@@ -21,6 +21,8 @@
 #import "UITextView+Resize.h"
 #import "Fresco.h"
 
+#import "FRSAppDelegate.h"
+
 @import MapKit;
 
 @interface FRSAssignmentsViewController () <MKMapViewDelegate>
@@ -157,12 +159,13 @@
     
     [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.latitude), @(location.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
         NSArray *assignments = (NSArray *)responseObject;
-        
+        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
-//        NSLog(@"ASS: %@", mSerializedAssignments);
         
         for (NSDictionary *dict in assignments){
-            FRSAssignment *assignmentToAdd = [FRSAssignment assignmentWithDictionary:dict];
+            
+            FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+            [assignmentToAdd configureWithDictionary:dict];
             NSString *uid = assignmentToAdd.uid;
             
             if ([self assignmentExists:uid]) {
@@ -189,6 +192,8 @@
         }
         
         [self configureAnnotationsForMap];
+        [delegate.managedObjectContext save:Nil];
+        [delegate saveContext];
     }];
 }
 

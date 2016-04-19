@@ -283,8 +283,12 @@
     
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     
+    if (page >= self.players.count) {
+        return;
+    }
+    
     FRSPlayer *player = self.players[page];
-    NSLog(@"%@", self.players);
+    
     if (![player respondsToSelector:@selector(play)]) {
         return;
     }

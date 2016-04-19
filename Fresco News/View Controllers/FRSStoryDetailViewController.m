@@ -140,7 +140,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
         FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         for (NSDictionary *gallery in galleries) {
             FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
-            [galleryObject configureWithDictionary:gallery];
+            [galleryObject configureWithDictionary:gallery context:delegate.managedObjectContext];
             [self.stories addObject:galleryObject];
         }
         

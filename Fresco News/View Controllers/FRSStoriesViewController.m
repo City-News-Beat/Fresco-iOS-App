@@ -30,7 +30,7 @@
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property (weak, nonatomic) FRSAppDelegate *appDelegate;
 @property (nonatomic) BOOL firstTime;
-
+@property (nonatomic, retain) NSArray *cached;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
 @end
@@ -253,6 +253,17 @@
     NSError *error = nil;
     self.stories = [NSMutableArray arrayWithArray:[moc executeFetchRequest:request error:&error]];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    self.cached = self.stories;
+    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    [delegate.managedObjectContext rollback];
+    
+    for (FRSStory *story in self.cached) {
+        [delegate.managedObjectContext deleteObject:story];
+    }
+    
+    [delegate.managedObjectContext save:Nil];
+    [delegate saveContext];
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
@@ -261,11 +272,8 @@
         for (NSDictionary *story in localData) {
             
             FRSStory *storyToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-            
-            if (storyToSave) {
-                [storyToSave setValue:@(index) forKey:@"index"];
-                [storyToSave configureWithDictionary:story];
-            }
+            [storyToSave configureWithDictionary:story];
+            [storyToSave setValue:@(index) forKey:@"index"];
             
             index++;
         }
