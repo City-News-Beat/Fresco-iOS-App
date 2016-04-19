@@ -25,6 +25,10 @@
 #import "FRSTrimTool.h"
 #import "FRSAppDelegate.h"
 
+#import "FRSUser.h"
+
+#import "FRSAppDelegate.h"
+
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
@@ -70,8 +74,10 @@
     [super viewDidLoad];
     
     if (self.presentingUser) {
-        NSLog(@"presentingUser");
-        [self configureWithUser:@"FRSUSER"];
+        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        FRSUser *user = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:delegate.managedObjectContext];
+        [self configureWithUser:user];
+        
     } else {
         [self configureUI];
         [self fetchGalleries];
@@ -89,15 +95,33 @@
     [self removeStatusBarNotification];
 }
 
--(id)initWithUser:(id)user { //UserID should take an FRSUser instead of an NSString
+-(id)initWithUser:(FRSUser *)user {
     
     if (self) {
         
         self.presentingUser = YES;
         [self configureBackButtonAnimated:YES];
-        [self configureNavigationBarForUserProfile:user];
+        
+        /* NAV BAR */
+        [super removeNavigationBarLine];
+        
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
+        titleLabel.text = @"@username"; //user.username
+        titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.textColor = [UIColor whiteColor];
+        self.navigationItem.titleView = titleLabel;
+        
+        UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
+        
+        self.navigationItem.rightBarButtonItem = followButton;
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+        
+        /* TABLE VIEW */
         [self configureTableView];
         [self fetchGalleries];
+        
+        [self configureWithUser:user];
         
     }
     return self;
@@ -163,24 +187,6 @@
     [self.tableView dg_removePullToRefresh];
 }
 
--(void)configureNavigationBarForUserProfile:(id)user {
-    [super removeNavigationBarLine];
-
-    
-    titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
-    titleLabel.text = @"@username"; //user.username
-    titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.textColor = [UIColor whiteColor];
-    self.navigationItem.titleView = titleLabel;
-
-    
-    UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
-    
-    self.navigationItem.rightBarButtonItem = followButton;
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
-}
 
 -(void)configureNavigationBar{
 //  [super configureNavigationBar];
@@ -588,7 +594,17 @@
 
 #pragma mark - User
 
--(void)configureWithUser:(id)user{
+-(void)configureWithUser:(FRSUser *)user {
+    
+//    self.profileIV.image = user.profileImage;
+//    self.nameLabel.text = user.firstName;
+//    self.bioLabel.text = user.bio;
+    
+    NSLog(@"user = %@", user);
+    
+    self.profileIV.image = [UIImage imageNamed:@"apple-user-grace"];
+    self.locationLabel.text = @"Fresco, USA."; //geo coder, last location
+    self.followersLabel.text = @"1.5M";
     
 }
 

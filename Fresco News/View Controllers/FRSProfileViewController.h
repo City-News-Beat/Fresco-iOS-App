@@ -13,6 +13,6 @@
     UILabel *titleLabel;
 }
 
--(id)initWithUser:(NSString *)user;
+-(id)initWithUser:(FRSUser *)user;
 
 @end

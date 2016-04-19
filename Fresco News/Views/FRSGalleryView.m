@@ -395,7 +395,7 @@
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
         self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 20);
     
-    UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToProfile)];
+    UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
     [bylineTap setNumberOfTapsRequired:1];
     [self.nameLabel setUserInteractionEnabled:YES];
     [self.nameLabel addGestureRecognizer:bylineTap];
@@ -748,15 +748,13 @@
     return averageHeight;
 }
 
--(void)segueToProfile {
-    
-    //make protocol
-//    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] init];
-//    FRSUserProfileViewController *userViewController = [[FRSUserProfileViewController alloc] init];
-    
-    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:@"USERID"];
-    [self.delegate.navigationController pushViewController:userViewController animated:YES];
-    
+-(void)segueToUserProfile:(FRSUser *)user {
+  
+//    NSLog(@"self.profileIV.image = %@", self.profileIV.image);
+//    if ([self.profileIV.image == nil]) {
+        FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:user];
+        [self.delegate.navigationController pushViewController:userViewController animated:YES];
+//    }
 }
 
 -(void)galleryTapped{    

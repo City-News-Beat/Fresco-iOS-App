@@ -12,7 +12,7 @@
 #import "FRSStory.h"
 
 #import <MagicalRecord/MagicalRecord.h>
-
+#import "FRSAppDelegate.h"
 
 @implementation FRSUser
 
@@ -24,9 +24,9 @@
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
-    NSLog(@"MAKE IN CONTEXT");
+    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     
-    FRSUser *user = [FRSUser MR_createEntityInContext:context];
+    FRSUser *user = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:delegate.managedObjectContext];
     return user;
 }
 
