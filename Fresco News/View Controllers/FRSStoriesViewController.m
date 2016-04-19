@@ -19,6 +19,7 @@
 
 #import "DGElasticPullToRefresh.h"
 #import "FRSLoadingTableViewCell.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSStoriesViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -27,6 +28,7 @@
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UITextField *searchTextField;
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
+@property (weak, nonatomic) FRSAppDelegate *appDelegate;
 @property (nonatomic) BOOL firstTime;
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
@@ -56,7 +58,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.appDelegate = [[UIApplication sharedApplication] delegate];
     [self configureUI];
     [self fetchStories];
     
@@ -190,20 +192,15 @@
         NSInteger index = 0;
         
         for (NSDictionary *storyDict in stories){
-            FRSStory *story;
             
             [self.loadingView stopLoading];
             [self.loadingView removeFromSuperview];
             
-            if (!story) {
-                story = [FRSStory MR_createEntity];
-                [story configureWithDictionary:storyDict];
-                [self.stories addObject:story];
-            }
-            else {
-                [self.stories addObject:story];
-            }
+            FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
             
+            [story configureWithDictionary:storyDict];
+            [story setValue:@(index) forKey:@"index"];
+            [self.stories addObject:story];
             index++;
         }
         
@@ -229,21 +226,14 @@
         }
         
         for (NSDictionary *storyDict in stories){
-            FRSStory *story = [FRSStory MR_findFirstByAttribute:@"uid" withValue:storyDict[@"_id"]];
-           // NSMutableArray *storiesToLoad = [[NSMutableArray alloc] init];
-            
             NSInteger index = self.stories.count;
+        
+            FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
             
-            if (!story) {
-                story = [FRSStory MR_createEntity];
-                [story configureWithDictionary:storyDict];
-                [self.stories addObject:story];
-                //[storiesToLoad addObject:[NSIndexPath indexPathForRow:index inSection:0]];
-                index++;
-            }
-            else {
-                [self.stories addObject:story];
-            }
+            [story configureWithDictionary:storyDict];
+            [self.stories addObject:story];
+            //[storiesToLoad addObject:[NSIndexPath indexPathForRow:index inSection:0]];
+            index++;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                /* [self.tableView beginUpdates];
@@ -256,37 +246,32 @@
 }
 
 -(void)fetchLocalData {
-    NSArray *stories = [FRSStory MR_findAllSortedBy:@"index" ascending:YES];
-    self.stories = [stories mutableCopy];
-    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-
+    NSManagedObjectContext *moc = [self.appDelegate managedObjectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSStory"];
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE]];
     
+    NSError *error = nil;
+    self.stories = [NSMutableArray arrayWithArray:[moc executeFetchRequest:request error:&error]];
+    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
         NSInteger index = 0;
         
         for (NSDictionary *story in localData) {
-            NSString *storyID = [story objectForKey:@"_id"];
             
-            FRSStory *storyToSave = [self storyExists:storyID];
+            FRSStory *storyToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:[self.appDelegate managedObjectContext]];
             
             if (storyToSave) {
                 [storyToSave setValue:@(index) forKey:@"index"];
                 [storyToSave configureWithDictionary:story];
-                continue;
             }
             
-            FRSStory *storySave = [FRSStory MR_createEntityInContext:localContext];
-            [storySave configureWithDictionary:story];
+            index++;
         }
-        
-        index++;
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-
-        [self flushCache:localData]; // empty non-remote stories (oos)
-    }];
+    
+    [self.appDelegate.managedObjectContext save:Nil];
+    [self.appDelegate saveContext];
 }
 
 -(FRSStory *)storyExists:(NSString *)storyID {

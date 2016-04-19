@@ -208,42 +208,12 @@
 }
 
 -(void)fetchLocalAssignments {
-    NSArray *assignments = [FRSAssignment MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
-    NSMutableArray *toShow = [[NSMutableArray alloc] init];
-    self.assignmentIDs = [[NSMutableArray alloc] init];
     
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        for (FRSAssignment *assignment in assignments) {
-            if ([assignment.expirationDate timeIntervalSinceNow] > 0) {
-                [toShow addObject:assignment];
-                [self.assignmentIDs addObject:assignment.uid];
-            }
-            else {
-                // delete
-                [assignment MR_deleteEntityInContext:localContext];
-            }
-        }
-        self.assignments = [toShow mutableCopy];
-        [self configureAnnotationsForMap];
-    }];
+
 }
 
 -(void)cacheAssignments {
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        
-        NSArray *delete = [FRSAssignment MR_findAllInContext:localContext];
-        
-        for (FRSAssignment *assignment in delete) {
-            [assignment MR_deleteEntityInContext:localContext];
-        }
-        
-        for (NSDictionary *dict in dictionaryRepresentations) {
-            FRSAssignment *assignmentToSave = [FRSAssignment MR_createEntityInContext:localContext];
-            [assignmentToSave configureWithDictionary:dict];
-        }
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-//        NSLog(@"ASSIGNMENTS SAVED: %@", (contextDidSave) ? @"TRUE" : @"FALSE");
-    }];
+   
 }
 
 #pragma mark - Region
