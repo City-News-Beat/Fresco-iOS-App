@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "FRSCameraViewController.h"
+#import "SCAssetExportSession.h"
 
 @import AVFoundation;
 
@@ -20,7 +21,9 @@ typedef NS_ENUM(NSUInteger, FRSAVAuthStatus) {
 };
 
 @interface FRSAVSessionManager : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate>
-
+{
+    SCAssetExportSession *exporter;
+}
 @property (nonatomic) FRSAVAuthStatus authStatus;
 
 @property (nonatomic, readonly) BOOL AVSetupSuccess;

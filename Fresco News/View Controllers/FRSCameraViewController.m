@@ -137,13 +137,6 @@
     return self;
 }
 
-- (void)captureOutput:(AVCaptureOutput *)captureOutput
-didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
-       fromConnection:(AVCaptureConnection *)connection {
-    NSLog(@"TEST");
-
-}
-
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -1135,9 +1128,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             //Set the session preset to photo, the default mode we enter in as
             [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
         }
-
-        [self.sessionManager.session commitConfiguration];
         
+        [self.sessionManager.session commitConfiguration];
     }
     else {
         self.captureMode = FRSCaptureModePhoto;
@@ -1808,6 +1800,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)handlePan:(NSArray *)movement {
+    if (fabs([[movement lastObject][@"y"] floatValue]) > 0.089037) {
+
+    }
     
 }
 

@@ -110,8 +110,21 @@
     
 }
 
--(void)configureInputsOutputs{
+-(void)test {
+    AVCaptureVideoDataOutput *videoDataOutput = [AVCaptureVideoDataOutput new];
+    NSDictionary *newSettings =
+    @{ (NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_32BGRA) };
+    videoDataOutput.videoSettings = newSettings;
     
+    // discard if the data output queue is blocked (as we process the still image
+    [videoDataOutput setAlwaysDiscardsLateVideoFrames:YES];
+    
+    dispatch_queue_t videoDataOutputQueue = dispatch_queue_create("VideoDataOutputQueue", DISPATCH_QUEUE_SERIAL);
+    [videoDataOutput setSampleBufferDelegate:self queue:videoDataOutputQueue];
+    [self.session addOutput:videoDataOutput];
+}
+
+-(void)configureInputsOutputs{
     //VIDEO INPUT
     if ([self.session canAddInput:[self videoInputDevice]]) {
         [self.session addInput:[self videoInputDevice]];
@@ -137,10 +150,10 @@
     }
     
     //VIDEO OUTPUT
-    
+   
     self.movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];
     if ( [self.session canAddOutput:self.movieFileOutput] ) {
-        [self.session addOutput:self.movieFileOutput];
+       // [self.session addOutput:self.movieFileOutput];
         
         AVCaptureConnection *connection = [self.movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
         if ( connection.isVideoStabilizationSupported ) {
@@ -160,9 +173,19 @@
     } else
         self.AVSetupSuccess = NO;
     
-    [self.session startRunning];
+    [self test];
+    exporter = [[SCAssetExportSession alloc] init];
+    exporter.outputFileType = AVFileTypeQuickTimeMovie;
+    exporter.outputUrl = [NSURL URLWithString:[NSTemporaryDirectory() stringByAppendingPathComponent:@"test.mov"]];
 
-    
+    [self.session startRunning];
+}
+
+- (void)captureOutput:(AVCaptureOutput *)captureOutput
+didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+       fromConnection:(AVCaptureConnection *)connection
+{
+    [exporter processSampleBuffer:sampleBuffer];
 }
 
 -(AVCaptureDeviceInput *)videoInputDevice{
