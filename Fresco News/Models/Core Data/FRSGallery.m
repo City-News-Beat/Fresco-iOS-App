@@ -23,7 +23,21 @@
 @implementation FRSGallery
 @synthesize currentContext = _currentContext;
 
+@dynamic byline;
+@dynamic caption;
+@dynamic createdDate;
+@dynamic editedDate;
+@dynamic relatedStories;
+@dynamic tags;
+@dynamic uid;
+@dynamic visibility;
+@dynamic creator;
+@dynamic posts;
+@dynamic stories;
+@dynamic articles;
+
 -(void)configureWithDictionary:(NSDictionary *)dict{
+    self.tags = [[NSMutableDictionary alloc] init];
     self.uid = dict[@"_id"];
     self.visibility = dict[@"visiblity"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
@@ -31,6 +45,10 @@
     self.byline = dict[@"byline"];
     [self addPostsWithArray:dict[@"posts"]];
     [self addArticlesWithArray:dict[@"articles"]];
+    
+    BOOL liked = [dict[@"liked"] boolValue];
+    [self.tags setObject:@(liked) forKey:@"liked"];
+    [self.tags setObject:(dict[@"likes"] != Nil && dict[@"likes"] != [NSNull null]) ? dict[@"likes"] : @(0) forKey:@"likes"];
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {

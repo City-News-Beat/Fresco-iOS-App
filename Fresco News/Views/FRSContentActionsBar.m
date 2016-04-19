@@ -139,6 +139,22 @@
     [self bounceButton:self.likeButton];
 }
 
+-(void)handleHeartState:(BOOL)state {
+    if(state) {
+        [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
+    } else {
+        [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"] forState:UIControlStateNormal];
+    }
+}
+
+-(void)handleRepostState:(BOOL)state {
+    if(state) {
+        [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
+    } else {
+        [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateNormal];
+    }
+}
+
 -(void)handleActionButtonTapped{
     [self.delegate contentActionBarDidSelectActionButton:self];
 }

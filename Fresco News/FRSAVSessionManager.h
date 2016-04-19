@@ -20,6 +20,7 @@ typedef NS_ENUM(NSUInteger, FRSAVAuthStatus) {
 };
 
 @interface FRSAVSessionManager : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate>
+@property (nonatomic, retain) AVCaptureSession *captureSession;
 
 @property (nonatomic) FRSAVAuthStatus authStatus;
 

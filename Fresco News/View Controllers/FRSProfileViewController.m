@@ -23,6 +23,7 @@
 #import "Fresco.h"
 
 #import "FRSTrimTool.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -112,17 +113,17 @@
         }
         
         NSMutableArray *mArr = [NSMutableArray new];
-        
+        FRSAppDelegate  *delegate = [[UIApplication sharedApplication] delegate];
         NSArray *galleries = responseObject;
         for (NSDictionary *dict in galleries){
-            FRSGallery *gallery = [FRSGallery MR_createEntity];
-            [gallery configureWithDictionary:dict];
+            FRSGallery *gallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
+            [gallery configureWithDictionary:dict context:delegate.managedObjectContext];
             [mArr addObject:gallery];
         }
         
+        
         self.galleries = [mArr copy];
         [self.tableView reloadData];
-
     }];
 }
 
@@ -385,7 +386,7 @@
     
     self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     self.bioLabel.numberOfLines = 0;
-    self.bioLabel.text = @"Yo, I'm Kobe Bryant. AKA the Black Mamba. Y'all need to bow down before my greatness. Also I like video games. Like 2K15. I pick the Lakers, and then I just play as myself and never pass the ball and score buckets, bc I'm fucking Kobe Bryant.";
+    self.bioLabel.text = @"Hey guys, I'm just here to be a part of this whole citizen journalism thing. I snagged some sick shots on my iPhone, and made $50! That puts me at $72,000,050! Hell yeah!";
     self.bioLabel.textColor = [UIColor whiteColor];
     [self.bioLabel sizeToFit];
     [self.profileContainer addSubview:self.bioLabel];

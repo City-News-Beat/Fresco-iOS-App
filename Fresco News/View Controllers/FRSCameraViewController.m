@@ -167,7 +167,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 -(void)addPanGesture {
     UIPinchGestureRecognizer *zoomGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoom:)];
-    [self.view addGestureRecognizer:zoomGesture];
+   [self.view addGestureRecognizer:zoomGesture];
 }
 
 -(void)zoom:(UIPinchGestureRecognizer *)recognizer {
@@ -281,7 +281,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     self.isPresented = NO;
     [self.motionManager stopAccelerometerUpdates];
-    
+    [self.motionManager stopGyroUpdates];
     [self shouldShowStatusBar:YES animated:YES];
     
 }
@@ -347,6 +347,24 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self.view addSubview:self.preview];
 }
 
+-(void)checkThumb {
+    
+    /*UIGraphicsBeginImageContextWithOptions(self.captureVideoPreviewLayer.frame.size, NO, 0);
+    [self.captureVideoPreviewLayer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self luminanceOfImage:outputImage];
+    });
+
+    [self performSelector:@selector(checkThumb) withObject:Nil afterDelay:.5];*/
+}
+
+-(void)luminanceOfImage:(UIImage *)inputImage {
+   //check for thumb
+}
+
 -(void)configurePreviewLayer {
     dispatch_async(dispatch_get_main_queue(), ^{
         CALayer *viewLayer = self.preview.layer;
@@ -355,7 +373,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         self.captureVideoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientationPortrait;
         [viewLayer addSublayer:self.captureVideoPreviewLayer];
         self.captureVideoPreviewLayer.frame = self.preview.frame;
+        [self checkThumb];
     });
+    
 }
 
 -(void)updatePreviewButtonWithAsset {
@@ -1752,12 +1772,38 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                                                      NSLog(@"%@", error);
                                                  }
                                              }];
+    
+    if (!_motionManager) {
+        _motionManager = [[CMMotionManager alloc] init];
+        _motionManager.gyroUpdateInterval = 2;
+    }
+    
+    __block float lastZ = 0;
+    
+    [_motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
+        CGFloat rotationRate = fabs(gyroData.rotationRate.x);
+        if (rotationRate > .5) {
+            [self alertUserOfFastPan];
+        }
+        
+        CGFloat wobbleRate = fabs(gyroData.rotationRate.z);
+        
+        if (lastZ == 0) {
+            lastZ = wobbleRate;
+            return;
+        }
+        
+        if (fabs(lastZ-wobbleRate) > .15) {
+            NSLog(@"STOP WOBBLING");
+        }
+        
+    }];
+
 }
 
 
 - (void)outputAccelertionData:(CMAcceleration)acceleration {
     
-    [self checkWobble:acceleration];
     UIDeviceOrientation orientationNew;
     
     if (self.sessionManager.movieFileOutput.isRecording) return;
@@ -1797,18 +1843,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
 }
 
--(void)checkWobble:(CMAcceleration)acceleration {
 
-    if (!self.positions) {
-        self.positions = [[NSMutableArray alloc] init];
-    }
-    
-    NSDictionary *data = @{@"x":@(acceleration.x), @"y":@(acceleration.y), @"z":@(acceleration.x)};
-    [self.positions addObject:data];
-    [self analyzeMovement:self.positions];
+-(void)alertUserOfFastPan {
+    NSLog(@"PAN SLOWER");
 }
 
--(void)analyzeMovement:(NSArray *)movement {
-    
+-(void)alertUserOfWobble {
+    NSLog(@"STOP WOBBLING");
 }
 @end

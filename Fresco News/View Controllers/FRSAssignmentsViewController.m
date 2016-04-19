@@ -22,6 +22,8 @@
 #import "UITextView+Resize.h"
 #import "Fresco.h"
 
+#import "FRSAppDelegate.h"
+
 @import MapKit;
 
 @interface FRSAssignmentsViewController () <MKMapViewDelegate>
@@ -161,12 +163,13 @@
     
     [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.latitude), @(location.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
         NSArray *assignments = (NSArray *)responseObject;
-        
+        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
-//        NSLog(@"ASS: %@", mSerializedAssignments);
         
         for (NSDictionary *dict in assignments){
-            FRSAssignment *assignmentToAdd = [FRSAssignment assignmentWithDictionary:dict];
+            
+            FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+            [assignmentToAdd configureWithDictionary:dict];
             NSString *uid = assignmentToAdd.uid;
             
             if ([self assignmentExists:uid]) {
@@ -193,6 +196,8 @@
         }
         
         [self configureAnnotationsForMap];
+        [delegate.managedObjectContext save:Nil];
+        [delegate saveContext];
     }];
 }
 
@@ -212,42 +217,20 @@
 }
 
 -(void)fetchLocalAssignments {
-    NSArray *assignments = [FRSAssignment MR_findAllInContext:[NSManagedObjectContext MR_defaultContext]];
-    NSMutableArray *toShow = [[NSMutableArray alloc] init];
-    self.assignmentIDs = [[NSMutableArray alloc] init];
+    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(expirationDate >= %@)", [NSDate date]];
+    NSManagedObjectContext *moc = [delegate managedObjectContext];
     
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        for (FRSAssignment *assignment in assignments) {
-            if ([assignment.expirationDate timeIntervalSinceNow] > 0) {
-                [toShow addObject:assignment];
-                [self.assignmentIDs addObject:assignment.uid];
-            }
-            else {
-                // delete
-                [assignment MR_deleteEntityInContext:localContext];
-            }
-        }
-        self.assignments = [toShow mutableCopy];
-        [self configureAnnotationsForMap];
-    }];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSAssignment"];
+    request.predicate = predicate;
+    NSError *error = nil;
+    NSArray *stored = [moc executeFetchRequest:request error:&error];
+    self.assignments = [NSMutableArray arrayWithArray:stored];
+    [self configureAnnotationsForMap];
 }
 
 -(void)cacheAssignments {
-    [MagicalRecord saveWithBlock:^(NSManagedObjectContext * _Nonnull localContext) {
-        
-        NSArray *delete = [FRSAssignment MR_findAllInContext:localContext];
-        
-        for (FRSAssignment *assignment in delete) {
-            [assignment MR_deleteEntityInContext:localContext];
-        }
-        
-        for (NSDictionary *dict in dictionaryRepresentations) {
-            FRSAssignment *assignmentToSave = [FRSAssignment MR_createEntityInContext:localContext];
-            [assignmentToSave configureWithDictionary:dict];
-        }
-    } completion:^(BOOL contextDidSave, NSError * _Nullable error) {
-//        NSLog(@"ASSIGNMENTS SAVED: %@", (contextDidSave) ? @"TRUE" : @"FALSE");
-    }];
+   
 }
 
 #pragma mark - Region

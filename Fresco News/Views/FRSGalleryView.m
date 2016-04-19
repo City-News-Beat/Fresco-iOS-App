@@ -32,18 +32,7 @@
 
 @implementation FRSGalleryView
 
-/*
-/
- / Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
 -(void)loadGallery:(FRSGallery *)gallery {
-    self.players = [[NSMutableArray alloc] init];
-    
     for (FRSPlayer *player in self.players) {
         if ([player respondsToSelector:@selector(pause)]) {
             [player.container removeFromSuperview];
@@ -52,7 +41,7 @@
         }
     }
     
-    [self breakDownPlayer:self.playerLayer];
+    self.players = [[NSMutableArray alloc] init];
     
     self.clipsToBounds = NO;
     self.gallery = gallery;
@@ -187,39 +176,37 @@
 }
 
 -(void)configureImageViews{
-    if (!self.players) {
-        self.players = [[NSMutableArray alloc] init];
-    }
+    self.players = [[NSMutableArray alloc] init];
     self.imageViews = [NSMutableArray new];
     
-        for (NSInteger i = 0; i < self.gallery.posts.count; i++){
+    for (NSInteger i = 0; i < self.gallery.posts.count; i++){
             
-            FRSPost *post = self.orderedPosts[i];
+        FRSPost *post = self.orderedPosts[i];
             
-            NSInteger xOrigin = i * self.frame.size.width;
-            FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self imageViewHeight])];
-            imageView.contentMode = UIViewContentModeScaleAspectFill;
-            imageView.backgroundColor = [UIColor whiteColor];
-            imageView.clipsToBounds = YES;
-            imageView.indexInScrollView = i;
+        NSInteger xOrigin = i * self.frame.size.width;
+        FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self imageViewHeight])];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.backgroundColor = [UIColor whiteColor];
+        imageView.clipsToBounds = YES;
+        imageView.indexInScrollView = i;
             
-            [self.imageViews addObject:imageView];
-            [self.scrollView addSubview:imageView];
+        [self.imageViews addObject:imageView];
+        [self.scrollView addSubview:imageView];
 
-                if (i==0) {
-                    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+            if (i==0) {
+                [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
 
-                    if (post.videoUrl != Nil) {
-                        // videof
-                        // set up FRSPlayer
-                        // add AVPlayerLayer
-                        NSLog(@"TOP LEVEL PLAYER");
-                        [self scrollViewDidScroll:self.scrollView];
-                        [self.scrollView bringSubviewToFront:[self.players[0] container]];
-                    }
-                    else {
-                        [self.players addObject:imageView];
-                    }
+                if (post.videoUrl != Nil) {
+                    // videof
+                    // set up FRSPlayer
+                    // add AVPlayerLayer
+                    NSLog(@"TOP LEVEL PLAYER");
+                    [self scrollViewDidScroll:self.scrollView];
+                    [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                }
+                else {
+                    [self.players addObject:imageView];
+                }
             }
            
             imageView.userInteractionEnabled = YES;
@@ -274,6 +261,8 @@
         [self.delegate playerWillPlay:self.videoPlayer];
     }
     
+    videoPlayer.muted = TRUE;
+    
     return videoPlayer;
 }
 
@@ -281,15 +270,26 @@
     
     CGPoint point = [tap locationInView:self];
     
+    // ensures point is in player area
     if (point.y > self.scrollView.frame.size.height) {
         return;
     }
     
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     
+    if (page >= self.players.count) {
+        return;
+    }
+    
     FRSPlayer *player = self.players[page];
-    NSLog(@"%@", self.players);
+    
+    // ensures FRSPlayer not view
     if (![player respondsToSelector:@selector(play)]) {
+        return;
+    }
+    
+    if (player.muted) {
+        player.muted = FALSE;
         return;
     }
     
@@ -825,7 +825,13 @@
 }
 
 -(void)play {
-    [self.videoPlayer play];
+    NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    
+    if (self.players.count >= page) {
+        if ([self.players[page] respondsToSelector:@selector(play)]) {
+            [(AVPlayer *)self.players[page] play];
+        }
+    }
 }
 
 -(void)pause {
