@@ -128,13 +128,6 @@
 		D41254A01C91E54700E3B85C /* FRSMultipartTask.h in Sources */ = {isa = PBXBuildFile; fileRef = D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */; };
 		D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */; };
 		D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D41365B11CA32DC0004FE848 /* FRSStoryDetailViewController.xib */; };
-		D42C906A1CC6094100B25C99 /* SCAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90691CC6094100B25C99 /* SCAssetExportSession.m */; };
-		D42C90721CC609DD00B25C99 /* SCAudioConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C906D1CC609DD00B25C99 /* SCAudioConfiguration.m */; };
-		D42C90731CC609DD00B25C99 /* SCFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C906F1CC609DD00B25C99 /* SCFilter.m */; };
-		D42C90741CC609DD00B25C99 /* SCFilterAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90711CC609DD00B25C99 /* SCFilterAnimation.m */; };
-		D42C90791CC609FB00B25C99 /* SCMediaTypeConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90761CC609FB00B25C99 /* SCMediaTypeConfiguration.m */; };
-		D42C907A1CC609FB00B25C99 /* SCRecorderTools.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90781CC609FB00B25C99 /* SCRecorderTools.m */; };
-		D42C907E1CC60A2200B25C99 /* SCVideoConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C907D1CC60A2200B25C99 /* SCVideoConfiguration.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
 		D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */; };
@@ -450,20 +443,6 @@
 		D41365AF1CA32DC0004FE848 /* FRSStoryDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryDetailViewController.h; sourceTree = "<group>"; };
 		D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryDetailViewController.m; sourceTree = "<group>"; };
 		D41365B11CA32DC0004FE848 /* FRSStoryDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryDetailViewController.xib; sourceTree = "<group>"; };
-		D42C90681CC6094100B25C99 /* SCAssetExportSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCAssetExportSession.h; sourceTree = "<group>"; };
-		D42C90691CC6094100B25C99 /* SCAssetExportSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCAssetExportSession.m; sourceTree = "<group>"; };
-		D42C906C1CC609DD00B25C99 /* SCAudioConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCAudioConfiguration.h; sourceTree = "<group>"; };
-		D42C906D1CC609DD00B25C99 /* SCAudioConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCAudioConfiguration.m; sourceTree = "<group>"; };
-		D42C906E1CC609DD00B25C99 /* SCFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilter.h; sourceTree = "<group>"; };
-		D42C906F1CC609DD00B25C99 /* SCFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilter.m; sourceTree = "<group>"; };
-		D42C90701CC609DD00B25C99 /* SCFilterAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCFilterAnimation.h; sourceTree = "<group>"; };
-		D42C90711CC609DD00B25C99 /* SCFilterAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCFilterAnimation.m; sourceTree = "<group>"; };
-		D42C90751CC609FB00B25C99 /* SCMediaTypeConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCMediaTypeConfiguration.h; sourceTree = "<group>"; };
-		D42C90761CC609FB00B25C99 /* SCMediaTypeConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCMediaTypeConfiguration.m; sourceTree = "<group>"; };
-		D42C90771CC609FB00B25C99 /* SCRecorderTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCRecorderTools.h; sourceTree = "<group>"; };
-		D42C90781CC609FB00B25C99 /* SCRecorderTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCRecorderTools.m; sourceTree = "<group>"; };
-		D42C907C1CC60A2200B25C99 /* SCVideoConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCVideoConfiguration.h; sourceTree = "<group>"; };
-		D42C907D1CC60A2200B25C99 /* SCVideoConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCVideoConfiguration.m; sourceTree = "<group>"; };
 		D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSFileLoader.h; path = ../FRSFileLoader.h; sourceTree = "<group>"; };
 		D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSFileLoader.m; path = ../FRSFileLoader.m; sourceTree = "<group>"; };
 		D43C7FD01C8E469800A7A7A7 /* FRSFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileViewController.h; sourceTree = "<group>"; };
@@ -619,7 +598,6 @@
 		074393EF1C3AC56E0007CFF0 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				D42C906B1CC6094B00B25C99 /* SCAsset */,
 				D43C7FEF1C8F517D00A7A7A7 /* Trimming Video */,
 				D43C7FF01C8F518300A7A7A7 /* Loading Resources */,
 				D43C7FF11C8F518E00A7A7A7 /* Data Validation */,
@@ -1115,35 +1093,6 @@
 			children = (
 			);
 			name = Settings;
-			sourceTree = "<group>";
-		};
-		D42C906B1CC6094B00B25C99 /* SCAsset */ = {
-			isa = PBXGroup;
-			children = (
-				D42C907B1CC60A0000B25C99 /* Tools */,
-				D42C90681CC6094100B25C99 /* SCAssetExportSession.h */,
-				D42C90691CC6094100B25C99 /* SCAssetExportSession.m */,
-			);
-			name = SCAsset;
-			sourceTree = "<group>";
-		};
-		D42C907B1CC60A0000B25C99 /* Tools */ = {
-			isa = PBXGroup;
-			children = (
-				D42C907C1CC60A2200B25C99 /* SCVideoConfiguration.h */,
-				D42C907D1CC60A2200B25C99 /* SCVideoConfiguration.m */,
-				D42C90751CC609FB00B25C99 /* SCMediaTypeConfiguration.h */,
-				D42C90761CC609FB00B25C99 /* SCMediaTypeConfiguration.m */,
-				D42C90771CC609FB00B25C99 /* SCRecorderTools.h */,
-				D42C90781CC609FB00B25C99 /* SCRecorderTools.m */,
-				D42C906C1CC609DD00B25C99 /* SCAudioConfiguration.h */,
-				D42C906D1CC609DD00B25C99 /* SCAudioConfiguration.m */,
-				D42C906E1CC609DD00B25C99 /* SCFilter.h */,
-				D42C906F1CC609DD00B25C99 /* SCFilter.m */,
-				D42C90701CC609DD00B25C99 /* SCFilterAnimation.h */,
-				D42C90711CC609DD00B25C99 /* SCFilterAnimation.m */,
-			);
-			name = Tools;
 			sourceTree = "<group>";
 		};
 		D43C7FCC1C8E464800A7A7A7 /* Image Picker */ = {
@@ -2077,7 +2026,6 @@
 				65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */,
 				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
 				65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */,
-				D42C907A1CC609FB00B25C99 /* SCRecorderTools.m in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
@@ -2086,7 +2034,6 @@
 				65135FD51C286DCF00839149 /* FRSStory+CoreDataProperties.m in Sources */,
 				6547C90A1C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m in Sources */,
 				65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */,
-				D42C90721CC609DD00B25C99 /* SCAudioConfiguration.m in Sources */,
 				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
 				65E860AC1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m in Sources */,
 				07A30C031C50488800C536EB /* FRSRadiusViewController.m in Sources */,
@@ -2101,7 +2048,6 @@
 				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
 				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
 				07A30C051C50488800C536EB /* FRSTableViewCell.m in Sources */,
-				D42C906A1CC6094100B25C99 /* SCAssetExportSession.m in Sources */,
 				65A525F21C499FCA004A622B /* FRSCommentTableViewCell.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
@@ -2109,7 +2055,6 @@
 				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,
 				D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */,
 				D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */,
-				D42C90741CC609DD00B25C99 /* SCFilterAnimation.m in Sources */,
 				65EBEDB11C4404A800BE671F /* FRSDateFormatter.m in Sources */,
 				654181E41C5144CD00019B3F /* NSObject+Validator.m in Sources */,
 				65135FD71C286DCF00839149 /* FRSNotification+CoreDataProperties.m in Sources */,
@@ -2127,14 +2072,12 @@
 				07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */,
 				65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */,
 				07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */,
-				D42C90731CC609DD00B25C99 /* SCFilter.m in Sources */,
 				65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */,
 				6501D56D1C249604001F54EF /* Model.xcdatamodeld in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
 				D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
-				D42C90791CC609FB00B25C99 /* SCMediaTypeConfiguration.m in Sources */,
 				6547C9041C6A68A700DAD98C /* FRSUserTableViewCell.m in Sources */,
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
@@ -2142,7 +2085,6 @@
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,
 				075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */,
 				07ED92E41C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m in Sources */,
-				D42C907E1CC60A2200B25C99 /* SCVideoConfiguration.m in Sources */,
 				D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */,
 				07A138BF1CBC053C00163BA0 /* FRSLoadingTableViewCell.m in Sources */,
 				D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */,
