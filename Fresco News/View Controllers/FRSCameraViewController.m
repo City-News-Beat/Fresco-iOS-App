@@ -1775,6 +1775,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [_motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
         CGFloat rotationRate = fabs(gyroData.rotationRate.x);
         if (rotationRate > .5) {
+            [self alertUserOfFastPan];
             NSLog(@"PANNING TOO QUICKLY");
         }
     }];
@@ -1870,8 +1871,16 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     float threshold = .9;
     
     if (x1 > threshold && x2 > threshold && x3 > threshold) {
-
+        [self alertUserOfWobble];
     }
 
+}
+
+-(void)alertUserOfFastPan {
+    
+}
+
+-(void)alertUserOfWobble {
+    
 }
 @end
