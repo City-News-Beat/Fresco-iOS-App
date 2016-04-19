@@ -1772,14 +1772,25 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         _motionManager.gyroUpdateInterval = 2;
     }
     
+    __block float lastZ = 0;
+    
     [_motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
         CGFloat rotationRate = fabs(gyroData.rotationRate.x);
         if (rotationRate > .5) {
             [self alertUserOfFastPan];
         }
         
-        //CGFloat wobbleRate = fabs(gyroData.rotationRate.z);
-        //NSLog(@"%f", wobbleRate);
+        CGFloat wobbleRate = fabs(gyroData.rotationRate.z);
+        
+        if (lastZ == 0) {
+            lastZ = wobbleRate;
+            return;
+        }
+        
+        if (fabs(lastZ-wobbleRate) > .1) {
+            NSLog(@"STOP WOBBLING");
+        }
+        
     }];
 
 }
