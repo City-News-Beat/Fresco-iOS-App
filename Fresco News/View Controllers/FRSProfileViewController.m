@@ -80,6 +80,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self addStatusBarNotification];
+    [self showNavBarForScrollView:self.tableView animated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
