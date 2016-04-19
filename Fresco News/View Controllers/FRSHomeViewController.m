@@ -485,6 +485,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [cell clearCell];
         [cell configureCell];
+        [cell play];
     });
     
     __weak typeof(self) weakSelf = self;

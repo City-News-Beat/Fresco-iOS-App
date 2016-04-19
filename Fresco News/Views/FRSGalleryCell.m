@@ -55,6 +55,9 @@
     };
 }
 
+-(void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+}
 -(void)clearCell{
     
     //[self.galleryView removeFromSuperview];

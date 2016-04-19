@@ -48,7 +48,7 @@
         }
     }
     
-    [self breakDownPlayer:self.playerLayer];
+    self.players = [[NSMutableArray alloc] init];
     
     self.clipsToBounds = NO;
     self.gallery = gallery;
@@ -295,6 +295,7 @@
     
     if (player.muted) {
         player.muted = FALSE;
+        return;
     }
     
     if (player.rate == 0.0) {
@@ -813,7 +814,13 @@
 }
 
 -(void)play {
-    [self.videoPlayer play];
+    NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    
+    if (self.players.count >= page) {
+        if ([self.players[page] respondsToSelector:@selector(play)]) {
+            [(AVPlayer *)self.players[page] play];
+        }
+    }
 }
 
 -(void)pause {
