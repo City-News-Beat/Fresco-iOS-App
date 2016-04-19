@@ -1811,7 +1811,17 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)analyzeMovement:(NSArray *)movement {
-    NSLog(@"%@", movement);
+    [self handleWobble:movement];
+    [self handlePan:movement];
+}
+
+-(void)handlePan:(NSArray *)movement {
+    float y = [movement[0][@"y"] floatValue];
+    y = (y < 0) ? y * -1 : y;
+    
+    if (y > .2) {
+        NSLog(@"PAN TOO FAST");
+    }
 }
 
 -(void)handleWobble:(NSArray *)movement {
@@ -1829,11 +1839,17 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     if (x1 < 0) {
         x1 *=-1;
+    }
+    if (x2 < 0) {
         x2 *=-1;
+    }
+    if (x3 < 0) {
         x3 *=-1;
     }
     
-    if (x1 > .98) {
+    float threshold = .98;
+    
+    if (x1 > threshold && x2 > threshold && x3 > threshold) {
         NSLog(@"Wobble");
     }
 
