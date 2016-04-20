@@ -459,7 +459,8 @@
             float remainder = ((windowY - sizeY) / 2) - 120;
             float difference = fabs(cellY - remainder);
             
-            if (difference <= 10) {
+            if (difference <= 10 && !cell.hasAlreadyAutoPlayed) {
+                cell.hasAlreadyAutoPlayed = TRUE;
                 [cell play];
             }
         }
@@ -483,7 +484,7 @@
     }
     
     cell.gallery = self.dataSource[indexPath.row];
-    
+    cell.hasAlreadyAutoPlayed = FALSE;
     dispatch_async(dispatch_get_main_queue(), ^{
         [cell clearCell];
         [cell configureCell];

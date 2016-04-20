@@ -23,6 +23,7 @@
 -(void)replaceCurrentItemWithPlayerItem:(AVPlayerItem *)item {
     [self.currentItem removeObserver:self forKeyPath:@"status"];
     [super replaceCurrentItemWithPlayerItem:item];
+    [self.currentItem addObserver:self forKeyPath:@"status" options:0 context:nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
