@@ -31,6 +31,7 @@
     NSInteger lastOffset;
     BOOL shouldAnimate;
 }
+
 @property (strong, nonatomic) NSMutableArray *cachedData;
 @property (strong, nonatomic) NSManagedObjectContext *temp;
 @property (strong, nonatomic) NSMutableArray *highlights;
@@ -40,6 +41,7 @@
 
 @property (strong, nonatomic) UIButton *highlightTabButton;
 @property (strong, nonatomic) UIButton *followingTabButton;
+//@property (strong, nonatomic) CAShapeLayer *maskView;
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 
@@ -189,7 +191,32 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
-      
+    
+    
+//    CAShapeLayer * layer = [[CAShapeLayer alloc]init];
+//    layer.frame = view.bounds;
+//    layer.fillColor = [[UIColor blackColor] CGColor];
+//    
+//    layer.path = CGPathCreateWithRect(CGRectMake(10, 10, 30, 30), NULL);
+//    
+//    view.layer.mask = layer;
+    
+//    self.maskView = [[CAShapeLayer alloc] init];
+//    self.maskView.frame = titleView.bounds;
+//    self.maskView.fillColor = [UIColor redColor].CGColor;
+//    self.maskView.path = CGPathCreateWithRect(CGRectMake(0, 0, 300, 20), nil);
+//    self.highlightTabButton.layer.mask = self.maskView;
+    
+//    self.maskView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 20)];
+//    self.maskView.backgroundColor = [UIColor redColor];
+//    self.maskView.maskView = self.highlightTabButton.titleLabel;
+//    [titleView addSubview:self.maskView];
+    
+//    [UIView animateWithDuration:1.0 delay:5 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//        
+//        self.maskView.frame = CGRectMake(100, 0, 300, 20);
+//
+//    } completion:nil];
 }
 
 -(void)configureTableView {
