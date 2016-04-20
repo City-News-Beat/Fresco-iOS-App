@@ -545,7 +545,8 @@
     if (self.followingTabButton.alpha > 0.7) {
         return; //The button is already selected
     }
-
+    [self.pageScroller setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:YES];
+    
     self.followingTabButton.alpha = 1.0;
     self.highlightTabButton.alpha = 0.7;
 }
@@ -554,6 +555,7 @@
     if (self.highlightTabButton.alpha > 0.7) {
         return;
     }
+    [self.pageScroller setContentOffset:CGPointMake(0, 0) animated:YES];
     
     self.highlightTabButton.alpha = 1.0;
     self.followingTabButton.alpha = 0.7;
