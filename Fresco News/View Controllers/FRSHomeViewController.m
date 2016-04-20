@@ -377,7 +377,6 @@
     
     [reloadedFrom addObject:offsetID];
     
-    
     if (lastOffset == self.dataSource.count) {
         NSLog(@"NOT RELOADING");
         return;
@@ -396,7 +395,6 @@
                 return;
             }
             
-            isLoading = FALSE;
             NSInteger index = self.highlights.count;
             for (NSDictionary *gallery in galleries) {
                 FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
@@ -411,9 +409,10 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView beginUpdates];
-                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
                 [self.tableView endUpdates];
                 needsUpdate = TRUE;
+                isLoading = FALSE;
             });
         }];
     });
@@ -498,7 +497,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [cell clearCell];
         [cell configureCell];
-        [cell play];
     });
     
     __weak typeof(self) weakSelf = self;
