@@ -419,7 +419,7 @@
 -(void)playerWillPlay:(AVPlayer *)player {
     for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
         for (FRSPlayer *cellPlayer in cell.players) {
-            if (cellPlayer != player) {
+            if (cellPlayer != player && player.rate != 0) {
                 [player pause];
             }
         }
@@ -465,7 +465,8 @@
 //            float difference = fabs(cellY - remainder);
             NSLog(@"CELL Y: %f", cellY);
             
-            if (cellY < 450) {
+            if (cellY < 450 && !cell.hasAlreadyAutoPlayed) {
+                cell.hasAlreadyAutoPlayed = TRUE;
                 [cell play];
                 break;
             }

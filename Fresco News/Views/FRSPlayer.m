@@ -39,6 +39,11 @@
 }
 
 -(void)play {
+    
+    if (self.playWhenReady) {
+        return;
+    }
+    
     if (self.currentItem.status == AVPlayerItemStatusReadyToPlay) {
         NSLog(@"PLAYING");
         [super play];
