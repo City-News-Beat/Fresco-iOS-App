@@ -53,6 +53,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.galleriesTable.scrollEnabled = NO;
 }
 
 -(void)configureNavigationBar {
@@ -150,6 +151,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
             [self.stories addObject:galleryObject];
             [self.loadingView stopLoading];
             [self.loadingView removeFromSuperview];
+            self.galleriesTable.scrollEnabled = YES;
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -199,9 +201,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)statusBarTappedAction:(NSNotification*)notification{
     if (self.galleriesTable.contentOffset.y >= 0) {
         [self.galleriesTable setContentOffset:CGPointMake(0, 0) animated:YES];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.enabled = YES;
-        });
     }
 }
 
