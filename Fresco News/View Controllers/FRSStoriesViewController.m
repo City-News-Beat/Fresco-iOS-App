@@ -206,7 +206,7 @@
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadData];
             [self.appDelegate.managedObjectContext save:Nil];
             [self.appDelegate saveContext];
         });
@@ -235,13 +235,23 @@
             FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
             
             [story configureWithDictionary:storyDict];
+            [story setValue:@(self.stories.count) forKey:@"index"];
             [self.stories addObject:story];
             [storiesToLoad addObject:[NSIndexPath indexPathForRow:index inSection:0]];
             index++;
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView reloadData];
+            
+            FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+            
+            for (FRSStory *story in self.cached) {
+                [delegate.managedObjectContext deleteObject:story];
+            }
+            
+            [delegate.managedObjectContext save:Nil];
+            [delegate saveContext];
         });
 
     }];
@@ -257,14 +267,6 @@
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     
     self.cached = self.stories;
-    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    
-    for (FRSStory *story in self.cached) {
-        [delegate.managedObjectContext deleteObject:story];
-    }
-    
-    [delegate.managedObjectContext save:Nil];
-    [delegate saveContext];
 }
 
 -(void)cacheLocalData:(NSArray *)localData {

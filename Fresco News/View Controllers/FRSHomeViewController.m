@@ -217,7 +217,6 @@
         [self cacheLocalData:galleries];
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     }];
 }
 
@@ -242,12 +241,10 @@
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
+    NSArray *past;
     
-    NSString *uid = @"__no__";
-    
-    if (self.dataSource.count > 0) {
-        FRSGallery *gal1 = self.dataSource[0];
-        uid = gal1.uid;
+    if (self.dataSource.count > 1) {
+        past = @[[self.dataSource[0] uid],[self.dataSource[1] uid]];
     }
     
     self.dataSource = [[NSMutableArray alloc] init];
@@ -261,17 +258,18 @@
         [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
         [self.dataSource addObject:galleryToSave];
         [self.highlights addObject:galleryToSave];
-        
-        if (localIndex == 0) {
-            if ([uid isEqualToString:galleryToSave.uid]) {
-                shouldAnimate = FALSE;
-            }
-            else {
-                shouldAnimate = TRUE;
-            }
-        }
-        
         localIndex++;
+    }
+    
+    if (self.dataSource.count > 1 && past) {
+        if ([past[0] isEqualToString:[self.dataSource[0] uid]] && [past[1] isEqualToString:[self.dataSource[1] uid]]) {
+            // no animate
+            [self.tableView reloadData];
+        }
+        else {
+            // animate
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        }
     }
     
     for (FRSGallery *gallery in self.cachedData) {
@@ -492,7 +490,9 @@
         return;
     }
     
-    cell.gallery = self.dataSource[indexPath.row];
+    if ([cell.gallery.uid isEqualToString:[self.dataSource[indexPath.row] uid]]) {
+        return;
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [cell clearCell];
