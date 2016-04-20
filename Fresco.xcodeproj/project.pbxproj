@@ -143,6 +143,7 @@
 		D487F1BE1CBD6C2D005742F3 /* FRSMediaScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */; };
 		D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1CD1CC14246005742F3 /* FRSPlayer.m */; };
 		D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = D49B1D991C99EB1E00735846 /* UITextView+Resize.m */; };
+		D4D60D0C1CC829C000059EBA /* following.json in Resources */ = {isa = PBXBuildFile; fileRef = D4D60D0B1CC829C000059EBA /* following.json */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
 		D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF1901CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png */; };
 		D4DBF1931CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF1921CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png */; };
@@ -470,6 +471,7 @@
 		D487F1CD1CC14246005742F3 /* FRSPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayer.m; sourceTree = "<group>"; };
 		D49B1D981C99EB1E00735846 /* UITextView+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Resize.h"; sourceTree = "<group>"; };
 		D49B1D991C99EB1E00735846 /* UITextView+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Resize.m"; sourceTree = "<group>"; };
+		D4D60D0B1CC829C000059EBA /* following.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = following.json; path = ../following.json; sourceTree = "<group>"; };
 		D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "karmina-bold.otf"; sourceTree = "<group>"; };
 		D4DBF1901CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxBlankCircleOutline24W2@3x.png"; sourceTree = "<group>"; };
 		D4DBF1921CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxBlankCircleOutline24W2@2x.png"; sourceTree = "<group>"; };
@@ -816,6 +818,7 @@
 		420DC7151ADB875000157762 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D4D60D0B1CC829C000059EBA /* following.json */,
 				072A9F3D1C24914F00F8CCE0 /* Fonts */,
 			);
 			path = Resources;
@@ -1832,6 +1835,7 @@
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
 				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
+				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
 				D43C7FDF1C8E489600A7A7A7 /* FRSFileFooterCell.xib in Resources */,
 				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,

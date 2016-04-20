@@ -254,6 +254,13 @@
         
 }
 
+-(void)fetchFollowing:(void(^)(NSArray *galleries, NSError *error))completion {
+    NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"following" ofType:@"json"]];
+    NSError *jsonError;
+    NSDictionary *fakeData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
+    completion(fakeData[@"data"], jsonError);
+}
+
 -(void)uploadPart:(NSInteger)part ofFile:(NSURL *)fileURL toURL:(NSURL *)destinationURL completion:(FRSAPIDefaultCompletionBlock)completion {
     
 }

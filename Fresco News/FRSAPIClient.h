@@ -20,6 +20,9 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 -(void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSInteger)offsetID completion:(void(^)(NSArray *stories, NSError *error))completion;
 -(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion;
 
+-(void)fetchFollowing:(void(^)(NSArray *galleries, NSError *error))completion;
+
+
 
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion;
 
