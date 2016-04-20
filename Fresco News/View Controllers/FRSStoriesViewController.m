@@ -32,7 +32,7 @@
 @property (nonatomic) BOOL firstTime;
 @property (nonatomic, retain) NSArray *cached;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
-
+@property (strong, nonatomic) NSArray *cachedData;
 @end
 
 @implementation FRSStoriesViewController
@@ -177,6 +177,7 @@
 -(void)fetchStories {
     [self fetchLocalData];
     __block int const numToFetch = 12;
+    self.cachedData = self.stories;
 
     [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:0 completion:^(NSArray *stories, NSError *error) {
         self.stories = [[NSMutableArray alloc] init];
@@ -202,6 +203,10 @@
             [story setValue:@(index) forKey:@"index"];
             [self.stories addObject:story];
             index++;
+        }
+        
+        for (FRSStory *story in self.cachedData) {
+            [self.appDelegate.managedObjectContext deleteObject:story];
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
