@@ -141,27 +141,9 @@
 }
 
 -(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
-    if (scrollView != self.tableView) {
-        return;
-    }
-    
-    NSArray *visibleCells = [[self.tableView visibleCells] mutableCopy];
-    visibleCells = [visibleCells sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"row" ascending:YES]]];
-    
-    float openY = scrollView.contentOffset.y;
-    BOOL foundPlayer = FALSE;
-    
-    for (FRSGalleryCell *cell in visibleCells) {
-        float cellY = cell.frame.origin.y - openY;
-        if (!foundPlayer && cellY < 450 && [cell player].rate == 0.0 && [[cell player] respondsToSelector:@selector(play)] && ![cell player].playWhenReady && [[cell player] hasPlayed] == FALSE) {
-            cell.hasAlreadyAutoPlayed = TRUE;
-            [cell play];
-            cell.isCurrentPlayer = TRUE;
-            foundPlayer = TRUE;
-        }
-        else {
-            cell.isCurrentPlayer = FALSE;
-        }
+    if (needsUpdate) {
+        needsUpdate = FALSE;
+       // [self.tableView reloadData];
     }
 }
 
@@ -375,7 +357,7 @@
             });
         }
     }
-    cell.row = @(indexPath.row);
+    
     cell.delegate = self;
     cell.hasAlreadyAutoPlayed = FALSE;
     return cell;
@@ -463,10 +445,28 @@
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-  
+    if (scrollView != self.tableView) {
+        return;
+    }
+    
+    NSArray *visibleCells = [[self.tableView visibleCells] mutableCopy];
+    
+    float openY = scrollView.contentOffset.y;
+    BOOL foundPlayer = FALSE;
+    
+    for (FRSGalleryCell *cell in visibleCells) {
+        float cellY = cell.frame.origin.y - openY;
+        if (!foundPlayer && cellY < 450 && [cell player].rate == 0.0 && [[cell player] respondsToSelector:@selector(play)] && ![cell player].playWhenReady && [[cell player] hasPlayed] == FALSE) {
+            cell.hasAlreadyAutoPlayed = TRUE;
+            [cell play];
+            cell.isCurrentPlayer = TRUE;
+            foundPlayer = TRUE;
+        }
+        else {
+            cell.isCurrentPlayer = FALSE;
+        }
+    }
 }
-
-
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     

@@ -69,7 +69,7 @@
 
 @property (nonatomic, retain) NSMutableArray *players;
 @property (weak, nonatomic) FRSPlayer *playerNeeded;
-@property (nonatomic, retain) NSNumber *row;
+
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate;
 -(void)loadGallery:(FRSGallery *)gallery;
 -(void)play;
