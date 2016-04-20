@@ -196,15 +196,17 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
     if (scrollView != self.galleriesTable) {
         return;
     }
-    
+    NSArray *visibleCells = [[self.galleriesTable visibleCells] mutableCopy];
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         float openY = scrollView.contentOffset.y;
         float windowY = scrollView.frame.size.height - 49;
         
-        for (FRSGalleryCell *cell in [self.galleriesTable visibleCells]) {
+        for (FRSGalleryCell *cell in visibleCells) {
             float cellY = cell.frame.origin.y - openY;
             float sizeY = cell.frame.size.height;
             

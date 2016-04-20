@@ -11,4 +11,5 @@
 
 @interface FRSPlayer : AVPlayer
 @property (weak, nonatomic) UIView *container;
+@property BOOL playWhenReady;
 @end
