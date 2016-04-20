@@ -308,7 +308,6 @@
     else {
         [player pause];
     }
-    
 }
 
 -(void)handlePhotoTap:(NSInteger)index {
@@ -609,6 +608,8 @@
     imageView = (self.imageViews.count > page) ? self.imageViews[page] : Nil;
     post = (self.orderedPosts.count > page) ? self.orderedPosts[page] : Nil;
     
+    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
+
     if (self.players.count <= page) {
         if (post.videoUrl != Nil && page >= self.players.count) {
             FRSPlayer *player = [self setupPlayerForPost:post];
@@ -838,7 +839,8 @@
 }
 
 -(void)play {
-    NSInteger page = floor(self.scrollView.contentOffset.x / self.scrollView.frame.size.width);
+    NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    
     if (self.players.count > page) {
         if ([self.players[page] respondsToSelector:@selector(play)]) {
             [(AVPlayer *)self.players[page] play];

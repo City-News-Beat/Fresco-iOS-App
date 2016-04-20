@@ -436,6 +436,43 @@
     return [gallery heightForGallery];
 }
 
+//-(NSInteger)heightForCellForGallery:(FRSGallery *)gallery{
+//    
+//    NSInteger totalHeight = 0;
+//    
+//    for (FRSPost *post in gallery.posts){
+//        NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
+//        NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
+//        
+//        if (rawHeight == 0 || rawWidth == 0){
+//            totalHeight += [UIScreen mainScreen].bounds.size.width;
+//        }
+//        else {
+//            NSInteger scaledHeight = rawHeight * ([UIScreen mainScreen].bounds.size.width/rawWidth);
+//            totalHeight += scaledHeight;
+//        }
+//    }
+//    
+//    NSInteger averageHeight = totalHeight/gallery.posts.count;
+//    
+//    averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
+//    
+//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 32, 0)];
+//
+//    label.font = [UIFont systemFontOfSize:15 weight:-1];
+//    label.text = gallery.caption;
+//    label.numberOfLines = 6;
+//
+//    [label sizeToFit];
+//    
+//    averageHeight += label.frame.size.height + 12 + 44 + 20;
+//    
+//    return averageHeight;
+//}
+
+
+
+
 #pragma mark - UITableView Delegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -446,13 +483,12 @@
     if (scrollView != self.tableView) {
         return;
     }
-    NSArray *visibleCells = [[self.tableView visibleCells] mutableCopy];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         float openY = scrollView.contentOffset.y;
         float windowY = scrollView.frame.size.height - 49;
         
-        for (FRSGalleryCell *cell in visibleCells) {
+        for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
             float cellY = cell.frame.origin.y - openY;
             float sizeY = cell.frame.size.height;
             

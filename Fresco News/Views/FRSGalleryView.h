@@ -68,7 +68,6 @@
 @property (nonatomic) NSInteger currentPage;
 
 @property (nonatomic, retain) NSMutableArray *players;
-@property (weak, nonatomic) FRSPlayer *playerNeeded;
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate;
 -(void)loadGallery:(FRSGallery *)gallery;
