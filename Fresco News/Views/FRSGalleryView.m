@@ -91,8 +91,10 @@
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
-    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 20);
+    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
     [self.nameLabel sizeToFit];
+    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
+
     
     [self.actionBar setOriginWithPoint:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height)];
     [self.borderLine.superview bringSubviewToFront:self.borderLine];
@@ -437,8 +439,11 @@
     self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
-    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 20);
+    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
     [self.nameLabel sizeToFit];
+    //Set frame again to avoid clipping shadow
+    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
+
 
     
     [self addShadowToLabel:self.nameLabel];
@@ -472,7 +477,8 @@
     self.locationLabel.text = post.address;
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
     
-//    [self.nameLabel sizeToFit];
+    self.nameLabel.numberOfLines = 1;
+    [self.nameLabel sizeToFit];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     
@@ -491,7 +497,6 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-            
             
             //Add gesture recognizer only if user has a photo
             UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
@@ -812,48 +817,10 @@
 }
 
 -(void)segueToUserProfile:(FRSUser *)user {
-  
-//    NSLog(@"self.profileIV.image = %@", self.profileIV.image);
-//    if ([self.profileIV.image == nil]) {
-        FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:user];
-        [self.delegate.navigationController pushViewController:userViewController animated:YES];
-//    }
-}
 
--(void)galleryTapped{    
-    
-//    self.parallaxImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-
-    
-//    FRSScrollViewImageView *image = [[FRSScrollViewImageView alloc] initWithFrame:self.parallaxImage.frame];
-//    UIImage *currentImage = [UIImage new];
-//    image = [self.imageViews objectAtIndex:self.currentPage];
-//    [self.parallaxImage setImage:image];
-    
-//    UIImage *imageView = self.imageViews[self.currentPage];
-//    self.parallaxImage.image = imageView;
-    
-//    self.parallaxImage.image = self.imageViews.firstObject;
-    
-    
-    
-//    self.container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-//    self.container.backgroundColor = [UIColor blackColor];
-//    [self.window addSubview:self.container];
-//    
-//    
-//    self.parallaxImage.alpha = 0;
-//    self.userInteractionEnabled = NO;
-//    self.parallaxImage.backgroundColor = [UIColor redColor];
-//    [self.window addSubview:self.parallaxImage];
-//    
-//    
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissParallax)];
-//    [self.window addGestureRecognizer:tap];
-    
-    
-//    [self presentParallax];
-//    [OEParallax createParallaxFromView:self.parallaxImage withMaxX:100 withMinX:-100 withMaxY:100 withMinY:-100];
+    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:user];
+//    userViewController.title = user.username;
+    [self.delegate.navigationController pushViewController:userViewController animated:YES];
 }
 
 -(void)presentParallax{
