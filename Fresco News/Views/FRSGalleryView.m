@@ -298,6 +298,7 @@
     
     if (player.muted) {
         player.muted = FALSE;
+        [player play];
         return;
     }
     
@@ -307,6 +308,7 @@
     else {
         [player pause];
     }
+    
 }
 
 -(void)handlePhotoTap:(NSInteger)index {
@@ -607,6 +609,8 @@
     imageView = (self.imageViews.count > page) ? self.imageViews[page] : Nil;
     post = (self.orderedPosts.count > page) ? self.orderedPosts[page] : Nil;
     
+    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
+
     if (self.players.count <= page) {
         if (post.videoUrl != Nil && page >= self.players.count) {
             FRSPlayer *player = [self setupPlayerForPost:post];
@@ -637,9 +641,6 @@
             });
         }
     }
-
-
-    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
     
     if (self.imageViews.count > page+1 && self.orderedPosts.count > page+1) {
         UIImageView *nextImage = self.imageViews[page+1];

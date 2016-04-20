@@ -409,7 +409,7 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView beginUpdates];
-                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
                 [self.tableView endUpdates];
                 needsUpdate = TRUE;
                 isLoading = FALSE;
