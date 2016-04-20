@@ -43,7 +43,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 -(void)setupTableView {
-    [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:galleryCell];
+   // [self.galleriesTable registerClass:[FRSGalleryCell class] forCellReuseIdentifier:@"gallery-cell"];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -84,8 +84,14 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    FRSGalleryCell *cell = (FRSGalleryCell *)[tableView dequeueReusableCellWithIdentifier:galleryCell];
+    FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
     
+    if (!cell) {
+        cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.navigationController = self.navigationController;
+    }
+
     return cell;
 }
 
@@ -114,6 +120,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     dispatch_async(dispatch_get_main_queue(), ^{
         [cell clearCell];
         [cell configureCell];
+        [cell play];
     });
     
     __weak typeof(self) weakSelf = self;
