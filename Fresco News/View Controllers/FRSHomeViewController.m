@@ -479,6 +479,27 @@
     
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView != self.tableView) {
+        return;
+    }
+    
+    float openY = scrollView.contentOffset.y;
+    float windowY = scrollView.frame.size.height - 65 - 44;
+    
+    for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
+        float cellY = cell.frame.origin.y - openY;
+        float sizeY = cell.frame.size.height;
+        
+        BOOL isCentered = (fabs(cellY - (windowY-sizeY)/2) == 0);
+        
+        if (isCentered) {
+            NSLog(@"CENTERED");
+            break;
+        }
+    }
+}
+
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
     // sloppy not to have a check here
