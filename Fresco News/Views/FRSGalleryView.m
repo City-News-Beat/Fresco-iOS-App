@@ -27,7 +27,9 @@
 @property (nonatomic, retain) UIView *topLine;
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
+@property (strong, nonatomic) UIImageView *muteImageView;
 @property BOOL playerHasFocus;
+@property BOOL isVideo;
 @end
 
 @implementation FRSGalleryView
@@ -147,6 +149,7 @@
     [self configureScrollView]; //
     [self configureImageViews]; // these three will be wrapped in carousel
     [self configurePageControl];//
+    [self configureMuteIcon];
     
     [self configureGalleryInfo]; // this will stay similar
     
@@ -315,6 +318,14 @@
 -(void)playerItemDidReachEnd:(NSNotification *)notification {
     [self.videoPlayer seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
     [self.videoPlayer play];
+}
+
+-(void)configureMuteIcon {
+    if (self.isVideo) {
+        self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
+        self.muteImageView.frame = CGRectMake(self.frame.size.width - 24 - 16, 16, 24, 24);
+        [self addSubview:self.muteImageView];
+    }
 }
 
 -(void)configurePageControl{
