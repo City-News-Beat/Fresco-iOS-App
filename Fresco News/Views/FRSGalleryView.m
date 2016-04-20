@@ -837,8 +837,19 @@
     [UIView commitAnimations];
 }
 
+-(AVPlayer *)currentPlayer {
+    NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    if (self.players.count > page) {
+        if ([self.players[page] respondsToSelector:@selector(pause)]) {
+            return self.players[page];
+        }
+    }
+    
+    return Nil;
+}
+
 -(void)play {
-    NSInteger page = floor(self.scrollView.contentOffset.x / self.scrollView.frame.size.width);
+    NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
     if (self.players.count > page) {
         if ([self.players[page] respondsToSelector:@selector(play)]) {
             FRSPlayer *player = (FRSPlayer *)self.players[page];
