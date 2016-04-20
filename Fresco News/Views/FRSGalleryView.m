@@ -439,11 +439,7 @@
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 20);
     [self.nameLabel sizeToFit];
-    
-    UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
-    [bylineTap setNumberOfTapsRequired:1];
-    [self.nameLabel setUserInteractionEnabled:YES];
-    [self.nameLabel addGestureRecognizer:bylineTap];
+
     
     [self addShadowToLabel:self.nameLabel];
     
@@ -451,7 +447,15 @@
     
     if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            
+            //Set user image
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+            
+            //Add gesture recognizer only if user has a photo
+            UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+            [bylineTap setNumberOfTapsRequired:1];
+            [self.nameLabel setUserInteractionEnabled:YES];
+            [self.nameLabel addGestureRecognizer:bylineTap];
         });
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
@@ -487,10 +491,18 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+            
+            
+            //Add gesture recognizer only if user has a photo
+            UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+            [bylineTap setNumberOfTapsRequired:1];
+            [self.nameLabel setUserInteractionEnabled:YES];
+            [self.nameLabel addGestureRecognizer:bylineTap];
         });
         
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
+        [self.nameLabel setUserInteractionEnabled:NO];
     }
 
     [self addShadowToLabel:self.nameLabel];
