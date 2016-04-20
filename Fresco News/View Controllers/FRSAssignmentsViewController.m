@@ -517,7 +517,7 @@
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.frame = CGRectMake(self.view.frame.size.width -93 , 15, 77, 17);
-    [button setTitle:@"ACCEPT ($5)" forState:UIControlStateNormal];
+    [button setTitle:@"OPEN CAMERA" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(acceptAssignment) forControlEvents:UIControlEventTouchDown];

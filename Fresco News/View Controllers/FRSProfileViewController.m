@@ -60,6 +60,8 @@
 @property (strong, nonatomic) UIView *socialButtonContainer;
 @property (strong, nonatomic) UIView *profileMaskView;
 
+@property (strong, nonatomic) UILabel *usernameLabel;
+
 @property (nonatomic) BOOL overlayPresented;
 
 @property (nonatomic) NSInteger count;
@@ -104,15 +106,15 @@
         
         /* NAV BAR */
         [super removeNavigationBarLine];
+
+        self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
+        self.usernameLabel.text = @"";
+        self.usernameLabel.textColor = [UIColor whiteColor];
+        [self.usernameLabel setFont:[UIFont notaBoldWithSize:17]];
+        self.usernameLabel.textAlignment = NSTextAlignmentCenter;
+        self.navigationItem.titleView = self.usernameLabel;
         
-        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
-        titleLabel.text = @"@username"; //user.username
-        titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
-        titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.textColor = [UIColor whiteColor];
-        self.navigationItem.titleView = titleLabel;
-        
-        UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
+        UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
         
         self.navigationItem.rightBarButtonItem = followButton;
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -554,11 +556,11 @@
 
 #pragma mark - Navigation
 
--(void)showNotifications{
+-(void)showNotifications {
     
 }
 
--(void)showSettings{
+-(void)showSettings {
     self.navigationController.hidesBottomBarWhenPushed = YES;
     FRSSettingsViewController *settingsVC = [[FRSSettingsViewController alloc] init];
     [self.navigationController pushViewController:settingsVC animated:YES];
@@ -566,11 +568,15 @@
     [self hideTabBarAnimated:YES];
 }
 
--(void)showEditProfile{
+-(void)followUser {
     
 }
 
--(void)showFollowers{
+-(void)showEditProfile {
+    
+}
+
+-(void)showFollowers {
     FRSFollowersViewController *vc = [[FRSFollowersViewController alloc] init];
     FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:vc];
     [self presentViewController:nav animated:YES completion:nil];
@@ -595,14 +601,17 @@
 #pragma mark - User
 
 -(void)configureWithUser:(FRSUser *)user {
+//    NSLog(@"user = %@", user);
+    
     
 //    self.profileIV.image = user.profileImage;
 //    self.nameLabel.text = user.firstName;
 //    self.bioLabel.text = user.bio;
     
-    NSLog(@"user = %@", user);
-    
     self.profileIV.image = [UIImage imageNamed:@"apple-user-grace"];
+    self.nameLabel.text = @"DJ Gracie P.";
+    self.usernameLabel.text = @"@grace";
+    self.bioLabel.text = @"Hey! My name is Grace and I'm wearing a yellow shirt. Look at my yellow shirt! Hey! My name is Grace and I'm wearing a yellow shirt. Look at my yellow shirt! Hey! My name is Grace and I'm wearing a yellow shirt. Look at my yellow shirt!";
     self.locationLabel.text = @"Fresco, USA."; //geo coder, last location
     self.followersLabel.text = @"1.5M";
     

@@ -11,8 +11,11 @@
 #import <MagicalRecord/MagicalRecord.h>
 #import "FRSStory+CoreDataProperties.h"
 #import "FRSAppDelegate.h"
+#import "DGElasticPullToRefresh.h"
 
 @interface FRSStoryDetailViewController ()
+
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
 @end
 
@@ -25,14 +28,17 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
     [self setupTableView];
     [self configureNavigationBar];
+    [self configureSpinner];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [self removeStatusBarNotification];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self addStatusBarNotification];
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
@@ -47,6 +53,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.galleriesTable.scrollEnabled = NO;
 }
 
 -(void)configureNavigationBar {
@@ -161,6 +168,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
             FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
             [galleryObject configureWithDictionary:gallery context:delegate.managedObjectContext];
             [self.stories addObject:galleryObject];
+            [self.loadingView stopLoading];
+            [self.loadingView removeFromSuperview];
+            self.galleriesTable.scrollEnabled = YES;
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -194,5 +204,35 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)scrollToGalleryIndex:(NSInteger)index {
     
 }
+
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 -10, [UIScreen mainScreen].bounds.size.height/2  -44 -10, 20, 20);
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+    [self.loadingView startAnimating];
+    [self.galleriesTable addSubview:self.loadingView];
+}
+
+
+#pragma mark - Status Bar
+
+-(void)statusBarTappedAction:(NSNotification*)notification{
+    if (self.galleriesTable.contentOffset.y >= 0) {
+        [self.galleriesTable setContentOffset:CGPointMake(0, 0) animated:YES];
+    }
+}
+
+-(void)addStatusBarNotification{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(statusBarTappedAction:)
+                                                 name:kStatusBarTappedNotification
+                                               object:nil];
+}
+
+-(void)removeStatusBarNotification{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kStatusBarTappedNotification object:nil];
+}
+
 
 @end

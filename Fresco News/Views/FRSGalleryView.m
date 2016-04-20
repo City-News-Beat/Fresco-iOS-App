@@ -27,7 +27,9 @@
 @property (nonatomic, retain) UIView *topLine;
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
+@property (strong, nonatomic) UIImageView *muteImageView;
 @property BOOL playerHasFocus;
+@property BOOL isVideo;
 @end
 
 @implementation FRSGalleryView
@@ -57,9 +59,10 @@
     
     self.pageControl.numberOfPages = self.gallery.posts.count;
     [self.pageControl setCurrentPage:0];
-    self.pageControl.frame = CGRectMake(self.scrollView.frame.size.width - 20 - (self.gallery.posts.count * 8) , self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8);
+    [self.pageControl sizeToFit];
     
-   // self.pageControl.frame = CGRectMake(0, self.scrollView.frame.size.height - 15, self.pageControl.frame.size.width, 8);
+    self.pageControl.frame = CGRectMake(self.frame.size.width - ((self.gallery.posts.count) *16) - 16, self.scrollView.frame.size.height - 15 - 8, (self.gallery.posts.count) *16, 8);
+    
 
     self.topLine.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5);
     self.bottomLine.frame = CGRectMake(0, self.scrollView.frame.size.height - 0.5, self.scrollView.frame.size.width, 0.5);
@@ -89,7 +92,10 @@
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
-    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 20);
+    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
+    [self.nameLabel sizeToFit];
+    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
+
     
     [self.actionBar setOriginWithPoint:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height)];
     [self.borderLine.superview bringSubviewToFront:self.borderLine];
@@ -208,6 +214,7 @@
                     NSLog(@"TOP LEVEL PLAYER");
                     [self.players addObject:[self setupPlayerForPost:post]];
                     [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                    [self configureMuteIcon];
                 }
                 else {
                     [self.players addObject:imageView];
@@ -266,6 +273,7 @@
             [container.layer insertSublayer:playerLayer atIndex:1000];
             [self.scrollView addSubview:container];
             [self.scrollView bringSubviewToFront:container];
+            [self configureMuteIcon];
         });
         
         if (self.delegate) {
@@ -275,11 +283,23 @@
         videoPlayer.muted = TRUE;
     });
     
+    
     return videoPlayer;
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
     
+    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    FRSPlayer *player = self.players[page];
+
+    if ([self currentPageIsVideo]) {
+        if (player.muted) {
+            self.muteImageView.alpha = 1;
+        } else {
+            self.muteImageView.alpha = 0;
+        }
+    }
+
     CGPoint point = [tap locationInView:self];
     
     // ensures point is in player area
@@ -287,13 +307,11 @@
         return;
     }
     
-    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     
     if (page >= self.players.count) {
         return;
     }
     
-    FRSPlayer *player = self.players[page];
     
     // ensures FRSPlayer not view
     if (![player respondsToSelector:@selector(play)]) {
@@ -302,15 +320,21 @@
     
     if (player.muted) {
         player.muted = FALSE;
+//<<<<<<< HEAD
         [player play];
+//=======
+        self.muteImageView.alpha = 0;
+//>>>>>>> 3.0-omar
         return;
+    } else {
     }
     
     if (player.rate == 0.0) {
         [player play];
-    }
-    else {
+        self.muteImageView.alpha = 0;
+    } else {
         [player pause];
+        self.muteImageView.alpha = 1;
     }
 }
 
@@ -323,6 +347,30 @@
     [self.videoPlayer play];
 }
 
+-(void)configureMuteIcon {
+    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    if (!self.muteImageView) {
+        self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
+        self.muteImageView.alpha = 0;
+        [self.scrollView addSubview:self.muteImageView];
+    }
+    
+    if ([self currentPageIsVideo]) {
+        NSLog(@"YEAH");
+        self.muteImageView.alpha = 1;
+        self.muteImageView.frame = CGRectMake(((page + 1) * self.frame.size.width) - 24 - 16, 16, 24, 24);
+        [self.scrollView bringSubviewToFront:self.muteImageView];
+    }
+}
+
+-(BOOL)currentPageIsVideo {
+    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
+}
+
+-(BOOL)pageIsVideo:(NSInteger)page {
+    return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
+}
 -(void)configurePageControl{
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = self.gallery.posts.count;
@@ -406,12 +454,12 @@
     self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
-        self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 20);
-    
-    UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
-    [bylineTap setNumberOfTapsRequired:1];
-    [self.nameLabel setUserInteractionEnabled:YES];
-    [self.nameLabel addGestureRecognizer:bylineTap];
+    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
+    [self.nameLabel sizeToFit];
+    //Set frame again to avoid clipping shadow
+    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
+
+
     
     [self addShadowToLabel:self.nameLabel];
     
@@ -419,7 +467,15 @@
     
     if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            
+            //Set user image
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+            
+            //Add gesture recognizer only if user has a photo
+            UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+            [bylineTap setNumberOfTapsRequired:1];
+            [self.nameLabel setUserInteractionEnabled:YES];
+            [self.nameLabel addGestureRecognizer:bylineTap];
         });
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
@@ -436,7 +492,8 @@
     self.locationLabel.text = post.address;
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
     
-//    [self.nameLabel sizeToFit];
+    self.nameLabel.numberOfLines = 1;
+    [self.nameLabel sizeToFit];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     
@@ -455,10 +512,17 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+            
+            //Add gesture recognizer only if user has a photo
+            UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+            [bylineTap setNumberOfTapsRequired:1];
+            [self.nameLabel setUserInteractionEnabled:YES];
+            [self.nameLabel addGestureRecognizer:bylineTap];
         });
         
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
+        [self.nameLabel setUserInteractionEnabled:NO];
     }
 
     [self addShadowToLabel:self.nameLabel];
@@ -685,6 +749,7 @@
         self.profileIV.alpha = 0;
         self.locationIV.alpha = 0;
         self.clockIV.alpha = 0;
+        self.muteImageView.alpha = 0;
         return;
     }
         
@@ -697,6 +762,7 @@
     self.profileIV.alpha = absAlpha;
     self.locationIV.alpha = absAlpha;
     self.clockIV.alpha = absAlpha;
+    self.muteImageView.alpha = absAlpha;
     
     //Profile picture doesn't fade on scroll
     
@@ -707,6 +773,10 @@
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
         self.profileIV.alpha = 0;
+    }
+    
+    if (adjustedPost.videoUrl == nil) {
+        self.muteImageView.alpha = 0;
     }
     
 }
@@ -743,6 +813,8 @@
         self.videoPlayer = ([self.players[page] respondsToSelector:@selector(play)]) ? self.players[page] : Nil;
         [self.videoPlayer play];
     }
+    
+    [self configureMuteIcon];
 }
 
 -(NSInteger)imageViewHeight{
@@ -769,48 +841,10 @@
 }
 
 -(void)segueToUserProfile:(FRSUser *)user {
-  
-//    NSLog(@"self.profileIV.image = %@", self.profileIV.image);
-//    if ([self.profileIV.image == nil]) {
-        FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:user];
-        [self.delegate.navigationController pushViewController:userViewController animated:YES];
-//    }
-}
 
--(void)galleryTapped{    
-    
-//    self.parallaxImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-
-    
-//    FRSScrollViewImageView *image = [[FRSScrollViewImageView alloc] initWithFrame:self.parallaxImage.frame];
-//    UIImage *currentImage = [UIImage new];
-//    image = [self.imageViews objectAtIndex:self.currentPage];
-//    [self.parallaxImage setImage:image];
-    
-//    UIImage *imageView = self.imageViews[self.currentPage];
-//    self.parallaxImage.image = imageView;
-    
-//    self.parallaxImage.image = self.imageViews.firstObject;
-    
-    
-    
-//    self.container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-//    self.container.backgroundColor = [UIColor blackColor];
-//    [self.window addSubview:self.container];
-//    
-//    
-//    self.parallaxImage.alpha = 0;
-//    self.userInteractionEnabled = NO;
-//    self.parallaxImage.backgroundColor = [UIColor redColor];
-//    [self.window addSubview:self.parallaxImage];
-//    
-//    
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissParallax)];
-//    [self.window addGestureRecognizer:tap];
-    
-    
-//    [self presentParallax];
-//    [OEParallax createParallaxFromView:self.parallaxImage withMaxX:100 withMinX:-100 withMaxY:100 withMinY:-100];
+    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:user];
+//    userViewController.title = user.username;
+    [self.delegate.navigationController pushViewController:userViewController animated:YES];
 }
 
 -(void)presentParallax{
@@ -850,6 +884,8 @@
             [(AVPlayer *)self.players[page] play];
         }
     }
+    
+//    self.muteImageView.alpha = 0;
 }
 
 -(void)pause {
@@ -858,6 +894,8 @@
             [player pause];
         }
     }
+    
+//    self.muteImageView.alpha = 1;
 }
 
 @end

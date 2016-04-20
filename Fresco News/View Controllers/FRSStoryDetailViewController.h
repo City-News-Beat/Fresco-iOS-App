@@ -12,7 +12,11 @@
 #import "UIFont+Fresco.h"
 #import "FRSGalleryView.h"
 
+//<<<<<<< HEAD
 @interface FRSStoryDetailViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
+//=======
+//@interface FRSStoryDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+//>>>>>>> 3.0-omar
 {
     
 }
