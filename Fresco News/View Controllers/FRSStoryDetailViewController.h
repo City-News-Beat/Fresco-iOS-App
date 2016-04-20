@@ -11,7 +11,7 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 
-@interface FRSStoryDetailViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
+@interface FRSStoryDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 {
     
 }
