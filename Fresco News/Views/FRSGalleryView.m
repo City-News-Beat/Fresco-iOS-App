@@ -211,6 +211,7 @@
                     NSLog(@"TOP LEVEL PLAYER");
                     [self scrollViewDidScroll:self.scrollView];
                     [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                    [self configureMuteIcon];
                 }
                 else {
                     [self.players addObject:imageView];
@@ -267,6 +268,7 @@
             [container.layer insertSublayer:playerLayer atIndex:1000];
             [self.scrollView addSubview:container];
             [self.scrollView bringSubviewToFront:container];
+            [self configureMuteIcon];
         });
         
         if (self.delegate) {
@@ -337,12 +339,18 @@
 }
 
 -(void)configureMuteIcon {
-//    NSLog(@"configureMuteIcon");
-    if ([self currentPageIsVideo]) {
-//        NSLog(@"current page is video");
+    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    if (!self.muteImageView) {
         self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
-        self.muteImageView.frame = CGRectMake(self.frame.size.width - 24 - 16, 16, 24, 24);
-        [self addSubview:self.muteImageView];
+        self.muteImageView.alpha = 0;
+        [self.scrollView addSubview:self.muteImageView];
+    }
+    
+    if ([self currentPageIsVideo]) {
+        NSLog(@"YEAH");
+        self.muteImageView.alpha = 1;
+        self.muteImageView.frame = CGRectMake(((page + 1) * self.frame.size.width) - 24 - 16, 16, 24, 24);
+        [self.scrollView bringSubviewToFront:self.muteImageView];
     }
 }
 
@@ -377,8 +385,6 @@
     [self configureLocationLine];
     [self configureUserLine];
     [self updateLabels];
-    [self configureMuteIcon];
-    
 }
 
 -(void)configureTimeLine{
@@ -791,6 +797,8 @@
         self.videoPlayer = ([self.players[page] respondsToSelector:@selector(play)]) ? self.players[page] : Nil;
         [self.videoPlayer play];
     }
+    
+    [self configureMuteIcon];
 }
 
 -(NSInteger)imageViewHeight{
