@@ -20,7 +20,6 @@
 @property (weak, nonatomic) UINavigationController *navigationController;
 @property (weak, nonatomic) id<FRSGalleryViewDelegate> delegate;
 @property BOOL hasVideoAsFirstPost;
-@property BOOL hasAlreadyAutoPlayed;
 -(void)clearCell;
 -(void)configureCell;
 
