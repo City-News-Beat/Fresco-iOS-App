@@ -486,13 +486,16 @@
         return;
     }
 
-    if (cell.gallery == self.dataSource[indexPath.row]) {
-        return;
+    if (self.cachedData.count > indexPath.row) {
+        NSString *oldUID = [self.cachedData[indexPath.row] uid];
+        NSString *newUID = [self.dataSource[indexPath.row] uid];
+        
+        if ([oldUID isEqualToString:newUID] && self.cachedData[indexPath.row] != self.dataSource[indexPath.row]) {
+            return;
+        }
     }
     
-    if ([cell.gallery.uid isEqualToString:[self.dataSource[indexPath.row] uid]]) {
-        return;
-    }
+    cell.gallery = self.dataSource[indexPath.row];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [cell clearCell];
