@@ -27,6 +27,8 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
 
 @property (nonatomic) BOOL shouldHaveBackButton;
 
+@property (nonatomic, retain) UIScrollView *pageScroller;
+
 -(void)configureTableView;
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView;
