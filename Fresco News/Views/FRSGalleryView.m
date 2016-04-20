@@ -837,17 +837,21 @@
     [UIView commitAnimations];
 }
 
+-(AVPlayer *)currentPlayer {
+    NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    if (self.players.count > page) {
+        if ([self.players[page] respondsToSelector:@selector(pause)]) {
+            return self.players[page];
+        }
+    }
+    
+    return Nil;
+}
+
 -(void)play {
-<<<<<<< HEAD
     if ([self currentPlayer]) {
         if ([self currentPlayer].rate == 0) {
             [[self currentPlayer] play];
-=======
-    NSInteger page = floor(self.scrollView.contentOffset.x / self.scrollView.frame.size.width);
-    if (self.players.count > page) {
-        if ([self.players[page] respondsToSelector:@selector(play)]) {
-            FRSPlayer *player = (FRSPlayer *)self.players[page];
->>>>>>> parent of d71c552... yes hello
             
             if (self.delegate) {
                 [self.delegate playerWillPlay:(FRSPlayer *)[self currentPlayer]];
