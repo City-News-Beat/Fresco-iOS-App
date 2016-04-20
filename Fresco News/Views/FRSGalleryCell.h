@@ -22,6 +22,7 @@
 @property BOOL hasVideoAsFirstPost;
 @property BOOL hasAlreadyAutoPlayed;
 @property BOOL isCurrentPlayer;
+@property (nonatomic, retain) NSNumber *row;
 -(void)clearCell;
 -(void)configureCell;
 
