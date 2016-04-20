@@ -849,12 +849,17 @@
 }
 
 -(void)play {
-    if ([self currentPlayer]) {
-        if ([self currentPlayer].rate == 0) {
-            [[self currentPlayer] play];
+    NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    if (self.players.count > page) {
+        if ([self.players[page] respondsToSelector:@selector(play)]) {
+            FRSPlayer *player = (FRSPlayer *)self.players[page];
             
-            if (self.delegate) {
-                [self.delegate playerWillPlay:(FRSPlayer *)[self currentPlayer]];
+            if (player.rate == 0) {
+                [player play];
+                
+                if (self.delegate) {
+                    [self.delegate playerWillPlay:self.players[page]];
+                }
             }
         }
     }
