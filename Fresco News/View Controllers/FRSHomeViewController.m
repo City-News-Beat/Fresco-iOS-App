@@ -450,17 +450,16 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         float openY = scrollView.contentOffset.y;
-        float windowY = scrollView.frame.size.height - 49;
+//        float windowY = scrollView.frame.size.height - 49;
         
         for (FRSGalleryCell *cell in visibleCells) {
             float cellY = cell.frame.origin.y - openY;
-            float sizeY = cell.frame.size.height;
+//            float sizeY = cell.frame.size.height;
             
-            float remainder = ((windowY - sizeY) / 2) - 120;
-            float difference = fabs(cellY - remainder);
+//            float remainder = ((windowY - sizeY) / 2) - 120;
+//            float difference = fabs(cellY - remainder);
             
-            if (difference <= 10 && !cell.hasAlreadyAutoPlayed) {
-                cell.hasAlreadyAutoPlayed = TRUE;
+            if (cellY < 400) {
                 [cell play];
             }
             
@@ -497,6 +496,7 @@
     cell.shareBlock = ^void(NSArray *sharedContent) {
         [weakSelf showShareSheetWithContent:sharedContent];
     };
+    
 }
 
 
