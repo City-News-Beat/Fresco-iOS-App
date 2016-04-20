@@ -46,6 +46,7 @@
     self.clipsToBounds = NO;
     self.gallery = gallery;
     self.orderedPosts = [gallery.posts allObjects];
+    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
         
     [self adjustHeight];
 
@@ -133,6 +134,8 @@
         [posts sortUsingDescriptors:[NSArray arrayWithObject:sort]];
 
         self.orderedPosts = posts;
+        self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
+
         [self configureUI];
     }
     return self;
