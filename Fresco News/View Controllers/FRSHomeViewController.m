@@ -200,6 +200,8 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
+    
+    self.pageScroller.delegate = self;
     [self.view addSubview:self.pageScroller];
 }
 
@@ -564,6 +566,22 @@
 -(void)searchStories {
     FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
     [self.navigationController pushViewController:searchVC animated:YES];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    if (self.pageScroller) {
+
+        if (self.pageScroller.contentOffset.x == self.view.frame.size.width) {
+            self.followingTabButton.alpha = 1;
+            self.highlightTabButton.alpha = 0.7;
+        } else if (self.pageScroller.contentOffset.x == 0) {
+            self.followingTabButton.alpha = 0.7;
+            self.highlightTabButton.alpha = 1;
+        }
+    }
 }
 
 
