@@ -176,8 +176,8 @@
 
 -(void)fetchStories {
     [self fetchLocalData];
+    [self.tableView reloadData];
     __block int const numToFetch = 12;
-    self.cachedData = self.stories;
 
     [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:0 completion:^(NSArray *stories, NSError *error) {
         self.stories = [[NSMutableArray alloc] init];
@@ -203,10 +203,6 @@
             [story setValue:@(index) forKey:@"index"];
             [self.stories addObject:story];
             index++;
-        }
-        
-        for (FRSStory *story in self.cachedData) {
-            [self.appDelegate.managedObjectContext deleteObject:story];
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -264,7 +260,6 @@
     
     self.cached = self.stories;
     FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    [delegate.managedObjectContext rollback];
     
     for (FRSStory *story in self.cached) {
         [delegate.managedObjectContext deleteObject:story];
@@ -275,19 +270,7 @@
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
-        NSInteger index = 0;
-        
-        for (NSDictionary *story in localData) {
-            
-            FRSStory *storyToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-            [storyToSave configureWithDictionary:story];
-            [storyToSave setValue:@(index) forKey:@"index"];
-            
-            index++;
-        }
     
-    [self.appDelegate.managedObjectContext save:Nil];
-    [self.appDelegate saveContext];
 }
 
 -(FRSStory *)storyExists:(NSString *)storyID {
