@@ -31,7 +31,7 @@
     if (object == self.currentItem && [keyPath isEqualToString:@"status"]) {
         if (self.currentItem.status == AVPlayerItemStatusReadyToPlay) {
             if (self.playWhenReady) {
-                [super play];
+                [self play];
                 self.playWhenReady = FALSE;
             }
         }
@@ -40,11 +40,9 @@
 
 -(void)play {
     if (self.currentItem.status == AVPlayerItemStatusReadyToPlay) {
-        NSLog(@"PLAYING");
         [super play];
     }
     else {
-        NSLog(@"WAITING");
         self.playWhenReady = TRUE;
     }
 }

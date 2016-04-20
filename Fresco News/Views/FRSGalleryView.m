@@ -838,14 +838,10 @@
 }
 
 -(void)play {
-    NSLog(@"PLAYPLAY");
     NSInteger page = floor(self.scrollView.contentOffset.x / self.scrollView.frame.size.width);
     if (self.players.count > page) {
-        NSLog(@"PLAYPLAY");
-
         if ([self.players[page] respondsToSelector:@selector(play)]) {
             [(AVPlayer *)self.players[page] play];
-            NSLog(@"PLAYPLAY");
         }
     }
 }

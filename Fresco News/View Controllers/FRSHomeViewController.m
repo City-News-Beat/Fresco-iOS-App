@@ -359,7 +359,7 @@
     }
     
     cell.delegate = self;
-    cell.hasAlreadyAutoPlayed = FALSE;
+    
     return cell;
 }
 
@@ -463,8 +463,6 @@
                 cell.hasAlreadyAutoPlayed = TRUE;
                 [cell play];
             }
-            
-            break;
         }
     });
 }
@@ -484,9 +482,9 @@
             return;
         }
     }
-    cell.hasAlreadyAutoPlayed = FALSE;
-
+    
     cell.gallery = self.dataSource[indexPath.row];
+    cell.hasAlreadyAutoPlayed = FALSE;
     dispatch_async(dispatch_get_main_queue(), ^{
         [cell clearCell];
         [cell configureCell];
