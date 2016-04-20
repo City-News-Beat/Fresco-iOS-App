@@ -14,6 +14,7 @@
 @interface FRSGalleryCell : UITableViewCell <FRSGalleryViewDelegate>
 
 @property (strong, nonatomic) FRSGalleryView *galleryView;
+
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
 @property (strong, nonatomic) NSArray *players;

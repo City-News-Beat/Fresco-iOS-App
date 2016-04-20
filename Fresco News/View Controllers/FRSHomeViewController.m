@@ -484,22 +484,20 @@
         return;
     }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        float openY = scrollView.contentOffset.y;
-        float windowY = scrollView.frame.size.height - 49;
+    float openY = scrollView.contentOffset.y;
+    float windowY = scrollView.frame.size.height - 65 - 44;
+    
+    for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
+        float cellY = cell.frame.origin.y - openY;
+        float sizeY = cell.frame.size.height;
         
-        for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
-            float cellY = cell.frame.origin.y - openY;
-            float sizeY = cell.frame.size.height;
-            
-            float remainder = ((windowY - sizeY) / 2) - 120;
-            float difference = fabs(cellY - remainder);
-            
-            if (difference <= 10) {
-                [cell play];
-            }
+        BOOL isCentered = (fabs(cellY - (windowY-sizeY)/2) == 0);
+        
+        if (isCentered) {
+            NSLog(@"CENTERED");
+            break;
         }
-    });
+    }
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
