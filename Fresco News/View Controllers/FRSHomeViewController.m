@@ -418,10 +418,8 @@
 
 -(void)playerWillPlay:(AVPlayer *)player {
     for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
-        if (cell.isCurrentPlayer)
-            continue;
-        for (FRSPlayer *player in cell.galleryView.players) {
-            if ([player respondsToSelector:@selector(rate)] && player.rate != 0.0) {
+        for (FRSPlayer *cellPlayer in cell.players) {
+            if (cellPlayer != player && player.rate != 0) {
                 [player pause];
             }
         }
@@ -452,18 +450,13 @@
     NSArray *visibleCells = [[self.tableView visibleCells] mutableCopy];
     
     float openY = scrollView.contentOffset.y;
-    BOOL foundPlayer = FALSE;
     
     for (FRSGalleryCell *cell in visibleCells) {
         float cellY = cell.frame.origin.y - openY;
-        if (!foundPlayer && cellY < 450 && [cell player].rate == 0.0 && [[cell player] respondsToSelector:@selector(play)] && ![cell player].playWhenReady && !cell.hasAlreadyAutoPlayed) {
+        if (cellY < 450 && cell.player.rate == 0.0 && [cell.player respondsToSelector:@selector(play)]) {
             cell.hasAlreadyAutoPlayed = TRUE;
             [cell play];
-            cell.isCurrentPlayer = TRUE;
-            foundPlayer = TRUE;
-        }
-        else {
-            cell.isCurrentPlayer = FALSE;
+            break;
         }
     }
 }

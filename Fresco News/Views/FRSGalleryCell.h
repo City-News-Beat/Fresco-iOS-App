@@ -21,11 +21,10 @@
 @property (weak, nonatomic) id<FRSGalleryViewDelegate> delegate;
 @property BOOL hasVideoAsFirstPost;
 @property BOOL hasAlreadyAutoPlayed;
-@property BOOL isCurrentPlayer;
 -(void)clearCell;
 -(void)configureCell;
 
 -(void)play;
 -(void)pause;
--(FRSPlayer *)player;
+-(AVPlayer *)player;
 @end
