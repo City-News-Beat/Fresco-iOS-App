@@ -30,6 +30,7 @@
 
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
+@property (strong, nonatomic) ShareSheetBlock readMoreBlock;
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 

@@ -12,6 +12,7 @@
 #import "FRSStory+CoreDataProperties.h"
 #import "FRSAppDelegate.h"
 #import "DGElasticPullToRefresh.h"
+#import "FRSGalleryExpandedViewController.h"
 
 @interface FRSStoryDetailViewController ()
 
@@ -29,6 +30,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [self setupTableView];
     [self configureNavigationBar];
     [self configureSpinner];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -97,11 +100,17 @@ static NSString *galleryCell = @"GalleryCellReuse";
         cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.navigationController = self.navigationController;
+
     }
+    
     
     cell.delegate = self;
 
     return cell;
+}
+
+-(void)readMore:(NSIndexPath *)indexPath {
+
 }
 
 -(void)playerWillPlay:(AVPlayer *)player {
@@ -146,6 +155,10 @@ static NSString *galleryCell = @"GalleryCellReuse";
     
     cell.shareBlock = ^void(NSArray *sharedContent) {
         [weakSelf showShareSheetWithContent:sharedContent];
+    };
+    
+    cell.galleryView.readMoreBlock = ^void(NSArray *sharedContent) {
+        [self readMore:indexPath];
     };
 }
 
@@ -233,6 +246,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)removeStatusBarNotification{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kStatusBarTappedNotification object:nil];
 }
+
 
 
 @end

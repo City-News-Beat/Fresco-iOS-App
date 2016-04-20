@@ -118,6 +118,10 @@
 
 -(void)handleActionButtonTapped {
     // idk why dan made this method life is a mystery
+    
+    if (self.readMoreBlock) {
+        self.readMoreBlock(Nil);
+    }
 }
 
 -(void)contentActionbarDidSelectShareButton:(id)sender {
