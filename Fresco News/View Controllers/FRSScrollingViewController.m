@@ -68,6 +68,7 @@
     self.pageScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, height);
     self.pageScroller.pagingEnabled = YES;
     self.pageScroller.showsHorizontalScrollIndicator = NO;
+    self.pageScroller.delaysContentTouches = FALSE;
     [self.pageScroller addSubview:self.tableView];
 }
 

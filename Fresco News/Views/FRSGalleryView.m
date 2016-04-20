@@ -169,6 +169,7 @@
     self.scrollView.delegate = self;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
+    self.scrollView.delaysContentTouches = FALSE;
     [self addSubview:self.scrollView];
     
     
