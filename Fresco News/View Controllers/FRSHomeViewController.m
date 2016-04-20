@@ -446,19 +446,21 @@
     if (scrollView != self.tableView) {
         return;
     }
-    
     NSArray *visibleCells = [[self.tableView visibleCells] mutableCopy];
     
-    float openY = scrollView.contentOffset.y;
-    
-    for (FRSGalleryCell *cell in visibleCells) {
-        float cellY = cell.frame.origin.y - openY;
-        if (cellY < 450 && cell.player.rate == 0.0 && [cell.player respondsToSelector:@selector(play)]) {
-            cell.hasAlreadyAutoPlayed = TRUE;
-            [cell play];
-            break;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        float openY = scrollView.contentOffset.y;
+//        float windowY = scrollView.frame.size.height - 49;
+        
+        for (FRSGalleryCell *cell in visibleCells) {
+            float cellY = cell.frame.origin.y - openY;
+            if (cellY < 450 && cell.player.rate == 0.0) {
+                cell.hasAlreadyAutoPlayed = TRUE;
+                [cell play];
+                break;
+            }
         }
-    }
+    });
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
