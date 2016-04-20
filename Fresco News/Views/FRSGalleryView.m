@@ -149,7 +149,6 @@
     [self configureScrollView]; //
     [self configureImageViews]; // these three will be wrapped in carousel
     [self configurePageControl];//
-    [self configureMuteIcon];
     
     [self configureGalleryInfo]; // this will stay similar
     
@@ -273,11 +272,23 @@
         videoPlayer.muted = TRUE;
     });
     
+    
     return videoPlayer;
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
     
+    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    FRSPlayer *player = self.players[page];
+
+    if ([self currentPageIsVideo]) {
+        if (player.muted) {
+            self.muteImageView.alpha = 1;
+        } else {
+            self.muteImageView.alpha = 0;
+        }
+    }
+
     CGPoint point = [tap locationInView:self];
     
     // ensures point is in player area
@@ -285,13 +296,11 @@
         return;
     }
     
-    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     
     if (page >= self.players.count) {
         return;
     }
     
-    FRSPlayer *player = self.players[page];
     
     // ensures FRSPlayer not view
     if (![player respondsToSelector:@selector(play)]) {
@@ -300,14 +309,17 @@
     
     if (player.muted) {
         player.muted = FALSE;
+        self.muteImageView.alpha = 0;
         return;
+    } else {
     }
     
     if (player.rate == 0.0) {
         [player play];
-    }
-    else {
+        self.muteImageView.alpha = 0;
+    } else {
         [player pause];
+        self.muteImageView.alpha = 1;
     }
 }
 
@@ -321,13 +333,23 @@
 }
 
 -(void)configureMuteIcon {
-    if (self.isVideo) {
+//    NSLog(@"configureMuteIcon");
+    if ([self currentPageIsVideo]) {
+//        NSLog(@"current page is video");
         self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
         self.muteImageView.frame = CGRectMake(self.frame.size.width - 24 - 16, 16, 24, 24);
         [self addSubview:self.muteImageView];
     }
 }
 
+-(BOOL)currentPageIsVideo {
+    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
+}
+
+-(BOOL)pageIsVideo:(NSInteger)page {
+    return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
+}
 -(void)configurePageControl{
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = self.gallery.posts.count;
@@ -351,6 +373,8 @@
     [self configureLocationLine];
     [self configureUserLine];
     [self updateLabels];
+    [self configureMuteIcon];
+    
 }
 
 -(void)configureTimeLine{
@@ -683,6 +707,7 @@
         self.profileIV.alpha = 0;
         self.locationIV.alpha = 0;
         self.clockIV.alpha = 0;
+        self.muteImageView.alpha = 0;
         return;
     }
         
@@ -695,6 +720,7 @@
     self.profileIV.alpha = absAlpha;
     self.locationIV.alpha = absAlpha;
     self.clockIV.alpha = absAlpha;
+    self.muteImageView.alpha = absAlpha;
     
     //Profile picture doesn't fade on scroll
     
@@ -705,6 +731,10 @@
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
         self.profileIV.alpha = 0;
+    }
+    
+    if (adjustedPost.videoUrl == nil) {
+        self.muteImageView.alpha = 0;
     }
     
 }
@@ -848,6 +878,8 @@
             [(AVPlayer *)self.players[page] play];
         }
     }
+    
+//    self.muteImageView.alpha = 0;
 }
 
 -(void)pause {
@@ -856,6 +888,8 @@
             [player pause];
         }
     }
+    
+//    self.muteImageView.alpha = 1;
 }
 
 @end
