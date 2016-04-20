@@ -841,14 +841,10 @@
     NSInteger page = floor(self.scrollView.contentOffset.x / self.scrollView.frame.size.width);
     if (self.players.count > page) {
         if ([self.players[page] respondsToSelector:@selector(play)]) {
-            FRSPlayer *player = (FRSPlayer *)self.players[page];
+            [(FRSPlayer *)self.players[page] play];
             
-            if (player.rate == 0) {
-                [player play];
-                
-                if (self.delegate) {
-                    [self.delegate playerWillPlay:self.players[page]];
-                }
+            if (self.delegate) {
+                [self.delegate playerWillPlay:self.players[page]];
             }
         }
     }
