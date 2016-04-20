@@ -24,8 +24,10 @@
     // Configure the view for the selected state
 }
 
--(void)playerWillPlay:(AVPlayer *)player {
-    
+-(void)playerWillPlay:(FRSPlayer *)player {
+    if (self.delegate) {
+        [self.delegate playerWillPlay:player];
+    }
 }
 
 -(void)configureCell {

@@ -19,6 +19,7 @@
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
 @property (strong, nonatomic) AVPlayer *player;
 @property (weak, nonatomic) UINavigationController *navigationController;
+@property (weak, nonatomic) id<FRSGalleryViewDelegate> delegate;
 @property BOOL hasVideoAsFirstPost;
 -(void)clearCell;
 -(void)configureCell;

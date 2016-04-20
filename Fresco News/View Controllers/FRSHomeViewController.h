@@ -8,8 +8,9 @@
 
 #import "FRSScrollingViewController.h"
 #import "Fresco.h"
+#import "FRSGalleryView.h"
 
-@interface FRSHomeViewController : FRSScrollingViewController
+@interface FRSHomeViewController : FRSScrollingViewController <FRSGalleryViewDelegate>
 {
     BOOL delayClear;
     BOOL needsUpdate;

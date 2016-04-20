@@ -360,6 +360,8 @@
         }
     }
     
+    cell.delegate = self;
+    
     return cell;
 }
 

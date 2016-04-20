@@ -266,7 +266,7 @@
         });
         
         if (self.delegate) {
-            [self.delegate playerWillPlay:self.videoPlayer];
+            [self.delegate playerWillPlay:videoPlayer];
         }
         
         videoPlayer.muted = TRUE;
@@ -610,9 +610,13 @@
     
     if (self.players.count <= page) {
         if (post.videoUrl != Nil && page >= self.players.count) {
-            AVPlayer *player = [self setupPlayerForPost:post];
+            FRSPlayer *player = [self setupPlayerForPost:post];
             [self.players addObject:player];
             [self.videoPlayer play];
+            
+            if (self.delegate) {
+                [self.delegate playerWillPlay:player];
+            }
         }
         else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
             [self.players addObject:imageView];
@@ -623,6 +627,10 @@
                 if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
                     self.videoPlayer = player;
                     [player play];
+                    
+                    if (self.delegate) {
+                        [self.delegate playerWillPlay:player];
+                    }
                 }
                 else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
                     [player pause];
