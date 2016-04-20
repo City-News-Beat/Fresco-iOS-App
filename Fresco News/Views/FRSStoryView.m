@@ -242,7 +242,7 @@
 
 -(void)addShadowToLabel:(UILabel*)label {
     
-    if ([label.text isEqualToString:@""]) {
+    if ([label.text isEqualToString:@""] || !label) {
         return;
     }
     

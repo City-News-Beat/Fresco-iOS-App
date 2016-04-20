@@ -241,9 +241,7 @@
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView beginUpdates];
-            [self.tableView insertRowsAtIndexPaths:storiesToLoad withRowAnimation:UITableViewRowAnimationFade];
-            [self.tableView endUpdates];
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
         });
 
     }];
@@ -256,7 +254,7 @@
     
     NSError *error = nil;
     self.stories = [NSMutableArray arrayWithArray:[moc executeFetchRequest:request error:&error]];
-    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     
     self.cached = self.stories;
     FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
@@ -297,7 +295,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.row == self.stories.count-1) {
+    if (indexPath.row == self.stories.count) {
         return 20;
     }
     
