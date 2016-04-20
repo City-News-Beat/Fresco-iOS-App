@@ -92,6 +92,7 @@
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 20);
+    [self.nameLabel sizeToFit];
     
     [self.actionBar setOriginWithPoint:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height)];
     [self.borderLine.superview bringSubviewToFront:self.borderLine];
@@ -436,7 +437,8 @@
     self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
-        self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 20);
+    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 20);
+    [self.nameLabel sizeToFit];
     
     UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
     [bylineTap setNumberOfTapsRequired:1];

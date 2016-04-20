@@ -603,6 +603,7 @@
     NSLog(@"user = %@", user);
     
     self.profileIV.image = [UIImage imageNamed:@"apple-user-grace"];
+    self.bioLabel.text = @"That's what it said on 'Ask Jeeves.' Bad news. Andy Griffith turned us down. He didn't like his trailer. Say goodbye to these, because it's the last time! Say goodbye to these, because it's the last time!";
     self.locationLabel.text = @"Fresco, USA."; //geo coder, last location
     self.followersLabel.text = @"1.5M";
     
