@@ -42,6 +42,9 @@
 
 @property (strong, nonatomic) NSMutableArray *imageViews;
 
+@property (strong, nonatomic) FRSGallery *gallery;
+
+
 @end
 
 @implementation FRSStoryView
@@ -272,7 +275,6 @@
 }
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
-    //    [[NSNotificationCenter defaultCenter] postNotificationName:@"StoryContentBarActionTapped" object:nil userInfo:@{@"story_id" : self.story.uid}];
     self.actionBlock();
 }
 
@@ -281,5 +283,6 @@
         [self.delegate clickedImageAtIndex:imageIndex];
     }
 }
+
 
 @end

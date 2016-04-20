@@ -31,6 +31,7 @@
     NSInteger lastOffset;
     BOOL shouldAnimate;
 }
+
 @property (strong, nonatomic) NSMutableArray *cachedData;
 @property (strong, nonatomic) NSManagedObjectContext *temp;
 @property (strong, nonatomic) NSMutableArray *highlights;
@@ -40,6 +41,7 @@
 
 @property (strong, nonatomic) UIButton *highlightTabButton;
 @property (strong, nonatomic) UIButton *followingTabButton;
+//@property (strong, nonatomic) CAShapeLayer *maskView;
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 
@@ -50,6 +52,7 @@
 @end
 
 @implementation FRSHomeViewController
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -189,7 +192,32 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
-      
+    
+    
+//    CAShapeLayer * layer = [[CAShapeLayer alloc]init];
+//    layer.frame = view.bounds;
+//    layer.fillColor = [[UIColor blackColor] CGColor];
+//    
+//    layer.path = CGPathCreateWithRect(CGRectMake(10, 10, 30, 30), NULL);
+//    
+//    view.layer.mask = layer;
+    
+//    self.maskView = [[CAShapeLayer alloc] init];
+//    self.maskView.frame = titleView.bounds;
+//    self.maskView.fillColor = [UIColor redColor].CGColor;
+//    self.maskView.path = CGPathCreateWithRect(CGRectMake(0, 0, 300, 20), nil);
+//    self.highlightTabButton.layer.mask = self.maskView;
+    
+//    self.maskView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 20)];
+//    self.maskView.backgroundColor = [UIColor redColor];
+//    self.maskView.maskView = self.highlightTabButton.titleLabel;
+//    [titleView addSubview:self.maskView];
+    
+//    [UIView animateWithDuration:1.0 delay:5 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//        
+//        self.maskView.frame = CGRectMake(100, 0, 300, 20);
+//
+//    } completion:nil];
 }
 
 -(void)configureTableView {
@@ -200,6 +228,8 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
+    
+    self.pageScroller.delegate = self;
     [self.view addSubview:self.pageScroller];
 }
 
@@ -568,7 +598,8 @@
     if (self.followingTabButton.alpha > 0.7) {
         return; //The button is already selected
     }
-
+    [self.pageScroller setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:YES];
+    
     self.followingTabButton.alpha = 1.0;
     self.highlightTabButton.alpha = 0.7;
 }
@@ -577,6 +608,7 @@
     if (self.highlightTabButton.alpha > 0.7) {
         return;
     }
+    [self.pageScroller setContentOffset:CGPointMake(0, 0) animated:YES];
     
     self.highlightTabButton.alpha = 1.0;
     self.followingTabButton.alpha = 0.7;
@@ -585,6 +617,26 @@
 -(void)searchStories {
     FRSSearchViewController *searchVC = [[FRSSearchViewController alloc] init];
     [self.navigationController pushViewController:searchVC animated:YES];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
+    if (self.pageScroller) {
+
+        if (self.pageScroller.contentOffset.x == self.view.frame.size.width) { // User is in right tab (following)
+            self.followingTabButton.alpha = 1;
+            self.highlightTabButton.alpha = 0.7;
+        } else if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
+            self.followingTabButton.alpha = 0.7;
+            self.highlightTabButton.alpha = 1;
+        }
+        
+        
+        
+    }
 }
 
 
