@@ -71,9 +71,6 @@
     return YES;
 }
 
--(AVPlayer *)player {
-    return [self.galleryView currentPlayer];
-}
 -(BOOL)shouldHaveTextLimit{
     return YES;
 }

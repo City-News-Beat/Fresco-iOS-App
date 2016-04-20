@@ -454,7 +454,18 @@
         
         for (FRSGalleryCell *cell in visibleCells) {
             float cellY = cell.frame.origin.y - openY;
-            if (cellY < 450 && cell.player.rate == 0.0) {
+            
+            if (cellY < 0) {
+                [cell pause];
+                continue;
+            }
+//            float sizeY = cell.frame.size.height;
+            
+//            float remainder = ((windowY - sizeY) / 2) - 120;
+//            float difference = fabs(cellY - remainder);
+            NSLog(@"CELL Y: %f", cellY);
+            
+            if (cellY < 450 && !cell.hasAlreadyAutoPlayed) {
                 cell.hasAlreadyAutoPlayed = TRUE;
                 [cell play];
                 break;

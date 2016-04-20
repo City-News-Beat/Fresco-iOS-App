@@ -26,5 +26,5 @@
 
 -(void)play;
 -(void)pause;
--(AVPlayer *)player;
+
 @end
