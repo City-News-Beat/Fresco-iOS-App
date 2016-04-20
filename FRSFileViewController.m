@@ -12,6 +12,7 @@
 
 @interface FRSFileViewController ()
 @property CMTime currentTime;
+@property (strong, nonatomic) UIButton *backTapButton;
 @end
 
 @implementation FRSFileViewController
@@ -33,21 +34,39 @@ static NSString *imageTile = @"ImageTile";
     [self setupSecondaryUI];
     
     self.navigationItem.title = @"CHOOSE MEDIA";
+//    UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
+//    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+//    [container addSubview:backButton];
+//    backButton.tintColor = [UIColor whiteColor];
+//    backButton.frame = CGRectMake(-3, 0, 24, 24);
+//    [backButton setImage:backButtonImage forState:UIControlStateNormal];
+//    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
+//    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.leftBarButtonItem = backBarButtonItem;
+    
+    
+    
     UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
     [container addSubview:backButton];
+    
     backButton.tintColor = [UIColor whiteColor];
     backButton.frame = CGRectMake(-3, 0, 24, 24);
     [backButton setImage:backButtonImage forState:UIControlStateNormal];
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
     
-    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
+    [self.backTapButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
+    
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
 }
 
 -(void)back {
     [self.navigationController popViewControllerAnimated:YES];
+    [self.backTapButton removeFromSuperview];
 }
 
 -(void)setupSecondaryUI {

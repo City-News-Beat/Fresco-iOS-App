@@ -25,6 +25,10 @@
 #import "FRSTrimTool.h"
 #import "FRSAppDelegate.h"
 
+#import "FRSUser.h"
+
+#import "FRSAppDelegate.h"
+
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
@@ -60,28 +64,69 @@
 
 @property (nonatomic) NSInteger count;
 
+@property (nonatomic) BOOL presentingUser;
+
 @end
 
 @implementation FRSProfileViewController
 
-- (void)viewDidLoad {
+-(void)viewDidLoad {
     [super viewDidLoad];
     
-    [self configureUI];
-    [self fetchGalleries];
-    
-    // Do any additional setup after loading the view.
+    if (self.presentingUser) {
+        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        FRSUser *user = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:delegate.managedObjectContext];
+        [self configureWithUser:user];
+        
+    } else {
+        [self configureUI];
+        [self fetchGalleries];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self addStatusBarNotification];
+    [self showNavBarForScrollView:self.tableView animated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self removeStatusBarNotification];
 }
+
+-(id)initWithUser:(FRSUser *)user {
+    
+    if (self) {
+        
+        self.presentingUser = YES;
+        [self configureBackButtonAnimated:YES];
+        
+        /* NAV BAR */
+        [super removeNavigationBarLine];
+        
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
+        titleLabel.text = @"@username"; //user.username
+        titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.textColor = [UIColor whiteColor];
+        self.navigationItem.titleView = titleLabel;
+        
+        UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
+        
+        self.navigationItem.rightBarButtonItem = followButton;
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+        
+        /* TABLE VIEW */
+        [self configureTableView];
+        [self fetchGalleries];
+        
+        [self configureWithUser:user];
+        
+    }
+    return self;
+}
+
 
 #pragma mark - Fetch Methods
 
@@ -141,6 +186,7 @@
 - (void)dealloc{
     [self.tableView dg_removePullToRefresh];
 }
+
 
 -(void)configureNavigationBar{
 //  [super configureNavigationBar];
@@ -544,6 +590,22 @@
 
 -(void)facebookTapped{
     NSLog(@"facebookTapped");
+}
+
+#pragma mark - User
+
+-(void)configureWithUser:(FRSUser *)user {
+    
+//    self.profileIV.image = user.profileImage;
+//    self.nameLabel.text = user.firstName;
+//    self.bioLabel.text = user.bio;
+    
+    NSLog(@"user = %@", user);
+    
+    self.profileIV.image = [UIImage imageNamed:@"apple-user-grace"];
+    self.locationLabel.text = @"Fresco, USA."; //geo coder, last location
+    self.followersLabel.text = @"1.5M";
+    
 }
 
 

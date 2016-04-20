@@ -8,6 +8,7 @@
 
 #import "FRSAssignmentsViewController.h"
 #import "FRSTabBarController.h"
+#import "FRSCameraViewController.h"
 
 #import "FRSLocationManager.h"
 
@@ -69,6 +70,9 @@
 
 @property (strong, nonatomic) UILabel *photoCashLabel;
 @property (strong, nonatomic) UILabel *videoCashLabel;
+
+@property (strong, nonatomic) UIButton *closeButton;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -420,7 +424,7 @@
 
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    NSLog(@"TEST");
+
     [self.mapView deselectAnnotation:view.annotation animated:NO];
 
     FRSAssignmentAnnotation *assAnn = (FRSAssignmentAnnotation *)view.annotation;
@@ -486,8 +490,9 @@
     self.assignmentTitleLabel.font = [UIFont notaBoldWithSize:24];
     self.assignmentTitleLabel.numberOfLines = 0;
     self.assignmentTitleLabel.text = self.assignmentTitle;
-    [self.assignmentTitleLabel sizeToFit];
+//    [self.assignmentTitleLabel sizeToFit];
     self.assignmentTitleLabel.textColor = [UIColor whiteColor];
+    self.assignmentTitleLabel.adjustsFontSizeToFitWidth = YES;
     
     if (self.assignmentTitleLabel.frame.size.height == 72) { // 72 is the size of titleLabel with 3 lines
         [self.assignmentTitleLabel setOriginWithPoint:CGPointMake(16, 0)];
@@ -515,6 +520,7 @@
     [button setTitle:@"ACCEPT ($5)" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(acceptAssignment) forControlEvents:UIControlEventTouchDown];
     [self.assignmentBottomBar addSubview:button];
     
     self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
@@ -600,7 +606,17 @@
     warningLabel.text = @"Not all events are safe. Be careful!";
     [assignmentStatsContainer addSubview:warningLabel];
     
+    UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
+    self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.closeButton.tintColor = [UIColor whiteColor];
+    [self.closeButton setImage:closeButtonImage forState:UIControlStateNormal];
+    self.closeButton.frame = CGRectMake(0 , 0, 24, 24);
+    [self.closeButton addTarget:self action:@selector(dismissAssignmentCard) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
+    self.navigationItem.leftBarButtonItem = backButton;
+    
     //Configure photo/video labels for animation
+    self.closeButton.alpha    = 0;
     self.photoCashLabel.alpha = 0;
     self.videoCashLabel.alpha = 0;
     self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
@@ -672,6 +688,12 @@
 
         } completion:nil];
     }];
+    
+    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.closeButton.alpha = 1;
+        
+    } completion:nil];
 }
 
 -(void)dismissAssignmentCard {
@@ -689,6 +711,24 @@
         self.videoCashLabel.alpha = 0;
         self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
         self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+    }];
+    
+    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.closeButton.alpha = 0;
+    } completion:nil];
+}
+
+-(void)acceptAssignment {
+    NSLog(@"acceptAssignment");
+    
+    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+    UINavigationController *navControl = [[UINavigationController alloc] init];
+    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    [navControl pushViewController:cam animated:NO];
+    [navControl setNavigationBarHidden:YES];
+    
+    [self presentViewController:navControl animated:YES completion:^{
+        [self.tabBarController setSelectedIndex:3];//should return to assignments 
     }];
 }
 

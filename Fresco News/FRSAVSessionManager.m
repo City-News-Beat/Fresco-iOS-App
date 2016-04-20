@@ -147,6 +147,19 @@
             connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
         }
         
+//<<<<<<< HEAD
+        AVCaptureVideoDataOutput* videoOutput = [[AVCaptureVideoDataOutput alloc] init];
+        
+        // create a queue to run the capture on
+        dispatch_queue_t captureQueue=dispatch_queue_create("captureQueue", NULL);
+        
+        // setup our delegate
+        [videoOutput setSampleBufferDelegate:self queue:captureQueue];
+        //[self.session addOutput:videoOutput];
+        
+//=======
+//>>>>>>> 3.0-phil
+        
         // configure the pixel format
         // Add the input and output
 

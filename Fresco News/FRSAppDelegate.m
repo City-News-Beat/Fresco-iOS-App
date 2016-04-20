@@ -63,6 +63,8 @@
     
     [self registerForPushNotifications];
     
+    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
+    
     return YES;
 }
 

@@ -20,8 +20,8 @@
 
 -(BOOL)shouldHaveActionBar;
 -(BOOL)shouldHaveTextLimit;
-
 -(void)playerWillPlay:(FRSPlayer *)player;
+@property UINavigationController *navigationController;
 @end
 
 @interface FRSGalleryView : UIView

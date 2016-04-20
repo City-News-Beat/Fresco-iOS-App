@@ -1002,16 +1002,19 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         
         angle = M_PI_2;
         labelWidth = self.captureVideoPreviewLayer.frame.size.height;
-        [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.topContainer.alpha = 0;
-        } completion:nil];
-        [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x - (ICON_WIDTH), (self.view.center.x - (ICON_WIDTH))),angle);
-        } completion:^(BOOL finished) {
+        
+        if (self.assignmentLabel.text != nil) {
             [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.topContainer.alpha = 1;
+                self.topContainer.alpha = 0;
             } completion:nil];
-        }];
+            [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.topContainer.transform = CGAffineTransformRotate(CGAffineTransformMakeTranslation(self.view.center.x - (ICON_WIDTH), (self.view.center.x - (ICON_WIDTH))),angle);
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    self.topContainer.alpha = 1;
+                } completion:nil];
+            }];
+        }
         
     } else if ( o == UIDeviceOrientationLandscapeRight ){
         
@@ -1023,24 +1026,27 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         
         angle = -M_PI_2;
         labelWidth = self.captureVideoPreviewLayer.frame.size.height;
-        [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.topContainer.alpha = 0;
-        } completion:nil];
-        [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation (self.view.center.x - (self.view.center.x *2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH ))),angle);
-        } completion:^(BOOL finished) {
+        
+        if (self.assignmentLabel.text != nil) {
             [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.topContainer.alpha = 1;
+                self.topContainer.alpha = 0;
             } completion:nil];
-        }];
-        [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            
-            self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation (self.view.center.x - (self.view.center.x *2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH * 2))),angle);
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.topContainer.alpha = 1;
-            } completion:nil];
-        }];
+            [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation (self.view.center.x - (self.view.center.x *2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH ))),angle);
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    self.topContainer.alpha = 1;
+                } completion:nil];
+            }];
+            [UIView animateWithDuration:0.1 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                self.topContainer.transform = CGAffineTransformRotate((CGAffineTransformMakeTranslation (self.view.center.x - (self.view.center.x *2) + (ICON_WIDTH), self.view.center.y - (ICON_WIDTH * 2))),angle);
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.1 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    self.topContainer.alpha = 1;
+                } completion:nil];
+            }];
+        }
         
     } else if ( o == UIDeviceOrientationPortraitUpsideDown ){
         /* no longer supported */
