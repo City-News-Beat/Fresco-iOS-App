@@ -10,8 +10,9 @@
 #import "Fresco.h"
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
+#import "FRSGalleryView.h"
 
-@interface FRSStoryDetailViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>
+@interface FRSStoryDetailViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
 {
     
 }

@@ -91,9 +91,20 @@ static NSString *galleryCell = @"GalleryCellReuse";
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.navigationController = self.navigationController;
     }
+    
+    cell.delegate = self;
 
     return cell;
 }
+
+-(void)playerWillPlay:(AVPlayer *)player {
+    for (FRSGalleryCell *cell in [self.galleriesTable visibleCells]) {
+        if (cell.player && cell.player != player && [cell respondsToSelector:@selector(pause)]) {
+            [cell.player pause];
+        }
+    }
+}
+
 
 -(void)viewDidLayoutSubviews {
     if ([self.galleriesTable respondsToSelector:@selector(setSeparatorInset:)]) {
