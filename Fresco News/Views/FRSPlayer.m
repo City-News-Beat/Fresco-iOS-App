@@ -39,7 +39,7 @@
 }
 
 -(void)play {
-    self.hasPlayed = TRUE;
+    
     if (self.playWhenReady) {
         return;
     }

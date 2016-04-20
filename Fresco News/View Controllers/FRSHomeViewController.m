@@ -456,7 +456,7 @@
     
     for (FRSGalleryCell *cell in visibleCells) {
         float cellY = cell.frame.origin.y - openY;
-        if (!foundPlayer && cellY < 450 && [cell player].rate == 0.0 && [[cell player] respondsToSelector:@selector(play)] && ![cell player].playWhenReady && [[cell player] hasPlayed] == FALSE) {
+        if (!foundPlayer && cellY < 450 && [cell player].rate == 0.0 && [[cell player] respondsToSelector:@selector(play)] && ![cell player].playWhenReady && !cell.hasAlreadyAutoPlayed) {
             cell.hasAlreadyAutoPlayed = TRUE;
             [cell play];
             cell.isCurrentPlayer = TRUE;
