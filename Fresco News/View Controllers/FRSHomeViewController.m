@@ -421,8 +421,10 @@
 
 -(void)playerWillPlay:(AVPlayer *)player {
     for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
-        if (cell.player && cell.player != player && [cell respondsToSelector:@selector(pause)]) {
-            [cell.player pause];
+        for (FRSPlayer *cellPlayer in cell.players) {
+            if (cellPlayer != player) {
+                [player pause];
+            }
         }
     }
 }

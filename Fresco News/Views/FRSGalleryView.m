@@ -128,6 +128,7 @@
         for (FRSPost *post in self.gallery.posts) {
             [posts addObject:post];
         }
+        
         NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES];
         [posts sortUsingDescriptors:[NSArray arrayWithObject:sort]];
 
@@ -194,16 +195,14 @@
         [self.scrollView addSubview:imageView];
 
             if (i==0) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
-                });
+                [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
 
                 if (post.videoUrl != Nil) {
                     // videof
                     // set up FRSPlayer
                     // add AVPlayerLayer
                     NSLog(@"TOP LEVEL PLAYER");
-                    [self scrollViewDidScroll:self.scrollView];
+                    [self.players addObject:[self setupPlayerForPost:post]];
                     [self.scrollView bringSubviewToFront:[self.players[0] container]];
                 }
                 else {
