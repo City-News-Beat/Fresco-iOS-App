@@ -237,13 +237,14 @@
             [self.stories addObject:story];
             [storiesToLoad addObject:[NSIndexPath indexPathForRow:index inSection:0]];
             index++;
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView beginUpdates];
-                [self.tableView insertRowsAtIndexPaths:storiesToLoad withRowAnimation:UITableViewRowAnimationFade];
-                [self.tableView endUpdates];
-            });
         }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView beginUpdates];
+            [self.tableView insertRowsAtIndexPaths:storiesToLoad withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView endUpdates];
+        });
+
     }];
 }
 
