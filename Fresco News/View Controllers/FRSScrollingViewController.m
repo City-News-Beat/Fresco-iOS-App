@@ -68,6 +68,7 @@
     self.pageScroller.pagingEnabled = YES;
     self.pageScroller.showsHorizontalScrollIndicator = NO;
     self.pageScroller.delaysContentTouches = FALSE;
+    self.pageScroller.bounces = FALSE;
     [self.pageScroller addSubview:self.tableView];
 }
 

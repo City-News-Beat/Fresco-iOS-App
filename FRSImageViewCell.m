@@ -20,15 +20,11 @@
     //imageView.image = Nil;
     
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         [_fileLoader getDataFromAsset:_currentAsset callback:^(UIImage *image, AVAsset *video, PHAssetMediaType mediaType, NSError *error) {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
                 imageView.image = image;
                 _currentAVAsset = video; // nils out if image
                 [self updateUIForAsset]; // timing etc
-            });
-           
         }];
     });
 }

@@ -288,10 +288,10 @@ static NSString *imageTile = @"ImageTile";
 
 -(void)presentVideoTrimmerViewController {
     
-    VideoTrimmerViewController *vc = [VideoTrimmerViewController new];
-    [self presentViewController:vc animated:YES completion:nil];
-    
-    [self shouldShowStatusBar:NO animated:YES];
+//    VideoTrimmerViewController *vc = [VideoTrimmerViewController new];
+//    [self presentViewController:vc animated:YES completion:nil];
+//    
+//    [self shouldShowStatusBar:NO animated:YES];
 }
 
 -(void)filesLoaded {

@@ -323,7 +323,12 @@
 #pragma mark - UITableView DataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (self.dataSource.count == 0) ? 0 : self.dataSource.count + 1;
+    
+    if (tableView == self.tableView) {
+        return (self.dataSource.count == 0) ? 0 : self.dataSource.count + 1;
+    }
+    
+    return 0;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -331,18 +336,32 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [self heightForItemAtDataSourceIndex:indexPath.row];
+    
+    if (tableView == self.tableView) {
+        return [self heightForItemAtDataSourceIndex:indexPath.row];
+    }
+    
+    return 0;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    if (tableView == self.tableView) {
+        return [self highlightCellForIndexPath:indexPath];
+    }
+
+    return Nil;
+}
+
+-(UITableViewCell *)highlightCellForIndexPath:(NSIndexPath *)indexPath {
+    
     if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != Nil) { // we're reloading
         
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
+        UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
         return cell;
     }
     
-    FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+    FRSGalleryCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
     
     if (!cell) {
         cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
@@ -361,6 +380,7 @@
     cell.delegate = self;
     
     return cell;
+
 }
 
 -(void)loadMore {
@@ -427,6 +447,7 @@
 }
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{
+    
     if (index == self.dataSource.count) {
         return 40;
     }
@@ -481,32 +502,34 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
-    // sloppy not to have a check here
-    if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-        return;
-    }
-
-    if (self.cachedData.count > indexPath.row) {
-        NSString *oldUID = [self.cachedData[indexPath.row] uid];
-        NSString *newUID = [self.dataSource[indexPath.row] uid];
-        
-        if ([oldUID isEqualToString:newUID] && self.cachedData[indexPath.row] != self.dataSource[indexPath.row]) {
+    if (tableView == self.tableView) {
+        // sloppy not to have a check here
+        if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
             return;
         }
+        
+        if (self.cachedData.count > indexPath.row) {
+            NSString *oldUID = [self.cachedData[indexPath.row] uid];
+            NSString *newUID = [self.dataSource[indexPath.row] uid];
+            
+            if ([oldUID isEqualToString:newUID] && self.cachedData[indexPath.row] != self.dataSource[indexPath.row]) {
+                return;
+            }
+        }
+        
+        cell.gallery = self.dataSource[indexPath.row];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [cell clearCell];
+            [cell configureCell];
+        });
+        
+        __weak typeof(self) weakSelf = self;
+        
+        cell.shareBlock = ^void(NSArray *sharedContent) {
+            [weakSelf showShareSheetWithContent:sharedContent];
+        };
     }
-    
-    cell.gallery = self.dataSource[indexPath.row];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell clearCell];
-        [cell configureCell];
-    });
-    
-    __weak typeof(self) weakSelf = self;
-    
-    cell.shareBlock = ^void(NSArray *sharedContent) {
-        [weakSelf showShareSheetWithContent:sharedContent];
-    };
 }
 
 
