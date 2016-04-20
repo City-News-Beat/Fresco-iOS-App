@@ -134,9 +134,7 @@
     
 //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
 }
--(void)playerWillPlay:(FRSPlayer *)player {
-    
-}
+
 -(void)configureArticles{
     self.articlesTV = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + TOP_PAD, self.view.frame.size.width, CELL_HEIGHT * self.orderedArticles.count)];
     self.articlesTV.delegate = self;
