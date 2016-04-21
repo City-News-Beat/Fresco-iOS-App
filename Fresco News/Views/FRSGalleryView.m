@@ -319,6 +319,8 @@
             self.muteImageView.alpha = 0;
         }
     }
+    
+    player.wasMuted = TRUE;
 
     CGPoint point = [tap locationInView:self];
     
@@ -345,11 +347,9 @@
         [player pause];
         
         if (!player.wasMuted) {
-            self.muteImageView.alpha = 1;
+            self.muteImageView.alpha = 0;
         }
     }
-    
-    player.wasMuted = TRUE;
 }
 
 -(void)handlePhotoTap:(NSInteger)index {

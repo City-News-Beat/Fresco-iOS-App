@@ -31,17 +31,18 @@
 }
 
 -(void)configureCell {
+    
+    if (self.galleryView != Nil) {
+        [self.galleryView loadGallery:self.gallery];
+        self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
+        return;
+    }
+
     self.clipsToBounds = YES;
     
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     if (self.gallery == self.galleryView.gallery) {
-        return;
-    }
-    
-    if (self.galleryView != Nil) {
-        [self.galleryView loadGallery:self.gallery];
-        self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
         return;
     }
     
