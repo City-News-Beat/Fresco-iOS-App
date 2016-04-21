@@ -55,6 +55,10 @@
     self.galleryView.shareBlock = ^void(NSArray *sharedContent) {
         weakSelf.shareBlock(sharedContent);
     };
+    
+    self.galleryView.readMoreBlock = ^void(NSArray *sharedContent) {
+        weakSelf.readMoreBlock(Nil);
+    };
 }
 
 -(void)setFrame:(CGRect)frame {

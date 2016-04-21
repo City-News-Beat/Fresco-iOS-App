@@ -10,6 +10,8 @@
 #import "UIColor+Fresco.h"
 #import "FRSAPIClient.h"
 #import "FRSAppDelegate.h"
+#import "FRSScrollingViewController.h"
+#import "FRSGalleryExpandedViewController.h"
 
 @implementation FRSFollowingTable
 @synthesize navigationController = _navigationController;
@@ -90,7 +92,18 @@
 }
 
 -(void)readMore:(NSIndexPath *)indexPath {
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.galleries objectAtIndex:indexPath.row]];
+    vc.shouldHaveBackButton = YES;
     
+    FRSScrollingViewController *scroll = (FRSScrollingViewController *)self.scrollDelegate;
+    
+    scroll.navigationItem.title = @"";
+    
+    [scroll.navigationController pushViewController:vc animated:YES];
+    scroll.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    scroll.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    [(FRSScrollingViewController *)self.scrollDelegate hideTabBarAnimated:YES];
+
 }
 
 -(void)playerWillPlay:(AVPlayer *)player {
@@ -137,7 +150,8 @@
         [weakSelf showShareSheetWithContent:sharedContent];
     };
     
-    cell.galleryView.readMoreBlock = ^void(NSArray *sharedContent) {
+    cell.readMoreBlock = ^void(NSArray *sharedContent) {
+        NSLog(@"TEST");
         [self readMore:indexPath];
     };
 }

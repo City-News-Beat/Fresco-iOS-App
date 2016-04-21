@@ -312,11 +312,9 @@
         return;
     }
     
-    
     if (page >= self.players.count) {
         return;
     }
-    
     
     // ensures FRSPlayer not view
     if (![player respondsToSelector:@selector(play)]) {
@@ -612,6 +610,8 @@
         self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height) delegate:self];
     }
     
+    self.actionBar.delegate = self;
+    
     [self addSubview:self.actionBar];
     
 }
@@ -637,6 +637,8 @@
 }
 
 
+
+
 #pragma mark - Action Bar Delegate
 -(NSString *)titleForActionButton{
     return @"READ MORE";
@@ -647,7 +649,10 @@
 }
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"GalleryContentBarActionTapped" object:nil userInfo:@{@"gallery_id" : self.gallery.uid}];
+
+    if (self.readMoreBlock) {
+        self.readMoreBlock(Nil);
+    }
 }
 
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {

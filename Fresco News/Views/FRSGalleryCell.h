@@ -17,6 +17,7 @@
 
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
+@property (strong, nonatomic) ShareSheetBlock readMoreBlock;
 @property (strong, nonatomic) NSArray *players;
 @property (weak, nonatomic) UINavigationController *navigationController;
 @property (weak, nonatomic) id<FRSGalleryViewDelegate> delegate;
