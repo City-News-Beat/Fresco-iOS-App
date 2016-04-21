@@ -58,13 +58,16 @@
         NSMutableArray *realGalleries = [[NSMutableArray alloc] init];
         
         for (NSDictionary *gallery in galleries) {
-            FRSGallery *realGallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:appDelegate.managedObjectContext];
+            NSEntityDescription *entity = [NSEntityDescription entityForName:@"FRSGallery"
+                                                      inManagedObjectContext:appDelegate.managedObjectContext];
+            FRSGallery *realGallery = [[FRSGallery alloc] initWithEntity:entity
+                                              insertIntoManagedObjectContext:nil];
+            //FRSGallery *realGallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:appDelegate.managedObjectContext];
             [realGallery configureWithDictionary:gallery context:appDelegate.managedObjectContext];
             [realGalleries addObject:realGallery];
         }
         
         [self loadGalleries:realGalleries];
-        [appDelegate.managedObjectContext rollback];
     }];
 }
 
