@@ -327,7 +327,9 @@
     
     if (player.rate == 0.0) {
         [player play];
-        self.muteImageView.alpha = 0;
+        if (!player.wasMuted) {
+            self.muteImageView.alpha = 0;
+        }
     } else {
         [player pause];
         
