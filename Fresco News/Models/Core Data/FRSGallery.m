@@ -35,6 +35,7 @@
 @dynamic posts;
 @dynamic stories;
 @dynamic articles;
+@synthesize isLiked, numberOfLikes, repostedBy;
 
 -(void)configureWithDictionary:(NSDictionary *)dict{
     self.tags = [[NSMutableDictionary alloc] init];
@@ -45,6 +46,10 @@
     self.byline = dict[@"byline"];
     [self addPostsWithArray:dict[@"posts"]];
     [self addArticlesWithArray:dict[@"articles"]];
+    
+    self.repostedBy = dict[@"reposted_by"];
+    self.isLiked = [dict[@"liked"] boolValue];
+    self.numberOfLikes = [dict[@"likes"] integerValue];
     
     BOOL liked = [dict[@"liked"] boolValue];
     [self.tags setObject:@(liked) forKey:@"liked"];
