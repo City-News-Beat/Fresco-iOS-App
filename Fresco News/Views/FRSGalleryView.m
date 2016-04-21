@@ -93,6 +93,7 @@
     self.timeLabel.frame = timeFrame;
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
+    
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
@@ -208,6 +209,8 @@
 -(void)configureImageViews{
     self.players = [[NSMutableArray alloc] init];
     self.imageViews = [NSMutableArray new];
+    
+    [self.nameLabel sizeToFit];
     
     for (NSInteger i = 0; i < self.gallery.posts.count; i++){
             
@@ -492,13 +495,14 @@
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
     [self.nameLabel sizeToFit];
-    //Set frame again to avoid clipping shadow
-    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
-
+    
+//    //Set frame again to avoid clipping shadow
+//    self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
 
     
     [self addShadowToLabel:self.nameLabel];
     
+    self.nameLabel.layer.masksToBounds = NO;
     [self addSubview:self.nameLabel];
     
     if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
@@ -584,6 +588,9 @@
     [attString addAttribute:NSShadowAttributeName value:shadow range:range];
     
     label.attributedText = attString;
+    
+    label.clipsToBounds = NO;
+    label.layer.masksToBounds = NO;
 }
 
 -(UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize {
