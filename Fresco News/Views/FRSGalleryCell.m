@@ -58,7 +58,9 @@ gs//
     };
     
     self.galleryView.readMoreBlock = ^void(NSArray *sharedContent) {
-        weakSelf.readMoreBlock(Nil);
+        if (weakSelf.readMoreBlock) {
+            weakSelf.readMoreBlock(Nil);
+        }
     };
 }
 
