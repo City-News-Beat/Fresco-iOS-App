@@ -58,9 +58,11 @@
     NSInteger height = self.view.frame.size.height - 64;
     if (self.hiddenTabBar) height += 49;
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height)];
+    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height) style:UITableViewStyleGrouped];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;  
     self.pageScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height)];
     self.pageScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, height);
@@ -113,11 +115,6 @@
     
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 
-    NSInteger height = [UIScreen mainScreen].bounds.size.height - 20;
-    if (self.hiddenTabBar) height += 49;
-    if (self.actionBarVisible) height -= 44;
-    CGRect scrollViewFrame = CGRectMake(0, -44, self.view.frame.size.width, height);
-
     if (self.search != Nil) {
         [self.navigationItem setRightBarButtonItem:self.search animated:YES];
         self.search = Nil;
@@ -137,8 +134,7 @@
         
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.navigationController.navigationBar.frame = toFrame;
-            scrollView.frame = scrollViewFrame;
-            self.pageScroller.frame = scrollViewFrame;
+            //scrollView.frame = scrollViewFrame;
             self.navigationItem.titleView.alpha = 1.0;
             
             
@@ -158,8 +154,7 @@
         }];
     }
     else {
-        scrollView.frame = scrollViewFrame;
-        self.pageScroller.frame = scrollViewFrame;
+        //scrollView.frame = scrollViewFrame;
         self.navigationController.navigationBar.frame = toFrame;
         if (self.shouldHaveBackButton && self.backButtonHidden){
             [super configureBackButtonAnimated:NO];
@@ -175,12 +170,6 @@
     self.backButtonHidden = YES;
     
     CGRect toFrame = CGRectMake(0, -22, [UIScreen mainScreen].bounds.size.width, 44);
-    
-    NSInteger height = [UIScreen mainScreen].bounds.size.height - 20;
-    if (self.hiddenTabBar) height += 49;
-    if (self.actionBarVisible) height  -= 44;
-    
-    CGRect scrollViewFrame = CGRectMake(0, -44, self.view.frame.size.width, height);
     
     if (animated){
         
@@ -199,8 +188,7 @@
         
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.navigationController.navigationBar.frame = toFrame;
-            scrollView.frame = scrollViewFrame;
-            self.pageScroller.frame = scrollViewFrame;
+            //scrollView.frame = scrollViewFrame;
             self.navigationItem.titleView.alpha = 0.0;
             if (self.shouldHaveBackButton){
                 [self.navigationItem setLeftBarButtonItem:[UIBarButtonItem new] animated:YES];
@@ -212,8 +200,7 @@
         }];
     }
     else {
-        scrollView.frame = scrollViewFrame;
-        self.pageScroller.frame = scrollViewFrame;
+        //scrollView.frame = scrollViewFrame;
         self.navigationController.navigationBar.frame = toFrame;
         [self.navigationItem setLeftBarButtonItem:[UIBarButtonItem new] animated:NO];
     }
