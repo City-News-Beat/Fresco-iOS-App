@@ -588,6 +588,11 @@
         cell.shareBlock = ^void(NSArray *sharedContent) {
             [weakSelf showShareSheetWithContent:sharedContent];
         };
+        
+        cell.readMoreBlock = ^(NSArray *bullshit){
+            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+        };
+        
     }
 }
 
@@ -603,13 +608,11 @@
 }
 
 
--(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {
+-(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-    NSArray *filteredArray = [self.dataSource filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
+    FRSGallery *gallery = self.dataSource[notification.row];
     
-    if (!filteredArray.count) return;
-    
-    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[filteredArray firstObject]];
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
     [super showNavBarForScrollView:self.tableView animated:NO];
     
