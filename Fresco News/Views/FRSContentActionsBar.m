@@ -108,11 +108,16 @@
     self.likeLabel = [[UILabel alloc] init];
     self.likeLabel.textColor = [UIColor frescoRedHeartColor];
     self.likeLabel.font = [UIFont notaBoldWithSize:15];
-    
+
+//<<<<<<< HEAD
     self.likeLabel.frame = CGRectMake(self.frame.size.width - (16 + self.shareButton.frame.size.width + 16 + self.repostLabel.frame.size.width + 6 + self.repostButton.frame.size.width + 16), 0, 100, 44);
+//=======
+////    self.likeLabel.backgroundColor = [UIColor redColor];
+//    
+//    self.likeLabel.frame = CGRectMake(self.repostButton.frame.origin.x - self.likeLabel.frame.size.width - 15, 0, 40, self.frame.size.height);
+//>>>>>>> 1b33475d4c165a83380d3eefa7bd5b0e439960dd
 
     [self addSubview:self.likeLabel];
-    
     
     self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeLabel.frame.origin.x - 36, 0, 36, self.frame.size.height)];
     [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"]        forState:UIControlStateNormal];

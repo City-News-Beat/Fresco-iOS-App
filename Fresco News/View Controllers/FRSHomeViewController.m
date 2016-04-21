@@ -118,6 +118,20 @@
     }
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *head = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 90)];
+    head.backgroundColor = [UIColor clearColor];
+    return head;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 93;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0;
+}
+
 
 #pragma mark - UI
 
@@ -240,14 +254,14 @@
         return [gallery heightForGallery];
     }
     
-    return 20;
+    return 10;
 }
 
 -(void)configureTableView {
     [super configureTableView];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
-    self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height +200);
+    self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height+20);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
@@ -508,7 +522,7 @@
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{
     
     if (index == self.dataSource.count) {
-        return 40;
+        return 20;
     }
     
     FRSGallery *gallery = self.dataSource[index];
@@ -588,6 +602,11 @@
         cell.shareBlock = ^void(NSArray *sharedContent) {
             [weakSelf showShareSheetWithContent:sharedContent];
         };
+        
+        cell.readMoreBlock = ^(NSArray *bullshit){
+            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+        };
+        
     }
 }
 
@@ -603,13 +622,11 @@
 }
 
 
--(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {
+-(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-    NSArray *filteredArray = [self.dataSource filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
+    FRSGallery *gallery = self.dataSource[notification.row];
     
-    if (!filteredArray.count) return;
-    
-    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[filteredArray firstObject]];
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
     [super showNavBarForScrollView:self.tableView animated:NO];
     
