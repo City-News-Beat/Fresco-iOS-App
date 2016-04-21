@@ -59,12 +59,12 @@
     if (self.hiddenTabBar) height += 49;
     
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height) style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -144, self.view.frame.size.width, height) style:UITableViewStyleGrouped];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     //self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;  
-    self.pageScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height)];
+    self.pageScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width, height)];
     self.pageScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, height);
     self.pageScroller.pagingEnabled = YES;
     self.pageScroller.showsHorizontalScrollIndicator = NO;
