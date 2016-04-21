@@ -677,7 +677,7 @@
         } else if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
             self.followingTabButton.alpha = 0.7;
             self.highlightTabButton.alpha = 1;
-            self.navigationController.navigationBar = 
+//            self.navigationController.navigationBar = 
         }
     }
     
