@@ -75,6 +75,7 @@
 -(void)configureFollowing {
     CGRect scrollFrame = self.tableView.frame;
     scrollFrame.origin.x = scrollFrame.size.width;
+    scrollFrame.size.width = self.view.frame.size.height-65-49;
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
     self.followingTable.scrollDelegate = self;
