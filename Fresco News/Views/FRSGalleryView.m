@@ -105,8 +105,10 @@
 }
 
 -(void)updateSocial {
-    [self.actionBar handleHeartState:self.gallery.isLiked];
-    [self.actionBar handleHeartAmount:self.gallery.numberOfLikes];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.actionBar handleHeartState:self.gallery.isLiked];
+        [self.actionBar handleHeartAmount:self.gallery.numberOfLikes];
+    });
 }
 
 -(void)updateScrollView {
@@ -148,11 +150,12 @@
         
         NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES];
         [posts sortUsingDescriptors:[NSArray arrayWithObject:sort]];
-
+        
         self.orderedPosts = posts;
         self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
 
         [self configureUI];
+        [self updateSocial];
     }
     return self;
 }

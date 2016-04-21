@@ -44,9 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<FRSStory *> *stories;
 @property (nullable, nonatomic, retain) NSSet<FRSArticle *> *articles;
 @property (nullable, nonatomic, retain) NSMutableDictionary *tags;
-@property BOOL isLiked;
-@property NSString *repostedBy;
-@property NSInteger numberOfLikes;
+@property (nonatomic, assign) BOOL isLiked;
+@property (nullable, nonatomic, retain) NSString *repostedBy;
+@property (nonatomic, assign) NSInteger numberOfLikes;
 -(NSInteger)heightForGallery;
 @property (nonatomic, weak) NSManagedObjectContext *currentContext;
 
