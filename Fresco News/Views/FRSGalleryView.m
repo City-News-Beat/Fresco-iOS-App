@@ -394,6 +394,22 @@
     [self configureLocationLine];
     [self configureUserLine];
     [self updateLabels];
+    [self configureRepostWithName:@"Susan Black"];
+}
+
+-(void)configureRepostWithName:(NSString *)name {
+    
+    UIImageView *repostImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"repost-icon-white"]];
+    repostImageView.frame = CGRectMake(16, 12, 24, 24);
+    [self addSubview:repostImageView];
+    
+    UILabel *repostLabel = [[UILabel alloc] initWithFrame:CGRectMake(48, 17, 150, 17)];
+    repostLabel.text = [name uppercaseString];
+    repostLabel.font = [UIFont notaBoldWithSize:15];
+    repostLabel.textColor = [UIColor whiteColor];
+    [self addShadowToLabel:repostLabel];
+    [self addSubview:repostLabel];
+    
 }
 
 -(void)configureTimeLine{
