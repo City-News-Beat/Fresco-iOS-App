@@ -35,6 +35,11 @@
 @implementation FRSGalleryView
 
 -(void)loadGallery:(FRSGallery *)gallery {
+    
+    if ([self.gallery.uid isEqualToString:gallery.uid]) {
+        return;
+    }
+    
     for (FRSPlayer *player in self.players) {
         if ([player respondsToSelector:@selector(pause)]) {
             [player.container removeFromSuperview];
@@ -49,9 +54,7 @@
     self.gallery = gallery;
     self.orderedPosts = [gallery.posts allObjects];
     self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
-        
-    [self adjustHeight];
-
+    
     self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight]);
     self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
     self.scrollView.clipsToBounds = YES;
@@ -101,6 +104,15 @@
     [self.borderLine.superview bringSubviewToFront:self.borderLine];
 
     [self updateScrollView];
+    [self updateSocial];
+    [self adjustHeight];
+}
+
+-(void)updateSocial {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.actionBar handleHeartState:self.gallery.isLiked];
+        [self.actionBar handleHeartAmount:self.gallery.numberOfLikes];
+    });
 }
 
 -(void)updateScrollView {
@@ -110,10 +122,12 @@
     }
     
     for (UIImageView *imageView in self.imageViews) {
-        [imageView removeFromSuperview];
+        [imageView setImage:Nil];
     }
     
-    [self configureImageViews];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self configureImageViews];
+    });
 }
 
 -(void)handleActionButtonTapped {
@@ -142,11 +156,12 @@
         
         NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES];
         [posts sortUsingDescriptors:[NSArray arrayWithObject:sort]];
-
+        
         self.orderedPosts = posts;
         self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
 
         [self configureUI];
+        [self updateSocial];
     }
     return self;
 }
@@ -280,65 +295,68 @@
             [self configureMuteIcon];
         });
         
-        if (self.delegate) {
-            [self.delegate playerWillPlay:videoPlayer];
-        }
-        
         videoPlayer.muted = TRUE;
+        videoPlayer.wasMuted = FALSE;
     });
     
+    __weak typeof(self) weakSelf = self;
+    
+    videoPlayer.playBlock = ^(BOOL playing, FRSPlayer *player) {
+        [weakSelf handlePlay:playing player:player];
+    };
     
     return videoPlayer;
+}
+
+-(void)handlePlay:(BOOL)play player:(FRSPlayer *)player {
+    if (play) {
+        for (FRSPlayer *potential in self.players) {
+            if (potential != player && [[potential class] isSubclassOfClass:[FRSPlayer class]]) {
+                [potential pause];
+            }
+        }
+    }
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
     
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     FRSPlayer *player = self.players[page];
-
-    if ([self currentPageIsVideo]) {
-        if (player.muted) {
-            self.muteImageView.alpha = 1;
-        } else {
-            self.muteImageView.alpha = 0;
-        }
-    }
-
-    CGPoint point = [tap locationInView:self];
     
-    // ensures point is in player area
-    if (point.y > self.scrollView.frame.size.height) {
+    if (![[player class] isSubclassOfClass:[FRSPlayer class]]) {
         return;
     }
     
+    player.muted = FALSE;
     
-    if (page >= self.players.count) {
+    if (self.muteImageView.alpha == 1 && player.rate == 0.0) {
+        self.muteImageView.alpha = 0;
+        [player play];
         return;
     }
-    
-    
-    // ensures FRSPlayer not view
-    if (![player respondsToSelector:@selector(play)]) {
-        return;
-    }
+//<<<<<<< HEAD
     
     if (player.muted) {
         player.muted = FALSE;
         [player play];
+//=======
+    else if (self.muteImageView.alpha == 1) {
+//>>>>>>> 3.0-phil
         self.muteImageView.alpha = 0;
         return;
-    } else {
     }
     
     if (player.rate == 0.0) {
         [player play];
+//<<<<<<< HEAD
 //        self.muteImageView.alpha = 0;
     } else {
         [player pause];
-//        self.muteImageView.alpha = 1;
+>>>>>>> 3.0-phil
     }
+    
 }
-
+}
 -(void)handlePhotoTap:(NSInteger)index {
     
 }
@@ -357,6 +375,15 @@
     }
     
     if ([self currentPageIsVideo]) {
+//<<<<<<< HEAD
+//=======
+        FRSPlayer *player = self.players[page];
+        
+        if (player.muted == FALSE) {
+            return;
+        }
+
+//>>>>>>> 3.0-phil
         self.muteImageView.alpha = 1;
         self.muteImageView.frame = CGRectMake(((page + 1) * self.frame.size.width) - 24 - 16, 16, 24, 24);
         [self.scrollView bringSubviewToFront:self.muteImageView];
@@ -627,6 +654,8 @@
         self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height) delegate:self];
     }
     
+    self.actionBar.delegate = self;
+    
     [self addSubview:self.actionBar];
     
 }
@@ -652,6 +681,8 @@
 }
 
 
+
+
 #pragma mark - Action Bar Delegate
 -(NSString *)titleForActionButton{
     return @"READ MORE";
@@ -662,7 +693,10 @@
 }
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"GalleryContentBarActionTapped" object:nil userInfo:@{@"gallery_id" : self.gallery.uid}];
+
+    if (self.readMoreBlock) {
+        self.readMoreBlock(Nil);
+    }
 }
 
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
@@ -693,7 +727,8 @@
     post = (self.orderedPosts.count > page) ? self.orderedPosts[page] : Nil;
     
     [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
-
+    [self handlePlay:TRUE player:Nil];
+    
     if (self.players.count <= page) {
         if (post.videoUrl != Nil && page >= self.players.count) {
             FRSPlayer *player = [self setupPlayerForPost:post];
@@ -778,7 +813,11 @@
     self.profileIV.alpha = absAlpha;
     self.locationIV.alpha = absAlpha;
     self.clockIV.alpha = absAlpha;
-    self.muteImageView.alpha = absAlpha;
+    
+    FRSPlayer *player = self.players[page];
+    if ([[player class] isSubclassOfClass:[FRSPlayer class]] && player.muted) {
+        self.muteImageView.alpha = absAlpha;
+    }
     
     //Profile picture doesn't fade on scroll
     

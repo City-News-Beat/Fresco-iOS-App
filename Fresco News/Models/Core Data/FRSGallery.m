@@ -35,6 +35,9 @@
 @dynamic posts;
 @dynamic stories;
 @dynamic articles;
+@dynamic isLiked;
+@dynamic numberOfLikes;
+@dynamic repostedBy;
 
 -(void)configureWithDictionary:(NSDictionary *)dict{
     self.tags = [[NSMutableDictionary alloc] init];
@@ -46,9 +49,9 @@
     [self addPostsWithArray:dict[@"posts"]];
     [self addArticlesWithArray:dict[@"articles"]];
     
-    BOOL liked = [dict[@"liked"] boolValue];
-    [self.tags setObject:@(liked) forKey:@"liked"];
-    [self.tags setObject:(dict[@"likes"] != Nil && dict[@"likes"] != [NSNull null]) ? dict[@"likes"] : @(0) forKey:@"likes"];
+    self.repostedBy = dict[@"reposted_by"];
+    self.isLiked = [dict[@"liked"] boolValue];
+    self.numberOfLikes = [dict[@"likes"] integerValue];
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
@@ -104,34 +107,32 @@
 
 -(NSInteger)heightForGallery{
     
-    NSInteger totalHeight = 0;
+    float totalHeight = 0;
     
     for (FRSPost *post in self.posts){
-        NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
-        NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
+        float rawHeight = [post.meta[@"image_height"] integerValue];
+        float rawWidth = [post.meta[@"image_width"] integerValue];
         
         if (rawHeight == 0 || rawWidth == 0){
             totalHeight += [UIScreen mainScreen].bounds.size.width;
         }
         else {
-            NSInteger scaledHeight = rawHeight * ([UIScreen mainScreen].bounds.size.width/rawWidth);
+            float scaledHeight = rawHeight * ([UIScreen mainScreen].bounds.size.width/rawWidth);
             totalHeight += scaledHeight;
         }
     }
     
-    NSInteger averageHeight = totalHeight/self.posts.count;
+    NSInteger averageHeight = ceilf(totalHeight/self.posts.count);
     
     averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width - 32, 0)];
     
-    label.font = [UIFont systemFontOfSize:15 weight:-1];
+    label.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     label.text = self.caption;
     label.numberOfLines = 6;
     
-    [label sizeToFit];
-    
-    averageHeight += label.frame.size.height + 12 + 44 + 20;
+    averageHeight += [label sizeThatFits:CGSizeMake([UIScreen mainScreen].bounds.size.width-32, INT_MAX)].height + 12 + 44 + 20;
     
     return averageHeight;
 }

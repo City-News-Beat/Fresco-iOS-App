@@ -10,4 +10,19 @@
 
 @implementation FRSPlayer
 
+-(void)play {
+    [super play];
+    
+    if (self.playBlock) {
+        self.playBlock(TRUE, self);
+    }
+}
+
+-(void)pause {
+    [super pause];
+    
+    if (self.playBlock) {
+        self.playBlock(FALSE, self);
+    }
+}
 @end

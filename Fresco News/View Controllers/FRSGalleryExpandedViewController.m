@@ -128,6 +128,10 @@
     [self.view addSubview:self.scrollView];
 }
 
+-(void)playerWillPlay:(FRSPlayer *)player {
+    
+}
+
 -(void)configureGalleryView{
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 500) gallery:self.gallery delegate:self];
     [self.scrollView addSubview:self.galleryView];

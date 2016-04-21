@@ -111,9 +111,18 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)readMore:(NSIndexPath *)indexPath {
 
-    NSLog(@"READ MORE");
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.stories objectAtIndex:indexPath.row]];
+    vc.shouldHaveBackButton = YES;
     
+    
+    self.navigationItem.title = @"";
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    [self hideTabBarAnimated:YES];
 }
+
 
 -(void)playerWillPlay:(AVPlayer *)player {
     for (FRSGalleryCell *cell in [self.galleriesTable visibleCells]) {
@@ -159,8 +168,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
         [weakSelf showShareSheetWithContent:sharedContent];
     };
     
-    cell.galleryView.readMoreBlock = ^void(NSArray *sharedContent) {
-        [self readMore:indexPath];
+    cell.readMoreBlock = ^void(NSArray *sharedContent) {
+        [weakSelf readMore:indexPath];
     };
 }
 

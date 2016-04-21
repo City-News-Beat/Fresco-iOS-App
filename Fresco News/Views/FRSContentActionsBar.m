@@ -46,6 +46,14 @@
     }
     return self;
 }
+-(void)handleHeartAmount:(NSInteger)amount {
+    
+    if (amount == 0) {
+        self.likeLabel.text = @"";
+    }
+    
+    self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+}
 
 -(void)configureActionButton{
     

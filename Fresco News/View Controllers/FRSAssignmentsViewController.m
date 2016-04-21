@@ -516,11 +516,13 @@
     [self.assignmentBottomBar addSubview:bottomContainerLine];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectMake(self.view.frame.size.width -93 , 15, 77, 17);
+    button.frame = CGRectMake(self.view.frame.size.width -93-23 , 15, 100, 17);
     [button setTitle:@"OPEN CAMERA" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(acceptAssignment) forControlEvents:UIControlEventTouchDown];
+    [button addTarget:self action:@selector(acceptAssignment) forControlEvents:UIControlEventTouchUpInside];
+    button.titleLabel.adjustsFontSizeToFitWidth = YES;
+    
     [self.assignmentBottomBar addSubview:button];
     
     self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];

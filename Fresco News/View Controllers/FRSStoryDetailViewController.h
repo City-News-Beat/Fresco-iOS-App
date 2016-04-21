@@ -11,9 +11,10 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "FRSGalleryView.h"
+#import "FRSBaseViewController.h"
 
 //<<<<<<< HEAD
-@interface FRSStoryDetailViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
+@interface FRSStoryDetailViewController : FRSBaseViewController<UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
 //=======
 //@interface FRSStoryDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 //>>>>>>> 3.0-omar
