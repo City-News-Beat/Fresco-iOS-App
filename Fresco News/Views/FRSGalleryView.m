@@ -773,7 +773,11 @@
     self.profileIV.alpha = absAlpha;
     self.locationIV.alpha = absAlpha;
     self.clockIV.alpha = absAlpha;
-    self.muteImageView.alpha = absAlpha;
+    
+    FRSPlayer *player = self.players[page];
+    if ([[player class] isSubclassOfClass:[FRSPlayer class]] && player.muted) {
+        self.muteImageView.alpha = absAlpha;
+    }
     
     //Profile picture doesn't fade on scroll
     
