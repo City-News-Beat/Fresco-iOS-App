@@ -99,6 +99,11 @@
 
 -(id)initWithUser:(FRSUser *)user {
     
+    
+//    user.profileImage
+//    user.firstName
+//    user.lastName
+//    user.username
     if (self) {
         
         self.presentingUser = YES;
@@ -604,11 +609,11 @@
 //    NSLog(@"user = %@", user);
     
     
-//    self.profileIV.image = user.profileImage;
+    self.profileIV.image = user.profileImage;
 //    self.nameLabel.text = user.firstName;
 //    self.bioLabel.text = user.bio;
     
-    self.profileIV.image = [UIImage imageNamed:@"apple-user-grace"];
+//    self.profileIV.image = [UIImage imageNamed:@"apple-user-grace"];
     self.nameLabel.text = @"DJ Gracie P.";
     self.usernameLabel.text = @"@grace";
     self.bioLabel.text = @"Hey! My name is Grace and I'm wearing a yellow shirt. Look at my yellow shirt! Hey! My name is Grace and I'm wearing a yellow shirt. Look at my yellow shirt! Hey! My name is Grace and I'm wearing a yellow shirt. Look at my yellow shirt!";

@@ -517,7 +517,9 @@
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
             
             //Add gesture recognizer only if user has a photo
+            
             UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+            
             [bylineTap setNumberOfTapsRequired:1];
             [self.nameLabel setUserInteractionEnabled:YES];
             [self.nameLabel addGestureRecognizer:bylineTap];
@@ -900,10 +902,14 @@
 }
 
 -(void)segueToUserProfile:(FRSUser *)user {
+    NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    if (page >= 0 && page < self.orderedPosts.count) {
+        FRSPost *currentPost = self.orderedPosts[page];
+        
+        FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:currentPost.creator];
 
-    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:user];
-//    userViewController.title = user.username;
-    [self.delegate.navigationController pushViewController:userViewController animated:YES];
+        [self.delegate.navigationController pushViewController:userViewController animated:YES];
+    }
 }
 
 -(void)presentParallax{
