@@ -13,4 +13,5 @@
 @interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
 @property NSArray *galleries;
 -(void)loadGalleries:(NSArray *)galleries;
+@property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
 @end

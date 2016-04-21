@@ -178,4 +178,11 @@
 }
 
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (self.scrollDelegate) {
+        [self.scrollDelegate scrollViewDidScroll:scrollView];
+    }
+}
+
+
 @end

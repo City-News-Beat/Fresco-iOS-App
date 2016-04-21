@@ -631,9 +631,10 @@
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [super scrollViewDidScroll:scrollView];
     
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
-    if (self.pageScroller) {
+    if (self.pageScroller && scrollView != self.pageScroller) {
 
         if (self.pageScroller.contentOffset.x == self.view.frame.size.width) { // User is in right tab (following)
             self.followingTabButton.alpha = 1;
@@ -642,8 +643,6 @@
             self.followingTabButton.alpha = 0.7;
             self.highlightTabButton.alpha = 1;
         }
-        
-        
         
     }
 }
