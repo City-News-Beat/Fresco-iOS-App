@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FRSGallery.h"
 #import "FRSGalleryCell.h"
+#import "FRSScrollingViewController.h"
 
 @interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
 @property NSArray *galleries;
