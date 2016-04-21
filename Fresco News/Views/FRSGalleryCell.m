@@ -42,7 +42,7 @@
     
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     
-    if (self.gallery == self.galleryView.gallery) {
+    if (self.gallery == self.galleryView.gallery && self.galleryView && self.gallery) {
         return;
     }
     
