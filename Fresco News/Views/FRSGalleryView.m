@@ -334,29 +334,24 @@
         [player play];
         return;
     }
-//<<<<<<< HEAD
     
     if (player.muted) {
         player.muted = FALSE;
         [player play];
-//=======
+    }
     else if (self.muteImageView.alpha == 1) {
-//>>>>>>> 3.0-phil
         self.muteImageView.alpha = 0;
         return;
     }
     
     if (player.rate == 0.0) {
         [player play];
-//<<<<<<< HEAD
-//        self.muteImageView.alpha = 0;
     } else {
         [player pause];
->>>>>>> 3.0-phil
     }
     
 }
-}
+
 -(void)handlePhotoTap:(NSInteger)index {
     
 }
@@ -375,15 +370,13 @@
     }
     
     if ([self currentPageIsVideo]) {
-//<<<<<<< HEAD
-//=======
+
         FRSPlayer *player = self.players[page];
         
         if (player.muted == FALSE) {
             return;
         }
 
-//>>>>>>> 3.0-phil
         self.muteImageView.alpha = 1;
         self.muteImageView.frame = CGRectMake(((page + 1) * self.frame.size.width) - 24 - 16, 16, 24, 24);
         [self.scrollView bringSubviewToFront:self.muteImageView];
