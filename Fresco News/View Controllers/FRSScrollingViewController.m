@@ -61,8 +61,7 @@
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height)];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;  
     self.pageScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height)];
     self.pageScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, height);
     self.pageScroller.pagingEnabled = YES;
@@ -117,7 +116,7 @@
     NSInteger height = [UIScreen mainScreen].bounds.size.height - 20;
     if (self.hiddenTabBar) height += 49;
     if (self.actionBarVisible) height -= 44;
-    CGRect scrollViewFrame = CGRectMake(0, 0, self.view.frame.size.width, height);
+    CGRect scrollViewFrame = CGRectMake(0, -44, self.view.frame.size.width, height);
 
     if (self.search != Nil) {
         [self.navigationItem setRightBarButtonItem:self.search animated:YES];

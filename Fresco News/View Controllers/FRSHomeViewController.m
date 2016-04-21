@@ -118,6 +118,12 @@
     }
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *head = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 44)];
+    head.backgroundColor = [UIColor frescoBackgroundColorLight];
+    return head;
+}
+
 
 #pragma mark - UI
 
