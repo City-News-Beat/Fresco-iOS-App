@@ -325,6 +325,10 @@
                 [potential pause];
             }
         }
+        
+        if (self.delegate) {
+            [self.delegate playerWillPlay:player];
+        }
     }
 }
 
@@ -742,9 +746,6 @@
             [self.players addObject:player];
             [self.videoPlayer play];
             
-            if (self.delegate) {
-                [self.delegate playerWillPlay:player];
-            }
         }
         else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
             [self.players addObject:imageView];
@@ -756,9 +757,6 @@
                     self.videoPlayer = player;
                     [player play];
                     
-                    if (self.delegate) {
-                        [self.delegate playerWillPlay:player];
-                    }
                 }
                 else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
                     [player pause];

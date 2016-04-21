@@ -504,11 +504,13 @@
     }];
 }
 
--(void)playerWillPlay:(AVPlayer *)player {
-    for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
-        for (FRSPlayer *cellPlayer in cell.players) {
-            if ([[cellPlayer class] isSubclassOfClass:[FRSPlayer class]] && cellPlayer != player) {
-                [player pause];
+-(void)playerWillPlay:(AVPlayer *)play {
+    for (UITableView *tableView in @[self.tableView, self.followingTable]) {
+        for (FRSGalleryCell *cell in [tableView visibleCells]) {
+            for (FRSPlayer *player in cell.galleryView.players) {
+                if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
+                    [player pause];
+                }
             }
         }
     }
