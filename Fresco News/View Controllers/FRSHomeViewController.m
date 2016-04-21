@@ -332,16 +332,7 @@
         localIndex++;
     }
     
-    if (self.dataSource.count > 1 && past) {
-        if ([past[0] isEqualToString:[self.dataSource[0] uid]] && [past[1] isEqualToString:[self.dataSource[1] uid]]) {
-            // no animate
-            [self.tableView reloadData];
-        }
-        else {
-            // animate
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-        }
-    }
+    [self.tableView reloadData];
     
     for (FRSGallery *gallery in self.cachedData) {
         [self.appDelegate.managedObjectContext deleteObject:gallery];
