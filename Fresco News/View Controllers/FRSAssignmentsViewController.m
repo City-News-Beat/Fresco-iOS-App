@@ -521,6 +521,8 @@
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(acceptAssignment) forControlEvents:UIControlEventTouchDown];
+    button.titleLabel.adjustsFontSizeToFitWidth = YES;
+    
     [self.assignmentBottomBar addSubview:button];
     
     self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
