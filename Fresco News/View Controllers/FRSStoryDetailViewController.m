@@ -111,6 +111,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)readMore:(NSIndexPath *)indexPath {
 
+    NSLog(@"READ MORE");
+    
 }
 
 -(void)playerWillPlay:(AVPlayer *)player {

@@ -324,21 +324,18 @@
     
     if (player.muted) {
         player.muted = FALSE;
-//<<<<<<< HEAD
         [player play];
-//=======
         self.muteImageView.alpha = 0;
-//>>>>>>> 3.0-omar
         return;
     } else {
     }
     
     if (player.rate == 0.0) {
         [player play];
-        self.muteImageView.alpha = 0;
+//        self.muteImageView.alpha = 0;
     } else {
         [player pause];
-        self.muteImageView.alpha = 1;
+//        self.muteImageView.alpha = 1;
     }
 }
 
@@ -360,7 +357,6 @@
     }
     
     if ([self currentPageIsVideo]) {
-        NSLog(@"YEAH");
         self.muteImageView.alpha = 1;
         self.muteImageView.frame = CGRectMake(((page + 1) * self.frame.size.width) - 24 - 16, 16, 24, 24);
         [self.scrollView bringSubviewToFront:self.muteImageView];
