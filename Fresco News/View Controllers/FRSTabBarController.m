@@ -155,7 +155,6 @@
             [self setSelectedIndex:self.lastActiveIndex];
         }];
     }
-    
 }
 
 - (void)didReceiveMemoryWarning {

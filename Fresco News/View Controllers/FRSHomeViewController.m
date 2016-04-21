@@ -125,9 +125,12 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 90;
+    return 93;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0;
+}
 
 
 #pragma mark - UI
@@ -251,14 +254,14 @@
         return [gallery heightForGallery];
     }
     
-    return 20;
+    return 10;
 }
 
 -(void)configureTableView {
     [super configureTableView];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
-    self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height +200);
+    self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height+20);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
@@ -519,7 +522,7 @@
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{
     
     if (index == self.dataSource.count) {
-        return 40;
+        return 20;
     }
     
     FRSGallery *gallery = self.dataSource[index];
