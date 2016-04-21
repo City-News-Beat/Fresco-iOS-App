@@ -314,13 +314,18 @@
 
     if ([self currentPageIsVideo]) {
         if (player.muted && !player.wasMuted) {
-            self.muteImageView.alpha = 1;
+            self.muteImageView.alpha = 0;
+            player.muted = FALSE;
         } else {
             self.muteImageView.alpha = 0;
         }
     }
     
     player.wasMuted = TRUE;
+
+    if (!player.wasMuted && player.rate == 0.0) {
+        return;
+    }
 
     CGPoint point = [tap locationInView:self];
     
