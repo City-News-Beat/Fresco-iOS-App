@@ -251,7 +251,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
-    self.tableView.bounces = FALSE;
+    self.tableView.bounces = YES;
     self.pageScroller.delegate = self;
     [self.view addSubview:self.pageScroller];
 }
