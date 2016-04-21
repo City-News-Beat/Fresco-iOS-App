@@ -231,9 +231,8 @@
         NSInteger index = self.stories.count;
         NSMutableArray *storiesToLoad = [[NSMutableArray alloc] init];
         for (NSDictionary *storyDict in stories){
-        
-            FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
-            
+            NSEntityDescription *entity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
+            FRSStory *story = (FRSStory *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
             [story configureWithDictionary:storyDict];
             [story setValue:@(self.stories.count) forKey:@"index"];
             [self.stories addObject:story];
@@ -243,15 +242,6 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
-            
-            FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-            
-            for (FRSStory *story in self.cached) {
-                [delegate.managedObjectContext deleteObject:story];
-            }
-            
-            [delegate.managedObjectContext save:Nil];
-            [delegate saveContext];
         });
 
     }];
@@ -270,7 +260,12 @@
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
+    for (FRSStory *story in self.cached) {
+        [self.appDelegate.managedObjectContext deleteObject:story];
+    }
     
+    [self.appDelegate.managedObjectContext save:Nil];
+    [self.appDelegate saveContext];
 }
 
 -(FRSStory *)storyExists:(NSString *)storyID {
