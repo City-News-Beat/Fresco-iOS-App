@@ -590,9 +590,9 @@
     [attString addAttribute:NSForegroundColorAttributeName value:label.textColor range:range];
     
     NSShadow *shadow = [[NSShadow alloc] init];
-    shadow.shadowColor = [UIColor frescoLightTextColor];
-    shadow.shadowOffset = CGSizeMake(0, 1);
-    shadow.shadowBlurRadius = 1.5;
+    shadow.shadowColor = [UIColor colorWithWhite:0 alpha:0.2];
+    shadow.shadowOffset = CGSizeMake(0, 1.5);
+    shadow.shadowBlurRadius = 2;
     [attString addAttribute:NSShadowAttributeName value:shadow range:range];
     
     label.attributedText = attString;
