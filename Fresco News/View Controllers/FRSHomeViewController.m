@@ -99,6 +99,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated {
     [self removeStatusBarNotification];
+    [self pausePlayers];
 }
 
 -(void)configureUI {
@@ -138,7 +139,6 @@
 #pragma mark - UI
 
 -(void)configureSpinner {
-    
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
@@ -671,25 +671,24 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    
     NSLog(@"self.pageScroller.contentOFfset.x = %f", self.pageScroller.contentOffset.x);
     
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     if (scrollView == self.pageScroller) {
+        [self pausePlayers];
+    }
         if (self.pageScroller.contentOffset.x == self.view.frame.size.width) { // User is in right tab (following)
             self.followingTabButton.alpha = 1;
             self.highlightTabButton.alpha = 0.7;
 
             [self showNavBarForScrollView:self.scrollView animated:NO];
             self.navigationItem.titleView.alpha = 1;
-        }
-        
-        
-    }
+        }        
     
     if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
         self.followingTabButton.alpha = 0.7;
         self.highlightTabButton.alpha = 1;
+        
     }
     
     if (scrollView == self.tableView) {
@@ -724,5 +723,16 @@
     }
 }
 
+-(void)pausePlayers {
+    for (UITableView *tableView in @[self.tableView, self.followingTable]) {
+        for (FRSGalleryCell *cell in [tableView visibleCells]) {
+            for (FRSPlayer *player in cell.galleryView.players) {
+                if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
+                    [player pause];
+                }
+            }
+        }
+    }
+}
 
 @end

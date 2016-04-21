@@ -36,6 +36,7 @@
 
 @implementation FRSGalleryView
 
+
 -(void)loadGallery:(FRSGallery *)gallery {
     
     if ([self.gallery.uid isEqualToString:gallery.uid]) {
