@@ -110,7 +110,7 @@
     self.likeLabel.font = [UIFont notaBoldWithSize:15];
     
     self.likeLabel.frame = CGRectMake(self.frame.size.width - (16 + self.shareButton.frame.size.width + 16 + self.repostLabel.frame.size.width + 6 + self.repostButton.frame.size.width + 16), 0, 100, 44);
-    
+
     [self addSubview:self.likeLabel];
     
     self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeLabel.frame.origin.x - 36, 0, 36, self.frame.size.height)];
