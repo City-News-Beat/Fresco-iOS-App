@@ -12,6 +12,7 @@
 #import "FRSAppDelegate.h"
 
 @implementation FRSFollowingTable
+@synthesize navigationController = _navigationController;
 
 -(instancetype)init {
     self = [super init];
@@ -63,6 +64,7 @@
         }
         
         [self loadGalleries:realGalleries];
+        [appDelegate.managedObjectContext rollback];
     }];
 }
 
