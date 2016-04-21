@@ -311,58 +311,28 @@
     
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     FRSPlayer *player = self.players[page];
-
-    if ([self currentPageIsVideo]) {
-        if (player.muted && !player.wasMuted) {
-            self.muteImageView.alpha = 0;
-            player.muted = FALSE;
-        } else {
-            self.muteImageView.alpha = 0;
-        }
-    }
     
-
-    if (!player.wasMuted && player.rate == 0.0) {
-        player.wasMuted = TRUE;
-        return;
-    }
-    else if (!player.wasMuted) {
-        player.muted = FALSE;
-        player.wasMuted = TRUE;
+    if (![[player class] isSubclassOfClass:[FRSPlayer class]]) {
         return;
     }
     
-    player.wasMuted = TRUE;
-
-
-    CGPoint point = [tap locationInView:self];
-    
-    // ensures point is in player area
-    if (point.y > self.scrollView.frame.size.height) {
+    if (self.muteImageView.alpha == 1 && player.rate == 0.0) {
+        self.muteImageView.alpha = 0;
+        [player play];
         return;
     }
-    
-    if (page >= self.players.count) {
-        return;
-    }
-    
-    // ensures FRSPlayer not view
-    if (![player respondsToSelector:@selector(play)]) {
+    else if (self.muteImageView.alpha == 1) {
+        self.muteImageView.alpha = 0;
         return;
     }
     
     if (player.rate == 0.0) {
         [player play];
-        if (!player.wasMuted) {
-            self.muteImageView.alpha = 0;
-        }
-    } else {
-        [player pause];
-        
-        if (!player.wasMuted) {
-            self.muteImageView.alpha = 0;
-        }
     }
+    else {
+        [player pause];
+    }
+    
 }
 
 -(void)handlePhotoTap:(NSInteger)index {
