@@ -98,6 +98,8 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    self.navigationItem.titleView.alpha = 1;
     
     if (!self.firstTime) {
         [self fetchStories];

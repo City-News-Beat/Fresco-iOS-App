@@ -249,7 +249,6 @@
         
         self.scrollDirection = UIScrollViewScrollDirectionDown;
     }
-    
 }
 
 

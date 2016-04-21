@@ -675,11 +675,15 @@
         if (self.pageScroller.contentOffset.x == self.view.frame.size.width) { // User is in right tab (following)
             self.followingTabButton.alpha = 1;
             self.highlightTabButton.alpha = 0.7;
-        } else if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
-            self.followingTabButton.alpha = 0.7;
-            self.highlightTabButton.alpha = 1;
+
+            [self showNavBarForScrollView:self.scrollView animated:NO];
+
         }
         
+        
+    } else if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
+        self.followingTabButton.alpha = 0.7;
+        self.highlightTabButton.alpha = 1;
     }
     
     if (scrollView == self.tableView) {
