@@ -113,8 +113,6 @@
     
 //    self.likeLabel.backgroundColor = [UIColor redColor];
     
-    self.likeLabel.frame = CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
-    
     self.likeLabel.frame = CGRectMake(self.repostButton.frame.origin.x - self.likeLabel.frame.size.width - 15, 0, 40, self.frame.size.height);
 
     [self addSubview:self.likeLabel];
