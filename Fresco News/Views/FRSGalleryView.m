@@ -939,7 +939,7 @@
     NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
     
     if (self.players.count > page) {
-        if ([self.players[page] respondsToSelector:@selector(play)]) {
+        if ([[self.players[page] class] isSubclassOfClass:[FRSPlayer class]]) {
             [(AVPlayer *)self.players[page] play];
         }
     }
@@ -949,7 +949,7 @@
 
 -(void)pause {
     for (AVPlayer *player in self.players) {
-        if ([player respondsToSelector:@selector(pause)]) {
+        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
             [player pause];
         }
     }

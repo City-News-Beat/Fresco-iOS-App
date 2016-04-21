@@ -684,6 +684,25 @@
     
     if (scrollView == self.tableView) {
         [super scrollViewDidScroll:scrollView];
+        NSArray *visibleCells = [self.tableView visibleCells];
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            BOOL taken = FALSE;
+            
+            for (FRSGalleryCell *cell in visibleCells) {
+                
+                if (cell.galleryView.scrollView.frame.origin.y < 500 && cell.galleryView.scrollView.frame.origin.y > 250) {
+                    
+                    if (!taken) {
+                        [cell play];
+                        taken = TRUE;
+                    }
+                    else {
+                        [cell pause];
+                    }
+                }
+            }
+        });
     }
     
     if (scrollView == self.pageScroller) {
