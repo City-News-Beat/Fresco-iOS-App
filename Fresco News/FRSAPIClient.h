@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FRSAppDelegate.h"
 #import "FRSLocator.h"
+#import "FRSUser.h"
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 
@@ -22,7 +23,7 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 
 -(void)fetchFollowing:(void(^)(NSArray *galleries, NSError *error))completion;
 
-
+-(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion;
 

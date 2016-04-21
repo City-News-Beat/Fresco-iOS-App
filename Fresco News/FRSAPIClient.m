@@ -81,6 +81,11 @@
     
 }
 
+-(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    
+}
+
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
     // make auth calls
     
