@@ -192,6 +192,20 @@
     NSLog(@"Follow Story");
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *head = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 90)];
+    head.backgroundColor = [UIColor clearColor];
+    return head;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 93;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0;
+}
+
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (self.scrollDelegate) {
