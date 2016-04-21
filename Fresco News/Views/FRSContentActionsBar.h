@@ -19,7 +19,7 @@
 -(void)actionButtonTitleNeedsUpdate;
 -(void)handleHeartState:(BOOL)state;
 -(void)handleRepostState:(BOOL)state;
-
+-(void)handleHeartAmount:(NSInteger)amount;
 
 @end
 

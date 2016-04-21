@@ -101,6 +101,12 @@
     [self.borderLine.superview bringSubviewToFront:self.borderLine];
 
     [self updateScrollView];
+    [self updateSocial];
+}
+
+-(void)updateSocial {
+    [self.actionBar handleHeartState:self.gallery.isLiked];
+    [self.actionBar handleHeartAmount:self.gallery.numberOfLikes];
 }
 
 -(void)updateScrollView {
