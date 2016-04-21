@@ -109,11 +109,9 @@
     [self updateScrollView];
     [self updateSocial];
     [self adjustHeight];
-
     
-    if (self.gallery.repostedBy != nil) {
+    if (self.gallery.repostedBy != nil && ![self.gallery.repostedBy isEqualToString:@""]) {
         [self configureRepostWithName:self.gallery.repostedBy];
-        NSLog(@"self.gallery.repostBy = %@", self.gallery.repostedBy);
     }
 }
 
@@ -617,7 +615,6 @@
     label.numberOfLines = 0;
 
    // [label sizeToFit];
-    
     CGRect labelFrame = label.frame;
     labelFrame.size.height = 20;
     labelFrame.size.width = [UIScreen mainScreen].bounds.size.width;
