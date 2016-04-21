@@ -113,7 +113,6 @@
     
     [self addSubview:self.likeLabel];
     
-    
     self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeLabel.frame.origin.x - 36, 0, 36, self.frame.size.height)];
     [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"]        forState:UIControlStateNormal];
     [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateSelected];
