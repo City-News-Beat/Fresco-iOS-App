@@ -107,22 +107,22 @@
 
 -(NSInteger)heightForGallery{
     
-    NSInteger totalHeight = 0;
+    float totalHeight = 0;
     
     for (FRSPost *post in self.posts){
-        NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
-        NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
+        float rawHeight = [post.meta[@"image_height"] integerValue];
+        float rawWidth = [post.meta[@"image_width"] integerValue];
         
         if (rawHeight == 0 || rawWidth == 0){
             totalHeight += [UIScreen mainScreen].bounds.size.width;
         }
         else {
-            NSInteger scaledHeight = rawHeight * ([UIScreen mainScreen].bounds.size.width/rawWidth);
+            float scaledHeight = rawHeight * ([UIScreen mainScreen].bounds.size.width/rawWidth);
             totalHeight += scaledHeight;
         }
     }
     
-    NSInteger averageHeight = totalHeight/self.posts.count;
+    NSInteger averageHeight = ceilf(totalHeight/self.posts.count);
     
     averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
     
@@ -132,7 +132,6 @@
     label.text = self.caption;
     label.numberOfLines = 6;
     
-    //[label sizeToFit];
     averageHeight += [label sizeThatFits:CGSizeMake([UIScreen mainScreen].bounds.size.width-32, INT_MAX)].height + 12 + 44 + 20;
     
     return averageHeight;

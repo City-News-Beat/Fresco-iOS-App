@@ -41,7 +41,7 @@
     
     if (self.galleryView != Nil) {
         [self.galleryView loadGallery:self.gallery];
-        
+        self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
         return;
     }
     
