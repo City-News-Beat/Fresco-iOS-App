@@ -691,7 +691,7 @@
             
             for (FRSGalleryCell *cell in visibleCells) {
                 
-                if (cell.galleryView.scrollView.frame.origin.y < 500 && cell.galleryView.scrollView.frame.origin.y > 250) {
+                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
                     
                     if (!taken) {
                         [cell play];
