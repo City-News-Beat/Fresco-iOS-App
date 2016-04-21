@@ -154,7 +154,7 @@
     }
     
     if (scrollView == self.pageScroller) {
-        NSInteger page = (self.pageScroller.contentOffset.x > 0) ? 1 : 0;
+
     }
 }
 
@@ -657,6 +657,7 @@
     
     if (scrollView == self.pageScroller) {
         // animate nav up
+        
     }
 }
 
