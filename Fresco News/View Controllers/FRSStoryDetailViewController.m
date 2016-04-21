@@ -119,8 +119,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [self.navigationController pushViewController:vc animated:YES];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-    //[self hideTabBarAnimated:YES];
-    
+    [self hideTabBarAnimated:YES];
 }
 
 
