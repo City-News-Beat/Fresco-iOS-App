@@ -118,6 +118,13 @@
     }
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *head = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 44)];
+    head.backgroundColor = [UIColor frescoBackgroundColorLight];
+    return head;
+}
+
+
 #pragma mark - UI
 
 -(void)configureSpinner {
@@ -233,9 +240,7 @@
 //
 //    } completion:nil];
 }
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)index {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:0];
-
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.dataSource.count > indexPath.row) {
         FRSGallery *gallery = [self.dataSource objectAtIndex:indexPath.row];
         return [gallery heightForGallery];
@@ -382,7 +387,7 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     if (tableView == self.tableView) {
-        return (self.dataSource.count == 0) ? 0 : self.dataSource.count + 2;
+        return (self.dataSource.count == 0) ? 0 : self.dataSource.count + 1;
     }
     
     return 0;
@@ -392,9 +397,8 @@
     return 1;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)index {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:0];
-
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     if (tableView == self.tableView) {
         return [self heightForItemAtDataSourceIndex:indexPath.row];
     }
@@ -402,12 +406,7 @@
     return 0;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)index {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:0];
-
-    if (index.row == 0) {
-        return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Buffer"];
-    }
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (tableView == self.tableView) {
         return [self highlightCellForIndexPath:indexPath];
@@ -416,9 +415,7 @@
     return Nil;
 }
 
--(UITableViewCell *)highlightCellForIndexPath:(NSIndexPath *)index {
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:0];
+-(UITableViewCell *)highlightCellForIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != Nil) { // we're reloading
         
@@ -516,10 +513,6 @@
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{
     
-    if (index == -1) {
-        return 44;
-    }
-    
     if (index == self.dataSource.count) {
         return 40;
     }
@@ -572,9 +565,8 @@
     
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)index {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:0];
-
+-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    
     if (tableView == self.tableView) {
         // sloppy not to have a check here
         if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
@@ -624,7 +616,7 @@
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-    FRSGallery *gallery = self.dataSource[notification.row-1];
+    FRSGallery *gallery = self.dataSource[notification.row];
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;

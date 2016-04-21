@@ -69,9 +69,7 @@
     self.pageScroller.delaysContentTouches = FALSE;
     self.pageScroller.bounces = FALSE;
     [self.pageScroller addSubview:self.tableView];
-    
 }
-
 
 
 - (void)didReceiveMemoryWarning {
