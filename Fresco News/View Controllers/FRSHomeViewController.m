@@ -49,6 +49,7 @@
 @property (strong, nonatomic) NSMutableArray *players;
 @property (strong, nonatomic) NSMutableArray *pulled;
 @property (weak, nonatomic) FRSAppDelegate *appDelegate;
+@property (nonatomic, strong) FRSFollowingTable *followingTable;
 @end
 
 @implementation FRSHomeViewController
@@ -75,8 +76,9 @@
     CGRect scrollFrame = self.tableView.frame;
     scrollFrame.origin.x = scrollFrame.size.width;
     
-    FRSFollowingTable *followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
-    [self.pageScroller addSubview:followingTable];
+    self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
+    self.followingTable.scrollDelegate = self;
+    [self.pageScroller addSubview:self.followingTable];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
