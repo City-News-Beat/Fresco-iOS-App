@@ -203,6 +203,10 @@
 -(void)configureImageViews{
     self.players = [[NSMutableArray alloc] init];
     
+    if (!self.imageViews) {
+        self.imageViews = [[NSMutableArray alloc] init];
+    }
+    
     for (NSInteger i = 0; i < self.gallery.posts.count; i++){
         
         if (self.imageViews.count > i) {
