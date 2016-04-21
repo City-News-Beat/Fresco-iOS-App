@@ -35,6 +35,11 @@
 @implementation FRSGalleryView
 
 -(void)loadGallery:(FRSGallery *)gallery {
+    
+    if ([self.gallery.uid isEqualToString:gallery.uid]) {
+        return;
+    }
+    
     for (FRSPlayer *player in self.players) {
         if ([player respondsToSelector:@selector(pause)]) {
             [player.container removeFromSuperview];
@@ -202,35 +207,10 @@
 
 -(void)configureImageViews{
     self.players = [[NSMutableArray alloc] init];
-    
-    if (!self.imageViews) {
-        self.imageViews = [[NSMutableArray alloc] init];
-    }
+    self.imageViews = [NSMutableArray new];
     
     for (NSInteger i = 0; i < self.gallery.posts.count; i++){
-        
-        if (self.imageViews.count > i) {
-            FRSPost *post = self.orderedPosts[i];
-            FRSScrollViewImageView *imageView = self.imageViews[i];
-            imageView.frame = CGRectMake(i * self.frame.size.width, 0, self.frame.size.width, [self imageViewHeight]);
-            [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
             
-            if (post.videoUrl != Nil) {
-                // videof
-                // set up FRSPlayer
-                // add AVPlayerLayer
-                NSLog(@"TOP LEVEL PLAYER");
-                [self.players addObject:[self setupPlayerForPost:post]];
-                [self.scrollView bringSubviewToFront:[self.players[0] container]];
-                [self configureMuteIcon];
-            }
-            else {
-                [self.players addObject:imageView];
-            }
-
-            return;
-        }
-        
         FRSPost *post = self.orderedPosts[i];
             
         NSInteger xOrigin = i * self.frame.size.width;
