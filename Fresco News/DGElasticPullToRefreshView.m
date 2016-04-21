@@ -381,7 +381,9 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
 
         height = scrollView.contentInset.top - self.originalContentInsetTop;
 
-        self.frame = CGRectMake(0, -height - 1.0, width, height);
+        self.frame = CGRectMake(0, -height - 1.0 +128, width, height);
+//        self.frame = CGRectMake(0, -height - 1.0, width, height);
+
     }
     else if (self.state == DGElasticPullToRefreshStateAnimatingToStopped) {
 //        height = [self actualContentOffsetY];
@@ -422,7 +424,8 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
         CGFloat width = scrollView.bounds.size.width;
         CGFloat height = [self currentHeight];
 
-        self.frame = CGRectMake(0, -height, width, height);
+        self.frame = CGRectMake(0, -height +128, width, height);
+//        self.frame = CGRectMake(0, -height, width, height);
 
         if (self.state == DGElasticPullToRefreshStateLoading || self.state == DGElasticPullToRefreshStateAnimatingToStopped) {
             self.cControlPointView.center = CGPointMake(width / 2.0, height);

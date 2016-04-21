@@ -164,7 +164,7 @@
     
     [self configureNavigationBar];
     [self configureTableView];
-    [self configurePullToRefresh];
+//    [self configurePullToRefresh];
     [self configureProfileSocialOverlay];
 }
 
