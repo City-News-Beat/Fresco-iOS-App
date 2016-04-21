@@ -295,16 +295,27 @@
             [self configureMuteIcon];
         });
         
-        if (self.delegate) {
-            [self.delegate playerWillPlay:videoPlayer];
-        }
-        
         videoPlayer.muted = TRUE;
         videoPlayer.wasMuted = FALSE;
     });
     
+    __weak typeof(self) weakSelf = self;
+    
+    videoPlayer.playBlock = ^(BOOL playing, FRSPlayer *player) {
+        [weakSelf handlePlay:playing player:player];
+    };
     
     return videoPlayer;
+}
+
+-(void)handlePlay:(BOOL)play player:(FRSPlayer *)player {
+    if (play) {
+        for (FRSPlayer *potential in self.players) {
+            if (potential != player && [[potential class] isSubclassOfClass:[FRSPlayer class]]) {
+                [potential pause];
+            }
+        }
+    }
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
@@ -688,7 +699,8 @@
     post = (self.orderedPosts.count > page) ? self.orderedPosts[page] : Nil;
     
     [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
-
+    [self handlePlay:TRUE player:Nil];
+    
     if (self.players.count <= page) {
         if (post.videoUrl != Nil && page >= self.players.count) {
             FRSPlayer *player = [self setupPlayerForPost:post];
