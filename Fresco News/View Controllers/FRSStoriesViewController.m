@@ -94,7 +94,6 @@
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
     [self.view addSubview:self.loadingView];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
