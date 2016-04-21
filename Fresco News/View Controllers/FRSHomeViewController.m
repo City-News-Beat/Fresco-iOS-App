@@ -234,6 +234,14 @@
 //
 //    } completion:nil];
 }
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.dataSource.count > indexPath.row) {
+        FRSGallery *gallery = [self.dataSource objectAtIndex:indexPath.row];
+        return [gallery heightForGallery];
+    }
+    
+    return 20;
+}
 
 -(void)configureTableView {
     [super configureTableView];
@@ -243,7 +251,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
-    
+    self.tableView.bounces = FALSE;
     self.pageScroller.delegate = self;
     [self.view addSubview:self.pageScroller];
 }
@@ -260,8 +268,11 @@
         }
         
         [self cacheLocalData:galleries];
-        [self.loadingView stopLoading];
-        [self.loadingView removeFromSuperview];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.loadingView stopLoading];
+            [self.loadingView removeFromSuperview];
+        });
     }];
 }
 
@@ -423,6 +434,8 @@
     }
     
     cell.delegate = self;
+    [cell setNeedsUpdateConstraints];
+    [cell updateConstraintsIfNeeded];
     
     return cell;
 
@@ -449,7 +462,6 @@
     
     lastOffset = self.dataSource.count;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
         
         [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:self.dataSource.count completion:^(NSArray *galleries, NSError *error) {
@@ -458,6 +470,8 @@
                 return;
             }
             
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
             NSInteger index = self.highlights.count;
             for (NSDictionary *gallery in galleries) {
                 FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
@@ -477,8 +491,8 @@
                 needsUpdate = TRUE;
                 isLoading = FALSE;
             });
-        }];
-    });
+        });
+    }];
 }
 
 -(void)playerWillPlay:(AVPlayer *)player {
