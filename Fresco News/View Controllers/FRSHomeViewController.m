@@ -162,6 +162,7 @@
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
 }
 
+
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if (needsUpdate) {
         needsUpdate = FALSE;
@@ -504,7 +505,7 @@
 -(void)playerWillPlay:(AVPlayer *)player {
     for (FRSGalleryCell *cell in [self.tableView visibleCells]) {
         for (FRSPlayer *cellPlayer in cell.players) {
-            if (cellPlayer != player) {
+            if ([[cellPlayer class] isSubclassOfClass:[FRSPlayer class]] && cellPlayer != player) {
                 [player pause];
             }
         }
