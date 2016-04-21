@@ -321,11 +321,19 @@
         }
     }
     
-    player.wasMuted = TRUE;
 
     if (!player.wasMuted && player.rate == 0.0) {
+        player.wasMuted = TRUE;
         return;
     }
+    else if (!player.wasMuted) {
+        player.muted = FALSE;
+        player.wasMuted = TRUE;
+        return;
+    }
+    
+    player.wasMuted = TRUE;
+
 
     CGPoint point = [tap locationInView:self];
     
