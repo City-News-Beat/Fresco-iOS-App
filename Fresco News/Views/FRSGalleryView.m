@@ -285,6 +285,7 @@
         }
         
         videoPlayer.muted = TRUE;
+        videoPlayer.wasMuted = FALSE;
     });
     
     
@@ -297,11 +298,13 @@
     FRSPlayer *player = self.players[page];
 
     if ([self currentPageIsVideo]) {
-        if (player.muted) {
+        if (player.muted && !player.wasMuted) {
             self.muteImageView.alpha = 1;
         } else {
             self.muteImageView.alpha = 0;
         }
+        
+        player.wasMuted = TRUE;
     }
 
     CGPoint point = [tap locationInView:self];
@@ -322,23 +325,15 @@
         return;
     }
     
-    if (player.muted) {
-        player.muted = FALSE;
-//<<<<<<< HEAD
-        [player play];
-//=======
-        self.muteImageView.alpha = 0;
-//>>>>>>> 3.0-omar
-        return;
-    } else {
-    }
-    
     if (player.rate == 0.0) {
         [player play];
         self.muteImageView.alpha = 0;
     } else {
         [player pause];
-        self.muteImageView.alpha = 1;
+        
+        if (!player.wasMuted) {
+            self.muteImageView.alpha = 1;
+        }
     }
 }
 
