@@ -608,17 +608,18 @@
 -(void)configureWithUser:(FRSUser *)user {
 //    NSLog(@"user = %@", user);
     
-    
-    self.profileIV.image = user.profileImage;
+    NSLog(@"user = %@", user);
+    self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+//    self.profileIV.image = user.profileImage;
 //    self.nameLabel.text = user.firstName;
 //    self.bioLabel.text = user.bio;
     
 //    self.profileIV.image = [UIImage imageNamed:@"apple-user-grace"];
-    self.nameLabel.text = @"DJ Gracie P.";
-    self.usernameLabel.text = @"@grace";
-    self.bioLabel.text = @"Hey! My name is Grace and I'm wearing a yellow shirt. Look at my yellow shirt! Hey! My name is Grace and I'm wearing a yellow shirt. Look at my yellow shirt! Hey! My name is Grace and I'm wearing a yellow shirt. Look at my yellow shirt!";
-    self.locationLabel.text = @"Fresco, USA."; //geo coder, last location
-    self.followersLabel.text = @"1.5M";
+    self.nameLabel.text = @"Fresco User";
+    self.usernameLabel.text = @"@username";
+    self.bioLabel.text = @"This here ought to have been a RED rose-tree, and we put a white one in by mistake; and if the Queen was to find it out, we should all have our heads cut off.";
+    self.locationLabel.text = @"New York, NY"; //geo coder, last location
+    self.followersLabel.text = @"1125";
     
 }
 

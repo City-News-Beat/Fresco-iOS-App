@@ -902,9 +902,13 @@
 }
 
 -(void)segueToUserProfile:(FRSUser *)user {
+    
     NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
     if (page >= 0 && page < self.orderedPosts.count) {
         FRSPost *currentPost = self.orderedPosts[page];
+        
+        
+        NSLog(@"currentPost.byline = %@", currentPost.byline);
         
         FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:currentPost.creator];
 
