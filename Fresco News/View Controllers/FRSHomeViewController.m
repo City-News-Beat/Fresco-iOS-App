@@ -80,6 +80,7 @@
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
     self.followingTable.scrollDelegate = self;
     [self.pageScroller addSubview:self.followingTable];
+    self.followingTable.scrollDelegate = self;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -670,6 +671,9 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
+    
+    NSLog(@"self.pageScroller.contentOFfset.x = %f", self.pageScroller.contentOffset.x);
+    
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     if (scrollView == self.pageScroller) {
         if (self.pageScroller.contentOffset.x == self.view.frame.size.width) { // User is in right tab (following)
@@ -677,17 +681,18 @@
             self.highlightTabButton.alpha = 0.7;
 
             [self showNavBarForScrollView:self.scrollView animated:NO];
-
+            self.navigationItem.titleView.alpha = 1;
         }
         
         
-    } else if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
+    }
+    
+    if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
         self.followingTabButton.alpha = 0.7;
         self.highlightTabButton.alpha = 1;
     }
     
     if (scrollView == self.tableView) {
-        [super scrollViewDidScroll:scrollView];
         NSArray *visibleCells = [self.tableView visibleCells];
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -707,6 +712,10 @@
                 }
             }
         });
+    }
+    
+    if (scrollView == self.tableView || scrollView == self.followingTable) {
+        [super scrollViewDidScroll:scrollView];
     }
     
     if (scrollView == self.pageScroller) {
