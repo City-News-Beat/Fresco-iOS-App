@@ -10,6 +10,7 @@
 #import "FRSGallery.h"
 #import "FRSGalleryCell.h"
 
-@interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource>
+@interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
 @property NSArray *galleries;
+-(void)loadGalleries:(NSArray *)galleries;
 @end

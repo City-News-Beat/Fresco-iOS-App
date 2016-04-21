@@ -23,7 +23,7 @@
 #import "FRSCoreData.h"
 #import "FRSAppDelegate.h"
 #import "FRSGallery+CoreDataProperties.h"
-
+#import "FRSFollowingTable.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate>
 {
@@ -53,7 +53,6 @@
 
 @implementation FRSHomeViewController
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.cachedData = [[NSMutableArray alloc] init];
@@ -67,7 +66,17 @@
     [self configureUI];
     [self addNotificationObservers];
     
+    [self configureFollowing];
+    
     self.scrollView.delegate = self;
+}
+
+-(void)configureFollowing {
+    CGRect scrollFrame = self.tableView.frame;
+    scrollFrame.origin.x = scrollFrame.size.width;
+    
+    FRSFollowingTable *followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
+    [self.pageScroller addSubview:followingTable];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
