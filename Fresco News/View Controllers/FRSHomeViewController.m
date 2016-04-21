@@ -668,19 +668,19 @@
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     if (scrollView == self.pageScroller) {
         [self pausePlayers];
-    }
         if (self.pageScroller.contentOffset.x == self.view.frame.size.width) { // User is in right tab (following)
             self.followingTabButton.alpha = 1;
             self.highlightTabButton.alpha = 0.7;
-
+            
             [self showNavBarForScrollView:self.scrollView animated:NO];
             self.navigationItem.titleView.alpha = 1;
-        }        
-    
-    if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
-        self.followingTabButton.alpha = 0.7;
-        self.highlightTabButton.alpha = 1;
+        }
         
+        if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
+            self.followingTabButton.alpha = 0.7;
+            self.highlightTabButton.alpha = 1;
+            
+        }
     }
     
     if (scrollView == self.tableView) {
