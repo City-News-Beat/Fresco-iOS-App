@@ -49,6 +49,7 @@
     [self reloadData];
 }
 -(void)commonInit {
+    self.showsVerticalScrollIndicator = FALSE;
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.separatorStyle = UITableViewCellSeparatorStyleNone;
