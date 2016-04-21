@@ -316,6 +316,8 @@
         return;
     }
     
+    player.muted = FALSE;
+    
     if (self.muteImageView.alpha == 1 && player.rate == 0.0) {
         self.muteImageView.alpha = 0;
         [player play];
@@ -353,7 +355,12 @@
     }
     
     if ([self currentPageIsVideo]) {
-        NSLog(@"YEAH");
+        FRSPlayer *player = self.players[page];
+        
+        if (player.muted == FALSE) {
+            return;
+        }
+
         self.muteImageView.alpha = 1;
         self.muteImageView.frame = CGRectMake(((page + 1) * self.frame.size.width) - 24 - 16, 16, 24, 24);
         [self.scrollView bringSubviewToFront:self.muteImageView];
