@@ -211,6 +211,27 @@
     if (self.scrollDelegate) {
         [self.scrollDelegate scrollViewDidScroll:scrollView];
     }
+    
+    NSArray *visibleCells = [self visibleCells];
+        
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        BOOL taken = FALSE;
+            
+        for (FRSGalleryCell *cell in visibleCells) {
+                
+            if (cell.frame.origin.y - self.contentOffset.y < 300 && cell.frame.origin.y - self.contentOffset.y > 100) {
+                    
+                if (!taken) {
+                    [cell play];
+                    taken = TRUE;
+                }
+                else {
+                    [cell pause];
+                }
+            }
+        }
+    });
+
 }
 
 

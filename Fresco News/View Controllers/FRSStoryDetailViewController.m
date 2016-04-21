@@ -134,6 +134,30 @@ static NSString *galleryCell = @"GalleryCellReuse";
     }
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView == self.galleriesTable) {
+        NSArray *visibleCells = [self.galleriesTable visibleCells];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            BOOL taken = FALSE;
+            
+            for (FRSGalleryCell *cell in visibleCells) {
+                
+                if (cell.frame.origin.y - self.galleriesTable.contentOffset.y < 300 && cell.frame.origin.y - self.galleriesTable.contentOffset.y > 100) {
+                    
+                    if (!taken) {
+                        [cell play];
+                        taken = TRUE;
+                    }
+                    else {
+                        [cell pause];
+                    }
+                }
+            }
+        });
+    }
+}
+
 
 -(void)viewDidLayoutSubviews {
     if ([self.galleriesTable respondsToSelector:@selector(setSeparatorInset:)]) {
