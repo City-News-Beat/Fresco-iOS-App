@@ -263,6 +263,7 @@
 -(void)configureTableView {
     [super configureTableView];
     
+//    self.tableView.backgroundColor = [UIColor frescoOrangeColor];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
     self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height+20);
     self.tableView.delegate = self;
