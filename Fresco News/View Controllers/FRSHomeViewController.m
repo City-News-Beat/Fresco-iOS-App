@@ -152,6 +152,10 @@
         needsUpdate = FALSE;
        // [self.tableView reloadData];
     }
+    
+    if (scrollView == self.pageScroller) {
+        NSInteger page = (self.pageScroller.contentOffset.x > 0) ? 1 : 0;
+    }
 }
 
 -(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
@@ -633,7 +637,6 @@
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [super scrollViewDidScroll:scrollView];
     
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     if (self.pageScroller && scrollView != self.pageScroller) {
@@ -646,6 +649,14 @@
             self.highlightTabButton.alpha = 1;
         }
         
+    }
+    
+    if (scrollView == self.tableView) {
+        [super scrollViewDidScroll:scrollView];
+    }
+    
+    if (scrollView == self.pageScroller) {
+        // animate nav up
     }
 }
 
