@@ -28,6 +28,8 @@
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
 @property (strong, nonatomic) UIImageView *muteImageView;
+@property (strong, nonatomic) UIImageView *repostImageView;
+@property (strong, nonatomic) UILabel *repostLabel;
 @property BOOL playerHasFocus;
 @property BOOL isVideo;
 @end
@@ -107,6 +109,12 @@
     [self updateScrollView];
     [self updateSocial];
     [self adjustHeight];
+
+    
+    if (self.gallery.repostedBy != nil) {
+        [self configureRepostWithName:self.gallery.repostedBy];
+        NSLog(@"self.gallery.repostBy = %@", self.gallery.repostedBy);
+    }
 }
 
 -(void)updateSocial {
@@ -417,22 +425,22 @@
     [self configureLocationLine];
     [self configureUserLine];
     [self updateLabels];
-    [self configureRepostWithName:@"Susan Black"];
 }
 
 -(void)configureRepostWithName:(NSString *)name {
     
-    UIImageView *repostImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"repost-icon-white"]];
-    repostImageView.frame = CGRectMake(16, 12, 24, 24);
-    [self addSubview:repostImageView];
-    
-    UILabel *repostLabel = [[UILabel alloc] initWithFrame:CGRectMake(48, 17, 150, 17)];
-    repostLabel.text = [name uppercaseString];
-    repostLabel.font = [UIFont notaBoldWithSize:15];
-    repostLabel.textColor = [UIColor whiteColor];
-    [self addShadowToLabel:repostLabel];
-    [self addSubview:repostLabel];
-    
+    if (self.repostLabel == nil) {
+        self.repostImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"repost-icon-white"]];
+        self.repostImageView.frame = CGRectMake(16, 12, 24, 24);
+        [self addSubview:self.repostImageView];
+        
+        self.repostLabel = [[UILabel alloc] initWithFrame:CGRectMake(48, 17, self.frame.size.width - 48 - 16, 17)];
+        self.repostLabel.text = [name uppercaseString];
+        self.repostLabel.font = [UIFont notaBoldWithSize:15];
+        self.repostLabel.textColor = [UIColor whiteColor];
+        [self addShadowToLabel:self.repostLabel];
+        [self addSubview:self.repostLabel];
+    }
 }
 
 -(void)configureTimeLine{
