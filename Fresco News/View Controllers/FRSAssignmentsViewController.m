@@ -331,13 +331,33 @@
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
     MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"assignment-annotation"];
+
+    
+//    for (id<MKOverlay>overlay in self.mapView.overlays) {
+//        if ([overlay isKindOfClass:[FRSMapCircle class]]) {
+//            FRSMapCircle *circle = (FRSMapCircle *)overlay;
+//            
+//            if (circle.circleType == FRSMapCircleTypeUser) {
+//               
+//                UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+//                view.backgroundColor = [UIColor redColor];
+//                [annotationView addSubview:view];
+//                
+//                return annotationView;
+//                
+//            } else {
+//
+//            }
+//        };
+//    }
+    
     
     if (!annotationView) {
         
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"assignment-annotation"];
         UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
         container.backgroundColor = [UIColor clearColor];
-       /* container.layer.borderColor = [UIColor redColor].CGColor;
+        /* container.layer.borderColor = [UIColor redColor].CGColor;
         container.layer.borderWidth = 1.0f;*/
         
         UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(25.5, 25.5, 24, 24)];
@@ -397,10 +417,6 @@
         if (circle.circleType == FRSMapCircleTypeUser) {
             circleR.fillColor = [UIColor frescoBlueColor];
             circleR.alpha = 0.5;
-            
-//            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-//            view.backgroundColor = [UIColor redColor];
-            
         }
         else if (circle.circleType == FRSMapCircleTypeAssignment) {
             circleR.fillColor = [UIColor frescoOrangeColor];
