@@ -118,6 +118,8 @@
 
 @property (nonatomic, retain) NSMutableArray *positions;
 
+@property (strong, nonatomic) UIView *alertContainer;
+
 @end
 
 @implementation FRSCameraViewController
@@ -1782,7 +1784,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [_motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
         CGFloat rotationRate = fabs(gyroData.rotationRate.x);
         if (rotationRate > .5) {
-            [self alertUserOfFastPan];
+            [self alertUserOfFastPan:TRUE];
         }
         
         CGFloat wobbleRate = fabs(gyroData.rotationRate.z);
@@ -1843,11 +1845,64 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 
--(void)alertUserOfFastPan {
+-(void)alertUserOfFastPan:(BOOL)isTooFast {
     NSLog(@"PAN SLOWER");
+    [self configureAlertWithText:@"Pan the fuck off bro"];
 }
 
--(void)alertUserOfWobble {
+-(void)alertUserOfWobble:(BOOL)isTooFast {
     NSLog(@"STOP WOBBLING");
 }
+
+
+
+
+-(void)configureAlertWithText:(NSString *)text {
+    
+    if(!self.alertContainer) {
+        self.alertContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 20)];
+        self.alertContainer.backgroundColor = [UIColor frescoRedHeartColor];
+        self.alertContainer.alpha = 0.5;
+        [self.view addSubview:self.alertContainer];
+        
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 20)];
+        title.text = text;
+        title.textColor = [UIColor whiteColor];
+        title.font = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
+        title.textAlignment = NSTextAlignmentCenter;
+        
+        [self.view addSubview:title];
+
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.alertContainer.frame = CGRectMake(0, 0, self.view.frame.size.width, 20);
+            title.frame = CGRectMake(0, 0, self.view.frame.size.width, 20);
+            
+        } completion:^(BOOL finished) {
+
+        }];
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @end
