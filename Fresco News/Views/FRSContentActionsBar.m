@@ -84,9 +84,14 @@
 
 -(void)configureRepostSection{
     self.repostLabel = [[UILabel alloc] init];
-    self.repostLabel.text = @"30";
     self.repostLabel.font = [UIFont notaBoldWithSize:15];
-    self.repostLabel.textColor = [UIColor frescoGreenColor];
+    self.repostLabel.text = @"30";
+    self.repostLabel.textColor = [UIColor frescoMediumTextColor];
+    
+    if (self.repostButton.imageView.image == [UIImage imageNamed:@"repost-icon-green"]) {
+        self.repostLabel.textColor = [UIColor frescoGreenColor];
+    }
+    
     [self.repostLabel sizeToFit];
     
     self.repostLabel.frame = CGRectMake(self.shareButton.frame.origin.x - 6 - self.repostLabel.frame.size.width, 0, self.repostLabel.frame.size.width, self.frame.size.height);
@@ -106,10 +111,14 @@
 -(void)configureLikeSection{
     
     self.likeLabel = [[UILabel alloc] init];
-    self.likeLabel.textColor = [UIColor frescoRedHeartColor];
+    self.likeLabel.textColor = [UIColor frescoMediumTextColor];
     self.likeLabel.font = [UIFont notaBoldWithSize:15];
+
+    if (self.likeButton.imageView.image == [UIImage imageNamed:@"like-heart-filled"]) {
+        self.likeLabel.textColor = [UIColor frescoRedHeartColor];
+    }
     
-    self.likeLabel.frame = CGRectMake(self.frame.size.width - (16 + self.shareButton.frame.size.width + 16 + self.repostLabel.frame.size.width + 6 + self.repostButton.frame.size.width + 16), 0, 100, 44);
+    self.likeLabel.frame = CGRectMake(self.frame.size.width - (16 + self.shareButton.frame.size.width + 16 + self.repostLabel.frame.size.width + 6 + self.repostButton.frame.size.width), 0, 100, 44);
 
     [self addSubview:self.likeLabel];
     
@@ -126,30 +135,54 @@
     [self addSubview:self.likeButton];
 }
 
--(void)handleRepostTapped{
+-(void)handleRepostTapped {
+    
+    CGFloat repost = [self.repostLabel.text floatValue];
+    
     if( [[self.repostButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"repost-icon-green"]]) {
         [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
+        self.repostLabel.textColor = [UIColor frescoMediumTextColor];
+        repost--;
+        
     } else {
         [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateNormal];
+        self.repostLabel.textColor = [UIColor frescoGreenColor];
+        repost++;
     }
+    
+    self.repostLabel.text = [NSString stringWithFormat:@"%.0f", repost];
     
     [self bounceButton:self.repostButton];
 }
 
--(void)handleLikeButtonTapped{
+-(void)handleLikeButtonTapped {
+    
+    CGFloat likes = [self.likeLabel.text floatValue];
+    
     if( [[self.likeButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"liked-heart"]]) {
         [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
+        self.likeLabel.textColor = [UIColor frescoRedHeartColor];
+        likes++;
+
     } else {
         [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"] forState:UIControlStateNormal];
+        self.likeLabel.textColor = [UIColor frescoMediumTextColor];
+        likes--;
     }
+    
+    self.likeLabel.text = [NSString stringWithFormat:@"%.0f", likes];
+    
     [self bounceButton:self.likeButton];
 }
 
 -(void)handleHeartState:(BOOL)state {
     if(state) {
         [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
+        self.likeLabel.textColor = [UIColor frescoRedHeartColor];
+
     } else {
         [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"] forState:UIControlStateNormal];
+        self.likeLabel.textColor = [UIColor frescoMediumTextColor];
     }
 }
 
