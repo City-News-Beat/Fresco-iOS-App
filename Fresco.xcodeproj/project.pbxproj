@@ -2442,6 +2442,10 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)",
+					recursive,
+				);
 				IBSC_MODULE = Fresco_WatchKit_Extension;
 				INFOPLIST_FILE = "Fresco WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
@@ -2465,6 +2469,10 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)",
+					recursive,
+				);
 				IBSC_MODULE = Fresco_WatchKit_Extension;
 				INFOPLIST_FILE = "Fresco WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
@@ -2606,6 +2614,10 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)",
+					recursive,
+				);
 				IBSC_MODULE = Fresco_WatchKit_Extension;
 				INFOPLIST_FILE = "Fresco WatchKit App/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
