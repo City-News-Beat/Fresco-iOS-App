@@ -327,6 +327,7 @@
     [self fetchAssignmentsNearLocation:location radius:milesLatitude];
 }
 
+
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
     MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"assignment-annotation"];
@@ -360,6 +361,7 @@
 
         annotationView.enabled = YES;
         annotationView.frame = CGRectMake(0, 0, 75, 75);
+        
     }
     
     return annotationView;
@@ -372,20 +374,17 @@
     
     //    CGFloat radius = self.mapView.usergLocation.location.horizontalAccuracy > 100 ? 100 : self.mapView.userLocation.location.horizontalAccuracy;
     
-    CGFloat radius = 100;
+    CGFloat radius = 300;
     
     if (self.userCircle) {
         [self.mapView removeOverlay:self.userCircle];
     }
     
     CLLocation *userLocation = [FRSLocator sharedLocator].currentLocation;
-    
 
     self.userCircle = [FRSMapCircle circleWithCenterCoordinate:userLocation.coordinate radius:radius];
     self.userCircle.circleType = FRSMapCircleTypeUser;
-    
     [self.mapView addOverlay:self.userCircle];
-
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay
@@ -398,6 +397,10 @@
         if (circle.circleType == FRSMapCircleTypeUser) {
             circleR.fillColor = [UIColor frescoBlueColor];
             circleR.alpha = 0.5;
+            
+//            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+//            view.backgroundColor = [UIColor redColor];
+            
         }
         else if (circle.circleType == FRSMapCircleTypeAssignment) {
             circleR.fillColor = [UIColor frescoOrangeColor];
@@ -421,6 +424,7 @@
         }
     }
 }
+
 
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
