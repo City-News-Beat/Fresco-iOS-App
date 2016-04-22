@@ -15,7 +15,7 @@
 
 #import "FRSStory.h"
 
-#import <MagicalRecord/MagicalRecord.h>
+#import "MagicalRecord.h"
 
 #import "DGElasticPullToRefresh.h"
 #import "FRSLoadingTableViewCell.h"

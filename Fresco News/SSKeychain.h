@@ -12,7 +12,7 @@
 	#import <Foundation/Foundation.h>
 #endif
 
-#import <SSKeychain/SSKeychainQuery.h>
+#import "SSKeychainQuery.h"
 
 /**
  Error code specific to SSKeychain that can be returned in NSError objects.

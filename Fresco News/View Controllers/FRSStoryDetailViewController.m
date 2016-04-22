@@ -8,7 +8,7 @@
 
 #import "FRSStoryDetailViewController.h"
 #import "FRSGalleryCell.h"
-#import <MagicalRecord/MagicalRecord.h>
+#import "MagicalRecord.h"
 #import "FRSStory+CoreDataProperties.h"
 #import "FRSAppDelegate.h"
 #import "DGElasticPullToRefresh.h"

@@ -10,7 +10,7 @@
 
 #import "FRSDateFormatter.h"
 
-#import <MagicalRecord/MagicalRecord.h>
+#import "MagicalRecord.h"
 
 #import "FRSCoreData.h"
 

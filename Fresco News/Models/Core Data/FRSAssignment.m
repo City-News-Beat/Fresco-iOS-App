@@ -8,7 +8,7 @@
 
 #import "FRSAssignment.h"
 #import "FRSDateFormatter.h"
-#import <MagicalRecord/MagicalRecord.h>
+#import "MagicalRecord.h"
 #import "FRSDataValidator.h"
 #import "FRSCoreData.h"
 
@@ -48,14 +48,5 @@
     self.expirationDate = [NSDate dateWithTimeIntervalSince1970:epoch/1000];
     self.caption = dictionary[@"caption"];
 }
-//@property (nullable, nonatomic, retain) NSString *uid;
-//@property (nullable, nonatomic, retain) NSString *title;
-//@property (nullable, nonatomic, retain) NSString *caption;
-//@property (nullable, nonatomic, retain) NSNumber *active;
-//@property (nullable, nonatomic, retain) id location;
-//@property (nullable, nonatomic, retain) NSNumber *radius;
-//@property (nullable, nonatomic, retain) NSDate *createdDate;
-//@property (nullable, nonatomic, retain) NSDate *editedDate;
-//@property (nullable, nonatomic, retain) NSDate *expirationDate;
 
 @end

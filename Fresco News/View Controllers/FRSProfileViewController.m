@@ -17,7 +17,7 @@
 
 #import "FRSBorderedImageView.h"
 
-#import <MagicalRecord/MagicalRecord.h>
+#import "MagicalRecord.h"
 
 #import "DGElasticPullToRefresh.h"
 #import "Fresco.h"

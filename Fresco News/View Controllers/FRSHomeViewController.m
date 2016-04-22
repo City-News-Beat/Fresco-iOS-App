@@ -19,7 +19,7 @@
 #import "FRSTrimTool.h"
 
 /* Core Data */
-#import <MagicalRecord/MagicalRecord.h>
+#import "MagicalRecord.h"
 #import "FRSCoreData.h"
 #import "FRSAppDelegate.h"
 #import "FRSGallery+CoreDataProperties.h"

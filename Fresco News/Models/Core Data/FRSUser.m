@@ -11,7 +11,7 @@
 #import "FRSPost.h"
 #import "FRSStory.h"
 
-#import <MagicalRecord/MagicalRecord.h>
+#import "MagicalRecord.h"
 #import "FRSAppDelegate.h"
 
 @implementation FRSUser

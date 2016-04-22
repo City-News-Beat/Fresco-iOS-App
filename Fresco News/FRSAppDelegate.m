@@ -16,7 +16,7 @@
 #import "FRSProfileViewController.h"
 #import "FRSLocationManager.h"
 #import "FRSCameraViewController.h"
-#import <MagicalRecord/MagicalRecord.h>
+#import "MagicalRecord.h"
 #import <CoreLocation/CoreLocation.h>
 #import "FRSLoginViewController.h"
 #import "FRSAPIClient.h"
