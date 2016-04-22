@@ -1793,8 +1793,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         if (lastZ == 0) {
             lastZ = wobbleRate;
         }
-        else if (fabs(lastZ-wobbleRate) > .14) {
-            NSLog(@"STOP WOBBLING");
+        else if (fabs(lastZ-wobbleRate) > .2) {
+            [self alertUserOfWobble:YES];
         }
         
         CGFloat forwardWobble = fabs(gyroData.rotationRate.y);
@@ -1802,8 +1802,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         if (lastY == 0) {
             lastY = forwardWobble;
         }
-        else if (fabs(lastY - forwardWobble) > .14) {
-            NSLog(@"STOP Y");
+        else if (fabs(lastY - forwardWobble) > .2) {
+            [self alertUserOfWobble:YES];
         }
         
     }];
@@ -1855,39 +1855,87 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 -(void)alertUserOfFastPan:(BOOL)isTooFast {
     NSLog(@"PAN SLOWER");
-    [self configureAlertWithText:@"Pan the fuck off bro"];
+    [self configureAlertWithText:@"Slow down your panning for a better shot."];
+    
+    if (pan && [pan isValid]) {
+        [pan invalidate];
+    }
+
+    pan = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
+    [[NSRunLoop mainRunLoop] addTimer:pan forMode:NSDefaultRunLoopMode];
 }
 
 -(void)alertUserOfWobble:(BOOL)isTooFast {
     NSLog(@"STOP WOBBLING");
+    [self configureAlertWithText:@"Hold your phone steadier for a better shot."];
+    
+    if (wobble && [wobble isValid]) {
+        [wobble invalidate];
+    }
+    
+    wobble = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
+    [[NSRunLoop mainRunLoop] addTimer:wobble forMode:NSDefaultRunLoopMode];
 }
 
-
-
+-(void)hideAlert {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.alertContainer.alpha = 0;
+            
+        } completion:^(BOOL finished) {
+            
+        }];
+    });
+}
 
 -(void)configureAlertWithText:(NSString *)text {
-    
+    #define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
+
     if(!self.alertContainer) {
-        self.alertContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 20)];
+        self.alertContainer = [[UIView alloc] initWithFrame:CGRectMake(35, self.view.frame.size.height/2-20, self.view.frame.size.height, 40)];
         self.alertContainer.backgroundColor = [UIColor frescoRedHeartColor];
-        self.alertContainer.alpha = 0.5;
+        self.alertContainer.alpha = 0;
         [self.view addSubview:self.alertContainer];
         
-        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 20)];
+        title = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, self.view.frame.size.height, 20)];
         title.text = text;
         title.textColor = [UIColor whiteColor];
         title.font = [UIFont systemFontOfSize:13 weight:UIFontWeightRegular];
         title.textAlignment = NSTextAlignmentCenter;
         
-        [self.view addSubview:title];
+        [self.alertContainer addSubview:title];
+        
+        CGAffineTransform transform;
+        
+        if (self.lastOrientation == UIDeviceOrientationLandscapeLeft) {
+            // 90 degrees
+            double rads = DEGREES_TO_RADIANS(90);
+            transform = CGAffineTransformRotate(self.alertContainer.transform, rads);
+        }
+        else if (self.lastOrientation == UIDeviceOrientationLandscapeRight) {
+            double rads = DEGREES_TO_RADIANS(-90);
+            CGAffineTransformRotate(self.alertContainer.transform, rads);
+        }
+        
+        self.alertContainer.transform = transform;
 
         [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            
-            self.alertContainer.frame = CGRectMake(0, 0, self.view.frame.size.width, 20);
-            title.frame = CGRectMake(0, 0, self.view.frame.size.width, 20);
+            self.alertContainer.alpha = 8;
             
         } completion:^(BOOL finished) {
-
+            
+        }];
+        
+    }
+    else {
+        title.text = text;
+        
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.alertContainer.alpha = 8;
+            
+        } completion:^(BOOL finished) {
+            
         }];
     }
 }
