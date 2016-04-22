@@ -1778,6 +1778,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     }
     
     __block float lastZ = 0;
+    __block float lastY = 0;
     
     [_motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
         CGFloat rotationRate = fabs(gyroData.rotationRate.x);
@@ -1789,11 +1790,18 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         
         if (lastZ == 0) {
             lastZ = wobbleRate;
-            return;
+        }
+        else if (fabs(lastZ-wobbleRate) > .14) {
+            NSLog(@"STOP WOBBLING");
         }
         
-        if (fabs(lastZ-wobbleRate) > .12) {
-            NSLog(@"STOP WOBBLING");
+        CGFloat forwardWobble = fabs(gyroData.rotationRate.y);
+        
+        if (lastY == 0) {
+            lastY = forwardWobble;
+        }
+        else if (fabs(lastY - forwardWobble) > .14) {
+            NSLog(@"STOP Y");
         }
         
     }];

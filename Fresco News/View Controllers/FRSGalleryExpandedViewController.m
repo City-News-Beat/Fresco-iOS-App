@@ -136,6 +136,7 @@
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 500) gallery:self.gallery delegate:self];
     [self.scrollView addSubview:self.galleryView];
     
+    
 //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
 }
 
