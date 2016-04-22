@@ -330,6 +330,9 @@
     // if we're loading more data
     if (indexPath.row == self.stories.count -1) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
+        CGRect cellFrame = cell.frame;
+        cellFrame.size.height = 20;
+        cell.frame = cellFrame;
         return cell;
     }
     
@@ -356,11 +359,6 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSStoryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (![[cell class] isSubclassOfClass:[FRSStoryCell class]]) {
-        return;
-    }
-    
-    // POSSIBLE BUG!!
-    if (self.stories.count > indexPath.row && cell.story == self.stories[indexPath.row]) {
         return;
     }
     

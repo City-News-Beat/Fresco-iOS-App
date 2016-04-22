@@ -411,7 +411,7 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (tableView == self.tableView) {
+    if (tableView == self.tableView && indexPath) {
         return [self highlightCellForIndexPath:indexPath];
     }
 
@@ -423,6 +423,9 @@
     if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != Nil) { // we're reloading
         
         UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
+        CGRect cellFrame = cell.frame;
+        cellFrame.size.height = 20;
+        cell.frame = cellFrame;
         return cell;
     }
     
