@@ -37,6 +37,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self removeStatusBarNotification];
+    [self pausePlayers];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -124,11 +125,13 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 
--(void)playerWillPlay:(AVPlayer *)player {
-    for (FRSGalleryCell *cell in [self.galleriesTable visibleCells]) {
-        for (FRSPlayer *cellPlayer in cell.players) {
-            if (cellPlayer != player) {
-                [player pause];
+-(void)playerWillPlay:(AVPlayer *)play {
+    for (UITableView *tableView in @[self.galleriesTable]) {
+        for (FRSGalleryCell *cell in [tableView visibleCells]) {
+            for (FRSPlayer *player in cell.galleryView.players) {
+                if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
+                    [player pause];
+                }
             }
         }
     }
@@ -282,6 +285,18 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kStatusBarTappedNotification object:nil];
 }
 
+
+-(void)pausePlayers {
+    for (UITableView *tableView in @[self.galleriesTable]) {
+        for (FRSGalleryCell *cell in [tableView visibleCells]) {
+            for (FRSPlayer *player in cell.galleryView.players) {
+                if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
+                    [player pause];
+                }
+            }
+        }
+    }
+}
 
 
 @end
