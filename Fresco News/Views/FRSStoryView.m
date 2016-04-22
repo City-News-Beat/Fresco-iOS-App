@@ -205,6 +205,15 @@
 }
 
 -(void)configureTitleLabel{
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, self.topContainer.frame.size.height -50, self.frame.size.width, 50)];
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = view.bounds;
+    UIColor *startColor = [UIColor colorWithWhite:0 alpha:0];
+    UIColor *endColor = [UIColor colorWithWhite:0 alpha:0.42];
+    gradient.colors = [NSArray arrayWithObjects:(id)[startColor CGColor], (id)[endColor CGColor], nil];
+    [view.layer insertSublayer:gradient atIndex:0];
+    
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 32, 0)];
     self.titleLabel.numberOfLines = 2;
     self.titleLabel.text = self.story.title;
@@ -217,6 +226,9 @@
     [self.titleLabel setOriginWithPoint:CGPointMake(16, self.topContainer.frame.size.height - self.titleLabel.frame.size.height - 12)];
     [self.titleLabel setSizeWithSize:CGSizeMake(self.frame.size.width - 16, self.titleLabel.frame.size.height+5)];
     
+
+    [self.topContainer addSubview:view];
+
     [self addShadowToLabel:self.titleLabel];
     
     [self.topContainer addSubview:self.titleLabel];
