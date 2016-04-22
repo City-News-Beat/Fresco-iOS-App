@@ -162,7 +162,7 @@
 -(void)configureComments{
     
     self.commentsView = [[FRSCommentsView alloc] initWithComments:[NSArray new]];
-    self.commentsView.frame = CGRectMake(0, self.articlesTV.frame.origin.y + self.articlesTV.frame.size.height + TOP_PAD, self.view.frame.size.width, [self.commentsView height]);
+    self.commentsView.frame = CGRectMake(0, self.articlesTV.frame.origin.y + self.articlesTV.frame.size.height + TOP_PAD, self.view.frame.size.width, [self.commentsView height] + 15);
     self.commentsView.delegate = self;
     [self.scrollView addSubview:self.commentsView];
     
