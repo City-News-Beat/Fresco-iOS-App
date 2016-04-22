@@ -8,7 +8,7 @@
 
 #import "FRSAPIClient.h" // Network
 #import "FRSLocator.h" // location tracking
-#import <SSKeychain/SSKeychain.h>
+#import "SSKeychain.h"
 
 #import "FRSGallery+CoreDataProperties.h"
 
