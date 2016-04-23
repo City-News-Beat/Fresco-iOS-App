@@ -1487,7 +1487,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                 NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[outputFileName stringByAppendingPathExtension:@"mov"]];
                 [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
                 //                [self.sessionManager.movieFileOutput startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
-                
+                self.isRecording = TRUE;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self runVideoRecordAnimation];
                 });
@@ -1522,7 +1522,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             [[UIApplication sharedApplication] endBackgroundTask:currentBackgroundRecordingID];
         }
     };
-    
+    self.isRecording = FALSE;
     BOOL success = YES;
     
     if ( error ) {
@@ -1892,6 +1892,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 -(void)configureAlertWithText:(NSString *)text {
     #define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
 
+    
+    if (self.isRecording == FALSE) {
+        return;
+    }
+    
     if(!self.alertContainer) {
         self.alertContainer = [[UIView alloc] initWithFrame:CGRectMake(35, self.view.frame.size.height/2-20, self.view.frame.size.height, 40)];
         self.alertContainer.backgroundColor = [UIColor frescoRedHeartColor];
