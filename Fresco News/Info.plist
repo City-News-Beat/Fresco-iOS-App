@@ -110,8 +110,6 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Fresco servers use location to notify you when there is an assignment nearby. This location data is secure and anonymous.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Fresco uses location to automatically verify photos and videos before they are posted.</string>
 	<key>UIAppFonts</key>

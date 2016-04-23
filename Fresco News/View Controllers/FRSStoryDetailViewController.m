@@ -21,8 +21,17 @@
 @end
 
 @implementation FRSStoryDetailViewController
-@synthesize stories = _stories, story = _story;
+@synthesize stories = _stories, story = _story, navigationController;
 static NSString *galleryCell = @"GalleryCellReuse";
+
+
+-(BOOL)shouldHaveTextLimit {
+    return TRUE;
+}
+
+-(BOOL)shouldHaveActionBar {
+    return TRUE;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

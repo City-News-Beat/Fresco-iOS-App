@@ -87,11 +87,10 @@
 }
 
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
-    // make auth calls
+    if (![self isAuthenticated]) {
+        return;
+    }
     
-    return;
-    
-    // no auth persistence yet
     [self post:locationEndpoint withParameters:location completion:^(id responseObject, NSError *error) {
         
     }];

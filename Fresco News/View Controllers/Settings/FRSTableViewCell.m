@@ -189,7 +189,7 @@
     self.textField  = [[UITextField alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.self.rightPadding+self.leftPadding),44)];
     self.textField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.textField.placeholder = string;
-    self.textField.delegate = self;
+    self.textField.delegate = (id<UITextFieldDelegate>)self;
     self.textField.textColor = [UIColor frescoDarkTextColor];
     self.textField.tintColor = [UIColor frescoBlueColor];
     [self addSubview:self.textField];

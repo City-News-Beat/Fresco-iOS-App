@@ -53,6 +53,15 @@
 @end
 
 @implementation FRSHomeViewController
+@synthesize navigationController;
+
+-(BOOL)shouldHaveActionBar {
+    return TRUE;
+}
+
+-(BOOL)shouldHaveTextLimit {
+    return TRUE;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

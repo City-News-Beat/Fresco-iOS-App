@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Xcode 7.0">
-    <entity name="FRSArticle" representedClassName="FRSArticle" isAbstract="YES" syncable="YES">
+    <entity name="FRSArticle" representedClassName="FRSArticle" syncable="YES">
         <attribute name="articleStringURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="imageStringURL" optional="YES" attributeType="String" syncable="YES"/>
@@ -9,7 +9,7 @@
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="gallery" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSGallery" inverseName="articles" inverseEntity="FRSGallery" syncable="YES"/>
     </entity>
-    <entity name="FRSAssignment" representedClassName="FRSAssignment" isAbstract="YES" syncable="YES">
+    <entity name="FRSAssignment" representedClassName="FRSAssignment" syncable="YES">
         <attribute name="active" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
@@ -22,7 +22,7 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="FRSGallery" representedClassName="FRSGallery" isAbstract="YES" syncable="YES">
+    <entity name="FRSGallery" representedClassName="FRSGallery" syncable="YES">
         <attribute name="byline" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
@@ -40,7 +40,7 @@
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSPost" inverseName="gallery" inverseEntity="FRSPost" syncable="YES"/>
         <relationship name="stories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSStory" inverseName="galleries" inverseEntity="FRSStory" syncable="YES"/>
     </entity>
-    <entity name="FRSNotification" representedClassName="FRSNotification" isAbstract="YES" syncable="YES">
+    <entity name="FRSNotification" representedClassName="FRSNotification" syncable="YES">
         <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="isSeen" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -49,7 +49,7 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="FRSPost" representedClassName="FRSPost" isAbstract="YES" syncable="YES">
+    <entity name="FRSPost" representedClassName="FRSPost" syncable="YES">
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="byline" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="coordinates" optional="YES" attributeType="Transformable" syncable="YES"/>
@@ -65,7 +65,7 @@
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSUser" inverseName="posts" inverseEntity="FRSUser" syncable="YES"/>
         <relationship name="gallery" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSGallery" inverseName="posts" inverseEntity="FRSGallery" syncable="YES"/>
     </entity>
-    <entity name="FRSStory" representedClassName="FRSStory" isAbstract="YES" syncable="YES">
+    <entity name="FRSStory" representedClassName="FRSStory" syncable="YES">
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="editedDate" optional="YES" attributeType="Date" syncable="YES"/>
@@ -76,7 +76,7 @@
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSUser" inverseName="stories" inverseEntity="FRSUser" syncable="YES"/>
         <relationship name="galleries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSGallery" inverseName="stories" inverseEntity="FRSGallery" syncable="YES"/>
     </entity>
-    <entity name="FRSUser" representedClassName="FRSUser" isAbstract="YES" syncable="YES">
+    <entity name="FRSUser" representedClassName="FRSUser" syncable="YES">
         <attribute name="associatedPromoCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="bio" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="creditCardDigits" optional="YES" attributeType="String" syncable="YES"/>

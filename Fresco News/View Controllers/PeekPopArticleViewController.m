@@ -26,6 +26,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit {
+    
+}
+
 -(NSArray<id<UIPreviewActionItem>> *)previewActionItems {
     
     UIPreviewAction *action1 = [UIPreviewAction actionWithTitle:@"Open in Safari" style:UIPreviewActionStyleDefault handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {

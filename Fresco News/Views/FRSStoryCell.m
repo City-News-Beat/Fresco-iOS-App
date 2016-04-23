@@ -15,6 +15,11 @@
 
 @implementation FRSStoryCell
 
+
+-(void)clickedImageAtIndex:(NSInteger)imageIndex {
+    
+}
+
 -(void)awakeFromNib {
     [super awakeFromNib]; // lord have mercy
 }
