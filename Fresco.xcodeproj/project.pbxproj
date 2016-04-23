@@ -129,6 +129,8 @@
 		D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */; };
 		D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D41365B11CA32DC0004FE848 /* FRSStoryDetailViewController.xib */; };
 		D418E2F71CCA97510003B080 /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E2F61CCA97510003B080 /* MagicalImportFunctions.m */; };
+		D418E33C1CCC19EF0003B080 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33A1CCC19EF0003B080 /* TwitterCore.framework */; };
+		D418E33D1CCC19EF0003B080 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33B1CCC19EF0003B080 /* TwitterKit.framework */; };
 		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
@@ -470,6 +472,8 @@
 		D41365B11CA32DC0004FE848 /* FRSStoryDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryDetailViewController.xib; sourceTree = "<group>"; };
 		D418E2F51CCA97510003B080 /* MagicalImportFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalImportFunctions.h; sourceTree = "<group>"; };
 		D418E2F61CCA97510003B080 /* MagicalImportFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalImportFunctions.m; sourceTree = "<group>"; };
+		D418E33A1CCC19EF0003B080 /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterCore.framework; sourceTree = "<group>"; };
+		D418E33B1CCC19EF0003B080 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
 		D42C907F1CC6191400B25C99 /* UIImage+Pixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Pixels.h"; path = "../../UIImage+Pixels.h"; sourceTree = "<group>"; };
 		D42C90801CC6191400B25C99 /* UIImage+Pixels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Pixels.m"; path = "../../UIImage+Pixels.m"; sourceTree = "<group>"; };
 		D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSFileLoader.h; path = ../FRSFileLoader.h; sourceTree = "<group>"; };
@@ -611,6 +615,8 @@
 				1E4983C71AFBCEBE00924F59 /* SystemConfiguration.framework in Frameworks */,
 				1E4983C51AFBCEAF00924F59 /* Security.framework in Frameworks */,
 				1E4983D11AFBCF5100924F59 /* Bolts.framework in Frameworks */,
+				D418E33C1CCC19EF0003B080 /* TwitterCore.framework in Frameworks */,
+				D418E33D1CCC19EF0003B080 /* TwitterKit.framework in Frameworks */,
 				1E4983C31AFBCEA200924F59 /* MobileCoreServices.framework in Frameworks */,
 				1E4983C11AFBCE9500924F59 /* CoreLocation.framework in Frameworks */,
 				1E4983BF1AFBCE8F00924F59 /* CoreGraphics.framework in Frameworks */,
@@ -707,6 +713,8 @@
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D418E33A1CCC19EF0003B080 /* TwitterCore.framework */,
+				D418E33B1CCC19EF0003B080 /* TwitterKit.framework */,
 				D4DBF1961CB468E80098BDC0 /* AVFoundation.framework */,
 				D4DBF1941CB468C90098BDC0 /* CoreMedia.framework */,
 				65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */,
@@ -2443,6 +2451,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)/**",
 					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fresco News/PrefixHeader.pch";
@@ -2481,6 +2490,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)/**",
 					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fresco News/PrefixHeader.pch";
@@ -2710,6 +2720,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)/**",
 					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fresco News/PrefixHeader.pch";
