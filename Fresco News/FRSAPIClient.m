@@ -337,17 +337,12 @@
  Singleton
  */
 
--(void)setupTwitter {
-    
-}
-
 +(instancetype)sharedClient {
     static FRSAPIClient *client = nil;
     static dispatch_once_t onceToken;
     
     dispatch_once(&onceToken, ^{
         client = [[FRSAPIClient alloc] init];
-        [client setupTwitter];
         [FRSLocator sharedLocator];
     });
     
