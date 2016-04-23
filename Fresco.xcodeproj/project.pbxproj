@@ -131,6 +131,10 @@
 		D418E2F71CCA97510003B080 /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E2F61CCA97510003B080 /* MagicalImportFunctions.m */; };
 		D418E33C1CCC19EF0003B080 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33A1CCC19EF0003B080 /* TwitterCore.framework */; };
 		D418E33D1CCC19EF0003B080 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33B1CCC19EF0003B080 /* TwitterKit.framework */; };
+		D418E3401CCC1A910003B080 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33E1CCC1A910003B080 /* FBSDKCoreKit.framework */; };
+		D418E3411CCC1A910003B080 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33F1CCC1A910003B080 /* FBSDKLoginKit.framework */; };
+		D418E3441CCC1A9B0003B080 /* AccountKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E3421CCC1A9B0003B080 /* AccountKit.framework */; };
+		D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D418E3431CCC1A9B0003B080 /* AccountKitStrings.bundle */; };
 		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
@@ -474,6 +478,10 @@
 		D418E2F61CCA97510003B080 /* MagicalImportFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalImportFunctions.m; sourceTree = "<group>"; };
 		D418E33A1CCC19EF0003B080 /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterCore.framework; sourceTree = "<group>"; };
 		D418E33B1CCC19EF0003B080 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
+		D418E33E1CCC1A910003B080 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		D418E33F1CCC1A910003B080 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		D418E3421CCC1A9B0003B080 /* AccountKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountKit.framework; sourceTree = "<group>"; };
+		D418E3431CCC1A9B0003B080 /* AccountKitStrings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = AccountKitStrings.bundle; path = ../../AccountKitStrings.bundle; sourceTree = "<group>"; };
 		D42C907F1CC6191400B25C99 /* UIImage+Pixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Pixels.h"; path = "../../UIImage+Pixels.h"; sourceTree = "<group>"; };
 		D42C90801CC6191400B25C99 /* UIImage+Pixels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Pixels.m"; path = "../../UIImage+Pixels.m"; sourceTree = "<group>"; };
 		D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSFileLoader.h; path = ../FRSFileLoader.h; sourceTree = "<group>"; };
@@ -620,10 +628,13 @@
 				1E4983C31AFBCEA200924F59 /* MobileCoreServices.framework in Frameworks */,
 				1E4983C11AFBCE9500924F59 /* CoreLocation.framework in Frameworks */,
 				1E4983BF1AFBCE8F00924F59 /* CoreGraphics.framework in Frameworks */,
+				D418E3441CCC1A9B0003B080 /* AccountKit.framework in Frameworks */,
+				D418E3401CCC1A910003B080 /* FBSDKCoreKit.framework in Frameworks */,
 				1E4983BD1AFBCE8000924F59 /* CFNetwork.framework in Frameworks */,
 				1E4983BB1AFBCE7500924F59 /* AudioToolbox.framework in Frameworks */,
 				1E4983B91AFBCDEA00924F59 /* StoreKit.framework in Frameworks */,
 				E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */,
+				D418E3411CCC1A910003B080 /* FBSDKLoginKit.framework in Frameworks */,
 				1E4983B71AFBCD9900924F59 /* ParseFacebookUtilsV4.framework in Frameworks */,
 				1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */,
 				42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */,
@@ -713,6 +724,9 @@
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D418E3421CCC1A9B0003B080 /* AccountKit.framework */,
+				D418E33E1CCC1A910003B080 /* FBSDKCoreKit.framework */,
+				D418E33F1CCC1A910003B080 /* FBSDKLoginKit.framework */,
 				D418E33A1CCC19EF0003B080 /* TwitterCore.framework */,
 				D418E33B1CCC19EF0003B080 /* TwitterKit.framework */,
 				D4DBF1961CB468E80098BDC0 /* AVFoundation.framework */,
@@ -901,6 +915,7 @@
 		420DC7151ADB875000157762 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D418E3431CCC1A9B0003B080 /* AccountKitStrings.bundle */,
 				D4D60D0B1CC829C000059EBA /* following.json */,
 				072A9F3D1C24914F00F8CCE0 /* Fonts */,
 			);
@@ -1991,6 +2006,7 @@
 				D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
+				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
 				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
