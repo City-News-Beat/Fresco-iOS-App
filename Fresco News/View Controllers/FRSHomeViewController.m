@@ -53,15 +53,6 @@
 @end
 
 @implementation FRSHomeViewController
-@synthesize navigationController;
-
--(BOOL)shouldHaveActionBar {
-    return TRUE;
-}
-
--(BOOL)shouldHaveTextLimit {
-    return TRUE;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -87,9 +78,7 @@
     scrollFrame.origin.y = -64;
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
-    self.followingTable.scrollDelegate = self;
     [self.pageScroller addSubview:self.followingTable];
-    self.followingTable.scrollDelegate = self;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -697,6 +686,9 @@
             
         }
     }
+    else {
+        [super scrollViewDidScroll:scrollView];
+    }
     
     if (scrollView == self.tableView) {
         NSArray *visibleCells = [self.tableView visibleCells];
@@ -718,10 +710,6 @@
                 }
             }
         });
-    }
-    
-    if (scrollView == self.tableView || scrollView == self.followingTable) {
-        [super scrollViewDidScroll:scrollView];
     }
     
     if (scrollView == self.pageScroller) {
