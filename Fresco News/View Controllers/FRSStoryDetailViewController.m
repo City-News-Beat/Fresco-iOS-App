@@ -24,15 +24,6 @@
 @synthesize stories = _stories, story = _story, navigationController;
 static NSString *galleryCell = @"GalleryCellReuse";
 
-
--(BOOL)shouldHaveTextLimit {
-    return TRUE;
-}
-
--(BOOL)shouldHaveActionBar {
-    return TRUE;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -72,7 +63,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)configureNavigationBar {
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissDetail)];
-
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followStory)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
@@ -86,8 +76,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 }
 
--(void)dismissDetail{
-    [[self navigationController] popViewControllerAnimated:YES];
+-(void)dismissDetail {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
