@@ -10,6 +10,7 @@
 #import "FRSAppDelegate.h"
 #import "FRSLocator.h"
 #import "FRSUser.h"
+#import "FRSSocial.h"
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 

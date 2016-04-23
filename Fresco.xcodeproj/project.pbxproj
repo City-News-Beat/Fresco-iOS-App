@@ -129,12 +129,12 @@
 		D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */; };
 		D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D41365B11CA32DC0004FE848 /* FRSStoryDetailViewController.xib */; };
 		D418E2F71CCA97510003B080 /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E2F61CCA97510003B080 /* MagicalImportFunctions.m */; };
-		D418E33C1CCC19EF0003B080 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33A1CCC19EF0003B080 /* TwitterCore.framework */; };
-		D418E33D1CCC19EF0003B080 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33B1CCC19EF0003B080 /* TwitterKit.framework */; };
 		D418E3401CCC1A910003B080 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33E1CCC1A910003B080 /* FBSDKCoreKit.framework */; };
 		D418E3411CCC1A910003B080 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33F1CCC1A910003B080 /* FBSDKLoginKit.framework */; };
 		D418E3441CCC1A9B0003B080 /* AccountKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E3421CCC1A9B0003B080 /* AccountKit.framework */; };
 		D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D418E3431CCC1A9B0003B080 /* AccountKitStrings.bundle */; };
+		D418E34C1CCC1B240003B080 /* FRSSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E34B1CCC1B240003B080 /* FRSSocial.m */; };
+		D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E34D1CCC1C360003B080 /* Twitter.framework */; };
 		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
@@ -476,12 +476,13 @@
 		D41365B11CA32DC0004FE848 /* FRSStoryDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryDetailViewController.xib; sourceTree = "<group>"; };
 		D418E2F51CCA97510003B080 /* MagicalImportFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalImportFunctions.h; sourceTree = "<group>"; };
 		D418E2F61CCA97510003B080 /* MagicalImportFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalImportFunctions.m; sourceTree = "<group>"; };
-		D418E33A1CCC19EF0003B080 /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterCore.framework; sourceTree = "<group>"; };
-		D418E33B1CCC19EF0003B080 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
 		D418E33E1CCC1A910003B080 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		D418E33F1CCC1A910003B080 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		D418E3421CCC1A9B0003B080 /* AccountKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountKit.framework; sourceTree = "<group>"; };
 		D418E3431CCC1A9B0003B080 /* AccountKitStrings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = AccountKitStrings.bundle; path = ../../AccountKitStrings.bundle; sourceTree = "<group>"; };
+		D418E34A1CCC1B240003B080 /* FRSSocial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSocial.h; sourceTree = "<group>"; };
+		D418E34B1CCC1B240003B080 /* FRSSocial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSocial.m; sourceTree = "<group>"; };
+		D418E34D1CCC1C360003B080 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		D42C907F1CC6191400B25C99 /* UIImage+Pixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Pixels.h"; path = "../../UIImage+Pixels.h"; sourceTree = "<group>"; };
 		D42C90801CC6191400B25C99 /* UIImage+Pixels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Pixels.m"; path = "../../UIImage+Pixels.m"; sourceTree = "<group>"; };
 		D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSFileLoader.h; path = ../FRSFileLoader.h; sourceTree = "<group>"; };
@@ -613,8 +614,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4DBF1971CB468E80098BDC0 /* AVFoundation.framework in Frameworks */,
 				D4DBF1951CB468C90098BDC0 /* CoreMedia.framework in Frameworks */,
+				D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */,
+				D4DBF1971CB468E80098BDC0 /* AVFoundation.framework in Frameworks */,
 				1E4983CF1AFBCF0800924F59 /* Accounts.framework in Frameworks */,
 				1E4983CD1AFBCEF400924F59 /* Social.framework in Frameworks */,
 				1E4983CB1AFBCED000924F59 /* libsqlite3.dylib in Frameworks */,
@@ -623,8 +625,6 @@
 				1E4983C71AFBCEBE00924F59 /* SystemConfiguration.framework in Frameworks */,
 				1E4983C51AFBCEAF00924F59 /* Security.framework in Frameworks */,
 				1E4983D11AFBCF5100924F59 /* Bolts.framework in Frameworks */,
-				D418E33C1CCC19EF0003B080 /* TwitterCore.framework in Frameworks */,
-				D418E33D1CCC19EF0003B080 /* TwitterKit.framework in Frameworks */,
 				1E4983C31AFBCEA200924F59 /* MobileCoreServices.framework in Frameworks */,
 				1E4983C11AFBCE9500924F59 /* CoreLocation.framework in Frameworks */,
 				1E4983BF1AFBCE8F00924F59 /* CoreGraphics.framework in Frameworks */,
@@ -724,11 +724,10 @@
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D418E34D1CCC1C360003B080 /* Twitter.framework */,
 				D418E3421CCC1A9B0003B080 /* AccountKit.framework */,
 				D418E33E1CCC1A910003B080 /* FBSDKCoreKit.framework */,
 				D418E33F1CCC1A910003B080 /* FBSDKLoginKit.framework */,
-				D418E33A1CCC19EF0003B080 /* TwitterCore.framework */,
-				D418E33B1CCC19EF0003B080 /* TwitterKit.framework */,
 				D4DBF1961CB468E80098BDC0 /* AVFoundation.framework */,
 				D4DBF1941CB468C90098BDC0 /* CoreMedia.framework */,
 				65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */,
@@ -1200,6 +1199,15 @@
 			children = (
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		D418E3491CCC1B0F0003B080 /* Social */ = {
+			isa = PBXGroup;
+			children = (
+				D418E34A1CCC1B240003B080 /* FRSSocial.h */,
+				D418E34B1CCC1B240003B080 /* FRSSocial.m */,
+			);
+			name = Social;
 			sourceTree = "<group>";
 		};
 		D43C7FCC1C8E464800A7A7A7 /* Image Picker */ = {
@@ -1695,6 +1703,7 @@
 				D4F91A461C8B508A0078BF15 /* Fresco.h */,
 				D4F91A471C8B51500078BF15 /* FRSAPIClient.h */,
 				D4F91A481C8B51500078BF15 /* FRSAPIClient.m */,
+				D418E3491CCC1B0F0003B080 /* Social */,
 				65EBEDBD1C44507600BE671F /* Networking */,
 				D43C7FF41C8F588C00A7A7A7 /* Defaults */,
 				D47999631C96A8FD00B46D01 /* Location */,
@@ -2258,6 +2267,7 @@
 				65EBEDB11C4404A800BE671F /* FRSDateFormatter.m in Sources */,
 				654181E41C5144CD00019B3F /* NSObject+Validator.m in Sources */,
 				65135FD71C286DCF00839149 /* FRSNotification+CoreDataProperties.m in Sources */,
+				D418E34C1CCC1B240003B080 /* FRSSocial.m in Sources */,
 				D453CC831CCA80850091A004 /* NSManagedObject+MagicalRecord.m in Sources */,
 				07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */,
 				65EBEDB91C44197100BE671F /* FRSLocationManager.m in Sources */,
