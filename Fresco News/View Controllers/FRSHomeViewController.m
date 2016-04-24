@@ -667,8 +667,6 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    NSLog(@"self.pageScroller.contentOFfset.x = %f", self.pageScroller.contentOffset.x);
-    
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     if (scrollView == self.pageScroller) {
         [self pausePlayers];
