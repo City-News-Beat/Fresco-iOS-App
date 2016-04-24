@@ -109,7 +109,7 @@
 
 -(void)playerWillPlay:(AVPlayer *)player {
     for (FRSGalleryCell *cell in [self visibleCells]) {
-        if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]] && !cell.galleryView.players) {
+        if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]] || !cell.galleryView.players) {
             continue;
         }
         for (FRSPlayer *cellPlayer in cell.players) {

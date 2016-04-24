@@ -509,7 +509,7 @@
     for (UITableView *tableView in @[self.tableView, self.followingTable]) {
         NSArray *visibleCells = [tableView visibleCells];
         for (FRSGalleryCell *cell in visibleCells) {
-            if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]] && !cell.galleryView.players) {
+            if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]] || !cell.galleryView.players) {
                 continue;
             }
             for (FRSPlayer *player in cell.galleryView.players) {
