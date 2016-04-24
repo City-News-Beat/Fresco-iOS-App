@@ -72,7 +72,7 @@
     for (NSDictionary *dict in posts){
         
         if (save) {
-            FRSPost *post = [FRSPost MR_createEntityInContext:_currentContext];
+            FRSPost *post = [NSEntityDescription insertNewObjectForEntityForName:@"FRSPost" inManagedObjectContext:self.currentContext];
             [post configureWithDictionary:dict context:_currentContext];
             [self addPostsObject:post];
         }
@@ -93,7 +93,7 @@
 -(void)addArticlesWithArray:(NSArray *)articles{
     for (NSDictionary * dict in articles){
         if (_currentContext) {
-            FRSArticle *article = [FRSArticle MR_createEntityInContext:_currentContext];
+            FRSArticle *article = [NSEntityDescription insertNewObjectForEntityForName:@"FRSArticle" inManagedObjectContext:self.currentContext];
             [article configureWithDictionary:dict];
             [self addArticlesObject:article];
         }
