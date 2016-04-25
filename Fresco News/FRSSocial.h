@@ -7,6 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Fabric/Fabric.h>
+#import <TwitterKit/TwitterKit.h>
+#import <AccountKit/AccountKit.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <Twitter/Twitter.h>
 
 @interface FRSSocial : NSObject
 
