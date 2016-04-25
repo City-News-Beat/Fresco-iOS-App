@@ -40,6 +40,8 @@
     [self configureCoreDataStack];
     [self createItemsWithIcons];
     
+    [self startFabric];
+    
     if ([[FRSAPIClient sharedClient] isAuthenticated] || TRUE) {
         self.window.rootViewController = [[FRSTabBarController alloc] init];
     }
@@ -66,6 +68,12 @@
     [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
     
     return YES;
+}
+
+-(void)startFabric {
+    [[Twitter sharedInstance] startWithConsumerKey:@"LuzgKf2eus1EGzxf2CyEtFJCJ" consumerSecret:@"kxlgOYo7SdgvLsHDUwUo90DkCbooDMbHQyDCayNSgD7oeUUUjT"];
+    
+    [Fabric with:@[[Twitter class], [Crashlytics class]]];
 }
 
 - (NSManagedObjectModel *)managedObjectModel {
