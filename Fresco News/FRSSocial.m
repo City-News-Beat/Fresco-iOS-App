@@ -28,6 +28,8 @@
         }
     }];
     
+    // customize button
+    
     return defaultLoginButton;
 }
 
