@@ -28,4 +28,17 @@
     }];
 }
 
++(void)loginWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent {
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [login logInWithReadPermissions: @[@"public_profile"] fromViewController:parent handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+        if (error) {
+                 NSLog(@"Process error");
+             } else if (result.isCancelled) {
+                 NSLog(@"Cancelled");
+             } else {
+                 NSLog(@"Logged in");
+             }
+         }];
+}
+
 @end

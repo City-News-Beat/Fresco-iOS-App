@@ -18,4 +18,5 @@
 typedef void (^LoginCompletionBlock)(BOOL authenticated, NSError *error);
 
 +(void)loginWithTwitter:(LoginCompletionBlock)completion;
++(void)loginWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent;
 @end
