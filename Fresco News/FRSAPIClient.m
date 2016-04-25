@@ -72,13 +72,12 @@
         completion(responseObject, error);
     }];
 }
-
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
 
 }
 
--(void)signInWithFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
-    
+-(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
+
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {

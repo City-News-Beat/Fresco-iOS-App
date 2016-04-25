@@ -31,6 +31,7 @@ target 'Fresco' do
 	pod 'Fabric'
 	pod 'TwitterKit'
 	pod 'TwitterCore'
+	pod 'Appsee'
 	pod 'Adjust', :git => 'git://github.com/adjust/ios_sdk.git', :tag => 'v4.5.0'
 end
 

@@ -30,15 +30,23 @@
 
 +(void)loginWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent {
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-    [login logInWithReadPermissions: @[@"public_profile"] fromViewController:parent handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+    [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:parent handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         if (error) {
-                 NSLog(@"Process error");
-             } else if (result.isCancelled) {
-                 NSLog(@"Cancelled");
-             } else {
-                 NSLog(@"Logged in");
-             }
-         }];
+            completion(FALSE, error);
+        } else if (result.isCancelled) {
+            completion(FALSE, [NSError errorWithDomain:@"com.fresconews.fresco" code:301 userInfo:Nil]);
+        } else {
+            [[FRSAPIClient sharedClient] signInWithFacebook:[FBSDKAccessToken currentAccessToken]
+                completion:^(id responseObject, NSError *error) {
+                    if (error) {
+                        completion(FALSE, error);
+                    }
+                    else {
+                        completion(TRUE, Nil);
+                    }
+            }];
+        }
+    }];
 }
 
 @end
