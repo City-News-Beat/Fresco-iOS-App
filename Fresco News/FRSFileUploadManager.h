@@ -16,9 +16,10 @@ static NSString * const uploadProgressNotification = @"FRSUploadProgressNotifica
 {
     
 }
+
 @property (nonatomic, readonly) NSMutableArray *uploadQueue;
 
 +(instancetype)sharedUploader;
--(void)uploadPhoto:(NSData *)photoData toURL:(NSURL *)destinationURL;
+-(void)uploadPhoto:(NSURL *)photoURL toURL:(NSURL *)destinationURL;
 -(void)uploadVideo:(NSURL *)videoURL toURL:(NSURL *)destinationURL;
 @end

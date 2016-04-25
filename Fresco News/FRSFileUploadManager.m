@@ -11,10 +11,35 @@
 @implementation FRSFileUploadManager
 @synthesize uploadQueue = _uploadQueue;
 
--(void)uploadPhoto:(NSData *)photoData toURL:(NSURL *)destinationURL {
+-(void)uploadPhoto:(NSURL *)photoURL toURL:(NSURL *)destinationURL {
+    [self handleSingleUpload:photoURL destination:destinationURL];
+}
+
+-(void)uploadVideo:(NSURL *)videoURL toURL:(NSURL *)destinationURL {
+    NSNumber *fileSizeValue = nil;
+    NSError *fileSizeError = nil;
+    [videoURL getResourceValue:&fileSizeValue
+                       forKey:NSURLFileSizeKey
+                        error:&fileSizeError];
+    
+    if (fileSizeError) {
+        // default to chunked upload
+    }
+    else if ([fileSizeValue unsignedLongLongValue] / 1024 / 1024 > 25) {
+        // chunked upload
+        [self handleChunkedUpload:videoURL destination:destinationURL];
+    }
+    else {
+        // single upload
+        [self handleSingleUpload:videoURL destination:destinationURL];
+    }
+}
+
+-(void)handleSingleUpload:(NSURL *)url destination:(NSURL *)destination {
     
 }
--(void)uploadVideo:(NSURL *)videoURL toURL:(NSURL *)destinationURL {
+
+-(void)handleChunkedUpload:(NSURL *)url destination:(NSURL *)destination {
     
 }
 
