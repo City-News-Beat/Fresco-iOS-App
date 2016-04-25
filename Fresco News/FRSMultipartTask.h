@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "FRSMultipartTask.h"
-#import "Fresco.h"
+#import "FRSUploadTask.h"
 
 
 #define MB 1024*1024
 #define MAX_CONCURRENT 3
 #define CHUNK_SIZE 5
 
-@interface FRSMultipartTask : NSObject <NSStreamDelegate>
+@interface FRSMultipartTask : FRSUploadTask <NSStreamDelegate>
 {
     NSInputStream *dataInputStream;
     NSMutableData *currentData;

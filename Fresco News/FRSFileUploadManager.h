@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FRSMultipartTask.h"
 
 static NSString * const uploadFailedNotification = @"FRSUploadFailedNotification";
 static NSString * const uploadSuccessNotification = @"FRSUploadSuccessNotification";

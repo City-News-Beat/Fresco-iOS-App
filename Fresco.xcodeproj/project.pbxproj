@@ -170,6 +170,7 @@
 		D4B35F4D1CCEB47200F5C8A8 /* NSData+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F4A1CCEB47200F5C8A8 /* NSData+NSHash.m */; };
 		D4B35F4E1CCEB47200F5C8A8 /* NSString+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F4C1CCEB47200F5C8A8 /* NSString+NSHash.m */; };
 		D4B35F521CCEB4CD00F5C8A8 /* FRSFileUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F511CCEB4CD00F5C8A8 /* FRSFileUploadManager.m */; };
+		D4B35F551CCED19600F5C8A8 /* FRSUploadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F541CCED19600F5C8A8 /* FRSUploadTask.m */; };
 		D4D60D0C1CC829C000059EBA /* following.json in Resources */ = {isa = PBXBuildFile; fileRef = D4D60D0B1CC829C000059EBA /* following.json */; };
 		D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
@@ -533,6 +534,8 @@
 		D4B35F4C1CCEB47200F5C8A8 /* NSString+NSHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSHash.m"; sourceTree = "<group>"; };
 		D4B35F501CCEB4CD00F5C8A8 /* FRSFileUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileUploadManager.h; sourceTree = "<group>"; };
 		D4B35F511CCEB4CD00F5C8A8 /* FRSFileUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileUploadManager.m; sourceTree = "<group>"; };
+		D4B35F531CCED19600F5C8A8 /* FRSUploadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadTask.h; sourceTree = "<group>"; };
+		D4B35F541CCED19600F5C8A8 /* FRSUploadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadTask.m; sourceTree = "<group>"; };
 		D4D60D0B1CC829C000059EBA /* following.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = following.json; path = ../following.json; sourceTree = "<group>"; };
 		D4D60D0E1CC8368300059EBA /* FRSFollowingTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingTable.h; sourceTree = "<group>"; };
 		D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingTable.m; sourceTree = "<group>"; };
@@ -1117,6 +1120,8 @@
 				D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */,
 				D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */,
 				D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */,
+				D4B35F531CCED19600F5C8A8 /* FRSUploadTask.h */,
+				D4B35F541CCED19600F5C8A8 /* FRSUploadTask.m */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -2127,6 +2132,7 @@
 				65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */,
 				07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */,
 				65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */,
+				D4B35F551CCED19600F5C8A8 /* FRSUploadTask.m in Sources */,
 				6501D56D1C249604001F54EF /* Model.xcdatamodeld in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
 				D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */,
