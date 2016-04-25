@@ -167,6 +167,8 @@
 		D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = D49B1D991C99EB1E00735846 /* UITextView+Resize.m */; };
 		D4A7D8A01CCA7D4E002C6EA3 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89D1CCA7D4E002C6EA3 /* SSKeychain.m */; };
 		D4A7D8A11CCA7D4E002C6EA3 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */; };
+		D4B35F4D1CCEB47200F5C8A8 /* NSData+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F4A1CCEB47200F5C8A8 /* NSData+NSHash.m */; };
+		D4B35F4E1CCEB47200F5C8A8 /* NSString+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F4C1CCEB47200F5C8A8 /* NSString+NSHash.m */; };
 		D4D60D0C1CC829C000059EBA /* following.json in Resources */ = {isa = PBXBuildFile; fileRef = D4D60D0B1CC829C000059EBA /* following.json */; };
 		D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
@@ -524,6 +526,10 @@
 		D4A7D89D1CCA7D4E002C6EA3 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		D4A7D89E1CCA7D4E002C6EA3 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychainQuery.h; sourceTree = "<group>"; };
 		D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
+		D4B35F491CCEB47200F5C8A8 /* NSData+NSHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+NSHash.h"; sourceTree = "<group>"; };
+		D4B35F4A1CCEB47200F5C8A8 /* NSData+NSHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+NSHash.m"; sourceTree = "<group>"; };
+		D4B35F4B1CCEB47200F5C8A8 /* NSString+NSHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSHash.h"; sourceTree = "<group>"; };
+		D4B35F4C1CCEB47200F5C8A8 /* NSString+NSHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSHash.m"; sourceTree = "<group>"; };
 		D4D60D0B1CC829C000059EBA /* following.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = following.json; path = ../following.json; sourceTree = "<group>"; };
 		D4D60D0E1CC8368300059EBA /* FRSFollowingTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingTable.h; sourceTree = "<group>"; };
 		D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingTable.m; sourceTree = "<group>"; };
@@ -648,6 +654,7 @@
 		074393EF1C3AC56E0007CFF0 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				D4B35F481CCEB45E00F5C8A8 /* File Hash */,
 				D43C7FEF1C8F517D00A7A7A7 /* Trimming Video */,
 				D43C7FF01C8F518300A7A7A7 /* Loading Resources */,
 				D43C7FF11C8F518E00A7A7A7 /* Data Validation */,
@@ -1629,6 +1636,17 @@
 			name = Keychain;
 			sourceTree = "<group>";
 		};
+		D4B35F481CCEB45E00F5C8A8 /* File Hash */ = {
+			isa = PBXGroup;
+			children = (
+				D4B35F491CCEB47200F5C8A8 /* NSData+NSHash.h */,
+				D4B35F4A1CCEB47200F5C8A8 /* NSData+NSHash.m */,
+				D4B35F4B1CCEB47200F5C8A8 /* NSString+NSHash.h */,
+				D4B35F4C1CCEB47200F5C8A8 /* NSString+NSHash.m */,
+			);
+			name = "File Hash";
+			sourceTree = "<group>";
+		};
 		D4D60D0D1CC8365B00059EBA /* Highlights */ = {
 			isa = PBXGroup;
 			children = (
@@ -2005,6 +2023,7 @@
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				D453CC7A1CCA80850091A004 /* MagicalRecord+ErrorHandling.m in Sources */,
 				07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */,
+				D4B35F4D1CCEB47200F5C8A8 /* NSData+NSHash.m in Sources */,
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
 				D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
@@ -2102,6 +2121,7 @@
 				D453CC811CCA80850091A004 /* NSManagedObject+MagicalDataImport.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
 				6547C9041C6A68A700DAD98C /* FRSUserTableViewCell.m in Sources */,
+				D4B35F4E1CCEB47200F5C8A8 /* NSString+NSHash.m in Sources */,
 				D453CC7B1CCA80850091A004 /* MagicalRecord+iCloud.m in Sources */,
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
