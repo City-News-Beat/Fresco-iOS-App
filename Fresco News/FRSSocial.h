@@ -17,5 +17,5 @@
 @interface FRSSocial : NSObject
 typedef void (^LoginCompletionBlock)(BOOL authenticated, NSError *error);
 
-+(TWTRLogInButton *)twitterLoginButton:(LoginCompletionBlock)completion;;
++(void)loginWithTwitter:(LoginCompletionBlock)completion;
 @end

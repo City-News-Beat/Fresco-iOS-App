@@ -10,9 +10,8 @@
 #import "FRSAPIClient.h"
 
 @implementation FRSSocial
-+(TWTRLogInButton *)twitterLoginButton:(LoginCompletionBlock)completion {
-    
-    TWTRLogInButton *defaultLoginButton = [TWTRLogInButton buttonWithLogInCompletion:^(TWTRSession* session, NSError* error) {
++(void)loginWithTwitter:(LoginCompletionBlock)completion {
+    [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
         if (session) {
             [[FRSAPIClient sharedClient] signInWithTwitter:session completion:^(id responseObject, NSError *error) {
                 if (error) {
@@ -27,10 +26,6 @@
             completion(FALSE, error);
         }
     }];
-    
-    // customize button
-    
-    return defaultLoginButton;
 }
 
 @end
