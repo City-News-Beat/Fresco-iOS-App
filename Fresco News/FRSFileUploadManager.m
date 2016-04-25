@@ -24,6 +24,7 @@
     
     if (fileSizeError) {
         // default to chunked upload
+        [self handleChunkedUpload:videoURL destination:destinationURL];
     }
     else if ([fileSizeValue unsignedLongLongValue] / 1024 / 1024 > 25) {
         // chunked upload
