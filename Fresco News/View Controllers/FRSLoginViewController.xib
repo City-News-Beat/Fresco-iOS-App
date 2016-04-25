@@ -42,17 +42,6 @@
                         <action selector="returnToPreviousViewController:" destination="-1" eventType="touchUpInside" id="xdr-OA-0b6"/>
                     </connections>
                 </button>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lTK-cu-Nxz">
-                    <rect key="frame" x="48" y="250" width="504" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="30" id="3io-1p-I6z"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
-                    <textInputTraits key="textInputTraits" returnKeyType="go" secureTextEntry="YES"/>
-                    <connections>
-                        <action selector="login:" destination="-1" eventType="editingDidEndOnExit" id="sna-jP-hIu"/>
-                    </connections>
-                </textField>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="largeLogo" translatesAutoresizingMaskIntoConstraints="NO" id="h1c-69-np5">
                     <rect key="frame" x="206" y="30" width="188" height="65"/>
                     <constraints>
@@ -115,10 +104,23 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="zO2-MR-g0T"/>
                     </constraints>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87000000476837158" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
                     <textInputTraits key="textInputTraits" returnKeyType="next"/>
                     <connections>
                         <action selector="next:" destination="-1" eventType="editingDidEndOnExit" id="van-Nk-Jef"/>
+                    </connections>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lTK-cu-Nxz">
+                    <rect key="frame" x="48" y="250" width="504" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="3io-1p-I6z"/>
+                    </constraints>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87000000479999995" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
+                    <textInputTraits key="textInputTraits" returnKeyType="go" secureTextEntry="YES"/>
+                    <connections>
+                        <action selector="login:" destination="-1" eventType="editingDidEndOnExit" id="sna-jP-hIu"/>
                     </connections>
                 </textField>
             </subviews>
