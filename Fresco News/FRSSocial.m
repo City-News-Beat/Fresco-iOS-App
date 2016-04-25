@@ -7,23 +7,28 @@
 //
 
 #import "FRSSocial.h"
+#import "FRSAPIClient.h"
 
 @implementation FRSSocial
 +(TWTRLogInButton *)twitterLoginButton:(LoginCompletionBlock)completion {
     
-    TWTRLogInButton* logInButton = [TWTRLogInButton buttonWithLogInCompletion:^(TWTRSession* session, NSError* error) {
+    TWTRLogInButton *defaultLoginButton = [TWTRLogInButton buttonWithLogInCompletion:^(TWTRSession* session, NSError* error) {
         if (session) {
-           
-            completion(TRUE, Nil);
+            [[FRSAPIClient sharedClient] signInWithTwitter:session completion:^(id responseObject, NSError *error) {
+                if (error) {
+                    completion(TRUE, Nil);
+                }
+                else {
+                    completion(FALSE, error);
+                }
+            }];
             
         } else {
-            
             completion(FALSE, error);
-            
         }
     }];
     
-    return logInButton;
+    return defaultLoginButton;
 }
 
 @end
