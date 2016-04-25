@@ -9,5 +9,21 @@
 #import "FRSSocial.h"
 
 @implementation FRSSocial
++(TWTRLogInButton *)twitterLoginButton:(LoginCompletionBlock)completion {
+    
+    TWTRLogInButton* logInButton = [TWTRLogInButton buttonWithLogInCompletion:^(TWTRSession* session, NSError* error) {
+        if (session) {
+           
+            completion(TRUE, Nil);
+            
+        } else {
+            
+            completion(FALSE, error);
+            
+        }
+    }];
+    
+    return logInButton;
+}
 
 @end
