@@ -22,6 +22,9 @@
     
     self.twitterButton.tintColor = [UIColor colorWithRed:0 green:0.675 blue:0.929 alpha:1]; /*Twitter Blue*/
     self.facebookButton.tintColor = [UIColor colorWithRed:0.231 green:0.349 blue:0.596 alpha:1]; /*Facebook Blue*/
+    
+    self.passwordField.tintColor = [UIColor frescoOrangeColor];
+    self.userField.tintColor = [UIColor frescoOrangeColor];
 }
 
 -(instancetype)init {
@@ -65,14 +68,6 @@
 -(IBAction)next:(id)sender {
     [self.passwordField becomeFirstResponder];
 }
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
