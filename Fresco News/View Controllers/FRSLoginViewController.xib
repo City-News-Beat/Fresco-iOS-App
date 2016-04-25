@@ -15,10 +15,12 @@
             <connections>
                 <outlet property="backArrowButton" destination="i0x-cI-9iD" id="c2V-Ry-OIq"/>
                 <outlet property="backButton" destination="i0x-cI-9iD" id="5Qz-Lf-f8P"/>
+                <outlet property="facebookButton" destination="6VX-7g-49m" id="qYH-2N-Ti3"/>
                 <outlet property="loginButton" destination="SBV-cU-aii" id="oOe-D2-4hd"/>
                 <outlet property="logoView" destination="h1c-69-np5" id="vpG-Jh-brU"/>
                 <outlet property="passwordField" destination="lTK-cu-Nxz" id="ALz-SH-lD9"/>
                 <outlet property="socialLabel" destination="7Aw-rc-Zq2" id="Pgd-Vo-DUE"/>
+                <outlet property="twitterButton" destination="y9q-Ly-sJx" id="xbp-F0-KTo"/>
                 <outlet property="userField" destination="eP9-i7-SxN" id="iMm-09-3IW"/>
                 <outlet property="view" destination="iN0-l3-epB" id="DAn-Je-7V2"/>
             </connections>
@@ -78,20 +80,16 @@
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RM0-9A-k0i">
                             <rect key="frame" x="114" y="5" width="68" height="22"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6VX-7g-49m">
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6VX-7g-49m">
                                     <rect key="frame" x="40" y="0.0" width="20" height="22"/>
-                                    <state key="normal" image="facebook-b">
-                                        <color key="titleColor" red="0.65490196079999996" green="0.65490196079999996" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
-                                    </state>
+                                    <state key="normal" image="facebook-b"/>
                                     <connections>
                                         <action selector="facebook:" destination="-1" eventType="touchUpInside" id="Th8-GZ-bbN"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y9q-Ly-sJx">
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y9q-Ly-sJx">
                                     <rect key="frame" x="7" y="0.0" width="20" height="22"/>
-                                    <state key="normal" image="twitter-b">
-                                        <color key="titleColor" red="0.65490196079999996" green="0.65490196079999996" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
-                                    </state>
+                                    <state key="normal" image="twitter-b"/>
                                     <connections>
                                         <action selector="twitter:" destination="-1" eventType="touchUpInside" id="Kpc-C9-TL2"/>
                                     </connections>

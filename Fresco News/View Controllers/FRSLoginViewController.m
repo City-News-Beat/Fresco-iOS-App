@@ -18,7 +18,10 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    
+    self.twitterButton.tintColor = [UIColor colorWithRed:0 green:0.675 blue:0.929 alpha:1]; /*Twitter Blue*/
+    self.facebookButton.tintColor = [UIColor colorWithRed:0.231 green:0.349 blue:0.596 alpha:1]; /*Facebook Blue*/
 }
 
 -(instancetype)init {
