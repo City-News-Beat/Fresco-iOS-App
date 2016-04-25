@@ -169,6 +169,7 @@
 		D4A7D8A11CCA7D4E002C6EA3 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */; };
 		D4B35F4D1CCEB47200F5C8A8 /* NSData+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F4A1CCEB47200F5C8A8 /* NSData+NSHash.m */; };
 		D4B35F4E1CCEB47200F5C8A8 /* NSString+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F4C1CCEB47200F5C8A8 /* NSString+NSHash.m */; };
+		D4B35F521CCEB4CD00F5C8A8 /* FRSFileUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F511CCEB4CD00F5C8A8 /* FRSFileUploadManager.m */; };
 		D4D60D0C1CC829C000059EBA /* following.json in Resources */ = {isa = PBXBuildFile; fileRef = D4D60D0B1CC829C000059EBA /* following.json */; };
 		D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
@@ -530,6 +531,8 @@
 		D4B35F4A1CCEB47200F5C8A8 /* NSData+NSHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+NSHash.m"; sourceTree = "<group>"; };
 		D4B35F4B1CCEB47200F5C8A8 /* NSString+NSHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSHash.h"; sourceTree = "<group>"; };
 		D4B35F4C1CCEB47200F5C8A8 /* NSString+NSHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSHash.m"; sourceTree = "<group>"; };
+		D4B35F501CCEB4CD00F5C8A8 /* FRSFileUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileUploadManager.h; sourceTree = "<group>"; };
+		D4B35F511CCEB4CD00F5C8A8 /* FRSFileUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileUploadManager.m; sourceTree = "<group>"; };
 		D4D60D0B1CC829C000059EBA /* following.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = following.json; path = ../following.json; sourceTree = "<group>"; };
 		D4D60D0E1CC8368300059EBA /* FRSFollowingTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingTable.h; sourceTree = "<group>"; };
 		D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingTable.m; sourceTree = "<group>"; };
@@ -1111,6 +1114,7 @@
 		65EBEDBD1C44507600BE671F /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */,
 				D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */,
 				D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */,
 			);
@@ -1647,6 +1651,15 @@
 			name = "File Hash";
 			sourceTree = "<group>";
 		};
+		D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */ = {
+			isa = PBXGroup;
+			children = (
+				D4B35F501CCEB4CD00F5C8A8 /* FRSFileUploadManager.h */,
+				D4B35F511CCEB4CD00F5C8A8 /* FRSFileUploadManager.m */,
+			);
+			name = "File Upload";
+			sourceTree = "<group>";
+		};
 		D4D60D0D1CC8365B00059EBA /* Highlights */ = {
 			isa = PBXGroup;
 			children = (
@@ -2129,6 +2142,7 @@
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,
 				075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */,
 				07ED92E41C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m in Sources */,
+				D4B35F521CCEB4CD00F5C8A8 /* FRSFileUploadManager.m in Sources */,
 				D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */,
 				07A138BF1CBC053C00163BA0 /* FRSLoadingTableViewCell.m in Sources */,
 				D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */,
