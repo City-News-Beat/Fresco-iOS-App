@@ -108,7 +108,7 @@
                     </constraints>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87000000476837158" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
-                    <textInputTraits key="textInputTraits" keyboardType="twitter" returnKeyType="next"/>
+                    <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
                     <connections>
                         <action selector="next:" destination="-1" eventType="editingDidEndOnExit" id="van-Nk-Jef"/>
                     </connections>

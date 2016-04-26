@@ -7,6 +7,7 @@
 //
 
 #import "FRSLoginViewController.h"
+#import "FRSAPIClient.h"
 
 @interface FRSLoginViewController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *usernameHighlightLine;
@@ -69,6 +70,7 @@
 }
 
 -(IBAction)twitter:(id)sender {
+//login with twitter
     
 }
 
@@ -82,6 +84,22 @@
 
 
 #pragma mark - UITextFieldDelegate
+
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+
+    if (self.userField.editing) {
+    
+    if(range.length + range.location > textField.text.length) {
+        return NO;
+    }
+    
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return newLength <= 40;
+    }
+    
+    return YES;
+}
+
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField {
     
