@@ -37,6 +37,13 @@
     
     self.userField.tintColor = [UIColor frescoOrangeColor];
     self.passwordField.tintColor = [UIColor frescoOrangeColor];
+    
+    [self.userField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
+    [self.passwordField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+
+    self.loginButton.enabled = NO;
+
 }
 
 -(instancetype)init {
@@ -66,7 +73,7 @@
 }
 
 -(IBAction)login:(id)sender {
-    
+
 }
 
 -(IBAction)twitter:(id)sender {
@@ -87,9 +94,8 @@
 #pragma mark - UITextFieldDelegate
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-
-    if (self.userField.editing) {
     
+    if (self.userField.editing) {
     if(range.length + range.location > textField.text.length) {
         return NO;
     }
@@ -100,6 +106,7 @@
     
     return YES;
 }
+
 
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField {
@@ -138,12 +145,32 @@
             
         } completion:nil];
     }
-    
 }
 
 
-
-
+-(void)textFieldDidChange:(UITextField *)textField {
+    
+    if (self.userField.text && self.userField.text.length > 0) {
+        if (self.passwordField.text && self.passwordField.text.length >= 8) {
+            
+            self.loginButton.enabled = YES;
+            
+            /* Fade title color */
+            [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                [self.loginButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+            } completion:nil];
+            
+        } else if (self.passwordField.text && self.passwordField.text.length < 8) {
+            
+            self.loginButton.enabled = NO;
+            
+            /* Fade title color */
+            [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+            } completion:nil];
+        }
+    }
+}
 
 
 
