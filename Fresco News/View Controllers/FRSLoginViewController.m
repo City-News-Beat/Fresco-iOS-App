@@ -7,8 +7,11 @@
 //
 
 #import "FRSLoginViewController.h"
+#import "FRSAPIClient.h"
 
-@interface FRSLoginViewController ()
+@interface FRSLoginViewController () <UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UIView *usernameHighlightLine;
+@property (weak, nonatomic) IBOutlet UIView *passwordHighlightLine;
 
 @property (weak, nonatomic) IBOutlet UIButton *backArrowButton;
 
@@ -18,7 +21,22 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    self.twitterButton.tintColor = [UIColor colorWithRed:0 green:0.675 blue:0.929 alpha:1]; /*Twitter Blue*/
+    self.facebookButton.tintColor = [UIColor colorWithRed:0.231 green:0.349 blue:0.596 alpha:1]; /*Facebook Blue*/
+    
+    self.passwordField.tintColor = [UIColor frescoShadowColor];
+    self.userField.tintColor = [UIColor frescoShadowColor];
+    
+    self.userField.delegate = self;
+    self.passwordField.delegate = self;
+    
+    UIView *emailLine = [[UIView alloc] initWithFrame:CGRectMake(self.userField.frame.origin.x, self.userField.frame.origin.y, self.userField.frame.size.width, 1)];
+    emailLine.backgroundColor = [UIColor frescoOrangeColor];
+    [self.userField addSubview:emailLine];
+    
+    self.userField.tintColor = [UIColor frescoOrangeColor];
+    self.passwordField.tintColor = [UIColor frescoOrangeColor];
 }
 
 -(instancetype)init {
@@ -52,6 +70,7 @@
 }
 
 -(IBAction)twitter:(id)sender {
+//login with twitter
     
 }
 
@@ -62,14 +81,75 @@
 -(IBAction)next:(id)sender {
     [self.passwordField becomeFirstResponder];
 }
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+
+#pragma mark - UITextFieldDelegate
+
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+
+    if (self.userField.editing) {
+    
+    if(range.length + range.location > textField.text.length) {
+        return NO;
+    }
+    
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return newLength <= 40;
+    }
+    
+    return YES;
 }
-*/
+
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    if (self.userField.editing) {
+
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.usernameHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
+            
+        } completion:nil];
+        
+        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.passwordHighlightLine.backgroundColor = [UIColor frescoShadowColor];
+            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+            
+        } completion:nil];
+    }
+    
+    
+    if (self.passwordField.editing) {
+
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.passwordHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
+            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
+            
+        } completion:nil];
+        
+        [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+            
+        } completion:nil];
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end
