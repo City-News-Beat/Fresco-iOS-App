@@ -125,16 +125,16 @@
                         <action selector="login:" destination="-1" eventType="editingDidEndOnExit" id="sna-jP-hIu"/>
                     </connections>
                 </textField>
-                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jJA-B7-1oY">
-                    <rect key="frame" x="48" y="242" width="504" height="1"/>
-                    <color key="backgroundColor" red="1" green="0.7764706015586853" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jJA-B7-1oY">
+                    <rect key="frame" x="48" y="242" width="504" height="0.5"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.11999999731779099" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="JxW-cE-ktd"/>
                     </constraints>
                 </view>
-                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LnW-sm-hp7">
-                    <rect key="frame" x="48" y="280" width="504" height="1"/>
-                    <color key="backgroundColor" red="1" green="0.77647060160000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LnW-sm-hp7">
+                    <rect key="frame" x="48" y="280" width="504" height="0.5"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.11999999731779099" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="zJW-RF-dhz"/>
                     </constraints>
