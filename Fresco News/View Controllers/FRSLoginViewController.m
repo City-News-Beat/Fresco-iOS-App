@@ -8,7 +8,9 @@
 
 #import "FRSLoginViewController.h"
 
-@interface FRSLoginViewController ()
+@interface FRSLoginViewController () <UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UIView *usernameHighlightLine;
+@property (weak, nonatomic) IBOutlet UIView *passwordHighlightLine;
 
 @property (weak, nonatomic) IBOutlet UIButton *backArrowButton;
 
@@ -19,12 +21,19 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     
-    
     self.twitterButton.tintColor = [UIColor colorWithRed:0 green:0.675 blue:0.929 alpha:1]; /*Twitter Blue*/
     self.facebookButton.tintColor = [UIColor colorWithRed:0.231 green:0.349 blue:0.596 alpha:1]; /*Facebook Blue*/
     
     self.passwordField.tintColor = [UIColor frescoOrangeColor];
     self.userField.tintColor = [UIColor frescoOrangeColor];
+    
+    self.userField.delegate = self;
+    self.passwordField.delegate = self;
+    
+    
+    UIView *emailLine = [[UIView alloc] initWithFrame:CGRectMake(self.userField.frame.origin.x, self.userField.frame.origin.y, self.userField.frame.size.width, 1)];
+    emailLine.backgroundColor = [UIColor frescoOrangeColor];
+    [self.userField addSubview:emailLine];
 }
 
 -(instancetype)init {
@@ -68,6 +77,35 @@
 -(IBAction)next:(id)sender {
     [self.passwordField becomeFirstResponder];
 }
+
+
+#pragma mark - UITextFieldDelegate
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    if (self.userField.editing) {
+        NSLog(@"userfield");
+        self.usernameHighlightLine.alpha = 1;
+        self.passwordHighlightLine.alpha = 0;
+    }
+    
+    if (self.passwordField.editing) {
+        NSLog(@"passfield");
+        self.passwordHighlightLine.alpha = 1;
+        self.usernameHighlightLine.alpha = 0;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 @end
