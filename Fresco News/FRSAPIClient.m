@@ -75,11 +75,9 @@
     NSString *twitterAccessToken = session.authToken;
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
     NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
-    NSLog(@"%@", authDictionary);
     
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        NSLog(@"%@", error);
         // handle cacheing of authentication
         if (!error) {
             [self handleUserLogin:responseObject];
@@ -156,7 +154,7 @@
     AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
     
     [manager GET:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        completion(responseObject[@"data"], Nil);
+        completion(responseObject, Nil);
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         completion(Nil, error);
@@ -176,7 +174,7 @@
     
     [manager POST:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
             
-            completion(responseObject[@"data"], Nil);
+            completion(responseObject, Nil);
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         completion(Nil, error);
@@ -198,7 +196,7 @@
                             };
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        completion(responseObject[@"data"], error);
     }];
     
 }
@@ -221,7 +219,7 @@
                             };
     
     [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        completion(responseObject[@"data"], error);
     }];
 }
 
@@ -237,7 +235,7 @@
     };
 
     [self get:storyGalleriesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        completion(responseObject[@"data"], error);
     }];
 }
 
@@ -258,7 +256,7 @@
     
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        completion(responseObject[@"data"], error);
     }];
 }
 
@@ -287,7 +285,7 @@
     if (!self.requestManager) {
         AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
         [manager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
-        [manager.requestSerializer setValue:@"x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        [manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         manager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
         return manager;
     }
