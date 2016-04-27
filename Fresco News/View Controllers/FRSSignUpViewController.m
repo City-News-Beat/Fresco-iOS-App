@@ -278,7 +278,7 @@
 }
 
 -(void)configureBottomBar{
-    self.bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)];
+    self.bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height -44 -64, self.view.frame.size.width, 44)];
     self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.bottomBar];
     
@@ -436,6 +436,13 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+
+
+
+
+
 
 
 @end
