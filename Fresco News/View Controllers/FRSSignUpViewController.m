@@ -96,6 +96,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 44)];
+    
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.scrollView];
 }
@@ -410,7 +411,7 @@
     
     CGPoint point = self.scrollView.contentOffset;
     if (self.promoTF.isFirstResponder){
-        point = CGPointMake(0, yOffset);
+        point = CGPointMake(0, yOffset-12);
     }
     
     [UIView animateWithDuration:0.15 animations:^{
