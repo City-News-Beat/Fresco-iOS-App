@@ -51,7 +51,12 @@
     [self.backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     self.backButton.tintColor = [UIColor frescoMediumTextColor];
     [self.view addSubview:self.backButton];
-
+    
+    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
+    
+    self.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: [UIColor frescoLightTextColor]}];
+    
+    self.userField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email or @username" attributes:@{NSForegroundColorAttributeName: [UIColor frescoLightTextColor]}];
 }
 
 -(instancetype)init {
@@ -207,17 +212,84 @@
     self.backButton.alpha = 0;
     self.backButton.transform = CGAffineTransformMakeTranslation(20, 0);
     
+    self.userField.alpha = 0;
+    self.userField.transform = CGAffineTransformMakeTranslation(50, 0);
+    
+    self.usernameHighlightLine.alpha = 0;
+    self.usernameHighlightLine.transform = CGAffineTransformMakeTranslation(50, 0);
+    
+    self.passwordField.alpha = 0;
+    self.passwordField.transform = CGAffineTransformMakeTranslation(50, 0);
+    
+    self.passwordHighlightLine.alpha = 0;
+    self.passwordHighlightLine.transform = CGAffineTransformMakeTranslation(50, 0);
+    
+    self.loginButton.alpha = 0;
+    self.loginButton.transform = CGAffineTransformMakeTranslation(50, 0);
+    
+    
 }
 
 -(void)animateIn {
     
     [self prepareForAnimation];
     
-    /* Transform backButton xPos */
-    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    /* Transform and fade backButton xPos */
+    [UIView animateWithDuration:0.6 delay:2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.backButton.transform = CGAffineTransformMakeTranslation(0, 0);
         self.backButton.alpha = 1;
     } completion:nil];
+    
+    /* Transform userField */
+    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.userField.transform = CGAffineTransformMakeTranslation(-5, 0);
+        self.userField.alpha = 1;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.userField.transform = CGAffineTransformMakeTranslation(0, 0);
+        } completion:nil];
+    }];
+    
+    /* Transform and fade usernameHighlightLine */
+    [UIView animateWithDuration:0.5 delay:0.05 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.usernameHighlightLine.transform = CGAffineTransformMakeTranslation(-5, 0);
+        self.usernameHighlightLine.alpha = 1;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameHighlightLine.transform = CGAffineTransformMakeTranslation(0, 0);
+        } completion:nil];
+    }];
+    
+    /* Transform and fade passwordField */
+    [UIView animateWithDuration:0.5 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.passwordField.transform = CGAffineTransformMakeTranslation(-5, 0);
+        self.passwordField.alpha = 1;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.passwordField.transform = CGAffineTransformMakeTranslation(0, 0);
+        } completion:nil];
+    }];
+    
+    /* Transform and fade passwordHighlightLine */
+    [UIView animateWithDuration:0.5 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.passwordHighlightLine.transform = CGAffineTransformMakeTranslation(-5, 0);
+        self.passwordHighlightLine.alpha = 1;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.passwordHighlightLine.transform = CGAffineTransformMakeTranslation(0, 0);
+        } completion:nil];
+    }];
+    
+    /* Transform and fade loginButton */
+    [UIView animateWithDuration:0.5 delay:0.25 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.loginButton.transform = CGAffineTransformMakeTranslation(-5, 0);
+        self.loginButton.alpha = 1;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.loginButton.transform = CGAffineTransformMakeTranslation(0, 0);
+        } completion:nil];
+    }];
+
 }
 
 -(void)animateOut {
@@ -231,13 +303,72 @@
             self.backButton.alpha = 0;
         } completion:nil];
     }];
-    
+
     /* Transform userField */
-    [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        
-        
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.userField.transform = CGAffineTransformMakeTranslation(-5, 0);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.7 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.userField.transform = CGAffineTransformMakeTranslation(100, 0);
+        } completion:nil];
+    }];
+
+    [UIView animateWithDuration:0.4 delay:0.4 options: UIViewAnimationOptionCurveEaseOut animations:^{
+        self.userField.alpha = 0;
     } completion:nil];
+    
+    /* Transform usernameHighlightLine */
+    [UIView animateWithDuration:0.3 delay:0.05 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.usernameHighlightLine.transform = CGAffineTransformMakeTranslation(-5, 0);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.7 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameHighlightLine.transform = CGAffineTransformMakeTranslation(100, 0);
+        } completion:nil];
+    }];
+    
+    [UIView animateWithDuration:0.4 delay:0.45 options: UIViewAnimationOptionCurveEaseOut animations:^{
+        self.usernameHighlightLine.alpha = 0;
+    } completion:nil];
+    
+    /* Transform passwordField */
+    [UIView animateWithDuration:0.3 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.passwordField.transform = CGAffineTransformMakeTranslation(-5, 0);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.7 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.passwordField.transform = CGAffineTransformMakeTranslation(100, 0);
+        } completion:nil];
+    }];
+    
+    [UIView animateWithDuration:0.4 delay:0.5 options: UIViewAnimationOptionCurveEaseOut animations:^{
+        self.passwordField.alpha = 0;
+    } completion:nil];
+    
+    /* Transform passwordHighlightLine */
+    [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.passwordHighlightLine.transform = CGAffineTransformMakeTranslation(-5, 0);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.7 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.passwordHighlightLine.transform = CGAffineTransformMakeTranslation(100, 0);
+        } completion:nil];
+    }];
+    
+    [UIView animateWithDuration:0.4 delay:0.55 options: UIViewAnimationOptionCurveEaseOut animations:^{
+        self.passwordHighlightLine.alpha = 0;
+    } completion:nil];
+    
+    /* Transform loginButton */
+    [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.loginButton.transform = CGAffineTransformMakeTranslation(-5, 0);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.7 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.loginButton.transform = CGAffineTransformMakeTranslation(100, 0);
+        } completion:nil];
+    }];
+    
+    [UIView animateWithDuration:0.4 delay:0.6 options: UIViewAnimationOptionCurveEaseOut animations:^{
+        self.loginButton.alpha = 0;
+    } completion:nil];
+    
 }
 
 

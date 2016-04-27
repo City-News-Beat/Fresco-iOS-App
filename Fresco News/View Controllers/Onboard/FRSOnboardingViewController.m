@@ -86,8 +86,7 @@
     [self configureLogo];
     [self configureActionBar];
     
-    //check zeplin for official value
-    self.view.backgroundColor = [UIColor colorWithRed:0.953 green:0.953 blue:0.933 alpha:1.00];
+    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
 }
 
 -(void)configureScrollView{
@@ -201,7 +200,7 @@
 
     
     /* Animate scrollView xPos */
-    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.scrollView.transform = CGAffineTransformMakeTranslation(5, 0);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.6 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -288,8 +287,6 @@
 
         } completion:nil];
     }];
-    
-    
     
     /* Animate actionBar xPos and alpha */
     [UIView animateWithDuration:0.5 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
