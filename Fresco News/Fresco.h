@@ -34,6 +34,7 @@
 static BOOL const developmentEnvironment = FALSE; // both of these effect the base url (dev takes priority)
 static BOOL const stagingEnvironment = FALSE;
 
+static NSString * const clientAuthorization = @"MTMzNzp0aGlzaXNhc2VjcmV0";
 static NSString * const serviceName = @"frescoNewsService3";
 
 static NSString * const baseURL = @"https://api.fresconews.com/v1/";
