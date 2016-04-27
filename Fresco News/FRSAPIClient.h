@@ -12,6 +12,7 @@
 #import "FRSUser.h"
 #import "FRSSocial.h"
 
+
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 
 @interface FRSAPIClient : NSObject

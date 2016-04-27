@@ -7,7 +7,6 @@
 //
 
 #import "FRSAPIClient.h"
-#import <AFNetworking/AFNetworking.h>
 #import "Fresco.h"
 #import "FRSPost.h"
 

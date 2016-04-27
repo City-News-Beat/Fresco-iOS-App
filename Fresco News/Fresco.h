@@ -9,8 +9,15 @@
 #import "FRSAPIClient.h" // Network
 #import "FRSLocator.h" // location tracking
 #import "SSKeychain.h"
-
 #import "FRSGallery+CoreDataProperties.h"
+#import "markdown_lib.h"
+#import "markdown_peg.h"
+#import "FRSAPIClient.h"
+
+
+//libraries
+#import <AFNetworking/AFNetworking.h>
+
 
 /*
     API
@@ -21,6 +28,7 @@
 #ifdef distribution 
 #define NSLog //
 #endif
+
 
 // api - constants
 static BOOL const developmentEnvironment = FALSE; // both of these effect the base url (dev takes priority)
