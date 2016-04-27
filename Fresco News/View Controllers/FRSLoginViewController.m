@@ -227,6 +227,14 @@
     self.loginButton.alpha = 0;
     self.loginButton.transform = CGAffineTransformMakeTranslation(50, 0);
     
+    self.socialLabel.transform = CGAffineTransformMakeTranslation(30, 0);
+    self.socialLabel.alpha = 0;
+    
+    self.facebookButton.transform = CGAffineTransformMakeTranslation(20, 0);
+    self.facebookButton.alpha = 0;
+    
+    self.twitterButton.transform = CGAffineTransformMakeTranslation(20, 0);
+    self.twitterButton.alpha = 0;
     
 }
 
@@ -235,7 +243,7 @@
     [self prepareForAnimation];
     
     /* Transform and fade backButton xPos */
-    [UIView animateWithDuration:0.6 delay:2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.6 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.backButton.transform = CGAffineTransformMakeTranslation(0, 0);
         self.backButton.alpha = 1;
     } completion:nil];
@@ -289,7 +297,32 @@
             self.loginButton.transform = CGAffineTransformMakeTranslation(0, 0);
         } completion:nil];
     }];
-
+    
+    
+    [UIView animateWithDuration:0.7 delay:0.3 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.socialLabel.transform = CGAffineTransformMakeTranslation(0, 0);
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.5 delay:0.3 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.socialLabel.alpha = 1;
+    } completion:nil];
+    
+    [UIView animateWithDuration:1.0 delay:0.35 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.twitterButton.transform = CGAffineTransformMakeTranslation(0, 0);
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.3 delay:0.35 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.twitterButton.alpha = 1;
+    } completion:nil];
+    
+    [UIView animateWithDuration:1.0 delay:0.4 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.facebookButton.transform = CGAffineTransformMakeTranslation(0, 0);
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.3 delay:0.4 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.facebookButton.alpha = 1;
+    } completion:nil];
+    
 }
 
 -(void)animateOut {
@@ -369,6 +402,29 @@
         self.loginButton.alpha = 0;
     } completion:nil];
     
+    [UIView animateWithDuration:1.0 delay:0.5 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.facebookButton.transform = CGAffineTransformMakeTranslation(100, 0);
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.3 delay:0.5 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.facebookButton.alpha = 0;
+    } completion:nil];
+    
+    [UIView animateWithDuration:1.0 delay:0.55 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.twitterButton.transform = CGAffineTransformMakeTranslation(80, 0);
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.3 delay:0.55 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.twitterButton.alpha = 0;
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.7 delay:0.6 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.socialLabel.transform = CGAffineTransformMakeTranslation(60, 0);
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.5 delay:0.6 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.socialLabel.alpha = 0;
+    } completion:nil];
 }
 
 
