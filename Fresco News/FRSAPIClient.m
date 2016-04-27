@@ -254,9 +254,13 @@
 
 
 -(AFHTTPRequestOperationManager *)managerWithFrescoConfigurations {
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
-   // [manager.requestSerializer setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"kFrescoAuthToken"] forHTTPHeaderField:@"authToken"]; // no auth token from user defaults, all in keychain now
-    return manager;
+    
+    if (!self.requestManager) {
+        AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
+        return manager;
+    }
+    
+    return self.requestManager;
 }
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion {
