@@ -72,11 +72,36 @@
     }];
 }
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
-
+    NSString *twitterAccessToken = session.authToken;
+    NSString *twitterAccessTokenSecret = session.authTokenSecret;
+    NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
+    
+    [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+        
+        // handle cacheing of authentication
+        if (!error) {
+            [self handleUserLogin:responseObject];
+        }
+    }];
 }
 
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *facebookAccessToken = token.tokenString;
+    NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
 
+    [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+        
+        // handle internal cacheing of authentication
+        if (!error) {
+            [self handleUserLogin:responseObject];
+        }
+    }];
+}
+
+-(void)handleUserLogin:(id)responseObject {
+    
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {

@@ -49,6 +49,8 @@ static NSString * const dualLocationEndpoint = @"user/locationcall";  // send lo
 static NSString * const loginEndpoint = @"auth/signin";
 static NSString * const signUpEndpoint = @"auth/signup";
 
+static NSString * const socialLoginEndpoint = @"auth/signin/social";
+
 // quick actions -- app delegate
 static NSString * const assignmentsAction = @"FRSAssignmentsAction";
 static NSString * const takeVideoAction = @"FRSVideoAction";
