@@ -31,6 +31,7 @@
 @property (strong, nonatomic) UIImageView *logo;
 @property (strong, nonatomic) FRSOnboardThreeView *viewThree;
 @property (strong, nonatomic) FRSOnboardOneView *viewOne;
+@property (strong, nonatomic) UIView *actionBarContainer;
 @property NSInteger page;
 
 @end
@@ -54,6 +55,12 @@
     [super viewWillAppear:animated];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self resetAnimationPositions];
 }
 
 #pragma mark - UI Configuration
@@ -129,12 +136,12 @@
 }
 
 -(void)configureActionBar{
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, [UIScreen mainScreen].bounds.size.width, 44)];
-    [self.view addSubview:container];
+    self.actionBarContainer = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, [UIScreen mainScreen].bounds.size.width, 44)];
+    [self.view addSubview:self.actionBarContainer];
     
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
     line.backgroundColor = [UIColor frescoLightTextColor];
-    [self.view addSubview:line];
+    [self.actionBarContainer addSubview:line];
 
     UIButton *logIn = [UIButton buttonWithType:UIButtonTypeSystem];
     logIn.frame = CGRectMake(0, 0, 85, 44);
@@ -143,7 +150,7 @@
     [logIn setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
     [logIn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
     [logIn setTitleEdgeInsets:UIEdgeInsetsMake(-10, 20, -10, 20)];
-    [container addSubview:logIn];
+    [self.actionBarContainer addSubview:logIn];
     
     UIButton *signUp = [UIButton buttonWithType:UIButtonTypeSystem];
     signUp.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 85, 0, 85, 44);
@@ -151,7 +158,7 @@
     signUp.titleLabel.font = [UIFont notaBoldWithSize:15];
     [signUp setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     [signUp addTarget:self action:@selector(signUp) forControlEvents:UIControlEventTouchUpInside];
-    [container addSubview:signUp];
+    [self.actionBarContainer addSubview:signUp];
     
     /* DEBUG */
 //        signUp.backgroundColor = [UIColor greenColor];
@@ -166,13 +173,81 @@
 #pragma mark - UIButton Actions
 
 -(void)logIn {
-    FRSLoginViewController *loginViewController = [[FRSLoginViewController alloc] init];
-    [self.navigationController pushViewController:loginViewController animated:NO];
+    
+    
+    
+    [self animateSegueToLogin];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        FRSLoginViewController *loginViewController = [[FRSLoginViewController alloc] init];
+        [self.navigationController pushViewController:loginViewController animated:NO];
+    });
 }
 
 -(void)signUp {
     FRSSignUpViewController *signUpViewController = [[FRSSignUpViewController alloc] init];
     [self.navigationController pushViewController:signUpViewController animated:YES];
+}
+
+#pragma mark - Transition Animations
+
+-(void)animateSegueToLogin {
+    
+    /* TOTAL ANIMATION DURATION [  00  ] */
+    
+    
+    
+    /* Animate scrollView xPos */
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.scrollView.transform = CGAffineTransformMakeTranslation(2.5, 0);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.scrollView.transform = CGAffineTransformMakeTranslation(-50, 0);
+        } completion:nil];
+    }];
+    
+    /* Animate scrollView alpha */
+    [UIView animateWithDuration:0.7 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.scrollView.alpha = 0;
+    } completion:nil];
+    
+    
+    
+    /* Animate pageControl xPos */
+    [UIView animateWithDuration:0.3 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.pageControl.transform = CGAffineTransformMakeTranslation(2.5, 0);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.7 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.pageControl.transform = CGAffineTransformMakeTranslation(-50, 0);
+        } completion:nil];
+    }];
+    
+    /* Animate pageControl alpha */
+    [UIView animateWithDuration:0.6 delay:0.3 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.pageControl.alpha = 0;
+    } completion:nil];
+    
+    
+    [UIView animateWithDuration:0.5 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 50);
+        self.actionBarContainer.alpha = 0;
+        
+    } completion:nil];
+}
+
+
+-(void)resetAnimationPositions {
+    
+    self.scrollView.transform = CGAffineTransformMakeTranslation(0, 0);
+    self.scrollView.alpha = 1;
+
+    self.pageControl.transform = CGAffineTransformMakeTranslation(0, 0);
+    self.pageControl.alpha = 1;
+    
+    self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 0);
+    self.actionBarContainer.alpha = 1;
+    
 }
 
 
