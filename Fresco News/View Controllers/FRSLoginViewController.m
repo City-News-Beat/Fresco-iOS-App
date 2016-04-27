@@ -99,6 +99,9 @@
 
 -(IBAction)facebook:(id)sender {
     
+    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error) {
+        //
+    } parent:self];
 }
 
 -(IBAction)next:(id)sender {

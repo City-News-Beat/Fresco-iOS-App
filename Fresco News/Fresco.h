@@ -10,8 +10,8 @@
 #import "FRSLocator.h" // location tracking
 #import "SSKeychain.h"
 #import "FRSGallery+CoreDataProperties.h"
-#import "markdown_lib.h"
-#import "markdown_peg.h"
+//#import "markdown_lib.h"
+//#import "markdown_peg.h"
 #import "FRSAPIClient.h"
 
 
