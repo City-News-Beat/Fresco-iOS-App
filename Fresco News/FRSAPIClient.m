@@ -101,7 +101,7 @@
 }
 
 -(void)handleUserLogin:(id)responseObject {
-    
+    NSLog(@"%@", responseObject);
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
