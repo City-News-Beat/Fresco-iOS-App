@@ -75,7 +75,8 @@
     NSString *twitterAccessToken = session.authToken;
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
     NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
-    
+    NSLog(@"%@", authDictionary);
+
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         
@@ -89,7 +90,7 @@
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
     NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
-
+    NSLog(@"%@", authDictionary);
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         
@@ -285,6 +286,8 @@
     
     if (!self.requestManager) {
         AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
+        [manager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
+        [manager.requestSerializer setValue:@"x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         return manager;
     }
     
