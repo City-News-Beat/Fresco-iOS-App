@@ -135,21 +135,13 @@
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, [UIScreen mainScreen].bounds.size.width, 0.5)];
     line.backgroundColor = [UIColor frescoLightTextColor];
     [self.view addSubview:line];
-    
-//    UIButton *logIn = [[UIButton alloc] initWithFrame:CGRectMake(-5, 0, 85, 44)];
-//    [logIn setTitle:@"SIGN UP" forState:UIControlStateNormal];
-//    logIn.titleLabel.font = [UIFont notaBoldWithSize:15];
-//    [logIn setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-//    [logIn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
-//    [container addSubview:logIn];
-    
+
     UIButton *logIn = [UIButton buttonWithType:UIButtonTypeSystem];
     logIn.frame = CGRectMake(0, 0, 85, 44);
     [logIn setTitle:@"LOG IN" forState:UIControlStateNormal];
     logIn.titleLabel.font = [UIFont notaBoldWithSize:15];
     [logIn setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
     [logIn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
-    [logIn addTarget:self action:@selector(highlight:) forControlEvents:UIControlEventTouchDown];
     [logIn setTitleEdgeInsets:UIEdgeInsetsMake(-10, 20, -10, 20)];
     [container addSubview:logIn];
     
@@ -166,11 +158,8 @@
 //        logIn.backgroundColor = [UIColor redColor];
 }
 
--(void)highlight:(UIButton *)sender {
-}
-
 -(void)configureParallax{
-    [OEParallax createParallaxFromView:self.logo withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
+//    [OEParallax createParallaxFromView:self.logo withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
 }
 
 
@@ -178,7 +167,7 @@
 
 -(void)logIn {
     FRSLoginViewController *loginViewController = [[FRSLoginViewController alloc] init];
-    [self.navigationController pushViewController:loginViewController animated:YES];
+    [self.navigationController pushViewController:loginViewController animated:NO];
 }
 
 -(void)signUp {
