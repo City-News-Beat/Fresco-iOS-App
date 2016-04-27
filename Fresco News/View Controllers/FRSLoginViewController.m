@@ -80,6 +80,7 @@
 
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error) {
     }];
+    
 }
 
 -(IBAction)facebook:(id)sender {
