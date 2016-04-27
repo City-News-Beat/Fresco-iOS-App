@@ -13,8 +13,7 @@
 - (id)responseObjectForResponse:(NSURLResponse *)response
                            data:(NSData *)data
                           error:(NSError *__autoreleasing *)error {
-    // Let the superclass do its work.
-    // Run the custom code only if there is an error.
+
     id responseToReturn = [super responseObjectForResponse:response
                                                       data:data
                                                      error:error];
@@ -27,7 +26,6 @@
     
     if (parsingError) { return responseToReturn; }
     
-    // Populate the error's userInfo using the parsed JSON
     NSMutableDictionary *userInfo = [(*error).userInfo mutableCopy];
     NSString *errorDescription = JSONResponse[@"error"];
     userInfo[NSLocalizedDescriptionKey] = errorDescription;

@@ -9,5 +9,7 @@
 #import <AFNetworking/AFNetworking.h>
 
 @interface FRSJSONResponseSerializer : AFJSONResponseSerializer
-
+/*
+    Simply to add response body as user info to error reporting from AFNetworking
+ */
 @end
