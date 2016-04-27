@@ -143,12 +143,14 @@
  Generic POST request against api BASE url + endpoint, with parameters
  
  */
--(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion
+{
     
     AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
     
     [manager POST:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        completion(responseObject[@"data"], Nil);
+            
+            completion(responseObject[@"data"], Nil);
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         completion(Nil, error);
@@ -213,7 +215,7 @@
     }];
 }
 
--(void)getRecentGalleriesFromLastGalleryID:(NSString *)galleryID completion:(void(^)(NSArray *galleries, NSError *error))completion{
+-(void)getRecentGalleriesFromLastGalleryID:(NSString *)galleryID completion:(void(^)(NSArray *galleries, NSError *error))completion {
     
 }
 
@@ -275,52 +277,6 @@
         [postsToSend addObject:currentPost];
     }
 }
-
-/*  OAUTH 2
- 
-- logging in
- NSURL *baseURL = [NSURL URLWithString:@"http://example.com/"];
- AFOAuth2Manager *OAuth2Manager =
- [[AFOAuth2Manager alloc] initWithBaseURL:baseURL
- clientID:kClientID
- secret:kClientSecret];
- 
- [OAuth2Manager authenticateUsingOAuthWithURLString:@"/oauth/token"
- username:@"username"
- password:@"password"
- scope:@"email"
- success:^(AFOAuthCredential *credential) {
- NSLog(@"Token: %@", credential.accessToken);
- }
- failure:^(NSError *error) {
- NSLog(@"Error: %@", error);
- }];
- 
- -- authorizing requests
- 
- AFHTTPRequestOperationManager *manager =
- [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
- 
- [manager.requestSerializer setAuthorizationHeaderFieldWithCredential:credential];
- 
- [manager GET:@"/path/to/protected/resource"
- parameters:nil
- success:^(AFHTTPRequestOperation *operation, id responseObject) {
- NSLog(@"Success: %@", responseObject);
- }
- failure:^(AFHTTPRequestOperation *operation, NSError *error) {
- NSLog(@"Failure: %@", error);
- }];
- 
--- save credential
- [AFOAuthCredential storeCredential:credential
- withIdentifier:serviceProviderIdentifier];
- 
--- retrieve credential
- AFOAuthCredential *credential =
- [AFOAuthCredential retrieveCredentialWithIdentifier:serviceProviderIdentifier];
-
- */
 
 /*
  Singleton
