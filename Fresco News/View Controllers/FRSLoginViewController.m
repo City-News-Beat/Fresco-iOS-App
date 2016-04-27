@@ -14,7 +14,11 @@
 @property (weak, nonatomic) IBOutlet UIView *usernameHighlightLine;
 @property (weak, nonatomic) IBOutlet UIView *passwordHighlightLine;
 
+@property(nonatomic, copy) NSArray *viewControllers;
+
 @property (weak, nonatomic) IBOutlet UIButton *backArrowButton;
+
+@property (nonatomic) BOOL didAnimate;
 
 @end
 
@@ -22,6 +26,8 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.didAnimate = NO;
     
     self.twitterButton.tintColor = [UIColor colorWithRed:0 green:0.675 blue:0.929 alpha:1]; /*Twitter Blue*/
     self.facebookButton.tintColor = [UIColor colorWithRed:0.231 green:0.349 blue:0.596 alpha:1]; /*Facebook Blue*/
@@ -78,7 +84,12 @@
     [super viewDidAppear:animated];
     self.navigationController.navigationBarHidden = YES;
     
-    [self animateIn];
+    UIViewController *previousViewController = [[[self navigationController]viewControllers] objectAtIndex:([self.viewControllers indexOfObject:self])];
+
+    
+    if (!self.didAnimate) {
+        [self animateIn];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -243,6 +254,8 @@
 }
 
 -(void)animateIn {
+    
+    self.didAnimate = YES;
     
     [self prepareForAnimation];
     
