@@ -9,8 +9,15 @@
 #import "FRSAPIClient.h" // Network
 #import "FRSLocator.h" // location tracking
 #import "SSKeychain.h"
-
 #import "FRSGallery+CoreDataProperties.h"
+#import "markdown_lib.h"
+#import "markdown_peg.h"
+#import "FRSAPIClient.h"
+
+
+//libraries
+#import <AFNetworking/AFNetworking.h>
+
 
 /*
     API
@@ -22,10 +29,12 @@
 #define NSLog //
 #endif
 
+
 // api - constants
 static BOOL const developmentEnvironment = FALSE; // both of these effect the base url (dev takes priority)
 static BOOL const stagingEnvironment = FALSE;
 
+static NSString * const clientAuthorization = @"MTMzNzp0aGlzaXNhc2VjcmV0";
 static NSString * const serviceName = @"frescoNewsService3";
 
 static NSString * const baseURL = @"https://api.fresconews.com/v1/";
@@ -40,6 +49,8 @@ static NSString * const dualLocationEndpoint = @"user/locationcall";  // send lo
 
 static NSString * const loginEndpoint = @"auth/signin";
 static NSString * const signUpEndpoint = @"auth/signup";
+
+static NSString * const socialLoginEndpoint = @"auth/signin/social";
 
 // quick actions -- app delegate
 static NSString * const assignmentsAction = @"FRSAssignmentsAction";

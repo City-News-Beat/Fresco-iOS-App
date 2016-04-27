@@ -11,11 +11,12 @@
 #import "FRSLocator.h"
 #import "FRSUser.h"
 #import "FRSSocial.h"
+#import <AFNetworking/AFNetworking.h>
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 
 @interface FRSAPIClient : NSObject
-
+@property (nonatomic, retain) AFHTTPRequestOperationManager *requestManager;
 +(instancetype)sharedClient;
 
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
