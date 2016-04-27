@@ -72,7 +72,8 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     self.navigationController.navigationBarHidden = YES;
-
+    
+    [self animateIn];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -100,14 +101,18 @@
 }
 
 -(void)back {
-    [self.navigationController popToRootViewControllerAnimated:NO];
 
-    
-    //TODO
-    //Make delegate
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"returnToOnboard"
-     object:self];
+    [self animateOut];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        
+        //TODO
+        //Make delegate
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"returnToOnboard"
+         object:self];
+    });
 }
 
 
@@ -195,6 +200,45 @@
 
 
 
+#pragma mark - Transition Animations
+
+-(void)prepareForAnimation {
+ 
+    self.backButton.alpha = 0;
+    self.backButton.transform = CGAffineTransformMakeTranslation(20, 0);
+    
+}
+
+-(void)animateIn {
+    
+    [self prepareForAnimation];
+    
+    /* Transform backButton xPos */
+    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.backButton.transform = CGAffineTransformMakeTranslation(0, 0);
+        self.backButton.alpha = 1;
+    } completion:nil];
+}
+
+-(void)animateOut {
+    
+    /* Transform backButton xPos */
+    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.backButton.transform = CGAffineTransformMakeTranslation(5, 0);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.backButton.transform = CGAffineTransformMakeTranslation(-20, 0);
+            self.backButton.alpha = 0;
+        } completion:nil];
+    }];
+    
+    /* Transform userField */
+    [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        
+        
+    } completion:nil];
+}
 
 
 

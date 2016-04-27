@@ -47,7 +47,7 @@
     //TODO
     //Make delegate
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(animateReturnToOnboard)
+                                             selector:@selector(animateIn)
                                                  name:@"returnToOnboard"
                                                object:nil];
 }
@@ -180,7 +180,7 @@
 
 -(void)logIn {
 
-    [self animateSegueToLogin];
+    [self animateOut];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         FRSLoginViewController *loginViewController = [[FRSLoginViewController alloc] init];
@@ -195,28 +195,28 @@
 
 #pragma mark - Transition Animations
 
--(void)animateSegueToLogin {
+-(void)animateOut {
     
     /* TOTAL ANIMATION DURATION [  1.0  ] */
 
     
     /* Animate scrollView xPos */
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.scrollView.transform = CGAffineTransformMakeTranslation(5, 0);
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.7 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.6 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.scrollView.transform = CGAffineTransformMakeTranslation(-90, 0);
         } completion:nil];
     }];
     
     /* Animate scrollView alpha */
-    [UIView animateWithDuration:0.7 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.6 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.scrollView.alpha = 0;
     } completion:nil];
     
 
     /* Animate pageControl xPos */
-    [UIView animateWithDuration:0.3 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.2 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.pageControl.transform = CGAffineTransformMakeTranslation(2.5, 0);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.6 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -225,13 +225,13 @@
     }];
     
     /* Animate pageControl alpha */
-    [UIView animateWithDuration:0.6 delay:0.3 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.5 delay:0.3 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.pageControl.alpha = 0;
     } completion:nil];
     
     
     /* Animate actionBar xPos and alpha */
-    [UIView animateWithDuration:0.5 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.4 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 50);
         self.actionBarContainer.alpha = 0;
@@ -240,7 +240,7 @@
 }
 
 
--(void)resetAnimationPositions {
+-(void)prepareForAnimation {
     
     self.scrollView.transform = CGAffineTransformMakeTranslation(-50, 0);
     self.scrollView.alpha = 0;
@@ -253,10 +253,9 @@
     
 }
 
--(void)animateReturnToOnboard {
-    NSLog(@"returnToOnboard");
+-(void)animateIn {
     
-    [self resetAnimationPositions];
+    [self prepareForAnimation];
     
     /* TOTAL ANIMATION DURATION [  1.0  ] */
     
