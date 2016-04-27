@@ -7,6 +7,7 @@
 //
 
 #import "FRSLoginViewController.h"
+#import "FRSOnboardingViewController.h"
 #import "FRSAPIClient.h"
 
 @interface FRSLoginViewController () <UITextFieldDelegate>
@@ -43,6 +44,13 @@
     [self.passwordField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 
     self.loginButton.enabled = NO;
+    
+    self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.backButton.frame = CGRectMake(12, 30, 24, 24);
+    [self.backButton setImage:[UIImage imageNamed:@"back-arrow-dark"] forState:UIControlStateNormal];
+    [self.backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    self.backButton.tintColor = [UIColor frescoMediumTextColor];
+    [self.view addSubview:self.backButton];
 
 }
 
@@ -89,6 +97,17 @@
 
 -(IBAction)next:(id)sender {
     [self.passwordField becomeFirstResponder];
+}
+
+-(void)back {
+    [self.navigationController popToRootViewControllerAnimated:NO];
+
+    
+    //TODO
+    //Make delegate
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"returnToOnboard"
+     object:self];
 }
 
 

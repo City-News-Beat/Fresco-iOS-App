@@ -13,8 +13,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FRSLoginViewController">
             <connections>
-                <outlet property="backArrowButton" destination="i0x-cI-9iD" id="c2V-Ry-OIq"/>
-                <outlet property="backButton" destination="i0x-cI-9iD" id="5Qz-Lf-f8P"/>
                 <outlet property="facebookButton" destination="6VX-7g-49m" id="qYH-2N-Ti3"/>
                 <outlet property="loginButton" destination="SBV-cU-aii" id="oOe-D2-4hd"/>
                 <outlet property="logoView" destination="h1c-69-np5" id="vpG-Jh-brU"/>
@@ -32,18 +30,6 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i0x-cI-9iD">
-                    <rect key="frame" x="-10" y="30" width="66" height="32"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="66" id="JRK-GJ-DJk"/>
-                        <constraint firstAttribute="height" constant="32" id="QYL-eo-4hn"/>
-                    </constraints>
-                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                    <state key="normal" image="back-arrow-dark"/>
-                    <connections>
-                        <action selector="returnToPreviousViewController:" destination="-1" eventType="touchUpInside" id="xdr-OA-0b6"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SBV-cU-aii">
                     <rect key="frame" x="507" y="298" width="46" height="30"/>
                     <constraints>
@@ -140,11 +126,10 @@
                     </constraints>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.9137254901960784" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="2Rz-Nu-3qb" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="1yy-e2-FzW"/>
                 <constraint firstItem="SBV-cU-aii" firstAttribute="top" secondItem="lTK-cu-Nxz" secondAttribute="bottom" constant="12" id="Ca0-dl-P0o"/>
-                <constraint firstItem="i0x-cI-9iD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="-10" id="Eq9-HG-aqI"/>
                 <constraint firstItem="h1c-69-np5" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="36" id="JpS-KP-7lS"/>
                 <constraint firstItem="eP9-i7-SxN" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="LIE-FF-feb"/>
                 <constraint firstItem="lTK-cu-Nxz" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="48" id="N1B-kC-16F"/>
@@ -161,7 +146,6 @@
                 <constraint firstAttribute="trailing" secondItem="SBV-cU-aii" secondAttribute="trailing" constant="47" id="exk-c5-6BS"/>
                 <constraint firstAttribute="trailing" secondItem="lTK-cu-Nxz" secondAttribute="trailing" constant="48" id="gCA-na-UQf"/>
                 <constraint firstItem="eP9-i7-SxN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="48" id="gc4-Ce-lxR"/>
-                <constraint firstItem="i0x-cI-9iD" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="ijn-xJ-mcJ"/>
                 <constraint firstItem="jJA-B7-1oY" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="jCD-ld-Z3C"/>
                 <constraint firstItem="jJA-B7-1oY" firstAttribute="top" secondItem="eP9-i7-SxN" secondAttribute="bottom" id="ltW-iQ-Eas"/>
                 <constraint firstItem="lTK-cu-Nxz" firstAttribute="top" secondItem="eP9-i7-SxN" secondAttribute="bottom" constant="8" id="wPB-D0-3MC"/>
@@ -169,7 +153,6 @@
         </view>
     </objects>
     <resources>
-        <image name="back-arrow-dark" width="24" height="24"/>
         <image name="facebook-b" width="20" height="20"/>
         <image name="largeLogo" width="204" height="71"/>
         <image name="twitter-b" width="20" height="20"/>
