@@ -109,7 +109,7 @@
 
     [self animateOut];
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.navigationController popToRootViewControllerAnimated:NO];
         
         //TODO
@@ -211,6 +211,7 @@
  
     self.backButton.alpha = 0;
     self.backButton.transform = CGAffineTransformMakeTranslation(20, 0);
+    self.backButton.enabled = NO;
     
     self.userField.alpha = 0;
     self.userField.transform = CGAffineTransformMakeTranslation(50, 0);
@@ -321,8 +322,9 @@
     
     [UIView animateWithDuration:0.3 delay:0.4 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.facebookButton.alpha = 1;
-    } completion:nil];
-    
+    } completion:^(BOOL finished) {
+        self.backButton.enabled = YES;
+    }];
 }
 
 -(void)animateOut {

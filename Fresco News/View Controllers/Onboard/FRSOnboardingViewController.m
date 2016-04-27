@@ -32,6 +32,7 @@
 @property (strong, nonatomic) FRSOnboardThreeView *viewThree;
 @property (strong, nonatomic) FRSOnboardOneView *viewOne;
 @property (strong, nonatomic) UIView *actionBarContainer;
+@property (strong, nonatomic) UIButton *logInButton;
 @property NSInteger page;
 
 @end
@@ -148,14 +149,14 @@
     line.backgroundColor = [UIColor frescoLightTextColor];
     [self.actionBarContainer addSubview:line];
 
-    UIButton *logIn = [UIButton buttonWithType:UIButtonTypeSystem];
-    logIn.frame = CGRectMake(0, 0, 85, 44);
-    [logIn setTitle:@"LOG IN" forState:UIControlStateNormal];
-    logIn.titleLabel.font = [UIFont notaBoldWithSize:15];
-    [logIn setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-    [logIn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
-    [logIn setTitleEdgeInsets:UIEdgeInsetsMake(-10, 20, -10, 20)];
-    [self.actionBarContainer addSubview:logIn];
+    self.logInButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.logInButton.frame = CGRectMake(0, 0, 85, 44);
+    [self.logInButton setTitle:@"LOG IN" forState:UIControlStateNormal];
+    self.logInButton.titleLabel.font = [UIFont notaBoldWithSize:15];
+    [self.logInButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+    [self.logInButton addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
+    [self.logInButton setTitleEdgeInsets:UIEdgeInsetsMake(-10, 20, -10, 20)];
+    [self.actionBarContainer addSubview:self.logInButton];
     
     UIButton *signUp = [UIButton buttonWithType:UIButtonTypeSystem];
     signUp.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 85, 0, 85, 44);
@@ -241,6 +242,8 @@
 
 -(void)prepareForAnimation {
     
+    self.logInButton.enabled = NO;
+    
     self.scrollView.transform = CGAffineTransformMakeTranslation(-50, 0);
     self.scrollView.alpha = 0;
 
@@ -294,7 +297,9 @@
         self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 0);
         self.actionBarContainer.alpha = 1;
         
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        self.logInButton.enabled = YES;
+    }];
 }
 
 
