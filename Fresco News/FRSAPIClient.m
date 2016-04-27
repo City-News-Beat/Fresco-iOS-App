@@ -76,10 +76,10 @@
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
     NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
     NSLog(@"%@", authDictionary);
-
+    
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        
+        NSLog(@"%@", error);
         // handle cacheing of authentication
         if (!error) {
             [self handleUserLogin:responseObject];
@@ -288,6 +288,7 @@
         AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
         [manager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
         [manager.requestSerializer setValue:@"x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        manager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
         return manager;
     }
     

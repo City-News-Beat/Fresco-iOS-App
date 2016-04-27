@@ -171,6 +171,7 @@
 		D4B35F4E1CCEB47200F5C8A8 /* NSString+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F4C1CCEB47200F5C8A8 /* NSString+NSHash.m */; };
 		D4B35F521CCEB4CD00F5C8A8 /* FRSFileUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F511CCEB4CD00F5C8A8 /* FRSFileUploadManager.m */; };
 		D4B35F551CCED19600F5C8A8 /* FRSUploadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F541CCED19600F5C8A8 /* FRSUploadTask.m */; };
+		D4B35F581CD1758400F5C8A8 /* FRSJSONResponseSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F571CD1758400F5C8A8 /* FRSJSONResponseSerializer.m */; };
 		D4D60D0C1CC829C000059EBA /* following.json in Resources */ = {isa = PBXBuildFile; fileRef = D4D60D0B1CC829C000059EBA /* following.json */; };
 		D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
@@ -536,6 +537,8 @@
 		D4B35F511CCEB4CD00F5C8A8 /* FRSFileUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFileUploadManager.m; sourceTree = "<group>"; };
 		D4B35F531CCED19600F5C8A8 /* FRSUploadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadTask.h; sourceTree = "<group>"; };
 		D4B35F541CCED19600F5C8A8 /* FRSUploadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadTask.m; sourceTree = "<group>"; };
+		D4B35F561CD1758400F5C8A8 /* FRSJSONResponseSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSJSONResponseSerializer.h; sourceTree = "<group>"; };
+		D4B35F571CD1758400F5C8A8 /* FRSJSONResponseSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSJSONResponseSerializer.m; sourceTree = "<group>"; };
 		D4D60D0B1CC829C000059EBA /* following.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = following.json; path = ../following.json; sourceTree = "<group>"; };
 		D4D60D0E1CC8368300059EBA /* FRSFollowingTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingTable.h; sourceTree = "<group>"; };
 		D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingTable.m; sourceTree = "<group>"; };
@@ -1118,10 +1121,7 @@
 			isa = PBXGroup;
 			children = (
 				D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */,
-				D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */,
-				D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */,
-				D4B35F531CCED19600F5C8A8 /* FRSUploadTask.h */,
-				D4B35F541CCED19600F5C8A8 /* FRSUploadTask.m */,
+				D4B35F591CD1758900F5C8A8 /* AFNetworking */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -1659,10 +1659,23 @@
 		D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */ = {
 			isa = PBXGroup;
 			children = (
+				D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */,
+				D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */,
+				D4B35F531CCED19600F5C8A8 /* FRSUploadTask.h */,
+				D4B35F541CCED19600F5C8A8 /* FRSUploadTask.m */,
 				D4B35F501CCEB4CD00F5C8A8 /* FRSFileUploadManager.h */,
 				D4B35F511CCEB4CD00F5C8A8 /* FRSFileUploadManager.m */,
 			);
 			name = "File Upload";
+			sourceTree = "<group>";
+		};
+		D4B35F591CD1758900F5C8A8 /* AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				D4B35F561CD1758400F5C8A8 /* FRSJSONResponseSerializer.h */,
+				D4B35F571CD1758400F5C8A8 /* FRSJSONResponseSerializer.m */,
+			);
+			name = AFNetworking;
 			sourceTree = "<group>";
 		};
 		D4D60D0D1CC8365B00059EBA /* Highlights */ = {
@@ -2143,6 +2156,7 @@
 				D4B35F4E1CCEB47200F5C8A8 /* NSString+NSHash.m in Sources */,
 				D453CC7B1CCA80850091A004 /* MagicalRecord+iCloud.m in Sources */,
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
+				D4B35F581CD1758400F5C8A8 /* FRSJSONResponseSerializer.m in Sources */,
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
 				07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */,
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,

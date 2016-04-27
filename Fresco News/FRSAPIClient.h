@@ -11,6 +11,7 @@
 #import "FRSLocator.h"
 #import "FRSUser.h"
 #import "FRSSocial.h"
+#import "FRSJSONResponseSerializer.h"
 #import <AFNetworking/AFNetworking.h>
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);

@@ -18,13 +18,7 @@
 //libraries
 #import <AFNetworking/AFNetworking.h>
 
-
-/*
-    API
- */
-
 // #define distribution TRUE // disable logging
-
 #ifdef distribution 
 #define NSLog //
 #endif
