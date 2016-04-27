@@ -66,9 +66,9 @@
     [self registerForPushNotifications];
     
     
-    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor frescoOrangeColor]];
-    [[UINavigationBar appearance] setTranslucent:NO];
+//    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
+//    [[UINavigationBar appearance] setBarTintColor:[UIColor frescoOrangeColor]];
+//    [[UINavigationBar appearance] setTranslucent:YES];
     
     return YES;
 }

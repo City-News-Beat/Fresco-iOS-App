@@ -84,9 +84,6 @@
     [super viewDidAppear:animated];
     self.navigationController.navigationBarHidden = YES;
     
-    UIViewController *previousViewController = [[[self navigationController]viewControllers] objectAtIndex:([self.viewControllers indexOfObject:self])];
-
-    
     if (!self.didAnimate) {
         [self animateIn];
     }
@@ -197,23 +194,66 @@
     if (self.userField.text && self.userField.text.length > 0) {
         if (self.passwordField.text && self.passwordField.text.length >= 8) {
             
-            self.loginButton.enabled = YES;
-            
-            /* Fade title color */
-            [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                [self.loginButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-            } completion:nil];
+            if ([self validEmail:self.userField.text] || [self isValidUsername:self.userField.text]) {
+                
+                self.loginButton.enabled = YES;
+                
+                /* Fade title color */
+                [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                    [self.loginButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+                } completion:nil];
+                
+            } else {
+                [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                    [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+                } completion:nil];
+            }
             
         } else if (self.passwordField.text && self.passwordField.text.length < 8) {
             
-            self.loginButton.enabled = NO;
-            
-            /* Fade title color */
-            [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-            } completion:nil];
+                self.loginButton.enabled = NO;
+                
+                /* Fade title color */
+                [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                    [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+                } completion:nil];
         }
     }
+    
+    if ([self.userField.text isEqualToString:@""]) {
+        [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        } completion:nil];
+    }
+}
+
+
+- (BOOL) validEmail:(NSString*) emailString {
+    
+    if([emailString length]==0){
+        return NO;
+    }
+    
+    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    
+    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
+    
+    NSLog(@"%i", regExMatches);
+    if (regExMatches == 0) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+
+-(BOOL)isValidUsername:(NSString *)username {
+    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
+    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
+    NSRange rangeOfFound = [username rangeOfCharacterFromSet:disallowedSet];
+    
+    return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
 }
 
 
