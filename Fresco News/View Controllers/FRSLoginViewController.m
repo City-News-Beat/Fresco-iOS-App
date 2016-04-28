@@ -72,13 +72,16 @@
     
     self.userField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email or @username" attributes:@{NSForegroundColorAttributeName: [UIColor frescoLightTextColor]}];
     
+    self.userField.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.passwordField.autocorrectionType = UITextAutocorrectionTypeNo;
+
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
-    
-    
+
+
     if (IS_IPHONE_5) {
         self.socialTopConstraint.constant = 104;
     } else if (IS_IPHONE_6) {
@@ -135,7 +138,6 @@
 
 -(void)back {
     [self animateOut];
-    [self dismissKeyboard];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.navigationController popToRootViewControllerAnimated:NO];
@@ -146,6 +148,8 @@
 }
 
 - (IBAction)passwordHelp:(id)sender {
+    NSURL *url = [NSURL URLWithString:@"http://www.fresconews.com/forgot"];
+    [[UIApplication sharedApplication] openURL:url];
 }
 
 
@@ -177,12 +181,14 @@
         } completion:nil];
     }
     
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         if (IS_IPHONE_5) {
             self.view.transform = CGAffineTransformMakeTranslation(0, -116);
         } else if (IS_IPHONE_6) {
-            
+            self.socialLabel.transform = CGAffineTransformMakeTranslation(0, -20);
+            self.facebookButton.transform = CGAffineTransformMakeTranslation(0, -20);
+            self.twitterButton.transform = CGAffineTransformMakeTranslation(0, -20);
         } else if (IS_IPHONE_6_PLUS) {
             
         }
@@ -196,12 +202,15 @@
         self.passwordHelpButton.alpha = 0;
     } completion:nil];
     
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         if (IS_IPHONE_5) {
             self.view.transform = CGAffineTransformMakeTranslation(0, 0);
         } else if (IS_IPHONE_6) {
-            
+            self.socialLabel.transform = CGAffineTransformMakeTranslation(0, 0);
+            self.facebookButton.transform = CGAffineTransformMakeTranslation(0, 0);
+            self.twitterButton.transform = CGAffineTransformMakeTranslation(0, 0);
+
         } else if (IS_IPHONE_6_PLUS) {
             
         }
@@ -261,9 +270,9 @@
     if (!enabled) {
         [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
-            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
             self.passwordHighlightLine.backgroundColor = [UIColor frescoShadowColor];
-            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
         } completion:nil];
         
         [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -276,19 +285,19 @@
         
         [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.usernameHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
-            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1.5);
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
         } completion:nil];
         
         [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.passwordHighlightLine.backgroundColor = [UIColor frescoShadowColor];
-            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
         } completion:nil];
         
     } else if (textField.editing == self.passwordField.editing) {
         
         [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.passwordHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
-            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 1.5);
+            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
         } completion:nil];
         
         [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -296,17 +305,17 @@
             self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
         } completion:nil];
     }
-
 }
 
 
 -(void)dismissKeyboard {
-    [self.userField resignFirstResponder];
-    [self.passwordField resignFirstResponder];
     
-    
-    [self highlightTextField:nil enabled:NO];
-    
+    if (self.userField.isEditing || self.passwordField.isEditing) {
+        [self highlightTextField:nil enabled:NO];
+        
+        [self.userField resignFirstResponder];
+        [self.passwordField resignFirstResponder];
+    }
 }
 
 
