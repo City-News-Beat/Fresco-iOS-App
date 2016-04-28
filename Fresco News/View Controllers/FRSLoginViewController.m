@@ -13,6 +13,7 @@
 @interface FRSLoginViewController () <UITextFieldDelegate>
 
 @property (nonatomic) BOOL didAnimate;
+@property (nonatomic) BOOL didTransform;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *socialTopConstraint;
 
 @end
@@ -37,6 +38,7 @@
     [super viewDidLoad];
     
     self.didAnimate = NO;
+    self.didTransform = NO;
     
     self.twitterButton.tintColor = [UIColor colorWithRed:0 green:0.675 blue:0.929 alpha:1]; /*Twitter Blue*/
     self.facebookButton.tintColor = [UIColor colorWithRed:0.231 green:0.349 blue:0.596 alpha:1]; /*Facebook Blue*/
@@ -81,7 +83,6 @@
     
     [self.view addGestureRecognizer:tap];
 
-
     if (IS_IPHONE_5) {
         self.socialTopConstraint.constant = 104;
     } else if (IS_IPHONE_6) {
@@ -105,9 +106,12 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
 }
 
-
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+}
 
 
 #pragma mark - Actions
@@ -147,9 +151,18 @@
     });
 }
 
-- (IBAction)passwordHelp:(id)sender {
-    NSURL *url = [NSURL URLWithString:@"http://www.fresconews.com/forgot"];
-    [[UIApplication sharedApplication] openURL:url];
+-(IBAction)passwordHelp:(id)sender {
+    
+    [self.passwordField resignFirstResponder];
+    [self.userField resignFirstResponder];
+    
+    [self animateFramesForKeyboard:YES];
+    
+    //patience, my friend. patience.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSURL *url = [NSURL URLWithString:@"https://www.fresconews.com/forgot"];
+        [[UIApplication sharedApplication] openURL:url];
+    });
 }
 
 
@@ -181,19 +194,14 @@
         } completion:nil];
     }
     
-    [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    
+    NSLog(@"self.socialTopConstraint.constant = %f", self.socialTopConstraint.constant);
+    
+    if (!self.didTransform) {
         
-        if (IS_IPHONE_5) {
-            self.view.transform = CGAffineTransformMakeTranslation(0, -116);
-        } else if (IS_IPHONE_6) {
-            self.socialLabel.transform = CGAffineTransformMakeTranslation(0, -20);
-            self.facebookButton.transform = CGAffineTransformMakeTranslation(0, -20);
-            self.twitterButton.transform = CGAffineTransformMakeTranslation(0, -20);
-        } else if (IS_IPHONE_6_PLUS) {
-            
-        }
-
-    } completion:nil];
+        [self highlightTextField:nil enabled:NO];
+        [self animateFramesForKeyboard:NO];
+    }
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
@@ -202,20 +210,11 @@
         self.passwordHelpButton.alpha = 0;
     } completion:nil];
     
-    [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        if (IS_IPHONE_5) {
-            self.view.transform = CGAffineTransformMakeTranslation(0, 0);
-        } else if (IS_IPHONE_6) {
-            self.socialLabel.transform = CGAffineTransformMakeTranslation(0, 0);
-            self.facebookButton.transform = CGAffineTransformMakeTranslation(0, 0);
-            self.twitterButton.transform = CGAffineTransformMakeTranslation(0, 0);
+    
+    if (!self.didTransform) {
 
-        } else if (IS_IPHONE_6_PLUS) {
-            
-        }
-        
-    } completion:nil];
+        [self animateFramesForKeyboard:YES];
+    }
 }
 
 
@@ -315,9 +314,41 @@
         
         [self.userField resignFirstResponder];
         [self.passwordField resignFirstResponder];
+        
+        [self animateFramesForKeyboard:YES];
     }
 }
 
+
+-(void)animateFramesForKeyboard:(BOOL)hidden {
+    
+    if (hidden) {
+        [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            if (IS_IPHONE_5) {
+                self.view.transform = CGAffineTransformMakeTranslation(0, 0);
+            } else if (IS_IPHONE_6) {
+                self.socialLabel.transform = CGAffineTransformMakeTranslation(0, 0);
+                self.facebookButton.transform = CGAffineTransformMakeTranslation(0, 0);
+                self.twitterButton.transform = CGAffineTransformMakeTranslation(0, 0);
+            }
+        } completion:^(BOOL finished) {
+            self.didTransform = NO;
+        }];
+    } else {
+        [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            if (IS_IPHONE_5) {
+                self.view.transform = CGAffineTransformMakeTranslation(0, -116);
+            } else if (IS_IPHONE_6) {
+                self.socialLabel.transform = CGAffineTransformMakeTranslation(0, -20);
+                self.facebookButton.transform = CGAffineTransformMakeTranslation(0, -20);
+                self.twitterButton.transform = CGAffineTransformMakeTranslation(0, -20);
+            }
+        } completion:^(BOOL finished) {
+            self.didTransform = YES;
+        }];
+    }
+}
 
 
 
