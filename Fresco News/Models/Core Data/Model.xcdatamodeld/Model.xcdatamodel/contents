@@ -76,6 +76,14 @@
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSUser" inverseName="stories" inverseEntity="FRSUser" syncable="YES"/>
         <relationship name="galleries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSGallery" inverseName="stories" inverseEntity="FRSGallery" syncable="YES"/>
     </entity>
+    <entity name="FRSUpload" representedClassName="FRSUpload" syncable="YES">
+        <attribute name="completed" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="multipart" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="partsComplete" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="partSize" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="FRSUser" representedClassName="FRSUser" syncable="YES">
         <attribute name="associatedPromoCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="bio" optional="YES" attributeType="String" syncable="YES"/>
@@ -102,5 +110,6 @@
         <element name="FRSPost" positionX="-36" positionY="9" width="128" height="255"/>
         <element name="FRSStory" positionX="-54" positionY="-9" width="128" height="180"/>
         <element name="FRSUser" positionX="-18" positionY="27" width="128" height="285"/>
+        <element name="FRSUpload" positionX="-990" positionY="-9" width="128" height="135"/>
     </elements>
 </model>
