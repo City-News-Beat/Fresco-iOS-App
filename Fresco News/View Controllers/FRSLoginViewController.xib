@@ -20,6 +20,7 @@
                 <outlet property="passwordHelpButton" destination="PS9-zF-0wc" id="FjR-X4-L18"/>
                 <outlet property="passwordHighlightLine" destination="LnW-sm-hp7" id="sSg-sa-xxI"/>
                 <outlet property="socialLabel" destination="7Aw-rc-Zq2" id="Pgd-Vo-DUE"/>
+                <outlet property="socialTopConstraint" destination="UZO-c3-waH" id="5Rx-JL-28w"/>
                 <outlet property="twitterButton" destination="y9q-Ly-sJx" id="xbp-F0-KTo"/>
                 <outlet property="userField" destination="eP9-i7-SxN" id="iMm-09-3IW"/>
                 <outlet property="usernameHighlightLine" destination="jJA-B7-1oY" id="GRK-8I-hMQ"/>
@@ -46,7 +47,7 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Rz-Nu-3qb">
-                    <rect key="frame" x="209" y="439" width="182" height="32"/>
+                    <rect key="frame" x="209" y="414" width="182" height="32"/>
                     <subviews>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RM0-9A-k0i">
                             <rect key="frame" x="114" y="5" width="68" height="22"/>
@@ -149,7 +150,7 @@
                 <constraint firstItem="lTK-cu-Nxz" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="48" id="N1B-kC-16F"/>
                 <constraint firstAttribute="trailing" secondItem="LnW-sm-hp7" secondAttribute="trailing" constant="48" id="Ocv-Oe-Q4T"/>
                 <constraint firstItem="jJA-B7-1oY" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="48" id="RGk-Tn-AbY"/>
-                <constraint firstItem="2Rz-Nu-3qb" firstAttribute="top" secondItem="lTK-cu-Nxz" secondAttribute="bottom" constant="125" id="UZO-c3-waH"/>
+                <constraint firstItem="2Rz-Nu-3qb" firstAttribute="top" secondItem="lTK-cu-Nxz" secondAttribute="bottom" constant="100" id="UZO-c3-waH"/>
                 <constraint firstItem="LnW-sm-hp7" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="V2y-Rr-TY8"/>
                 <constraint firstAttribute="trailing" secondItem="PS9-zF-0wc" secondAttribute="trailing" constant="50" id="X7W-cx-CqF"/>
                 <constraint firstItem="LnW-sm-hp7" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="48" id="b8i-ur-YR2"/>

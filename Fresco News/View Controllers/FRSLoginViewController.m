@@ -13,6 +13,7 @@
 @interface FRSLoginViewController () <UITextFieldDelegate>
 
 @property (nonatomic) BOOL didAnimate;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *socialTopConstraint;
 
 @end
 
@@ -77,6 +78,14 @@
     
     [self.view addGestureRecognizer:tap];
     
+    
+    if (IS_IPHONE_5) {
+        self.socialTopConstraint.constant = 104;
+    } else if (IS_IPHONE_6) {
+        self.socialTopConstraint.constant = 120.8;
+    } else if (IS_IPHONE_6_PLUS) {
+        self.socialTopConstraint.constant = 128;
+    }
 }
 
 
@@ -163,18 +172,41 @@
     [self highlightTextField:textField enabled:YES];
     
     if (self.passwordField.editing) {
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.passwordHelpButton.alpha = 1;
         } completion:nil];
     }
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        if (IS_IPHONE_5) {
+            self.view.transform = CGAffineTransformMakeTranslation(0, -116);
+        } else if (IS_IPHONE_6) {
+            
+        } else if (IS_IPHONE_6_PLUS) {
+            
+        }
+
+    } completion:nil];
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
-    if (textField == self.passwordField) {
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.passwordHelpButton.alpha = 1;
-        } completion:nil];
-    }
+    
+    [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.passwordHelpButton.alpha = 0;
+    } completion:nil];
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        if (IS_IPHONE_5) {
+            self.view.transform = CGAffineTransformMakeTranslation(0, 0);
+        } else if (IS_IPHONE_6) {
+            
+        } else if (IS_IPHONE_6_PLUS) {
+            
+        }
+        
+    } completion:nil];
 }
 
 
@@ -234,7 +266,7 @@
             self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
         } completion:nil];
         
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.passwordHelpButton.alpha = 0;
         } completion:nil];
         return;
@@ -242,9 +274,9 @@
     
     if (textField.editing == self.userField.editing) {
         
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.usernameHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
-            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1.5);
         } completion:nil];
         
         [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -254,9 +286,9 @@
         
     } else if (textField.editing == self.passwordField.editing) {
         
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.passwordHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
-            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
+            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 1.5);
         } completion:nil];
         
         [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
