@@ -11,18 +11,17 @@
 #import "FRSAPIClient.h"
 
 @interface FRSLoginViewController () <UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UIView *usernameHighlightLine;
-@property (weak, nonatomic) IBOutlet UIView *passwordHighlightLine;
-
-@property(nonatomic, copy) NSArray *viewControllers;
-
-@property (weak, nonatomic) IBOutlet UIButton *backArrowButton;
 
 @property (nonatomic) BOOL didAnimate;
 
 @end
 
 @implementation FRSLoginViewController
+
+
+
+
+#pragma mark - View Controller Life Cycle
 
 -(instancetype)init {
     self = [super initWithNibName:@"FRSLoginViewController" bundle:[NSBundle mainBundle]];
@@ -33,6 +32,7 @@
     
     return self;
 }
+
 
 -(void)viewDidLoad {
     [super viewDidLoad];
@@ -81,27 +81,6 @@
     [self.view addGestureRecognizer:tap];
 }
 
--(void)dismissKeyboard {
-    [self.userField endEditing:YES];
-    [self.passwordField endEditing:YES];
-    [self.userField resignFirstResponder];
-    [self.passwordField resignFirstResponder];
-    
-    [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
-        self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
-        self.passwordHighlightLine.backgroundColor = [UIColor frescoShadowColor];
-        self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
-        
-    } completion:nil];
-}
-
-- (IBAction)returnToPreviousViewController:(id)sender {
-    
- [self.navigationController popViewControllerAnimated:YES];
-
-}
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -112,42 +91,46 @@
     }
 }
 
+
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
 
--(IBAction)login:(id)sender {
 
+
+
+#pragma mark - Actions
+
+-(IBAction)login:(id)sender {
+    //Animate transition
 }
 
--(IBAction)twitter:(id)sender {
 
+-(IBAction)twitter:(id)sender {
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error) {
         //
     }];
 }
 
+
 -(IBAction)facebook:(id)sender {
-    
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error) {
         //
     } parent:self];
 }
 
+
 -(IBAction)next:(id)sender {
     [self.passwordField becomeFirstResponder];
 }
 
--(void)back {
 
+-(void)back {
     [self animateOut];
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.navigationController popToRootViewControllerAnimated:NO];
-        
-        //TODO
-        //Make delegate
         [[NSNotificationCenter defaultCenter]
          postNotificationName:@"returnToOnboard"
          object:self];
@@ -155,84 +138,45 @@
 }
 
 
+
+
 #pragma mark - UITextFieldDelegate
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (self.userField.editing) {
-    if(range.length + range.location > textField.text.length) {
-        return NO;
-    }
-    
-    NSUInteger newLength = [textField.text length] + [string length] - range.length;
-    return newLength <= 40;
+        if(range.length + range.location > textField.text.length) {
+            return NO;
+        }
+        
+        NSUInteger newLength = [textField.text length] + [string length] - range.length;
+        return newLength <= 40;
     }
     
     return YES;
 }
 
 
-
 -(void)textFieldDidBeginEditing:(UITextField *)textField {
     
-    [self highlightTextField];
-}
-
-
--(void)highlightTextField {
-    
-    if (self.userField.editing) {
-        
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            
-            self.usernameHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
-            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
-            
-        } completion:nil];
-        
-        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            
-            self.passwordHighlightLine.backgroundColor = [UIColor frescoShadowColor];
-            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
-            
-        } completion:nil];
-    }
-    
-    
-    if (self.passwordField.editing) {
-        
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            
-            self.passwordHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
-            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
-            
-        } completion:nil];
-        
-        [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            
-            self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
-            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
-            
-        } completion:nil];
-    }
+    [self highlightTextField:textField enabled:YES];
 }
 
 
 -(void)textFieldDidChange:(UITextField *)textField {
     
-    if (self.userField.text && self.userField.text.length > 0) {
-        if (self.passwordField.text && self.passwordField.text.length >= 8) {
-            
+    if ((self.userField.text && self.userField.text.length > 0) && (self.passwordField.text && self.passwordField.text.length >= 8)) {
+        
             if ([self validEmail:self.userField.text] || [self isValidUsername:self.userField.text]) {
                 
                 self.loginButton.enabled = YES;
                 
-                /* Fade title color */
                 [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
                     [self.loginButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
                 } completion:nil];
                 
             } else {
+                
                 [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
                     [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
                 } completion:nil];
@@ -242,11 +186,9 @@
             
                 self.loginButton.enabled = NO;
                 
-                /* Fade title color */
                 [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
                     [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
                 } completion:nil];
-        }
     }
     
     if ([self.userField.text isEqualToString:@""]) {
@@ -257,9 +199,60 @@
 }
 
 
-- (BOOL) validEmail:(NSString*) emailString {
+-(void)highlightTextField:(UITextField *)textField enabled:(BOOL)enabled {
     
-    if([emailString length]==0){
+    if (!enabled) {
+        [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+            self.passwordHighlightLine.backgroundColor = [UIColor frescoShadowColor];
+            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+        } completion:nil];
+        return;
+    }
+    
+    if (textField.editing == self.userField.editing) {
+        
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
+        } completion:nil];
+        
+        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.passwordHighlightLine.backgroundColor = [UIColor frescoShadowColor];
+            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+        } completion:nil];
+        
+    } else if (textField.editing == self.passwordField.editing) {
+        
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.passwordHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
+            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
+        } completion:nil];
+        
+        [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+        } completion:nil];
+    }
+}
+
+
+-(void)dismissKeyboard {
+    [self.userField resignFirstResponder];
+    [self.passwordField resignFirstResponder];
+    
+    [self highlightTextField:nil enabled:NO];
+}
+
+
+
+
+#pragma mark - Textfield Validation
+
+-(BOOL)validEmail:(NSString *)emailString {
+    
+    if([emailString length] == 0) {
         return NO;
     }
     
@@ -268,7 +261,6 @@
     NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
     NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
     
-    NSLog(@"%i", regExMatches);
     if (regExMatches == 0) {
         return NO;
     } else {
@@ -276,19 +268,16 @@
     }
 }
 
-
 -(BOOL)isValidUsername:(NSString *)username {
     NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
     NSCharacterSet *disallowedSet = [allowedSet invertedSet];
-    NSRange rangeOfFound = [username rangeOfCharacterFromSet:disallowedSet];
-    
     return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
 }
 
 
 
 
-#pragma mark - Transition Animations
+#pragma mark - Animation
 
 -(void)prepareForAnimation {
  
@@ -319,7 +308,6 @@
     
     self.twitterButton.transform = CGAffineTransformMakeTranslation(20, 0);
     self.twitterButton.alpha = 0;
-    
 }
 
 -(void)animateIn {
@@ -384,6 +372,7 @@
         } completion:nil];
     }];
     
+    /* Transform and fade social line */
     
     [UIView animateWithDuration:0.7 delay:0.3 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.socialLabel.transform = CGAffineTransformMakeTranslation(0, 0);
@@ -489,6 +478,7 @@
         self.loginButton.alpha = 0;
     } completion:nil];
     
+    /* Transform and fade social line */
     [UIView animateWithDuration:1.0 delay:0.5 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.facebookButton.transform = CGAffineTransformMakeTranslation(100, 0);
     } completion:nil];
@@ -518,4 +508,9 @@
 
 
 
+
+
+
+
 @end
+
