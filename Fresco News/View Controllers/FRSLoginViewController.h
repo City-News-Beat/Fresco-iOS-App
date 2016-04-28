@@ -25,6 +25,7 @@
 @property (nonatomic, retain) IBOutlet UIButton *twitterButton;
 @property (nonatomic, retain) IBOutlet UIButton *facebookButton;
 @property (nonatomic, retain) IBOutlet UILabel *socialLabel;
+@property (weak, nonatomic) IBOutlet UIButton *passwordHelpButton;
 
 -(IBAction)login:(id)sender;
 -(IBAction)twitter:(id)sender;

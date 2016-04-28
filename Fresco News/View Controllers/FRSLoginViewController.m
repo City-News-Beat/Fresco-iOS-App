@@ -19,8 +19,6 @@
 @implementation FRSLoginViewController
 
 
-
-
 #pragma mark - View Controller Life Cycle
 
 -(instancetype)init {
@@ -56,7 +54,6 @@
     self.passwordField.tintColor = [UIColor frescoOrangeColor];
     
     [self.userField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    
     [self.passwordField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 
     self.loginButton.enabled = NO;
@@ -79,6 +76,7 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
+    
 }
 
 
@@ -128,7 +126,8 @@
 
 -(void)back {
     [self animateOut];
-
+    [self dismissKeyboard];
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.navigationController popToRootViewControllerAnimated:NO];
         [[NSNotificationCenter defaultCenter]
@@ -137,6 +136,8 @@
     });
 }
 
+- (IBAction)passwordHelp:(id)sender {
+}
 
 
 
@@ -160,6 +161,20 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField {
     
     [self highlightTextField:textField enabled:YES];
+    
+    if (self.passwordField.editing) {
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.passwordHelpButton.alpha = 1;
+        } completion:nil];
+    }
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField {
+    if (textField == self.passwordField) {
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.passwordHelpButton.alpha = 1;
+        } completion:nil];
+    }
 }
 
 
@@ -196,6 +211,16 @@
             [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         } completion:nil];
     }
+    
+    if (self.passwordField.editing && ![self.passwordField.text isEqualToString:@""]) { //check whitespace?
+        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.passwordHelpButton.alpha = 1;
+        } completion:nil];
+    } else {
+        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.passwordHelpButton.alpha = 0;
+        } completion:nil];
+    }
 }
 
 
@@ -207,6 +232,10 @@
             self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
             self.passwordHighlightLine.backgroundColor = [UIColor frescoShadowColor];
             self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+        } completion:nil];
+        
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.passwordHelpButton.alpha = 0;
         } completion:nil];
         return;
     }
@@ -235,6 +264,7 @@
             self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
         } completion:nil];
     }
+
 }
 
 
@@ -242,7 +272,9 @@
     [self.userField resignFirstResponder];
     [self.passwordField resignFirstResponder];
     
+    
     [self highlightTextField:nil enabled:NO];
+    
 }
 
 
@@ -308,6 +340,8 @@
     
     self.twitterButton.transform = CGAffineTransformMakeTranslation(20, 0);
     self.twitterButton.alpha = 0;
+    
+    self.passwordHelpButton.alpha = 0;
 }
 
 -(void)animateIn {
@@ -439,17 +473,21 @@
         self.usernameHighlightLine.alpha = 0;
     } completion:nil];
     
-    /* Transform passwordField */
+    /* Transform passwordField and helpButton */
     [UIView animateWithDuration:0.3 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.passwordField.transform = CGAffineTransformMakeTranslation(-5, 0);
+        self.passwordHelpButton.transform = CGAffineTransformMakeTranslation(-5, 0);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.7 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.passwordField.transform = CGAffineTransformMakeTranslation(100, 0);
+            self.passwordHelpButton.transform = CGAffineTransformMakeTranslation(100, 0);
+
         } completion:nil];
     }];
     
     [UIView animateWithDuration:0.4 delay:0.5 options: UIViewAnimationOptionCurveEaseOut animations:^{
         self.passwordField.alpha = 0;
+        self.passwordHelpButton.alpha = 0;
     } completion:nil];
     
     /* Transform passwordHighlightLine */
@@ -502,6 +540,7 @@
     [UIView animateWithDuration:0.5 delay:0.6 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.socialLabel.alpha = 0;
     } completion:nil];
+
 }
 
 
