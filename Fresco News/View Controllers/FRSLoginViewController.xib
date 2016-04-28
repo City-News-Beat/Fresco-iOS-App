@@ -17,8 +17,10 @@
                 <outlet property="loginButton" destination="SBV-cU-aii" id="oOe-D2-4hd"/>
                 <outlet property="logoView" destination="h1c-69-np5" id="vpG-Jh-brU"/>
                 <outlet property="passwordField" destination="lTK-cu-Nxz" id="ALz-SH-lD9"/>
+                <outlet property="passwordHelpButton" destination="PS9-zF-0wc" id="FjR-X4-L18"/>
                 <outlet property="passwordHighlightLine" destination="LnW-sm-hp7" id="sSg-sa-xxI"/>
                 <outlet property="socialLabel" destination="7Aw-rc-Zq2" id="Pgd-Vo-DUE"/>
+                <outlet property="socialTopConstraint" destination="UZO-c3-waH" id="5Rx-JL-28w"/>
                 <outlet property="twitterButton" destination="y9q-Ly-sJx" id="xbp-F0-KTo"/>
                 <outlet property="userField" destination="eP9-i7-SxN" id="iMm-09-3IW"/>
                 <outlet property="usernameHighlightLine" destination="jJA-B7-1oY" id="GRK-8I-hMQ"/>
@@ -31,10 +33,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SBV-cU-aii">
-                    <rect key="frame" x="507" y="298" width="46" height="30"/>
+                    <rect key="frame" x="478" y="326" width="75" height="44"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="30" id="Sgi-bM-GeU"/>
-                        <constraint firstAttribute="width" constant="46" id="ver-iB-4PT"/>
+                        <constraint firstAttribute="height" constant="44" id="Sgi-bM-GeU"/>
+                        <constraint firstAttribute="width" constant="75" id="ver-iB-4PT"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                     <state key="normal" title="LOG IN">
@@ -45,7 +47,7 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Rz-Nu-3qb">
-                    <rect key="frame" x="209" y="411" width="182" height="32"/>
+                    <rect key="frame" x="209" y="414" width="182" height="32"/>
                     <subviews>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RM0-9A-k0i">
                             <rect key="frame" x="114" y="5" width="68" height="22"/>
@@ -81,9 +83,9 @@
                     </constraints>
                 </view>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email or @username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eP9-i7-SxN">
-                    <rect key="frame" x="48" y="218" width="504" height="30"/>
+                    <rect key="frame" x="48" y="218" width="504" height="44"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="30" id="zO2-MR-g0T"/>
+                        <constraint firstAttribute="height" constant="44" id="zO2-MR-g0T"/>
                     </constraints>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87000000476837158" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
@@ -93,9 +95,9 @@
                     </connections>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lTK-cu-Nxz">
-                    <rect key="frame" x="48" y="256" width="504" height="30"/>
+                    <rect key="frame" x="48" y="270" width="504" height="44"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="30" id="3io-1p-I6z"/>
+                        <constraint firstAttribute="height" constant="44" id="3io-1p-I6z"/>
                     </constraints>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87000000479999995" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
@@ -105,14 +107,14 @@
                     </connections>
                 </textField>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jJA-B7-1oY">
-                    <rect key="frame" x="48" y="248" width="504" height="0.5"/>
+                    <rect key="frame" x="48" y="262" width="504" height="0.5"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.11999999731779099" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="JxW-cE-ktd"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LnW-sm-hp7">
-                    <rect key="frame" x="48" y="286" width="504" height="0.5"/>
+                    <rect key="frame" x="48" y="314" width="504" height="0.5"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.11999999731779099" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="zJW-RF-dhz"/>
@@ -125,18 +127,32 @@
                         <constraint firstAttribute="height" constant="65" id="m9k-Co-Boq"/>
                     </constraints>
                 </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PS9-zF-0wc">
+                    <rect key="frame" x="526" y="280" width="24" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="24" id="B4R-MO-uBL"/>
+                        <constraint firstAttribute="width" constant="24" id="WEY-YN-2B4"/>
+                    </constraints>
+                    <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" image="help-circle"/>
+                    <connections>
+                        <action selector="passwordHelp:" destination="-1" eventType="touchUpInside" id="cSQ-Iv-Kim"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="2Rz-Nu-3qb" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="1yy-e2-FzW"/>
                 <constraint firstItem="SBV-cU-aii" firstAttribute="top" secondItem="lTK-cu-Nxz" secondAttribute="bottom" constant="12" id="Ca0-dl-P0o"/>
                 <constraint firstItem="h1c-69-np5" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="36" id="JpS-KP-7lS"/>
+                <constraint firstItem="LnW-sm-hp7" firstAttribute="top" secondItem="PS9-zF-0wc" secondAttribute="bottom" constant="10" id="Krl-J2-kGx"/>
                 <constraint firstItem="eP9-i7-SxN" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="LIE-FF-feb"/>
                 <constraint firstItem="lTK-cu-Nxz" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="48" id="N1B-kC-16F"/>
                 <constraint firstAttribute="trailing" secondItem="LnW-sm-hp7" secondAttribute="trailing" constant="48" id="Ocv-Oe-Q4T"/>
                 <constraint firstItem="jJA-B7-1oY" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="48" id="RGk-Tn-AbY"/>
-                <constraint firstItem="2Rz-Nu-3qb" firstAttribute="top" secondItem="lTK-cu-Nxz" secondAttribute="bottom" constant="125" id="UZO-c3-waH"/>
+                <constraint firstItem="2Rz-Nu-3qb" firstAttribute="top" secondItem="lTK-cu-Nxz" secondAttribute="bottom" constant="100" id="UZO-c3-waH"/>
                 <constraint firstItem="LnW-sm-hp7" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="V2y-Rr-TY8"/>
+                <constraint firstAttribute="trailing" secondItem="PS9-zF-0wc" secondAttribute="trailing" constant="50" id="X7W-cx-CqF"/>
                 <constraint firstItem="LnW-sm-hp7" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="48" id="b8i-ur-YR2"/>
                 <constraint firstAttribute="trailing" secondItem="eP9-i7-SxN" secondAttribute="trailing" constant="48" id="cid-QO-RzV"/>
                 <constraint firstItem="h1c-69-np5" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="dlF-xy-93x"/>
@@ -154,6 +170,7 @@
     </objects>
     <resources>
         <image name="facebook-b" width="20" height="20"/>
+        <image name="help-circle" width="24" height="24"/>
         <image name="largeLogo" width="204" height="71"/>
         <image name="twitter-b" width="20" height="20"/>
     </resources>

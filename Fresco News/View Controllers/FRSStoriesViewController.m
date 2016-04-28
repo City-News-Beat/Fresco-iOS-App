@@ -386,6 +386,7 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:cellIndex.row]];
+    detailView.navigationController = self.navigationController;
     [detailView scrollToGalleryIndex:imageIndex];
     [self.navigationController pushViewController:detailView animated:YES];
 }
@@ -399,6 +400,7 @@
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
+    detailView.navigationController = self.navigationController;
     [self.navigationController pushViewController:detailView animated:YES];
 }
 
