@@ -24,7 +24,7 @@
 @synthesize stories = _stories, story = _story, navigationController;
 static NSString *galleryCell = @"GalleryCellReuse";
 
-- (void)viewDidLoad {
+-(void)viewDidLoad {
     [super viewDidLoad];
 
     [self setupTableView];
@@ -74,6 +74,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
     
     [self.navigationItem setTitleView:label];
 
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+
 }
 
 -(void)dismissDetail {
@@ -103,7 +105,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
     }
     
-    
     cell.delegate = self;
 
     return cell;
@@ -112,14 +113,10 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)readMore:(NSIndexPath *)indexPath {
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.stories objectAtIndex:indexPath.row]];
+    
     vc.shouldHaveBackButton = YES;
-    
-    
     self.navigationItem.title = @"";
-    
     [self.navigationController pushViewController:vc animated:YES];
-    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
 }
 
@@ -235,6 +232,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     
     if (!filteredArray.count) return;
     // push gallery detail view
+    
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
