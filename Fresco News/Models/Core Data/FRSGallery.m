@@ -60,7 +60,7 @@
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
-    FRSGallery *gallery = [FRSGallery MR_createEntityInContext:context];
+    FRSGallery *gallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:context];
     gallery.currentContext = context;
     [gallery configureWithDictionary:properties];
     return gallery;
@@ -75,7 +75,6 @@
 
 -(void)addPostsWithArray:(NSArray *)posts{
     for (NSDictionary *dict in posts){
-        
         if (save) {
             FRSPost *post = [NSEntityDescription insertNewObjectForEntityForName:@"FRSPost" inManagedObjectContext:self.currentContext];
             [post configureWithDictionary:dict context:_currentContext];

@@ -23,7 +23,7 @@
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
-    FRSAssignment *assignment = [FRSAssignment MR_createEntityInContext:context];
+    FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:context];
     [assignment configureWithDictionary:properties];
     return assignment;
 }

@@ -68,7 +68,7 @@
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
-    FRSStory *story = [FRSStory MR_createEntityInContext:context];
+    FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:context];
     [story configureWithDictionary:properties];
     return story;
 }

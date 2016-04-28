@@ -35,7 +35,7 @@
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
-    FRSArticle *article = [FRSArticle MR_createEntityInContext:context];
+    FRSArticle *article = [NSEntityDescription insertNewObjectForEntityForName:@"FRSArticle" inManagedObjectContext:context];
     [article configureWithDictionary:properties];
     return article;
 }
