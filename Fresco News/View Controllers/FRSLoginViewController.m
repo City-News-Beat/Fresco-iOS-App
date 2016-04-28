@@ -153,6 +153,9 @@
 
 -(IBAction)passwordHelp:(id)sender {
     
+    [self highlightTextField:nil enabled:NO];
+//    [self highlightTextField:self.userField enabled:NO];
+    
     [self.passwordField resignFirstResponder];
     [self.userField resignFirstResponder];
     
@@ -199,7 +202,6 @@
     
     if (!self.didTransform) {
         
-        [self highlightTextField:nil enabled:NO];
         [self animateFramesForKeyboard:NO];
     }
 }
