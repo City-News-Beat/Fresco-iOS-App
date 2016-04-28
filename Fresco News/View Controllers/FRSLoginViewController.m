@@ -24,6 +24,16 @@
 
 @implementation FRSLoginViewController
 
+-(instancetype)init {
+    self = [super initWithNibName:@"FRSLoginViewController" bundle:[NSBundle mainBundle]];
+    
+    if (self) {
+        
+    }
+    
+    return self;
+}
+
 -(void)viewDidLoad {
     [super viewDidLoad];
     
@@ -63,17 +73,30 @@
     self.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: [UIColor frescoLightTextColor]}];
     
     self.userField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email or @username" attributes:@{NSForegroundColorAttributeName: [UIColor frescoLightTextColor]}];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tap];
 }
 
--(instancetype)init {
-    self = [super initWithNibName:@"FRSLoginViewController" bundle:[NSBundle mainBundle]];
+-(void)dismissKeyboard {
+    [self.userField endEditing:YES];
+    [self.passwordField endEditing:YES];
+    [self.userField resignFirstResponder];
+    [self.passwordField resignFirstResponder];
     
-    if (self) {
+    [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
-    }
-    
-    return self;
+        self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
+        self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+        self.passwordHighlightLine.backgroundColor = [UIColor frescoShadowColor];
+        self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+        
+    } completion:nil];
 }
+
 - (IBAction)returnToPreviousViewController:(id)sender {
     
  [self.navigationController popViewControllerAnimated:YES];
@@ -101,8 +124,8 @@
 -(IBAction)twitter:(id)sender {
 
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error) {
+        //
     }];
-    
 }
 
 -(IBAction)facebook:(id)sender {
@@ -152,8 +175,14 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField {
     
-    if (self.userField.editing) {
+    [self highlightTextField];
+}
 
+
+-(void)highlightTextField {
+    
+    if (self.userField.editing) {
+        
         [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             
             self.usernameHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
@@ -171,7 +200,7 @@
     
     
     if (self.passwordField.editing) {
-
+        
         [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             
             self.passwordHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
