@@ -477,7 +477,11 @@
     
         self.notificationsEnabled = YES;
         self.scrollView.scrollEnabled = YES;
-        
+        [self.promoTF resignFirstResponder];
+        [self.usernameTF resignFirstResponder];
+        [self.passwordTF resignFirstResponder];
+        [self.usernameTF resignFirstResponder];
+
         if (IS_IPHONE_5) {
             [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height -44) animated:YES];
         } else {
