@@ -41,6 +41,8 @@
 
 @property (strong, nonatomic) UITapGestureRecognizer *dismissGR;
 
+@property (strong, nonatomic) UIView *usernameHighlightLine;
+
 @property (nonatomic) NSInteger y;
 
 @end
@@ -52,7 +54,6 @@
     [self configureUI];
     
     [self addNotifications];
-    
     
     if (IS_IPHONE_6) {
         self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.view.frame.size.height + self.promoTF.frame.size.height + self.promoDescription.frame.size.height +24);
@@ -121,11 +122,18 @@
     self.usernameTF = [[UITextField alloc] initWithFrame:CGRectMake(48, 24, self.scrollView.frame.size.width - 2 * 48, 44)];
     self.usernameTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"@username" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont notaMediumWithSize:17]}];
     self.usernameTF.delegate = self;
+    self.usernameTF.autocorrectionType = UITextAutocorrectionTypeNo;
     self.usernameTF.textColor = [UIColor frescoDarkTextColor];
     self.usernameTF.font = [UIFont notaMediumWithSize:17];
+    self.usernameTF.tintColor = [UIColor frescoOrangeColor];
     [self.scrollView addSubview:self.usernameTF];
     
-    [self.usernameTF addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
+    self.usernameHighlightLine = [[UIView alloc] initWithFrame:CGRectMake(48, 92-64+44, self.usernameTF.frame.size.width, 0.5)];
+    self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
+    [self.scrollView addSubview:self.usernameHighlightLine];
+    
+    
+    //    [self.usernameTF addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
 }
 
 -(void)configureEmailAddressField{
@@ -140,7 +148,10 @@
     self.emailTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email address" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     self.emailTF.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.emailTF.delegate = self;
+    self.emailTF.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.emailTF.autocorrectionType = UITextAutocorrectionTypeNo;
     self.emailTF.textColor = [UIColor frescoDarkTextColor];
+    self.emailTF.tintColor = [UIColor frescoOrangeColor];
     self.emailTF.font = [UIFont systemFontOfSize:15];
     [backgroundView addSubview:self.emailTF];
     
@@ -156,7 +167,9 @@
     self.passwordTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     self.passwordTF.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.passwordTF.delegate = self;
+    self.passwordTF.autocorrectionType = UITextAutocorrectionTypeNo;
     self.passwordTF.textColor = [UIColor frescoDarkTextColor];
+    self.passwordTF.tintColor = [UIColor frescoOrangeColor];
     self.passwordTF.font = [UIFont systemFontOfSize:15];
     self.passwordTF.secureTextEntry = YES;
     [backgroundView addSubview:self.passwordTF];
@@ -266,10 +279,14 @@
     self.promoTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.scrollView.frame.size.width - 32, 44)];
     self.promoTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Promo" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     self.promoTF.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.promoTF.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.promoTF.tintColor = [UIColor frescoOrangeColor];
     self.promoTF.delegate = self;
+    self.promoTF.font = [UIFont systemFontOfSize:15];
     [backgroundView addSubview:self.promoTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
+    
     
     self.y += backgroundView.frame.size.height + 12;
     
@@ -345,12 +362,15 @@
 //        self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
 //    
 //    [self.view addGestureRecognizer:self.dismissGR];
-//    
-//    if (textField == self.usernameTF){
-//        if ([self.usernameTF.text isEqualToString:@""]){
-//            self.usernameTF.text = @"@";
-//        }
-//    }
+
+    if (textField == self.usernameTF){
+        [self highlightTextField:self.usernameTF enabled:YES];
+
+        
+        if ([self.usernameTF.text isEqualToString:@""]){
+            self.usernameTF.text = @"@";
+        }
+    }
     
     
     if (textField == self.promoTF) {
@@ -362,12 +382,15 @@
 -(void)textFieldDidEndEditing:(UITextField *)textField{
 //    [self.view removeGestureRecognizer:self.dismissGR];
 //    
-//    if (textField == self.usernameTF){
-//        if ([self.usernameTF.text isEqualToString:@"@"]){
-//            self.usernameTF.text = @"";
-//        }
-//    }
-//    
+    if (textField == self.usernameTF){
+        
+        [self highlightTextField:self.usernameTF enabled:NO];
+
+        if ([self.usernameTF.text isEqualToString:@"@"]){
+            self.usernameTF.text = @"";
+        }
+    }
+//
 //    UIControlState controlState;
 //    
 //    if ([FRSDataValidator isValidUserName:self.usernameTF.text] && [FRSDataValidator isValidEmail:self.emailTF.text] && [FRSDataValidator isValidPassword:self.passwordTF.text])
@@ -379,10 +402,19 @@
 }
 
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-    if (textField.text.length == 1 && [string isEqualToString:@""]) {//When detect backspace when have one character.
-        return NO;
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (textField == self.usernameTF) {
+        
+//        NSCharacterSet *set = [NSCharacterSet symbolCharacterSet];
+//        if ([string rangeOfCharacterFromSet:[set invertedSet]].location == NSNotFound) {
+//            NSLog(@"valid");
+//        } else {
+//            NSLog(@"invalid");
+//        }
+        
+        if (textField.text.length == 1 && [string isEqualToString:@""]) {//When detect backspace when have one character.
+            return NO;
+        }
     }
     return YES;
 }
@@ -455,9 +487,23 @@
 }
 
 
+-(void)highlightTextField:(UITextField *)textField enabled:(BOOL)enabled {
+    
+    if (!enabled) {
+        [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
+        } completion:nil];
 
-
-
+        return;
+        
+    } else {
+        [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 2);
+        } completion:nil];
+    }
+}
 
 
 

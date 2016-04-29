@@ -286,7 +286,7 @@
         
         [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.usernameHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
-            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1.5);
         } completion:nil];
         
         [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -298,12 +298,12 @@
         
         [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.passwordHighlightLine.backgroundColor = [UIColor frescoOrangeColor];
-            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
+            self.passwordHighlightLine.transform = CGAffineTransformMakeScale(1, 1.5);
         } completion:nil];
         
         [UIView animateWithDuration:.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
-            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 0.5);
+            self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
         } completion:nil];
     }
 }
