@@ -495,7 +495,10 @@
         
         [self.scrollView setContentOffset:CGPointMake(0, -self.scrollView.contentInset.top) animated:YES];
         
-        self.notificationsEnabled = NO;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.notificationsEnabled = NO;
+        });
+        
         self.scrollView.scrollEnabled = NO;
         
         [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -503,15 +506,15 @@
             self.mapView.alpha = 0;
         } completion:nil];
         
-        [UIView animateWithDuration:0.3 delay:0.3 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.promoContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
             self.promoDescription.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
         } completion:nil];
         
-        [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
         } completion:nil];
-        [UIView animateWithDuration:0.15 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.sliderContainer.alpha = 0;
         } completion:nil];
     }
@@ -548,10 +551,16 @@
     
     CGPoint point = self.scrollView.contentOffset;
 
-
-    if (self.promoTF.isFirstResponder){
+    [UIView animateWithDuration:0.15 animations:^{
+        [self.scrollView setContentOffset:point animated:NO];
+    }];
+    
+    if (self.promoTF.isFirstResponder) {
         if (self.notificationsEnabled) {
+            
             self.scrollView.frame = CGRectMake(0, -keyboardSize.height, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+
+            [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height) animated:YES];
             
         } else {
             if (IS_IPHONE_6) {
@@ -559,17 +568,9 @@
             } else if (IS_IPHONE_6_PLUS) {
                 
             } else if (IS_IPHONE_5) {
-//                self.scrollView.frame = CGRectMake(0, -144, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+                self.scrollView.frame = CGRectMake(0, -144, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
             }
         }
-    }
-    
-    [UIView animateWithDuration:0.15 animations:^{
-        [self.scrollView setContentOffset:point animated:NO];
-    }];
-    
-    if (!self.notificationsEnabled) {
-        
     }
 }
 
@@ -622,10 +623,10 @@
     
     
 //    [self.view resignFirstResponder];
-    [self.usernameTF resignFirstResponder];
-    [self.emailTF resignFirstResponder];
-    [self.passwordTF resignFirstResponder];
-    [self.promoTF resignFirstResponder];
+//    [self.usernameTF resignFirstResponder];
+//    [self.emailTF resignFirstResponder];
+//    [self.passwordTF resignFirstResponder];
+//    [self.promoTF resignFirstResponder];
 }
 
 @end
