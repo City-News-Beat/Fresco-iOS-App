@@ -397,11 +397,19 @@
 }
 
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
-    return YES;
+-(BOOL)textFieldShouldReturn:(UITextField*)textField {
+    NSInteger nextTag = textField.tag + 1;
+    // Try to find next responder
+    UIResponder* nextResponder = [textField.superview viewWithTag:nextTag];
+    if (nextResponder) {
+        // Found next responder, so set it.
+        [nextResponder becomeFirstResponder];
+    } else {
+        // Not found, so remove keyboard.
+        [textField resignFirstResponder];
+    }
+    return NO; // We do not want UITextField to insert line-breaks.
 }
-
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
 
     if (textField == self.usernameTF){
@@ -462,7 +470,11 @@
         self.notificationsEnabled = YES;
         self.scrollView.scrollEnabled = YES;
         
-        [self.scrollView scrollRectToVisible:CGRectMake(self.scrollView.contentSize.width - 1, self.scrollView.contentSize.height - 1, 1, 1) animated:YES];
+        if (IS_IPHONE_5) {
+            [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height -44) animated:YES];
+        } else {
+            [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.heightg) animated:YES];
+        }
         
         [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.mapView.transform = CGAffineTransformMakeScale(1, 1);
@@ -540,13 +552,14 @@
     if (self.promoTF.isFirstResponder){
         if (self.notificationsEnabled) {
             self.scrollView.frame = CGRectMake(0, -keyboardSize.height, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+            
         } else {
             if (IS_IPHONE_6) {
                 self.scrollView.frame = CGRectMake(0, -36, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
             } else if (IS_IPHONE_6_PLUS) {
                 
             } else if (IS_IPHONE_5) {
-                
+//                self.scrollView.frame = CGRectMake(0, -144, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
             }
         }
     }
@@ -554,6 +567,10 @@
     [UIView animateWithDuration:0.15 animations:^{
         [self.scrollView setContentOffset:point animated:NO];
     }];
+    
+    if (!self.notificationsEnabled) {
+        
+    }
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
