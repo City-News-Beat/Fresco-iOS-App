@@ -36,12 +36,16 @@
 
 @property (strong, nonatomic) UIButton *createAccountButton;
 
-
 @property (strong, nonatomic) UILabel *promoDescription;
 
 @property (strong, nonatomic) UITapGestureRecognizer *dismissGR;
 
 @property (strong, nonatomic) UIView *usernameHighlightLine;
+
+@property (strong, nonatomic) UIImageView *usernameCheckIV;
+
+@property (strong, nonatomic) UIView *sliderContainer;
+@property (strong, nonatomic) UIView *promoContainer;
 
 @property (nonatomic) NSInteger y;
 
@@ -54,14 +58,6 @@
     [self configureUI];
     
     [self addNotifications];
-    
-    if (IS_IPHONE_6) {
-        self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.view.frame.size.height + self.promoTF.frame.size.height + self.promoDescription.frame.size.height +24);
-    } else if (IS_IPHONE_6_PLUS) {
-        self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.view.frame.size.height + self.promoTF.frame.size.height + self.promoDescription.frame.size.height -12);
-    } else if (IS_IPHONE_5) {
-        self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.view.frame.size.height + self.promoTF.frame.size.height + self.promoDescription.frame.size.height +84);
-    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -110,15 +106,29 @@
     
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.scrollView];
+    
+    if (IS_IPHONE_6) {
+        self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.view.frame.size.height + self.promoTF.frame.size.height + self.promoDescription.frame.size.height +24);
+    } else if (IS_IPHONE_6_PLUS) {
+        self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.view.frame.size.height + self.promoTF.frame.size.height + self.promoDescription.frame.size.height -12);
+    } else if (IS_IPHONE_5) {
+        self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.view.frame.size.height + self.promoTF.frame.size.height + self.promoDescription.frame.size.height +84);
+    }
 }
 
 -(void)configureTextFields{
     [self configureUserNameField];
     [self configureEmailAddressField];
     [self configurePasswordField];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tap];
 }
 
--(void)configureUserNameField{
+-(void)configureUserNameField {
     self.usernameTF = [[UITextField alloc] initWithFrame:CGRectMake(48, 24, self.scrollView.frame.size.width - 2 * 48, 44)];
     self.usernameTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"@username" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont notaMediumWithSize:17]}];
     self.usernameTF.delegate = self;
@@ -133,7 +143,12 @@
     [self.scrollView addSubview:self.usernameHighlightLine];
     
     
-    //    [self.usernameTF addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
+    self.usernameCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-green"]];
+    self.usernameCheckIV.frame = CGRectMake(self.usernameTF.frame.size.width - 24, 10, 24, 24);
+    self.usernameCheckIV.alpha = 0;
+    [self.usernameTF addSubview:self.usernameCheckIV];
+    
+    
 }
 
 -(void)configureEmailAddressField{
@@ -248,33 +263,36 @@
 
 -(void)configureSliderSection{
     
-    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, 56)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [self.scrollView addSubview:backgroundView];
+    self.sliderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, 56)];
+    self.sliderContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self.scrollView addSubview:self.sliderContainer];
+    
+    [self.sliderContainer addSubview:[UIView lineAtPoint:CGPointMake(0, 0)]];
+    [self.sliderContainer addSubview:[UIView lineAtPoint:CGPointMake(0, self.sliderContainer.frame.size.height)]];
     
     self.radiusSlider = [[UISlider alloc] initWithFrame:CGRectMake(52, 14, self.view.frame.size.width - 104, 28)];
     [self.radiusSlider setMinimumTrackTintColor:[UIColor frescoBlueColor]];
     [self.radiusSlider setMaximumTrackTintColor:[UIColor colorWithWhite:181/255.0 alpha:1.0]];
-    [backgroundView addSubview:self.radiusSlider];
+    [self.self.sliderContainer addSubview:self.radiusSlider];
 
     UIImageView *smallIV = [[UIImageView alloc] initWithFrame:CGRectMake(12, 16, 24, 24)];
     smallIV.image = [UIImage imageNamed:@"radius-small"];
-    [backgroundView addSubview:smallIV];
+    [self.self.sliderContainer addSubview:smallIV];
     
     UIImageView *bigIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width - 12 - 24, 16, 24, 24)];
     bigIV.image = [UIImage imageNamed:@"radius-large"];
-    [backgroundView addSubview:bigIV];
+    [self.sliderContainer addSubview:bigIV];
     
-    self.y += backgroundView.frame.size.height + 12;
+    self.y += self.sliderContainer.frame.size.height + 12;
 }
 
 -(void)configurePromoSection{
     
-    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [self.scrollView addSubview:backgroundView];
+    self.promoContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, 44)];
+    self.promoContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self.scrollView addSubview:self.promoContainer];
     
-    [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
+    [self.promoContainer addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
     self.promoTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.scrollView.frame.size.width - 32, 44)];
     self.promoTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Promo" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
@@ -283,12 +301,12 @@
     self.promoTF.tintColor = [UIColor frescoOrangeColor];
     self.promoTF.delegate = self;
     self.promoTF.font = [UIFont systemFontOfSize:15];
-    [backgroundView addSubview:self.promoTF];
+    [self.promoContainer addSubview:self.promoTF];
     
-    [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
+    [self.promoContainer addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
     
     
-    self.y += backgroundView.frame.size.height + 12;
+    self.y += self.promoContainer.frame.size.height + 12;
     
     self.promoDescription = [[UILabel alloc] initWithFrame:CGRectMake(16, self.y, self.scrollView.frame.size.width - 2 * 16, 28)];
     self.promoDescription.numberOfLines = 0;
@@ -351,6 +369,13 @@
 }
 
 #pragma TextField Delegate
+
+-(void)dismissKeyboard {
+    [self highlightTextField:nil enabled:NO];
+        
+    [self.view resignFirstResponder];
+}
+
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
@@ -425,10 +450,40 @@
 
 -(void)handleToggleSwitched:(UISwitch *)toggle{
     if (toggle.on){
+
+        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.mapView.transform = CGAffineTransformMakeScale(1, 1);
+            self.mapView.alpha = 1;
+        } completion:nil];
         
-    }
-    else {
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
+            self.promoDescription.transform = CGAffineTransformMakeTranslation(0, 0);
+        } completion:nil];
         
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 0);
+            self.sliderContainer.alpha = 1;
+        } completion:nil];
+        
+    } else {
+        
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.mapView.transform = CGAffineTransformMakeScale(0.93, 0.93);
+            self.mapView.alpha = 0;
+        } completion:nil];
+        
+        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
+            self.promoDescription.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
+        } completion:nil];
+        
+        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
+        } completion:nil];
+        [UIView animateWithDuration:0.15 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.sliderContainer.alpha = 0;
+        } completion:nil];
     }
 }
 
