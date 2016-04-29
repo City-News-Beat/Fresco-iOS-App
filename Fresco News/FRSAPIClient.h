@@ -39,6 +39,8 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion;
 
+//registration
+-(void)registerWithUsername:(NSString *)username password:(NSString *)password social:(NSDictionary *)social installation:(NSDictionary *)installation;
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
 
 -(BOOL)isAuthenticated;

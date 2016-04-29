@@ -99,13 +99,76 @@
     }];
 }
 
+/* 
+ Register:
+ 
+ email:              'str', // User's email
+ username:           'str', // User's username (no @ at beginning)
+ password:           'str', // User's plaintext password
+ phone_:             'str', // User's phone number (include country code)
+ twitter_handle_:    'str', // User's twitter handle
+ social_links_: { // Info for linking social media accounts
+    facebook_: {
+        token: 'str'
+    },
+    twitter_: {
+        token: 'str',
+        secret: 'str'
+    }
+ },
+ installation_: { // Used for push notifications + linking devices to users
+    app_version:        'str',
+    platform:           'str',
+    device_token:       'str',
+    timezone_:          'str', // TODO What type??
+    locale_identifier_: 'str' // EN-US
+ }
+ 
+ Update:
+ 
+ full_name_:         'str', // User's full name
+ bio_:               'str', // User's profile bio
+ avatar_:            'str', // User's avatar URL
+ */
+
+-(void)registerWithUsername:(NSString *)username password:(NSString *)password social:(NSDictionary *)social installation:(NSDictionary *)installation {
+    
+    // create registration request
+    
+    NSMutableDictionary *registrationInfo = [[NSMutableDictionary alloc] init];
+    [registrationInfo setObject:username forKey:@"username"];
+    
+    if (password) {
+        [registrationInfo setObject:password forKey:@"password"];
+    }
+    
+    if (social) {
+        [registrationInfo setObject:social forKey:@"social_links"];
+    }
+    
+    if (installation) {
+        [registrationInfo setObject:installation forKey:@"installation"];
+    }
+    else {
+        [registrationInfo setObject:[self currentInstallation] forKey:@"installation"];
+    }
+    
+    // start request
+}
+
+-(NSDictionary *)currentInstallation {
+    NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
+    
+    return currentInstallation;
+}
+
 -(void)handleUserLogin:(id)responseObject {
     NSLog(@"%@", responseObject);
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
-    
-    
+ 
+ 
 }
 
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
