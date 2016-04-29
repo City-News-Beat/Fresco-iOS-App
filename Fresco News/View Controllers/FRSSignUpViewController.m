@@ -145,6 +145,7 @@
     self.usernameTF.textColor = [UIColor frescoDarkTextColor];
     self.usernameTF.font = [UIFont notaMediumWithSize:17];
     self.usernameTF.tintColor = [UIColor frescoOrangeColor];
+    self.usernameTF.returnKeyType = UIReturnKeyNext;
     [self.scrollView addSubview:self.usernameTF];
     
     self.usernameHighlightLine = [[UIView alloc] initWithFrame:CGRectMake(48, 92-64+44, self.usernameTF.frame.size.width, 0.5)];
@@ -177,6 +178,8 @@
     self.emailTF.textColor = [UIColor frescoDarkTextColor];
     self.emailTF.tintColor = [UIColor frescoOrangeColor];
     self.emailTF.font = [UIFont systemFontOfSize:15];
+    self.emailTF.returnKeyType = UIReturnKeyNext;
+
     [backgroundView addSubview:self.emailTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -196,6 +199,8 @@
     self.passwordTF.tintColor = [UIColor frescoOrangeColor];
     self.passwordTF.font = [UIFont systemFontOfSize:15];
     self.passwordTF.secureTextEntry = YES;
+    self.passwordTF.returnKeyType = UIReturnKeyNext;
+
     [backgroundView addSubview:self.passwordTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -317,6 +322,7 @@
     self.promoTF.tintColor = [UIColor frescoOrangeColor];
     self.promoTF.delegate = self;
     self.promoTF.font = [UIFont systemFontOfSize:15];
+    self.promoTF.returnKeyType = UIReturnKeyGo;
     [self.promoContainer addSubview:self.promoTF];
     
     [self.promoContainer addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
