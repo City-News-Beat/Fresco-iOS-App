@@ -61,6 +61,8 @@
     
     
     [self addNotifications];
+    
+    self.notificationsEnabled = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -108,6 +110,7 @@
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height -44 -52 -12)];
     
     self.scrollView.delegate = self;
+    self.scrollView.scrollEnabled = NO;
     
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.scrollView];
@@ -222,10 +225,11 @@
     
     
     UISwitch *toggle = [[UISwitch alloc] initWithFrame:CGRectMake(backgroundView.frame.size.width - 51 - 12, 15.5, 51, 31)];
-    toggle.on = YES;
+    toggle.on = NO;
     toggle.onTintColor = [UIColor frescoGreenColor];
     [toggle addTarget:self action:@selector(handleToggleSwitched:) forControlEvents:UIControlEventValueChanged];
     [backgroundView addSubview:toggle];
+    
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
@@ -265,6 +269,9 @@
     [self.mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
     self.y += self.mapView.frame.size.height;
+    
+    self.mapView.transform = CGAffineTransformMakeScale(0.93, 0.93);
+    self.mapView.alpha = 0;
 }
 
 -(void)configureSliderSection{
@@ -290,6 +297,9 @@
     [self.sliderContainer addSubview:bigIV];
     
     self.y += self.sliderContainer.frame.size.height + 12;
+    
+    self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
+    self.sliderContainer.alpha = 0;
 }
 
 -(void)configurePromoSection{
@@ -323,6 +333,9 @@
     [self.scrollView addSubview:self.promoDescription];
     
     self.y += self.promoDescription.frame.size.height + 24;
+    
+    self.promoContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
+    self.promoDescription.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
 }
 
 -(void)adjustScrollViewContentSize{
@@ -391,7 +404,6 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
 
-
     if (textField == self.usernameTF){
         [self highlightTextField:self.usernameTF enabled:YES];
         if ([self.usernameTF.text isEqualToString:@""]){
@@ -446,8 +458,11 @@
 -(void)handleToggleSwitched:(UISwitch *)toggle{
     
     if (toggle.on){
+    
         self.notificationsEnabled = YES;
         self.scrollView.scrollEnabled = YES;
+        
+        [self.scrollView scrollRectToVisible:CGRectMake(self.scrollView.contentSize.width - 1, self.scrollView.contentSize.height - 1, 1, 1) animated:YES];
         
         [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.mapView.transform = CGAffineTransformMakeScale(1, 1);
@@ -466,6 +481,8 @@
         
     } else {
         
+        [self.scrollView setContentOffset:CGPointMake(0, -self.scrollView.contentInset.top) animated:YES];
+        
         self.notificationsEnabled = NO;
         self.scrollView.scrollEnabled = NO;
         
@@ -474,15 +491,15 @@
             self.mapView.alpha = 0;
         } completion:nil];
         
-        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0.3 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.promoContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
             self.promoDescription.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
         } completion:nil];
         
-        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
         } completion:nil];
-        [UIView animateWithDuration:0.15 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.15 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.sliderContainer.alpha = 0;
         } completion:nil];
     }
@@ -521,15 +538,20 @@
 
 
     if (self.promoTF.isFirstResponder){
-//        if (self.notificationsEnabled) {
-//            self.scrollView.frame = CGRectMake(0, -24, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
-//        } else {
-//            self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
-//        }
+        if (self.notificationsEnabled) {
+            self.scrollView.frame = CGRectMake(0, -keyboardSize.height, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+        } else {
+            if (IS_IPHONE_6) {
+                self.scrollView.frame = CGRectMake(0, -36, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+            } else if (IS_IPHONE_6_PLUS) {
+                
+            } else if (IS_IPHONE_5) {
+                
+            }
+        }
     }
     
     [UIView animateWithDuration:0.15 animations:^{
-//        self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, newScrollViewHeight);
         [self.scrollView setContentOffset:point animated:NO];
     }];
 }
