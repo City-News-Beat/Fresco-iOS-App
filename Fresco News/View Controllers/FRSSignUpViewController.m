@@ -534,16 +534,16 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
--(void)facebookTapped{
-    
-}
-
 -(void)twitterTapped{
-    
+    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error) {
+        //
+    }];
 }
 
--(void)googleTapped{
-    
+-(void)facebookTapped{
+    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error) {
+        //
+    } parent:self];
 }
 
 #pragma mark - Keyboard
