@@ -398,18 +398,20 @@
 
 
 -(BOOL)textFieldShouldReturn:(UITextField*)textField {
-    NSInteger nextTag = textField.tag + 1;
-    // Try to find next responder
-    UIResponder* nextResponder = [textField.superview viewWithTag:nextTag];
-    if (nextResponder) {
-        // Found next responder, so set it.
-        [nextResponder becomeFirstResponder];
-    } else {
-        // Not found, so remove keyboard.
-        [textField resignFirstResponder];
+
+    if (textField == self.usernameTF) {
+        [self.emailTF becomeFirstResponder];
+    } else if (textField == self.emailTF) {
+        [self.passwordTF becomeFirstResponder];
+    } else if (textField == self.passwordTF) {
+        [self.passwordTF resignFirstResponder];
     }
-    return NO; // We do not want UITextField to insert line-breaks.
+
+    
+    return NO;
 }
+
+
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
 
     if (textField == self.usernameTF){
