@@ -36,6 +36,9 @@
 
 @property (strong, nonatomic) UIButton *createAccountButton;
 
+
+@property (strong, nonatomic) UILabel *promoDescription;
+
 @property (strong, nonatomic) UITapGestureRecognizer *dismissGR;
 
 @property (nonatomic) NSInteger y;
@@ -50,7 +53,9 @@
     
     [self addNotifications];
     
-    // Do any additional setup after loading the view.
+
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.view.frame.size.height + self.promoTF.frame.size.height + self.promoDescription.frame.size.height +24);
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -263,15 +268,15 @@
     
     self.y += backgroundView.frame.size.height + 12;
     
-    UILabel *promoDescription = [[UILabel alloc] initWithFrame:CGRectMake(16, self.y, self.scrollView.frame.size.width - 2 * 16, 28)];
-    promoDescription.numberOfLines = 0;
-    promoDescription.text = @"If you use a friend’s promo code, you’ll get $20 when you respond to an assignment for the first time.";
-    promoDescription.font = [UIFont systemFontOfSize:12];
-    promoDescription.textColor = [UIColor frescoMediumTextColor];
-    [promoDescription sizeToFit];
-    [self.scrollView addSubview:promoDescription];
+    self.promoDescription = [[UILabel alloc] initWithFrame:CGRectMake(16, self.y, self.scrollView.frame.size.width - 2 * 16, 28)];
+    self.promoDescription.numberOfLines = 0;
+    self.promoDescription.text = @"If you use a friend’s promo code, you’ll get $20 when you respond to an assignment for the first time.";
+    self.promoDescription.font = [UIFont systemFontOfSize:12];
+    self.promoDescription.textColor = [UIColor frescoMediumTextColor];
+    [self.promoDescription sizeToFit];
+    [self.scrollView addSubview:self.promoDescription];
     
-    self.y += promoDescription.frame.size.height + 24;
+    self.y += self.promoDescription.frame.size.height + 24;
 }
 
 -(void)adjustScrollViewContentSize{
@@ -331,35 +336,41 @@
 }
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
-    if (!self.dismissGR)
-        self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+//    if (!self.dismissGR)
+//        self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+//    
+//    [self.view addGestureRecognizer:self.dismissGR];
+//    
+//    if (textField == self.usernameTF){
+//        if ([self.usernameTF.text isEqualToString:@""]){
+//            self.usernameTF.text = @"@";
+//        }
+//    }
     
-    [self.view addGestureRecognizer:self.dismissGR];
     
-    if (textField == self.usernameTF){
-        if ([self.usernameTF.text isEqualToString:@""]){
-            self.usernameTF.text = @"@";
-        }
+    if (textField == self.promoTF) {
+        
     }
+    
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
-    [self.view removeGestureRecognizer:self.dismissGR];
-    
-    if (textField == self.usernameTF){
-        if ([self.usernameTF.text isEqualToString:@"@"]){
-            self.usernameTF.text = @"";
-        }
-    }
-    
-    UIControlState controlState;
-    
-    if ([FRSDataValidator isValidUserName:self.usernameTF.text] && [FRSDataValidator isValidEmail:self.emailTF.text] && [FRSDataValidator isValidPassword:self.passwordTF.text])
-        controlState = UIControlStateHighlighted;
-    else
-        controlState = UIControlStateNormal;
-    
-    [self toggleCreateAccountButtonTitleColorToState:controlState];
+//    [self.view removeGestureRecognizer:self.dismissGR];
+//    
+//    if (textField == self.usernameTF){
+//        if ([self.usernameTF.text isEqualToString:@"@"]){
+//            self.usernameTF.text = @"";
+//        }
+//    }
+//    
+//    UIControlState controlState;
+//    
+//    if ([FRSDataValidator isValidUserName:self.usernameTF.text] && [FRSDataValidator isValidEmail:self.emailTF.text] && [FRSDataValidator isValidPassword:self.passwordTF.text])
+//        controlState = UIControlStateHighlighted;
+//    else
+//        controlState = UIControlStateNormal;
+//    
+//    [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
 
 
