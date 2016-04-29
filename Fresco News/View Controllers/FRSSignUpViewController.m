@@ -374,6 +374,7 @@
     [self highlightTextField:nil enabled:NO];
         
     [self.view resignFirstResponder];
+    [self.view endEditing:YES];
 }
 
 
@@ -383,10 +384,6 @@
 }
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
-//    if (!self.dismissGR)
-//        self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-//    
-//    [self.view addGestureRecognizer:self.dismissGR];
 
     if (textField == self.usernameTF){
         [self highlightTextField:self.usernameTF enabled:YES];
@@ -405,8 +402,7 @@
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
-//    [self.view removeGestureRecognizer:self.dismissGR];
-//    
+ 
     if (textField == self.usernameTF){
         
         [self highlightTextField:self.usernameTF enabled:NO];
@@ -506,34 +502,39 @@
 
 #pragma mark - Keyboard
 
--(void)handleKeyboardWillShow:(NSNotification *)sender{
+-(void)handleKeyboardWillShow:(NSNotification *)sender {
+    
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    
+    self.bottomBar.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
     
     NSInteger newScrollViewHeight = self.view.frame.size.height - keyboardSize.height;
     NSInteger yOffset = self.scrollView.contentSize.height - newScrollViewHeight;
     
     CGPoint point = self.scrollView.contentOffset;
+
+    
     if (self.promoTF.isFirstResponder){
-        point = CGPointMake(0, yOffset-12);
+        point = CGPointMake(0, yOffset-24);
     }
     
     [UIView animateWithDuration:0.15 animations:^{
         self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, newScrollViewHeight);
         [self.scrollView setContentOffset:point animated:NO];
     }];
-    
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
+    
+    CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    
+    self.bottomBar.transform = CGAffineTransformMakeTranslation(0, 0);
+    
     if (self.scrollView.frame.size.height < self.view.frame.size.height - 108){
         [UIView animateWithDuration:0.15 animations:^{
             self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, self.view.frame.size.height - 44);
         }];
     }
-}
-
--(void)dismissKeyboard{
-    [self.view endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning {
