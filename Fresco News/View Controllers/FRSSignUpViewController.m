@@ -20,7 +20,7 @@
 @import MapKit;
 
 
-@interface FRSSignUpViewController () <UITextFieldDelegate, MKMapViewDelegate>
+@interface FRSSignUpViewController () <UITextFieldDelegate, MKMapViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 
@@ -48,6 +48,8 @@
 @property (strong, nonatomic) UIView *promoContainer;
 
 @property (nonatomic) NSInteger y;
+
+@property (nonatomic) BOOL notificationsEnabled;
 
 @end
 
@@ -102,7 +104,9 @@
 -(void)configureScrollView{
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 44)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height -44 -52 -12)];
+    
+    self.scrollView.delegate = self;
     
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.scrollView];
@@ -114,6 +118,7 @@
     } else if (IS_IPHONE_5) {
         self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.view.frame.size.height + self.promoTF.frame.size.height + self.promoDescription.frame.size.height +84);
     }
+    
 }
 
 -(void)configureTextFields{
@@ -385,20 +390,13 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
 
+
     if (textField == self.usernameTF){
         [self highlightTextField:self.usernameTF enabled:YES];
-
-        
         if ([self.usernameTF.text isEqualToString:@""]){
             self.usernameTF.text = @"@";
         }
     }
-    
-    
-    if (textField == self.promoTF) {
-        
-    }
-    
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
@@ -445,8 +443,11 @@
 #pragma mark Action Logic 
 
 -(void)handleToggleSwitched:(UISwitch *)toggle{
+    
     if (toggle.on){
-
+        self.notificationsEnabled = YES;
+        self.scrollView.scrollEnabled = YES;
+        
         [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.mapView.transform = CGAffineTransformMakeScale(1, 1);
             self.mapView.alpha = 1;
@@ -463,6 +464,9 @@
         } completion:nil];
         
     } else {
+        
+        self.notificationsEnabled = NO;
+        self.scrollView.scrollEnabled = NO;
         
         [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.mapView.transform = CGAffineTransformMakeScale(0.93, 0.93);
@@ -513,13 +517,17 @@
     
     CGPoint point = self.scrollView.contentOffset;
 
-    
+
     if (self.promoTF.isFirstResponder){
-        point = CGPointMake(0, yOffset-24);
+//        if (self.notificationsEnabled) {
+//            self.scrollView.frame = CGRectMake(0, -24, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+//        } else {
+//            self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+//        }
     }
     
     [UIView animateWithDuration:0.15 animations:^{
-        self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, newScrollViewHeight);
+//        self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, newScrollViewHeight);
         [self.scrollView setContentOffset:point animated:NO];
     }];
 }
@@ -534,6 +542,10 @@
         [UIView animateWithDuration:0.15 animations:^{
             self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, self.view.frame.size.height - 44);
         }];
+    }
+    
+    if (self.promoTF.isFirstResponder){
+        self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
     }
 }
 
@@ -563,5 +575,16 @@
 
 
 
+#pragma mark - UIScrollViewDelegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    
+//    [self.view resignFirstResponder];
+    [self.usernameTF resignFirstResponder];
+    [self.emailTF resignFirstResponder];
+    [self.passwordTF resignFirstResponder];
+    [self.promoTF resignFirstResponder];
+}
 
 @end
