@@ -59,6 +59,7 @@
     [super viewDidLoad];
     [self configureUI];
     
+    
     [self addNotifications];
 }
 
@@ -348,12 +349,12 @@
 -(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState{
     if (controlState == UIControlStateNormal){
         [self.createAccountButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        self.createAccountButton.enabled = NO;
+//        self.createAccountButton.enabled = NO;
     }
     else {
         [self.createAccountButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         [self.createAccountButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
-        self.createAccountButton.enabled = YES;
+//        self.createAccountButton.enabled = YES;
     }
 }
 
@@ -487,7 +488,8 @@
     }
 }
 
--(void)createAccount{
+-(void)createAccount {
+    
     FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
