@@ -50,6 +50,9 @@
 @property (strong, nonatomic) NSMutableArray *pulled;
 @property (weak, nonatomic) FRSAppDelegate *appDelegate;
 @property (nonatomic, strong) FRSFollowingTable *followingTable;
+
+@property (strong, nonatomic) UIView *sudoNavBar;
+
 @end
 
 @implementation FRSHomeViewController
@@ -221,6 +224,24 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+    
+    /* Configure sudo nav bar when scrolling for scrolling between tabs and nav bar is hidden */
+    self.sudoNavBar = [[UIView alloc] initWithFrame:CGRectMake(0, -88, self.view.frame.size.width, 44)];
+    self.sudoNavBar.backgroundColor = [UIColor frescoOrangeColor];
+    [self.view addSubview:self.sudoNavBar];
+    
+    UIButton *sudoHighlightButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7-5, 12, 87, 20)];
+    [sudoHighlightButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
+    [sudoHighlightButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
+    [sudoHighlightButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.sudoNavBar addSubview:sudoHighlightButton];
+    
+    UIButton *sudoFollowingButton = [[UIButton alloc] initWithFrame:CGRectMake(208.3, 12, 87, 20)];
+    [sudoFollowingButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
+    [sudoFollowingButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
+    [sudoFollowingButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.sudoNavBar addSubview:sudoFollowingButton];
+    
     
     
     
@@ -671,6 +692,8 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
+    self.sudoNavBar.frame = CGRectMake(0, (scrollView.contentOffset.x/8.5)-88, self.view.frame.size.width, 44);
+
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     if (scrollView == self.pageScroller) {
         [self pausePlayers];
@@ -686,6 +709,7 @@
             self.followingTabButton.alpha = 0.7;
             self.highlightTabButton.alpha = 1;
         }
+
     }
     else {
         [super scrollViewDidScroll:scrollView];
