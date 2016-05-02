@@ -9,12 +9,13 @@
 #import "FRSMultipartTask.h"
 
 @implementation FRSMultipartTask
+@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock;
 
 -(void)uploadDataFromURL:(NSURL *)url completion:(TransferCompletionBlock)completion progress:(TransferProgressBlock)progress {
     
     // reporting back to parent
-    completionBlock = completion;
-    progressBlock = progress;
+    _completionBlock = completion;
+    _progressBlock = progress;
     
     // set up initial stream
     needsData = TRUE;

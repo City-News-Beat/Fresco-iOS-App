@@ -22,12 +22,9 @@
     NSInteger openConnections;
     NSInteger dataRead;
     NSInteger totalConnections;
-
-    TransferCompletionBlock completionBlock;
-    TransferProgressBlock progressBlock;
-    
     BOOL needsData;
 }
+
 -(void)uploadDataFromURL:(NSURL *)url completion:(TransferCompletionBlock)completion progress:(TransferProgressBlock)progress;
 
 

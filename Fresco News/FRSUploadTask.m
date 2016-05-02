@@ -10,4 +10,7 @@
 
 @implementation FRSUploadTask
 
+-(void)beginUploadFromSource:(PHAsset *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
+    
+}
 @end

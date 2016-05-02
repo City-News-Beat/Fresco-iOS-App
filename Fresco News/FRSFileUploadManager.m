@@ -7,6 +7,7 @@
 //
 
 #import "FRSFileUploadManager.h"
+#import "FRSMultipartTask.h"
 
 @implementation FRSFileUploadManager
 @synthesize uploadQueue = _uploadQueue;
@@ -41,6 +42,19 @@
 }
 
 -(void)handleChunkedUpload:(NSURL *)url destination:(NSURL *)destination {
+    
+}
+
+-(void)checkAgainstEmptyQueue {
+    if ([self.uploadQueue count] == 1) {
+        FRSUploadTask *task = self.uploadQueue[0];
+        if (!task.hasStarted) {
+            [self restartQueue];
+        }
+    }
+}
+
+-(void)restartQueue {
     
 }
 
