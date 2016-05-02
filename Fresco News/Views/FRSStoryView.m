@@ -66,6 +66,7 @@
         self.story = story;
         //        self.orderedPosts = [self.story.posts allObjects];
         [self configureUI];
+//        self.backgroundColor = [UIColor blueColor];
     }
     return self;
 }
@@ -87,7 +88,15 @@
 -(void)configureTopContainer{
     
     NSInteger height = IS_IPHONE_5 ? 192 : 240;
-    
+//    if ([self.caption.text isEqual:[NSNull null]]) {
+//    if (![self.caption.text isKindOfClass:[NSNull class]] && self.caption.text && self.caption.text != NULL) {
+//
+//    
+//    if (self.caption.text.length == 0) {
+//        self.topContainer.backgroundColor = [UIColor greenColor];
+//    }
+//    
+//    
     self.topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, height)];
     self.topContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.topContainer.clipsToBounds = YES;
@@ -250,8 +259,13 @@
 }
 
 -(void)configureActionsBar{
-    
+
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
+    
+    if (self.caption.text.length == 0) {
+        [self.actionBar setOriginWithPoint:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height-12)];
+    }
+    
     [self addSubview:self.actionBar];
 }
 
