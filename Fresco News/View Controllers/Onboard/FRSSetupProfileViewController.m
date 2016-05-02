@@ -44,7 +44,7 @@
     [self configureUI];
     [self addNotifications];
     [self configureImagePicker];
-    // Do any additional setup after loading the view.
+    [self configureBackButtonAnimated:YES];
     
     self.navigationController.navigationBarHidden = NO;
 }
@@ -111,11 +111,28 @@
     self.profileIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, height, height)];
     [self.profileIV centerHorizontallyInView:self.topContainer];
     [self.profileIV clipAsCircle];
-    [self.profileIV addBorderWithWidth:8 color:[UIColor whiteColor]];
+//    [self.profileIV addBorderWithWidth:8 color:[UIColor whiteColor]];
     self.profileIV.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.profileIV.userInteractionEnabled = YES;
+    self.profileIV.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     [self.profileShadow addSubview:self.profileIV];
+    
+    
+    UIImageView *placeholderUserIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]]; //Waiting on imogen for big user icon
+    placeholderUserIcon.backgroundColor = [UIColor blueColor];
+    placeholderUserIcon.frame = CGRectMake(60, 60, 72, 72);
+    if (IS_IPHONE_5) {
+        placeholderUserIcon.frame = CGRectMake(40, 40, 48, 48);
+    }
+    [self.profileIV addSubview:placeholderUserIcon];
+    
+    
+    UIView *ring = [[UIView alloc] initWithFrame:CGRectMake(self.profileIV.frame.origin.x-1, self.profileShadow.frame.origin.y-1, height+2, height+2)];
+    ring.backgroundColor = [UIColor clearColor];
+    ring.layer.cornerRadius = height/2;
+    [ring addBorderWithWidth:8 color:[UIColor whiteColor]];
+    [self.scrollView addSubview:ring];
 }
 
 -(void)configureCameraButton{

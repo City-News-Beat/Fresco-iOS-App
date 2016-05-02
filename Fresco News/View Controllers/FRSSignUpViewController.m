@@ -80,7 +80,15 @@
     [super viewWillDisappear:animated];
     self.navigationItem.title = @"";
     
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count-2] == self) {
+        // View is disappearing because a new view controller was pushed onto the stack
+        
+    } else if ([viewControllers indexOfObject:self] == NSNotFound) {
+        // View is disappearing because it was popped from the stack
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+    }
 }
 
 -(void)addNotifications{
@@ -157,8 +165,6 @@
     self.usernameCheckIV.frame = CGRectMake(self.usernameTF.frame.size.width - 24, 10, 24, 24);
     self.usernameCheckIV.alpha = 0;
     [self.usernameTF addSubview:self.usernameCheckIV];
-    
-    
 }
 
 -(void)configureEmailAddressField{
@@ -173,6 +179,7 @@
     self.emailTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email address" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     self.emailTF.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.emailTF.delegate = self;
+    self.emailTF.keyboardType = UIKeyboardTypeEmailAddress;
     self.emailTF.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.emailTF.autocorrectionType = UITextAutocorrectionTypeNo;
     self.emailTF.textColor = [UIColor frescoDarkTextColor];
@@ -368,12 +375,12 @@
 -(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState{
     if (controlState == UIControlStateNormal){
         [self.createAccountButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-//        self.createAccountButton.enabled = NO;
+        self.createAccountButton.enabled = NO;
     }
     else {
         [self.createAccountButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         [self.createAccountButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
-//        self.createAccountButton.enabled = YES;
+        self.createAccountButton.enabled = YES;
     }
 }
 
@@ -438,15 +445,17 @@
             self.usernameTF.text = @"";
         }
     }
-//
-//    UIControlState controlState;
-//    
-//    if ([FRSDataValidator isValidUserName:self.usernameTF.text] && [FRSDataValidator isValidEmail:self.emailTF.text] && [FRSDataValidator isValidPassword:self.passwordTF.text])
-//        controlState = UIControlStateHighlighted;
-//    else
+    
+    UIControlState controlState;
+    
+    if ([FRSDataValidator isValidUserName:self.usernameTF.text] && [FRSDataValidator isValidEmail:self.emailTF.text] && [FRSDataValidator isValidPassword:self.passwordTF.text]) {
+        controlState = UIControlStateHighlighted;
+    } else {
 //        controlState = UIControlStateNormal;
-//    
-//    [self toggleCreateAccountButtonTitleColorToState:controlState];
+        controlState = UIControlStateHighlighted;
+
+    }
+    [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
 
 
