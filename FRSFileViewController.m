@@ -84,6 +84,7 @@ static NSString *imageTile = @"ImageTile";
     nextButton.frame = CGRectMake(screenWidth-64, [UIScreen mainScreen].bounds.size.height-41, 60, 40);
     [nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
     [nextButton addTarget:self action:@selector(next:) forControlEvents:UIControlEventTouchUpInside];
+    nextButton.userInteractionEnabled = NO;
     [self.view addSubview:nextButton];
     
     
@@ -167,7 +168,6 @@ static NSString *imageTile = @"ImageTile";
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    
 }
 
 -(void)next:(id)sender {
@@ -259,15 +259,18 @@ static NSString *imageTile = @"ImageTile";
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
         [cell selected:FALSE];
+        [nextButton.titleLabel setTextColor:[UIColor frescoLightTextColor]];
+        nextButton.userInteractionEnabled = NO;
     }
     else {
         if (cell.currentAVAsset) {
             self.currentTime = cell.currentAVAsset.duration;
             [self presentVideoTrimmerViewController];
         }
-        
         [selectedAssets addObject:representedAsset];
         [cell selected:TRUE];
+        [nextButton.titleLabel setTextColor:[UIColor frescoBlueColor]];
+        nextButton.userInteractionEnabled = YES;
     }
 }
 
