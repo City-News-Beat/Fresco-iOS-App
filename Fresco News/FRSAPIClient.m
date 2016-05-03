@@ -384,7 +384,7 @@
             currentBearerToken = [NSString stringWithFormat:@"Bearer: %@", currentBearerToken];
             [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
         }
-        else {
+        else { // something went wrong here (maybe pass to error handler)
             [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
         }
     }
