@@ -146,6 +146,7 @@
  avatar_:            'str', // User's avatar URL
  */
 
+
 -(void)registerWithUsername:(NSString *)username password:(NSString *)password social:(NSDictionary *)social installation:(NSDictionary *)installation {
     
     // create registration request
@@ -362,20 +363,32 @@
     
     if (!self.requestManager) {
         AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
-        
-        if (![self isAuthenticated]) {
-            [manager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
-        }
-        else {
-            // set bearer client token
-        }
-        
-        [manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        manager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
-        return manager;
+        self.requestManager = manager;
     }
     
+    [self reevaluateAuthorization];
+    
     return self.requestManager;
+}
+
+-(void)reevaluateAuthorization {
+    if (![self isAuthenticated]) {
+        [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
+    }
+    else {
+        // set bearer client token
+        NSString *currentBearerToken = [self authenticationToken];
+        if (currentBearerToken) {
+            currentBearerToken = [NSString stringWithFormat:@"Bearer: %@", currentBearerToken];
+            [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
+        }
+        else {
+            [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
+        }
+    }
+    
+    [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
 }
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion {
