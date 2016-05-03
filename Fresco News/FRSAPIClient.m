@@ -141,29 +141,9 @@
  */
 
 
--(void)registerWithUsername:(NSString *)username password:(NSString *)password social:(NSDictionary *)social installation:(NSDictionary *)installation {
+-(void)registerWithUserDigestion:(NSDictionary *)digestion {
     
-    // create registration request
-    
-    NSMutableDictionary *registrationInfo = [[NSMutableDictionary alloc] init];
-    [registrationInfo setObject:username forKey:@"username"];
-    
-    if (password) {
-        [registrationInfo setObject:password forKey:@"password"];
-    }
-    
-    if (social) {
-        [registrationInfo setObject:social forKey:@"social_links"];
-    }
-    
-    if (installation) {
-        [registrationInfo setObject:installation forKey:@"installation"];
-    }
-    else {
-        [registrationInfo setObject:[self currentInstallation] forKey:@"installation"];
-    }
-    
-    // start request
+
 }
 
 /*
