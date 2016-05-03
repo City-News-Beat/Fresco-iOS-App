@@ -46,4 +46,5 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 -(BOOL)isAuthenticated;
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion;
+-(NSString *)authenticationToken; // current token, assuming 1 user support
 @end
