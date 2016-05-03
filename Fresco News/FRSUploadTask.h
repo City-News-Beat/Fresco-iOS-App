@@ -10,6 +10,7 @@
 #import "Fresco.h"
 #import <Photos/Photos.h>
 
+#define session [NSURLSession sharedSession]
 @protocol FRSUploadDelegate <NSObject>
 @optional
 -(void)uploadWillStart:(id)upload;
@@ -23,19 +24,19 @@
     
 }
 
+@property (nonatomic, retain, readonly) NSURLSessionUploadTask *uploadTask;
 @property unsigned long bytesUploaded;
 @property unsigned long totalBytes;
+@property (nonatomic, retain) NSURL *assetURL;
+@property (nonatomic, retain) NSURL *destinationURL;
 
 @property TransferCompletionBlock completionBlock;
 @property TransferProgressBlock progressBlock;
 @property BOOL hasStarted;
 -(void)createUploadFromSource:(NSURL *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion;
 
+
 -(void)start;
 -(void)stop;
-
--(void)postUpdateNotification;
--(void)postCompletionNotification;
-
 
 @end

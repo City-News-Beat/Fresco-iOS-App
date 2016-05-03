@@ -7,6 +7,7 @@
 //
 
 #import "FRSMultipartTask.h"
+#import "Fresco.h"
 
 @implementation FRSMultipartTask
 @synthesize completionBlock = _completionBlock, progressBlock = _progressBlock;
