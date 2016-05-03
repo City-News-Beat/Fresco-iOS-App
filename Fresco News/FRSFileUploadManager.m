@@ -10,7 +10,7 @@
 #import "FRSMultipartTask.h"
 
 @implementation FRSFileUploadManager
-@synthesize uploadQueue = _uploadQueue;
+@synthesize uploadQueue = _uploadQueue, notificationCenter = _notificationCenter;
 
 
 -(id)init {
@@ -18,6 +18,8 @@
     
     if (self) {
         _uploadQueue = [[NSMutableArray alloc] init];
+        _activeUploads = [[NSMutableArray alloc] init];
+        _notificationCenter = [NSNotificationCenter defaultCenter];
     }
     
     return self;
@@ -102,19 +104,22 @@
 #pragma mark Delegate Methods
 
 -(void)uploadWillStart:(id)upload {
-    
+    [self.notificationCenter postNotificationName:uploadStartedNotification object:upload userInfo:Nil];
 }
 
 -(void)uploadDidProgress:(id)upload bytesSent:(unsigned long)sent totalBytes:(unsigned long)total {
-    
+    NSDictionary *infoForNotification = @{@"sent":@(sent), @"total":@(total)};
+    [self.notificationCenter postNotificationName:uploadProgressNotification object:upload userInfo:infoForNotification];
 }
 
 -(void)uploadDidSucceed:(id)upload withResponse:(NSData *)response {
-    
+    NSDictionary *infoForNotification = @{@"response":response};
+    [self.notificationCenter postNotificationName:uploadSuccessNotification object:upload userInfo:infoForNotification];
 }
 
 -(void)uploadDidFail:(id)upload withError:(NSError *)error response:(NSData *)response {
-    
+    NSDictionary *infoForNotification = @{@"response":response, @"error":error};
+    [self.notificationCenter postNotificationName:uploadFailedNotification object:upload userInfo:infoForNotification];
 }
 
 @end

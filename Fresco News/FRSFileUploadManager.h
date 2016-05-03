@@ -12,6 +12,7 @@
 static NSString * const uploadFailedNotification = @"FRSUploadFailedNotification";
 static NSString * const uploadSuccessNotification = @"FRSUploadSuccessNotification";
 static NSString * const uploadProgressNotification = @"FRSUploadProgressNotification";
+static NSString * const uploadStartedNotification = @"FRSUploadStartedNotification";
 
 @interface FRSFileUploadManager : NSObject <FRSUploadDelegate>
 {
@@ -23,7 +24,7 @@ static NSString * const uploadProgressNotification = @"FRSUploadProgressNotifica
 @property (readonly) unsigned long bytesToSend;
 @property (readonly) unsigned long bytesSent;
 @property (readonly) float progressPercentage; // calculated by bytesSent/bytesToSend
-
+@property (nonatomic) NSNotificationCenter *notificationCenter;
 +(instancetype)sharedUploader;
 -(void)uploadPhoto:(NSURL *)photoURL toURL:(NSURL *)destinationURL;
 -(void)uploadVideo:(NSURL *)videoURL toURL:(NSURL *)destinationURL;
