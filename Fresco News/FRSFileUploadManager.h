@@ -19,6 +19,10 @@ static NSString * const uploadProgressNotification = @"FRSUploadProgressNotifica
 }
 
 @property (nonatomic, readonly) NSMutableArray *uploadQueue;
+@property (nonatomic, readonly) NSMutableArray *activeUploads;
+@property (readonly) unsigned long bytesToSend;
+@property (readonly) unsigned long bytesSent;
+@property (readonly) float progressPercentage; // calculated by bytesSent/bytesToSend
 
 +(instancetype)sharedUploader;
 -(void)uploadPhoto:(NSURL *)photoURL toURL:(NSURL *)destinationURL;
