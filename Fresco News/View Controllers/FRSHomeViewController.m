@@ -79,9 +79,18 @@
     CGRect scrollFrame = self.tableView.frame;
     scrollFrame.origin.x = scrollFrame.size.width;
     scrollFrame.origin.y = -64;
+
+//    if (userHasNoFollowers) {
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
+
+    [self configureNoFollowers];
+
+//    } else {
+//    }
+    
     [self.pageScroller addSubview:self.followingTable];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -138,6 +147,14 @@
 
 
 #pragma mark - UI
+
+-(void)configureNoFollowers {
+    
+    UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"frog"]];
+    frog.frame = CGRectMake(self.view.frame.size.width/2 - 120/2, self.view.frame.size.height/2, 200, 120);
+    
+    [self.followingTable addSubview:frog];
+}
 
 -(void)configureSpinner {
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
