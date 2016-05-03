@@ -8,6 +8,7 @@
 
 #import "FRSFileViewController.h"
 #import "VideoTrimmerViewController.h"
+#import "FRSUploadViewController.h"
 #import "UIFont+Fresco.h"
 
 @interface FRSFileViewController ()
@@ -170,8 +171,10 @@ static NSString *imageTile = @"ImageTile";
 }
 
 -(void)next:(id)sender {
-    
+    FRSUploadViewController *uploadViewController = [[FRSUploadViewController alloc] init];
+    [self.navigationController pushViewController:uploadViewController animated:YES];
 }
+
 /* Footer Related */
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {

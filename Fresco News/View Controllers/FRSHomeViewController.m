@@ -187,7 +187,7 @@
 }
 
 -(void)hereTapped {
-    NSLog(@"Here");
+    NSLog(@"here");
 }
 
 -(void)configureSpinner {
