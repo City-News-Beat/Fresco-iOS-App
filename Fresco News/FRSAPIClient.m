@@ -372,7 +372,9 @@
 }
 
 -(void)reevaluateAuthorization {
+    
     if (![self isAuthenticated]) {
+        // set client token
         [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
     }
     else {
