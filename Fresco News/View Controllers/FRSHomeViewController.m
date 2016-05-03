@@ -195,6 +195,7 @@
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
+//    titleView.backgroundColor = [UIColor redColor];
 
     self.highlightTabButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7, 12, 87, 20)];
     [self.highlightTabButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
@@ -230,7 +231,7 @@
     self.sudoNavBar.backgroundColor = [UIColor frescoOrangeColor];
     [self.view addSubview:self.sudoNavBar];
     
-    UIButton *sudoHighlightButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7-5, 12, 87, 20)];
+    UIButton *sudoHighlightButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7, 12, 87, 20)];
     [sudoHighlightButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
     [sudoHighlightButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
     [sudoHighlightButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
@@ -242,15 +243,23 @@
     [sudoFollowingButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.sudoNavBar addSubview:sudoFollowingButton];
     
-    
-    
-    
+    if (IS_IPHONE_6) {
+        sudoHighlightButton.frame = CGRectMake(80.7, 12, 87, 20);
+        sudoFollowingButton.frame  = CGRectMake(208.3, 12, 87, 20);
+    } else if (IS_IPHONE_6_PLUS) {
+        sudoHighlightButton.frame = CGRectMake(93.7, 12, 87, 20);
+        sudoFollowingButton.frame  = CGRectMake(234.3, 12, 87, 20);
+    } else if (IS_IPHONE_5) {
+        sudoHighlightButton.frame = CGRectMake(62.3, 12, 87, 20);
+        sudoFollowingButton.frame  = CGRectMake(171.7, 12, 87, 20);
+    }
+
 //    CAShapeLayer * layer = [[CAShapeLayer alloc]init];
 //    layer.frame = view.bounds;
 //    layer.fillColor = [[UIColor blackColor] CGColor];
 //    
 //    layer.path = CGPathCreateWithRect(CGRectMake(10, 10, 30, 30), NULL);
-//    
+
 //    view.layer.mask = layer;
     
 //    self.maskView = [[CAShapeLayer alloc] init];
