@@ -27,7 +27,4 @@
 @property int totalParts;
 @property int completedParts;
 
--(void)pause;
--(void)resume;
-
 @end

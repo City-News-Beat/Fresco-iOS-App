@@ -18,19 +18,34 @@
     self.destinationURL = destination;
     self.progressBlock = progress;
     self.completionBlock = completion;
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
+    
+    _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
 }
 
 -(void)stop {
-    
+    [_uploadTask suspend];
 }
 
 -(void)start {
+    
     NSMutableURLRequest *uploadRequest;
     [self signRequest:uploadRequest];
     
-    _uploadTask = [session uploadTaskWithRequest:uploadRequest fromFile:self.assetURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    _uploadTask = [self.session uploadTaskWithRequest:uploadRequest fromFile:self.assetURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
         
     }];
+    
+    [_uploadTask resume]; // starts initial request
+}
+
+-(void)pause {
+    [_uploadTask suspend];
+}
+
+-(void)resume {
+    [_uploadTask resume];
 }
 
 -(void)signRequest:(NSMutableURLRequest *)request {

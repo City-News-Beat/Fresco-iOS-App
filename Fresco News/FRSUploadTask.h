@@ -10,7 +10,6 @@
 #import "Fresco.h"
 #import <Photos/Photos.h>
 
-#define session [NSURLSession sharedSession]
 @protocol FRSUploadDelegate <NSObject>
 @optional
 -(void)uploadWillStart:(id)upload;
@@ -19,12 +18,13 @@
 -(void)uploadDidFail:(id)upload withError:(NSError *)error response:(NSData *)response;
 @end
 
-@interface FRSUploadTask : NSObject
+@interface FRSUploadTask : NSObject <NSURLSessionDelegate, NSURLSessionDataDelegate> // allows granular feedback on upload
 {
     
 }
 
 @property (nonatomic, retain, readonly) NSURLSessionUploadTask *uploadTask;
+@property (nonatomic, retain, readonly) NSURLSession *session;
 @property unsigned long bytesUploaded;
 @property unsigned long totalBytes;
 @property (nonatomic, retain) NSURL *assetURL;
@@ -38,5 +38,7 @@
 
 -(void)start;
 -(void)stop;
+-(void)pause;
+-(void)resume;
 
 @end
