@@ -123,13 +123,7 @@
  phone_:             'str', // User's phone number (include country code)
  twitter_handle_:    'str', // User's twitter handle
  social_links_: { // Info for linking social media accounts
-    facebook_: {
-        token: 'str'
-    },
-    twitter_: {
-        token: 'str',
-        secret: 'str'
-    }
+   
  },
  installation_: { // Used for push notifications + linking devices to users
     app_version:        'str',
@@ -171,6 +165,50 @@
     
     // start request
 }
+
+/*
+  Creates dictionary w/ all current (provided) social links within the application, creates a dictionary with the format needed to be serialized into JSON for the API, will be {} with no links
+ */
+
+-(NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken {
+    NSMutableDictionary *socialDigestion = [[NSMutableDictionary alloc] init];
+    
+    if (twitterSession) {
+        // add twitter to digestion
+        if (twitterSession.authToken && twitterSession.authTokenSecret) {
+            NSDictionary *twitterDigestion = @{@"token":twitterSession.authToken, @"secret": twitterSession.authTokenSecret};
+            [socialDigestion setObject:twitterDigestion forKey:@"twitter"];
+        }
+    }
+    
+    if (facebookToken) {
+        // add facebook to digestion
+        if (facebookToken.tokenString) {
+            NSDictionary *facebookDigestion = @{@"token":facebookToken.tokenString};
+            [socialDigestion setObject:facebookDigestion forKey:@"facebook"];
+        }
+    }
+    
+    /* if no social links, empty dict (parses out to JSON perfectly)
+     
+     Result: 
+     
+     {
+        @"facebook": {
+            @"token": @"XXXXXX"
+        },
+        @"twitter": {
+            @"token": @"XXXXXX"
+            @"secret": @"XXXXX"
+        }
+     }
+
+     */
+    
+    return socialDigestion;
+}
+
+
 
 -(NSDictionary *)currentInstallation {
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
@@ -291,11 +329,11 @@
 -(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion {
     
     NSDictionary *params = @{
-                             @"limit" : [NSNumber numberWithInteger:limit],
-                             @"offset" : @(offset),
-                             @"hide": @2,
-                             @"stories": @1
-                            };
+                        @"limit" : [NSNumber numberWithInteger:limit],
+                        @"offset" : @(offset),
+                        @"hide": @2,
+                        @"stories": @1
+                    };
     
     [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject[@"data"], error);
@@ -305,13 +343,12 @@
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion {
     
     NSDictionary *params = @{
-                             
                @"id" : storyID,
                @"offset" : @(0),
                @"sort" : @"1",
                @"limit" : @"100",
                @"hide" : @"4" //HIDE NUMBER
-    };
+            };
 
     [self get:storyGalleriesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject[@"data"], error);
