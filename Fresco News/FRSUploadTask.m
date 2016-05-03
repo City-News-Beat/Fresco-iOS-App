@@ -56,4 +56,18 @@
 
 }
 
+-(NSString *)authenticationToken {
+    
+    NSArray *allAccounts = [SSKeychain accountsForService:serviceName];
+    
+    if ([allAccounts count] == 0) {
+        return Nil;
+    }
+    
+    NSDictionary *credentialsDictionary = [allAccounts firstObject];
+    NSString *accountName = credentialsDictionary[kSSKeychainAccountKey];
+    
+    return [SSKeychain passwordForService:serviceName account:accountName];
+}
+
 @end

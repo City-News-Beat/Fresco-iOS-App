@@ -41,4 +41,6 @@
 -(void)pause;
 -(void)resume;
 
+-(NSString *)authenticationToken;
+
 @end
