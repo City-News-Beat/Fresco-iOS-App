@@ -35,6 +35,8 @@
                        forKey:NSURLFileSizeKey
                         error:&fileSizeError];
     
+    _bytesToSend+=[fileSizeValue unsignedLongLongValue];
+    
     if (fileSizeError) {
         // default to chunked upload
         [self handleChunkedUpload:videoURL destination:destinationURL];

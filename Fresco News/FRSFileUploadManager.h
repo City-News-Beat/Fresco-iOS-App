@@ -21,8 +21,8 @@ static NSString * const uploadStartedNotification = @"FRSUploadStartedNotificati
 
 @property (nonatomic, readonly) NSMutableArray *uploadQueue;
 @property (nonatomic, readonly) NSMutableArray *activeUploads;
-@property (readonly) unsigned long bytesToSend;
-@property (readonly) unsigned long bytesSent;
+@property (readonly) unsigned long long bytesToSend;
+@property (readonly) unsigned long long bytesSent;
 @property (readonly) float progressPercentage; // calculated by bytesSent/bytesToSend
 @property (nonatomic) NSNotificationCenter *notificationCenter;
 +(instancetype)sharedUploader;
