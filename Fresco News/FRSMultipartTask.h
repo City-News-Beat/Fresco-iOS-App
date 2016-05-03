@@ -24,8 +24,10 @@
     NSInteger totalConnections;
     BOOL needsData;
 }
+@property int totalParts;
+@property int completedParts;
 
--(void)uploadDataFromURL:(NSURL *)url completion:(TransferCompletionBlock)completion progress:(TransferProgressBlock)progress;
-
+-(void)pause;
+-(void)resume;
 
 @end

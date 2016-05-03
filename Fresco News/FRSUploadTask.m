@@ -10,7 +10,24 @@
 
 @implementation FRSUploadTask
 
--(void)beginUploadFromSource:(PHAsset *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
+-(void)createUploadFromSource:(NSURL *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
     
 }
+
+-(void)postUpdateNotification {
+    
+}
+
+-(void)postCompletionNotification {
+    
+}
+
+-(void)stop {
+    
+}
+
+-(void)start {
+    
+}
+
 @end

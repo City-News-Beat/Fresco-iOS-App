@@ -13,7 +13,7 @@ static NSString * const uploadFailedNotification = @"FRSUploadFailedNotification
 static NSString * const uploadSuccessNotification = @"FRSUploadSuccessNotification";
 static NSString * const uploadProgressNotification = @"FRSUploadProgressNotification";
 
-@interface FRSFileUploadManager : NSObject
+@interface FRSFileUploadManager : NSObject <FRSUploadDelegate>
 {
     
 }

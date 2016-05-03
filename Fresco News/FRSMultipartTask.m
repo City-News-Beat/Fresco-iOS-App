@@ -28,6 +28,12 @@
     [self next];
 }
 
+
+// ovveride 
+-(void)createUploadFromSource:(NSURL *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
+    
+}
+
 -(void)next {
     // loop on background thread for obvious reasons
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
@@ -93,4 +99,13 @@
 -(NSString *)uniqueTempPath {
     return [[NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]] stringByAppendingString:@".dat"];
 }
+
+-(void)pause {
+    
+}
+
+-(void)resume {
+    
+}
+
 @end
