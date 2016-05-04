@@ -26,5 +26,6 @@
 
 @property int totalParts;
 @property int completedParts;
+@property (nonatomic, retain, readonly) NSMutableArray *openConnections;
 
 @end

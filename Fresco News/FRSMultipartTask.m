@@ -10,28 +10,22 @@
 #import "Fresco.h"
 
 @implementation FRSMultipartTask
-@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock;
-
--(void)uploadDataFromURL:(NSURL *)url completion:(TransferCompletionBlock)completion progress:(TransferProgressBlock)progress {
-    
-    // reporting back to parent
-    _completionBlock = completion;
-    _progressBlock = progress;
-    
-    // set up initial stream
-    needsData = TRUE;
-    dataInputStream = [NSInputStream inputStreamWithURL:url];
-    dataInputStream.delegate = self;
-    [dataInputStream open];
-    
-    // start input from data stream
-    [self next];
-}
-
+@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections;
 
 // ovveride 
 -(void)createUploadFromSource:(NSURL *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
     
+    
+}
+
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        _openConnections = [[NSMutableArray alloc] init];
+    }
+    
+    return self;
 }
 
 -(void)next {
@@ -83,33 +77,42 @@
     openConnections++;
     totalConnections++;
     
-    // write to temp directory for upload to AWS (we can skip this if we don't use SDK, idk yet)
-    __block NSString *currentPath = [self uniqueTempPath];
-    [currentData writeToFile:currentPath atomically:YES];
-    currentData = Nil;
+    // set up actual NSURLSessionUploadTask
+    NSURLRequest *chunkRequest = Nil;
     
+    NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:currentData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        
+    }];
+    
+    [task resume];
+    [_openConnections addObject:task];
+    
+    
+    currentData = Nil;
     // if we have open stream & below max connections
     if (openConnections < MAX_CONCURRENT && needsData) {
         [self next];
     }
     
-    // set up actual NSURLSessionUploadTask
-    
 }
 
-// generates unique temp path to store chunks during upload (off of volotile memory), automatically cleared
--(NSString *)uniqueTempPath {
-    return [[NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]] stringByAppendingString:@".dat"];
+- (void)URLSession:(NSURLSession *)urlSession task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
+    
 }
 
 // pause current request just like inherited class, but takes action on streaming too
 -(void)pause {
-    [super pause];
+    for (NSURLSessionUploadTask *task in _openConnections) {
+        [task suspend];
+    }
 }
 
 // resume current request just like inherited class, but takes action on streaming too
 -(void)resume {
-    [super resume];
+    for (NSURLSessionUploadTask *task in _openConnections) {
+        [task resume];
+    }
 }
 
 @end
