@@ -11,16 +11,16 @@
 #import <Photos/Photos.h>
 
 @protocol FRSUploadDelegate <NSObject>
-@optional
+// mandatory, basic upload events
 -(void)uploadWillStart:(id)upload;
 -(void)uploadDidProgress:(id)upload bytesSent:(unsigned long)sent totalBytes:(unsigned long)total;
 -(void)uploadDidSucceed:(id)upload withResponse:(NSData *)response;
 -(void)uploadDidFail:(id)upload withError:(NSError *)error response:(NSData *)response;
 @end
 
-typedef void (^TransferProgressBlock)(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
+typedef void (^TransferProgressBlock)(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
 typedef void (^TransferCompletionBlock)(id task, NSData *responseData, NSError *error, BOOL success);
-typedef void (^TransferCancellationBlock)(BOOL success, NSError *error, id task);
+typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success);
 
 
 @interface FRSUploadTask : NSObject <NSURLSessionDelegate, NSURLSessionDataDelegate> // allows granular feedback on upload
@@ -50,7 +50,4 @@ typedef void (^TransferCancellationBlock)(BOOL success, NSError *error, id task)
 -(void)stop;
 -(void)pause;
 -(void)resume;
-
--(NSString *)authenticationToken;
-
 @end

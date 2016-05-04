@@ -72,10 +72,19 @@
 
 - (void)URLSession:(NSURLSession *)urlSession task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
 
+    // typedef void (^TransferProgressBlock)(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
+
+    if (self.progressBlock) {
+        self.progressBlock(task, bytesSent, totalBytesSent, totalBytesExpectedToSend);
+    }
+    
+    if (self.delegate) {
+        [self.delegate uploadDidProgress:self bytesSent:(unsigned long long)bytesSent totalBytes:(unsigned long long)totalBytesExpectedToSend];
+    }
 }
 
 -(NSString *)authenticationToken {
-    
+
     NSArray *allAccounts = [SSKeychain accountsForService:serviceName];
     
     if ([allAccounts count] == 0) {
