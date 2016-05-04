@@ -10,7 +10,7 @@
 #import "FRSMultipartTask.h"
 
 @implementation FRSFileUploadManager
-@synthesize uploadQueue = _uploadQueue, notificationCenter = _notificationCenter;
+@synthesize uploadQueue = _uploadQueue, notificationCenter = _notificationCenter, errorCount = _errorCount;
 
 
 -(id)init {
@@ -24,6 +24,7 @@
     
     return self;
 }
+
 -(void)uploadPhoto:(NSURL *)photoURL toURL:(NSURL *)destinationURL {
     [self handleSingleUpload:photoURL destination:destinationURL];
 }
@@ -91,6 +92,10 @@
 
 }
 
+-(void)next {
+    
+}
+
 
 +(instancetype)sharedUploader {
     static FRSFileUploadManager *uploader = nil;
@@ -111,6 +116,7 @@
 
 -(void)uploadWillStart:(id)upload {
     [self.notificationCenter postNotificationName:uploadStartedNotification object:upload userInfo:Nil];
+    [self.activeUploads addObject:upload];
 }
 
 -(void)uploadDidProgress:(id)upload bytesSent:(unsigned long)sent totalBytes:(unsigned long)total {
@@ -121,11 +127,23 @@
 -(void)uploadDidSucceed:(id)upload withResponse:(NSData *)response {
     NSDictionary *infoForNotification = @{@"response":response};
     [self.notificationCenter postNotificationName:uploadSuccessNotification object:upload userInfo:infoForNotification];
+    
+    [self.activeUploads removeObject:upload];
+    [self next];
 }
 
 -(void)uploadDidFail:(id)upload withError:(NSError *)error response:(NSData *)response {
     NSDictionary *infoForNotification = @{@"response":response, @"error":error};
     [self.notificationCenter postNotificationName:uploadFailedNotification object:upload userInfo:infoForNotification];
+    
+    if (_errorCount >= maxFailures) {
+        return;
+    }
+    
+    [self.activeUploads removeObject:upload];
+    [self.activeUploads addObject:upload];
+    [self next];
+    _errorCount++;
 }
 
 @end

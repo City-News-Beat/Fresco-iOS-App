@@ -13,12 +13,14 @@ static NSString * const uploadFailedNotification = @"FRSUploadFailedNotification
 static NSString * const uploadSuccessNotification = @"FRSUploadSuccessNotification";
 static NSString * const uploadProgressNotification = @"FRSUploadProgressNotification";
 static NSString * const uploadStartedNotification = @"FRSUploadStartedNotification";
+static int const maxFailures = 5;
 
 @interface FRSFileUploadManager : NSObject <FRSUploadDelegate>
 {
     
 }
 
+@property (nonatomic, readonly) int errorCount;
 @property (nonatomic, readonly) NSMutableArray *uploadQueue;
 @property (nonatomic, readonly) NSMutableArray *activeUploads;
 @property (readonly) unsigned long long bytesToSend;

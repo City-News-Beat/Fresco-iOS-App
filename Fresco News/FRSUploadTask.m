@@ -72,6 +72,12 @@
 
 - (void)URLSession:(NSURLSession *)urlSession task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
 
+    // manage properties
+    _totalBytes = totalBytesExpectedToSend;
+    _bytesUploaded += bytesSent;
+    
+    
+    // update delegate ( or block )
     // typedef void (^TransferProgressBlock)(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
 
     if (self.progressBlock) {
