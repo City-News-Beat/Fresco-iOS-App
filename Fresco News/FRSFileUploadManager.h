@@ -16,6 +16,9 @@ static NSString * const uploadStartedNotification = @"FRSUploadStartedNotificati
 static int const maxFailures = 5; // max failures before pause
 static int const failWaitTime = 5; // seconds waited between fail count trigger
 
+@protocol FRSFileUploaderObjectContext <NSObject>
+-(NSManagedObjectContext *)managedObjectContext; // emulate FRSAppDelegate methods without importing
+@end
 @interface FRSFileUploadManager : NSObject <FRSUploadDelegate>
 {
     
@@ -31,4 +34,5 @@ static int const failWaitTime = 5; // seconds waited between fail count trigger
 +(instancetype)sharedUploader;
 -(void)uploadPhoto:(NSURL *)photoURL toURL:(NSURL *)destinationURL;
 -(void)uploadVideo:(NSURL *)videoURL toURL:(NSURL *)destinationURL;
+-(NSManagedObjectContext *)uploaderContext;
 @end
