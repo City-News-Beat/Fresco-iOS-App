@@ -18,6 +18,11 @@
 -(void)uploadDidFail:(id)upload withError:(NSError *)error response:(NSData *)response;
 @end
 
+typedef void (^TransferProgressBlock)(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
+typedef void (^TransferCompletionBlock)(id task, NSData *responseData, NSError *error, BOOL success);
+typedef void (^TransferCancellationBlock)(BOOL success, NSError *error, id task);
+
+
 @interface FRSUploadTask : NSObject <NSURLSessionDelegate, NSURLSessionDataDelegate> // allows granular feedback on upload
 {
     

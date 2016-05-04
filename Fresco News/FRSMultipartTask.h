@@ -23,6 +23,7 @@
     NSInteger totalConnections;
     BOOL needsData;
 }
+
 @property int totalParts;
 @property int completedParts;
 

@@ -37,6 +37,20 @@
     
     _uploadTask = [self.session uploadTaskWithRequest:uploadRequest fromFile:self.assetURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
+        if (error) {
+            if (self.delegate) {
+                [self.delegate uploadDidFail:self withError:error response:data];
+            }
+        }
+        else {
+            if (self.delegate) {
+                [self.delegate uploadDidSucceed:self withResponse:data];
+            }
+        }
+        
+        if (self.completionBlock) {
+            self.completionBlock(self, data, error, (error == Nil));
+        }
         
     }];
     
