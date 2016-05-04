@@ -54,6 +54,8 @@
 -(void)handleSingleUpload:(NSURL *)url destination:(NSURL *)destination {
     // create FRSUploadTask, add to queue
     FRSUploadTask *newTask = [[FRSUploadTask alloc] init];
+    newTask.delegate = self;
+    
     /* configure task */
     [self addUploadTask:newTask];
 }
@@ -61,6 +63,8 @@
 -(void)handleChunkedUpload:(NSURL *)url destination:(NSURL *)destination {
     // create FRSMultipartTask, add to queue
     FRSMultipartTask *newTask = [[FRSMultipartTask alloc] init];
+    newTask.delegate = self;
+    
     /* configure task */
     [self addUploadTask:newTask];
 }

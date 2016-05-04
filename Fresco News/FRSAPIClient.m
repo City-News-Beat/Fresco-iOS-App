@@ -103,9 +103,9 @@
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
     NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
-    NSLog(@"%@", authDictionary);
+
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        completion(responseObject, error); // burden of error handling falls on sender
         
         // handle internal cacheing of authentication
         if (!error) {
@@ -117,10 +117,12 @@
 /* 
  Register:
  
+ -----------
  email:              'str', // User's email
  username:           'str', // User's username (no @ at beginning)
  password:           'str', // User's plaintext password
  phone_:             'str', // User's phone number (include country code)
+ ------------
  twitter_handle_:    'str', // User's twitter handle
  social_links_: { // Info for linking social media accounts
    
@@ -133,11 +135,13 @@
     locale_identifier_: 'str' // EN-US
  }
  
- Update:
  
+ Update:
+ ----
  full_name_:         'str', // User's full name
  bio_:               'str', // User's profile bio
  avatar_:            'str', // User's avatar URL
+ ----
  */
 
 
@@ -145,6 +149,13 @@
     
 
 }
+
+-(FRSUser *)authenticatedUser {
+    
+    
+    return Nil;
+}
+
 
 /*
   Creates dictionary w/ all current (provided) social links within the application, creates a dictionary with the format needed to be serialized into JSON for the API, will be {} with no links

@@ -24,8 +24,7 @@
     dataInputStream.delegate = self;
     [dataInputStream open];
     
-    // now we start the fun
-    NSLog(@"START CHUNKING");
+    // start input from data stream
     [self next];
 }
 
@@ -36,7 +35,7 @@
 }
 
 -(void)next {
-    // loop on background thread for obvious reasons
+    // loop on background thread to not interrupt UI, but on HIGH priority to supercede any default thread needs
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         if (!currentData) // don't want multiple running loops
             [self readDataInputStream];
@@ -71,15 +70,16 @@
         }
     }
     
-    if (ranOnce && !triggeredUpload) { // last chunk, less than 5mb
+    // last chunk, less than 5mb, streaming process ends here
+    if (ranOnce && !triggeredUpload) {
         [self startChunkUpload];
         needsData = FALSE;
         [dataInputStream close];
-        NSLog(@"END CHUNKING");
     }
 }
+
+// moves to next chunk based on previously succeeded blocks, does not iterate if we are above max # concurrent requests
 -(void)startChunkUpload {
-    NSLog(@"NEW CHUNK");
     openConnections++;
     totalConnections++;
     
@@ -93,20 +93,23 @@
         [self next];
     }
     
-    // set up actual REST call
+    // set up actual NSURLSessionUploadTask
     
 }
 
+// generates unique temp path to store chunks during upload (off of volotile memory), automatically cleared
 -(NSString *)uniqueTempPath {
     return [[NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]] stringByAppendingString:@".dat"];
 }
 
+// pause current request just like inherited class, but takes action on streaming too
 -(void)pause {
-    
+    [super pause];
 }
 
+// resume current request just like inherited class, but takes action on streaming too
 -(void)resume {
-    
+    [super resume];
 }
 
 @end

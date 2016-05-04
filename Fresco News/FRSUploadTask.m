@@ -28,6 +28,9 @@
 }
 
 -(void)start {
+    if (_uploadTask) {
+        return; // FRSUploadTask are one off, no re-use
+    }
     
     NSMutableURLRequest *uploadRequest;
     [self signRequest:uploadRequest];
@@ -49,7 +52,8 @@
 }
 
 -(void)signRequest:(NSMutableURLRequest *)request {
-    
+    NSString *authorizationString = [NSString stringWithFormat:@"Bearer: %@", [self authenticationToken]];
+    [request setValue:authorizationString forHTTPHeaderField:@"Authorization"];
 }
 
 - (void)URLSession:(NSURLSession *)urlSession task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
@@ -61,7 +65,7 @@
     NSArray *allAccounts = [SSKeychain accountsForService:serviceName];
     
     if ([allAccounts count] == 0) {
-        return Nil;
+        return clientAuthorization; // client as default
     }
     
     NSDictionary *credentialsDictionary = [allAccounts firstObject];

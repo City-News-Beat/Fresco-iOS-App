@@ -23,6 +23,8 @@
     
 }
 
+@property (nonatomic, retain) NSManagedObject *managedObject;
+@property (nonatomic, weak) id<FRSUploadDelegate> delegate;
 @property (nonatomic, retain, readonly) NSURLSessionUploadTask *uploadTask;
 @property (nonatomic, retain, readonly) NSURLSession *session;
 @property unsigned long bytesUploaded;
