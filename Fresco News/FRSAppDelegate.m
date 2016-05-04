@@ -352,5 +352,10 @@
                                                         object:nil];
 }
 
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(nonnull NSString *)identifier completionHandler:(nonnull void (^)())completionHandler {
+    // iterate on multipart, or move to next upload in background ( we fuckin rock)
+    
+}
+
 
 @end

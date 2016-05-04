@@ -21,6 +21,7 @@
     self.completionBlock = completion;
     
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
+    sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
     _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
 }
 
