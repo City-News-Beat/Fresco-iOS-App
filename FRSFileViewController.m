@@ -35,18 +35,6 @@ static NSString *imageTile = @"ImageTile";
     [self setupSecondaryUI];
     
     self.navigationItem.title = @"CHOOSE MEDIA";
-//    UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
-//    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
-//    [container addSubview:backButton];
-//    backButton.tintColor = [UIColor whiteColor];
-//    backButton.frame = CGRectMake(-3, 0, 24, 24);
-//    [backButton setImage:backButtonImage forState:UIControlStateNormal];
-//    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
-//    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.leftBarButtonItem = backBarButtonItem;
-    
-    
     
     UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -63,6 +51,7 @@ static NSString *imageTile = @"ImageTile";
     [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
     
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
+    
 }
 
 -(void)back {
@@ -147,10 +136,9 @@ static NSString *imageTile = @"ImageTile";
     
     fileCollectionView.delegate = self;
     fileCollectionView.dataSource = self;
-    
-    // match sketch spec (just used dev color picker tbh)
-    fileCollectionView.backgroundColor = [UIColor colorWithHue:0.167 saturation:0.025 brightness:0.937 alpha:1.000];
-    self.view.backgroundColor = [UIColor colorWithHue:0.000 saturation:0.000 brightness:0.969 alpha:1.000];
+
+    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
+    fileCollectionView.backgroundColor = [UIColor frescoBackgroundColorLight];
 
 }
 -(void)viewWillAppear:(BOOL)animated {
@@ -160,6 +148,9 @@ static NSString *imageTile = @"ImageTile";
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self shouldShowStatusBar:YES animated:YES];
+    
+//    self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
+    //Navigation bar color is not Fresco Yellow. Not sure where it's set
 }
 
 -(void)viewWillDisappear:(BOOL)animated {

@@ -113,16 +113,15 @@
     [bottomContainer addSubview:anonymousButton];
     
         //Configure next button
-//    UIButton *nextButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [nextButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-//    [nextButton setTintColor:[UIColor frescoLightTextColor]];
-//    nextButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 60, 40);
-//    [nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
-//    [nextButton addTarget:self action:@selector(next:) forControlEvents:UIControlEventTouchUpInside];
-//    nextButton.userInteractionEnabled = NO;
-//    [bottomContainer addSubview:nextButton];
+    UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [sendButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [sendButton setTintColor:[UIColor frescoLightTextColor]];
+    sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
+    [sendButton setTitle:@"SEND" forState:UIControlStateNormal];
+    [sendButton addTarget:self action:@selector(next:) forControlEvents:UIControlEventTouchUpInside];
+    sendButton.userInteractionEnabled = NO;
+    [bottomContainer addSubview:sendButton];
     
-    //^ SHOULD BE SEND BUTTON
 }
 
 
@@ -132,6 +131,13 @@
     //Back button action
 -(void)back {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+    //Next button action
+-(void)send {
+    //Send to Fresco
+    //Post to selected social
+    //Configure anonymity
 }
 
     //Square button action
