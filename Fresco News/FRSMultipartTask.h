@@ -27,5 +27,5 @@
 @property int totalParts;
 @property int completedParts;
 @property (nonatomic, retain, readonly) NSMutableArray *openConnections;
-
+-(void)createUploadFromSource:(NSURL *)asset destinations:(NSArray *)destinations progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion;
 @end

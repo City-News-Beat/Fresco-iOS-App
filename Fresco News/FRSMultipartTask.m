@@ -13,7 +13,7 @@
 @synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections;
 
 // ovveride 
--(void)createUploadFromSource:(NSURL *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
+-(void)createUploadFromSource:(NSURL *)asset destinations:(NSArray *)destinations progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
     
     
 }
@@ -78,7 +78,8 @@
     totalConnections++;
     
     // set up actual NSURLSessionUploadTask
-    NSURLRequest *chunkRequest = Nil;
+    NSMutableURLRequest *chunkRequest = Nil;
+    [self signRequest:chunkRequest];
     
     NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:currentData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
