@@ -138,6 +138,8 @@
 }
 
 -(void)uploadDidFail:(id)upload withError:(NSError *)error response:(NSData *)response {
+    _errorCount++;
+
     NSDictionary *infoForNotification = @{@"response":response, @"error":error};
     [self.notificationCenter postNotificationName:uploadFailedNotification object:upload userInfo:infoForNotification];
     
@@ -149,7 +151,6 @@
     [self.activeUploads removeObject:upload];
     [self.activeUploads addObject:upload];
     [self next];
-    _errorCount++;
 }
 
 -(void)waitOnFailure {
