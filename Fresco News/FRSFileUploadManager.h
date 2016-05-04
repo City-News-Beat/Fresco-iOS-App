@@ -13,7 +13,8 @@ static NSString * const uploadFailedNotification = @"FRSUploadFailedNotification
 static NSString * const uploadSuccessNotification = @"FRSUploadSuccessNotification";
 static NSString * const uploadProgressNotification = @"FRSUploadProgressNotification";
 static NSString * const uploadStartedNotification = @"FRSUploadStartedNotification";
-static int const maxFailures = 5;
+static int const maxFailures = 5; // max failures before pause
+static int const failWaitTime = 5; // seconds waited between fail count trigger
 
 @interface FRSFileUploadManager : NSObject <FRSUploadDelegate>
 {

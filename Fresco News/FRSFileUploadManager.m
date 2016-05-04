@@ -93,7 +93,10 @@
 }
 
 -(void)next {
-    
+    if ([self.uploadQueue count] > 1) {
+        FRSUploadTask *nextTask = self.uploadQueue[1];
+        [nextTask start];
+    }
 }
 
 
@@ -139,6 +142,7 @@
     [self.notificationCenter postNotificationName:uploadFailedNotification object:upload userInfo:infoForNotification];
     
     if (_errorCount >= maxFailures) {
+        [self waitOnFailure];
         return;
     }
     
@@ -146,6 +150,11 @@
     [self.activeUploads addObject:upload];
     [self next];
     _errorCount++;
+}
+
+-(void)waitOnFailure {
+    // wait for x seconds before starting again
+    [self performSelector:@selector(next) withObject:Nil afterDelay:5];
 }
 
 @end
