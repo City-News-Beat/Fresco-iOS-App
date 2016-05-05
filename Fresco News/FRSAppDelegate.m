@@ -43,7 +43,7 @@
     [self startFabric];
  
 //    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
-        self.window.rootViewController = [[FRSTabBarController alloc] init];
+    self.window.rootViewController = [[FRSTabBarController alloc] init];
 //    }
 //    else {
 //        [self startAuthentication];
