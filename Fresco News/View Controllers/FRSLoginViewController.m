@@ -83,6 +83,10 @@
     
     [self.view addGestureRecognizer:tap];
 
+    /*
+        OMAR THIS IS WHAT CONSTRAINTS ARE FOR, SO U DONT NEED RANDOM NUMBERS
+     */
+    
     if (IS_IPHONE_5) {
         self.socialTopConstraint.constant = 104;
     } else if (IS_IPHONE_6) {
@@ -118,6 +122,21 @@
 
 -(IBAction)login:(id)sender {
     //Animate transition
+    NSString *username = _userField.text;
+    NSString *password = _passwordField.text;
+    
+    if ([password isEqualToString:@""] || [username isEqualToString:@""] || (![self isValidUsername:username] && ![self validEmail:username])) {
+        // error out
+        
+        
+        
+        return;
+    }
+    
+    [[FRSAPIClient sharedClient] signIn:username password:password completion:^(id responseObject, NSError *error) {
+        NSLog(@"%@ %@", responseObject, error);
+        
+    }];
 }
 
 

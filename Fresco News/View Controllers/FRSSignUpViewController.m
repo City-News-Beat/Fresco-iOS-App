@@ -581,7 +581,6 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    
 //    [self.view resignFirstResponder];
     [self.usernameTF resignFirstResponder];
     [self.emailTF resignFirstResponder];
