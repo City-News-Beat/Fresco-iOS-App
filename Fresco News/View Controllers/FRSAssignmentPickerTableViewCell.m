@@ -32,9 +32,13 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
     if (self) {
-        self.backgroundColor = [UIColor redColor];
+        self.backgroundColor = [UIColor frescoBackgroundColorLight];
         self.assignment = assignment;
         
+//        UIView *backgroundView = [[UIView alloc] initWithFrame:self.frame];
+//        backgroundView.backgroundColor = [UIColor whiteColor];
+//        self.backgroundView = backgroundView;
+
         self.selectionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24)];
         
         [self toggleImage];
@@ -50,7 +54,8 @@
 }
 
 -(void)configureCell {
- 
+    
+//    self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     self.selectionImageView.frame = CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24);
     self.titleLabel.frame = CGRectMake(16, 12, self.frame.size.width - 32 - 24 - 16, 20);

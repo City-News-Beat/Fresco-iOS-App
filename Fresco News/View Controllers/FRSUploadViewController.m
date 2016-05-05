@@ -33,7 +33,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureUI];
     
     NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView selectRowAtIndexPath:indexPath animated:YES  scrollPosition:UITableViewScrollPositionBottom];
+    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionBottom];
 }
 
 
@@ -173,6 +173,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.allowsSelection = YES;
     [self adjustTableViewFrame];
     [self.view addSubview:self.tableView];
     
@@ -217,12 +218,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    
-    
+
     FRSAssignment *assignment;
     
     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier assignment:assignment];
+    
     [cell configureCell];
     
     return cell;
@@ -231,9 +231,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     NSLog(@"SELECTED: %ld", indexPath.row);
-    
-    FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    [cell setSelected:YES animated:YES];
+
 }
 
 

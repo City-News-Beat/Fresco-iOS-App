@@ -17,5 +17,6 @@
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(FRSAssignment *)assignment;
 
 -(void)configureCell;
+-(void)toggleImage;
 
 @end
