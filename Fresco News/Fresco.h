@@ -31,8 +31,8 @@ static BOOL const stagingEnvironment = FALSE;
 static NSString * const clientAuthorization = @"MTMzNzp0aGlzaXNhc2VjcmV0";
 static NSString * const serviceName = @"frescoNewsService3";
 
-static NSString * const baseURL = @"https://api.fresconews.com/v1/";
-static NSString * const baseURL2 = @"https://api.dev2.fresconews.com/v2/";
+static NSString * const baseURL2 = @"https://api.fresconews.com/v1/";
+static NSString * const baseURL = @"http://dev.api2.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 static NSString * const storiesEndpoint = @"story/recent";
@@ -93,9 +93,6 @@ typedef void (^StoryImageBlock)(NSInteger storyImageIndex);
 
 typedef void (^ShareSheetBlock)(NSArray *sharedContent);
 typedef void (^ActionButtonBlock)();
-typedef void (^TransferProgressBlock)(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
-typedef void (^TransferCompletionBlock)(NSString *fileName, NSString *eTag, NSError *error, id task);
-typedef void (^TransferCancellationBlock)(BOOL success, NSError *error, id task);
 typedef void (^TransferPercentage)(float percentage);
 
 /*

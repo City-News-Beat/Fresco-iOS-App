@@ -10,7 +10,6 @@
 #import "FRSMultipartTask.h"
 #import "FRSUploadTask.h"
 
-
 #define MB 1024*1024
 #define MAX_CONCURRENT 3
 #define CHUNK_SIZE 5
@@ -22,13 +21,11 @@
     NSInteger openConnections;
     NSInteger dataRead;
     NSInteger totalConnections;
-
-    TransferCompletionBlock completionBlock;
-    TransferProgressBlock progressBlock;
-    
     BOOL needsData;
 }
--(void)uploadDataFromURL:(NSURL *)url completion:(TransferCompletionBlock)completion progress:(TransferProgressBlock)progress;
 
-
+@property int totalParts;
+@property int completedParts;
+@property (nonatomic, retain, readonly) NSMutableArray *openConnections;
+-(void)createUploadFromSource:(NSURL *)asset destinations:(NSArray *)destinations progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion;
 @end

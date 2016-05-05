@@ -49,4 +49,16 @@
     }];
 }
 
++(NSDictionary *)socialLinkForTwitterSession:(TWTRSession *)session {
+    
+    
+    return Nil;
+}
+
++(NSDictionary *)socialLinkForFacebookToken:(FBSDKAccessToken *)token {
+    
+    
+    return Nil;
+}
+
 @end
