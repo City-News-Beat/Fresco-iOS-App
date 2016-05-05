@@ -304,7 +304,7 @@
                             };
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        completion(responseObject[@"data"], error);
     }];
     
 }
@@ -327,7 +327,7 @@
                     };
     
     [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        completion(responseObject[@"data"], error);
     }];
 }
 
@@ -342,7 +342,7 @@
             };
 
     [self get:storyGalleriesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        completion(responseObject[@"data"], error);
     }];
 }
 
@@ -363,7 +363,7 @@
     
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        completion(responseObject[@"data"], error);
     }];
 }
 
