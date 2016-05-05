@@ -55,6 +55,18 @@
     self.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.delegate = self;
     self.dataSource = self;
+    
+    
+    
+    
+//    if (userHasFollowers) {
+//        [void loadFeed];
+//    }
+
+}
+
+-(void)loadFeed {
+    
     FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
     [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
@@ -64,7 +76,7 @@
             NSEntityDescription *entity = [NSEntityDescription entityForName:@"FRSGallery"
                                                       inManagedObjectContext:appDelegate.managedObjectContext];
             FRSGallery *realGallery = [[FRSGallery alloc] initWithEntity:entity
-                                              insertIntoManagedObjectContext:nil];
+                                          insertIntoManagedObjectContext:nil];
             //FRSGallery *realGallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:appDelegate.managedObjectContext];
             [realGallery configureWithDictionary:gallery context:appDelegate.managedObjectContext];
             [realGalleries addObject:realGallery];

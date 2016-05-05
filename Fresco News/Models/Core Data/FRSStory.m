@@ -40,6 +40,10 @@
     
     NSInteger imageViewHeight = IS_IPHONE_5 ? 192 : 240;
     
+    if (self.caption.length == 0) {
+        imageViewHeight = imageViewHeight -12;
+    }
+    
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width - 32 , 0)];
     label.text = self.caption;
     label.numberOfLines = 6;

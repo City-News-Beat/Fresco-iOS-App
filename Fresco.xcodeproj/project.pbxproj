@@ -16,6 +16,8 @@
 		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
 		075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */; };
 		075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */; };
+		077FBC3A1CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 077FBC391CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m */; };
+		0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0780914A1CD93A0D00D7FA40 /* FRSUploadViewController.m */; };
 		078CEB1B1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078CEB1A1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
 		07A138BF1CBC053C00163BA0 /* FRSLoadingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A138BE1CBC053C00163BA0 /* FRSLoadingTableViewCell.m */; };
@@ -241,6 +243,10 @@
 		0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraViewController.m; sourceTree = "<group>"; };
 		075998311C6BCF5300A0FE73 /* FRSAVSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAVSessionManager.h; sourceTree = "<group>"; };
 		075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAVSessionManager.m; sourceTree = "<group>"; };
+		077FBC381CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentPickerTableViewCell.h; sourceTree = "<group>"; };
+		077FBC391CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentPickerTableViewCell.m; sourceTree = "<group>"; };
+		078091491CD93A0D00D7FA40 /* FRSUploadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadViewController.h; sourceTree = "<group>"; };
+		0780914A1CD93A0D00D7FA40 /* FRSUploadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadViewController.m; sourceTree = "<group>"; };
 		078CEB191CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingSomethingCollectionReusableView.h; sourceTree = "<group>"; };
 		078CEB1A1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissingSomethingCollectionReusableView.m; sourceTree = "<group>"; };
 		079CEEFA1C28740B00E559F3 /* FRSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAlertView.h; sourceTree = "<group>"; };
@@ -676,6 +682,17 @@
 			name = Utilities;
 			sourceTree = "<group>";
 		};
+		078091481CD939E500D7FA40 /* Upload */ = {
+			isa = PBXGroup;
+			children = (
+				078091491CD93A0D00D7FA40 /* FRSUploadViewController.h */,
+				0780914A1CD93A0D00D7FA40 /* FRSUploadViewController.m */,
+				077FBC381CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.h */,
+				077FBC391CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m */,
+			);
+			name = Upload;
+			sourceTree = "<group>";
+		};
 		07ED92D61C752017000DBEA8 /* DGElasticPullToRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -832,6 +849,7 @@
 			children = (
 				D487F1B21CBD6550005742F3 /* Submission */,
 				4AB98C921C8A7EC6005E7AB2 /* Camera */,
+				078091481CD939E500D7FA40 /* Upload */,
 				4AB98C931C8A7ECF005E7AB2 /* Followers */,
 				4AB98C941C8A7ED7005E7AB2 /* Gallery */,
 				4AB98C951C8A7EDC005E7AB2 /* Assignments */,
@@ -2113,8 +2131,10 @@
 				65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */,
 				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
 				D4A7D8A11CCA7D4E002C6EA3 /* SSKeychainQuery.m in Sources */,
+				077FBC3A1CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m in Sources */,
 				65DC9BF41C485B7F001F450A /* FRSGallery+CoreDataProperties.m in Sources */,
 				D487F1BE1CBD6C2D005742F3 /* FRSMediaScroller.m in Sources */,
+				0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */,
 				D453CC871CCA80850091A004 /* NSManagedObjectContext+MagicalRecord.m in Sources */,
 				07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,

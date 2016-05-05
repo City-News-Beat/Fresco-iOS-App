@@ -117,15 +117,15 @@
 }
 
 -(void)updateSocial {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.actionBar handleHeartState:self.gallery.isLiked];
-        
-        if (self.gallery.numberOfLikes == 0) {
-            self.gallery.numberOfLikes = rand()%350;
-        }
-        
-        [self.actionBar handleHeartAmount:self.gallery.numberOfLikes];
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self.actionBar handleHeartState:self.gallery.isLiked];
+////        
+////        if (self.gallery.numberOfLikes == 0) {
+////            self.gallery.numberOfLikes = rand()%350;
+////        }
+//        
+//        [self.actionBar handleHeartAmount:self.gallery.numberOfLikes];
+//    });
 }
 
 -(void)updateScrollView {

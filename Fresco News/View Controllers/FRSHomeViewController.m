@@ -50,6 +50,9 @@
 @property (strong, nonatomic) NSMutableArray *pulled;
 @property (weak, nonatomic) FRSAppDelegate *appDelegate;
 @property (nonatomic, strong) FRSFollowingTable *followingTable;
+
+@property (strong, nonatomic) UIView *sudoNavBar;
+
 @end
 
 @implementation FRSHomeViewController
@@ -76,9 +79,18 @@
     CGRect scrollFrame = self.tableView.frame;
     scrollFrame.origin.x = scrollFrame.size.width;
     scrollFrame.origin.y = -64;
+
+//    if (userHasNoFollowers) {
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
+
+    [self configureNoFollowers];
+
+//    } else {
+//    }
+    
     [self.pageScroller addSubview:self.followingTable];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -136,6 +148,48 @@
 
 #pragma mark - UI
 
+-(void)configureNoFollowers {
+    
+    UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"frog"]];
+    frog.frame = CGRectMake(self.view.frame.size.width/2 - 200/2, self.view.frame.size.height/2 -60, 200, 120);
+    frog.alpha = 0.54;
+    [self.followingTable addSubview:frog];
+    
+    UILabel *awkward = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 +100, self.followingTable.frame.size.width, 30)];
+    [awkward setTextAlignment:NSTextAlignmentCenter];
+    [awkward setText:@"AWKWARD"];
+    [awkward setTextColor:[UIColor frescoDarkTextColor]];
+    [awkward setFont:[UIFont notaBoldWithSize:35]];
+    [self.followingTable addSubview:awkward];
+    
+    
+    UIView *textContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 +140, self.followingTable.frame.size.width, 40)];
+    [self.followingTable addSubview:textContainer];
+    
+    UILabel *subText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.followingTable.frame.size.width, 40)];
+    [subText setTextAlignment:NSTextAlignmentCenter];
+    subText.backgroundColor = [UIColor clearColor];
+    [subText setText:@"It looks like you aren't following anyone yet. \nSee which of your friends are using Fresco         ."];
+    subText.numberOfLines = 2;
+    subText.textColor = [UIColor frescoMediumTextColor];
+    [subText setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightRegular]];
+    [subText sizeToFit];
+    subText.frame = CGRectMake(textContainer.frame.size.width/2 -subText.frame.size.width/2, subText.frame.origin.y, subText.frame.size.width, subText.frame.size.height);
+    [textContainer addSubview:subText];
+    
+    UIButton *here = [UIButton buttonWithType:UIButtonTypeSystem];
+    here.frame = CGRectMake(subText.frame.size.width - 18, 16, 40, 20);
+    [here setTitle:@"here" forState:UIControlStateNormal];
+    [here setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+    [here.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
+    [here addTarget:self action:@selector(hereTapped) forControlEvents:UIControlEventTouchUpInside];
+    [textContainer addSubview:here];
+}
+
+-(void)hereTapped {
+    NSLog(@"here");
+}
+
 -(void)configureSpinner {
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
@@ -192,6 +246,7 @@
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
+//    titleView.backgroundColor = [UIColor redColor];
 
     self.highlightTabButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7, 12, 87, 20)];
     [self.highlightTabButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
@@ -222,14 +277,40 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
+    /* Configure sudo nav bar when scrolling for scrolling between tabs and nav bar is hidden */
+    self.sudoNavBar = [[UIView alloc] initWithFrame:CGRectMake(0, -88, self.view.frame.size.width, 44)];
+    self.sudoNavBar.backgroundColor = [UIColor frescoOrangeColor];
+    [self.view addSubview:self.sudoNavBar];
     
+    UIButton *sudoHighlightButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7, 12, 87, 20)];
+    [sudoHighlightButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
+    [sudoHighlightButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
+    [sudoHighlightButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.sudoNavBar addSubview:sudoHighlightButton];
     
+    UIButton *sudoFollowingButton = [[UIButton alloc] initWithFrame:CGRectMake(208.3, 12, 87, 20)];
+    [sudoFollowingButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
+    [sudoFollowingButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
+    [sudoFollowingButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.sudoNavBar addSubview:sudoFollowingButton];
+    
+    if (IS_IPHONE_6) {
+        sudoHighlightButton.frame = CGRectMake(80.7, 12, 87, 20);
+        sudoFollowingButton.frame  = CGRectMake(208.3, 12, 87, 20);
+    } else if (IS_IPHONE_6_PLUS) {
+        sudoHighlightButton.frame = CGRectMake(93.7, 12, 87, 20);
+        sudoFollowingButton.frame  = CGRectMake(234.3, 12, 87, 20);
+    } else if (IS_IPHONE_5) {
+        sudoHighlightButton.frame = CGRectMake(62.3, 12, 87, 20);
+        sudoFollowingButton.frame  = CGRectMake(171.7, 12, 87, 20);
+    }
+
 //    CAShapeLayer * layer = [[CAShapeLayer alloc]init];
 //    layer.frame = view.bounds;
 //    layer.fillColor = [[UIColor blackColor] CGColor];
 //    
 //    layer.path = CGPathCreateWithRect(CGRectMake(10, 10, 30, 30), NULL);
-//    
+
 //    view.layer.mask = layer;
     
 //    self.maskView = [[CAShapeLayer alloc] init];
@@ -671,6 +752,8 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
+    self.sudoNavBar.frame = CGRectMake(0, (scrollView.contentOffset.x/8.5)-88, self.view.frame.size.width, 44);
+
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     if (scrollView == self.pageScroller) {
         [self pausePlayers];
@@ -686,6 +769,7 @@
             self.followingTabButton.alpha = 0.7;
             self.highlightTabButton.alpha = 1;
         }
+
     }
     else {
         [super scrollViewDidScroll:scrollView];

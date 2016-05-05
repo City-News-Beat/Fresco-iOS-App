@@ -61,6 +61,8 @@
     
     
     [self addNotifications];
+    
+    self.notificationsEnabled = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -78,7 +80,15 @@
     [super viewWillDisappear:animated];
     self.navigationItem.title = @"";
     
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count-2] == self) {
+        // View is disappearing because a new view controller was pushed onto the stack
+        
+    } else if ([viewControllers indexOfObject:self] == NSNotFound) {
+        // View is disappearing because it was popped from the stack
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+    }
 }
 
 -(void)addNotifications{
@@ -108,6 +118,7 @@
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height -44 -52 -12)];
     
     self.scrollView.delegate = self;
+    self.scrollView.scrollEnabled = NO;
     
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.scrollView];
@@ -142,6 +153,7 @@
     self.usernameTF.textColor = [UIColor frescoDarkTextColor];
     self.usernameTF.font = [UIFont notaMediumWithSize:17];
     self.usernameTF.tintColor = [UIColor frescoOrangeColor];
+    self.usernameTF.returnKeyType = UIReturnKeyNext;
     [self.scrollView addSubview:self.usernameTF];
     
     self.usernameHighlightLine = [[UIView alloc] initWithFrame:CGRectMake(48, 92-64+44, self.usernameTF.frame.size.width, 0.5)];
@@ -153,8 +165,6 @@
     self.usernameCheckIV.frame = CGRectMake(self.usernameTF.frame.size.width - 24, 10, 24, 24);
     self.usernameCheckIV.alpha = 0;
     [self.usernameTF addSubview:self.usernameCheckIV];
-    
-    
 }
 
 -(void)configureEmailAddressField{
@@ -169,11 +179,14 @@
     self.emailTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email address" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     self.emailTF.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.emailTF.delegate = self;
+    self.emailTF.keyboardType = UIKeyboardTypeEmailAddress;
     self.emailTF.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.emailTF.autocorrectionType = UITextAutocorrectionTypeNo;
     self.emailTF.textColor = [UIColor frescoDarkTextColor];
     self.emailTF.tintColor = [UIColor frescoOrangeColor];
     self.emailTF.font = [UIFont systemFontOfSize:15];
+    self.emailTF.returnKeyType = UIReturnKeyNext;
+
     [backgroundView addSubview:self.emailTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -193,6 +206,8 @@
     self.passwordTF.tintColor = [UIColor frescoOrangeColor];
     self.passwordTF.font = [UIFont systemFontOfSize:15];
     self.passwordTF.secureTextEntry = YES;
+    self.passwordTF.returnKeyType = UIReturnKeyNext;
+
     [backgroundView addSubview:self.passwordTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -222,10 +237,11 @@
     
     
     UISwitch *toggle = [[UISwitch alloc] initWithFrame:CGRectMake(backgroundView.frame.size.width - 51 - 12, 15.5, 51, 31)];
-    toggle.on = YES;
+    toggle.on = NO;
     toggle.onTintColor = [UIColor frescoGreenColor];
     [toggle addTarget:self action:@selector(handleToggleSwitched:) forControlEvents:UIControlEventValueChanged];
     [backgroundView addSubview:toggle];
+    
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
@@ -265,6 +281,9 @@
     [self.mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
     self.y += self.mapView.frame.size.height;
+    
+    self.mapView.transform = CGAffineTransformMakeScale(0.93, 0.93);
+    self.mapView.alpha = 0;
 }
 
 -(void)configureSliderSection{
@@ -290,6 +309,9 @@
     [self.sliderContainer addSubview:bigIV];
     
     self.y += self.sliderContainer.frame.size.height + 12;
+    
+    self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
+    self.sliderContainer.alpha = 0;
 }
 
 -(void)configurePromoSection{
@@ -307,6 +329,7 @@
     self.promoTF.tintColor = [UIColor frescoOrangeColor];
     self.promoTF.delegate = self;
     self.promoTF.font = [UIFont systemFontOfSize:15];
+    self.promoTF.returnKeyType = UIReturnKeyGo;
     [self.promoContainer addSubview:self.promoTF];
     
     [self.promoContainer addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -323,6 +346,9 @@
     [self.scrollView addSubview:self.promoDescription];
     
     self.y += self.promoDescription.frame.size.height + 24;
+    
+    self.promoContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
+    self.promoDescription.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
 }
 
 -(void)adjustScrollViewContentSize{
@@ -349,12 +375,12 @@
 -(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState{
     if (controlState == UIControlStateNormal){
         [self.createAccountButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-//        self.createAccountButton.enabled = NO;
+        self.createAccountButton.enabled = NO;
     }
     else {
         [self.createAccountButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         [self.createAccountButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
-//        self.createAccountButton.enabled = YES;
+        self.createAccountButton.enabled = YES;
     }
 }
 
@@ -374,23 +400,113 @@
     [self.bottomBar addSubview:twitterButton];
 }
 
-#pragma TextField Delegate
+-(void)animateTextFieldError:(UITextField *)textField {
+    
+    CGFloat duration = 0.1;
+    
+    /* SHAKE */
+    
+    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        textField.transform = CGAffineTransformMakeTranslation(-7.5, 0);
+        
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            textField.transform = CGAffineTransformMakeTranslation(5, 0);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                textField.transform = CGAffineTransformMakeTranslation(-2.5, 0);
+                
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    
+                    textField.transform = CGAffineTransformMakeTranslation(2.5, 0);
+                    
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                        
+                        textField.transform = CGAffineTransformMakeTranslation(0, 0);
+                        
+                    } completion:nil];
+                }];
+            }];
+        }];
+    }];
+}
+
+-(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success{
+    
+    if(success) {
+        self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
+    } else {
+        self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
+    }
+    
+    
+    if (animateIn) {
+        
+        self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+        self.usernameCheckIV.alpha = 0;
+        
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameCheckIV.alpha = 1;
+        } completion:nil];
+        
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
+            } completion:nil];
+        }];
+        
+    } else {
+        
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.1, 1.1);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+            } completion:nil];
+        }];
+        
+        [UIView animateWithDuration:0.2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameCheckIV.alpha = 0;
+        } completion:nil];
+    }
+}
+
+#pragma mark - TextField Delegate
 
 -(void)dismissKeyboard {
     [self highlightTextField:nil enabled:NO];
-        
+    
     [self.view resignFirstResponder];
     [self.view endEditing:YES];
 }
 
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
-    return YES;
+-(BOOL)textFieldShouldReturn:(UITextField*)textField {
+
+    if (textField == self.usernameTF) {
+        [self.emailTF becomeFirstResponder];
+    } else if (textField == self.emailTF) {
+        [self.passwordTF becomeFirstResponder];
+    } else if (textField == self.passwordTF) {
+        [self.passwordTF resignFirstResponder];
+    }
+
+    
+    return NO;
 }
 
--(void)textFieldDidBeginEditing:(UITextField *)textField{
 
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
 
     if (textField == self.usernameTF){
         [self highlightTextField:self.usernameTF enabled:YES];
@@ -405,20 +521,24 @@
     if (textField == self.usernameTF){
         
         [self highlightTextField:self.usernameTF enabled:NO];
+        
+        [self animateTextFieldError:self.usernameTF];
 
         if ([self.usernameTF.text isEqualToString:@"@"]){
             self.usernameTF.text = @"";
         }
     }
-//
-//    UIControlState controlState;
-//    
-//    if ([FRSDataValidator isValidUserName:self.usernameTF.text] && [FRSDataValidator isValidEmail:self.emailTF.text] && [FRSDataValidator isValidPassword:self.passwordTF.text])
-//        controlState = UIControlStateHighlighted;
-//    else
+    
+    UIControlState controlState;
+    
+    if ([FRSDataValidator isValidUserName:self.usernameTF.text] && [FRSDataValidator isValidEmail:self.emailTF.text] && [FRSDataValidator isValidPassword:self.passwordTF.text]) {
+        controlState = UIControlStateHighlighted;
+    } else {
 //        controlState = UIControlStateNormal;
-//    
-//    [self toggleCreateAccountButtonTitleColorToState:controlState];
+        controlState = UIControlStateHighlighted;
+
+    }
+    [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
 
 
@@ -446,8 +566,19 @@
 -(void)handleToggleSwitched:(UISwitch *)toggle{
     
     if (toggle.on){
+    
         self.notificationsEnabled = YES;
         self.scrollView.scrollEnabled = YES;
+        [self.promoTF resignFirstResponder];
+        [self.usernameTF resignFirstResponder];
+        [self.passwordTF resignFirstResponder];
+        [self.usernameTF resignFirstResponder];
+
+        if (IS_IPHONE_5) {
+            [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height -44) animated:YES];
+        } else {
+            [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height) animated:YES];
+        }
         
         [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.mapView.transform = CGAffineTransformMakeScale(1, 1);
@@ -466,7 +597,12 @@
         
     } else {
         
-        self.notificationsEnabled = NO;
+        [self.scrollView setContentOffset:CGPointMake(0, -self.scrollView.contentInset.top) animated:YES];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.notificationsEnabled = NO;
+        });
+        
         self.scrollView.scrollEnabled = NO;
         
         [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -474,7 +610,7 @@
             self.mapView.alpha = 0;
         } completion:nil];
         
-        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.promoContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
             self.promoDescription.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
         } completion:nil];
@@ -482,7 +618,7 @@
         [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
         } completion:nil];
-        [UIView animateWithDuration:0.15 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.sliderContainer.alpha = 0;
         } completion:nil];
     }
@@ -494,16 +630,16 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
--(void)facebookTapped{
-    
-}
-
 -(void)twitterTapped{
-    
+    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error) {
+        //
+    }];
 }
 
--(void)googleTapped{
-    
+-(void)facebookTapped{
+    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error) {
+        //
+    } parent:self];
 }
 
 #pragma mark - Keyboard
@@ -519,19 +655,27 @@
     
     CGPoint point = self.scrollView.contentOffset;
 
-
-    if (self.promoTF.isFirstResponder){
-//        if (self.notificationsEnabled) {
-//            self.scrollView.frame = CGRectMake(0, -24, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
-//        } else {
-//            self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
-//        }
-    }
-    
     [UIView animateWithDuration:0.15 animations:^{
-//        self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, newScrollViewHeight);
         [self.scrollView setContentOffset:point animated:NO];
     }];
+    
+    if (self.promoTF.isFirstResponder) {
+        if (self.notificationsEnabled) {
+            
+            self.scrollView.frame = CGRectMake(0, -keyboardSize.height, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+
+            [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height) animated:YES];
+            
+        } else {
+            if (IS_IPHONE_6) {
+                self.scrollView.frame = CGRectMake(0, -36, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+            } else if (IS_IPHONE_6_PLUS) {
+                
+            } else if (IS_IPHONE_5) {
+                self.scrollView.frame = CGRectMake(0, -144, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+            }
+        }
+    }
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
@@ -582,10 +726,10 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
 //    [self.view resignFirstResponder];
-    [self.usernameTF resignFirstResponder];
-    [self.emailTF resignFirstResponder];
-    [self.passwordTF resignFirstResponder];
-    [self.promoTF resignFirstResponder];
+//    [self.usernameTF resignFirstResponder];
+//    [self.emailTF resignFirstResponder];
+//    [self.passwordTF resignFirstResponder];
+//    [self.promoTF resignFirstResponder];
 }
 
 @end

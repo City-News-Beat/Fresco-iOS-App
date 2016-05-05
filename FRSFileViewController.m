@@ -8,6 +8,7 @@
 
 #import "FRSFileViewController.h"
 #import "VideoTrimmerViewController.h"
+#import "FRSUploadViewController.h"
 #import "UIFont+Fresco.h"
 
 @interface FRSFileViewController ()
@@ -34,18 +35,6 @@ static NSString *imageTile = @"ImageTile";
     [self setupSecondaryUI];
     
     self.navigationItem.title = @"CHOOSE MEDIA";
-//    UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
-//    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
-//    [container addSubview:backButton];
-//    backButton.tintColor = [UIColor whiteColor];
-//    backButton.frame = CGRectMake(-3, 0, 24, 24);
-//    [backButton setImage:backButtonImage forState:UIControlStateNormal];
-//    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
-//    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.leftBarButtonItem = backBarButtonItem;
-    
-    
     
     UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -62,6 +51,7 @@ static NSString *imageTile = @"ImageTile";
     [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
     
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
+    
 }
 
 -(void)back {
@@ -83,6 +73,7 @@ static NSString *imageTile = @"ImageTile";
     nextButton.frame = CGRectMake(screenWidth-64, [UIScreen mainScreen].bounds.size.height-41, 60, 40);
     [nextButton setTitle:@"NEXT" forState:UIControlStateNormal];
     [nextButton addTarget:self action:@selector(next:) forControlEvents:UIControlEventTouchUpInside];
+    nextButton.userInteractionEnabled = NO;
     [self.view addSubview:nextButton];
     
     
@@ -145,10 +136,9 @@ static NSString *imageTile = @"ImageTile";
     
     fileCollectionView.delegate = self;
     fileCollectionView.dataSource = self;
-    
-    // match sketch spec (just used dev color picker tbh)
-    fileCollectionView.backgroundColor = [UIColor colorWithHue:0.167 saturation:0.025 brightness:0.937 alpha:1.000];
-    self.view.backgroundColor = [UIColor colorWithHue:0.000 saturation:0.000 brightness:0.969 alpha:1.000];
+
+    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
+    fileCollectionView.backgroundColor = [UIColor frescoBackgroundColorLight];
 
 }
 -(void)viewWillAppear:(BOOL)animated {
@@ -158,6 +148,9 @@ static NSString *imageTile = @"ImageTile";
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self shouldShowStatusBar:YES animated:YES];
+    
+//    self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
+    //Navigation bar color is not Fresco Yellow. Not sure where it's set
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -166,12 +159,13 @@ static NSString *imageTile = @"ImageTile";
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    
 }
 
 -(void)next:(id)sender {
-    
+    FRSUploadViewController *uploadViewController = [[FRSUploadViewController alloc] init];
+    [self.navigationController pushViewController:uploadViewController animated:YES];
 }
+
 /* Footer Related */
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -256,15 +250,18 @@ static NSString *imageTile = @"ImageTile";
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
         [cell selected:FALSE];
+        [nextButton.titleLabel setTextColor:[UIColor frescoLightTextColor]];
+        nextButton.userInteractionEnabled = NO;
     }
     else {
         if (cell.currentAVAsset) {
             self.currentTime = cell.currentAVAsset.duration;
             [self presentVideoTrimmerViewController];
         }
-        
         [selectedAssets addObject:representedAsset];
         [cell selected:TRUE];
+        [nextButton.titleLabel setTextColor:[UIColor frescoBlueColor]];
+        nextButton.userInteractionEnabled = YES;
     }
 }
 

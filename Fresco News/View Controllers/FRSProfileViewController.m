@@ -596,11 +596,15 @@
 #pragma mark - Social Overlay Actions
 
 -(void)twitterTapped{
-    NSLog(@"twitterTapped");
+    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error) {
+        //
+    }];
 }
 
 -(void)facebookTapped{
-    NSLog(@"facebookTapped");
+    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error) {
+        //
+    } parent:self];
 }
 
 #pragma mark - User
