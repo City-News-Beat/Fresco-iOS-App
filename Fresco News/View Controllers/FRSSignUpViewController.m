@@ -400,11 +400,92 @@
     [self.bottomBar addSubview:twitterButton];
 }
 
-#pragma TextField Delegate
+-(void)animateTextFieldError:(UITextField *)textField {
+    
+    CGFloat duration = 0.1;
+    
+    /* SHAKE */
+    
+    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        textField.transform = CGAffineTransformMakeTranslation(-7.5, 0);
+        
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            textField.transform = CGAffineTransformMakeTranslation(5, 0);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                textField.transform = CGAffineTransformMakeTranslation(-2.5, 0);
+                
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    
+                    textField.transform = CGAffineTransformMakeTranslation(2.5, 0);
+                    
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                        
+                        textField.transform = CGAffineTransformMakeTranslation(0, 0);
+                        
+                    } completion:nil];
+                }];
+            }];
+        }];
+    }];
+}
+
+-(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success{
+    
+    if(success) {
+        self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
+    } else {
+        self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
+    }
+    
+    
+    if (animateIn) {
+        
+        self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+        self.usernameCheckIV.alpha = 0;
+        
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameCheckIV.alpha = 1;
+        } completion:nil];
+        
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
+            } completion:nil];
+        }];
+        
+    } else {
+        
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.1, 1.1);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+            } completion:nil];
+        }];
+        
+        [UIView animateWithDuration:0.2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameCheckIV.alpha = 0;
+        } completion:nil];
+    }
+}
+
+#pragma mark - TextField Delegate
 
 -(void)dismissKeyboard {
     [self highlightTextField:nil enabled:NO];
-        
+    
     [self.view resignFirstResponder];
     [self.view endEditing:YES];
 }
@@ -440,6 +521,8 @@
     if (textField == self.usernameTF){
         
         [self highlightTextField:self.usernameTF enabled:NO];
+        
+        [self animateTextFieldError:self.usernameTF];
 
         if ([self.usernameTF.text isEqualToString:@"@"]){
             self.usernameTF.text = @"";

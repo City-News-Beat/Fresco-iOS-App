@@ -43,13 +43,13 @@
     [self startFabric];
  
 
-    if ([[FRSAPIClient sharedClient] isAuthenticated]  || TRUE) {
-        self.window.rootViewController = [[FRSTabBarController alloc] init];
-    }
-    else {
+//    if ([[FRSAPIClient sharedClient] isAuthenticated]  || TRUE) {
+//        self.window.rootViewController = [[FRSTabBarController alloc] init];
+//    }
+//    else {
         [self startAuthentication];
-        return YES; // no other stuff going on (no quick action handling, etc)
-    }
+//        return YES; // no other stuff going on (no quick action handling, etc)
+//    }
 
 
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
