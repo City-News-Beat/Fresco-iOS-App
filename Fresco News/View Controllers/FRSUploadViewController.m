@@ -14,8 +14,9 @@
 
 @property (strong, nonatomic) UIView *navigationBarView;
 @property (strong, nonatomic) UIScrollView *scrollView;
-@property (strong, nonatomic) UITableView *tableView;
-@property (strong, nonatomic) NSMutableArray *assignmentsArray;
+@property (strong, nonatomic) UITableView *assignmentsTableView;
+@property (strong, nonatomic) UITableView *galleryTableView;
+@property (strong, nonatomic) NSArray *assignmentsArray;
 @property (strong, nonatomic) UITextView *captionTextView;
 @property (strong, nonatomic) UIView *captionContainer;
 @property (strong, nonatomic) UIView *bottomContainer;
@@ -44,15 +45,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [self addNotifications];
     
-    [self configureNavigationBar];
     [self configureScrollView];
+    [self configureGalleryTableView];
+    [self configureNavigationBar];
     [self configureAssignments];
-    [self configureTableView];
+    [self configureAssignmentsTableView];
     [self configureTextView];
     [self configureBottomBar];
-    
-    self.tableView.tableFooterView = self.captionContainer;
-    self.tableView.tableHeaderView = self.scrollView;
+
 }
 
 
@@ -88,6 +88,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [titleLabel setText:@"GALLERY"];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [self.navigationBarView addSubview:titleLabel];
+    
+    
+    self.navigationBarView.alpha = 0;
+    titleLabel.alpha = 0;
 }
 
 -(void)configureBottomBar {
@@ -141,8 +145,17 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - UIScrollView
 
 -(void)configureScrollView {
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, self.view.frame.size.height)];
+    self.scrollView.delegate = self;
+    [self.view addSubview:self.scrollView];
+}
+
+
+#pragma mark - UITableView
+
+-(void)configureGalleryTableView {
     
-    /* Height for scrollView */
+    /* Height for galleryTableView */
     int height;
     if (IS_IPHONE_5) {
         height = 240;
@@ -152,47 +165,39 @@ static NSString * const cellIdentifier = @"assignment-cell";
         height = 310;
     }
     
-    /* Configure scrollView */
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, height)];
-    self.scrollView.delegate = self;
-    [self.navigationBarView addSubview:self.scrollView];
+    /* Configure galleryTableView */
+    self.galleryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height)];
+    [self.scrollView addSubview:self.galleryTableView];
     
     /* DEBUG */
-    self.scrollView.backgroundColor = [UIColor redColor];
-    self.scrollView.alpha = 0.1;
+    self.galleryTableView.backgroundColor = [UIColor blueColor];
+    self.galleryTableView.alpha = 0.1;
 }
 
-
-#pragma mark - UITableView
-
--(void)configureTableView {
+-(void)configureAssignmentsTableView {
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 44)];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.backgroundColor = [UIColor frescoBackgroundColorLight];
-    self.tableView.showsVerticalScrollIndicator = NO;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.assignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height, self.view.frame.size.width, self.assignmentsArray.count *44)];
+    self.assignmentsTableView.scrollEnabled = NO;
+    self.assignmentsTableView.delegate = self;
+    self.assignmentsTableView.dataSource = self;
+    self.assignmentsTableView.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.assignmentsTableView.showsVerticalScrollIndicator = NO;
+//    self.assignmentsTableView.delaysContentTouches = NO;
+    self.assignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 //    [self adjustTableViewFrame];
-    [self.view addSubview:self.tableView];
-    
-//    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentPickerTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:cellIdentifier];
-    
-//    [self.tableView registerClass:[FRSAssignmentPickerTableViewCell self] forCellReuseIdentifier:cellIdentifier];
+    [self.view addSubview:self.assignmentsTableView];
 }
 
 -(void)adjustTableViewFrame {
-    
+
     NSInteger height = self.assignmentsArray.count * 44;
-    
-    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     switch (self.assignmentsArray.count) {
         case 0:
-            return 1;
+            return 3;
             
         default:
             return self.assignmentsArray.count;
@@ -251,7 +256,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)resetOtherCells {
     for (NSInteger i = 0; i < self.assignmentsArray.count + 1; i++){
-        FRSAssignmentPickerTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        FRSAssignmentPickerTableViewCell *cell = [self.assignmentsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.isSelectedAssignment = NO;
         [cell toggleImage];
     }
@@ -261,10 +266,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configureTextView {
     
-    int textViewHeight = 200;
+    NSInteger textViewHeight = 200;
     
-    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, textViewHeight + 16)];
-    [self.view addSubview:self.captionContainer];
+    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
+    [self.scrollView addSubview:self.captionContainer];
     
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, textViewHeight)];
     self.captionTextView.delegate = self;
@@ -324,13 +329,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
     self.bottomContainer.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-    self.tableView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+    self.scrollView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
     
     self.bottomContainer.transform = CGAffineTransformMakeTranslation(0, 0);
-    self.tableView.transform = CGAffineTransformMakeTranslation(0, 0);
+    self.scrollView.transform = CGAffineTransformMakeTranslation(0, 0);
+    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, 0);
 }
 
 #pragma mark - Assignments
@@ -345,6 +352,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     NSError *error = nil;
     NSArray *stored = [moc executeFetchRequest:request error:&error];
     self.assignmentsArray = [NSMutableArray arrayWithArray:stored];
+    
+    self.assignmentsArray = @[@"one", @"two", @"three"];
 }
 
 #pragma mark - Actions
