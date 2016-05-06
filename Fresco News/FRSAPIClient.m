@@ -149,13 +149,16 @@
     }];
 }
 
--(void)updateUserWithDigestion:(NSDictionary *)digestion {
+-(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     // full_name: User's full name
     // bio: User's profile bio
     // avatar: User's avatar URL
     // installation
     // social links
     
+    [self post:updateUserEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
     
 }
 
