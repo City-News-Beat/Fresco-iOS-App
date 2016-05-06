@@ -34,5 +34,6 @@ static int const failWaitTime = 5; // seconds waited between fail count trigger
 +(instancetype)sharedUploader;
 -(void)uploadPhoto:(NSURL *)photoURL toURL:(NSURL *)destinationURL;
 -(void)uploadVideo:(NSURL *)videoURL toURL:(NSURL *)destinationURL;
+-(void)continueFromBackgroundWithCompletion:(nonnull void (^)())completionHandler;
 -(NSManagedObjectContext *)uploaderContext;
 @end

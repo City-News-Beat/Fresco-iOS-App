@@ -165,4 +165,13 @@
     return [appDelegate managedObjectContext];
 }
 
+// background notification & app killer
+-(void)continueFromBackgroundWithCompletion:(nonnull void (^)())completionHandler {
+    //complete work (either iterate based on waiting uploads or remove from store)
+    
+    
+    // end of work
+    completionHandler();
+}
+
 @end

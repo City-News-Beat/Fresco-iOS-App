@@ -200,10 +200,39 @@
 }
 
 
-
+// all info needed for "installation" field of registration/signin
 -(NSDictionary *)currentInstallation {
+   
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
     
+    currentInstallation[@"platform"] = @"ios";
+    
+    NSString *appVersion = [NSString stringWithFormat:@"Version %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    
+    if (appVersion) {
+        currentInstallation[@"app_version"] = appVersion;
+    }
+    
+    NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
+    
+    if (deviceToken) {
+        currentInstallation[@"deviceToken"] = deviceToken;
+    }
+    
+    NSInteger secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
+    NSInteger hoursFromGMT = secondsFromGMT / 60; // GMT = UTC
+    NSString *timeZone = [NSString stringWithFormat:@"UTC+%d", (int)hoursFromGMT];
+    
+    if (timeZone) {
+        currentInstallation[@"timezone"] = timeZone;
+    }
+    
+    NSString *localeString = [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode];
+    
+    if (localeString) {
+        currentInstallation[@"locale_identifier"] = localeString;
+    }
+
     return currentInstallation;
 }
 
