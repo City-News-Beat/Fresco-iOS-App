@@ -21,6 +21,8 @@
 @property (strong, nonatomic) UIView *bottomContainer;
 @property (strong, nonatomic) UILabel *placeholderLabel;
 
+@property (strong, nonatomic) FRSAssignment *selectedAssignment;
+
 @end
 
 @implementation FRSUploadViewController
@@ -31,9 +33,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [super viewDidLoad];
     
     [self configureUI];
-    
-    NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionBottom];
+
 }
 
 
@@ -156,7 +156,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, height)];
     self.scrollView.delegate = self;
     [self.navigationBarView addSubview:self.scrollView];
-
+    
     /* DEBUG */
     self.scrollView.backgroundColor = [UIColor redColor];
     self.scrollView.alpha = 0.1;
@@ -173,29 +173,30 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.allowsSelection = YES;
-    [self adjustTableViewFrame];
+//    [self adjustTableViewFrame];
     [self.view addSubview:self.tableView];
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentPickerTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:cellIdentifier];
+//    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentPickerTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:cellIdentifier];
     
-    [self.tableView registerClass:[FRSAssignmentPickerTableViewCell self] forCellReuseIdentifier:cellIdentifier];
+//    [self.tableView registerClass:[FRSAssignmentPickerTableViewCell self] forCellReuseIdentifier:cellIdentifier];
 }
 
 -(void)adjustTableViewFrame {
- 
-    NSInteger height = 88; //Count of submittable assignments * 44
-
+    
+    NSInteger height = self.assignmentsArray.count * 44;
+    
+    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    switch (self.assignmentsArray.count) {
-//        case 0:
-//            return 0;
-//            
-//        default:
-            return 3;
-//    }
+    
+    switch (self.assignmentsArray.count) {
+        case 0:
+            return 1;
+            
+        default:
+            return self.assignmentsArray.count;
+    }
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -207,7 +208,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [cell configureCell];
     
 }
-
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -221,7 +221,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     FRSAssignment *assignment;
     
-    FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier assignment:assignment];
+    FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:assignment];
     
     [cell configureCell];
     
@@ -229,12 +229,33 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    NSLog(@"SELECTED: %ld", indexPath.row);
-
+//    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    
+    
+    
+    FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (cell.isSelectedAssignment){
+        cell.isSelectedAssignment = NO;
+        self.selectedAssignment = nil;
+    }
+    else {
+        [self resetOtherCells];
+        cell.isSelectedAssignment = YES;
+        self.selectedAssignment = cell.assignment;
+    }
+    
+    [cell toggleImage];
 }
 
-
+-(void)resetOtherCells {
+    for (NSInteger i = 0; i < self.assignmentsArray.count + 1; i++){
+        FRSAssignmentPickerTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        cell.isSelectedAssignment = NO;
+        [cell toggleImage];
+    }
+}
 
 #pragma mark - Text View
 
@@ -315,12 +336,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - Assignments
 
 -(void)configureAssignments {
+    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(expirationDate >= %@)", [NSDate date]];
+    NSManagedObjectContext *moc = [delegate managedObjectContext];
     
-    NSString *assignmentOne   = @"Student Health Fair @ 10 a.m. in Camden, New Jersey";
-    NSString *assignmentTwo   = @"Alert! Police Activity in Oxnard";
-    NSString *assignmentThree = @"Bernie Sanders Rally @ 10:30 a.m. next to UCI's Student Center";
-
-    self.assignmentsArray = [[NSMutableArray alloc] initWithObjects:assignmentOne, assignmentTwo, assignmentThree, nil];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSAssignment"];
+    request.predicate = predicate;
+    NSError *error = nil;
+    NSArray *stored = [moc executeFetchRequest:request error:&error];
+    self.assignmentsArray = [NSMutableArray arrayWithArray:stored];
 }
 
 #pragma mark - Actions

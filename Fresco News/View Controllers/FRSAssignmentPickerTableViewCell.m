@@ -26,6 +26,7 @@
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
+
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(FRSAssignment *)assignment {
@@ -54,8 +55,6 @@
 }
 
 -(void)configureCell {
-    
-//    self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     self.selectionImageView.frame = CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24);
     self.titleLabel.frame = CGRectMake(16, 12, self.frame.size.width - 32 - 24 - 16, 20);
@@ -89,6 +88,7 @@
     self.titleLabel.text = nil;
     self.isSelectedAssignment = NO;
 }
+
 
 
 
