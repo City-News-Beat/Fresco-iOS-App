@@ -219,9 +219,14 @@
         currentInstallation[@"deviceToken"] = deviceToken;
     }
     
+    /*
     NSInteger secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
     NSInteger hoursFromGMT = secondsFromGMT / 60; // GMT = UTC
-    NSString *timeZone = [NSString stringWithFormat:@"UTC+%d", (int)hoursFromGMT];
+    NSString *timeZone = [NSString stringWithFormat:@"UTC+%d", (int)hoursFromGMT]; */
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    NSString *timeZone = [dateFormat stringFromDate:[NSDate date]];
     
     if (timeZone) {
         currentInstallation[@"timezone"] = timeZone;
