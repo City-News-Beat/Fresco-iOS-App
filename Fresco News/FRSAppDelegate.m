@@ -64,7 +64,7 @@
         [self handleColdQuickAction:launchOptions[UIApplicationLaunchOptionsShortcutItemKey]];
     }
     
-    [self registerForPushNotifications];
+    //[self registerForPushNotifications];
     
     
 //    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];

@@ -16,6 +16,11 @@
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 
+@protocol FRSFileUploaderObjectContext <NSObject>
+-(NSManagedObjectContext *)managedObjectContext; // emulate FRSAppDelegate methods without importing
+-(void)registerForPushNotifications;
+@end
+
 @interface FRSAPIClient : NSObject
 @property (nonatomic, retain) AFHTTPRequestOperationManager *requestManager;
 +(instancetype)sharedClient;

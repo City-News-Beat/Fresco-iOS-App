@@ -13,7 +13,7 @@
 @protocol FRSUploadDelegate <NSObject>
 // mandatory, basic upload events
 -(void)uploadWillStart:(id)upload;
--(void)uploadDidProgress:(id)upload bytesSent:(unsigned long)sent totalBytes:(unsigned long)total;
+-(void)uploadDidProgress:(id)upload bytesSent:(int64_t)sent totalBytes:(int64_t)total;
 -(void)uploadDidSucceed:(id)upload withResponse:(NSData *)response;
 -(void)uploadDidFail:(id)upload withError:(NSError *)error response:(NSData *)response;
 @end
@@ -32,8 +32,8 @@ typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success)
 @property (nonatomic, weak) id<FRSUploadDelegate> delegate;
 @property (nonatomic, retain, readonly) NSURLSessionUploadTask *uploadTask;
 @property (nonatomic, retain, readonly) NSURLSession *session;
-@property unsigned long bytesUploaded;
-@property unsigned long totalBytes;
+@property int64_t bytesUploaded;
+@property int64_t totalBytes;
 @property (nonatomic, retain) NSURL *assetURL;
 @property (nonatomic, retain) NSURL *destinationURL;
 

@@ -89,7 +89,7 @@
     }
     
     if (self.delegate) {
-        [self.delegate uploadDidProgress:self bytesSent:(unsigned long long)bytesSent totalBytes:(unsigned long long)totalBytesExpectedToSend];
+        [self.delegate uploadDidProgress:self bytesSent:bytesSent totalBytes:totalBytesExpectedToSend];
     }
 }
 

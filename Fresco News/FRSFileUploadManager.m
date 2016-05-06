@@ -123,7 +123,7 @@
     [self.activeUploads addObject:upload];
 }
 
--(void)uploadDidProgress:(id)upload bytesSent:(unsigned long)sent totalBytes:(unsigned long)total {
+-(void)uploadDidProgress:(id)upload bytesSent:(int64_t)sent totalBytes:(int64_t)total {
     NSDictionary *infoForNotification = @{@"sent":@(sent), @"total":@(total)};
     [self.notificationCenter postNotificationName:uploadProgressNotification object:upload userInfo:infoForNotification];
     

@@ -117,23 +117,13 @@
 /* 
  Register:
  
- -----------
  email:              'str', // User's email
  username:           'str', // User's username (no @ at beginning)
  password:           'str', // User's plaintext password
- phone_:             'str', // User's phone number (include country code)
- ------------
+ phone:             'str', // User's phone number (include country code)
  twitter_handle_:    'str', // User's twitter handle
- social_links_: { // Info for linking social media accounts
-   
- },
- installation_: { // Used for push notifications + linking devices to users
-    app_version:        'str',
-    platform:           'str',
-    device_token:       'str',
-    timezone_:          'str', // TODO What type??
-    locale_identifier_: 'str' // EN-US
- }
+ social_links_: {},
+ installation_: {}
  
  
  Update:
@@ -146,8 +136,22 @@
 
 
 -(void)registerWithUserDigestion:(NSDictionary *)digestion {
+    // email
+    // username
+    // password
+    // twitter_handle
+    // social_links
+    // installation
     
 
+}
+
+-(void)updateUserWithDigestion:(NSDictionary *)digestion {
+    // full_name: User's full name
+    // bio: User's profile bio
+    // avatar: User's avatar URL
+    // installation
+    // social links
 }
 
 -(FRSUser *)authenticatedUser {
@@ -157,11 +161,9 @@
 }
 
 
-/*
-  Creates dictionary w/ all current (provided) social links within the application, creates a dictionary with the format needed to be serialized into JSON for the API, will be {} with no links
- */
-
+// all the info needed for "social_links" field of registration/signin
 -(NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken {
+    // side note, twitter_handle is outside social links, needs to be handled outside this method
     NSMutableDictionary *socialDigestion = [[NSMutableDictionary alloc] init];
     
     if (twitterSession) {
@@ -179,22 +181,6 @@
             [socialDigestion setObject:facebookDigestion forKey:@"facebook"];
         }
     }
-    
-    /* if no social links, empty dict (parses out to JSON perfectly)
-     
-     Result: 
-     
-     {
-        @"facebook": {
-            @"token": @"XXXXXX"
-        },
-        @"twitter": {
-            @"token": @"XXXXXX"
-            @"secret": @"XXXXX"
-        }
-     }
-
-     */
     
     return socialDigestion;
 }
@@ -222,7 +208,8 @@
     /*
     NSInteger secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
     NSInteger hoursFromGMT = secondsFromGMT / 60; // GMT = UTC
-    NSString *timeZone = [NSString stringWithFormat:@"UTC+%d", (int)hoursFromGMT]; */
+    NSString *timeZone = [NSString stringWithFormat:@"UTC+%d", (int)hoursFromGMT]; 
+    */
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -482,6 +469,7 @@
     
     return client;
 }
+
 
 
 @end
