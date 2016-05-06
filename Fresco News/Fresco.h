@@ -36,7 +36,7 @@ static NSString * const baseURL2 = @"https://api.dev2.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 static NSString * const storiesEndpoint = @"story/recent";
-static NSString * const highlightsEndpoint = @"gallery/highlights_with_social";
+static NSString * const highlightsEndpoint = @"gallery/highlights";
 static NSString * const assignmentsEndpoint = @"assignment/find";
 static NSString * const storyGalleriesEndpoint = @"story/galleries/";
 static NSString * const locationEndpoint = @"user/location"; // send location
@@ -46,6 +46,11 @@ static NSString * const loginEndpoint = @"auth/signin";
 static NSString * const signUpEndpoint = @"auth/signup";
 
 static NSString * const socialLoginEndpoint = @"auth/signin/social";
+static NSString * const updateUserEndpoint = @"user/update";
+static NSString * const authenticatedUserEndpoint = @"user/me";
+
+static NSString * const createGalleryEndpoint = @"gallery/create";
+
 
 // quick actions -- app delegate
 static NSString * const assignmentsAction = @"FRSAssignmentsAction";

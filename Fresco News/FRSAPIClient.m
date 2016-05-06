@@ -135,7 +135,7 @@
  */
 
 
--(void)registerWithUserDigestion:(NSDictionary *)digestion {
+-(void)registerWithUserDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     // email
     // username
     // password
@@ -143,7 +143,10 @@
     // social_links
     // installation
     
-
+    
+    [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 -(void)updateUserWithDigestion:(NSDictionary *)digestion {
@@ -152,6 +155,8 @@
     // avatar: User's avatar URL
     // installation
     // social links
+    
+    
 }
 
 -(FRSUser *)authenticatedUser {
@@ -325,7 +330,7 @@
                             };
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject[@"data"], error);
+        completion(responseObject, error);
     }];
     
 }
@@ -348,7 +353,7 @@
                     };
     
     [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject[@"data"], error);
+        completion(responseObject, error);
     }];
 }
 
@@ -363,7 +368,7 @@
             };
 
     [self get:storyGalleriesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject[@"data"], error);
+        completion(responseObject, error);
     }];
 }
 
@@ -384,7 +389,7 @@
     
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject[@"data"], error);
+        completion(responseObject, error);
     }];
 }
 
