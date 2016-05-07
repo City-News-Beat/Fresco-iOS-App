@@ -638,7 +638,8 @@
 
 -(void)facebookTapped{
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error) {
-        //
+        NSLog(@"%d %@", authenticated, error);
+        
     } parent:self];
 }
 

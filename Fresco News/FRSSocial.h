@@ -15,8 +15,11 @@
 #import <Twitter/Twitter.h>
 
 @interface FRSSocial : NSObject
-typedef void (^LoginCompletionBlock)(BOOL authenticated, NSError *error);
+typedef void (^LoginCompletionBlock)(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token);
 
 +(void)loginWithTwitter:(LoginCompletionBlock)completion;
 +(void)loginWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent;
+
++(void)registerWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent;
++(void)registerWithTwitter:(LoginCompletionBlock)completion;
 @end

@@ -74,6 +74,13 @@
     return YES;
 }
 
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options {
+    return [[FBSDKApplicationDelegate sharedInstance] application:app
+                                                          openURL:url
+                                                sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                                       annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+}
+
 -(void)startFabric {
     [[Twitter sharedInstance] startWithConsumerKey:@"LuzgKf2eus1EGzxf2CyEtFJCJ" consumerSecret:@"kxlgOYo7SdgvLsHDUwUo90DkCbooDMbHQyDCayNSgD7oeUUUjT"];
     
