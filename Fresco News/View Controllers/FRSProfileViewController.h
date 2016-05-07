@@ -13,6 +13,7 @@
     UILabel *titleLabel;
 }
 
--(id)initWithUser:(FRSUser *)user;
-
+-(instancetype)initWithUser:(FRSUser *)user;
+@property (nonatomic, retain) FRSUser *representedUser;
+@property BOOL authenticatedProfile;
 @end

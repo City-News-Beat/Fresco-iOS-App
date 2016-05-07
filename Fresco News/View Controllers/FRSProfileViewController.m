@@ -71,6 +71,7 @@
 @end
 
 @implementation FRSProfileViewController
+@synthesize representedUser = _representedUser, authenticatedProfile = _authenticatedProfile;
 
 -(void)viewDidLoad {
     [super viewDidLoad];
@@ -97,41 +98,41 @@
     [self removeStatusBarNotification];
 }
 
--(id)initWithUser:(FRSUser *)user {
-    
-    
-//    user.profileImage
-//    user.firstName
-//    user.lastName
-//    user.username
-    if (self) {
-        
-        self.presentingUser = YES;
-        [self configureBackButtonAnimated:YES];
-        
-        /* NAV BAR */
-        [super removeNavigationBarLine];
+-(instancetype)initWithUser:(FRSUser *)user {
 
-        self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
-        self.usernameLabel.text = @"";
-        self.usernameLabel.textColor = [UIColor whiteColor];
-        [self.usernameLabel setFont:[UIFont notaBoldWithSize:17]];
-        self.usernameLabel.textAlignment = NSTextAlignmentCenter;
-        self.navigationItem.titleView = self.usernameLabel;
+    if (self) {
+        [self configureUI]; // setup UI
         
-        UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
-        
-        self.navigationItem.rightBarButtonItem = followButton;
-        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-        
-        /* TABLE VIEW */
-        [self configureTableView];
-        [self fetchGalleries];
-        
-        [self configureWithUser:user];
+        _representedUser = user; // obviously save for future
+        _authenticatedProfile = _representedUser.isLoggedIn; // signifies profile view is current authed user
+        [self configureWithUser:_representedUser];
         
     }
     return self;
+}
+
+-(void)configureUI {
+    self.presentingUser = YES;
+    [self configureBackButtonAnimated:YES];
+    
+    [super removeNavigationBarLine];
+    
+    self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
+    self.usernameLabel.text = @"";
+    self.usernameLabel.textColor = [UIColor whiteColor];
+    [self.usernameLabel setFont:[UIFont notaBoldWithSize:17]];
+    self.usernameLabel.textAlignment = NSTextAlignmentCenter;
+    self.navigationItem.titleView = self.usernameLabel;
+    
+    UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
+    
+    self.navigationItem.rightBarButtonItem = followButton;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    /* TABLE VIEW */
+    [self configureTableView];
+    [self fetchGalleries];
+
 }
 
 
