@@ -225,4 +225,8 @@
     completionHandler();
 }
 
+-(void)handleEventsForBackgroundURLSession:(nonnull NSString *)identifier completionHandler:(nonnull void (^)())completionHandler {
+    
+}
+
 @end

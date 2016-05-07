@@ -36,5 +36,6 @@ static int const failWaitTime = 5; // seconds waited between fail count trigger
 -(nullable NSManagedObjectContext *)uploaderContext;
 
 +(nullable NSManagedObjectContext *)uploaderContext; // convenience for outside use
+-(void)handleEventsForBackgroundURLSession:(nonnull NSString *)identifier completionHandler:(nonnull void (^)())completionHandler; // iterate in background
 
 @end

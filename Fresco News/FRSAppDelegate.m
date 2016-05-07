@@ -21,8 +21,9 @@
 #import "FRSLoginViewController.h"
 #import "FRSAPIClient.h"
 #import "VideoTrimmerViewController.h"
-
 #import "Fresco.h"
+#import "FRSFileUploadManager.h"
+
 @interface FRSAppDelegate (Implement)
 @property (nonatomic, retain) FRSTabBarController *tabBarController;
 @end
@@ -352,8 +353,8 @@
 }
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(nonnull NSString *)identifier completionHandler:(nonnull void (^)())completionHandler {
-    // iterate on multipart, or move to next upload in background ( we fuckin rock )
-    
+    // pass responsibility onto FRSFileUploadManager (will trigger completion handler when done with work needed)
+    [[FRSFileUploadManager sharedUploader] handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
 }
 
 
