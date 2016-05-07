@@ -57,16 +57,22 @@
     // create FRSUploadTask, add to queue
     FRSUploadTask *newTask = [[FRSUploadTask alloc] init];
     newTask.delegate = self;
-    
+    newTask.managedObject = [self managedObjectForTask:newTask];
     /* configure task */
     [self addUploadTask:newTask];
+}
+
+-(NSManagedObject *)managedObjectForTask:(FRSUploadTask *)task {
+    
+    
+    return Nil;
 }
 
 -(void)handleChunkedUpload:(NSURL *)url destination:(NSURL *)destination {
     // create FRSMultipartTask, add to queue
     FRSMultipartTask *newTask = [[FRSMultipartTask alloc] init];
     newTask.delegate = self;
-    
+    newTask.managedObject = [self managedObjectForTask:newTask];
     /* configure task */
     [self addUploadTask:newTask];
 }
