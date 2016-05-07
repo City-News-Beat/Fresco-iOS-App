@@ -105,6 +105,7 @@ static NSString * const loadingCellIdentifier = @"LoadingMoreCell";
 static NSString * const highlightCellIdentifier = @"HighlightCell";
 static NSString * const storyCellIdentifier = @"StoryCell";
 static NSString * const settingsCellIdentifier = @"SettingsCell";
+static NSString * const galleryCellIdentifier = @"gallery-cell";
 
 // callbacks / blocks
 typedef void (^StoryImageBlock)(NSInteger storyImageIndex);

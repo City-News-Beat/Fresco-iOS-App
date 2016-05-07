@@ -51,10 +51,6 @@
     return TRUE;
 }
 
--(void)loadGalleries:(NSArray *)galleries {
-    self.galleries = galleries;
-    [self reloadData];
-}
 -(void)commonInit {
     self.showsVerticalScrollIndicator = FALSE;
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -66,10 +62,10 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+    FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
     
     if (!cell) {
-        cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
@@ -94,7 +90,6 @@
     scroll.navigationController.interactivePopGestureRecognizer.enabled = YES;
     scroll.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [(FRSScrollingViewController *)self.scrollDelegate hideTabBarAnimated:YES];
-    
 }
 
 -(void)playerWillPlay:(AVPlayer *)player {
@@ -145,7 +140,6 @@
     };
     
     cell.readMoreBlock = ^void(NSArray *sharedContent) {
-        NSLog(@"TEST");
         [self readMore:indexPath];
     };
 }
