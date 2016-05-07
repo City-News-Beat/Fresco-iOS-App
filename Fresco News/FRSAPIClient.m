@@ -151,6 +151,8 @@
 }
 
 -(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    // ** WARNING ** Don't update users info just to update it, update it only if new (i.e. changing email to identical email has resulted in issues with api v1)
     // full_name: User's full name
     // bio: User's profile bio
     // avatar: User's avatar URL
@@ -165,19 +167,24 @@
 
 -(FRSUser *)authenticatedUser {
     
+    // predicate searching for users in store w/ loggedIn as TRUE/1
     NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"isLoggedIn", @(TRUE)];
     NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUser"];
     signedInRequest.predicate = signedInPredicate;
     
+    // get context from app deleegate (hate this dependency but no need to re-write rn to move up)
     NSManagedObjectContext *context = [FRSFileUploadManager uploaderContext]; // temp (replace with internal or above method
     
+    // no need to sort response, because theoretically there is 1
     NSError *userFetchError;
     NSArray *authenticatedUsers = [context executeFetchRequest:signedInRequest error:&userFetchError];
     
+    // no authenticated user, or we had trouble accessing data store
     if (userFetchError || [authenticatedUsers count] < 1) {
         return Nil;
     }
     
+    // if we have multiple "authenticated" users in data store, we probs messed up big time
     if ([authenticatedUsers count] > 1) {
         NSLog(@"**WARNING**: Indication of multiple authenciated users: %@", authenticatedUsers);
     }

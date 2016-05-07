@@ -24,7 +24,7 @@
 
 #import "Fresco.h"
 @interface FRSAppDelegate (Implement)
-
+@property (nonatomic, retain) FRSTabBarController *tabBarController;
 @end
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -43,7 +43,8 @@
     [self startFabric];
  
     if ([[FRSAPIClient sharedClient] isAuthenticated]) {
-        self.window.rootViewController = [[FRSTabBarController alloc] init];
+        self.tabBarController = [[FRSTabBarController alloc] init];
+        self.window.rootViewController = self.tabBarController;
     }
     else {
         [self startAuthentication];
@@ -179,29 +180,20 @@
 // when the app isn't open
 -(void)handleColdQuickAction:(UIApplicationShortcutItem *)shortcutItem {
     
-    if ([shortcutItem.type isEqualToString:takeVideoAction]) {
-        // load video view
+    if (!self.tabBarController) { // sry we kinda need that
+        return;
     }
-    else if ([shortcutItem.type isEqualToString:takePhotoAction]) {
-        // load photo view
-    }
-    else if ([shortcutItem.type isEqualToString:assignmentsAction]) {
-        // load assignments view
-    }
-
+    
+    [self.tabBarController respondToQuickAction:shortcutItem.type]; // tab bar can handle change
 }
 
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
     
-    if ([shortcutItem.type isEqualToString:takeVideoAction]) {
-        // load video view
+    if (!self.tabBarController) { // sry we kinda need that pal
+        return;
     }
-    else if ([shortcutItem.type isEqualToString:takePhotoAction]) {
-        // load photo view
-    }
-    else if ([shortcutItem.type isEqualToString:assignmentsAction]) {
-        // load assignments view
-    }
+    
+    [self.tabBarController respondToQuickAction:shortcutItem.type]; // tab bar can handle change
 }
 
 -(void)registerForPushNotifications {

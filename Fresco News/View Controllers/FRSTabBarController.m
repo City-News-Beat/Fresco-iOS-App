@@ -32,6 +32,10 @@
     
 }
 
+-(void)respondToQuickAction:(NSString *)quickAction {
+    
+}
+
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
