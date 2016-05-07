@@ -10,6 +10,8 @@
 #import "FRSAPIClient.h"
 
 @implementation FRSSocial
+
+// TODO: for login w/ twitter & login w/ facebook, use register, and add extra api layer
 +(void)loginWithTwitter:(LoginCompletionBlock)completion {
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
         if (session) {
@@ -64,15 +66,21 @@
 }
 
 +(NSDictionary *)socialLinkForTwitterSession:(TWTRSession *)session {
+    if (session.authTokenSecret && session.authToken) {
+        return @{@"platform":@"twitter", @"token":session.authToken, @"secret":session.authTokenSecret};
+    }
     
-    
-    return Nil;
+    return @{};
 }
 
 +(NSDictionary *)socialLinkForFacebookToken:(FBSDKAccessToken *)token {
+    NSString *tokenString = token.tokenString;
     
+    if (tokenString) {
+        return @{@"platform":@"facebook", @"token":tokenString};
+    }
     
-    return Nil;
+    return @{};
 }
 
 @end
