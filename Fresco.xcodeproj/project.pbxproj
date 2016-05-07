@@ -826,6 +826,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D40BD3CB1CDE073A00E39701 /* Gallery Table */,
 				D487F1B81CBD6BE5005742F3 /* Media Scroll */,
 				D4E76A2D1CB423C200AC7A45 /* Trim Tool */,
 				D43C80031C9074CE00A7A7A7 /* Loading Bottom Cell */,
@@ -850,7 +851,6 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				D40BD3CB1CDE073A00E39701 /* Scrolling Galleries */,
 				D487F1B21CBD6550005742F3 /* Submission */,
 				4AB98C921C8A7EC6005E7AB2 /* Camera */,
 				078091481CD939E500D7FA40 /* Upload */,
@@ -1177,13 +1177,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		D40BD3CB1CDE073A00E39701 /* Scrolling Galleries */ = {
+		D40BD3CB1CDE073A00E39701 /* Gallery Table */ = {
 			isa = PBXGroup;
 			children = (
 				D40BD3CC1CDE076000E39701 /* FRSGalleryTable.h */,
 				D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */,
 			);
-			name = "Scrolling Galleries";
+			name = "Gallery Table";
+			path = "../View Controllers";
 			sourceTree = "<group>";
 		};
 		D41365AB1CA32D63004FE848 /* Detail */ = {
