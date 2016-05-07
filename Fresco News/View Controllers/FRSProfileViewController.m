@@ -105,8 +105,8 @@
         
         _representedUser = user; // obviously save for future
         _authenticatedProfile = [_representedUser.isLoggedIn boolValue]; // signifies profile view is current authed user
-        [self configureWithUser:_representedUser];
         
+        [self configureWithUser:_representedUser]; // configure UI to specific represented user
     }
     return self;
 }
