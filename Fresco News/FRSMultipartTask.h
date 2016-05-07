@@ -10,9 +10,9 @@
 #import "FRSMultipartTask.h"
 #import "FRSUploadTask.h"
 
-#define MB 1024*1024
-#define MAX_CONCURRENT 3
-#define CHUNK_SIZE 5
+static int const chunkSize = 5;
+static int const maxConcurrentUploads = 3;
+static int const megabyteDefinition = 1048576; // bytes -> mb
 
 @interface FRSMultipartTask : FRSUploadTask <NSStreamDelegate>
 {

@@ -57,7 +57,7 @@
         {
             [currentData appendBytes:buffer length:length];
         }
-        if ([currentData length] >= CHUNK_SIZE * MB) {
+        if ([currentData length] >= chunkSize * megabyteDefinition) {
             [self startChunkUpload];
             triggeredUpload = TRUE;
             break;
@@ -95,7 +95,7 @@
     
     currentData = Nil;
     // if we have open stream & below max connections
-    if (openConnections < MAX_CONCURRENT && needsData) {
+    if (openConnections < maxConcurrentUploads && needsData) {
         [self next];
     }
     

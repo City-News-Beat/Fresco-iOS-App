@@ -41,11 +41,11 @@
     
     if (fileSizeError) {
         // default to chunked upload
-        [self handleChunkedUpload:videoURL destination:destinationURL];
+        [self handleChunkedUpload:videoURL destination:destinationURL fileSize:[fileSizeValue integerValue]];
     }
     else if ([fileSizeValue unsignedLongLongValue] / 1024 / 1024 > 25) {
         // chunked upload
-        [self handleChunkedUpload:videoURL destination:destinationURL];
+        [self handleChunkedUpload:videoURL destination:destinationURL fileSize:[fileSizeValue integerValue]];
     }
     else {
         // single upload
@@ -63,12 +63,30 @@
 }
 
 -(NSManagedObject *)managedObjectForTask:(FRSUploadTask *)task {
+    NSManagedObjectContext *currentContext = [self uploaderContext];
+    NSManagedObject *taskManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUpload" inManagedObjectContext:currentContext];
     
+    // specific properties
+    if ([[task class] isSubclassOfClass:[FRSMultipartTask class]]) {
+        [taskManagedObject setValue:@(TRUE) forKey:@"multipart"];
+    }
+    else if ([[task class] isSubclassOfClass:[FRSUploadTask class]]) {
+        
+    }
     
-    return Nil;
+    // general properties
+    
+    NSError *storeError;
+    [currentContext save:&storeError];
+    
+    if (storeError) {
+        NSLog(@"Error saving upload task: %@", storeError);
+    }
+    
+    return taskManagedObject;
 }
 
--(void)handleChunkedUpload:(NSURL *)url destination:(NSURL *)destination {
+-(void)handleChunkedUpload:(NSURL *)url destination:(NSURL *)destination fileSize:(NSInteger)sizeInBytes {
     // create FRSMultipartTask, add to queue
     FRSMultipartTask *newTask = [[FRSMultipartTask alloc] init];
     newTask.delegate = self;
