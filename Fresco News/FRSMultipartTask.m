@@ -8,11 +8,11 @@
 
 #import "FRSMultipartTask.h"
 #import "Fresco.h"
+#import "NSData+NSHash.h" // md5 all requests
 
 @implementation FRSMultipartTask
-@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections;
+@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections, destinationURLS = _destinationURLS;
 
-// ovveride 
 -(void)createUploadFromSource:(NSURL *)asset destinations:(NSArray *)destinations progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
     
     
@@ -101,18 +101,27 @@
     
 }
 
+// have to override to take into account multiple chunks
 - (void)URLSession:(NSURLSession *)urlSession task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
+    self.bytesUploaded += bytesSent;
     
+    if (self.delegate) {
+        [self.delegate uploadDidProgress:self bytesSent:self.bytesUploaded totalBytes:self.fileSizeFromMetadata];
+    }
+    
+    if (self.progressBlock) {
+        self.progressBlock(self, bytesSent, self.bytesUploaded, self.fileSizeFromMetadata);
+    }
 }
 
-// pause current request just like inherited class, but takes action on streaming too
+// pause all open requests
 -(void)pause {
     for (NSURLSessionUploadTask *task in _openConnections) {
         [task suspend];
     }
 }
 
-// resume current request just like inherited class, but takes action on streaming too
+// resume all previously open requests
 -(void)resume {
     for (NSURLSessionUploadTask *task in _openConnections) {
         [task resume];
