@@ -26,8 +26,15 @@
     return self;
 }
 
+// upload photo and video exist b/c we have rules as to what gets past on as single request or multi request task
 -(void)uploadPhoto:(NSURL *)photoURL toURL:(NSURL *)destinationURL {
-    [self handleSingleUpload:photoURL destination:destinationURL];
+    NSNumber *fileSizeValue = nil;
+    NSError *fileSizeError = nil;
+    [photoURL getResourceValue:&fileSizeValue
+                        forKey:NSURLFileSizeKey
+                         error:&fileSizeError];
+    
+    [self handleSingleUpload:photoURL destination:destinationURL fileSize:[fileSizeValue integerValue]];
 }
 
 -(void)uploadVideo:(NSURL *)videoURL toURL:(NSURL *)destinationURL {
@@ -49,32 +56,55 @@
     }
     else {
         // single upload
-        [self handleSingleUpload:videoURL destination:destinationURL];
+        [self handleSingleUpload:videoURL destination:destinationURL fileSize:[fileSizeValue integerValue]];
     }
 }
 
--(void)handleSingleUpload:(NSURL *)url destination:(NSURL *)destination {
+-(void)handleSingleUpload:(NSURL *)url destination:(NSURL *)destination fileSize:(NSInteger)sizeInBytes {
     // create FRSUploadTask, add to queue
     FRSUploadTask *newTask = [[FRSUploadTask alloc] init];
     newTask.delegate = self;
     newTask.managedObject = [self managedObjectForTask:newTask];
+    newTask.fileSizeFromMetadata = (int64_t)sizeInBytes;
     /* configure task */
     [self addUploadTask:newTask];
 }
 
+-(void)handleChunkedUpload:(NSURL *)url destination:(NSURL *)destination fileSize:(NSInteger)sizeInBytes {
+    // create FRSMultipartTask, add to queue
+    FRSMultipartTask *newTask = [[FRSMultipartTask alloc] init];
+    newTask.delegate = self;
+    newTask.managedObject = [self managedObjectForTask:newTask];
+    newTask.fileSizeFromMetadata = (int64_t)sizeInBytes;
+    /* configure task */
+    [self addUploadTask:newTask];
+}
+
+// creates managed object based off *NEW* **FULLY INITIALIZED** upload task
 -(NSManagedObject *)managedObjectForTask:(FRSUploadTask *)task {
     NSManagedObjectContext *currentContext = [self uploaderContext];
     NSManagedObject *taskManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUpload" inManagedObjectContext:currentContext];
     
     // specific properties
     if ([[task class] isSubclassOfClass:[FRSMultipartTask class]]) {
+        FRSMultipartTask *multiTask = (FRSMultipartTask *)task;
+        [taskManagedObject setValue:multiTask.destinationURLS forKey:@"destinationURLS"];
         [taskManagedObject setValue:@(TRUE) forKey:@"multipart"];
+        [taskManagedObject setValue:@(chunkSize) forKey:@"chunkSize"];
     }
     else if ([[task class] isSubclassOfClass:[FRSUploadTask class]]) {
-        
+        [taskManagedObject setValue:@(FALSE) forKey:@"multipart"];
+        [taskManagedObject setValue:@[task.destinationURL.absoluteString] forKey:@"destinationURLS"]; // save AWS signed URL
+
+    }
+    else {
+        return Nil; // what tf went on here, theoretically impossible, & should have broken by now
     }
     
     // general properties
+    [taskManagedObject setValue:@(task.fileSizeFromMetadata) forKey:@"fileSize"];
+    [taskManagedObject setValue:[NSDate date] forKey:@"creationDate"]; // check against expired URLS, etc
+    [taskManagedObject setValue:task.assetURL forKey:@"assetURL"]; // save origin location (might be temp, might have to change)
     
     NSError *storeError;
     [currentContext save:&storeError];
@@ -84,15 +114,6 @@
     }
     
     return taskManagedObject;
-}
-
--(void)handleChunkedUpload:(NSURL *)url destination:(NSURL *)destination fileSize:(NSInteger)sizeInBytes {
-    // create FRSMultipartTask, add to queue
-    FRSMultipartTask *newTask = [[FRSMultipartTask alloc] init];
-    newTask.delegate = self;
-    newTask.managedObject = [self managedObjectForTask:newTask];
-    /* configure task */
-    [self addUploadTask:newTask];
 }
 
 -(void)addUploadTask:(FRSUploadTask *)task {
@@ -189,7 +210,7 @@
     return [appDelegate managedObjectContext];
 }
 
-// background notification & app killer
+// background notification & app killer (dopest feature ever)
 -(void)continueFromBackgroundWithCompletion:(nonnull void (^)())completionHandler {
     //complete work (either iterate based on waiting uploads or remove from store)
     

@@ -26,6 +26,7 @@ static int const megabyteDefinition = 1048576; // bytes -> mb
 
 @property int totalParts;
 @property int completedParts;
+@property (nonatomic, retain) NSArray *destinationURLS;
 @property (nonatomic, retain, readonly) NSMutableArray *openConnections;
 -(void)createUploadFromSource:(NSURL *)asset destinations:(NSArray *)destinations progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion;
 @end

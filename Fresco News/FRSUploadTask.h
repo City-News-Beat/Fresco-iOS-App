@@ -32,8 +32,12 @@ typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success)
 @property (nonatomic, weak) id<FRSUploadDelegate> delegate;
 @property (nonatomic, retain, readonly) NSURLSessionUploadTask *uploadTask;
 @property (nonatomic, retain, readonly) NSURLSession *session;
+
+// file sizing & progress
 @property int64_t bytesUploaded;
 @property int64_t totalBytes;
+@property int64_t fileSizeFromMetadata;
+
 @property (nonatomic, retain) NSURL *assetURL;
 @property (nonatomic, retain) NSURL *destinationURL;
 

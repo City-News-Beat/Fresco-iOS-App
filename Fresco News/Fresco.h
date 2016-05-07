@@ -31,8 +31,7 @@ static BOOL const stagingEnvironment = FALSE;
 static NSString * const clientAuthorization = @"MTMzNzp0aGlzaXNhc2VjcmV0";
 static NSString * const serviceName = @"frescoNewsService3";
 
-static NSString * const baseURL = @"https://api.fresconews.com/v1/";
-static NSString * const baseURL2 = @"https://api.dev2.fresconews.com/v2/";
+static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 static NSString * const storiesEndpoint = @"story/recent";
