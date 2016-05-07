@@ -28,28 +28,36 @@
 static BOOL const developmentEnvironment = FALSE; // both of these effect the base url (dev takes priority)
 static BOOL const stagingEnvironment = FALSE;
 
+// authorization constants
 static NSString * const clientAuthorization = @"MTMzNzp0aGlzaXNhc2VjcmV0";
 static NSString * const serviceName = @"frescoNewsService3";
 
+// base URLS
 static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
+
+// content endpoints
 static NSString * const storiesEndpoint = @"story/recent";
 static NSString * const highlightsEndpoint = @"gallery/highlights";
 static NSString * const assignmentsEndpoint = @"assignment/find";
 static NSString * const storyGalleriesEndpoint = @"story/galleries/";
+
+// location endpoints
 static NSString * const locationEndpoint = @"user/location"; // send location
 static NSString * const dualLocationEndpoint = @"user/locationcall";  // send location & get nearby assignments
 
+// sign in / sign up (authorization) methods
 static NSString * const loginEndpoint = @"auth/signin";
 static NSString * const signUpEndpoint = @"auth/signup";
-
 static NSString * const socialLoginEndpoint = @"auth/signin/social";
+
+// user endpoints
 static NSString * const updateUserEndpoint = @"user/update";
 static NSString * const authenticatedUserEndpoint = @"user/me";
 
+// gallery creation
 static NSString * const createGalleryEndpoint = @"gallery/create";
-
 
 // quick actions -- app delegate
 static NSString * const assignmentsAction = @"FRSAssignmentsAction";
@@ -152,40 +160,6 @@ enum FRSErrorCodes {
 
 #define KEYS_PLIST_PATH                     [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"]
 #define KEYS_DICTIONARY                     [NSDictionary dictionaryWithContentsOfFile:KEYS_PLIST_PATH]
-
-/* Base URL/API */
-
-#pragma mark - Base URL/API
-
-#define ERROR_DOMAIN                        @"com.fresconews"
-
-#define BASE_PATH                           @""
-
-//#ifdef DEBUG
-
-//#define BASE_URL                        @"https://fresconews.com"
-//#define BASE_API                        @"https://api.fresconews.com/v1/"
-//#define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
-//#define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
-//#define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"ProductionStripeKey"]
-
-
-//    #define BASE_URL                        @"http://dev.fresconews.com"
-//    #define BASE_API                        @"http://dev.api.fresconews.com/v1/"
-
-//    #define BASE_URL                        @"https://staging.fresconews.com"
-//    #define BASE_API                        @"https://staging.api.fresconews.com/v1/"
-//
-//    #define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"StagingParseAppID"]
-//    #define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"StagingParseClientKey"]
-//    #define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"StagingStripeKey"]
-//#else
-#define BASE_URL                        @"https://fresconews.com"
-#define BASE_API                        @"https://api.fresconews.com/v1/"
-#define PARSE_APP_ID                    [KEYS_DICTIONARY objectForKey:@"ProductionParseAppID"]
-#define PARSE_CLIENT_KEY                [KEYS_DICTIONARY objectForKey:@"ProductionParseClientKey"]
-#define STRIPE_PUBLISHABLE_KEY          [KEYS_DICTIONARY objectForKey:@"ProductionStripeKey"]
-//#endif
 
 /* Twitter Auth */
 

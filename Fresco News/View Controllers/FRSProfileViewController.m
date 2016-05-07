@@ -596,15 +596,16 @@
 #pragma mark - Social Overlay Actions
 
 -(void)twitterTapped{
-    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error) {
-        //
+    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        
     }];
 }
 
--(void)facebookTapped{
-    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error) {
-        //
-    } parent:self];
+-(void)facebookTapped {
+    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        
+    } parent:self]; // presenting view controller
+    
 }
 
 #pragma mark - User
