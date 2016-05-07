@@ -123,6 +123,7 @@
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
 		D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */; };
+		D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3D01CDE1EAE00E39701 /* Reachability.m */; };
 		D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */; };
 		D412549F1C91E46D00E3B85C /* FRSMultipartTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */; };
 		D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */; };
@@ -448,6 +449,8 @@
 		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
 		D40BD3CC1CDE076000E39701 /* FRSGalleryTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryTable.h; sourceTree = "<group>"; };
 		D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryTable.m; sourceTree = "<group>"; };
+		D40BD3CF1CDE1EAE00E39701 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		D40BD3D01CDE1EAE00E39701 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		D40FA3191CAAFB2100A4FE47 /* FRSUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserDefaults.h; sourceTree = "<group>"; };
 		D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserDefaults.m; sourceTree = "<group>"; };
 		D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMultipartTask.h; sourceTree = "<group>"; };
@@ -1146,6 +1149,7 @@
 		65EBEDBD1C44507600BE671F /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				D40BD3D21CDE1EB100E39701 /* Rechability */,
 				D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */,
 				D4B35F591CD1758900F5C8A8 /* AFNetworking */,
 			);
@@ -1185,6 +1189,15 @@
 			);
 			name = "Gallery Table";
 			path = "../View Controllers";
+			sourceTree = "<group>";
+		};
+		D40BD3D21CDE1EB100E39701 /* Rechability */ = {
+			isa = PBXGroup;
+			children = (
+				D40BD3CF1CDE1EAE00E39701 /* Reachability.h */,
+				D40BD3D01CDE1EAE00E39701 /* Reachability.m */,
+			);
+			name = Rechability;
 			sourceTree = "<group>";
 		};
 		D41365AB1CA32D63004FE848 /* Detail */ = {
@@ -2175,6 +2188,7 @@
 				654181E41C5144CD00019B3F /* NSObject+Validator.m in Sources */,
 				65135FD71C286DCF00839149 /* FRSNotification+CoreDataProperties.m in Sources */,
 				D418E34C1CCC1B240003B080 /* FRSSocial.m in Sources */,
+				D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */,
 				D453CC831CCA80850091A004 /* NSManagedObject+MagicalRecord.m in Sources */,
 				07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */,
 				65EBEDB91C44197100BE671F /* FRSLocationManager.m in Sources */,
