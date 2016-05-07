@@ -55,6 +55,7 @@ static NSString * const socialLoginEndpoint = @"auth/signin/social";
 // user endpoints
 static NSString * const updateUserEndpoint = @"user/update";
 static NSString * const authenticatedUserEndpoint = @"user/me";
+static NSString * const addSocialEndpoint = @"social/connect/";
 
 // gallery creation
 static NSString * const createGalleryEndpoint = @"gallery/create";

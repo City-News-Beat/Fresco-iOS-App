@@ -132,6 +132,35 @@
  full_name_:         'str', // User's full name
  bio_:               'str', // User's profile bio
  avatar_:            'str', // User's avatar URL
+ 
+ email_:             'str',
+ account_type_:      'str', // Stripe entity_type ("individual" or "corporation")
+ username_:          'str',
+ password_:          'str',
+ full_name_:         'str',
+ bio_:               'str',
+ location_:          'str',
+ phone_:             'str',
+ avatar_:            'str',
+ twitter_handle_:    'str',
+ address_: { // TODO should these be required?
+ line1: 'str',
+ line2_: 'str',
+ city: 'str',
+ state: 'str',
+ zip: 'str',
+ country: 'str'
+ },
+ dob_: {
+ day: 'int',
+ month: 'int',
+ year: 'int'
+ },
+ tax_id_: 'str', // For corporations, used by Stripe
+ vat_id_: 'str', // For companies in the EU, used by Stripe
+ pid_token_: 'str', // Stripe.JS personal ID # token
+ ssn_last4_: 'str[4]',
+ document_token_: 'str' // Stripe.JS uploaded verification file token
  ----
  */
 
