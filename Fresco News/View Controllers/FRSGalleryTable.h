@@ -18,6 +18,6 @@
 
 // loading more data
 @property BOOL shouldLoadMore;
-typedef NSArray *(^FRSGalleryTableLoadMoreRequest)(int offset, NSString *offsetIdentifier);
+typedef NSArray *(^FRSGalleryTableLoadMoreRequest)(int offset, NSString *offsetIdentifier); // asks for more data based off index path of last object we currently have, as well as the UID of the gallery, expects (demands) an NSArray in response
 
 @end
