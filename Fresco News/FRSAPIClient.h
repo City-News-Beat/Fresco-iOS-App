@@ -13,6 +13,7 @@
 #import "FRSSocial.h"
 #import "FRSJSONResponseSerializer.h"
 #import <AFNetworking/AFNetworking.h>
+#import "SSKeychain.h"
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 

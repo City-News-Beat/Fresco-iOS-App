@@ -7,12 +7,10 @@
 //
 
 #import "FRSAPIClient.h" // Network
-#import "FRSLocator.h" // location tracking
-#import "SSKeychain.h"
 #import "FRSGallery+CoreDataProperties.h"
 //#import "markdown_lib.h"
 //#import "markdown_peg.h"
-#import "FRSAPIClient.h"
+#import "FRSAPIClient.h" // imports all extension classes needed (location, persistence, social, upload)
 
 
 //libraries
@@ -101,7 +99,6 @@ static int const maxVideoLength = 60.0; // in seconds, triggers trim
 static int const maxVideoAge = 86400; // seconds in a day
 static int const maxAssetCount = 8;
 
-
 // UI
 static NSString * const loadingCellIdentifier = @"LoadingMoreCell";
 static NSString * const highlightCellIdentifier = @"HighlightCell";
@@ -153,7 +150,6 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 #define HELVETICA_NEUE_LIGHT                @"HelveticaNeue-Light"
 #define HELVETICA_NEUE_THIN                 @"HelveticaNeue-Thin"
 #define HELVETICA_NEUE_REGULAR              @"HelveticaNeue"
-
 
 
 /* Segue Identifiers */
