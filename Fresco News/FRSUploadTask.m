@@ -22,7 +22,7 @@
     
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
     sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
-    _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+    _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]]; // think queue might be able to bet set to nil but test this for now
 }
 
 -(void)stop {

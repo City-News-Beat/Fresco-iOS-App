@@ -216,17 +216,12 @@
     return [appDelegate managedObjectContext];
 }
 
-// background notification & app killer (dopest feature ever)
--(void)continueFromBackgroundWithCompletion:(nonnull void (^)())completionHandler {
-    //complete work (either iterate based on waiting uploads or remove from store)
-    
-    
-    // end of work
-    completionHandler();
-}
-
 -(void)handleEventsForBackgroundURLSession:(nonnull NSString *)identifier completionHandler:(nonnull void (^)())completionHandler {
+    // do work
     
+    
+    // end work
+    completionHandler();
 }
 
 @end
