@@ -1438,7 +1438,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         
     }
     else {
-        self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:MAX_VIDEO_LENGTH target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
+        self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:maxVideoLength target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
         [self animateCloseButtonHide:YES];
     }
     
@@ -1670,7 +1670,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     // Configure animation
     CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    drawAnimation.duration = MAX_VIDEO_LENGTH; // for testing purposes
+    drawAnimation.duration = maxVideoLength; // for testing purposes
     //    drawAnimation.duration            = MAX_VIDEO_LENGTH; //Animate ove max vid length
     drawAnimation.repeatCount         = 1.0;  // Animate only once..
     

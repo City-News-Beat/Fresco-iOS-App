@@ -73,8 +73,11 @@ static NSInteger const maxLocationChars = 40;
 static NSInteger const maxBioChars = 160;
 static NSString * const validUsernameChars = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
 
-// map
+// map + location
 static float const maxRadius = 50.0; // miles
+static int const userTrackingDelay = 10;
+static float const metersInAMile = 1609.34;
+static float const degreesInAMile = 69.0; // this is really only true with latutide, no idea how
 
 //gallery
 static NSInteger const maxDescriptionChars = 1500;
@@ -88,13 +91,13 @@ static NSInteger const maxStoryDescriptionChar = 1500;
 // social
 static NSInteger const maxCommentChar = 200;
 
+// assets
+static int const maxVideoLength = 60.0; // in seconds, triggers trim
+static int const maxVideoAge = 86400; // seconds in a day
+static int const maxAssetCount = 8;
 
-// location tracking
-static NSInteger const userTrackingDelay = 10;
 
-/* 
-    UI
- */
+// UI
 static NSString * const loadingCellIdentifier = @"LoadingMoreCell";
 static NSString * const highlightCellIdentifier = @"HighlightCell";
 static NSString * const storyCellIdentifier = @"StoryCell";
@@ -102,31 +105,13 @@ static NSString * const settingsCellIdentifier = @"SettingsCell";
 
 // callbacks / blocks
 typedef void (^StoryImageBlock)(NSInteger storyImageIndex);
-
 typedef void (^ShareSheetBlock)(NSArray *sharedContent);
 typedef void (^ActionButtonBlock)();
 typedef void (^TransferPercentage)(float percentage);
-
-/*
-    The following code is coming to us from FRSAPIConstants, thought it cleaner to integrate into Fresco.h
- */
 typedef void(^FRSAPIResponseBlock)(id responseObject, NSError *error);
 typedef void(^FRSDataResponseBlock)(NSData *data, NSError *error);
 typedef void(^FRSAPISuccessBlock)(BOOL sucess, NSError *error);
 typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error);
-
-/* Enums */
-#pragma mark - Enums
-
-enum FRSErrorCodes {
-    ErrorSignupDuplicateEmail = 101,
-    ErrorSignupCantCreateUser,
-    ErrorSignupCantSaveUser,
-    ErrorSignupCantGetUser,
-    ErrorSignupNoUserOnServer,
-    ErrorSignupNoUserFromParseUser,
-    ErrorUploadFail
-} frsErrorCodes;
 
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
@@ -153,34 +138,6 @@ enum FRSErrorCodes {
 #define NOTIF_GALLERY_ASSET_CHANGE          @"GalleryAssetsChanged"
 
 #define NOTIF_LOCATIONS_UPDATE              @"DidUpdateLocations"
-
-/* Keys Plist */
-
-#pragma mark - Keys Plist
-
-#define KEYS_PLIST_PATH                     [[NSBundle mainBundle] pathForResource:@"Keys" ofType:@"plist"]
-#define KEYS_DICTIONARY                     [NSDictionary dictionaryWithContentsOfFile:KEYS_PLIST_PATH]
-
-/* Twitter Auth */
-
-#pragma mark - Twitter Auth
-
-#define TWITTER_CONSUMER_KEY                [KEYS_DICTIONARY objectForKey:@"TwitterConsumerKey"]
-#define TWITTER_CONSUMER_SECRET             [KEYS_DICTIONARY objectForKey:@"TwitterConsumerSecret"]
-#define TWITTER_USERS_SHOW_URL              @"https://api.twitter.com/1.1/users/show.json?"
-#define TWITTER_VERIFY_URL                  @"https://api.twitter.com/1.1/account/verify_credentials.json"
-
-/* Float/Int Values */
-
-#pragma mark - Float/Int Values
-
-#define MAX_VIDEO_LENGTH                    60.0
-#define MAX_ASSET_AGE                       -3600 * 24
-#define LOCATION_UPDATE_INTERVAL            30
-#define MAX_ASSET_COUNT                     8
-#define kMetersInAMile                      1609.34
-#define kDegreesInAMile                     69.0
-
 
 /* User Defaults */
 
