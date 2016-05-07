@@ -17,7 +17,8 @@
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
 
 // loading more data
-@property BOOL shouldLoadMore;
 typedef NSArray *(^FRSGalleryTableLoadMoreRequest)(int offset, NSString *offsetIdentifier); // asks for more data based off index path of last object we currently have, as well as the UID of the gallery, expects (demands) an NSArray in response
+@property BOOL shouldLoadMore;
+@property FRSGalleryTableLoadMoreRequest loadMoreBlock;
 
 @end

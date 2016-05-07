@@ -12,7 +12,7 @@
 #import "FRSGalleryExpandedViewController.h"
 
 @implementation FRSGalleryTable
-@synthesize navigationController = _navigationController, galleries = _galleries;
+@synthesize navigationController = _navigationController, galleries = _galleries, loadMoreBlock = _loadMoreBlock;
 
 -(instancetype)init {
     self = [super init];
