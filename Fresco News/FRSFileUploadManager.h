@@ -34,4 +34,7 @@ static int const failWaitTime = 5; // seconds waited between fail count trigger
 -(void)uploadVideo:(NSURL *)videoURL toURL:(NSURL *)destinationURL;
 -(void)continueFromBackgroundWithCompletion:(nonnull void (^)())completionHandler;
 -(nullable NSManagedObjectContext *)uploaderContext;
+
++(nullable NSManagedObjectContext *)uploaderContext; // convenience for outside use
+
 @end

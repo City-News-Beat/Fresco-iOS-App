@@ -9,6 +9,7 @@
 #import "FRSAPIClient.h"
 #import "Fresco.h"
 #import "FRSPost.h"
+#import "FRSFileUploadManager.h" // temp patch
 
 @implementation FRSAPIClient
 
@@ -164,8 +165,24 @@
 
 -(FRSUser *)authenticatedUser {
     
+    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"isLoggedIn", @(TRUE)];
+    NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUser"];
+    signedInRequest.predicate = signedInPredicate;
     
-    return Nil;
+    NSManagedObjectContext *context = [FRSFileUploadManager uploaderContext]; // temp (replace with internal or above method
+    
+    NSError *userFetchError;
+    NSArray *authenticatedUsers = [context executeFetchRequest:signedInRequest error:&userFetchError];
+    
+    if (userFetchError || [authenticatedUsers count] < 1) {
+        return Nil;
+    }
+    
+    if ([authenticatedUsers count] > 1) {
+        NSLog(@"**WARNING**: Indication of multiple authenciated users: %@", authenticatedUsers);
+    }
+    
+    return [authenticatedUsers firstObject];
 }
 
 

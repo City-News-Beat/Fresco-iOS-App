@@ -64,6 +64,9 @@ static NSString * const assignmentsAction = @"FRSAssignmentsAction";
 static NSString * const takeVideoAction = @"FRSVideoAction";
 static NSString * const takePhotoAction = @"FRSPhotoAction";
 
+// legacy user defaults
+static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
+
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
 
 // user - data
@@ -138,26 +141,6 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 #define NOTIF_GALLERY_ASSET_CHANGE          @"GalleryAssetsChanged"
 
 #define NOTIF_LOCATIONS_UPDATE              @"DidUpdateLocations"
-
-/* User Defaults */
-
-#pragma mark - User Defaults
-
-#define UD_FIRSTNAME                        @"firstname"
-#define UD_LASTNAME                         @"lastname"
-#define UD_AVATAR                           @"avatar"
-#define UD_TOKEN                            @"frescoAPIToken"
-#define UD_LAST4                            @"last4"
-#define UD_CAPTION_STRING_IN_PROGRESS       @"captionStringInProgress"
-#define UD_DEFAULT_ASSIGNMENT_ID            @"defaultAssignmentID"
-#define UD_SELECTED_ASSETS                  @"selectedAssets"
-#define UD_PREVIOUSLY_SELECTED_TAB          @"previouslySelectedTab"
-#define UD_HAS_LAUNCHED_BEFORE              @"hasLaunchedBefore"
-#define UD_ASSIGNMENTS_ONBOARDING           @"assignmentsOnboarding"
-#define UD_UPDATE_PROFILE_HEADER            @"updateProfileHeader"
-#define UD_UPDATE_PROFILE                   @"updateProfile"
-#define UD_UPDATE_USER_GALLERIES            @"updateUserGalleries"
-#define UD_GALLERY_POSTED                   @"galleryPosted"
 
 /* Fonts */
 

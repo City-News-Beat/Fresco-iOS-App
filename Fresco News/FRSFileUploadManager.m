@@ -210,6 +210,12 @@
     return [appDelegate managedObjectContext];
 }
 
++(NSManagedObjectContext *)uploaderContext {
+    id<FRSFileUploaderObjectContext> appDelegate = (id<FRSFileUploaderObjectContext>)[[UIApplication sharedApplication] delegate];
+    
+    return [appDelegate managedObjectContext];
+}
+
 // background notification & app killer (dopest feature ever)
 -(void)continueFromBackgroundWithCompletion:(nonnull void (^)())completionHandler {
     //complete work (either iterate based on waiting uploads or remove from store)

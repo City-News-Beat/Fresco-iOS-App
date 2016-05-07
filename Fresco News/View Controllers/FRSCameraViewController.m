@@ -389,7 +389,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
     
-    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:UD_PREVIOUSLY_SELECTED_TAB];
+    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:previouslySelectedTabKey];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
