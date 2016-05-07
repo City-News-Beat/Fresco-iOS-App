@@ -29,7 +29,7 @@
 }
 
 -(void)configureWithDictionary:(NSDictionary *)dictionary{
-    self.uid = dictionary[@"_id"];
+    self.uid = dictionary[@"id"];
     self.title = dictionary[@"title"];
 
     if ([FRSDataValidator isNonNullObject:dictionary[@"location"][@"geo"][@"coordinates"]]){
