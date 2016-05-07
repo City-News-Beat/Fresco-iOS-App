@@ -24,9 +24,7 @@
 #import "Fresco.h"
 #import "FRSFileUploadManager.h"
 
-@interface FRSAppDelegate (Implement)
-@property (nonatomic, retain) FRSTabBarController *tabBarController;
-@end
+
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
 
@@ -43,7 +41,7 @@
     
     [self startFabric];
  
-    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+    if ([[FRSAPIClient sharedClient] isAuthenticated] || TRUE) {
         self.tabBarController = [[FRSTabBarController alloc] init];
         self.window.rootViewController = self.tabBarController;
     }
