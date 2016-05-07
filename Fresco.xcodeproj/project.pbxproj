@@ -122,6 +122,7 @@
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
+		D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */; };
 		D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */; };
 		D412549F1C91E46D00E3B85C /* FRSMultipartTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */; };
 		D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */; };
@@ -445,6 +446,8 @@
 		BC419B6D1B70052500122B87 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
 		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
+		D40BD3CC1CDE076000E39701 /* FRSGalleryTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryTable.h; sourceTree = "<group>"; };
+		D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryTable.m; sourceTree = "<group>"; };
 		D40FA3191CAAFB2100A4FE47 /* FRSUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserDefaults.h; sourceTree = "<group>"; };
 		D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserDefaults.m; sourceTree = "<group>"; };
 		D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMultipartTask.h; sourceTree = "<group>"; };
@@ -847,6 +850,7 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D40BD3CB1CDE073A00E39701 /* Scrolling Galleries */,
 				D487F1B21CBD6550005742F3 /* Submission */,
 				4AB98C921C8A7EC6005E7AB2 /* Camera */,
 				078091481CD939E500D7FA40 /* Upload */,
@@ -1171,6 +1175,15 @@
 				52CC8732D9311BE822B8EC9B /* Pods-Fresco WatchKit Extension.beta.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		D40BD3CB1CDE073A00E39701 /* Scrolling Galleries */ = {
+			isa = PBXGroup;
+			children = (
+				D40BD3CC1CDE076000E39701 /* FRSGalleryTable.h */,
+				D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */,
+			);
+			name = "Scrolling Galleries";
 			sourceTree = "<group>";
 		};
 		D41365AB1CA32D63004FE848 /* Detail */ = {
@@ -2097,6 +2110,7 @@
 				D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */,
 				65135FDC1C286DCF00839149 /* FRSPost.m in Sources */,
 				D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */,
+				D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */,
 				D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */,
 				65201A3A1C3D7DA800B31089 /* FRSDataValidator.m in Sources */,
 				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,

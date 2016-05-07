@@ -246,7 +246,6 @@
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
-//    titleView.backgroundColor = [UIColor redColor];
 
     self.highlightTabButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7, 12, 87, 20)];
     [self.highlightTabButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
@@ -304,32 +303,8 @@
         sudoHighlightButton.frame = CGRectMake(62.3, 12, 87, 20);
         sudoFollowingButton.frame  = CGRectMake(171.7, 12, 87, 20);
     }
-
-//    CAShapeLayer * layer = [[CAShapeLayer alloc]init];
-//    layer.frame = view.bounds;
-//    layer.fillColor = [[UIColor blackColor] CGColor];
-//    
-//    layer.path = CGPathCreateWithRect(CGRectMake(10, 10, 30, 30), NULL);
-
-//    view.layer.mask = layer;
-    
-//    self.maskView = [[CAShapeLayer alloc] init];
-//    self.maskView.frame = titleView.bounds;
-//    self.maskView.fillColor = [UIColor redColor].CGColor;
-//    self.maskView.path = CGPathCreateWithRect(CGRectMake(0, 0, 300, 20), nil);
-//    self.highlightTabButton.layer.mask = self.maskView;
-    
-//    self.maskView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 20)];
-//    self.maskView.backgroundColor = [UIColor redColor];
-//    self.maskView.maskView = self.highlightTabButton.titleLabel;
-//    [titleView addSubview:self.maskView];
-    
-//    [UIView animateWithDuration:1.0 delay:5 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//        
-//        self.maskView.frame = CGRectMake(100, 0, 300, 20);
-//
-//    } completion:nil];
 }
+
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.dataSource.count > indexPath.row) {
         FRSGallery *gallery = [self.dataSource objectAtIndex:indexPath.row];
@@ -612,43 +587,6 @@
 //    return [self heightForCellForGallery:gallery];
     return [gallery heightForGallery];
 }
-
-//-(NSInteger)heightForCellForGallery:(FRSGallery *)gallery{
-//    
-//    NSInteger totalHeight = 0;
-//    
-//    for (FRSPost *post in gallery.posts){
-//        NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
-//        NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
-//        
-//        if (rawHeight == 0 || rawWidth == 0){
-//            totalHeight += [UIScreen mainScreen].bounds.size.width;
-//        }
-//        else {
-//            NSInteger scaledHeight = rawHeight * ([UIScreen mainScreen].bounds.size.width/rawWidth);
-//            totalHeight += scaledHeight;
-//        }
-//    }
-//    
-//    NSInteger averageHeight = totalHeight/gallery.posts.count;
-//    
-//    averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
-//    
-//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 32, 0)];
-//
-//    label.font = [UIFont systemFontOfSize:15 weight:-1];
-//    label.text = gallery.caption;
-//    label.numberOfLines = 6;
-//
-//    [label sizeToFit];
-//    
-//    averageHeight += label.frame.size.height + 12 + 44 + 20;
-//    
-//    return averageHeight;
-//}
-
-
-
 
 #pragma mark - UITableView Delegate
 
