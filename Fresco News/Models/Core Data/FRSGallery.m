@@ -41,7 +41,7 @@
 
 -(void)configureWithDictionary:(NSDictionary *)dict{
     self.tags = [[NSMutableDictionary alloc] init];
-    self.uid = dict[@"_id"];
+    self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     self.caption = dict[@"caption"];

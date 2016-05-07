@@ -369,11 +369,8 @@
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
-    NSArray *past;
     
-    if (self.dataSource.count > 1) {
-        past = @[[self.dataSource[0] uid],[self.dataSource[1] uid]];
-    }
+    NSLog(@"CACHE LOCAL %@", localData);
     
     self.dataSource = [[NSMutableArray alloc] init];
     self.highlights = [[NSMutableArray alloc] init];
@@ -389,14 +386,14 @@
         localIndex++;
     }
     
+    [self.appDelegate.managedObjectContext save:Nil];
+    [self.appDelegate saveContext];
+
     [self.tableView reloadData];
     
     for (FRSGallery *gallery in self.cachedData) {
         [self.appDelegate.managedObjectContext deleteObject:gallery];
     }
-    
-    [self.appDelegate.managedObjectContext save:Nil];
-    [self.appDelegate saveContext];
 }
 
 -(void)reloadFromLocal {
@@ -494,7 +491,7 @@
     if (indexPath.row == self.dataSource.count-4) {
         if (!isLoading) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                [self loadMore];
+               // [self loadMore];
             });
         }
     }

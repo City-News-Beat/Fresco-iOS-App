@@ -32,7 +32,7 @@
     self.caption = dict[@"caption"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     self.title = dict[@"title"];
-    self.uid = dict[@"_id"];
+    self.uid = dict[@"id"];
     self.imageURLs = [self imagesURLsFromThumbnails:dict[@"thumbnails"]];
 }
 

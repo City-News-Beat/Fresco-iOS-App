@@ -73,7 +73,7 @@
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
-    self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
+    self.address = [self shortAddressFromAddress:dict[@"location"]];
     self.creator = [FRSUser MR_createEntityInContext:context];
     
     if ([dict objectForKey:@"video"] != [NSNull null]) {
