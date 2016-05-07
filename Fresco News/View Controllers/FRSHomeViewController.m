@@ -370,8 +370,6 @@
 
 -(void)cacheLocalData:(NSArray *)localData {
     
-    NSLog(@"CACHE LOCAL %@", localData);
-    
     self.dataSource = [[NSMutableArray alloc] init];
     self.highlights = [[NSMutableArray alloc] init];
 
