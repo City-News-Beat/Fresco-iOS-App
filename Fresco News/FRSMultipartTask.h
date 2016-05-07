@@ -14,6 +14,9 @@ static int const chunkSize = 5;
 static int const maxConcurrentUploads = 3;
 static int const megabyteDefinition = 1048576; // bytes -> mb
 
+static int const chunkMaxFailures = 2; // resets between chunks (otherwise behaves like superclass)
+static int const chunkFailWaitTime = 2; // resets between chunks (otherwise behaves like superclass)
+
 @interface FRSMultipartTask : FRSUploadTask <NSStreamDelegate>
 {
     NSInputStream *dataInputStream;
