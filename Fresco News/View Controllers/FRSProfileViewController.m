@@ -101,17 +101,17 @@
 -(instancetype)initWithUser:(FRSUser *)user {
 
     if (self) {
-        [self configureUI]; // setup UI
+        [self setupUI]; // setup UI
         
         _representedUser = user; // obviously save for future
-        _authenticatedProfile = _representedUser.isLoggedIn; // signifies profile view is current authed user
+        _authenticatedProfile = [_representedUser.isLoggedIn boolValue]; // signifies profile view is current authed user
         [self configureWithUser:_representedUser];
         
     }
     return self;
 }
 
--(void)configureUI {
+-(void)setupUI {
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
     
