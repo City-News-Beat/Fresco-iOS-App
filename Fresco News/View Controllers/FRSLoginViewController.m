@@ -141,16 +141,17 @@
 
 
 -(IBAction)twitter:(id)sender {
-    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error) {
-        //
+    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        
     }];
 }
 
 
 -(IBAction)facebook:(id)sender {
-    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error) {
-        //
-    } parent:self];
+    
+    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        
+    } parent:self]; // presenting view controller
 }
 
 

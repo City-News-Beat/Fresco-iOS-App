@@ -9,7 +9,7 @@
 #import "FRSSignUpViewController.h"
 
 //View Controllers
-#import "FRSSetupProfileViewController.h"
+#import "FRSSetupProfileViewController.h" // !HELPFUL, LOOP BACK
 
 //Helpers
 #import "UIColor+Fresco.h"
@@ -631,16 +631,17 @@
 }
 
 -(void)twitterTapped{
-    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error) {
-        //
+    [FRSSocial registerWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        
+        
     }];
 }
 
 -(void)facebookTapped{
-    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error) {
-        NSLog(@"%d %@", authenticated, error);
+    [FRSSocial registerWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         
-    } parent:self];
+        
+    } parent:self]; // presenting view controller for safari view login
 }
 
 #pragma mark - Keyboard
