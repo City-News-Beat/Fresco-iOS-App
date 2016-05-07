@@ -84,7 +84,10 @@
     NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:currentData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         if (error) {
-            
+            // put in provision for # of errors, and icing the task, and being able to resume it when asked to
+            if (self.delegate) {
+                [self.delegate uploadDidFail:self withError:error response:data];
+            }
         }
         
     }];
