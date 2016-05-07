@@ -11,10 +11,20 @@
 #import "NSData+NSHash.h" // md5 all requests
 
 @implementation FRSMultipartTask
-@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections, destinationURLS = _destinationURLS;
+@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections, destinationURLS = _destinationURLS, session = _session;
 
 -(void)createUploadFromSource:(NSURL *)asset destinations:(NSArray *)destinations progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
     
+    // save meta-data & callbacks, prepare to be called upon to start
+    self.assetURL = asset;
+    self.destinationURLS = destinations;
+    self.progressBlock = progress;
+    self.completionBlock = completion;
+    
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
+    sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
+    _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+
     
 }
 
