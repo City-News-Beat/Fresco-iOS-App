@@ -37,11 +37,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBarHidden = YES;
+}
+
 
 -(void)configureUI {
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
-    self.navigationController.navigationBarHidden = YES;
     
     [self addNotifications];
     

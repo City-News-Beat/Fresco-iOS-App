@@ -49,7 +49,7 @@ static NSString *imageTile = @"ImageTile";
     self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
     [self.backTapButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
-        
+    
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
 }
@@ -151,7 +151,7 @@ static NSString *imageTile = @"ImageTile";
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:FALSE animated:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self shouldShowStatusBar:YES animated:YES];
@@ -162,6 +162,8 @@ static NSString *imageTile = @"ImageTile";
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
+    self.navigationController.navigationBarHidden = NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
