@@ -33,17 +33,17 @@
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
     
     [self configureWindow];
+    [self startFabric]; // crashlytics first yall
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
     [self persistentStoreCoordinator];
     
     [self configureCoreDataStack];
-    [self createItemsWithIcons];
     
-    [self startFabric];
  
     if ([[FRSAPIClient sharedClient] isAuthenticated] || TRUE) {
         self.tabBarController = [[FRSTabBarController alloc] init];
         self.window.rootViewController = self.tabBarController;
+        [self createItemsWithIcons];
     }
     else {
         [self startAuthentication];
