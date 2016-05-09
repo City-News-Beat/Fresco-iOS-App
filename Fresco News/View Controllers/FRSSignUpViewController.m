@@ -69,8 +69,6 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    [self.usernameTF becomeFirstResponder];
 }
 
 -(NSDictionary *)currentSocialDigest {
@@ -79,7 +77,9 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.navigationItem.title = @"SIGN UP";
+    [self.usernameTF becomeFirstResponder];
+    
+    self.navigationItem.title = @"SIGN UP"; // lil agressive no
     [self configureBackButtonAnimated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     self.navigationController.navigationBarHidden = NO;
@@ -91,7 +91,6 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     self.navigationItem.title = @"";
-    
     
     NSArray *viewControllers = self.navigationController.viewControllers;
     if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count-2] == self) {
@@ -258,7 +257,6 @@
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 61.5)]];
-    
 }
 
 -(void)configureMapView{
@@ -267,13 +265,11 @@
     if (IS_STANDARD_IPHONE_6) height = 280;
     if (IS_STANDARD_IPHONE_6_PLUS) height = 310;
     
-    
     //Up until this point all the ui elements were static heights
     //The map height is dependent on the iPhone size now
     //We use a variable for easy tracking of the y-origin of subsequent elements
     //Eventually it will also be used to adjust the content size of the scroll view
     self.y = 254;
-    
     
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, height)];
     self.mapView.delegate = self;
@@ -343,9 +339,7 @@
     self.promoTF.font = [UIFont systemFontOfSize:15];
     self.promoTF.returnKeyType = UIReturnKeyGo;
     [self.promoContainer addSubview:self.promoTF];
-    
     [self.promoContainer addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
-    
     
     self.y += self.promoContainer.frame.size.height + 12;
     
@@ -506,14 +500,25 @@
 -(BOOL)textFieldShouldReturn:(UITextField*)textField {
 
     if (textField == self.usernameTF) {
+        if (![self isValidUsername:[self.usernameTF.text substringFromIndex:1]] || [textField.text isEqualToString:@"@"]){
+            [self animateTextFieldError:self.usernameTF];
+            [textField becomeFirstResponder];
+            return FALSE;
+        }
         [self.emailTF becomeFirstResponder];
     } else if (textField == self.emailTF) {
+        if (![self validEmail:textField.text] || [self.emailTF.text isEqualToString:@""]) {
+            [self animateTextFieldError:textField];
+            [textField becomeFirstResponder];
+            return FALSE;
+        }
+        
         [self.passwordTF becomeFirstResponder];
+        
     } else if (textField == self.passwordTF) {
         [self.passwordTF resignFirstResponder];
     }
 
-    
     return NO;
 }
 
@@ -528,30 +533,13 @@
     }
 }
 
--(BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    if (textField == self.usernameTF){
-        
-        if (![self isValidUsername:[self.usernameTF.text substringFromIndex:1]] || [textField.text isEqualToString:@"@"]){
-            [self animateTextFieldError:self.usernameTF];
-            [textField becomeFirstResponder];
-            return FALSE;
-        }
-        
-        if ([self.usernameTF.text isEqualToString:@"@"]){
-            self.usernameTF.text = @"";
-        }
-    }
-
-    return TRUE;
-}
-
 -(void)textFieldDidEndEditing:(UITextField *)textField{
  
     if (textField == self.usernameTF){
         
         [self highlightTextField:self.usernameTF enabled:NO];
         
-        if (![self isValidUsername:self.usernameTF.text]){
+        if (![self isValidUsername:[self.usernameTF.text substringFromIndex:1]]){
             [self animateTextFieldError:self.usernameTF];
             [textField becomeFirstResponder];
             return;
@@ -577,7 +565,9 @@
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (textField == self.usernameTF) {
-        
+        if ([string containsString:@" "]) {
+            return FALSE;
+        }
 //        NSCharacterSet *set = [NSCharacterSet symbolCharacterSet];
 //        if ([string rangeOfCharacterFromSet:[set invertedSet]].location == NSNotFound) {
 //            NSLog(@"valid");
@@ -597,6 +587,8 @@
 #pragma mark Action Logic 
 
 -(void)handleToggleSwitched:(UISwitch *)toggle{
+    id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
+    [delegate registerForPushNotifications];
     
     if (toggle.on){
     
