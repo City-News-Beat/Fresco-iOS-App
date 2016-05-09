@@ -43,6 +43,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.navigationController.navigationBarHidden = YES;
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+}
+
 
 -(void)configureUI {
     
@@ -112,31 +117,39 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     /* Configure bottom bar */
     //Configure Twitter post button
-    UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [twitterButton addTarget:self action:@selector(postToTwitter) forControlEvents:UIControlEventTouchDown];
-    UIImage *twitter = [[UIImage imageNamed:@"twitter-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [twitterButton setImage:twitter forState:UIControlStateNormal];
-    twitterButton.frame = CGRectMake(16, 10, 24, 24);
-    [self.bottomContainer addSubview:twitterButton];
+    self.twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.twitterButton addTarget:self action:@selector(postToTwitter:) forControlEvents:UIControlEventTouchDown];
+    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
+    self.twitterButton.frame = CGRectMake(16, 10, 24, 24);
+    [self.bottomContainer addSubview:self.twitterButton];
     
     //Configure Facebook post button
-    UIButton *facebookButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [twitterButton addTarget:self action:@selector(postToFacebook) forControlEvents:UIControlEventTouchDown];
-    UIImage *facebook = [[UIImage imageNamed:@"facebook-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [facebookButton setImage:facebook forState:UIControlStateNormal];
-    facebookButton.frame = CGRectMake(56, 10, 24, 24);
-    [self.bottomContainer addSubview:facebookButton];
+    self.facebookButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.facebookButton addTarget:self action:@selector(postToFacebook:) forControlEvents:UIControlEventTouchDown];
+    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
+    self.facebookButton.frame = CGRectMake(56, 10, 24, 24);
+    [self.bottomContainer addSubview:self.facebookButton];
     
     //Configure anonymous posting button
-    UIButton *anonymousButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [anonymousButton addTarget:self action:@selector(postAnonymously) forControlEvents:UIControlEventTouchDown];
-    UIImage *eye = [[UIImage imageNamed:@"eye-26"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [anonymousButton setImage:eye forState:UIControlStateNormal];
-    anonymousButton.frame = CGRectMake(96, 10, 24, 24);
-    [self.bottomContainer addSubview:anonymousButton];
+    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.anonButton addTarget:self action:@selector(postAnonymously:) forControlEvents:UIControlEventTouchDown];
+    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
+    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
+    self.anonButton.frame = CGRectMake(96, 10, 24, 24);
+    [self.bottomContainer addSubview:self.anonButton];
+    
+    //Configure anonymous label (default alpha = 0)
+    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, 15, 83, 17)];
+    self.anonLabel.text = @"ANONYMOUS";
+    self.anonLabel.font = [UIFont notaBoldWithSize:15];
+    self.anonLabel.textColor = [UIColor frescoOrangeColor];
+    self.anonLabel.alpha = 0;
+    [self.bottomContainer addSubview:self.anonLabel];
     
     //Configure next button
-    UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeSystem]; //Should be green when valid
     [sendButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [sendButton setTintColor:[UIColor frescoLightTextColor]];
     sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
@@ -388,18 +401,35 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 /* Bottom Bar */
     //Post to Facebook
--(void)postToFacebook {
+-(void)postToFacebook:(UIButton *)sender {
     
+    if (sender.selected) {
+        sender.selected = NO;
+    } else {
+        sender.selected = YES;
+    }
 }
 
     //Post to Twitter
--(void)postToTwitter {
+-(void)postToTwitter:(UIButton *)sender {
     
+    if (sender.selected) {
+        sender.selected = NO;
+    } else {
+        sender.selected = YES;
+    }
 }
 
     //Post Anonymously
--(void)postAnonymously {
+-(void)postAnonymously:(UIButton *)sender {
     
+    if (sender.selected) {
+        self.anonLabel.alpha = 0;
+        sender.selected = NO;
+    } else {
+        self.anonLabel.alpha = 1;
+        sender.selected = YES;
+    }
 }
 
 

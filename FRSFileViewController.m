@@ -14,6 +14,8 @@
 @interface FRSFileViewController ()
 @property CMTime currentTime;
 @property (strong, nonatomic) UIButton *backTapButton;
+@property (strong, nonatomic) FRSUploadViewController *uploadViewController;
+
 @end
 
 @implementation FRSFileViewController
@@ -52,6 +54,7 @@ static NSString *imageTile = @"ImageTile";
     
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
+    self.uploadViewController = [[FRSUploadViewController alloc] init];
 }
 
 -(void)back {
@@ -99,8 +102,8 @@ static NSString *imageTile = @"ImageTile";
     
     self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.anonButton addTarget:self action:@selector(anonTapped:) forControlEvents:UIControlEventTouchDown];
-    UIImage *eye = [UIImage imageNamed:@"eye-26"];
-    [self.anonButton setImage:eye forState:UIControlStateNormal];
+    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
+    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
     self.anonButton.frame = CGRectMake(96, self.view.frame.size.height -24 -10, 24, 24);
     [self.view addSubview:self.anonButton];
     
@@ -161,6 +164,12 @@ static NSString *imageTile = @"ImageTile";
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self shouldShowStatusBar:YES animated:YES];
+
+    
+    //When returning from upload, set self.uploadViewController = nil;
+
+    
+    
     
 //    self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
     //Navigation bar color is not Fresco Yellow. Not sure where it's set
@@ -168,17 +177,40 @@ static NSString *imageTile = @"ImageTile";
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+
+    if (self.twitterButton.selected) {
+        self.uploadViewController.twitterButton.selected = YES;
+    } else {
+        self.uploadViewController.twitterButton.selected = NO;
+    }
+    
+    if (self.facebookButton.selected) {
+        self.uploadViewController.facebookButton.selected = YES;
+    } else {
+        self.uploadViewController.facebookButton.selected = NO;
+    }
+    
+    if (self.anonButton.selected) {
+        self.uploadViewController.anonButton.selected = YES;
+        self.uploadViewController.anonLabel.alpha = 1;
+    } else {
+        self.uploadViewController.anonButton.selected = NO;
+        self.uploadViewController.anonLabel.alpha = 0;
+    }
     
     self.navigationController.navigationBarHidden = NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    
+//    self.uploadViewController = nil;
+    
 }
 
 -(void)next:(id)sender {
-    FRSUploadViewController *uploadViewController = [[FRSUploadViewController alloc] init];
-    [self.navigationController pushViewController:uploadViewController animated:YES];
+    
+    [self.navigationController pushViewController:self.uploadViewController animated:YES];
 }
 
 /* Footer Related */
@@ -342,6 +374,7 @@ static NSString *imageTile = @"ImageTile";
 -(void)anonTapped:(UIButton *)sender {
 
     if (sender.selected) {
+        self.anonLabel.alpha = 0;
         sender.selected = NO;
     } else {
         self.anonLabel.alpha = 1;
