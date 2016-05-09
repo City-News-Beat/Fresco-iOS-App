@@ -67,6 +67,12 @@
     self.notificationsEnabled = NO;
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self.usernameTF becomeFirstResponder];
+}
+
 -(NSDictionary *)currentSocialDigest {
     return [[FRSAPIClient sharedClient] socialDigestionWithTwitter:_twitterSession facebook:_facebookToken];
 }
@@ -525,9 +531,7 @@
 -(BOOL)textFieldShouldEndEditing:(UITextField *)textField {
     if (textField == self.usernameTF){
         
-        [self highlightTextField:self.usernameTF enabled:NO];
-        
-        if (![self isValidUsername:self.usernameTF.text]){
+        if (![self isValidUsername:[self.usernameTF.text substringFromIndex:1]] || [textField.text isEqualToString:@"@"]){
             [self animateTextFieldError:self.usernameTF];
             [textField becomeFirstResponder];
             return FALSE;
