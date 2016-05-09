@@ -40,7 +40,7 @@
     [self configureCoreDataStack];
     
  
-    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+    if ([[FRSAPIClient sharedClient] isAuthenticated] || TRUE) {
         self.tabBarController = [[FRSTabBarController alloc] init];
         self.window.rootViewController = self.tabBarController;
         [self createItemsWithIcons];
