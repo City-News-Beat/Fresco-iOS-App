@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FRSStory : NSManagedObject<FRSManagedObject>
 
+@property (nonatomic, retain) NSNumber *galleryCount;
+
 // Insert code here to declare functionality of your managed object subclass
 
 -(void)configureWithDictionary:(NSDictionary *)dict;

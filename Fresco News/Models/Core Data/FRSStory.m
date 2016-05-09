@@ -26,14 +26,18 @@
 //@property (nullable, nonatomic, retain) NSSet<FRSGallery *> *galleries;
 
 @implementation FRSStory
+@synthesize galleryCount = _galleryCount;
 
 // Insert code here to add functionality to your managed object subclass
 -(void)configureWithDictionary:(NSDictionary *)dict{
+    
     self.caption = dict[@"caption"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"created_at"] milliseconds:YES];
     self.title = dict[@"title"];
     self.uid = dict[@"id"];
     self.imageURLs = [self imagesURLsFromThumbnails:dict[@"thumbnails"]];
+    self.galleryCount = dict[@"galleries"];
+    
 }
 
 -(NSInteger)heightForStory{
@@ -57,16 +61,13 @@
 
 -(NSArray *)imagesURLsFromThumbnails:(NSArray *)thumbnails{
     NSMutableArray *mArr = [NSMutableArray new];
+    
     for (NSDictionary *thumb in thumbnails){
+        NSLog(@"%@", thumb);
         NSString *stringURL = thumb[@"image"];
         if (!stringURL) continue;
-        NSString *escapedString = [stringURL stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
-        NSURL *url = [NSURL URLWithString:escapedString];
+        NSURL *url = [NSURL URLWithString:stringURL];
         [mArr addObject:url];
-        
-        if (mArr.count >= 6) {
-            break;   
-        }
     }
     return [mArr copy];
 }

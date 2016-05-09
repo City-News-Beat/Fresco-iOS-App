@@ -64,6 +64,7 @@
     if (self){
         self.delegate = delegate;
         self.story = story;
+        
         //        self.orderedPosts = [self.story.posts allObjects];
         [self configureUI];
 //        self.backgroundColor = [UIColor blueColor];
@@ -115,8 +116,7 @@
     
     for (NSURL *fullSizeURL in self.story.imageURLs) {
         NSString *fullSizeString = fullSizeURL.absoluteString;
-        NSString *smallString = [fullSizeString stringByReplacingOccurrencesOfString:@"images/" withString:imageSize];
-        NSLog(@"%@", smallString);
+        NSString *smallString = fullSizeString;//[fullSizeString stringByReplacingOccurrencesOfString:@"images/" withString:imageSize];
         [smallImageURLS addObject:[NSURL URLWithString:smallString]];
     }
     
