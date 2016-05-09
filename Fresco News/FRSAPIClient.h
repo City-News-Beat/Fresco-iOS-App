@@ -39,9 +39,14 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion;
 
+//registration
+-(void)registerWithUserDigestion:(NSDictionary *)digestion; // leaves burdon of constructing dict obj to sender (will have method for that)
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
 
 -(BOOL)isAuthenticated;
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion;
+-(NSString *)authenticationToken; // current token, assuming 1 user support
+-(NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken; // current social links, formatted for transmission to server
+-(FRSUser *)authenticatedUser;
 @end

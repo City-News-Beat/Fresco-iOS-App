@@ -42,11 +42,12 @@
     
     [self startFabric];
  
-//    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
-    self.window.rootViewController = [[FRSTabBarController alloc] init];
+
+//    if ([[FRSAPIClient sharedClient] isAuthenticated]  || TRUE) {
+//        self.window.rootViewController = [[FRSTabBarController alloc] init];
 //    }
 //    else {
-//        [self startAuthentication];
+        [self startAuthentication];
 //        return YES; // no other stuff going on (no quick action handling, etc)
 //    }
 
@@ -350,6 +351,11 @@
 -(void)statusBarTouchedAction {
     [[NSNotificationCenter defaultCenter] postNotificationName:kStatusBarTappedNotification
                                                         object:nil];
+}
+
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(nonnull NSString *)identifier completionHandler:(nonnull void (^)())completionHandler {
+    // iterate on multipart, or move to next upload in background ( we fuckin rock )
+    
 }
 
 

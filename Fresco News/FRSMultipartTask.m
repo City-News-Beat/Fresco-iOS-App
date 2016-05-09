@@ -7,28 +7,29 @@
 //
 
 #import "FRSMultipartTask.h"
+#import "Fresco.h"
 
 @implementation FRSMultipartTask
+@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections;
 
--(void)uploadDataFromURL:(NSURL *)url completion:(TransferCompletionBlock)completion progress:(TransferProgressBlock)progress {
+// ovveride 
+-(void)createUploadFromSource:(NSURL *)asset destinations:(NSArray *)destinations progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
     
-    // reporting back to parent
-    completionBlock = completion;
-    progressBlock = progress;
     
-    // set up initial stream
-    needsData = TRUE;
-    dataInputStream = [NSInputStream inputStreamWithURL:url];
-    dataInputStream.delegate = self;
-    [dataInputStream open];
+}
+
+-(instancetype)init {
+    self = [super init];
     
-    // now we start the fun
-    NSLog(@"START CHUNKING");
-    [self next];
+    if (self) {
+        _openConnections = [[NSMutableArray alloc] init];
+    }
+    
+    return self;
 }
 
 -(void)next {
-    // loop on background thread for obvious reasons
+    // loop on background thread to not interrupt UI, but on HIGH priority to supercede any default thread needs
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         if (!currentData) // don't want multiple running loops
             [self readDataInputStream];
@@ -63,33 +64,59 @@
         }
     }
     
-    if (ranOnce && !triggeredUpload) { // last chunk, less than 5mb
+    // last chunk, less than 5mb, streaming process ends here
+    if (ranOnce && !triggeredUpload) {
         [self startChunkUpload];
         needsData = FALSE;
         [dataInputStream close];
-        NSLog(@"END CHUNKING");
     }
 }
+
+// moves to next chunk based on previously succeeded blocks, does not iterate if we are above max # concurrent requests
 -(void)startChunkUpload {
-    NSLog(@"NEW CHUNK");
     openConnections++;
     totalConnections++;
     
-    // write to temp directory for upload to AWS (we can skip this if we don't use SDK, idk yet)
-    __block NSString *currentPath = [self uniqueTempPath];
-    [currentData writeToFile:currentPath atomically:YES];
-    currentData = Nil;
+    // set up actual NSURLSessionUploadTask
+    NSMutableURLRequest *chunkRequest = Nil;
+    [self signRequest:chunkRequest];
     
+    NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:currentData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        if (error) {
+            
+        }
+        
+    }];
+    
+    [task resume];
+    [_openConnections addObject:task];
+    
+    
+    currentData = Nil;
     // if we have open stream & below max connections
     if (openConnections < MAX_CONCURRENT && needsData) {
         [self next];
     }
     
-    // set up actual REST call
+}
+
+- (void)URLSession:(NSURLSession *)urlSession task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
     
 }
 
--(NSString *)uniqueTempPath {
-    return [[NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]] stringByAppendingString:@".dat"];
+// pause current request just like inherited class, but takes action on streaming too
+-(void)pause {
+    for (NSURLSessionUploadTask *task in _openConnections) {
+        [task suspend];
+    }
 }
+
+// resume current request just like inherited class, but takes action on streaming too
+-(void)resume {
+    for (NSURLSessionUploadTask *task in _openConnections) {
+        [task resume];
+    }
+}
+
 @end

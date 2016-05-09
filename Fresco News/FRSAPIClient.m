@@ -85,12 +85,27 @@
     }];
 }
 
+-(NSString *)authenticationToken {
+    
+    NSArray *allAccounts = [SSKeychain accountsForService:serviceName];
+    
+    if ([allAccounts count] == 0) {
+        return Nil;
+    }
+    
+    NSDictionary *credentialsDictionary = [allAccounts firstObject];
+    NSString *accountName = credentialsDictionary[kSSKeychainAccountKey];
+    
+    return [SSKeychain passwordForService:serviceName account:accountName];
+}
+
+
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
     NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
-    NSLog(@"%@", authDictionary);
+
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
+        completion(responseObject, error); // burden of error handling falls on sender
         
         // handle internal cacheing of authentication
         if (!error) {
@@ -99,13 +114,106 @@
     }];
 }
 
+/* 
+ Register:
+ 
+ -----------
+ email:              'str', // User's email
+ username:           'str', // User's username (no @ at beginning)
+ password:           'str', // User's plaintext password
+ phone_:             'str', // User's phone number (include country code)
+ ------------
+ twitter_handle_:    'str', // User's twitter handle
+ social_links_: { // Info for linking social media accounts
+   
+ },
+ installation_: { // Used for push notifications + linking devices to users
+    app_version:        'str',
+    platform:           'str',
+    device_token:       'str',
+    timezone_:          'str', // TODO What type??
+    locale_identifier_: 'str' // EN-US
+ }
+ 
+ 
+ Update:
+ ----
+ full_name_:         'str', // User's full name
+ bio_:               'str', // User's profile bio
+ avatar_:            'str', // User's avatar URL
+ ----
+ */
+
+
+-(void)registerWithUserDigestion:(NSDictionary *)digestion {
+    
+
+}
+
+-(FRSUser *)authenticatedUser {
+    
+    
+    return Nil;
+}
+
+
+/*
+  Creates dictionary w/ all current (provided) social links within the application, creates a dictionary with the format needed to be serialized into JSON for the API, will be {} with no links
+ */
+
+-(NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken {
+    NSMutableDictionary *socialDigestion = [[NSMutableDictionary alloc] init];
+    
+    if (twitterSession) {
+        // add twitter to digestion
+        if (twitterSession.authToken && twitterSession.authTokenSecret) {
+            NSDictionary *twitterDigestion = @{@"token":twitterSession.authToken, @"secret": twitterSession.authTokenSecret};
+            [socialDigestion setObject:twitterDigestion forKey:@"twitter"];
+        }
+    }
+    
+    if (facebookToken) {
+        // add facebook to digestion
+        if (facebookToken.tokenString) {
+            NSDictionary *facebookDigestion = @{@"token":facebookToken.tokenString};
+            [socialDigestion setObject:facebookDigestion forKey:@"facebook"];
+        }
+    }
+    
+    /* if no social links, empty dict (parses out to JSON perfectly)
+     
+     Result: 
+     
+     {
+        @"facebook": {
+            @"token": @"XXXXXX"
+        },
+        @"twitter": {
+            @"token": @"XXXXXX"
+            @"secret": @"XXXXX"
+        }
+     }
+
+     */
+    
+    return socialDigestion;
+}
+
+
+
+-(NSDictionary *)currentInstallation {
+    NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
+    
+    return currentInstallation;
+}
+
 -(void)handleUserLogin:(id)responseObject {
     NSLog(@"%@", responseObject);
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
-    
-    
+ 
+ 
 }
 
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -196,7 +304,7 @@
                             };
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject[@"data"], error);
+        completion(responseObject, error);
     }];
     
 }
@@ -212,30 +320,29 @@
 -(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion {
     
     NSDictionary *params = @{
-                             @"limit" : [NSNumber numberWithInteger:limit],
-                             @"offset" : @(offset),
-                             @"hide": @2,
-                             @"stories": @1
-                            };
+                        @"limit" : [NSNumber numberWithInteger:limit],
+                        @"offset" : @(offset),
+                        @"hide": @2,
+                        @"stories": @1
+                    };
     
     [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject[@"data"], error);
+        completion(responseObject, error);
     }];
 }
 
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion {
     
     NSDictionary *params = @{
-                             
                @"id" : storyID,
                @"offset" : @(0),
                @"sort" : @"1",
                @"limit" : @"100",
                @"hide" : @"4" //HIDE NUMBER
-    };
+            };
 
     [self get:storyGalleriesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject[@"data"], error);
+        completion(responseObject, error);
     }];
 }
 
@@ -256,7 +363,7 @@
     
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        completion(responseObject[@"data"], error);
+        completion(responseObject, error);
     }];
 }
 
@@ -284,20 +391,34 @@
     
     if (!self.requestManager) {
         AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
-        
-        if (![self isAuthenticated]) {
-            [manager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
-        }
-        else {
-            // set bearer client token
-        }
-        
-        [manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        manager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
-        return manager;
+        self.requestManager = manager;
     }
     
+    [self reevaluateAuthorization];
+    
     return self.requestManager;
+}
+
+-(void)reevaluateAuthorization {
+    
+    if (![self isAuthenticated]) {
+        // set client token
+        [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
+    }
+    else {
+        // set bearer client token
+        NSString *currentBearerToken = [self authenticationToken];
+        if (currentBearerToken) {
+            currentBearerToken = [NSString stringWithFormat:@"Bearer: %@", currentBearerToken];
+            [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
+        }
+        else { // something went wrong here (maybe pass to error handler)
+            [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
+        }
+    }
+    
+    [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
 }
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion {
