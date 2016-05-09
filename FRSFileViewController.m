@@ -83,27 +83,33 @@ static NSString *imageTile = @"ImageTile";
     nextButton.userInteractionEnabled = NO;
     [self.view addSubview:nextButton];
     
+    self.twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.twitterButton addTarget:self action:@selector(twitterTapped:) forControlEvents:UIControlEventTouchDown];
+    self.twitterButton.frame = CGRectMake(16, self.view.frame.size.height -24 -10, 24, 24);
+    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
+    [self.view addSubview:self.twitterButton];
     
-    UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchDown];
-    UIImage *twitter = [[UIImage imageNamed:@"twitter-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [twitterButton setImage:twitter forState:UIControlStateNormal];
-    twitterButton.frame = CGRectMake(16, self.view.frame.size.height -24 -10, 24, 24);
-    [self.view addSubview:twitterButton];
+    self.facebookButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.facebookButton addTarget:self action:@selector(facebookTapped:) forControlEvents:UIControlEventTouchDown];
+    self.facebookButton.frame = CGRectMake(56, self.view.frame.size.height -24 -10, 24, 24);
+    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
+    [self.view addSubview:self.facebookButton];
     
-    UIButton *facebookButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [twitterButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchDown];
-    UIImage *facebook = [[UIImage imageNamed:@"facebook-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [facebookButton setImage:facebook forState:UIControlStateNormal];
-    facebookButton.frame = CGRectMake(56, self.view.frame.size.height -24 -10, 24, 24);
-    [self.view addSubview:facebookButton];
+    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.anonButton addTarget:self action:@selector(anonTapped:) forControlEvents:UIControlEventTouchDown];
+    UIImage *eye = [UIImage imageNamed:@"eye-26"];
+    [self.anonButton setImage:eye forState:UIControlStateNormal];
+    self.anonButton.frame = CGRectMake(96, self.view.frame.size.height -24 -10, 24, 24);
+    [self.view addSubview:self.anonButton];
     
-    UIButton *anonymousButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [twitterButton addTarget:self action:@selector(eyeTapped) forControlEvents:UIControlEventTouchDown];
-    UIImage *eye = [[UIImage imageNamed:@"eye-26"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [anonymousButton setImage:eye forState:UIControlStateNormal];
-    anonymousButton.frame = CGRectMake(96, self.view.frame.size.height -24 -10, 24, 24);
-    [self.view addSubview:anonymousButton];
+    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, self.view.frame.size.height -17 -12, 83, 17)];
+    self.anonLabel.text = @"ANONYMOUS";
+    self.anonLabel.font = [UIFont notaBoldWithSize:15];
+    self.anonLabel.textColor = [UIColor frescoOrangeColor];
+    self.anonLabel.alpha = 0;
+    [self.view addSubview:self.anonLabel];
     
 }
 
@@ -311,4 +317,48 @@ static NSString *imageTile = @"ImageTile";
         [fileCollectionView reloadData];
     });
 }
+
+
+#pragma mark - Bottom Bar Buttons
+
+-(void)twitterTapped:(UIButton *)sender {
+    
+    if (sender.selected) {
+        sender.selected = NO;
+    } else {
+        sender.selected = YES;
+    }
+}
+
+-(void)facebookTapped:(UIButton *)sender {
+    
+    if (sender.selected) {
+        sender.selected = NO;
+    } else {
+        sender.selected = YES;
+    }
+}
+
+-(void)anonTapped:(UIButton *)sender {
+
+    if (sender.selected) {
+        sender.selected = NO;
+    } else {
+        self.anonLabel.alpha = 1;
+        sender.selected = YES;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 @end
