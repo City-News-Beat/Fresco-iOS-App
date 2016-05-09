@@ -195,6 +195,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
+    NSLog(@"self.assignmentsArray.count = %ld", self.assignmentsArray.count);
+    
     switch (self.assignmentsArray.count) {
         case 0:
             return 3;
@@ -352,6 +354,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     NSError *error = nil;
     NSArray *stored = [moc executeFetchRequest:request error:&error];
     self.assignmentsArray = [NSMutableArray arrayWithArray:stored];
+    
+//    NSLog(@"self.assignmentsArray.count = %ld", self.assignmentsArray.count);
     
     self.assignmentsArray = @[@"one", @"two", @"three"];
 }

@@ -49,14 +49,21 @@ static NSString *imageTile = @"ImageTile";
     self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
     [self.backTapButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
-    
+        
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
-    
+
 }
 
 -(void)back {
+    
     [self.navigationController popViewControllerAnimated:YES];
-    [self.backTapButton removeFromSuperview];
+    
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    
+    //Checks if going back to camera
+    if ([viewControllers indexOfObject:self] == NSNotFound) {
+        [self.backTapButton removeFromSuperview];
+    }
 }
 
 -(void)setupSecondaryUI {
