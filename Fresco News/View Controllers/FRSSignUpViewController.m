@@ -17,6 +17,7 @@
 #import "UIView+Helpers.h"
 #import "FRSDataValidator.h"
 
+
 @import MapKit;
 
 
@@ -54,6 +55,7 @@
 @end
 
 @implementation FRSSignUpViewController
+@synthesize twitterSession = _twitterSession, facebookToken = _facebookToken, facebookButton = _facebookButton, twitterButton = _twitterButton;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -385,19 +387,19 @@
 }
 
 -(void)addSocialButtonsToBottomBar{
-    UIButton *facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
-    [facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-    [facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateHighlighted];
-    [facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
-    [facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.bottomBar addSubview:facebookButton];
+    _facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
+    [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+    [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateHighlighted];
+    [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
+    [_facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomBar addSubview:_facebookButton];
     
-    UIButton *twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(facebookButton.frame.origin.x + facebookButton.frame.size.width, 1, 24 + 18, 24 + 18)];
-    [twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-    [twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateHighlighted];
-    [twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
-    [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.bottomBar addSubview:twitterButton];
+    _twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(_facebookButton.frame.origin.x + _facebookButton.frame.size.width, 1, 24 + 18, 24 + 18)];
+    [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+    [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateHighlighted];
+    [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
+    [_twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomBar addSubview:_twitterButton];
 }
 
 -(void)animateTextFieldError:(UITextField *)textField {
@@ -631,17 +633,65 @@
 }
 
 -(void)twitterTapped{
+    
+    if (_twitterSession) {
+        _twitterSession = Nil;
+        [UIView animateWithDuration:.2 animations:^{
+            [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+        }];
+        return;
+    }
+    
+    _twitterButton.enabled = FALSE; // prevent double tapping
+    
     [FRSSocial registerWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        _twitterButton.enabled = TRUE;
         
+        if (error) {
+            [self handleSocialChallenge:error];
+            return;
+        }
         
+        [UIView animateWithDuration:.2 animations:^{
+            [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateNormal];
+        }];
+        
+        _twitterSession = session;
     }];
 }
 
 -(void)facebookTapped{
-    [FRSSocial registerWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+    
+    if (_facebookToken) {
+        _facebookToken = Nil;
+        [UIView animateWithDuration:.2 animations:^{
+            [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+        }];
         
+        return;
+    }
+    
+    _facebookButton.enabled = FALSE; // prevent double tapping
+    
+    [FRSSocial registerWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        _facebookButton.enabled = TRUE;
+        
+        if (error) {
+            [self handleSocialChallenge:error];
+            return;
+        }
+        
+        [UIView animateWithDuration:.2 animations:^{
+            [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateNormal];
+        }];
+        
+        _facebookToken = token;
         
     } parent:self]; // presenting view controller for safari view login
+}
+
+-(void)handleSocialChallenge:(NSError *)error {
+    
 }
 
 #pragma mark - Keyboard

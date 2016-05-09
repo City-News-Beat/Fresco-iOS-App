@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
+#import "FRSAPIClient.h"
 
 @interface FRSSignUpViewController : FRSBaseViewController
-
+@property TWTRSession *twitterSession;
+@property FBSDKAccessToken *facebookToken;
+@property (nonatomic, retain) UIButton *facebookButton;
+@property (nonatomic, retain) UIButton *twitterButton;
 @end
