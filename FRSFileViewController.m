@@ -51,12 +51,19 @@ static NSString *imageTile = @"ImageTile";
     [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
     
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
-    
+
 }
 
 -(void)back {
+    
     [self.navigationController popViewControllerAnimated:YES];
-    [self.backTapButton removeFromSuperview];
+    
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    
+    //Checks if going back to camera
+    if ([viewControllers indexOfObject:self] == NSNotFound) {
+        [self.backTapButton removeFromSuperview];
+    }
 }
 
 -(void)setupSecondaryUI {
@@ -144,7 +151,7 @@ static NSString *imageTile = @"ImageTile";
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:FALSE animated:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self shouldShowStatusBar:YES animated:YES];
@@ -155,6 +162,8 @@ static NSString *imageTile = @"ImageTile";
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
+    self.navigationController.navigationBarHidden = NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
