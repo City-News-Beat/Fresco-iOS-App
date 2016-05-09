@@ -55,7 +55,7 @@
 @end
 
 @implementation FRSSignUpViewController
-@synthesize twitterSession = _twitterSession, facebookToken = _facebookToken, facebookButton = _facebookButton, twitterButton = _twitterButton;
+@synthesize twitterSession = _twitterSession, facebookToken = _facebookToken, facebookButton = _facebookButton, twitterButton = _twitterButton, currentSocialDigest = _currentSocialDigest;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -65,6 +65,10 @@
     [self addNotifications];
     
     self.notificationsEnabled = NO;
+}
+
+-(NSDictionary *)currentSocialDigest {
+    return [[FRSAPIClient sharedClient] socialDigestionWithTwitter:_twitterSession facebook:_facebookToken];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
