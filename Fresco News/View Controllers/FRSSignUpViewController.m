@@ -522,13 +522,36 @@
     }
 }
 
+-(BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    if (textField == self.usernameTF){
+        
+        [self highlightTextField:self.usernameTF enabled:NO];
+        
+        if (![self isValidUsername:self.usernameTF.text]){
+            [self animateTextFieldError:self.usernameTF];
+            [textField becomeFirstResponder];
+            return FALSE;
+        }
+        
+        if ([self.usernameTF.text isEqualToString:@"@"]){
+            self.usernameTF.text = @"";
+        }
+    }
+
+    return TRUE;
+}
+
 -(void)textFieldDidEndEditing:(UITextField *)textField{
  
     if (textField == self.usernameTF){
         
         [self highlightTextField:self.usernameTF enabled:NO];
         
-        [self animateTextFieldError:self.usernameTF];
+        if (![self isValidUsername:self.usernameTF.text]){
+            [self animateTextFieldError:self.usernameTF];
+            [textField becomeFirstResponder];
+            return;
+        }
 
         if ([self.usernameTF.text isEqualToString:@"@"]){
             self.usernameTF.text = @"";
@@ -786,6 +809,30 @@
 //    [self.emailTF resignFirstResponder];
 //    [self.passwordTF resignFirstResponder];
 //    [self.promoTF resignFirstResponder];
+}
+
+-(BOOL)validEmail:(NSString *)emailString {
+    
+    if([emailString length] == 0) {
+        return NO;
+    }
+    
+    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    
+    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
+    
+    if (regExMatches == 0) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+-(BOOL)isValidUsername:(NSString *)username {
+    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
+    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
+    return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
 }
 
 @end
