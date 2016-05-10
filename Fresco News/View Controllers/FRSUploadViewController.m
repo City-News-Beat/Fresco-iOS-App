@@ -476,17 +476,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     if ([notif isEqualToString:@"twitter-tapped-filevc"]) {
         
-        NSLog(@"received twitter in FRSUploadViewController");
         [self updateStateForButton:self.twitterButton];
         
     } else if ([notif isEqualToString:@"facebook-tapped-filevc"]) {
         
-        NSLog(@"received facebook in FRSUploadViewController");
         [self updateStateForButton:self.facebookButton];
         
     } else if ([notif isEqualToString:@"anon-tapped-filevc"]) {
         
-        NSLog(@"received anon in FRSUploadViewController");
         [self updateStateForButton:self.anonButton];
         
     }

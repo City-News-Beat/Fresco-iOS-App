@@ -419,19 +419,15 @@ static NSString *imageTile = @"ImageTile";
     
     if ([notif isEqualToString:@"twitter-tapped-uploadvc"]) {
         
-        NSLog(@"received twitter notification in FRSFileViewController");
         [self updateStateForButton:self.twitterButton];
         
     } else if ([notif isEqualToString:@"facebook-tapped-uploadvc"]) {
         
-        NSLog(@"received facebook notification in FRSFileViewController");
         [self updateStateForButton:self.facebookButton];
         
     } else if ([notif isEqualToString:@"anon-tapped-uploadvc"]) {
         
-        NSLog(@"received anon notification in FRSFileViewController");
         [self updateStateForButton:self.anonButton];
-        
     }
 }
 
