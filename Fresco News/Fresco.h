@@ -50,7 +50,7 @@ static NSString * const dualLocationEndpoint = @"user/locationcall";  // send lo
 
 // sign in / sign up (authorization) methods
 static NSString * const loginEndpoint = @"auth/signin";
-static NSString * const signUpEndpoint = @"auth/signup";
+static NSString * const signUpEndpoint = @"auth/register";
 static NSString * const socialLoginEndpoint = @"auth/signin/social";
 
 // user endpoints
