@@ -48,7 +48,7 @@
         CLLocation *location = [[CLLocation alloc] initWithLatitude:[latitude floatValue] longitude:[longitude floatValue]];
         self.currentLocation = location;
         
-        NSDictionary *userInfo = @{@"lat":@(_currentLocation.coordinate.latitude), @"lon":@(_currentLocation.coordinate.longitude)};
+        NSDictionary *userInfo = @{@"lat":@(_currentLocation.coordinate.latitude), @"lng":@(_currentLocation.coordinate.longitude)};
         
         // propogate last location through notification center
         dispatch_async(dispatch_get_main_queue(),^{
@@ -76,7 +76,7 @@
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             CLLocation *currentLocation = [locations firstObject];
-            NSDictionary *userLocation = @{@"lat":@(currentLocation.coordinate.latitude), @"lon":@(currentLocation.coordinate.longitude)};
+            NSDictionary *userLocation = @{@"lat":@(currentLocation.coordinate.latitude), @"lng":@(currentLocation.coordinate.longitude)};
             
             [[FRSAPIClient sharedClient] pingLocation:userLocation completion:^(id responseObject, NSError *error) {
                 if (error) {
@@ -289,7 +289,7 @@
     _currentLocation = (CLLocation *)[locations lastObject];
     
     // sends out as NSNotification, sends array of locations as well as preformed params for API update
-    NSDictionary *userInfo = @{@"lat":@(_currentLocation.coordinate.latitude), @"lon":@(_currentLocation.coordinate.longitude)};
+    NSDictionary *userInfo = @{@"lat":@(_currentLocation.coordinate.latitude), @"lng":@(_currentLocation.coordinate.longitude)};
     
     // make sure we're on the main thread so the updates actually get receieved
     dispatch_async(dispatch_get_main_queue(),^{

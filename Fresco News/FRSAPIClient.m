@@ -380,7 +380,7 @@
 
     NSDictionary *params = @{
                              @"lat" :location[0],
-                             @"lon" : location[1],
+                             @"lng" : location[1],
                              @"radius" : @(radius),
                              @"active" : @"true"
                             };
