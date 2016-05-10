@@ -655,8 +655,18 @@
 
 -(void)createAccount {
     
-    FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
+   // FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
+   // [self.navigationController pushViewController:vc animated:YES];
+    NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
+    [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
+    [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
+    [registrationDigest setObject:self.emailTF.text forKey:@"email"];
+    [registrationDigest setObject:self.usernameTF.text forKey:@"username"];
+    [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
+    
+    [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
+        NSLog(@"%@ %@", error, responseObject);
+    }];
 }
 
 -(void)twitterTapped{
