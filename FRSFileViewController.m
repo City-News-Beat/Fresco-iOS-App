@@ -60,6 +60,48 @@ static NSString *imageTile = @"ImageTile";
     [self.uploadViewController view];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [self shouldShowStatusBar:YES animated:YES];
+    
+    if (selectedAssets.count >= 1) {
+        [nextButton setTintColor:[UIColor frescoBlueColor]];
+    }
+    
+    //self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
+    //Navigation bar color is not Fresco Yellow. Not sure where it's set
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    if (self.twitterButton.selected) {
+        self.uploadViewController.twitterButton.selected = YES;
+    } else {
+        self.uploadViewController.twitterButton.selected = NO;
+    }
+    
+    if (self.facebookButton.selected) {
+        self.uploadViewController.facebookButton.selected = YES;
+    } else {
+        self.uploadViewController.facebookButton.selected = NO;
+    }
+    
+    if (self.anonButton.selected) {
+        self.uploadViewController.anonButton.selected = YES;
+        self.uploadViewController.anonLabel.alpha = 1;
+    } else {
+        self.uploadViewController.anonButton.selected = NO;
+        self.uploadViewController.anonLabel.alpha = 0;
+    }
+    
+//    self.navigationController.navigationBarHidden = NO;
+}
+
 -(void)back {
     
     [self.navigationController popViewControllerAnimated:YES];
@@ -160,60 +202,11 @@ static NSString *imageTile = @"ImageTile";
     fileCollectionView.backgroundColor = [UIColor frescoBackgroundColorLight];
 
 }
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [self shouldShowStatusBar:YES animated:YES];
-
-    
-    //When returning from upload, set self.uploadViewController = nil;
-
-
-    
-    
-//    self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
-    //Navigation bar color is not Fresco Yellow. Not sure where it's set
-}
-
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-
-    if (self.twitterButton.selected) {
-        self.uploadViewController.twitterButton.selected = YES;
-    } else {
-        self.uploadViewController.twitterButton.selected = NO;
-    }
-    
-    if (self.facebookButton.selected) {
-        self.uploadViewController.facebookButton.selected = YES;
-    } else {
-        self.uploadViewController.facebookButton.selected = NO;
-    }
-    
-    if (self.anonButton.selected) {
-        self.uploadViewController.anonButton.selected = YES;
-        self.uploadViewController.anonLabel.alpha = 1;
-    } else {
-        self.uploadViewController.anonButton.selected = NO;
-        self.uploadViewController.anonLabel.alpha = 0;
-    }
-    
-    self.navigationController.navigationBarHidden = NO;
-}
-
--(void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    
-//    self.uploadViewController = nil;
-    
-}
 
 -(void)next:(id)sender {
     
     [self.navigationController pushViewController:self.uploadViewController animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 /* Footer Related */

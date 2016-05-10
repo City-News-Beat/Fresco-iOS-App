@@ -41,7 +41,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.navigationController.navigationBarHidden = YES;
+//    self.navigationController.navigationBarHidden = YES;
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -263,10 +263,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-    
-    
-    
+
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -336,15 +333,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     return YES;
 }
 
-//-(void)textViewDidChange:(UITextView *)textView {
-//
-//    if (self.captionTextView.text.length == 0) {
-//        self.captionTextView.textColor = [UIColor frescoLightTextColor];
-//        self.captionTextView.text = @"What’s happening?";
-//        [self.captionTextView resignFirstResponder];
-//    }
-//}
-
 -(void)dismissKeyboard {
     
     [self.view resignFirstResponder];
@@ -357,15 +345,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
-    self.bottomContainer.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-    self.scrollView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+    self.scrollView.transform           = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
     self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
     
-    self.bottomContainer.transform = CGAffineTransformMakeTranslation(0, 0);
-    self.scrollView.transform = CGAffineTransformMakeTranslation(0, 0);
+    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, 0);
+    self.scrollView.transform           = CGAffineTransformMakeTranslation(0, 0);
     self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, 0);
 }
 
@@ -381,8 +369,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     NSError *error = nil;
     NSArray *stored = [moc executeFetchRequest:request error:&error];
     self.assignmentsArray = [NSMutableArray arrayWithArray:stored];
-    
-//    NSLog(@"self.assignmentsArray.count = %ld", self.assignmentsArray.count);
     
     self.assignmentsArray = @[@"one", @"two", @"three"];
 }
@@ -485,7 +471,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     } else if ([notif isEqualToString:@"anon-tapped-filevc"]) {
         
         [self updateStateForButton:self.anonButton];
-        
     }
 }
 
