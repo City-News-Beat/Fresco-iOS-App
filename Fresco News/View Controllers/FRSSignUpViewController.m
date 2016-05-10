@@ -77,7 +77,11 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.usernameTF becomeFirstResponder];
+    if (!_hasShown) {
+        [self.usernameTF becomeFirstResponder];
+    }
+    
+    _hasShown = TRUE;
     
     self.navigationItem.title = @"SIGN UP"; // lil agressive no
     [self configureBackButtonAnimated:NO];

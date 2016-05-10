@@ -18,4 +18,5 @@
 @property (nonatomic, retain) UIButton *facebookButton;
 @property (nonatomic, retain) UIButton *twitterButton;
 @property (nonatomic, retain) NSDictionary *currentSocialDigest;
+@property BOOL hasShown;
 @end
