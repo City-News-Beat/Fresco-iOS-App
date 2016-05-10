@@ -26,6 +26,8 @@ static NSString *imageTile = @"ImageTile";
 -(void)viewDidLoad {
     [super viewDidLoad];
     
+    [self addObservers];
+    
     selectedAssets = [[NSMutableArray alloc] init];
     
     [self.navigationController.navigationBar setTitleTextAttributes:
@@ -55,6 +57,7 @@ static NSString *imageTile = @"ImageTile";
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
     self.uploadViewController = [[FRSUploadViewController alloc] init];
+    [self.uploadViewController view];
 }
 
 -(void)back {
@@ -168,7 +171,7 @@ static NSString *imageTile = @"ImageTile";
     
     //When returning from upload, set self.uploadViewController = nil;
 
-    
+
     
     
 //    self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
@@ -355,35 +358,82 @@ static NSString *imageTile = @"ImageTile";
 
 -(void)twitterTapped:(UIButton *)sender {
     
-    if (sender.selected) {
-        sender.selected = NO;
-    } else {
-        sender.selected = YES;
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"twitter-tapped-filevc" object:self];
+    
+    [self updateStateForButton:sender];
+    
 }
 
 -(void)facebookTapped:(UIButton *)sender {
     
-    if (sender.selected) {
-        sender.selected = NO;
-    } else {
-        sender.selected = YES;
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"facebook-tapped-filevc" object:self];
+    
+    [self updateStateForButton:sender];
+
 }
 
 -(void)anonTapped:(UIButton *)sender {
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"anon-tapped-filevc" object:self];
 
-    if (sender.selected) {
-        self.anonLabel.alpha = 0;
-        sender.selected = NO;
+    [self updateStateForButton:sender];
+}
+
+
+-(void)updateStateForButton:(UIButton *)button {
+    
+    if (button.selected) {
+        button.selected = NO;
     } else {
+        button.selected = YES;
+    }
+    
+    /* Check for self.anonButton to change associated label */
+    if (button == self.anonButton && self.anonButton.selected) {
         self.anonLabel.alpha = 1;
-        sender.selected = YES;
+    } else if (button == self.anonButton){
+        self.anonLabel.alpha = 0;
     }
 }
 
 
+#pragma mark - NSNotification Center
 
+-(void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+-(void)addObservers {
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"anon-tapped-uploadvc"     object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"twitter-tapped-uploadvc"  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"facebook-tapped-uploadvc" object:nil];
+}
+
+
+-(void)receiveNotifications:(NSNotification *)notification {
+    
+    NSString *notif = [notification name];
+    
+    if ([notif isEqualToString:@"twitter-tapped-uploadvc"]) {
+        
+        NSLog(@"received twitter notification in FRSFileViewController");
+        [self updateStateForButton:self.twitterButton];
+        
+    } else if ([notif isEqualToString:@"facebook-tapped-uploadvc"]) {
+        
+        NSLog(@"received facebook notification in FRSFileViewController");
+        [self updateStateForButton:self.facebookButton];
+        
+    } else if ([notif isEqualToString:@"anon-tapped-uploadvc"]) {
+        
+        NSLog(@"received anon notification in FRSFileViewController");
+        [self updateStateForButton:self.anonButton];
+        
+    }
+}
 
 
 
