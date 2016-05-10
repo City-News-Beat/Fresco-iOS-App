@@ -13,7 +13,6 @@
 @implementation FRSFileUploadManager
 @synthesize uploadQueue = _uploadQueue, notificationCenter = _notificationCenter, errorCount = _errorCount;
 
-
 -(id)init {
     self = [super init];
     
