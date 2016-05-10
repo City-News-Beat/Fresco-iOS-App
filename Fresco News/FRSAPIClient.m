@@ -263,7 +263,7 @@
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
     
     if (deviceToken) {
-        currentInstallation[@"deviceToken"] = deviceToken;
+        currentInstallation[@"device_token"] = deviceToken;
     }
     
     /*
