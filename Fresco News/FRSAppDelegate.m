@@ -50,7 +50,6 @@
         return YES; // no other stuff going on (no quick action handling, etc)
     }
 
-
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         [self handleLocationUpdate];
     }
@@ -63,13 +62,6 @@
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
         [self handleColdQuickAction:launchOptions[UIApplicationLaunchOptionsShortcutItemKey]];
     }
-    
-    //[self registerForPushNotifications];
-    
-    
-//    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
-//    [[UINavigationBar appearance] setBarTintColor:[UIColor frescoOrangeColor]];
-//    [[UINavigationBar appearance] setTranslucent:YES];
     
     return YES;
 }
