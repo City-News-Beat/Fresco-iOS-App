@@ -201,6 +201,8 @@
             return;
         }
         
+        NSLog(@"%@", stories);
+        
         [self cacheLocalData:stories];
         
         NSInteger index = 0;
@@ -227,7 +229,11 @@
 }
 
 -(void)fetchMoreStories {
-
+    
+    if (_loadNoMore) {
+        return;
+    }
+    
     if (!self.stories) {
         self.stories = [[NSMutableArray alloc] init];
     }
@@ -236,9 +242,18 @@
     [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:self.stories.count completion:^(NSArray *stories, NSError *error) {
         
         if (!stories.count){
-            if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
-            else NSLog(@"No error fetching stories but the request returned zero results");
+            if (error) {
+                NSLog(@"Error fetching stories %@", error.localizedDescription);
+            }
+            else {
+                _loadNoMore = TRUE;
+               NSLog(@"No error fetching stories but the request returned zero results");
+            }
             return;
+        }
+        
+        if (stories.count < numToFetch) {
+            _loadNoMore = TRUE;
         }
         
         NSInteger index = self.stories.count;
@@ -296,6 +311,11 @@
 #pragma mark - UITableView DataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    if (_loadNoMore) {
+        return self.stories.count;
+    }
+    
     return (self.stories.count == 0) ? 0 : self.stories.count+1;
 }
 
@@ -343,7 +363,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    if (indexPath.row == self.stories.count - 5) {
+    if (indexPath.row == self.stories.count - 5 || (indexPath.row == self.stories.count && self.stories.count < 4)) {
         [self fetchMoreStories];
     }
     

@@ -12,5 +12,5 @@
 #import "FRSStoryDetailViewController.h"
 
 @interface FRSStoriesViewController : FRSScrollingViewController
-
+@property BOOL loadNoMore;
 @end

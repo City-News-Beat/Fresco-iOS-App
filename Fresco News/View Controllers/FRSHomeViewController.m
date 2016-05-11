@@ -739,6 +739,9 @@
 -(void)pausePlayers {
     for (UITableView *tableView in @[self.tableView, self.followingTable]) {
         for (FRSGalleryCell *cell in [tableView visibleCells]) {
+            if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+                continue;
+            }
             for (FRSPlayer *player in cell.galleryView.players) {
                 if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
                     [player pause];

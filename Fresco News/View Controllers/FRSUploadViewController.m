@@ -34,13 +34,19 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [super viewDidLoad];
     
     [self configureUI];
+    [self checkButtonStates];
 
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.navigationController.navigationBarHidden = YES;
+//    self.navigationController.navigationBarHidden = YES;
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
 }
 
 
@@ -48,7 +54,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
-    [self addNotifications];
+    [self addObservers];
     
     [self configureScrollView];
     [self configureGalleryTableView];
@@ -58,6 +64,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureTextView];
     [self configureBottomBar];
 
+}
+
+-(void)checkButtonStates {
+
+
+    
+    
+    
 }
 
 
@@ -112,31 +126,39 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     /* Configure bottom bar */
     //Configure Twitter post button
-    UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [twitterButton addTarget:self action:@selector(postToTwitter) forControlEvents:UIControlEventTouchDown];
-    UIImage *twitter = [[UIImage imageNamed:@"twitter-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [twitterButton setImage:twitter forState:UIControlStateNormal];
-    twitterButton.frame = CGRectMake(16, 10, 24, 24);
-    [self.bottomContainer addSubview:twitterButton];
+    self.twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.twitterButton addTarget:self action:@selector(postToTwitter:) forControlEvents:UIControlEventTouchDown];
+    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
+    self.twitterButton.frame = CGRectMake(16, 10, 24, 24);
+    [self.bottomContainer addSubview:self.twitterButton];
     
     //Configure Facebook post button
-    UIButton *facebookButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [twitterButton addTarget:self action:@selector(postToFacebook) forControlEvents:UIControlEventTouchDown];
-    UIImage *facebook = [[UIImage imageNamed:@"facebook-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [facebookButton setImage:facebook forState:UIControlStateNormal];
-    facebookButton.frame = CGRectMake(56, 10, 24, 24);
-    [self.bottomContainer addSubview:facebookButton];
+    self.facebookButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.facebookButton addTarget:self action:@selector(postToFacebook:) forControlEvents:UIControlEventTouchDown];
+    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
+    self.facebookButton.frame = CGRectMake(56, 10, 24, 24);
+    [self.bottomContainer addSubview:self.facebookButton];
     
     //Configure anonymous posting button
-    UIButton *anonymousButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [anonymousButton addTarget:self action:@selector(postAnonymously) forControlEvents:UIControlEventTouchDown];
-    UIImage *eye = [[UIImage imageNamed:@"eye-26"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [anonymousButton setImage:eye forState:UIControlStateNormal];
-    anonymousButton.frame = CGRectMake(96, 10, 24, 24);
-    [self.bottomContainer addSubview:anonymousButton];
+    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.anonButton addTarget:self action:@selector(postAnonymously:) forControlEvents:UIControlEventTouchDown];
+    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
+    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
+    self.anonButton.frame = CGRectMake(96, 10, 24, 24);
+    [self.bottomContainer addSubview:self.anonButton];
+    
+    //Configure anonymous label (default alpha = 0)
+    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, 15, 83, 17)];
+    self.anonLabel.text = @"ANONYMOUS";
+    self.anonLabel.font = [UIFont notaBoldWithSize:15];
+    self.anonLabel.textColor = [UIColor frescoOrangeColor];
+    self.anonLabel.alpha = 0;
+    [self.bottomContainer addSubview:self.anonLabel];
     
     //Configure next button
-    UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeSystem]; //Should be green when valid
     [sendButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [sendButton setTintColor:[UIColor frescoLightTextColor]];
     sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
@@ -241,10 +263,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-    
-    
-    
+
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -314,15 +333,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     return YES;
 }
 
-//-(void)textViewDidChange:(UITextView *)textView {
-//
-//    if (self.captionTextView.text.length == 0) {
-//        self.captionTextView.textColor = [UIColor frescoLightTextColor];
-//        self.captionTextView.text = @"What’s happening?";
-//        [self.captionTextView resignFirstResponder];
-//    }
-//}
-
 -(void)dismissKeyboard {
     
     [self.view resignFirstResponder];
@@ -335,15 +345,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
-    self.bottomContainer.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-    self.scrollView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+    self.scrollView.transform           = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
     self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
     
-    self.bottomContainer.transform = CGAffineTransformMakeTranslation(0, 0);
-    self.scrollView.transform = CGAffineTransformMakeTranslation(0, 0);
+    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, 0);
+    self.scrollView.transform           = CGAffineTransformMakeTranslation(0, 0);
     self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, 0);
 }
 
@@ -359,8 +369,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     NSError *error = nil;
     NSArray *stored = [moc executeFetchRequest:request error:&error];
     self.assignmentsArray = [NSMutableArray arrayWithArray:stored];
-    
-//    NSLog(@"self.assignmentsArray.count = %ld", self.assignmentsArray.count);
     
     self.assignmentsArray = @[@"one", @"two", @"three"];
 }
@@ -388,27 +396,82 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 /* Bottom Bar */
     //Post to Facebook
--(void)postToFacebook {
+-(void)postToFacebook:(UIButton *)sender {
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"facebook-tapped-uploadvc" object:self];
+
+    [self updateStateForButton:sender];
 }
 
     //Post to Twitter
--(void)postToTwitter {
+-(void)postToTwitter:(UIButton *)sender {
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"twitter-tapped-uploadvc" object:self];
+
+    [self updateStateForButton:sender];
 }
 
     //Post Anonymously
--(void)postAnonymously {
+-(void)postAnonymously:(UIButton *)sender {
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"anon-tapped-uploadvc" object:self];
+    
+    [self updateStateForButton:sender];
+}
+
+-(void)updateStateForButton:(UIButton *)button {
+    
+    if (button.selected) {
+        button.selected = NO;
+    } else {
+        button.selected = YES;
+    }
+    
+    /* Check for self.anonButton to change associated label */
+    if (button == self.anonButton && self.anonButton.selected) {
+        self.anonLabel.alpha = 1;
+    } else if (button == self.anonButton){
+        self.anonLabel.alpha = 0;
+    }
+}
+
+#pragma mark - NSNotification Center
+
+-(void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
-#pragma mark - Notifications
-
--(void)addNotifications {
+-(void)addObservers {
+    
+    /* Bottom bar notifications */
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"anon-tapped-filevc"     object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"twitter-tapped-filevc"  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"facebook-tapped-filevc" object:nil];
+    
+    /* Keyboard notifications */
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+}
+
+
+-(void)receiveNotifications:(NSNotification *)notification {
     
+    NSString *notif = [notification name];
+    
+    if ([notif isEqualToString:@"twitter-tapped-filevc"]) {
+        
+        [self updateStateForButton:self.twitterButton];
+        
+    } else if ([notif isEqualToString:@"facebook-tapped-filevc"]) {
+        
+        [self updateStateForButton:self.facebookButton];
+        
+    } else if ([notif isEqualToString:@"anon-tapped-filevc"]) {
+        
+        [self updateStateForButton:self.anonButton];
+    }
 }
 
 

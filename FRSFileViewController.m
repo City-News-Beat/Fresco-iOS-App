@@ -14,6 +14,8 @@
 @interface FRSFileViewController ()
 @property CMTime currentTime;
 @property (strong, nonatomic) UIButton *backTapButton;
+@property (strong, nonatomic) FRSUploadViewController *uploadViewController;
+
 @end
 
 @implementation FRSFileViewController
@@ -23,6 +25,8 @@ static NSString *imageTile = @"ImageTile";
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self addObservers];
     
     selectedAssets = [[NSMutableArray alloc] init];
     
@@ -52,6 +56,50 @@ static NSString *imageTile = @"ImageTile";
     
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
+    self.uploadViewController = [[FRSUploadViewController alloc] init];
+    [self.uploadViewController view];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [self shouldShowStatusBar:YES animated:YES];
+    
+    if (selectedAssets.count >= 1) {
+        [nextButton setTintColor:[UIColor frescoBlueColor]];
+    }
+    
+    //self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
+    //Navigation bar color is not Fresco Yellow. Not sure where it's set
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    if (self.twitterButton.selected) {
+        self.uploadViewController.twitterButton.selected = YES;
+    } else {
+        self.uploadViewController.twitterButton.selected = NO;
+    }
+    
+    if (self.facebookButton.selected) {
+        self.uploadViewController.facebookButton.selected = YES;
+    } else {
+        self.uploadViewController.facebookButton.selected = NO;
+    }
+    
+    if (self.anonButton.selected) {
+        self.uploadViewController.anonButton.selected = YES;
+        self.uploadViewController.anonLabel.alpha = 1;
+    } else {
+        self.uploadViewController.anonButton.selected = NO;
+        self.uploadViewController.anonLabel.alpha = 0;
+    }
+    
+//    self.navigationController.navigationBarHidden = NO;
 }
 
 -(void)back {
@@ -83,27 +131,33 @@ static NSString *imageTile = @"ImageTile";
     nextButton.userInteractionEnabled = NO;
     [self.view addSubview:nextButton];
     
+    self.twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.twitterButton addTarget:self action:@selector(twitterTapped:) forControlEvents:UIControlEventTouchDown];
+    self.twitterButton.frame = CGRectMake(16, self.view.frame.size.height -24 -10, 24, 24);
+    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
+    [self.view addSubview:self.twitterButton];
     
-    UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchDown];
-    UIImage *twitter = [[UIImage imageNamed:@"twitter-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [twitterButton setImage:twitter forState:UIControlStateNormal];
-    twitterButton.frame = CGRectMake(16, self.view.frame.size.height -24 -10, 24, 24);
-    [self.view addSubview:twitterButton];
+    self.facebookButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.facebookButton addTarget:self action:@selector(facebookTapped:) forControlEvents:UIControlEventTouchDown];
+    self.facebookButton.frame = CGRectMake(56, self.view.frame.size.height -24 -10, 24, 24);
+    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
+    [self.view addSubview:self.facebookButton];
     
-    UIButton *facebookButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [twitterButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchDown];
-    UIImage *facebook = [[UIImage imageNamed:@"facebook-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [facebookButton setImage:facebook forState:UIControlStateNormal];
-    facebookButton.frame = CGRectMake(56, self.view.frame.size.height -24 -10, 24, 24);
-    [self.view addSubview:facebookButton];
+    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.anonButton addTarget:self action:@selector(anonTapped:) forControlEvents:UIControlEventTouchDown];
+    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
+    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
+    self.anonButton.frame = CGRectMake(96, self.view.frame.size.height -24 -10, 24, 24);
+    [self.view addSubview:self.anonButton];
     
-    UIButton *anonymousButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    [twitterButton addTarget:self action:@selector(eyeTapped) forControlEvents:UIControlEventTouchDown];
-    UIImage *eye = [[UIImage imageNamed:@"eye-26"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [anonymousButton setImage:eye forState:UIControlStateNormal];
-    anonymousButton.frame = CGRectMake(96, self.view.frame.size.height -24 -10, 24, 24);
-    [self.view addSubview:anonymousButton];
+    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, self.view.frame.size.height -17 -12, 83, 17)];
+    self.anonLabel.text = @"ANONYMOUS";
+    self.anonLabel.font = [UIFont notaBoldWithSize:15];
+    self.anonLabel.textColor = [UIColor frescoOrangeColor];
+    self.anonLabel.alpha = 0;
+    [self.view addSubview:self.anonLabel];
     
 }
 
@@ -148,31 +202,11 @@ static NSString *imageTile = @"ImageTile";
     fileCollectionView.backgroundColor = [UIColor frescoBackgroundColorLight];
 
 }
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [self shouldShowStatusBar:YES animated:YES];
-    
-//    self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
-    //Navigation bar color is not Fresco Yellow. Not sure where it's set
-}
-
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    self.navigationController.navigationBarHidden = NO;
-}
-
--(void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
 
 -(void)next:(id)sender {
-    FRSUploadViewController *uploadViewController = [[FRSUploadViewController alloc] init];
-    [self.navigationController pushViewController:uploadViewController animated:YES];
+    
+    [self.navigationController pushViewController:self.uploadViewController animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 /* Footer Related */
@@ -311,4 +345,92 @@ static NSString *imageTile = @"ImageTile";
         [fileCollectionView reloadData];
     });
 }
+
+
+#pragma mark - Bottom Bar Buttons
+
+-(void)twitterTapped:(UIButton *)sender {
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"twitter-tapped-filevc" object:self];
+    
+    [self updateStateForButton:sender];
+    
+}
+
+-(void)facebookTapped:(UIButton *)sender {
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"facebook-tapped-filevc" object:self];
+    
+    [self updateStateForButton:sender];
+
+}
+
+-(void)anonTapped:(UIButton *)sender {
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"anon-tapped-filevc" object:self];
+
+    [self updateStateForButton:sender];
+}
+
+
+-(void)updateStateForButton:(UIButton *)button {
+    
+    if (button.selected) {
+        button.selected = NO;
+    } else {
+        button.selected = YES;
+    }
+    
+    /* Check for self.anonButton to change associated label */
+    if (button == self.anonButton && self.anonButton.selected) {
+        self.anonLabel.alpha = 1;
+    } else if (button == self.anonButton){
+        self.anonLabel.alpha = 0;
+    }
+}
+
+
+#pragma mark - NSNotification Center
+
+-(void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+-(void)addObservers {
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"anon-tapped-uploadvc"     object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"twitter-tapped-uploadvc"  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"facebook-tapped-uploadvc" object:nil];
+}
+
+
+-(void)receiveNotifications:(NSNotification *)notification {
+    
+    NSString *notif = [notification name];
+    
+    if ([notif isEqualToString:@"twitter-tapped-uploadvc"]) {
+        
+        [self updateStateForButton:self.twitterButton];
+        
+    } else if ([notif isEqualToString:@"facebook-tapped-uploadvc"]) {
+        
+        [self updateStateForButton:self.facebookButton];
+        
+    } else if ([notif isEqualToString:@"anon-tapped-uploadvc"]) {
+        
+        [self updateStateForButton:self.anonButton];
+    }
+}
+
+
+
+
+
+
+
+
+
+
 @end

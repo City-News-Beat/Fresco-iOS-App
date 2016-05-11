@@ -271,9 +271,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
 }
 
--(void)viewWillDisappear:(BOOL)animated{
+-(void)viewDidDisappear:(BOOL)animated{
     
-    [super viewWillDisappear:animated];
+    [super viewDidDisappear:animated];
     
     [self.locationManager stopMonitoringSignificantLocationChanges];
     
