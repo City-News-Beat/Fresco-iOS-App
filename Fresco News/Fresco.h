@@ -21,6 +21,13 @@
 #define NSLog //
 #endif
 
+
+// image CDN sizing
+static NSString * const thumbImageSize = @"150x";
+static NSString * const smallImageSize = @"320x";
+static NSString * const mediumImageSize = @"600x";
+static NSString * const largeImageSize = @""; // actual image
+
 // notifications
 static NSString * const kStatusBarTappedNotification = @"statusBarTappedNotification";
 

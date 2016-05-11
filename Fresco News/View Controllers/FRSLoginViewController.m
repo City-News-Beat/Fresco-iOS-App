@@ -187,7 +187,6 @@
     [self.userField resignFirstResponder];
     
     [self animateFramesForKeyboard:YES];
-    
     //patience, my friend. patience.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSURL *url = [NSURL URLWithString:@"https://www.fresconews.com/forgot"];
@@ -198,7 +197,6 @@
 
 
 #pragma mark - UITextFieldDelegate
-
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.userField) {
