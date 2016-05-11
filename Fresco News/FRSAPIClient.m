@@ -502,12 +502,17 @@
         if (currentBearerToken) {
             currentBearerToken = [NSString stringWithFormat:@"Bearer %@", currentBearerToken];
             [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
+            [self startLocator];
         }
         else { // something went wrong here (maybe pass to error handler)
             [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
         }
     }
     _managerAuthenticated = TRUE;
+}
+
+-(void)startLocator {
+    [FRSLocator sharedLocator];
 }
 
 -(NSString *)clientAuthorization {
@@ -536,7 +541,6 @@
     
     dispatch_once(&onceToken, ^{
         client = [[FRSAPIClient alloc] init];
-        [FRSLocator sharedLocator];
     });
     
     return client;
