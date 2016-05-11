@@ -439,7 +439,7 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     if (tableView == self.tableView) {
-        return (self.dataSource.count == 0) ? 0 : self.dataSource.count + 1;
+        return (self.dataSource.count == 0 || _loadNoMore) ? self.dataSource.count : self.dataSource.count + 1;
     }
     
     return 0;
@@ -487,9 +487,9 @@
     }
     
     if (indexPath.row == self.dataSource.count-4) {
-        if (!isLoading) {
+        if (!isLoading && !_loadNoMore) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-               // [self loadMore];
+                [self loadMore];
             });
         }
     }
@@ -528,6 +528,8 @@
         [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:self.dataSource.count completion:^(NSArray *galleries, NSError *error) {
                         
             if ([galleries count] == 0){
+                _loadNoMore = TRUE;
+                [self.tableView reloadData];
                 return;
             }
             
