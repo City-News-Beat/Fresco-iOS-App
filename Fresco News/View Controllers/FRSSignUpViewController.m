@@ -107,8 +107,19 @@
 }
 
 -(void)addNotifications{
+    
+    /* Keyboard Notifications */
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    
+    /* Text Field Notifications */
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange) name:UITextFieldTextDidChangeNotification object:self.usernameTF];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange) name:UITextFieldTextDidChangeNotification object:self.emailTF];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange) name:UITextFieldTextDidChangeNotification object:self.passwordTF];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -159,6 +170,7 @@
     
     [self.view addGestureRecognizer:tap];
 }
+
 
 -(void)configureUserNameField {
     self.usernameTF = [[UITextField alloc] initWithFrame:CGRectMake(48, 24, self.scrollView.frame.size.width - 2 * 48, 44)];
@@ -493,13 +505,24 @@
 
 #pragma mark - TextField Delegate
 
+-(void)textFieldDidChange {
+    
+    UIControlState controlState;
+    if ([self isValidUsername:self.usernameTF.text] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
+        controlState = UIControlStateHighlighted;
+    } else {
+        controlState = UIControlStateNormal;
+    }
+    
+    [self toggleCreateAccountButtonTitleColorToState:controlState];
+}
+
 -(void)dismissKeyboard {
     [self highlightTextField:nil enabled:NO];
     
     [self.view resignFirstResponder];
     [self.view endEditing:YES];
 }
-
 
 -(BOOL)textFieldShouldReturn:(UITextField*)textField {
 
@@ -511,7 +534,7 @@
         }
         [self.emailTF becomeFirstResponder];
     } else if (textField == self.emailTF) {
-        if (![self validEmail:textField.text] || [self.emailTF.text isEqualToString:@""]) {
+        if (![self isValidEmail:textField.text] || [self.emailTF.text isEqualToString:@""]) {
             [self animateTextFieldError:textField];
             [textField becomeFirstResponder];
             return FALSE;
@@ -553,21 +576,10 @@
             self.usernameTF.text = @"";
         }
     }
-    
-    UIControlState controlState;
-    
-    if ([FRSDataValidator isValidUserName:self.usernameTF.text] && [FRSDataValidator isValidEmail:self.emailTF.text] && [FRSDataValidator isValidPassword:self.passwordTF.text]) {
-        controlState = UIControlStateHighlighted;
-    } else {
-//        controlState = UIControlStateNormal;
-        controlState = UIControlStateHighlighted;
-
-    }
-    [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
 
-
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
     if (textField == self.usernameTF) {
         if ([string containsString:@" "]) {
             return FALSE;
@@ -689,7 +701,7 @@
         return FALSE;
     }
     
-    if (self.emailTF.text.length == 0 || ![self validEmail:self.emailTF.text]) {
+    if (self.emailTF.text.length == 0 || ![self isValidEmail:self.emailTF.text]) {
         return FALSE;
     }
     
@@ -848,7 +860,9 @@
 //    [self.promoTF resignFirstResponder];
 }
 
--(BOOL)validEmail:(NSString *)emailString {
+#pragma mark - Text Field Validation
+
+-(BOOL)isValidEmail:(NSString *)emailString {
     
     if([emailString length] == 0) {
         return NO;
@@ -867,9 +881,23 @@
 }
 
 -(BOOL)isValidUsername:(NSString *)username {
+
+    if ([username isEqualToString:@"@"]) {
+        return NO;
+    }
+    
     NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
     NSCharacterSet *disallowedSet = [allowedSet invertedSet];
-    return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
+    if (([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound) /*&& ([username length] >= 4)*/ && (!([username length] > 20))) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+-(BOOL)isValidPassword:(NSString *)password {
+    
+    return [password length] >= 8;
 }
 
 @end
