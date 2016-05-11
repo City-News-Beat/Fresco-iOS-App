@@ -265,6 +265,9 @@
     if (deviceToken) {
         currentInstallation[@"device_token"] = deviceToken;
     }
+    else {
+        return Nil; // no installation without push info, apparently
+    }
     
     /*
     NSInteger secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
