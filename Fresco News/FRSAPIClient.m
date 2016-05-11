@@ -326,10 +326,10 @@
     return self;
 }
 
--(void)handleLocationUpdate:(NSDictionary *)userInfo {
+-(void)handleLocationUpdate:(NSNotification *)userInfo {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateUserLocation:userInfo completion:^(NSDictionary *response, NSError *error) {
+        [self updateUserLocation:userInfo.userInfo completion:^(NSDictionary *response, NSError *error) {
             if (!error) {
                 NSLog(@"Sent Location");
             }
@@ -479,6 +479,8 @@
     if (!self.requestManager) {
         AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
         self.requestManager = manager;
+        [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
     }
     
     [self reevaluateAuthorization];
@@ -496,16 +498,13 @@
         // set bearer client token
         NSString *currentBearerToken = [self authenticationToken];
         if (currentBearerToken) {
-            currentBearerToken = [NSString stringWithFormat:@"Bearer: %@", currentBearerToken];
+            currentBearerToken = [NSString stringWithFormat:@"Bearer %@", currentBearerToken];
             [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
         }
         else { // something went wrong here (maybe pass to error handler)
             [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
         }
     }
-    
-    [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
 }
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion {
