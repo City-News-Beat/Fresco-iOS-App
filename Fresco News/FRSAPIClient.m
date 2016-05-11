@@ -561,6 +561,27 @@
     return client;
 }
 
+-(void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSMutableDictionary *twitterDictionary = [[NSMutableDictionary alloc] init];
+    [twitterDictionary setObject:@"Twitter" forKey:@"platform"];
+    
+    if (twitterSession.authToken && twitterSession.authTokenSecret) {
+        [twitterDictionary setObject:twitterSession.authToken forKey:@"token"];
+        [twitterDictionary setObject:twitterSession.authTokenSecret forKey:@"secret"];
+    }
+    else {
+        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:401 userInfo:Nil]);
+        return;
+    }
+    
+    [self post:addSocialEndpoint withParameters:twitterDictionary completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+-(void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
+
 
 
 @end

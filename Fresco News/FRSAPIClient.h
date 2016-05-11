@@ -51,10 +51,13 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)updateLocalUser;
 -(BOOL)isAuthenticated;
-
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion;
 -(NSString *)authenticationToken; // current token, assuming 1 user support
 -(NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken; // current social links, formatted for transmission to server
 -(FRSUser *)authenticatedUser;
 -(NSDictionary *)currentInstallation;
+
+// social
+-(void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion;
 @end
