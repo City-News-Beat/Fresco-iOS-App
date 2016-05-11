@@ -199,6 +199,54 @@
 
 #pragma mark - UITextFieldDelegate
 
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == self.userField) {
+        if (![self isValidUsername:self.userField.text] && ![self validEmail:self.userField.text]) {
+            [self animateTextFieldError:textField];
+            return FALSE;
+        }
+    }
+    
+    return TRUE;
+}
+
+-(void)animateTextFieldError:(UITextField *)textField {
+    
+    CGFloat duration = 0.1;
+    
+    /* SHAKE */
+    
+    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        textField.transform = CGAffineTransformMakeTranslation(-7.5, 0);
+        
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            textField.transform = CGAffineTransformMakeTranslation(5, 0);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                textField.transform = CGAffineTransformMakeTranslation(-2.5, 0);
+                
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    
+                    textField.transform = CGAffineTransformMakeTranslation(2.5, 0);
+                    
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                        
+                        textField.transform = CGAffineTransformMakeTranslation(0, 0);
+                        
+                    } completion:nil];
+                }];
+            }];
+        }];
+    }];
+}
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (self.userField.editing) {
