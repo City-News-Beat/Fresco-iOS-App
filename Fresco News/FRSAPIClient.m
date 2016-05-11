@@ -579,7 +579,17 @@
     }];
 }
 -(void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *tokenString = facebookToken.tokenString;
+    if (!tokenString) {
+        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:401 userInfo:Nil]);
+        return;
+    }
     
+    NSDictionary *facebookDictionary = @{@"platform":@"Facebook", @"token":tokenString};
+    
+    [self post:addSocialEndpoint withParameters:facebookDictionary completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 
