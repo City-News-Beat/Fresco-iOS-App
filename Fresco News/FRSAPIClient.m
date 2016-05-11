@@ -86,6 +86,8 @@
         if (!error) {
             [self handleUserLogin:responseObject];
         }
+        
+        NSLog(@"%@ %@", error, responseObject);
     }];
 }
 

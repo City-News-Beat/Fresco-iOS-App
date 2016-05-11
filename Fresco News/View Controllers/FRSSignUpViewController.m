@@ -659,14 +659,19 @@
         return;
     }
     
+    NSDictionary *currentInstallation = [[FRSAPIClient sharedClient] currentInstallation];
+
    // FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
    // [self.navigationController pushViewController:vc animated:YES];
     NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
     [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
-    [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
     [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
+    
+    if (currentInstallation) {
+        [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
+    }
     
     NSLog(@"%@", registrationDigest);
     

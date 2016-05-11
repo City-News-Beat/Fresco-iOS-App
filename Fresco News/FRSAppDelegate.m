@@ -46,7 +46,7 @@
     [self configureCoreDataStack];
     
  
-    if ([[FRSAPIClient sharedClient] isAuthenticated] || TRUE) {
+    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
         self.window.rootViewController = self.tabBarController;
         [self createItemsWithIcons];
@@ -68,6 +68,8 @@
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
         [self handleColdQuickAction:launchOptions[UIApplicationLaunchOptionsShortcutItemKey]];
     }
+    
+    [self registerForPushNotifications];
     
     return YES;
 }
@@ -218,10 +220,7 @@
 }
 
 -(void)registerForPushNotifications {
-    
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"]) {
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-    }
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
