@@ -18,4 +18,5 @@
     NSArray *pulledFromCache;
     NSMutableArray *reloadedFrom;
 }
+@property BOOL loadNoMore;
 @end
