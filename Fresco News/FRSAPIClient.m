@@ -489,12 +489,15 @@
 }
 
 -(void)reevaluateAuthorization {
+    if (_managerAuthenticated) { // we gucci at this point, no changes
+        return;
+    }
     
     if (![self isAuthenticated]) {
         // set client token
         [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
     }
-    else {
+    else if (!_managerAuthenticated) { // set bearer token if we haven't already
         // set bearer client token
         NSString *currentBearerToken = [self authenticationToken];
         if (currentBearerToken) {
@@ -502,9 +505,14 @@
             [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
         }
         else { // something went wrong here (maybe pass to error handler)
-            [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
+            [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
         }
     }
+    _managerAuthenticated = TRUE;
+}
+
+-(NSString *)clientAuthorization {
+    return [NSString stringWithFormat:@"Basic %@", clientAuthorization];
 }
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion {
