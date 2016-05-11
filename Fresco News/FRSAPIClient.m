@@ -296,6 +296,8 @@
     if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
         [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
     }
+    
+    [self reevaluateAuthorization];
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -489,15 +491,12 @@
 }
 
 -(void)reevaluateAuthorization {
-    if (_managerAuthenticated) { // we gucci at this point, no changes
-        return;
-    }
     
     if (![self isAuthenticated]) {
         // set client token
         [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
     }
-    else if (!_managerAuthenticated) { // set bearer token if we haven't already
+    else { // set bearer token if we haven't already
         // set bearer client token
         NSString *currentBearerToken = [self authenticationToken];
         if (currentBearerToken) {
