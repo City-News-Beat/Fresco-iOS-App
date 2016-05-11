@@ -254,7 +254,7 @@
     
     currentInstallation[@"platform"] = @"ios";
     
-    NSString *appVersion = [NSString stringWithFormat:@"Version %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    NSString *appVersion = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     
     if (appVersion) {
         currentInstallation[@"app_version"] = appVersion;

@@ -664,6 +664,8 @@
     [registrationDigest setObject:self.usernameTF.text forKey:@"username"];
     [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
     
+    NSLog(@"%@", registrationDigest);
+    
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", error, responseObject);
     }];
