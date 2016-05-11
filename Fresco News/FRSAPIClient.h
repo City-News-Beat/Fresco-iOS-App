@@ -49,7 +49,7 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 //registration
 -(void)registerWithUserDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion; // leaves burdon of constructing dict obj to sender (will have method for that)
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
-
+-(void)updateLocalUser;
 -(BOOL)isAuthenticated;
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion;

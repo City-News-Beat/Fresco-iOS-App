@@ -301,6 +301,18 @@
     }
     
     [self reevaluateAuthorization];
+    [self updateLocalUser];
+}
+
+-(void)updateLocalUser {
+    [self get:authenticatedUserEndpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        if (error) {
+            [self handleError:error];
+            return;
+        }
+        
+        // set up FRSUser object with this info, set authenticated to true
+    }];
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
