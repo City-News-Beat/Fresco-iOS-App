@@ -70,6 +70,9 @@
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:loginEndpoint withParameters:@{@"username":user, @"password":password} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        if (!error) {
+            [self handleUserLogin:responseObject];
+        }
     }];
 }
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
