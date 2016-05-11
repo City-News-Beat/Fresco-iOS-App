@@ -202,7 +202,7 @@
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.userField) {
-        if (![self isValidUsername:self.userField.text] && ![self validEmail:self.userField.text]) {
+        if ((![self isValidUsername:self.userField.text] && ![self validEmail:self.userField.text]) || [self.userField.text isEqualToString:@""]) {
             [self animateTextFieldError:textField];
             return FALSE;
         }
