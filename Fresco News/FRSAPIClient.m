@@ -70,6 +70,9 @@
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:loginEndpoint withParameters:@{@"username":user, @"password":password} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        if (!error) {
+            [self handleUserLogin:responseObject];
+        }
     }];
 }
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -254,7 +257,7 @@
     
     currentInstallation[@"platform"] = @"ios";
     
-    NSString *appVersion = [NSString stringWithFormat:@"Version %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    NSString *appVersion = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     
     if (appVersion) {
         currentInstallation[@"app_version"] = appVersion;
@@ -263,7 +266,10 @@
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
     
     if (deviceToken) {
-        currentInstallation[@"deviceToken"] = deviceToken;
+        currentInstallation[@"device_token"] = deviceToken;
+    }
+    else {
+        return Nil; // no installation without push info, apparently
     }
     
     /*
@@ -290,7 +296,23 @@
 }
 
 -(void)handleUserLogin:(id)responseObject {
-    NSLog(@"%@", responseObject);
+    if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
+        [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
+    }
+    
+    [self reevaluateAuthorization];
+    [self updateLocalUser];
+}
+
+-(void)updateLocalUser {
+    [self get:authenticatedUserEndpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        if (error) {
+            [self handleError:error];
+            return;
+        }
+        
+        // set up FRSUser object with this info, set authenticated to true
+    }];
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -321,10 +343,10 @@
     return self;
 }
 
--(void)handleLocationUpdate:(NSDictionary *)userInfo {
+-(void)handleLocationUpdate:(NSNotification *)userInfo {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateUserLocation:userInfo completion:^(NSDictionary *response, NSError *error) {
+        [self updateUserLocation:userInfo.userInfo completion:^(NSDictionary *response, NSError *error) {
             if (!error) {
                 NSLog(@"Sent Location");
             }
@@ -380,7 +402,7 @@
 
     NSDictionary *params = @{
                              @"lat" :location[0],
-                             @"lon" : location[1],
+                             @"lng" : location[1],
                              @"radius" : @(radius),
                              @"active" : @"true"
                             };
@@ -474,6 +496,8 @@
     if (!self.requestManager) {
         AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
         self.requestManager = manager;
+        [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
     }
     
     [self reevaluateAuthorization];
@@ -487,20 +511,27 @@
         // set client token
         [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
     }
-    else {
+    else { // set bearer token if we haven't already
         // set bearer client token
         NSString *currentBearerToken = [self authenticationToken];
         if (currentBearerToken) {
-            currentBearerToken = [NSString stringWithFormat:@"Bearer: %@", currentBearerToken];
+            currentBearerToken = [NSString stringWithFormat:@"Bearer %@", currentBearerToken];
             [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
+            [self startLocator];
         }
         else { // something went wrong here (maybe pass to error handler)
-            [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
+            [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
         }
     }
-    
-    [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
+    _managerAuthenticated = TRUE;
+}
+
+-(void)startLocator {
+    [FRSLocator sharedLocator];
+}
+
+-(NSString *)clientAuthorization {
+    return [NSString stringWithFormat:@"Basic %@", clientAuthorization];
 }
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -525,7 +556,6 @@
     
     dispatch_once(&onceToken, ^{
         client = [[FRSAPIClient alloc] init];
-        [FRSLocator sharedLocator];
     });
     
     return client;

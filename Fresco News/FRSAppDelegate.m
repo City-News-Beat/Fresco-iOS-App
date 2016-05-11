@@ -23,6 +23,8 @@
 #import "VideoTrimmerViewController.h"
 #import "Fresco.h"
 #import "FRSFileUploadManager.h"
+#import "SSKeychain.h"
+
 
 
 @implementation FRSAppDelegate
@@ -31,6 +33,10 @@
 #pragma mark - Startup and Application States
 
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
+    
+    if ([self isFirstRun]) {
+        [self clearKeychain]; // clear tokens from past install
+    }
     
     [self configureWindow];
     [self startFabric]; // crashlytics first yall
@@ -50,7 +56,6 @@
         return YES; // no other stuff going on (no quick action handling, etc)
     }
 
-
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         [self handleLocationUpdate];
     }
@@ -64,14 +69,31 @@
         [self handleColdQuickAction:launchOptions[UIApplicationLaunchOptionsShortcutItemKey]];
     }
     
-    //[self registerForPushNotifications];
-    
-    
-//    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
-//    [[UINavigationBar appearance] setBarTintColor:[UIColor frescoOrangeColor]];
-//    [[UINavigationBar appearance] setTranslucent:YES];
-    
     return YES;
+}
+
+-(void)clearKeychain {
+    SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
+    
+    NSArray *accounts = [query fetchAll:nil];
+    
+    for (id account in accounts) {
+        
+        SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
+        
+        query.service = serviceName;
+        query.account = [account valueForKey:@"acct"];
+        
+        [query deleteItem:nil];
+    }
+}
+
+-(BOOL)isFirstRun {
+    BOOL firstRun = (![[[NSUserDefaults standardUserDefaults] stringForKey:@"isFirstRun"] isEqualToString:@"Yeah It Totally Is"]);
+    [[NSUserDefaults standardUserDefaults] setObject:@"Yeah It Totally Is" forKey:@"isFirstRun"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    return firstRun;
 }
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options {

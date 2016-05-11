@@ -24,6 +24,7 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 
 @interface FRSAPIClient : NSObject
 @property (nonatomic, retain) AFHTTPRequestOperationManager *requestManager;
+@property BOOL managerAuthenticated;
 +(instancetype)sharedClient;
 
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
@@ -48,11 +49,12 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 //registration
 -(void)registerWithUserDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion; // leaves burdon of constructing dict obj to sender (will have method for that)
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
-
+-(void)updateLocalUser;
 -(BOOL)isAuthenticated;
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion;
 -(NSString *)authenticationToken; // current token, assuming 1 user support
 -(NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken; // current social links, formatted for transmission to server
 -(FRSUser *)authenticatedUser;
+-(NSDictionary *)currentInstallation;
 @end

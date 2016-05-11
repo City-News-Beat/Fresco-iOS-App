@@ -142,15 +142,22 @@
 
 -(IBAction)twitter:(id)sender {
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
-        
+        if (authenticated) {
+            [self moveToHome];
+        }
     }];
 }
 
+-(void)moveToHome {
+         
+}
 
 -(IBAction)facebook:(id)sender {
     
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
-        
+        if (authenticated) {
+            [self moveToHome];
+        }
     } parent:self]; // presenting view controller
 }
 

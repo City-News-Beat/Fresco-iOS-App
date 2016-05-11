@@ -124,6 +124,7 @@
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
 		D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */; };
 		D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3D01CDE1EAE00E39701 /* Reachability.m */; };
+		D40BD3D61CE28A8300E39701 /* AWFileHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3D51CE28A8300E39701 /* AWFileHash.m */; };
 		D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */; };
 		D412549F1C91E46D00E3B85C /* FRSMultipartTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */; };
 		D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */; };
@@ -451,6 +452,8 @@
 		D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryTable.m; sourceTree = "<group>"; };
 		D40BD3CF1CDE1EAE00E39701 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		D40BD3D01CDE1EAE00E39701 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		D40BD3D41CE28A8300E39701 /* AWFileHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AWFileHash.h; sourceTree = "<group>"; };
+		D40BD3D51CE28A8300E39701 /* AWFileHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AWFileHash.m; sourceTree = "<group>"; };
 		D40FA3191CAAFB2100A4FE47 /* FRSUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserDefaults.h; sourceTree = "<group>"; };
 		D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserDefaults.m; sourceTree = "<group>"; };
 		D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMultipartTask.h; sourceTree = "<group>"; };
@@ -1200,6 +1203,15 @@
 			name = Rechability;
 			sourceTree = "<group>";
 		};
+		D40BD3D31CE28A3B00E39701 /* Hash Stream */ = {
+			isa = PBXGroup;
+			children = (
+				D40BD3D41CE28A8300E39701 /* AWFileHash.h */,
+				D40BD3D51CE28A8300E39701 /* AWFileHash.m */,
+			);
+			name = "Hash Stream";
+			sourceTree = "<group>";
+		};
 		D41365AB1CA32D63004FE848 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
@@ -1708,6 +1720,7 @@
 		D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */ = {
 			isa = PBXGroup;
 			children = (
+				D40BD3D31CE28A3B00E39701 /* Hash Stream */,
 				D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */,
 				D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */,
 				D4B35F531CCED19600F5C8A8 /* FRSUploadTask.h */,
@@ -2234,6 +2247,7 @@
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
 				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,
 				D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */,
+				D40BD3D61CE28A8300E39701 /* AWFileHash.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

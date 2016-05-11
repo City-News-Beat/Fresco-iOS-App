@@ -29,6 +29,9 @@ static BOOL const developmentEnvironment = FALSE; // both of these effect the ba
 static BOOL const stagingEnvironment = FALSE;
 
 // authorization constants
+static NSString * const stripeTest = @"pk_test_o4pMXyj95Vqe5NgV3hb7qmdo";
+static NSString * const stripeLive = @"pk_live_saSjliYnCbjFwYfriTzhTQiO";
+
 static NSString * const clientAuthorization = @"MTMzNzp0aGlzaXNhc2VjcmV0";
 static NSString * const testBearerToken = @"gyOubJIiNaGkLn2BPPO9MIespXhBcp8WQlamDNMmEucedLwAxVovHaa1B55xQuz9eOgPE74M8BgcC3lslwHPidye4eTexKYyvKMeTLkwxQb2EGkvH8LAPVGEo2ZqdGlDsaI2gALhNbt8ZM45pk7gHECc0qj6MjRAATf2c943grQQuL6akUCCQqN7McYoQE";
 static NSString * const serviceName = @"frescoNewsService3";
@@ -50,7 +53,7 @@ static NSString * const dualLocationEndpoint = @"user/locationcall";  // send lo
 
 // sign in / sign up (authorization) methods
 static NSString * const loginEndpoint = @"auth/signin";
-static NSString * const signUpEndpoint = @"auth/signup";
+static NSString * const signUpEndpoint = @"auth/register";
 static NSString * const socialLoginEndpoint = @"auth/signin/social";
 
 // user endpoints
@@ -76,7 +79,7 @@ static NSInteger const maxUsernameChars = 20;
 static NSInteger const maxNameChars = 40;
 static NSInteger const maxLocationChars = 40;
 static NSInteger const maxBioChars = 160;
-static NSString * const validUsernameChars = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
+static NSString * const validUsernameChars = @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_@"; // leaving @ for idiots who think @ is in their username
 
 // map + location
 static float const maxRadius = 50.0; // miles

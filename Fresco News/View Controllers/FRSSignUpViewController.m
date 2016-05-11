@@ -17,6 +17,7 @@
 #import "UIView+Helpers.h"
 #import "FRSDataValidator.h"
 
+
 @import MapKit;
 
 
@@ -54,6 +55,7 @@
 @end
 
 @implementation FRSSignUpViewController
+@synthesize twitterSession = _twitterSession, facebookToken = _facebookToken, facebookButton = _facebookButton, twitterButton = _twitterButton, currentSocialDigest = _currentSocialDigest;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -65,9 +67,23 @@
     self.notificationsEnabled = NO;
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+}
+
+-(NSDictionary *)currentSocialDigest {
+    return [[FRSAPIClient sharedClient] socialDigestionWithTwitter:_twitterSession facebook:_facebookToken];
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.navigationItem.title = @"SIGN UP";
+    if (!_hasShown) {
+        [self.usernameTF becomeFirstResponder];
+    }
+    
+    _hasShown = TRUE;
+    
+    self.navigationItem.title = @"SIGN UP"; // lil agressive no
     [self configureBackButtonAnimated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     self.navigationController.navigationBarHidden = NO;
@@ -79,7 +95,6 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     self.navigationItem.title = @"";
-    
     
     NSArray *viewControllers = self.navigationController.viewControllers;
     if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count-2] == self) {
@@ -246,7 +261,6 @@
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 61.5)]];
-    
 }
 
 -(void)configureMapView{
@@ -255,13 +269,11 @@
     if (IS_STANDARD_IPHONE_6) height = 280;
     if (IS_STANDARD_IPHONE_6_PLUS) height = 310;
     
-    
     //Up until this point all the ui elements were static heights
     //The map height is dependent on the iPhone size now
     //We use a variable for easy tracking of the y-origin of subsequent elements
     //Eventually it will also be used to adjust the content size of the scroll view
     self.y = 254;
-    
     
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, height)];
     self.mapView.delegate = self;
@@ -331,9 +343,7 @@
     self.promoTF.font = [UIFont systemFontOfSize:15];
     self.promoTF.returnKeyType = UIReturnKeyGo;
     [self.promoContainer addSubview:self.promoTF];
-    
     [self.promoContainer addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
-    
     
     self.y += self.promoContainer.frame.size.height + 12;
     
@@ -385,19 +395,19 @@
 }
 
 -(void)addSocialButtonsToBottomBar{
-    UIButton *facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
-    [facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-    [facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateHighlighted];
-    [facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
-    [facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.bottomBar addSubview:facebookButton];
+    _facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
+    [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+    [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateHighlighted];
+    [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
+    [_facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomBar addSubview:_facebookButton];
     
-    UIButton *twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(facebookButton.frame.origin.x + facebookButton.frame.size.width, 1, 24 + 18, 24 + 18)];
-    [twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-    [twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateHighlighted];
-    [twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
-    [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.bottomBar addSubview:twitterButton];
+    _twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(_facebookButton.frame.origin.x + _facebookButton.frame.size.width, 1, 24 + 18, 24 + 18)];
+    [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+    [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateHighlighted];
+    [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
+    [_twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomBar addSubview:_twitterButton];
 }
 
 -(void)animateTextFieldError:(UITextField *)textField {
@@ -494,14 +504,25 @@
 -(BOOL)textFieldShouldReturn:(UITextField*)textField {
 
     if (textField == self.usernameTF) {
+        if (![self isValidUsername:[self.usernameTF.text substringFromIndex:1]] || [textField.text isEqualToString:@"@"]){
+            [self animateTextFieldError:self.usernameTF];
+            [textField becomeFirstResponder];
+            return FALSE;
+        }
         [self.emailTF becomeFirstResponder];
     } else if (textField == self.emailTF) {
+        if (![self validEmail:textField.text] || [self.emailTF.text isEqualToString:@""]) {
+            [self animateTextFieldError:textField];
+            [textField becomeFirstResponder];
+            return FALSE;
+        }
+        
         [self.passwordTF becomeFirstResponder];
+        
     } else if (textField == self.passwordTF) {
         [self.passwordTF resignFirstResponder];
     }
 
-    
     return NO;
 }
 
@@ -522,7 +543,11 @@
         
         [self highlightTextField:self.usernameTF enabled:NO];
         
-        [self animateTextFieldError:self.usernameTF];
+        if (![self isValidUsername:[self.usernameTF.text substringFromIndex:1]]){
+            [self animateTextFieldError:self.usernameTF];
+            [textField becomeFirstResponder];
+            return;
+        }
 
         if ([self.usernameTF.text isEqualToString:@"@"]){
             self.usernameTF.text = @"";
@@ -544,7 +569,9 @@
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (textField == self.usernameTF) {
-        
+        if ([string containsString:@" "]) {
+            return FALSE;
+        }
 //        NSCharacterSet *set = [NSCharacterSet symbolCharacterSet];
 //        if ([string rangeOfCharacterFromSet:[set invertedSet]].location == NSNotFound) {
 //            NSLog(@"valid");
@@ -564,6 +591,8 @@
 #pragma mark Action Logic 
 
 -(void)handleToggleSwitched:(UISwitch *)toggle{
+    id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
+    [delegate registerForPushNotifications];
     
     if (toggle.on){
     
@@ -626,22 +655,102 @@
 
 -(void)createAccount {
     
-    FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
+    if (![self checkFields]) {
+        return;
+    }
+    
+   // FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
+   // [self.navigationController pushViewController:vc animated:YES];
+    NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
+    [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
+    [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
+    [registrationDigest setObject:self.emailTF.text forKey:@"email"];
+    [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
+    [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
+    
+    NSLog(@"%@", registrationDigest);
+    
+    [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
+        NSLog(@"%@ %@", error, responseObject);
+    }];
+}
+
+-(BOOL)checkFields {
+    if (self.usernameTF.text.length <= 1 || ![self isValidUsername:[self.usernameTF.text substringFromIndex:1]]) {
+        return FALSE;
+    }
+    
+    if (self.passwordTF.text.length < 5) {
+        return FALSE;
+    }
+    
+    if (self.emailTF.text.length == 0 || ![self validEmail:self.emailTF.text]) {
+        return FALSE;
+    }
+    
+    return TRUE;
 }
 
 -(void)twitterTapped{
+    
+    if (_twitterSession) {
+        _twitterSession = Nil;
+        [UIView animateWithDuration:.2 animations:^{
+            [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+        }];
+        return;
+    }
+    
+    _twitterButton.enabled = FALSE; // prevent double tapping
+    
     [FRSSocial registerWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        _twitterButton.enabled = TRUE;
         
+        if (error) {
+            [self handleSocialChallenge:error];
+            return;
+        }
         
+        [UIView animateWithDuration:.2 animations:^{
+            [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateNormal];
+        }];
+        
+        _twitterSession = session;
     }];
 }
 
 -(void)facebookTapped{
-    [FRSSocial registerWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+    
+    if (_facebookToken) {
+        _facebookToken = Nil;
+        [UIView animateWithDuration:.2 animations:^{
+            [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+        }];
         
+        return;
+    }
+    
+    _facebookButton.enabled = FALSE; // prevent double tapping
+    
+    [FRSSocial registerWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        _facebookButton.enabled = TRUE;
+        
+        if (error) {
+            [self handleSocialChallenge:error];
+            return;
+        }
+        
+        [UIView animateWithDuration:.2 animations:^{
+            [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateNormal];
+        }];
+        
+        _facebookToken = token;
         
     } parent:self]; // presenting view controller for safari view login
+}
+
+-(void)handleSocialChallenge:(NSError *)error {
+    
 }
 
 #pragma mark - Keyboard
@@ -732,6 +841,30 @@
 //    [self.emailTF resignFirstResponder];
 //    [self.passwordTF resignFirstResponder];
 //    [self.promoTF resignFirstResponder];
+}
+
+-(BOOL)validEmail:(NSString *)emailString {
+    
+    if([emailString length] == 0) {
+        return NO;
+    }
+    
+    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    
+    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
+    
+    if (regExMatches == 0) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+-(BOOL)isValidUsername:(NSString *)username {
+    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
+    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
+    return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
 }
 
 @end

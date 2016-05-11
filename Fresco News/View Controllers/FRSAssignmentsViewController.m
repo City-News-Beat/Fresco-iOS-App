@@ -116,7 +116,7 @@
     NSDictionary *latLong = notification.userInfo;
     
     NSNumber *lat = latLong[@"lat"];
-    NSNumber *lon = latLong[@"lon"];
+    NSNumber *lon = latLong[@"lng"];
     
     CLLocation *location = [[CLLocation alloc] initWithLatitude:[lat floatValue] longitude:[lon floatValue]];
     [self locationUpdate:location];
