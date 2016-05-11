@@ -290,7 +290,9 @@
 }
 
 -(void)handleUserLogin:(id)responseObject {
-    NSLog(@"%@", responseObject);
+    if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
+        [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
+    }
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
