@@ -10,12 +10,16 @@
 
 //View Controllers
 #import "FRSSetupProfileViewController.h" // !HELPFUL, LOOP BACK
+#import <QuartzCore/QuartzCore.h>
 
 //Helpers
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
 #import "FRSDataValidator.h"
+
+//Cocoapods
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 
 @import MapKit;
@@ -51,6 +55,8 @@
 @property (nonatomic) NSInteger y;
 
 @property (nonatomic) BOOL notificationsEnabled;
+
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
 @end
 
@@ -136,6 +142,12 @@
     [self configurePromoSection];
     [self adjustScrollViewContentSize];
     [self configureBottomBar];
+}
+
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
 }
 
 -(void)configureScrollView{
@@ -671,10 +683,11 @@
         return;
     }
     
+    [self configureSpinner];
+    [self startSpinner:self.loadingView onButton:self.createAccountButton];
+    
     NSDictionary *currentInstallation = [[FRSAPIClient sharedClient] currentInstallation];
 
-   // FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
-   // [self.navigationController pushViewController:vc animated:YES];
     NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
     [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
@@ -689,7 +702,35 @@
     
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", error, responseObject);
+
+        FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
+
+        [self pushViewControllerWithCompletion:vc animated:YES completion:^{
+            [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+        }];
     }];
+}
+
+-(void)pushViewControllerWithCompletion:(UIViewController *)viewController animated:(BOOL)animated completion:(void (^)(void))completion {
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:completion];
+    [self.navigationController pushViewController:viewController animated:animated];
+    [CATransaction commit];
+}
+
+-(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    
+    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    spinner.frame = CGRectMake(button.frame.size.width - 20 -16, button.frame.size.height/2 -10, 20, 20);
+    [spinner startAnimating];
+    [button addSubview:spinner];
+}
+
+-(void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button {
+    
+    [button setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    [spinner stopLoading];
+    [spinner removeFromSuperview];
 }
 
 -(BOOL)checkFields {
@@ -847,18 +888,6 @@
     }
 }
 
-
-
-#pragma mark - UIScrollViewDelegate
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-//    [self.view resignFirstResponder];
-//    [self.usernameTF resignFirstResponder];
-//    [self.emailTF resignFirstResponder];
-//    [self.passwordTF resignFirstResponder];
-//    [self.promoTF resignFirstResponder];
-}
 
 #pragma mark - Text Field Validation
 
