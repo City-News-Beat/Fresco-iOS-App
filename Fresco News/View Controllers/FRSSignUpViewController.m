@@ -84,7 +84,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if (!_hasShown) {
-        [self.usernameTF becomeFirstResponder];
+//        [self.usernameTF becomeFirstResponder];
     }
     
     _hasShown = TRUE;
@@ -562,12 +562,13 @@
 }
 
 
--(void)textFieldDidBeginEditing:(UITextField *)textField{
-
-    if (textField == self.usernameTF){
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    if (textField == self.usernameTF) {
         [self highlightTextField:self.usernameTF enabled:YES];
         if ([self.usernameTF.text isEqualToString:@""]){
             self.usernameTF.text = @"@";
+
         }
     }
 }
@@ -678,6 +679,8 @@
 }
 
 -(void)createAccount {
+    
+    [self dismissKeyboard];
     
     if (![self checkFields]) {
         return;

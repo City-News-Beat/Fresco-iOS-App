@@ -119,7 +119,7 @@
     [self.profileShadow addSubview:self.profileIV];
     
     
-    UIImageView *placeholderUserIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kenny"]]; //Waiting on imogen for big user icon
+    UIImageView *placeholderUserIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]]; //Waiting on imogen for big user icon
     placeholderUserIcon.backgroundColor = [UIColor blueColor];
     placeholderUserIcon.frame = CGRectMake(60, 60, 72, 72);
     if (IS_IPHONE_5) {
