@@ -69,7 +69,7 @@
     id responseObject = [NSJSONSerialization JSONObjectWithData:response options:kNilOptions error:&jsonError];
     
     if (jsonError) {
-        return Nil;
+        return @{@"err":@"Malformed JSON object", @"success":@(FALSE)};
     }
     
     return responseObject;
