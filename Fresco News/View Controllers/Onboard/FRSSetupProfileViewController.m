@@ -54,6 +54,46 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
+-(NSDictionary *)updateDigest {
+    NSMutableDictionary *profileInfo = [[NSMutableDictionary alloc] init];
+    
+    if (self.bioTV.text) {
+        profileInfo[@"bio"] = self.bioTV.text;
+    }
+    if (self.nameTF.text) {
+        profileInfo[@"full_name"] = self.nameTF.text;
+    }
+    if (self.locationTF.text) {
+        profileInfo[@"location"] = self.locationTF.text;
+    }
+    
+    return profileInfo;
+}
+
+-(void)addUserProfile {
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:[self updateDigest] completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            // show modal
+            if (error.code/100 == 4) {
+                // we fucked up
+            }
+            else if (error.code/100 == 5) {
+                // they fucked up
+            }
+            else if (error.code/100 == 3) {
+                // auth fucked up
+            }
+            
+            return;
+        }
+        
+        // dismiss modal
+        
+    }];
+}
+
+
 -(void)configureImagePicker{
     self.imagePicker = [[UIImagePickerController alloc] init];
     self.imagePicker.delegate = (id<UINavigationControllerDelegate, UIImagePickerControllerDelegate>)self;
@@ -240,6 +280,7 @@
     [doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     [doneButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [backgroundView addSubview:doneButton];
+    [doneButton addTarget:self action:@selector(addUserProfile) forControlEvents:UIControlEventTouchUpInside];
 }
 
 #pragma TextField Delegate

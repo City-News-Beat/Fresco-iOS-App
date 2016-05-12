@@ -219,6 +219,7 @@
     // if we have multiple "authenticated" users in data store, we probs messed up big time
     if ([authenticatedUsers count] > 1) {
         NSLog(@"**WARNING**: Indication of multiple authenciated users: %@", authenticatedUsers);
+        @throw [NSException exceptionWithName:@"FRSMultiAuth" reason:@"Multiple users" userInfo:@{@"users":authenticatedUsers}];
     }
     
     return [authenticatedUsers firstObject];
@@ -305,6 +306,10 @@
 }
 
 -(void)updateLocalUser {
+    if (![self isAuthenticated]) {
+        return;
+    }
+    
     [self get:authenticatedUserEndpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         if (error) {
             [self handleError:error];
