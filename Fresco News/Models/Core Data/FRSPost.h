@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import <CoreLocation/CoreLocation.h>
 
 
 @class FRSGallery, FRSUser;
@@ -22,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)configureWithDictionary:(NSDictionary *)dict;
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context;
 @property (nonatomic, weak) NSManagedObjectContext *currentContext;
+@property (nonatomic, retain) CLLocation *location;
+@property (nonatomic, retain) NSString *contentType;
 @end
 
 NS_ASSUME_NONNULL_END

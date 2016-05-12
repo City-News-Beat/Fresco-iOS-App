@@ -548,19 +548,33 @@
     return [NSString stringWithFormat:@"Basic %@", clientAuthorization];
 }
 
--(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     
+    NSArray *posts = [gallery.posts allObjects];
     NSMutableDictionary *galleryDigest = [[NSMutableDictionary alloc] init];
     NSMutableArray *postsToSend = [[NSMutableArray alloc] init];
 
     for (FRSPost *post in posts) {
         NSMutableDictionary *currentPost = [[NSMutableDictionary alloc] init];
-        NSString *localVideoURL = post.videoUrl;
+        currentPost[@"address"] = (post.address) ? post.address : @"";
+        currentPost[@"lat"] = @(post.location.coordinate.latitude);
+        currentPost[@"lng"] = @(post.location.coordinate.longitude);
+        currentPost[@"contentType"] = (post.contentType) ? post.contentType : @"image/jpeg";
+        
+        if (post.videoUrl) {
+            currentPost[@"fileSize"] = [self fileSizeForURL:[NSURL fileURLWithPath:post.videoUrl]];
+            currentPost[@"chunkSize"] = @(5242880); // 5mb in bytes
+        }
         
         [postsToSend addObject:currentPost];
     }
     
+    galleryDigest[@"caption"] = (gallery.caption) ? gallery.caption : @"";
     galleryDigest[@"posts"] = posts;
+    
+    [self post:createGalleryEndpoint withParameters:galleryDigest completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 /*
