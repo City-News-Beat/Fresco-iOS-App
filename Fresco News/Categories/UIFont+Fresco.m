@@ -10,16 +10,19 @@
 
 @implementation UIFont (Fresco)
 
-+(UIFont *)notaBoldWithSize:(NSInteger)size{
++(UIFont *)notaBoldWithSize:(NSInteger)size {
     return [UIFont fontWithName:@"Nota-Bold" size:size];
 }
 
-+(UIFont *)notaRegularWithSize:(NSInteger)size{
++(UIFont *)notaRegularWithSize:(NSInteger)size {
     return [UIFont fontWithName:@"Nota-Normal" size:size];
 }
 
-+(UIFont *)notaMediumWithSize:(NSInteger)size{
++(UIFont *)notaMediumWithSize:(NSInteger)size {
     return [UIFont fontWithName:@"Nota-Medium" size:size];
 }
 
++(UIFont *)karminaBoldWithSize:(NSInteger)size {
+    return [UIFont fontWithName:@"Karmina-Bold" size:size];
+}
 @end

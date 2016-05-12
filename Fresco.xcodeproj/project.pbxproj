@@ -10,6 +10,7 @@
 		070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66CB1C2AEFD200AB3D9D /* FRSOnboardTwoView.m */; };
 		070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66CE1C2AEFE000AB3D9D /* FRSOnboardThreeView.m */; };
 		070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66D11C2B395D00AB3D9D /* OEParallax.m */; };
+		0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */; };
 		072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */; };
 		072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */; };
 		072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */; };
@@ -237,6 +238,8 @@
 		070D66CE1C2AEFE000AB3D9D /* FRSOnboardThreeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSOnboardThreeView.m; sourceTree = "<group>"; };
 		070D66D01C2B395D00AB3D9D /* OEParallax.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEParallax.h; path = "View Controllers/Onboard/OEParallax.h"; sourceTree = "<group>"; };
 		070D66D11C2B395D00AB3D9D /* OEParallax.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OEParallax.m; path = "View Controllers/Onboard/OEParallax.m"; sourceTree = "<group>"; };
+		0713D12C1CE5121900F79F49 /* FRSAwkwardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAwkwardView.h; sourceTree = "<group>"; };
+		0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAwkwardView.m; sourceTree = "<group>"; };
 		072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Bold.otf"; sourceTree = "<group>"; };
 		072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Medium.otf"; sourceTree = "<group>"; };
 		072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nota-Normal.otf"; sourceTree = "<group>"; };
@@ -850,6 +853,8 @@
 				D43C80001C9074BB00A7A7A7 /* Content Action Bar */,
 				D43C80011C9074C100A7A7A7 /* Alert View */,
 				D43C80021C9074C700A7A7A7 /* Scroll View Image */,
+				0713D12C1CE5121900F79F49 /* FRSAwkwardView.h */,
+				0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2137,6 +2142,7 @@
 				D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */,
 				65135FDC1C286DCF00839149 /* FRSPost.m in Sources */,
 				D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */,
+				0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */,
 				D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */,
 				D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */,
 				65201A3A1C3D7DA800B31089 /* FRSDataValidator.m in Sources */,
