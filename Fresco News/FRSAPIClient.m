@@ -51,6 +51,16 @@
     }
 }
 
+-(NSNumber *)fileSizeForURL:(NSURL *)url {
+    NSNumber *fileSizeValue = nil;
+    NSError *fileSizeError = nil;
+    [url getResourceValue:&fileSizeValue
+                        forKey:NSURLFileSizeKey
+                         error:&fileSizeError];
+    
+    return fileSizeValue;
+}
+
 -(void)saveToken:(NSString *)token forUser:(NSString *)userName {
     [SSKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:userName];
 }
@@ -539,15 +549,18 @@
 }
 
 -(void)createGalleryWithPosts:(NSArray *)posts completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    NSMutableArray *postsToSend = [[NSMutableArray alloc] init];
     
+    NSMutableDictionary *galleryDigest = [[NSMutableDictionary alloc] init];
+    NSMutableArray *postsToSend = [[NSMutableArray alloc] init];
+
     for (FRSPost *post in posts) {
         NSMutableDictionary *currentPost = [[NSMutableDictionary alloc] init];
         NSString *localVideoURL = post.videoUrl;
         
         [postsToSend addObject:currentPost];
     }
+    
+    galleryDigest[@"posts"] = posts;
 }
 
 /*
@@ -582,6 +595,7 @@
         completion(responseObject, error);
     }];
 }
+
 -(void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *tokenString = facebookToken.tokenString;
     if (!tokenString) {
