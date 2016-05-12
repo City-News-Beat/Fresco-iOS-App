@@ -178,13 +178,27 @@
     
     
     [[FRSAPIClient sharedClient] signIn:username password:password completion:^(id responseObject, NSError *error) {
-        NSLog(@"%@ %@", responseObject, error);
+//        NSLog(@"%@ %@", responseObject, error);
+        NSLog(@"ERROR CODE: %ld", error.code);
         
         
-        //FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
-        //[self pushViewControllerWithCompletion:tabBarVC animated:YES completion:^{
-        [self stopSpinner:self.loadingView onButton:self.loginButton];
-        //}];
+        if (error.code == 0) {
+            FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
+            [self pushViewControllerWithCompletion:tabBarVC animated:YES completion:^{
+                [self stopSpinner:self.loadingView onButton:self.loginButton];
+            }];
+        }
+        
+        if (error.code == -1011) {
+            NSLog(@"Invalid username or password.");
+            [self stopSpinner:self.loadingView onButton:self.loginButton];
+        }
+        
+        if (error.code == -1009) {
+            NSLog(@"Unable to connect.");
+            [self stopSpinner:self.loadingView onButton:self.loginButton];
+        }
+        
     }];
 }
 
