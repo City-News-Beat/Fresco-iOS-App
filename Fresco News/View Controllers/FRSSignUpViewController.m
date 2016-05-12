@@ -24,38 +24,25 @@
 
 @import MapKit;
 
-
 @interface FRSSignUpViewController () <UITextFieldDelegate, MKMapViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
-
 @property (strong, nonatomic) UITextField *usernameTF;
 @property (strong, nonatomic) UITextField *emailTF;
 @property (strong, nonatomic) UITextField *passwordTF;
 @property (strong, nonatomic) UITextField *promoTF;
-
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) UISlider *radiusSlider;
-
 @property (strong, nonatomic) UIView *bottomBar;
-
 @property (strong, nonatomic) UIButton *createAccountButton;
-
 @property (strong, nonatomic) UILabel *promoDescription;
-
 @property (strong, nonatomic) UITapGestureRecognizer *dismissGR;
-
 @property (strong, nonatomic) UIView *usernameHighlightLine;
-
 @property (strong, nonatomic) UIImageView *usernameCheckIV;
-
 @property (strong, nonatomic) UIView *sliderContainer;
 @property (strong, nonatomic) UIView *promoContainer;
-
 @property (nonatomic) NSInteger y;
-
 @property (nonatomic) BOOL notificationsEnabled;
-
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
 @end
@@ -81,7 +68,7 @@
     return [[FRSAPIClient sharedClient] socialDigestionWithTwitter:_twitterSession facebook:_facebookToken];
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (!_hasShown) {
 //        [self.usernameTF becomeFirstResponder];
@@ -98,7 +85,7 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
+-(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationItem.title = @"";
     
@@ -112,7 +99,7 @@
     }
 }
 
--(void)addNotifications{
+-(void)addNotifications {
     
     /* Keyboard Notifications */
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -131,7 +118,7 @@
 
 #pragma mark - UI 
 
--(void)configureUI{
+-(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
 
     [self configureScrollView];
@@ -144,13 +131,7 @@
     [self configureBottomBar];
 }
 
--(void)configureSpinner {
-    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    self.loadingView.tintColor = [UIColor frescoOrangeColor];
-    [self.loadingView setPullProgress:90];
-}
-
--(void)configureScrollView{
+-(void)configureScrollView {
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height -44 -52 -12)];
@@ -171,7 +152,7 @@
     
 }
 
--(void)configureTextFields{
+-(void)configureTextFields {
     [self configureUserNameField];
     [self configureEmailAddressField];
     [self configurePasswordField];
@@ -206,7 +187,7 @@
     [self.usernameTF addSubview:self.usernameCheckIV];
 }
 
--(void)configureEmailAddressField{
+-(void)configureEmailAddressField {
     
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 92, self.scrollView.frame.size.width, 44)];
     backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
@@ -231,7 +212,7 @@
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
 }
 
--(void)configurePasswordField{
+-(void)configurePasswordField {
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 136, self.scrollView.frame.size.width, 44)];
     backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
@@ -252,7 +233,7 @@
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
 }
 
--(void)configureNotificationSection{
+-(void)configureNotificationSection {
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 192, self.scrollView.frame.size.width, 62)];
     backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
@@ -287,7 +268,7 @@
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 61.5)]];
 }
 
--(void)configureMapView{
+-(void)configureMapView {
     
     NSInteger height = 240;
     if (IS_STANDARD_IPHONE_6) height = 280;
@@ -322,7 +303,7 @@
     self.mapView.alpha = 0;
 }
 
--(void)configureSliderSection{
+-(void)configureSliderSection {
     
     self.sliderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, 56)];
     self.sliderContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
@@ -350,7 +331,7 @@
     self.sliderContainer.alpha = 0;
 }
 
--(void)configurePromoSection{
+-(void)configurePromoSection {
     
     self.promoContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, 44)];
     self.promoContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
@@ -385,11 +366,11 @@
     self.promoDescription.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
 }
 
--(void)adjustScrollViewContentSize{
+-(void)adjustScrollViewContentSize {
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.y);
 }
 
--(void)configureBottomBar{
+-(void)configureBottomBar {
     self.bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height -44 -64, self.view.frame.size.width, 44)];
     self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.bottomBar];
@@ -406,7 +387,7 @@
     [self addSocialButtonsToBottomBar];
 }
 
--(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState{
+-(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState {
     if (controlState == UIControlStateNormal){
         [self.createAccountButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.createAccountButton.enabled = NO;
@@ -418,7 +399,7 @@
     }
 }
 
--(void)addSocialButtonsToBottomBar{
+-(void)addSocialButtonsToBottomBar {
     _facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
     [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
     [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateHighlighted];
@@ -471,7 +452,7 @@
     }];
 }
 
--(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success{
+-(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
     
     if(success) {
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
@@ -573,7 +554,7 @@
     }
 }
 
--(void)textFieldDidEndEditing:(UITextField *)textField{
+-(void)textFieldDidEndEditing:(UITextField *)textField {
  
     if (textField == self.usernameTF){
         
@@ -615,7 +596,7 @@
 
 #pragma mark Action Logic 
 
--(void)handleToggleSwitched:(UISwitch *)toggle{
+-(void)handleToggleSwitched:(UISwitch *)toggle {
     id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
     [delegate registerForPushNotifications];
     
@@ -679,7 +660,7 @@
 }
 
 -(void)createAccount {
-    
+
     [self dismissKeyboard];
     
     if (![self checkFields]) {
@@ -714,28 +695,6 @@
     }];
 }
 
--(void)pushViewControllerWithCompletion:(UIViewController *)viewController animated:(BOOL)animated completion:(void (^)(void))completion {
-    [CATransaction begin];
-    [CATransaction setCompletionBlock:completion];
-    [self.navigationController pushViewController:viewController animated:animated];
-    [CATransaction commit];
-}
-
--(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
-    
-    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
-    spinner.frame = CGRectMake(button.frame.size.width - 20 -16, button.frame.size.height/2 -10, 20, 20);
-    [spinner startAnimating];
-    [button addSubview:spinner];
-}
-
--(void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button {
-    
-    [button setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-    [spinner stopLoading];
-    [spinner removeFromSuperview];
-}
-
 -(BOOL)checkFields {
     if (self.usernameTF.text.length <= 1 || ![self isValidUsername:[self.usernameTF.text substringFromIndex:1]]) {
         return FALSE;
@@ -752,7 +711,7 @@
     return TRUE;
 }
 
--(void)twitterTapped{
+-(void)twitterTapped {
     
     if (_twitterSession) {
         _twitterSession = Nil;
@@ -780,7 +739,7 @@
     }];
 }
 
--(void)facebookTapped{
+-(void)facebookTapped {
     
     if (_facebookToken) {
         _facebookToken = Nil;
@@ -812,6 +771,37 @@
 
 -(void)handleSocialChallenge:(NSError *)error {
     
+}
+
+
+#pragma mark - Spinner
+
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+}
+
+-(void)pushViewControllerWithCompletion:(UIViewController *)viewController animated:(BOOL)animated completion:(void (^)(void))completion {
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:completion];
+    [self.navigationController pushViewController:viewController animated:animated];
+    [CATransaction commit];
+}
+
+-(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    
+    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    spinner.frame = CGRectMake(button.frame.size.width - 20 -16, button.frame.size.height/2 -10, 20, 20);
+    [spinner startAnimating];
+    [button addSubview:spinner];
+}
+
+-(void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button {
+    
+    [button setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    [spinner stopLoading];
+    [spinner removeFromSuperview];
 }
 
 #pragma mark - Keyboard
@@ -850,7 +840,7 @@
     }
 }
 
--(void)handleKeyboardWillHide:(NSNotification *)sender{
+-(void)handleKeyboardWillHide:(NSNotification *)sender {
     
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     

@@ -6,15 +6,23 @@
 //  Copyright © 2015 Fresco. All rights reserved.
 //
 
+//View Controllers
 #import "FRSLoginViewController.h"
 #import "FRSOnboardingViewController.h"
+#import "FRSTabBarController.h"
+
+//API
 #import "FRSAPIClient.h"
+
+//Cocoapods
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 @interface FRSLoginViewController () <UITextFieldDelegate>
 
 @property (nonatomic) BOOL didAnimate;
 @property (nonatomic) BOOL didTransform;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *socialTopConstraint;
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
 @end
 
@@ -36,6 +44,8 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self configureSpinner];
     
     self.didAnimate = NO;
     self.didTransform = NO;
@@ -117,10 +127,42 @@
     [super viewWillDisappear:animated];
 }
 
+#pragma mark - Spinner
+
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+}
+
+-(void)pushViewControllerWithCompletion:(UIViewController *)viewController animated:(BOOL)animated completion:(void (^)(void))completion {
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:completion];
+    [self.navigationController pushViewController:viewController animated:animated];
+    [CATransaction commit];
+}
+
+-(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    
+    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    spinner.frame = CGRectMake(button.frame.size.width - 20 -16, button.frame.size.height/2 -10, 20, 20);
+    [spinner startAnimating];
+    [button addSubview:spinner];
+}
+
+-(void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button {
+    
+    [button setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    [spinner stopLoading];
+    [spinner removeFromSuperview];
+}
 
 #pragma mark - Actions
 
 -(IBAction)login:(id)sender {
+    
+    [self dismissKeyboard];
+    
     //Animate transition
     NSString *username = _userField.text;
     NSString *password = _passwordField.text;
@@ -128,14 +170,21 @@
     if ([password isEqualToString:@""] || [username isEqualToString:@""] || (![self isValidUsername:username] && ![self validEmail:username])) {
         // error out
         
-        
-        
         return;
     }
+    
+    
+    [self startSpinner:self.loadingView onButton:self.loginButton];
+    
     
     [[FRSAPIClient sharedClient] signIn:username password:password completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", responseObject, error);
         
+        
+        //FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
+        //[self pushViewControllerWithCompletion:tabBarVC animated:YES completion:^{
+        [self stopSpinner:self.loadingView onButton:self.loginButton];
+        //}];
     }];
 }
 
@@ -168,6 +217,7 @@
 
 
 -(void)back {
+    [self dismissKeyboard];
     [self animateOut];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -181,7 +231,6 @@
 -(IBAction)passwordHelp:(id)sender {
     
     [self highlightTextField:nil enabled:NO];
-//    [self highlightTextField:self.userField enabled:NO];
     
     [self.passwordField resignFirstResponder];
     [self.userField resignFirstResponder];
@@ -223,9 +272,6 @@
             self.passwordHelpButton.alpha = 1;
         } completion:nil];
     }
-    
-    
-    NSLog(@"self.socialTopConstraint.constant = %f", self.socialTopConstraint.constant);
     
     if (!self.didTransform) {
         
