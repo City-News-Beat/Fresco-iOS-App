@@ -312,7 +312,6 @@
     
     [self get:authenticatedUserEndpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         if (error) {
-            [self handleError:error];
             return;
         }
         
@@ -357,7 +356,6 @@
             }
             else {
                 NSLog(@"Location Error: %@", error);
-                [self handleError:error];
             }
         }];
     });
@@ -375,7 +373,7 @@
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         completion(Nil, error);
-
+        [self handleError:error];
     }];
 }
 
@@ -395,6 +393,7 @@
         
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         completion(Nil, error);
+        [self handleError:error];
     }];
 }
 
