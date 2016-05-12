@@ -63,6 +63,10 @@
     [_uploadTask resume]; // starts initial request
 }
 
+-(NSString *)contentMD5 {
+    return [AWFileHash md5HashOfFileAtPath:_assetURL.absoluteString];
+}
+
 -(id)serializedObjectFromResponse:(NSData *)response {
     
     NSError *jsonError;

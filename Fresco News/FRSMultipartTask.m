@@ -158,4 +158,7 @@
     }
 }
 
+-(NSString *)contentMD5ForChunk:(NSData *)data {
+    return [AWFileHash md5HashOfData:data];
+}
 @end

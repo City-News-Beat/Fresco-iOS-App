@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Fresco.h"
 #import <Photos/Photos.h>
+#import "AWFileHash.h"
 
 @protocol FRSUploadDelegate <NSObject>
 // mandatory, basic upload events
@@ -30,6 +31,7 @@ typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success)
 
 @property (nonatomic, retain) NSManagedObject *managedObject;
 @property (nonatomic, weak) id<FRSUploadDelegate> delegate;
+@property (nonatomic, weak) FRSPost *associatedPost;
 @property (nonatomic, retain, readonly) NSURLSessionUploadTask *uploadTask;
 @property (nonatomic, retain, readonly) NSURLSession *session;
 @property (nonatomic, retain, readonly) NSString *eTag;
@@ -50,6 +52,7 @@ typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success)
 // were going to be internal but needed in all classes inheriting this structure
 -(void)signRequest:(NSMutableURLRequest *)request;
 -(NSString *)authenticationToken;
+-(NSString *)contentMD5; // md5 of entire file, streamed to reduce memory load
 
 -(void)start;
 -(void)stop;
