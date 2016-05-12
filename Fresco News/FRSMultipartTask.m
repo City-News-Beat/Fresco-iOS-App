@@ -99,6 +99,15 @@
                 [self.delegate uploadDidFail:self withError:error response:data];
             }
         }
+        else {
+            if (self.delegate) {
+                [self.delegate uploadDidSucceed:self withResponse:data];
+                [_openConnections removeObject:task];
+                if (openConnections < maxConcurrentUploads && needsData) {
+                    [self next];
+                }
+            }
+        }
         
     }];
     
