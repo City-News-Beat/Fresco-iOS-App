@@ -178,7 +178,7 @@
     
     
     [[FRSAPIClient sharedClient] signIn:username password:password completion:^(id responseObject, NSError *error) {
-//        NSLog(@"%@ %@", responseObject, error);
+        NSLog(@"%@ %@", responseObject, error);
         NSLog(@"ERROR CODE: %ld", error.code);
         
         

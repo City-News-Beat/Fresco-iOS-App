@@ -20,6 +20,7 @@
 
 #import "FRSLoginViewController.h"
 #import "FRSSignUpViewController.h"
+#import "FRSTabBarController.h"
 
 #import "OEParallax.h"
 
@@ -86,11 +87,22 @@
     [self configurePageControl];
     [self configureLogo];
     [self configureActionBar];
+    [self configureDismissButton];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
 }
 
--(void)configureScrollView{
+-(void)configureDismissButton {
+    //Placeholder,
+    
+    UIButton *dismiss = [UIButton buttonWithType:UIButtonTypeCustom];
+    dismiss.frame = CGRectMake(12, 30, 24, 24);
+    [dismiss setImage:[UIImage imageNamed:@"close-dark"] forState:UIControlStateNormal];
+    [dismiss addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:dismiss];
+}
+
+-(void)configureScrollView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width * 3, self.scrollView.frame.size.height);
     self.scrollView.pagingEnabled = YES;
@@ -102,7 +114,7 @@
     [self.view addSubview:self.scrollView];
 }
 
--(void)configureOnboardingViews{
+-(void)configureOnboardingViews {
     NSInteger offset = (self.scrollView.frame.size.width - 320)/2;
     
     self.viewOne = [[FRSOnboardOneView alloc] initWithOrigin:CGPointMake(offset, 0)];
@@ -116,7 +128,7 @@
     [self.scrollView addSubview:self.viewThree];
 }
 
--(void)configurePageControl{
+-(void)configurePageControl {
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = 3;
     self.pageControl.userInteractionEnabled = NO;
@@ -135,13 +147,13 @@
     [self.view addSubview:self.pageControl];
 }
 
--(void)configureLogo{
+-(void)configureLogo {
     self.logo =[[UIImageView alloc] initWithFrame:CGRectMake(self.view.center.x - 188/2, 36, 188, 65)];
     self.logo.image=[UIImage imageNamed:@"largeLogo"];
     [self.view addSubview:self.logo];
 }
 
--(void)configureActionBar{
+-(void)configureActionBar {
     self.actionBarContainer = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, [UIScreen mainScreen].bounds.size.width, 44)];
     [self.view addSubview:self.actionBarContainer];
     
@@ -171,7 +183,7 @@
 //        logIn.backgroundColor = [UIColor redColor];
 }
 
--(void)configureParallax{
+-(void)configureParallax {
 //    [OEParallax createParallaxFromView:self.logo withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
 }
 
@@ -191,6 +203,22 @@
 -(void)signUp {
     FRSSignUpViewController *signUpViewController = [[FRSSignUpViewController alloc] init];
     [self.navigationController pushViewController:signUpViewController animated:YES];
+}
+
+-(void)dismiss {
+    
+    self.view.window.backgroundColor = [UIColor blackColor];
+    
+    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.view.alpha = 0;
+        self.view.backgroundColor = [UIColor blackColor];
+        self.view.transform = CGAffineTransformMakeScale(0.9, 0.9);
+    } completion:nil];
+    
+    FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
+    [self presentViewController:tabBarVC animated:YES completion:^{
+        [self removeFromParentViewController];
+    }];
 }
 
 #pragma mark - Transition Animations
