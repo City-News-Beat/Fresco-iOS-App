@@ -35,7 +35,8 @@
         return; // FRSUploadTask are one off, no re-use
     }
     
-    NSMutableURLRequest *uploadRequest;
+    NSMutableURLRequest *uploadRequest = [NSMutableURLRequest requestWithURL:self.destinationURL];
+    [uploadRequest setHTTPMethod:@"PUT"];
     [self signRequest:uploadRequest];
     
     _uploadTask = [self.session uploadTaskWithRequest:uploadRequest fromFile:self.assetURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {

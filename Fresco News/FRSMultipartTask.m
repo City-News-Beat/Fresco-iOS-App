@@ -87,8 +87,16 @@
     openConnections++;
     totalConnections++;
     
+    NSURL *urlToUploadTo = (totalConnections < self.destinationURLS.count)  ? self.destinationURLS[totalConnections-1] : Nil;
+    
+    if (!urlToUploadTo) {
+        return; // error
+    }
+    
     // set up actual NSURLSessionUploadTask
-    NSMutableURLRequest *chunkRequest = Nil;
+    NSMutableURLRequest *chunkRequest = [NSMutableURLRequest requestWithURL:urlToUploadTo];
+    [chunkRequest setHTTPMethod:@"PUT"];
+    
     [self signRequest:chunkRequest];
     
     NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:currentData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
