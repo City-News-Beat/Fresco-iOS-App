@@ -47,6 +47,7 @@
             }
         }
         else {
+            [self checkEtag:data];
             if (self.delegate) {
                 [self.delegate uploadDidSucceed:self withResponse:data];
             }
@@ -60,6 +61,28 @@
     
     _hasStarted = TRUE;
     [_uploadTask resume]; // starts initial request
+}
+
+-(id)serializedObjectFromResponse:(NSData *)response {
+    
+    NSError *jsonError;
+    id responseObject = [NSJSONSerialization JSONObjectWithData:response options:kNilOptions error:&jsonError];
+    
+    if (jsonError) {
+        return Nil;
+    }
+    
+    return responseObject;
+}
+
+-(void)checkEtag:(NSData *)data {
+    NSDictionary *responseDictionary = [self serializedObjectFromResponse:data];
+    if (responseDictionary[@"eTag"]) {
+        _eTag = responseDictionary[@"eTag"];
+    }
+    else {
+        // spells out error in upload
+    }
 }
 
 -(void)pause {
