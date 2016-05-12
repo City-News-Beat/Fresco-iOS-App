@@ -664,14 +664,34 @@
     NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
     [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
     [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
-    [registrationDigest setObject:self.emailTF.text forKey:@"email"];
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
     [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
+
+    if (_isAlreadyRegistered) {
+        
+        if (![_pastRegistration[@"email"] isEqualToString:self.emailTF.text]) {
+            
+        }
+        
+        [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
+            if (error) {
+                // show error
+            }
+            else {
+                // continue on whatever
+            }
+        }];
+        
+        return;
+    }
     
-    NSLog(@"%@", registrationDigest);
-    
+    [registrationDigest setObject:self.emailTF.text forKey:@"email"];
+
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", error, responseObject);
+        
+        _isAlreadyRegistered = TRUE;
+        _pastRegistration = registrationDigest;
     }];
 }
 

@@ -19,4 +19,6 @@
 @property (nonatomic, retain) UIButton *twitterButton;
 @property (nonatomic, retain) NSDictionary *currentSocialDigest;
 @property BOOL hasShown;
+@property BOOL isAlreadyRegistered;
+@property (nonatomic, retain) NSDictionary *pastRegistration;
 @end
