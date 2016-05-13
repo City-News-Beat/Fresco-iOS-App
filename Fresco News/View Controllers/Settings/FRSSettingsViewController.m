@@ -85,7 +85,7 @@
 #pragma mark - UITableViewDelegate
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 10;
+    return 12;
 }
 
 
@@ -116,9 +116,18 @@
             return 1;
             break;
         case 8:
-            return 3;
+            return 1;
             break;
         case 9:
+            return 1;
+            break;
+        case 10:
+            return 3;
+            break;
+        case 11:
+            return 1;
+            break;
+        case 12:
             return 1;
             break;
         default:
@@ -157,6 +166,9 @@
             return 13;
             break;
         case 9:
+            return 13;
+            break;
+        case 11:
             return 13;
             break;
         default:
@@ -234,11 +246,8 @@
             break;
         case 4:
             switch (indexPath.row) {
-                case 0: {
-                    //Find Friends
+                case 0:
                     [cell configureFindFriendsCell];
-                }
-                    
                     break;
                 case 1:
                     [cell configureSocialCellWithTitle:@"Connect Twitter" andTag:1];
@@ -256,10 +265,20 @@
         case 6:
             [cell configureDefaultCellWithTitle:@"Promo codes" andCarret:YES andRightAlignedTitle:@""];
             break;
+            
         case 7:
             [cell configureEmptyCellSpace:NO];
             break;
+            
         case 8:
+            [cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil];
+            break;
+        
+        case 9:
+            [cell configureEmptyCellSpace:NO];
+            break;
+            
+        case 10:
             switch (indexPath.row) {
                 case 0:
                     [cell configureLogOut];
@@ -272,7 +291,7 @@
                     break;
             }
             break;
-        case 9:
+        case 11:
             [cell configureEmptyCellSpace:YES];
             break;
         default:
@@ -379,6 +398,12 @@
             //Empty
             break;
         case 8:
+            NSLog(@"hello");
+            break;
+        case 9:
+            //Empty
+            break;
+        case 10:
             switch (indexPath.row) {
                 case 0:
                 {
@@ -391,7 +416,6 @@
                     [self presentModalMailComposerViewController:YES];
                     break;
                 case 2:{
-                    
 //                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
 //                    [alert show];
                     FRSDisableAccountViewController *disableVC = [[FRSDisableAccountViewController alloc] init];
@@ -405,7 +429,7 @@
                     break;
             }
             break;
-        case 9:
+        case 11:
             //Empty
             break;
         default:
