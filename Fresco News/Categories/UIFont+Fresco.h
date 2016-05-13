@@ -16,4 +16,6 @@
 
 +(UIFont *)notaMediumWithSize:(NSInteger)size;
 
++(UIFont *)karminaBoldWithSize:(NSInteger)size;
+
 @end

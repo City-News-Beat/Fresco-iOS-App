@@ -26,6 +26,7 @@
 #import "FRSDisableAccountViewController.h"
 #import "FRSRadiusViewController.h"
 #import "FRSDebitCardViewController.h"
+#import "FRSAboutFrescoViewController.h"
 
 /* Cocoa Pods */
 #import <MessageUI/MessageUI.h>
@@ -78,13 +79,14 @@
     self.tableView.bounces = YES;
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.tableView];
+    [self configureKenny];
 }
 
 
 #pragma mark - UITableViewDelegate
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 10;
+    return 12;
 }
 
 
@@ -115,9 +117,18 @@
             return 1;
             break;
         case 8:
-            return 3;
+            return 1;
             break;
         case 9:
+            return 1;
+            break;
+        case 10:
+            return 3;
+            break;
+        case 11:
+            return 1;
+            break;
+        case 12:
             return 1;
             break;
         default:
@@ -156,6 +167,9 @@
             return 13;
             break;
         case 9:
+            return 13;
+            break;
+        case 11:
             return 13;
             break;
         default:
@@ -233,11 +247,8 @@
             break;
         case 4:
             switch (indexPath.row) {
-                case 0: {
-                    //Find Friends
+                case 0:
                     [cell configureFindFriendsCell];
-                }
-                    
                     break;
                 case 1:
                     [cell configureSocialCellWithTitle:@"Connect Twitter" andTag:1];
@@ -255,10 +266,20 @@
         case 6:
             [cell configureDefaultCellWithTitle:@"Promo codes" andCarret:YES andRightAlignedTitle:@""];
             break;
+            
         case 7:
             [cell configureEmptyCellSpace:NO];
             break;
+            
         case 8:
+            [cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil];
+            break;
+        
+        case 9:
+            [cell configureEmptyCellSpace:NO];
+            break;
+            
+        case 10:
             switch (indexPath.row) {
                 case 0:
                     [cell configureLogOut];
@@ -271,7 +292,7 @@
                     break;
             }
             break;
-        case 9:
+        case 11:
             [cell configureEmptyCellSpace:YES];
             break;
         default:
@@ -377,34 +398,35 @@
         case 7:
             //Empty
             break;
-        case 8:
+        case 8: {
+            FRSAboutFrescoViewController *about = [[FRSAboutFrescoViewController alloc] init];
+            [self.navigationController pushViewController:about animated:YES];
+            self.navigationItem.title = @"";
+        } break;
+        case 9:
+            //Empty
+            break;
+        case 10:
             switch (indexPath.row) {
-                case 0:
-                {
+                case 0: {
                     FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We’ll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" delegate:self];
                     [alert show];
                     
-                }
-                    break;
+                } break;
                 case 1:
                     [self presentModalMailComposerViewController:YES];
                     break;
                 case 2:{
-                    
-//                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
-//                    [alert show];
+                    //FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+                    //[alert show];
                     FRSDisableAccountViewController *disableVC = [[FRSDisableAccountViewController alloc] init];
                     [self.navigationController pushViewController:disableVC animated:YES];
                 }
-                    
-                    
-                {
-                    
-                }
+
                     break;
             }
             break;
-        case 9:
+        case 11:
             //Empty
             break;
         default:
@@ -412,6 +434,54 @@
     }
 }
 
+-(void)configureKenny {
+    UILabel *kenny = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -12, self.tableView.frame.size.height*1.9, 24, 24)];
+    kenny.text = @"🎷";
+    [self.tableView addSubview:kenny];
+    [self rotate:kenny];
+    
+    UILabel *music = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -20, self.tableView.frame.size.height*1.9 -5, 24, 24)];
+    music.text = @"🎶";
+    music.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    [self.tableView addSubview:music];
+    [self configureTheSongsOfKennyG:music];
+}
+
+-(void)rotate:(UILabel *)kenny {
+    [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        kenny.transform = CGAffineTransformMakeRotation(M_PI/15);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            kenny.transform = CGAffineTransformMakeRotation(-M_PI/15);
+        } completion:^(BOOL finished) {
+            [self rotate:kenny];
+        }];
+    }];
+}
+
+-(void)configureTheSongsOfKennyG:(UILabel *)music {
+    music.alpha = 0;
+    music.frame = CGRectMake(self.view.frame.size.width/2 -15, self.tableView.frame.size.height*1.9 -5, 24, 24);
+    music.transform = CGAffineTransformMakeScale(0.5, 0.5);
+
+    [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        music.frame = CGRectMake(self.view.frame.size.width/2 -20, self.tableView.frame.size.height*1.9 -15, 24, 24);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            music.alpha = 0;
+        } completion:nil];
+    }];
+    
+    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        music.alpha = 1;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            music.alpha = 0;
+        } completion:^(BOOL finished) {
+            [self configureTheSongsOfKennyG:music];
+        }];
+    }];
+}
 
 #pragma mark - MFMailComposeViewControllerDelegate
 

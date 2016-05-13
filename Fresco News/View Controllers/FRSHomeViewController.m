@@ -17,6 +17,7 @@
 #import "DGElasticPullToRefresh.h"
 #import "FRSGalleryCell.h"
 #import "FRSTrimTool.h"
+#import "FRSAwkwardView.h"
 
 /* Core Data */
 #import "MagicalRecord.h"
@@ -150,40 +151,45 @@
 
 -(void)configureNoFollowers {
     
-    UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"frog"]];
-    frog.frame = CGRectMake(self.view.frame.size.width/2 - 200/2, self.view.frame.size.height/2 -60, 200, 120);
-    frog.alpha = 0.54;
-    [self.followingTable addSubview:frog];
     
-    UILabel *awkward = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 +100, self.followingTable.frame.size.width, 30)];
-    [awkward setTextAlignment:NSTextAlignmentCenter];
-    [awkward setText:@"AWKWARD"];
-    [awkward setTextColor:[UIColor frescoDarkTextColor]];
-    [awkward setFont:[UIFont notaBoldWithSize:35]];
-    [self.followingTable addSubview:awkward];
+    FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 175/2, self.view.frame.size.height/2 -125/2 +64, 175, 125)];
+    [self.followingTable addSubview:awkwardView];
     
     
-    UIView *textContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 +140, self.followingTable.frame.size.width, 40)];
-    [self.followingTable addSubview:textContainer];
-    
-    UILabel *subText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.followingTable.frame.size.width, 40)];
-    [subText setTextAlignment:NSTextAlignmentCenter];
-    subText.backgroundColor = [UIColor clearColor];
-    [subText setText:@"It looks like you aren't following anyone yet. \nSee which of your friends are using Fresco         ."];
-    subText.numberOfLines = 2;
-    subText.textColor = [UIColor frescoMediumTextColor];
-    [subText setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightRegular]];
-    [subText sizeToFit];
-    subText.frame = CGRectMake(textContainer.frame.size.width/2 -subText.frame.size.width/2, subText.frame.origin.y, subText.frame.size.width, subText.frame.size.height);
-    [textContainer addSubview:subText];
-    
-    UIButton *here = [UIButton buttonWithType:UIButtonTypeSystem];
-    here.frame = CGRectMake(subText.frame.size.width - 18, 16, 40, 20);
-    [here setTitle:@"here" forState:UIControlStateNormal];
-    [here setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-    [here.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
-    [here addTarget:self action:@selector(hereTapped) forControlEvents:UIControlEventTouchUpInside];
-    [textContainer addSubview:here];
+//    UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"frog"]];
+//    frog.frame = CGRectMake(self.view.frame.size.width/2 - 200/2, self.view.frame.size.height/2 -60, 200, 120);
+//    frog.alpha = 0.54;
+//    [self.followingTable addSubview:frog];
+//    
+//    UILabel *awkward = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 +100, self.followingTable.frame.size.width, 30)];
+//    [awkward setTextAlignment:NSTextAlignmentCenter];
+//    [awkward setText:@"AWKWARD"];
+//    [awkward setTextColor:[UIColor frescoDarkTextColor]];
+//    [awkward setFont:[UIFont notaBoldWithSize:35]];
+//    [self.followingTable addSubview:awkward];
+//    
+//    
+//    UIView *textContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 +140, self.followingTable.frame.size.width, 40)];
+//    [self.followingTable addSubview:textContainer];
+//    
+//    UILabel *subText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.followingTable.frame.size.width, 40)];
+//    [subText setTextAlignment:NSTextAlignmentCenter];
+//    subText.backgroundColor = [UIColor clearColor];
+//    [subText setText:@"It looks like you aren't following anyone yet. \nSee which of your friends are using Fresco         ."];
+//    subText.numberOfLines = 2;
+//    subText.textColor = [UIColor frescoMediumTextColor];
+//    [subText setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightRegular]];
+//    [subText sizeToFit];
+//    subText.frame = CGRectMake(textContainer.frame.size.width/2 -subText.frame.size.width/2, subText.frame.origin.y, subText.frame.size.width, subText.frame.size.height);
+//    [textContainer addSubview:subText];
+//    
+//    UIButton *here = [UIButton buttonWithType:UIButtonTypeSystem];
+//    here.frame = CGRectMake(subText.frame.size.width - 18, 16, 40, 20);
+//    [here setTitle:@"here" forState:UIControlStateNormal];
+//    [here setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+//    [here.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
+//    [here addTarget:self action:@selector(hereTapped) forControlEvents:UIControlEventTouchUpInside];
+//    [textContainer addSubview:here];
 }
 
 -(void)hereTapped {

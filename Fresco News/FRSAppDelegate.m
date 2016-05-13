@@ -69,6 +69,8 @@
         [self handleColdQuickAction:launchOptions[UIApplicationLaunchOptionsShortcutItemKey]];
     }
     
+    [self registerForPushNotifications];
+    
     return YES;
 }
 
@@ -218,10 +220,7 @@
 }
 
 -(void)registerForPushNotifications {
-    
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"]) {
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-    }
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
