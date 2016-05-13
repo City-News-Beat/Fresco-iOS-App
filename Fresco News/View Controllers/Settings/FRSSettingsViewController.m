@@ -26,6 +26,7 @@
 #import "FRSDisableAccountViewController.h"
 #import "FRSRadiusViewController.h"
 #import "FRSDebitCardViewController.h"
+#import "FRSAboutFrescoViewController.h"
 
 /* Cocoa Pods */
 #import <MessageUI/MessageUI.h>
@@ -397,35 +398,31 @@
         case 7:
             //Empty
             break;
-        case 8:
-            NSLog(@"hello");
-            break;
+        case 8: {
+            FRSAboutFrescoViewController *about = [[FRSAboutFrescoViewController alloc] init];
+            [self.navigationController pushViewController:about animated:YES];
+            self.navigationItem.title = @"";
+        } break;
         case 9:
             //Empty
             break;
         case 10:
             switch (indexPath.row) {
-                case 0:
-                {
+                case 0: {
                     FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We’ll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" delegate:self];
                     [alert show];
                     
-                }
-                    break;
+                } break;
                 case 1:
                     [self presentModalMailComposerViewController:YES];
                     break;
                 case 2:{
-//                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
-//                    [alert show];
+                    //FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+                    //[alert show];
                     FRSDisableAccountViewController *disableVC = [[FRSDisableAccountViewController alloc] init];
                     [self.navigationController pushViewController:disableVC animated:YES];
                 }
-                    
-                    
-                {
-                    
-                }
+
                     break;
             }
             break;

@@ -17,6 +17,7 @@
 		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
 		075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */; };
 		075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */; };
+		077CF9D91CE62793006FE908 /* FRSAboutFrescoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */; };
 		077FBC3A1CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 077FBC391CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m */; };
 		0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0780914A1CD93A0D00D7FA40 /* FRSUploadViewController.m */; };
 		078CEB1B1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078CEB1A1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m */; };
@@ -249,6 +250,8 @@
 		0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraViewController.m; sourceTree = "<group>"; };
 		075998311C6BCF5300A0FE73 /* FRSAVSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAVSessionManager.h; sourceTree = "<group>"; };
 		075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAVSessionManager.m; sourceTree = "<group>"; };
+		077CF9D71CE62793006FE908 /* FRSAboutFrescoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAboutFrescoViewController.h; path = "Fresco News/View Controllers/Settings/FRSAboutFrescoViewController.h"; sourceTree = "<group>"; };
+		077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAboutFrescoViewController.m; path = "Fresco News/View Controllers/Settings/FRSAboutFrescoViewController.m"; sourceTree = "<group>"; };
 		077FBC381CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentPickerTableViewCell.h; sourceTree = "<group>"; };
 		077FBC391CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentPickerTableViewCell.m; sourceTree = "<group>"; };
 		078091491CD93A0D00D7FA40 /* FRSUploadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadViewController.h; sourceTree = "<group>"; };
@@ -676,6 +679,8 @@
 				D43C7FEC1C8F359700A7A7A7 /* Table View */,
 				D43C7FED1C8F359D00A7A7A7 /* Tax Info */,
 				D43C7FEE1C8F35A300A7A7A7 /* Username */,
+				077CF9D71CE62793006FE908 /* FRSAboutFrescoViewController.h */,
+				077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */,
 			);
 			name = Settings;
 			path = ../..;
@@ -2173,6 +2178,7 @@
 				6547C90A1C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m in Sources */,
 				65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */,
 				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
+				077CF9D91CE62793006FE908 /* FRSAboutFrescoViewController.m in Sources */,
 				65E860AC1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m in Sources */,
 				07A30C031C50488800C536EB /* FRSRadiusViewController.m in Sources */,
 				65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */,
