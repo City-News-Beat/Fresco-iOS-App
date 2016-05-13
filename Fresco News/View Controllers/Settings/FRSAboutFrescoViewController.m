@@ -11,6 +11,7 @@
 @interface FRSAboutFrescoViewController ()
 
 @property (strong, nonatomic) NSArray *creditsArray;
+@property (nonatomic) BOOL touchEnabled;
 
 @end
 
@@ -22,7 +23,6 @@
     self.creditsArray = @[@"Philip Bernstein", @"Omar Elfanek", @"Imogen Olsen", @"Elmir Kõuliev", @"Daniel Sun"];
     
     [self configureUI];
-    [self check3DTouch];
 }
 
 
@@ -216,21 +216,6 @@
 
 
 #pragma mark - 3D Touch
-
--(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    
-    [self check3DTouch];
-}
-
--(void)check3DTouch {
-    
-    if (self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable) {
-        [self registerForPreviewingWithDelegate:(id)self sourceView:self.view];
-    }
-}
-
-
-
 
 
 @end
