@@ -129,7 +129,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.twitterButton addTarget:self action:@selector(postToTwitter:) forControlEvents:UIControlEventTouchDown];
     [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
+    [self.twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateSelected];
     self.twitterButton.frame = CGRectMake(16, 10, 24, 24);
     [self.bottomContainer addSubview:self.twitterButton];
     
@@ -137,7 +137,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.facebookButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.facebookButton addTarget:self action:@selector(postToFacebook:) forControlEvents:UIControlEventTouchDown];
     [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
+    [self.facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
     self.facebookButton.frame = CGRectMake(56, 10, 24, 24);
     [self.bottomContainer addSubview:self.facebookButton];
     

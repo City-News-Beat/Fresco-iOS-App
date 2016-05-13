@@ -297,7 +297,7 @@
 
     UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchDown];
-    UIImage *twitter = [[UIImage imageNamed:@"twitter-icon-filled"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *twitter = [[UIImage imageNamed:@"social-twitter"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [twitterButton setImage:twitter forState:UIControlStateNormal];
     twitterButton.frame = CGRectMake(0, 0, 24, 24);
     twitterButton.alpha = 1;
@@ -305,7 +305,7 @@
     
     UIButton *facebookButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchDown];
-    UIImage *facebook = [[UIImage imageNamed:@"facebook-icon-filled"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *facebook = [[UIImage imageNamed:@"social-facebook"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [facebookButton setImage:facebook forState:UIControlStateNormal];
     facebookButton.frame = CGRectMake(40, 0, 24, 24);
     facebookButton.alpha = 1;

@@ -19,7 +19,7 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     
-    self.creditsArray = @[@"Philip Bernstein", @"Omar Elfanek", @"Imogen Olsen", @"Daniel Sun"];
+    self.creditsArray = @[@"Philip Bernstein", @"Omar Elfanek", @"Imogen Olsen", @"Elmir Kõuliev", @"Daniel Sun"];
     
     [self configureUI];
 }
@@ -98,6 +98,15 @@
     [self.view addSubview:creditsTableView];
 }
 
+-(void)configureSocialButtons {
+    
+    UIButton *twitter = [UIButton buttonWithType:UIButtonTypeSystem];
+    [twitter setImage:[UIImage imageNamed:@"twitter"] forState:UIControlStateNormal];
+    
+    
+    
+}
+
 #pragma mark - UITableView
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -112,7 +121,6 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"name-cell"];
     
     if (cell == nil) {

@@ -402,15 +402,15 @@
 -(void)addSocialButtonsToBottomBar {
     _facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
     [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-    [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateHighlighted];
-    [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
+    [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateHighlighted];
+    [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
     [_facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomBar addSubview:_facebookButton];
     
     _twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(_facebookButton.frame.origin.x + _facebookButton.frame.size.width, 1, 24 + 18, 24 + 18)];
     [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-    [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateHighlighted];
-    [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
+    [_twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateHighlighted];
+    [_twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateSelected];
     [_twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomBar addSubview:_twitterButton];
 }
@@ -764,7 +764,7 @@
         }
         
         [UIView animateWithDuration:.2 animations:^{
-            [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateNormal];
+            [_twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateNormal];
         }];
         
         _twitterSession = session;
@@ -793,7 +793,7 @@
         }
         
         [UIView animateWithDuration:.2 animations:^{
-            [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateNormal];
+            [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
         }];
         
         _facebookToken = token;
