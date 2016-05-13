@@ -10,12 +10,16 @@
 
 @interface FRSAboutFrescoViewController ()
 
+@property (strong, nonatomic) NSArray *creditsArray;
+
 @end
 
 @implementation FRSAboutFrescoViewController
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.creditsArray = @[@"Philip Bernstein", @"Omar Elfanek", @"Imogen Olsen", @"Daniel Sun"];
     
     [self configureUI];
 }
@@ -30,6 +34,7 @@
     [self configureNavigationBar];
     [self configureFrescoLogo];
     [self configureVersionHeader];
+    [self configureCredits];
 }
 
 
@@ -78,8 +83,54 @@
     creditsLabel.textAlignment = NSTextAlignmentCenter;
     
     
+    UITableView *creditsTableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -288/2, 188, 288, self.view.frame.size.height -64 -188 -116) style:UITableViewStylePlain];
+    creditsTableView.delegate   = self;
+    creditsTableView.dataSource = self;
+    creditsTableView.rowHeight  = 20;
+    creditsTableView.backgroundColor = [UIColor clearColor];
+    creditsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    creditsTableView.separatorColor  = [UIColor clearColor];
+    creditsTableView.scrollEnabled   = NO;
+    
+    
+    
+    [self.view addSubview:creditsLabel];
+    [self.view addSubview:creditsTableView];
 }
 
+#pragma mark - UITableView
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.creditsArray count];
+}
+
+
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"name-cell"];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"name-cell"];
+    }
+    
+    NSString *cellValue = [NSString stringWithFormat:@"%@", [self.creditsArray objectAtIndex:indexPath.row]];
+    
+    cell.textLabel.text = cellValue;
+    cell.textLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    cell.textLabel.textColor = [UIColor frescoDarkTextColor];
+    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+
+    cell.backgroundColor = [UIColor clearColor];
+
+    
+    return cell;
+}
 
 #pragma mark - Actions
 
