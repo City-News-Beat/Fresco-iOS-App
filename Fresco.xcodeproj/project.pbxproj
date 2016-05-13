@@ -678,9 +678,8 @@
 				D43C7FEB1C8F359000A7A7A7 /* Settings VC */,
 				D43C7FEC1C8F359700A7A7A7 /* Table View */,
 				D43C7FED1C8F359D00A7A7A7 /* Tax Info */,
+				07FD8BAD1CE66EAA00F93705 /* About */,
 				D43C7FEE1C8F35A300A7A7A7 /* Username */,
-				077CF9D71CE62793006FE908 /* FRSAboutFrescoViewController.h */,
-				077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */,
 			);
 			name = Settings;
 			path = ../..;
@@ -725,6 +724,15 @@
 				07ED92E01C752037000DBEA8 /* DGElasticPullToRefreshView.m */,
 			);
 			name = DGElasticPullToRefresh;
+			sourceTree = "<group>";
+		};
+		07FD8BAD1CE66EAA00F93705 /* About */ = {
+			isa = PBXGroup;
+			children = (
+				077CF9D71CE62793006FE908 /* FRSAboutFrescoViewController.h */,
+				077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */,
+			);
+			name = About;
 			sourceTree = "<group>";
 		};
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {

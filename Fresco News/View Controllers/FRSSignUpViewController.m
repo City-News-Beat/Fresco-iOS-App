@@ -874,8 +874,6 @@
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender {
     
-    CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    
     self.bottomBar.transform = CGAffineTransformMakeTranslation(0, 0);
     
     if (self.scrollView.frame.size.height < self.view.frame.size.height - 108){
