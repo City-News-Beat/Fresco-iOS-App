@@ -206,22 +206,12 @@
 }
 
 -(void)dismiss {
-    
-    UIView *blackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    blackView.alpha = 0;
-    [self.view addSubview:blackView];
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        blackView.alpha = 1 ;
-        
-    } completion:nil];
-    
+
     self.view.window.backgroundColor = [UIColor blackColor];
     
     [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.view.alpha = 0;
-        self.view.backgroundColor = [UIColor blackColor];
-        self.view.transform = CGAffineTransformMakeScale(0.9, 0.9);
+        self.view.alpha = 0.5;
+        self.view.transform = CGAffineTransformMakeScale(0.95, 0.95);
     } completion:nil];
     
     FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
