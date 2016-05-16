@@ -95,6 +95,10 @@
     } else if ([viewControllers indexOfObject:self] == NSNotFound) {
         // View is disappearing because it was popped from the stack
         [self.navigationController setNavigationBarHidden:YES animated:YES];
+        
+        if ((self.usernameTF.text != nil) || (self.passwordTF.text != nil) || (self.emailTF.text != nil)) {
+            NSLog(@"presentError");
+        }
     }
 }
 

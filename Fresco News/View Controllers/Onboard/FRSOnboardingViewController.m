@@ -220,8 +220,8 @@
 -(void)dismiss {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+    
     CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
     [translate setFromValue:[NSNumber numberWithFloat:self.view.center.y]];
     [translate setToValue:[NSNumber numberWithFloat:self.view.center.y +50]];
@@ -237,6 +237,7 @@
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
+        tabBarVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self presentViewController:tabBarVC animated:YES completion:^{
             [self removeFromParentViewController];
         }];
