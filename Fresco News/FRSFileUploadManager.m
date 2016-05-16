@@ -10,7 +10,19 @@
 #import "FRSMultipartTask.h"
 
 @implementation FRSFileUploadManager
-@synthesize uploadQueue = _uploadQueue, notificationCenter = _notificationCenter, errorCount = _errorCount;
+@synthesize uploadQueue = _uploadQueue, notificationCenter = _notificationCenter, errorCount = _errorCount, forcePaused = _forcePaused;
+
+
++(instancetype)sharedUploader {
+    static FRSFileUploadManager *uploader = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        uploader = [[FRSFileUploadManager alloc] init];
+    });
+    
+    return uploader;
+}
 
 -(id)init {
     self = [super init];
@@ -19,9 +31,48 @@
         _uploadQueue = [[NSMutableArray alloc] init];
         _activeUploads = [[NSMutableArray alloc] init];
         _notificationCenter = [NSNotificationCenter defaultCenter];
+        [self startReachability];
+        [self resumeFromPersistentUploads];
     }
     
     return self;
+}
+
+-(void)startReachability {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+}
+
+-(void)reachabilityChanged:(NSNotification *)reachabilityNotification {
+    
+    Reachability *curReach = [reachabilityNotification object];
+    NetworkStatus currentStatus = [curReach currentReachabilityStatus];
+
+    switch (currentStatus)
+    {
+        case NotReachable: {
+            _forcePaused = TRUE;
+            break;
+        }
+            
+        case ReachableViaWWAN: {
+            if (_forcePaused) {
+                [self restartQueue];
+            }
+            _forcePaused = FALSE;
+            break;
+        }
+        case ReachableViaWiFi: {
+            if (_forcePaused) {
+                [self restartQueue];
+            }
+            _forcePaused = FALSE;
+            break;
+        }
+    }
+}
+
+-(void)resumeFromPersistentUploads {
+    // load already persisted uploads
 }
 
 // upload photo and video exist b/c we have rules as to what gets past on as single request or multi request task
@@ -131,7 +182,9 @@
 -(void)restartQueue {
     if ([self.uploadQueue count] >= 1) {
         FRSUploadTask *task = self.uploadQueue[0];
-        [task start];
+        if (!task.hasStarted) {
+            [task start];
+        }
     }
 
 }
@@ -141,18 +194,6 @@
         FRSUploadTask *nextTask = self.uploadQueue[1];
         [nextTask start];
     }
-}
-
-
-+(instancetype)sharedUploader {
-    static FRSFileUploadManager *uploader = nil;
-    static dispatch_once_t onceToken;
-    
-    dispatch_once(&onceToken, ^{
-        uploader = [[FRSFileUploadManager alloc] init];
-    });
-    
-    return uploader;
 }
 
 -(void)handleError:(FRSUploadTask *)task error:(NSError *)error {

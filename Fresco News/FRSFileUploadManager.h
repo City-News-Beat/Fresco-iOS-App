@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FRSMultipartTask.h"
+#import "Reachability.h"
 
 static NSString * __nonnull const uploadFailedNotification = @"FRSUploadFailedNotification";
 static NSString * __nonnull const uploadSuccessNotification = @"FRSUploadSuccessNotification";
@@ -24,7 +25,7 @@ static int const failWaitTime = 5; // seconds waited between fail count trigger
 {
     
 }
-
+@property (nonatomic, readonly) BOOL forcePaused;
 @property (nonatomic, readonly) int errorCount;
 @property (nonatomic, readonly) NSMutableArray *uploadQueue;
 @property (nonatomic, readonly) NSMutableArray *activeUploads;
