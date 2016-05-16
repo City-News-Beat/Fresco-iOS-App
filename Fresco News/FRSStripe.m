@@ -52,5 +52,4 @@
 +(void)startTest {
     [Stripe setDefaultPublishableKey:stripeTest];
 }
-
 @end
