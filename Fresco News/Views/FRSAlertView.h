@@ -19,7 +19,7 @@
 
 @property (weak, nonatomic) NSObject <FRSAlertViewDelegate> *delegate;
 
--(instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle delegate:(id)delegate;
+-(instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate;
 
 -(void)show;
 

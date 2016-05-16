@@ -409,7 +409,8 @@
         case 10:
             switch (indexPath.row) {
                 case 0: {
-                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We’ll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" delegate:self];
+                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We'll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                    
                     [alert show];
                     
                 } break;

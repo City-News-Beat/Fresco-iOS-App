@@ -52,7 +52,7 @@
 
 @implementation FRSAlertView
 
--(instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle delegate:(id)delegate {
+-(instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate {
     self = [super init];
     if (self){
         
@@ -119,7 +119,7 @@
             self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
             self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
             [self.cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
-            [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+            [self.cancelButton setTitleColor:cancelTitleColor forState:UIControlStateNormal];
             [self.cancelButton setTitle:cancelTitle forState:UIControlStateNormal];
             [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [self.cancelButton sizeToFit];

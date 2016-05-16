@@ -61,7 +61,7 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     self.navigationController.navigationBarHidden = YES;
 }
 
@@ -143,6 +143,7 @@
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = 3;
     self.pageControl.userInteractionEnabled = NO;
+    self.pageControl.alpha = 0;
     [self.pageControl sizeToFit];
     
     [self.pageControl setPageIndicatorTintColor:[UIColor frescoLightTextColor]];
@@ -220,8 +221,6 @@
 -(void)dismiss {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-    
     CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
     [translate setFromValue:[NSNumber numberWithFloat:self.view.center.y]];
     [translate setToValue:[NSNumber numberWithFloat:self.view.center.y +50]];
@@ -241,6 +240,7 @@
         [self presentViewController:tabBarVC animated:YES completion:^{
             [self removeFromParentViewController];
         }];
+
     });
 }
 
@@ -257,9 +257,9 @@
         self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 0);
     } completion:nil];
     
-    [self animateMaterialIntroOnPageControl:self.pageControl delay:0.05];
-    [self animateMaterialIntroOnScrollView:self.scrollView delay:0.1];
-    [self animateMaterialIntroOnImageView:self.logo delay:0.15];
+    [self animateMaterialIntroOnPageControl:self.pageControl delay:0.1];
+    [self animateMaterialIntroOnScrollView:self.scrollView delay:0.2];
+    [self animateMaterialIntroOnImageView:self.logo delay:0.3];
     
     [UIView animateWithDuration:1.0 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.closeButton.alpha = 1;

@@ -17,7 +17,8 @@
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
 
-//Cocoapods
+//UI
+#import "FRSAlertView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 
@@ -73,6 +74,7 @@
 //        [self.usernameTF becomeFirstResponder];
     }
     
+    
     _hasShown = TRUE;
     
     self.navigationItem.title = @"SIGN UP"; // lil agressive no
@@ -95,9 +97,19 @@
     } else if ([viewControllers indexOfObject:self] == NSNotFound) {
         // View is disappearing because it was popped from the stack
         [self.navigationController setNavigationBarHidden:YES animated:YES];
-        
-        if ((self.usernameTF.text != nil) || (self.passwordTF.text != nil) || (self.emailTF.text != nil)) {
-            NSLog(@"presentError");
+
+    }
+}
+
+-(void)willMoveToParentViewController:(UIViewController *)parent {
+    [super willMoveToParentViewController:parent];
+    
+    if (!parent){
+        if ((![self.passwordTF.text isEqualToString:@""]) || (![self.emailTF.text isEqualToString:@""]) || ([self.usernameTF.text length] > 1)) {
+            UIColor *red = [UIColor frescoRedHeartColor];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"WAIT, DON’T GO" message:@"Are you sure you don’t want to sign up for Fresco?" actionTitle:@"CANCEL" cancelTitle:@"DELETE" cancelTitleColor:red delegate:self];
+            
+            [alert show];
         }
     }
 }
