@@ -17,6 +17,7 @@ typedef void(^FRSStripeBlock)(STPToken *stripeToken, NSError *error);
 
 static NSString * const stripeTest = @"pk_test_o4pMXyj95Vqe5NgV3hb7qmdo";
 static NSString * const stripeLive = @"pk_live_saSjliYnCbjFwYfriTzhTQiO";
+static NSString * const countryCode = @"US"; // only support US entities
 
 typedef enum {
     FRSBankAccountTypeIndividual,
