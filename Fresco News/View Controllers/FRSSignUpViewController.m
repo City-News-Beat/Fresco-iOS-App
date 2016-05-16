@@ -695,12 +695,13 @@
     if (_isAlreadyRegistered) {
         
         if (![_pastRegistration[@"email"] isEqualToString:self.emailTF.text]) {
-            
+
         }
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             if (error) {
                 // show error
+                
             }
             else {
                 // continue on whatever
@@ -714,6 +715,9 @@
         NSLog(@"%@ %@", error, responseObject);
         _isAlreadyRegistered = TRUE;
         _pastRegistration = registrationDigest;
+
+        [self respondToError:error];
+        [self stopSpinner:self.loadingView onButton:self.createAccountButton];
     }];
 }
 
@@ -951,6 +955,41 @@
     
     return YES;
 }
+
+#pragma mark - Error Handling
+
+-(void)respondToError:(NSError *)error {
+    
+    NSLog(@"ERROR CODE = %ld", (long)error.code);
+    switch (error.code) {
+        case 0: //Invalid email
+            
+            [self presentInvalidEmail];
+            
+            break;
+            
+        default:
+            break;
+    }
+}
+
+-(void)presentInvalidEmail {
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @end
