@@ -238,8 +238,14 @@
         self.stories = [[NSMutableArray alloc] init];
     }
     __block int const numToFetch = 12;
+    NSString *offsetID = @"";
     
-    [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:self.stories.count completion:^(NSArray *stories, NSError *error) {
+    if (self.stories.count > 0) {
+        FRSStory *lastStory = self.stories[self.stories.count-1];
+        offsetID = lastStory.uid;
+    }
+    
+    [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:offsetID completion:^(NSArray *stories, NSError *error) {
         
         if (!stories.count){
             if (error) {
