@@ -13,13 +13,18 @@
 - (id)responseObjectForResponse:(NSURLResponse *)response
                            data:(NSData *)data
                           error:(NSError *__autoreleasing *)error {
+
+    id responseToReturn = [super responseObjectForResponse:response
+                                                      data:data
+                                                     error:error];
+    if (!*error) { return responseToReturn; }
     
     NSError *parsingError;
     NSDictionary *JSONResponse = [NSJSONSerialization JSONObjectWithData:data
                                                                  options:NSJSONReadingAllowFragments
                                                                    error:&parsingError];
     
-    if (parsingError) { return Nil; }
+    if (parsingError) { return responseToReturn; }
     
     NSMutableDictionary *userInfo = [(*error).userInfo mutableCopy];
     NSString *errorDescription = JSONResponse[@"error"];
@@ -30,7 +35,7 @@
                                               userInfo:userInfo];
     (*error) = annotatedError;
     
-    return JSONResponse;
+    return responseToReturn;
 }
 
 @end
