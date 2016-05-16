@@ -15,8 +15,6 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
-#import "FRSDataValidator.h"
-
 
 @import MapKit;
 
@@ -555,8 +553,8 @@
     }
     
     UIControlState controlState;
-    
-    if ([FRSDataValidator isValidUserName:self.usernameTF.text] && [FRSDataValidator isValidEmail:self.emailTF.text] && [FRSDataValidator isValidPassword:self.passwordTF.text]) {
+
+    if ([self isValidUsername:self.usernameTF.text] && [self validEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
         controlState = UIControlStateHighlighted;
     } else {
 //        controlState = UIControlStateNormal;
@@ -566,6 +564,9 @@
     [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
 
+-(BOOL)isValidPassword:(NSString *)password {
+    return TRUE;
+}
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (textField == self.usernameTF) {

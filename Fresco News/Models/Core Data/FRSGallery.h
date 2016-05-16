@@ -17,8 +17,6 @@
 #import "FRSCoreData.h"
 
 #import "FRSDateFormatter.h"
-
-#import "FRSDataValidator.h"
 #import "MagicalRecord.h"
 
 @class FRSPost, FRSStory, FRSUser;

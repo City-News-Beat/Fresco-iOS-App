@@ -87,7 +87,6 @@
 		65201A311C3D7D6200B31089 /* FRSGalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A301C3D7D6200B31089 /* FRSGalleryView.m */; };
 		65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A331C3D7D7900B31089 /* FRSGalleryCell.m */; };
 		65201A371C3D7D8200B31089 /* FRSScrollViewImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */; };
-		65201A3A1C3D7DA800B31089 /* FRSDataValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A391C3D7DA800B31089 /* FRSDataValidator.m */; };
 		65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */; };
 		65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */; };
 		654181E41C5144CD00019B3F /* NSObject+Validator.m in Sources */ = {isa = PBXBuildFile; fileRef = 654181E31C5144CD00019B3F /* NSObject+Validator.m */; };
@@ -378,8 +377,6 @@
 		65201A331C3D7D7900B31089 /* FRSGalleryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryCell.m; sourceTree = "<group>"; };
 		65201A351C3D7D8200B31089 /* FRSScrollViewImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSScrollViewImageView.h; sourceTree = "<group>"; };
 		65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSScrollViewImageView.m; sourceTree = "<group>"; };
-		65201A381C3D7DA800B31089 /* FRSDataValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSDataValidator.h; path = Utilities/FRSDataValidator.h; sourceTree = "<group>"; };
-		65201A391C3D7DA800B31089 /* FRSDataValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSDataValidator.m; path = Utilities/FRSDataValidator.m; sourceTree = "<group>"; };
 		65201A3B1C3D7EEA00B31089 /* FRSBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseViewController.h; sourceTree = "<group>"; };
 		65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseViewController.m; sourceTree = "<group>"; };
 		65201A3E1C3D808A00B31089 /* FRSProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSProfileViewController.h; sourceTree = "<group>"; };
@@ -687,7 +684,6 @@
 				D4B35F481CCEB45E00F5C8A8 /* File Hash */,
 				D43C7FEF1C8F517D00A7A7A7 /* Trimming Video */,
 				D43C7FF01C8F518300A7A7A7 /* Loading Resources */,
-				D43C7FF11C8F518E00A7A7A7 /* Data Validation */,
 				D43C7FF21C8F519300A7A7A7 /* Date Formatter */,
 				D43C7FF31C8F519A00A7A7A7 /* Parallax */,
 			);
@@ -1424,15 +1420,6 @@
 			name = "Loading Resources";
 			sourceTree = "<group>";
 		};
-		D43C7FF11C8F518E00A7A7A7 /* Data Validation */ = {
-			isa = PBXGroup;
-			children = (
-				65201A381C3D7DA800B31089 /* FRSDataValidator.h */,
-				65201A391C3D7DA800B31089 /* FRSDataValidator.m */,
-			);
-			name = "Data Validation";
-			sourceTree = "<group>";
-		};
 		D43C7FF21C8F519300A7A7A7 /* Date Formatter */ = {
 			isa = PBXGroup;
 			children = (
@@ -2153,7 +2140,6 @@
 				D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */,
 				D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */,
 				D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */,
-				65201A3A1C3D7DA800B31089 /* FRSDataValidator.m in Sources */,
 				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,
