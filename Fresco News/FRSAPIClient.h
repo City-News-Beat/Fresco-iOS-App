@@ -16,6 +16,8 @@
 #import "SSKeychain.h"
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
+typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
+
 
 @protocol FRSFileUploaderObjectContext <NSObject>
 -(NSManagedObjectContext *)managedObjectContext; // emulate FRSAppDelegate methods without importing
@@ -60,4 +62,8 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 // social
 -(void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion;
+// check user
+-(void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion;
+
+
 @end

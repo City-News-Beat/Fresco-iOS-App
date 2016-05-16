@@ -484,7 +484,7 @@
     
     if (![self isAuthenticated]) {
         // set client token
-        [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
+        [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
     }
     else { // set bearer token if we haven't already
         // set bearer client token
@@ -579,6 +579,26 @@
                     error:&fileSizeError];
     
     return fileSizeValue;
+}
+
+-(void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"user/%@", user];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        if (error) {
+            completion(TRUE, error);
+            return;
+        }
+        
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(FALSE, error);
+        }
+        
+        // shouldn't happen
+        completion(TRUE, error);
+    }];
+    
 }
 
 
