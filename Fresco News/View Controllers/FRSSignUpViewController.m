@@ -10,45 +10,43 @@
 
 //View Controllers
 #import "FRSSetupProfileViewController.h" // !HELPFUL, LOOP BACK
+#import <QuartzCore/QuartzCore.h>
 
 //Helpers
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
+<<<<<<< HEAD
+=======
+#import "FRSDataValidator.h"
+
+//Cocoapods
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
+>>>>>>> origin/3.0-phil
+
 
 @import MapKit;
-
 
 @interface FRSSignUpViewController () <UITextFieldDelegate, MKMapViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
-
 @property (strong, nonatomic) UITextField *usernameTF;
 @property (strong, nonatomic) UITextField *emailTF;
 @property (strong, nonatomic) UITextField *passwordTF;
 @property (strong, nonatomic) UITextField *promoTF;
-
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) UISlider *radiusSlider;
-
 @property (strong, nonatomic) UIView *bottomBar;
-
 @property (strong, nonatomic) UIButton *createAccountButton;
-
 @property (strong, nonatomic) UILabel *promoDescription;
-
 @property (strong, nonatomic) UITapGestureRecognizer *dismissGR;
-
 @property (strong, nonatomic) UIView *usernameHighlightLine;
-
 @property (strong, nonatomic) UIImageView *usernameCheckIV;
-
 @property (strong, nonatomic) UIView *sliderContainer;
 @property (strong, nonatomic) UIView *promoContainer;
-
 @property (nonatomic) NSInteger y;
-
 @property (nonatomic) BOOL notificationsEnabled;
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
 @end
 
@@ -73,10 +71,10 @@
     return [[FRSAPIClient sharedClient] socialDigestionWithTwitter:_twitterSession facebook:_facebookToken];
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (!_hasShown) {
-        [self.usernameTF becomeFirstResponder];
+//        [self.usernameTF becomeFirstResponder];
     }
     
     _hasShown = TRUE;
@@ -90,7 +88,7 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
--(void)viewWillDisappear:(BOOL)animated{
+-(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationItem.title = @"";
     
@@ -104,15 +102,26 @@
     }
 }
 
--(void)addNotifications{
+-(void)addNotifications {
+    
+    /* Keyboard Notifications */
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    
+    /* Text Field Notifications */
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange) name:UITextFieldTextDidChangeNotification object:self.usernameTF];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange) name:UITextFieldTextDidChangeNotification object:self.emailTF];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldDidChange) name:UITextFieldTextDidChangeNotification object:self.passwordTF];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
 #pragma mark - UI 
 
--(void)configureUI{
+-(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
 
     [self configureScrollView];
@@ -125,7 +134,7 @@
     [self configureBottomBar];
 }
 
--(void)configureScrollView{
+-(void)configureScrollView {
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height -44 -52 -12)];
@@ -146,7 +155,7 @@
     
 }
 
--(void)configureTextFields{
+-(void)configureTextFields {
     [self configureUserNameField];
     [self configureEmailAddressField];
     [self configurePasswordField];
@@ -157,6 +166,7 @@
     
     [self.view addGestureRecognizer:tap];
 }
+
 
 -(void)configureUserNameField {
     self.usernameTF = [[UITextField alloc] initWithFrame:CGRectMake(48, 24, self.scrollView.frame.size.width - 2 * 48, 44)];
@@ -180,7 +190,7 @@
     [self.usernameTF addSubview:self.usernameCheckIV];
 }
 
--(void)configureEmailAddressField{
+-(void)configureEmailAddressField {
     
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 92, self.scrollView.frame.size.width, 44)];
     backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
@@ -205,7 +215,7 @@
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
 }
 
--(void)configurePasswordField{
+-(void)configurePasswordField {
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 136, self.scrollView.frame.size.width, 44)];
     backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
@@ -226,7 +236,7 @@
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
 }
 
--(void)configureNotificationSection{
+-(void)configureNotificationSection {
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 192, self.scrollView.frame.size.width, 62)];
     backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
@@ -261,7 +271,7 @@
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 61.5)]];
 }
 
--(void)configureMapView{
+-(void)configureMapView {
     
     NSInteger height = 240;
     if (IS_STANDARD_IPHONE_6) height = 280;
@@ -296,7 +306,7 @@
     self.mapView.alpha = 0;
 }
 
--(void)configureSliderSection{
+-(void)configureSliderSection {
     
     self.sliderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, 56)];
     self.sliderContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
@@ -324,7 +334,7 @@
     self.sliderContainer.alpha = 0;
 }
 
--(void)configurePromoSection{
+-(void)configurePromoSection {
     
     self.promoContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.scrollView.frame.size.width, 44)];
     self.promoContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
@@ -359,11 +369,11 @@
     self.promoDescription.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
 }
 
--(void)adjustScrollViewContentSize{
+-(void)adjustScrollViewContentSize {
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.y);
 }
 
--(void)configureBottomBar{
+-(void)configureBottomBar {
     self.bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height -44 -64, self.view.frame.size.width, 44)];
     self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.bottomBar];
@@ -380,7 +390,7 @@
     [self addSocialButtonsToBottomBar];
 }
 
--(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState{
+-(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState {
     if (controlState == UIControlStateNormal){
         [self.createAccountButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.createAccountButton.enabled = NO;
@@ -392,7 +402,7 @@
     }
 }
 
--(void)addSocialButtonsToBottomBar{
+-(void)addSocialButtonsToBottomBar {
     _facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
     [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
     [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateHighlighted];
@@ -445,7 +455,7 @@
     }];
 }
 
--(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success{
+-(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
     
     if(success) {
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
@@ -491,13 +501,24 @@
 
 #pragma mark - TextField Delegate
 
+-(void)textFieldDidChange {
+    
+    UIControlState controlState;
+    if ([self isValidUsername:self.usernameTF.text] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
+        controlState = UIControlStateHighlighted;
+    } else {
+        controlState = UIControlStateNormal;
+    }
+    
+    [self toggleCreateAccountButtonTitleColorToState:controlState];
+}
+
 -(void)dismissKeyboard {
     [self highlightTextField:nil enabled:NO];
     
     [self.view resignFirstResponder];
     [self.view endEditing:YES];
 }
-
 
 -(BOOL)textFieldShouldReturn:(UITextField*)textField {
 
@@ -509,7 +530,7 @@
         }
         [self.emailTF becomeFirstResponder];
     } else if (textField == self.emailTF) {
-        if (![self validEmail:textField.text] || [self.emailTF.text isEqualToString:@""]) {
+        if (![self isValidEmail:textField.text] || [self.emailTF.text isEqualToString:@""]) {
             [self animateTextFieldError:textField];
             [textField becomeFirstResponder];
             return FALSE;
@@ -525,17 +546,18 @@
 }
 
 
--(void)textFieldDidBeginEditing:(UITextField *)textField{
-
-    if (textField == self.usernameTF){
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    if (textField == self.usernameTF) {
         [self highlightTextField:self.usernameTF enabled:YES];
         if ([self.usernameTF.text isEqualToString:@""]){
             self.usernameTF.text = @"@";
+
         }
     }
 }
 
--(void)textFieldDidEndEditing:(UITextField *)textField{
+-(void)textFieldDidEndEditing:(UITextField *)textField {
  
     if (textField == self.usernameTF){
         
@@ -551,6 +573,7 @@
             self.usernameTF.text = @"";
         }
     }
+<<<<<<< HEAD
     
     UIControlState controlState;
 
@@ -568,7 +591,12 @@
     return TRUE;
 }
 
+=======
+}
+
+>>>>>>> origin/3.0-phil
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
     if (textField == self.usernameTF) {
         if ([string containsString:@" "]) {
             return FALSE;
@@ -591,7 +619,7 @@
 
 #pragma mark Action Logic 
 
--(void)handleToggleSwitched:(UISwitch *)toggle{
+-(void)handleToggleSwitched:(UISwitch *)toggle {
     id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
     [delegate registerForPushNotifications];
     
@@ -655,16 +683,25 @@
 }
 
 -(void)createAccount {
+
+    [self dismissKeyboard];
     
     if (![self checkFields]) {
         return;
     }
     
-   // FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
-   // [self.navigationController pushViewController:vc animated:YES];
+    [self configureSpinner];
+    [self startSpinner:self.loadingView onButton:self.createAccountButton];
+    
+    NSDictionary *currentInstallation = [[FRSAPIClient sharedClient] currentInstallation];
+
     NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
     [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
+//<<<<<<< HEAD
     [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
+//=======
+//    [registrationDigest setObject:self.emailTF.text forKey:@"email"];
+//>>>>>>> 3.0-omar
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
     [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
 
@@ -686,6 +723,7 @@
         return;
     }
     
+//<<<<<<< HEAD
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
 
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
@@ -693,6 +731,22 @@
         
         _isAlreadyRegistered = TRUE;
         _pastRegistration = registrationDigest;
+//=======
+//    if (currentInstallation) {
+//        [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
+//    }
+//    
+//    NSLog(@"%@", registrationDigest);
+//    
+//    [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
+//        NSLog(@"%@ %@", error, responseObject);
+//
+//        FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
+//
+//        [self pushViewControllerWithCompletion:vc animated:YES completion:^{
+//            [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+//        }];
+//>>>>>>> 3.0-omar
     }];
 }
 
@@ -705,14 +759,14 @@
         return FALSE;
     }
     
-    if (self.emailTF.text.length == 0 || ![self validEmail:self.emailTF.text]) {
+    if (self.emailTF.text.length == 0 || ![self isValidEmail:self.emailTF.text]) {
         return FALSE;
     }
     
     return TRUE;
 }
 
--(void)twitterTapped{
+-(void)twitterTapped {
     
     if (_twitterSession) {
         _twitterSession = Nil;
@@ -740,7 +794,7 @@
     }];
 }
 
--(void)facebookTapped{
+-(void)facebookTapped {
     
     if (_facebookToken) {
         _facebookToken = Nil;
@@ -772,6 +826,37 @@
 
 -(void)handleSocialChallenge:(NSError *)error {
     
+}
+
+
+#pragma mark - Spinner
+
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+}
+
+-(void)pushViewControllerWithCompletion:(UIViewController *)viewController animated:(BOOL)animated completion:(void (^)(void))completion {
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:completion];
+    [self.navigationController pushViewController:viewController animated:animated];
+    [CATransaction commit];
+}
+
+-(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    
+    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    spinner.frame = CGRectMake(button.frame.size.width - 20 -16, button.frame.size.height/2 -10, 20, 20);
+    [spinner startAnimating];
+    [button addSubview:spinner];
+}
+
+-(void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button {
+    
+    [button setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    [spinner stopLoading];
+    [spinner removeFromSuperview];
 }
 
 #pragma mark - Keyboard
@@ -810,7 +895,7 @@
     }
 }
 
--(void)handleKeyboardWillHide:(NSNotification *)sender{
+-(void)handleKeyboardWillHide:(NSNotification *)sender {
     
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
@@ -852,19 +937,9 @@
 }
 
 
+#pragma mark - Text Field Validation
 
-#pragma mark - UIScrollViewDelegate
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-//    [self.view resignFirstResponder];
-//    [self.usernameTF resignFirstResponder];
-//    [self.emailTF resignFirstResponder];
-//    [self.passwordTF resignFirstResponder];
-//    [self.promoTF resignFirstResponder];
-}
-
--(BOOL)validEmail:(NSString *)emailString {
+-(BOOL)isValidEmail:(NSString *)emailString {
     
     if([emailString length] == 0) {
         return NO;
@@ -883,9 +958,23 @@
 }
 
 -(BOOL)isValidUsername:(NSString *)username {
+
+    if ([username isEqualToString:@"@"]) {
+        return NO;
+    }
+    
     NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
     NSCharacterSet *disallowedSet = [allowedSet invertedSet];
-    return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
+    if (([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound) /*&& ([username length] >= 4)*/ && (!([username length] > 20))) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+-(BOOL)isValidPassword:(NSString *)password {
+    
+    return [password length] >= 8;
 }
 
 @end
