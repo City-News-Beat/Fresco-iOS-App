@@ -40,7 +40,17 @@
     Integral part of upload process, this allows for the app to re-claim old/failed uploads, and continue uploading them in the background
  */
 -(void)startFromChunk:(NSInteger)chunk {
+    unsigned long long currentPoint = chunk * chunkSize * megabyteDefinition;
     
+    if (self.fileSizeFromMetadata - currentPoint < chunkSize && self.fileSizeFromMetadata != currentPoint) {
+        // final chunk (confirm tho)
+    }
+    else if (self.fileSizeFromMetadata == currentPoint) {
+        // close on api end ** check this from core data not byte definition **
+        
+    }
+    
+    // continue from non-final chunk
 }
 
 -(void)next {
