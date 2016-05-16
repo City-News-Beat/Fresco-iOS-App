@@ -16,13 +16,9 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
-<<<<<<< HEAD
-=======
-#import "FRSDataValidator.h"
 
 //Cocoapods
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
->>>>>>> origin/3.0-phil
 
 
 @import MapKit;
@@ -573,11 +569,9 @@
             self.usernameTF.text = @"";
         }
     }
-<<<<<<< HEAD
-    
     UIControlState controlState;
 
-    if ([self isValidUsername:self.usernameTF.text] && [self validEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
+    if ([self isValidUsername:self.usernameTF.text] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
         controlState = UIControlStateHighlighted;
     } else {
 //        controlState = UIControlStateNormal;
@@ -591,10 +585,7 @@
     return TRUE;
 }
 
-=======
-}
 
->>>>>>> origin/3.0-phil
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (textField == self.usernameTF) {
@@ -970,11 +961,6 @@
     } else {
         return NO;
     }
-}
-
--(BOOL)isValidPassword:(NSString *)password {
-    
-    return [password length] >= 8;
 }
 
 @end
