@@ -7,7 +7,6 @@
 //
 
 #import "FRSUploadTask.h"
-#import "Fresco.h"
 
 @implementation FRSUploadTask
 @synthesize uploadTask = _uploadTask;

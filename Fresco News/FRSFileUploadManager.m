@@ -8,7 +8,6 @@
 
 #import "FRSFileUploadManager.h"
 #import "FRSMultipartTask.h"
-#import "FRSAppDelegate.h" // take advantage of specific core data methods
 
 @implementation FRSFileUploadManager
 @synthesize uploadQueue = _uploadQueue, notificationCenter = _notificationCenter, errorCount = _errorCount;
@@ -210,8 +209,7 @@
 }
 
 +(NSManagedObjectContext *)uploaderContext {
-    id<FRSFileUploaderObjectContext> appDelegate = (id<FRSFileUploaderObjectContext>)[[UIApplication sharedApplication] delegate];
-    
+    id<FRSContextProvider> appDelegate = (id<FRSContextProvider>)[[UIApplication sharedApplication] delegate];
     return [appDelegate managedObjectContext];
 }
 

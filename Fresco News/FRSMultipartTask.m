@@ -7,7 +7,6 @@
 //
 
 #import "FRSMultipartTask.h"
-#import "Fresco.h"
 #import "NSData+NSHash.h" // md5 all requests
 
 @implementation FRSMultipartTask
@@ -24,7 +23,6 @@
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
     sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
     _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-
     
 }
 

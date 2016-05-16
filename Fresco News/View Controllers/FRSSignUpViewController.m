@@ -581,10 +581,6 @@
     [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
 
--(BOOL)isValidPassword:(NSString *)password {
-    return TRUE;
-}
-
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
@@ -962,5 +958,17 @@
         return NO;
     }
 }
+
+-(BOOL)isValidPassword:(NSString *)password {
+    
+    // check length
+        // return false
+    
+    // check against pattern (i.e. xxXXxxx1)
+        // return false
+    
+    return TRUE;
+}
+
 
 @end

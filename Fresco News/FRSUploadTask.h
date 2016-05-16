@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Fresco.h"
 #import <Photos/Photos.h>
 #import "AWFileHash.h"
 
