@@ -89,7 +89,6 @@
 		65201A311C3D7D6200B31089 /* FRSGalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A301C3D7D6200B31089 /* FRSGalleryView.m */; };
 		65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A331C3D7D7900B31089 /* FRSGalleryCell.m */; };
 		65201A371C3D7D8200B31089 /* FRSScrollViewImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */; };
-		65201A3A1C3D7DA800B31089 /* FRSDataValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A391C3D7DA800B31089 /* FRSDataValidator.m */; };
 		65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */; };
 		65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */; };
 		654181E41C5144CD00019B3F /* NSObject+Validator.m in Sources */ = {isa = PBXBuildFile; fileRef = 654181E31C5144CD00019B3F /* NSObject+Validator.m */; };
@@ -138,6 +137,7 @@
 		D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D418E3431CCC1A9B0003B080 /* AccountKitStrings.bundle */; };
 		D418E34C1CCC1B240003B080 /* FRSSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E34B1CCC1B240003B080 /* FRSSocial.m */; };
 		D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E34D1CCC1C360003B080 /* Twitter.framework */; };
+		D41C10CB1CE9A54900F96B25 /* FRSStripe.m in Sources */ = {isa = PBXBuildFile; fileRef = D41C10CA1CE9A54900F96B25 /* FRSStripe.m */; };
 		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
@@ -383,8 +383,6 @@
 		65201A331C3D7D7900B31089 /* FRSGalleryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryCell.m; sourceTree = "<group>"; };
 		65201A351C3D7D8200B31089 /* FRSScrollViewImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSScrollViewImageView.h; sourceTree = "<group>"; };
 		65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSScrollViewImageView.m; sourceTree = "<group>"; };
-		65201A381C3D7DA800B31089 /* FRSDataValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSDataValidator.h; path = Utilities/FRSDataValidator.h; sourceTree = "<group>"; };
-		65201A391C3D7DA800B31089 /* FRSDataValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSDataValidator.m; path = Utilities/FRSDataValidator.m; sourceTree = "<group>"; };
 		65201A3B1C3D7EEA00B31089 /* FRSBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBaseViewController.h; sourceTree = "<group>"; };
 		65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBaseViewController.m; sourceTree = "<group>"; };
 		65201A3E1C3D808A00B31089 /* FRSProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSProfileViewController.h; sourceTree = "<group>"; };
@@ -477,6 +475,8 @@
 		D418E34B1CCC1B240003B080 /* FRSSocial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSocial.m; sourceTree = "<group>"; };
 		D418E34D1CCC1C360003B080 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		D418E3571CCC1DE50003B080 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../Library/Developer/Xcode/DerivedData/Fresco-fdljnwvdniqudpbfysumtikmtfbi/Build/Products/Release-iphoneos/AFNetworking.framework"; sourceTree = "<group>"; };
+		D41C10C91CE9A54900F96B25 /* FRSStripe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStripe.h; sourceTree = "<group>"; };
+		D41C10CA1CE9A54900F96B25 /* FRSStripe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStripe.m; sourceTree = "<group>"; };
 		D42C907F1CC6191400B25C99 /* UIImage+Pixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Pixels.h"; path = "../../UIImage+Pixels.h"; sourceTree = "<group>"; };
 		D42C90801CC6191400B25C99 /* UIImage+Pixels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Pixels.m"; path = "../../UIImage+Pixels.m"; sourceTree = "<group>"; };
 		D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSFileLoader.h; path = ../FRSFileLoader.h; sourceTree = "<group>"; };
@@ -691,7 +691,6 @@
 				D4B35F481CCEB45E00F5C8A8 /* File Hash */,
 				D43C7FEF1C8F517D00A7A7A7 /* Trimming Video */,
 				D43C7FF01C8F518300A7A7A7 /* Loading Resources */,
-				D43C7FF11C8F518E00A7A7A7 /* Data Validation */,
 				D43C7FF21C8F519300A7A7A7 /* Date Formatter */,
 				D43C7FF31C8F519A00A7A7A7 /* Parallax */,
 			);
@@ -1256,6 +1255,15 @@
 			name = Social;
 			sourceTree = "<group>";
 		};
+		D41C10C81CE9A4AF00F96B25 /* Stripe */ = {
+			isa = PBXGroup;
+			children = (
+				D41C10C91CE9A54900F96B25 /* FRSStripe.h */,
+				D41C10CA1CE9A54900F96B25 /* FRSStripe.m */,
+			);
+			name = Stripe;
+			sourceTree = "<group>";
+		};
 		D43C7FCC1C8E464800A7A7A7 /* Image Picker */ = {
 			isa = PBXGroup;
 			children = (
@@ -1428,15 +1436,6 @@
 				D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */,
 			);
 			name = "Loading Resources";
-			sourceTree = "<group>";
-		};
-		D43C7FF11C8F518E00A7A7A7 /* Data Validation */ = {
-			isa = PBXGroup;
-			children = (
-				65201A381C3D7DA800B31089 /* FRSDataValidator.h */,
-				65201A391C3D7DA800B31089 /* FRSDataValidator.m */,
-			);
-			name = "Data Validation";
 			sourceTree = "<group>";
 		};
 		D43C7FF21C8F519300A7A7A7 /* Date Formatter */ = {
@@ -1792,6 +1791,7 @@
 				D4F91A461C8B508A0078BF15 /* Fresco.h */,
 				D4F91A471C8B51500078BF15 /* FRSAPIClient.h */,
 				D4F91A481C8B51500078BF15 /* FRSAPIClient.m */,
+				D41C10C81CE9A4AF00F96B25 /* Stripe */,
 				D418E3491CCC1B0F0003B080 /* Social */,
 				65EBEDBD1C44507600BE671F /* Networking */,
 				D43C7FF41C8F588C00A7A7A7 /* Defaults */,
@@ -2129,6 +2129,7 @@
 				07ED92E51C752037000DBEA8 /* DGElasticPullToRefreshView.m in Sources */,
 				6596EC9F1C5031FA0011C18B /* FRSBorderedImageView.m in Sources */,
 				07B61ECD1CAF1C4900D3454F /* PeekPopArticleViewController.m in Sources */,
+				D41C10CB1CE9A54900F96B25 /* FRSStripe.m in Sources */,
 				65D1E4EC1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m in Sources */,
 				D453CC861CCA80850091A004 /* NSManagedObjectContext+MagicalObserving.m in Sources */,
 				07A30BFE1C50488800C536EB /* FRSDebitCardViewController.m in Sources */,
@@ -2158,7 +2159,6 @@
 				0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */,
 				D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */,
 				D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */,
-				65201A3A1C3D7DA800B31089 /* FRSDataValidator.m in Sources */,
 				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,

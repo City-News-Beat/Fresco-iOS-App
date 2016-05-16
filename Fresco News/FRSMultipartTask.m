@@ -38,6 +38,13 @@
     return self;
 }
 
+/*
+    Integral part of upload process, this allows for the app to re-claim old/failed uploads, and continue uploading them in the background
+ */
+-(void)startFromChunk:(NSInteger)chunk {
+    
+}
+
 -(void)next {
     // loop on background thread to not interrupt UI, but on HIGH priority to supercede any default thread needs
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{

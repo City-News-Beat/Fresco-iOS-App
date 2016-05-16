@@ -16,7 +16,6 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
-#import "FRSDataValidator.h"
 
 //Cocoapods
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
@@ -570,7 +569,22 @@
             self.usernameTF.text = @"";
         }
     }
+    UIControlState controlState;
+
+    if ([self isValidUsername:self.usernameTF.text] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
+        controlState = UIControlStateHighlighted;
+    } else {
+//        controlState = UIControlStateNormal;
+        controlState = UIControlStateHighlighted;
+
+    }
+    [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
+
+-(BOOL)isValidPassword:(NSString *)password {
+    return TRUE;
+}
+
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
@@ -945,11 +959,6 @@
     } else {
         return NO;
     }
-}
-
--(BOOL)isValidPassword:(NSString *)password {
-    
-    return [password length] >= 8;
 }
 
 @end

@@ -15,7 +15,6 @@
 
 #import "FRSDateFormatter.h"
 
-#import "FRSDataValidator.h"
 #import "MagicalRecord.h"
 
 @import UIKit;

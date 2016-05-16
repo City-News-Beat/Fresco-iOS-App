@@ -9,7 +9,6 @@
 #import "FRSAssignment.h"
 #import "FRSDateFormatter.h"
 #import "MagicalRecord.h"
-#import "FRSDataValidator.h"
 #import "FRSCoreData.h"
 
 @implementation FRSAssignment
@@ -32,7 +31,7 @@
     self.uid = dictionary[@"id"];
     self.title = dictionary[@"title"];
 
-    if ([FRSDataValidator isNonNullObject:dictionary[@"location"][@"geo"][@"coordinates"]]){
+    if (dictionary[@"location"][@"geo"][@"coordinates"] != Nil && ![dictionary[@"location"][@"geo"][@"coordinates"] isEqual: [NSNull null]]){
         NSArray *coords = dictionary[@"location"][@"geo"][@"coordinates"]; //coordinates are sent in geojson format meaning (long, lat)
         if (coords.count == 2){
             self.longitude = [coords firstObject];
