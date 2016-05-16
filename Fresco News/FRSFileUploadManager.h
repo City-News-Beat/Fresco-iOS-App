@@ -25,6 +25,7 @@ static int const failWaitTime = 5; // seconds waited between fail count trigger
 {
     
 }
+@property (nonatomic, readonly) NetworkStatus reachabilityStatus;
 @property (nonatomic, readonly) BOOL forcePaused;
 @property (nonatomic, readonly) int errorCount;
 @property (nonatomic, readonly) NSMutableArray *uploadQueue;

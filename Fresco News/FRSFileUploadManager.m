@@ -10,7 +10,7 @@
 #import "FRSMultipartTask.h"
 
 @implementation FRSFileUploadManager
-@synthesize uploadQueue = _uploadQueue, notificationCenter = _notificationCenter, errorCount = _errorCount, forcePaused = _forcePaused;
+@synthesize uploadQueue = _uploadQueue, notificationCenter = _notificationCenter, errorCount = _errorCount, forcePaused = _forcePaused, reachabilityStatus = _reachabilityStatus;
 
 
 +(instancetype)sharedUploader {
@@ -46,7 +46,8 @@
     
     Reachability *curReach = [reachabilityNotification object];
     NetworkStatus currentStatus = [curReach currentReachabilityStatus];
-
+    _reachabilityStatus = currentStatus;
+    
     switch (currentStatus)
     {
         case NotReachable: {
