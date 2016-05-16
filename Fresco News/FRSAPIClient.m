@@ -13,6 +13,21 @@
 
 @implementation FRSAPIClient
 
+/*
+ Singleton
+ */
+
++(instancetype)sharedClient {
+    static FRSAPIClient *client = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        client = [[FRSAPIClient alloc] init];
+    });
+    
+    return client;
+}
+
 -(void)handleError:(NSError *)error {
     switch (error.code/100) {
         case 5:
@@ -49,16 +64,6 @@
         default:
             break;
     }
-}
-
--(NSNumber *)fileSizeForURL:(NSURL *)url {
-    NSNumber *fileSizeValue = nil;
-    NSError *fileSizeError = nil;
-    [url getResourceValue:&fileSizeValue
-                        forKey:NSURLFileSizeKey
-                         error:&fileSizeError];
-    
-    return fileSizeValue;
 }
 
 -(void)saveToken:(NSString *)token forUser:(NSString *)userName {
@@ -177,6 +182,9 @@
  ----
  */
 
+-(NSString *)clientAuthorization {
+    return [NSString stringWithFormat:@"Basic %@", clientAuthorization];
+}
 
 -(void)registerWithUserDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     // email
@@ -331,7 +339,6 @@
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
  
- 
 }
 
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -369,42 +376,6 @@
             }
         }];
     });
-}
-
-/*
-    Generic GET request against api BASE url + endpoint, with parameters
- */
--(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-    
-    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
-    
-    [manager GET:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        completion(responseObject, Nil);
-        
-    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-        completion(Nil, error);
-        [self handleError:error];
-    }];
-}
-
-/*
- 
- Generic POST request against api BASE url + endpoint, with parameters
- 
- */
--(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion
-{
-    
-    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
-    
-    [manager POST:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-            
-            completion(responseObject, Nil);
-        
-    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
-        completion(Nil, error);
-        [self handleError:error];
-    }];
 }
 
 /*
@@ -544,10 +515,6 @@
     [FRSLocator sharedLocator];
 }
 
--(NSString *)clientAuthorization {
-    return [NSString stringWithFormat:@"Basic %@", clientAuthorization];
-}
-
 -(void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     
     NSArray *posts = [gallery.posts allObjects];
@@ -575,21 +542,6 @@
     [self post:createGalleryEndpoint withParameters:galleryDigest completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
-}
-
-/*
- Singleton
- */
-
-+(instancetype)sharedClient {
-    static FRSAPIClient *client = nil;
-    static dispatch_once_t onceToken;
-    
-    dispatch_once(&onceToken, ^{
-        client = [[FRSAPIClient alloc] init];
-    });
-    
-    return client;
 }
 
 -(void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -624,6 +576,50 @@
     }];
 }
 
+-(NSNumber *)fileSizeForURL:(NSURL *)url {
+    NSNumber *fileSizeValue = nil;
+    NSError *fileSizeError = nil;
+    [url getResourceValue:&fileSizeValue
+                   forKey:NSURLFileSizeKey
+                    error:&fileSizeError];
+    
+    return fileSizeValue;
+}
 
+/*
+ Generic GET request against api BASE url + endpoint, with parameters
+ */
+-(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+    
+    [manager GET:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        completion(responseObject, Nil);
+        
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        completion(Nil, error);
+        [self handleError:error];
+    }];
+}
+
+/*
+ 
+ Generic POST request against api BASE url + endpoint, with parameters
+ 
+ */
+-(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion
+{
+    
+    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+    
+    [manager POST:endPoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        
+        completion(responseObject, Nil);
+        
+    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        completion(Nil, error);
+        [self handleError:error];
+    }];
+}
 
 @end
