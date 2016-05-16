@@ -45,4 +45,12 @@
 +(void)createTokenWithBank:(STPBankAccountParams *)params completion:(FRSStripeBlock)completion {
     
 }
+
++(void)startLive {
+    [Stripe setDefaultPublishableKey:stripeLive];
+}
++(void)startTest {
+    [Stripe setDefaultPublishableKey:stripeTest];
+}
+
 @end

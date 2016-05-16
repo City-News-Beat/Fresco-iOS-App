@@ -15,6 +15,9 @@ typedef void(^FRSStripeBlock)(STPToken *stripeToken, NSError *error);
     Note: Stripe only cares about "individual" (human) vs "company" (corporate entity) accounts
  */
 
+static NSString * const stripeTest = @"pk_test_o4pMXyj95Vqe5NgV3hb7qmdo";
+static NSString * const stripeLive = @"pk_live_saSjliYnCbjFwYfriTzhTQiO";
+
 typedef enum {
     FRSBankAccountTypeIndividual,
     FRSBankAccountTypeCorporate
@@ -31,7 +34,8 @@ typedef enum {
 // bank accounts
 +(STPBankAccountParams *)bankAccountWithNumber:(NSString *)number routing:(NSString *)routing name:(NSString *)name ssn:(NSString *)last4 type:(FRSBankAccountType)holderType;
 +(void)createTokenWithBank:(STPBankAccountParams *)params completion:(FRSStripeBlock)completion;
-
++(void)startLive;
++(void)startTest;
 /*
  
     Personal note:
