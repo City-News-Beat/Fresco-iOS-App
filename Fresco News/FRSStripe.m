@@ -33,4 +33,16 @@
          completion(token, error);
     }];
 }
+
++(STPBankAccountParams *)bankAccountWithNumber:(NSString *)number routing:(NSString *)routing name:(NSString *)name ssn:(NSString *)last4 type:(FRSBankAccountType)holderType {
+    STPBankAccountParams *bankParams = [[STPBankAccountParams alloc] init];
+    bankParams.accountNumber = number;
+    bankParams.routingNumber = routing;
+    
+    return bankParams;
+}
+
++(void)createTokenWithBank:(STPBankAccountParams *)params completion:(FRSStripeBlock)completion {
+    
+}
 @end
