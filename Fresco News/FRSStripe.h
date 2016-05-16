@@ -33,6 +33,11 @@ typedef enum {
 +(void)createTokenWithBank:(STPBankAccountParams *)params completion:(FRSStripeBlock)completion;
 
 /*
+ 
+    Personal note:
+ 
+    Dealing with documents: licenses, etc??
+ 
     Notes on banks, what it appears stripe looks for:
  
     @"accountNumber": @"account_number",
