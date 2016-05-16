@@ -34,6 +34,8 @@
 @property (strong, nonatomic) FRSOnboardOneView *viewOne;
 @property (strong, nonatomic) UIView *actionBarContainer;
 @property (strong, nonatomic) UIButton *logInButton;
+@property (strong, nonatomic) UIView *mainContainer; //Animating view on intro
+
 @property NSInteger page;
 
 @end
@@ -44,6 +46,8 @@
     [super viewDidLoad];
     [self configureUI];
     [self configureParallax];
+    
+    [self animateFirstLaunch];
     
     
     //TODO
@@ -57,6 +61,7 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     self.navigationController.navigationBarHidden = YES;
 }
 
@@ -82,6 +87,10 @@
 }
 
 -(void)configureUI{
+    
+    self.mainContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+//    self.mainContainer.backgroundColor = [UIColor redColor];
+    
     [self configureScrollView];
     [self configureOnboardingViews];
     [self configurePageControl];
@@ -95,11 +104,12 @@
 -(void)configureDismissButton {
     //Placeholder,
     
-    UIButton *dismiss = [UIButton buttonWithType:UIButtonTypeCustom];
-    dismiss.frame = CGRectMake(12, 30, 24, 24);
-    [dismiss setImage:[UIImage imageNamed:@"close-dark"] forState:UIControlStateNormal];
-    [dismiss addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:dismiss];
+    self.closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.closeButton.frame = CGRectMake(12, 30, 24, 24);
+    [self.closeButton setImage:[UIImage imageNamed:@"close-dark"] forState:UIControlStateNormal];
+    [self.closeButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+    self.closeButton.alpha = 0;
+    [self.view addSubview:self.closeButton];
 }
 
 -(void)configureScrollView {
@@ -111,6 +121,7 @@
     self.scrollView.clipsToBounds = NO;
     self.scrollView.delaysContentTouches = NO;
     self.automaticallyAdjustsScrollViewInsets = NO;
+    self.scrollView.alpha = 0;
     [self.view addSubview:self.scrollView];
 }
 
@@ -148,8 +159,9 @@
 }
 
 -(void)configureLogo {
-    self.logo =[[UIImageView alloc] initWithFrame:CGRectMake(self.view.center.x - 188/2, 36, 188, 65)];
-    self.logo.image=[UIImage imageNamed:@"largeLogo"];
+    self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.center.x - 188/2, 36, 188, 65)];
+    self.logo.image =[UIImage imageNamed:@"largeLogo"];
+    self.logo.alpha = 0;
     [self.view addSubview:self.logo];
 }
 
@@ -206,21 +218,140 @@
 }
 
 -(void)dismiss {
-
-    self.view.window.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
-    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.view.alpha = 0.5;
-        self.view.transform = CGAffineTransformMakeScale(0.95, 0.95);
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+
+    CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
+    [translate setFromValue:[NSNumber numberWithFloat:self.view.center.y]];
+    [translate setToValue:[NSNumber numberWithFloat:self.view.center.y +50]];
+    [translate setDuration:0.6];
+    [translate setRemovedOnCompletion:NO];
+    [translate setFillMode:kCAFillModeForwards];
+    [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4 :0 :0 :1.0]];
+    [[self.view layer] addAnimation:translate forKey:@"translate"];
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.view.alpha = 0;
     } completion:nil];
     
-    FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
-    [self presentViewController:tabBarVC animated:YES completion:^{
-        [self removeFromParentViewController];
-    }];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
+        [self presentViewController:tabBarVC animated:YES completion:^{
+            [self removeFromParentViewController];
+        }];
+    });
 }
 
 #pragma mark - Transition Animations
+
+-(void)animateFirstLaunch {
+
+    //REF
+    //https://material-design.storage.googleapis.com/publish/material_v_8/material_ext_publish/0B14F_FSUCc01Znc0RmE0Ni0taFU/CreationChoreo_06_NewDialogueDo_v2.mp4
+
+    
+    self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 44);
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 0);
+    } completion:nil];
+    
+    [self animateMaterialIntroOnPageControl:self.pageControl delay:0.05];
+    [self animateMaterialIntroOnScrollView:self.scrollView delay:0.1];
+    [self animateMaterialIntroOnImageView:self.logo delay:0.15];
+    
+    [UIView animateWithDuration:1.0 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.closeButton.alpha = 1;
+    } completion:nil];
+    
+    [self performSelector:@selector(showStatusBar) withObject:nil afterDelay:0.25];
+}
+
+-(void)showStatusBar {
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
+}
+
+-(void)animateMaterialIntroOnPageControl:(UIPageControl *)pageControl delay:(CGFloat)delay {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
+        [translate setFromValue:[NSNumber numberWithFloat:pageControl.center.y +50]];
+        [translate setToValue:[NSNumber numberWithFloat:pageControl.center.y]];
+        [translate setDuration:0.6];
+        [translate setRemovedOnCompletion:NO];
+        [translate setFillMode:kCAFillModeForwards];
+        [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4 :0 :0 :1.0]];
+        [[pageControl layer] addAnimation:translate forKey:@"translate"];
+        
+        CABasicAnimation *scale = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+        [scale setFromValue:[NSNumber numberWithFloat:0.9]];
+        [scale setToValue:[NSNumber numberWithFloat:1.0]];
+        [scale setDuration:0.25];
+        [scale setRemovedOnCompletion:NO];
+        [scale setFillMode:kCAFillModeBackwards];
+        [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4 :0 :0 :1.0]];
+        [[pageControl layer] addAnimation:scale forKey:@"scale"];
+        
+        pageControl.alpha = 0;
+        [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            pageControl.alpha = 1;
+        } completion:nil];
+    });
+}
+
+-(void)animateMaterialIntroOnScrollView:(UIScrollView *)scrollView delay:(CGFloat)delay {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
+        [translate setFromValue:[NSNumber numberWithFloat:scrollView.center.y +50]];
+        [translate setToValue:[NSNumber numberWithFloat:scrollView.center.y]];
+        [translate setDuration:0.6];
+        [translate setRemovedOnCompletion:NO];
+        [translate setFillMode:kCAFillModeForwards];
+        [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4 :0 :0 :1.0]];
+        [[scrollView layer] addAnimation:translate forKey:@"translate"];
+        
+        CABasicAnimation *scale = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+        [scale setFromValue:[NSNumber numberWithFloat:0.9]];
+        [scale setToValue:[NSNumber numberWithFloat:1.0]];
+        [scale setDuration:0.25];
+        [scale setRemovedOnCompletion:NO];
+        [scale setFillMode:kCAFillModeBackwards];
+        [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4 :0 :0 :1.0]];
+        [[scrollView layer] addAnimation:scale forKey:@"scale"];
+        
+        scrollView.alpha = 0;
+        [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            scrollView.alpha = 1;
+        } completion:nil];
+    });
+}
+
+-(void)animateMaterialIntroOnImageView:(UIImageView *)imageView delay:(CGFloat)delay {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
+        [translate setFromValue:[NSNumber numberWithFloat:imageView.center.y +50]];
+        [translate setToValue:[NSNumber numberWithFloat:imageView.center.y]];
+        [translate setDuration:0.6];
+        [translate setRemovedOnCompletion:NO];
+        [translate setFillMode:kCAFillModeForwards];
+        [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4 :0 :0 :1.0]];
+        [[imageView layer] addAnimation:translate forKey:@"translate"];
+        
+        CABasicAnimation *scale = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+        [scale setFromValue:[NSNumber numberWithFloat:0.9]];
+        [scale setToValue:[NSNumber numberWithFloat:1.0]];
+        [scale setDuration:0.25];
+        [scale setRemovedOnCompletion:NO];
+        [scale setFillMode:kCAFillModeBackwards];
+        [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4 :0 :0 :1.0]];
+        [[imageView layer] addAnimation:scale forKey:@"scale"];
+        
+        imageView.alpha = 0;
+        [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            imageView.alpha = 1;
+        } completion:nil];
+    });
+}
+
 
 -(void)animateOut {
     
