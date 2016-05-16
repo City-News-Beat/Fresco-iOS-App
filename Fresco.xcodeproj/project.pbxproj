@@ -1170,7 +1170,6 @@
 			isa = PBXGroup;
 			children = (
 				D40BD3D21CDE1EB100E39701 /* Rechability */,
-				D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */,
 				D4B35F591CD1758900F5C8A8 /* AFNetworking */,
 			);
 			name = Networking;
@@ -1220,13 +1219,13 @@
 			name = Rechability;
 			sourceTree = "<group>";
 		};
-		D40BD3D31CE28A3B00E39701 /* Hash Stream */ = {
+		D40BD3D31CE28A3B00E39701 /* MD5 (stream) */ = {
 			isa = PBXGroup;
 			children = (
 				D40BD3D41CE28A8300E39701 /* AWFileHash.h */,
 				D40BD3D51CE28A8300E39701 /* AWFileHash.m */,
 			);
-			name = "Hash Stream";
+			name = "MD5 (stream)";
 			sourceTree = "<group>";
 		};
 		D41365AB1CA32D63004FE848 /* Detail */ = {
@@ -1737,7 +1736,7 @@
 		D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */ = {
 			isa = PBXGroup;
 			children = (
-				D40BD3D31CE28A3B00E39701 /* Hash Stream */,
+				D40BD3D31CE28A3B00E39701 /* MD5 (stream) */,
 				D412549D1C91E46D00E3B85C /* FRSMultipartTask.h */,
 				D412549E1C91E46D00E3B85C /* FRSMultipartTask.m */,
 				D4B35F531CCED19600F5C8A8 /* FRSUploadTask.h */,
@@ -1793,6 +1792,7 @@
 				D4F91A481C8B51500078BF15 /* FRSAPIClient.m */,
 				D41C10C81CE9A4AF00F96B25 /* Stripe */,
 				D418E3491CCC1B0F0003B080 /* Social */,
+				D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */,
 				65EBEDBD1C44507600BE671F /* Networking */,
 				D43C7FF41C8F588C00A7A7A7 /* Defaults */,
 				D47999631C96A8FD00B46D01 /* Location */,

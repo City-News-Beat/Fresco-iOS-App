@@ -581,10 +581,6 @@
     [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
 
--(BOOL)isValidPassword:(NSString *)password {
-    return TRUE;
-}
-
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
@@ -688,13 +684,14 @@
 
     NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
     [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
-//<<<<<<< HEAD
-    [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
-//=======
-//    [registrationDigest setObject:self.emailTF.text forKey:@"email"];
-//>>>>>>> 3.0-omar
+    
+    if (currentInstallation) {
+        [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
+    }
+    
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
     [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
+    [registrationDigest setObject:self.emailTF.text forKey:@"email"];
 
     if (_isAlreadyRegistered) {
         
@@ -714,30 +711,10 @@
         return;
     }
     
-//<<<<<<< HEAD
-    [registrationDigest setObject:self.emailTF.text forKey:@"email"];
-
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", error, responseObject);
-        
         _isAlreadyRegistered = TRUE;
         _pastRegistration = registrationDigest;
-//=======
-//    if (currentInstallation) {
-//        [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
-//    }
-//    
-//    NSLog(@"%@", registrationDigest);
-//    
-//    [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
-//        NSLog(@"%@ %@", error, responseObject);
-//
-//        FRSSetupProfileViewController *vc = [[FRSSetupProfileViewController alloc] init];
-//
-//        [self pushViewControllerWithCompletion:vc animated:YES completion:^{
-//            [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-//        }];
-//>>>>>>> 3.0-omar
     }];
 }
 
@@ -960,5 +937,17 @@
         return NO;
     }
 }
+
+-(BOOL)isValidPassword:(NSString *)password {
+    
+    // check length
+        // return false
+    
+    // check against pattern (i.e. xxXXxxx1)
+        // return false
+    
+    return TRUE;
+}
+
 
 @end
