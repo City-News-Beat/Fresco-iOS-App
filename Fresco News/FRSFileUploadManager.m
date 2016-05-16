@@ -12,7 +12,6 @@
 @implementation FRSFileUploadManager
 @synthesize uploadQueue = _uploadQueue, notificationCenter = _notificationCenter, errorCount = _errorCount, forcePaused = _forcePaused, reachabilityStatus = _reachabilityStatus;
 
-
 +(instancetype)sharedUploader {
     static FRSFileUploadManager *uploader = nil;
     static dispatch_once_t onceToken;

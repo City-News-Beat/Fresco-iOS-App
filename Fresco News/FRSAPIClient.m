@@ -337,12 +337,11 @@
  
  */
 
--(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSInteger)offset completion:(void(^)(NSArray *galleries, NSError *error))completion {
+-(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void(^)(NSArray *galleries, NSError *error))completion {
     
     NSDictionary *params = @{
                         @"limit" : [NSNumber numberWithInteger:limit],
-                        @"offset" : @(offset),
-                        @"hide": @2,
+                        @"last" : (offset != Nil) ? offset : @(0),
                         @"stories": @1
                     };
     
@@ -358,7 +357,6 @@
                @"offset" : @(0),
                @"sort" : @"1",
                @"limit" : @"100",
-               @"hide" : @"4" //HIDE NUMBER
             };
 
     [self get:storyGalleriesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {

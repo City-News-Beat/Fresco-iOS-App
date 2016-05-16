@@ -531,7 +531,7 @@
     
         NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
         
-        [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:self.dataSource.count completion:^(NSArray *galleries, NSError *error) {
+        [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:offsetID completion:^(NSArray *galleries, NSError *error) {
                         
             if ([galleries count] == 0){
                 _loadNoMore = TRUE;
