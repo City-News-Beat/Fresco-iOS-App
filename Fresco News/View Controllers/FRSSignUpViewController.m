@@ -574,8 +574,7 @@
     if ([self isValidUsername:self.usernameTF.text] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
         controlState = UIControlStateHighlighted;
     } else {
-//        controlState = UIControlStateNormal;
-        controlState = UIControlStateHighlighted;
+        controlState = UIControlStateNormal;
 
     }
     [self toggleCreateAccountButtonTitleColorToState:controlState];
@@ -940,13 +939,17 @@
 
 -(BOOL)isValidPassword:(NSString *)password {
     
+    if (password.length < 8) {
+        return NO;
+    }
+    
     // check length
         // return false
     
     // check against pattern (i.e. xxXXxxx1)
         // return false
     
-    return TRUE;
+    return YES;
 }
 
 
