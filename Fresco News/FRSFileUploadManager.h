@@ -18,7 +18,7 @@ static int const maxFailures = 5; // max failures before pause
 static int const failWaitTime = 5; // seconds waited between fail count trigger
 
 @protocol FRSContextProvider <NSObject>
--(NSManagedObjectContext *)managedObjectContext;
+-(nullable NSManagedObjectContext *)managedObjectContext;
 @end
 
 @interface FRSFileUploadManager : NSObject <FRSUploadDelegate>
@@ -28,15 +28,15 @@ static int const failWaitTime = 5; // seconds waited between fail count trigger
 @property (nonatomic, readonly) NetworkStatus reachabilityStatus;
 @property (nonatomic, readonly) BOOL forcePaused;
 @property (nonatomic, readonly) int errorCount;
-@property (nonatomic, readonly) NSMutableArray *uploadQueue;
-@property (nonatomic, readonly) NSMutableArray *activeUploads;
+@property (nonatomic, readonly, nullable) NSMutableArray *uploadQueue;
+@property (nonatomic, readonly, nullable) NSMutableArray *activeUploads;
 @property (readonly) unsigned long long bytesToSend;
 @property (readonly) unsigned long long bytesSent;
 @property (readonly) float progressPercentage; // calculated by bytesSent/bytesToSend
-@property (nonatomic) NSNotificationCenter *notificationCenter;
-+(instancetype)sharedUploader;
--(void)uploadPhoto:(NSURL *)photoURL toURL:(NSURL *)destinationURL;
--(void)uploadVideo:(NSURL *)videoURL toURL:(NSURL *)destinationURL;
+@property (nonatomic, nullable) NSNotificationCenter *notificationCenter;
++(__nonnull instancetype)sharedUploader;
+-(void)uploadPhoto:( NSURL * _Nonnull )photoURL toURL:(NSURL * _Nonnull)destinationURL;
+-(void)uploadVideo:(NSURL * _Nonnull)videoURL toURL:(NSURL * _Nonnull)destinationURL;
 -(nullable NSManagedObjectContext *)uploaderContext;
 
 +(nullable NSManagedObjectContext *)uploaderContext; // convenience for outside use
