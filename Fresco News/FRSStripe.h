@@ -32,4 +32,15 @@ typedef enum {
 +(STPBankAccountParams *)bankAccountWithNumber:(NSString *)number routing:(NSString *)routing name:(NSString *)name ssn:(NSString *)last4 type:(FRSBankAccountType)holderType;
 +(void)createTokenWithBank:(STPBankAccountParams *)params completion:(FRSStripeBlock)completion;
 
+/*
+    Notes on banks, what it appears stripe looks for:
+ 
+    @"accountNumber": @"account_number",
+    @"routingNumber": @"routing_number",
+    @"country": @"country",
+    @"currency": @"currency",
+    @"accountHolderName": @"account_holder_name",
+    @"accountHolderTypeString": @"account_holder_type",
+ */
+
 @end
