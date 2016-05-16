@@ -135,6 +135,13 @@
     }];
 }
 
+-(void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
+-(void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
+
 -(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     
     // ** WARNING ** Don't update users info just to update it, update it only if new (i.e. changing email to identical email has resulted in issues with api v1)

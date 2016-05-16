@@ -60,4 +60,7 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 // social
 -(void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion;
+
+-(void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion;
 @end
