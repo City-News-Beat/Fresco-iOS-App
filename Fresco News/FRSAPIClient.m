@@ -28,6 +28,19 @@
     return client;
 }
 
+-(id)init {
+    self = [super init];
+    
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleLocationUpdate:)
+                                                     name:FRSLocationUpdateNotification
+                                                   object:nil];
+    }
+    
+    return self;
+}
+
 -(void)handleError:(NSError *)error {
     switch (error.code/100) {
         case 5:
@@ -66,22 +79,6 @@
     }
 }
 
--(void)saveToken:(NSString *)token forUser:(NSString *)userName {
-    [SSKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:userName];
-}
-
--(NSString *)tokenForUser:(NSString *)userName {
-    return [SSKeychain passwordForService:serviceName account:userName];
-}
-
--(BOOL)isAuthenticated {
-    if ([[SSKeychain accountsForService:serviceName] count] > 0) {
-        return TRUE;
-    }
-    
-    return FALSE;
-}
-
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:loginEndpoint withParameters:@{@"username":user, @"password":password} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -90,6 +87,10 @@
         }
     }];
 }
+
+/*
+    Sign in: all expect user to have an account, either returns a token, a challenge (i.e. 'create an account') or incorrect details
+ */
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *twitterAccessToken = session.authToken;
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
@@ -104,21 +105,6 @@
     }];
 }
 
--(NSString *)authenticationToken {
-    
-    NSArray *allAccounts = [SSKeychain accountsForService:serviceName];
-    
-    if ([allAccounts count] == 0) {
-        return Nil;
-    }
-    
-    NSDictionary *credentialsDictionary = [allAccounts firstObject];
-    NSString *accountName = credentialsDictionary[kSSKeychainAccountKey];
-    
-    return [SSKeychain passwordForService:serviceName account:accountName];
-}
-
-
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
     NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
@@ -131,59 +117,6 @@
             [self handleUserLogin:responseObject];
         }
     }];
-}
-
-/* 
- Register:
- 
- email:              'str', // User's email
- username:           'str', // User's username (no @ at beginning)
- password:           'str', // User's plaintext password
- phone:             'str', // User's phone number (include country code)
- twitter_handle_:    'str', // User's twitter handle
- social_links_: {},
- installation_: {}
- 
- 
- Update:
- ----
- full_name_:         'str', // User's full name
- bio_:               'str', // User's profile bio
- avatar_:            'str', // User's avatar URL
- 
- email_:             'str',
- account_type_:      'str', // Stripe entity_type ("individual" or "corporation")
- username_:          'str',
- password_:          'str',
- full_name_:         'str',
- bio_:               'str',
- location_:          'str',
- phone_:             'str',
- avatar_:            'str',
- twitter_handle_:    'str',
- address_: { // TODO should these be required?
- line1: 'str',
- line2_: 'str',
- city: 'str',
- state: 'str',
- zip: 'str',
- country: 'str'
- },
- dob_: {
- day: 'int',
- month: 'int',
- year: 'int'
- },
- tax_id_: 'str', // For corporations, used by Stripe
- vat_id_: 'str', // For companies in the EU, used by Stripe
- pid_token_: 'str', // Stripe.JS personal ID # token
- ssn_last4_: 'str[4]',
- document_token_: 'str' // Stripe.JS uploaded verification file token
- ----
- */
-
--(NSString *)clientAuthorization {
-    return [NSString stringWithFormat:@"Basic %@", clientAuthorization];
 }
 
 -(void)registerWithUserDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -292,6 +225,8 @@
 
     
     /*
+     If we ever choose to move towards a UTC+X approach in timezones, as opposed to the unix timestamp that includes the current timezone, this is how we would do it.
+     
     NSInteger secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
     NSInteger hoursFromGMT = secondsFromGMT / 60; // GMT = UTC
     NSString *timeZone = [NSString stringWithFormat:@"UTC+%d", (int)hoursFromGMT]; 
@@ -349,19 +284,6 @@
     [self post:locationEndpoint withParameters:location completion:^(id responseObject, NSError *error) {
         
     }];
-}
-
--(id)init {
-    self = [super init];
-    
-    if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleLocationUpdate:)
-                                                     name:FRSLocationUpdateNotification
-                                                   object:nil];
-    }
-    
-    return self;
 }
 
 -(void)handleLocationUpdate:(NSNotification *)userInfo {
@@ -439,9 +361,6 @@
     
 }
 
-#pragma mark - Stories Fetch
-
-
 -(void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSInteger)offsetID completion:(void(^)(NSArray *stories, NSError *error))completion {
     
     NSDictionary *params = @{
@@ -454,6 +373,10 @@
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
+}
+
+-(void)startLocator {
+    [FRSLocator sharedLocator];
 }
 
 -(void)updateUserLocation:(NSDictionary *)inputParams completion:(void(^)(NSDictionary *response, NSError *error))completion
@@ -488,31 +411,6 @@
     [self reevaluateAuthorization];
     
     return self.requestManager;
-}
-
--(void)reevaluateAuthorization {
-    
-    if (![self isAuthenticated]) {
-        // set client token
-        [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
-    }
-    else { // set bearer token if we haven't already
-        // set bearer client token
-        NSString *currentBearerToken = [self authenticationToken];
-        if (currentBearerToken) {
-            currentBearerToken = [NSString stringWithFormat:@"Bearer %@", currentBearerToken];
-            [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
-            [self startLocator];
-        }
-        else { // something went wrong here (maybe pass to error handler)
-            [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
-        }
-    }
-    _managerAuthenticated = TRUE;
-}
-
--(void)startLocator {
-    [FRSLocator sharedLocator];
 }
 
 -(void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -576,18 +474,67 @@
     }];
 }
 
--(NSNumber *)fileSizeForURL:(NSURL *)url {
-    NSNumber *fileSizeValue = nil;
-    NSError *fileSizeError = nil;
-    [url getResourceValue:&fileSizeValue
-                   forKey:NSURLFileSizeKey
-                    error:&fileSizeError];
+/*
+    Keychain-Based interaction & authentication
+ */
+
+-(void)reevaluateAuthorization {
     
-    return fileSizeValue;
+    if (![self isAuthenticated]) {
+        // set client token
+        [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
+    }
+    else { // set bearer token if we haven't already
+        // set bearer client token
+        NSString *currentBearerToken = [self authenticationToken];
+        if (currentBearerToken) {
+            currentBearerToken = [NSString stringWithFormat:@"Bearer %@", currentBearerToken];
+            [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
+            [self startLocator];
+        }
+        else { // something went wrong here (maybe pass to error handler)
+            [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
+        }
+    }
+    _managerAuthenticated = TRUE;
+}
+
+-(NSString *)authenticationToken {
+    
+    NSArray *allAccounts = [SSKeychain accountsForService:serviceName];
+    
+    if ([allAccounts count] == 0) {
+        return Nil;
+    }
+    
+    NSDictionary *credentialsDictionary = [allAccounts firstObject];
+    NSString *accountName = credentialsDictionary[kSSKeychainAccountKey];
+    
+    return [SSKeychain passwordForService:serviceName account:accountName];
+}
+
+-(void)saveToken:(NSString *)token forUser:(NSString *)userName {
+    [SSKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:userName];
+}
+
+-(NSString *)tokenForUser:(NSString *)userName {
+    return [SSKeychain passwordForService:serviceName account:userName];
+}
+
+-(BOOL)isAuthenticated {
+    if ([[SSKeychain accountsForService:serviceName] count] > 0) {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+-(NSString *)clientAuthorization {
+    return [NSString stringWithFormat:@"Basic %@", clientAuthorization];
 }
 
 /*
- Generic GET request against api BASE url + endpoint, with parameters
+    Generic HTTP methods for use within class
  */
 -(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     
@@ -602,11 +549,6 @@
     }];
 }
 
-/*
- 
- Generic POST request against api BASE url + endpoint, with parameters
- 
- */
 -(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion
 {
     
@@ -621,5 +563,21 @@
         [self handleError:error];
     }];
 }
+
+
+/*
+    One-off tools for use within class
+ */
+
+-(NSNumber *)fileSizeForURL:(NSURL *)url {
+    NSNumber *fileSizeValue = nil;
+    NSError *fileSizeError = nil;
+    [url getResourceValue:&fileSizeValue
+                   forKey:NSURLFileSizeKey
+                    error:&fileSizeError];
+    
+    return fileSizeValue;
+}
+
 
 @end
