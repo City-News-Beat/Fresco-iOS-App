@@ -271,17 +271,8 @@
 
 // all info needed for "installation" field of registration/signin
 -(NSDictionary *)currentInstallation {
-   
+    
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
-    
-    currentInstallation[@"platform"] = @"ios";
-    
-    NSString *appVersion = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
-    
-    if (appVersion) {
-        currentInstallation[@"app_version"] = appVersion;
-    }
-    
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
     
     if (deviceToken) {
@@ -290,6 +281,15 @@
     else {
         return Nil; // no installation without push info, apparently
     }
+    
+    currentInstallation[@"platform"] = @"ios";
+    
+    NSString *appVersion = [NSString stringWithFormat:@"%@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    
+    if (appVersion) {
+        currentInstallation[@"app_version"] = appVersion;
+    }
+
     
     /*
     NSInteger secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
