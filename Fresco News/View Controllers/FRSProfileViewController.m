@@ -553,7 +553,7 @@
             
         }
         else {
-            if ([self.tableView.backgroundColor isEqual:[UIColor frescoOrangeColor]]) return;
+//            if ([self.tableView.backgroundColor isEqual:[UIColor frescoOrangeColor]]) return;
             
             self.tableView.backgroundColor = [UIColor frescoOrangeColor];
         }

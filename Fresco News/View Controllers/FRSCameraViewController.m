@@ -387,9 +387,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 - (void)dismissAndReturnToPreviousTab {
     
-    FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
-    
-    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:previouslySelectedTabKey];
+//    FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
+//    
+////    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:previouslySelectedTabKey];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
