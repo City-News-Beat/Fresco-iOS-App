@@ -232,16 +232,19 @@
     
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.view.alpha = 0;
-    } completion:nil];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
-        tabBarVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self presentViewController:tabBarVC animated:YES completion:^{
-            [self removeFromParentViewController];
-        }];
+    } completion:^(BOOL finished) {
 
-    });
+    }];
+    
+    CATransition *transition = [CATransition animation];
+    transition.duration = 0.3;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionFade;
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [[self navigationController] popViewControllerAnimated:NO];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+
 }
 
 #pragma mark - Transition Animations
@@ -251,7 +254,6 @@
     //REF
     //https://material-design.storage.googleapis.com/publish/material_v_8/material_ext_publish/0B14F_FSUCc01Znc0RmE0Ni0taFU/CreationChoreo_06_NewDialogueDo_v2.mp4
 
-    
     self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 44);
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 0);
