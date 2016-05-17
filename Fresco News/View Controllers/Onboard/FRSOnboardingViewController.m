@@ -207,7 +207,7 @@
 
     [self animateOut];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8/2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         FRSLoginViewController *loginViewController = [[FRSLoginViewController alloc] init];
         [self.navigationController pushViewController:loginViewController animated:NO];
     });
@@ -263,7 +263,7 @@
     [self animateMaterialIntroOnScrollView:self.scrollView delay:0.2];
     [self animateMaterialIntroOnImageView:self.logo delay:0.3];
     
-    [UIView animateWithDuration:1.0 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:1.0 delay:0.2/2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.closeButton.alpha = 1;
     } completion:nil];
     
@@ -362,7 +362,7 @@
 
     
     /* Animate scrollView xPos */
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.3/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.scrollView.transform = CGAffineTransformMakeTranslation(5, 0);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.6 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -371,13 +371,13 @@
     }];
     
     /* Animate scrollView alpha */
-    [UIView animateWithDuration:0.6 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.6/2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.scrollView.alpha = 0;
     } completion:nil];
     
 
     /* Animate pageControl xPos */
-    [UIView animateWithDuration:0.2 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.2/2 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.pageControl.transform = CGAffineTransformMakeTranslation(2.5, 0);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.6 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -386,13 +386,13 @@
     }];
     
     /* Animate pageControl alpha */
-    [UIView animateWithDuration:0.5 delay:0.3 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.5/2 delay:0.3 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.pageControl.alpha = 0;
     } completion:nil];
     
     
     /* Animate actionBar xPos and alpha */
-    [UIView animateWithDuration:0.4 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.4/2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 50);
         self.actionBarContainer.alpha = 0;
@@ -424,36 +424,35 @@
     
     
     /* Animate scrollView xPos */
-    [UIView animateWithDuration:0.7 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.7/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.scrollView.transform = CGAffineTransformMakeTranslation(2.5, 0);
 
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.scrollView.transform = CGAffineTransformMakeTranslation(0, 0);
 
         } completion:nil];
     }];
     
     /* Animate scrollView alpha */
-    [UIView animateWithDuration:0.7 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.7/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.scrollView.alpha = 1;
     } completion:nil];
     
-    
     /* Animate pageControl xPos */
-    [UIView animateWithDuration:0.6 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.6/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.pageControl.transform = CGAffineTransformMakeTranslation(2.5, 0);
         self.pageControl.alpha = 1;
 
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.pageControl.transform = CGAffineTransformMakeTranslation(0, 0);
 
         } completion:nil];
     }];
     
     /* Animate actionBar xPos and alpha */
-    [UIView animateWithDuration:0.5 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.5/2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 0);
         self.actionBarContainer.alpha = 1;

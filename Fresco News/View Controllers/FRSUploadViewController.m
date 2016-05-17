@@ -413,9 +413,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
                         SLComposeViewController *facebook = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
                         [facebook setInitialText:self.captionTextView.text];
-                        
                         [facebook addURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
-                        
                         [self presentViewController:facebook animated:YES completion:^{
                             return;
                         }];
@@ -428,7 +426,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
         //TWTRCardConfiguration *card = [TWTRCardConfiguration appCardConfigurationWithPromoImage:[[UIImage alloc] init] iPhoneAppID:@"872040692" iPadAppID:nil googlePlayAppID:nil];
         //TWTRComposerViewController *composer = [[TWTRComposerViewController alloc] initWithUserID:session.userID cardConfiguration:card];
         //[self presentViewController:composer animated:YES completion:nil];
-
     }
     
     if (self.postToFacebook) {
