@@ -154,6 +154,7 @@
 -(void)contentActionbarDidSelectShareButton:(id)sender {
     // show actions sheet
     self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
+    
 }
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate{

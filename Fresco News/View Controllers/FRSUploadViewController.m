@@ -24,6 +24,10 @@
 
 @property (strong, nonatomic) FRSAssignment *selectedAssignment;
 
+@property (nonatomic) BOOL postToFacebook;
+@property (nonatomic) BOOL postToTwitter;
+@property (nonatomic) BOOL postAnon;
+
 @end
 
 @implementation FRSUploadViewController
@@ -35,7 +39,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [self configureUI];
     [self checkButtonStates];
-
+    
+    
+    self.postToTwitter  = NO;
+    self.postToFacebook = NO;
+    self.postAnon = NO;
+    [self checkBottomBar];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -164,7 +173,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
     [sendButton setTitle:@"SEND" forState:UIControlStateNormal];
     [sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
-    sendButton.userInteractionEnabled = NO;
+//    sendButton.userInteractionEnabled = NO;
     [self.bottomContainer addSubview:sendButton];
 }
 
@@ -386,6 +395,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     //Send to Fresco
     //Post to selected social
     //Configure anonymity
+    
+    NSLog(@"TW: %d, FB: %d, ANON: %d", self.postToTwitter, self.postToFacebook, self.postAnon);
+    
+    
+    
+    
 }
 
     //Square button action
@@ -432,6 +447,46 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.anonLabel.alpha = 1;
     } else if (button == self.anonButton){
         self.anonLabel.alpha = 0;
+    }
+    
+    //Sets BOOL toggles for bottom bar
+    [self checkBottomBar];
+    
+    if (self.postToFacebook) {
+        NSLog(@"Post to Facebook");
+    }
+    
+    if (self.postToTwitter) {
+        NSLog(@"Post to Twitter");
+    }
+    
+    if (self.postAnon) {
+        NSLog(@"Post Anonymously");
+    }
+    
+    
+    
+    
+    
+}
+
+-(void)checkBottomBar {
+    if (self.facebookButton.selected) {
+        self.postToFacebook = YES;
+    } else {
+        self.postToFacebook = NO;
+    }
+    
+    if (self.twitterButton.selected) {
+        self.postToTwitter = YES;
+    } else {
+        self.postToTwitter = NO;
+    }
+    
+    if (self.anonButton.selected) {
+        self.postAnon = YES;
+    } else {
+        self.postAnon = NO;
     }
 }
 
