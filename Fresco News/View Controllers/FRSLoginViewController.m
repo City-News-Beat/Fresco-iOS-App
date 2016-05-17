@@ -71,11 +71,11 @@
 
     self.loginButton.enabled = NO;
     
-    self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.backButton.frame = CGRectMake(12, 30, 24, 24);
     [self.backButton setImage:[UIImage imageNamed:@"back-arrow-dark"] forState:UIControlStateNormal];
     [self.backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    self.backButton.tintColor = [UIColor frescoMediumTextColor];
+//    self.backButton.tintColor = [UIColor frescoMediumTextColor];
     [self.view addSubview:self.backButton];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
