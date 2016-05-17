@@ -9,6 +9,7 @@
 #import "FRSUploadViewController.h"
 #import "FRSAssignmentPickerTableViewCell.h"
 #import "FRSAssignment.h"
+#import <Twitter/Twitter.h>
 
 @interface FRSUploadViewController ()
 
@@ -392,16 +393,59 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     //Next button action
 -(void)send {
-    //Send to Fresco
-    //Post to selected social
-    //Configure anonymity
     
-    NSLog(@"TW: %d, FB: %d, ANON: %d", self.postToTwitter, self.postToFacebook, self.postAnon);
+    [self dismissKeyboard];
     
-    
+
+    //Upload in background when user is composing social post
     
     
+    if (self.postToTwitter) {
+
+        TWTRComposer *composer = [[TWTRComposer alloc] init];
+        
+        [composer setText:self.captionTextView.text];
+        [composer setURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
+        [composer showFromViewController:self completion:^(TWTRComposerResult result) {
+            if (result == TWTRComposerResultCancelled) {
+            } else {
+                if (self.postToFacebook) {
+                    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
+                        SLComposeViewController *facebook = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+                        [facebook setInitialText:self.captionTextView.text];
+                        
+                        [facebook addURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
+                        
+                        [self presentViewController:facebook animated:YES completion:^{
+                            return;
+                        }];
+                    }
+                }
+            }
+        }];
+        
+        //TWTRSession *session = [Twitter sharedInstance].sessionStore.session;
+        //TWTRCardConfiguration *card = [TWTRCardConfiguration appCardConfigurationWithPromoImage:[[UIImage alloc] init] iPhoneAppID:@"872040692" iPadAppID:nil googlePlayAppID:nil];
+        //TWTRComposerViewController *composer = [[TWTRComposerViewController alloc] initWithUserID:session.userID cardConfiguration:card];
+        //[self presentViewController:composer animated:YES completion:nil];
+
+    }
+    
+    if (self.postToFacebook) {
+        if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
+            SLComposeViewController *facebook = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+            [facebook setInitialText:self.captionTextView.text];
+            [facebook addURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
+            [self presentViewController:facebook animated:YES completion:nil];
+        }
+    }
+    
+    if (self.postAnon) {
+        NSLog(@"Post anonymously");
+    }
 }
+
+
 
     //Square button action
 -(void)square {
@@ -463,11 +507,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     if (self.postAnon) {
         NSLog(@"Post Anonymously");
     }
-    
-    
-    
-    
-    
 }
 
 -(void)checkBottomBar {
