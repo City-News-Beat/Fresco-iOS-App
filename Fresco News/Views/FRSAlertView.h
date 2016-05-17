@@ -22,9 +22,12 @@
 -(instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate;
 
 -(void)show;
+-(void)dismiss;
 
 -(instancetype)initPermissionsAlert;
 
 -(instancetype)initFindFriendsAlert;
+
+-(instancetype)initSignUpAlert;
 
 @end

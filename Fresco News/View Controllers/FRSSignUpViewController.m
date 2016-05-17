@@ -24,7 +24,7 @@
 
 @import MapKit;
 
-@interface FRSSignUpViewController () <UITextFieldDelegate, MKMapViewDelegate, UIScrollViewDelegate>
+@interface FRSSignUpViewController () <UITextFieldDelegate, MKMapViewDelegate, UIScrollViewDelegate, FRSAlertViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UITextField *usernameTF;
@@ -44,7 +44,7 @@
 @property (nonatomic) NSInteger y;
 @property (nonatomic) BOOL notificationsEnabled;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
-
+@property (strong, nonatomic) FRSAlertView *alert;
 @end
 
 @implementation FRSSignUpViewController
@@ -74,16 +74,51 @@
 //        [self.usernameTF becomeFirstResponder];
     }
     
-    
     _hasShown = TRUE;
     
     self.navigationItem.title = @"SIGN UP"; // lil agressive no
-    [self configureBackButtonAnimated:NO];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.navigationBar setTitleTextAttributes:
-     @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
+          @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    [self.navigationItem setLeftBarButtonItem:backItem animated:animated];
+    
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnToPreviousViewController) name:@"returnToPreviousViewController" object:nil];
+}
+
+-(void)back {
+    BOOL shouldGoBack = NO;
+    
+    if ((![self.passwordTF.text isEqualToString:@""]) || (![self.emailTF.text isEqualToString:@""]) || ([self.usernameTF.text length] > 1)) {
+        
+        [self.passwordTF resignFirstResponder];
+        [self.emailTF resignFirstResponder];
+        [self.usernameTF resignFirstResponder];
+        
+        self.alert = [[FRSAlertView alloc] initSignUpAlert];
+        
+        [self.alert show];
+    } else {
+        shouldGoBack = YES;
+    }
+    
+
+    if (shouldGoBack) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+-(void)returnToPreviousViewController {
+    [self.alert dismiss];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -97,22 +132,12 @@
     } else if ([viewControllers indexOfObject:self] == NSNotFound) {
         // View is disappearing because it was popped from the stack
         [self.navigationController setNavigationBarHidden:YES animated:YES];
-
     }
-}
-
--(void)willMoveToParentViewController:(UIViewController *)parent {
-    [super willMoveToParentViewController:parent];
     
-    if (!parent){
-        if ((![self.passwordTF.text isEqualToString:@""]) || (![self.emailTF.text isEqualToString:@""]) || ([self.usernameTF.text length] > 1)) {
-            UIColor *red = [UIColor frescoRedHeartColor];
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"WAIT, DON’T GO" message:@"Are you sure you don’t want to sign up for Fresco?" actionTitle:@"CANCEL" cancelTitle:@"DELETE" cancelTitleColor:red delegate:self];
-            
-            [alert show];
-        }
-    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
+
 
 -(void)addNotifications {
     
