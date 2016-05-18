@@ -22,6 +22,8 @@
 @property (strong, nonatomic) UIImageView *cashOneIV;
 @property (strong, nonatomic) UIImageView *cashTwoIV;
 @property (strong, nonatomic) UIImageView *cashThreeIV;
+@property (strong, nonatomic) UIButton *cashButton;
+@property (nonatomic) BOOL animating;
 
 @end
 
@@ -32,6 +34,7 @@
     if (self){
         [self configureText];
         [self configureIV];
+        self.animating = NO;
         
         [OEParallax createParallaxFromView:self.cloudIV withMaxX:20 withMinX:-20 withMaxY:20 withMinY:-20];
     }
@@ -118,6 +121,13 @@
     self.cloudIV.image = [UIImage imageNamed:@"grey-cloud"];
     [container addSubview:self.cloudIV];
     
+    self.cashButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.cashButton.frame = self.cloudIV.frame;
+    [self.cashButton addTarget:self action:@selector(animate) forControlEvents:UIControlEventTouchUpInside];
+    self.cashButton.backgroundColor = [UIColor redColor];
+//    [container addSubview:self.cashButton];
+    //todo: add some jiggle
+    
     self.cashOneIV = [UIImageView UIImageViewWithName:@"cash"
                                              andFrame:CGRectMake(205, 36, 35, 24)
                                        andContentMode:UIViewContentModeScaleToFill];
@@ -145,20 +155,27 @@
 }
 
 - (void)animate {
-    self.cloudIV.alpha = 1;
-    self.televisionIV.alpha = 1;
-    self.newspaperIV.alpha = 1;
-    self.leftArrowIV.alpha = 1;
-    self.rightArrowIV.alpha = 1;
-    self.cashOneIV.alpha = 1;
-    self.cashTwoIV.alpha = 1;
-    self.cashThreeIV.alpha = 1;
-    self.cloudIV.transform = CGAffineTransformMakeScale(.96,.96);
-    self.cloudIV.alpha = 1;
     
-    [self animateCash1];
-    [self animateCash2];
-    [self animateCash3];
+    if (!self.animating) {
+        
+        self.cloudIV.alpha = 1;
+        self.televisionIV.alpha = 1;
+        self.newspaperIV.alpha = 1;
+        self.leftArrowIV.alpha = 1;
+        self.rightArrowIV.alpha = 1;
+        self.cashOneIV.alpha = 1;
+        self.cashTwoIV.alpha = 1;
+        self.cashThreeIV.alpha = 1;
+        self.cloudIV.transform = CGAffineTransformMakeScale(.96,.96);
+        self.cloudIV.alpha = 1;
+        
+        [self animateCash1];
+        [self animateCash2];
+        [self animateCash3];
+        
+        self.animating = NO;
+    }
+    self.animating = YES;
 }
 
 
