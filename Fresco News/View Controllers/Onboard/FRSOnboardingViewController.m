@@ -138,10 +138,6 @@
     self.viewThree = [[FRSOnboardThreeView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width * 2 + offset, 0)];
     [self.scrollView addSubview:self.viewThree];
     
-    self.viewOne.backgroundColor = [UIColor redColor];
-    viewTwo.backgroundColor = [UIColor blueColor];
-    self.viewThree.backgroundColor = [UIColor orangeColor];
-    
 }
 
 -(void)configurePageControl {

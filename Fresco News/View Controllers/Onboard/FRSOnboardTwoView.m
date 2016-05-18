@@ -90,8 +90,7 @@
     
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 320, 288)];
     [self addSubview:container];
-    container.backgroundColor = [UIColor frescoGreenColor];
-    
+
     self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2 - width/2, yOrigin-5, width, height)];
     self.cloudIV.image = [UIImage imageNamed:@"cloud"];
     [container addSubview:self.cloudIV];

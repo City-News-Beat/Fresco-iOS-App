@@ -82,10 +82,9 @@
     CGFloat offset;
     
     if (IS_IPHONE_5){
-        width = 160;
-        xOrigin = 80.5;
-        yOrigin = 69.6;
-        offset = 263;
+        xOrigin = 194;
+        yOrigin = 23;
+        offset = 205;
     } else if (IS_STANDARD_IPHONE_6){
         offset = 263;
     } else if (IS_STANDARD_IPHONE_6_PLUS){
@@ -95,13 +94,13 @@
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 320, 288)];
     [self addSubview:container];
     
-    self.leftArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2 - 30, 143, 28, 26)];
+    self.leftArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(104, 143, 28, 26)];
     self.leftArrowIV.image = [UIImage imageNamed:@"upload"];
     self.leftArrowIV.transform = CGAffineTransformMakeRotation(M_PI_2 +2);
     self.leftArrowIV.layer.shouldRasterize = YES;
     [container addSubview:self.leftArrowIV];
     
-    self.rightArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2 + 30, 143, 28, 26)];
+    self.rightArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(192, 143, 28, 26)];
     self.rightArrowIV.image = [UIImage imageNamed:@"upload"];
     self.rightArrowIV.transform = CGAffineTransformMakeRotation(M_PI_2 + 1);
     self.rightArrowIV.layer.shouldRasterize = YES;
@@ -111,11 +110,11 @@
     self.televisionIV.image = [UIImage imageNamed:@"television"];
     [container addSubview:self.televisionIV];
     
-    self.newspaperIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2 + 30, 193, 80, 72)];
+    self.newspaperIV = [[UIImageView alloc] initWithFrame:CGRectMake(194, 194, 80, 72)];
     self.newspaperIV.image = [UIImage imageNamed:@"newspaper"];
     [container addSubview:self.newspaperIV];
     
-    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - width/2, yOrigin-5, width, height)];
+    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - width/2, yOrigin, width, height)];
     self.cloudIV.image = [UIImage imageNamed:@"grey-cloud"];
     [container addSubview:self.cloudIV];
     
