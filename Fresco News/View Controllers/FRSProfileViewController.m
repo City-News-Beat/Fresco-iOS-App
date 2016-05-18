@@ -91,6 +91,8 @@
     [super viewWillAppear:animated];
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
+    
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -104,6 +106,9 @@
         [self setupUI]; // setup UI
         
         _representedUser = user; // obviously save for future
+        
+        
+        
         _authenticatedProfile = [_representedUser.isLoggedIn boolValue]; // signifies profile view is current authed user
         
         [self configureWithUser:_representedUser]; // configure UI to specific represented user
@@ -615,6 +620,7 @@
 //    NSLog(@"user = %@", user);
     
     NSLog(@"user = %@", user);
+    
     self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
 //    self.profileIV.image = user.profileImage;
 //    self.nameLabel.text = user.firstName;

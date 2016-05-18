@@ -184,9 +184,11 @@
         
         if (error.code == 0) {
             FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
-            [self pushViewControllerWithCompletion:tabBarVC animated:YES completion:^{
+            [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
                 [self stopSpinner:self.loadingView onButton:self.loginButton];
             }];
+            
+            
         }
         
         if (error.code == -1011) {
@@ -202,6 +204,33 @@
     }];
 }
 
+-(void)dismiss {
+    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
+    
+    CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
+    [translate setFromValue:[NSNumber numberWithFloat:self.view.center.y]];
+    [translate setToValue:[NSNumber numberWithFloat:self.view.center.y +50]];
+    [translate setDuration:0.6];
+    [translate setRemovedOnCompletion:NO];
+    [translate setFillMode:kCAFillModeForwards];
+    [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4 :0 :0 :1.0]];
+    [[self.view layer] addAnimation:translate forKey:@"translate"];
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.view.alpha = 0;
+    } completion:^(BOOL finished) {
+        
+    }];
+    
+    CATransition *transition = [CATransition animation];
+    transition.duration = 0.3;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionFade;
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [[self navigationController] popViewControllerAnimated:NO];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+}
 
 -(IBAction)twitter:(id)sender {
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {

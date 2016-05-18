@@ -34,7 +34,7 @@
     if (self){
         [self configureText];
         [self configureIV];
-        self.animating = NO;
+//        self.animating = NO;
         
         [OEParallax createParallaxFromView:self.cloudIV withMaxX:20 withMinX:-20 withMaxY:20 withMinY:-20];
     }
@@ -119,14 +119,8 @@
     
     self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - width/2, yOrigin, width, height)];
     self.cloudIV.image = [UIImage imageNamed:@"grey-cloud"];
+    self.cloudIV.userInteractionEnabled = YES;
     [container addSubview:self.cloudIV];
-    
-    self.cashButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.cashButton.frame = self.cloudIV.frame;
-    [self.cashButton addTarget:self action:@selector(animate) forControlEvents:UIControlEventTouchUpInside];
-    self.cashButton.backgroundColor = [UIColor redColor];
-//    [container addSubview:self.cashButton];
-    //todo: add some jiggle
     
     self.cashOneIV = [UIImageView UIImageViewWithName:@"cash"
                                              andFrame:CGRectMake(205, 36, 35, 24)
@@ -152,12 +146,19 @@
     self.cashOneIV.alpha = 0;
     self.cashTwoIV.alpha = 0;
     self.cashThreeIV.alpha = 0;
+    
+//    self.cashButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    self.cashButton.frame = CGRectMake(0, 0, self.cloudIV.frame.size.width, self.cloudIV.frame.size.height);
+//    [self.cashButton addTarget:self action:@selector(animate) forControlEvents:UIControlEventTouchUpInside];
+//    self.cashButton.backgroundColor = [UIColor redColor];
+//    [self.cloudIV addSubview:self.cashButton];
+    
 }
 
 - (void)animate {
     
-    if (!self.animating) {
-        
+//    if (!self.animating) {
+    
         self.cloudIV.alpha = 1;
         self.televisionIV.alpha = 1;
         self.newspaperIV.alpha = 1;
@@ -173,9 +174,8 @@
         [self animateCash2];
         [self animateCash3];
         
-        self.animating = NO;
-    }
-    self.animating = YES;
+//    }
+//    self.animating = YES;
 }
 
 
@@ -281,7 +281,9 @@
         cash3Animation.duration=2.0;
         
         [self.cashThreeIV.layer addAnimation:cash3Animation forKey:@"position"];
-    } completion:nil];
+    } completion:^(BOOL finished) {
+//        self.animating = NO;
+    }];
 }
 
 @end
