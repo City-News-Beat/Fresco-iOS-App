@@ -160,7 +160,7 @@
     }
     
     [self.pageControl centerHorizontallyInView:self.view];
-    self.pageControl.frame = CGRectMake(self.pageControl.frame.origin.x, self.view.frame.size.height - 44 - offset, self.pageControl.frame.size.width, self.pageControl.frame.size.height - 32);
+    self.pageControl.frame = CGRectMake(self.pageControl.frame.origin.x, self.view.frame.size.height - 44 - 7 - offset, self.pageControl.frame.size.width, self.pageControl.frame.size.height - 32);
     [self.view addSubview:self.pageControl];
 }
 

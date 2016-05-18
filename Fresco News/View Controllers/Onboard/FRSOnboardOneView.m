@@ -78,14 +78,18 @@
     CGFloat xOrigin = 67.7;
     CGFloat yOrigin = 52.3;
     
-    CGFloat offset = 138; // default
-    CGFloat yOffset = 0;
+    CGFloat offset = 138; // height offset for container
+    CGFloat yOffset = 0; // parallax offset
+    CGFloat iPhone5Offset = 0; // iphone5 offset
+    CGFloat size = 55; //width and height for flags
     
     if (IS_IPHONE_5){
         width = 160;
         xOrigin = 80.5;
         yOrigin = 69.6;
-        
+        iPhone5Offset = -10;
+        yOffset = -5;
+        size = 44;
         offset = 205;
     } else if (IS_STANDARD_IPHONE_6){
         offset = 263;
@@ -103,22 +107,22 @@
     self.globeIV.image = [UIImage imageNamed:@"earth"];
     [container addSubview:self.globeIV];
     
-    self.flagOne = [[UIImageView alloc] initWithFrame: CGRectMake(160 - (55/2), 27 + (55/2) - yOffset, 55, 55)];
+    self.flagOne = [[UIImageView alloc] initWithFrame: CGRectMake(160 - (55/2) - (iPhone5Offset/2), 27 + (55/2) - yOffset - iPhone5Offset, size, size)];
     self.flagOne.image = [UIImage imageNamed:@"assignment-right"];
     self.flagOne.layer.anchorPoint = CGPointMake(-.01, 1);
     [container addSubview:self.flagOne];
     
-    self.flagTwo = [[UIImageView alloc] initWithFrame: CGRectMake(55 + (55/2), 60 + (55/2) - yOffset, 55, 55)];
+    self.flagTwo = [[UIImageView alloc] initWithFrame: CGRectMake(55 + (55/2) - (iPhone5Offset * 1.5), 60 + (55/2) - yOffset - iPhone5Offset, size, size)];
     self.flagTwo.image = [UIImage imageNamed:@"assignment-left"];
     self.flagTwo.layer.anchorPoint = CGPointMake(1, 1);
     [container addSubview:self.flagTwo];
     
-    self.flagThree = [[UIImageView alloc] initWithFrame: CGRectMake(105 + (55/2), 137 + (55/2) - yOffset, 55, 55)];
+    self.flagThree = [[UIImageView alloc] initWithFrame: CGRectMake(105 + (55/2), 137 + (55/2) - yOffset, size, size)];
     self.flagThree.image = [UIImage imageNamed:@"assignment-left"];
     self.flagThree.layer.anchorPoint = CGPointMake(1, 1);
     [container addSubview:self.flagThree];
     
-    self.flagFour = [[UIImageView alloc] initWithFrame: CGRectMake(200 - (55/2), 160 + (55/2) - yOffset, 55, 55)];
+    self.flagFour = [[UIImageView alloc] initWithFrame: CGRectMake(200 - (55/2), 160 + (55/2) - yOffset + iPhone5Offset/1.5, size, size)];
     self.flagFour.image = [UIImage imageNamed:@"assignment-right"];
     self.flagFour.layer.anchorPoint = CGPointMake(-.01, 1);
     [container addSubview:self.flagFour];
