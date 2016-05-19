@@ -72,7 +72,8 @@
     [self addNotificationObservers];
     
     [self configureFollowing];
-    
+    [self configureNavigationBar];
+
     self.scrollView.delegate = self;
 }
 
@@ -97,7 +98,6 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [self configureNavigationBar];
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.scrollView animated:NO];
 }

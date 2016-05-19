@@ -161,18 +161,12 @@
         }];
     }
     
-    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
-        FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-        UINavigationController *navControl = [[UINavigationController alloc] init];
-        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-        [navControl pushViewController:onboardVC animated:NO];
-        [navControl setNavigationBarHidden:YES];
-        
-        [self presentViewController:navControl animated:YES completion:^{
-            [self setSelectedIndex:self.lastActiveIndex];
-        }];
-    } else {
-        
+    if ([self.tabBar.items indexOfObject:item] == 4) {
+        if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+            FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
+            [self.navigationController pushViewController:onboardVC animated:NO];
+            
+        }
     }
 }
 

@@ -246,8 +246,7 @@
     [[self navigationController] popViewControllerAnimated:NO];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
-    [self dismissViewControllerAnimated:YES completion:nil];
-
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 #pragma mark - Transition Animations
