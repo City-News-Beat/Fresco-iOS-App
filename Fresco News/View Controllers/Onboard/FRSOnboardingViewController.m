@@ -245,6 +245,8 @@
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
     [[self navigationController] popViewControllerAnimated:NO];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 
 }
 

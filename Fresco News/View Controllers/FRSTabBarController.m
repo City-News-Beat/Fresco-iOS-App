@@ -125,8 +125,9 @@
     vc2.view.backgroundColor = [UIColor blackColor];
     
     UIViewController *vc3 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSAssignmentsViewController alloc] init]];
-    UIViewController *vc4 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
     
+    UIViewController *vc4 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
+
     self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
 }
 
@@ -158,6 +159,20 @@
         [self presentViewController:navControl animated:YES completion:^{
             [self setSelectedIndex:self.lastActiveIndex];
         }];
+    }
+    
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
+        UINavigationController *navControl = [[UINavigationController alloc] init];
+        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+        [navControl pushViewController:onboardVC animated:NO];
+        [navControl setNavigationBarHidden:YES];
+        
+        [self presentViewController:navControl animated:YES completion:^{
+            [self setSelectedIndex:self.lastActiveIndex];
+        }];
+    } else {
+        
     }
 }
 
@@ -216,12 +231,18 @@
             
         case 4:{
             
+            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+                FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
+                [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+            } else {
+                return NO;
+            }
+            
             if (self.lastActiveIndex != 4) {
                 break;
             }
-            
-            FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
-            [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+
+
             
         } break;
             
