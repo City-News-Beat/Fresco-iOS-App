@@ -188,7 +188,6 @@
                 [self stopSpinner:self.loadingView onButton:self.loginButton];
             }];
             
-            
         }
         
         if (error.code == -1011) {
