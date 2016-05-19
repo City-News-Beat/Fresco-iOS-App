@@ -1003,10 +1003,8 @@
     
     NSLog(@"ERROR CODE = %ld", (long)error.code);
     switch (error.code) {
-        case 0: //Invalid email
-            
-            [self presentInvalidEmail];
-            
+        case 0:
+            [self segueToSetup];
             break;
             
         default:
@@ -1018,7 +1016,10 @@
     
 }
 
-
+-(void)segueToSetup {
+    FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
+    [self.navigationController pushViewController:setupProfileVC animated:YES];
+}
 
 
 

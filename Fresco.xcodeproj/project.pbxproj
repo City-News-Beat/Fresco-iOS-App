@@ -817,8 +817,8 @@
 				1EDA44DE1AA4CCFB0082E08D /* View Controllers */,
 				420DC7151ADB875000157762 /* Resources */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
-				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 				65F237B81C24B21F002182DE /* Images_3.xcassets */,
+				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 			);
 			path = "Fresco News";
 			sourceTree = "<group>";

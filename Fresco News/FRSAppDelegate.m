@@ -55,7 +55,7 @@
         [self startAuthentication];
         return YES; // no other stuff going on (no quick action handling, etc)
     }
-
+    
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         [self handleLocationUpdate];
     }

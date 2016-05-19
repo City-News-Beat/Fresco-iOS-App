@@ -28,6 +28,8 @@
 @property (strong, nonatomic) UITextField *locationTF;
 @property (strong, nonatomic) UITextView *bioTV;
 
+@property (strong, nonatomic) UIImageView *placeHolderUserIcon;
+
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
 
 @property (nonatomic) NSInteger y;
@@ -87,10 +89,38 @@
             
             return;
         }
+    
         
         // dismiss modal
         
     }];
+    
+    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
+    
+    CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
+    [translate setFromValue:[NSNumber numberWithFloat:self.view.center.y]];
+    [translate setToValue:[NSNumber numberWithFloat:self.view.center.y +50]];
+    [translate setDuration:0.6];
+    [translate setRemovedOnCompletion:NO];
+    [translate setFillMode:kCAFillModeForwards];
+    [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4 :0 :0 :1.0]];
+    [[self.view layer] addAnimation:translate forKey:@"translate"];
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.view.alpha = 0;
+    } completion:^(BOOL finished) {
+        
+    }];
+    
+    CATransition *transition = [CATransition animation];
+    transition.duration = 0.3;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionFade;
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [[self navigationController] setNavigationBarHidden:YES];
+    [[self navigationController] popToRootViewControllerAnimated:NO];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
 }
 
 
@@ -159,13 +189,12 @@
     [self.profileShadow addSubview:self.profileIV];
     
     
-    UIImageView *placeholderUserIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]]; //Waiting on imogen for big user icon
-    placeholderUserIcon.backgroundColor = [UIColor blueColor];
-    placeholderUserIcon.frame = CGRectMake(60, 60, 72, 72);
+    self.placeHolderUserIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"large-user"]];
+    self.placeHolderUserIcon.frame = CGRectMake(60, 60, 72, 72);
     if (IS_IPHONE_5) {
-        placeholderUserIcon.frame = CGRectMake(40, 40, 48, 48);
+        self.placeHolderUserIcon.frame = CGRectMake(40, 40, 48, 48);
     }
-    [self.profileIV addSubview:placeholderUserIcon];
+    [self.profileIV addSubview:self.placeHolderUserIcon];
     
     
     UIView *ring = [[UIView alloc] initWithFrame:CGRectMake(self.profileIV.frame.origin.x-1, self.profileShadow.frame.origin.y-1, height+2, height+2)];
@@ -220,10 +249,12 @@
     [self.scrollView addSubview:backgroundView];
     
     self.nameTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 *2, 44)];
+    self.nameTF.tag = 1;
+    self.nameTF.tintColor = [UIColor frescoOrangeColor];
     self.nameTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Name" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     self.nameTF.delegate = self;
     self.nameTF.font = [UIFont systemFontOfSize:15 weight:-1];
-    self.nameTF.textColor = [UIColor frescoMediumTextColor];
+    self.nameTF.textColor = [UIColor frescoDarkTextColor];
     [backgroundView addSubview:self.nameTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -237,10 +268,12 @@
     [self.scrollView addSubview:backgroundView];
     
     self.locationTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 *2, 44)];
+    self.locationTF.tag = 2;
+    self.locationTF.tintColor = [UIColor frescoOrangeColor];
     self.locationTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Location" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     self.locationTF.delegate = self;
     self.locationTF.font = [UIFont systemFontOfSize:15 weight:-1];
-    self.locationTF.textColor = [UIColor frescoMediumTextColor];
+    self.locationTF.textColor = [UIColor frescoDarkTextColor];
     [backgroundView addSubview:self.locationTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -255,11 +288,13 @@
     [self.scrollView addSubview:backgroundView];
 
     self.bioTV = [[UITextView alloc] initWithFrame:CGRectMake(16, 11, backgroundView.frame.size.width - 32, backgroundView.frame.size.height - 22)];
+    self.bioTV.tag = 3;
+    self.bioTV.tintColor = [UIColor frescoOrangeColor];
     self.bioTV.delegate = self;
     self.bioTV.textContainer.lineFragmentPadding = 0;
     self.bioTV.textContainerInset = UIEdgeInsetsZero;
     self.bioTV.font = [UIFont systemFontOfSize:15 weight:-1];
-    self.bioTV.textColor = [UIColor frescoMediumTextColor];
+    self.bioTV.textColor = [UIColor frescoDarkTextColor];
     self.bioTV.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.bioTV.attributedText = [[NSAttributedString alloc] initWithString:@"Bio" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     
@@ -286,7 +321,9 @@
 #pragma TextField Delegate
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
+
+    [[self.view viewWithTag:textField.tag+1] becomeFirstResponder];
+    
     return YES;
 }
 
@@ -313,7 +350,7 @@
     
     if (textView.attributedText){
         textView.attributedText = nil;
-        textView.textColor = [UIColor frescoMediumTextColor];
+        textView.textColor = [UIColor frescoDarkTextColor];
     }
 }
 
@@ -383,6 +420,7 @@
     UIImage *selectedImage;
     if ([info valueForKey:UIImagePickerControllerEditedImage]){
         selectedImage = [info valueForKey:UIImagePickerControllerEditedImage];
+        self.placeHolderUserIcon.alpha = 0;
     }
     else if ([info valueForKey:UIImagePickerControllerOriginalImage]){
         selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
