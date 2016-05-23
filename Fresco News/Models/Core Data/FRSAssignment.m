@@ -25,7 +25,7 @@
     FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:context];
     [assignment configureWithDictionary:properties];
     return assignment;
-}
+}g
 
 -(void)configureWithDictionary:(NSDictionary *)dictionary{
     self.uid = dictionary[@"id"];

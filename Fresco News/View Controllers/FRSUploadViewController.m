@@ -61,6 +61,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [self dismissKeyboard];
     
 }
 
@@ -75,7 +76,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureGalleryTableView];
     [self configureNavigationBar];
     [self configureAssignments];
-    [self configureTextView];
     [self configureBottomBar];
 
 }
@@ -184,6 +184,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)configureScrollView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.delegate = self;
+//    self.scrollView.backgroundColor = [UIColor redColor];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:self.scrollView];
 }
@@ -299,16 +300,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, textViewHeight)];
     self.captionTextView.delegate = self;
-    self.captionTextView.clipsToBounds = NO;
+    self.captionTextView.clipsToBounds = YES;
     self.captionTextView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.captionTextView.textColor = [UIColor frescoDarkTextColor];
     self.captionTextView.tintColor = [UIColor frescoOrangeColor];
     self.captionTextView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.captionContainer addSubview:self.captionTextView];
     
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(-16, -16, self.view.frame.size.width, 0.5)];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(-16, 0, self.view.frame.size.width, 0.5)];
     line.backgroundColor = [UIColor frescoShadowColor];
-    [self.captionTextView addSubview:line];
+    [self.captionContainer addSubview:line];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
@@ -345,16 +346,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
-    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-    self.scrollView.transform           = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+//    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+    self.view.transform           = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+//    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
     
-    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, 0);
-    self.scrollView.transform           = CGAffineTransformMakeTranslation(0, 0);
-    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, 0);
+//    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, 0);
+    self.view.transform           = CGAffineTransformMakeTranslation(0, 0);
+//    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, 0);
 }
 
 #pragma mark - Assignments
@@ -372,6 +373,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         self.assignmentsArray = global;
         [self configureAssignmentsTableView];
+        [self configureTextView];
+        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height + self.captionContainer.frame.size.height +44);
     }];
 }
 
