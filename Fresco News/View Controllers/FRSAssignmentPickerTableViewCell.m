@@ -62,7 +62,6 @@
     
     if (self.assignment) {
         self.titleLabel.text = [self.assignment valueForKey:@"title"];
-        
     } else {
         self.titleLabel.text = @"No assignment";
     }

@@ -120,6 +120,7 @@
 
 @property (strong, nonatomic) UIView *alertContainer;
 
+@property (nonatomic) BOOL didPush;
 @end
 
 @implementation FRSCameraViewController
@@ -247,6 +248,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [super viewWillAppear:animated];
     
     self.isPresented = YES;
+    self.didPush = NO;
     
     if (!self.sessionManager.session.isRunning){
         
@@ -1725,17 +1727,19 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 #pragma mark - Navigation
 
 -(void)handlePreviewButtonTapped{
-    
-    if (self.sessionManager.movieFileOutput.isRecording){
-        [self toggleVideoRecording];
+    if (!self.didPush) {
+        
+        if (self.sessionManager.movieFileOutput.isRecording){
+            [self toggleVideoRecording];
+        }
+        
+        FRSFileViewController *fileView = [[FRSFileViewController alloc] initWithNibName:Nil bundle:Nil];
+        fileView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        
+        [self.navigationController pushViewController:fileView animated:YES];
     }
-    
-    FRSFileViewController *fileView = [[FRSFileViewController alloc] initWithNibName:Nil bundle:Nil];
-    fileView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    
-    [self.navigationController pushViewController:fileView animated:YES];
+    self.didPush = YES;
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
