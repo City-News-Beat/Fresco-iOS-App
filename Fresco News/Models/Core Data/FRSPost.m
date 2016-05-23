@@ -41,7 +41,7 @@
     
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
-    self.address = [self shortAddressFromAddress:dict[@"location"][@"address"]];
+    self.address = [self shortAddressFromAddress:dict[@"address"]];
     self.creator = [FRSUser MR_createEntity];
     /*self.creator = [FRSUser MR_createEntity];
     
@@ -72,7 +72,7 @@
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
-    self.address = [self shortAddressFromAddress:dict[@"location"]];
+    self.address = [self shortAddressFromAddress:dict[@"address"]];
     self.creator = [FRSUser MR_createEntityInContext:context];
     
     if ([dict objectForKey:@"video"] != [NSNull null]) {
