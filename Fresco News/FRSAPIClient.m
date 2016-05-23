@@ -345,13 +345,11 @@
     NSDictionary *params = @{
                         @"limit" : [NSNumber numberWithInteger:limit],
                         @"last" : (offset != Nil) ? offset : @"",
-                        @"stories": @1
                     };
     
     if (!offset) {
         params = @{
                    @"limit" : [NSNumber numberWithInteger:limit],
-                   @"stories": @1
                    };
     }
     
