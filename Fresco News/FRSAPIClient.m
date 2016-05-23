@@ -334,6 +334,8 @@
                              @"radius" : @(radius),
                             };
     
+    NSLog(@"%@", params);
+    
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];

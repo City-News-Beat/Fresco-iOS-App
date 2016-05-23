@@ -191,7 +191,6 @@
 -(void)trackAsModerate { // in between active and passive, a low-accuracy, high-break track
     
     // don't think I'm actually going to implement this until I can figure out a use case.
-    
     if (![self stateDidChange:UIApplicationStateActive]) {
         return;
     }

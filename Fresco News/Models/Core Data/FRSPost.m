@@ -43,6 +43,7 @@
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"address"]];
     self.creator = [FRSUser MR_createEntity];
+    
     /*self.creator = [FRSUser MR_createEntity];
     
     if ([dict objectForKey:@"video"] != [NSNull null]) {
@@ -56,12 +57,12 @@
         }
     }*/
     
-    if (dict[@"video"] != Nil && dict[@"video"] != [NSNull null]) {
-        self.videoUrl = dict[@"video"];
+    if (dict[@"video"] != Nil && dict[@"stream"] != [NSNull null]) {
+        self.videoUrl = dict[@"stream"];
     }
     
-    NSNumber *height = dict[@"meta"][@"height"] ? : @0;
-    NSNumber *width = dict[@"meta"][@"width"] ? : @0;
+    NSNumber *height = dict[@"orig_height"] ? : @0;
+    NSNumber *width = dict[@"orig_width"] ? : @0;
     
     self.meta = @{@"image_height" : height, @"image_width" : width};
 }
