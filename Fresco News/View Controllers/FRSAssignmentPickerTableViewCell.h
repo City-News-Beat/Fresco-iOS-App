@@ -11,7 +11,7 @@
 
 @interface FRSAssignmentPickerTableViewCell : UITableViewCell
 
-@property (strong, nonatomic) FRSAssignment *assignment;
+@property (strong, nonatomic) NSArray *assignment;
 @property (nonatomic) BOOL isSelectedAssignment;
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(FRSAssignment *)assignment;

@@ -35,10 +35,6 @@
     if (self) {
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
         self.assignment = assignment;
-        
-//        UIView *backgroundView = [[UIView alloc] initWithFrame:self.frame];
-//        backgroundView.backgroundColor = [UIColor whiteColor];
-//        self.backgroundView = backgroundView;
 
         self.selectionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24)];
         
@@ -65,7 +61,8 @@
     self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     
     if (self.assignment) {
-        self.titleLabel.text = self.assignment.title;
+        self.titleLabel.text = [self.assignment valueForKey:@"title"];
+        
     } else {
         self.titleLabel.text = @"No assignment";
     }

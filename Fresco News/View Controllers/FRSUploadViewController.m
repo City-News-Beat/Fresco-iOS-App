@@ -37,8 +37,11 @@
 
 static NSString * const cellIdentifier = @"assignment-cell";
 
+
+
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
     
     [self configureUI];
     [self checkButtonStates];
@@ -72,7 +75,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureGalleryTableView];
     [self configureNavigationBar];
     [self configureAssignments];
-    [self configureAssignmentsTableView];
     [self configureTextView];
     [self configureBottomBar];
 
@@ -80,10 +82,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)checkButtonStates {
 
-
-    
-    
-    
 }
 
 
@@ -186,6 +184,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)configureScrollView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.delegate = self;
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:self.scrollView];
 }
 
@@ -221,28 +220,17 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.assignmentsTableView.dataSource = self;
     self.assignmentsTableView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.assignmentsTableView.showsVerticalScrollIndicator = NO;
-//    self.assignmentsTableView.delaysContentTouches = NO;
+    self.assignmentsTableView.delaysContentTouches = NO;
     self.assignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    [self adjustTableViewFrame];
-    [self.view addSubview:self.assignmentsTableView];
+    [self.scrollView addSubview:self.assignmentsTableView];
 }
 
--(void)adjustTableViewFrame {
-
-    NSInteger height = self.assignmentsArray.count * 44;
-}
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     NSLog(@"self.assignmentsArray.count = %ld", self.assignmentsArray.count);
     
-    switch (self.assignmentsArray.count) {
-        case 0:
-            return 3;
-            
-        default:
-            return self.assignmentsArray.count;
-    }
+    return self.assignmentsArray.count;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -263,11 +251,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
     return 44;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    FRSAssignment *assignment;
-    
-    FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:assignment];
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+        
+    FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:indexPath.row]];
     
     [cell configureCell];
     
@@ -372,48 +360,19 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - Assignments
 
 -(void)configureAssignments {
-//    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(expirationDate >= %@)", [NSDate date]];
-//    NSManagedObjectContext *moc = [delegate managedObjectContext];
-//    
-//    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSAssignment"];
-//    request.predicate = predicate;
-//    NSError *error = nil;
-//    NSArray *stored = [moc executeFetchRequest:request error:&error];
-//    self.assignmentsArray = [NSMutableArray arrayWithArray:stored];
-    
-    self.assignmentsArray = @[@"one", @"two", @"three"];
-
-    
     
     CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
     
-//    CGFloat latFloat  = lastLocation.coordinate.latitude;
-//    CGFloat longFloat = lastLocation.coordinate.longitude;
-//    
-//    NSArray *locationArray = @[[NSNumber numberWithFloat:latFloat], [NSNumber numberWithFloat:longFloat]];
-//    
-//    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:1000 ofLocation:locationArray withCompletion:^(id responseObject, NSError *error) {
-//        NSLog(@"responseObject = %@", responseObject);
-//    }];
-    
-    
-    
-    NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
-    [geoData setObject:@"Point" forKey:@"type"];
-    [geoData setObject:lastLocation forKey:@"coordinates"];
-    
-    NSDictionary *params = @{
-                             @"geo" : geoData,
-                             @"radius" : @(1000),
-                             };
-    
-    [[FRSAPIClient sharedClient] get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-
-        NSLog(@"RESPONSE: %@, \n\n ERROR: %@", responseObject, error);
-    
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:50 ofLocation:@[@(lastLocation.coordinate.latitude), @(lastLocation.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
+        
+        NSArray *nearBy = responseObject[@"nearby"];
+        NSArray *global = responseObject[@"global"];
+        
+        NSLog(@"Near by:%@ Global: %@", nearBy, global);
+        
+        self.assignmentsArray = global;
+        [self configureAssignmentsTableView];
     }];
-    
 }
 
 
