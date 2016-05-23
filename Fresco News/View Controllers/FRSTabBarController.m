@@ -35,15 +35,15 @@
 -(void)respondToQuickAction:(NSString *)quickAction {
     if ([quickAction isEqualToString:assignmentsAction]) {
         // open assignments
-        [self.tabBar setSelectedItem:self.tabBar.items[3]];
+        [self setSelectedIndex:3];
     }
     else if ([quickAction isEqualToString:takePhotoAction]) {
         // open camera, switch to photo
-        [self.tabBar setSelectedItem:self.tabBar.items[2]];
+        [self setSelectedIndex:2];
     }
     else if ([quickAction isEqualToString:takeVideoAction]) {
         // just open camera
-        [self.tabBar setSelectedItem:self.tabBar.items[2]];
+        [self setSelectedIndex:2];
     }
 }
 
