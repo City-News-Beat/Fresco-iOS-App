@@ -162,9 +162,15 @@
     self.isFetching = YES;
     
     [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.latitude), @(location.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
-        NSArray *assignments = (NSArray *)responseObject;
+        NSArray *assignments = (NSArray *)responseObject[@"nearby"];
+        NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
+        
         FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
+        
+        if (globalAssignments.count > 0) {
+            
+        }
         
         for (NSDictionary *dict in assignments){
             

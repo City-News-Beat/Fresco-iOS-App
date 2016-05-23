@@ -75,9 +75,9 @@
     self.address = [self shortAddressFromAddress:dict[@"address"]];
     self.creator = [FRSUser MR_createEntityInContext:context];
     
-    if ([dict objectForKey:@"video"] != [NSNull null]) {
+    if ([dict objectForKey:@"stream"] != [NSNull null]) {
         self.mediaType = @(1);
-        self.videoUrl = [dict objectForKey:@"video"];
+        self.videoUrl = [dict objectForKey:@"stream"];
     }
     
     if ([dict objectForKey:@"owner"] != [NSNull null] && [dict objectForKey:@"owner"]) {

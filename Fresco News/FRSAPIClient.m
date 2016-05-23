@@ -327,6 +327,7 @@
     NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
     [geoData setObject:@"Point" forKey:@"type"];
     [geoData setObject:location forKey:@"coordinates"];
+    NSLog(@"%@", geoData);
     
     NSDictionary *params = @{
                              @"geo" : geoData,

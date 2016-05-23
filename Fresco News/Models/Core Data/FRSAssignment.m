@@ -27,7 +27,8 @@
     return assignment;
 }
 
--(void)configureWithDictionary:(NSDictionary *)dictionary{
+-(void)configureWithDictionary:(NSDictionary *)dictionary {
+    
     self.uid = dictionary[@"id"];
     self.title = dictionary[@"title"];
 
