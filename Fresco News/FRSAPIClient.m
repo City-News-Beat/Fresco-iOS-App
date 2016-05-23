@@ -136,10 +136,18 @@
 }
 
 -(void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion {
-    
+    [self check:email completion:completion];
 }
 -(void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self check:username completion:completion];
+}
+
+-(void)check:(NSString *)check completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *checkEndpoint = [userEndpoint stringByAppendingString:check];
     
+    [self get:checkEndpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 -(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -500,7 +508,9 @@
         return;
     }
     
-    // authenticated request
+    [self reevaluateAuthorization]; // specific check on bearer
+    
+    // authenticated request to user/me (essentially user/ozetadev w/ more fields)
     [self get:authenticatedUserEndpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
