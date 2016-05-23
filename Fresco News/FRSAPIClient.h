@@ -63,4 +63,6 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 
 -(void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion;
+
+-(void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion;
 @end

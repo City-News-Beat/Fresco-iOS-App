@@ -492,11 +492,25 @@
     Keychain-Based interaction & authentication
  */
 
+// user/me
+-(void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion {
+    
+    if (![self isAuthenticated]) {
+        completion(Nil, [NSError errorWithDomain:@"com.fresconews.fresco" code:404 userInfo:Nil]); // no authenticated user, 404
+        return;
+    }
+    
+    // authenticated request
+    [self get:authenticatedUserEndpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 -(void)reevaluateAuthorization {
     
     if (![self isAuthenticated]) {
         // set client token
-        [self.requestManager.requestSerializer setValue:@"Basic MTMzNzp0aGlzaXNhc2VjcmV0" forHTTPHeaderField:@"Authorization"];
+        [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
     }
     else { // set bearer token if we haven't already
         // set bearer client token
