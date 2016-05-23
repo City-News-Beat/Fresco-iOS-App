@@ -11,6 +11,8 @@
 #import "FRSAssignment.h"
 #import <Twitter/Twitter.h>
 
+#import "FRSAPIClient.h"
+
 @interface FRSUploadViewController ()
 
 @property (strong, nonatomic) UIView *navigationBarView;
@@ -370,18 +372,37 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - Assignments
 
 -(void)configureAssignments {
-    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(expirationDate >= %@)", [NSDate date]];
-    NSManagedObjectContext *moc = [delegate managedObjectContext];
-    
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSAssignment"];
-    request.predicate = predicate;
-    NSError *error = nil;
-    NSArray *stored = [moc executeFetchRequest:request error:&error];
-    self.assignmentsArray = [NSMutableArray arrayWithArray:stored];
+//    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(expirationDate >= %@)", [NSDate date]];
+//    NSManagedObjectContext *moc = [delegate managedObjectContext];
+//    
+//    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSAssignment"];
+//    request.predicate = predicate;
+//    NSError *error = nil;
+//    NSArray *stored = [moc executeFetchRequest:request error:&error];
+//    self.assignmentsArray = [NSMutableArray arrayWithArray:stored];
     
     self.assignmentsArray = @[@"one", @"two", @"three"];
+
+    
+    
+    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
+    
+    CGFloat latFloat  = lastLocation.coordinate.latitude;
+    CGFloat longFloat = lastLocation.coordinate.longitude;
+    
+    NSArray *locationArray = @[[NSNumber numberWithFloat:latFloat], [NSNumber numberWithFloat:longFloat]];
+    
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:1000 ofLocation:locationArray withCompletion:^(id responseObject, NSError *error) {
+        NSLog(@"responseObject = %@", responseObject);
+    }];
+    
+    
 }
+
+
+
+
 
 #pragma mark - Actions
 
