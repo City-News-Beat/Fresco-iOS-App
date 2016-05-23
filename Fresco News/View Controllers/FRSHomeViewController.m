@@ -340,7 +340,8 @@
     [self fetchLocalData];
     
     // network call
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *galleries, NSError *error) {
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
+        NSLog(@"%@", error);
         if ([galleries count] == 0){
             return;
         }
@@ -392,7 +393,7 @@
     
     [self.appDelegate.managedObjectContext save:Nil];
     [self.appDelegate saveContext];
-
+    
     [self.tableView reloadData];
     
     for (FRSGallery *gallery in self.cachedData) {
