@@ -388,15 +388,31 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
     
-    CGFloat latFloat  = lastLocation.coordinate.latitude;
-    CGFloat longFloat = lastLocation.coordinate.longitude;
+//    CGFloat latFloat  = lastLocation.coordinate.latitude;
+//    CGFloat longFloat = lastLocation.coordinate.longitude;
+//    
+//    NSArray *locationArray = @[[NSNumber numberWithFloat:latFloat], [NSNumber numberWithFloat:longFloat]];
+//    
+//    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:1000 ofLocation:locationArray withCompletion:^(id responseObject, NSError *error) {
+//        NSLog(@"responseObject = %@", responseObject);
+//    }];
     
-    NSArray *locationArray = @[[NSNumber numberWithFloat:latFloat], [NSNumber numberWithFloat:longFloat]];
     
-    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:1000 ofLocation:locationArray withCompletion:^(id responseObject, NSError *error) {
-        NSLog(@"responseObject = %@", responseObject);
+    
+    NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
+    [geoData setObject:@"Point" forKey:@"type"];
+    [geoData setObject:lastLocation forKey:@"coordinates"];
+    
+    NSDictionary *params = @{
+                             @"geo" : geoData,
+                             @"radius" : @(1000),
+                             };
+    
+    [[FRSAPIClient sharedClient] get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+
+        NSLog(@"RESPONSE: %@, \n\n ERROR: %@", responseObject, error);
+    
     }];
-    
     
 }
 
