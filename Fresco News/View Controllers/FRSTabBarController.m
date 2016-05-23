@@ -33,7 +33,15 @@
 }
 
 -(void)respondToQuickAction:(NSString *)quickAction {
-    
+    if ([quickAction isEqualToString:assignmentsAction]) {
+        // open assignments
+    }
+    else if ([quickAction isEqualToString:takePhotoAction]) {
+        // open camera, switch to photo
+    }
+    else if ([quickAction isEqualToString:takeVideoAction]) {
+        // just open camera
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated {
