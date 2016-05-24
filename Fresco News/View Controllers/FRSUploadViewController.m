@@ -236,12 +236,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-//    if (indexPath.row == 0) {
-//        cell.isSelectedAssignment = YES;
-//    }
     
-    [cell configureCell];
-    
+    [cell configureCellForIndexPath:indexPath];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -253,12 +249,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
         
     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:indexPath.row]];
     
-    [cell configureCell];
+    [cell configureCellForIndexPath:indexPath];
     
     return cell;
 }
@@ -275,7 +270,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         [self resetOtherCells];
         cell.isSelectedAssignment = YES;
-        self.selectedAssignment = cell.assignment;
+        self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
     }
     
     [cell toggleImage];
@@ -366,12 +361,20 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:50 ofLocation:@[@(lastLocation.coordinate.latitude), @(lastLocation.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
         
-        NSArray *nearBy = responseObject[@"nearby"];
-        NSArray *global = responseObject[@"global"];
+//        NSArray *nearBy = responseObject[@"nearby"];
+//        NSArray *global = responseObject[@"global"];
+        
+        NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
+        NSArray *global = @[@"Global", @"Global Two"];
+        
+//        NSMutableArray *nearBy = [[NSMutableArray alloc] initWithObjects:@[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia"], nil];
+//        
+//        
+//        NSMutableArray *global = [[NSMutableArray alloc] initWithObjects:@[@"Global assignment number one", @"Global assignment number two with truncating title hopefully"], nil];
         
         NSLog(@"Near by:%@ Global: %@", nearBy, global);
         
-        self.assignmentsArray = global;
+        self.assignmentsArray = nearBy; //should be nearby, make new array for global
         [self configureAssignmentsTableView];
         [self configureTextView];
         self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height + self.captionContainer.frame.size.height +44);
