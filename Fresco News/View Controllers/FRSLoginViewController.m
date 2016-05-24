@@ -276,7 +276,7 @@
         if (authenticated) {
             [self moveToHome];
         }
-    } parent:self]; // presenting view controller
+    } parent:self];
 }
 
 
