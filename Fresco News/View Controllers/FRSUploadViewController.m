@@ -367,11 +367,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
         NSArray *global = @[@"Global", @"Global Two"];
         
-//        NSMutableArray *nearBy = [[NSMutableArray alloc] initWithObjects:@[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia"], nil];
-//        
-//        
-//        NSMutableArray *global = [[NSMutableArray alloc] initWithObjects:@[@"Global assignment number one", @"Global assignment number two with truncating title hopefully"], nil];
-        
         NSLog(@"Near by:%@ Global: %@", nearBy, global);
         
         self.assignmentsArray = nearBy; //should be nearby, make new array for global

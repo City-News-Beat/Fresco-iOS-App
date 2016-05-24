@@ -23,6 +23,7 @@
 @property (nonatomic) BOOL didTransform;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *socialTopConstraint;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+@property (strong, nonatomic) UILabel *invalidUserLabel;
 
 @end
 
@@ -187,19 +188,43 @@
             [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
                 [self stopSpinner:self.loadingView onButton:self.loginButton];
             }];
-            
         }
         
         if (error.code == -1011) {
             NSLog(@"Invalid username or password.");
             [self stopSpinner:self.loadingView onButton:self.loginButton];
+            [self presentInvalidInfo];
         }
         
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
             [self stopSpinner:self.loadingView onButton:self.loginButton];
         }
-        
+    }];
+}
+
+-(void)presentInvalidInfo {
+    
+    self.loginButton.userInteractionEnabled = NO;
+    self.invalidUserLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.passwordField.frame.origin.x, self.passwordField.frame.origin.y + self.passwordField.frame.size.height + 16, 200, 18)];
+    self.invalidUserLabel.textAlignment = NSTextAlignmentLeft;
+    self.invalidUserLabel.text = @"Invalid username or password.";
+    self.invalidUserLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
+    self.invalidUserLabel.textColor = [UIColor frescoRedHeartColor];
+    self.invalidUserLabel.alpha = 0;
+    [self.view addSubview:self.invalidUserLabel];
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.invalidUserLabel.alpha = 1;
+        self.invalidUserLabel.transform = CGAffineTransformMakeTranslation(0, 8);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.3 delay:0.7 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.invalidUserLabel.alpha = 0;
+            self.invalidUserLabel.transform = CGAffineTransformMakeTranslation(0, 16);
+        } completion:^(BOOL finished) {
+            [self.invalidUserLabel removeFromSuperview];
+            self.loginButton.userInteractionEnabled = YES;
+        }];
     }];
 }
 
