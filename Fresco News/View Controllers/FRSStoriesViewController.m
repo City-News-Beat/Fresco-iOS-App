@@ -255,10 +255,9 @@
                 _loadNoMore = TRUE;
                NSLog(@"No error fetching stories but the request returned zero results");
             }
-            return;
         }
         
-        if (stories.count < numToFetch) {
+        if (stories.count < numToFetch || stories.count == 0) {
             _loadNoMore = TRUE;
         }
         
