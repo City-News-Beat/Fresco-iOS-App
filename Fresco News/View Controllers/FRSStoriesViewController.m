@@ -188,44 +188,44 @@
 #pragma mark - Fetch Methods
 
 -(void)fetchStories {
-    [self fetchLocalData];
-    [self.tableView reloadData];
-    __block int const numToFetch = 12;
-
-    [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:0 completion:^(NSArray *stories, NSError *error) {
-        self.stories = [[NSMutableArray alloc] init];
+     //   [self fetchLocalData];
+        [self.tableView reloadData];
+        __block int const numToFetch = 12;
         
-        if (!stories.count){
-            if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
-            else NSLog(@"No error fetching stories but the request returned zero results");
-            return;
-        }
-        
-        NSLog(@"%@", stories);
-        
-        [self cacheLocalData:stories];
-        
-        NSInteger index = 0;
-        
-        for (NSDictionary *storyDict in stories){
+        [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:Nil completion:^(NSArray *stories, NSError *error) {
+            self.stories = [[NSMutableArray alloc] init];
             
-            [self.loadingView stopLoading];
-            [self.loadingView removeFromSuperview];
+            if (!stories.count){
+                if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
+                else NSLog(@"No error fetching stories but the request returned zero results");
+                return;
+            }
             
-            FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
+            NSLog(@"%@ %@", stories, error);
             
-            [story configureWithDictionary:storyDict];
-            [story setValue:@(index) forKey:@"index"];
-            [self.stories addObject:story];
-            index++;
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            [self.appDelegate.managedObjectContext save:Nil];
-            [self.appDelegate saveContext];
-        });
-    }];
+            [self cacheLocalData:stories];
+            
+            NSInteger index = 0;
+            
+            for (NSDictionary *storyDict in stories){
+                
+                [self.loadingView stopLoading];
+                [self.loadingView removeFromSuperview];
+                
+                FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
+                
+                [story configureWithDictionary:storyDict];
+                [story setValue:@(index) forKey:@"index"];
+                [self.stories addObject:story];
+                index++;
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+                [self.appDelegate.managedObjectContext save:Nil];
+                [self.appDelegate saveContext];
+            });
+        }];
 }
 
 -(void)fetchMoreStories {

@@ -390,10 +390,14 @@
     
     NSDictionary *params = @{
                              @"limit" : [NSNumber numberWithInteger:limit],
-                             @"notags" : @"true",
-                             @"last" : (offsetID != Nil) ? offsetID : 0
+                             @"last" : (offsetID != Nil) ? offsetID : @""
                             };
     
+    if (!offsetID) {
+        params = @{
+                    @"limit" : [NSNumber numberWithInteger:limit],
+                };
+    }
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
