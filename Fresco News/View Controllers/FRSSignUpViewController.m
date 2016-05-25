@@ -769,6 +769,11 @@
 
     [self dismissKeyboard];
     
+    if (_isAlreadyRegistered) {
+        [self segueToSetup];
+        return;
+    }
+    
     if (![self checkFields]) {
         return;
     }
@@ -798,7 +803,6 @@
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             if (error) {
                 // show error
-                
             }
             else {
                 // continue on whatever
@@ -810,7 +814,11 @@
     
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", error, responseObject);
-        _isAlreadyRegistered = TRUE;
+        
+        if (error.code == 0) {
+            _isAlreadyRegistered = TRUE;
+            //check dictionary
+        }
         _pastRegistration = registrationDigest;
 
         [self respondToError:error];
