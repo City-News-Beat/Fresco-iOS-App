@@ -593,6 +593,7 @@
             self.usernameTF.text = @"@";
         }
     }
+
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
@@ -1061,16 +1062,16 @@
     } else {
         self.emailError = NO;
         
-//        if (self.notificationsEnabled) {
-//
-//        } else {
-//            self.errorContainer.alpha = 0;
-//            self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
-//            self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
-//            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
-//        }
-//        
-//        
+        if (self.notificationsEnabled) {
+
+        } else {
+            self.errorContainer.alpha = 0;
+            self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
+            self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
+            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
+        }
+        
+        
     }
 }
 
