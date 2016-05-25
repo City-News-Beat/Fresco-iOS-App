@@ -10,6 +10,7 @@
 #import "FRSDateFormatter.h"
 #import "MagicalRecord.h"
 #import "FRSCoreData.h"
+#import "FRSAPIClient.h"
 
 @implementation FRSAssignment
 
@@ -40,12 +41,11 @@
         }
     }
     
-    self.address = dictionary[@"location"][@"address"];
-    self.radius = dictionary[@"location"][@"radius"];
+    self.address = dictionary[@"address"];
+    self.radius = dictionary[@"radius"];
     
-    self.createdDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"time_created"] milliseconds:YES];
-    NSInteger epoch = [dictionary[@"expiration_time"] integerValue];
-    self.expirationDate = [NSDate dateWithTimeIntervalSince1970:epoch/1000];
+    self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"starts_at"]];
+    self.expirationDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"ends_at"]];
     self.caption = dictionary[@"caption"];
 }
 
