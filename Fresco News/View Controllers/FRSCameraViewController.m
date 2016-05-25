@@ -120,6 +120,7 @@
 
 @property (strong, nonatomic) UIView *alertContainer;
 
+@property (nonatomic) BOOL didPush;
 @end
 
 @implementation FRSCameraViewController
@@ -247,6 +248,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [super viewWillAppear:animated];
     
     self.isPresented = YES;
+    self.didPush = NO;
     
     if (!self.sessionManager.session.isRunning){
         
@@ -387,9 +389,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 - (void)dismissAndReturnToPreviousTab {
     
-    FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
-    
-    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:previouslySelectedTabKey];
+//    FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
+//    
+////    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:previouslySelectedTabKey];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -1194,7 +1196,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 #pragma mark - Notifications and Observers
 
 //-(void)addObservers{
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rotateApp:) name:UIDeviceOrientationDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rotateApp:) name:UIDeviceOrientationlackNotification object:nil];
 //}
 
 #pragma mark - Camera focus
@@ -1725,17 +1727,19 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 #pragma mark - Navigation
 
 -(void)handlePreviewButtonTapped{
-    
-    if (self.sessionManager.movieFileOutput.isRecording){
-        [self toggleVideoRecording];
+    if (!self.didPush) {
+        
+        if (self.sessionManager.movieFileOutput.isRecording){
+            [self toggleVideoRecording];
+        }
+        
+        FRSFileViewController *fileView = [[FRSFileViewController alloc] initWithNibName:Nil bundle:Nil];
+        fileView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        
+        [self.navigationController pushViewController:fileView animated:YES];
     }
-    
-    FRSFileViewController *fileView = [[FRSFileViewController alloc] initWithNibName:Nil bundle:Nil];
-    fileView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    
-    [self.navigationController pushViewController:fileView animated:YES];
+    self.didPush = YES;
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

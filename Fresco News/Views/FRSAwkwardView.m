@@ -26,7 +26,6 @@
 
     UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"frog"]];
     frog.frame = CGRectMake(self.frame.size.width/2 -72/2, 0, 72, 72);
-    frog.backgroundColor = [UIColor frescoShadowColor];
     [self addSubview:frog];
     
     UILabel *awkwardLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 -121/2, 72, 121, 33)];

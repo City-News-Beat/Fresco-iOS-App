@@ -91,6 +91,8 @@
     [super viewWillAppear:animated];
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
+    
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -104,6 +106,9 @@
         [self setupUI]; // setup UI
         
         _representedUser = user; // obviously save for future
+        
+        
+        
         _authenticatedProfile = [_representedUser.isLoggedIn boolValue]; // signifies profile view is current authed user
         
         [self configureWithUser:_representedUser]; // configure UI to specific represented user
@@ -297,7 +302,7 @@
 
     UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchDown];
-    UIImage *twitter = [[UIImage imageNamed:@"twitter-icon-filled"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *twitter = [[UIImage imageNamed:@"social-twitter"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [twitterButton setImage:twitter forState:UIControlStateNormal];
     twitterButton.frame = CGRectMake(0, 0, 24, 24);
     twitterButton.alpha = 1;
@@ -305,7 +310,7 @@
     
     UIButton *facebookButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchDown];
-    UIImage *facebook = [[UIImage imageNamed:@"facebook-icon-filled"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *facebook = [[UIImage imageNamed:@"social-facebook"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [facebookButton setImage:facebook forState:UIControlStateNormal];
     facebookButton.frame = CGRectMake(40, 0, 24, 24);
     facebookButton.alpha = 1;
@@ -553,7 +558,7 @@
             
         }
         else {
-            if ([self.tableView.backgroundColor isEqual:[UIColor frescoOrangeColor]]) return;
+//            if ([self.tableView.backgroundColor isEqual:[UIColor frescoOrangeColor]]) return;
             
             self.tableView.backgroundColor = [UIColor frescoOrangeColor];
         }
@@ -615,6 +620,7 @@
 //    NSLog(@"user = %@", user);
     
     NSLog(@"user = %@", user);
+    
     self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
 //    self.profileIV.image = user.profileImage;
 //    self.nameLabel.text = user.firstName;

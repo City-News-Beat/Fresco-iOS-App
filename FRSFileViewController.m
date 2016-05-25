@@ -50,10 +50,6 @@ static NSString *imageTile = @"ImageTile";
     [backButton setImage:backButtonImage forState:UIControlStateNormal];
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
     
-    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
-    [self.backTapButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
-    
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
     self.uploadViewController = [[FRSUploadViewController alloc] init];
@@ -71,6 +67,10 @@ static NSString *imageTile = @"ImageTile";
     if (selectedAssets.count >= 1) {
         [nextButton setTintColor:[UIColor frescoBlueColor]];
     }
+    
+    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
+    [self.backTapButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
     
     //self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
     //Navigation bar color is not Fresco Yellow. Not sure where it's set
@@ -105,13 +105,7 @@ static NSString *imageTile = @"ImageTile";
 -(void)back {
     
     [self.navigationController popViewControllerAnimated:YES];
-    
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    
-    //Checks if going back to camera
-    if ([viewControllers indexOfObject:self] == NSNotFound) {
-        [self.backTapButton removeFromSuperview];
-    }
+    [self.backTapButton removeFromSuperview];
 }
 
 -(void)setupSecondaryUI {
@@ -135,14 +129,14 @@ static NSString *imageTile = @"ImageTile";
     [self.twitterButton addTarget:self action:@selector(twitterTapped:) forControlEvents:UIControlEventTouchDown];
     self.twitterButton.frame = CGRectMake(16, self.view.frame.size.height -24 -10, 24, 24);
     [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
+    [self.twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateSelected];
     [self.view addSubview:self.twitterButton];
     
     self.facebookButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.facebookButton addTarget:self action:@selector(facebookTapped:) forControlEvents:UIControlEventTouchDown];
     self.facebookButton.frame = CGRectMake(56, self.view.frame.size.height -24 -10, 24, 24);
     [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
+    [self.facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
     [self.view addSubview:self.facebookButton];
     
     self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];

@@ -72,7 +72,8 @@
     [self addNotificationObservers];
     
     [self configureFollowing];
-    
+    [self configureNavigationBar];
+
     self.scrollView.delegate = self;
 }
 
@@ -97,7 +98,6 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [self configureNavigationBar];
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.scrollView animated:NO];
 }
@@ -692,12 +692,16 @@
 
 #pragma mark - UIScrollViewDelegate
 
+
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     self.sudoNavBar.frame = CGRectMake(0, (scrollView.contentOffset.x/8.5)-88, self.view.frame.size.width, 44);
 
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     if (scrollView == self.pageScroller) {
+        
+        self.loadingView.alpha = 1-(scrollView.contentOffset.x/(scrollView.contentSize.width - scrollView.frame.size.width));
+        
         [self pausePlayers];
         if (self.pageScroller.contentOffset.x == self.view.frame.size.width) { // User is in right tab (following)
             self.followingTabButton.alpha = 1;

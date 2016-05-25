@@ -55,7 +55,7 @@
         [self startAuthentication];
         return YES; // no other stuff going on (no quick action handling, etc)
     }
-
+    
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         [self handleLocationUpdate];
     }
@@ -186,9 +186,11 @@
 
 
 -(void)startAuthentication {
-    
     FRSNavigationController *mainNav = [[FRSNavigationController alloc] init];
-    [mainNav pushViewController:[[FRSOnboardingViewController alloc] init] animated:FALSE];
+    [mainNav pushViewController:[[FRSTabBarController alloc] init] animated:FALSE];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [mainNav pushViewController:[[FRSOnboardingViewController alloc] init] animated:FALSE];
+    });
     [mainNav setNavigationBarHidden:YES];
     self.window.rootViewController = mainNav;
 }

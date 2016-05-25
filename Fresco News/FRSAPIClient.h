@@ -16,6 +16,8 @@
 #import "SSKeychain.h"
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
+typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
+
 
 @protocol FRSFileUploaderObjectContext <NSObject>
 -(NSManagedObjectContext *)managedObjectContext; // emulate FRSAppDelegate methods without importing
@@ -63,6 +65,9 @@ typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 
 -(void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion;
-
 -(void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion;
+
+// check user
+-(void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion;
+
 @end

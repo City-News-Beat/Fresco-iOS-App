@@ -29,16 +29,12 @@
 
 }
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(FRSAssignment *)assignment {
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
     if (self) {
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
         self.assignment = assignment;
-        
-//        UIView *backgroundView = [[UIView alloc] initWithFrame:self.frame];
-//        backgroundView.backgroundColor = [UIColor whiteColor];
-//        self.backgroundView = backgroundView;
 
         self.selectionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24)];
         
@@ -54,7 +50,7 @@
     return self;
 }
 
--(void)configureCell {
+-(void)configureCellForIndexPath:(NSIndexPath *)indexPath {
     
     self.selectionImageView.frame = CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24);
     self.titleLabel.frame = CGRectMake(16, 12, self.frame.size.width - 32 - 24 - 16, 20);
@@ -65,9 +61,9 @@
     self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     
     if (self.assignment) {
-        self.titleLabel.text = self.assignment.title;
+        self.titleLabel.text = self.assignment;
     } else {
-        self.titleLabel.text = @"No assignment";
+        self.titleLabel.text = @"Untitled Assignment";
     }
 }
 

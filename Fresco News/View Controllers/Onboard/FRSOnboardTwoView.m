@@ -77,10 +77,9 @@
     CGFloat camHeight = 72;
     
     if (IS_IPHONE_5){
-        width = 160;
-        xOrigin = 80.5;
-        yOrigin = 69.6;
-        offset = 263;
+        xOrigin = self.frame.size.width;
+        yOrigin = 23;
+        offset = 205;
     } else if (IS_STANDARD_IPHONE_6){
         offset = 263;
     } else if (IS_STANDARD_IPHONE_6_PLUS){
@@ -91,16 +90,16 @@
     
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 320, 288)];
     [self addSubview:container];
-    
-    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - width/2, yOrigin-5, width, height)];
+
+    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2 - width/2, yOrigin-5, width, height)];
     self.cloudIV.image = [UIImage imageNamed:@"cloud"];
     [container addSubview:self.cloudIV];
     
-    self.arrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2, 143, 28, 26)];
+    self.arrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2 - 28/2, 143, 28, 26)];
     self.arrowIV.image = [UIImage imageNamed:@"upload"];
     [container addSubview:self.arrowIV];
     
-    self.cameraIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - camWidth/2, 194, camWidth, camHeight)];
+    self.cameraIV = [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2 - camWidth/2, 194, camWidth, camHeight)];
     self.cameraIV.image = [UIImage imageNamed:@"camera"];
     [container addSubview:self.cameraIV];
 }

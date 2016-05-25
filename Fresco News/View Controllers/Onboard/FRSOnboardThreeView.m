@@ -22,6 +22,8 @@
 @property (strong, nonatomic) UIImageView *cashOneIV;
 @property (strong, nonatomic) UIImageView *cashTwoIV;
 @property (strong, nonatomic) UIImageView *cashThreeIV;
+@property (strong, nonatomic) UIButton *cashButton;
+@property (nonatomic) BOOL animating;
 
 @end
 
@@ -32,6 +34,7 @@
     if (self){
         [self configureText];
         [self configureIV];
+//        self.animating = NO;
         
         [OEParallax createParallaxFromView:self.cloudIV withMaxX:20 withMinX:-20 withMaxY:20 withMinY:-20];
     }
@@ -82,10 +85,9 @@
     CGFloat offset;
     
     if (IS_IPHONE_5){
-        width = 160;
-        xOrigin = 80.5;
-        yOrigin = 69.6;
-        offset = 263;
+        xOrigin = 194;
+        yOrigin = 23;
+        offset = 205;
     } else if (IS_STANDARD_IPHONE_6){
         offset = 263;
     } else if (IS_STANDARD_IPHONE_6_PLUS){
@@ -95,13 +97,13 @@
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 320, 288)];
     [self addSubview:container];
     
-    self.leftArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2 - 30, 143, 28, 26)];
+    self.leftArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(104, 143, 28, 26)];
     self.leftArrowIV.image = [UIImage imageNamed:@"upload"];
     self.leftArrowIV.transform = CGAffineTransformMakeRotation(M_PI_2 +2);
     self.leftArrowIV.layer.shouldRasterize = YES;
     [container addSubview:self.leftArrowIV];
     
-    self.rightArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2 + 30, 143, 28, 26)];
+    self.rightArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(192, 143, 28, 26)];
     self.rightArrowIV.image = [UIImage imageNamed:@"upload"];
     self.rightArrowIV.transform = CGAffineTransformMakeRotation(M_PI_2 + 1);
     self.rightArrowIV.layer.shouldRasterize = YES;
@@ -111,12 +113,13 @@
     self.televisionIV.image = [UIImage imageNamed:@"television"];
     [container addSubview:self.televisionIV];
     
-    self.newspaperIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - 28/2 + 30, 193, 80, 72)];
+    self.newspaperIV = [[UIImageView alloc] initWithFrame:CGRectMake(194, 194, 80, 72)];
     self.newspaperIV.image = [UIImage imageNamed:@"newspaper"];
     [container addSubview:self.newspaperIV];
     
-    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(xOrigin - width/2, yOrigin-5, width, height)];
+    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - width/2, yOrigin, width, height)];
     self.cloudIV.image = [UIImage imageNamed:@"grey-cloud"];
+    self.cloudIV.userInteractionEnabled = YES;
     [container addSubview:self.cloudIV];
     
     self.cashOneIV = [UIImageView UIImageViewWithName:@"cash"
@@ -143,23 +146,36 @@
     self.cashOneIV.alpha = 0;
     self.cashTwoIV.alpha = 0;
     self.cashThreeIV.alpha = 0;
+    
+//    self.cashButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    self.cashButton.frame = CGRectMake(0, 0, self.cloudIV.frame.size.width, self.cloudIV.frame.size.height);
+//    [self.cashButton addTarget:self action:@selector(animate) forControlEvents:UIControlEventTouchUpInside];
+//    self.cashButton.backgroundColor = [UIColor redColor];
+//    [self.cloudIV addSubview:self.cashButton];
+    
 }
 
 - (void)animate {
-    self.cloudIV.alpha = 1;
-    self.televisionIV.alpha = 1;
-    self.newspaperIV.alpha = 1;
-    self.leftArrowIV.alpha = 1;
-    self.rightArrowIV.alpha = 1;
-    self.cashOneIV.alpha = 1;
-    self.cashTwoIV.alpha = 1;
-    self.cashThreeIV.alpha = 1;
-    self.cloudIV.transform = CGAffineTransformMakeScale(.96,.96);
-    self.cloudIV.alpha = 1;
     
-    [self animateCash1];
-    [self animateCash2];
-    [self animateCash3];
+//    if (!self.animating) {
+    
+        self.cloudIV.alpha = 1;
+        self.televisionIV.alpha = 1;
+        self.newspaperIV.alpha = 1;
+        self.leftArrowIV.alpha = 1;
+        self.rightArrowIV.alpha = 1;
+        self.cashOneIV.alpha = 1;
+        self.cashTwoIV.alpha = 1;
+        self.cashThreeIV.alpha = 1;
+        self.cloudIV.transform = CGAffineTransformMakeScale(.96,.96);
+        self.cloudIV.alpha = 1;
+        
+        [self animateCash1];
+        [self animateCash2];
+        [self animateCash3];
+        
+//    }
+//    self.animating = YES;
 }
 
 
@@ -265,7 +281,9 @@
         cash3Animation.duration=2.0;
         
         [self.cashThreeIV.layer addAnimation:cash3Animation forKey:@"position"];
-    } completion:nil];
+    } completion:^(BOOL finished) {
+//        self.animating = NO;
+    }];
 }
 
 @end

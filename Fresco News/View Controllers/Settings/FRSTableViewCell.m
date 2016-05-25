@@ -78,12 +78,12 @@
     [self addSubview:self.socialTitleLabel];
     
     if (tag == 1){
-        self.twitterIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"twitter-icon-filled"]];
+        self.twitterIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"social-twitter"]];
         self.twitterIV.frame = CGRectMake(16, 10 ,24,24);
         [self.twitterIV sizeToFit];
         [self addSubview:self.twitterIV];
     } else if (tag == 2){
-        self.facebookIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"facebook-icon-filled"]];
+        self.facebookIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"social-facebook"]];
         self.facebookIV.frame = CGRectMake(16, 10 ,24,24);
         [self.facebookIV sizeToFit];
         [self addSubview:self.facebookIV];

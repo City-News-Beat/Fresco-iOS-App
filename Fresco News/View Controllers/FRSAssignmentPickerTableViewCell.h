@@ -11,12 +11,13 @@
 
 @interface FRSAssignmentPickerTableViewCell : UITableViewCell
 
-@property (strong, nonatomic) FRSAssignment *assignment;
+@property (strong, nonatomic) NSArray *assignment;
 @property (nonatomic) BOOL isSelectedAssignment;
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(FRSAssignment *)assignment;
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment;
 
--(void)configureCell;
+-(void)configureCellForIndexPath:(NSIndexPath *)indexPath;
+
 -(void)toggleImage;
 
 @end

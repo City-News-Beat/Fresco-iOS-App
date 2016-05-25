@@ -333,13 +333,13 @@
                              @"geo" : geoData,
                              @"radius" : @(radius),
                             };
+
     
     NSLog(@"%@", params);
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
-    
 }
 
 #pragma mark - Gallery Fetch
@@ -619,6 +619,26 @@
                     error:&fileSizeError];
     
     return fileSizeValue;
+}
+
+-(void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"user/%@", user];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        if (error) {
+            completion(TRUE, error);
+            return;
+        }
+        
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(FALSE, error);
+        }
+        
+        // shouldn't happen
+        completion(TRUE, error);
+    }];
+    
 }
 
 

@@ -9,6 +9,9 @@
 #import "FRSUploadViewController.h"
 #import "FRSAssignmentPickerTableViewCell.h"
 #import "FRSAssignment.h"
+#import <Twitter/Twitter.h>
+
+#import "FRSAPIClient.h"
 
 @interface FRSUploadViewController ()
 
@@ -24,18 +27,30 @@
 
 @property (strong, nonatomic) FRSAssignment *selectedAssignment;
 
+@property (nonatomic) BOOL postToFacebook;
+@property (nonatomic) BOOL postToTwitter;
+@property (nonatomic) BOOL postAnon;
+
 @end
 
 @implementation FRSUploadViewController
 
 static NSString * const cellIdentifier = @"assignment-cell";
 
+
+
 -(void)viewDidLoad {
     [super viewDidLoad];
     
+    
     [self configureUI];
     [self checkButtonStates];
-
+    
+    
+    self.postToTwitter  = NO;
+    self.postToFacebook = NO;
+    self.postAnon = NO;
+    [self checkBottomBar];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -46,6 +61,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [self dismissKeyboard];
     
 }
 
@@ -60,18 +76,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureGalleryTableView];
     [self configureNavigationBar];
     [self configureAssignments];
-    [self configureAssignmentsTableView];
-    [self configureTextView];
     [self configureBottomBar];
 
 }
 
 -(void)checkButtonStates {
 
-
-    
-    
-    
 }
 
 
@@ -129,7 +139,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.twitterButton addTarget:self action:@selector(postToTwitter:) forControlEvents:UIControlEventTouchDown];
     [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-    [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon-filled"] forState:UIControlStateSelected];
+    [self.twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateSelected];
     self.twitterButton.frame = CGRectMake(16, 10, 24, 24);
     [self.bottomContainer addSubview:self.twitterButton];
     
@@ -137,7 +147,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.facebookButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.facebookButton addTarget:self action:@selector(postToFacebook:) forControlEvents:UIControlEventTouchDown];
     [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-    [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon-filled"] forState:UIControlStateSelected];
+    [self.facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
     self.facebookButton.frame = CGRectMake(56, 10, 24, 24);
     [self.bottomContainer addSubview:self.facebookButton];
     
@@ -164,7 +174,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
     [sendButton setTitle:@"SEND" forState:UIControlStateNormal];
     [sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
-    sendButton.userInteractionEnabled = NO;
+//    sendButton.userInteractionEnabled = NO;
     [self.bottomContainer addSubview:sendButton];
 }
 
@@ -174,6 +184,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)configureScrollView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.delegate = self;
+//    self.scrollView.backgroundColor = [UIColor redColor];
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:self.scrollView];
 }
 
@@ -209,38 +221,23 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.assignmentsTableView.dataSource = self;
     self.assignmentsTableView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.assignmentsTableView.showsVerticalScrollIndicator = NO;
-//    self.assignmentsTableView.delaysContentTouches = NO;
+    self.assignmentsTableView.delaysContentTouches = NO;
     self.assignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    [self adjustTableViewFrame];
-    [self.view addSubview:self.assignmentsTableView];
+    [self.scrollView addSubview:self.assignmentsTableView];
 }
 
--(void)adjustTableViewFrame {
-
-    NSInteger height = self.assignmentsArray.count * 44;
-}
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     NSLog(@"self.assignmentsArray.count = %ld", self.assignmentsArray.count);
     
-    switch (self.assignmentsArray.count) {
-        case 0:
-            return 3;
-            
-        default:
-            return self.assignmentsArray.count;
-    }
+    return self.assignmentsArray.count;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
-//    if (indexPath.row == 0) {
-//        cell.isSelectedAssignment = YES;
-//    }
     
-    [cell configureCell];
-    
+    [cell configureCellForIndexPath:indexPath];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -251,13 +248,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     return 44;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    FRSAssignment *assignment;
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+        
+    FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:indexPath.row]];
     
-    FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:assignment];
-    
-    [cell configureCell];
+    [cell configureCellForIndexPath:indexPath];
     
     return cell;
 }
@@ -274,7 +270,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         [self resetOtherCells];
         cell.isSelectedAssignment = YES;
-        self.selectedAssignment = cell.assignment;
+        self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
     }
     
     [cell toggleImage];
@@ -299,16 +295,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, textViewHeight)];
     self.captionTextView.delegate = self;
-    self.captionTextView.clipsToBounds = NO;
+    self.captionTextView.clipsToBounds = YES;
     self.captionTextView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.captionTextView.textColor = [UIColor frescoDarkTextColor];
     self.captionTextView.tintColor = [UIColor frescoOrangeColor];
     self.captionTextView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.captionContainer addSubview:self.captionTextView];
     
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(-16, -16, self.view.frame.size.width, 0.5)];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(-16, 0, self.view.frame.size.width, 0.5)];
     line.backgroundColor = [UIColor frescoShadowColor];
-    [self.captionTextView addSubview:line];
+    [self.captionContainer addSubview:line];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
@@ -345,33 +341,44 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
-    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-    self.scrollView.transform           = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+//    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+    self.view.transform           = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+//    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
     
-    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, 0);
-    self.scrollView.transform           = CGAffineTransformMakeTranslation(0, 0);
-    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, 0);
+//    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, 0);
+    self.view.transform           = CGAffineTransformMakeTranslation(0, 0);
+//    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, 0);
 }
 
 #pragma mark - Assignments
 
 -(void)configureAssignments {
-    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(expirationDate >= %@)", [NSDate date]];
-    NSManagedObjectContext *moc = [delegate managedObjectContext];
     
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSAssignment"];
-    request.predicate = predicate;
-    NSError *error = nil;
-    NSArray *stored = [moc executeFetchRequest:request error:&error];
-    self.assignmentsArray = [NSMutableArray arrayWithArray:stored];
+    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
     
-    self.assignmentsArray = @[@"one", @"two", @"three"];
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:50 ofLocation:@[@(lastLocation.coordinate.latitude), @(lastLocation.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
+        
+//        NSArray *nearBy = responseObject[@"nearby"];
+//        NSArray *global = responseObject[@"global"];
+        
+        NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
+        NSArray *global = @[@"Global", @"Global Two"];
+        
+        NSLog(@"Near by:%@ Global: %@", nearBy, global);
+        
+        self.assignmentsArray = nearBy; //should be nearby, make new array for global
+        [self configureAssignmentsTableView];
+        [self configureTextView];
+        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height + self.captionContainer.frame.size.height +44);
+    }];
 }
+
+
+
+
 
 #pragma mark - Actions
 
@@ -383,10 +390,56 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     //Next button action
 -(void)send {
-    //Send to Fresco
-    //Post to selected social
-    //Configure anonymity
+    
+    [self dismissKeyboard];
+    
+
+    //Upload in background when user is composing social post
+    
+    
+    if (self.postToTwitter) {
+
+        TWTRComposer *composer = [[TWTRComposer alloc] init];
+        
+        [composer setText:self.captionTextView.text];
+        [composer setURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
+        [composer showFromViewController:self completion:^(TWTRComposerResult result) {
+            if (result == TWTRComposerResultCancelled) {
+            } else {
+                if (self.postToFacebook) {
+                    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
+                        SLComposeViewController *facebook = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+                        [facebook setInitialText:self.captionTextView.text];
+                        [facebook addURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
+                        [self presentViewController:facebook animated:YES completion:^{
+                            return;
+                        }];
+                    }
+                }
+            }
+        }];
+        
+        //TWTRSession *session = [Twitter sharedInstance].sessionStore.session;
+        //TWTRCardConfiguration *card = [TWTRCardConfiguration appCardConfigurationWithPromoImage:[[UIImage alloc] init] iPhoneAppID:@"872040692" iPadAppID:nil googlePlayAppID:nil];
+        //TWTRComposerViewController *composer = [[TWTRComposerViewController alloc] initWithUserID:session.userID cardConfiguration:card];
+        //[self presentViewController:composer animated:YES completion:nil];
+    }
+    
+    if (self.postToFacebook) {
+        if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
+            SLComposeViewController *facebook = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+            [facebook setInitialText:self.captionTextView.text];
+            [facebook addURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
+            [self presentViewController:facebook animated:YES completion:nil];
+        }
+    }
+    
+    if (self.postAnon) {
+        NSLog(@"Post anonymously");
+    }
 }
+
+
 
     //Square button action
 -(void)square {
@@ -432,6 +485,41 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.anonLabel.alpha = 1;
     } else if (button == self.anonButton){
         self.anonLabel.alpha = 0;
+    }
+    
+    //Sets BOOL toggles for bottom bar
+    [self checkBottomBar];
+    
+    if (self.postToFacebook) {
+        NSLog(@"Post to Facebook");
+    }
+    
+    if (self.postToTwitter) {
+        NSLog(@"Post to Twitter");
+    }
+    
+    if (self.postAnon) {
+        NSLog(@"Post Anonymously");
+    }
+}
+
+-(void)checkBottomBar {
+    if (self.facebookButton.selected) {
+        self.postToFacebook = YES;
+    } else {
+        self.postToFacebook = NO;
+    }
+    
+    if (self.twitterButton.selected) {
+        self.postToTwitter = YES;
+    } else {
+        self.postToTwitter = NO;
+    }
+    
+    if (self.anonButton.selected) {
+        self.postAnon = YES;
+    } else {
+        self.postAnon = NO;
     }
 }
 

@@ -41,6 +41,7 @@
 		07B61ECD1CAF1C4900D3454F /* PeekPopArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */; };
 		07BB581C1CB5717A00091C86 /* lalaunch.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 07BB581B1CB5717A00091C86 /* lalaunch.mp4 */; };
 		07E9366D1CB4534B00D3CC39 /* VideoTrimmerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E9366C1CB4534B00D3CC39 /* VideoTrimmerViewController.m */; };
+		07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */; };
 		07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */; };
 		07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DA1C752037000DBEA8 /* DGElasticPullToRefreshExtension.m */; };
 		07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DC1C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m */; };
@@ -301,6 +302,7 @@
 		07BB581B1CB5717A00091C86 /* lalaunch.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = lalaunch.mp4; sourceTree = "<group>"; };
 		07E9366B1CB4534B00D3CC39 /* VideoTrimmerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTrimmerViewController.h; sourceTree = "<group>"; };
 		07E9366C1CB4534B00D3CC39 /* VideoTrimmerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoTrimmerViewController.m; sourceTree = "<group>"; };
+		07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSLaunchScreen.xib; sourceTree = "<group>"; };
 		07ED92D71C752037000DBEA8 /* DGElasticPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGElasticPullToRefresh.h; sourceTree = "<group>"; };
 		07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGElasticPullToRefresh.m; sourceTree = "<group>"; };
 		07ED92D91C752037000DBEA8 /* DGElasticPullToRefreshExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGElasticPullToRefreshExtension.h; sourceTree = "<group>"; };
@@ -688,9 +690,8 @@
 				D43C7FEB1C8F359000A7A7A7 /* Settings VC */,
 				D43C7FEC1C8F359700A7A7A7 /* Table View */,
 				D43C7FED1C8F359D00A7A7A7 /* Tax Info */,
+				07FD8BAD1CE66EAA00F93705 /* About */,
 				D43C7FEE1C8F35A300A7A7A7 /* Username */,
-				077CF9D71CE62793006FE908 /* FRSAboutFrescoViewController.h */,
-				077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */,
 			);
 			name = Settings;
 			path = ../..;
@@ -719,6 +720,14 @@
 			name = Upload;
 			sourceTree = "<group>";
 		};
+		07EAFF281CEA226D00E224E2 /* Launch Screen */ = {
+			isa = PBXGroup;
+			children = (
+				07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */,
+			);
+			name = "Launch Screen";
+			sourceTree = "<group>";
+		};
 		07ED92D61C752017000DBEA8 /* DGElasticPullToRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -734,6 +743,15 @@
 				07ED92E01C752037000DBEA8 /* DGElasticPullToRefreshView.m */,
 			);
 			name = DGElasticPullToRefresh;
+			sourceTree = "<group>";
+		};
+		07FD8BAD1CE66EAA00F93705 /* About */ = {
+			isa = PBXGroup;
+			children = (
+				077CF9D71CE62793006FE908 /* FRSAboutFrescoViewController.h */,
+				077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */,
+			);
+			name = About;
 			sourceTree = "<group>";
 		};
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
@@ -809,8 +827,8 @@
 				1EDA44DE1AA4CCFB0082E08D /* View Controllers */,
 				420DC7151ADB875000157762 /* Resources */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
-				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 				65F237B81C24B21F002182DE /* Images_3.xcassets */,
+				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 			);
 			path = "Fresco News";
 			sourceTree = "<group>";
@@ -849,6 +867,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				07EAFF281CEA226D00E224E2 /* Launch Screen */,
 				D40BD3CB1CDE073A00E39701 /* Gallery Table */,
 				D487F1B81CBD6BE5005742F3 /* Media Scroll */,
 				D4E76A2D1CB423C200AC7A45 /* Trim Tool */,
@@ -2077,6 +2096,7 @@
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
 				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
 				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
+				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
 				D43C7FDF1C8E489600A7A7A7 /* FRSFileFooterCell.xib in Resources */,
 				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,
