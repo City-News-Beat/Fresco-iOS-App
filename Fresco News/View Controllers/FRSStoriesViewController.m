@@ -257,8 +257,11 @@
             }
         }
         
+        NSLog(@"%@", stories);
+        
         if (stories.count < numToFetch || stories.count == 0) {
             _loadNoMore = TRUE;
+            [self.tableView reloadData];
         }
         
         NSInteger index = self.stories.count;

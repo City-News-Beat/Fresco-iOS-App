@@ -211,7 +211,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
     
     [[FRSAPIClient sharedClient] fetchGalleriesInStory:self.story.uid completion:^(NSArray *galleries, NSError *error) {
         FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-        for (NSDictionary *gallery in galleries) {
+        NSArray *galleriesArray = ((NSDictionary *)galleries)[@"galleries"];
+        
+        for (NSDictionary *gallery in galleriesArray) {
             FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
             [galleryObject configureWithDictionary:gallery context:delegate.managedObjectContext];
             [self.stories addObject:galleryObject];
