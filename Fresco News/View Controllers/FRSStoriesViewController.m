@@ -195,9 +195,9 @@
         [[FRSAPIClient new] fetchStoriesWithLimit:numToFetch lastStoryID:Nil completion:^(NSArray *stories, NSError *error) {
             self.stories = [[NSMutableArray alloc] init];
             
-            if (!stories.count){
-                if (error) NSLog(@"Error fetching stories %@", error.localizedDescription);
-                else NSLog(@"No error fetching stories but the request returned zero results");
+            if ([stories count] == 0){
+                _loadNoMore = TRUE;
+                [self.tableView reloadData];
                 return;
             }
             
