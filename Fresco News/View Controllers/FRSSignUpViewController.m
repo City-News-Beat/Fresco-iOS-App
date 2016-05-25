@@ -10,7 +10,7 @@
 
 //View Controllers
 #import "FRSSetupProfileViewController.h" // !HELPFUL, LOOP BACK
-#import <QuartzCore/QuartzCore.h>
+#import "FRSLoginViewController.h"
 
 //Helpers
 #import "UIColor+Fresco.h"
@@ -20,6 +20,7 @@
 //UI
 #import "FRSAlertView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
+#import <QuartzCore/QuartzCore.h>
 
 
 @import MapKit;
@@ -78,6 +79,8 @@
     if (!_hasShown) {
 //        [self.usernameTF becomeFirstResponder];
     }
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
     _hasShown = TRUE;
     
@@ -1093,6 +1096,7 @@
         [self.errorContainer addSubview:invalidLabel];
         
         UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [loginButton addTarget:self action:@selector(segueToLogin) forControlEvents:UIControlEventTouchUpInside];
         loginButton.frame = CGRectMake(90, 0, 100, 20);
         loginButton.tintColor = [UIColor frescoRedHeartColor];
         [loginButton setTitle:@"Tap to log in" forState:UIControlStateNormal];
@@ -1140,6 +1144,12 @@
 -(void)segueToSetup {
     FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
     [self.navigationController pushViewController:setupProfileVC animated:YES];
+}
+
+-(void)segueToLogin {
+    FRSLoginViewController *loginVC = [[FRSLoginViewController alloc] init];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController pushViewController:loginVC animated:YES];
 }
 
 

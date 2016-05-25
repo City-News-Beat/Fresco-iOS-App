@@ -105,6 +105,8 @@
     } else if (IS_IPHONE_6_PLUS) {
         self.socialTopConstraint.constant = 128;
     }
+    
+    
 }
 
 
@@ -122,6 +124,16 @@
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
+    self.backButton.alpha = 0;
+    self.userField.alpha = 0;
+    self.usernameHighlightLine.alpha = 0;
+    self.passwordField.alpha = 0;
+    self.passwordHelpButton.alpha = 0;
+    self.passwordHighlightLine.alpha = 0;
+    self.loginButton.alpha = 0;
+    self.socialLabel.alpha = 0;
+    self.twitterButton.alpha = 0;
+    self.facebookButton.alpha = 0;
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
