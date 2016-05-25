@@ -171,7 +171,9 @@
         if (globalAssignments.count > 0) {
             
         }
-                
+        
+        NSLog(@"%@", assignments);
+        
         for (NSDictionary *dict in assignments){
             
             FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];

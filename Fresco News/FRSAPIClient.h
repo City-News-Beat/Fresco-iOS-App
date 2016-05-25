@@ -27,6 +27,7 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 @interface FRSAPIClient : NSObject
 @property (nonatomic, retain) AFHTTPRequestOperationManager *requestManager;
 @property BOOL managerAuthenticated;
+@property (nonatomic, retain) NSDateFormatter *dateFormatter;
 +(instancetype)sharedClient;
 
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
@@ -69,5 +70,5 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 
 // check user
 -(void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion;
-
+-(NSDate *)dateFromString:(NSString *)string;
 @end
