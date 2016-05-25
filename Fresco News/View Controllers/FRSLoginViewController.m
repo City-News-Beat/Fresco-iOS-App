@@ -269,8 +269,13 @@
 }
 
 -(IBAction)twitter:(id)sender {
+    
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        
+        NSLog(@"TWITTER AUTH: %d", authenticated);
+        
         if (authenticated) {
+            
             [self moveToHome];
         }
     }];

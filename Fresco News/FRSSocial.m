@@ -17,10 +17,10 @@
         if (session) {
             [[FRSAPIClient sharedClient] signInWithTwitter:session completion:^(id responseObject, NSError *error) {
                 if (error) {
-                    completion(TRUE, Nil, session, Nil);
+                    completion(FALSE, error, session, Nil);
                 }
                 else {
-                    completion(FALSE, error, session, Nil);
+                    completion(TRUE, error, session, Nil);
                 }
             }];
             

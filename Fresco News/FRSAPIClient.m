@@ -365,6 +365,8 @@
     
     [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        
+        NSLog(@"%@ %@", responseObject, error);
     }];
 }
 
