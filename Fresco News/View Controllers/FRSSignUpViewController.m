@@ -547,7 +547,7 @@
 -(void)textFieldDidChange {
     
     UIControlState controlState;
-    if ([self isValidUsername:self.usernameTF.text] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
+    if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
         controlState = UIControlStateHighlighted;
     } else {
         controlState = UIControlStateNormal;
@@ -618,7 +618,7 @@
     }
     UIControlState controlState;
 
-    if ([self isValidUsername:self.usernameTF.text] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
+    if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
         controlState = UIControlStateHighlighted;
     } else {
         controlState = UIControlStateNormal;
