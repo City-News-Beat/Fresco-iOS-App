@@ -50,6 +50,7 @@
         self.tabBarController = [[FRSTabBarController alloc] init];
         self.window.rootViewController = self.tabBarController;
         [self createItemsWithIcons];
+        [self reloadUser];
     }
     else {
         [self startAuthentication];
@@ -72,6 +73,12 @@
     [self registerForPushNotifications];
     
     return YES;
+}
+
+-(void)reloadUser {
+    [[FRSAPIClient sharedClient] refreshCurrentUser:^(id responseObject, NSError *error) {
+        NSLog(@"User Refresh: %@ %@", responseObject, error);
+    }];
 }
 
 -(void)clearKeychain {

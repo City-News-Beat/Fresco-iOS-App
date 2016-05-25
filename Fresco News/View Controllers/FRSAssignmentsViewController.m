@@ -161,7 +161,7 @@
     
     self.isFetching = YES;
     
-    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.latitude), @(location.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
         
@@ -171,7 +171,7 @@
         if (globalAssignments.count > 0) {
             
         }
-        
+                
         for (NSDictionary *dict in assignments){
             
             FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];

@@ -32,8 +32,8 @@
     self.uid = dictionary[@"id"];
     self.title = dictionary[@"title"];
 
-    if (dictionary[@"location"][@"geo"][@"coordinates"] != Nil && ![dictionary[@"location"][@"geo"][@"coordinates"] isEqual: [NSNull null]]){
-        NSArray *coords = dictionary[@"location"][@"geo"][@"coordinates"]; //coordinates are sent in geojson format meaning (long, lat)
+    if (dictionary[@"location"][@"coordinates"] != Nil && ![dictionary[@"location"][@"coordinates"] isEqual: [NSNull null]]){
+        NSArray *coords = dictionary[@"location"][@"coordinates"]; //coordinates are sent in geojson format meaning (long, lat)
         if (coords.count == 2){
             self.longitude = [coords firstObject];
             self.latitude = [coords lastObject];
