@@ -107,6 +107,7 @@
         [self.passwordTF resignFirstResponder];
         [self.emailTF resignFirstResponder];
         [self.usernameTF resignFirstResponder];
+        [self.promoTF resignFirstResponder];
         
         self.alert = [[FRSAlertView alloc] initSignUpAlert];
         
@@ -357,7 +358,7 @@
     self.radiusSlider = [[UISlider alloc] initWithFrame:CGRectMake(52, 14, self.view.frame.size.width - 104, 28)];
     [self.radiusSlider setMinimumTrackTintColor:[UIColor frescoBlueColor]];
     [self.radiusSlider setMaximumTrackTintColor:[UIColor colorWithWhite:181/255.0 alpha:1.0]];
-    [self.self.sliderContainer addSubview:self.radiusSlider];
+    [self.sliderContainer addSubview:self.radiusSlider];
 
     UIImageView *smallIV = [[UIImageView alloc] initWithFrame:CGRectMake(12, 16, 24, 24)];
     smallIV.image = [UIImage imageNamed:@"radius-small"];
@@ -654,6 +655,7 @@
     
     if (toggle.on){
         
+        
         self.notificationsEnabled = YES;
         self.scrollView.scrollEnabled = YES;
         [self.promoTF resignFirstResponder];
@@ -667,24 +669,64 @@
             [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height) animated:YES];
         }
 
-        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.mapView.transform = CGAffineTransformMakeScale(1, 1);
-            self.mapView.alpha = 1;
-        } completion:nil];
         
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height +self.sliderContainer.frame.size.height);
-        } completion:nil];
+        if (self.emailError) {
+            
+            
+            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height +44);
+            
+            [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.mapView.transform = CGAffineTransformMakeScale(1, 1);
+                self.mapView.alpha = 1;
+            } completion:^(BOOL finished) {
+            }];
+            
+            [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
+            } completion:nil];
+            
+            [self.scrollView insertSubview:self.mapView belowSubview:self.assignmentsCard];
+            [self.scrollView insertSubview:self.sliderContainer belowSubview:self.assignmentsCard];
+            
+            [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 44);
+                self.sliderContainer.alpha = 1;
+            } completion:nil];
+            
+            [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height +self.sliderContainer.frame.size.height +44);
+            } completion:nil];
+            
+        } else {
+            
+            
+            [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.mapView.transform = CGAffineTransformMakeScale(1, 1);
+                self.mapView.alpha = 1;
+            } completion:nil];
+            
+            [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 0);
+                self.sliderContainer.alpha = 1;
+            } completion:nil];
+            
+            [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height +self.sliderContainer.frame.size.height);
+            } completion:nil];
+        }
         
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 0);
-            self.sliderContainer.alpha = 1;
-        } completion:nil];
+
+        
+
         
     } else {
         
         [self.scrollView setContentOffset:CGPointMake(0, -self.scrollView.contentInset.top) animated:YES];
         
+        if (self.emailError) {
+            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height -44);
+        }
+
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.notificationsEnabled = NO;
         });
@@ -699,9 +741,17 @@
             self.mapView.frame = CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, self.mapView.frame.size.width, self.mapView.frame.size.height);
         }];
         
-        [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
-        } completion:nil];
+        
+        if (!self.emailError) {
+            [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
+            } completion:nil];
+        } else {
+            [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 44);
+            } completion:nil];
+        }
+
         
         [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
@@ -899,12 +949,23 @@
             [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height) animated:YES];
             
         } else {
-            if (IS_IPHONE_6) {
-                self.scrollView.frame = CGRectMake(0, -36, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
-            } else if (IS_IPHONE_6_PLUS) {
-                
-            } else if (IS_IPHONE_5) {
-                self.scrollView.frame = CGRectMake(0, -144, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+            
+            if (self.emailError) {
+                if (IS_IPHONE_6) {
+                    self.scrollView.frame = CGRectMake(0, -36 -44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+                } else if (IS_IPHONE_6_PLUS) {
+                    
+                } else if (IS_IPHONE_5) {
+                    self.scrollView.frame = CGRectMake(0, -144 -44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+                }
+            } else {
+                if (IS_IPHONE_6) {
+                    self.scrollView.frame = CGRectMake(0, -36, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+                } else if (IS_IPHONE_6_PLUS) {
+                    
+                } else if (IS_IPHONE_5) {
+                    self.scrollView.frame = CGRectMake(0, -144, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+                }
             }
         }
     }
@@ -1050,9 +1111,12 @@
         self.errorContainer.alpha = 1;
 
         if (self.notificationsEnabled) {
+
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
-            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 44);
+            self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 44);
+            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height +self.sliderContainer.frame.size.height);
+            
         } else {
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
@@ -1070,8 +1134,6 @@
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
             self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
         }
-        
-        
     }
 }
 
