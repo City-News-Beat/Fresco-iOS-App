@@ -49,6 +49,7 @@
 @property (strong, nonatomic) UIView *errorContainer;
 @property (strong, nonatomic) UIView *assignmentsCard;
 @property (nonatomic) BOOL emailError;
+@property (nonatomic) BOOL userShouldCheck;
 
 @end
 
@@ -64,6 +65,7 @@
     
     self.notificationsEnabled = NO;
     self.emailError = NO;
+    self.userShouldCheck = YES;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -629,6 +631,22 @@
 
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (textField == self.usernameTF) {
+        
+        if (self.userShouldCheck) {
+            
+            [[FRSAPIClient sharedClient] checkUsername:self.usernameTF.text completion:^(id responseObject, NSError *error) {
+                NSLog(@"RESPONSE OBJECT: %@ \n\n ERROR: %@ \n", responseObject, error);
+            }];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self.userShouldCheck = YES;
+            });
+        }
+        
+        self.userShouldCheck = NO;
+    }
     
     if (textField == self.emailTF) {
         if (self.emailError) {
