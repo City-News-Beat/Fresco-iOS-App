@@ -549,7 +549,7 @@
 -(void)textFieldDidChange {
     
     
-    [self checkUsername];
+//    [self checkUsername];
     
     
     UIControlState controlState;
