@@ -548,6 +548,10 @@
 
 -(void)textFieldDidChange {
     
+    
+    [self checkUsername];
+    
+    
     UIControlState controlState;
     if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
         controlState = UIControlStateHighlighted;
@@ -556,6 +560,36 @@
     }
     
     [self toggleCreateAccountButtonTitleColorToState:controlState];
+}
+
+-(void)checkUsername {
+    if (self.usernameTF.isEditing) {
+        NSLog(@"self.username.text = %@", self.usernameTF.text);
+        
+        if ([self.usernameTF.text isEqualToString:@"@"]) {
+            self.usernameCheckIV.alpha = 0;
+        }
+        
+        if (self.userShouldCheck) {
+            
+            [[FRSAPIClient sharedClient] checkUsername:self.usernameTF.text completion:^(id responseObject, NSError *error) {
+                
+                
+                NSString *message = [responseObject valueForKey:@"_msg"];
+                NSLog(@"MESSAGE: %@", message);
+                
+                if ([message isEqualToString:@"No user found"] && (![self.usernameTF.text isEqualToString:@""])) {
+                    self.usernameCheckIV.alpha = 1;
+                }
+            }];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                self.userShouldCheck = YES;
+            });
+        }
+        
+        self.userShouldCheck = NO;
+    }
 }
 
 -(void)dismissKeyboard {
@@ -631,22 +665,6 @@
 
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    if (textField == self.usernameTF) {
-        
-        if (self.userShouldCheck) {
-            
-            [[FRSAPIClient sharedClient] checkUsername:self.usernameTF.text completion:^(id responseObject, NSError *error) {
-                NSLog(@"RESPONSE OBJECT: %@ \n\n ERROR: %@ \n", responseObject, error);
-            }];
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                self.userShouldCheck = YES;
-            });
-        }
-        
-        self.userShouldCheck = NO;
-    }
     
     if (textField == self.emailTF) {
         if (self.emailError) {
