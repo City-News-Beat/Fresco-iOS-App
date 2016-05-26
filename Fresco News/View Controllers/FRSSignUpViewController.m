@@ -548,10 +548,6 @@
 
 -(void)textFieldDidChange {
     
-    
-//    [self checkUsername];
-    
-    
     UIControlState controlState;
     if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
         controlState = UIControlStateHighlighted;
@@ -563,33 +559,34 @@
 }
 
 -(void)checkUsername {
-    if (self.usernameTF.isEditing) {
-        NSLog(@"self.username.text = %@", self.usernameTF.text);
-        
-        if ([self.usernameTF.text isEqualToString:@"@"]) {
-            self.usernameCheckIV.alpha = 0;
-        }
-        
-        if (self.userShouldCheck) {
-            
-            [[FRSAPIClient sharedClient] checkUsername:self.usernameTF.text completion:^(id responseObject, NSError *error) {
-                
-                
-                NSString *message = [responseObject valueForKey:@"_msg"];
-                NSLog(@"MESSAGE: %@", message);
-                
-                if ([message isEqualToString:@"No user found"] && (![self.usernameTF.text isEqualToString:@""])) {
-                    self.usernameCheckIV.alpha = 1;
-                }
-            }];
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                self.userShouldCheck = YES;
-            });
-        }
-        
-        self.userShouldCheck = NO;
-    }
+    
+//    if (self.usernameTF.isEditing) {
+//        NSLog(@"self.username.text = %@", self.usernameTF.text);
+//        
+//        if ([self.usernameTF.text isEqualToString:@"@"]) {
+//            self.usernameCheckIV.alpha = 0;
+//        }
+//        
+//        if (self.userShouldCheck) {
+//            
+//            [[FRSAPIClient sharedClient] checkUsername:self.usernameTF.text completion:^(id responseObject, NSError *error) {
+//                
+//                
+//                NSString *message = [responseObject valueForKey:@"_msg"];
+//                NSLog(@"MESSAGE: %@", message);
+//                
+//                if ([message isEqualToString:@"No user found"] && (![self.usernameTF.text isEqualToString:@""])) {
+//                    self.usernameCheckIV.alpha = 1;
+//                }
+//            }];
+//            
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                self.userShouldCheck = YES;
+//            });
+//        }
+//        
+//        self.userShouldCheck = NO;
+//    }
 }
 
 -(void)dismissKeyboard {
@@ -851,14 +848,19 @@
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", error, responseObject);
         
+        NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
+        NSLog(@"%@", errorMessage);
+        
+        [self respondToError:error fromResponseObject:responseObject];
+
         if (error.code == 0) {
             _isAlreadyRegistered = TRUE;
             //check dictionary
         }
         _pastRegistration = registrationDigest;
-
-        [self respondToError:error];
+        
         [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+        
     }];
 }
 
@@ -1110,21 +1112,25 @@
 
 #pragma mark - Error Handling
 
--(void)respondToError:(NSError *)error {
+-(void)respondToError:(NSError *)error fromResponseObject:(id)responseObject {
     
-    NSLog(@"ERROR CODE = %ld", (long)error.code);
-    switch (error.code) {
-        case 0:
-            [self segueToSetup];
-            break;
-            
-        case -1011:
-            [self presentInvalidEmail];
-            
-            break;
-        default:
-            break;
-    }
+    NSLog(@"ERROR = %@", error);
+    NSLog(@"RESPONSE OBJECT = %@", responseObject);
+    
+    [self segueToSetup];
+
+//    switch (error.code) {
+//        case 0:
+//            [self segueToSetup];
+//            break;
+//        case -1011:
+//            [self presentInvalidEmail];
+//            break;
+//        default:
+//            break;
+//    }
+    
+    
 }
 
 -(void)presentInvalidEmail {
