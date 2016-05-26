@@ -523,7 +523,6 @@
 }
 
 -(void)reevaluateAuthorization {
-    
     if (![self isAuthenticated]) {
         // set client token
         [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
