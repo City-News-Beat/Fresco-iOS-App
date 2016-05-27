@@ -258,10 +258,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     return cell;
 }
 
+
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (cell.isSelectedAssignment){
         cell.isSelectedAssignment = NO;
@@ -272,15 +274,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
         cell.isSelectedAssignment = YES;
         self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
     }
-    
-    [cell toggleImage];
 }
 
 -(void)resetOtherCells {
     for (NSInteger i = 0; i < self.assignmentsArray.count + 1; i++){
         FRSAssignmentPickerTableViewCell *cell = [self.assignmentsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.isSelectedAssignment = NO;
-        [cell toggleImage];
+//        [cell toggleImage];
     }
 }
 

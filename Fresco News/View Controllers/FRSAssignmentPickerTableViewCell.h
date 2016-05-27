@@ -18,6 +18,6 @@
 
 -(void)configureCellForIndexPath:(NSIndexPath *)indexPath;
 
--(void)toggleImage;
+//-(void)toggleImage;
 
 @end
