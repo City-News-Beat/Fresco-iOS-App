@@ -10,6 +10,7 @@
 #import "Fresco.h"
 #import "FRSPost.h"
 #import "FRSFileUploadManager.h" // temp patch
+#import "FRSRequestSerializer.h"
 
 @implementation FRSAPIClient
 
@@ -432,6 +433,7 @@
     if (!self.requestManager) {
         AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
         self.requestManager = manager;
+        self.requestManager.requestSerializer = [[FRSRequestSerializer alloc] init];
         [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
     }
