@@ -49,7 +49,8 @@
 @property (strong, nonatomic) UIView *errorContainer;
 @property (strong, nonatomic) UIView *assignmentsCard;
 @property (nonatomic) BOOL emailError;
-@property (nonatomic) BOOL userShouldCheck;
+
+@property (strong, nonatomic) NSTimer *usernameTimer;
 
 @end
 
@@ -65,7 +66,6 @@
     
     self.notificationsEnabled = NO;
     self.emailError = NO;
-    self.userShouldCheck = YES;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -510,22 +510,24 @@
     
     
     if (animateIn) {
-        
-        self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
-        self.usernameCheckIV.alpha = 0;
-        
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.usernameCheckIV.alpha = 1;
-        } completion:nil];
-        
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
+        if (self.usernameCheckIV.alpha == 0) {
             
-        } completion:^(BOOL finished) {
+            self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+            self.usernameCheckIV.alpha = 0;
+            
             [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
+                self.usernameCheckIV.alpha = 1;
             } completion:nil];
-        }];
+            
+            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
+                
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
+                } completion:nil];
+            }];
+        }
         
     } else {
         
@@ -548,6 +550,13 @@
 
 -(void)textFieldDidChange {
     
+    
+    
+    if (self.usernameTF) {
+        [self startUsernameTimer];
+    }
+    
+    
     UIControlState controlState;
     if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
         controlState = UIControlStateHighlighted;
@@ -558,36 +567,7 @@
     [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
 
--(void)checkUsername {
-    
-//    if (self.usernameTF.isEditing) {
-//        NSLog(@"self.username.text = %@", self.usernameTF.text);
-//        
-//        if ([self.usernameTF.text isEqualToString:@"@"]) {
-//            self.usernameCheckIV.alpha = 0;
-//        }
-//        
-//        if (self.userShouldCheck) {
-//            
-//            [[FRSAPIClient sharedClient] checkUsername:self.usernameTF.text completion:^(id responseObject, NSError *error) {
-//                
-//                
-//                NSString *message = [responseObject valueForKey:@"_msg"];
-//                NSLog(@"MESSAGE: %@", message);
-//                
-//                if ([message isEqualToString:@"No user found"] && (![self.usernameTF.text isEqualToString:@""])) {
-//                    self.usernameCheckIV.alpha = 1;
-//                }
-//            }];
-//            
-//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                self.userShouldCheck = YES;
-//            });
-//        }
-//        
-//        self.userShouldCheck = NO;
-//    }
-}
+
 
 -(void)dismissKeyboard {
     [self highlightTextField:nil enabled:NO];
@@ -625,6 +605,9 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField {
     
     if (textField == self.usernameTF) {
+        
+        [self startUsernameTimer];
+        
         [self highlightTextField:self.usernameTF enabled:YES];
         if ([self.usernameTF.text isEqualToString:@""]){
             self.usernameTF.text = @"@";
@@ -635,7 +618,11 @@
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
  
-    if (textField == self.usernameTF){
+    
+    if (textField == self.usernameTF) {
+        
+        [self usernameTimerFired];
+        [self stopUsernameTimer];
         
         [self highlightTextField:self.usernameTF enabled:NO];
         
@@ -647,8 +634,12 @@
 
         if ([self.usernameTF.text isEqualToString:@"@"]){
             self.usernameTF.text = @"";
+            return;
         }
     }
+    
+    
+    
     UIControlState controlState;
 
     if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
@@ -661,6 +652,44 @@
 }
 
 
+-(void)startUsernameTimer {
+    if (!self.usernameTimer) {
+        self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(usernameTimerFired) userInfo:nil repeats:YES];
+    }
+}
+
+-(void)stopUsernameTimer {
+    if ([self.usernameTimer isValid]) {
+        [self.usernameTimer invalidate];
+    }
+    
+    self.usernameTimer = nil;
+}
+
+-(void)usernameTimerFired {
+    
+    if (self.usernameTF.isEditing) {
+        
+        if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
+            
+            [[FRSAPIClient sharedClient] checkUsername:self.usernameTF.text completion:^(id responseObject, NSError *error) {
+                
+                NSString *message = [responseObject valueForKey:@"_msg"];
+                NSLog(@"MESSAGE: %@", message);
+                
+                if ([message isEqualToString:@"No user found"]) {
+                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                    [self stopUsernameTimer];
+                } else {
+                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                }
+            }];
+        }
+    }
+}
+
+
+
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (textField == self.emailTF) {
@@ -670,6 +699,7 @@
     }
     
     if (textField == self.usernameTF) {
+        
         if ([string containsString:@" "]) {
             return FALSE;
         }
@@ -787,7 +817,6 @@
                 self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 44);
             } completion:nil];
         }
-
         
         [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
@@ -980,10 +1009,7 @@
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
     self.bottomBar.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-    
-    NSInteger newScrollViewHeight = self.view.frame.size.height - keyboardSize.height;
-    NSInteger yOffset = self.scrollView.contentSize.height - newScrollViewHeight;
-    
+
     CGPoint point = self.scrollView.contentOffset;
 
     [UIView animateWithDuration:0.15 animations:^{
@@ -1118,7 +1144,7 @@
     NSLog(@"RESPONSE OBJECT = %@", responseObject);
     
     [self segueToSetup];
-
+    
 //    switch (error.code) {
 //        case 0:
 //            [self segueToSetup];
@@ -1129,7 +1155,6 @@
 //        default:
 //            break;
 //    }
-    
     
 }
 
