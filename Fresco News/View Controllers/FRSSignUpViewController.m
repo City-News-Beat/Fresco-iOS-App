@@ -49,7 +49,6 @@
 @property (strong, nonatomic) UIView *errorContainer;
 @property (strong, nonatomic) UIView *assignmentsCard;
 @property (nonatomic) BOOL emailError;
-@property (nonatomic) BOOL userShouldCheck;
 
 @property (strong, nonatomic) NSTimer *usernameTimer;
 
@@ -511,22 +510,24 @@
     
     
     if (animateIn) {
-        
-        self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
-        self.usernameCheckIV.alpha = 0;
-        
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.usernameCheckIV.alpha = 1;
-        } completion:nil];
-        
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
+        if (self.usernameCheckIV.alpha == 0) {
             
-        } completion:^(BOOL finished) {
+            self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+            self.usernameCheckIV.alpha = 0;
+            
             [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
+                self.usernameCheckIV.alpha = 1;
             } completion:nil];
-        }];
+            
+            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
+                
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
+                } completion:nil];
+            }];
+        }
         
     } else {
         
@@ -548,6 +549,13 @@
 #pragma mark - TextField Delegate
 
 -(void)textFieldDidChange {
+    
+    
+    
+    if (self.usernameTF) {
+        [self startUsernameTimer];
+    }
+    
     
     UIControlState controlState;
     if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
@@ -608,41 +616,12 @@
 
 }
 
-
--(void)checkUsername {
-    if (self.usernameTF.isEditing) {
-        NSLog(@"self.username.text = %@", self.usernameTF.text);
-        
-        if ([self.usernameTF.text isEqualToString:@"@"]) {
-            self.usernameCheckIV.alpha = 0;
-        }
-        
-        if (self.userShouldCheck) {
-            
-            [[FRSAPIClient sharedClient] checkUsername:self.usernameTF.text completion:^(id responseObject, NSError *error) {
-                
-                
-                NSString *message = [responseObject valueForKey:@"_msg"];
-                NSLog(@"MESSAGE: %@", message);
-                
-                //if ([message isEqualToString:@"No user found"] && (![self.usernameTF.text isEqualToString:@""])) {
-                //    self.usernameCheckIV.alpha = 1;
-                //}
-            }];
-            
-            self.userShouldCheck = YES;
-        }
-        
-        self.userShouldCheck = NO;
-    }
-}
-
 -(void)textFieldDidEndEditing:(UITextField *)textField {
  
     
-    if (textField == self.usernameTF){
+    if (textField == self.usernameTF) {
         
-        [self timerFired];
+        [self usernameTimerFired];
         [self stopUsernameTimer];
         
         [self highlightTextField:self.usernameTF enabled:NO];
@@ -655,8 +634,12 @@
 
         if ([self.usernameTF.text isEqualToString:@"@"]){
             self.usernameTF.text = @"";
+            return;
         }
     }
+    
+    
+    
     UIControlState controlState;
 
     if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
@@ -671,7 +654,7 @@
 
 -(void)startUsernameTimer {
     if (!self.usernameTimer) {
-        self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(timerFired) userInfo:nil repeats:YES];
+        self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(usernameTimerFired) userInfo:nil repeats:YES];
     }
 }
 
@@ -683,8 +666,26 @@
     self.usernameTimer = nil;
 }
 
--(void)timerFired {
-    NSLog(@"timer fired");
+-(void)usernameTimerFired {
+    
+    if (self.usernameTF.isEditing) {
+        
+        if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
+            
+            [[FRSAPIClient sharedClient] checkUsername:self.usernameTF.text completion:^(id responseObject, NSError *error) {
+                
+                NSString *message = [responseObject valueForKey:@"_msg"];
+                NSLog(@"MESSAGE: %@", message);
+                
+                if ([message isEqualToString:@"No user found"]) {
+                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                    [self stopUsernameTimer];
+                } else {
+                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                }
+            }];
+        }
+    }
 }
 
 
@@ -698,6 +699,7 @@
     }
     
     if (textField == self.usernameTF) {
+        
         if ([string containsString:@" "]) {
             return FALSE;
         }
@@ -1007,10 +1009,7 @@
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
     self.bottomBar.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-    
-    NSInteger newScrollViewHeight = self.view.frame.size.height - keyboardSize.height;
-    NSInteger yOffset = self.scrollView.contentSize.height - newScrollViewHeight;
-    
+
     CGPoint point = self.scrollView.contentOffset;
 
     [UIView animateWithDuration:0.15 animations:^{
@@ -1145,7 +1144,7 @@
     NSLog(@"RESPONSE OBJECT = %@", responseObject);
     
     [self segueToSetup];
-
+    
 //    switch (error.code) {
 //        case 0:
 //            [self segueToSetup];
@@ -1156,7 +1155,6 @@
 //        default:
 //            break;
 //    }
-    
     
 }
 
