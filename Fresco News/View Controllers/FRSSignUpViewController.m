@@ -503,11 +503,17 @@
 -(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
     
     if(success) {
+        if ([self.usernameCheckIV.image isEqual:[UIImage imageNamed:@"check-green"]]) {
+            return;
+        }
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
+        
     } else {
+        if ([self.usernameCheckIV.image isEqual:[UIImage imageNamed:@"check-red"]]) {
+            return;
+        }
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
     }
-    
     
     if (animateIn) {
         if (self.usernameCheckIV.alpha == 0) {
@@ -554,6 +560,11 @@
     
     if (self.usernameTF) {
         [self startUsernameTimer];
+        
+        
+        if ([[self.usernameTF.text substringFromIndex:1] isEqualToString:@""]){
+            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:NO success:NO];
+        }
     }
     
     
@@ -617,7 +628,6 @@
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
- 
     
     if (textField == self.usernameTF) {
         
@@ -672,7 +682,7 @@
         
         if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
             
-            [[FRSAPIClient sharedClient] checkUsername:self.usernameTF.text completion:^(id responseObject, NSError *error) {
+            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTF.text substringFromIndex:1] completion:^(id responseObject, NSError *error) {
                 
                 NSString *message = [responseObject valueForKey:@"_msg"];
                 NSLog(@"MESSAGE: %@", message);
@@ -682,6 +692,7 @@
                     [self stopUsernameTimer];
                 } else {
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                    [self stopUsernameTimer];
                 }
             }];
         }

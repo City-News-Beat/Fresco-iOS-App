@@ -11,9 +11,9 @@
 
 @interface FRSUploadViewController : FRSBaseViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
-@property (strong, nonatomic) UIButton *twitterButton;
-@property (strong, nonatomic) UIButton *facebookButton;
-@property (strong, nonatomic) UIButton *anonButton;
-@property (strong, nonatomic) UILabel *anonLabel;
+@property (retain, nonatomic) UIButton *twitterButton;
+@property (retain, nonatomic) UIButton *facebookButton;
+@property (retain, nonatomic) UIButton *anonButton;
+@property (retain, nonatomic) UILabel *anonLabel;
 
 @end

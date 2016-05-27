@@ -19,7 +19,7 @@
 @end
 
 @implementation FRSAssignmentPickerTableViewCell
-
+@synthesize isSelectedAssignment = _isSelectedAssignment;
 -(void)awakeFromNib {
 //    [super awakeFromNib];
 }
@@ -38,7 +38,8 @@
 
         self.selectionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24)];
         
-        [self toggleImage];
+//        [self toggleImage];
+        self.isSelectedAssignment = FALSE;
         
         [self addSubview:self.selectionImageView];
         
@@ -56,7 +57,8 @@
     self.titleLabel.frame = CGRectMake(16, 12, self.frame.size.width - 32 - 24 - 16, 20);
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
     
-    [self toggleImage];
+//    [self toggleImage];
+    self.isSelectedAssignment = FALSE;
     
     self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     
@@ -68,8 +70,13 @@
 }
 
 
--(void)toggleImage {
- 
+-(BOOL)isSelectedAssignment {
+    return _isSelectedAssignment;
+}
+
+-(void)setIsSelectedAssignment:(BOOL)isSelectedAssignment {
+    _isSelectedAssignment = isSelectedAssignment;
+    
     if (self.isSelectedAssignment) {
         self.selectionImageView.image = [UIImage imageNamed:@"check-box-circle-filled"];
         self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
@@ -78,7 +85,6 @@
         self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     }
 }
-
 
 -(void)clearCell {
     self.titleLabel.text = nil;
