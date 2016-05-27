@@ -18,7 +18,7 @@
     if (![endpoint containsString:@"auth"]) {
 
         if ([endpoint containsString:@"highlights"] || [endpoint containsString:@"story/recent"]) {
-            [request setValue:@"" forHTTPHeaderField:@"Authorization"];
+            [request setValue:Nil forHTTPHeaderField:@"Authorization"];
         }
     }
     
