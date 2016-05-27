@@ -33,12 +33,10 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void(^)(NSArray *stories, NSError *error))completion;
 -(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void(^)(NSArray *galleries, NSError *error))completion;
-
 -(void)fetchFollowing:(void(^)(NSArray *galleries, NSError *error))completion;
-
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion;
+-(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
 
 // generic auth-ed call
 -(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -71,5 +69,4 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 // check user
 -(void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion;
 -(NSDate *)dateFromString:(NSString *)string;
--(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
 @end
