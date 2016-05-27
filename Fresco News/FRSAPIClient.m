@@ -225,7 +225,7 @@
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
     
-    if (deviceToken) {
+    if (deviceToken != Nil || [deviceToken isEqual:[NSNull null]]) {
         currentInstallation[@"device_token"] = deviceToken;
     }
     else {
