@@ -2,7 +2,7 @@
 //  FRSJSONResponseSerializer.h
 //  Fresco
 //
-//  Created by Philip Bernstein on 5/27/2016.
+//  Created by Philip Bernstein on 5/27/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
