@@ -513,43 +513,40 @@
             
             self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
             self.usernameCheckIV.alpha = 0;
-            
-            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.usernameCheckIV.alpha = 1;
-            } completion:nil];
-            
-            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
-                
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
-                } completion:nil];
-            }];
-        }
-        
-    } else {
-        
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.1, 1.1);
-            
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
-            } completion:nil];
-        }];
-        
-        [UIView animateWithDuration:0.2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.usernameCheckIV.alpha = 0;
-        } completion:nil];
+          
+//            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+              self.usernameCheckIV.alpha = 1;
+//            } completion:nil];
+          
+//            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+              self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
+              
+//            } completion:^(BOOL finished) {
+//                [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                  self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
+//                } completion:nil];
+//            }];
+      }
+  } else {
+      
+//        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+          self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.1, 1.1);
+          
+//        } completion:^(BOOL finished) {
+//          [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+              self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+//            } completion:nil];
+//        }];
+      
+//        [UIView animateWithDuration:0.2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+          self.usernameCheckIV.alpha = 0;
+//        } completion:nil];
     }
 }
 
 #pragma mark - TextField Delegate
 
 -(void)textFieldDidChange {
-    
-    
     
     if (self.usernameTF) {
         [self startUsernameTimer];
