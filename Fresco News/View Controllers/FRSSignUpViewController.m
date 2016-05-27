@@ -622,6 +622,10 @@
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
     
+    if ([self.usernameTF.text length] == 0) {
+        return;
+    }
+    
     if (textField == self.usernameTF) {
         
         [self usernameTimerFired];
