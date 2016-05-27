@@ -57,7 +57,6 @@
     self.titleLabel.frame = CGRectMake(16, 12, self.frame.size.width - 32 - 24 - 16, 20);
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
     
-//    [self toggleImage];
     self.isSelectedAssignment = FALSE;
     
     self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -90,16 +89,6 @@
     self.titleLabel.text = nil;
     self.isSelectedAssignment = NO;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 @end

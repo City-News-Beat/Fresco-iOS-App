@@ -503,15 +503,8 @@
 -(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
     
     if(success) {
-        if ([self.usernameCheckIV.image isEqual:[UIImage imageNamed:@"check-green"]]) {
-            return;
-        }
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
-        
     } else {
-        if ([self.usernameCheckIV.image isEqual:[UIImage imageNamed:@"check-red"]]) {
-            return;
-        }
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
     }
     
