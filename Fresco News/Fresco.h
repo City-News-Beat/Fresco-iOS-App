@@ -54,7 +54,7 @@ static NSString * const storyGalleriesEndpoint = @"story/";
 // location endpoints
 static NSString * const locationEndpoint = @"user/location"; // send location
 static NSString * const dualLocationEndpoint = @"user/locationcall";  // send location & get nearby assignments
-
+static NSString * const acceptAssignmentEndpoint = @"assignment/accept";
 // sign in / sign up (authorization) methods
 static NSString * const loginEndpoint = @"auth/signin";
 static NSString * const signUpEndpoint = @"auth/register";

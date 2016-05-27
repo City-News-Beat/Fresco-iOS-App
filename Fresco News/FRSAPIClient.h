@@ -71,4 +71,5 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 // check user
 -(void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion;
 -(NSDate *)dateFromString:(NSString *)string;
+-(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
 @end

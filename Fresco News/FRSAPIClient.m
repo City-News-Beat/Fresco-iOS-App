@@ -642,6 +642,13 @@
     
 }
 
+-(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    [self post:acceptAssignmentEndpoint withParameters:@{@"assignment_id":assignmentID} completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 -(NSDate *)dateFromString:(NSString *)string {
     if (!self.dateFormatter) {
         self.dateFormatter = [[NSDateFormatter alloc] init];
