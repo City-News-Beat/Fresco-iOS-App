@@ -16,9 +16,10 @@
     NSMutableURLRequest *request = [super requestWithMethod:method URLString:URLString parameters:parameters error:Nil];
     
     if (![endpoint containsString:@"auth"]) {
-
-        if ([endpoint containsString:@"highlights"] || [endpoint containsString:@"story/recent"]) {
-            [request setValue:Nil forHTTPHeaderField:@"Authorization"];
+        NSString *authorization = [request valueForHTTPHeaderField:@"Authorization"];
+        
+        if ([endpoint containsString:@"highlights"] || [endpoint containsString:@"story/recent"] && ![authorization containsString:@"Bearer"]) {
+            [request setValue:@"" forHTTPHeaderField:@"Authorization"];
         }
     }
     
