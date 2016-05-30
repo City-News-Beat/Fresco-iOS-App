@@ -18,11 +18,8 @@
     
     if (![endpoint containsString:@"auth"]) {
         NSString *authorization = [request valueForHTTPHeaderField:@"Authorization"];
-        
-        if ([endpoint containsString:highlightsEndpoint] || [endpoint containsString:storiesEndpoint]) {
-            if (![authorization containsString:@"Bearer"]) {
-                [request setValue:@"" forHTTPHeaderField:@"Authorization"];
-            }
+        if ([authorization containsString:@"Basic"]) {
+            [request setValue:Nil forHTTPHeaderField:@"Authorization"];
         }
     }
     
