@@ -548,9 +548,14 @@
 
 -(void)textFieldDidChange {
     
-    if (self.usernameTF) {
+    if (self.emailTF.isEditing) {
+        if ([self isValidEmail:self.emailTF.text]) {
+            [self checkEmail];
+        }
+    }
+    
+    if (self.usernameTF.isEditing) {
         [self startUsernameTimer];
-        
         
         if ([[self.usernameTF.text substringFromIndex:1] isEqualToString:@""]){
             [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:NO success:NO];
@@ -882,15 +887,34 @@
         NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
         NSLog(@"%@", errorMessage);
         
-        [self respondToError:error fromResponseObject:responseObject];
-
+        
         if (error.code == 0) {
             _isAlreadyRegistered = TRUE;
+            [self segueToSetup];
             //check dictionary
         }
         _pastRegistration = registrationDigest;
         
         [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+        
+    }];
+}
+
+-(void)checkEmail {
+
+    [[FRSAPIClient sharedClient] checkEmail:self.emailTF.text completion:^(id responseObject, NSError *error) {
+        
+        
+        NSLog(@"RESPONSE: %@ \n\n\n ERROR: %@", responseObject, error);
+        
+        if (!error) {
+            [self shouldShowEmailDialogue:YES];
+            [self presentInvalidEmail];
+        } else {
+            [self shouldShowEmailDialogue:NO];
+        }
+        
+        
         
     }];
 }
@@ -1140,25 +1164,6 @@
 
 #pragma mark - Error Handling
 
--(void)respondToError:(NSError *)error fromResponseObject:(id)responseObject {
-    
-    NSLog(@"ERROR = %@", error);
-    NSLog(@"RESPONSE OBJECT = %@", responseObject);
-    
-    [self segueToSetup];
-    
-//    switch (error.code) {
-//        case 0:
-//            [self segueToSetup];
-//            break;
-//        case -1011:
-//            [self presentInvalidEmail];
-//            break;
-//        default:
-//            break;
-//    }
-    
-}
 
 -(void)presentInvalidEmail {
     
