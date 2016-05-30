@@ -677,11 +677,8 @@
         if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
             
             [[FRSAPIClient sharedClient] checkUsername:[self.usernameTF.text substringFromIndex:1] completion:^(id responseObject, NSError *error) {
-                
-                NSString *message = [responseObject valueForKey:@"_msg"];
-                NSLog(@"MESSAGE: %@", message);
-                
-                if ([message isEqualToString:@"No user found"]) {
+
+                if ([error.userInfo[@"NSLocalizedDescription"][@"msg"] isEqualToString:@"No user found"]) {
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
                     [self stopUsernameTimer];
                 } else {
