@@ -287,6 +287,10 @@
     FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
     [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
     }];
+
+    
+    
+//    [self dismiss];
 }
 
 -(IBAction)facebook:(id)sender {
