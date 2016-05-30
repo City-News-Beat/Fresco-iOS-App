@@ -50,6 +50,8 @@
 @property (strong, nonatomic) UIView *assignmentsCard;
 @property (nonatomic) BOOL emailError;
 
+@property (nonatomic) BOOL usernameTaken;
+@property (nonatomic) BOOL emailTaken;
 @property (strong, nonatomic) NSTimer *usernameTimer;
 
 @end
@@ -548,10 +550,8 @@
 
 -(void)textFieldDidChange {
     
-    if (self.emailTF.isEditing) {
-        if ([self isValidEmail:self.emailTF.text]) {
-            [self checkEmail];
-        }
+    if ((self.emailTF.isEditing) && ([self isValidEmail:self.emailTF.text])) {
+        [self checkEmail];
     }
     
     if (self.usernameTF.isEditing) {
@@ -562,17 +562,23 @@
         }
     }
     
-    
-    UIControlState controlState;
-    if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
-        controlState = UIControlStateHighlighted;
-    } else {
-        controlState = UIControlStateNormal;
-    }
-    
-    [self toggleCreateAccountButtonTitleColorToState:controlState];
+    [self checkCreateAccountButtonState];
 }
 
+-(void)checkCreateAccountButtonState {
+    UIControlState controlState;
+    
+    if (([self.usernameTF.text length] > 0) && ([self.emailTF.text length] > 0) && ([self.passwordTF.text length] >0)) {
+        
+        if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text] && (!self.emailTaken) && (!self.usernameTaken)) {
+            controlState = UIControlStateHighlighted;
+        } else {
+            controlState = UIControlStateNormal;
+        }
+        
+        [self toggleCreateAccountButtonTitleColorToState:controlState];
+    }
+}
 
 
 -(void)dismissKeyboard {
@@ -588,6 +594,7 @@
         if (![self isValidUsername:[self.usernameTF.text substringFromIndex:1]] || [textField.text isEqualToString:@"@"]){
             [self animateTextFieldError:self.usernameTF];
             [textField becomeFirstResponder];
+            self.usernameCheckIV.alpha = 0;
             return FALSE;
         }
         [self.emailTF becomeFirstResponder];
@@ -647,17 +654,15 @@
         }
     }
     
-    
-    
-    UIControlState controlState;
-
-    if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text]) {
-        controlState = UIControlStateHighlighted;
-    } else {
-        controlState = UIControlStateNormal;
-    }
-    
-    [self toggleCreateAccountButtonTitleColorToState:controlState];
+//    UIControlState controlState;
+//
+//    if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text] && (!self.emailTaken) && (!self.usernameTaken)) {
+//        controlState = UIControlStateHighlighted;
+//    } else {
+//        controlState = UIControlStateNormal;
+//    }
+//    
+//    [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
 
 
@@ -685,10 +690,14 @@
 
                 if ([error.userInfo[@"NSLocalizedDescription"][@"msg"] isEqualToString:@"No user found"]) {
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                    self.usernameTaken = NO;
                     [self stopUsernameTimer];
+                    [self checkCreateAccountButtonState];
                 } else {
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                    self.usernameTaken = YES;
                     [self stopUsernameTimer];
+                    [self checkCreateAccountButtonState];
                 }
             }];
         }
@@ -904,18 +913,16 @@
 
     [[FRSAPIClient sharedClient] checkEmail:self.emailTF.text completion:^(id responseObject, NSError *error) {
         
-        
-        NSLog(@"RESPONSE: %@ \n\n\n ERROR: %@", responseObject, error);
-        
         if (!error) {
+            self.emailTaken = YES;
             [self shouldShowEmailDialogue:YES];
             [self presentInvalidEmail];
         } else {
+            self.emailTaken = NO;
             [self shouldShowEmailDialogue:NO];
         }
         
-        
-        
+        [self checkCreateAccountButtonState];
     }];
 }
 
