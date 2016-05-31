@@ -168,7 +168,17 @@
         [storyCell clearCell];
         storyCell.story = self.feed[indexPath.row];
         [storyCell configureCell];
+        
+        __weak typeof(self) weakSelf = self;
+        
+        storyCell.actionBlock = ^{
+            [weakSelf showGalleries:weakSelf.feed[indexPath.row]];
+        };
     }
+}
+
+-(void)showGalleries:(FRSStory *)story {
+    
 }
 
 -(void)showShareSheetWithContent:(NSArray *)content {
