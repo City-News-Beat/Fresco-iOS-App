@@ -78,7 +78,18 @@
             return cell;
         }
         else if ([[representedObject class] isSubclassOfClass:[FRSStory class]]) {
+            FRSStoryCell *cell = [tableView dequeueReusableCellWithIdentifier:storyCellIdentifier];
             
+            if (!cell) {
+                cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storyCellIdentifier];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            
+            cell.actionBlock = ^{
+                
+            };
+        
+            return cell;
         }
     
     }
