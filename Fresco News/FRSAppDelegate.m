@@ -33,7 +33,7 @@
 #pragma mark - Startup and Application States
 
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
-    
+
     if ([self isFirstRun]) {
         [self clearKeychain]; // clear tokens from past install
     }
@@ -71,6 +71,8 @@
     }
     
     [self registerForPushNotifications];
+    
+   
     
     return YES;
 }
