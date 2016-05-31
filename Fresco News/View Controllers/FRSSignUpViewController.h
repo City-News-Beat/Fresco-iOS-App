@@ -21,4 +21,5 @@
 @property BOOL hasShown;
 @property BOOL isAlreadyRegistered;
 @property (nonatomic, retain) NSDictionary *pastRegistration;
+@property (nonatomic) BOOL isPresented;
 @end

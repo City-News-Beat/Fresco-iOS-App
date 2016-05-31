@@ -57,7 +57,7 @@
 @end
 
 @implementation FRSSignUpViewController
-@synthesize twitterSession = _twitterSession, facebookToken = _facebookToken, facebookButton = _facebookButton, twitterButton = _twitterButton, currentSocialDigest = _currentSocialDigest;
+@synthesize twitterSession = _twitterSession, facebookToken = _facebookToken, facebookButton = _facebookButton, twitterButton = _twitterButton, currentSocialDigest = _currentSocialDigest, isPresented = _isPresented;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -186,7 +186,7 @@
 -(void)configureScrollView {
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.window.bounds.size.height -44 -52 -12)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, (_isPresented) ? self.view.frame.size.height-52 -12 : self.view.frame.size.height -44 -52 -12)];
     
     self.scrollView.delegate = self;
     self.scrollView.scrollEnabled = NO;
