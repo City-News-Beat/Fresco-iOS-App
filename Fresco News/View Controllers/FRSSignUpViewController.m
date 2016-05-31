@@ -186,7 +186,7 @@
 -(void)configureScrollView {
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height -44 -52 -12)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.window.bounds.size.height -44 -52 -12)];
     
     self.scrollView.delegate = self;
     self.scrollView.scrollEnabled = NO;
