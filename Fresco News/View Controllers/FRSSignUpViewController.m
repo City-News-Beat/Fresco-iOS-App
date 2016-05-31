@@ -185,8 +185,15 @@
 
 -(void)configureScrollView {
     self.automaticallyAdjustsScrollViewInsets = NO;
+    int height = self.view.frame.size.height -44;
+    int y = 64;
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height -44 -52 -12)];
+    if ([self.navigationController.viewControllers indexOfObject:self] == 2) {
+        height = self.view.frame.size.height -44 -52 -12;
+        y = 0;
+    }
+    
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, y, self.view.frame.size.width, height)];
     
     self.scrollView.delegate = self;
     self.scrollView.scrollEnabled = NO;
