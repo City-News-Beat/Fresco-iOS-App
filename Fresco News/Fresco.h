@@ -80,6 +80,11 @@ static NSString * const assignmentsAction = @"FRSAssignmentsAction";
 static NSString * const takeVideoAction = @"FRSVideoAction";
 static NSString * const takePhotoAction = @"FRSPhotoAction";
 
+// object types
+static NSString * const postObjectType = @"post";
+static NSString * const galleryObjectType = @"gallery";
+static NSString * const storyObjectType = @"story";
+
 // legacy user defaults
 static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
 

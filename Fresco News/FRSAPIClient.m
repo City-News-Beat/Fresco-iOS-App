@@ -688,4 +688,29 @@
         completion(responseObject, error);
     }];
 }
+
+-(NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache {
+    NSMutableArray *responseObjects = [[NSMutableArray alloc] init];
+    NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
+    
+    for (NSDictionary *responseObject in response) {
+        NSString *objectType = responseObject[@"object"];
+        
+        if ([objectType isEqualToString:galleryObjectType]) {
+            
+        }
+        else if ([objectType isEqualToString:postObjectType]) {
+            
+        }
+        else if ([objectType isEqualToString:storyObjectType]) {
+            
+        }
+    }
+    
+    return responseObjects;
+}
+
+-(NSManagedObjectContext *)managedObjectContext {
+    return Nil;
+}
 @end
