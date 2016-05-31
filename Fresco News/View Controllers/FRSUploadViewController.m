@@ -57,7 +57,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-//    self.navigationController.navigationBarHidden = YES;
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -393,9 +394,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)send {
     
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
-        
+        UINavigationController *onboardNav = [[UINavigationController alloc] init];
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-        [self.navigationController pushViewController:onboardVC animated:NO];
+        [onboardNav pushViewController:onboardVC animated:NO];
+        [self.navigationController presentViewController:onboardNav animated:YES completion:nil];
+        
         return;
     }
         
