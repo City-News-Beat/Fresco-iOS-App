@@ -664,7 +664,7 @@
     Social interaction
 */
 -(void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpointFormat, gallery.uid];
+    NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
@@ -714,6 +714,11 @@
             
             [responseObjects addObject:story];
         }
+    }
+    
+    if (cache) {
+        NSError *saveError;
+        [managedObjectContext save:&saveError];
     }
     
     return responseObjects;
