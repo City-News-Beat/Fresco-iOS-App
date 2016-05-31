@@ -69,6 +69,12 @@ static NSString * const addSocialEndpoint = @"social/connect/";
 // gallery creation
 static NSString * const createGalleryEndpoint = @"gallery/create";
 
+// formatted endpoints
+static NSString * const likeGalleryEndpointFormat = @"gallery/%@/like";
+static NSString * const repostGalleryEndpoint = @"gallery/%@/repost";
+static NSString * const likeStoryEndpoint = @"story/%@/like";
+static NSString * const repostStoryEndpoint = @"story/%@/repost";
+
 // quick actions -- app delegate
 static NSString * const assignmentsAction = @"FRSAssignmentsAction";
 static NSString * const takeVideoAction = @"FRSVideoAction";

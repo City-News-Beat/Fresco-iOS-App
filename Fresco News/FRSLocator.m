@@ -305,4 +305,15 @@
     }
 }
 
++(NSArray *)localAssignments {
+    return @[];
+}
++(NSArray *)globalAssignments {
+    return @[];
+
+}
++(NSArray *)allAssignments {
+    return @[];
+}
+
 @end

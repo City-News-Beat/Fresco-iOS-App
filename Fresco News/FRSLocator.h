@@ -36,5 +36,8 @@ typedef void (^BackgroundBlock)(NSArray *locations); // allows us to add ability
 -(void)manualUpdate;
 
 +(instancetype)sharedLocator;
++(NSArray *)localAssignments;
++(NSArray *)globalAssignments;
++(NSArray *)allAssignments;
 
 @end

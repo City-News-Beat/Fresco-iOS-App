@@ -660,4 +660,20 @@
     return [self.dateFormatter dateFromString:string];
 }
 
+/* 
+    Social interaction
+*/
+-(void)likeGallery:(FRSGallery *)gallery {
+    
+}
+-(void)likeStory:(FRSStory *)story {
+    
+}
+
+-(void)repostGallery:(FRSGallery *)gallery {
+    
+}
+-(void)repostStory:(FRSStory *)story {
+    
+}
 @end
