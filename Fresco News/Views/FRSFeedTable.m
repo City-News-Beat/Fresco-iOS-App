@@ -141,30 +141,34 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     // sloppy not to have a check here
-    if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-        return;
+    if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        if (cell.gallery == self.feed[indexPath.row]) {
+            return;
+        }
+        
+        cell.gallery = self.feed[indexPath.row];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [cell clearCell];
+            [cell configureCell];
+        });
+        
+        __weak typeof(self) weakSelf = self;
+        
+        cell.shareBlock = ^void(NSArray *sharedContent) {
+            [weakSelf showShareSheetWithContent:sharedContent];
+        };
+        
+        cell.readMoreBlock = ^void(NSArray *sharedContent) {
+            [self readMore:indexPath];
+        };
     }
-    
-    if (cell.gallery == self.feed[indexPath.row]) {
-        return;
+    else if ([[cell class] isSubclassOfClass:[FRSStoryCell class]]) {
+        FRSStoryCell *storyCell = (FRSStoryCell *)cell;
+        [storyCell clearCell];
+        storyCell.story = self.feed[indexPath.row];
+        [storyCell configureCell];
     }
-    
-    cell.gallery = self.feed[indexPath.row];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell clearCell];
-        [cell configureCell];
-    });
-    
-    __weak typeof(self) weakSelf = self;
-    
-    cell.shareBlock = ^void(NSArray *sharedContent) {
-        [weakSelf showShareSheetWithContent:sharedContent];
-    };
-    
-    cell.readMoreBlock = ^void(NSArray *sharedContent) {
-        [self readMore:indexPath];
-    };
 }
 
 -(void)showShareSheetWithContent:(NSArray *)content {
