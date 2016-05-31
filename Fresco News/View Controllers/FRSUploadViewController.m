@@ -57,7 +57,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-//    self.navigationController.navigationBarHidden = YES;
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
