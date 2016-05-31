@@ -697,13 +697,22 @@
         NSString *objectType = responseObject[@"object"];
         
         if ([objectType isEqualToString:galleryObjectType]) {
+            FRSGallery *gallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:managedObjectContext];
+            [gallery configureWithDictionary:responseObject context:managedObjectContext];
             
+            [responseObjects addObject:gallery];
         }
         else if ([objectType isEqualToString:postObjectType]) {
+            FRSPost *post = [NSEntityDescription insertNewObjectForEntityForName:@"FRSPost" inManagedObjectContext:managedObjectContext];
+            [post configureWithDictionary:responseObject context:managedObjectContext];
             
+            [responseObjects addObject:post];
         }
         else if ([objectType isEqualToString:storyObjectType]) {
+            FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:managedObjectContext];
+            [story configureWithDictionary:responseObject];
             
+            [responseObjects addObject:story];
         }
     }
     
