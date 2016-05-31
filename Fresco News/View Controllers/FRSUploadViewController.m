@@ -9,6 +9,7 @@
 #import "FRSUploadViewController.h"
 #import "FRSAssignmentPickerTableViewCell.h"
 #import "FRSAssignment.h"
+#import "FRSOnboardingViewController.h"
 #import <Twitter/Twitter.h>
 
 #import "FRSAPIClient.h"
@@ -391,6 +392,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
     //Next button action
 -(void)send {
     
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        
+        FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
+        [self.navigationController pushViewController:onboardVC animated:NO];
+        return;
+    }
+        
     [self dismissKeyboard];
     
 
