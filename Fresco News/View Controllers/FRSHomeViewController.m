@@ -100,6 +100,8 @@
     
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.scrollView animated:NO];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
 }
 
 -(void)viewDidAppear:(BOOL)animated {

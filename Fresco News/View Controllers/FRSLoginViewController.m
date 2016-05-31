@@ -292,8 +292,19 @@
 //    FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
 //    [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:nil];
     
+//    [self.navigationController popToRootViewControllerAnimated:YES];
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    
+
+    if ([viewControllers count] == 3) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    } else {
+        [self.navigationController popToViewController:[viewControllers objectAtIndex:2] animated:YES];
+    }
+    
     
 }
 
