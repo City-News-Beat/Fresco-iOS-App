@@ -663,17 +663,29 @@
 /* 
     Social interaction
 */
--(void)likeGallery:(FRSGallery *)gallery {
-    
+-(void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpointFormat, gallery.uid];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
--(void)likeStory:(FRSStory *)story {
-    
+-(void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:likeStoryEndpoint, story.uid];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
--(void)repostGallery:(FRSGallery *)gallery {
-    
+-(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
--(void)repostStory:(FRSStory *)story {
-    
+-(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:repostStoryEndpoint, story.uid];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 @end

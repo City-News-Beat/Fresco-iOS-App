@@ -70,9 +70,9 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 -(void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion;
 -(NSDate *)dateFromString:(NSString *)string;
 
--(void)likeGallery:(FRSGallery *)gallery;
--(void)likeStory:(FRSStory *)story;
+-(void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
 
--(void)repostGallery:(FRSGallery *)gallery;
--(void)repostStory:(FRSStory *)story;
+-(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
 @end
