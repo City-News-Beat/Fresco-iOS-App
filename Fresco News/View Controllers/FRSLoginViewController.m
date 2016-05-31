@@ -10,6 +10,7 @@
 #import "FRSLoginViewController.h"
 #import "FRSOnboardingViewController.h"
 #import "FRSTabBarController.h"
+#import "FRSUploadViewController.h"
 
 //API
 #import "FRSAPIClient.h"
@@ -24,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *socialTopConstraint;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) UILabel *invalidUserLabel;
+@property (nonatomic) BOOL didAuthenticateSocial;
 
 @end
 
@@ -273,31 +275,39 @@
 -(IBAction)twitter:(id)sender {
     
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
-        
-        NSLog(@"TWITTER AUTH: %d", authenticated);
-        
         if (authenticated) {
             
-            [self moveToHome];
+            self.didAuthenticateSocial = YES;
+            
+            [self popToOrigin];
         }
     }];
 }
 
--(void)moveToHome {
-    FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
-    [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
-    }];
-
+-(void)popToOrigin {
+    
+    //FRSUploadViewController *uploadVC = [[FRSUploadViewController alloc] init];
+    //[self pushViewControllerWithCompletion:uploadVC animated:NO completion:nil];
+    
+//    FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
+//    [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:nil];
+    
+//    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    [self.navigationController popToViewController:[viewControllers objectAtIndex:2] animated:YES];
     
     
-//    [self dismiss];
 }
 
 -(IBAction)facebook:(id)sender {
     
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         if (authenticated) {
-            [self moveToHome];
+            
+            self.didAuthenticateSocial = YES;
+
+            [self popToOrigin];
         }
     } parent:self];
 }
