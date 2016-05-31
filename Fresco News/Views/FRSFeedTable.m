@@ -7,6 +7,9 @@
 //
 
 #import "FRSFeedTable.h"
+#import "UIColor+Fresco.h"
+#import "FRSAppDelegate.h"
+#import "FRSGalleryExpandedViewController.h"
 
 @implementation FRSFeedTable
 @synthesize navigationController = _navigationController, galleries = _galleries, loadMoreBlock = _loadMoreBlock;

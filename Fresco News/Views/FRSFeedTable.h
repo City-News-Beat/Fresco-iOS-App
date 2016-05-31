@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Fresco.h"
 #import "FRSGallery.h"
 #import "FRSStory.h"
 #import "FRSGalleryCell.h"
