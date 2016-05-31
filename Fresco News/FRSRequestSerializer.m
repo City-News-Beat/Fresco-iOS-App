@@ -7,6 +7,7 @@
 //
 
 #import "FRSRequestSerializer.h"
+#import "Fresco.h"
 
 @implementation FRSRequestSerializer
 
@@ -16,9 +17,9 @@
     NSMutableURLRequest *request = [super requestWithMethod:method URLString:URLString parameters:parameters error:Nil];
     
     if (![endpoint containsString:@"auth"]) {
-
-        if ([endpoint containsString:@"highlights"] || [endpoint containsString:@"story/recent"]) {
-            [request setValue:@"" forHTTPHeaderField:@"Authorization"];
+        NSString *authorization = [request valueForHTTPHeaderField:@"Authorization"];
+        if ([authorization containsString:@"Basic"]) {
+            [request setValue:Nil forHTTPHeaderField:@"Authorization"];
         }
     }
     

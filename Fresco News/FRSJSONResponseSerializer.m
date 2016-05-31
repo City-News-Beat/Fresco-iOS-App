@@ -17,14 +17,18 @@
     id responseToReturn = [super responseObjectForResponse:response
                                                       data:data
                                                      error:error];
-    if (!*error) { return responseToReturn; }
+    if (!*error) {
+        return responseToReturn;
+    }
     
     NSError *parsingError;
     NSDictionary *JSONResponse = [NSJSONSerialization JSONObjectWithData:data
                                                                  options:NSJSONReadingAllowFragments
                                                                    error:&parsingError];
     
-    if (parsingError) { return responseToReturn; }
+    if (parsingError) {
+        return responseToReturn;
+    }
     
     NSMutableDictionary *userInfo = [(*error).userInfo mutableCopy];
     NSString *errorDescription = JSONResponse[@"error"];

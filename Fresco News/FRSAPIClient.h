@@ -69,4 +69,10 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 // check user
 -(void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion;
 -(NSDate *)dateFromString:(NSString *)string;
+
+-(void)likeGallery:(FRSGallery *)gallery;
+-(void)likeStory:(FRSStory *)story;
+
+-(void)repostGallery:(FRSGallery *)gallery;
+-(void)repostStory:(FRSStory *)story;
 @end
