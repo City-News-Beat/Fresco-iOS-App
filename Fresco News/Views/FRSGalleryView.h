@@ -17,11 +17,10 @@
 
 
 @protocol FRSGalleryViewDelegate <NSObject>
-
 -(BOOL)shouldHaveActionBar;
 -(BOOL)shouldHaveTextLimit;
 -(void)playerWillPlay:(FRSPlayer *)player;
-@property UINavigationController *navigationController;
+@property (weak, nonatomic) UINavigationController *navigationController;
 @end
 
 @interface FRSGalleryView : UIView
