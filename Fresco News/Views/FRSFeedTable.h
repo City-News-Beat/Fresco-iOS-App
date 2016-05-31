@@ -13,8 +13,8 @@
 #import "FRSGalleryCell.h"
 #import "FRSStoryCell.h"
 
-@interface FRSFeedTable : UITableView <FRSGalleryViewDelegate>
-@property NSArray *galleries;
+@interface FRSFeedTable : UITableView <FRSGalleryViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@property NSArray *feed;
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
 // loading more data
 typedef NSArray *(^FRSFeedTableLoadMoreRequest)(int offset, NSString *offsetIdentifier); // asks for more data based off index path of last object we currently have, as well as the UID of the gallery, expects (demands) an NSArray in response, not recommended to capture self (or any external object) strongly in this block (will retain table even if discarded if you do, use a weak reference to self)

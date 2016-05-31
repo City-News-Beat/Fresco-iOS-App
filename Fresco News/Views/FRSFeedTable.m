@@ -12,7 +12,7 @@
 #import "FRSGalleryExpandedViewController.h"
 
 @implementation FRSFeedTable
-@synthesize navigationController = _navigationController, galleries = _galleries, loadMoreBlock = _loadMoreBlock;
+@synthesize navigationController = _navigationController, feed = _feed, loadMoreBlock = _loadMoreBlock;
 
 -(instancetype)init {
     self = [super init];
@@ -34,12 +34,12 @@
     return self;
 }
 
--(NSArray *)galleries {
-    return _galleries;
+-(NSArray *)feed {
+    return _feed;
 }
 
--(void)setGalleries:(NSArray *)galleries {
-    _galleries = galleries;
+-(void)setFeed:(NSArray *)feed {
+    _feed = feed;
     [self reloadData];
 }
 
@@ -56,30 +56,42 @@
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.delegate = self;
-    self.dataSource = self;
+    self.delegate = (id<UITableViewDelegate>)self;
+    self.dataSource = (id<UITableViewDataSource>)self;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
+    if (indexPath.row < _feed.count) {
+        id representedObject = [_feed objectAtIndex:indexPath.row];
+        
+        if ([[representedObject class] isSubclassOfClass:[FRSGallery class]]) {
+            FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:galleryCellIdentifier];
+            
+            if (!cell) {
+                cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            
+            cell.delegate = self;
+            
+            return cell;
+        }
+        else if ([[representedObject class] isSubclassOfClass:[FRSStory class]]) {
+            
+        }
     
-    if (!cell) {
-        cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:galleryCellIdentifier];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
-    cell.delegate = self;
-    
-    return cell;
+ 
+    return Nil; // replace with loading more
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.galleries.count;
+    return self.feed.count;
 }
 
 -(void)readMore:(NSIndexPath *)indexPath {
-    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.galleries objectAtIndex:indexPath.row]];
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.feed objectAtIndex:indexPath.row]];
     vc.shouldHaveBackButton = YES;
     
     FRSScrollingViewController *scroll = (FRSScrollingViewController *)self.scrollDelegate;
@@ -122,11 +134,11 @@
         return;
     }
     
-    if (cell.gallery == self.galleries[indexPath.row]) {
+    if (cell.gallery == self.feed[indexPath.row]) {
         return;
     }
     
-    cell.gallery = self.galleries[indexPath.row];
+    cell.gallery = self.feed[indexPath.row];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [cell clearCell];
@@ -150,16 +162,16 @@
 }
 
 -(void)reloadData {
-    [self fetchGalleries];
+    [self fetchfeed];
 }
 
--(void)fetchGalleries {
+-(void)fetchfeed {
     
 }
 
 -(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {
     
-    NSArray *filteredArray = [self.galleries filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
+    NSArray *filteredArray = [self.feed filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
     
     if (!filteredArray.count) return;
     // push gallery detail view
@@ -167,11 +179,11 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.row >= self.galleries.count) {
+    if (indexPath.row >= self.feed.count) {
         return 0;
     }
     
-    FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
+    FRSGallery *gallery = [self.feed objectAtIndex:indexPath.row];
     return [gallery heightForGallery];
 }
 
