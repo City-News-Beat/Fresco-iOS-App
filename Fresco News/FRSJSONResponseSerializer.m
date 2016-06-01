@@ -20,7 +20,7 @@
                                                       data:data
                                                      error:error];
     if (!*error) {
-        return responseToReturn;
+        return [self parsedObjectsFromAPIResponse:response cache:FALSE];
     }
     
     NSError *parsingError;
