@@ -7,6 +7,8 @@
 //
 
 #import "FRSJSONResponseSerializer.h"
+#import "FRSGallery.h"
+#import "FRSStory.h"
 
 @implementation FRSJSONResponseSerializer
 
@@ -40,6 +42,78 @@
     (*error) = annotatedError;
     
     return responseToReturn;
+}
+
+-(id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
+    
+    if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
+        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
+        NSMutableDictionary *responseObjects = [[NSMutableDictionary alloc] init];
+        NSArray *keys = [response allKeys];
+        
+        for (NSString *key in keys) {
+            id valueForKey = [self objectFromDictionary:[response objectForKey:key] context:managedObjectContext];
+            [responseObjects setObject:valueForKey forKey:key];
+        }
+        
+        if (cache) {
+            NSError *saveError;
+            [managedObjectContext save:&saveError];
+        }
+        
+        return responseObjects;
+    }
+    else if ([[response class] isSubclassOfClass:[NSArray class]]) {
+        NSMutableArray *responseObjects = [[NSMutableArray alloc] init];
+        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
+        
+        for (NSDictionary *responseObject in response) {
+            [responseObjects addObject:[self objectFromDictionary:responseObject context:managedObjectContext]];
+        }
+        
+        if (cache) {
+            NSError *saveError;
+            [managedObjectContext save:&saveError];
+        }
+        
+        return responseObjects;
+    }
+    else {
+        NSLog(@"No route of serialization. Sry.");
+    }
+    
+    return response;
+}
+
+-(id)objectFromDictionary:(NSDictionary *)dictionary context:(NSManagedObjectContext *)managedObjectContext {
+    
+    NSString *objectType = dictionary[@"object"];
+    
+    if ([objectType isEqualToString:galleryObjectType]) {
+        FRSGallery *gallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:managedObjectContext];
+        [gallery configureWithDictionary:dictionary context:managedObjectContext];
+        
+        return gallery;
+    }
+    else if ([objectType isEqualToString:postObjectType]) {
+        FRSPost *post = [NSEntityDescription insertNewObjectForEntityForName:@"FRSPost" inManagedObjectContext:managedObjectContext];
+        [post configureWithDictionary:dictionary context:managedObjectContext];
+        
+        return post;
+        
+    }
+    else if ([objectType isEqualToString:storyObjectType]) {
+        FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:managedObjectContext];
+        [story configureWithDictionary:dictionary];
+        
+        return story;
+    }
+    
+    return dictionary; // not serializable
+}
+
+-(NSManagedObjectContext *)managedObjectContext {
+    return Nil;
 }
 
 @end
