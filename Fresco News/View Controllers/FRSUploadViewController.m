@@ -231,7 +231,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    NSLog(@"self.assignmentsArray.count = %ld", self.assignmentsArray.count);
+    NSLog(@"self.assignmentsArray.count = %llu", (unsigned long long)self.assignmentsArray.count);
     
     return self.assignmentsArray.count;
 }
@@ -368,7 +368,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         //NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
         //NSArray *global = @[@"Global", @"Global Two"];
-                
+        
+        if ([global count] >  0) {
+            
+        }
         self.assignmentsArray = nearBy; //should be nearby, make new array for global
         [self configureAssignmentsTableView];
         [self configureTextView];
