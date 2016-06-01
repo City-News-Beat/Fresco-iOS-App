@@ -71,6 +71,11 @@
         <attribute name="editedDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="imageURLs" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="liked" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="likes" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="reposted" optional="YES" attributeType="Boolean" defaultValueString="0" syncable="YES"/>
+        <attribute name="reposted_ny" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="reposts" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSUser" inverseName="stories" inverseEntity="FRSUser" syncable="YES"/>
@@ -113,7 +118,7 @@
         <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="285"/>
         <element name="FRSNotification" positionX="-839" positionY="-153" width="128" height="150"/>
         <element name="FRSPost" positionX="-36" positionY="9" width="128" height="255"/>
-        <element name="FRSStory" positionX="-54" positionY="-9" width="128" height="180"/>
+        <element name="FRSStory" positionX="-54" positionY="-9" width="128" height="255"/>
         <element name="FRSUpload" positionX="-990" positionY="-9" width="128" height="210"/>
         <element name="FRSUser" positionX="-18" positionY="27" width="128" height="285"/>
     </elements>
