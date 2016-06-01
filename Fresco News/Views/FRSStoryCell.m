@@ -39,16 +39,9 @@
 //        self.storyView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     }
     
-    NSNumber *numLikes = [self.story valueForKey:@"likes"];
-    BOOL isLiked = [[self.story valueForKey:@"liked"] boolValue];
-    
-    NSNumber *numReposts = [self.story valueForKey:@"reposts"];
-    BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
-    
-    NSString *repostedBy = [self.story valueForKey:@"reposted_by"];
-    
     self.storyView.actionBlock = self.actionBlock;
     [self addSubview:self.storyView];
+
 }
 
 -(void)clearCell{
