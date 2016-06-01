@@ -59,7 +59,7 @@
 @implementation FRSSignUpViewController
 @synthesize twitterSession = _twitterSession, facebookToken = _facebookToken, facebookButton = _facebookButton, twitterButton = _twitterButton, currentSocialDigest = _currentSocialDigest;
 
-- (void)viewDidLoad {
+-(void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
     
@@ -80,22 +80,22 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     if (!_hasShown) {
 //        [self.usernameTF becomeFirstResponder];
     }
-    
+    _hasShown = TRUE;
+
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
-    _hasShown = TRUE;
     
-    self.navigationItem.title = @"SIGN UP"; // lil agressive no
+    self.navigationItem.title = @"SIGN UP";
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.navigationBar setTitleTextAttributes:
           @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
-    
+    self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
@@ -428,6 +428,7 @@
 }
 
 -(void)configureBottomBar {
+    
     self.bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height -44 -64, self.view.frame.size.width, 44)];
     self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.bottomBar];
@@ -442,6 +443,58 @@
     [self.bottomBar addSubview:self.createAccountButton];
     
     [self addSocialButtonsToBottomBar];
+
+    
+    UIView *subView = self.bottomBar;
+    UIView *parent = self.view;
+    g
+    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    //Trailing
+    NSLayoutConstraint *trailing =[NSLayoutConstraint
+                                   constraintWithItem:subView
+                                   attribute:NSLayoutAttributeTrailing
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:parent
+                                   attribute:NSLayoutAttributeTrailing
+                                   multiplier:1
+                                   constant:0];
+    
+    //Leading
+    NSLayoutConstraint *leading = [NSLayoutConstraint
+                                   constraintWithItem:subView
+                                   attribute:NSLayoutAttributeLeading
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:parent
+                                   attribute:NSLayoutAttributeLeading
+                                   multiplier:1
+                                   constant:0];
+    
+    //Bottom
+    NSLayoutConstraint *bottom = [NSLayoutConstraint
+                                 constraintWithItem:subView
+                                 attribute:NSLayoutAttributeBottom
+                                 relatedBy:NSLayoutRelationEqual
+                                 toItem:parent
+                                 attribute:NSLayoutAttributeBottom
+                                 multiplier:1
+                                 constant:0];
+    
+    //Height height
+    NSLayoutConstraint *height = [NSLayoutConstraint
+                                  constraintWithItem:subView
+                                  attribute:NSLayoutAttributeHeight
+                                  relatedBy:NSLayoutRelationEqual
+                                  toItem:nil
+                                  attribute:0
+                                  multiplier:0
+                                  constant:44];
+    
+    [parent addConstraint:trailing];
+    [parent addConstraint:bottom];
+    [parent addConstraint:leading];
+    
+    [subView addConstraint:height];
 }
 
 -(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState {
