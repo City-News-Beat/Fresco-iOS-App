@@ -10,6 +10,7 @@
 #import "UIColor+Fresco.h"
 #import "FRSAppDelegate.h"
 #import "FRSGalleryExpandedViewController.h"
+#import "FRSScrollingViewController.h"
 
 @implementation FRSFeedTable
 @synthesize navigationController = _navigationController, feed = _feed, loadMoreBlock = _loadMoreBlock;
@@ -141,6 +142,13 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     // sloppy not to have a check here
+    
+    if (indexPath.row == [self.feed count]) {
+        // load more cell, don't need to do anything
+        
+        return;
+    }
+    
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
         if (cell.gallery == self.feed[indexPath.row]) {
             return;
@@ -175,6 +183,10 @@
             [weakSelf showGalleries:weakSelf.feed[indexPath.row]];
         };
     }
+    else {
+        NSLog(@"Unidentified Cell Display");
+    }
+    
 }
 
 -(void)showGalleries:(FRSStory *)story {
@@ -200,6 +212,24 @@
     
     if (!filteredArray.count) return;
     // push gallery detail view
+    
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[filteredArray firstObject]];
+    vc.shouldHaveBackButton = YES;
+    
+    FRSScrollingViewController *scroll = (FRSScrollingViewController *)self.scrollDelegate;
+    
+    if (!scroll) {
+        NSLog(@"No delegate for gallery detail view.");
+        return;
+    }
+    
+    scroll.navigationItem.title = @"";
+    
+    [scroll.navigationController pushViewController:vc animated:YES];
+    scroll.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    scroll.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    [(FRSScrollingViewController *)self.scrollDelegate hideTabBarAnimated:YES];
+
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

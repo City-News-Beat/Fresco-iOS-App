@@ -181,6 +181,7 @@
 		D4A7D8A11CCA7D4E002C6EA3 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */; };
 		D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EEA1CF8B50400A33FAB /* FRSRequestSerializer.m */; };
 		D4AF8EEF1CFDFED100A33FAB /* FRSFeedTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EEE1CFDFED100A33FAB /* FRSFeedTable.m */; };
+		D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EF21CFF656100A33FAB /* FRSNavigationBar.m */; };
 		D4B35F4D1CCEB47200F5C8A8 /* NSData+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F4A1CCEB47200F5C8A8 /* NSData+NSHash.m */; };
 		D4B35F4E1CCEB47200F5C8A8 /* NSString+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F4C1CCEB47200F5C8A8 /* NSString+NSHash.m */; };
 		D4B35F521CCEB4CD00F5C8A8 /* FRSFileUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F511CCEB4CD00F5C8A8 /* FRSFileUploadManager.m */; };
@@ -569,6 +570,8 @@
 		D4AF8EEA1CF8B50400A33FAB /* FRSRequestSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRequestSerializer.m; sourceTree = "<group>"; };
 		D4AF8EED1CFDFED100A33FAB /* FRSFeedTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFeedTable.h; sourceTree = "<group>"; };
 		D4AF8EEE1CFDFED100A33FAB /* FRSFeedTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFeedTable.m; sourceTree = "<group>"; };
+		D4AF8EF11CFF656100A33FAB /* FRSNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNavigationBar.h; sourceTree = "<group>"; };
+		D4AF8EF21CFF656100A33FAB /* FRSNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNavigationBar.m; sourceTree = "<group>"; };
 		D4B35F491CCEB47200F5C8A8 /* NSData+NSHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+NSHash.h"; sourceTree = "<group>"; };
 		D4B35F4A1CCEB47200F5C8A8 /* NSData+NSHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+NSHash.m"; sourceTree = "<group>"; };
 		D4B35F4B1CCEB47200F5C8A8 /* NSString+NSHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSHash.h"; sourceTree = "<group>"; };
@@ -873,6 +876,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D4AF8EF01CFF654A00A33FAB /* Nav Bar */,
 				D4AF8EEC1CFDFEB100A33FAB /* Feed Table */,
 				07EAFF281CEA226D00E224E2 /* Launch Screen */,
 				D40BD3CB1CDE073A00E39701 /* Gallery Table */,
@@ -1789,6 +1793,15 @@
 			name = "Feed Table";
 			sourceTree = "<group>";
 		};
+		D4AF8EF01CFF654A00A33FAB /* Nav Bar */ = {
+			isa = PBXGroup;
+			children = (
+				D4AF8EF11CFF656100A33FAB /* FRSNavigationBar.h */,
+				D4AF8EF21CFF656100A33FAB /* FRSNavigationBar.m */,
+			);
+			name = "Nav Bar";
+			sourceTree = "<group>";
+		};
 		D4B35F481CCEB45E00F5C8A8 /* File Hash */ = {
 			isa = PBXGroup;
 			children = (
@@ -2234,6 +2247,7 @@
 				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,
+				D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */,
 				65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */,
 				65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */,
 				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,
