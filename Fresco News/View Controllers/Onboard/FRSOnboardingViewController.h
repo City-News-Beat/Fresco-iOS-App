@@ -10,6 +10,4 @@
 
 @interface FRSOnboardingViewController : UIViewController
 
--(void)animateReturnToOnboard;
-
 @end
