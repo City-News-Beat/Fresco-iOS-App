@@ -74,7 +74,7 @@
         <attribute name="liked" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="likes" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="reposted" optional="YES" attributeType="Boolean" defaultValueString="0" syncable="YES"/>
-        <attribute name="reposted_ny" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="reposted_by" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="reposts" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
