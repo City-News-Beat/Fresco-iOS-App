@@ -20,7 +20,7 @@
                                                       data:data
                                                      error:error];
     if (!*error) {
-        return [self parsedObjectsFromAPIResponse:response cache:FALSE];
+        return responseToReturn;//[self parsedObjectsFromAPIResponse:response cache:FALSE];
     }
     
     NSError *parsingError;
@@ -53,6 +53,11 @@
         
         for (NSString *key in keys) {
             id valueForKey = [self objectFromDictionary:[response objectForKey:key] context:managedObjectContext];
+            
+            if (valueForKey == [response objectForKey:key]) {
+                return response; // non parse
+            }
+            
             [responseObjects setObject:valueForKey forKey:key];
         }
         
@@ -68,6 +73,12 @@
         NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
         
         for (NSDictionary *responseObject in response) {
+            id originalResponse = [self objectFromDictionary:responseObject context:managedObjectContext];
+            
+            if (originalResponse == responseObject) {
+                return response;
+            }
+            
             [responseObjects addObject:[self objectFromDictionary:responseObject context:managedObjectContext]];
         }
         
