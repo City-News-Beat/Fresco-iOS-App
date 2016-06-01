@@ -76,5 +76,11 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
 
+-(void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
+
+-(void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unfollowUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion;
+
 -(NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache;
 @end

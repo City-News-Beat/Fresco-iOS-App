@@ -74,6 +74,8 @@ static NSString * const likeGalleryEndpoint = @"gallery/%@/like";
 static NSString * const repostGalleryEndpoint = @"gallery/%@/repost";
 static NSString * const likeStoryEndpoint = @"story/%@/like";
 static NSString * const repostStoryEndpoint = @"story/%@/repost";
+static NSString * const followUserEndpoint = @"user/%@/follow";
+static NSString * const unfollowUserEndpoint = @"user/%@/unfollow";
 
 // quick actions -- app delegate
 static NSString * const assignmentsAction = @"FRSAssignmentsAction";

@@ -396,6 +396,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
         UINavigationController *onboardNav = [[UINavigationController alloc] init];
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
+        
         [onboardNav pushViewController:onboardVC animated:NO];
         [self.navigationController presentViewController:onboardNav animated:YES completion:nil];
         

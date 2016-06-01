@@ -689,6 +689,26 @@
     }];
 }
 
+-(void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self followUserID:user.uid completion:completion];
+}
+-(void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self unfollowUserID:user.uid completion:completion];
+}
+
+-(void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:followUserEndpoint, userID];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+-(void)unfollowUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:unfollowUserEndpoint, userID];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 -(NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache {
     NSMutableArray *responseObjects = [[NSMutableArray alloc] init];
     NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
