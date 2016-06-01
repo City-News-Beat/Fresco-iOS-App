@@ -447,7 +447,7 @@
     
     UIView *subView = self.bottomBar;
     UIView *parent = self.view;
-    g
+
     subView.translatesAutoresizingMaskIntoConstraints = NO;
     
     //Trailing
