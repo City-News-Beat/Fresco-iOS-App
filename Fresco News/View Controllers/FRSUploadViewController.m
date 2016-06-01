@@ -363,14 +363,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:50 ofLocation:@[@(lastLocation.coordinate.latitude), @(lastLocation.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
         
-//        NSArray *nearBy = responseObject[@"nearby"];
-//        NSArray *global = responseObject[@"global"];
+        NSArray *nearBy = responseObject[@"nearby"];
+        NSArray *global = responseObject[@"global"];
         
-        NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
-        NSArray *global = @[@"Global", @"Global Two"];
-        
-        NSLog(@"Near by:%@ Global: %@", nearBy, global);
-        
+        //NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
+        //NSArray *global = @[@"Global", @"Global Two"];
+                
         self.assignmentsArray = nearBy; //should be nearby, make new array for global
         [self configureAssignmentsTableView];
         [self configureTextView];
