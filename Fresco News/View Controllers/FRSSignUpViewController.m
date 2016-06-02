@@ -442,19 +442,22 @@
     [self.bottomBar addSubview:self.createAccountButton];
     
     [self addSocialButtonsToBottomBar];
-
     
-    UIView *subView = self.bottomBar;
-    UIView *parent = self.view;
+    
+    [self constrainSubview:self.bottomBar ToBottomOfParentView:self.view WithHeight:44];
 
+}
+
+-(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
+    
     subView.translatesAutoresizingMaskIntoConstraints = NO;
     
     //Trailing
-    NSLayoutConstraint *trailing =[NSLayoutConstraint
+    NSLayoutConstraint *trailing = [NSLayoutConstraint
                                    constraintWithItem:subView
                                    attribute:NSLayoutAttributeTrailing
                                    relatedBy:NSLayoutRelationEqual
-                                   toItem:parent
+                                   toItem:parentView
                                    attribute:NSLayoutAttributeTrailing
                                    multiplier:1
                                    constant:0];
@@ -464,37 +467,39 @@
                                    constraintWithItem:subView
                                    attribute:NSLayoutAttributeLeading
                                    relatedBy:NSLayoutRelationEqual
-                                   toItem:parent
+                                   toItem:parentView
                                    attribute:NSLayoutAttributeLeading
                                    multiplier:1
                                    constant:0];
     
     //Bottom
     NSLayoutConstraint *bottom = [NSLayoutConstraint
-                                 constraintWithItem:subView
-                                 attribute:NSLayoutAttributeBottom
-                                 relatedBy:NSLayoutRelationEqual
-                                 toItem:parent
-                                 attribute:NSLayoutAttributeBottom
-                                 multiplier:1
-                                 constant:0];
+                                  constraintWithItem:subView
+                                  attribute:NSLayoutAttributeBottom
+                                  relatedBy:NSLayoutRelationEqual
+                                  toItem:parentView
+                                  attribute:NSLayoutAttributeBottom
+                                  multiplier:1
+                                  constant:0];
     
-    //Height height
-    NSLayoutConstraint *height = [NSLayoutConstraint
+    //Height
+    NSLayoutConstraint *constantHeight = [NSLayoutConstraint
                                   constraintWithItem:subView
                                   attribute:NSLayoutAttributeHeight
                                   relatedBy:NSLayoutRelationEqual
                                   toItem:nil
                                   attribute:0
                                   multiplier:0
-                                  constant:44];
+                                  constant:height];
     
-    [parent addConstraint:trailing];
-    [parent addConstraint:bottom];
-    [parent addConstraint:leading];
+    [parentView addConstraint:trailing];
+    [parentView addConstraint:bottom];
+    [parentView addConstraint:leading];
     
-    [subView addConstraint:height];
+    [subView addConstraint:constantHeight];
 }
+
+
 
 -(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState {
     if (controlState == UIControlStateNormal){
@@ -506,7 +511,9 @@
         [self.createAccountButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
         self.createAccountButton.enabled = YES;
     }
+    
 }
+
 
 -(void)addSocialButtonsToBottomBar {
     _facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
@@ -1312,7 +1319,7 @@
 }
 
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {    
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (self.scrollView.scrollEnabled) {
         if (self.emailTF.isEditing || self.passwordTF.isEditing || self.usernameTF.isEditing || self.promoTF.isEditing) {
             [self dismissKeyboard];
