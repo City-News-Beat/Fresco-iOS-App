@@ -695,7 +695,10 @@
             self.usernameTF.text = @"@";
         }
     }
-
+    
+    if (self.usernameTF.isFirstResponder || self.emailTF.isFirstResponder || self.passwordTF.isFirstResponder) {
+        [self.scrollView setContentOffset:CGPointZero animated:YES];
+    }
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
@@ -1157,7 +1160,11 @@
     if (self.notificationsEnabled) {
         self.scrollView.scrollEnabled = YES;
     } else {
-        [self.scrollView setContentOffset:CGPointZero animated:YES];
+        NSLog(@"self.scrollView.contentOffset.y = %f", self.scrollView.contentOffset.y);
+        if (self.scrollView.contentOffset.y != 0){
+            [self.scrollView setContentOffset:CGPointZero animated:YES];
+        }
+        
         self.scrollView.scrollEnabled = NO;
     }
     
@@ -1171,6 +1178,10 @@
     
     if (self.promoTF.isFirstResponder) {
         self.scrollView.frame = CGRectMake(0, self.yPos, self.view.frame.size.width, self.height);
+    }
+    
+    if (!self.notificationsEnabled) {
+        [self.scrollView setContentOffset:CGPointZero animated:YES];
     }
 }
 
