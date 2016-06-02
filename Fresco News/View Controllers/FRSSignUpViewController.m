@@ -54,6 +54,9 @@
 @property (nonatomic) BOOL emailTaken;
 @property (strong, nonatomic) NSTimer *usernameTimer;
 
+@property (nonatomic) NSInteger yPos;
+@property (nonatomic) NSInteger height;
+
 @end
 
 @implementation FRSSignUpViewController
@@ -184,15 +187,15 @@
 
 -(void)configureScrollView {
     self.automaticallyAdjustsScrollViewInsets = NO;
-    int height = self.view.frame.size.height -44;
-    int y = 64;
+    self.height = self.view.frame.size.height -44;
+    self.yPos = 64;
     
     if ([self.navigationController.viewControllers indexOfObject:self] == 2) {
-        height = self.view.frame.size.height -44 -52 -12;
-        y = 0;
+        self.height = self.view.frame.size.height -44 -52 -12;
+        self.yPos = 0;
     }
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, y, self.view.frame.size.width, height)];
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.yPos, self.view.frame.size.width, self.height)];
     
     self.scrollView.delegate = self;
     self.scrollView.scrollEnabled = NO;
