@@ -95,7 +95,6 @@
     [self.navigationController.navigationBar setTitleTextAttributes:
           @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
@@ -1099,6 +1098,8 @@
 
 -(void)handleKeyboardWillShow:(NSNotification *)sender {
     
+    self.scrollView.scrollEnabled = YES;
+    
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
     self.bottomBar.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
@@ -1136,10 +1137,19 @@
                 }
             }
         }
+    } else {
+        [self.scrollView setContentOffset:CGPointZero animated:YES];
     }
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender {
+    
+    if (self.notificationsEnabled) {
+        self.scrollView.scrollEnabled = YES;
+    } else {
+        [self.scrollView setContentOffset:CGPointZero animated:YES];
+        self.scrollView.scrollEnabled = NO;
+    }
     
     self.bottomBar.transform = CGAffineTransformMakeTranslation(0, 0);
     
@@ -1302,7 +1312,13 @@
 }
 
 
-
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {    
+    if (self.scrollView.scrollEnabled) {
+        if (self.emailTF.isEditing || self.passwordTF.isEditing || self.usernameTF.isEditing || self.promoTF.isEditing) {
+            [self dismissKeyboard];
+        }
+    }
+}
 
 
 

@@ -176,6 +176,10 @@
         if (![[FRSAPIClient sharedClient] isAuthenticated]) {
             UINavigationController *onboardNav = [[UINavigationController alloc] init];
             FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
+            
+            onboardNav.navigationBar.backgroundColor = [UIColor redColor];
+            self.parentViewController.navigationController.navigationBar.backgroundColor = [UIColor frescoOrangeColor];
+            
             [onboardNav pushViewController:onboardVC animated:NO];
             [self.navigationController presentViewController:onboardNav animated:YES completion:nil];
         }
