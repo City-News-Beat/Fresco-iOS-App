@@ -1169,8 +1169,8 @@
         }];
     }
     
-    if (self.promoTF.isFirstResponder){
-        self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    if (self.promoTF.isFirstResponder) {
+        self.scrollView.frame = CGRectMake(0, self.yPos, self.view.frame.size.width, self.height);
     }
 }
 
