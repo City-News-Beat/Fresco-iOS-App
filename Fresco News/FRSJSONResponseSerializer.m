@@ -19,32 +19,36 @@
     id responseToReturn = [super responseObjectForResponse:response
                                                       data:data
                                                      error:error];
-    if (!*error) {
-        return responseToReturn;//[self parsedObjectsFromAPIResponse:response cache:FALSE];
-    }
     
     NSError *parsingError;
     NSDictionary *JSONResponse = [NSJSONSerialization JSONObjectWithData:data
                                                                  options:NSJSONReadingAllowFragments
                                                                    error:&parsingError];
     
-    if (parsingError) {
-        return responseToReturn;
+    if (!*error && !parsingError) {
+        return [self parsedObjectsFromAPIResponse:JSONResponse cache:FALSE];
     }
+    
     
     NSMutableDictionary *userInfo = [(*error).userInfo mutableCopy];
     NSString *errorDescription = JSONResponse[@"error"];
     userInfo[NSLocalizedDescriptionKey] = errorDescription;
+    
+    if (parsingError) {
+        (*error) = parsingError;
+        return responseToReturn;
+    }
     
     NSError *annotatedError = [NSError errorWithDomain:(*error).domain
                                                   code:(*error).code
                                               userInfo:userInfo];
     (*error) = annotatedError;
     
-    return responseToReturn;
+    return JSONResponse;
 }
 
 -(id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
+    NSLog(@"RESPONSE CLASS: %@", [response class]);
     
     if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
         NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
