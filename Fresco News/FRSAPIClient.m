@@ -709,6 +709,29 @@
     }];
 }
 
+-(void)fetchCommentsForGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self fetchCommentsForGalleryID:gallery.uid completion:completion];
+}
+-(void)fetchCommentsForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:commentsEndpoint, galleryID];
+    
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)addComment:(NSString *)comment toGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self addComment:comment toGalleryID:gallery.uid completion:completion];
+}
+
+-(void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:commentEndpoint, galleryID];
+    NSDictionary *parameters = @{@"comment":comment};
+    
+    [self post:endpoint withParameters:parameters completion:completion];
+}
+
+
 -(NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache {
     NSMutableArray *responseObjects = [[NSMutableArray alloc] init];
     NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;

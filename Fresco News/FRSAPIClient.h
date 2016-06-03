@@ -82,5 +82,8 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 -(void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)unfollowUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion;
 
+-(void)fetchCommentsForGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)fetchCommentsForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion;
+
 -(NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache;
 @end
