@@ -102,6 +102,10 @@
 
 -(id)objectFromDictionary:(NSDictionary *)dictionary context:(NSManagedObjectContext *)managedObjectContext {
     
+    if ([dictionary isEqual:[NSNull null]]) {
+        return dictionary;
+    }
+    
     NSString *objectType = dictionary[@"object"];
     
     if ([objectType isEqualToString:galleryObjectType]) {
