@@ -102,6 +102,10 @@
 
 -(id)objectFromDictionary:(NSDictionary *)dictionary context:(NSManagedObjectContext *)managedObjectContext {
     
+    if (![dictionary respondsToSelector:@selector(objectForKeyedSubscript:)]) {
+        return dictionary;
+    }
+    
     if ([dictionary isEqual:[NSNull null]]) {
         return dictionary;
     }
