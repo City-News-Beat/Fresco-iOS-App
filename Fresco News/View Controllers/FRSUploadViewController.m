@@ -404,82 +404,49 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
 
     //Upload in background when user is composing social post
+
     
-    
-    
-    
-    
-    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
-    
-        [[[FBSDKGraphRequest alloc]
-          initWithGraphPath:@"me/feed"
-          parameters: @{ @"message" : @"test"}
-          HTTPMethod:@"POST"]
-         startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+    if (self.postToFacebook) {
+        
+        if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
             
-             if (!error) {
-                 NSLog(@"Post id:%@", result[@"id"]);
-             }
-         }];
-        
-    } else {
-
-        FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
-        
-        [loginManager logInWithPublishPermissions:@[@"publish_actions"]
-                               fromViewController:self
-                                          handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-                                              
-                                              NSLog(@"\n\n  RESULT: %@ \n\n  ERROR: %@ \n ", result, error);
-                                              
-                                              [[[FBSDKGraphRequest alloc]
-                                                initWithGraphPath:@"me/feed"
-                                                parameters: @{ @"message" : @"test"}
-                                                HTTPMethod:@"POST"]
-                                               startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                                                   NSLog(@"\n\n  RESULT: %@ \n\n  ERROR: %@ \n ", result, error);
-
-                                                   if (!error) {
-                                                       NSLog(@"Post id:%@", result[@"id"]);
-                                                   }
-                                               }];
-                                              
-                                          }];
+            [[[FBSDKGraphRequest alloc]
+              initWithGraphPath:@"me/feed"
+              parameters: @{ @"message" : @"test"}
+              HTTPMethod:@"POST"]
+             startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                 
+                 if (!error) {
+                     NSLog(@"Post id:%@", result[@"id"]);
+                 }
+             }];
+            
+        } else {
+            
+            FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
+            
+            [loginManager logInWithPublishPermissions:@[@"publish_actions"]
+                                   fromViewController:self
+                                              handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+                                                  
+                                                  [[[FBSDKGraphRequest alloc]
+                                                    initWithGraphPath:@"me/feed"
+                                                    parameters: @{ @"message" : @"test"}
+                                                    HTTPMethod:@"POST"]
+                                                   startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                                                       
+                                                       if (!error) {
+                                                           NSLog(@"Post id:%@", result[@"id"]);
+                                                       }
+                                                   }];
+                                              }];
+        }
     }
     
     
-//    if (self.postToTwitter) {
-//        TWTRComposer *composer = [[TWTRComposer alloc] init];
-//        [composer setText:self.captionTextView.text];
-//        [composer setURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
-//        [composer showFromViewController:self completion:^(TWTRComposerResult result) {
-//            if (result == TWTRComposerResultCancelled) {
-//            } else {
-//                if (self.postToFacebook) {
-//                    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
-//                        SLComposeViewController *facebook = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-//                        [facebook setInitialText:self.captionTextView.text];
-//                        [facebook addURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
-//                        [self presentViewController:facebook animated:YES completion:^{
-//                            return;
-//                        }];
-//                    }
-//                }
-//            }
-//        }];
-//    }
-//    
-//    if (self.postToFacebook) {
-//        if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
-//            SLComposeViewController *facebook = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-//            [facebook setInitialText:self.captionTextView.text];
-//            [facebook addURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
-//            [self presentViewController:facebook animated:YES completion:nil];
-//        }
-//    }
-    
-    
-    
+    if (self.postToTwitter) {
+        [self tweet:@"test"];
+    }
     
     
     if (self.postAnon) {
@@ -487,6 +454,23 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
 }
 
+-(void)tweet:(NSString *)string {
+    
+//    string = [NSString stringWithFormat:@"status=%@", string];
+//    
+//    NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
+//    NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
+//    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+//    tweetRequest.HTTPMethod = @"POST";
+//    tweetRequest.HTTPBody = [[string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] dataUsingEncoding:NSUTF8StringEncoding];
+//    
+//    [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+//        NSLog(@"\n RESPONSE: %@ \n DATA: %@ \n ERROR : %@ \n", response, data, connectionError);
+//        if (connectionError) {
+//
+//        }
+//    }];
+}
 
 
     //Square button action
