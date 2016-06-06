@@ -10,4 +10,20 @@
 
 @implementation FRSNavigationBar
 
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(uploadStatus:)
+                                                     name:FRSUploadNotification
+                                                   object:nil];
+    }
+    
+    return self;
+}
+
+-(void)uploadStatus:(NSNotification *)notification {
+    
+}
 @end

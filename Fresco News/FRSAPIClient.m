@@ -641,7 +641,6 @@
         // shouldn't happen
         completion(TRUE, error);
     }];
-    
 }
 
 -(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
