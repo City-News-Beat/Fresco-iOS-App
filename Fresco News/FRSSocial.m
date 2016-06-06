@@ -32,6 +32,7 @@
 
 +(void)loginWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent {
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    
     [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:parent handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         if (error) {
             completion(FALSE, error, Nil, Nil);

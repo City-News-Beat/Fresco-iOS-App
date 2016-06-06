@@ -174,10 +174,9 @@
     
     if ([self.tabBar.items indexOfObject:item] == 4) {
         if (![[FRSAPIClient sharedClient] isAuthenticated]) {
-            UINavigationController *onboardNav = [[UINavigationController alloc] init];
+            
             FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-            [onboardNav pushViewController:onboardVC animated:NO];
-            [self.navigationController presentViewController:onboardNav animated:YES completion:nil];
+            [self.navigationController pushViewController:onboardVC animated:NO];
         }
     }
 }

@@ -34,7 +34,7 @@
 @property (strong, nonatomic) FRSOnboardOneView *viewOne;
 @property (strong, nonatomic) UIView *actionBarContainer;
 @property (strong, nonatomic) UIButton *logInButton;
-@property (strong, nonatomic) UIView *mainContainer; //Animating view on intro
+@property (strong, nonatomic) UIView *mainContainer;
 
 @property NSInteger page;
 
@@ -42,54 +42,43 @@
 
 @implementation FRSOnboardingViewController
 
-- (void)viewDidLoad {
+
+
+#pragma mark - Lifecycle
+
+-(void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
-    [self configureParallax];
     
     [self animateFirstLaunch];
     
-    
-    //TODO
     //Make delegate
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(animateIn)
-                                                 name:@"returnToOnboard"
-                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(animateIn) name:@"returnToOnboard" object:nil];
 }
+
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     self.navigationController.navigationBarHidden = YES;
 }
+
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-    
+    [self.navigationController.navigationBar setHidden:YES];
 }
 
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
+
+
 
 #pragma mark - UI Configuration
 
--(NSString *)titleForActionButton{
-    return @"READ MORE";
-}
-
--(UIColor *)colorForActionButton{
-    return [UIColor frescoBlueColor];
-}
-
--(void)configureUI{
+-(void)configureUI {
     
     self.mainContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-//    self.mainContainer.backgroundColor = [UIColor redColor];
     
     [self configureScrollView];
     [self configureOnboardingViews];
@@ -101,8 +90,18 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
 }
 
+
+-(NSString *)titleForActionButton {
+    return @"READ MORE";
+}
+
+
+-(UIColor *)colorForActionButton {
+    return [UIColor frescoBlueColor];
+}
+
+
 -(void)configureDismissButton {
-    //Placeholder,
     
     self.closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.closeButton.frame = CGRectMake(12, 30, 24, 24);
@@ -112,7 +111,9 @@
     [self.view addSubview:self.closeButton];
 }
 
+
 -(void)configureScrollView {
+    
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width * 3, self.scrollView.frame.size.height);
     self.scrollView.pagingEnabled = YES;
@@ -125,11 +126,13 @@
     [self.view addSubview:self.scrollView];
 }
 
+
 -(void)configureOnboardingViews {
+    
     NSInteger offset = (self.scrollView.frame.size.width - 320)/2;
     
+    
     self.viewOne = [[FRSOnboardOneView alloc] initWithOrigin:CGPointMake(offset, 0)];
-
     [self.scrollView addSubview:self.viewOne];
     
     FRSOnboardTwoView *viewTwo = [[FRSOnboardTwoView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width + offset, 0)];
@@ -137,10 +140,11 @@
     
     self.viewThree = [[FRSOnboardThreeView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width * 2 + offset, 0)];
     [self.scrollView addSubview:self.viewThree];
-    
 }
 
+
 -(void)configurePageControl {
+    
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = 3;
     self.pageControl.userInteractionEnabled = NO;
@@ -150,7 +154,9 @@
     [self.pageControl setPageIndicatorTintColor:[UIColor frescoLightTextColor]];
     [self.pageControl setCurrentPageIndicatorTintColor:[UIColor frescoMediumTextColor]];
     
+    
     NSInteger offset = 32;
+    
     if (IS_IPHONE_5){
         offset = 24;
     }
@@ -160,14 +166,18 @@
     [self.view addSubview:self.pageControl];
 }
 
+
 -(void)configureLogo {
+    
     self.logo = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.center.x - 188/2, 36, 188, 65)];
     self.logo.image =[UIImage imageNamed:@"largeLogo"];
     self.logo.alpha = 0;
     [self.view addSubview:self.logo];
 }
 
+
 -(void)configureActionBar {
+    
     self.actionBarContainer = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, [UIScreen mainScreen].bounds.size.width, 44)];
     [self.view addSubview:self.actionBarContainer];
     
@@ -191,15 +201,9 @@
     [signUp setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     [signUp addTarget:self action:@selector(signUp) forControlEvents:UIControlEventTouchUpInside];
     [self.actionBarContainer addSubview:signUp];
-    
-    /* DEBUG */
-//        signUp.backgroundColor = [UIColor greenColor];
-//        logIn.backgroundColor = [UIColor redColor];
 }
 
--(void)configureParallax {
-//    [OEParallax createParallaxFromView:self.logo withMaxX:10 withMinX:-10 withMaxY:10 withMinY:-10];
-}
+
 
 
 #pragma mark - UIButton Actions
@@ -214,12 +218,16 @@
     });
 }
 
+
 -(void)signUp {
+    
     FRSSignUpViewController *signUpViewController = [[FRSSignUpViewController alloc] init];
     [self.navigationController pushViewController:signUpViewController animated:YES];
 }
 
+
 -(void)dismiss {
+    
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
@@ -233,9 +241,7 @@
     
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.view.alpha = 0;
-    } completion:^(BOOL finished) {
-
-    }];
+    } completion:nil];
     
     CATransition *transition = [CATransition animation];
     transition.duration = 0.3;
@@ -248,6 +254,9 @@
     
     [self dismissViewControllerAnimated:NO completion:nil];
 }
+
+
+
 
 #pragma mark - Transition Animations
 
@@ -272,9 +281,11 @@
     [self performSelector:@selector(showStatusBar) withObject:nil afterDelay:0.25];
 }
 
+
 -(void)showStatusBar {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
 }
+
 
 -(void)animateMaterialIntroOnPageControl:(UIPageControl *)pageControl delay:(CGFloat)delay {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -303,6 +314,7 @@
     });
 }
 
+
 -(void)animateMaterialIntroOnScrollView:(UIScrollView *)scrollView delay:(CGFloat)delay {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
@@ -329,6 +341,7 @@
         } completion:nil];
     });
 }
+
 
 -(void)animateMaterialIntroOnImageView:(UIImageView *)imageView delay:(CGFloat)delay {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -359,9 +372,6 @@
 
 
 -(void)animateOut {
-    
-    /* TOTAL ANIMATION DURATION [  1.0  ] */
-
     
     /* Animate scrollView xPos */
     [UIView animateWithDuration:0.3/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -415,14 +425,12 @@
     
     self.actionBarContainer.transform = CGAffineTransformMakeTranslation(0, 50);
     self.actionBarContainer.alpha = 0;
-    
 }
+
 
 -(void)animateIn {
     
     [self prepareForAnimation];
-    
-    /* TOTAL ANIMATION DURATION [  1.0  ] */
     
     
     /* Animate scrollView xPos */
@@ -463,6 +471,8 @@
         self.logInButton.enabled = YES;
     }];
 }
+
+
 
 
 #pragma mark - UIScrollView Delegate

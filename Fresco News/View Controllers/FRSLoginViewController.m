@@ -294,8 +294,16 @@
     
 //    [self.navigationController popToRootViewControllerAnimated:YES];
     
+    
+    
     NSArray *viewControllers = [self.navigationController viewControllers];
-    [self.navigationController popToViewController:[viewControllers objectAtIndex:2] animated:YES];
+    
+
+    if ([viewControllers count] == 3) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    } else {
+        [self.navigationController popToViewController:[viewControllers objectAtIndex:2] animated:YES];
+    }
     
     
 }

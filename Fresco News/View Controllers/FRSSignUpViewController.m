@@ -54,12 +54,15 @@
 @property (nonatomic) BOOL emailTaken;
 @property (strong, nonatomic) NSTimer *usernameTimer;
 
+@property (nonatomic) NSInteger yPos;
+@property (nonatomic) NSInteger height;
+
 @end
 
 @implementation FRSSignUpViewController
 @synthesize twitterSession = _twitterSession, facebookToken = _facebookToken, facebookButton = _facebookButton, twitterButton = _twitterButton, currentSocialDigest = _currentSocialDigest, isPresented = _isPresented;
 
-- (void)viewDidLoad {
+-(void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
     
@@ -80,22 +83,21 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     if (!_hasShown) {
 //        [self.usernameTF becomeFirstResponder];
     }
-    
+    _hasShown = TRUE;
+
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
-    _hasShown = TRUE;
     
-    self.navigationItem.title = @"SIGN UP"; // lil agressive no
+    self.navigationItem.title = @"SIGN UP";
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.navigationBar setTitleTextAttributes:
           @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
-    
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
@@ -185,8 +187,15 @@
 
 -(void)configureScrollView {
     self.automaticallyAdjustsScrollViewInsets = NO;
+    self.height = self.view.frame.size.height -44;
+    self.yPos = 64;
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, (_isPresented) ? self.view.frame.size.height-52 -12 : self.view.frame.size.height -44 -52 -12)];
+    if ([self.navigationController.viewControllers indexOfObject:self] == 2) {
+        self.height = self.view.frame.size.height -44 -52 -12;
+        self.yPos = 0;
+    }
+    
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.yPos, self.view.frame.size.width, self.height)];
     
     self.scrollView.delegate = self;
     self.scrollView.scrollEnabled = NO;
@@ -421,6 +430,7 @@
 }
 
 -(void)configureBottomBar {
+    
     self.bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height -44 -64, self.view.frame.size.width, 44)];
     self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.bottomBar];
@@ -435,7 +445,64 @@
     [self.bottomBar addSubview:self.createAccountButton];
     
     [self addSocialButtonsToBottomBar];
+    
+    
+    [self constrainSubview:self.bottomBar ToBottomOfParentView:self.view WithHeight:44];
+
 }
+
+-(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
+    
+    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    //Trailing
+    NSLayoutConstraint *trailing = [NSLayoutConstraint
+                                   constraintWithItem:subView
+                                   attribute:NSLayoutAttributeTrailing
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:parentView
+                                   attribute:NSLayoutAttributeTrailing
+                                   multiplier:1
+                                   constant:0];
+    
+    //Leading
+    NSLayoutConstraint *leading = [NSLayoutConstraint
+                                   constraintWithItem:subView
+                                   attribute:NSLayoutAttributeLeading
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:parentView
+                                   attribute:NSLayoutAttributeLeading
+                                   multiplier:1
+                                   constant:0];
+    
+    //Bottom
+    NSLayoutConstraint *bottom = [NSLayoutConstraint
+                                  constraintWithItem:subView
+                                  attribute:NSLayoutAttributeBottom
+                                  relatedBy:NSLayoutRelationEqual
+                                  toItem:parentView
+                                  attribute:NSLayoutAttributeBottom
+                                  multiplier:1
+                                  constant:0];
+    
+    //Height
+    NSLayoutConstraint *constantHeight = [NSLayoutConstraint
+                                  constraintWithItem:subView
+                                  attribute:NSLayoutAttributeHeight
+                                  relatedBy:NSLayoutRelationEqual
+                                  toItem:nil
+                                  attribute:0
+                                  multiplier:0
+                                  constant:height];
+    
+    [parentView addConstraint:trailing];
+    [parentView addConstraint:bottom];
+    [parentView addConstraint:leading];
+    
+    [subView addConstraint:constantHeight];
+}
+
+
 
 -(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState {
     if (controlState == UIControlStateNormal){
@@ -447,7 +514,9 @@
         [self.createAccountButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
         self.createAccountButton.enabled = YES;
     }
+    
 }
+
 
 -(void)addSocialButtonsToBottomBar {
     _facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
@@ -626,7 +695,10 @@
             self.usernameTF.text = @"@";
         }
     }
-
+    
+    if (self.usernameTF.isFirstResponder || self.emailTF.isFirstResponder || self.passwordTF.isFirstResponder) {
+        [self.scrollView setContentOffset:CGPointZero animated:YES];
+    }
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
@@ -682,7 +754,13 @@
 
 -(void)usernameTimerFired {
     
-    if (self.usernameTF.isEditing) {
+    // Check for emoji and error
+    if ([self stringContainsEmoji:[self.usernameTF.text substringFromIndex:1]]){
+        [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+        return;
+    }
+    
+    if (self.usernameTF.isEditing && (![self stringContainsEmoji:[self.usernameTF.text substringFromIndex:1]])) {
         
         if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
             
@@ -1039,6 +1117,8 @@
 
 -(void)handleKeyboardWillShow:(NSNotification *)sender {
     
+    self.scrollView.scrollEnabled = YES;
+    
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
     self.bottomBar.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
@@ -1076,10 +1156,23 @@
                 }
             }
         }
+    } else {
+        [self.scrollView setContentOffset:CGPointZero animated:YES];
     }
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender {
+    
+    if (self.notificationsEnabled) {
+        self.scrollView.scrollEnabled = YES;
+    } else {
+
+        if (self.scrollView.contentOffset.y != 0){
+            [self.scrollView setContentOffset:CGPointZero animated:YES];
+        }
+        
+        self.scrollView.scrollEnabled = NO;
+    }
     
     self.bottomBar.transform = CGAffineTransformMakeTranslation(0, 0);
     
@@ -1089,8 +1182,12 @@
         }];
     }
     
-    if (self.promoTF.isFirstResponder){
-        self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    if (self.promoTF.isFirstResponder) {
+        self.scrollView.frame = CGRectMake(0, self.yPos, self.view.frame.size.width, self.height);
+    }
+    
+    if (!self.notificationsEnabled) {
+        [self.scrollView setContentOffset:CGPointZero animated:YES];
     }
 }
 
@@ -1140,6 +1237,10 @@
 }
 
 -(BOOL)isValidUsername:(NSString *)username {
+    
+    if ([self stringContainsEmoji:username]) {
+        return NO;
+    }
 
     if ([username isEqualToString:@"@"]) {
         return NO;
@@ -1167,6 +1268,46 @@
         // return false
     
     return YES;
+}
+
+-(BOOL)stringContainsEmoji:(NSString *)string {
+    __block BOOL returnValue = NO;
+    [string enumerateSubstringsInRange:NSMakeRange(0, [string length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:
+     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+         
+         const unichar hs = [substring characterAtIndex:0];
+         // surrogate pair
+         if (0xd800 <= hs && hs <= 0xdbff) {
+             if (substring.length > 1) {
+                 const unichar ls = [substring characterAtIndex:1];
+                 const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+                 if (0x1d000 <= uc && uc <= 0x1f77f) {
+                     returnValue = YES;
+                 }
+             }
+         } else if (substring.length > 1) {
+             const unichar ls = [substring characterAtIndex:1];
+             if (ls == 0x20e3) {
+                 returnValue = YES;
+             }
+             
+         } else {
+             // non surrogate
+             if (0x2100 <= hs && hs <= 0x27ff) {
+                 returnValue = YES;
+             } else if (0x2B05 <= hs && hs <= 0x2b07) {
+                 returnValue = YES;
+             } else if (0x2934 <= hs && hs <= 0x2935) {
+                 returnValue = YES;
+             } else if (0x3297 <= hs && hs <= 0x3299) {
+                 returnValue = YES;
+             } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
+                 returnValue = YES;
+             }
+         }
+     }];
+    
+    return returnValue;
 }
 
 #pragma mark - Error Handling
@@ -1242,7 +1383,13 @@
 }
 
 
-
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (self.scrollView.scrollEnabled) {
+        if (self.emailTF.isEditing || self.passwordTF.isEditing || self.usernameTF.isEditing || self.promoTF.isEditing) {
+            [self dismissKeyboard];
+        }
+    }
+}
 
 
 

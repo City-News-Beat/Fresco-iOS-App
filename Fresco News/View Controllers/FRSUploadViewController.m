@@ -395,66 +395,65 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)send {
     
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
-        UINavigationController *onboardNav = [[UINavigationController alloc] init];
+        
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-        
-        [onboardNav pushViewController:onboardVC animated:NO];
-        [self.navigationController presentViewController:onboardNav animated:YES completion:nil];
-        
+        [self.navigationController pushViewController:onboardVC animated:NO];
         return;
     }
         
     [self dismissKeyboard];
     
 
-    //Upload in background when user is composing social post
+    if (self.postToFacebook) {
+        [self facebook:self.captionTextView.text];
+
+    }
     
     
     if (self.postToTwitter) {
-
-        TWTRComposer *composer = [[TWTRComposer alloc] init];
-        
-        [composer setText:self.captionTextView.text];
-        [composer setURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
-        [composer showFromViewController:self completion:^(TWTRComposerResult result) {
-            if (result == TWTRComposerResultCancelled) {
-            } else {
-                if (self.postToFacebook) {
-                    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
-                        SLComposeViewController *facebook = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-                        [facebook setInitialText:self.captionTextView.text];
-                        [facebook addURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
-                        [self presentViewController:facebook animated:YES completion:^{
-                            return;
-                        }];
-                    }
-                }
-            }
-        }];
-        
-        //TWTRSession *session = [Twitter sharedInstance].sessionStore.session;
-        //TWTRCardConfiguration *card = [TWTRCardConfiguration appCardConfigurationWithPromoImage:[[UIImage alloc] init] iPhoneAppID:@"872040692" iPadAppID:nil googlePlayAppID:nil];
-        //TWTRComposerViewController *composer = [[TWTRComposerViewController alloc] initWithUserID:session.userID cardConfiguration:card];
-        //[self presentViewController:composer animated:YES completion:nil];
+        [self tweet:@"test"];
     }
     
-    if (self.postToFacebook) {
-        if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
-            SLComposeViewController *facebook = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-            [facebook setInitialText:self.captionTextView.text];
-            [facebook addURL:[NSURL URLWithString:@"www.fresconews.com"]]; //link to gallery
-            [self presentViewController:facebook animated:YES completion:nil];
-        }
-    }
     
     if (self.postAnon) {
         NSLog(@"Post anonymously");
     }
 }
 
+-(void)tweet:(NSString *)string {
+    
+    string = [NSString stringWithFormat:@"status=%@", string];
+    
+    NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
+    NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    tweetRequest.HTTPMethod = @"POST";
+    tweetRequest.HTTPBody = [[string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        NSLog(@"\n RESPONSE: %@ \n DATA: %@ \n ERROR : %@ \n", response, data, connectionError);
+        if (connectionError) {
+        }
+    }];
+}
 
 
-    //Square button action
+-(void)facebook:(NSString *)text {
+
+    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters: @{ @"message" : text} HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+        }];
+        
+    } else {
+        FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
+        [loginManager logInWithPublishPermissions:@[@"publish_actions"] fromViewController:self handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters: @{ @"message" : @"test"} HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+            }];
+        }];
+    }
+}
+
+
 -(void)square {
     
 }
