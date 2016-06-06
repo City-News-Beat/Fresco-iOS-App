@@ -421,21 +421,22 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)tweet:(NSString *)string {
     
-//    string = [NSString stringWithFormat:@"status=%@", string];
-//    
-//    NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
-//    NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
-//    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-//    tweetRequest.HTTPMethod = @"POST";
-//    tweetRequest.HTTPBody = [[string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] dataUsingEncoding:NSUTF8StringEncoding];
-//    
-//    [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-//        NSLog(@"\n RESPONSE: %@ \n DATA: %@ \n ERROR : %@ \n", response, data, connectionError);
-//        if (connectionError) {
-//
-//        }
-//    }];
+    string = [NSString stringWithFormat:@"status=%@", string];
+    
+    NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
+    NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    tweetRequest.HTTPMethod = @"POST";
+    tweetRequest.HTTPBody = [[string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        NSLog(@"\n RESPONSE: %@ \n DATA: %@ \n ERROR : %@ \n", response, data, connectionError);
+        if (connectionError) {
+
+        }
+    }];
 }
+
 
 -(void)facebook:(NSString *)text {
 
@@ -453,7 +454,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 
-    //Square button action
 -(void)square {
     
 }
