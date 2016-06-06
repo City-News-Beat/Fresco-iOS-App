@@ -438,7 +438,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)facebook:(NSString *)text {
-    
+
     if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
         [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters: @{ @"message" : text} HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
         }];
