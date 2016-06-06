@@ -412,7 +412,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             [[[FBSDKGraphRequest alloc]
               initWithGraphPath:@"me/feed"
-              parameters: @{ @"message" : @"test"}
+              parameters: @{ @"message" : self.captionTextView.text}
               HTTPMethod:@"POST"]
              startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                  
