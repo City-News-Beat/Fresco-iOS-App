@@ -432,7 +432,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         NSLog(@"\n RESPONSE: %@ \n DATA: %@ \n ERROR : %@ \n", response, data, connectionError);
         if (connectionError) {
-
         }
     }];
 }
