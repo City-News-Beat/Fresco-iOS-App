@@ -71,9 +71,6 @@
     }
     
     [self registerForPushNotifications];
-    
-   
-    
     return YES;
 }
 
@@ -246,8 +243,11 @@
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:@"deviceToken"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    NSLog(@"%@", newDeviceToken);
+    NSDictionary *installationDigest = [[FRSAPIClient sharedClient] currentInstallation];
     
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:installationDigest completion:^(id responseObject, NSError *error) {
+        NSLog(@"Updated Installation: %@ %@", responseObject, error);
+    }];
 }
 
 -(void)handleLocationUpdate {
