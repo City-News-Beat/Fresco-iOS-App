@@ -403,44 +403,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self dismissKeyboard];
     
 
-    //Upload in background when user is composing social post
-
-    
     if (self.postToFacebook) {
-        
-        if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
-            
-            [[[FBSDKGraphRequest alloc]
-              initWithGraphPath:@"me/feed"
-              parameters: @{ @"message" : self.captionTextView.text}
-              HTTPMethod:@"POST"]
-             startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                 
-                 if (!error) {
-                     NSLog(@"Post id:%@", result[@"id"]);
-                 }
-             }];
-            
-        } else {
-            
-            FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
-            
-            [loginManager logInWithPublishPermissions:@[@"publish_actions"]
-                                   fromViewController:self
-                                              handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-                                                  
-                                                  [[[FBSDKGraphRequest alloc]
-                                                    initWithGraphPath:@"me/feed"
-                                                    parameters: @{ @"message" : @"test"}
-                                                    HTTPMethod:@"POST"]
-                                                   startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                                                       
-                                                       if (!error) {
-                                                           NSLog(@"Post id:%@", result[@"id"]);
-                                                       }
-                                                   }];
-                                              }];
-        }
+        [self facebook:self.captionTextView.text];
+
     }
     
     
@@ -470,6 +435,21 @@ static NSString * const cellIdentifier = @"assignment-cell";
 //
 //        }
 //    }];
+}
+
+-(void)facebook:(NSString *)text {
+    
+    if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters: @{ @"message" : text} HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+        }];
+        
+    } else {
+        FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
+        [loginManager logInWithPublishPermissions:@[@"publish_actions"] fromViewController:self handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters: @{ @"message" : @"test"} HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+            }];
+        }];
+    }
 }
 
 
