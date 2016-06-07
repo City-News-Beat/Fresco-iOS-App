@@ -12,6 +12,7 @@
 #import "FRSOnboardingViewController.h"
 #import <Twitter/Twitter.h>
 
+
 #import "FRSAPIClient.h"
 
 @interface FRSUploadViewController ()
@@ -421,20 +422,39 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)tweet:(NSString *)string {
     
-    string = [NSString stringWithFormat:@"status=%@", string];
+    // Objective-C
+    NSString *userID = [Twitter sharedInstance].sessionStore.session.userID;
+    TWTRAPIClient *client = [[TWTRAPIClient alloc] initWithUserID:userID];
+
+    NSString *tweetEndpoint = @"https://api.twitter.com/1.1/statuses/update.json";
+    NSDictionary *params = @{@"status" : @"hello my friend"};
+    NSError *clientError;
     
-    NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
-    NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    tweetRequest.HTTPMethod = @"POST";
-    tweetRequest.HTTPBody = [[string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] dataUsingEncoding:NSUTF8StringEncoding];
+    NSURLRequest *request = [client URLRequestWithMethod:@"POST" URL:tweetEndpoint parameters:params error:&clientError];
     
-    [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        NSLog(@"\n RESPONSE: %@ \n DATA: %@ \n ERROR : %@ \n", response, data, connectionError);
-        if (connectionError) {
-        }
-    }];
+    if (request) {
+        [client sendTwitterRequest:request completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+            
+            NSLog(@"Twitter Ressponse: %@", response);
+            
+            if (data) {
+                // handle the response data e.g.
+                NSError *jsonError;
+                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+                NSLog(@"Twitter Response: %@", json);
+            }
+            else {
+                NSLog(@"Error: %@", connectionError);
+            }
+        }];
+    }
+    else {
+        NSLog(@"Error: %@", clientError);
+    }
+    
 }
+
+
 
 
 -(void)facebook:(NSString *)text {
