@@ -252,7 +252,7 @@
     BOOL isLiked = [[self.story valueForKey:@"liked"] boolValue];
     
     NSNumber *numReposts = [self.story valueForKey:@"reposts"];
-    BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
+    BOOL isReposted = FALSE;// [[self.story valueForKey:@"reposted"] boolValue];
     
     NSString *repostedBy = [self.story valueForKey:@"reposted_by"];
     
