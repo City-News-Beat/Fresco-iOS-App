@@ -381,9 +381,7 @@
     
     NSString *endpoint = [storyGalleriesEndpoint stringByAppendingString:storyID];
     
-    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
-        NSLog(@"%@", responseObject);
-        
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {        
         completion(responseObject, error);
     }];
 }
