@@ -27,7 +27,7 @@
                                                                    error:&parsingError];
     
     if (!*error && !parsingError) {
-        return responseToReturn;
+        return [self parsedObjectsFromAPIResponse:JSONResponse cache:TRUE];
     }
     
     
