@@ -25,8 +25,6 @@
 #import "FRSFileUploadManager.h"
 #import "SSKeychain.h"
 
-
-
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
 
@@ -386,6 +384,5 @@
     // pass responsibility onto FRSFileUploadManager (will trigger completion handler when done with work needed)
     [[FRSFileUploadManager sharedUploader] handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
 }
-
 
 @end
