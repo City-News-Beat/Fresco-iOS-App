@@ -235,7 +235,17 @@
         return Nil; // no installation without push info, apparently
     }
     
-    currentInstallation[@"device_id"] = randomString;
+    NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
+    
+    if (sessionID) {
+        currentInstallation[@"device_id"] = sessionID;
+    }
+    else {
+        sessionID = [self randomString];
+        currentInstallation[@"device_id"] = sessionID;
+        [[NSUserDefaults standardUserDefaults] setObject:sessionID forKey:@"SESSION_ID"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
     currentInstallation[@"platform"] = @"ios";
     
@@ -272,6 +282,19 @@
     
     return currentInstallation;
 }
+
+
+-(NSString *)randomString {
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    NSMutableString *randomString = [NSMutableString stringWithCapacity:15];
+    
+    for (int i=0; i<15; i++) {
+        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform([letters length])]];
+    }
+    
+    return randomString;
+}
+
 
 -(void)handleUserLogin:(id)responseObject {
     if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
