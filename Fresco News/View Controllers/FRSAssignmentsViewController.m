@@ -741,12 +741,21 @@
     
     self.showsCard = FALSE;
     
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.assignmentCard.frame.origin.y + (self.view.frame.size.height - self.assignmentCard.frame.origin.y) +100, self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
+        
+    } completion:nil];
+    
     [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
-        [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
         
     } completion:^(BOOL finished) {
+        
+        [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
+
         //Reset animated labels
 //        self.photoCashLabel.alpha = 0;
 //        self.videoCashLabel.alpha = 0;
@@ -778,14 +787,14 @@
         [self handleAssignmentScroll];
     }
         
-    if (self.scrollView.contentOffset.y <= -80) {
-        [self dismissAssignmentCard];
-    }
+//    if (self.scrollView.contentOffset.y <= -80) {
+//        [self dismissAssignmentCard];
+//    }
 }
 
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (scrollView.contentOffset.y <= -50) {
+    if (scrollView.contentOffset.y <= -75) { //QA value, see what's most comfortable for over scrolling and dismissing
         [self dismissAssignmentCard];
     }
 }
