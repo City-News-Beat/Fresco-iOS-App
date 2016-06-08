@@ -88,11 +88,6 @@
         //        [self.usernameTF becomeFirstResponder];
     }
     _hasShown = TRUE;
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> origin/3.0-phil
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
     
@@ -452,63 +447,6 @@
     
     
     [self constrainSubview:self.bottomBar ToBottomOfParentView:self.view WithHeight:44];
-<<<<<<< HEAD
-    
-}
-
--(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
-    
-    subView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    //Trailing
-    NSLayoutConstraint *trailing = [NSLayoutConstraint
-                                    constraintWithItem:subView
-                                    attribute:NSLayoutAttributeTrailing
-                                    relatedBy:NSLayoutRelationEqual
-                                    toItem:parentView
-                                    attribute:NSLayoutAttributeTrailing
-                                    multiplier:1
-                                    constant:0];
-    
-    //Leading
-    NSLayoutConstraint *leading = [NSLayoutConstraint
-                                   constraintWithItem:subView
-                                   attribute:NSLayoutAttributeLeading
-                                   relatedBy:NSLayoutRelationEqual
-                                   toItem:parentView
-                                   attribute:NSLayoutAttributeLeading
-                                   multiplier:1
-                                   constant:0];
-    
-    //Bottom
-    NSLayoutConstraint *bottom = [NSLayoutConstraint
-                                  constraintWithItem:subView
-                                  attribute:NSLayoutAttributeBottom
-                                  relatedBy:NSLayoutRelationEqual
-                                  toItem:parentView
-                                  attribute:NSLayoutAttributeBottom
-                                  multiplier:1
-                                  constant:0];
-    
-    //Height
-    NSLayoutConstraint *constantHeight = [NSLayoutConstraint
-                                          constraintWithItem:subView
-                                          attribute:NSLayoutAttributeHeight
-                                          relatedBy:NSLayoutRelationEqual
-                                          toItem:nil
-                                          attribute:0
-                                          multiplier:0
-                                          constant:height];
-    
-    [parentView addConstraint:trailing];
-    [parentView addConstraint:bottom];
-    [parentView addConstraint:leading];
-    
-    [subView addConstraint:constantHeight];
-}
-
-=======
-
 }
 
 -(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
@@ -561,9 +499,6 @@
     
     [subView addConstraint:constantHeight];
 }
-
->>>>>>> origin/3.0-phil
-
 
 -(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState {
     if (controlState == UIControlStateNormal){
@@ -1227,11 +1162,6 @@
     if (self.notificationsEnabled) {
         self.scrollView.scrollEnabled = YES;
     } else {
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> origin/3.0-phil
         if (self.scrollView.contentOffset.y != 0){
             [self.scrollView setContentOffset:CGPointZero animated:YES];
         }
@@ -1306,11 +1236,7 @@
     if ([self stringContainsEmoji:username]) {
         return NO;
     }
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> origin/3.0-phil
     if ([username isEqualToString:@"@"]) {
         return NO;
     }
@@ -1459,18 +1385,4 @@
         }
     }
 }
-<<<<<<< HEAD
-=======
-
-
-
-
-
-
-
-
-
-
->>>>>>> origin/3.0-phil
-
 @end
