@@ -76,7 +76,7 @@
     
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
-    [self configureTopContainer];
+   // [self configureTopContainer];
     [self configureTitleLabel];
     [self configureCaption];
     [self configureActionsBar];
@@ -106,19 +106,7 @@
     CGFloat halfHeight = self.topContainer.frame.size.height/2 - 0.5;
     CGFloat width = halfHeight * 1.333333333 - 2;
     
-    NSMutableArray *smallImageURLS = [[NSMutableArray alloc] init];
-    
-    NSString *imageSize = @"images/medium/";
-    
-    if (self.story.imageURLs.count > 2) {
-        imageSize = @"images/small/";
-    }
-    
-    for (NSURL *fullSizeURL in self.story.imageURLs) {
-        NSString *fullSizeString = fullSizeURL.absoluteString;
-        NSString *smallString = fullSizeString;//[fullSizeString stringByReplacingOccurrencesOfString:@"images/" withString:imageSize];
-        [smallImageURLS addObject:[NSURL URLWithString:smallString]];
-    }
+    NSMutableArray *smallImageURLS = [NSMutableArray arrayWithArray:self.story.imageURLs];
     
     if (smallImageURLS.count < 6) {
         
@@ -259,6 +247,7 @@
 }
 
 -(void)configureActionsBar{
+    
     NSNumber *numLikes = [self.story valueForKey:@"likes"];
     BOOL isLiked = [[self.story valueForKey:@"liked"] boolValue];
     

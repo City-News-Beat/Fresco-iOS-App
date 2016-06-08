@@ -41,7 +41,6 @@
     
     self.storyView.actionBlock = self.actionBlock;
     [self addSubview:self.storyView];
-
 }
 
 -(void)clearCell{
