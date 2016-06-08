@@ -76,7 +76,7 @@
     
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
-   // [self configureTopContainer];
+    [self configureTopContainer];
     [self configureTitleLabel];
     [self configureCaption];
     [self configureActionsBar];
@@ -108,7 +108,7 @@
     
     NSMutableArray *smallImageURLS = [NSMutableArray arrayWithArray:self.story.imageURLs];
     
-    if (smallImageURLS.count < 6) {
+    if (smallImageURLS.count < 6 && smallImageURLS.count != 0) {
         
         switch (smallImageURLS.count) {
             case 1:{
@@ -125,7 +125,7 @@
             } break;
         }
         
-    } else {
+    } else if (smallImageURLS.count != 0) {
         
         UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight)];
         iv.contentMode = UIViewContentModeScaleAspectFill;
