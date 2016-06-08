@@ -306,6 +306,7 @@
     }
     
     
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
 -(IBAction)facebook:(id)sender {
