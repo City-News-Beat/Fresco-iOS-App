@@ -73,6 +73,8 @@
 
 @property (strong, nonatomic) UIButton *closeButton;
 
+@property (strong, nonatomic) UIView *assignmentStatsContainer;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -597,20 +599,20 @@
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
-    UIView *assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 16, self.view.frame.size.width, 120)];
-    [self.assignmentCard addSubview:assignmentStatsContainer];
+    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 16, self.view.frame.size.width, 120)];
+    [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
     UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
     clock.frame = CGRectMake(16, 8, 24, 24);
-    [assignmentStatsContainer addSubview:clock];
+    [self.assignmentStatsContainer addSubview:clock];
     
     UIImageView *mapAnnotation = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"annotation"]];
     mapAnnotation.frame = CGRectMake(16, 48, 24, 24);
-    [assignmentStatsContainer addSubview:mapAnnotation];
+    [self.assignmentStatsContainer addSubview:mapAnnotation];
     
     UIImageView *warning = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"warning"]];
     warning.frame = CGRectMake(16, 88, 24, 24);
-    [assignmentStatsContainer addSubview:warning];
+    [self.assignmentStatsContainer addSubview:warning];
     
     self.expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
     self.expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -621,19 +623,19 @@
     NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
     self.expirationLabel.text = dateString;
 
-    [assignmentStatsContainer addSubview:self.expirationLabel];
+    [self.assignmentStatsContainer addSubview:self.expirationLabel];
     
     self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 50, self.view.frame.size.width, 20)];
     self.distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.distanceLabel.textColor = [UIColor frescoMediumTextColor];
     self.distanceLabel.text = @"1.1 miles away";
-    [assignmentStatsContainer addSubview:self.distanceLabel];
+    [self.assignmentStatsContainer addSubview:self.distanceLabel];
     
     UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 90, self.view.frame.size.width, 20)];
     warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     warningLabel.textColor = [UIColor frescoMediumTextColor];
     warningLabel.text = @"Not all events are safe. Be careful!";
-    [assignmentStatsContainer addSubview:warningLabel];
+    [self.assignmentStatsContainer addSubview:warningLabel];
     
     UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
     self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -652,8 +654,7 @@
     //self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
     
     
-    
-    
+    [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     
     
@@ -677,6 +678,10 @@
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTap:)];
     [self.dismissView addGestureRecognizer:singleTap];
+    
+    [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
+    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
+    self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
 }
 
 -(void)dismissTap:(UITapGestureRecognizer *)sender {
