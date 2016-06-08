@@ -28,11 +28,11 @@
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="editedDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="isLiked" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="isReposted" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="numberOfLikes" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="liked" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="likes" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="relatedStories" optional="YES" attributeType="Transformable" syncable="YES"/>
-        <attribute name="repostedBy" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="reposted" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="reposted_by" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="reposts" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="tags" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>

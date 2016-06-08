@@ -48,17 +48,17 @@
     [self addPostsWithArray:dict[@"posts"]];
     [self addArticlesWithArray:dict[@"articles"]];
     
-    [self setValue:@([dict[@"liked"] boolValue]) forKey:@"isLiked"];
-    [self setValue:@([dict[@"likes"] integerValue]) forKey:@"numberOfLikes"];
+    [self setValue:@([dict[@"liked"] boolValue]) forKey:@"liked"];
+    [self setValue:@([dict[@"likes"] integerValue]) forKey:@"likes"];
     
     NSString *repostedBy = dict[@"reposted_by"];
     
     if (repostedBy != Nil && repostedBy != (NSString *)[NSNull null] && ![repostedBy isEqualToString:@""]) {
-        [self setValue:repostedBy forKey:@"repostedBy"];
+        [self setValue:repostedBy forKey:@"reposted_by"];
     }
     
     [self setValue:@([dict[@"reposts"] intValue]) forKey:@"reposts"];
-    [self setValue:@([dict[@"reposted"] boolValue]) forKey:@"isReposted"];
+    [self setValue:@([dict[@"reposted"] boolValue]) forKey:@"reposted"];
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
