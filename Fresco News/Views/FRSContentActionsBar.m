@@ -49,7 +49,7 @@
 -(void)handleHeartAmount:(NSInteger)amount {
     
     if (amount == 0) {
-        self.likeLabel.text = @"";
+        self.likeLabel.text = @"0";
     }
     
     self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
@@ -240,6 +240,14 @@
             } completion:nil];
         }];
     }];
+}
+
+-(void)handleRepostAmount:(NSInteger)amount {
+    if (amount == 0) {
+        self.repostLabel.text = @"0";
+    }
+    
+    self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
 }
 
 @end
