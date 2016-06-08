@@ -56,6 +56,9 @@
     if (repostedBy != Nil && repostedBy != (NSString *)[NSNull null] && ![repostedBy isEqualToString:@""]) {
         [self setValue:repostedBy forKey:@"repostedBy"];
     }
+    
+    [self setValue:@([dict[@"reposts"] intValue]) forKey:@"reposts"];
+    [self setValue:@([dict[@"reposted"] boolValue]) forKey:@"isReposted"];
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {

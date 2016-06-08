@@ -117,15 +117,18 @@
 }
 
 -(void)updateSocial {
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.actionBar handleHeartState:self.gallery.isLiked];
-////        
-////        if (self.gallery.numberOfLikes == 0) {
-////            self.gallery.numberOfLikes = rand()%350;
-////        }
-//        
-//        [self.actionBar handleHeartAmount:self.gallery.numberOfLikes];
-//    });
+    NSNumber *numLikes = [self.gallery valueForKey:@"numberOfLikes"];
+    BOOL isLiked = [[self.gallery valueForKey:@"isLiked"] boolValue];
+    
+    NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
+    BOOL isReposted = [[self.gallery valueForKey:@"isReposted"] boolValue];
+    
+    NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
+    
+    [self.actionBar handleHeartState:isLiked];
+    [self.actionBar handleHeartAmount:[numLikes intValue]];
+    [self.actionBar handleRepostState:isReposted];
+    [self.actionBar handleRepostAmount:[numReposts intValue]];
 }
 
 -(void)updateScrollView {
