@@ -582,7 +582,7 @@
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding +120); //120 is the height of the container at the bottom where expiration time, assignemnt distance, and the warning label live.
+    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding +190); //120 is the height of the container at the bottom where expiration time, assignemnt distance, and the warning label live.
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"video-icon"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
@@ -645,10 +645,10 @@
     
     //Configure photo/video labels for animation
     self.closeButton.alpha    = 0;
-    self.photoCashLabel.alpha = 0;
-    self.videoCashLabel.alpha = 0;
-    self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
-    self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+    //self.photoCashLabel.alpha = 0;
+    //self.videoCashLabel.alpha = 0;
+    //self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+    //self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
 }
 
 -(void)configureAssignmentCard {
@@ -703,16 +703,16 @@
         //Animate photoCashLabel
         [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             
-            self.photoCashLabel.alpha = 1;
-            self.photoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
+            //self.photoCashLabel.alpha = 1;
+            //self.photoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
 
         } completion:nil];
         
         //Animate videoCashLabel with delay
         [UIView animateWithDuration:0.2 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             
-            self.videoCashLabel.alpha = 1;
-            self.videoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
+            //self.videoCashLabel.alpha = 1;
+            //self.videoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
 
         } completion:nil];
     }];
@@ -735,10 +735,10 @@
         
     } completion:^(BOOL finished) {
         //Reset animated labels
-        self.photoCashLabel.alpha = 0;
-        self.videoCashLabel.alpha = 0;
-        self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
-        self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+//        self.photoCashLabel.alpha = 0;
+//        self.videoCashLabel.alpha = 0;
+//        self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+//        self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
     }];
     
     [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{

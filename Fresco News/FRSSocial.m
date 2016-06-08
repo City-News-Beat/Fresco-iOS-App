@@ -14,6 +14,7 @@
 // TODO: for login w/ twitter & login w/ facebook, use register, and add extra api layer
 +(void)loginWithTwitter:(LoginCompletionBlock)completion {
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
+        NSLog(@"SECRET: %@ \nTOKEN: %@", session.authTokenSecret, session.authToken);
         if (session) {
             [[FRSAPIClient sharedClient] signInWithTwitter:session completion:^(id responseObject, NSError *error) {
                 if (error) {

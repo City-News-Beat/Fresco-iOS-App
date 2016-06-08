@@ -364,11 +364,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:50 ofLocation:@[@(lastLocation.coordinate.latitude), @(lastLocation.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
         
-//        NSArray *nearBy = responseObject[@"nearby"];
-//        NSArray *global = responseObject[@"global"];
+        NSArray *nearBy = responseObject[@"nearby"];
+        NSArray *global = responseObject[@"global"];
         
-        NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
-        NSArray *global = @[@"Global", @"Global Two"];
+//        NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
+//        NSArray *global = @[@"Global", @"Global Two"];
         
         NSLog(@"Near by:%@ Global: %@", nearBy, global);
         
@@ -377,6 +377,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self configureTextView];
         self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height + self.captionContainer.frame.size.height +44);
     }];
+    
+    
 }
 
 
@@ -431,7 +433,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     NSError *clientError;
     
     NSURLRequest *request = [client URLRequestWithMethod:@"POST" URL:tweetEndpoint parameters:params error:&clientError];
-    
     if (request) {
         [client sendTwitterRequest:request completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
             
