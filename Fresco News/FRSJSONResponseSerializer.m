@@ -9,6 +9,7 @@
 #import "FRSJSONResponseSerializer.h"
 #import "FRSGallery.h"
 #import "FRSStory.h"
+#import "FRSAppDelegate.h"
 
 @implementation FRSJSONResponseSerializer
 
@@ -51,7 +52,8 @@
     NSLog(@"RESPONSE CLASS: %@", [response class]);
     
     if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
-        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
+        NSManagedObjectContext *managedObjectContext =  [self managedObjectContext];//(cache) ? [self managedObjectContext] : Nil;
+
         NSMutableDictionary *responseObjects = [[NSMutableDictionary alloc] init];
         NSArray *keys = [response allKeys];
         
@@ -74,7 +76,7 @@
     }
     else if ([[response class] isSubclassOfClass:[NSArray class]]) {
         NSMutableArray *responseObjects = [[NSMutableArray alloc] init];
-        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
+        NSManagedObjectContext *managedObjectContext = [self managedObjectContext];//(cache) ? [self managedObjectContext] : Nil;
         
         for (NSDictionary *responseObject in response) {
             id originalResponse = [self objectFromDictionary:responseObject context:managedObjectContext];
@@ -113,13 +115,20 @@
     NSString *objectType = dictionary[@"object"];
     
     if ([objectType isEqualToString:galleryObjectType]) {
+        
+        
         FRSGallery *gallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:managedObjectContext];
         [gallery configureWithDictionary:dictionary context:managedObjectContext];
         
         return gallery;
     }
     else if ([objectType isEqualToString:postObjectType]) {
-        FRSPost *post = [NSEntityDescription insertNewObjectForEntityForName:@"FRSPost" inManagedObjectContext:managedObjectContext];
+        FRSPost *post;
+        
+        if (managedObjectContext) {
+            post = [NSEntityDescription insertNewObjectForEntityForName:@"FRSPost" inManagedObjectContext:managedObjectContext];
+        }
+        
         [post configureWithDictionary:dictionary context:managedObjectContext];
         
         return post;
@@ -135,8 +144,10 @@
     return dictionary; // not serializable
 }
 
+
 -(NSManagedObjectContext *)managedObjectContext {
-    return Nil;
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [appDelegate managedObjectContext];
 }
 
 @end

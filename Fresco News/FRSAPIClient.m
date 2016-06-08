@@ -268,6 +268,8 @@
         currentInstallation[@"locale_identifier"] = localeString;
     }
 
+    NSLog(@"%@", currentInstallation);
+    
     return currentInstallation;
 }
 
