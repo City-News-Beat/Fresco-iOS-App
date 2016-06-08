@@ -500,9 +500,9 @@
     self.assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.assignmentCard];
     
-    UIView *topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 76)];
+    UIView *topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -76, self.view.frame.size.width, 76)];
     topContainer.backgroundColor = [UIColor clearColor];
-    [self.scrollView addSubview:topContainer];
+    [self.assignmentCard addSubview:topContainer];
     
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = topContainer.frame;
@@ -510,7 +510,7 @@
     UIColor *startColor = [UIColor clearColor];
     UIColor *endColor = [UIColor colorWithWhite:0 alpha:0.42];
     gradient.colors = [NSArray arrayWithObjects:(id)[startColor CGColor], (id)[endColor CGColor], nil];
-    [self.scrollView.layer insertSublayer:gradient atIndex:0];
+    [self.assignmentCard.layer insertSublayer:gradient atIndex:0];
     
     self.assignmentTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 288, 52)];
     self.assignmentTitleLabel.font = [UIFont notaBoldWithSize:24];
@@ -582,7 +582,9 @@
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding +190); //120 is the height of the container at the bottom where expiration time, assignemnt distance, and the warning label live.
+//    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding +190); //120 is the height of the container at the bottom where expiration time, assignemnt distance, and the warning label live.
+    
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height +1); //TODO: test with longer assignment captions
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"video-icon"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
@@ -594,7 +596,6 @@
     self.videoCashLabel.textAlignment = NSTextAlignmentCenter;
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
-    
     
     UIView *assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 16, self.view.frame.size.width, 120)];
     [self.assignmentCard addSubview:assignmentStatsContainer];
@@ -649,6 +650,13 @@
     //self.videoCashLabel.alpha = 0;
     //self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
     //self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+    
+    
+    
+    
+    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
+    
+    
 }
 
 -(void)configureAssignmentCard {
