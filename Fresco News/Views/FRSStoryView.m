@@ -252,14 +252,14 @@
     BOOL isLiked = [[self.story valueForKey:@"liked"] boolValue];
     
     NSNumber *numReposts = [self.story valueForKey:@"reposts"];
-    BOOL isReposted = FALSE;// [[self.story valueForKey:@"reposted"] boolValue];
+    BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
     
     NSString *repostedBy = [self.story valueForKey:@"reposted_by"];
     
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
     [self.actionBar handleHeartState:isLiked];
     [self.actionBar handleHeartAmount:[numLikes intValue]];
-    [self.actionBar handleRepostState:isReposted];
+    [self.actionBar handleRepostState:!isReposted];
     
     if (self.caption.text.length == 0) {
         [self.actionBar setOriginWithPoint:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height-12)];
