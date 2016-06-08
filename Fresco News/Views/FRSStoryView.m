@@ -260,7 +260,8 @@
     [self.actionBar handleHeartState:isLiked];
     [self.actionBar handleHeartAmount:[numLikes intValue]];
     [self.actionBar handleRepostState:!isReposted];
-    
+    [self.actionBar handleRepostAmount:[numReposts intValue]];
+
     if (self.caption.text.length == 0) {
         [self.actionBar setOriginWithPoint:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height-12)];
     }
