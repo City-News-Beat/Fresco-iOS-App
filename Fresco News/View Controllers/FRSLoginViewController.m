@@ -296,8 +296,9 @@
     
     
     
-    NSArray *viewControllers = [self.navigationController viewControllers];
     
+    
+    NSArray *viewControllers = [self.navigationController viewControllers];    
     
     if ([viewControllers count] == 3) {
         [self.navigationController popToRootViewControllerAnimated:YES];
