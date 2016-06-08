@@ -376,13 +376,29 @@
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
-    [self flushCache:localData];
+    
+    self.dataSource = [[NSMutableArray alloc] init];
+    self.highlights = [[NSMutableArray alloc] init];
 
-    self.dataSource = [NSMutableArray arrayWithArray:localData];
-    self.highlights = [NSMutableArray arrayWithArray:localData];
+    NSInteger localIndex = 0;
+    for (NSDictionary *gallery in localData) {
+        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+        
+        [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+        [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
+        [self.dataSource addObject:galleryToSave];
+        [self.highlights addObject:galleryToSave];
+        localIndex++;
+    }
     
     [self.appDelegate.managedObjectContext save:Nil];
+    [self.appDelegate saveContext];
+    
     [self.tableView reloadData];
+    
+    for (FRSGallery *gallery in self.cachedData) {
+        [self.appDelegate.managedObjectContext deleteObject:gallery];
+    }
 }
 
 -(void)reloadFromLocal {
@@ -514,20 +530,34 @@
     
     lastOffset = self.dataSource.count;
     
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:offsetID completion:^(NSArray *galleries, NSError *error) {
+        NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+        
+        [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:offsetID completion:^(NSArray *galleries, NSError *error) {
                         
-        if ([galleries count] == 0){
-            _loadNoMore = TRUE;
-            [self.tableView reloadData];
-            return;
-        }
+            if ([galleries count] == 0){
+                _loadNoMore = TRUE;
+                [self.tableView reloadData];
+                return;
+            }
             
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            [[self.appDelegate managedObjectContext] rollback];
+
+            NSInteger index = self.highlights.count;
+            for (NSDictionary *gallery in galleries) {
+                FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                
+                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                [self.dataSource addObject:galleryToSave];
+                [self.highlights addObject:galleryToSave];
+                [indexPaths addObject:[NSIndexPath indexPathForRow:self.dataSource.count-1 inSection:0]];
+                index++;
+            }
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
+                [self.tableView beginUpdates];
+                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView endUpdates];
                 needsUpdate = TRUE;
                 isLoading = FALSE;
             });

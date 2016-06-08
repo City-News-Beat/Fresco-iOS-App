@@ -27,7 +27,7 @@
                                                                    error:&parsingError];
     
     if (!*error && !parsingError) {
-        return [self parsedObjectsFromAPIResponse:JSONResponse cache:TRUE];
+        return responseToReturn;
     }
     
     
@@ -52,8 +52,7 @@
     NSLog(@"RESPONSE CLASS: %@", [response class]);
     
     if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
-        NSManagedObjectContext *managedObjectContext =  [self managedObjectContext];//(cache) ? [self managedObjectContext] : Nil;
-
+        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
         NSMutableDictionary *responseObjects = [[NSMutableDictionary alloc] init];
         NSArray *keys = [response allKeys];
         
@@ -76,7 +75,7 @@
     }
     else if ([[response class] isSubclassOfClass:[NSArray class]]) {
         NSMutableArray *responseObjects = [[NSMutableArray alloc] init];
-        NSManagedObjectContext *managedObjectContext = [self managedObjectContext];//(cache) ? [self managedObjectContext] : Nil;
+        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
         
         for (NSDictionary *responseObject in response) {
             id originalResponse = [self objectFromDictionary:responseObject context:managedObjectContext];
@@ -146,8 +145,7 @@
 
 
 -(NSManagedObjectContext *)managedObjectContext {
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    return [appDelegate managedObjectContext];
+    return Nil;
 }
 
 @end
