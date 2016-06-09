@@ -44,7 +44,14 @@
 }
 
 -(void)snapTables {
-    
+    if (_primaryTableView) {
+        CGRect primaryRect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        _primaryTableView.frame = primaryRect;
+    }
+    if (_secondaryTableView) {
+        CGRect secondaryRect = CGRectMake(self.frame.size.width, 0, self.frame.size.width, self.frame.size.height);
+        _secondaryTableView.frame = secondaryRect;
+    }
 }
 
 
