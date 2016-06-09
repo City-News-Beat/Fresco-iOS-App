@@ -254,7 +254,7 @@
     NSNumber *numReposts = [self.story valueForKey:@"reposts"];
     BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
     
-    NSString *repostedBy = [self.story valueForKey:@"reposted_by"];
+    //NSString *repostedBy = [self.story valueForKey:@"reposted_by"];
     
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
     [self.actionBar handleHeartState:isLiked];
@@ -268,6 +268,19 @@
     
     [self addSubview:self.actionBar];
 }
+
+-(void)handleLike:(FRSContentActionsBar *)actionBar {
+    [[FRSAPIClient sharedClient] likeStory:self.story completion:^(id responseObject, NSError *error) {
+        NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+    }];
+}
+
+-(void)handleRepost:(FRSContentActionsBar *)actionBar {
+    [[FRSAPIClient sharedClient] repostStory:self.story completion:^(id responseObject, NSError *error) {
+        NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+    }];
+}
+
 
 -(void)addShadowToLabel:(UILabel*)label {
     

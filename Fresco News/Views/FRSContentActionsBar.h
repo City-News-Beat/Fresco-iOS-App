@@ -33,5 +33,6 @@
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar;
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar;
 -(void)handleActionButtonTapped;
-
+-(void)handleRepost:(FRSContentActionsBar *)actionBar;
+-(void)handleLike:(FRSContentActionsBar *)actionBar;
 @end

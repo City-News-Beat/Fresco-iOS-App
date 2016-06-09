@@ -19,7 +19,7 @@
 #import "FRSUser+CoreDataProperties.h"
 #import "FRSProfileViewController.h"
 //#import "FRSUserProfileViewController.h"
-
+#import "FRSAPIClient.h"
 
 #define TEXTVIEW_TOP_PAD 12
 
@@ -157,6 +157,18 @@
 -(void)contentActionbarDidSelectShareButton:(id)sender {
     // show actions sheet
     self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
+}
+
+-(void)handleLike:(FRSContentActionsBar *)actionBar {
+    [[FRSAPIClient sharedClient] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+    }];
+}
+
+-(void)handleRepost:(FRSContentActionsBar *)actionBar {
+    [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+    }];
 }
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate{

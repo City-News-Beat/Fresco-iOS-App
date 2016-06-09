@@ -151,7 +151,9 @@
     }
     
     self.repostLabel.text = [NSString stringWithFormat:@"%.0f", repost];
-    
+    if (self.delegate) {
+        [self.delegate handleRepost:self];
+    }
     [self bounceButton:self.repostButton];
 }
 
@@ -173,6 +175,10 @@
     self.likeLabel.text = [NSString stringWithFormat:@"%.0f", likes];
     
     [self bounceButton:self.likeButton];
+    
+    if (self.delegate) {
+        [self.delegate handleLike:self];
+    }
 }
 
 -(void)handleHeartState:(BOOL)state {
