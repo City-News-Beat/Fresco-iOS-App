@@ -15,6 +15,7 @@
 +(void)loginWithTwitter:(LoginCompletionBlock)completion {
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
         NSLog(@"SECRET: %@ \nTOKEN: %@", session.authTokenSecret, session.authToken);
+        
         if (session) {
             [[FRSAPIClient sharedClient] signInWithTwitter:session completion:^(id responseObject, NSError *error) {
                 if (error) {

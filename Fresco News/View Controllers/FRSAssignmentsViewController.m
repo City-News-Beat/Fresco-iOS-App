@@ -75,6 +75,8 @@
 
 @property (strong, nonatomic) UIView *assignmentStatsContainer;
 
+@property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -90,6 +92,9 @@
                                                object:nil];
     
     self.assignmentIDs = [[NSMutableArray alloc] init];
+    
+    //Should only be visible when global assignments
+    [self configureGlobalAsignmentsBar];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -813,7 +818,7 @@
     
     self.locationManager.lastAcquiredLocation = [locations lastObject];
     
-    //    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
     
     if (self.locationManager.monitoringState == FRSLocationMonitoringStateForeground){
         [self.locationManager stopUpdatingLocation];
@@ -821,7 +826,7 @@
     
     NSLog(@"Location update notification observed by assignmentsVC");
     
-//    CLLocation *currentLocation = [locations lastObject];
+    //CLLocation *currentLocation = [locations lastObject];
     
     if (!hasSnapped) {
         hasSnapped = TRUE;
@@ -832,5 +837,41 @@
     
     [self configureAnnotationsForMap];
 }
+
+#pragma mark - Global Assignments
+
+-(void)configureGlobalAsignmentsBar {
+    
+    self.globalAssignmentsBottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height -44-49, self.view.frame.size.width, 44)];
+    self.globalAssignmentsBottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self.view addSubview:self.globalAssignmentsBottomContainer];
+    
+    UILabel *globalAssignmentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 12, self.view.frame.size.width -56 -24 -18 -6, 20)];
+    globalAssignmentsLabel.text = @"6 global assignments";
+    globalAssignmentsLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    globalAssignmentsLabel.textColor = [UIColor frescoDarkTextColor];
+    [self.globalAssignmentsBottomContainer addSubview:globalAssignmentsLabel];
+    
+    UIImageView *globeImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"earth-small"]];
+    globeImageView.frame = CGRectMake(16, 10, 24, 24);
+    [self.globalAssignmentsBottomContainer addSubview:globeImageView];
+    
+    UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"right-caret"]];
+    caret.frame = CGRectMake(self.view.frame.size.width -24 -6, 10, 24, 24);
+    [self.globalAssignmentsBottomContainer addSubview:caret];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(globalAssignmentsSegue)];
+    [self.globalAssignmentsBottomContainer addGestureRecognizer:tap];
+}
+
+-(void)globalAssignmentsSegue {
+    NSLog(@"hello");
+    
+    
+}
+
+
+
+
 
 @end
