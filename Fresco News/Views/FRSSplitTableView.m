@@ -11,6 +11,46 @@
 @implementation FRSSplitTableView
 @synthesize primaryTableView = _primaryTableView, secondaryTableView = _secondaryTableView;
 
+
+-(void)commonInit {
+    [self setContentSize:CGSizeMake(self.frame.size.width * 2, self.frame.size.height)]; // always 2x width by height
+}
+
+-(void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    
+    // content size
+    [self setContentSize:CGSizeMake(self.frame.size.width * 2, self.frame.size.height)]; // always 2x width by height
+}
+
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
 -(UITableView *)primaryTableView {
     return _primaryTableView;
 }
@@ -46,12 +86,5 @@
     
     _secondaryTableView = secondaryTableView;
 }
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end
