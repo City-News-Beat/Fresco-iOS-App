@@ -9,6 +9,7 @@
 #import "FRSScrollingViewController.h"
 #import "Fresco.h"
 #import "FRSGalleryView.h"
+#import "FRSSplitTableView.h"
 
 @interface FRSHomeViewController : FRSScrollingViewController <FRSGalleryViewDelegate>
 {
@@ -17,6 +18,8 @@
     
     NSArray *pulledFromCache;
     NSMutableArray *reloadedFrom;
+    
+    FRSSplitTableView *tableScroller;
 }
 @property BOOL loadNoMore;
 @end
