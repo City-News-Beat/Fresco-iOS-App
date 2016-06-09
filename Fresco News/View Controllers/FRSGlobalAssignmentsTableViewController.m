@@ -7,6 +7,7 @@
 //
 
 #import "FRSGlobalAssignmentsTableViewController.h"
+#import "GlobalAssignmentsTableViewCell.h"
 
 @interface FRSGlobalAssignmentsTableViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -21,6 +22,7 @@
     
     [self configureNavigationBar];
     [self configureTableView];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,6 +48,9 @@
     self.tableView.bounces = YES;
     self.tableView.backgroundColor = [UIColor blueColor];
     [self.view addSubview:self.tableView];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSGlobalAssignmentTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"global-assignment-cell"];
+
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -58,16 +63,23 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"global-assignment-cell" forIndexPath:indexPath];
-    UITableViewCell *cell = [[UITableViewCell alloc] init];
     
+    static NSString *CellIdentifier = @"cell";
     
-    // Configure the cell...
-    cell.backgroundColor = [UIColor redColor];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"global-assignment-cell"];
+    if (cell == nil) {
+        cell = [[GlobalAssignmentsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
     
     return cell;
 }
 
+
+//-(void)tableView:(UITableView *)tableView willDisplayCell:(GlobalAssignmentsTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    
+//    cell.backgroundColor = [UIColor redColor];
+//    
+//}
 
 /*
 // Override to support conditional editing of the table view.

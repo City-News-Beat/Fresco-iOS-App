@@ -40,6 +40,8 @@
 		07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C121C50499A00C536EB /* FRSStoryCell.m */; };
 		07B61ECD1CAF1C4900D3454F /* PeekPopArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */; };
 		07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */; };
+		07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */; };
+		07B6FB551D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB541D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m */; };
 		07BB581C1CB5717A00091C86 /* lalaunch.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 07BB581B1CB5717A00091C86 /* lalaunch.mp4 */; };
 		07E9366D1CB4534B00D3CC39 /* VideoTrimmerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E9366C1CB4534B00D3CC39 /* VideoTrimmerViewController.m */; };
 		07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */; };
@@ -303,6 +305,9 @@
 		07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeekPopArticleViewController.m; sourceTree = "<group>"; };
 		07B6FB461D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGlobalAssignmentsTableViewController.h; sourceTree = "<group>"; };
 		07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGlobalAssignmentsTableViewController.m; sourceTree = "<group>"; };
+		07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGlobalAssignmentTableViewCell.xib; sourceTree = "<group>"; };
+		07B6FB531D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalAssignmentsTableViewCell.h; sourceTree = "<group>"; };
+		07B6FB541D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalAssignmentsTableViewCell.m; sourceTree = "<group>"; };
 		07BB581B1CB5717A00091C86 /* lalaunch.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = lalaunch.mp4; sourceTree = "<group>"; };
 		07E9366B1CB4534B00D3CC39 /* VideoTrimmerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTrimmerViewController.h; sourceTree = "<group>"; };
 		07E9366C1CB4534B00D3CC39 /* VideoTrimmerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoTrimmerViewController.m; sourceTree = "<group>"; };
@@ -1002,6 +1007,9 @@
 				65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */,
 				07B6FB461D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.h */,
 				07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */,
+				07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */,
+				07B6FB531D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.h */,
+				07B6FB541D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m */,
 			);
 			name = Assignments;
 			sourceTree = "<group>";
@@ -2109,6 +2117,7 @@
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
 				D43C7FDF1C8E489600A7A7A7 /* FRSFileFooterCell.xib in Resources */,
+				07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */,
 				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,
 				07BB581C1CB5717A00091C86 /* lalaunch.mp4 in Resources */,
 			);
@@ -2279,6 +2288,7 @@
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
 				075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */,
 				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,
+				07B6FB551D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m in Sources */,
 				D4A7D8A01CCA7D4E002C6EA3 /* SSKeychain.m in Sources */,
 				D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */,
 				D453CC7E1CCA80850091A004 /* MagicalRecord+ShorthandMethods.m in Sources */,
