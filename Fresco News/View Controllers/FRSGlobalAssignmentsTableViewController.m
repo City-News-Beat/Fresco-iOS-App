@@ -22,11 +22,21 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self configureStatusBar];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+#pragma mark - UI Configuration
+
+-(void)configureStatusBar {
+    [self configureBackButtonAnimated:YES];
+    self.title = @"GLOBAL ASSIGNMENTS";
 }
 
 #pragma mark - Table view data source

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSScrollingViewController.h"
 
-@interface FRSGlobalAssignmentsTableViewController : UITableViewController
+@interface FRSGlobalAssignmentsTableViewController : FRSScrollingViewController
 
 @end
