@@ -117,13 +117,13 @@
 }
 
 -(void)updateSocial {
-    NSNumber *numLikes = [self.gallery valueForKey:@"numberOfLikes"];
-    BOOL isLiked = [[self.gallery valueForKey:@"isLiked"] boolValue];
+    NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
+    BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
     
     NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
-    BOOL isReposted = FALSE;[[self.gallery valueForKey:@"isReposted"] boolValue];
+    BOOL isReposted = FALSE;[[self.gallery valueForKey:@"reposted"] boolValue];
     
-    NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
+   // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
     
     [self.actionBar handleHeartState:isLiked];
     [self.actionBar handleHeartAmount:[numLikes intValue]];
