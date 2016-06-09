@@ -23,6 +23,7 @@
 #import "Fresco.h"
 
 #import "FRSAppDelegate.h"
+#import "FRSGlobalAssignmentsTableViewController.h"
 
 @import MapKit;
 
@@ -867,7 +868,8 @@
 -(void)globalAssignmentsSegue {
     NSLog(@"hello");
     
-    
+    FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
+    [self.navigationController pushViewController:tableViewController animated:YES];
 }
 
 
