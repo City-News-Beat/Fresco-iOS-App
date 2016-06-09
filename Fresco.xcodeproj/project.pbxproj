@@ -176,6 +176,7 @@
 		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
 		D487F1BE1CBD6C2D005742F3 /* FRSMediaScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */; };
 		D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1CD1CC14246005742F3 /* FRSPlayer.m */; };
+		D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72231D09D8D2000677BF /* FRSSplitTableView.m */; };
 		D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = D49B1D991C99EB1E00735846 /* UITextView+Resize.m */; };
 		D4A7D8A01CCA7D4E002C6EA3 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89D1CCA7D4E002C6EA3 /* SSKeychain.m */; };
 		D4A7D8A11CCA7D4E002C6EA3 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */; };
@@ -560,6 +561,8 @@
 		D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMediaScroller.m; sourceTree = "<group>"; };
 		D487F1CC1CC14246005742F3 /* FRSPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPlayer.h; sourceTree = "<group>"; };
 		D487F1CD1CC14246005742F3 /* FRSPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayer.m; sourceTree = "<group>"; };
+		D48C72221D09D8D2000677BF /* FRSSplitTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSplitTableView.h; sourceTree = "<group>"; };
+		D48C72231D09D8D2000677BF /* FRSSplitTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSplitTableView.m; sourceTree = "<group>"; };
 		D49B1D981C99EB1E00735846 /* UITextView+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Resize.h"; sourceTree = "<group>"; };
 		D49B1D991C99EB1E00735846 /* UITextView+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Resize.m"; sourceTree = "<group>"; };
 		D4A7D89C1CCA7D4E002C6EA3 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
@@ -876,6 +879,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D48C72211D09D8BC000677BF /* Split Table View */,
 				D4AF8EF01CFF654A00A33FAB /* Nav Bar */,
 				D4AF8EEC1CFDFEB100A33FAB /* Feed Table */,
 				07EAFF281CEA226D00E224E2 /* Launch Screen */,
@@ -1771,6 +1775,15 @@
 			name = Player;
 			sourceTree = "<group>";
 		};
+		D48C72211D09D8BC000677BF /* Split Table View */ = {
+			isa = PBXGroup;
+			children = (
+				D48C72221D09D8D2000677BF /* FRSSplitTableView.h */,
+				D48C72231D09D8D2000677BF /* FRSSplitTableView.m */,
+			);
+			name = "Split Table View";
+			sourceTree = "<group>";
+		};
 		D4A7D8A21CCA7E47002C6EA3 /* Keychain */ = {
 			isa = PBXGroup;
 			children = (
@@ -2230,6 +2243,7 @@
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
 				1EA27AA81AF147C4003137CE /* MKMapView+Helpers.m in Sources */,
 				D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
+				D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */,
 				65D1E4E91C4EB7B6003362D3 /* FRSMapCircle.m in Sources */,
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				D453CC7A1CCA80850091A004 /* MagicalRecord+ErrorHandling.m in Sources */,
