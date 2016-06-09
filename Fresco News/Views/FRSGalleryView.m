@@ -111,7 +111,7 @@
     [self updateSocial];
     [self adjustHeight];
     
-    if (self.gallery.repostedBy != nil && ![self.gallery.repostedBy isEqualToString:@""]) {
+    if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
         [self configureRepostWithName:self.gallery.repostedBy];
     }
 }
