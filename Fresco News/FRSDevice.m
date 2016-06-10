@@ -11,6 +11,7 @@
 
 @implementation FRSDevice
 +(FRSDeviceType)currentDevice {
+    
     NSString *mahineString = machineName();
     
     if ([mahineString isEqualToString:@"i386"]) {
