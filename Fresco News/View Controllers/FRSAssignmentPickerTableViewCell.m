@@ -62,12 +62,12 @@
     self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     
     if (self.assignment) {
-        self.titleLabel.text = self.assignment;
+        self.titleLabel.text = [self.assignment objectForKey:@"caption"];
+        
     } else {
         self.titleLabel.text = @"Untitled Assignment";
     }
 }
-
 
 -(BOOL)isSelectedAssignment {
     return _isSelectedAssignment;

@@ -15,7 +15,10 @@
 
 #import "FRSAPIClient.h"
 
-@interface FRSUploadViewController ()
+@interface FRSUploadViewController () {
+    NSMutableArray *dictionaryRepresentations;
+    BOOL notFirstFetch;
+}
 
 @property (strong, nonatomic) UIView *navigationBarView;
 @property (strong, nonatomic) UIScrollView *scrollView;
@@ -27,11 +30,17 @@
 @property (strong, nonatomic) UIView *bottomContainer;
 @property (strong, nonatomic) UILabel *placeholderLabel;
 
+@property (nonatomic, retain) NSMutableArray *assignmentIDs;
+
 @property (strong, nonatomic) FRSAssignment *selectedAssignment;
 
 @property (nonatomic) BOOL postToFacebook;
 @property (nonatomic) BOOL postToTwitter;
 @property (nonatomic) BOOL postAnon;
+@property (nonatomic) BOOL isFetching;
+
+@property (strong, nonatomic) NSArray *assignments;
+
 
 @end
 
@@ -53,6 +62,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.postToFacebook = NO;
     self.postAnon = NO;
     [self checkBottomBar];
+    
+    self.assignmentIDs = [[NSMutableArray alloc] init];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -218,6 +229,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configureAssignmentsTableView {
     
+    NSLog(@"TABLE VIEW TABLE VIEW TABLE VIEW");
+    
     self.assignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height, self.view.frame.size.width, self.assignmentsArray.count *44)];
     self.assignmentsTableView.scrollEnabled = NO;
     self.assignmentsTableView.delegate = self;
@@ -359,28 +372,85 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - Assignments
 
 -(void)configureAssignments {
+
     
-    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
-    
-    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:50 ofLocation:@[@(lastLocation.coordinate.latitude), @(lastLocation.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
-        
-        NSArray *nearBy = responseObject[@"nearby"];
-        NSArray *global = responseObject[@"global"];
-        
-//        NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
-//        NSArray *global = @[@"Global", @"Global Two"];
-        
-        NSLog(@"Near by:%@ Global: %@", nearBy, global);
-        
-        self.assignmentsArray = nearBy; //should be nearby, make new array for global
-        [self configureAssignmentsTableView];
-        [self configureTextView];
-        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height + self.captionContainer.frame.size.height +44);
-    }];
-    
+    [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
+    self.assignmentsArray = self.assignments;
     
 }
 
+
+
+-(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
+    
+    if (self.isFetching) return;
+    
+    self.isFetching = YES;
+    
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
+        
+        NSLog(@"ASSIGNMENTS ASSIGNMENTS ASSIGNMENTS ASSIGNMENTS");
+
+        NSArray *assignments = (NSArray *)responseObject[@"nearby"];
+        NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
+        
+        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        
+        if (globalAssignments.count > 0) {
+            
+        }
+
+        self.assignmentsArray = [assignments copy];
+        
+        self.isFetching = NO;
+        
+        if (!notFirstFetch) {
+            notFirstFetch = TRUE;
+            [self cacheAssignments];
+        }
+        
+        [delegate.managedObjectContext save:Nil];
+        [delegate saveContext];
+        
+        
+        
+        [self configureAssignmentsTableView];
+        
+        
+    }];
+}
+
+-(BOOL)assignmentExists:(NSString *)assignment {
+    
+    __block BOOL returnValue = FALSE;
+    
+    [self.assignmentIDs enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *currentID = (NSString *)obj;
+        
+        if ([currentID isEqualToString:assignment]) {
+            returnValue = TRUE;
+        }
+    }];
+    
+    return returnValue;
+}
+
+-(void)fetchLocalAssignments {
+    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(expirationDate >= %@)", [NSDate date]];
+    NSManagedObjectContext *moc = [delegate managedObjectContext];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSAssignment"];
+    request.predicate = predicate;
+    NSError *error = nil;
+    NSArray *stored = [moc executeFetchRequest:request error:&error];
+    self.assignmentsArray= [NSMutableArray arrayWithArray:stored];
+//    [self configureAnnotationsForMap];
+}
+
+-(void)cacheAssignments {
+    
+}
 
 
 
