@@ -177,6 +177,7 @@
 		D487F1BE1CBD6C2D005742F3 /* FRSMediaScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */; };
 		D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1CD1CC14246005742F3 /* FRSPlayer.m */; };
 		D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72231D09D8D2000677BF /* FRSSplitTableView.m */; };
+		D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72261D0B3D5C000677BF /* FRSDevice.m */; };
 		D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = D49B1D991C99EB1E00735846 /* UITextView+Resize.m */; };
 		D4A7D8A01CCA7D4E002C6EA3 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89D1CCA7D4E002C6EA3 /* SSKeychain.m */; };
 		D4A7D8A11CCA7D4E002C6EA3 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */; };
@@ -563,6 +564,8 @@
 		D487F1CD1CC14246005742F3 /* FRSPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayer.m; sourceTree = "<group>"; };
 		D48C72221D09D8D2000677BF /* FRSSplitTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSplitTableView.h; sourceTree = "<group>"; };
 		D48C72231D09D8D2000677BF /* FRSSplitTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSplitTableView.m; sourceTree = "<group>"; };
+		D48C72251D0B3D5C000677BF /* FRSDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDevice.h; sourceTree = "<group>"; };
+		D48C72261D0B3D5C000677BF /* FRSDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDevice.m; sourceTree = "<group>"; };
 		D49B1D981C99EB1E00735846 /* UITextView+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Resize.h"; sourceTree = "<group>"; };
 		D49B1D991C99EB1E00735846 /* UITextView+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Resize.m"; sourceTree = "<group>"; };
 		D4A7D89C1CCA7D4E002C6EA3 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
@@ -1892,6 +1895,8 @@
 				D43C7FF41C8F588C00A7A7A7 /* Defaults */,
 				D47999631C96A8FD00B46D01 /* Location */,
 				D41365B41CA33347004FE848 /* Settings */,
+				D48C72251D0B3D5C000677BF /* FRSDevice.h */,
+				D48C72261D0B3D5C000677BF /* FRSDevice.m */,
 			);
 			name = "Fresco API";
 			sourceTree = "<group>";
@@ -2267,6 +2272,7 @@
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,
 				D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */,
+				D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */,
 				65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */,
 				65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */,
 				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,

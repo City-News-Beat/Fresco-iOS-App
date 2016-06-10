@@ -277,7 +277,7 @@
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {
     [[FRSAPIClient sharedClient] repostStory:self.story completion:^(id responseObject, NSError *error) {
-        NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+        NSLog(@"REPOSTED %@", (!error) ? @"TRUE" : @"FALSE");
     }];
 }
 

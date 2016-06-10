@@ -179,7 +179,6 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 #define HELVETICA_NEUE_THIN                 @"HelveticaNeue-Thin"
 #define HELVETICA_NEUE_REGULAR              @"HelveticaNeue"
 
-
 /* Segue Identifiers */
 
 #pragma mark - Segue Identifiers

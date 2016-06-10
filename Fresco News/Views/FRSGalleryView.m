@@ -167,7 +167,7 @@
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {
     [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+        NSLog(@"REPOSTED %@", (!error) ? @"TRUE" : @"FALSE");
     }];
 }
 
