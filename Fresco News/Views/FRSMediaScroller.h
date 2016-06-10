@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FRSMediaScroller : UITableView
+@interface FRSMediaScroller : UIScrollView
 
 @end
