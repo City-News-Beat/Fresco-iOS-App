@@ -119,8 +119,9 @@
         float rawHeight = [post.meta[@"image_height"] integerValue];
         float rawWidth = [post.meta[@"image_width"] integerValue];
         
-        if (rawHeight == 0 || rawWidth == 0){
+        if (rawHeight <= 0 || rawWidth <= 0){
             totalHeight += [UIScreen mainScreen].bounds.size.width;
+            continue;
         }
         else {
             float scaledHeight = rawHeight * ([UIScreen mainScreen].bounds.size.width/rawWidth);
@@ -130,10 +131,10 @@
     
     NSInteger averageHeight = ceilf(totalHeight/self.posts.count);
     
-    averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
+    averageHeight = MAX(averageHeight, [UIScreen mainScreen].bounds.size.width * 5/3);
     
-    if (averageHeight > [UIScreen mainScreen].bounds.size.width * 4/3) {
-        averageHeight = [UIScreen mainScreen].bounds.size.width * 4/3;
+    if (averageHeight > [UIScreen mainScreen].bounds.size.width * 3) {
+        averageHeight = [UIScreen mainScreen].bounds.size.width * 3;
     }
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width - 32, 0)];
