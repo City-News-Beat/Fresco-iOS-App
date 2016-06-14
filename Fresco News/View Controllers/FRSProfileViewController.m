@@ -26,6 +26,7 @@
 
 #import "FRSAppDelegate.h"
 #import "FRSAPIClient.h"
+#import "FRSStoryCell.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -138,9 +139,7 @@
 -(void)fetchGalleries {    
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
-        FRSFeedTable *feedTable = (FRSFeedTable *)self.tableView;
-        feedTable.feed = self.galleries;
-        [feedTable reloadData];
+        [self.tableView reloadData];
     }];
 }
 
@@ -208,10 +207,10 @@
     [self createProfileSection];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[FRSFeedTable alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
-    //self.tableView.delegate = self;
-   // self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     self.tableView.delaysContentTouches = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
@@ -465,11 +464,18 @@
         return self.profileContainer.frame.size.height;
     }
     else {
-//        return 600;
         if (!self.galleries.count) return 0;
-        FRSGallery *gallery = self.galleries[indexPath.row];
-        return [gallery heightForGallery];
+        if ([[self.galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+            FRSGallery *gallery = self.galleries[indexPath.row];
+            return [gallery heightForGallery];
+        }
+        else {
+            FRSStory *story = self.galleries[indexPath.row];
+            return [story heightForStory];
+        }
     }
+    
+    return 0;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -480,10 +486,21 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     else {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
-        if (!cell){
-            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+            
+            if (!cell){
+                cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+            }
         }
+        else if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
+            
+            if (!cell){
+                cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
+            }
+        }
+
     }
     return cell;
 }
@@ -493,11 +510,20 @@
         [cell addSubview:self.profileContainer];
     }
     else {
-        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
-        [galCell clearCell];
-        
-        galCell.gallery = self.galleries[indexPath.row];
-        [galCell configureCell];
+        if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+            FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+            [galCell clearCell];
+            
+            galCell.gallery = self.galleries[indexPath.row];
+            [galCell configureCell];
+        }
+        else {
+            FRSStoryCell *storyCell = (FRSStoryCell *)cell;
+            [storyCell clearCell];
+            
+            storyCell.story = self.galleries[indexPath.row];
+            [storyCell configureCell];
+        }
     }
 }
 
