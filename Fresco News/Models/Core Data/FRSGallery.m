@@ -83,14 +83,16 @@
             [self addPostsObject:post];
         }
         else {
-            FRSPost *post = [FRSPost postWithDictionary:dict];            
+            NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSPost" inManagedObjectContext:self.currentContext];
+            FRSPost *post = (FRSPost *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
+            
             if (dict[@"owner"] != [NSNull null]) {
                 if (!dict[@"owner"][@"avatar"]) {
                     return;
                 }
                 post.creator.profileImage = dict[@"owner"][@"avatar"];
             }
-            
+            [post configureWithDictionary:dict];
             [self addPostsObject:post];
         }
     }
@@ -104,7 +106,8 @@
             [self addArticlesObject:article];
         }
         else {
-            FRSArticle *article = [FRSArticle articleWithDictionary:dict];
+            NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSArticle" inManagedObjectContext:self.currentContext];
+            FRSArticle *article = (FRSArticle *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
             [self addArticlesObject:article];
         }
     }

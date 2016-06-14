@@ -812,22 +812,20 @@
         return dictionary;
     }
     
+    
     NSString *objectType = dictionary[@"object"];
     
     if ([objectType isEqualToString:galleryObjectType]) {
         NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSGallery" inManagedObjectContext:[self managedObjectContext]];
         FRSGallery *gallery = (FRSGallery *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
+        gallery.currentContext = [self managedObjectContext];
         [gallery configureWithDictionary:dictionary];
         return gallery;
-    }
-    else if ([objectType isEqualToString:postObjectType]) {
-        NSEntityDescription *postEntity = [NSEntityDescription entityForName:@"FRSPost" inManagedObjectContext:[self managedObjectContext]];
-        FRSPost *post = (FRSPost *)[[NSManagedObject alloc] initWithEntity:postEntity insertIntoManagedObjectContext:nil];
-        return post;
     }
     else if ([objectType isEqualToString:storyObjectType]) {
         NSEntityDescription *storyEntity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:[self managedObjectContext]];
         FRSStory *story = (FRSStory *)[[NSManagedObject alloc] initWithEntity:storyEntity insertIntoManagedObjectContext:nil];
+        [story configureWithDictionary:dictionary];
         return story;
     }
     

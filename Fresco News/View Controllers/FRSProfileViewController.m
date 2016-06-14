@@ -16,9 +16,6 @@
 #import "FRSGalleryCell.h"
 
 #import "FRSBorderedImageView.h"
-
-#import "MagicalRecord.h"
-
 #import "DGElasticPullToRefresh.h"
 #import "Fresco.h"
 
