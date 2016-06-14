@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(instancetype)postWithDictionary:(NSDictionary *)dict;
 -(void)configureWithDictionary:(NSDictionary *)dict;
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context;
+-(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context save:(BOOL)save;
 @property (nonatomic, weak) NSManagedObjectContext *currentContext;
 @property (nonatomic, retain) CLLocation *location;
 @property (nonatomic, retain) NSString *contentType;

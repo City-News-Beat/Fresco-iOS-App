@@ -75,6 +75,7 @@
 -(void)addPostsWithArray:(NSArray *)posts{
     for (NSDictionary *dict in posts){
         if (save) {
+            NSLog(@"SAVE");
             FRSPost *post = [NSEntityDescription insertNewObjectForEntityForName:@"FRSPost" inManagedObjectContext:self.currentContext];
             [post configureWithDictionary:dict context:_currentContext];
             [self addPostsObject:post];
@@ -89,7 +90,7 @@
                 }
                 post.creator.profileImage = dict[@"owner"][@"avatar"];
             }
-            [post configureWithDictionary:dict];
+            [post configureWithDictionary:dict context:self.currentContext save:FALSE];
             [self addPostsObject:post];
         }
     }
