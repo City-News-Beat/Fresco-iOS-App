@@ -318,7 +318,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+    
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
