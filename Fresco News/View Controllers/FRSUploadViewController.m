@@ -247,7 +247,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)configureGlobalAssignmentsDrawer {
     self.globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44)];
     self.globalAssignmentsDrawer.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [self.view addSubview:self.globalAssignmentsDrawer];
+    [self.scrollView addSubview:self.globalAssignmentsDrawer];
     
     UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
     label.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
@@ -322,7 +322,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (cell.isSelectedAssignment){
         cell.isSelectedAssignment = NO;
@@ -349,7 +348,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     NSInteger textViewHeight = 200;
     
-    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
+    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
     [self.scrollView addSubview:self.captionContainer];
     
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, textViewHeight)];
@@ -460,6 +459,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
+        //[self configureTextView]; //Disables cell selection/deselection (?)
         
         
     }];
