@@ -35,7 +35,7 @@
     if (self) {
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
         self.assignment = assignment;
-
+        
         self.selectionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24)];
         
 //        [self toggleImage];

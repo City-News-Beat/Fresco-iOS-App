@@ -246,7 +246,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configureGlobalAssignmentsDrawer {
     self.globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44)];
-    self.globalAssignmentsDrawer.backgroundColor = [UIColor whiteColor];
+    self.globalAssignmentsDrawer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.globalAssignmentsDrawer];
     
     UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
@@ -266,6 +266,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleGlobalAssignmentsDrawer)];
     [self.globalAssignmentsDrawer addGestureRecognizer:tap];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 43.5, self.globalAssignmentsDrawer.frame.size.width, .5)];
+    line.backgroundColor = [UIColor frescoShadowColor];
+    [self.globalAssignmentsDrawer addSubview:line];
 }
 
 -(void)toggleGlobalAssignmentsDrawer {
