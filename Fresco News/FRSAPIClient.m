@@ -796,5 +796,97 @@
     return Nil;
 }
 
+/* serialization */
+
+-(id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
+    NSLog(@"RESPONSE CLASS: %@", [response class]);
+    
+    if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
+        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
+        NSMutableDictionary *responseObjects = [[NSMutableDictionary alloc] init];
+        NSArray *keys = [response allKeys];
+        
+        for (NSString *key in keys) {
+            id valueForKey = [self objectFromDictionary:[response objectForKey:key] context:managedObjectContext];
+            
+            if (valueForKey == [response objectForKey:key]) {
+                return response; // non parse
+            }
+            
+            [responseObjects setObject:valueForKey forKey:key];
+        }
+        
+        if (cache) {
+            NSError *saveError;
+            [managedObjectContext save:&saveError];
+        }
+        
+        return responseObjects;
+    }
+    else if ([[response class] isSubclassOfClass:[NSArray class]]) {
+        NSMutableArray *responseObjects = [[NSMutableArray alloc] init];
+        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
+        
+        for (NSDictionary *responseObject in response) {
+            id originalResponse = [self objectFromDictionary:responseObject context:managedObjectContext];
+            
+            if (originalResponse == responseObject) {
+                return response;
+            }
+            
+            [responseObjects addObject:[self objectFromDictionary:responseObject context:managedObjectContext]];
+        }
+        
+        if (cache) {
+            NSError *saveError;
+            [managedObjectContext save:&saveError];
+        }
+        
+        return responseObjects;
+    }
+    else {
+        NSLog(@"No route of serialization. Sry.");
+    }
+    
+    return response;
+}
+
+-(id)objectFromDictionary:(NSDictionary *)dictionary context:(NSManagedObjectContext *)managedObjectContext {
+    
+    if (![dictionary respondsToSelector:@selector(objectForKeyedSubscript:)]) {
+        return dictionary;
+    }
+    
+    if ([dictionary isEqual:[NSNull null]]) {
+        return dictionary;
+    }
+    
+    NSString *objectType = dictionary[@"object"];
+    
+    if ([objectType isEqualToString:galleryObjectType]) {
+        
+        
+        FRSGallery *gallery = [[FRSGallery alloc] init];
+        [gallery configureWithDictionary:dictionary];
+        
+        return gallery;
+    }
+    else if ([objectType isEqualToString:postObjectType]) {
+        FRSPost *post = [[FRSPost alloc] init];
+        [post configureWithDictionary:dictionary];
+        
+        return post;
+        
+    }
+    else if ([objectType isEqualToString:storyObjectType]) {
+        FRSStory *story = [[FRSStory alloc] init];
+        [story configureWithDictionary:dictionary];
+        
+        return story;
+    }
+    
+    return dictionary; // not serializable
+}
+
 
 @end
