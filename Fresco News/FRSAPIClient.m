@@ -836,12 +836,7 @@
             
             [responseObjects addObject:[self objectFromDictionary:responseObject context:managedObjectContext]];
         }
-        
-        if (cache) {
-            NSError *saveError;
-            [managedObjectContext save:&saveError];
-        }
-        
+
         return responseObjects;
     }
     else {
