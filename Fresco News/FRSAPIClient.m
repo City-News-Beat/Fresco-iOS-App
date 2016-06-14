@@ -444,10 +444,12 @@
 }
 
 -(void)fetchFollowing:(void(^)(NSArray *galleries, NSError *error))completion {
-    NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"following" ofType:@"json"]];
-    NSError *jsonError;
-    NSDictionary *fakeData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
-    completion(fakeData[@"data"], jsonError);
+    FRSUser *authenticatedUser = [self authenticatedUser];
+    NSString *endpoint = [NSString stringWithFormat:followingFeed, authenticatedUser.uid];
+    
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 
