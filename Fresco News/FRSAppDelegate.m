@@ -85,11 +85,18 @@
         // update user
         authenticatedUser.uid = responseObject[@"id"];
         authenticatedUser.email = responseObject[@"email"];
-        authenticatedUser.firstName = responseObject[@"full_name"];
+        
+        if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
+            authenticatedUser.firstName = responseObject[@"full_name"];
+        }
         authenticatedUser.username = responseObject[@"username"];
-        authenticatedUser.bio = responseObject[@"bio"];
+        if (![responseObject[@"bio"] isEqual:[NSNull null]]) {
+            authenticatedUser.bio = responseObject[@"bio"];
+        }
         authenticatedUser.isLoggedIn = @(TRUE);
-        authenticatedUser.profileImage = responseObject[@"avatar"];
+        if (![responseObject[@"avatar"] isEqual:[NSNull null]]) {
+            authenticatedUser.profileImage = responseObject[@"avatar"];
+        }
         
         [[self managedObjectContext] save:Nil];
     }];
