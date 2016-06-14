@@ -8,6 +8,7 @@
 
 #import "FRSScrollingViewController.h"
 #import "FRSUser.h"
+#import "FRSFeedTable.h"
 
 @interface FRSProfileViewController : FRSScrollingViewController
 {

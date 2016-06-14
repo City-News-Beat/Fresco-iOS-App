@@ -138,7 +138,9 @@
 -(void)fetchGalleries {    
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
-        NSLog(@"BLA %@", self.galleries);
+        FRSFeedTable *feedTable = (FRSFeedTable *)self.tableView;
+        feedTable.feed = self.galleries;
+        [feedTable reloadData];
     }];
 }
 
@@ -206,10 +208,10 @@
     [self createProfileSection];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
+    self.tableView = [[FRSFeedTable alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+    //self.tableView.delegate = self;
+   // self.tableView.dataSource = self;
     self.tableView.delaysContentTouches = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
