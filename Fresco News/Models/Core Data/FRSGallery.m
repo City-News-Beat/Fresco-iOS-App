@@ -14,9 +14,6 @@
 #import "FRSCoreData.h"
 
 #import "FRSDateFormatter.h"
-
-#import "MagicalRecord.h"
-
 @import UIKit;
 
 @implementation FRSGallery
@@ -100,7 +97,7 @@
 
 -(void)addArticlesWithArray:(NSArray *)articles{
     for (NSDictionary * dict in articles){
-        if (_currentContext) {
+        if (save) {
             FRSArticle *article = [NSEntityDescription insertNewObjectForEntityForName:@"FRSArticle" inManagedObjectContext:self.currentContext];
             [article configureWithDictionary:dict];
             [self addArticlesObject:article];
