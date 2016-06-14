@@ -87,7 +87,9 @@
         authenticatedUser.email = responseObject[@"email"];
         authenticatedUser.firstName = responseObject[@"full_name"];
         authenticatedUser.username = responseObject[@"username"];
+        authenticatedUser.bio = responseObject[@"bio"];
         authenticatedUser.isLoggedIn = @(TRUE);
+        authenticatedUser.profileImage = responseObject[@"avatar"];
         
         [[self managedObjectContext] save:Nil];
     }];
