@@ -11,6 +11,7 @@
 #import "FRSPost.h"
 #import "FRSFileUploadManager.h" // temp patch
 #import "FRSRequestSerializer.h"
+#import "FRSAppDelegate.h"
 
 @implementation FRSAPIClient
 
@@ -814,24 +815,19 @@
     NSString *objectType = dictionary[@"object"];
     
     if ([objectType isEqualToString:galleryObjectType]) {
-        
-        
-        FRSGallery *gallery = [[FRSGallery alloc] init];
+        NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSGallery" inManagedObjectContext:[self managedObjectContext]];
+        FRSGallery *gallery = (FRSGallery *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
         [gallery configureWithDictionary:dictionary];
-        
         return gallery;
     }
     else if ([objectType isEqualToString:postObjectType]) {
-        FRSPost *post = [[FRSPost alloc] init];
-        [post configureWithDictionary:dictionary];
-        
+        NSEntityDescription *postEntity = [NSEntityDescription entityForName:@"FRSPost" inManagedObjectContext:[self managedObjectContext]];
+        FRSPost *post = (FRSPost *)[[NSManagedObject alloc] initWithEntity:postEntity insertIntoManagedObjectContext:nil];
         return post;
-        
     }
     else if ([objectType isEqualToString:storyObjectType]) {
-        FRSStory *story = [[FRSStory alloc] init];
-        [story configureWithDictionary:dictionary];
-        
+        NSEntityDescription *storyEntity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:[self managedObjectContext]];
+        FRSStory *story = (FRSStory *)[[NSManagedObject alloc] initWithEntity:storyEntity insertIntoManagedObjectContext:nil];
         return story;
     }
     
@@ -839,7 +835,8 @@
 }
 
 -(NSManagedObjectContext *)managedObjectContext {
-    return Nil;
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [appDelegate managedObjectContext];
 }
 
 
