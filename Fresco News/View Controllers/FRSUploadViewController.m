@@ -276,11 +276,24 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     if (self.globalAssignmentsEnabled) {
         self.globalAssignmentsEnabled = NO;
+        [self hideAndRemoveGlobalAssignments];
         NSLog(@"disabled");
     } else {
         self.globalAssignmentsEnabled = YES;
+        [self configureAndShowGlobalAssignments];
         NSLog(@"enabled");
     }
+}
+
+
+-(void)configureAndShowGlobalAssignments {
+    //create tableview and animate in
+    //textfield should move down (*number of global assignments+1) with animation
+}
+
+-(void)hideAndRemoveGlobalAssignments {
+    //animate out and remove from superview in completion
+    //textfield should move up (*number of gloal assignments+1) with animation
 }
 
 
