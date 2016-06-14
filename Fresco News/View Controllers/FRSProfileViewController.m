@@ -77,17 +77,9 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    [self configureUI];
     [self configureWithUser:_representedUser];
-    
-    if (self.presentingUser) {
-        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-        FRSUser *user = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:delegate.managedObjectContext];
-        [self configureWithUser:user];
-        
-    } else {
-        [self configureUI];
-        [self fetchGalleries];
-    }
+    [self fetchGalleries];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -147,11 +139,7 @@
 #pragma mark - Fetch Methods
 
 -(void)fetchGalleries {
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *responseObject, NSError *error) {
-        if (!responseObject.count){
-            return;
-        }
-        
+    [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         NSMutableArray *mArr = [NSMutableArray new];
         FRSAppDelegate  *delegate = [[UIApplication sharedApplication] delegate];
         NSArray *galleries = responseObject;
@@ -624,15 +612,12 @@
     
     NSLog(@"user = %@", user);
     
-    self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
-//    self.profileIV.image = user.profileImage;
-//    self.nameLabel.text = user.firstName;
-//    self.bioLabel.text = user.bio;
+   // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+    self.nameLabel.text = user.firstName;
+    self.bioLabel.text = user.bio;
     
-//    self.profileIV.image = [UIImage imageNamed:@"apple-user-grace"];
-    self.nameLabel.text = @"Fresco User";
-    self.usernameLabel.text = @"@username";
-    self.bioLabel.text = @"This here ought to have been a RED rose-tree, and we put a white one in by mistake; and if the Queen was to find it out, we should all have our heads cut off.";
+    self.usernameLabel.text = user.username;
+    titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
     self.locationLabel.text = @"New York, NY"; //geo coder, last location
     self.followersLabel.text = @"1125";
 
