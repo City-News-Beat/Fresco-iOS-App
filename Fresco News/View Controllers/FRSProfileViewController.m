@@ -493,7 +493,7 @@
                 cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
             }
         }
-        else if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+        else if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStoryCell class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
             
             if (!cell){
