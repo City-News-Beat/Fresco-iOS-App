@@ -632,7 +632,7 @@
     self.bioLabel.text = @"This here ought to have been a RED rose-tree, and we put a white one in by mistake; and if the Queen was to find it out, we should all have our heads cut off.";
     self.locationLabel.text = @"New York, NY"; //geo coder, last location
     self.followersLabel.text = @"1125";
-    
+
 }
 
 

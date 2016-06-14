@@ -223,7 +223,6 @@
 // all info needed for "installation" field of registration/signin
 -(NSDictionary *)currentInstallation {
     
-    NSString *randomString = @"NOLANSMOM";
     
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
@@ -796,4 +795,6 @@
 -(NSManagedObjectContext *)managedObjectContext {
     return Nil;
 }
+
+
 @end

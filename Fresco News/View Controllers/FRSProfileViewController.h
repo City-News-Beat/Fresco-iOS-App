@@ -7,6 +7,7 @@
 //
 
 #import "FRSScrollingViewController.h"
+#import "FRSUser.h"
 
 @interface FRSProfileViewController : FRSScrollingViewController
 {
@@ -14,6 +15,8 @@
 }
 
 -(instancetype)initWithUser:(FRSUser *)user;
+-(void)loadAuthenticatedUser;
+-(FRSUser *)authenticatedUser;
 @property (nonatomic, retain) FRSUser *representedUser;
 @property BOOL authenticatedProfile;
 @end
