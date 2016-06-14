@@ -28,6 +28,7 @@
 #import "FRSUser.h"
 
 #import "FRSAppDelegate.h"
+#import "FRSAPIClient.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -75,6 +76,8 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    [self configureWithUser:_representedUser];
     
     if (self.presentingUser) {
         FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];

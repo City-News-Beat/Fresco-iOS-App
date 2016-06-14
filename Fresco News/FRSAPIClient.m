@@ -756,46 +756,6 @@
     [self post:endpoint withParameters:parameters completion:completion];
 }
 
-
--(NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache {
-    NSMutableArray *responseObjects = [[NSMutableArray alloc] init];
-    NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
-    
-    for (NSDictionary *responseObject in response) {
-        NSString *objectType = responseObject[@"object"];
-        
-        if ([objectType isEqualToString:galleryObjectType]) {
-            FRSGallery *gallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:managedObjectContext];
-            [gallery configureWithDictionary:responseObject context:managedObjectContext];
-            
-            [responseObjects addObject:gallery];
-        }
-        else if ([objectType isEqualToString:postObjectType]) {
-            FRSPost *post = [NSEntityDescription insertNewObjectForEntityForName:@"FRSPost" inManagedObjectContext:managedObjectContext];
-            [post configureWithDictionary:responseObject context:managedObjectContext];
-            
-            [responseObjects addObject:post];
-        }
-        else if ([objectType isEqualToString:storyObjectType]) {
-            FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:managedObjectContext];
-            [story configureWithDictionary:responseObject];
-            
-            [responseObjects addObject:story];
-        }
-    }
-    
-    if (cache) {
-        NSError *saveError;
-        [managedObjectContext save:&saveError];
-    }
-    
-    return responseObjects;
-}
-
--(NSManagedObjectContext *)managedObjectContext {
-    return Nil;
-}
-
 /* serialization */
 
 -(id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
@@ -881,6 +841,10 @@
     }
     
     return dictionary; // not serializable
+}
+
+-(NSManagedObjectContext *)managedObjectContext {
+    return Nil;
 }
 
 
