@@ -44,6 +44,7 @@
 @property (strong, nonatomic) NSArray *globalAssignments;
 
 @property (strong, nonatomic) UIView *globalAssignmentsDrawer;
+@property (strong, nonatomic) UITableView *globalAssignmentsTableView;
 
 
 @end
@@ -299,9 +300,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    NSLog(@"self.assignmentsArray.count = %ld", self.assignmentsArray.count);
     
-    return self.assignmentsArray.count;
+    if (tableView == self.assignmentsTableView) {
+        return self.assignmentsArray.count;
+    } else if (tableView == self.globalAssignmentsTableView) {
+        return self.globalAssignments.count;
+    } else {
+        return 0; //will never get called
+    }
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -320,19 +326,27 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (tableView == self.assignmentsTableView) {
+        FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:indexPath.row]];
         
-    FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:indexPath.row]];
-    
-    [cell configureCellForIndexPath:indexPath];
-    
-    return cell;
+        [cell configureCellForIndexPath:indexPath];
+        
+        return cell;
+    } else if (tableView == self.globalAssignmentsTableView) {
+        //configure global cells
+    } else {
+        FRSAssignmentPickerTableViewCell *cell;
+        return cell;
+    }
+    return nil;
 }
 
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];    
     
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
