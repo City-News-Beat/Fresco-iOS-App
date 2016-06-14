@@ -38,6 +38,7 @@
 @property (nonatomic) BOOL postToTwitter;
 @property (nonatomic) BOOL postAnon;
 @property (nonatomic) BOOL isFetching;
+@property (nonatomic) BOOL globalAssignmentsEnabled;
 
 @property (strong, nonatomic) NSArray *assignments;
 
@@ -91,6 +92,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureNavigationBar];
     [self configureAssignments];
     [self configureBottomBar];
+    [self configureGlobalAssignmentsDrawer];
 
 }
 
@@ -229,8 +231,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configureAssignmentsTableView {
     
-    NSLog(@"TABLE VIEW TABLE VIEW TABLE VIEW");
-    
     self.assignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height, self.view.frame.size.width, self.assignmentsArray.count *44)];
     self.assignmentsTableView.scrollEnabled = NO;
     self.assignmentsTableView.delegate = self;
@@ -240,6 +240,41 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.assignmentsTableView.delaysContentTouches = NO;
     self.assignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.scrollView addSubview:self.assignmentsTableView];
+}
+
+-(void)configureGlobalAssignmentsDrawer {
+    UIView *globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 44)];
+    globalAssignmentsDrawer.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:globalAssignmentsDrawer];
+    
+    UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
+    label.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
+    label.text = @"6 global assignments";
+    [label sizeToFit];
+    label.frame = CGRectMake(globalAssignmentsDrawer.frame.size.width/2 - label.frame.size.width/2, 6, label.frame.size.width, 14);
+    [globalAssignmentsDrawer addSubview:label];
+    
+    UIImageView *globe = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"earth-16"]]; //swap with 16x16 earth
+    globe.frame = CGRectMake(label.frame.origin.x -16 -6, 8, 16, 16);
+    [globalAssignmentsDrawer addSubview:globe];
+    
+    UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"down-caret"]];
+    caret.frame = CGRectMake(self.view.frame.size.width/2 - 8/2, 28, 8, 8);
+    [globalAssignmentsDrawer addSubview:caret];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleGlobalAssignmentsDrawer)];
+    [globalAssignmentsDrawer addGestureRecognizer:tap];
+}
+
+-(void)toggleGlobalAssignmentsDrawer {
+    
+    if (self.globalAssignmentsEnabled) {
+        self.globalAssignmentsEnabled = NO;
+        NSLog(@"disabled");
+    } else {
+        self.globalAssignmentsEnabled = YES;
+        NSLog(@"enabled");
+    }
 }
 
 
