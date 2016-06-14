@@ -85,7 +85,7 @@ static NSString * const commentEndpoint = @"gallery/%@/comment/";
 // feeds
 static NSString * const likeFeed = @"feeds/%@/likes";
 static NSString * const followingFeed = @"feeds/%@/following";
-static NSString * const userFeed = @"feeds/%@/";
+static NSString * const userFeed = @"feeds/%@/user";
 
 // quick actions -- app delegate
 static NSString * const assignmentsAction = @"FRSAssignmentsAction";

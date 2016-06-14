@@ -343,7 +343,6 @@
     
     // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
-        NSLog(@"%@", error);
         if ([galleries count] == 0){
             return;
         }
@@ -527,9 +526,7 @@
         NSLog(@"NOT RELOADING");
         return;
     }
-    
-    NSLog(@"RELOADING WITH OFFSET ID: %@", offsetID);
-    
+        
     lastOffset = self.dataSource.count;
     
         NSMutableArray *indexPaths = [[NSMutableArray alloc] init];

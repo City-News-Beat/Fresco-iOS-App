@@ -49,7 +49,6 @@
 }
 
 -(id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
-    NSLog(@"RESPONSE CLASS: %@", [response class]);
     
     if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
         NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;

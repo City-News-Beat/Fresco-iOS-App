@@ -104,7 +104,6 @@
             [self handleUserLogin:responseObject];
         }
         
-        NSLog(@"%@ %@", error, responseObject);
     }];
 }
 
@@ -187,8 +186,7 @@
     
     // if we have multiple "authenticated" users in data store, we probs messed up big time
     if ([authenticatedUsers count] > 1) {
-        NSLog(@"**WARNING**: Indication of multiple authenciated users: %@", authenticatedUsers);
-        @throw [NSException exceptionWithName:@"FRSMultiAuth" reason:@"Multiple users" userInfo:@{@"users":authenticatedUsers}];
+
     }
     
     return [authenticatedUsers firstObject];
@@ -277,7 +275,6 @@
         currentInstallation[@"locale_identifier"] = localeString;
     }
 
-    NSLog(@"%@", currentInstallation);
     
     return currentInstallation;
 }
@@ -319,7 +316,10 @@
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
- 
+    NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -356,7 +356,6 @@
     NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
     [geoData setObject:@"Point" forKey:@"type"];
     [geoData setObject:location forKey:@"coordinates"];
-    NSLog(@"%@", geoData);
     
     NSDictionary *params = @{
                              @"geo" : geoData,
@@ -364,7 +363,6 @@
                             };
 
     
-    NSLog(@"%@", params);
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -394,8 +392,6 @@
     
     [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        
-        NSLog(@"%@ %@", responseObject, error);
     }];
 }
 
@@ -759,7 +755,6 @@
 /* serialization */
 
 -(id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
-    NSLog(@"RESPONSE CLASS: %@", [response class]);
     
     if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
         NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;

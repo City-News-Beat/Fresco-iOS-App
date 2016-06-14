@@ -138,10 +138,10 @@
 
 #pragma mark - Fetch Methods
 
--(void)fetchGalleries {
+-(void)fetchGalleries {    
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
-    
+        NSLog(@"BLA %@", self.galleries);
     }];
 }
 
@@ -598,10 +598,6 @@
 #pragma mark - User
 
 -(void)configureWithUser:(FRSUser *)user {
-//    NSLog(@"user = %@", user);
-    
-    NSLog(@"user = %@", user);
-    
    // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
     self.nameLabel.text = user.firstName;
     self.bioLabel.text = user.bio;
