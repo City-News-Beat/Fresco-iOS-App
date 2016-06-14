@@ -132,11 +132,7 @@
     NSInteger averageHeight = ceilf(totalHeight/self.posts.count);
     
     averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
-    
-    if (averageHeight > [UIScreen mainScreen].bounds.size.width * 4/3) {
-        averageHeight = [UIScreen mainScreen].bounds.size.width * 4/3;
-    }
-    
+
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width - 32, 0)];
     
     label.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
