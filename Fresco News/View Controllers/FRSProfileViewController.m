@@ -140,18 +140,8 @@
 
 -(void)fetchGalleries {
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
-        NSMutableArray *mArr = [NSMutableArray new];
-        FRSAppDelegate  *delegate = [[UIApplication sharedApplication] delegate];
-        NSArray *galleries = responseObject;
-        for (NSDictionary *dict in galleries){
-            FRSGallery *gallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
-            [gallery configureWithDictionary:dict context:delegate.managedObjectContext];
-            [mArr addObject:gallery];
-        }
-        
-        
-        self.galleries = [mArr copy];
-        [self.tableView reloadData];
+        self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
+    
     }];
 }
 
