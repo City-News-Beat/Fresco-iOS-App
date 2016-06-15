@@ -938,10 +938,8 @@
         NSLog(@"currentPost.byline = %@", currentPost.byline);
         
         FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:currentPost.creator];
-        
-        
-        
         [self.delegate.navigationController pushViewController:userViewController animated:YES];
+        
     }
 }
 

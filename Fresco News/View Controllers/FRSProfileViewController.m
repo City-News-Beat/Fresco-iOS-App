@@ -200,7 +200,7 @@
     [self.tableView dg_removePullToRefresh];
 }
 
- 
+
 -(void)configureNavigationBar{
 //  [super configureNavigationBar];
     [super removeNavigationBarLine];
@@ -212,7 +212,6 @@
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
-    
     
     if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
@@ -655,7 +654,7 @@
     
     self.usernameLabel.text = user.username;
     titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
-    self.locationLabel.text = @"New York, NY"; //geo coder, last location
+    self.locationLabel.text = user.address; //user.address does not exiset yet
     self.followersLabel.text = @"1125";
 
 }
