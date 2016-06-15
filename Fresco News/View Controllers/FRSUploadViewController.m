@@ -288,6 +288,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 
 -(void)configureAndShowGlobalAssignments {
+    
     //create tableview and animate in
     //textfield should move down (*number of global assignments+1) with animation
 }
@@ -346,7 +347,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];    
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
