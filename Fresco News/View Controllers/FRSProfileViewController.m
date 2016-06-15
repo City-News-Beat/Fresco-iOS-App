@@ -76,11 +76,21 @@
 
 @synthesize representedUser = _representedUser, authenticatedProfile = _authenticatedProfile;
 
+
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        if (!_representedUser) {
+            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        }
+    }
+    
+    return self;
+}
+
 -(void)viewDidLoad {
     [super viewDidLoad];
-    if (!_representedUser) {
-        _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-    }
     [self configureUI];
     [self configureWithUser:_representedUser];
     [self fetchGalleries];
@@ -156,7 +166,9 @@
 
 #pragma mark - Fetch Methods
 
--(void)fetchGalleries {    
+-(void)fetchGalleries {
+    NSLog(@"%@", self.representedUser);
+    
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
         [self.tableView reloadData];
