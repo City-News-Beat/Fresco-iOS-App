@@ -81,20 +81,13 @@
     CGRect scrollFrame = self.tableView.frame;
     scrollFrame.origin.x = scrollFrame.size.width;
     scrollFrame.origin.y = -64;
-
-//    if (userHasNoFollowers) {
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
     followingController = [[FRSFollowingController alloc] init];
     followingController.tableView = self.followingTable;
     
     [self configureNoFollowers];
-
-//    } else {
-//    }
-    
     [self.pageScroller addSubview:self.followingTable];
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{

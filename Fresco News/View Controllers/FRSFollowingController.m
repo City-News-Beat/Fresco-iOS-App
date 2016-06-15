@@ -28,6 +28,8 @@
 
 -(void)commonInit {
     [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
+        NSLog(@"TST %@", galleries);
+        
         self.feed = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
         [self.tableView reloadData];
     }];
