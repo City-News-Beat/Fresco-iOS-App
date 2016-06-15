@@ -604,7 +604,9 @@
 }
 
 -(void)followUser {
-    
+    [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
+        //
+    }];
 }
 
 -(void)showEditProfile {
