@@ -110,8 +110,7 @@
 }
 
 -(instancetype)initWithUser:(FRSUser *)user {
-    NSLog(@"%@", user.uid);
-    
+
     if (self) {
         [self setupUI]; // setup UI
         
