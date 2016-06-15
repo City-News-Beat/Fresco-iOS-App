@@ -21,7 +21,7 @@
 #import "FRSAlertView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "FRSAppDelegate.h"
 
 @import MapKit;
 
@@ -1367,6 +1367,9 @@
 }
 
 -(void)segueToSetup {
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate reloadUser];
+    
     FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
     [self.navigationController pushViewController:setupProfileVC animated:YES];
 }

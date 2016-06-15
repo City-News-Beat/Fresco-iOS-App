@@ -31,6 +31,6 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain) id tabBarController;
-
+-(void)reloadUser;
 - (void)saveContext;
 @end
