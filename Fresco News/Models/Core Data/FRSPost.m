@@ -43,7 +43,9 @@
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"address"]];
     self.creator = [FRSUser MR_createEntity];
-    
+    self.creator.uid = dict[@"owner"][@"id"];
+    self.creator.firstName = dict[@"owner"][@"full_name"];
+
     /*self.creator = [FRSUser MR_createEntity];
     
     if ([dict objectForKey:@"video"] != [NSNull null]) {
@@ -75,6 +77,8 @@
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"address"]];
     self.creator = [FRSUser MR_createEntityInContext:context];
+    self.creator.uid = dict[@"owner"][@"id"];
+    self.creator.firstName = dict[@"owner"][@"full_name"];
     
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
         self.mediaType = @(1);
