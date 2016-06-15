@@ -132,6 +132,10 @@
     UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
     followButton.tintColor = [UIColor whiteColor];
     
+    
+    
+
+    
     self.navigationItem.rightBarButtonItem = followButton;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
@@ -209,15 +213,17 @@
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
     
-    UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
-    editItem.tintColor = [UIColor whiteColor];
-    UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
-    editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
-    
-    self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
+        UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
+        editItem.tintColor = [UIColor whiteColor];
+        UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
+        editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
+        
+        self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //?
+    }
 }
 
 -(void)configureTableView{
