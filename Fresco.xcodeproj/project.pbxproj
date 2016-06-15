@@ -182,6 +182,14 @@
 		D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72231D09D8D2000677BF /* FRSSplitTableView.m */; };
 		D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72261D0B3D5C000677BF /* FRSDevice.m */; };
 		D48C722B1D10C502000677BF /* FRSFollowingController.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C722A1D10C502000677BF /* FRSFollowingController.m */; };
+		D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C722E1D11D2EB000677BF /* FRSActivityViewController.m */; };
+		D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48C722F1D11D2EB000677BF /* FRSActivityViewController.xib */; };
+		D48C72371D11D312000677BF /* FRSGenericActivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72351D11D312000677BF /* FRSGenericActivityCell.m */; };
+		D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48C72361D11D312000677BF /* FRSGenericActivityCell.xib */; };
+		D48C723D1D11D352000677BF /* FRSUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C723B1D11D352000677BF /* FRSUserCell.m */; };
+		D48C723E1D11D352000677BF /* FRSUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48C723C1D11D352000677BF /* FRSUserCell.xib */; };
+		D48C72431D11D39F000677BF /* FRSBreakingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72411D11D39F000677BF /* FRSBreakingCell.m */; };
+		D48C72441D11D39F000677BF /* FRSBreakingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48C72421D11D39F000677BF /* FRSBreakingCell.xib */; };
 		D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = D49B1D991C99EB1E00735846 /* UITextView+Resize.m */; };
 		D4A7D8A01CCA7D4E002C6EA3 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89D1CCA7D4E002C6EA3 /* SSKeychain.m */; };
 		D4A7D8A11CCA7D4E002C6EA3 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */; };
@@ -577,6 +585,18 @@
 		D48C72261D0B3D5C000677BF /* FRSDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDevice.m; sourceTree = "<group>"; };
 		D48C72291D10C502000677BF /* FRSFollowingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingController.h; sourceTree = "<group>"; };
 		D48C722A1D10C502000677BF /* FRSFollowingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingController.m; sourceTree = "<group>"; };
+		D48C722D1D11D2EB000677BF /* FRSActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSActivityViewController.h; sourceTree = "<group>"; };
+		D48C722E1D11D2EB000677BF /* FRSActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSActivityViewController.m; sourceTree = "<group>"; };
+		D48C722F1D11D2EB000677BF /* FRSActivityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSActivityViewController.xib; sourceTree = "<group>"; };
+		D48C72341D11D312000677BF /* FRSGenericActivityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGenericActivityCell.h; sourceTree = "<group>"; };
+		D48C72351D11D312000677BF /* FRSGenericActivityCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGenericActivityCell.m; sourceTree = "<group>"; };
+		D48C72361D11D312000677BF /* FRSGenericActivityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGenericActivityCell.xib; sourceTree = "<group>"; };
+		D48C723A1D11D352000677BF /* FRSUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserCell.h; sourceTree = "<group>"; };
+		D48C723B1D11D352000677BF /* FRSUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserCell.m; sourceTree = "<group>"; };
+		D48C723C1D11D352000677BF /* FRSUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSUserCell.xib; sourceTree = "<group>"; };
+		D48C72401D11D39F000677BF /* FRSBreakingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSBreakingCell.h; sourceTree = "<group>"; };
+		D48C72411D11D39F000677BF /* FRSBreakingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSBreakingCell.m; sourceTree = "<group>"; };
+		D48C72421D11D39F000677BF /* FRSBreakingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSBreakingCell.xib; sourceTree = "<group>"; };
 		D49B1D981C99EB1E00735846 /* UITextView+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Resize.h"; sourceTree = "<group>"; };
 		D49B1D991C99EB1E00735846 /* UITextView+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Resize.m"; sourceTree = "<group>"; };
 		D4A7D89C1CCA7D4E002C6EA3 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
@@ -924,6 +944,7 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D48C722C1D11D2C6000677BF /* Notification */,
 				D487F1B21CBD6550005742F3 /* Submission */,
 				4AB98C921C8A7EC6005E7AB2 /* Camera */,
 				078091481CD939E500D7FA40 /* Upload */,
@@ -1813,6 +1834,65 @@
 			name = "Following Controller";
 			sourceTree = "<group>";
 		};
+		D48C722C1D11D2C6000677BF /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				D48C72331D11D2F6000677BF /* Cells */,
+				D48C72321D11D2EE000677BF /* VC */,
+			);
+			name = Notification;
+			sourceTree = "<group>";
+		};
+		D48C72321D11D2EE000677BF /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				D48C722D1D11D2EB000677BF /* FRSActivityViewController.h */,
+				D48C722E1D11D2EB000677BF /* FRSActivityViewController.m */,
+				D48C722F1D11D2EB000677BF /* FRSActivityViewController.xib */,
+			);
+			name = VC;
+			sourceTree = "<group>";
+		};
+		D48C72331D11D2F6000677BF /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				D48C72391D11D315000677BF /* Generic */,
+				D48C723F1D11D355000677BF /* User */,
+				D48C72451D11D3A2000677BF /* Breaking */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		D48C72391D11D315000677BF /* Generic */ = {
+			isa = PBXGroup;
+			children = (
+				D48C72341D11D312000677BF /* FRSGenericActivityCell.h */,
+				D48C72351D11D312000677BF /* FRSGenericActivityCell.m */,
+				D48C72361D11D312000677BF /* FRSGenericActivityCell.xib */,
+			);
+			name = Generic;
+			sourceTree = "<group>";
+		};
+		D48C723F1D11D355000677BF /* User */ = {
+			isa = PBXGroup;
+			children = (
+				D48C723A1D11D352000677BF /* FRSUserCell.h */,
+				D48C723B1D11D352000677BF /* FRSUserCell.m */,
+				D48C723C1D11D352000677BF /* FRSUserCell.xib */,
+			);
+			name = User;
+			sourceTree = "<group>";
+		};
+		D48C72451D11D3A2000677BF /* Breaking */ = {
+			isa = PBXGroup;
+			children = (
+				D48C72401D11D39F000677BF /* FRSBreakingCell.h */,
+				D48C72411D11D39F000677BF /* FRSBreakingCell.m */,
+				D48C72421D11D39F000677BF /* FRSBreakingCell.xib */,
+			);
+			name = Breaking;
+			sourceTree = "<group>";
+		};
 		D4A7D8A21CCA7E47002C6EA3 /* Keychain */ = {
 			isa = PBXGroup;
 			children = (
@@ -2174,9 +2254,13 @@
 				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
+				D48C72441D11D39F000677BF /* FRSBreakingCell.xib in Resources */,
 				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
+				D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */,
+				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
 				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
+				D48C723E1D11D352000677BF /* FRSUserCell.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
 				D43C7FDF1C8E489600A7A7A7 /* FRSFileFooterCell.xib in Resources */,
 				07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */,
@@ -2270,6 +2354,7 @@
 				07A30BFE1C50488800C536EB /* FRSDebitCardViewController.m in Sources */,
 				07A30BFF1C50488800C536EB /* FRSDisableAccountViewController.m in Sources */,
 				079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */,
+				D48C72371D11D312000677BF /* FRSGenericActivityCell.m in Sources */,
 				078CEB1B1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m in Sources */,
 				07E9366D1CB4534B00D3CC39 /* VideoTrimmerViewController.m in Sources */,
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
@@ -2305,6 +2390,7 @@
 				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,
 				D48C722B1D10C502000677BF /* FRSFollowingController.m in Sources */,
 				65046E051C3EFC81003E02B5 /* FRSHomeViewController.m in Sources */,
+				D48C723D1D11D352000677BF /* FRSUserCell.m in Sources */,
 				D453CC891CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m in Sources */,
 				07A30C001C50488800C536EB /* FRSEmailViewController.m in Sources */,
 				65201A311C3D7D6200B31089 /* FRSGalleryView.m in Sources */,
@@ -2320,6 +2406,7 @@
 				D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */,
 				D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
+				D48C72431D11D39F000677BF /* FRSBreakingCell.m in Sources */,
 				D412549F1C91E46D00E3B85C /* FRSMultipartTask.m in Sources */,
 				07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */,
 				D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */,
@@ -2387,6 +2474,7 @@
 				D4B35F551CCED19600F5C8A8 /* FRSUploadTask.m in Sources */,
 				6501D56D1C249604001F54EF /* Model.xcdatamodeld in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
+				D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */,
 				D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */,
 				D4AF8EEF1CFDFED100A33FAB /* FRSFeedTable.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
