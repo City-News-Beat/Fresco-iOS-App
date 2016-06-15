@@ -200,7 +200,7 @@
     [self.tableView dg_removePullToRefresh];
 }
 
-
+ 
 -(void)configureNavigationBar{
 //  [super configureNavigationBar];
     [super removeNavigationBarLine];
