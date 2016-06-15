@@ -48,12 +48,58 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 0;
+    return self.feed.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return Nil;
+    UITableViewCell *cell;
+    
+    if ([[[self.feed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+        
+        if (!cell){
+            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        }
+    }
+    else if ([[[self.feed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
+        
+        if (!cell){
+            cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
+        }
+    }
+    
+    return cell;
 }
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+        [galCell clearCell];
+            
+        galCell.gallery = self.feed[indexPath.row];
+        [galCell configureCell];
+    }
+    else {
+        FRSStoryCell *storyCell = (FRSStoryCell *)cell;
+        [storyCell clearCell];
+        
+        storyCell.story = self.feed[indexPath.row];
+        [storyCell configureCell];
+    }
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if ([[self.feed[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+            FRSGallery *gallery = self.feed[indexPath.row];
+            return [gallery heightForGallery];
+    }
+    else {
+        FRSStory *story = self.feed[indexPath.row];
+        return [story heightForStory];
+    }
+    
+    return 0;
+}
+
 
 
 @end
