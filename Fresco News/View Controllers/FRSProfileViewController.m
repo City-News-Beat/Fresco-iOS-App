@@ -17,6 +17,7 @@
 
 #import "FRSBorderedImageView.h"
 #import "DGElasticPullToRefresh.h"
+
 #import "Fresco.h"
 
 #import "FRSTrimTool.h"
@@ -67,9 +68,12 @@
 
 @property (nonatomic) BOOL presentingUser;
 
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
 @end
 
 @implementation FRSProfileViewController
+
 @synthesize representedUser = _representedUser, authenticatedProfile = _authenticatedProfile;
 
 -(void)viewDidLoad {
@@ -110,6 +114,9 @@
 }
 
 -(void)setupUI {
+    
+    [self configureSpinner];
+    
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
     
@@ -123,6 +130,11 @@
     self.navigationItem.titleView = self.usernameLabel;
     
     UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
+    followButton.tintColor = [UIColor whiteColor];
+    
+    
+    
+
     
     self.navigationItem.rightBarButtonItem = followButton;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -133,6 +145,15 @@
 
 }
 
+
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+    [self.loadingView startAnimating];
+    [self.view addSubview:self.loadingView];
+}
 
 #pragma mark - Fetch Methods
 
@@ -192,14 +213,16 @@
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
-    
-    UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
-    UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
-    editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
-    
-    self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
+        UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
+        editItem.tintColor = [UIColor whiteColor];
+        UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
+        editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
+        
+        self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //?
+    }
 }
 
 -(void)configureTableView{
@@ -586,7 +609,9 @@
 }
 
 -(void)followUser {
-    
+    [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
+        //
+    }];
 }
 
 -(void)showEditProfile {
@@ -623,13 +648,13 @@
 #pragma mark - User
 
 -(void)configureWithUser:(FRSUser *)user {
-   // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+    self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
     self.nameLabel.text = user.firstName;
     self.bioLabel.text = user.bio;
     
     self.usernameLabel.text = user.username;
     titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
-    self.locationLabel.text = @"New York, NY"; //geo coder, last location
+    self.locationLabel.text = user.address; //user.address does not exiset yet
     self.followersLabel.text = @"1125";
 
 }

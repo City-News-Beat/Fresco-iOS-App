@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<FRSGallery *> *galleries;
 @property (nullable, nonatomic, retain) NSSet<FRSPost *> *posts;
 @property (nullable, nonatomic, retain) NSSet<FRSStory *> *stories;
+@property (nullable, nonatomic, retain) NSString *address;
 
 @end
 
