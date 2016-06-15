@@ -29,19 +29,14 @@
 @property (strong, nonatomic) UIView *captionContainer;
 @property (strong, nonatomic) UIView *bottomContainer;
 @property (strong, nonatomic) UILabel *placeholderLabel;
-
 @property (nonatomic, retain) NSMutableArray *assignmentIDs;
-
 @property (strong, nonatomic) FRSAssignment *selectedAssignment;
-
 @property (nonatomic) BOOL postToFacebook;
 @property (nonatomic) BOOL postToTwitter;
 @property (nonatomic) BOOL postAnon;
 @property (nonatomic) BOOL isFetching;
 @property (nonatomic) BOOL globalAssignmentsEnabled;
-
 @property (strong, nonatomic) NSArray *assignments;
-
 
 @end
 
@@ -381,7 +376,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)dismissKeyboard {
-    
     [self.view resignFirstResponder];
     [self.view endEditing:YES];
 }
@@ -444,13 +438,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
             [self cacheAssignments];
         }
         
-<<<<<<< HEAD
         [delegate.managedObjectContext save:Nil];
         [delegate saveContext];
         
-        
-        
-=======
         NSArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
         
@@ -461,7 +451,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
         }
         self.assignmentsArray = nearBy; //should be nearby, make new array for global
->>>>>>> 3.0-phil
         [self configureAssignmentsTableView];
         
         
@@ -499,9 +488,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)cacheAssignments {
     
 }
-
-
-
 
 #pragma mark - Actions
 
