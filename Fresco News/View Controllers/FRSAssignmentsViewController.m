@@ -23,6 +23,7 @@
 #import "Fresco.h"
 
 #import "FRSAppDelegate.h"
+#import "FRSGlobalAssignmentsTableViewController.h"
 
 @import MapKit;
 
@@ -73,6 +74,10 @@
 
 @property (strong, nonatomic) UIButton *closeButton;
 
+@property (strong, nonatomic) UIView *assignmentStatsContainer;
+
+@property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -88,6 +93,9 @@
                                                object:nil];
     
     self.assignmentIDs = [[NSMutableArray alloc] init];
+    
+    //Should only be visible when global assignments
+    [self configureGlobalAsignmentsBar];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -500,9 +508,9 @@
     self.assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.assignmentCard];
     
-    UIView *topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 76)];
+    UIView *topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -76, self.view.frame.size.width, 76)];
     topContainer.backgroundColor = [UIColor clearColor];
-    [self.scrollView addSubview:topContainer];
+    [self.assignmentCard addSubview:topContainer];
     
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = topContainer.frame;
@@ -510,7 +518,7 @@
     UIColor *startColor = [UIColor clearColor];
     UIColor *endColor = [UIColor colorWithWhite:0 alpha:0.42];
     gradient.colors = [NSArray arrayWithObjects:(id)[startColor CGColor], (id)[endColor CGColor], nil];
-    [self.scrollView.layer insertSublayer:gradient atIndex:0];
+    [self.assignmentCard.layer insertSublayer:gradient atIndex:0];
     
     self.assignmentTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 288, 52)];
     self.assignmentTitleLabel.font = [UIFont notaBoldWithSize:24];
@@ -582,7 +590,9 @@
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding +120); //120 is the height of the container at the bottom where expiration time, assignemnt distance, and the warning label live.
+//    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding +190); //120 is the height of the container at the bottom where expiration time, assignemnt distance, and the warning label live.
+    
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height +1); //TODO: test with longer assignment captions
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"video-icon"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
@@ -595,21 +605,20 @@
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
-    
-    UIView *assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 16, self.view.frame.size.width, 120)];
-    [self.assignmentCard addSubview:assignmentStatsContainer];
+    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 16, self.view.frame.size.width, 120)];
+    [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
     UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
     clock.frame = CGRectMake(16, 8, 24, 24);
-    [assignmentStatsContainer addSubview:clock];
+    [self.assignmentStatsContainer addSubview:clock];
     
     UIImageView *mapAnnotation = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"annotation"]];
     mapAnnotation.frame = CGRectMake(16, 48, 24, 24);
-    [assignmentStatsContainer addSubview:mapAnnotation];
+    [self.assignmentStatsContainer addSubview:mapAnnotation];
     
     UIImageView *warning = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"warning"]];
     warning.frame = CGRectMake(16, 88, 24, 24);
-    [assignmentStatsContainer addSubview:warning];
+    [self.assignmentStatsContainer addSubview:warning];
     
     self.expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
     self.expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -620,19 +629,19 @@
     NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
     self.expirationLabel.text = dateString;
 
-    [assignmentStatsContainer addSubview:self.expirationLabel];
+    [self.assignmentStatsContainer addSubview:self.expirationLabel];
     
     self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 50, self.view.frame.size.width, 20)];
     self.distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.distanceLabel.textColor = [UIColor frescoMediumTextColor];
     self.distanceLabel.text = @"1.1 miles away";
-    [assignmentStatsContainer addSubview:self.distanceLabel];
+    [self.assignmentStatsContainer addSubview:self.distanceLabel];
     
     UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 90, self.view.frame.size.width, 20)];
     warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     warningLabel.textColor = [UIColor frescoMediumTextColor];
     warningLabel.text = @"Not all events are safe. Be careful!";
-    [assignmentStatsContainer addSubview:warningLabel];
+    [self.assignmentStatsContainer addSubview:warningLabel];
     
     UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
     self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -645,10 +654,16 @@
     
     //Configure photo/video labels for animation
     self.closeButton.alpha    = 0;
-    self.photoCashLabel.alpha = 0;
-    self.videoCashLabel.alpha = 0;
-    self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
-    self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+    //self.photoCashLabel.alpha = 0;
+    //self.videoCashLabel.alpha = 0;
+    //self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+    //self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+    
+    
+    [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
+    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
+    
+    
 }
 
 -(void)configureAssignmentCard {
@@ -669,6 +684,10 @@
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTap:)];
     [self.dismissView addGestureRecognizer:singleTap];
+    
+    [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
+    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
+    self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
 }
 
 -(void)dismissTap:(UITapGestureRecognizer *)sender {
@@ -703,16 +722,16 @@
         //Animate photoCashLabel
         [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             
-            self.photoCashLabel.alpha = 1;
-            self.photoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
+            //self.photoCashLabel.alpha = 1;
+            //self.photoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
 
         } completion:nil];
         
         //Animate videoCashLabel with delay
         [UIView animateWithDuration:0.2 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             
-            self.videoCashLabel.alpha = 1;
-            self.videoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
+            //self.videoCashLabel.alpha = 1;
+            //self.videoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
 
         } completion:nil];
     }];
@@ -728,17 +747,26 @@
     
     self.showsCard = FALSE;
     
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.assignmentCard.frame.origin.y + (self.view.frame.size.height - self.assignmentCard.frame.origin.y) +100, self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
+        
+    } completion:nil];
+    
     [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
-        [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
         
     } completion:^(BOOL finished) {
+        
+        [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
+
         //Reset animated labels
-        self.photoCashLabel.alpha = 0;
-        self.videoCashLabel.alpha = 0;
-        self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
-        self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+//        self.photoCashLabel.alpha = 0;
+//        self.videoCashLabel.alpha = 0;
+//        self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
+//        self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
     }];
     
     [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -763,14 +791,14 @@
         [self handleAssignmentScroll];
     }
         
-    if (self.scrollView.contentOffset.y <= -80) {
-        [self dismissAssignmentCard];
-    }
+//    if (self.scrollView.contentOffset.y <= -80) {
+//        [self dismissAssignmentCard];
+//    }
 }
 
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (scrollView.contentOffset.y <= -50) {
+    if (scrollView.contentOffset.y <= -75) { //QA value, see what's most comfortable for over scrolling and dismissing
         [self dismissAssignmentCard];
     }
 }
@@ -789,7 +817,7 @@
     
     self.locationManager.lastAcquiredLocation = [locations lastObject];
     
-    //    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
     
     if (self.locationManager.monitoringState == FRSLocationMonitoringStateForeground){
         [self.locationManager stopUpdatingLocation];
@@ -797,7 +825,7 @@
     
     NSLog(@"Location update notification observed by assignmentsVC");
     
-//    CLLocation *currentLocation = [locations lastObject];
+    //CLLocation *currentLocation = [locations lastObject];
     
     if (!hasSnapped) {
         hasSnapped = TRUE;
@@ -808,5 +836,42 @@
     
     [self configureAnnotationsForMap];
 }
+
+#pragma mark - Global Assignments
+
+-(void)configureGlobalAsignmentsBar {
+    
+    self.globalAssignmentsBottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height -44-49, self.view.frame.size.width, 44)];
+    self.globalAssignmentsBottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self.view addSubview:self.globalAssignmentsBottomContainer];
+    
+    UILabel *globalAssignmentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 12, self.view.frame.size.width -56 -24 -18 -6, 20)];
+    globalAssignmentsLabel.text = @"6 global assignments";
+    globalAssignmentsLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    globalAssignmentsLabel.textColor = [UIColor frescoDarkTextColor];
+    [self.globalAssignmentsBottomContainer addSubview:globalAssignmentsLabel];
+    
+    UIImageView *globeImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"earth-small"]];
+    globeImageView.frame = CGRectMake(16, 10, 24, 24);
+    [self.globalAssignmentsBottomContainer addSubview:globeImageView];
+    
+    UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"right-caret"]];
+    caret.frame = CGRectMake(self.view.frame.size.width -24 -6, 10, 24, 24);
+    [self.globalAssignmentsBottomContainer addSubview:caret];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(globalAssignmentsSegue)];
+    [self.globalAssignmentsBottomContainer addGestureRecognizer:tap];
+}
+
+-(void)globalAssignmentsSegue {
+    NSLog(@"hello");
+    
+    FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
+    [self.navigationController pushViewController:tableViewController animated:YES];
+}
+
+
+
+
 
 @end

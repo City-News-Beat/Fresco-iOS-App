@@ -12,9 +12,13 @@
 #import "FRSOnboardingViewController.h"
 #import <Twitter/Twitter.h>
 
+
 #import "FRSAPIClient.h"
 
-@interface FRSUploadViewController ()
+@interface FRSUploadViewController () {
+    NSMutableArray *dictionaryRepresentations;
+    BOOL notFirstFetch;
+}
 
 @property (strong, nonatomic) UIView *navigationBarView;
 @property (strong, nonatomic) UIScrollView *scrollView;
@@ -26,11 +30,18 @@
 @property (strong, nonatomic) UIView *bottomContainer;
 @property (strong, nonatomic) UILabel *placeholderLabel;
 
+@property (nonatomic, retain) NSMutableArray *assignmentIDs;
+
 @property (strong, nonatomic) FRSAssignment *selectedAssignment;
 
 @property (nonatomic) BOOL postToFacebook;
 @property (nonatomic) BOOL postToTwitter;
 @property (nonatomic) BOOL postAnon;
+@property (nonatomic) BOOL isFetching;
+@property (nonatomic) BOOL globalAssignmentsEnabled;
+
+@property (strong, nonatomic) NSArray *assignments;
+
 
 @end
 
@@ -52,6 +63,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.postToFacebook = NO;
     self.postAnon = NO;
     [self checkBottomBar];
+    
+    self.assignmentIDs = [[NSMutableArray alloc] init];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -79,6 +92,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureNavigationBar];
     [self configureAssignments];
     [self configureBottomBar];
+    [self configureGlobalAssignmentsDrawer];
 
 }
 
@@ -228,6 +242,41 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.scrollView addSubview:self.assignmentsTableView];
 }
 
+-(void)configureGlobalAssignmentsDrawer {
+    UIView *globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 44)];
+    globalAssignmentsDrawer.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:globalAssignmentsDrawer];
+    
+    UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
+    label.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
+    label.text = @"6 global assignments";
+    [label sizeToFit];
+    label.frame = CGRectMake(globalAssignmentsDrawer.frame.size.width/2 - label.frame.size.width/2, 6, label.frame.size.width, 14);
+    [globalAssignmentsDrawer addSubview:label];
+    
+    UIImageView *globe = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"earth-16"]]; //swap with 16x16 earth
+    globe.frame = CGRectMake(label.frame.origin.x -16 -6, 8, 16, 16);
+    [globalAssignmentsDrawer addSubview:globe];
+    
+    UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"down-caret"]];
+    caret.frame = CGRectMake(self.view.frame.size.width/2 - 8/2, 28, 8, 8);
+    [globalAssignmentsDrawer addSubview:caret];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleGlobalAssignmentsDrawer)];
+    [globalAssignmentsDrawer addGestureRecognizer:tap];
+}
+
+-(void)toggleGlobalAssignmentsDrawer {
+    
+    if (self.globalAssignmentsEnabled) {
+        self.globalAssignmentsEnabled = NO;
+        NSLog(@"disabled");
+    } else {
+        self.globalAssignmentsEnabled = YES;
+        NSLog(@"enabled");
+    }
+}
+
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -358,11 +407,50 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - Assignments
 
 -(void)configureAssignments {
+
     
-    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
+    [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
+    self.assignmentsArray = self.assignments;
     
-    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:50 ofLocation:@[@(lastLocation.coordinate.latitude), @(lastLocation.coordinate.longitude)] withCompletion:^(id responseObject, NSError *error) {
+}
+
+
+
+-(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
+    
+    if (self.isFetching) return;
+    
+    self.isFetching = YES;
+    
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
         
+        NSLog(@"ASSIGNMENTS ASSIGNMENTS ASSIGNMENTS ASSIGNMENTS");
+
+        NSArray *assignments = (NSArray *)responseObject[@"nearby"];
+        NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
+        
+        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        
+        if (globalAssignments.count > 0) {
+            
+        }
+
+        self.assignmentsArray = [assignments copy];
+        
+        self.isFetching = NO;
+        
+        if (!notFirstFetch) {
+            notFirstFetch = TRUE;
+            [self cacheAssignments];
+        }
+        
+<<<<<<< HEAD
+        [delegate.managedObjectContext save:Nil];
+        [delegate saveContext];
+        
+        
+        
+=======
         NSArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
         
@@ -373,12 +461,44 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
         }
         self.assignmentsArray = nearBy; //should be nearby, make new array for global
+>>>>>>> 3.0-phil
         [self configureAssignmentsTableView];
-        [self configureTextView];
-        self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height + self.captionContainer.frame.size.height +44);
+        
+        
     }];
 }
 
+-(BOOL)assignmentExists:(NSString *)assignment {
+    
+    __block BOOL returnValue = FALSE;
+    
+    [self.assignmentIDs enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *currentID = (NSString *)obj;
+        
+        if ([currentID isEqualToString:assignment]) {
+            returnValue = TRUE;
+        }
+    }];
+    
+    return returnValue;
+}
+
+-(void)fetchLocalAssignments {
+    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(expirationDate >= %@)", [NSDate date]];
+    NSManagedObjectContext *moc = [delegate managedObjectContext];
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSAssignment"];
+    request.predicate = predicate;
+    NSError *error = nil;
+    NSArray *stored = [moc executeFetchRequest:request error:&error];
+    self.assignmentsArray= [NSMutableArray arrayWithArray:stored];
+//    [self configureAnnotationsForMap];
+}
+
+-(void)cacheAssignments {
+    
+}
 
 
 
@@ -422,20 +542,38 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)tweet:(NSString *)string {
     
-    string = [NSString stringWithFormat:@"status=%@", string];
+    // Objective-C
+    NSString *userID = [Twitter sharedInstance].sessionStore.session.userID;
+    TWTRAPIClient *client = [[TWTRAPIClient alloc] initWithUserID:userID];
+
+    NSString *tweetEndpoint = @"https://api.twitter.com/1.1/statuses/update.json";
+    NSDictionary *params = @{@"status" : @"hello my friend"};
+    NSError *clientError;
     
-    NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
-    NSMutableURLRequest *tweetRequest = [NSMutableURLRequest requestWithURL:url];
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    tweetRequest.HTTPMethod = @"POST";
-    tweetRequest.HTTPBody = [[string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]] dataUsingEncoding:NSUTF8StringEncoding];
+    NSURLRequest *request = [client URLRequestWithMethod:@"POST" URL:tweetEndpoint parameters:params error:&clientError];
+    if (request) {
+        [client sendTwitterRequest:request completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+            
+            NSLog(@"Twitter Ressponse: %@", response);
+            
+            if (data) {
+                // handle the response data e.g.
+                NSError *jsonError;
+                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+                NSLog(@"Twitter Response: %@", json);
+            }
+            else {
+                NSLog(@"Error: %@", connectionError);
+            }
+        }];
+    }
+    else {
+        NSLog(@"Error: %@", clientError);
+    }
     
-    [NSURLConnection sendAsynchronousRequest:tweetRequest queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        NSLog(@"\n RESPONSE: %@ \n DATA: %@ \n ERROR : %@ \n", response, data, connectionError);
-        if (connectionError) {
-        }
-    }];
 }
+
+
 
 
 -(void)facebook:(NSString *)text {
