@@ -452,6 +452,19 @@
     }];
 }
 
+-(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+-(void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:storyUnlikeEndpoint, story.uid];
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 
 -(AFHTTPRequestOperationManager *)managerWithFrescoConfigurations {
     

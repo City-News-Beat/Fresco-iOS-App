@@ -73,6 +73,10 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 -(void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
 
+-(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
+
+
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
 

@@ -270,9 +270,17 @@
 }
 
 -(void)handleLike:(FRSContentActionsBar *)actionBar {
-    [[FRSAPIClient sharedClient] likeStory:self.story completion:^(id responseObject, NSError *error) {
-        NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
-    }];
+    
+    if ([[self.story valueForKey:@"liked"] boolValue]) {
+        [[FRSAPIClient sharedClient] likeStory:self.story completion:^(id responseObject, NSError *error) {
+            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+        }];
+    }
+    else {
+        [[FRSAPIClient sharedClient] likeStory:self.story completion:^(id responseObject, NSError *error) {
+            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+        }];
+    }
 }
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {

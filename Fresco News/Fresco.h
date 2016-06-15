@@ -81,6 +81,8 @@ static NSString * const followersEndpoint = @"user/%@/followers";
 static NSString * const followingEndpoint = @"user/%@/following";
 static NSString * const commentsEndpoint = @"gallery/%@/comments/";
 static NSString * const commentEndpoint = @"gallery/%@/comment/";
+static NSString * const galleryUnlikeEndpoint = @"gallery/%@/unlike";
+static NSString * const storyUnlikeEndpoint = @"story/%@/unlike";
 
 // feeds
 static NSString * const likeFeed = @"feeds/%@/likes";
