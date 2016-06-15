@@ -160,9 +160,18 @@
 }
 
 -(void)handleLike:(FRSContentActionsBar *)actionBar {
-    [[FRSAPIClient sharedClient] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
-    }];
+    
+    if ([[self.gallery valueForKey:@"liked"] boolValue]) {
+        [[FRSAPIClient sharedClient] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+        }];
+
+    }
+    else {
+        [[FRSAPIClient sharedClient] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+        }];
+    }
 }
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {

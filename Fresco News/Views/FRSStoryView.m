@@ -272,13 +272,15 @@
 -(void)handleLike:(FRSContentActionsBar *)actionBar {
     
     if ([[self.story valueForKey:@"liked"] boolValue]) {
-        [[FRSAPIClient sharedClient] likeStory:self.story completion:^(id responseObject, NSError *error) {
+        [[FRSAPIClient sharedClient] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
             NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+            [self.story setValue:@(FALSE) forKey:@"liked"];
         }];
     }
     else {
         [[FRSAPIClient sharedClient] likeStory:self.story completion:^(id responseObject, NSError *error) {
             NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+            [self.story setValue:@(TRUE) forKey:@"liked"];
         }];
     }
 }
