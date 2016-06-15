@@ -83,6 +83,7 @@
     if (self) {
         if (!_representedUser) {
             _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+            self.authenticatedProfile = TRUE;
         }
     }
     
@@ -101,6 +102,11 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
+    if (self.authenticatedProfile) {
+        _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        [self configureWithUser:_representedUser];
+        [self fetchGalleries];
+    }
     
 }
 
@@ -140,10 +146,6 @@
     
     UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
     followButton.tintColor = [UIColor whiteColor];
-    
-    
-    
-
     
     self.navigationItem.rightBarButtonItem = followButton;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];

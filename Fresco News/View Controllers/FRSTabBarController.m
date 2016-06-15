@@ -152,7 +152,7 @@
     [self.tabBar insertSubview:self.cameraBackgroundView atIndex:0];
 }
 
--(void)setIrisItemColor:(UIColor *)color{
+-(void)setIrisItemColor:(UIColor *)color {
     self.cameraBackgroundView.backgroundColor = color;
 }
 
