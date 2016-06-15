@@ -85,7 +85,9 @@
 //    if (userHasNoFollowers) {
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
-
+    followingController = [[FRSFollowingController alloc] init];
+    followingController.tableView = self.followingTable;
+    
     [self configureNoFollowers];
 
 //    } else {
