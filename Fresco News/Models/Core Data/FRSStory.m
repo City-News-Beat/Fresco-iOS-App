@@ -38,6 +38,19 @@
     self.imageURLs = [self imagesURLsFromThumbnails:dict[@"thumbnails"]];
     self.galleryCount = dict[@"galleries"];
     
+    
+    if ([[dict valueForKey:@"reposted"] boolValue]) {
+        [self setValue:@(TRUE) forKey:@"reposted"];
+    }
+    
+    NSNumber *reposts = [dict valueForKey:@"reposts"];
+    [self setValue:reposts forKey:@"reposts"];
+    
+    NSString *repostedBy = [dict valueForKey:@"reposted_by"];
+    
+    if (repostedBy != Nil && ![repostedBy isEqual:[NSNull null]]) {
+        [self setValue:repostedBy forKey:@"reposted_by"];
+    }
 }
 
 -(NSInteger)heightForStory{

@@ -200,9 +200,7 @@
                 [self.tableView reloadData];
                 return;
             }
-            
-            NSLog(@"%@ %@", stories, error);
-            
+
             [self cacheLocalData:stories];
             
             NSInteger index = 0;

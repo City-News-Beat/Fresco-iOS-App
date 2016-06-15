@@ -280,7 +280,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    NSLog(@"self.assignmentsArray.count = %ld", self.assignmentsArray.count);
+    NSLog(@"self.assignmentsArray.count = %llu", (unsigned long long)self.assignmentsArray.count);
     
     return self.assignmentsArray.count;
 }
@@ -444,11 +444,24 @@ static NSString * const cellIdentifier = @"assignment-cell";
             [self cacheAssignments];
         }
         
+<<<<<<< HEAD
         [delegate.managedObjectContext save:Nil];
         [delegate saveContext];
         
         
         
+=======
+        NSArray *nearBy = responseObject[@"nearby"];
+        NSArray *global = responseObject[@"global"];
+        
+        //NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
+        //NSArray *global = @[@"Global", @"Global Two"];
+        
+        if ([global count] >  0) {
+            
+        }
+        self.assignmentsArray = nearBy; //should be nearby, make new array for global
+>>>>>>> 3.0-phil
         [self configureAssignmentsTableView];
         
         

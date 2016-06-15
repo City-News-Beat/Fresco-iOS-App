@@ -20,6 +20,7 @@
 -(void)handleHeartState:(BOOL)state;
 -(void)handleRepostState:(BOOL)state;
 -(void)handleHeartAmount:(NSInteger)amount;
+-(void)handleRepostAmount:(NSInteger)amount;
 
 @end
 
@@ -32,5 +33,6 @@
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar;
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar;
 -(void)handleActionButtonTapped;
-
+-(void)handleRepost:(FRSContentActionsBar *)actionBar;
+-(void)handleLike:(FRSContentActionsBar *)actionBar;
 @end

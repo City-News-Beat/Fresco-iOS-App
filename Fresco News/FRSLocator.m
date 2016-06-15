@@ -305,13 +305,19 @@
     }
 }
 
+/* 
+    Fetch cached assignments, should be used in conjunction with API client
+ */
+
 +(NSArray *)localAssignments {
     return @[];
 }
+
 +(NSArray *)globalAssignments {
     return @[];
 
 }
+
 +(NSArray *)allAssignments {
     return @[];
 }

@@ -81,18 +81,13 @@
     CGRect scrollFrame = self.tableView.frame;
     scrollFrame.origin.x = scrollFrame.size.width;
     scrollFrame.origin.y = -64;
-
-//    if (userHasNoFollowers) {
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
-
-    [self configureNoFollowers];
-
-//    } else {
-//    }
+    followingController = [[FRSFollowingController alloc] init];
+    followingController.tableView = self.followingTable;
     
+    [self configureNoFollowers];
     [self.pageScroller addSubview:self.followingTable];
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -343,7 +338,6 @@
     
     // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
-        NSLog(@"%@", error);
         if ([galleries count] == 0){
             return;
         }
@@ -527,9 +521,7 @@
         NSLog(@"NOT RELOADING");
         return;
     }
-    
-    NSLog(@"RELOADING WITH OFFSET ID: %@", offsetID);
-    
+        
     lastOffset = self.dataSource.count;
     
         NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
@@ -597,7 +589,7 @@
 #pragma mark - UITableView Delegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -671,6 +663,7 @@
     if (self.followingTabButton.alpha > 0.7) {
         return; //The button is already selected
     }
+    
     [self.pageScroller setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:YES];
     
     self.followingTabButton.alpha = 1.0;

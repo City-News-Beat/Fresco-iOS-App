@@ -92,6 +92,31 @@
     self.meta = @{@"image_height" : height, @"image_width" : width};
 }
 
+-(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context save:(BOOL)save {
+    self.uid = dict[@"_id"];
+    self.visibility = dict[@"visiblity"];
+    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
+    self.imageUrl = dict[@"image"];
+    self.byline = dict[@"byline"];
+    self.address = [self shortAddressFromAddress:dict[@"address"]];
+    self.creator = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:context];
+    
+    if ([dict objectForKey:@"stream"] != [NSNull null]) {
+        self.mediaType = @(1);
+        self.videoUrl = [dict objectForKey:@"stream"];
+    }
+    
+    if ([dict objectForKey:@"owner"] != [NSNull null] && [dict objectForKey:@"owner"]) {
+        //self.creator = [FRSUser MR_createEntityInContext:context];
+        self.creator.profileImage = [[dict objectForKey:@"owner"] objectForKey:@"avatar"];
+    }
+    
+    NSNumber *height = dict[@"meta"][@"height"] ? : @0;
+    NSNumber *width = dict[@"meta"][@"width"] ? : @0;
+    
+    self.meta = @{@"image_height" : height, @"image_width" : width};
+}
+
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
     FRSPost *post = [FRSPost MR_createEntityInContext:context];
     post.currentContext = context;

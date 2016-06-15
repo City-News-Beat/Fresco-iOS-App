@@ -127,8 +127,6 @@
     AVCaptureDevice *audioDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
     AVCaptureDeviceInput *audioDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:&error];
     
-    NSLog(@"%@", error.localizedDescription);
-    
     if ([self.session canAddInput:audioDeviceInput]) {
         [self.session addInput:audioDeviceInput];
     }

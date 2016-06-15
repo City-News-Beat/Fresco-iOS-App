@@ -16,9 +16,6 @@
 #import "FRSGalleryCell.h"
 
 #import "FRSBorderedImageView.h"
-
-#import "MagicalRecord.h"
-
 #import "DGElasticPullToRefresh.h"
 #import "Fresco.h"
 
@@ -28,6 +25,8 @@
 #import "FRSUser.h"
 
 #import "FRSAppDelegate.h"
+#import "FRSAPIClient.h"
+#import "FRSStoryCell.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -75,16 +74,10 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
-    if (self.presentingUser) {
-        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-        FRSUser *user = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:delegate.managedObjectContext];
-        [self configureWithUser:user];
-        
-    } else {
-        [self configureUI];
-        [self fetchGalleries];
-    }
+    _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    [self configureUI];
+    [self configureWithUser:_representedUser];
+    [self fetchGalleries];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -143,23 +136,9 @@
 
 #pragma mark - Fetch Methods
 
--(void)fetchGalleries {
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:0 completion:^(NSArray *responseObject, NSError *error) {
-        if (!responseObject.count){
-            return;
-        }
-        
-        NSMutableArray *mArr = [NSMutableArray new];
-        FRSAppDelegate  *delegate = [[UIApplication sharedApplication] delegate];
-        NSArray *galleries = responseObject;
-        for (NSDictionary *dict in galleries){
-            FRSGallery *gallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
-            [gallery configureWithDictionary:dict context:delegate.managedObjectContext];
-            [mArr addObject:gallery];
-        }
-        
-        
-        self.galleries = [mArr copy];
+-(void)fetchGalleries {    
+    [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
+        self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
         [self.tableView reloadData];
     }];
 }
@@ -485,11 +464,18 @@
         return self.profileContainer.frame.size.height;
     }
     else {
-//        return 600;
         if (!self.galleries.count) return 0;
-        FRSGallery *gallery = self.galleries[indexPath.row];
-        return [gallery heightForGallery];
+        if ([[self.galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+            FRSGallery *gallery = self.galleries[indexPath.row];
+            return [gallery heightForGallery];
+        }
+        else {
+            FRSStory *story = self.galleries[indexPath.row];
+            return [story heightForStory];
+        }
     }
+    
+    return 0;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -500,10 +486,21 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     else {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
-        if (!cell){
-            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+            
+            if (!cell){
+                cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+            }
         }
+        else if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
+            
+            if (!cell){
+                cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
+            }
+        }
+
     }
     return cell;
 }
@@ -513,11 +510,20 @@
         [cell addSubview:self.profileContainer];
     }
     else {
-        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
-        [galCell clearCell];
-        
-        galCell.gallery = self.galleries[indexPath.row];
-        [galCell configureCell];
+        if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+            FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+            [galCell clearCell];
+            
+            galCell.gallery = self.galleries[indexPath.row];
+            [galCell configureCell];
+        }
+        else {
+            FRSStoryCell *storyCell = (FRSStoryCell *)cell;
+            [storyCell clearCell];
+            
+            storyCell.story = self.galleries[indexPath.row];
+            [storyCell configureCell];
+        }
     }
 }
 
@@ -617,22 +623,15 @@
 #pragma mark - User
 
 -(void)configureWithUser:(FRSUser *)user {
-//    NSLog(@"user = %@", user);
+   // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+    self.nameLabel.text = user.firstName;
+    self.bioLabel.text = user.bio;
     
-    NSLog(@"user = %@", user);
-    
-    self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
-//    self.profileIV.image = user.profileImage;
-//    self.nameLabel.text = user.firstName;
-//    self.bioLabel.text = user.bio;
-    
-//    self.profileIV.image = [UIImage imageNamed:@"apple-user-grace"];
-    self.nameLabel.text = @"Fresco User";
-    self.usernameLabel.text = @"@username";
-    self.bioLabel.text = @"This here ought to have been a RED rose-tree, and we put a white one in by mistake; and if the Queen was to find it out, we should all have our heads cut off.";
+    self.usernameLabel.text = user.username;
+    titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
     self.locationLabel.text = @"New York, NY"; //geo coder, last location
     self.followersLabel.text = @"1125";
-    
+
 }
 
 

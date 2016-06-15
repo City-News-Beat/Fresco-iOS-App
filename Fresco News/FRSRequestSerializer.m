@@ -16,7 +16,7 @@
     
     NSMutableURLRequest *request = [super requestWithMethod:method URLString:URLString parameters:parameters error:Nil];
     
-    if (![endpoint containsString:@"auth"]) {
+    if (![endpoint containsString:@"auth"] && ![endpoint containsString:@"user"]) {
         NSString *authorization = [request valueForHTTPHeaderField:@"Authorization"];
         if ([authorization containsString:@"Basic"]) {
             [request setValue:Nil forHTTPHeaderField:@"Authorization"];

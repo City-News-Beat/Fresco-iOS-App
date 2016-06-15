@@ -49,7 +49,7 @@
 -(void)handleHeartAmount:(NSInteger)amount {
     
     if (amount == 0) {
-        self.likeLabel.text = @"";
+        self.likeLabel.text = @"0";
     }
     
     self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
@@ -151,7 +151,9 @@
     }
     
     self.repostLabel.text = [NSString stringWithFormat:@"%.0f", repost];
-    
+    if (self.delegate) {
+        [self.delegate handleRepost:self];
+    }
     [self bounceButton:self.repostButton];
 }
 
@@ -173,6 +175,10 @@
     self.likeLabel.text = [NSString stringWithFormat:@"%.0f", likes];
     
     [self bounceButton:self.likeButton];
+    
+    if (self.delegate) {
+        [self.delegate handleLike:self];
+    }
 }
 
 -(void)handleHeartState:(BOOL)state {
@@ -240,6 +246,14 @@
             } completion:nil];
         }];
     }];
+}
+
+-(void)handleRepostAmount:(NSInteger)amount {
+    if (amount == 0) {
+        self.repostLabel.text = @"0";
+    }
+    
+    self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
 }
 
 @end

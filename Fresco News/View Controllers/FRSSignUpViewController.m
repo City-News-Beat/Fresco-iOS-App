@@ -85,10 +85,9 @@
     [super viewWillAppear:animated];
     
     if (!_hasShown) {
-//        [self.usernameTF becomeFirstResponder];
+        //        [self.usernameTF becomeFirstResponder];
     }
     _hasShown = TRUE;
-
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
     
@@ -96,7 +95,7 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.navigationBar setTitleTextAttributes:
-          @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
+     @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
@@ -124,7 +123,7 @@
     } else {
         shouldGoBack = YES;
     }
-
+    
     if (shouldGoBack) {
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -170,11 +169,11 @@
 }
 
 
-#pragma mark - UI 
+#pragma mark - UI
 
 -(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
-
+    
     [self configureScrollView];
     [self configureTextFields];
     [self configureNotificationSection];
@@ -265,7 +264,7 @@
     self.emailTF.tintColor = [UIColor frescoOrangeColor];
     self.emailTF.font = [UIFont systemFontOfSize:15];
     self.emailTF.returnKeyType = UIReturnKeyNext;
-
+    
     [backgroundView addSubview:self.emailTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -286,7 +285,7 @@
     self.passwordTF.font = [UIFont systemFontOfSize:15];
     self.passwordTF.secureTextEntry = YES;
     self.passwordTF.returnKeyType = UIReturnKeyNext;
-
+    
     [backgroundView addSubview:self.passwordTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -344,7 +343,7 @@
     self.mapView.zoomEnabled = NO;
     self.mapView.scrollEnabled = NO;
     self.mapView.centerCoordinate = CLLocationCoordinate2DMake(40.00123, -70.10239);
-
+    
     MKCoordinateRegion region;
     region.center.latitude = 40.7118;
     region.center.longitude = -74.0105;
@@ -375,7 +374,7 @@
     [self.radiusSlider setMinimumTrackTintColor:[UIColor frescoBlueColor]];
     [self.radiusSlider setMaximumTrackTintColor:[UIColor colorWithWhite:181/255.0 alpha:1.0]];
     [self.sliderContainer addSubview:self.radiusSlider];
-
+    
     UIImageView *smallIV = [[UIImageView alloc] initWithFrame:CGRectMake(12, 16, 24, 24)];
     smallIV.image = [UIImage imageNamed:@"radius-small"];
     [self.self.sliderContainer addSubview:smallIV];
@@ -421,8 +420,8 @@
     
     self.y += self.promoDescription.frame.size.height + 24;
     
-//    self.promoContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
-//    self.promoDescription.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
+    //    self.promoContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
+    //    self.promoDescription.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
 }
 
 -(void)adjustScrollViewContentSize {
@@ -448,7 +447,6 @@
     
     
     [self constrainSubview:self.bottomBar ToBottomOfParentView:self.view WithHeight:44];
-
 }
 
 -(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
@@ -501,8 +499,6 @@
     
     [subView addConstraint:constantHeight];
 }
-
-
 
 -(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState {
     if (controlState == UIControlStateNormal){
@@ -584,34 +580,34 @@
             
             self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
             self.usernameCheckIV.alpha = 0;
-          
-//            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-              self.usernameCheckIV.alpha = 1;
-//            } completion:nil];
-          
-//            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-              self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
-              
-//            } completion:^(BOOL finished) {
-//                [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                  self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
-//                } completion:nil];
-//            }];
-      }
-  } else {
-      
-//        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-          self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.1, 1.1);
-          
-//        } completion:^(BOOL finished) {
-//          [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-              self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
-//            } completion:nil];
-//        }];
-      
-//        [UIView animateWithDuration:0.2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-          self.usernameCheckIV.alpha = 0;
-//        } completion:nil];
+            
+            //            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameCheckIV.alpha = 1;
+            //            } completion:nil];
+            
+            //            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
+            
+            //            } completion:^(BOOL finished) {
+            //                [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
+            //                } completion:nil];
+            //            }];
+        }
+    } else {
+        
+        //        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.1, 1.1);
+        
+        //        } completion:^(BOOL finished) {
+        //          [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+        //            } completion:nil];
+        //        }];
+        
+        //        [UIView animateWithDuration:0.2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.usernameCheckIV.alpha = 0;
+        //        } completion:nil];
     }
 }
 
@@ -658,7 +654,7 @@
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField*)textField {
-
+    
     if (textField == self.usernameTF) {
         if (![self isValidUsername:[self.usernameTF.text substringFromIndex:1]] || [textField.text isEqualToString:@"@"]){
             [self animateTextFieldError:self.usernameTF];
@@ -679,7 +675,7 @@
     } else if (textField == self.passwordTF) {
         [self.passwordTF resignFirstResponder];
     }
-
+    
     return NO;
 }
 
@@ -719,22 +715,22 @@
             [textField becomeFirstResponder];
             return;
         }
-
+        
         if ([self.usernameTF.text isEqualToString:@"@"]){
             self.usernameTF.text = @"";
             return;
         }
     }
     
-//    UIControlState controlState;
-//
-//    if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text] && (!self.emailTaken) && (!self.usernameTaken)) {
-//        controlState = UIControlStateHighlighted;
-//    } else {
-//        controlState = UIControlStateNormal;
-//    }
-//    
-//    [self toggleCreateAccountButtonTitleColorToState:controlState];
+    //    UIControlState controlState;
+    //
+    //    if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text] && (!self.emailTaken) && (!self.usernameTaken)) {
+    //        controlState = UIControlStateHighlighted;
+    //    } else {
+    //        controlState = UIControlStateNormal;
+    //    }
+    //
+    //    [self toggleCreateAccountButtonTitleColorToState:controlState];
 }
 
 
@@ -765,7 +761,7 @@
         if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
             
             [[FRSAPIClient sharedClient] checkUsername:[self.usernameTF.text substringFromIndex:1] completion:^(id responseObject, NSError *error) {
-
+                
                 if ([error.userInfo[@"NSLocalizedDescription"][@"msg"] isEqualToString:@"No user found"]) {
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
                     self.usernameTaken = NO;
@@ -807,7 +803,7 @@
 
 
 
-#pragma mark Action Logic 
+#pragma mark Action Logic
 
 -(void)handleToggleSwitched:(UISwitch *)toggle {
     id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
@@ -822,13 +818,13 @@
         [self.usernameTF resignFirstResponder];
         [self.passwordTF resignFirstResponder];
         [self.usernameTF resignFirstResponder];
-
+        
         if (IS_IPHONE_5) {
             [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height -44) animated:YES];
         } else {
             [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height) animated:YES];
         }
-
+        
         
         if (self.emailError) {
             
@@ -875,9 +871,9 @@
             } completion:nil];
         }
         
-
         
-
+        
+        
         
     } else {
         
@@ -886,7 +882,7 @@
         if (self.emailError) {
             self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height -44);
         }
-
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.notificationsEnabled = NO;
         });
@@ -922,7 +918,7 @@
 }
 
 -(void)createAccount {
-
+    
     [self dismissKeyboard];
     
     if (_isAlreadyRegistered) {
@@ -938,7 +934,7 @@
     [self startSpinner:self.loadingView onButton:self.createAccountButton];
     
     NSDictionary *currentInstallation = [[FRSAPIClient sharedClient] currentInstallation];
-
+    
     NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
     [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
     
@@ -949,11 +945,11 @@
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
     [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
-
+    
     if (_isAlreadyRegistered) {
         
         if (![_pastRegistration[@"email"] isEqualToString:self.emailTF.text]) {
-
+            
         }
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
@@ -988,7 +984,7 @@
 }
 
 -(void)checkEmail {
-
+    
     [[FRSAPIClient sharedClient] checkEmail:self.emailTF.text completion:^(id responseObject, NSError *error) {
         
         if (!error) {
@@ -1122,9 +1118,9 @@
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
     self.bottomBar.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-
+    
     CGPoint point = self.scrollView.contentOffset;
-
+    
     [UIView animateWithDuration:0.15 animations:^{
         [self.scrollView setContentOffset:point animated:NO];
     }];
@@ -1133,7 +1129,7 @@
         if (self.notificationsEnabled) {
             
             self.scrollView.frame = CGRectMake(0, -keyboardSize.height, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
-
+            
             [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height) animated:YES];
             
         } else {
@@ -1166,7 +1162,6 @@
     if (self.notificationsEnabled) {
         self.scrollView.scrollEnabled = YES;
     } else {
-
         if (self.scrollView.contentOffset.y != 0){
             [self.scrollView setContentOffset:CGPointZero animated:YES];
         }
@@ -1204,7 +1199,7 @@
             self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
             self.usernameHighlightLine.transform = CGAffineTransformMakeScale(1, 1);
         } completion:nil];
-
+        
         return;
         
     } else {
@@ -1262,10 +1257,10 @@
     }
     
     // check length
-        // return false
+    // return false
     
     // check against pattern (i.e. xxXXxxx1)
-        // return false
+    // return false
     
     return YES;
 }
@@ -1343,9 +1338,9 @@
         self.emailError = YES;
         
         self.errorContainer.alpha = 1;
-
+        
         if (self.notificationsEnabled) {
-
+            
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 44);
@@ -1361,7 +1356,7 @@
         self.emailError = NO;
         
         if (self.notificationsEnabled) {
-
+            
         } else {
             self.errorContainer.alpha = 0;
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
@@ -1390,15 +1385,4 @@
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 @end

@@ -179,10 +179,15 @@
 		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
 		D487F1BE1CBD6C2D005742F3 /* FRSMediaScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */; };
 		D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1CD1CC14246005742F3 /* FRSPlayer.m */; };
+		D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72231D09D8D2000677BF /* FRSSplitTableView.m */; };
+		D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72261D0B3D5C000677BF /* FRSDevice.m */; };
+		D48C722B1D10C502000677BF /* FRSFollowingController.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C722A1D10C502000677BF /* FRSFollowingController.m */; };
 		D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = D49B1D991C99EB1E00735846 /* UITextView+Resize.m */; };
 		D4A7D8A01CCA7D4E002C6EA3 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89D1CCA7D4E002C6EA3 /* SSKeychain.m */; };
 		D4A7D8A11CCA7D4E002C6EA3 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */; };
 		D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EEA1CF8B50400A33FAB /* FRSRequestSerializer.m */; };
+		D4AF8EEF1CFDFED100A33FAB /* FRSFeedTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EEE1CFDFED100A33FAB /* FRSFeedTable.m */; };
+		D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EF21CFF656100A33FAB /* FRSNavigationBar.m */; };
 		D4B35F4D1CCEB47200F5C8A8 /* NSData+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F4A1CCEB47200F5C8A8 /* NSData+NSHash.m */; };
 		D4B35F4E1CCEB47200F5C8A8 /* NSString+NSHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F4C1CCEB47200F5C8A8 /* NSString+NSHash.m */; };
 		D4B35F521CCEB4CD00F5C8A8 /* FRSFileUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F511CCEB4CD00F5C8A8 /* FRSFileUploadManager.m */; };
@@ -566,6 +571,12 @@
 		D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMediaScroller.m; sourceTree = "<group>"; };
 		D487F1CC1CC14246005742F3 /* FRSPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPlayer.h; sourceTree = "<group>"; };
 		D487F1CD1CC14246005742F3 /* FRSPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayer.m; sourceTree = "<group>"; };
+		D48C72221D09D8D2000677BF /* FRSSplitTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSplitTableView.h; sourceTree = "<group>"; };
+		D48C72231D09D8D2000677BF /* FRSSplitTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSplitTableView.m; sourceTree = "<group>"; };
+		D48C72251D0B3D5C000677BF /* FRSDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDevice.h; sourceTree = "<group>"; };
+		D48C72261D0B3D5C000677BF /* FRSDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDevice.m; sourceTree = "<group>"; };
+		D48C72291D10C502000677BF /* FRSFollowingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingController.h; sourceTree = "<group>"; };
+		D48C722A1D10C502000677BF /* FRSFollowingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingController.m; sourceTree = "<group>"; };
 		D49B1D981C99EB1E00735846 /* UITextView+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Resize.h"; sourceTree = "<group>"; };
 		D49B1D991C99EB1E00735846 /* UITextView+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Resize.m"; sourceTree = "<group>"; };
 		D4A7D89C1CCA7D4E002C6EA3 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
@@ -574,6 +585,10 @@
 		D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
 		D4AF8EE91CF8B50400A33FAB /* FRSRequestSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRequestSerializer.h; sourceTree = "<group>"; };
 		D4AF8EEA1CF8B50400A33FAB /* FRSRequestSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRequestSerializer.m; sourceTree = "<group>"; };
+		D4AF8EED1CFDFED100A33FAB /* FRSFeedTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFeedTable.h; sourceTree = "<group>"; };
+		D4AF8EEE1CFDFED100A33FAB /* FRSFeedTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFeedTable.m; sourceTree = "<group>"; };
+		D4AF8EF11CFF656100A33FAB /* FRSNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNavigationBar.h; sourceTree = "<group>"; };
+		D4AF8EF21CFF656100A33FAB /* FRSNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNavigationBar.m; sourceTree = "<group>"; };
 		D4B35F491CCEB47200F5C8A8 /* NSData+NSHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+NSHash.h"; sourceTree = "<group>"; };
 		D4B35F4A1CCEB47200F5C8A8 /* NSData+NSHash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+NSHash.m"; sourceTree = "<group>"; };
 		D4B35F4B1CCEB47200F5C8A8 /* NSString+NSHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSHash.h"; sourceTree = "<group>"; };
@@ -878,6 +893,9 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D48C72211D09D8BC000677BF /* Split Table View */,
+				D4AF8EF01CFF654A00A33FAB /* Nav Bar */,
+				D4AF8EEC1CFDFEB100A33FAB /* Feed Table */,
 				07EAFF281CEA226D00E224E2 /* Launch Screen */,
 				D40BD3CB1CDE073A00E39701 /* Gallery Table */,
 				D487F1B81CBD6BE5005742F3 /* Media Scroll */,
@@ -1044,6 +1062,7 @@
 		4AB98C991C8A7EF7005E7AB2 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				D48C72281D10C4EB000677BF /* Following Controller */,
 				D4D60D0D1CC8365B00059EBA /* Highlights */,
 				65046E031C3EFC81003E02B5 /* FRSHomeViewController.h */,
 				65046E041C3EFC81003E02B5 /* FRSHomeViewController.m */,
@@ -1776,6 +1795,24 @@
 			name = Player;
 			sourceTree = "<group>";
 		};
+		D48C72211D09D8BC000677BF /* Split Table View */ = {
+			isa = PBXGroup;
+			children = (
+				D48C72221D09D8D2000677BF /* FRSSplitTableView.h */,
+				D48C72231D09D8D2000677BF /* FRSSplitTableView.m */,
+			);
+			name = "Split Table View";
+			sourceTree = "<group>";
+		};
+		D48C72281D10C4EB000677BF /* Following Controller */ = {
+			isa = PBXGroup;
+			children = (
+				D48C72291D10C502000677BF /* FRSFollowingController.h */,
+				D48C722A1D10C502000677BF /* FRSFollowingController.m */,
+			);
+			name = "Following Controller";
+			sourceTree = "<group>";
+		};
 		D4A7D8A21CCA7E47002C6EA3 /* Keychain */ = {
 			isa = PBXGroup;
 			children = (
@@ -1787,6 +1824,24 @@
 				D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */,
 			);
 			name = Keychain;
+			sourceTree = "<group>";
+		};
+		D4AF8EEC1CFDFEB100A33FAB /* Feed Table */ = {
+			isa = PBXGroup;
+			children = (
+				D4AF8EED1CFDFED100A33FAB /* FRSFeedTable.h */,
+				D4AF8EEE1CFDFED100A33FAB /* FRSFeedTable.m */,
+			);
+			name = "Feed Table";
+			sourceTree = "<group>";
+		};
+		D4AF8EF01CFF654A00A33FAB /* Nav Bar */ = {
+			isa = PBXGroup;
+			children = (
+				D4AF8EF11CFF656100A33FAB /* FRSNavigationBar.h */,
+				D4AF8EF21CFF656100A33FAB /* FRSNavigationBar.m */,
+			);
+			name = "Nav Bar";
 			sourceTree = "<group>";
 		};
 		D4B35F481CCEB45E00F5C8A8 /* File Hash */ = {
@@ -1866,6 +1921,8 @@
 				D43C7FF41C8F588C00A7A7A7 /* Defaults */,
 				D47999631C96A8FD00B46D01 /* Location */,
 				D41365B41CA33347004FE848 /* Settings */,
+				D48C72251D0B3D5C000677BF /* FRSDevice.h */,
+				D48C72261D0B3D5C000677BF /* FRSDevice.m */,
 			);
 			name = "Fresco API";
 			sourceTree = "<group>";
@@ -2047,6 +2104,11 @@
 					1EDA44AF1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = Z7R96S8K3N;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					1EDA44CB1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -2213,6 +2275,7 @@
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
 				1EA27AA81AF147C4003137CE /* MKMapView+Helpers.m in Sources */,
 				D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
+				D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */,
 				65D1E4E91C4EB7B6003362D3 /* FRSMapCircle.m in Sources */,
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				D453CC7A1CCA80850091A004 /* MagicalRecord+ErrorHandling.m in Sources */,
@@ -2235,9 +2298,12 @@
 				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,
 				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
 				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,
+				D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */,
+				D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */,
 				65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */,
 				65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */,
 				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,
+				D48C722B1D10C502000677BF /* FRSFollowingController.m in Sources */,
 				65046E051C3EFC81003E02B5 /* FRSHomeViewController.m in Sources */,
 				D453CC891CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m in Sources */,
 				07A30C001C50488800C536EB /* FRSEmailViewController.m in Sources */,
@@ -2322,6 +2388,7 @@
 				6501D56D1C249604001F54EF /* Model.xcdatamodeld in Sources */,
 				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
 				D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */,
+				D4AF8EEF1CFDFED100A33FAB /* FRSFeedTable.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				D453CC811CCA80850091A004 /* NSManagedObject+MagicalDataImport.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,

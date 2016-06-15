@@ -24,8 +24,7 @@
 #import "Fresco.h"
 #import "FRSFileUploadManager.h"
 #import "SSKeychain.h"
-
-
+#import "FRSUser.h"
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -33,7 +32,7 @@
 #pragma mark - Startup and Application States
 
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
-    
+
     if ([self isFirstRun]) {
         [self clearKeychain]; // clear tokens from past install
     }
@@ -71,15 +70,76 @@
     }
     
     [self registerForPushNotifications];
-    
     return YES;
 }
 
 -(void)reloadUser {
     [[FRSAPIClient sharedClient] refreshCurrentUser:^(id responseObject, NSError *error) {
-        NSLog(@"User Refresh: %@ %@", responseObject, error);
+        // check against existing user
+        FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        
+        if (!authenticatedUser) {
+            authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
+        }
+        
+        // update user
+        authenticatedUser.uid = responseObject[@"id"];
+        authenticatedUser.email = responseObject[@"email"];
+        
+        if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
+            authenticatedUser.firstName = responseObject[@"full_name"];
+        }
+        authenticatedUser.username = responseObject[@"username"];
+        if (![responseObject[@"bio"] isEqual:[NSNull null]]) {
+            authenticatedUser.bio = responseObject[@"bio"];
+        }
+        authenticatedUser.isLoggedIn = @(TRUE);
+        if (![responseObject[@"avatar"] isEqual:[NSNull null]]) {
+            authenticatedUser.profileImage = responseObject[@"avatar"];
+        }
+        
+        [[self managedObjectContext] save:Nil];
     }];
 }
+
+/*
+ "id": "RpE71DkQAojG",
+ "email": "phil@fresconews.com",
+ "username": "@p",
+ "full_name": null,
+ "bio": "",
+ "location": null,
+ "phone": null,
+ "avatar": null,
+ "twitter_handle": null,
+ "terms": -1,
+ "active": true,
+ "verification_token": null,
+ "created_at": "2016-05-10T23:12:59.423Z",
+ "charges_enabled": true,
+ "transfers_enabled": false,
+ "disabled_reason": null,
+ "fields_needed": [
+ "legal_entity.dob.day",
+ "legal_entity.dob.month",
+ "legal_entity.dob.year",
+ "legal_entity.first_name",
+ "legal_entity.last_name",
+ "bank_account"
+ ],
+ "due_by": null,
+ "permissions": {
+ "permissions": {
+ "user": {
+ "*": {
+ "*": true
+ }
+ }
+ }
+ }
+ }
+ 
+ */
 
 -(void)clearKeychain {
     SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
@@ -244,8 +304,11 @@
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:@"deviceToken"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    NSLog(@"%@", newDeviceToken);
+    NSDictionary *installationDigest = [[FRSAPIClient sharedClient] currentInstallation];
     
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"installation":installationDigest} completion:^(id responseObject, NSError *error) {
+        NSLog(@"Updated Installation: %@ %@", responseObject, error);
+    }];
 }
 
 -(void)handleLocationUpdate {
@@ -384,6 +447,5 @@
     // pass responsibility onto FRSFileUploadManager (will trigger completion handler when done with work needed)
     [[FRSFileUploadManager sharedUploader] handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
 }
-
 
 @end

@@ -37,8 +37,9 @@ static BOOL const stagingEnvironment = FALSE;
 
 // authorization constants
 static NSString * const clientAuthorization = @"MTMzNzp0aGlzaXNhc2VjcmV0";
-static NSString * const testBearerToken = @"gyOubJIiNaGkLn2BPPO9MIespXhBcp8WQlamDNMmEucedLwAxVovHaa1B55xQuz9eOgPE74M8BgcC3lslwHPidye4eTexKYyvKMeTLkwxQb2EGkvH8LAPVGEo2ZqdGlDsaI2gALhNbt8ZM45pk7gHECc0qj6MjRAATf2c943grQQuL6akUCCQqN7McYoQE";
+static NSString * const testBearerToken = @"goog";
 static NSString * const serviceName = @"frescoNewsService3";
+static NSString * const FRSUploadNotification = @"FRSUploadUpdateNotification";
 
 // base URLS
 static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
@@ -70,15 +71,33 @@ static NSString * const addSocialEndpoint = @"social/connect/";
 static NSString * const createGalleryEndpoint = @"gallery/create";
 
 // formatted endpoints
-static NSString * const likeGalleryEndpointFormat = @"gallery/%@/like";
+static NSString * const likeGalleryEndpoint = @"gallery/%@/like";
 static NSString * const repostGalleryEndpoint = @"gallery/%@/repost";
 static NSString * const likeStoryEndpoint = @"story/%@/like";
 static NSString * const repostStoryEndpoint = @"story/%@/repost";
+static NSString * const followUserEndpoint = @"user/%@/follow";
+static NSString * const unfollowUserEndpoint = @"user/%@/unfollow";
+static NSString * const followersEndpoint = @"user/%@/followers";
+static NSString * const followingEndpoint = @"user/%@/following";
+static NSString * const commentsEndpoint = @"gallery/%@/comments/";
+static NSString * const commentEndpoint = @"gallery/%@/comment/";
+static NSString * const galleryUnlikeEndpoint = @"gallery/%@/unlike";
+static NSString * const storyUnlikeEndpoint = @"story/%@/unlike";
+
+// feeds
+static NSString * const likeFeed = @"feeds/%@/likes";
+static NSString * const followingFeed = @"feeds/%@/following";
+static NSString * const userFeed = @"feeds/%@/user";
 
 // quick actions -- app delegate
 static NSString * const assignmentsAction = @"FRSAssignmentsAction";
 static NSString * const takeVideoAction = @"FRSVideoAction";
 static NSString * const takePhotoAction = @"FRSPhotoAction";
+
+// object types
+static NSString * const postObjectType = @"post";
+static NSString * const galleryObjectType = @"gallery";
+static NSString * const storyObjectType = @"story";
 
 // legacy user defaults
 static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
@@ -166,7 +185,6 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 #define HELVETICA_NEUE_LIGHT                @"HelveticaNeue-Light"
 #define HELVETICA_NEUE_THIN                 @"HelveticaNeue-Thin"
 #define HELVETICA_NEUE_REGULAR              @"HelveticaNeue"
-
 
 /* Segue Identifiers */
 

@@ -19,7 +19,7 @@
 #import "FRSUser+CoreDataProperties.h"
 #import "FRSProfileViewController.h"
 //#import "FRSUserProfileViewController.h"
-
+#import "FRSAPIClient.h"
 
 #define TEXTVIEW_TOP_PAD 12
 
@@ -111,21 +111,24 @@
     [self updateSocial];
     [self adjustHeight];
     
-    if (self.gallery.repostedBy != nil && ![self.gallery.repostedBy isEqualToString:@""]) {
+    if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
         [self configureRepostWithName:self.gallery.repostedBy];
     }
 }
 
 -(void)updateSocial {
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.actionBar handleHeartState:self.gallery.isLiked];
-////        
-////        if (self.gallery.numberOfLikes == 0) {
-////            self.gallery.numberOfLikes = rand()%350;
-////        }
-//        
-//        [self.actionBar handleHeartAmount:self.gallery.numberOfLikes];
-//    });
+    NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
+    BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
+    
+    NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
+    BOOL isReposted = FALSE;[[self.gallery valueForKey:@"reposted"] boolValue];
+    
+   // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
+    
+    [self.actionBar handleHeartState:isLiked];
+    [self.actionBar handleHeartAmount:[numLikes intValue]];
+    [self.actionBar handleRepostState:!isReposted];
+    [self.actionBar handleRepostAmount:[numReposts intValue]];
 }
 
 -(void)updateScrollView {
@@ -154,7 +157,27 @@
 -(void)contentActionbarDidSelectShareButton:(id)sender {
     // show actions sheet
     self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
+}
+
+-(void)handleLike:(FRSContentActionsBar *)actionBar {
     
+    if ([[self.gallery valueForKey:@"liked"] boolValue]) {
+        [[FRSAPIClient sharedClient] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+        }];
+
+    }
+    else {
+        [[FRSAPIClient sharedClient] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+        }];
+    }
+}
+
+-(void)handleRepost:(FRSContentActionsBar *)actionBar {
+    [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        NSLog(@"REPOSTED %@", (!error) ? @"TRUE" : @"FALSE");
+    }];
 }
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate{

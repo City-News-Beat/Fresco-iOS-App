@@ -106,21 +106,9 @@
     CGFloat halfHeight = self.topContainer.frame.size.height/2 - 0.5;
     CGFloat width = halfHeight * 1.333333333 - 2;
     
-    NSMutableArray *smallImageURLS = [[NSMutableArray alloc] init];
+    NSMutableArray *smallImageURLS = [NSMutableArray arrayWithArray:self.story.imageURLs];
     
-    NSString *imageSize = @"images/medium/";
-    
-    if (self.story.imageURLs.count > 2) {
-        imageSize = @"images/small/";
-    }
-    
-    for (NSURL *fullSizeURL in self.story.imageURLs) {
-        NSString *fullSizeString = fullSizeURL.absoluteString;
-        NSString *smallString = fullSizeString;//[fullSizeString stringByReplacingOccurrencesOfString:@"images/" withString:imageSize];
-        [smallImageURLS addObject:[NSURL URLWithString:smallString]];
-    }
-    
-    if (smallImageURLS.count < 6) {
+    if (smallImageURLS.count < 6 && smallImageURLS.count != 0) {
         
         switch (smallImageURLS.count) {
             case 1:{
@@ -137,7 +125,7 @@
             } break;
         }
         
-    } else {
+    } else if (smallImageURLS.count != 0) {
         
         UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, width, halfHeight)];
         iv.contentMode = UIViewContentModeScaleAspectFill;
@@ -259,15 +247,50 @@
 }
 
 -(void)configureActionsBar{
-
-    self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
     
+    NSNumber *numLikes = [self.story valueForKey:@"likes"];
+    BOOL isLiked = [[self.story valueForKey:@"liked"] boolValue];
+    
+    NSNumber *numReposts = [self.story valueForKey:@"reposts"];
+    BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
+    
+    //NSString *repostedBy = [self.story valueForKey:@"reposted_by"];
+    
+    self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
+    [self.actionBar handleHeartState:isLiked];
+    [self.actionBar handleHeartAmount:[numLikes intValue]];
+    [self.actionBar handleRepostState:!isReposted];
+    [self.actionBar handleRepostAmount:[numReposts intValue]];
+
     if (self.caption.text.length == 0) {
         [self.actionBar setOriginWithPoint:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height-12)];
     }
     
     [self addSubview:self.actionBar];
 }
+
+-(void)handleLike:(FRSContentActionsBar *)actionBar {
+    
+    if ([[self.story valueForKey:@"liked"] boolValue]) {
+        [[FRSAPIClient sharedClient] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
+            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+            [self.story setValue:@(FALSE) forKey:@"liked"];
+        }];
+    }
+    else {
+        [[FRSAPIClient sharedClient] likeStory:self.story completion:^(id responseObject, NSError *error) {
+            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+            [self.story setValue:@(TRUE) forKey:@"liked"];
+        }];
+    }
+}
+
+-(void)handleRepost:(FRSContentActionsBar *)actionBar {
+    [[FRSAPIClient sharedClient] repostStory:self.story completion:^(id responseObject, NSError *error) {
+        NSLog(@"REPOSTED %@", (!error) ? @"TRUE" : @"FALSE");
+    }];
+}
+
 
 -(void)addShadowToLabel:(UILabel*)label {
     

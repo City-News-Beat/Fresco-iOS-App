@@ -11,6 +11,7 @@
 #import "FRSPost.h"
 #import "FRSFileUploadManager.h" // temp patch
 #import "FRSRequestSerializer.h"
+#import "FRSAppDelegate.h"
 
 @implementation FRSAPIClient
 
@@ -104,7 +105,6 @@
             [self handleUserLogin:responseObject];
         }
         
-        NSLog(@"%@ %@", error, responseObject);
     }];
 }
 
@@ -169,7 +169,7 @@
 -(FRSUser *)authenticatedUser {
     
     // predicate searching for users in store w/ loggedIn as TRUE/1
-    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K like %@", @"isLoggedIn", @(TRUE)];
+    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"isLoggedIn", @(TRUE)];
     NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUser"];
     signedInRequest.predicate = signedInPredicate;
     
@@ -187,8 +187,7 @@
     
     // if we have multiple "authenticated" users in data store, we probs messed up big time
     if ([authenticatedUsers count] > 1) {
-        NSLog(@"**WARNING**: Indication of multiple authenciated users: %@", authenticatedUsers);
-        @throw [NSException exceptionWithName:@"FRSMultiAuth" reason:@"Multiple users" userInfo:@{@"users":authenticatedUsers}];
+
     }
     
     return [authenticatedUsers firstObject];
@@ -223,6 +222,7 @@
 // all info needed for "installation" field of registration/signin
 -(NSDictionary *)currentInstallation {
     
+    
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
     
@@ -231,6 +231,18 @@
     }
     else {
         return Nil; // no installation without push info, apparently
+    }
+    
+    NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
+    
+    if (sessionID) {
+        currentInstallation[@"device_id"] = sessionID;
+    }
+    else {
+        sessionID = [self randomString];
+        currentInstallation[@"device_id"] = sessionID;
+        [[NSUserDefaults standardUserDefaults] setObject:sessionID forKey:@"SESSION_ID"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
     currentInstallation[@"platform"] = @"ios";
@@ -264,8 +276,22 @@
         currentInstallation[@"locale_identifier"] = localeString;
     }
 
+    
     return currentInstallation;
 }
+
+
+-(NSString *)randomString {
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    NSMutableString *randomString = [NSMutableString stringWithCapacity:15];
+    
+    for (int i=0; i<15; i++) {
+        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform([letters length])]];
+    }
+    
+    return randomString;
+}
+
 
 -(void)handleUserLogin:(id)responseObject {
     if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
@@ -291,7 +317,10 @@
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
- 
+    NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -328,7 +357,6 @@
     NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
     [geoData setObject:@"Point" forKey:@"type"];
     [geoData setObject:location forKey:@"coordinates"];
-    NSLog(@"%@", geoData);
     
     NSDictionary *params = @{
                              @"geo" : geoData,
@@ -336,7 +364,6 @@
                             };
 
     
-    NSLog(@"%@", params);
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -366,8 +393,6 @@
     
     [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        
-        NSLog(@"%@ %@", responseObject, error);
     }];
 }
 
@@ -375,9 +400,7 @@
     
     NSString *endpoint = [storyGalleriesEndpoint stringByAppendingString:storyID];
     
-    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
-        NSLog(@"%@", responseObject);
-        
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {        
         completion(responseObject, error);
     }];
 }
@@ -421,10 +444,25 @@
 }
 
 -(void)fetchFollowing:(void(^)(NSArray *galleries, NSError *error))completion {
-    NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"following" ofType:@"json"]];
-    NSError *jsonError;
-    NSDictionary *fakeData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
-    completion(fakeData[@"data"], jsonError);
+    FRSUser *authenticatedUser = [self authenticatedUser];
+    NSString *endpoint = [NSString stringWithFormat:followingFeed, authenticatedUser.uid];
+    
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+-(void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:storyUnlikeEndpoint, story.uid];
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 
@@ -641,7 +679,6 @@
         // shouldn't happen
         completion(TRUE, error);
     }];
-    
 }
 
 -(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -663,17 +700,157 @@
 /* 
     Social interaction
 */
--(void)likeGallery:(FRSGallery *)gallery {
-    
+-(void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
--(void)likeStory:(FRSStory *)story {
-    
+-(void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:likeStoryEndpoint, story.uid];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
--(void)repostGallery:(FRSGallery *)gallery {
-    
+-(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
--(void)repostStory:(FRSStory *)story {
-    
+-(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:repostStoryEndpoint, story.uid];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
+
+-(void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self followUserID:user.uid completion:completion];
+}
+-(void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self unfollowUserID:user.uid completion:completion];
+}
+
+-(void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:followUserEndpoint, userID];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+-(void)unfollowUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:unfollowUserEndpoint, userID];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)fetchCommentsForGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self fetchCommentsForGalleryID:gallery.uid completion:completion];
+}
+-(void)fetchCommentsForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:commentsEndpoint, galleryID];
+    
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)addComment:(NSString *)comment toGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self addComment:comment toGalleryID:gallery.uid completion:completion];
+}
+
+-(void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:commentEndpoint, galleryID];
+    NSDictionary *parameters = @{@"comment":comment};
+    
+    [self post:endpoint withParameters:parameters completion:completion];
+}
+
+/* serialization */
+
+-(id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
+    
+    if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
+        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
+        NSMutableDictionary *responseObjects = [[NSMutableDictionary alloc] init];
+        NSArray *keys = [response allKeys];
+        
+        for (NSString *key in keys) {
+            id valueForKey = [self objectFromDictionary:[response objectForKey:key] context:managedObjectContext];
+            
+            if (valueForKey == [response objectForKey:key]) {
+                return response; // non parse
+            }
+            
+            [responseObjects setObject:valueForKey forKey:key];
+        }
+        
+        if (cache) {
+            NSError *saveError;
+            [managedObjectContext save:&saveError];
+        }
+        
+        return responseObjects;
+    }
+    else if ([[response class] isSubclassOfClass:[NSArray class]]) {
+        NSMutableArray *responseObjects = [[NSMutableArray alloc] init];
+        NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
+        
+        for (NSDictionary *responseObject in response) {
+            id originalResponse = [self objectFromDictionary:responseObject context:managedObjectContext];
+            
+            if (originalResponse == responseObject) {
+                return response;
+            }
+            
+            [responseObjects addObject:[self objectFromDictionary:responseObject context:managedObjectContext]];
+        }
+
+        return responseObjects;
+    }
+    else {
+        NSLog(@"No route of serialization. Sry.");
+    }
+    
+    return response;
+}
+
+-(id)objectFromDictionary:(NSDictionary *)dictionary context:(NSManagedObjectContext *)managedObjectContext {
+    
+    if (![dictionary respondsToSelector:@selector(objectForKeyedSubscript:)]) {
+        return dictionary;
+    }
+    
+    if ([dictionary isEqual:[NSNull null]]) {
+        return dictionary;
+    }
+    
+    
+    NSString *objectType = dictionary[@"object"];
+    
+    if ([objectType isEqualToString:galleryObjectType]) {
+        NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSGallery" inManagedObjectContext:[self managedObjectContext]];
+        FRSGallery *gallery = (FRSGallery *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
+        gallery.currentContext = [self managedObjectContext];
+        [gallery configureWithDictionary:dictionary];
+        return gallery;
+    }
+    else if ([objectType isEqualToString:storyObjectType]) {
+        NSEntityDescription *storyEntity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:[self managedObjectContext]];
+        FRSStory *story = (FRSStory *)[[NSManagedObject alloc] initWithEntity:storyEntity insertIntoManagedObjectContext:nil];
+        [story configureWithDictionary:dictionary];
+        return story;
+    }
+    
+    return dictionary; // not serializable
+}
+
+-(NSManagedObjectContext *)managedObjectContext {
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    return [appDelegate managedObjectContext];
+}
+
+
 @end

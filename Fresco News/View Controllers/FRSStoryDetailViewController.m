@@ -210,6 +210,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
     self.stories = [[NSMutableArray alloc] init];
     
     [[FRSAPIClient sharedClient] fetchGalleriesInStory:self.story.uid completion:^(NSArray *galleries, NSError *error) {
+        NSLog(@"%@", galleries);
+
         FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         NSArray *galleriesArray = ((NSDictionary *)galleries)[@"galleries"];
         

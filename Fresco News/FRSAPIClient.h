@@ -70,9 +70,24 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 -(void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion;
 -(NSDate *)dateFromString:(NSString *)string;
 
--(void)likeGallery:(FRSGallery *)gallery;
--(void)likeStory:(FRSStory *)story;
+-(void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
 
--(void)repostGallery:(FRSGallery *)gallery;
--(void)repostStory:(FRSStory *)story;
+-(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
+
+
+-(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
+
+-(void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
+
+-(void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unfollowUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion;
+
+-(void)fetchCommentsForGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)fetchCommentsForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion;
+
+-(NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache;
 @end
