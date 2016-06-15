@@ -10,4 +10,5 @@
 
 @interface FRSFollowingController : NSObject <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, weak) UITableView *tableView;
+@property (nonatomic, retain) NSArray *feed;
 @end

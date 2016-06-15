@@ -27,6 +27,10 @@
 }
 
 -(void)commonInit {
+    [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
+        self.feed = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
+        [self.tableView reloadData];
+    }];
 }
 
 -(void)setTableView:(UITableView *)tableView {
