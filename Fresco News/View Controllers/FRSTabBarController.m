@@ -178,6 +178,10 @@
             FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
             [self.navigationController pushViewController:onboardVC animated:NO];
         }
+        else {
+            FRSProfileViewController *profile = (FRSProfileViewController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
+            [profile loadAuthenticatedUser];
+        }
     }
 }
 

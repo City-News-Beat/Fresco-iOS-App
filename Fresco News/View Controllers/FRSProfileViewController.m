@@ -77,6 +77,13 @@
 @synthesize representedUser = _representedUser, authenticatedProfile = _authenticatedProfile;
 
 
+-(void)loadAuthenticatedUser {
+    _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    self.authenticatedProfile = TRUE;
+    [self configureWithUser:_representedUser];
+    [self fetchGalleries];
+}
+
 -(instancetype)init {
     self = [super init];
     
@@ -90,6 +97,8 @@
     return self;
 }
 
+
+
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
@@ -97,17 +106,10 @@
     [self fetchGalleries];
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
-    
-    if (self.authenticatedProfile) {
-        _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-        [self configureWithUser:_representedUser];
-        [self fetchGalleries];
-    }
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
