@@ -179,7 +179,8 @@
             [self.navigationController pushViewController:onboardVC animated:NO];
         }
         else {
-            FRSProfileViewController *profile = (FRSProfileViewController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
+            UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
+            FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
             [profile loadAuthenticatedUser];
         }
     }
