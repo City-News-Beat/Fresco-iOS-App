@@ -17,6 +17,7 @@
 
 #import "FRSBorderedImageView.h"
 #import "DGElasticPullToRefresh.h"
+
 #import "Fresco.h"
 
 #import "FRSTrimTool.h"
@@ -67,9 +68,12 @@
 
 @property (nonatomic) BOOL presentingUser;
 
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
 @end
 
 @implementation FRSProfileViewController
+
 @synthesize representedUser = _representedUser, authenticatedProfile = _authenticatedProfile;
 
 -(void)viewDidLoad {
@@ -110,6 +114,9 @@
 }
 
 -(void)setupUI {
+    
+    [self configureSpinner];
+    
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
     
@@ -134,6 +141,15 @@
 
 }
 
+
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+    [self.loadingView startAnimating];
+    [self.view addSubview:self.loadingView];
+}
 
 #pragma mark - Fetch Methods
 
@@ -625,7 +641,7 @@
 #pragma mark - User
 
 -(void)configureWithUser:(FRSUser *)user {
-   // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+    self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
     self.nameLabel.text = user.firstName;
     self.bioLabel.text = user.bio;
     
