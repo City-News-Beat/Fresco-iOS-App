@@ -444,13 +444,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
             [self cacheAssignments];
         }
         
-<<<<<<< HEAD
         [delegate.managedObjectContext save:Nil];
         [delegate saveContext];
         
         
         
-=======
         NSArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
         
@@ -461,10 +459,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
         }
         self.assignmentsArray = nearBy; //should be nearby, make new array for global
->>>>>>> 3.0-phil
         [self configureAssignmentsTableView];
-        
-        
     }];
 }
 
