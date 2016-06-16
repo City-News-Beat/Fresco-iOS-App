@@ -11,6 +11,7 @@
 #import "FRSStoryCell.h"
 #import "FRSAPIClient.h"
 #import "Fresco.h"
+#import "FRSAwkwardView.h"
 
 @implementation FRSFollowingController
 @synthesize tableView = _tableView;
@@ -28,8 +29,10 @@
 
 -(void)commonInit {
     [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
-        NSLog(@"TST %@", galleries);
-        
+        if (galleries.count == 0) {
+            FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2 - 175/2, self.tableView.frame.size.height/2 -125/2 +64, 175, 125)];
+            [self.tableView addSubview:awkwardView];
+        }
         self.feed = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
         [self.tableView reloadData];
     }];
