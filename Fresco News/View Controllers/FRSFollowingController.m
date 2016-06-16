@@ -38,7 +38,10 @@
         }
         [loadingView removeFromSuperview];
         self.feed = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
-        [self.tableView reloadData];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
     }];
 }
 
@@ -51,6 +54,10 @@
     
     [loadingView startAnimating];
     [_tableView addSubview:loadingView];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 }
 
 -(UITableView *)tableView {
