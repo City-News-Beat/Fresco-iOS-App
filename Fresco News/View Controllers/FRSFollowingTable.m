@@ -34,8 +34,6 @@
     
     if (self) {
         [self commonInit];
-        self.delegate = self;
-        self.dataSource = self;
     }
     
     return self;
@@ -50,7 +48,6 @@
 }
 
 -(void)loadGalleries:(NSArray *)galleries {
-    self.galleries = galleries;
     [self reloadData];
 }
 -(void)commonInit {
@@ -67,18 +64,9 @@
             [self addSubview:awkwardView];
         }
         
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
-            [self reloadData];
-        });
+        self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
+        [self reloadData];
     }];
-    
-    
-//    if (userHasFollowers) {
-//        [void loadFeed];
-//    }
-
 }
 
 
@@ -192,8 +180,8 @@
     return 1;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {    
-    return self.galleries.count;
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.galleries count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
