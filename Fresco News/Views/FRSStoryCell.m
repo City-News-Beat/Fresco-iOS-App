@@ -42,7 +42,12 @@
     self.storyView.actionBlock = self.actionBlock;
     [self addSubview:self.storyView];
 }
-
+-(void)play {
+    
+}
+-(void)pause {
+    
+}
 -(void)clearCell{
     [self.storyView removeFromSuperview];
 }
