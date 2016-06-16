@@ -446,8 +446,9 @@
 -(void)fetchFollowing:(void(^)(NSArray *galleries, NSError *error))completion {
     FRSUser *authenticatedUser = [self authenticatedUser];
     NSString *endpoint = [NSString stringWithFormat:followingFeed, authenticatedUser.uid];
+    NSLog(@"BST: %@", endpoint);
     
-    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+    [self get:endpoint withParameters:@{@"limit":@(100)} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
