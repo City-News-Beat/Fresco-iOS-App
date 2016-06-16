@@ -102,6 +102,7 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
+    
     [self configureWithUser:_representedUser];
     [self fetchGalleries];
 }
@@ -131,7 +132,7 @@
         
         _representedUser = user; // obviously save for future
         _authenticatedProfile = [_representedUser.isLoggedIn boolValue]; // signifies profile view is current authed user
-        
+
         [self configureWithUser:_representedUser]; // configure UI to specific represented user
     }
     return self;
@@ -670,15 +671,16 @@
 #pragma mark - User
 
 -(void)configureWithUser:(FRSUser *)user {
-    self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
-    self.nameLabel.text = user.firstName;
-    self.bioLabel.text = user.bio;
-    
-    self.usernameLabel.text = user.username;
-    titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
-  //  self.locationLabel.text = user.address; //user.address does not exiset yet
-    self.followersLabel.text = @"1125";
-
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+        self.nameLabel.text = user.firstName;
+        self.bioLabel.text = user.bio;
+        
+        self.usernameLabel.text = user.username;
+        titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
+        //  self.locationLabel.text = user.address; //user.address does not exiset yet
+        self.followersLabel.text = @"1125";
+    });
 }
 
 
