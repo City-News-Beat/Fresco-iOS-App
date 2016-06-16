@@ -12,7 +12,10 @@
 #import "FRSScrollingViewController.h"
 
 @interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
-@property NSArray *galleries;
--(void)loadGalleries:(NSArray *)galleries;
+{
+    NSInteger numberOfPosts;
+}
+@property (strong, nonatomic, readonly) NSArray *galleries;
+
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
 @end

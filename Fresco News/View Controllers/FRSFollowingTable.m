@@ -17,7 +17,7 @@
 
 
 @implementation FRSFollowingTable
-@synthesize navigationController = _navigationController;
+@synthesize navigationController = _navigationController, galleries = _galleries;
 
 -(instancetype)init {
     self = [super init];
@@ -64,14 +64,15 @@
             [self addSubview:awkwardView];
         }
         
-        self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
+        _galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
+        numberOfPosts = [_galleries count];
         [self reloadData];
     }];
 }
 
 
 -(void)readMore:(NSIndexPath *)indexPath {
-    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.galleries objectAtIndex:indexPath.row]];
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[_galleries objectAtIndex:indexPath.row]];
     vc.shouldHaveBackButton = YES;
     
     FRSScrollingViewController *scroll = (FRSScrollingViewController *)self.scrollDelegate;
@@ -124,7 +125,7 @@
 
 -(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {
     
-    NSArray *filteredArray = [self.galleries filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
+    NSArray *filteredArray = [_galleries filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
     
     if (!filteredArray.count) return;
     // push gallery detail view
@@ -181,20 +182,20 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.galleries count];
+    return [_galleries count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell;
     
-    if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+    if ([[[_galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
         
         if (!cell){
             cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
         }
     }
-    else if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
+    else if ([[[_galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
         
         if (!cell){
@@ -209,25 +210,25 @@
         FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
         [galCell clearCell];
         
-        galCell.gallery = self.galleries[indexPath.row];
+        galCell.gallery = _galleries[indexPath.row];
         [galCell configureCell];
     }
     else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
         [storyCell clearCell];
         
-        storyCell.story = self.galleries[indexPath.row];
+        storyCell.story = _galleries[indexPath.row];
         [storyCell configureCell];
     }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([[self.galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
-        FRSGallery *gallery = self.galleries[indexPath.row];
+    if ([[_galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+        FRSGallery *gallery = _galleries[indexPath.row];
         return [gallery heightForGallery];
     }
     else {
-        FRSStory *story = self.galleries[indexPath.row];
+        FRSStory *story = _galleries[indexPath.row];
         return [story heightForStory];
     }
     
