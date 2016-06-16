@@ -50,7 +50,7 @@
 @property (strong, nonatomic) NSMutableArray *players;
 @property (strong, nonatomic) NSMutableArray *pulled;
 @property (weak, nonatomic) FRSAppDelegate *appDelegate;
-@property (nonatomic, strong) UITableView *followingTable;
+@property (nonatomic, strong) FRSFollowingTable *followingTable;
 
 @property (strong, nonatomic) UIView *sudoNavBar;
 
@@ -82,7 +82,7 @@
     scrollFrame.origin.x = scrollFrame.size.width;
     scrollFrame.origin.y = -64;
     
-    self.followingTable = [[UITableView alloc] initWithFrame:scrollFrame];
+    self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
     followingController = [[FRSFollowingController alloc] init];
     followingController.tableView = self.followingTable;
     self.followingTable.dataSource = followingController;

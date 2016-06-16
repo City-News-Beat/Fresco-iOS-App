@@ -12,6 +12,9 @@
 #import "FRSAppDelegate.h"
 #import "FRSScrollingViewController.h"
 #import "FRSGalleryExpandedViewController.h"
+#import "FRSAwkwardView.h"
+#import "FRSStoryCell.h"
+
 
 @implementation FRSFollowingTable
 @synthesize navigationController = _navigationController;
@@ -56,7 +59,18 @@
     self.delegate = self;
     self.dataSource = self;
     
-    
+    [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
+        if (galleries.count == 0) {
+            FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 175/2, self.frame.size.height/2 -125/2 +64, 175, 125)];
+            [self addSubview:awkwardView];
+        }
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
+            [self reloadData];
+        });
+    }];
     
     
 //    if (userHasFollowers) {
@@ -65,44 +79,6 @@
 
 }
 
--(void)loadFeed {
-    
-    FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    
-    [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
-        NSMutableArray *realGalleries = [[NSMutableArray alloc] init];
-        
-        for (NSDictionary *gallery in galleries) {
-            NSEntityDescription *entity = [NSEntityDescription entityForName:@"FRSGallery"
-                                                      inManagedObjectContext:appDelegate.managedObjectContext];
-            FRSGallery *realGallery = [[FRSGallery alloc] initWithEntity:entity
-                                          insertIntoManagedObjectContext:nil];
-            //FRSGallery *realGallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:appDelegate.managedObjectContext];
-            [realGallery configureWithDictionary:gallery context:appDelegate.managedObjectContext];
-            [realGalleries addObject:realGallery];
-        }
-        
-        [self loadGalleries:realGalleries];
-    }];
-}
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    FRSGalleryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
-    
-    if (!cell) {
-        cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
-    
-    cell.delegate = self;
-    
-    return cell;
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.galleries.count;
-}
 
 -(void)readMore:(NSIndexPath *)indexPath {
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.galleries objectAtIndex:indexPath.row]];
@@ -143,35 +119,6 @@
     }
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    // sloppy not to have a check here
-    if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-        return;
-    }
-    
-    if (cell.gallery == self.galleries[indexPath.row]) {
-        return;
-    }
-    
-    cell.gallery = self.galleries[indexPath.row];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell clearCell];
-        [cell configureCell];
-    });
-    
-    __weak typeof(self) weakSelf = self;
-    
-    cell.shareBlock = ^void(NSArray *sharedContent) {
-        [weakSelf showShareSheetWithContent:sharedContent];
-    };
-    
-    cell.readMoreBlock = ^void(NSArray *sharedContent) {
-        NSLog(@"TEST");
-        [self readMore:indexPath];
-    };
-}
-
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.window.rootViewController presentViewController:activityController animated:YES completion:nil];
@@ -191,16 +138,6 @@
     
     if (!filteredArray.count) return;
     // push gallery detail view
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.row >= self.galleries.count) {
-        return 0;
-    }
-    
-    FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
-    return [gallery heightForGallery];
 }
 
 -(void)followStory {
@@ -249,9 +186,64 @@
 
 }
 
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
 
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSLog(@"%@", self.galleries);
+    
+    return self.galleries.count;
+}
 
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell;
+    
+    if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+        
+        if (!cell){
+            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        }
+    }
+    else if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
+        
+        if (!cell){
+            cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
+        }
+    }
+    
+    return cell;
+}
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+        [galCell clearCell];
+        
+        galCell.gallery = self.galleries[indexPath.row];
+        [galCell configureCell];
+    }
+    else {
+        FRSStoryCell *storyCell = (FRSStoryCell *)cell;
+        [storyCell clearCell];
+        
+        storyCell.story = self.galleries[indexPath.row];
+        [storyCell configureCell];
+    }
+}
 
-
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if ([[self.galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+        FRSGallery *gallery = self.galleries[indexPath.row];
+        return [gallery heightForGallery];
+    }
+    else {
+        FRSStory *story = self.galleries[indexPath.row];
+        return [story heightForStory];
+    }
+    
+    return 100;
+}
 
 @end

@@ -36,10 +36,11 @@
             [self.tableView addSubview:awkwardView];
             self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
         }
+        
         [loadingView removeFromSuperview];
-        self.feed = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.feed = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
             [self.tableView reloadData];
         });
     }];
@@ -118,9 +119,7 @@
         return [story heightForStory];
     }
     
-    return 0;
+    return 100;
 }
-
-
 
 @end
