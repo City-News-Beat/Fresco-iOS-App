@@ -103,6 +103,9 @@
     
     [self configureWithUser:_representedUser];
     [self fetchGalleries];
+    
+    [super removeNavigationBarLine];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -174,6 +177,8 @@
     [self configureTableView];
     [self fetchGalleries];
     [self configureSpinner];
+    
+    [super removeNavigationBarLine];
 }
 
 
