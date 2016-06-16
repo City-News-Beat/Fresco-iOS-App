@@ -44,6 +44,11 @@
     self.address = [self shortAddressFromAddress:dict[@"address"]];
     self.creator = [FRSUser MR_createEntity];
     
+    self.creator.uid = dict[@"owner"][@"id"];
+    self.creator.username = dict[@"owner"][@"username"];
+    self.creator.firstName = dict[@"owner"][@"full_name"];
+    
+
     /*self.creator = [FRSUser MR_createEntity];
     
     if ([dict objectForKey:@"video"] != [NSNull null]) {
