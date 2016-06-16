@@ -76,6 +76,10 @@
     self.address = [self shortAddressFromAddress:dict[@"address"]];
     self.creator = [FRSUser MR_createEntityInContext:context];
     
+    self.creator.uid = dict[@"owner"][@"id"];
+    self.creator.username = dict[@"owner"][@"username"];
+    self.creator.firstName = dict[@"owner"][@"full_name"];
+
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
         self.mediaType = @(1);
         self.videoUrl = [dict objectForKey:@"stream"];
@@ -99,7 +103,11 @@
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"address"]];
+    
     self.creator = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:context];
+    self.creator.uid = dict[@"owner"][@"id"];
+    self.creator.username = dict[@"owner"][@"username"];
+    self.creator.firstName = dict[@"owner"][@"full_name"];
     
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
         self.mediaType = @(1);
