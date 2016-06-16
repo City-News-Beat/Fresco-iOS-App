@@ -137,8 +137,15 @@
     
     NSArray *filteredArray = [_galleries filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
     
-    if (!filteredArray.count) return;
-    // push gallery detail view
+    FRSGallery *gallery = [filteredArray firstObject];
+        
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+    vc.shouldHaveBackButton = YES;
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+
 }
 
 -(void)followStory {
@@ -212,8 +219,11 @@
         }
     }
     
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     return cell;
 }
+
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
         FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
