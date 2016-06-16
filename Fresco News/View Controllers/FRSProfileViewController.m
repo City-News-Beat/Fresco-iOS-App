@@ -110,6 +110,13 @@
     [super viewWillAppear:animated];
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
+    
+    if (!_representedUser) {
+        _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        self.authenticatedProfile = TRUE;
+        [self configureWithUser:_representedUser];
+        [self fetchGalleries];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{

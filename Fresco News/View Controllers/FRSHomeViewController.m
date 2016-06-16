@@ -97,6 +97,8 @@
     [self showNavBarForScrollView:self.scrollView animated:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    
+    [self.appDelegate reloadUser];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
