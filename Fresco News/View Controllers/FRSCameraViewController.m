@@ -961,11 +961,17 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 -(void)adjustFramesForCaptureState{
     
+    
     NSInteger topToAperture = (self.bottomClearContainer.frame.size.height - self.apertureBackground.frame.size.height)/2;
     NSInteger offset = topToAperture - 10;
     
     CGRect bigPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     CGRect smallPreviewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width * PHOTO_FRAME_RATIO);
+    
+    
+    //Default to video frame, shouldnt have to animate at all
+    self.preview.frame = bigPreviewFrame;
+    self.captureVideoPreviewLayer.frame = bigPreviewFrame;
     
     if (self.captureMode == FRSCaptureModePhoto){
         
@@ -974,23 +980,26 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
         } completion:^(BOOL finished){
             self.apertureButton.frame = self.originalApertureFrame;
+            
+            
+            self.preview.frame = smallPreviewFrame;
+            self.captureVideoPreviewLayer.frame = smallPreviewFrame;
         }];
+
         
-        self.preview.frame = smallPreviewFrame;
-        self.captureVideoPreviewLayer.frame = smallPreviewFrame;
     }
     else {
-
+        
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-
+            
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.height, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.bottomClearContainer.frame.origin.y + offset, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
         } completion:^(BOOL finished){
             self.apertureButton.frame = self.originalApertureFrame;
+            
+            self.preview.frame = bigPreviewFrame;
+            self.captureVideoPreviewLayer.frame = bigPreviewFrame;
         }];
-        
-        self.preview.frame = bigPreviewFrame;
-        self.captureVideoPreviewLayer.frame = bigPreviewFrame;
     }
 }
 
