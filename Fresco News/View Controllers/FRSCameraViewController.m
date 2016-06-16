@@ -996,8 +996,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             self.apertureButton.frame = self.originalApertureFrame;
             self.bottomOpaqueContainer.layer.shadowOpacity = 1; //throw in animation block
             
-            
-
         }];
         
         

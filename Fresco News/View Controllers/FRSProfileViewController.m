@@ -123,16 +123,26 @@
     [self removeStatusBarNotification];
 }
 
+
 -(instancetype)initWithUser:(FRSUser *)user {
 
     if (self) {
         
-        [self setupUI]; // setup UI
         
         _representedUser = user; // obviously save for future
         _authenticatedProfile = [_representedUser.isLoggedIn boolValue]; // signifies profile view is current authed user
+        
+        
+        [self setupUI]; // setup UI
 
+        
+        
         [self configureWithUser:_representedUser]; // configure UI to specific represented user
+
+        
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+        [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+        
     }
     return self;
 }
@@ -151,18 +161,19 @@
     [self.usernameLabel setFont:[UIFont notaBoldWithSize:17]];
     self.usernameLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = self.usernameLabel;
-    
+    self.navigationItem.titleView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
+        
     UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
     followButton.tintColor = [UIColor whiteColor];
     
     self.navigationItem.rightBarButtonItem = followButton;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+
     
     /* TABLE VIEW */
     [self configureTableView];
     [self fetchGalleries];
     [self configureSpinner];
-
 }
 
 
@@ -429,7 +440,7 @@
     
     self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     self.bioLabel.numberOfLines = 0;
-    self.bioLabel.text = @"";
+    self.bioLabel.text = @"bio";
     self.bioLabel.textColor = [UIColor whiteColor];
     [self.bioLabel sizeToFit];
     [self.profileContainer addSubview:self.bioLabel];

@@ -20,4 +20,5 @@
 -(FRSUser *)authenticatedUser;
 @property (nonatomic, retain) FRSUser *representedUser;
 @property BOOL authenticatedProfile;
+-(instancetype)initWithDefaultUser;
 @end

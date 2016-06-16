@@ -137,7 +137,7 @@
     
     UIViewController *vc3 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSAssignmentsViewController alloc] init]];
     
-    UIViewController *vc4 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] init]];
+    UIViewController *vc4 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] initWithUser:[[FRSAPIClient sharedClient] authenticatedUser]]];
 
     self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
 }
