@@ -2184,7 +2184,7 @@
 					1EDA44AF1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = Z7R96S8K3N;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -2647,7 +2647,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Z7R96S8K3N/XC: com.fresconews.Fresco.dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2687,7 +2687,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Z7R96S8K3N/XC: com.fresconews.Fresco.dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2808,7 +2808,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
 				PRODUCT_NAME = VPN;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Z7R96S8K3N/XC: com.fresconews.Fresco.dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
