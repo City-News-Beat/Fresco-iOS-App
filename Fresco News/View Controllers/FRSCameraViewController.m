@@ -970,24 +970,27 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     if (self.captureMode == FRSCaptureModePhoto){
         
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.captureVideoPreviewLayer.frame = smallPreviewFrame;
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
         } completion:^(BOOL finished){
             self.apertureButton.frame = self.originalApertureFrame;
-            self.preview.frame = smallPreviewFrame;
         }];
+        
+        self.preview.frame = smallPreviewFrame;
+        self.captureVideoPreviewLayer.frame = smallPreviewFrame;
     }
     else {
 
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.preview.frame = bigPreviewFrame;
-            self.captureVideoPreviewLayer.frame = bigPreviewFrame;
+
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.height, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.bottomClearContainer.frame.origin.y + offset, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
         } completion:^(BOOL finished){
             self.apertureButton.frame = self.originalApertureFrame;
         }];
+        
+        self.preview.frame = bigPreviewFrame;
+        self.captureVideoPreviewLayer.frame = bigPreviewFrame;
     }
 }
 
