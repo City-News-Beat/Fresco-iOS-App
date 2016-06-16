@@ -139,7 +139,7 @@
 
 -(void)setupUI {
     
-    [self configureSpinner];
+    //[self configureSpinner];
     
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];

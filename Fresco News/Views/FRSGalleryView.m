@@ -553,10 +553,15 @@
             //Add gesture recognizer only if user has a photo
             
             UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
-            
             [bylineTap setNumberOfTapsRequired:1];
             [self.nameLabel setUserInteractionEnabled:YES];
             [self.nameLabel addGestureRecognizer:bylineTap];
+
+            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+            [photoTap setNumberOfTapsRequired:1];
+            [self.profileIV setUserInteractionEnabled:YES];
+            [self.profileIV addGestureRecognizer:photoTap];
+            
         });
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
@@ -599,6 +604,11 @@
             [bylineTap setNumberOfTapsRequired:1];
             [self.nameLabel setUserInteractionEnabled:YES];
             [self.nameLabel addGestureRecognizer:bylineTap];
+            
+            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+            [photoTap setNumberOfTapsRequired:1];
+            [self.profileIV setUserInteractionEnabled:YES];
+            [self.profileIV addGestureRecognizer:photoTap];
         });
         
     } else {
