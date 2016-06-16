@@ -83,10 +83,6 @@
     scrollFrame.origin.y = -64;
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
-    followingController = [[FRSFollowingController alloc] init];
-    followingController.tableView = self.followingTable;
-    self.followingTable.dataSource = followingController;
-    self.followingTable.delegate = followingController;
     
     //[self configureNoFollowers];
     [self.pageScroller addSubview:self.followingTable];

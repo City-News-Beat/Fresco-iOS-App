@@ -34,6 +34,8 @@
     
     if (self) {
         [self commonInit];
+        self.delegate = self;
+        self.dataSource = self;
     }
     
     return self;
@@ -190,9 +192,7 @@
     return 1;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"%@", self.galleries);
-    
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {    
     return self.galleries.count;
 }
 
