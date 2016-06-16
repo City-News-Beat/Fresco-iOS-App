@@ -44,6 +44,7 @@
 
 @property (strong, nonatomic) FRSGallery *gallery;
 
+@property (strong, nonatomic) ShareSheetBlock shareBlock;
 
 @end
 
@@ -51,7 +52,9 @@
 
 
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
-    
+    NSLog(@"share mfker");
+    self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
+
 }
 
 -(void)handleActionButtonTapped {
