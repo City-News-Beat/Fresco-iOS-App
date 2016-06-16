@@ -992,14 +992,22 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
             
-            snapshot.alpha = 0.0;
         } completion:^(BOOL finished){
             self.apertureButton.frame = self.originalApertureFrame;
             self.bottomOpaqueContainer.layer.shadowOpacity = 1; //throw in animation block
             
-            [snapshot removeFromSuperview];
             
 
+        }];
+        
+        
+        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            snapshot.alpha = 0;
+            
+        } completion:^(BOOL finished) {
+            [snapshot removeFromSuperview];
+            
         }];
 
     } else {
@@ -1027,7 +1035,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
         }];
         
-        [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             
             snapshot.alpha = 0;
             
