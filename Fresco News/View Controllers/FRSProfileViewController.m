@@ -80,7 +80,6 @@
 -(void)loadAuthenticatedUser {
     _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
     self.authenticatedProfile = TRUE;
-    [self configureUI];
     [self configureWithUser:_representedUser];
     [self fetchGalleries];
 }
@@ -92,9 +91,6 @@
         if (!_representedUser) {
             _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
             self.authenticatedProfile = TRUE;
-            [self configureUI];
-            [self configureWithUser:_representedUser];
-            [self fetchGalleries];
         }
     }
     
@@ -105,12 +101,9 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
-    if (_representedUser) {
-        [self configureUI];
-        [self configureWithUser:_representedUser];
-        [self fetchGalleries];
-    }
+    [self configureUI];
+    [self configureWithUser:_representedUser];
+    [self fetchGalleries];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
