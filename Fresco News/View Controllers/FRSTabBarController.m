@@ -152,7 +152,7 @@
     [self.tabBar insertSubview:self.cameraBackgroundView atIndex:0];
 }
 
--(void)setIrisItemColor:(UIColor *)color{
+-(void)setIrisItemColor:(UIColor *)color {
     self.cameraBackgroundView.backgroundColor = color;
 }
 
@@ -177,6 +177,11 @@
             
             FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
             [self.navigationController pushViewController:onboardVC animated:NO];
+        }
+        else {
+            UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
+            FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
+            [profile loadAuthenticatedUser];
         }
     }
 }

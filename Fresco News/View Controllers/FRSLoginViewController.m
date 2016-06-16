@@ -17,6 +17,7 @@
 
 //Cocoapods
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSLoginViewController () <UITextFieldDelegate>
 
@@ -291,8 +292,8 @@
     //    [self.navigationController popToRootViewControllerAnimated:YES];
     
     
-    
-    
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate reloadUser];
     
     NSArray *viewControllers = [self.navigationController viewControllers];    
     

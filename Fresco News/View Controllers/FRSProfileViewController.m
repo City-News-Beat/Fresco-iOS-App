@@ -76,20 +76,47 @@
 
 @synthesize representedUser = _representedUser, authenticatedProfile = _authenticatedProfile;
 
+
+-(void)loadAuthenticatedUser {
+    _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    self.authenticatedProfile = TRUE;
+    [self configureWithUser:_representedUser];
+    [self fetchGalleries];
+}
+
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        if (!_representedUser) {
+            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+            self.authenticatedProfile = TRUE;
+        }
+    }
+    
+    return self;
+}
+
+
+
 -(void)viewDidLoad {
     [super viewDidLoad];
-    _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
     [self configureUI];
     [self configureWithUser:_representedUser];
     [self fetchGalleries];
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
-    
+    if (!_representedUser) {
+        _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        self.authenticatedProfile = TRUE;
+        [self configureWithUser:_representedUser];
+        [self fetchGalleries];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -103,9 +130,6 @@
         [self setupUI]; // setup UI
         
         _representedUser = user; // obviously save for future
-        
-        
-        
         _authenticatedProfile = [_representedUser.isLoggedIn boolValue]; // signifies profile view is current authed user
         
         [self configureWithUser:_representedUser]; // configure UI to specific represented user
@@ -132,10 +156,6 @@
     UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
     followButton.tintColor = [UIColor whiteColor];
     
-    
-    
-
-    
     self.navigationItem.rightBarButtonItem = followButton;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
@@ -157,7 +177,9 @@
 
 #pragma mark - Fetch Methods
 
--(void)fetchGalleries {    
+-(void)fetchGalleries {
+    NSLog(@"%@", self.representedUser);
+    
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
         [self.tableView reloadData];
@@ -654,7 +676,7 @@
     
     self.usernameLabel.text = user.username;
     titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
-    self.locationLabel.text = user.address; //user.address does not exiset yet
+  //  self.locationLabel.text = user.address; //user.address does not exiset yet
     self.followersLabel.text = @"1125";
 
 }

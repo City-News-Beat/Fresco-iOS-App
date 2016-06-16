@@ -102,44 +102,6 @@
     }];
 }
 
-/*
- "id": "RpE71DkQAojG",
- "email": "phil@fresconews.com",
- "username": "@p",
- "full_name": null,
- "bio": "",
- "location": null,
- "phone": null,
- "avatar": null,
- "twitter_handle": null,
- "terms": -1,
- "active": true,
- "verification_token": null,
- "created_at": "2016-05-10T23:12:59.423Z",
- "charges_enabled": true,
- "transfers_enabled": false,
- "disabled_reason": null,
- "fields_needed": [
- "legal_entity.dob.day",
- "legal_entity.dob.month",
- "legal_entity.dob.year",
- "legal_entity.first_name",
- "legal_entity.last_name",
- "bank_account"
- ],
- "due_by": null,
- "permissions": {
- "permissions": {
- "user": {
- "*": {
- "*": true
- }
- }
- }
- }
- }
- 
- */
 
 -(void)clearKeychain {
     SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
