@@ -20,5 +20,6 @@
 
 -(void)clearCell;
 -(void)configureCell;
-
+-(void)play;
+-(void)pause;
 @end

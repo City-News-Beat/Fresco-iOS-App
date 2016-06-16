@@ -932,7 +932,12 @@
         }
     }
     
-    NSInteger averageHeight = totalHeight/self.gallery.posts.count;
+    float divider = self.gallery.posts.count;
+    if (divider == 0) {
+        divider = 1;
+    }
+    
+    NSInteger averageHeight = totalHeight/divider;
     
     averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
     

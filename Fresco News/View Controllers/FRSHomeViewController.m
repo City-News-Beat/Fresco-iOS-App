@@ -83,10 +83,6 @@
     scrollFrame.origin.y = -64;
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
-    followingController = [[FRSFollowingController alloc] init];
-    followingController.tableView = self.followingTable;
-    self.followingTable.dataSource = followingController;
-    self.followingTable.delegate = followingController;
     
     //[self configureNoFollowers];
     [self.pageScroller addSubview:self.followingTable];
@@ -151,11 +147,6 @@
 #pragma mark - UI
 
 -(void)configureNoFollowers {
-    
-    
-    FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 175/2, self.view.frame.size.height/2 -125/2 +64, 175, 125)];
-    [self.followingTable addSubview:awkwardView];
-    
     
 //    UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"frog"]];
 //    frog.frame = CGRectMake(self.view.frame.size.width/2 - 200/2, self.view.frame.size.height/2 -60, 200, 120);

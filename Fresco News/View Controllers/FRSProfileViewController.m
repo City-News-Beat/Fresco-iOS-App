@@ -97,8 +97,6 @@
     return self;
 }
 
-
-
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
@@ -635,6 +633,7 @@
 -(void)followUser {
     [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
         //
+        NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.representedUser);
     }];
 }
 

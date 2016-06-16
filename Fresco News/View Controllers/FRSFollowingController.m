@@ -15,7 +15,7 @@
 #import "UIColor+Fresco.h"
 
 @implementation FRSFollowingController
-@synthesize tableView = _tableView;
+@synthesize tableView = _tableView, feed = _feed;
 
 
 -(instancetype)init {
@@ -28,15 +28,30 @@
     return self;
 }
 
--(void)commonInit {
+-(void)setFeed:(NSArray *)feed {
+    _feed = feed;
+    
+    NSLog(@"SET FEED: %@", feed);
+}
 
+-(NSArray *)feed {
+    return _feed;
+}
+
+-(void)commonInit {
+    NSLog(@"COMMON INIT");
+    
     [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
+        NSLog(@"LOADED: %@ %@", galleries, error);
+        
         if (galleries.count == 0) {
             FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2 - 175/2, self.tableView.frame.size.height/2 -125/2 +64, 175, 125)];
             [self.tableView addSubview:awkwardView];
             self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
         }
+        
         [loadingView removeFromSuperview];
+        
         self.feed = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
         [self.tableView reloadData];
     }];
@@ -51,6 +66,10 @@
     
     [loadingView startAnimating];
     [_tableView addSubview:loadingView];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 }
 
 -(UITableView *)tableView {
@@ -101,19 +120,25 @@
         [storyCell configureCell];
     }
 }
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    float height = 100;
+    
     if ([[self.feed[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             FRSGallery *gallery = self.feed[indexPath.row];
-            return [gallery heightForGallery];
+            height = [gallery heightForGallery];
     }
     else {
         FRSStory *story = self.feed[indexPath.row];
-        return [story heightForStory];
+        height = [story heightForStory];
     }
     
-    return 0;
+    if (height <= 0) {
+        height = 100;
+    }
+    
+    NSLog(@"HEIGHT: %f", height);
+    
+    return height;
 }
-
-
 
 @end
