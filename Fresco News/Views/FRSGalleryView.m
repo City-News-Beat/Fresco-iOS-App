@@ -553,10 +553,15 @@
             //Add gesture recognizer only if user has a photo
             
             UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
-            
             [bylineTap setNumberOfTapsRequired:1];
             [self.nameLabel setUserInteractionEnabled:YES];
             [self.nameLabel addGestureRecognizer:bylineTap];
+
+            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+            [photoTap setNumberOfTapsRequired:1];
+            [self.profileIV setUserInteractionEnabled:YES];
+            [self.profileIV addGestureRecognizer:photoTap];
+            
         });
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
@@ -599,6 +604,11 @@
             [bylineTap setNumberOfTapsRequired:1];
             [self.nameLabel setUserInteractionEnabled:YES];
             [self.nameLabel addGestureRecognizer:bylineTap];
+            
+            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+            [photoTap setNumberOfTapsRequired:1];
+            [self.profileIV setUserInteractionEnabled:YES];
+            [self.profileIV addGestureRecognizer:photoTap];
         });
         
     } else {
@@ -940,11 +950,10 @@
     if (page >= 0 && page < self.orderedPosts.count) {
         FRSPost *currentPost = self.orderedPosts[page];
         
-        NSLog(@"currentPost.byline = %@", currentPost.byline);
-        
-        FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:currentPost.creator];
-        [self.delegate.navigationController pushViewController:userViewController animated:YES];
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:currentPost.creator];
+            [self.delegate.navigationController pushViewController:userViewController animated:YES];
+        });        
     }
 }
 
