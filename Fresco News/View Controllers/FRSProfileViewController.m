@@ -438,9 +438,12 @@
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
     
-    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
+//    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
+    
+    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 0, self.nameLabel.frame.size.width, 0)];
+
     self.bioLabel.numberOfLines = 0;
-    self.bioLabel.text = @"bio";
+    self.bioLabel.text = @"BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO"; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
     self.bioLabel.textColor = [UIColor whiteColor];
     [self.bioLabel sizeToFit];
     [self.profileContainer addSubview:self.bioLabel];
