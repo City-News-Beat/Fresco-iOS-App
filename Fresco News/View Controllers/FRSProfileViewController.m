@@ -140,7 +140,6 @@
 
 -(void)setupUI {
     
-    //[self configureSpinner];
     
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
@@ -163,6 +162,7 @@
     /* TABLE VIEW */
     [self configureTableView];
     [self fetchGalleries];
+    [self configureSpinner];
 
 }
 
@@ -680,6 +680,9 @@
         titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
         //  self.locationLabel.text = user.address; //user.address does not exiset yet
         self.followersLabel.text = @"1125";
+        
+        [self.loadingView stopLoading];
+        [self.loadingView removeFromSuperview];
     });
 }
 
