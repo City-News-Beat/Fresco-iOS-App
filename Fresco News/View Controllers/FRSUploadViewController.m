@@ -29,19 +29,18 @@
 @property (strong, nonatomic) UIView *captionContainer;
 @property (strong, nonatomic) UIView *bottomContainer;
 @property (strong, nonatomic) UILabel *placeholderLabel;
-
 @property (nonatomic, retain) NSMutableArray *assignmentIDs;
-
 @property (strong, nonatomic) FRSAssignment *selectedAssignment;
-
 @property (nonatomic) BOOL postToFacebook;
 @property (nonatomic) BOOL postToTwitter;
 @property (nonatomic) BOOL postAnon;
 @property (nonatomic) BOOL isFetching;
 @property (nonatomic) BOOL globalAssignmentsEnabled;
-
 @property (strong, nonatomic) NSArray *assignments;
+@property (strong, nonatomic) NSArray *globalAssignments;
 
+@property (strong, nonatomic) UIView *globalAssignmentsDrawer;
+@property (strong, nonatomic) UITableView *globalAssignmentsTableView;
 
 @end
 
@@ -90,10 +89,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureScrollView];
     [self configureGalleryTableView];
     [self configureNavigationBar];
-    [self configureAssignments];
+    [self configureAssignments]; //Tableview configures are called here
     [self configureBottomBar];
-    [self configureGlobalAssignmentsDrawer];
-
+    
 }
 
 -(void)checkButtonStates {
@@ -243,46 +241,71 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)configureGlobalAssignmentsDrawer {
-    UIView *globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 44)];
-    globalAssignmentsDrawer.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:globalAssignmentsDrawer];
+    self.globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44)];
+    self.globalAssignmentsDrawer.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self.scrollView addSubview:self.globalAssignmentsDrawer];
     
     UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
     label.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
     label.text = @"6 global assignments";
     [label sizeToFit];
-    label.frame = CGRectMake(globalAssignmentsDrawer.frame.size.width/2 - label.frame.size.width/2, 6, label.frame.size.width, 14);
-    [globalAssignmentsDrawer addSubview:label];
+    label.frame = CGRectMake(self.globalAssignmentsDrawer.frame.size.width/2 - label.frame.size.width/2, 6, label.frame.size.width, 14);
+    [self.globalAssignmentsDrawer addSubview:label];
     
     UIImageView *globe = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"earth-16"]]; //swap with 16x16 earth
     globe.frame = CGRectMake(label.frame.origin.x -16 -6, 8, 16, 16);
-    [globalAssignmentsDrawer addSubview:globe];
+    [self.globalAssignmentsDrawer addSubview:globe];
     
     UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"down-caret"]];
     caret.frame = CGRectMake(self.view.frame.size.width/2 - 8/2, 28, 8, 8);
-    [globalAssignmentsDrawer addSubview:caret];
+    [self.globalAssignmentsDrawer addSubview:caret];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleGlobalAssignmentsDrawer)];
-    [globalAssignmentsDrawer addGestureRecognizer:tap];
+    [self.globalAssignmentsDrawer addGestureRecognizer:tap];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 43.5, self.globalAssignmentsDrawer.frame.size.width, .5)];
+    line.backgroundColor = [UIColor frescoShadowColor];
+    [self.globalAssignmentsDrawer addSubview:line];
 }
 
 -(void)toggleGlobalAssignmentsDrawer {
     
     if (self.globalAssignmentsEnabled) {
         self.globalAssignmentsEnabled = NO;
+        [self hideAndRemoveGlobalAssignments];
         NSLog(@"disabled");
     } else {
         self.globalAssignmentsEnabled = YES;
+        [self configureAndShowGlobalAssignments];
         NSLog(@"enabled");
     }
+}
+
+
+-(void)configureAndShowGlobalAssignments {
+    
+    //create tableview and animate in
+    //textfield should move down (*number of global assignments+1) with animation
+}
+
+-(void)hideAndRemoveGlobalAssignments {
+    //animate out and remove from superview in completion
+    //textfield should move up (*number of gloal assignments+1) with animation
 }
 
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     NSLog(@"self.assignmentsArray.count = %llu", (unsigned long long)self.assignmentsArray.count);
+
     
-    return self.assignmentsArray.count;
+    if (tableView == self.assignmentsTableView) {
+        return self.assignmentsArray.count;
+    } else if (tableView == self.globalAssignmentsTableView) {
+        return self.globalAssignments.count;
+    } else {
+        return 0; //will never get called
+    }
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -301,20 +324,29 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (tableView == self.assignmentsTableView) {
+        FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:indexPath.row]];
         
-    FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:indexPath.row]];
-    
-    [cell configureCellForIndexPath:indexPath];
-    
-    return cell;
+        [cell configureCellForIndexPath:indexPath];
+        
+        return cell;
+    } else if (tableView == self.globalAssignmentsTableView) {
+        //configure global cells
+    } else {
+        FRSAssignmentPickerTableViewCell *cell;
+        return cell;
+    }
+    return nil;
 }
 
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+    
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (cell.isSelectedAssignment){
         cell.isSelectedAssignment = NO;
@@ -341,7 +373,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     NSInteger textViewHeight = 200;
     
-    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
+    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
     [self.scrollView addSubview:self.captionContainer];
     
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, textViewHeight)];
@@ -381,7 +413,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)dismissKeyboard {
-    
     [self.view resignFirstResponder];
     [self.view endEditing:YES];
 }
@@ -408,7 +439,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configureAssignments {
 
-    
     [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
     self.assignmentsArray = self.assignments;
     
@@ -424,18 +454,20 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
         
-        NSLog(@"ASSIGNMENTS ASSIGNMENTS ASSIGNMENTS ASSIGNMENTS");
-
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
         
         FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         
         if (globalAssignments.count > 0) {
-            
+            self.globalAssignmentsDrawer.alpha = 0;
+            //and globalAssignments tableview.alpha?
+        } else {
+            self.globalAssignmentsDrawer.alpha = 0;
         }
 
-        self.assignmentsArray = [assignments copy];
+        self.assignmentsArray  = [assignments copy];
+        self.globalAssignments = [globalAssignments copy];
         
         self.isFetching = NO;
         
@@ -447,8 +479,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [delegate.managedObjectContext save:Nil];
         [delegate saveContext];
         
+<<<<<<< HEAD
         
         
+=======
+>>>>>>> origin/3.0-omar
         NSArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
         
@@ -460,6 +495,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
         }
         self.assignmentsArray = nearBy; //should be nearby, make new array for global
         [self configureAssignmentsTableView];
+<<<<<<< HEAD
+=======
+        [self configureGlobalAssignmentsDrawer];
+        //[self configureTextView]; //Disables cell selection/deselection (?)
+        
+        
+>>>>>>> origin/3.0-omar
     }];
 }
 
@@ -495,9 +537,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
 }
 
-
-
-
 #pragma mark - Actions
 
 /* Navigation bar*/
@@ -526,7 +565,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     
     if (self.postToTwitter) {
-        [self tweet:@"test"];
+        [self tweet:@"test"]; //does not work, fix before release
     }
     
     

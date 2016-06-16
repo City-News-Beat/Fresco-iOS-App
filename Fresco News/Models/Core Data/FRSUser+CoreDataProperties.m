@@ -29,5 +29,6 @@
 @dynamic galleries;
 @dynamic posts;
 @dynamic stories;
+@dynamic address;
 
 @end

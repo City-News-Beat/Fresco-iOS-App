@@ -17,6 +17,7 @@
 
 #import "FRSBorderedImageView.h"
 #import "DGElasticPullToRefresh.h"
+
 #import "Fresco.h"
 
 #import "FRSTrimTool.h"
@@ -67,25 +68,56 @@
 
 @property (nonatomic) BOOL presentingUser;
 
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
 @end
 
 @implementation FRSProfileViewController
+
 @synthesize representedUser = _representedUser, authenticatedProfile = _authenticatedProfile;
 
--(void)viewDidLoad {
-    [super viewDidLoad];
+
+-(void)loadAuthenticatedUser {
     _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-    [self configureUI];
+    self.authenticatedProfile = TRUE;
     [self configureWithUser:_representedUser];
     [self fetchGalleries];
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        if (!_representedUser) {
+            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+            self.authenticatedProfile = TRUE;
+        }
+    }
+    
+    return self;
+}
+
+
+
+-(void)viewDidLoad {
+    [super viewDidLoad];
+    [self configureUI];
+    
+    [self configureWithUser:_representedUser];
+    [self fetchGalleries];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
-    
+    if (!_representedUser) {
+        _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        self.authenticatedProfile = TRUE;
+        [self configureWithUser:_representedUser];
+        [self fetchGalleries];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -96,20 +128,20 @@
 -(instancetype)initWithUser:(FRSUser *)user {
 
     if (self) {
+        
         [self setupUI]; // setup UI
         
         _representedUser = user; // obviously save for future
-        
-        
-        
         _authenticatedProfile = [_representedUser.isLoggedIn boolValue]; // signifies profile view is current authed user
-        
+
         [self configureWithUser:_representedUser]; // configure UI to specific represented user
     }
     return self;
 }
 
 -(void)setupUI {
+    
+    
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
     
@@ -123,6 +155,7 @@
     self.navigationItem.titleView = self.usernameLabel;
     
     UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
+    followButton.tintColor = [UIColor whiteColor];
     
     self.navigationItem.rightBarButtonItem = followButton;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -130,13 +163,25 @@
     /* TABLE VIEW */
     [self configureTableView];
     [self fetchGalleries];
+    [self configureSpinner];
 
 }
 
 
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+    [self.loadingView startAnimating];
+    [self.view addSubview:self.loadingView];
+}
+
 #pragma mark - Fetch Methods
 
--(void)fetchGalleries {    
+-(void)fetchGalleries {
+    NSLog(@"%@", self.representedUser);
+    
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
         [self.tableView reloadData];
@@ -148,7 +193,7 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     [self configureNavigationBar];
-    [self configureTableView];
+//    [self configureTableView];
 //    [self configurePullToRefresh];
     [self configureProfileSocialOverlay];
 }
@@ -192,14 +237,16 @@
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
-    
-    UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
-    UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
-    editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
-    
-    self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
+        UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
+        editItem.tintColor = [UIColor whiteColor];
+        UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
+        editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
+        
+        self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //?
+    }
 }
 
 -(void)configureTableView{
@@ -231,7 +278,7 @@
     [self.profileBG addShadowWithColor:[UIColor frescoShadowColor] radius:3 offset:CGSizeMake(0, 2)];
     
     self.profileIV = [[FRSBorderedImageView alloc] initWithFrame:CGRectMake(0, 0, self.profileBG.frame.size.width, self.profileBG.frame.size.height) borderColor:[UIColor whiteColor] borderWidth:4];
-    self.profileIV.image = [UIImage imageNamed:@"kobe"];
+    self.profileIV.image = [UIImage imageNamed:@""];
     self.profileIV.contentMode = UIViewContentModeScaleAspectFill;
     self.profileIV.layer.cornerRadius = self.profileIV.frame.size.width/2;
     self.profileIV.clipsToBounds = YES;
@@ -243,7 +290,7 @@
     self.followersIV.userInteractionEnabled = YES;
     
     self.followersLabel = [[UILabel alloc] init];
-    self.followersLabel.text = @"1.5M";
+    self.followersLabel.text = @"";
     self.followersLabel.userInteractionEnabled = YES;
     self.followersLabel.textColor = [UIColor whiteColor];
     self.followersLabel.font = [UIFont notaBoldWithSize:15];
@@ -371,20 +418,20 @@
     NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
     
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.profileBG.frame.origin.y, self.view.frame.size.width - origin - 16, 22)];
-    self.nameLabel.text = @"Kobe Bryant";
+    self.nameLabel.text = @"";
     self.nameLabel.textColor = [UIColor whiteColor];
     self.nameLabel.font = [UIFont notaMediumWithSize:17];
     [self.profileContainer addSubview:self.nameLabel];
     
     self.locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height, self.nameLabel.frame.size.width, 14)];
-    self.locationLabel.text = @"Los Angeles, California";
+    self.locationLabel.text = @"";
     self.locationLabel.textColor = [UIColor whiteColor];
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
     
     self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     self.bioLabel.numberOfLines = 0;
-    self.bioLabel.text = @"Hey guys, I'm just here to be a part of this whole citizen journalism thing. I snagged some sick shots on my iPhone, and made $50! That puts me at $72,000,050! Hell yeah!";
+    self.bioLabel.text = @"";
     self.bioLabel.textColor = [UIColor whiteColor];
     [self.bioLabel sizeToFit];
     [self.profileContainer addSubview:self.bioLabel];
@@ -586,7 +633,9 @@
 }
 
 -(void)followUser {
-    
+    [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
+        //
+    }];
 }
 
 -(void)showEditProfile {
@@ -623,15 +672,20 @@
 #pragma mark - User
 
 -(void)configureWithUser:(FRSUser *)user {
-   // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
-    self.nameLabel.text = user.firstName;
-    self.bioLabel.text = user.bio;
-    
-    self.usernameLabel.text = user.username;
-    titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
-    self.locationLabel.text = @"New York, NY"; //geo coder, last location
-    self.followersLabel.text = @"1125";
 
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+        self.nameLabel.text = user.firstName;
+        self.bioLabel.text = user.bio;
+        
+        self.usernameLabel.text = user.username;
+        titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
+        //  self.locationLabel.text = user.address; //user.address does not exiset yet
+        self.followersLabel.text = @"1125";
+        
+        [self.loadingView stopLoading];
+        [self.loadingView removeFromSuperview];
+    });
 }
 
 
