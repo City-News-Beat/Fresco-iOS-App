@@ -128,6 +128,7 @@
 -(instancetype)initWithUser:(FRSUser *)user {
 
     if (self) {
+        
         [self setupUI]; // setup UI
         
         _representedUser = user; // obviously save for future
@@ -192,7 +193,7 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     [self configureNavigationBar];
-    [self configureTableView];
+//    [self configureTableView];
 //    [self configurePullToRefresh];
     [self configureProfileSocialOverlay];
 }
@@ -277,7 +278,7 @@
     [self.profileBG addShadowWithColor:[UIColor frescoShadowColor] radius:3 offset:CGSizeMake(0, 2)];
     
     self.profileIV = [[FRSBorderedImageView alloc] initWithFrame:CGRectMake(0, 0, self.profileBG.frame.size.width, self.profileBG.frame.size.height) borderColor:[UIColor whiteColor] borderWidth:4];
-    self.profileIV.image = [UIImage imageNamed:@"kobe"];
+    self.profileIV.image = [UIImage imageNamed:@""];
     self.profileIV.contentMode = UIViewContentModeScaleAspectFill;
     self.profileIV.layer.cornerRadius = self.profileIV.frame.size.width/2;
     self.profileIV.clipsToBounds = YES;
@@ -289,7 +290,7 @@
     self.followersIV.userInteractionEnabled = YES;
     
     self.followersLabel = [[UILabel alloc] init];
-    self.followersLabel.text = @"1.5M";
+    self.followersLabel.text = @"";
     self.followersLabel.userInteractionEnabled = YES;
     self.followersLabel.textColor = [UIColor whiteColor];
     self.followersLabel.font = [UIFont notaBoldWithSize:15];
@@ -417,20 +418,20 @@
     NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
     
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.profileBG.frame.origin.y, self.view.frame.size.width - origin - 16, 22)];
-    self.nameLabel.text = @"Kobe Bryant";
+    self.nameLabel.text = @"";
     self.nameLabel.textColor = [UIColor whiteColor];
     self.nameLabel.font = [UIFont notaMediumWithSize:17];
     [self.profileContainer addSubview:self.nameLabel];
     
     self.locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height, self.nameLabel.frame.size.width, 14)];
-    self.locationLabel.text = @"Los Angeles, California";
+    self.locationLabel.text = @"";
     self.locationLabel.textColor = [UIColor whiteColor];
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
     
     self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     self.bioLabel.numberOfLines = 0;
-    self.bioLabel.text = @"Hey guys, I'm just here to be a part of this whole citizen journalism thing. I snagged some sick shots on my iPhone, and made $50! That puts me at $72,000,050! Hell yeah!";
+    self.bioLabel.text = @"";
     self.bioLabel.textColor = [UIColor whiteColor];
     [self.bioLabel sizeToFit];
     [self.profileContainer addSubview:self.bioLabel];
@@ -671,6 +672,7 @@
 #pragma mark - User
 
 -(void)configureWithUser:(FRSUser *)user {
+
     dispatch_async(dispatch_get_main_queue(), ^{
         self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.firstName;
