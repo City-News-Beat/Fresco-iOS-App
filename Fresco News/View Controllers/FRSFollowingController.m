@@ -12,6 +12,7 @@
 #import "FRSAPIClient.h"
 #import "Fresco.h"
 #import "FRSAwkwardView.h"
+#import "UIColor+Fresco.h"
 
 @implementation FRSFollowingController
 @synthesize tableView = _tableView;
@@ -28,11 +29,14 @@
 }
 
 -(void)commonInit {
+
     [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
         if (galleries.count == 0) {
             FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2 - 175/2, self.tableView.frame.size.height/2 -125/2 +64, 175, 125)];
             [self.tableView addSubview:awkwardView];
+            self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
         }
+        [loadingView removeFromSuperview];
         self.feed = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
         [self.tableView reloadData];
     }];
@@ -42,6 +46,11 @@
     _tableView = tableView;
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.frame = CGRectMake((_tableView.frame.size.width-loadingView.frame.size.width)/2, _tableView.frame.size.height/2, loadingView.frame.size.width, loadingView.frame.size.height);
+    
+    [loadingView startAnimating];
+    [_tableView addSubview:loadingView];
 }
 
 -(UITableView *)tableView {
