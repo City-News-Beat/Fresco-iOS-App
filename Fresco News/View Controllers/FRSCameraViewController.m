@@ -973,33 +973,71 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     self.preview.frame = bigPreviewFrame;
     self.captureVideoPreviewLayer.frame = bigPreviewFrame;
     
+    self.bottomOpaqueContainer.layer.shadowOpacity = 0;
+    
     if (self.captureMode == FRSCaptureModePhoto){
-        
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
-            self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
-        } completion:^(BOOL finished){
-            self.apertureButton.frame = self.originalApertureFrame;
-            
-            
-            self.preview.frame = smallPreviewFrame;
-            self.captureVideoPreviewLayer.frame = smallPreviewFrame;
-        }];
+
+        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
+        [self.view addSubview:snapshot];
 
         
-    }
-    else {
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            // Dispatching the animation of the preview until the next frame because we were having trouble with the animation not being synchronized well otherwise. I can't explain why this was needed but noted that things were slightly better (no black showing underneath) if the layout was done in the completion block so we made the layout happen after this one-frame delay and it seems to fix it.
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.preview.frame = smallPreviewFrame;
+                self.captureVideoPreviewLayer.frame = smallPreviewFrame;
+            });
+            
+            self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
+            self.bottomClearContainer.frame = CGRectMake(0, self.view.frame.size.width * PHOTO_FRAME_RATIO, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
+            
+            snapshot.alpha = 0.0;
+        } completion:^(BOOL finished){
+            self.apertureButton.frame = self.originalApertureFrame;
+            self.bottomOpaqueContainer.layer.shadowOpacity = 1; //throw in animation block
+            
+            [snapshot removeFromSuperview];
+            
+
+        }];
+
+    } else {
+        
+        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
+        [self.view addSubview:snapshot];
         
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            // Dispatching the animation of the preview until the next frame because we were having trouble with the animation not being synchronized well otherwise. I can't explain why this was needed but noted that things were slightly better (no black showing underneath) if the layout was done in the completion block so we made the layout happen after this one-frame delay and it seems to fix it.
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.preview.frame = bigPreviewFrame;
+                self.captureVideoPreviewLayer.frame = bigPreviewFrame;
+            });
+
             
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.height, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.bottomClearContainer.frame.origin.y + offset, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
+            self.bottomOpaqueContainer.layer.shadowOpacity = 1;
+            
+
         } completion:^(BOOL finished){
             self.apertureButton.frame = self.originalApertureFrame;
             
-            self.preview.frame = bigPreviewFrame;
-            self.captureVideoPreviewLayer.frame = bigPreviewFrame;
+
         }];
+        
+        [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            snapshot.alpha = 0;
+            
+        } completion:^(BOOL finished) {
+            [snapshot removeFromSuperview];
+
+        }];
+        
+        
+        
     }
 }
 
