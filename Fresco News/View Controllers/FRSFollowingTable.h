@@ -15,7 +15,7 @@
 {
     NSInteger numberOfPosts;
 }
-@property (strong, nonatomic, readonly) NSArray *galleries;
+@property (retain, nonatomic, readonly) NSArray *galleries;
 
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
 @end

@@ -677,7 +677,6 @@
     titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
   //  self.locationLabel.text = user.address; //user.address does not exiset yet
     self.followersLabel.text = @"1125";
-
 }
 
 

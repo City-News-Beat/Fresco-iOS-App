@@ -19,6 +19,14 @@
 @implementation FRSFollowingTable
 @synthesize navigationController = _navigationController, galleries = _galleries;
 
+
+-(void)setGalleries:(NSArray *)galleries {
+    _galleries = galleries;
+}
+
+-(NSArray *)galleries {
+    return _galleries;
+}
 -(instancetype)init {
     self = [super init];
     
@@ -59,14 +67,16 @@
     self.dataSource = self;
     
     [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
+        
         if (galleries.count == 0) {
             FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 175/2, self.frame.size.height/2 -125/2 +64, 175, 125)];
             [self addSubview:awkwardView];
         }
-        
-        _galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
-        numberOfPosts = [_galleries count];
-        [self reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _galleries = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE]];
+            numberOfPosts = [_galleries count];
+            [self reloadData];
+        });
     }];
 }
 
@@ -116,7 +126,7 @@
 }
 
 -(void)reloadData {
-    [self fetchGalleries];
+    [super reloadData];
 }
 
 -(void)fetchGalleries {
@@ -148,7 +158,6 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 0;
 }
-
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (self.scrollDelegate) {
@@ -222,17 +231,26 @@
     }
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    float height = 0;
+    
     if ([[_galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
         FRSGallery *gallery = _galleries[indexPath.row];
-        return [gallery heightForGallery];
+        height = [gallery heightForGallery];
     }
     else {
         FRSStory *story = _galleries[indexPath.row];
-        return [story heightForStory];
+        height = [story heightForStory];
     }
     
-    return 100;
+    NSLog(@"HT: %f", height);
+    
+    if (height <= 0) {
+        height = 200;
+    }
+    
+    return height;
 }
 
 @end
