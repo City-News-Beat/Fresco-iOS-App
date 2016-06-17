@@ -44,8 +44,6 @@
 
 @property (strong, nonatomic) FRSGallery *gallery;
 
-@property (strong, nonatomic) ShareSheetBlock shareBlock;
-
 @end
 
 @implementation FRSStoryView
