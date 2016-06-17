@@ -231,6 +231,16 @@
         
         galCell.gallery = _galleries[indexPath.row];
         [galCell configureCell];
+        
+        __weak typeof(self) weakSelf = self;
+        
+        galCell.shareBlock = ^void(NSArray *sharedContent) {
+            [weakSelf showShareSheetWithContent:sharedContent];
+        };
+        
+//        galCell.readMoreBlock = ^(NSArray *bullshit){
+//            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+//        };
     }
     else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
@@ -238,6 +248,16 @@
         
         storyCell.story = _galleries[indexPath.row];
         [storyCell configureCell];
+        
+        __weak typeof(self) weakSelf = self;
+        
+        storyCell.shareBlock = ^void(NSArray *sharedContent) {
+            [weakSelf showShareSheetWithContent:sharedContent];
+        };
+        
+//        storyCell.readMoreBlock = ^(NSArray *bullshit){
+//            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+//        };
     }
 }
 

@@ -23,6 +23,8 @@
 
 @property (weak, nonatomic) NSObject <FRSStoryViewDelegate> *delegate;
 @property (strong, nonatomic) ActionButtonBlock actionBlock;
+@property (strong, nonatomic) ShareSheetBlock shareBlock;
+@property (strong, nonatomic) ShareSheetBlock readMoreBlock;
 @property (strong, nonatomic) FRSStory *story;
 
 

@@ -41,6 +41,19 @@
     
     self.storyView.actionBlock = self.actionBlock;
     [self addSubview:self.storyView];
+    
+    
+    __weak typeof (self) weakSelf = self;
+    
+    self.storyView.shareBlock = ^void(NSArray *sharedContent) {
+        weakSelf.shareBlock(sharedContent);
+    };
+    
+    self.storyView.readMoreBlock = ^void(NSArray *sharedContent) {
+        if (weakSelf.readMoreBlock) {
+            weakSelf.readMoreBlock(Nil);
+        }
+    };
 }
 -(void)play {
     
