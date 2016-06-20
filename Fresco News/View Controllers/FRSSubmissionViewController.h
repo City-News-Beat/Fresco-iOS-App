@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FRSMediaScroller.h"
 
 @interface FRSSubmissionViewController : UIViewController
 {
-    IBOutlet FRSMediaScroller *mediaScroller;
+
 }
 @end
