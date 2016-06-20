@@ -262,4 +262,31 @@
     completionHandler();
 }
 
+
+/*
+    Pre upload
+ */
+
+-(void)createGalleryWithPosts:(nonnull NSArray *)posts {
+    NSMutableArray *serializedPosts = [[NSMutableArray alloc] init];
+    
+    for (FRSPost *post in posts) {
+        
+        NSDictionary *serializedPost = [self serializePost:post];
+        
+        if (serializedPost) {
+            [serializedPosts addObject:serializedPost];
+        }
+    }
+}
+
+-(NSDictionary *)serializePost:(FRSPost *)post {
+    NSMutableDictionary *serializedPost = [[NSMutableDictionary alloc] init];
+    
+    serializedPost[@"imageURL"] = post.imageUrl;
+    serializedPost[@"capture_date"] = post.createdDate;
+    serializedPost[@"size"] = @(1000); // bytes TODO: replaces
+    return serializedPost;
+}
+
 @end
