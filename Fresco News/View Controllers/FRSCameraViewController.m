@@ -977,8 +977,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     if (self.captureMode == FRSCaptureModePhoto){
 
-//        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
-//        [self.view addSubview:snapshot];
+        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
+        [self.view addSubview:snapshot];
 
         
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -999,20 +999,20 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         }];
         
         
-//        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//            
-//            snapshot.alpha = 0;
-//            
-//        } completion:^(BOOL finished) {
-//            [snapshot removeFromSuperview];
-//            
-//        }];
+        [UIView animateWithDuration:0.15 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            snapshot.alpha = 0;
+            
+        } completion:^(BOOL finished) {
+            [snapshot removeFromSuperview];
+            
+        }];
 
     } else {
         
-//        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
-//        [self.view addSubview:snapshot];
-//        
+        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
+        [self.view addSubview:snapshot];
+//
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
             // Dispatching the animation of the preview until the next frame because we were having trouble with the animation not being synchronized well otherwise. I can't explain why this was needed but noted that things were slightly better (no black showing underneath) if the layout was done in the completion block so we made the layout happen after this one-frame delay and it seems to fix it.
@@ -1026,21 +1026,25 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             self.bottomClearContainer.frame = CGRectMake(0, self.bottomClearContainer.frame.origin.y + offset, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
             self.bottomOpaqueContainer.layer.shadowOpacity = 1;
             
+            snapshot.transform = CGAffineTransformMakeScale(0, self.bottomOpaqueContainer.frame.size.height);
+            
 
         } completion:^(BOOL finished){
             self.apertureButton.frame = self.originalApertureFrame;
             
+            
+            [UIView animateWithDuration:0.15 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                snapshot.alpha = 0;
+                
+            } completion:^(BOOL finished) {
+                [snapshot removeFromSuperview];
+                
+            }];
 
         }];
         
-//        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//            
-//            snapshot.alpha = 0;
-//            
-//        } completion:^(BOOL finished) {
-//            [snapshot removeFromSuperview];
-//
-//        }];
+
         
         
         
