@@ -15,6 +15,8 @@
     UILabel *titleLabel;
 }
 
+@property (nonatomic, retain) UIScrollView *tablePageScroller;
+@property (nonatomic, retain) UITableView *contentTable;
 -(instancetype)initWithUser:(FRSUser *)user;
 -(void)loadAuthenticatedUser;
 -(FRSUser *)authenticatedUser;

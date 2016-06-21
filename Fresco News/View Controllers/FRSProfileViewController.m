@@ -70,6 +70,8 @@
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
+@property (strong, nonatomic) UIScrollView *scrollView;
+
 @end
 
 @implementation FRSProfileViewController
@@ -174,6 +176,7 @@
     
     
     /* TABLE VIEW */
+    [self configureScrollView];
     [self configureTableView];
     [self fetchGalleries];
     [self configureSpinner];
@@ -199,6 +202,7 @@
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
         [self.tableView reloadData];
+        [self.contentTable reloadData];
     }];
 }
 
@@ -263,9 +267,20 @@
     }
 }
 
--(void)configureTableView{
+-(void)configureScrollView {
     
     [self createProfileSection];
+
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    self.scrollView.backgroundColor = [UIColor redColor];
+    self.scrollView.contentSize   = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
+    self.scrollView.pagingEnabled = YES;
+    self.scrollView.bounces       = NO;
+    [self.view addSubview:self.scrollView];
+}
+
+-(void)configureTableView{
+    
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
@@ -274,7 +289,30 @@
     self.tableView.dataSource = self;
     self.tableView.delaysContentTouches = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:self.tableView];
+    [self.scrollView addSubview:self.tableView];
+    [self createProfileSection];
+    self.tableView.tableHeaderView = self.profileContainer;
+    
+    [self configurePageScroller];
+}
+
+-(void)configureContentTable {
+    
+    self.contentTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 800)];
+    self.contentTable.dataSource = self;
+    self.contentTable.delegate = self;
+    self.contentTable.bounces = FALSE;
+    self.contentTable.scrollEnabled = FALSE;
+    [self.tablePageScroller addSubview:self.contentTable];
+}
+
+-(void)configurePageScroller {
+    self.tablePageScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    self.tablePageScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height);
+    self.tablePageScroller.pagingEnabled = YES;
+    self.tablePageScroller.bounces = FALSE;
+    
+    [self configureContentTable];
 }
 
 -(void)createProfileSection{
@@ -497,38 +535,67 @@
 
 #pragma mark - UITableView Delegate & DataSource
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    if (tableView == self.tableView) {
+        return 2;
+    }
+    
+    return 1;
     
     //We have two sections for our tableview. The first section holds the profile container and has a header height of 0.
     //The second section holds the feed/likes, and the header has the segmented tab and has a height of 44.
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section == 0){
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (tableView == self.tableView) {
         return 1;
     }
-    else {
+    else if (tableView == self.contentTable) {
+        
         return self.galleries.count;
-        return 0;
     }
+    
+    return 0;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (section == 0){
-        return 0;
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    
+    if (tableView == self.tableView) {
+        if (section == 0){
+            return 0;
+        }
+        else{
+            return 44;
+        }
     }
-    else{
-        return 44;
+    
+    return 0;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    
+    if (section == 1 && tableView == self.tableView) {
+        return self.tablePageScroller.frame.size.height;
     }
+    
+    return 0;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section == 0){
-        return self.profileContainer.frame.size.height;
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if (section == 1 && tableView == self.tableView) {
+        return self.tablePageScroller;
     }
-    else {
-        if (!self.galleries.count) return 0;
+    
+    return Nil;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (tableView == self.tableView) {
+        return 0;
+    }
+    else if (tableView == self.contentTable) {
         if ([[self.galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             FRSGallery *gallery = self.galleries[indexPath.row];
             return [gallery heightForGallery];
@@ -545,11 +612,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     UITableViewCell *cell;
-    if (indexPath.section == 0){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
-    else {
+    if (tableView == self.contentTable) {
         if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
             
@@ -564,7 +627,14 @@
                 cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
             }
         }
+    }
+    else if (tableView == self.tableView) {
         
+        cell = [tableView dequeueReusableCellWithIdentifier:@"basic"];
+        
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"basic"];
+        }
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -573,10 +643,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section== 0){
-        [cell addSubview:self.profileContainer];
-    }
-    else {
+    if (tableView == self.contentTable) {
         if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
             FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
             [galCell clearCell];
