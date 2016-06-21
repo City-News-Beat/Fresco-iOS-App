@@ -70,6 +70,9 @@
     }
     
     [self registerForPushNotifications];
+    
+    [[UINavigationBar appearance]setShadowImage:[[UIImage alloc] init]];
+
     return YES;
 }
 

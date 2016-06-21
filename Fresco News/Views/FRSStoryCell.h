@@ -17,8 +17,11 @@
 @property (strong, nonatomic) FRSStory *story;
 @property (strong, nonatomic) ActionButtonBlock actionBlock;
 @property (strong, nonatomic) StoryImageBlock imageBlock;
+@property (strong, nonatomic) ShareSheetBlock shareBlock;
+@property (strong, nonatomic) ShareSheetBlock readMoreBlock;
 
 -(void)clearCell;
 -(void)configureCell;
-
+-(void)play;
+-(void)pause;
 @end

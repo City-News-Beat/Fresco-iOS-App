@@ -44,14 +44,17 @@
 
 @property (strong, nonatomic) FRSGallery *gallery;
 
-
 @end
 
 @implementation FRSStoryView
 
 
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
+
     
+    
+    self.shareBlock(@[[@"https://fresconews.com/story/" stringByAppendingString:self.story.uid]]);
+
 }
 
 -(void)handleActionButtonTapped {
