@@ -98,13 +98,16 @@
 }
 
 -(void)viewDidLoad {
+   
+    [super viewDidLoad];
     
     if (!_representedUser) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
     }
 
-    [super viewDidLoad];
+    [self setupUI];
+    
     [self configureUI];
     
     [self configureWithUser:_representedUser];
@@ -137,17 +140,8 @@
     
     if (self) {
         
-        
         _representedUser = user; // obviously save for future
         _authenticatedProfile = [_representedUser.isLoggedIn boolValue]; // signifies profile view is current authed user
-        
-        
-        [self setupUI]; // setup UI
-        
-        
-        
-        [self configureWithUser:_representedUser]; // configure UI to specific represented user
-        
         
         [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
         [self.navigationController.navigationBar setShadowImage:[UIImage new]];
