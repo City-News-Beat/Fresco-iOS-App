@@ -105,7 +105,7 @@
     [self fetchGalleries];
     
     [super removeNavigationBarLine];
-
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -128,7 +128,7 @@
 
 
 -(instancetype)initWithUser:(FRSUser *)user {
-
+    
     if (self) {
         
         
@@ -137,11 +137,11 @@
         
         
         [self setupUI]; // setup UI
-
+        
         
         
         [self configureWithUser:_representedUser]; // configure UI to specific represented user
-
+        
         
         [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
         [self.navigationController.navigationBar setShadowImage:[UIImage new]];
@@ -165,13 +165,13 @@
     self.usernameLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = self.usernameLabel;
     self.navigationItem.titleView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
-        
+    
     UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
     followButton.tintColor = [UIColor whiteColor];
     
     self.navigationItem.rightBarButtonItem = followButton;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-
+    
     
     /* TABLE VIEW */
     [self configureTableView];
@@ -207,8 +207,8 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     [self configureNavigationBar];
-//    [self configureTableView];
-//    [self configurePullToRefresh];
+    //    [self configureTableView];
+    //    [self configurePullToRefresh];
     [self configureProfileSocialOverlay];
 }
 
@@ -240,7 +240,7 @@
 
 
 -(void)configureNavigationBar{
-//  [super configureNavigationBar];
+    //  [super configureNavigationBar];
     [super removeNavigationBarLine];
     
     //self.navigationItem.title = @"@aesthetique";
@@ -323,7 +323,7 @@
 }
 
 -(void)configureProfileSocialOverlay{
-
+    
     self.whiteOverlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 96, 96)];
     self.whiteOverlay.backgroundColor = [UIColor whiteColor];
     self.whiteOverlay.alpha = 1;
@@ -338,8 +338,8 @@
     self.socialButtonContainer = [[UIView alloc] initWithFrame:CGRectMake(16, 36, 64.5, 24)];
     self.socialButtonContainer.alpha = 1;
     [self.whiteOverlay addSubview:self.socialButtonContainer];
-//    [self.whiteOverlay insertSubview:self.socialButtonContainer aboveSubview:self.view];
-
+    //    [self.whiteOverlay insertSubview:self.socialButtonContainer aboveSubview:self.view];
+    
     UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchDown];
     UIImage *twitter = [[UIImage imageNamed:@"social-twitter"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -358,14 +358,14 @@
     
     UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [self.view addGestureRecognizer:gr];
-
+    
     self.profileMaskView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 96, 96)];
     self.profileMaskView.transform = CGAffineTransformMakeScale(0.00001, 0.00001);
     self.profileMaskView.layer.cornerRadius = 48;
     self.profileMaskView.backgroundColor = [UIColor redColor];
     [self.view addSubview:self.profileMaskView];
     self.whiteOverlay.layer.mask = self.profileMaskView.layer;
-
+    
 }
 
 - (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer {
@@ -389,21 +389,21 @@
         } completion:nil];
         
         //Set default transform
-//        self.socialButtonContainer.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
+        //        self.socialButtonContainer.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
         
-//        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//            
-//            self.socialButtonContainer.transform = CGAffineTransformMakeScale(1.05, 1.05);
-//            self.socialButtonContainer.alpha = 1;
-//            self.whiteOverlay.alpha = 1;
-//            
-//        } completion:^(BOOL finished) {
-//            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//                
-//                self.socialButtonContainer.transform = CGAffineTransformMakeScale(1, 1);
-//                
-//            } completion:nil];
-//        }];
+        //        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        //
+        //            self.socialButtonContainer.transform = CGAffineTransformMakeScale(1.05, 1.05);
+        //            self.socialButtonContainer.alpha = 1;
+        //            self.whiteOverlay.alpha = 1;
+        //
+        //        } completion:^(BOOL finished) {
+        //            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        //
+        //                self.socialButtonContainer.transform = CGAffineTransformMakeScale(1, 1);
+        //
+        //            } completion:nil];
+        //        }];
     }
 }
 
@@ -417,14 +417,14 @@
         self.profileMaskView.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
         
     } completion:nil];
-
-//    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//        
-//        self.socialButtonContainer.alpha = 0;
-//        self.socialButtonContainer.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
-//        self.whiteOverlay.alpha = 0;
-//        
-//    } completion:nil];
+    
+    //    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    //
+    //        self.socialButtonContainer.alpha = 0;
+    //        self.socialButtonContainer.transform = CGAffineTransformMakeScale(0.0001, 0.0001);
+    //        self.whiteOverlay.alpha = 0;
+    //
+    //    } completion:nil];
     
 }
 
@@ -443,10 +443,10 @@
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
     
-//    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
+    //    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     
     self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 0, self.nameLabel.frame.size.width, 0)];
-
+    
     self.bioLabel.numberOfLines = 0;
     self.bioLabel.text = @"BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO"; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
     self.bioLabel.textColor = [UIColor whiteColor];
@@ -564,8 +564,11 @@
                 cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
             }
         }
-
+        
     }
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     return cell;
 }
 
@@ -616,7 +619,7 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
-//    [self dismissSocialOverlay];
+    //    [self dismissSocialOverlay];
     
     if (scrollView == self.tableView){
         [super determineScrollDirection:scrollView];
@@ -628,7 +631,7 @@
             
         }
         else {
-//            if ([self.tableView.backgroundColor isEqual:[UIColor frescoOrangeColor]]) return;
+            //            if ([self.tableView.backgroundColor isEqual:[UIColor frescoOrangeColor]]) return;
             
             self.tableView.backgroundColor = [UIColor frescoOrangeColor];
         }
@@ -652,7 +655,7 @@
 -(void)followUser {
     [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
         //
-        NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.representedUser);
+        NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
     }];
 }
 
@@ -690,7 +693,7 @@
 #pragma mark - User
 
 -(void)configureWithUser:(FRSUser *)user {
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.firstName;

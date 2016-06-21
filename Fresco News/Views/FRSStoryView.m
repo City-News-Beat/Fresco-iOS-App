@@ -327,7 +327,9 @@
 }
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
-    self.actionBlock();
+    if (self.actionBlock) {
+        self.actionBlock();
+    }
 }
 
 -(void)clickedImageAtIndex:(NSInteger)imageIndex {

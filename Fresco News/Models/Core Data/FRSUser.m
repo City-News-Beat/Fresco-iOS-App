@@ -18,7 +18,7 @@
 
 // Insert code here to add functionality to your managed object subclass
 
-+(FRSUser *)loggedInUser{
++(FRSUser *)loggedInUser   {
     FRSUser *user = [FRSUser MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"isLoggedIn == %@", @1]];
     return user;
 }
@@ -27,12 +27,19 @@
     FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     
     FRSUser *user = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:delegate.managedObjectContext];
+    user.uid = properties[@"id"];
+    user.firstName = properties[@"full_name"];
+    user.username = (properties[@"username"] != Nil) ? properties[@"username"] : @"";
     return user;
 }
 
 +(instancetype)nonSavedUserWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
     NSEntityDescription *userEntity = [NSEntityDescription entityForName:@"FRSUser" inManagedObjectContext:context];
     FRSUser *user = (FRSUser *)[[NSManagedObject alloc] initWithEntity:userEntity insertIntoManagedObjectContext:nil];
+    user.uid = properties[@"id"];
+    user.firstName = properties[@"full_name"];
+    user.username = (properties[@"username"] != Nil) ? properties[@"username"] : @"";
+    
     return user;
 }
 

@@ -142,10 +142,6 @@
 		D418E34C1CCC1B240003B080 /* FRSSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E34B1CCC1B240003B080 /* FRSSocial.m */; };
 		D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E34D1CCC1C360003B080 /* Twitter.framework */; };
 		D41C10CB1CE9A54900F96B25 /* FRSStripe.m in Sources */ = {isa = PBXBuildFile; fileRef = D41C10CA1CE9A54900F96B25 /* FRSStripe.m */; };
-		D41C10D01CECE4FD00F96B25 /* FRSVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D41C10CE1CECE4FD00F96B25 /* FRSVideoCell.m */; };
-		D41C10D11CECE4FD00F96B25 /* FRSVideoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D41C10CF1CECE4FD00F96B25 /* FRSVideoCell.xib */; };
-		D41C10D61CECE51400F96B25 /* FRSPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D41C10D41CECE51400F96B25 /* FRSPhotoCell.m */; };
-		D41C10D71CECE51400F96B25 /* FRSPhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D41C10D51CECE51400F96B25 /* FRSPhotoCell.xib */; };
 		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
@@ -177,7 +173,6 @@
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
 		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
-		D487F1BE1CBD6C2D005742F3 /* FRSMediaScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */; };
 		D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1CD1CC14246005742F3 /* FRSPlayer.m */; };
 		D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72231D09D8D2000677BF /* FRSSplitTableView.m */; };
 		D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72261D0B3D5C000677BF /* FRSDevice.m */; };
@@ -202,6 +197,9 @@
 		D4B35F551CCED19600F5C8A8 /* FRSUploadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F541CCED19600F5C8A8 /* FRSUploadTask.m */; };
 		D4B35F581CD1758400F5C8A8 /* FRSJSONResponseSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F571CD1758400F5C8A8 /* FRSJSONResponseSerializer.m */; };
 		D4B35F5C1CD1B51400F5C8A8 /* FRSUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F5B1CD1B51400F5C8A8 /* FRSUpload.m */; };
+		D4BE3E2D1D17D6530039394C /* FRSCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BE3E2C1D17D6530039394C /* FRSCarousel.m */; };
+		D4BE3E311D17D6760039394C /* FRSCarouselCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BE3E2F1D17D6760039394C /* FRSCarouselCell.m */; };
+		D4BE3E321D17D6760039394C /* FRSCarouselCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4BE3E301D17D6760039394C /* FRSCarouselCell.xib */; };
 		D4D60D0C1CC829C000059EBA /* following.json in Resources */ = {isa = PBXBuildFile; fileRef = D4D60D0B1CC829C000059EBA /* following.json */; };
 		D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
@@ -505,12 +503,6 @@
 		D418E3571CCC1DE50003B080 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../Library/Developer/Xcode/DerivedData/Fresco-fdljnwvdniqudpbfysumtikmtfbi/Build/Products/Release-iphoneos/AFNetworking.framework"; sourceTree = "<group>"; };
 		D41C10C91CE9A54900F96B25 /* FRSStripe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStripe.h; sourceTree = "<group>"; };
 		D41C10CA1CE9A54900F96B25 /* FRSStripe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStripe.m; sourceTree = "<group>"; };
-		D41C10CD1CECE4FD00F96B25 /* FRSVideoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSVideoCell.h; sourceTree = "<group>"; };
-		D41C10CE1CECE4FD00F96B25 /* FRSVideoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSVideoCell.m; sourceTree = "<group>"; };
-		D41C10CF1CECE4FD00F96B25 /* FRSVideoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSVideoCell.xib; sourceTree = "<group>"; };
-		D41C10D31CECE51400F96B25 /* FRSPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPhotoCell.h; sourceTree = "<group>"; };
-		D41C10D41CECE51400F96B25 /* FRSPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPhotoCell.m; sourceTree = "<group>"; };
-		D41C10D51CECE51400F96B25 /* FRSPhotoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSPhotoCell.xib; sourceTree = "<group>"; };
 		D42C907F1CC6191400B25C99 /* UIImage+Pixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Pixels.h"; path = "../../UIImage+Pixels.h"; sourceTree = "<group>"; };
 		D42C90801CC6191400B25C99 /* UIImage+Pixels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Pixels.m"; path = "../../UIImage+Pixels.m"; sourceTree = "<group>"; };
 		D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSFileLoader.h; path = ../FRSFileLoader.h; sourceTree = "<group>"; };
@@ -575,8 +567,6 @@
 		D487F1B31CBD6565005742F3 /* FRSSubmissionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSubmissionViewController.h; sourceTree = "<group>"; };
 		D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSubmissionViewController.m; sourceTree = "<group>"; };
 		D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSubmissionViewController.xib; sourceTree = "<group>"; };
-		D487F1BC1CBD6C2D005742F3 /* FRSMediaScroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSMediaScroller.h; sourceTree = "<group>"; };
-		D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSMediaScroller.m; sourceTree = "<group>"; };
 		D487F1CC1CC14246005742F3 /* FRSPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPlayer.h; sourceTree = "<group>"; };
 		D487F1CD1CC14246005742F3 /* FRSPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayer.m; sourceTree = "<group>"; };
 		D48C72221D09D8D2000677BF /* FRSSplitTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSplitTableView.h; sourceTree = "<group>"; };
@@ -621,6 +611,11 @@
 		D4B35F571CD1758400F5C8A8 /* FRSJSONResponseSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSJSONResponseSerializer.m; sourceTree = "<group>"; };
 		D4B35F5A1CD1B51400F5C8A8 /* FRSUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUpload.h; sourceTree = "<group>"; };
 		D4B35F5B1CD1B51400F5C8A8 /* FRSUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUpload.m; sourceTree = "<group>"; };
+		D4BE3E2B1D17D6530039394C /* FRSCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCarousel.h; sourceTree = "<group>"; };
+		D4BE3E2C1D17D6530039394C /* FRSCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCarousel.m; sourceTree = "<group>"; };
+		D4BE3E2E1D17D6760039394C /* FRSCarouselCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCarouselCell.h; sourceTree = "<group>"; };
+		D4BE3E2F1D17D6760039394C /* FRSCarouselCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCarouselCell.m; sourceTree = "<group>"; };
+		D4BE3E301D17D6760039394C /* FRSCarouselCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSCarouselCell.xib; sourceTree = "<group>"; };
 		D4D60D0B1CC829C000059EBA /* following.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = following.json; path = ../following.json; sourceTree = "<group>"; };
 		D4D60D0E1CC8368300059EBA /* FRSFollowingTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingTable.h; sourceTree = "<group>"; };
 		D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingTable.m; sourceTree = "<group>"; };
@@ -1340,35 +1335,6 @@
 			name = Stripe;
 			sourceTree = "<group>";
 		};
-		D41C10CC1CECE4BE00F96B25 /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				D41C10D21CECE50000F96B25 /* Video */,
-				D41C10D81CECE51900F96B25 /* Photo */,
-			);
-			name = Cells;
-			sourceTree = "<group>";
-		};
-		D41C10D21CECE50000F96B25 /* Video */ = {
-			isa = PBXGroup;
-			children = (
-				D41C10CD1CECE4FD00F96B25 /* FRSVideoCell.h */,
-				D41C10CE1CECE4FD00F96B25 /* FRSVideoCell.m */,
-				D41C10CF1CECE4FD00F96B25 /* FRSVideoCell.xib */,
-			);
-			name = Video;
-			sourceTree = "<group>";
-		};
-		D41C10D81CECE51900F96B25 /* Photo */ = {
-			isa = PBXGroup;
-			children = (
-				D41C10D31CECE51400F96B25 /* FRSPhotoCell.h */,
-				D41C10D41CECE51400F96B25 /* FRSPhotoCell.m */,
-				D41C10D51CECE51400F96B25 /* FRSPhotoCell.xib */,
-			);
-			name = Photo;
-			sourceTree = "<group>";
-		};
 		D43C7FCC1C8E464800A7A7A7 /* Image Picker */ = {
 			isa = PBXGroup;
 			children = (
@@ -1782,9 +1748,9 @@
 		D487F1B81CBD6BE5005742F3 /* Media Scroll */ = {
 			isa = PBXGroup;
 			children = (
-				D41C10CC1CECE4BE00F96B25 /* Cells */,
-				D487F1BC1CBD6C2D005742F3 /* FRSMediaScroller.h */,
-				D487F1BD1CBD6C2D005742F3 /* FRSMediaScroller.m */,
+				D4BE3E2B1D17D6530039394C /* FRSCarousel.h */,
+				D4BE3E2C1D17D6530039394C /* FRSCarousel.m */,
+				D4BE3E331D17D67A0039394C /* Cells */,
 			);
 			name = "Media Scroll";
 			sourceTree = "<group>";
@@ -1967,6 +1933,16 @@
 				D4B35F5B1CD1B51400F5C8A8 /* FRSUpload.m */,
 			);
 			name = FRSUpload;
+			sourceTree = "<group>";
+		};
+		D4BE3E331D17D67A0039394C /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				D4BE3E2E1D17D6760039394C /* FRSCarouselCell.h */,
+				D4BE3E2F1D17D6760039394C /* FRSCarouselCell.m */,
+				D4BE3E301D17D6760039394C /* FRSCarouselCell.xib */,
+			);
+			name = Cells;
 			sourceTree = "<group>";
 		};
 		D4D60D0D1CC8365B00059EBA /* Highlights */ = {
@@ -2243,11 +2219,10 @@
 			files = (
 				D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */,
 				D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */,
-				D41C10D71CECE51400F96B25 /* FRSPhotoCell.xib in Resources */,
+				D4BE3E321D17D6760039394C /* FRSCarouselCell.xib in Resources */,
 				D4DBF1931CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png in Resources */,
 				65F237B91C24B21F002182DE /* Images_3.xcassets in Resources */,
 				D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */,
-				D41C10D11CECE4FD00F96B25 /* FRSVideoCell.xib in Resources */,
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
 				D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
@@ -2423,7 +2398,6 @@
 				D4A7D8A11CCA7D4E002C6EA3 /* SSKeychainQuery.m in Sources */,
 				077FBC3A1CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m in Sources */,
 				65DC9BF41C485B7F001F450A /* FRSGallery+CoreDataProperties.m in Sources */,
-				D487F1BE1CBD6C2D005742F3 /* FRSMediaScroller.m in Sources */,
 				0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */,
 				D453CC871CCA80850091A004 /* NSManagedObjectContext+MagicalRecord.m in Sources */,
 				07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */,
@@ -2455,9 +2429,9 @@
 				D453CC831CCA80850091A004 /* NSManagedObject+MagicalRecord.m in Sources */,
 				07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */,
 				65EBEDB91C44197100BE671F /* FRSLocationManager.m in Sources */,
+				D4BE3E311D17D6760039394C /* FRSCarouselCell.m in Sources */,
 				07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */,
 				D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */,
-				D41C10D61CECE51400F96B25 /* FRSPhotoCell.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
 				07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */,
 				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,
@@ -2497,11 +2471,11 @@
 				D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */,
 				D418E2F71CCA97510003B080 /* MagicalImportFunctions.m in Sources */,
 				D453CC7C1CCA80850091A004 /* MagicalRecord+Options.m in Sources */,
-				D41C10D01CECE4FD00F96B25 /* FRSVideoCell.m in Sources */,
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
 				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,
 				D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */,
 				D40BD3D61CE28A8300E39701 /* AWFileHash.m in Sources */,
+				D4BE3E2D1D17D6530039394C /* FRSCarousel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
