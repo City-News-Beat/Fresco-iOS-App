@@ -144,7 +144,7 @@
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection {
     NSLog(@"TEST");
-
+    
 }
 
 - (void)viewDidLoad {
@@ -156,7 +156,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
     [self rotateAppForOrientation:self.lastOrientation];
-
+    
     [self checkLibrary];
     
     [self addPanGesture];
@@ -164,13 +164,13 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     self.isRecording = NO;
     
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stopVideoCaptureIfNeeded) name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 -(void)addPanGesture {
     UIPinchGestureRecognizer *zoomGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoom:)];
-   [self.view addGestureRecognizer:zoomGesture];
+    [self.view addGestureRecognizer:zoomGesture];
 }
 
 -(void)zoom:(UIPinchGestureRecognizer *)recognizer {
@@ -206,7 +206,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         CGFloat maxScaleAndCropFactor = device.activeFormat.videoMaxZoomFactor;
         if (effectiveScale > maxScaleAndCropFactor)
             effectiveScale = maxScaleAndCropFactor;
-                
+        
         if ([device respondsToSelector:@selector(setVideoZoomFactor:)]
             && device.activeFormat.videoMaxZoomFactor >= effectiveScale) {
             
@@ -215,7 +215,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                 [device unlockForConfiguration];
             }
         }
-
+        
     }
 }
 -(void)fetchGalleryAssetsInBackgroundWithCompletion:(void(^)())completion {
@@ -260,15 +260,15 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self shouldShowStatusBar:NO animated:YES];
     
     [self.navigationController setNavigationBarHidden:TRUE animated:YES];
-
+    
     self.motionManager = [[CMMotionManager alloc] init];
-    [self startTrackingMovement]; 
+    [self startTrackingMovement];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     
     [super viewDidAppear:animated];
-
+    
     [self fadeInPreview];
     
 }
@@ -354,19 +354,19 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 -(void)checkThumb {
     
     /*UIGraphicsBeginImageContextWithOptions(self.captureVideoPreviewLayer.frame.size, NO, 0);
-    [self.captureVideoPreviewLayer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self luminanceOfImage:outputImage];
-    });
-
-    [self performSelector:@selector(checkThumb) withObject:Nil afterDelay:.5];*/
+     [self.captureVideoPreviewLayer renderInContext:UIGraphicsGetCurrentContext()];
+     UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
+     UIGraphicsEndImageContext();
+     
+     dispatch_async(dispatch_get_main_queue(), ^{
+     [self luminanceOfImage:outputImage];
+     });
+     
+     [self performSelector:@selector(checkThumb) withObject:Nil afterDelay:.5];*/
 }
 
 -(void)luminanceOfImage:(UIImage *)inputImage {
-   //check for thumb
+    //check for thumb
 }
 
 -(void)configurePreviewLayer {
@@ -383,15 +383,15 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)updatePreviewButtonWithAsset {
-
+    
     
 }
 
 - (void)dismissAndReturnToPreviousTab {
     
-//    FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
-//    
-////    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:previouslySelectedTabKey];
+    //    FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
+    //
+    ////    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:previouslySelectedTabKey];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -580,7 +580,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     self.apertureImageView.contentMode = UIViewContentModeScaleAspectFill;
     
     self.ivContainer = [[UIView alloc] initWithFrame:self.apertureShadowView.frame];
-//    self.ivContButton = [[UIButton alloc] initWithFrame:self.apertureShadowView.frame];
+    //    self.ivContButton = [[UIButton alloc] initWithFrame:self.apertureShadowView.frame];
     
     self.videoRotateIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 92.2, 92.2)];
     [self.videoRotateIV centerHorizontallyInView:self.ivContainer];
@@ -607,7 +607,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     self.videoPhoneIV.userInteractionEnabled = YES;
     
     [self.apertureButton addSubview:self.apertureImageView];
-
+    
     [self.ivContainer addSubview:self.videoPhoneIV];
     [self.ivContainer addSubview:self.videoRotateIV];
     
@@ -626,7 +626,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self.clearButton addTarget:self action:@selector(handleApertureButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.clearButton addTarget:self action:@selector(handleApertureButtonDepressed) forControlEvents:UIControlEventTouchDown];
     [self.clearButton addTarget:self action:@selector(handleApertureButtonReleased) forControlEvents:UIControlEventTouchDragExit];
-
+    
 }
 
 -(void)handleApertureButtonDepressed{
@@ -711,7 +711,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)animateVideoRotateHide{
-
+    
     
     [UIView animateWithDuration:0.45/2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
@@ -763,7 +763,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self animateRotateView:self.videoPhoneIV withDuration:duration counterClockwise:NO];
     
     [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-
+        
         self.videoRotateIV.alpha = 1.0;
         self.videoPhoneIV.alpha = 1.0;
         
@@ -778,7 +778,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         self.apertureImageView.transform = CGAffineTransformMakeRotation(M_PI);
         self.apertureImageView.transform = CGAffineTransformMakeScale(0.01, 0.01);
         self.apertureImageView.alpha = 0;
-
+        
     } completion:nil];
     
     self.firstTimeAni = NO;
@@ -811,7 +811,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     if (self.captureMode == FRSCaptureModeVideo){
         if (self.torchIsOn == NO) {
             [self torch:YES];
-
+            
             [self.flashButton setImage:[UIImage imageNamed:@"torch-on"] forState:UIControlStateNormal];
             
         } else {
@@ -912,7 +912,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
             
             [self.flashButton setImage:[UIImage imageNamed:@"flash-off"] forState:UIControlStateNormal];
-
+            
             self.cameraIV.image = [UIImage imageNamed:@"camera-on"];
             self.videoIV.image = [UIImage imageNamed:@"video-off"];
             
@@ -976,10 +976,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     self.bottomOpaqueContainer.layer.shadowOpacity = 0;
     
     if (self.captureMode == FRSCaptureModePhoto){
-
-//        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
-//        [self.view addSubview:snapshot];
-
+        
+        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
+        [self.view addSubview:snapshot];
+        
         
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
@@ -999,20 +999,20 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         }];
         
         
-//        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//            
-//            snapshot.alpha = 0;
-//            
-//        } completion:^(BOOL finished) {
-//            [snapshot removeFromSuperview];
-//            
-//        }];
-
+        [UIView animateWithDuration:0.15 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            snapshot.alpha = 0;
+            
+        } completion:^(BOOL finished) {
+            [snapshot removeFromSuperview];
+            
+        }];
+        
     } else {
         
-//        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
-//        [self.view addSubview:snapshot];
-//        
+        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
+        [self.view addSubview:snapshot];
+        //
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
             // Dispatching the animation of the preview until the next frame because we were having trouble with the animation not being synchronized well otherwise. I can't explain why this was needed but noted that things were slightly better (no black showing underneath) if the layout was done in the completion block so we made the layout happen after this one-frame delay and it seems to fix it.
@@ -1020,27 +1020,31 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                 self.preview.frame = bigPreviewFrame;
                 self.captureVideoPreviewLayer.frame = bigPreviewFrame;
             });
-
+            
             
             self.bottomOpaqueContainer.frame = CGRectMake(0, self.view.frame.size.height, self.bottomOpaqueContainer.frame.size.width, self.bottomOpaqueContainer.frame.size.height);
             self.bottomClearContainer.frame = CGRectMake(0, self.bottomClearContainer.frame.origin.y + offset, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
             self.bottomOpaqueContainer.layer.shadowOpacity = 1;
             
-
+            snapshot.transform = CGAffineTransformMakeScale(0, self.bottomOpaqueContainer.frame.size.height);
+            
+            
         } completion:^(BOOL finished){
             self.apertureButton.frame = self.originalApertureFrame;
             
-
+            
+            [UIView animateWithDuration:0.15 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                snapshot.alpha = 0;
+                
+            } completion:^(BOOL finished) {
+                [snapshot removeFromSuperview];
+                
+            }];
+            
         }];
         
-//        [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//            
-//            snapshot.alpha = 0;
-//            
-//        } completion:^(BOOL finished) {
-//            [snapshot removeFromSuperview];
-//
-//        }];
+        
         
         
         
@@ -1184,18 +1188,18 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         } completion:nil];
     }
     
-        if (self.captureMode == FRSCaptureModePhoto){
-            
-            [self captureStillImage];
+    if (self.captureMode == FRSCaptureModePhoto){
+        
+        [self captureStillImage];
+    }
+    else {
+        if (self.lastOrientation == UIDeviceOrientationPortrait){
+            [self animatePhoneRotationForVideoOrientation];
         }
         else {
-            if (self.lastOrientation == UIDeviceOrientationPortrait){
-                [self animatePhoneRotationForVideoOrientation];
-            }
-            else {
-                [self toggleVideoRecording];
-            }
+            [self toggleVideoRecording];
         }
+    }
 }
 
 -(void)toggleCaptureMode{
@@ -1215,13 +1219,13 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         
         [self.sessionManager.session beginConfiguration];
         
-
+        
         //Change the preset to display properly
         if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetHigh]) {
             //Set the session preset to photo, the default mode we enter in as
             [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetHigh];
         }
-
+        
         [self.sessionManager.session commitConfiguration];
         
     }
@@ -1231,7 +1235,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         [self animateVideoRotateHide];
         
         [self.sessionManager.session beginConfiguration];
-                //Change the preset to display properly
+        //Change the preset to display properly
         if ([self.sessionManager.session canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
             //Set the session preset to photo, the default mode we enter in as
             [self.sessionManager.session setSessionPreset:AVCaptureSessionPresetPhoto];
@@ -1245,7 +1249,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
     self.assignmentLabel.frame = CGRectMake(self.locationIV.frame.origin.x + self.locationIV.frame.size.width + 7, 0, self.view.frame.size.width, 24);
-
+    
 }
 
 
@@ -1311,21 +1315,21 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             self.previewButton.userInteractionEnabled = NO;
             self.nextButton.userInteractionEnabled = NO;
         }
-    
+        
         AVCaptureConnection *connection = [self.sessionManager.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
-    
+        
         // Update the orientation on the still image output video connection before capturing.
         connection.videoOrientation = [self orientationFromDeviceOrientaton];
-    
-//         Capture a still image.
+        
+        //         Capture a still image.
         
         [self animateShutterWithCompletion:nil];
         
         [self.sessionManager.stillImageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
-    
+            
             CMSampleBufferRef copy = NULL;
             CMSampleBufferCreateCopy(NULL, imageDataSampleBuffer, &copy);
-    
+            
             if (copy){
                 
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // 1
@@ -1485,7 +1489,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 -(void)toggleVideoRecording {
     
     if (self.sessionManager.movieFileOutput.isRecording) {
-    
+        
         //Clear the timer so it doesn't re-run
         [self.videoTimer invalidate];
         self.videoTimer = nil;
@@ -1610,16 +1614,16 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                         NSLog( @"Could not save movie to photo library: %@", error );
                     }
                     
-//                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
-//                        PHAsset *asset = [[FRSGalleryAssetsManager sharedManager].fetchResult firstObject];
-//                    
-//                        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.previewBackgroundIV.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
-//                    
-//                            [self updatePreviewButtonWithImage:result];
-//                        }];
-//                    
-//                        cleanup();
-//                    }];
+                    //                    [[FRSGalleryAssetsManager sharedManager] fetchGalleryAssetsInBackgroundWithCompletion:^{
+                    //                        PHAsset *asset = [[FRSGalleryAssetsManager sharedManager].fetchResult firstObject];
+                    //
+                    //                        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:self.previewBackgroundIV.frame.size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage *result, NSDictionary *info) {
+                    //
+                    //                            [self updatePreviewButtonWithImage:result];
+                    //                        }];
+                    //
+                    //                        cleanup();
+                    //                    }];
                     
                 }];
             }
@@ -1649,32 +1653,32 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
     
     
-//    if (self.locationManager.managerState == LocationManagerStateForeground)
-//        [self.locationManager stopUpdatingLocation];
-//    
-//    if (self.locationManager.location) {
-//        
-//        NSLog(@"%@", [FRSLocationManager sharedManager].currentLocation);
-//        
-//        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
-//            
-//            if([responseObject firstObject] != nil){
-//                
-//                FRSAssignment *assignment = [responseObject firstObject];
-//                
-//                CGFloat distanceInMiles = [[FRSLocationManager sharedManager].location distanceFromLocation:assignment.locationObject] / kMetersInAMile;
-//                
-//                //Check if in range
-//                if(distanceInMiles < [assignment.radius floatValue]){
-//                    
-//                    [self updateLocationLabelWithAssignment:assignment];
-//                    
-//                }
-//            }
-//        }];
-//    }
-//    
-//    [self.locationManager setupLocationMonitoringForState:LocationManagerStateBackground];
+    //    if (self.locationManager.managerState == LocationManagerStateForeground)
+    //        [self.locationManager stopUpdatingLocation];
+    //
+    //    if (self.locationManager.location) {
+    //
+    //        NSLog(@"%@", [FRSLocationManager sharedManager].currentLocation);
+    //
+    //        [[FRSDataManager sharedManager] getAssignmentsWithinRadius:[[FRSDataManager sharedManager].currentUser.notificationRadius integerValue] ofLocation:[FRSLocationManager sharedManager].location.coordinate withResponseBlock:^(id responseObject, NSError *error) {
+    //
+    //            if([responseObject firstObject] != nil){
+    //
+    //                FRSAssignment *assignment = [responseObject firstObject];
+    //
+    //                CGFloat distanceInMiles = [[FRSLocationManager sharedManager].location distanceFromLocation:assignment.locationObject] / kMetersInAMile;
+    //
+    //                //Check if in range
+    //                if(distanceInMiles < [assignment.radius floatValue]){
+    //
+    //                    [self updateLocationLabelWithAssignment:assignment];
+    //
+    //                }
+    //            }
+    //        }];
+    //    }
+    //
+    //    [self.locationManager setupLocationMonitoringForState:LocationManagerStateBackground];
     
 }
 
@@ -1867,7 +1871,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         }
         
     }];
-
+    
 }
 
 
@@ -1920,7 +1924,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     if (pan && [pan isValid]) {
         [pan invalidate];
     }
-
+    
     pan = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
     [[NSRunLoop mainRunLoop] addTimer:pan forMode:NSDefaultRunLoopMode];
 }
@@ -1950,8 +1954,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)configureAlertWithText:(NSString *)text {
-    #define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
-
+#define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
+    
     
     if (self.isRecording == FALSE) {
         return;
@@ -1984,7 +1988,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         }
         
         self.alertContainer.transform = transform;
-
+        
         [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             self.alertContainer.alpha = 8;
             
