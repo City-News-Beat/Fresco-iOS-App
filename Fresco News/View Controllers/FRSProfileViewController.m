@@ -98,6 +98,12 @@
 }
 
 -(void)viewDidLoad {
+    
+    if (!_representedUser) {
+        _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        self.authenticatedProfile = TRUE;
+    }
+
     [super viewDidLoad];
     [self configureUI];
     
