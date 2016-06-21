@@ -79,6 +79,12 @@
 -(void)reloadUser {
     [[FRSAPIClient sharedClient] refreshCurrentUser:^(id responseObject, NSError *error) {
         // check against existing user
+        if (error || responseObject[@"error"]) {
+            // throw up sign in
+            
+            return;
+        }
+        
         FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         
         if (!authenticatedUser) {

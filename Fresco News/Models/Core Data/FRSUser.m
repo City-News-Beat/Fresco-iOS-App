@@ -18,8 +18,8 @@
 
 // Insert code here to add functionality to your managed object subclass
 
-+(FRSUser *)loggedInUser   {
-    FRSUser *user = [FRSUser MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"isLoggedIn == %@", @1]];
++(FRSUser *)loggedInUser {
+    FRSUser *user = [FRSUser MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"isLoggedIn == %@", @(TRUE)]];
     return user;
 }
 
@@ -30,6 +30,7 @@
     user.uid = properties[@"id"];
     user.firstName = properties[@"full_name"];
     user.username = (properties[@"username"] != Nil) ? properties[@"username"] : @"";
+    user.isLoggedIn = @(FALSE);
     return user;
 }
 
@@ -39,6 +40,7 @@
     user.uid = properties[@"id"];
     user.firstName = properties[@"full_name"];
     user.username = (properties[@"username"] != Nil) ? properties[@"username"] : @"";
+    user.isLoggedIn = @(FALSE);
     
     return user;
 }
