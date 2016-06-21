@@ -245,7 +245,7 @@
     
     //self.navigationItem.title = @"@aesthetique";
     titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
-    titleLabel.text = @"@aesthetique";
+    titleLabel.text = @"";
     titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
@@ -438,17 +438,17 @@
     [self.profileContainer addSubview:self.nameLabel];
     
     self.locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height, self.nameLabel.frame.size.width, 14)];
-    self.locationLabel.text = @"";
+    self.locationLabel.text = @"New York, NY";
     self.locationLabel.textColor = [UIColor whiteColor];
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
     
     //    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     
-    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 0, self.nameLabel.frame.size.width, 0)];
+    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 50, self.nameLabel.frame.size.width, 0)];
     
     self.bioLabel.numberOfLines = 0;
-    self.bioLabel.text = @"BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO"; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
+    self.bioLabel.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
     self.bioLabel.textColor = [UIColor whiteColor];
 //    [self.bioLabel sizeToFit];
     [self.profileContainer addSubview:self.bioLabel];
