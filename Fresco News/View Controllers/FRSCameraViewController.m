@@ -976,10 +976,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     self.bottomOpaqueContainer.layer.shadowOpacity = 0;
     
     if (self.captureMode == FRSCaptureModePhoto){
-
+        
         UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
         [self.view addSubview:snapshot];
-
+        
         
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
@@ -1007,12 +1007,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             [snapshot removeFromSuperview];
             
         }];
-
+        
     } else {
         
         UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
         [self.view addSubview:snapshot];
-
+        //
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
             // Dispatching the animation of the preview until the next frame because we were having trouble with the animation not being synchronized well otherwise. I can't explain why this was needed but noted that things were slightly better (no black showing underneath) if the layout was done in the completion block so we made the layout happen after this one-frame delay and it seems to fix it.
@@ -1028,6 +1028,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             
             snapshot.transform = CGAffineTransformMakeScale(0, self.bottomOpaqueContainer.frame.size.height);
             
+            
         } completion:^(BOOL finished){
             self.apertureButton.frame = self.originalApertureFrame;
             
@@ -1042,6 +1043,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             }];
             
         }];
+        
+        
+        
+        
         
     }
 }

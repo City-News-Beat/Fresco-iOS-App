@@ -450,7 +450,7 @@
     self.bioLabel.numberOfLines = 0;
     self.bioLabel.text = @"BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO"; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
     self.bioLabel.textColor = [UIColor whiteColor];
-    [self.bioLabel sizeToFit];
+//    [self.bioLabel sizeToFit];
     [self.profileContainer addSubview:self.bioLabel];
 }
 
@@ -698,6 +698,7 @@
         self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.firstName;
         self.bioLabel.text = user.bio;
+        [self.bioLabel sizeToFit];
         
         self.usernameLabel.text = user.username;
         titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
