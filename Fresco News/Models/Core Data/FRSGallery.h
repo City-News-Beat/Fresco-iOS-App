@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeArticlesObject:(FRSArticle *)value;
 - (void)addArticles:(NSSet<FRSArticle *> *)values;
 - (void)removeArticles:(NSSet<FRSArticle *> *)values;
-
+-(NSDictionary *)jsonObject;
 @end
 
 NS_ASSUME_NONNULL_END

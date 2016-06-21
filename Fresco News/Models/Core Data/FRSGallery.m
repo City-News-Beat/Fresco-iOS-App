@@ -145,6 +145,12 @@
     return averageHeight;
 }
 
+-(NSDictionary *)jsonObject {
+    NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];
+    
+    
+    return jsonObject;
+}
 
 // Insert code here to add functionality to your managed object subclass
 

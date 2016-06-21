@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 // Insert code here to declare functionality of your managed object subclass
 
 -(void)configureWithDictionary:(NSDictionary *)dict;
-
+-(NSDictionary *)jsonObject;
 -(NSInteger)heightForStory;
 @end
 

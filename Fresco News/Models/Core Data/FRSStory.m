@@ -93,5 +93,10 @@
     [story configureWithDictionary:properties];
     return story;
 }
-
+-(NSDictionary *)jsonObject {
+    NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];
+    
+    
+    return jsonObject;
+}
 @end

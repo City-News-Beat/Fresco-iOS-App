@@ -43,10 +43,28 @@
     user.username = (properties[@"username"] != Nil) ? properties[@"username"] : @"";
     user.isLoggedIn = @(FALSE);
     user.bio = (properties[@"bio"] != Nil) ? properties[@"bio"] : @"";
-
     return user;
 }
 
+
+-(NSDictionary *)jsonObject {
+    NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];
+    
+    if (self.uid) {
+        jsonObject[@"id"] = self.uid;
+    }
+    if (self.bio) {
+        jsonObject[@"bio"] = self.bio;
+    }
+    if (self.username) {
+        jsonObject[@"username"] = self.username;
+    }
+    if (self.firstName) {
+        jsonObject[@"full_name"] = self.firstName;
+    }
+    
+    return jsonObject;
+}
 
 
 
