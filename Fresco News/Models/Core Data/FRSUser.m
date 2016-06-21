@@ -31,6 +31,7 @@
     user.firstName = properties[@"full_name"];
     user.username = (properties[@"username"] != Nil) ? properties[@"username"] : @"";
     user.isLoggedIn = @(FALSE);
+    user.bio = (properties[@"bio"] != Nil) ? properties[@"bio"] : @"";
     return user;
 }
 
@@ -41,7 +42,8 @@
     user.firstName = properties[@"full_name"];
     user.username = (properties[@"username"] != Nil) ? properties[@"username"] : @"";
     user.isLoggedIn = @(FALSE);
-    
+    user.bio = (properties[@"bio"] != Nil) ? properties[@"bio"] : @"";
+
     return user;
 }
 
