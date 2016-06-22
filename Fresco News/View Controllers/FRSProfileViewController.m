@@ -272,7 +272,6 @@
     [self createProfileSection];
 
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    self.scrollView.backgroundColor = [UIColor redColor];
     self.scrollView.contentSize   = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     self.scrollView.pagingEnabled = YES;
     self.scrollView.bounces       = NO;
@@ -311,6 +310,7 @@
     self.tablePageScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height);
     self.tablePageScroller.pagingEnabled = YES;
     self.tablePageScroller.bounces = FALSE;
+    self.tablePageScroller.delegate = self;
     
     [self configureContentTable];
 }
@@ -476,7 +476,7 @@
     [self.profileContainer addSubview:self.nameLabel];
     
     self.locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height, self.nameLabel.frame.size.width, 14)];
-    self.locationLabel.text = @"New York, NY";
+    self.locationLabel.text = @"";
     self.locationLabel.textColor = [UIColor whiteColor];
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
@@ -486,9 +486,8 @@
     self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 50, self.nameLabel.frame.size.width, 0)];
     
     self.bioLabel.numberOfLines = 0;
-    self.bioLabel.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
+    self.bioLabel.text = @"";
     self.bioLabel.textColor = [UIColor whiteColor];
-//    [self.bioLabel sizeToFit];
     [self.profileContainer addSubview:self.bioLabel];
 }
 
@@ -522,12 +521,16 @@
 -(void)handleFeedbackButtonTapped{
     if (self.feedButton.alpha > 0.7) return; //The button is already selected
     
+    [self.tablePageScroller setContentOffset:CGPointMake(0, 0) animated:YES];
+    
     self.feedButton.alpha = 1.0;
     self.likesButton.alpha = 0.7;
 }
 
 -(void)handleLikesButtonTapped{
     if (self.likesButton.alpha > 0.7) return; //The button is already selected
+    
+    [self.tablePageScroller setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:YES];
     
     self.likesButton.alpha = 1.0;
     self.feedButton.alpha = 0.7;
@@ -688,6 +691,22 @@
     
     //    [self dismissSocialOverlay];
     
+    if (scrollView == self.tablePageScroller) {
+        
+        if (self.tablePageScroller.contentOffset.x == self.view.frame.size.width) { // User is in right tab (following)
+            self.likesButton.alpha = 1;
+            self.feedButton.alpha = 0.7;
+            
+            [self showNavBarForScrollView:self.scrollView animated:NO];
+            self.navigationItem.titleView.alpha = 1;
+        }
+        
+        if (self.tablePageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
+            self.likesButton.alpha = 0.7;
+            self.feedButton.alpha = 1;
+        }
+    }
+    
     if (scrollView == self.tableView){
         [super determineScrollDirection:scrollView];
         
@@ -763,13 +782,13 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
-        self.nameLabel.text = user.firstName;
-        self.bioLabel.text = user.bio;
+        self.nameLabel.text = @"Omar Elfanek"; //user.firstName;
+        self.bioLabel.text = @"Hey my name is Omar and this is my bio, read my bio because my name is Omar and this is my bio."; //user.bio;
         [self.bioLabel sizeToFit];
         
         self.usernameLabel.text = user.username;
         titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
-        //  self.locationLabel.text = user.address; //user.address does not exiset yet
+        self.locationLabel.text = @"New York, NY"; //user.address; //user.address does not exiset yet
         self.followersLabel.text = @"1125";
         
         [self.loadingView stopLoading];
