@@ -696,7 +696,7 @@
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
 //    FRSGallery *gallery = self.dataSource[notification.row];
-//    
+//
 //    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
 //    vc.shouldHaveBackButton = YES;
 //    [super showNavBarForScrollView:self.tableView animated:NO];
