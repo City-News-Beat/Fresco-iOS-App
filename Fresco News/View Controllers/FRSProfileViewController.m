@@ -70,7 +70,7 @@
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
-@property (strong, nonatomic) UIScrollView *scrollView;
+//@property (strong, nonatomic) UIScrollView *scrollView;
 
 @end
 
@@ -176,7 +176,7 @@
     
     
     /* TABLE VIEW */
-    [self configureScrollView];
+//    [self configureScrollView];
     [self configureTableView];
     [self fetchGalleries];
     [self configureSpinner];
@@ -269,13 +269,13 @@
 
 -(void)configureScrollView {
     
-    [self createProfileSection];
+//    [self createProfileSection];
 
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    self.scrollView.contentSize   = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
-    self.scrollView.pagingEnabled = YES;
-    self.scrollView.bounces       = NO;
-    [self.view addSubview:self.scrollView];
+//    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+//    self.scrollView.contentSize   = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
+//    self.scrollView.pagingEnabled = YES;
+//    self.scrollView.bounces       = NO;
+//    [self.view addSubview:self.scrollView];
 }
 
 -(void)configureTableView{
@@ -288,7 +288,7 @@
     self.tableView.dataSource = self;
     self.tableView.delaysContentTouches = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.scrollView addSubview:self.tableView];
+    [self.view addSubview:self.tableView];
     [self createProfileSection];
     self.tableView.tableHeaderView = self.profileContainer;
     
@@ -298,6 +298,7 @@
 -(void)configureContentTable {
     
     self.contentTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 800)];
+    self.contentTable.contentSize = CGSizeMake(self.view.frame.size.width, 1000);
     self.contentTable.dataSource = self;
     self.contentTable.delegate = self;
     self.contentTable.bounces = FALSE;
@@ -311,6 +312,7 @@
     self.tablePageScroller.pagingEnabled = YES;
     self.tablePageScroller.bounces = FALSE;
     self.tablePageScroller.delegate = self;
+    self.tablePageScroller.showsHorizontalScrollIndicator = NO;
     
     [self configureContentTable];
 }
@@ -670,6 +672,17 @@
             
             storyCell.story = self.galleries[indexPath.row];
             [storyCell configureCell];
+            
+            
+            __weak typeof(self) weakSelf = self;
+            
+            storyCell.actionBlock = ^{
+                [weakSelf readMore:indexPath.row];
+            };
+            
+            storyCell.shareBlock = ^void(NSArray *sharedContent) {
+                [weakSelf showShareSheetWithContent:sharedContent];
+            };
         }
     }
 }
@@ -695,6 +708,15 @@
 //    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
 //    [self hideTabBarAnimated:YES];
 }
+
+-(void)readMore:(NSInteger)index {
+    
+//    [self.navigationController setNavigationBarHidden:YES animated:NO];
+//    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
+//    detailView.navigationController = self.navigationController;
+//    [self.navigationController pushViewController:detailView animated:YES];
+}
+
 
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -730,7 +752,7 @@
             self.likesButton.alpha = 1;
             self.feedButton.alpha = 0.7;
             
-            [self showNavBarForScrollView:self.scrollView animated:NO];
+//            [self showNavBarForScrollView:self.scrollView animated:NO];
             self.navigationItem.titleView.alpha = 1;
         }
         
