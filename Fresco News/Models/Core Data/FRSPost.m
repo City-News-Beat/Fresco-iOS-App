@@ -83,7 +83,7 @@
     
     self.creator.uid = dict[@"owner"][@"id"];
     self.creator.username = dict[@"owner"][@"username"];
-    self.creator.firstName = dict[@"owner"][@"full_name"];
+    self.creator.firstName = (dict[@"owner"][@"full_name"] != nil) ? dict[@"owner"][@"full_name"] : @"";
     self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
 
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
