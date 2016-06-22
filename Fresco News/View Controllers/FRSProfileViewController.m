@@ -653,6 +653,16 @@
             
             galCell.gallery = self.galleries[indexPath.row];
             [galCell configureCell];
+            
+            __weak typeof(self) weakSelf = self;
+            
+            galCell.shareBlock = ^void(NSArray *sharedContent) {
+                [weakSelf showShareSheetWithContent:sharedContent];
+            };
+            
+            galCell.readMoreBlock = ^(NSArray *bullshit){
+                [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+            };
         }
         else {
             FRSStoryCell *storyCell = (FRSStoryCell *)cell;
@@ -663,6 +673,29 @@
         }
     }
 }
+
+
+-(void)showShareSheetWithContent:(NSArray *)content {
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
+    [self.navigationController presentViewController:activityController animated:YES completion:nil];
+}
+
+-(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
+    
+//    FRSGallery *gallery = self.dataSource[notification.row];
+//    
+//    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+//    vc.shouldHaveBackButton = YES;
+//    [super showNavBarForScrollView:self.tableView animated:NO];
+//    
+//    self.navigationItem.title = @"";
+//    
+//    [self.navigationController pushViewController:vc animated:YES];
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+//    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+//    [self hideTabBarAnimated:YES];
+}
+
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
