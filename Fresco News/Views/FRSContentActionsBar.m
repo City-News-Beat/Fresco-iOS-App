@@ -106,6 +106,9 @@
     [self.repostButton addTarget:self action:@selector(handleButtonSelected:)  forControlEvents:UIControlEventTouchDragEnter];
     [self.repostButton addTarget:self action:@selector(handleButtonDrag:)      forControlEvents:UIControlEventTouchDragExit];
     [self addSubview:self.repostButton];
+    
+    
+    
 }
 
 -(void)configureLikeSection{
