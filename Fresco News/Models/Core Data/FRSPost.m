@@ -23,7 +23,6 @@
         NSLog(@"does not have dict");
     }
     
-    
     if (dict) [post configureWithDictionary:dict];
     
     return post;
@@ -31,7 +30,7 @@
 
 -(void)configureWithDictionary:(NSDictionary *)dict {
     
-    self.uid = dict[@"_id"];
+    self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     
@@ -69,7 +68,7 @@
 }
 
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context {
-    self.uid = dict[@"_id"];
+    self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     self.imageUrl = dict[@"image"];
@@ -99,7 +98,7 @@
 }
 
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context save:(BOOL)save {
-    self.uid = dict[@"_id"];
+    self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     self.imageUrl = dict[@"image"];
