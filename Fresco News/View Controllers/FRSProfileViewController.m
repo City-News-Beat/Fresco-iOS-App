@@ -13,6 +13,7 @@
 #import "FRSFollowersViewController.h"
 #import "FRSNavigationController.h"
 #import "FRSStoryDetailViewController.h"
+#import "FRSGalleryExpandedViewController.h"
 
 #import "FRSGalleryCell.h"
 
@@ -700,18 +701,18 @@
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-//    FRSGallery *gallery = self.dataSource[notification.row];
-//
-//    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
-//    vc.shouldHaveBackButton = YES;
-//    [super showNavBarForScrollView:self.tableView animated:NO];
-//    
-//    self.navigationItem.title = @"";
-//    
-//    [self.navigationController pushViewController:vc animated:YES];
-//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-//    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-//    [self hideTabBarAnimated:YES];
+    FRSGallery *gallery = self.galleries[notification.row];
+
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+    vc.shouldHaveBackButton = YES;
+    [super showNavBarForScrollView:self.tableView animated:NO];
+
+    self.navigationItem.title = @"";
+
+    [self.navigationController pushViewController:vc animated:YES];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    [self hideTabBarAnimated:YES];
 }
 
 -(void)readMore:(NSInteger)index {
