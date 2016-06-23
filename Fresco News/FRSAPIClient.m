@@ -82,11 +82,25 @@
 }
 
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSDictionary *params;
+    
+    if ([self currentInstallation]) {
+        params = @{@"username":user, @"password":password, @"installation":[self currentInstallation]};
+    }
+    else {
+        params = @{@"username":user, @"password":password};
+
+    }
+    
     [self post:loginEndpoint withParameters:@{@"username":user, @"password":password, @"installation":[self currentInstallation]} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         if (!error) {
             [self handleUserLogin:responseObject];
         }
+        else {
+            NSLog(@"LOGIN ERROR: %@", error);
+        }
+        
     }];
 }
 
@@ -96,7 +110,14 @@
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *twitterAccessToken = session.authToken;
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
-    NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret, @"installation":[self currentInstallation]};
+    NSDictionary *authDictionary;
+    
+    if ([self currentInstallation]) {
+       authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret, @"installation":[self currentInstallation]};
+    }
+    else {
+        authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
+    }
     
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -110,7 +131,14 @@
 
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
-    NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken, @"installation":[self currentInstallation]};
+    NSDictionary *authDictionary;
+    
+    if ([self currentInstallation]) {
+        authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken, @"installation":[self currentInstallation]};
+    }
+    else {
+        authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
+    }
 
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error); // burden of error handling falls on sender
@@ -230,8 +258,8 @@
         currentInstallation[@"device_token"] = deviceToken;
     }
     else {
-        currentInstallation[@"device_token"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
          // no installation without push info, apparently
+        return Nil;
     }
     
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
@@ -240,7 +268,7 @@
         currentInstallation[@"device_id"] = sessionID;
     }
     else {
-        sessionID = [UIDevice currentDevice].identifierForVendor.UUIDString;
+        sessionID = [self randomString];
         currentInstallation[@"device_id"] = sessionID;
         [[NSUserDefaults standardUserDefaults] setObject:sessionID forKey:@"SESSION_ID"];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -254,6 +282,15 @@
         currentInstallation[@"app_version"] = appVersion;
     }
 
+    
+    /*
+     If we ever choose to move towards a UTC+X approach in timezones, as opposed to the unix timestamp that includes the current timezone, this is how we would do it.
+     
+    NSInteger secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
+    NSInteger hoursFromGMT = secondsFromGMT / 60; // GMT = UTC
+    NSString *timeZone = [NSString stringWithFormat:@"UTC+%d", (int)hoursFromGMT]; 
+    */
+    
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     NSString *timeZone = [dateFormat stringFromDate:[NSDate date]];
@@ -271,6 +308,19 @@
     
     return currentInstallation;
 }
+
+
+-(NSString *)randomString {
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    NSMutableString *randomString = [NSMutableString stringWithCapacity:15];
+    
+    for (int i=0; i<15; i++) {
+        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform([letters length])]];
+    }
+    
+    return randomString;
+}
+
 
 -(void)handleUserLogin:(id)responseObject {
     if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
