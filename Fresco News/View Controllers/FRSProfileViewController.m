@@ -197,7 +197,7 @@
 #pragma mark - Fetch Methods
 
 -(void)fetchGalleries {
-    NSLog(@"%@", self.representedUser);
+    NSLog(@"FETCH GALLERIES: %@", self.representedUser);
     
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
