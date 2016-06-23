@@ -230,7 +230,8 @@
         currentInstallation[@"device_token"] = deviceToken;
     }
     else {
-        return Nil; // no installation without push info, apparently
+        currentInstallation[@"device_token"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
+         // no installation without push info, apparently
     }
     
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
@@ -239,7 +240,7 @@
         currentInstallation[@"device_id"] = sessionID;
     }
     else {
-        sessionID = [self randomString];
+        sessionID = [UIDevice currentDevice].identifierForVendor.UUIDString;
         currentInstallation[@"device_id"] = sessionID;
         [[NSUserDefaults standardUserDefaults] setObject:sessionID forKey:@"SESSION_ID"];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -253,15 +254,6 @@
         currentInstallation[@"app_version"] = appVersion;
     }
 
-    
-    /*
-     If we ever choose to move towards a UTC+X approach in timezones, as opposed to the unix timestamp that includes the current timezone, this is how we would do it.
-     
-    NSInteger secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
-    NSInteger hoursFromGMT = secondsFromGMT / 60; // GMT = UTC
-    NSString *timeZone = [NSString stringWithFormat:@"UTC+%d", (int)hoursFromGMT]; 
-    */
-    
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     NSString *timeZone = [dateFormat stringFromDate:[NSDate date]];
@@ -279,19 +271,6 @@
     
     return currentInstallation;
 }
-
-
--(NSString *)randomString {
-    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    NSMutableString *randomString = [NSMutableString stringWithCapacity:15];
-    
-    for (int i=0; i<15; i++) {
-        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform([letters length])]];
-    }
-    
-    return randomString;
-}
-
 
 -(void)handleUserLogin:(id)responseObject {
     if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
