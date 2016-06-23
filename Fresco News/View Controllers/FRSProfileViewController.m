@@ -197,7 +197,7 @@
 #pragma mark - Fetch Methods
 
 -(void)fetchGalleries {
-    NSLog(@"%@", self.representedUser);
+    NSLog(@"FETCH GALLERIES: %@", self.representedUser);
     
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
@@ -303,6 +303,10 @@
     self.contentTable.delegate = self;
     self.contentTable.bounces = FALSE;
     self.contentTable.scrollEnabled = FALSE;
+    self.contentTable.delaysContentTouches = NO;
+    self.contentTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.contentTable.backgroundColor = [UIColor clearColor];
+    
     [self.tablePageScroller addSubview:self.contentTable];
 }
 
@@ -313,7 +317,7 @@
     self.tablePageScroller.bounces = FALSE;
     self.tablePageScroller.delegate = self;
     self.tablePageScroller.showsHorizontalScrollIndicator = NO;
-    
+    self.tablePageScroller.backgroundColor = [UIColor clearColor];
     [self configureContentTable];
 }
 
@@ -836,9 +840,8 @@
 -(void)configureWithUser:(FRSUser *)user {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
-        self.nameLabel.text = @"Omar Elfanek"; //user.firstName;
-        self.bioLabel.text = @"Hey my name is Omar and this is my bio, read my bio because my name is Omar and this is my bio."; //user.bio;
+        self.nameLabel.text = user.firstName;
+        self.bioLabel.text = user.bio;
         [self.bioLabel sizeToFit];
         
         self.usernameLabel.text = user.username;
@@ -846,6 +849,7 @@
         self.locationLabel.text = @"New York, NY"; //user.address; //user.address does not exiset yet
         self.followersLabel.text = @"1125";
         
+        self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
     });
