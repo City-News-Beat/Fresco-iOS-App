@@ -478,7 +478,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         [delegate.managedObjectContext save:Nil];
         [delegate saveContext];
-        
         NSArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
         
@@ -492,8 +491,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
         //[self configureTextView]; //Disables cell selection/deselection (?)
-        
-        
     }];
 }
 

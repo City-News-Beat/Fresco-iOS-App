@@ -399,12 +399,21 @@
             [weakSelf readMore:indexPath.row];
         };
         
+        cell.shareBlock = ^void(NSArray *sharedContent) {
+            [weakSelf showShareSheetWithContent:sharedContent];
+        };
+        
         cell.imageBlock = ^(NSInteger imageIndex){
             [weakSelf handleImagePress:indexPath imageIndex:imageIndex];
         };
         
         [cell configureCell];
     }
+}
+
+-(void)showShareSheetWithContent:(NSArray *)content {
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
+    [self.navigationController presentViewController:activityController animated:YES completion:nil];
 }
 
 -(void)handleImagePress:(NSIndexPath *)cellIndex imageIndex:(NSInteger)imageIndex {

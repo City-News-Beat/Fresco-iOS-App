@@ -70,6 +70,8 @@
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
+//@property (strong, nonatomic) UIScrollView *scrollView;
+
 @end
 
 @implementation FRSProfileViewController
@@ -174,6 +176,7 @@
     
     
     /* TABLE VIEW */
+//    [self configureScrollView];
     [self configureTableView];
     [self fetchGalleries];
     [self configureSpinner];
@@ -199,6 +202,7 @@
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
         [self.tableView reloadData];
+        [self.contentTable reloadData];
     }];
 }
 
@@ -245,7 +249,7 @@
     
     //self.navigationItem.title = @"@aesthetique";
     titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
-    titleLabel.text = @"@aesthetique";
+    titleLabel.text = @"";
     titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
@@ -263,9 +267,19 @@
     }
 }
 
+-(void)configureScrollView {
+    
+//    [self createProfileSection];
+
+//    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+//    self.scrollView.contentSize   = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
+//    self.scrollView.pagingEnabled = YES;
+//    self.scrollView.bounces       = NO;
+//    [self.view addSubview:self.scrollView];
+}
+
 -(void)configureTableView{
     
-    [self createProfileSection];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
@@ -275,6 +289,32 @@
     self.tableView.delaysContentTouches = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
+    [self createProfileSection];
+    self.tableView.tableHeaderView = self.profileContainer;
+    
+    [self configurePageScroller];
+}
+
+-(void)configureContentTable {
+    
+    self.contentTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 800)];
+    self.contentTable.contentSize = CGSizeMake(self.view.frame.size.width, 1000);
+    self.contentTable.dataSource = self;
+    self.contentTable.delegate = self;
+    self.contentTable.bounces = FALSE;
+    self.contentTable.scrollEnabled = FALSE;
+    [self.tablePageScroller addSubview:self.contentTable];
+}
+
+-(void)configurePageScroller {
+    self.tablePageScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    self.tablePageScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height);
+    self.tablePageScroller.pagingEnabled = YES;
+    self.tablePageScroller.bounces = FALSE;
+    self.tablePageScroller.delegate = self;
+    self.tablePageScroller.showsHorizontalScrollIndicator = NO;
+    
+    [self configureContentTable];
 }
 
 -(void)createProfileSection{
@@ -445,12 +485,11 @@
     
     //    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     
-    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 0, self.nameLabel.frame.size.width, 0)];
+    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 50, self.nameLabel.frame.size.width, 0)];
     
     self.bioLabel.numberOfLines = 0;
-    self.bioLabel.text = @"BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO BIO"; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
+    self.bioLabel.text = @"";
     self.bioLabel.textColor = [UIColor whiteColor];
-    [self.bioLabel sizeToFit];
     [self.profileContainer addSubview:self.bioLabel];
 }
 
@@ -484,6 +523,8 @@
 -(void)handleFeedbackButtonTapped{
     if (self.feedButton.alpha > 0.7) return; //The button is already selected
     
+    [self.tablePageScroller setContentOffset:CGPointMake(0, 0) animated:YES];
+    
     self.feedButton.alpha = 1.0;
     self.likesButton.alpha = 0.7;
 }
@@ -491,44 +532,75 @@
 -(void)handleLikesButtonTapped{
     if (self.likesButton.alpha > 0.7) return; //The button is already selected
     
+    [self.tablePageScroller setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:YES];
+    
     self.likesButton.alpha = 1.0;
     self.feedButton.alpha = 0.7;
 }
 
 #pragma mark - UITableView Delegate & DataSource
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    if (tableView == self.tableView) {
+        return 2;
+    }
+    
+    return 1;
     
     //We have two sections for our tableview. The first section holds the profile container and has a header height of 0.
     //The second section holds the feed/likes, and the header has the segmented tab and has a height of 44.
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section == 0){
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (tableView == self.tableView) {
         return 1;
     }
-    else {
+    else if (tableView == self.contentTable) {
+        
         return self.galleries.count;
-        return 0;
     }
+    
+    return 0;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (section == 0){
-        return 0;
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    
+    if (tableView == self.tableView) {
+        if (section == 0){
+            return 0;
+        }
+        else{
+            return 44;
+        }
     }
-    else{
-        return 44;
+    
+    return 0;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    
+    if (section == 1 && tableView == self.tableView) {
+        return self.tablePageScroller.frame.size.height;
     }
+    
+    return 0;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section == 0){
-        return self.profileContainer.frame.size.height;
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if (section == 1 && tableView == self.tableView) {
+        return self.tablePageScroller;
     }
-    else {
-        if (!self.galleries.count) return 0;
+    
+    return Nil;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (tableView == self.tableView) {
+        return 0;
+    }
+    else if (tableView == self.contentTable) {
         if ([[self.galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             FRSGallery *gallery = self.galleries[indexPath.row];
             return [gallery heightForGallery];
@@ -545,11 +617,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     UITableViewCell *cell;
-    if (indexPath.section == 0){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
-    else {
+    if (tableView == self.contentTable) {
         if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
             
@@ -564,7 +632,14 @@
                 cell = [[FRSStoryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"story-cell"];
             }
         }
+    }
+    else if (tableView == self.tableView) {
         
+        cell = [tableView dequeueReusableCellWithIdentifier:@"basic"];
+        
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"basic"];
+        }
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -573,16 +648,23 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section== 0){
-        [cell addSubview:self.profileContainer];
-    }
-    else {
+    if (tableView == self.contentTable) {
         if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
             FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
             [galCell clearCell];
             
             galCell.gallery = self.galleries[indexPath.row];
             [galCell configureCell];
+            
+            __weak typeof(self) weakSelf = self;
+            
+            galCell.shareBlock = ^void(NSArray *sharedContent) {
+                [weakSelf showShareSheetWithContent:sharedContent];
+            };
+            
+            galCell.readMoreBlock = ^(NSArray *bullshit){
+                [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+            };
         }
         else {
             FRSStoryCell *storyCell = (FRSStoryCell *)cell;
@@ -590,9 +672,52 @@
             
             storyCell.story = self.galleries[indexPath.row];
             [storyCell configureCell];
+            
+            
+            __weak typeof(self) weakSelf = self;
+            
+            storyCell.actionBlock = ^{
+                [weakSelf readMore:indexPath.row];
+            };
+            
+            storyCell.shareBlock = ^void(NSArray *sharedContent) {
+                [weakSelf showShareSheetWithContent:sharedContent];
+            };
         }
     }
 }
+
+
+-(void)showShareSheetWithContent:(NSArray *)content {
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
+    [self.navigationController presentViewController:activityController animated:YES completion:nil];
+}
+
+-(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
+    
+//    FRSGallery *gallery = self.dataSource[notification.row];
+//
+//    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+//    vc.shouldHaveBackButton = YES;
+//    [super showNavBarForScrollView:self.tableView animated:NO];
+//    
+//    self.navigationItem.title = @"";
+//    
+//    [self.navigationController pushViewController:vc animated:YES];
+//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+//    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+//    [self hideTabBarAnimated:YES];
+}
+
+-(void)readMore:(NSInteger)index {
+    
+//    [self.navigationController setNavigationBarHidden:YES animated:NO];
+//    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
+//    detailView.navigationController = self.navigationController;
+//    [self.navigationController pushViewController:detailView animated:YES];
+}
+
+
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
@@ -620,6 +745,22 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
     //    [self dismissSocialOverlay];
+    
+    if (scrollView == self.tablePageScroller) {
+        
+        if (self.tablePageScroller.contentOffset.x == self.view.frame.size.width) { // User is in right tab (following)
+            self.likesButton.alpha = 1;
+            self.feedButton.alpha = 0.7;
+            
+//            [self showNavBarForScrollView:self.scrollView animated:NO];
+            self.navigationItem.titleView.alpha = 1;
+        }
+        
+        if (self.tablePageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
+            self.likesButton.alpha = 0.7;
+            self.feedButton.alpha = 1;
+        }
+    }
     
     if (scrollView == self.tableView){
         [super determineScrollDirection:scrollView];
@@ -696,12 +837,13 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
-        self.nameLabel.text = user.firstName;
-        self.bioLabel.text = user.bio;
+        self.nameLabel.text = @"Omar Elfanek"; //user.firstName;
+        self.bioLabel.text = @"Hey my name is Omar and this is my bio, read my bio because my name is Omar and this is my bio."; //user.bio;
+        [self.bioLabel sizeToFit];
         
         self.usernameLabel.text = user.username;
         titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
-        //  self.locationLabel.text = user.address; //user.address does not exiset yet
+        self.locationLabel.text = @"New York, NY"; //user.address; //user.address does not exiset yet
         self.followersLabel.text = @"1125";
         
         [self.loadingView stopLoading];
