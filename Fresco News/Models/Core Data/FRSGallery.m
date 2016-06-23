@@ -36,6 +36,7 @@
 @dynamic repostedBy;
 
 -(void)configureWithDictionary:(NSDictionary *)dict{
+    
     self.tags = [[NSMutableDictionary alloc] init];
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];

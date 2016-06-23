@@ -179,8 +179,9 @@
 }
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {
+    
     [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        NSLog(@"REPOSTED %@", (!error) ? @"TRUE" : @"FALSE");
+        NSLog(@"REPOSTED %@", error);
     }];
 }
 

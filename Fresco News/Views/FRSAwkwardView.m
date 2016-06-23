@@ -39,6 +39,7 @@
     subLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     subLabel.textColor = [UIColor frescoMediumTextColor];
     [self addSubview:subLabel];
+    
 }
 
 

@@ -139,7 +139,7 @@
     
     CGFloat repost = [self.repostLabel.text floatValue];
     
-    if( [[self.repostButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"repost-icon-green"]]) {
+    if([[self.repostButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"repost-icon-green"]]) {
         [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
         self.repostLabel.textColor = [UIColor frescoMediumTextColor];
         repost--;

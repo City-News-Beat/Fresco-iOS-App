@@ -16,6 +16,7 @@
 {
     BOOL delayClear;
     BOOL needsUpdate;
+    BOOL hasLoadedOnce;
     
     NSArray *pulledFromCache;
     NSMutableArray *reloadedFrom;

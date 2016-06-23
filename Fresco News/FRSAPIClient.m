@@ -719,6 +719,7 @@
 
 
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    
     if ([[gallery valueForKey:@"reposted"] boolValue]) {
         [self unrepostGallery:gallery completion:completion];
         return;
@@ -756,7 +757,9 @@
 }
 
 -(void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:[@"un" stringByAppendingString:repostGalleryEndpoint], gallery.uid];
+    NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
+    NSLog(@"ENDPOINT: %@", endpoint);
+
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
 
@@ -769,7 +772,7 @@
 }
 
 -(void)unrepostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:[@"un" stringByAppendingString:repostStoryEndpoint], story.uid];
+    NSString *endpoint = [NSString stringWithFormat:unrepostStoryEndpoint, story.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         
