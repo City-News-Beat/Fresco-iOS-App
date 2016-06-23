@@ -40,8 +40,12 @@
 -(void)loadGallery:(FRSGallery *)gallery {
     
     if ([self.gallery.uid isEqualToString:gallery.uid]) {
+        self.gallery = gallery;
+        [self updateSocial];
         return;
     }
+    
+    self.gallery = gallery;
     
     for (FRSPlayer *player in self.players) {
         if ([player respondsToSelector:@selector(pause)]) {
@@ -121,7 +125,7 @@
     BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
     
     NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
-    BOOL isReposted = FALSE;[[self.gallery valueForKey:@"reposted"] boolValue];
+    BOOL isReposted = [[self.gallery valueForKey:@"reposted"] boolValue];
     
    // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
     

@@ -82,25 +82,11 @@
 }
 
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSDictionary *params;
-    
-    if ([self currentInstallation]) {
-        params = @{@"username":user, @"password":password, @"installation":[self currentInstallation]};
-    }
-    else {
-        params = @{@"username":user, @"password":password};
-
-    }
-    
-    [self post:loginEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+    [self post:loginEndpoint withParameters:@{@"username":user, @"password":password} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         if (!error) {
             [self handleUserLogin:responseObject];
         }
-        else {
-            NSLog(@"LOGIN ERROR: %@", error);
-        }
-        
     }];
 }
 
@@ -110,14 +96,7 @@
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *twitterAccessToken = session.authToken;
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
-    NSDictionary *authDictionary;
-    
-    if ([self currentInstallation]) {
-       authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret, @"installation":[self currentInstallation]};
-    }
-    else {
-        authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
-    }
+    NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
     
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -131,14 +110,7 @@
 
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
-    NSDictionary *authDictionary;
-    
-    if ([self currentInstallation]) {
-        authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken, @"installation":[self currentInstallation]};
-    }
-    else {
-        authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
-    }
+    NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
 
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error); // burden of error handling falls on sender
@@ -258,8 +230,7 @@
         currentInstallation[@"device_token"] = deviceToken;
     }
     else {
-         // no installation without push info, apparently
-        return Nil;
+        return Nil; // no installation without push info, apparently
     }
     
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
@@ -750,9 +721,12 @@
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([[gallery valueForKey:@"reposted"] boolValue]) {
         [self unrepostGallery:gallery completion:completion];
+        return;
     }
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
+    NSLog(@"ENDPOINT: %@", endpoint);
+    
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         
@@ -766,6 +740,7 @@
     
     if ([[story valueForKey:@"reposted"] boolValue]) {
         [self unrepostStory:story completion:completion];
+        return;
     }
     
     NSString *endpoint = [NSString stringWithFormat:repostStoryEndpoint, story.uid];
