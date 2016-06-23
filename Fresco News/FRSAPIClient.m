@@ -772,9 +772,7 @@
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         
-        if (!error) {
-            [story setValue:@(FALSE) forKey:@"reposted"];
-        }
+        [story setValue:@(FALSE) forKey:@"reposted"];
         
         [[self managedObjectContext] save:Nil];
     }];
