@@ -303,6 +303,9 @@
     self.contentTable.delegate = self;
     self.contentTable.bounces = FALSE;
     self.contentTable.scrollEnabled = FALSE;
+    self.contentTable.delaysContentTouches = NO;
+    self.contentTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+
     [self.tablePageScroller addSubview:self.contentTable];
 }
 
