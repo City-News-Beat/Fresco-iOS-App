@@ -1,4 +1,4 @@
-//
+ //
 //  FRSProfileViewController.m
 //  Fresco
 //
@@ -12,6 +12,7 @@
 #import "FRSSettingsViewController.h"
 #import "FRSFollowersViewController.h"
 #import "FRSNavigationController.h"
+#import "FRSStoryDetailViewController.h"
 
 #import "FRSGalleryCell.h"
 
@@ -715,10 +716,17 @@
 
 -(void)readMore:(NSInteger)index {
     
-//    [self.navigationController setNavigationBarHidden:YES animated:NO];
-//    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
-//    detailView.navigationController = self.navigationController;
-//    [self.navigationController pushViewController:detailView animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.galleries objectAtIndex:index]];
+    detailView.navigationController = self.navigationController;
+    [self.navigationController pushViewController:detailView animated:YES];
+}
+
+-(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    detailView.story = story;
+    [detailView reloadData];
+    return detailView;
 }
 
 
