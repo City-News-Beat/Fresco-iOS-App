@@ -48,7 +48,7 @@
     [self setValue:@([dict[@"liked"] boolValue]) forKey:@"liked"];
     [self setValue:@([dict[@"likes"] integerValue]) forKey:@"likes"];
     
-    NSString *repostedBy = dict[@"reposted_by"];
+    NSString *repostedBy = dict[@"source"];
     
     if (repostedBy != Nil && repostedBy != (NSString *)[NSNull null] && ![repostedBy isEqualToString:@""]) {
         [self setValue:repostedBy forKey:@"reposted_by"];

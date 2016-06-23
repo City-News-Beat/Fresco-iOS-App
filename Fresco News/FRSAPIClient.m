@@ -456,12 +456,14 @@
     NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        [gallery setValue:@(TRUE) forKey:@"liked"];
     }];
 }
 -(void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:storyUnlikeEndpoint, story.uid];
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        [story setValue:@(FALSE) forKey:@"liked"];
     }];
 }
 
@@ -704,26 +706,56 @@
     NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        [gallery setValue:@(TRUE) forKey:@"liked"];
     }];
 }
 -(void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:likeStoryEndpoint, story.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        [story setValue:@(TRUE) forKey:@"liked"];
     }];
 }
 
+
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    if ([[gallery valueForKey:@"reposted"] boolValue]) {
+        [self unrepostGallery:gallery completion:completion];
+    }
+
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        [gallery setValue:@(TRUE) forKey:@"reposted"];
     }];
 }
 -(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    if ([[story valueForKey:@"reposted"] boolValue]) {
+        [self unrepostStory:story completion:completion];
+    }
+    
     NSString *endpoint = [NSString stringWithFormat:repostStoryEndpoint, story.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
+}
+
+-(void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:[@"un" stringByAppendingString:repostGalleryEndpoint], gallery.uid];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+        [gallery setValue:@(FALSE) forKey:@"reposted"];
+    }];
+}
+
+-(void)unrepostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:[@"un" stringByAppendingString:repostStoryEndpoint], story.uid];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+        [story setValue:@(FALSE) forKey:@"reposted"];
+    }];
+
 }
 
 -(void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
