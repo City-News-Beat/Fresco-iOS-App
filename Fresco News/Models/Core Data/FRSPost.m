@@ -9,17 +9,13 @@
 #import "FRSPost.h"
 #import "FRSGallery.h"
 #import "FRSUser.h"
-
-
 #import "FRSDateFormatter.h"
-
 #import "MagicalRecord.h"
 
 @implementation FRSPost
 @synthesize currentContext, location, contentType;
 
 // Insert code here to add functionality to your managed object subclass
-
 +(instancetype)postWithDictionary:(NSDictionary *)dict {
     FRSPost *post = [FRSPost MR_createEntity];
     
@@ -159,4 +155,10 @@
     return str;
 }
 
+-(NSDictionary *)jsonObject {
+    NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];
+    
+    
+    return jsonObject;
+}
 @end

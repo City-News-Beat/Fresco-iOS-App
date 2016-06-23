@@ -59,6 +59,12 @@ static NSString * const videoCell = @"videoCell";
     
     PHAsset *representedAsset = [_media objectAtIndex:indexPath.row];
     
+    if (representedAsset.mediaType == PHAssetMediaTypeVideo) {
+        
+    }
+    else if (representedAsset.mediaType == PHAssetMediaTypeImage) {
+        
+    }
     return Nil;
 }
 @end

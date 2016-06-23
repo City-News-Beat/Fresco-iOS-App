@@ -21,7 +21,6 @@
 #define NSLog //
 #endif
 
-
 // image CDN sizing
 static NSString * const thumbImageSize = @"150x";
 static NSString * const smallImageSize = @"320x";

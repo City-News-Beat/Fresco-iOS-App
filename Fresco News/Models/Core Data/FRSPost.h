@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) NSManagedObjectContext *currentContext;
 @property (nonatomic, retain) CLLocation *location;
 @property (nonatomic, retain) NSString *contentType;
+-(NSDictionary *)jsonObject;
 @end
 
 NS_ASSUME_NONNULL_END

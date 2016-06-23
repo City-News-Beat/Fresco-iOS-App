@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(instancetype)articleWithDictionary:(NSDictionary *)dictionary;
 
 -(void)configureWithDictionary:(NSDictionary *)dictionary;
-
+-(NSDictionary *)jsonObject;
 // Insert code here to declare functionality of your managed object subclass
 
 @end
