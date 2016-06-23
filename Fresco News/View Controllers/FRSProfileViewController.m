@@ -840,7 +840,6 @@
 -(void)configureWithUser:(FRSUser *)user {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.firstName;
         self.bioLabel.text = user.bio;
         [self.bioLabel sizeToFit];
@@ -850,6 +849,7 @@
         self.locationLabel.text = @"New York, NY"; //user.address; //user.address does not exiset yet
         self.followersLabel.text = @"1125";
         
+        self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
     });
