@@ -195,8 +195,10 @@
 -(void)handleRepostState:(BOOL)state {
     if(state) {
         [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
+        self.repostLabel.textColor = [UIColor frescoMediumTextColor];
     } else {
         [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateNormal];
+        self.repostLabel.textColor = [UIColor frescoGreenColor];
     }
 }
 
