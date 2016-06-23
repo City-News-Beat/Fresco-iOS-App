@@ -726,7 +726,11 @@
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        [gallery setValue:@(TRUE) forKey:@"reposted"];
+        
+        if (!error) {
+            [gallery setValue:@(TRUE) forKey:@"reposted"];
+            [[self managedObjectContext] save:Nil];
+        }
     }];
 }
 -(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -738,6 +742,12 @@
     NSString *endpoint = [NSString stringWithFormat:repostStoryEndpoint, story.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        
+        if (!error) {
+            [story setValue:@(TRUE) forKey:@"reposted"];
+        }
+        
+        [[self managedObjectContext] save:Nil];
     }];
 }
 
@@ -745,7 +755,12 @@
     NSString *endpoint = [NSString stringWithFormat:[@"un" stringByAppendingString:repostGalleryEndpoint], gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        [gallery setValue:@(FALSE) forKey:@"reposted"];
+        
+        if (!error) {
+            [gallery setValue:@(FALSE) forKey:@"reposted"];
+        }
+        
+        [[self managedObjectContext] save:Nil];
     }];
 }
 
@@ -753,7 +768,12 @@
     NSString *endpoint = [NSString stringWithFormat:[@"un" stringByAppendingString:repostStoryEndpoint], story.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        [story setValue:@(FALSE) forKey:@"reposted"];
+        
+        if (!error) {
+            [story setValue:@(FALSE) forKey:@"reposted"];
+        }
+        
+        [[self managedObjectContext] save:Nil];
     }];
 
 }
