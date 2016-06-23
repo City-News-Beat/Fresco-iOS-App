@@ -82,7 +82,7 @@
 }
 
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self post:loginEndpoint withParameters:@{@"username":user, @"password":password} completion:^(id responseObject, NSError *error) {
+    [self post:loginEndpoint withParameters:@{@"username":user, @"password":password, @"installation":[self currentInstallation]} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         if (!error) {
             [self handleUserLogin:responseObject];
@@ -96,7 +96,7 @@
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *twitterAccessToken = session.authToken;
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
-    NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
+    NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret, @"installation":[self currentInstallation]};
     
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -110,7 +110,7 @@
 
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
-    NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
+    NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken, @"installation":[self currentInstallation]};
 
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error); // burden of error handling falls on sender
@@ -755,7 +755,7 @@
     NSString *endpoint = [NSString stringWithFormat:[@"un" stringByAppendingString:repostGalleryEndpoint], gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        
+
         if (!error) {
             [gallery setValue:@(FALSE) forKey:@"reposted"];
         }
