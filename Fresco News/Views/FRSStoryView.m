@@ -249,7 +249,7 @@
     [self addSubview:self.caption];
 }
 
--(void)configureActionsBar{
+-(void)configureActionsBar {
     
     NSNumber *numLikes = [self.story valueForKey:@"likes"];
     BOOL isLiked = [[self.story valueForKey:@"liked"] boolValue];

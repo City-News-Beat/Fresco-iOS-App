@@ -84,6 +84,8 @@
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:loginEndpoint withParameters:@{@"username":user, @"password":password} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        NSLog(@"%@", responseObject);
+        
         if (!error) {
             [self handleUserLogin:responseObject];
         }
