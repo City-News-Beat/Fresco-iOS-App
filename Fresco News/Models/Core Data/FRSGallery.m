@@ -17,7 +17,7 @@
 @import UIKit;
 
 @implementation FRSGallery
-@synthesize currentContext = _currentContext;
+@synthesize currentContext = _currentContext, generatedHeight = _generatedHeight;
 
 @dynamic byline;
 @dynamic caption;
@@ -114,6 +114,10 @@
 
 -(NSInteger)heightForGallery{
     
+    if (self.generatedHeight) {
+        return self.generatedHeight;
+    }
+    
     float totalHeight = 0;
     
     for (FRSPost *post in self.posts){
@@ -141,6 +145,8 @@
     label.numberOfLines = 6;
     
     averageHeight += [label sizeThatFits:CGSizeMake([UIScreen mainScreen].bounds.size.width-32, INT_MAX)].height + 12 + 44 + 20;
+    
+    self.generatedHeight = averageHeight;
     
     return averageHeight;
 }
