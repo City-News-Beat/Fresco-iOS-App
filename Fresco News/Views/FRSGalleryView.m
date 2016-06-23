@@ -131,7 +131,7 @@
     
     [self.actionBar handleHeartState:isLiked];
     [self.actionBar handleHeartAmount:[numLikes intValue]];
-    [self.actionBar handleRepostState:!isReposted];
+    [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
 }
 
