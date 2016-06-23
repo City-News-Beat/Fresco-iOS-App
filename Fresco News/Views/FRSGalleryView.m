@@ -125,7 +125,7 @@
     BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
     
     NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
-    BOOL isReposted = [[self.gallery valueForKey:@"reposted"] boolValue];
+    BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
     
    // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
     
