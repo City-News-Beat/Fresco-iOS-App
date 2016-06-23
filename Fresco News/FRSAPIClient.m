@@ -707,6 +707,7 @@
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         [gallery setValue:@(TRUE) forKey:@"liked"];
+        [[self managedObjectContext] save:Nil];
     }];
 }
 -(void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -714,6 +715,7 @@
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         [story setValue:@(TRUE) forKey:@"liked"];
+        [[self managedObjectContext] save:Nil];
     }];
 }
 
@@ -731,10 +733,8 @@
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         
-        if (!error) {
-            [gallery setValue:@(TRUE) forKey:@"reposted"];
-            [[self managedObjectContext] save:Nil];
-        }
+        [gallery setValue:@(TRUE) forKey:@"reposted"];
+        [[self managedObjectContext] save:Nil];
     }];
 }
 -(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -748,9 +748,7 @@
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         
-        if (!error) {
-            [story setValue:@(TRUE) forKey:@"reposted"];
-        }
+        [story setValue:@(TRUE) forKey:@"reposted"];
         
         [[self managedObjectContext] save:Nil];
     }];
@@ -763,9 +761,7 @@
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
 
-        if (!error) {
-            [gallery setValue:@(FALSE) forKey:@"reposted"];
-        }
+        [gallery setValue:@(FALSE) forKey:@"reposted"];
         
         [[self managedObjectContext] save:Nil];
     }];
