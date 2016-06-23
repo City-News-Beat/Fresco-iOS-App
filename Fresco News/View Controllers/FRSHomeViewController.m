@@ -83,7 +83,7 @@
     scrollFrame.origin.y = -64;
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
-    
+    self.followingTable.navigationController = self.navigationController;
     //[self configureNoFollowers];
     [self.pageScroller addSubview:self.followingTable];
 }
@@ -635,6 +635,23 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)storyClicked:(FRSStory *)story {
+    
+}
+-(void)galleryClicked:(FRSGallery *)gallery {
+    
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+    vc.shouldHaveBackButton = YES;
+    [super showNavBarForScrollView:self.tableView animated:NO];
+    
+    self.navigationItem.title = @"";
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    [self hideTabBarAnimated:YES];
+
+}
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     

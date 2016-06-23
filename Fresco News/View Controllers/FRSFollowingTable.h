@@ -18,4 +18,7 @@
 @property (retain, nonatomic, readonly) NSArray *galleries;
 
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
+
+-(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)indexPath;
+
 @end

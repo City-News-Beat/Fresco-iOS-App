@@ -743,7 +743,8 @@
 }
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
-
+    NSLog(@"READ MORE");
+    
     if (self.readMoreBlock) {
         self.readMoreBlock(Nil);
     }
