@@ -78,7 +78,11 @@
     
     self.creator.uid = dict[@"owner"][@"id"];
     self.creator.username = (dict[@"owner"][@"username"] != nil) ? dict[@"owner"][@"username"] : @"";
+<<<<<<< HEAD
     self.creator.firstName = (dict[@"owner"][@"full_name"] != Nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]] && [[dict[@"owner"][@"full_name"] class] isSubclassOfClass:[NSString class]]) ? dict[@"owner"][@"full_name"] : @"";;
+=======
+    self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
+>>>>>>> origin/3.0-phil
     self.creator.bio = (dict[@"owner"][@"bio"] != nil) ? dict[@"owner"][@"bio"] : @"";
 
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
