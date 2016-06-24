@@ -103,6 +103,10 @@
     [super viewDidAppear:animated];
     
     [self showTabBarAnimated:YES];
+    
+    if (hasLoadedOnce) {
+        [self reloadData];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -119,6 +123,37 @@
 
 -(void)addNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
+}
+
+-(void)reloadData {
+    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSMutableArray *newData = [[NSMutableArray alloc] init];
+            
+            NSInteger index = self.highlights.count;
+            for (NSDictionary *gallery in galleries) {
+                FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                
+                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                [newData addObject:galleryToSave];
+                [newData addObject:galleryToSave];
+                [indexPaths addObject:[NSIndexPath indexPathForRow:self.dataSource.count-1 inSection:0]];
+                index++;
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.dataSource = newData;
+                self.highlights = newData;
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+                needsUpdate = TRUE;
+                isLoading = FALSE;
+            });
+        });
+    }];
 }
 
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
