@@ -151,13 +151,16 @@
     
     [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.articlesTV.frame.origin.y - 0.5)]];
     
-    UILabel *articlesLabel = [[UILabel alloc] init];
-    articlesLabel.text = @"ARTICLES";
-    articlesLabel.textColor = [UIColor frescoMediumTextColor];
-    articlesLabel.font = [UIFont notaBoldWithSize:15];
-    [articlesLabel sizeToFit];
-    [articlesLabel setOriginWithPoint:CGPointMake(16, self.articlesTV.frame.origin.y - 5 - articlesLabel.frame.size.height)];
-    [self.scrollView addSubview:articlesLabel];
+    
+    if (self.orderedArticles.count > 0) {
+        UILabel *articlesLabel = [[UILabel alloc] init];
+        articlesLabel.text = @"ARTICLES";
+        articlesLabel.textColor = [UIColor frescoMediumTextColor];
+        articlesLabel.font = [UIFont notaBoldWithSize:15];
+        [articlesLabel sizeToFit];
+        [articlesLabel setOriginWithPoint:CGPointMake(16, self.articlesTV.frame.origin.y - 5 - articlesLabel.frame.size.height)];
+        [self.scrollView addSubview:articlesLabel];
+    }
 }
 
 -(void)configureComments{
@@ -196,6 +199,17 @@
     [self.view addSubview:self.actionBar];
     
     [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
+}
+
+-(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
+    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
+    NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
+    
+    sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
+    
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[sharedContent] applicationActivities:nil];
+    [self.navigationController presentViewController:activityController animated:YES completion:nil];
+
 }
 
 -(void)adjustScrollViewContentSize{
