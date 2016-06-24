@@ -45,6 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isLiked;
 @property (nullable, nonatomic, retain) NSString *repostedBy;
 @property (nonatomic, assign) NSInteger numberOfLikes;
+@property (nonatomic) NSInteger generatedHeight;
 -(NSInteger)heightForGallery;
 @property (nonatomic, weak) NSManagedObjectContext *currentContext;
 

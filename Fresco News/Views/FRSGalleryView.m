@@ -40,8 +40,12 @@
 -(void)loadGallery:(FRSGallery *)gallery {
     
     if ([self.gallery.uid isEqualToString:gallery.uid]) {
+        self.gallery = gallery;
+        [self updateSocial];
         return;
     }
+    
+    self.gallery = gallery;
     
     for (FRSPlayer *player in self.players) {
         if ([player respondsToSelector:@selector(pause)]) {
@@ -121,13 +125,13 @@
     BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
     
     NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
-    BOOL isReposted = FALSE;[[self.gallery valueForKey:@"reposted"] boolValue];
+    BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
     
    // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
     
     [self.actionBar handleHeartState:isLiked];
     [self.actionBar handleHeartAmount:[numLikes intValue]];
-    [self.actionBar handleRepostState:!isReposted];
+    [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
 }
 
@@ -160,23 +164,40 @@
 }
 
 -(void)handleLike:(FRSContentActionsBar *)actionBar {
-    
+    NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
+
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
         [[FRSAPIClient sharedClient] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+            NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
+            if (error) {
+                [actionBar handleHeartState:TRUE];
+                [actionBar handleHeartAmount:likes];
+            }
         }];
 
     }
     else {
         [[FRSAPIClient sharedClient] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
             NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
+            if (error) {
+                [actionBar handleHeartState:FALSE];
+                [actionBar handleHeartAmount:likes];
+            }
         }];
     }
 }
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {
+    BOOL state = [[self.gallery valueForKey:@"reposted"] boolValue];
+    NSInteger repostCount = [[self.gallery valueForKey:@"reposts"] boolValue];
+    
     [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        NSLog(@"REPOSTED %@", (!error) ? @"TRUE" : @"FALSE");
+        NSLog(@"REPOSTED %@", error);
+        
+        if (error) {
+            [actionBar handleRepostState:!state];
+            [actionBar handleRepostAmount:repostCount];
+        }
     }];
 }
 

@@ -16,6 +16,8 @@
 {
     BOOL delayClear;
     BOOL needsUpdate;
+    BOOL hasLoadedOnce;
+    BOOL wasAuthenticated;
     
     NSArray *pulledFromCache;
     NSMutableArray *reloadedFrom;
@@ -25,4 +27,5 @@
     UITableView *followTable;
 }
 @property BOOL loadNoMore;
+-(void)loadData;
 @end

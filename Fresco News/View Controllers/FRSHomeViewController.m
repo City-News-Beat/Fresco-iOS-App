@@ -334,14 +334,16 @@
     // network call
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
         if ([galleries count] == 0){
-            return;
+            
         }
-        
-        [self cacheLocalData:galleries];
+        else {
+            [self cacheLocalData:galleries];
+        }
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.loadingView stopLoading];
             [self.loadingView removeFromSuperview];
+            hasLoadedOnce = TRUE;
         });
     }];
 }
@@ -484,6 +486,23 @@
         cell.navigationController = self.navigationController;
     }
     
+    cell.gallery = self.dataSource[indexPath.row];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [cell clearCell];
+        [cell configureCell];
+    });
+    
+    __weak typeof(self) weakSelf = self;
+    
+    cell.shareBlock = ^void(NSArray *sharedContent) {
+        [weakSelf showShareSheetWithContent:sharedContent];
+    };
+    
+    cell.readMoreBlock = ^(NSArray *bullshit){
+        [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+    };
+    
     if (indexPath.row == self.dataSource.count-4) {
         if (!isLoading && !_loadNoMore) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
@@ -501,6 +520,10 @@
 }
 
 -(void)loadMore {
+    
+    if (!hasLoadedOnce) {
+        return;
+    }
     
     isLoading = TRUE;
     FRSGallery *lastGallery = [self.dataSource lastObject];
@@ -588,6 +611,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    return;
     
     if (tableView == self.tableView) {
         // sloppy not to have a check here

@@ -249,7 +249,7 @@
     [self addSubview:self.caption];
 }
 
--(void)configureActionsBar{
+-(void)configureActionsBar {
     
     NSNumber *numLikes = [self.story valueForKey:@"likes"];
     BOOL isLiked = [[self.story valueForKey:@"liked"] boolValue];
@@ -274,16 +274,27 @@
 
 -(void)handleLike:(FRSContentActionsBar *)actionBar {
     
+    NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
+    
     if ([[self.story valueForKey:@"liked"] boolValue]) {
         [[FRSAPIClient sharedClient] unlikeStory:self.story completion:^(id responseObject, NSError *error) {
-            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
-            [self.story setValue:@(FALSE) forKey:@"liked"];
+            NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
+            if (error) {
+                [actionBar handleHeartState:TRUE];
+                [actionBar handleHeartAmount:likes];
+                NSLog(@"ERR: %@", error);
+            }
         }];
+        
     }
     else {
         [[FRSAPIClient sharedClient] likeStory:self.story completion:^(id responseObject, NSError *error) {
             NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
-            [self.story setValue:@(TRUE) forKey:@"liked"];
+            if (error) {
+                NSLog(@"ERR: %@", error);
+                [actionBar handleHeartState:FALSE];
+                [actionBar handleHeartAmount:likes];
+            }
         }];
     }
 }

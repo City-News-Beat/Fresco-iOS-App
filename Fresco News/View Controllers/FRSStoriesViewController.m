@@ -259,7 +259,11 @@
         
         if (stories.count < numToFetch || stories.count == 0) {
             _loadNoMore = TRUE;
+        }
+        
+        if (stories.count == 0) {
             [self.tableView reloadData];
+            return;
         }
         
         NSInteger index = self.stories.count;

@@ -32,7 +32,9 @@
 #pragma mark - Startup and Application States
 
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
-
+    [[FBSDKApplicationDelegate sharedInstance] application:application
+                             didFinishLaunchingWithOptions:launchOptions];
+    
     if ([self isFirstRun]) {
         [self clearKeychain]; // clear tokens from past install
     }
@@ -136,11 +138,16 @@
     return firstRun;
 }
 
-- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options {
-    return [[FBSDKApplicationDelegate sharedInstance] application:app
-                                                          openURL:url
-                                                sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                                                       annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    
+    BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                                  openURL:url
+                                                        sourceApplication:sourceApplication
+                                                               annotation:annotation
+                    ];
+    // Add any custom logic here.
+    return handled;
 }
 
 -(void)startFabric {
@@ -244,7 +251,6 @@
     
     return FALSE;
 }
-
 // when the app isn't open
 -(void)handleColdQuickAction:(UIApplicationShortcutItem *)shortcutItem {
     

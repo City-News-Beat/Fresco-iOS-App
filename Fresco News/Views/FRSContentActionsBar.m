@@ -106,6 +106,9 @@
     [self.repostButton addTarget:self action:@selector(handleButtonSelected:)  forControlEvents:UIControlEventTouchDragEnter];
     [self.repostButton addTarget:self action:@selector(handleButtonDrag:)      forControlEvents:UIControlEventTouchDragExit];
     [self addSubview:self.repostButton];
+    
+    
+    
 }
 
 -(void)configureLikeSection{
@@ -139,7 +142,7 @@
     
     CGFloat repost = [self.repostLabel.text floatValue];
     
-    if( [[self.repostButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"repost-icon-green"]]) {
+    if([[self.repostButton imageForState:UIControlStateNormal] isEqual:[UIImage imageNamed:@"repost-icon-green"]]) {
         [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
         self.repostLabel.textColor = [UIColor frescoMediumTextColor];
         repost--;
@@ -182,6 +185,7 @@
 }
 
 -(void)handleHeartState:(BOOL)state {
+<<<<<<< HEAD
         
     if(state) {
         [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
@@ -191,14 +195,30 @@
         [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"] forState:UIControlStateNormal];
         self.likeLabel.textColor = [UIColor frescoMediumTextColor];
     }
+=======
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(state) {
+            [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
+            self.likeLabel.textColor = [UIColor frescoRedHeartColor];
+            
+        } else {
+            [self.likeButton setImage:[UIImage imageNamed:@"liked-heart"] forState:UIControlStateNormal];
+            self.likeLabel.textColor = [UIColor frescoMediumTextColor];
+        }
+    });
+>>>>>>> 3.0-phil
 }
 
 -(void)handleRepostState:(BOOL)state {
-    if(state) {
-        [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
-    } else {
-        [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateNormal];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(state) {
+            [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-gray"] forState:UIControlStateNormal];
+            self.repostLabel.textColor = [UIColor frescoMediumTextColor];
+        } else {
+            [self.repostButton setImage:[UIImage imageNamed:@"repost-icon-green"] forState:UIControlStateNormal];
+            self.repostLabel.textColor = [UIColor frescoGreenColor];
+        }
+    });
 }
 
 -(void)handleActionButtonTapped{

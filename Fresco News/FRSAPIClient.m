@@ -85,6 +85,8 @@
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:loginEndpoint withParameters:@{@"username":user, @"password":password} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        NSLog(@"%@", responseObject);
+        
         if (!error) {
             [self handleUserLogin:responseObject];
         }
@@ -455,14 +457,16 @@
 
 -(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
-    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        [gallery setValue:@(TRUE) forKey:@"liked"];
     }];
 }
 -(void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:storyUnlikeEndpoint, story.uid];
-    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        [story setValue:@(FALSE) forKey:@"liked"];
     }];
 }
 
@@ -710,6 +714,8 @@
     NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        [gallery setValue:@(TRUE) forKey:@"liked"];
+        [[self managedObjectContext] save:Nil];
     }];
 }
 -(void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -721,30 +727,82 @@
     NSString *endpoint = [NSString stringWithFormat:likeStoryEndpoint, story.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        [story setValue:@(TRUE) forKey:@"liked"];
+        [[self managedObjectContext] save:Nil];
     }];
 }
 
+
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+<<<<<<< HEAD
     if ([self checkAuthAndPresentOnboard]) {
         completion(Nil, [[NSError alloc] init]);
         return;
     }
     
+=======
+    
+    if ([[gallery valueForKey:@"reposted"] boolValue]) {
+        [self unrepostGallery:gallery completion:completion];
+        return;
+    }
+
+>>>>>>> 3.0-phil
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
+    NSLog(@"ENDPOINT: %@", endpoint);
+    
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        
+        [gallery setValue:@(TRUE) forKey:@"reposted"];
+        [[self managedObjectContext] save:Nil];
     }];
 }
 -(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+<<<<<<< HEAD
     if ([self checkAuthAndPresentOnboard]) {
         completion(Nil, [[NSError alloc] init]);
+=======
+    
+    if ([[story valueForKey:@"reposted"] boolValue]) {
+        [self unrepostStory:story completion:completion];
+>>>>>>> 3.0-phil
         return;
     }
     
     NSString *endpoint = [NSString stringWithFormat:repostStoryEndpoint, story.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        
+        [story setValue:@(TRUE) forKey:@"reposted"];
+        
+        [[self managedObjectContext] save:Nil];
     }];
+}
+
+-(void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
+    NSLog(@"ENDPOINT: %@", endpoint);
+
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+
+        [gallery setValue:@(FALSE) forKey:@"reposted"];
+        
+        [[self managedObjectContext] save:Nil];
+    }];
+}
+
+-(void)unrepostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:unrepostStoryEndpoint, story.uid];
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+        
+        [story setValue:@(FALSE) forKey:@"reposted"];
+        
+        [[self managedObjectContext] save:Nil];
+    }];
+
 }
 
 -(void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
