@@ -18,7 +18,7 @@
     BOOL needsUpdate;
     BOOL hasLoadedOnce;
     BOOL wasAuthenticated;
-    
+    DGElasticPullToRefreshLoadingViewCircle* loadingView;
     NSArray *pulledFromCache;
     NSMutableArray *reloadedFrom;
     
