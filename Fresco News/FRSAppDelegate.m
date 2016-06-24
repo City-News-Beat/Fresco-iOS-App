@@ -222,10 +222,15 @@
     }
 }
 
+-(UITabBarController *)tabBar {
+    return _tabBarController;
+}
 
 -(void)startAuthentication {
+    _tabBarController = [[FRSTabBarController alloc] init];
+    
     FRSNavigationController *mainNav = [[FRSNavigationController alloc] init];
-    [mainNav pushViewController:[[FRSTabBarController alloc] init] animated:FALSE];
+    [mainNav pushViewController:_tabBarController animated:FALSE];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [mainNav pushViewController:[[FRSOnboardingViewController alloc] init] animated:FALSE];
     });

@@ -182,6 +182,7 @@
 }
 
 -(void)handleHeartState:(BOOL)state {
+        
     if(state) {
         [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
         self.likeLabel.textColor = [UIColor frescoRedHeartColor];

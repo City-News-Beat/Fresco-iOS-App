@@ -17,7 +17,9 @@
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
-
+@protocol FRSApp
+-(UITabBarController *)tabBar;
+@end
 
 @protocol FRSFileUploaderObjectContext <NSObject>
 -(NSManagedObjectContext *)managedObjectContext; // emulate FRSAppDelegate methods without importing
@@ -90,4 +92,6 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 -(void)fetchCommentsForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion;
 
 -(NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache;
+
+-(BOOL)checkAuthAndPresentOnboard;
 @end

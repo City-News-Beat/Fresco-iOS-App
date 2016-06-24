@@ -33,4 +33,5 @@
 @property (nonatomic, retain) id tabBarController;
 -(void)reloadUser;
 - (void)saveContext;
+-(UITabBarController *)tabBar;
 @end
