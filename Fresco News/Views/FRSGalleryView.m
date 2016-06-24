@@ -864,12 +864,12 @@
         self.muteImageView.alpha = absAlpha;
     }
     
-    //Profile picture doesn't fade on scroll
     
     FRSPost *adjustedPost = self.orderedPosts[self.adjustedPage];
     if (adjustedPost.creator.profileImage != [NSNull null] && [[adjustedPost.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:adjustedPost.creator.profileImage]];
 //        self.profileIV.alpha = 1;
+        
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
 //        self.profileIV.alpha = 0;

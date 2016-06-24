@@ -70,6 +70,8 @@
 
 @property (nonatomic) BOOL presentingUser;
 
+@property (strong, nonatomic) UIBarButtonItem *followBarButtonItem;
+
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
@@ -170,10 +172,10 @@
     self.navigationItem.titleView = self.usernameLabel;
     self.navigationItem.titleView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
     
-    UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
-    followButton.tintColor = [UIColor whiteColor];
+    self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
+    self.followBarButtonItem.tintColor = [UIColor whiteColor];
     
-    self.navigationItem.rightBarButtonItem = followButton;
+    self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     
@@ -810,6 +812,10 @@
     [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
         //
         NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
+//        [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"] forState:UIControlStateNormal];
+        
+        self.followBarButtonItem.image = [UIImage imageNamed:@"followed-white"];
+                
     }];
 }
 
