@@ -734,20 +734,19 @@
 
 
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-<<<<<<< HEAD
+
     if ([self checkAuthAndPresentOnboard]) {
         completion(Nil, [[NSError alloc] init]);
         return;
     }
     
-=======
     
     if ([[gallery valueForKey:@"reposted"] boolValue]) {
         [self unrepostGallery:gallery completion:completion];
         return;
     }
 
->>>>>>> 3.0-phil
+
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
     NSLog(@"ENDPOINT: %@", endpoint);
     
@@ -759,14 +758,12 @@
     }];
 }
 -(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
-<<<<<<< HEAD
     if ([self checkAuthAndPresentOnboard]) {
         completion(Nil, [[NSError alloc] init]);
-=======
+    }
     
     if ([[story valueForKey:@"reposted"] boolValue]) {
         [self unrepostStory:story completion:completion];
->>>>>>> 3.0-phil
         return;
     }
     
