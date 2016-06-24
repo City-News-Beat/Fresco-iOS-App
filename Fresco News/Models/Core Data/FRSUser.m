@@ -51,6 +51,14 @@
     user.username = (properties[@"username"] != Nil) ? properties[@"username"] : @"";
     user.isLoggedIn = @(FALSE);
     user.bio = (properties[@"bio"] != Nil) ? properties[@"bio"] : @"";
+    
+    if ([[properties objectForKey:@"following"] boolValue]) {
+        [user setValue:@(TRUE) forKey:@"following"];
+    }
+    else {
+        [user setValue:@(FALSE) forKey:@"following"];
+    }
+
     return user;
 }
 
