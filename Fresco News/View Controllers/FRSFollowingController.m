@@ -62,6 +62,23 @@
     }];
 }
 
+-(void)reloadData {
+    [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
+        NSLog(@"LOADED: %@ %@", galleries, error);
+        
+        if (galleries.count == 0) {
+            FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2 - 175/2, self.tableView.frame.size.height/2 -125/2 +64, 175, 125)];
+            [self.tableView addSubview:awkwardView];
+            self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
+        
+        [loadingView removeFromSuperview];
+        
+        self.feed = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE];
+        [self.tableView reloadData];
+    }];
+}
+
 -(void)setTableView:(UITableView *)tableView {
     _tableView = tableView;
     _tableView.delegate = self;

@@ -14,11 +14,12 @@
 @interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
 {
     NSInteger numberOfPosts;
+    UIView *awkwardView;
 }
 @property (retain, nonatomic, readonly) NSArray *galleries;
 
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
-
+-(void)reloadFollowing;
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)indexPath;
 
 @end

@@ -156,12 +156,46 @@
     
     [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.tableView dg_stopLoading];
+            [weakSelf reloadData];
         });
     } loadingView:loadingView];
     
     [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+}
+
+-(void)reloadData {
+    [[FRSAPIClient new] fetchStoriesWithLimit:self.stories.count lastStoryID:Nil completion:^(NSArray *stories, NSError *error) {
+        
+        if ([stories count] == 0 || error){
+            _loadNoMore = TRUE;
+            [self.tableView reloadData];
+            return;
+        }
+        self.stories = [[NSMutableArray alloc] init];
+
+        [self cacheLocalData:stories];
+        
+        
+        NSInteger index = 0;
+        
+        for (NSDictionary *storyDict in stories){
+            FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:self.appDelegate.managedObjectContext];
+            
+            [story configureWithDictionary:storyDict];
+            [story setValue:@(index) forKey:@"index"];
+            [self.stories addObject:story];
+            index++;
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView dg_stopLoading];
+            [self.tableView reloadData];
+            [self.appDelegate.managedObjectContext save:Nil];
+            [self.appDelegate saveContext];
+        });
+    }];
+
 }
 
 -(void)configureTableView {
@@ -415,6 +449,16 @@
     }
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if (!firstOpen) {
+        firstOpen = TRUE;
+    }
+    else {
+        [self reloadData];
+    }
+}
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];

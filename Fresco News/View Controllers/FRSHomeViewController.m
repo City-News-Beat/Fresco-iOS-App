@@ -77,6 +77,14 @@
     self.scrollView.delegate = self;
 }
 
+-(BOOL)shouldHaveTextLimit {
+    return YES;
+}
+
+-(void)loadData {
+    
+}
+
 -(void)configureFollowing {
     CGRect scrollFrame = self.tableView.frame;
     scrollFrame.origin.x = scrollFrame.size.width;
@@ -85,6 +93,7 @@
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
     self.followingTable.navigationController = self.navigationController;
     //[self configureNoFollowers];
+    
     [self.pageScroller addSubview:self.followingTable];
 }
 
@@ -126,7 +135,8 @@
 }
 
 -(void)reloadData {
-
+    [self.followingTable reloadFollowing];
+    
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -157,6 +167,7 @@
                 [self.tableView reloadData];
                 isLoading = FALSE;
                 [self.tableView dg_stopLoading];
+                [self.followingTable dg_stopLoading];
             });
         });
     }];
@@ -239,7 +250,7 @@
 }
 
 -(void)configurePullToRefresh {
-    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     loadingView.tintColor = [UIColor whiteColor];
     
     __weak typeof(self) weakSelf = self;
@@ -745,11 +756,40 @@
             
             [self showNavBarForScrollView:self.scrollView animated:NO];
             self.navigationItem.titleView.alpha = 1;
+            [self.tableView dg_stopLoading];
+            [self.followingTable dg_stopLoading];
+
+            [self.tableView dg_removePullToRefresh];
+            loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+            loadingView.tintColor = [UIColor whiteColor];
+
+            __weak typeof(self) weakSelf = self;
+            [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
+                [weakSelf reloadData];
+            } loadingView:loadingView];
+            
+            [self.followingTable dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+            [self.followingTable dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
         }
         
         if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
             self.followingTabButton.alpha = 0.7;
             self.highlightTabButton.alpha = 1;
+            [self.tableView dg_stopLoading];
+            [self.followingTable dg_stopLoading];
+
+            [self.followingTable dg_removePullToRefresh];
+            
+            loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+            loadingView.tintColor = [UIColor whiteColor];
+
+            __weak typeof(self) weakSelf = self;
+            [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
+                [weakSelf reloadData];
+            } loadingView:loadingView];
+            
+            [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+            [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
         }
 
     }
