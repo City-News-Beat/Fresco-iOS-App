@@ -773,7 +773,6 @@
         completion(responseObject, error);
         
         [story setValue:@(TRUE) forKey:@"reposted"];
-        
         [[self managedObjectContext] save:Nil];
     }];
 }

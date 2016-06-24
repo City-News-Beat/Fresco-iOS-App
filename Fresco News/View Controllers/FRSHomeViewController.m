@@ -103,6 +103,10 @@
     [super viewDidAppear:animated];
     
     [self showTabBarAnimated:YES];
+    
+    if (hasLoadedOnce) {
+        [self reloadData];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -119,6 +123,43 @@
 
 -(void)addNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
+}
+
+-(void)reloadData {
+
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            NSInteger index = 0;
+            
+            for (NSDictionary *gallery in galleries) {
+                NSString *galleryID = gallery[@"id"];
+                NSInteger galleryIndex = [self galleryExists:galleryID];
+                
+                if (galleryIndex == -1) {
+                    FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                    
+                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                    [self.dataSource insertObject:galleryToSave atIndex:index];
+                }
+                else {
+                    FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
+                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                }
+                
+                index++;
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+                isLoading = FALSE;
+                [self.tableView dg_stopLoading];
+            });
+        });
+    }];
 }
 
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -204,9 +245,7 @@
     __weak typeof(self) weakSelf = self;
     
     [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.tableView dg_stopLoading];
-        });
+        [weakSelf reloadData];
     } loadingView:loadingView];
     
     [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
@@ -503,14 +542,6 @@
         [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
     };
     
-    if (indexPath.row == self.dataSource.count-4) {
-        if (!isLoading && !_loadNoMore) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                [self loadMore];
-            });
-        }
-    }
-    
     cell.delegate = self;
     [cell setNeedsUpdateConstraints];
     [cell updateConstraintsIfNeeded];
@@ -611,40 +642,14 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    return;
-    
     if (tableView == self.tableView) {
-        // sloppy not to have a check here
-        if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-            return;
-        }
-        
-        if (self.cachedData.count > indexPath.row) {
-            NSString *oldUID = [self.cachedData[indexPath.row] uid];
-            NSString *newUID = [self.dataSource[indexPath.row] uid];
-            
-            if ([oldUID isEqualToString:newUID] && self.cachedData[indexPath.row] != self.dataSource[indexPath.row]) {
-                return;
+        if (indexPath.row == self.dataSource.count-4) {
+            if (!isLoading && !_loadNoMore) {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                    [self loadMore];
+                });
             }
         }
-        
-        cell.gallery = self.dataSource[indexPath.row];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [cell clearCell];
-            [cell configureCell];
-        });
-        
-        __weak typeof(self) weakSelf = self;
-        
-        cell.shareBlock = ^void(NSArray *sharedContent) {
-            [weakSelf showShareSheetWithContent:sharedContent];
-        };
-        
-        cell.readMoreBlock = ^(NSArray *bullshit){
-            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
-        };
-        
     }
 }
 
