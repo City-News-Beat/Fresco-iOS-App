@@ -41,7 +41,7 @@
     
     self.creator.uid = dict[@"owner"][@"id"];
     self.creator.username = dict[@"owner"][@"username"];
-    self.creator.firstName = dict[@"owner"][@"full_name"];
+    self.creator.firstName = (dict[@"owner"][@"full_name"] != Nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]] && [[dict[@"owner"][@"full_name"] class] isSubclassOfClass:[NSString class]]) ? dict[@"owner"][@"full_name"] : @"";;
     self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
 
     /*self.creator = [FRSUser MR_createEntity];
@@ -78,7 +78,7 @@
     
     self.creator.uid = dict[@"owner"][@"id"];
     self.creator.username = (dict[@"owner"][@"username"] != nil) ? dict[@"owner"][@"username"] : @"";
-    self.creator.firstName = (dict[@"owner"][@"full_name"] != nil) ? dict[@"owner"][@"full_name"] : @"";
+    self.creator.firstName = (dict[@"owner"][@"full_name"] != Nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]] && [[dict[@"owner"][@"full_name"] class] isSubclassOfClass:[NSString class]]) ? dict[@"owner"][@"full_name"] : @"";;
     self.creator.bio = (dict[@"owner"][@"bio"] != nil) ? dict[@"owner"][@"bio"] : @"";
 
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
@@ -108,7 +108,7 @@
     self.creator = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:context];
     self.creator.uid = dict[@"owner"][@"id"];
     self.creator.username = dict[@"owner"][@"username"];
-    self.creator.firstName = dict[@"owner"][@"full_name"];
+    self.creator.firstName = (dict[@"owner"][@"full_name"] != Nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]] && [[dict[@"owner"][@"full_name"] class] isSubclassOfClass:[NSString class]]) ? dict[@"owner"][@"full_name"] : @"";;
     self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
 
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
