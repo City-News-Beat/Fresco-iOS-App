@@ -456,14 +456,14 @@
 
 -(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
-    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         [gallery setValue:@(TRUE) forKey:@"liked"];
     }];
 }
 -(void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:storyUnlikeEndpoint, story.uid];
-    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         [story setValue:@(FALSE) forKey:@"liked"];
     }];
