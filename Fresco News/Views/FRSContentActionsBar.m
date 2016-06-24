@@ -185,6 +185,7 @@
 }
 
 -(void)handleHeartState:(BOOL)state {
+
     dispatch_async(dispatch_get_main_queue(), ^{
         if(state) {
             [self.likeButton setImage:[UIImage imageNamed:@"liked-heart-filled"] forState:UIControlStateNormal];
@@ -195,6 +196,7 @@
             self.likeLabel.textColor = [UIColor frescoMediumTextColor];
         }
     });
+
 }
 
 -(void)handleRepostState:(BOOL)state {

@@ -80,22 +80,6 @@
     }];
 }
 
-
--(void)readMore:(NSIndexPath *)indexPath {
-    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[_galleries objectAtIndex:indexPath.row]];
-    vc.shouldHaveBackButton = YES;
-    
-    FRSScrollingViewController *scroll = (FRSScrollingViewController *)self.scrollDelegate;
-    
-    scroll.navigationItem.title = @"";
-    
-    [scroll.navigationController pushViewController:vc animated:YES];
-    scroll.navigationController.interactivePopGestureRecognizer.enabled = YES;
-    scroll.navigationController.interactivePopGestureRecognizer.delegate = nil;
-    [(FRSScrollingViewController *)self.scrollDelegate hideTabBarAnimated:YES];
-
-}
-
 -(void)playerWillPlay:(AVPlayer *)player {
     for (FRSGalleryCell *cell in [self visibleCells]) {
         if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]] || !cell.galleryView.players) {
@@ -133,19 +117,35 @@
     
 }
 
--(void)goToExpandedGalleryForContentBarTap:(NSNotification *)notification {
+-(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)indexPath {
     
-    NSArray *filteredArray = [_galleries filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"uid = %@", notification.userInfo[@"gallery_id"]]];
+    FRSGallery *gallery = _galleries[indexPath.row];
     
-    FRSGallery *gallery = [filteredArray firstObject];
-        
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
-    
-    [self.navigationController pushViewController:vc animated:YES];
-    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+//    [super showNavBarForScrollView:self.inputViewController animated:NO];
 
+    self.inputViewController.navigationController.title = @"";
+    
+    [self.inputViewController.navigationController pushViewController:vc animated:YES];
+    self.inputViewController.navigationController.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    self.inputViewController.navigationController.navigationController.interactivePopGestureRecognizer.delegate = nil;
+
+//    [self.inputViewController hideTabBarAnimated:YES];
+}
+
+-(void)readMore:(NSIndexPath *)indexPath {
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[_galleries objectAtIndex:indexPath.row]];
+    vc.shouldHaveBackButton = YES;
+    
+    FRSScrollingViewController *scroll = (FRSScrollingViewController *)self.scrollDelegate;
+    
+    scroll.navigationItem.title = @"";
+    
+    [scroll.navigationController pushViewController:vc animated:YES];
+    scroll.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    scroll.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    [(FRSScrollingViewController *)self.scrollDelegate hideTabBarAnimated:YES];
 }
 
 -(void)followStory {
@@ -238,9 +238,9 @@
             [weakSelf showShareSheetWithContent:sharedContent];
         };
         
-//        galCell.readMoreBlock = ^(NSArray *bullshit){
-//            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
-//        };
+        galCell.readMoreBlock = ^(NSArray *bullshit){
+            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+        };
     }
     else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
@@ -255,9 +255,10 @@
             [weakSelf showShareSheetWithContent:sharedContent];
         };
         
-//        storyCell.readMoreBlock = ^(NSArray *bullshit){
+        storyCell.readMoreBlock = ^(NSArray *bullshit){
 //            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
-//        };
+            [weakSelf readMore:indexPath];
+        };
     }
 }
 

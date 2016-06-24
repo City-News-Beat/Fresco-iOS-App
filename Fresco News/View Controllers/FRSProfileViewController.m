@@ -1,4 +1,4 @@
-//
+ //
 //  FRSProfileViewController.m
 //  Fresco
 //
@@ -12,6 +12,8 @@
 #import "FRSSettingsViewController.h"
 #import "FRSFollowersViewController.h"
 #import "FRSNavigationController.h"
+#import "FRSStoryDetailViewController.h"
+#import "FRSGalleryExpandedViewController.h"
 
 #import "FRSGalleryCell.h"
 
@@ -67,6 +69,8 @@
 @property (nonatomic) NSInteger count;
 
 @property (nonatomic) BOOL presentingUser;
+
+@property (strong, nonatomic) UIBarButtonItem *followBarButtonItem;
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
@@ -168,10 +172,10 @@
     self.navigationItem.titleView = self.usernameLabel;
     self.navigationItem.titleView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
     
-    UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
-    followButton.tintColor = [UIColor whiteColor];
+    self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
+    self.followBarButtonItem.tintColor = [UIColor whiteColor];
     
-    self.navigationItem.rightBarButtonItem = followButton;
+    self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     
@@ -699,26 +703,33 @@
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-//    FRSGallery *gallery = self.dataSource[notification.row];
-//
-//    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
-//    vc.shouldHaveBackButton = YES;
-//    [super showNavBarForScrollView:self.tableView animated:NO];
-//    
-//    self.navigationItem.title = @"";
-//    
-//    [self.navigationController pushViewController:vc animated:YES];
-//    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-//    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-//    [self hideTabBarAnimated:YES];
+    FRSGallery *gallery = self.galleries[notification.row];
+
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+    vc.shouldHaveBackButton = YES;
+    [super showNavBarForScrollView:self.tableView animated:NO];
+
+    self.navigationItem.title = @"";
+
+    [self.navigationController pushViewController:vc animated:YES];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    [self hideTabBarAnimated:YES];
 }
 
 -(void)readMore:(NSInteger)index {
     
-//    [self.navigationController setNavigationBarHidden:YES animated:NO];
-//    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
-//    detailView.navigationController = self.navigationController;
-//    [self.navigationController pushViewController:detailView animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.galleries objectAtIndex:index]];
+    detailView.navigationController = self.navigationController;
+    [self.navigationController pushViewController:detailView animated:YES];
+}
+
+-(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    detailView.story = story;
+    [detailView reloadData];
+    return detailView;
 }
 
 
@@ -801,6 +812,10 @@
     [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
         //
         NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
+//        [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"] forState:UIControlStateNormal];
+        
+        self.followBarButtonItem.image = [UIImage imageNamed:@"followed-white"];
+                
     }];
 }
 

@@ -12,6 +12,7 @@
 #import "FRSFileUploadManager.h" // temp patch
 #import "FRSRequestSerializer.h"
 #import "FRSAppDelegate.h"
+#import "FRSOnboardingViewController.h"
 
 @implementation FRSAPIClient
 
@@ -705,6 +706,11 @@
     Social interaction
 */
 -(void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    if ([self checkAuthAndPresentOnboard]) {
+        completion(Nil, [[NSError alloc] init]);
+        return;
+    }
+    
     NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -713,6 +719,11 @@
     }];
 }
 -(void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    if ([self checkAuthAndPresentOnboard]) {
+        completion(Nil, [[NSError alloc] init]);
+        return;
+    }
+    
     NSString *endpoint = [NSString stringWithFormat:likeStoryEndpoint, story.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -723,11 +734,18 @@
 
 
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+
+    if ([self checkAuthAndPresentOnboard]) {
+        completion(Nil, [[NSError alloc] init]);
+        return;
+    }
+    
     
     if ([[gallery valueForKey:@"reposted"] boolValue]) {
         [self unrepostGallery:gallery completion:completion];
         return;
     }
+
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
     NSLog(@"ENDPOINT: %@", endpoint);
@@ -740,6 +758,9 @@
     }];
 }
 -(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    if ([self checkAuthAndPresentOnboard]) {
+        completion(Nil, [[NSError alloc] init]);
+    }
     
     if ([[story valueForKey:@"reposted"] boolValue]) {
         [self unrepostStory:story completion:completion];
@@ -782,9 +803,19 @@
 }
 
 -(void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    if ([self checkAuthAndPresentOnboard]) {
+        completion(Nil, [[NSError alloc] init]);
+        return;
+    }
+    
     [self followUserID:user.uid completion:completion];
 }
 -(void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    if ([self checkAuthAndPresentOnboard]) {
+        completion(Nil, [[NSError alloc] init]);
+        return;
+    }
+    
     [self unfollowUserID:user.uid completion:completion];
 }
 
@@ -813,10 +844,20 @@
 }
 
 -(void)addComment:(NSString *)comment toGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+//    if ([self checkAuthAndPresentOnboard]) {
+//        completion(Nil, [[NSError alloc] init]);
+//        return;
+//    }
+    
     [self addComment:comment toGalleryID:gallery.uid completion:completion];
 }
 
 -(void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
+//    if ([self checkAuthAndPresentOnboard]) {
+//        completion(Nil, [[NSError alloc] init]);
+//        return;
+//    }
+    
     NSString *endpoint = [NSString stringWithFormat:commentEndpoint, galleryID];
     NSDictionary *parameters = @{@"comment":comment};
     
@@ -905,6 +946,22 @@
 -(NSManagedObjectContext *)managedObjectContext {
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     return [appDelegate managedObjectContext];
+}
+
+-(BOOL)checkAuthAndPresentOnboard {
+    
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        
+        id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
+        UITabBarController *tabBar = [appDelegate tabBar];
+        
+        UINavigationController *navigationController = tabBar.navigationController;
+        FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
+        [navigationController pushViewController:onboardVC animated:NO];
+        return TRUE;
+    }
+    
+    return FALSE;
 }
 
 

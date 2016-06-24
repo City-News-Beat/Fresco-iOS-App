@@ -27,12 +27,11 @@
 			</array>
 			<key>LSApplicationQueriesSchemes</key>
 			<array>
-   		       <string>fbauth2</string>
-   			 <string>fbapi</string>
-    			<string>fb-messenger-api</string>
-    			<string>fbshareextension</string>
-		</array>
-
+				<string>fbauth2</string>
+				<string>fbapi</string>
+				<string>fb-messenger-api</string>
+				<string>fbshareextension</string>
+			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
@@ -135,6 +134,18 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>🙈 I can’t see! Help! 📹 📸</string>
+	<key>NSContactsUsageDescription</key>
+	<string>👭 Fresco searches your address book to find friends to follow.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>🗺 Fresco uses location to find and notify you of nearby assignments.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>🗺 Fresco uses location to find assignments near you.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>🙉 Check, check one, sibilance, ssssssibilance. 🎙</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>🖼 Fresco checks your camera roll to           find verifiable content from the last                         24 hours.                                                  🎞 To show up, photos and videos need to be taken with location ​ON in Camera.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Nota-Normal.otf</string>
@@ -189,17 +200,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSCameraUsageDescription</key>
-	<string>🙈 I can’t see! Help! 📹 📸</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>🙉 Check, check one, sibilance, ssssssibilance. 🎙</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>🖼 Fresco checks your camera roll to           find verifiable content from the last                         24 hours.                                                  🎞 To show up, photos and videos need to be taken with location ​ON in Camera.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>🗺 Fresco uses location to find and notify you of nearby assignments.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>🗺 Fresco uses location to find assignments near you.</string>
-	<key>NSContactsUsageDescription</key>
-	<string>👭 Fresco searches your address book to find friends to follow.</string>
 </dict>
 </plist>

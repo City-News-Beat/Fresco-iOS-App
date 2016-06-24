@@ -37,10 +37,15 @@
 -(NSArray *)feed {
     return _feed;
 }
-
+-(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
+    if (self.delegate) {
+        [self.delegate galleryClicked:self.feed[notification.row]];
+    }
+}
 -(void)commonInit {
     NSLog(@"COMMON INIT");
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
+
     [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
         NSLog(@"LOADED: %@ %@", galleries, error);
         
@@ -76,6 +81,7 @@
     return _tableView;
 }
 
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -110,6 +116,13 @@
         [galCell clearCell];
             
         galCell.gallery = self.feed[indexPath.row];
+        
+        __weak typeof(self) weakSelf = self;
+        
+        galCell.readMoreBlock = ^(NSArray *bullshit){
+            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+        };
+        
         [galCell configureCell];
     }
     else {
