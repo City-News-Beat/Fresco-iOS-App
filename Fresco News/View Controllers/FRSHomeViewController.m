@@ -128,13 +128,15 @@
 -(void)reloadData {
 
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
-        if (!error && galleries.count > 0) {
-            for (FRSGallery *gallery in self.dataSource) {
-                [self.appDelegate.managedObjectContext deleteObject:gallery];
-            }
-        }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            if (!error && galleries.count > 0) {
+                for (FRSGallery *gallery in self.dataSource) {
+                    [self.appDelegate.managedObjectContext deleteObject:gallery];
+                }
+            }
+
             NSMutableArray *newData = [[NSMutableArray alloc] init];
             
             NSInteger index = 0;
