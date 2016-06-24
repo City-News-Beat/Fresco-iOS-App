@@ -167,6 +167,7 @@
                 [self.tableView reloadData];
                 isLoading = FALSE;
                 [self.tableView dg_stopLoading];
+                [self.followingTable dg_stopLoading];
             });
         });
     }];
