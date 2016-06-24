@@ -131,29 +131,29 @@
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
-            if (!error && galleries.count > 0) {
-                for (FRSGallery *gallery in self.dataSource) {
-                    [self.appDelegate.managedObjectContext deleteObject:gallery];
-                }
-            }
-
-            NSMutableArray *newData = [[NSMutableArray alloc] init];
-            
             NSInteger index = 0;
             
             for (NSDictionary *gallery in galleries) {
-                FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                NSString *galleryID = gallery[@"id"];
+                NSInteger galleryIndex = [self galleryExists:galleryID];
                 
-                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-                [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                [newData addObject:galleryToSave];
-                [newData addObject:galleryToSave];
+                if (galleryIndex == -1) {
+                    FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                    
+                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                    [self.dataSource insertObject:galleryToSave atIndex:index];
+                }
+                else {
+                    FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
+                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                }
+                
                 index++;
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.dataSource = newData;
-                self.highlights = newData;
                 [self.tableView reloadData];
                 isLoading = FALSE;
                 [self.tableView dg_stopLoading];
