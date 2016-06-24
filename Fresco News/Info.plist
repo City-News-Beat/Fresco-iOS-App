@@ -27,12 +27,11 @@
 			</array>
 			<key>LSApplicationQueriesSchemes</key>
 			<array>
-   		       <string>fbauth2</string>
-   			 <string>fbapi</string>
-    			<string>fb-messenger-api</string>
-    			<string>fbshareextension</string>
-		</array>
-
+				<string>fbauth2</string>
+				<string>fbapi</string>
+				<string>fb-messenger-api</string>
+				<string>fbshareextension</string>
+			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
