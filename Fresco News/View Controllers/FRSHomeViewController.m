@@ -103,6 +103,10 @@
     [super viewDidAppear:animated];
     
     [self showTabBarAnimated:YES];
+    
+    if ((!wasAuthenticated && [[FRSAPIClient sharedClient] isAuthenticated]) || (!wasAuthenticated && !hasLoadedOnce)) {
+        [self configureDataSource];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -112,13 +116,25 @@
 
 -(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
+    
+    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        [self loadData];
+        wasAuthenticated = FALSE;
+    }
+    else {
+        wasAuthenticated = TRUE;
+    }
+    
     [self configureTableView];
-    [self configureDataSource];
     [self configurePullToRefresh];
 }
 
 -(void)addNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
+}
+
+-(void)loadData {
+    [self configureDataSource];
 }
 
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
