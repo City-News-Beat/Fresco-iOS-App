@@ -57,6 +57,9 @@
     NSNumber *reposts = [dict valueForKey:@"reposts"];
     [self setValue:reposts forKey:@"reposts"];
     
+    NSNumber *likes = [dict valueForKey:@"likes"];
+    [self setValue:likes forKey:@"likes"];
+    
     NSString *repostedBy = [dict valueForKey:@"reposted_by"];
     
     if (repostedBy != Nil && ![repostedBy isEqual:[NSNull null]]) {
