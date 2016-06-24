@@ -198,6 +198,17 @@
     [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
 }
 
+-(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
+    FRSPost *post = [[self.gallery.posts allObjects] firstObject];
+    NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
+    
+    sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
+    
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[sharedContent] applicationActivities:nil];
+    [self.navigationController presentViewController:activityController animated:YES completion:nil];
+
+}
+
 -(void)adjustScrollViewContentSize{
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryView.frame.size.height + self.articlesTV.frame.size.height + self.commentsView.frame.size.height + TOP_PAD * 2 + 50);
 }
