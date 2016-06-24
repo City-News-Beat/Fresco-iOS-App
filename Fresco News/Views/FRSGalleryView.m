@@ -194,6 +194,8 @@
         if (error) {
             [actionBar handleRepostState:!state];
             [actionBar handleRepostAmount:repostCount];
+            [self.gallery setValue:@(state) forKey:@"reposted"];
+            [self.gallery setValue:@(repostCount) forKey:@"reposts"];
         }
     }];
 }
