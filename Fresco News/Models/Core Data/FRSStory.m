@@ -46,6 +46,14 @@
         [self setValue:@(FALSE) forKey:@"reposted"];
     }
     
+    if ([[dict valueForKey:@"liked"] boolValue]) {
+        [self setValue:@(TRUE) forKey:@"liked"];
+
+    }
+    else {
+        [self setValue:@(FALSE) forKey:@"liked"];
+    }
+    
     NSNumber *reposts = [dict valueForKey:@"reposts"];
     [self setValue:reposts forKey:@"reposts"];
     
