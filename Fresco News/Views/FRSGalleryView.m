@@ -73,13 +73,16 @@
     
     self.pageControl.frame = CGRectMake(self.frame.size.width - ((self.gallery.posts.count) *16) - 16, self.scrollView.frame.size.height - 15 - 8, (self.gallery.posts.count) *16, 8);
     
-
+    [self updateUser];
+    
     self.topLine.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5);
     self.bottomLine.frame = CGRectMake(0, self.scrollView.frame.size.height - 0.5, self.scrollView.frame.size.width, 0.5);
     self.clockIV.center = self.pageControl.center;
     
     self.clockIV.frame = CGRectMake(21, self.clockIV.frame.origin.y, 16, 16);
     [self.locationIV setOriginWithPoint:CGPointMake(self.locationIV.frame.origin.x, self.clockIV.frame.origin.y - self.locationIV.frame.size.height - 6)];
+    
+    // RIGHT HUR
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
     self.captionLabel.text = self.gallery.caption;
     
@@ -117,6 +120,19 @@
     
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
+    }
+}
+
+-(void)updateUser {
+    FRSPost *firstPost = (FRSPost *)[self.orderedPosts firstObject];
+    
+    if (firstPost.creator.profileImage && firstPost.creator.profileImage != Nil && ![firstPost.creator.profileImage isEqual:[NSNull null]] && [[firstPost.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:firstPost.creator.profileImage]];
+        [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
+    }
+    else {
+        [self.profileIV setImage:Nil];
+        [self.nameLabel setOriginWithPoint:CGPointMake(0, self.nameLabel.frame.origin.y)];
     }
 }
 
