@@ -42,8 +42,14 @@
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     self.caption = dict[@"caption"];
     self.byline = dict[@"byline"];
-    [self addPostsWithArray:dict[@"posts"]];
-    [self addArticlesWithArray:dict[@"articles"]];
+    
+    if (self.posts.count == 0) {
+        [self addPostsWithArray:dict[@"posts"]];
+    }
+    
+    if (self.articles.count == 0) {
+        [self addArticlesWithArray:dict[@"articles"]];        
+    }
     
     [self setValue:@([dict[@"liked"] boolValue]) forKey:@"liked"];
     [self setValue:@([dict[@"likes"] integerValue]) forKey:@"likes"];
