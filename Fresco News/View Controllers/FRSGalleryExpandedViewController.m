@@ -151,13 +151,16 @@
     
     [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.articlesTV.frame.origin.y - 0.5)]];
     
-    UILabel *articlesLabel = [[UILabel alloc] init];
-    articlesLabel.text = @"ARTICLES";
-    articlesLabel.textColor = [UIColor frescoMediumTextColor];
-    articlesLabel.font = [UIFont notaBoldWithSize:15];
-    [articlesLabel sizeToFit];
-    [articlesLabel setOriginWithPoint:CGPointMake(16, self.articlesTV.frame.origin.y - 5 - articlesLabel.frame.size.height)];
-    [self.scrollView addSubview:articlesLabel];
+    
+    if (self.orderedArticles.count > 0) {
+        UILabel *articlesLabel = [[UILabel alloc] init];
+        articlesLabel.text = @"ARTICLES";
+        articlesLabel.textColor = [UIColor frescoMediumTextColor];
+        articlesLabel.font = [UIFont notaBoldWithSize:15];
+        [articlesLabel sizeToFit];
+        [articlesLabel setOriginWithPoint:CGPointMake(16, self.articlesTV.frame.origin.y - 5 - articlesLabel.frame.size.height)];
+        [self.scrollView addSubview:articlesLabel];
+    }
 }
 
 -(void)configureComments{
