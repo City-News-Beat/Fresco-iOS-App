@@ -116,7 +116,7 @@
     [self adjustHeight];
     
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
-        [self configureRepostWithName:self.gallery.repostedBy];
+        [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
 }
 
@@ -133,6 +133,15 @@
     [self.actionBar handleHeartAmount:[numLikes intValue]];
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
+    
+    [self.repostLabel removeFromSuperview];
+    self.repostLabel = Nil;
+    [self.repostImageView removeFromSuperview];
+    self.repostImageView = Nil;
+    
+    if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
+        [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
+    }
 }
 
 -(void)updateScrollView {

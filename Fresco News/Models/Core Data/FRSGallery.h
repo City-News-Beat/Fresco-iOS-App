@@ -43,7 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<FRSArticle *> *articles;
 @property (nullable, nonatomic, retain) NSMutableDictionary *tags;
 @property (nonatomic, assign) BOOL isLiked;
-@property (nullable, nonatomic, retain) NSString *repostedBy;
 @property (nonatomic, assign) NSInteger numberOfLikes;
 @property (nonatomic) NSInteger generatedHeight;
 -(NSInteger)heightForGallery;

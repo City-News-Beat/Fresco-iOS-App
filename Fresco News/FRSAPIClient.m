@@ -707,7 +707,7 @@
 */
 -(void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] init]);
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
     
@@ -720,7 +720,7 @@
 }
 -(void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] init]);
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
     
@@ -736,7 +736,7 @@
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
 
     if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] init]);
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
     
@@ -759,7 +759,8 @@
 }
 -(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] init]);
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
+        return;
     }
     
     if ([[story valueForKey:@"reposted"] boolValue]) {
@@ -804,7 +805,7 @@
 
 -(void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] init]);
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
     
@@ -812,7 +813,7 @@
 }
 -(void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] init]);
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
     
@@ -845,7 +846,7 @@
 
 -(void)addComment:(NSString *)comment toGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
 //    if ([self checkAuthAndPresentOnboard]) {
-//        completion(Nil, [[NSError alloc] init]);
+//        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
 //        return;
 //    }
     
@@ -854,7 +855,7 @@
 
 -(void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
 //    if ([self checkAuthAndPresentOnboard]) {
-//        completion(Nil, [[NSError alloc] init]);
+//        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
 //        return;
 //    }
     
