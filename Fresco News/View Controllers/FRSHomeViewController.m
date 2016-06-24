@@ -151,6 +151,7 @@
                 [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
                 needsUpdate = TRUE;
                 isLoading = FALSE;
+                [self.tableView dg_stopLoading];
             });
         });
     }];
@@ -239,9 +240,7 @@
     __weak typeof(self) weakSelf = self;
     
     [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.tableView dg_stopLoading];
-        });
+        [weakSelf reloadData];
     } loadingView:loadingView];
     
     [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
