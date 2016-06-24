@@ -33,7 +33,6 @@
 @dynamic articles;
 @dynamic isLiked;
 @dynamic numberOfLikes;
-@dynamic repostedBy;
 
 -(void)configureWithDictionary:(NSDictionary *)dict{
     

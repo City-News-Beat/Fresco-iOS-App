@@ -116,7 +116,7 @@
     [self adjustHeight];
     
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
-        [self configureRepostWithName:self.gallery.repostedBy];
+        [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
 }
 
