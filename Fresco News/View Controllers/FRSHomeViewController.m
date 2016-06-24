@@ -756,6 +756,9 @@
             
             [self showNavBarForScrollView:self.scrollView animated:NO];
             self.navigationItem.titleView.alpha = 1;
+            [self.tableView dg_stopLoading];
+            [self.followingTable dg_stopLoading];
+
             [self.tableView dg_removePullToRefresh];
             loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
             loadingView.tintColor = [UIColor whiteColor];
@@ -772,6 +775,9 @@
         if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
             self.followingTabButton.alpha = 0.7;
             self.highlightTabButton.alpha = 1;
+            [self.tableView dg_stopLoading];
+            [self.followingTable dg_stopLoading];
+
             [self.followingTable dg_removePullToRefresh];
             
             loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];

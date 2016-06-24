@@ -69,9 +69,13 @@
     [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
         
         if (galleries.count == 0) {
-            FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 175/2, self.frame.size.height/2 -125/2 +64, 175, 125)];
+            awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 175/2, self.frame.size.height/2 -125/2 +64, 175, 125)];
             [self addSubview:awkwardView];
         }
+        else {
+            [awkwardView removeFromSuperview];
+        }
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             _galleries = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE]];
             numberOfPosts = [_galleries count];
@@ -84,9 +88,13 @@
     [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
         
         if (galleries.count == 0) {
-            FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 175/2, self.frame.size.height/2 -125/2 +64, 175, 125)];
+            awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 175/2, self.frame.size.height/2 -125/2 +64, 175, 125)];
             [self addSubview:awkwardView];
         }
+        else {
+            [awkwardView removeFromSuperview];
+        }
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             _galleries = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE]];
             numberOfPosts = [_galleries count];

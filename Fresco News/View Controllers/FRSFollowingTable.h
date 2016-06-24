@@ -14,6 +14,7 @@
 @interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
 {
     NSInteger numberOfPosts;
+    UIView *awkwardView;
 }
 @property (retain, nonatomic, readonly) NSArray *galleries;
 

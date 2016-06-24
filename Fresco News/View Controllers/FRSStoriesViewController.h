@@ -12,5 +12,9 @@
 #import "FRSStoryDetailViewController.h"
 
 @interface FRSStoriesViewController : FRSScrollingViewController
+{
+    BOOL firstOpen;
+}
 @property BOOL loadNoMore;
+-(void)reloadData;
 @end
