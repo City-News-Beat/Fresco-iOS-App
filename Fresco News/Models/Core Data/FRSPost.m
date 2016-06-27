@@ -141,7 +141,7 @@
     if (!address || [address isEqual:[NSNull null]]) {
         return @"";
     }
-    
+     
     NSArray *comps = [address componentsSeparatedByString:@","];
     NSMutableString *str = [NSMutableString new];
     if (comps.count >= 3){
