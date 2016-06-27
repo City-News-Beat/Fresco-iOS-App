@@ -100,7 +100,9 @@
         if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
             authenticatedUser.firstName = responseObject[@"full_name"];
         }
-        authenticatedUser.username = responseObject[@"username"];
+        if (responseObject[@"username"] && ![responseObject[@"username"] isEqual:[NSNull null]]) {
+            authenticatedUser.username = responseObject[@"username"];
+        }
         if (![responseObject[@"bio"] isEqual:[NSNull null]]) {
             authenticatedUser.bio = responseObject[@"bio"];
         }

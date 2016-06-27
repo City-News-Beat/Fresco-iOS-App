@@ -536,7 +536,6 @@
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
     
-    
     self.timeLabel.clipsToBounds = NO;
     self.timeLabel.layer.masksToBounds = NO;
     
@@ -834,7 +833,9 @@
             
         }
         else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
-            [self.players addObject:imageView];
+            if (self.players && imageView) {
+                [self.players addObject:imageView];
+            }
         }
         else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

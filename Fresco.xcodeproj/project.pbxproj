@@ -617,6 +617,7 @@
 		D4BE3E2E1D17D6760039394C /* FRSCarouselCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCarouselCell.h; sourceTree = "<group>"; };
 		D4BE3E2F1D17D6760039394C /* FRSCarouselCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCarouselCell.m; sourceTree = "<group>"; };
 		D4BE3E301D17D6760039394C /* FRSCarouselCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSCarouselCell.xib; sourceTree = "<group>"; };
+		D4BEEB891D1DCD720019D2AB /* Fresco.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Fresco.entitlements; sourceTree = "<group>"; };
 		D4D60D0B1CC829C000059EBA /* following.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = following.json; path = ../following.json; sourceTree = "<group>"; };
 		D4D60D0E1CC8368300059EBA /* FRSFollowingTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingTable.h; sourceTree = "<group>"; };
 		D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingTable.m; sourceTree = "<group>"; };
@@ -836,6 +837,7 @@
 		1EDA44A71AA4CCC70082E08D = {
 			isa = PBXGroup;
 			children = (
+				D4BEEB891D1DCD720019D2AB /* Fresco.entitlements */,
 				1EDA44B21AA4CCC70082E08D /* Fresco News */,
 				1EDA44CF1AA4CCC70082E08D /* FrescoNewsTests */,
 				E71F0E301B0B936200186BAD /* Fresco WatchKit Extension */,
@@ -2161,6 +2163,7 @@
 					1EDA44AF1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = Z7R96S8K3N;
+						DevelopmentTeamName = "Fresco News Inc";
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -2603,6 +2606,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_ID_SUFFIX = .dev;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Fresco.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -2624,7 +2628,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2643,6 +2647,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Fresco.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -2664,7 +2669,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2766,6 +2771,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				BUNDLE_ID_SUFFIX = .beta;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Fresco.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -2787,7 +2793,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
 				PRODUCT_NAME = VPN;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

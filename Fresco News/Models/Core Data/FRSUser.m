@@ -49,7 +49,7 @@
     FRSUser *user = (FRSUser *)[[NSManagedObject alloc] initWithEntity:userEntity insertIntoManagedObjectContext:nil];
     user.uid = properties[@"id"];
     user.firstName = (properties[@"full_name"] != Nil && ![properties[@"full_name"] isEqual:[NSNull null]] && [[properties[@"full_name"] class] isSubclassOfClass:[NSString class]]) ? properties[@"full_name"] : @"";;
-    user.username = (properties[@"username"] != Nil) ? properties[@"username"] : @"";
+    user.username = (properties[@"username"] != Nil && ![properties[@"username"] isEqual:[NSNull null]]) ? properties[@"username"] : @"";
     user.isLoggedIn = @(FALSE);
     user.bio = (properties[@"bio"] != Nil) ? properties[@"bio"] : @"";
     

@@ -38,7 +38,6 @@
 
 @end
 
-
 @implementation FRSSettingsViewController
 
 -(void)viewDidLoad {
