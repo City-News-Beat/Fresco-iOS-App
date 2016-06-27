@@ -202,8 +202,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
 //    self.scrollView.backgroundColor = [UIColor redColor];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:self.scrollView];
-    
 
+}
+
+-(void)adjustScrollViewContentSize {
+    
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height);
+    
+    NSLog(@"self.scrollView.contentSize.height = %f", self.scrollView.contentSize.height);
 }
 
 
@@ -463,6 +469,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
     self.assignmentsArray = self.assignments;
     
+    
 }
 
 
@@ -508,10 +515,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         if ([global count] >  0) {
             
         }
-        self.assignmentsArray = nearBy; //should be nearby, make new array for global
+        self.assignmentsArray = nearBy;
         [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
-        [self configureTextView]; //Disables cell selection/deselection (?)
+        [self configureTextView];
+        [self adjustScrollViewContentSize];
     }];
 }
 

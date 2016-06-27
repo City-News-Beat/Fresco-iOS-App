@@ -76,7 +76,6 @@ static NSString *imageTile = @"ImageTile";
     //Navigation bar color is not Fresco Yellow. Not sure where it's set
     
     self.backTapButton.userInteractionEnabled = YES;
-
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
