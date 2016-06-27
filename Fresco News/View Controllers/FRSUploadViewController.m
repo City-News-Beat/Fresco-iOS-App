@@ -293,14 +293,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)toggleGestureRecognizer {
-
-    NSLog(@"toggle");
     
     if (self.dismissKeyboardGestureRecognizer.enabled) {
-        NSLog(@"disable");
         self.dismissKeyboardGestureRecognizer.enabled = NO;
     } else {
-        NSLog(@"enable");
         self.dismissKeyboardGestureRecognizer.enabled = YES;
     }
 }
