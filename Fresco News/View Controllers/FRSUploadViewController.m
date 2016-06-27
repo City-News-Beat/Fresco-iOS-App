@@ -10,8 +10,8 @@
 #import "FRSAssignmentPickerTableViewCell.h"
 #import "FRSAssignment.h"
 #import "FRSOnboardingViewController.h"
+#import "FRSCarouselCell.h"
 #import <Twitter/Twitter.h>
-
 
 #import "FRSAPIClient.h"
 
@@ -123,6 +123,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.galleryCollectionView.collectionViewLayout = collectionViewLayout;
     self.galleryCollectionView.delegate = self;
     self.galleryCollectionView.dataSource = self;
+    [self.galleryCollectionView registerNib:[UINib nibWithNibName:@"FRSCarouselCell" bundle:nil] forCellWithReuseIdentifier:@"FRSCarouselCell"];
     [self.view addSubview:self.galleryCollectionView];
 
     /* DEBUG */
@@ -134,7 +135,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell-identifierr" forIndexPath:indexPath];
+    FRSCarouselCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor blueColor];
     return cell;
 }
