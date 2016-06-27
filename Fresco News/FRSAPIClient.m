@@ -124,6 +124,9 @@
         if (!error) {
             [self handleUserLogin:responseObject];
         }
+        
+        NSLog(@"FACEBOOK SIGN IN: %@", error);
+
     }];
 }
 
