@@ -23,6 +23,7 @@
 @property (strong, nonatomic) UIImageView *cashTwoIV;
 @property (strong, nonatomic) UIImageView *cashThreeIV;
 @property (strong, nonatomic) UIButton *cashButton;
+@property (strong, nonatomic) UIView *container ;
 @property (nonatomic) BOOL animating;
 
 @end
@@ -94,71 +95,71 @@
         offset = 295;
     }
     
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 320, 288)];
-    [self addSubview:container];
+    self.container = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 320, 288)];
+    [self addSubview:self.container];
     
     self.leftArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(104, 143, 28, 26)];
     self.leftArrowIV.image = [UIImage imageNamed:@"upload"];
     self.leftArrowIV.transform = CGAffineTransformMakeRotation(M_PI_2 +2);
     self.leftArrowIV.layer.shouldRasterize = YES;
-    [container addSubview:self.leftArrowIV];
+    [self.container addSubview:self.leftArrowIV];
     
     self.rightArrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(192, 143, 28, 26)];
     self.rightArrowIV.image = [UIImage imageNamed:@"upload"];
     self.rightArrowIV.transform = CGAffineTransformMakeRotation(M_PI_2 + 1);
     self.rightArrowIV.layer.shouldRasterize = YES;
-    [container addSubview:self.rightArrowIV];
+    [self.container addSubview:self.rightArrowIV];
     
     self.televisionIV = [[UIImageView alloc] initWithFrame:CGRectMake(46, 193, 88, 72)];
     self.televisionIV.image = [UIImage imageNamed:@"television"];
-    [container addSubview:self.televisionIV];
+    [self.container addSubview:self.televisionIV];
     
     self.newspaperIV = [[UIImageView alloc] initWithFrame:CGRectMake(194, 194, 80, 72)];
     self.newspaperIV.image = [UIImage imageNamed:@"newspaper"];
-    [container addSubview:self.newspaperIV];
+    [self.container addSubview:self.newspaperIV];
     
     self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - width/2, yOrigin, width, height)];
     self.cloudIV.image = [UIImage imageNamed:@"grey-cloud"];
-    self.cloudIV.userInteractionEnabled = YES;
-    [container addSubview:self.cloudIV];
+    [self.container addSubview:self.cloudIV];
     
     self.cashOneIV = [UIImageView UIImageViewWithName:@"cash"
                                              andFrame:CGRectMake(205, 36, 35, 24)
                                        andContentMode:UIViewContentModeScaleToFill];
     self.cashOneIV.layer.shouldRasterize = YES;
     self.cashOneIV.transform = CGAffineTransformMakeRotation(.13);
-    [container addSubview:self.cashOneIV];
+    [self.container addSubview:self.cashOneIV];
     
     self.cashTwoIV = [UIImageView UIImageViewWithName:@"cash"
                                              andFrame:CGRectMake(45, 60, 35, 24)
                                        andContentMode:UIViewContentModeScaleToFill];
     self.cashTwoIV.layer.shouldRasterize = YES;
     self.cashTwoIV.transform = CGAffineTransformMakeRotation(-.785);
-    [container addSubview:self.cashTwoIV];
+    [self.container addSubview:self.cashTwoIV];
     
     self.cashThreeIV = [UIImageView UIImageViewWithName:@"cash"
                                                andFrame:CGRectMake(228, 114, 35, 24)
                                          andContentMode:UIViewContentModeScaleToFill];
     self.cashThreeIV.layer.shouldRasterize = YES;
     self.cashThreeIV.transform = CGAffineTransformMakeRotation(.785);
-    [container addSubview:self.cashThreeIV];
+    [self.container addSubview:self.cashThreeIV];
     
     self.cashOneIV.alpha = 0;
     self.cashTwoIV.alpha = 0;
     self.cashThreeIV.alpha = 0;
-    
-//    self.cashButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    self.cashButton.frame = CGRectMake(0, 0, self.cloudIV.frame.size.width, self.cloudIV.frame.size.height);
-//    [self.cashButton addTarget:self action:@selector(animate) forControlEvents:UIControlEventTouchUpInside];
-//    self.cashButton.backgroundColor = [UIColor redColor];
-//    [self.cloudIV addSubview:self.cashButton];
-    
+}
+
+-(UIImageView*)getCloud{
+    return self.cloudIV;
+}
+
+-(UIView*)getCloudContainer{
+    return self.container;
 }
 
 - (void)animate {
     
 //    if (!self.animating) {
-    
+        NSLog(@"Poof");
         self.cloudIV.alpha = 1;
         self.televisionIV.alpha = 1;
         self.newspaperIV.alpha = 1;
@@ -169,7 +170,10 @@
         self.cashThreeIV.alpha = 1;
         self.cloudIV.transform = CGAffineTransformMakeScale(.96,.96);
         self.cloudIV.alpha = 1;
-        
+    
+        self.cashOneIV.backgroundColor = [UIColor redColor];
+        self.cashTwoIV.backgroundColor = [UIColor blackColor];
+
         [self animateCash1];
         [self animateCash2];
         [self animateCash3];
@@ -187,13 +191,13 @@
         CGMutablePathRef cash1Path1 = CGPathCreateMutable();
         CGPathMoveToPoint(cash1Path1,NULL,200.0,70.0);
         
-        [UIView animateWithDuration:2.0 animations:^{
+        [UIView animateWithDuration:1.5 animations:^{
             CGPathAddCurveToPoint(cash1Path1,NULL,
                                   340.0, 0.0,
                                   130.0,100.0,
                                   250.0,300.0
                                   );
-            [UIView animateWithDuration:1.0 delay:0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [UIView animateWithDuration:0.7 delay:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.cashOneIV.transform = CGAffineTransformMakeRotation(0.3);
             } completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.5 delay: 0.8 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -209,7 +213,7 @@
         
         theAnimation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
         theAnimation.path=cash1Path1;
-        theAnimation.duration=2.0;
+        theAnimation.duration=1.5;
         
         [self.cashOneIV.layer addAnimation:theAnimation forKey:@"position"];
     } completion:^(BOOL finished) {
@@ -222,13 +226,14 @@
     [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         CGMutablePathRef cash1Path1 = CGPathCreateMutable();
         CGPathMoveToPoint(cash1Path1,NULL,100.0,70.0);
-        [UIView animateWithDuration:2.0 delay:0.5  options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        [UIView animateWithDuration:1.5 delay:0.5  options:UIViewAnimationOptionCurveEaseInOut animations:^{
             CGPathAddCurveToPoint(cash1Path1,NULL,
                                   -90.0, 0.0,
                                   130.0,100.0,
                                   100.0,240.0
                                   );
-            [UIView animateWithDuration:1.0 delay:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [UIView animateWithDuration:0.7 delay:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.cashTwoIV.transform = CGAffineTransformMakeRotation(-0.3);
                 
             } completion:^(BOOL finished) {
@@ -245,7 +250,7 @@
         CAKeyframeAnimation * theAnimation;
         theAnimation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
         theAnimation.path=cash1Path1;
-        theAnimation.duration=2.0;
+        theAnimation.duration=1.5;
         [self.cashTwoIV.layer addAnimation:theAnimation forKey:@"position"];
         
     } completion:nil];
@@ -256,13 +261,13 @@
         CGMutablePathRef cash3Path = CGPathCreateMutable();
         CGPathMoveToPoint(cash3Path,NULL,200.0,120.0);
         
-        [UIView animateWithDuration:2.0 animations:^{
+        [UIView animateWithDuration:1.5 animations:^{
             CGPathAddCurveToPoint(cash3Path,NULL,
                                   280.0, 100.0,
                                   230.0,100.0,
                                   150.0,200.0
                                   );
-            [UIView animateWithDuration:1.0 delay:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [UIView animateWithDuration:0.7 delay:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.cashThreeIV.transform = CGAffineTransformMakeRotation(-0.3);
             } completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.5 delay: 0.8 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -278,7 +283,7 @@
         CAKeyframeAnimation * cash3Animation;
         cash3Animation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
         cash3Animation.path=cash3Path;
-        cash3Animation.duration=2.0;
+        cash3Animation.duration=1.5;
         
         [self.cashThreeIV.layer addAnimation:cash3Animation forKey:@"position"];
     } completion:^(BOOL finished) {
