@@ -497,18 +497,7 @@
     NSMutableArray *postsToSend = [[NSMutableArray alloc] init];
 
     for (FRSPost *post in posts) {
-        NSMutableDictionary *currentPost = [[NSMutableDictionary alloc] init];
-        currentPost[@"address"] = (post.address) ? post.address : @"";
-        currentPost[@"lat"] = @(post.location.coordinate.latitude);
-        currentPost[@"lng"] = @(post.location.coordinate.longitude);
-        currentPost[@"contentType"] = (post.contentType) ? post.contentType : @"image/jpeg";
-        
-        if (post.videoUrl) {
-            currentPost[@"fileSize"] = [self fileSizeForURL:[NSURL fileURLWithPath:post.videoUrl]];
-            currentPost[@"chunkSize"] = @(5242880); // 5mb in bytes
-        }
-        
-        [postsToSend addObject:currentPost];
+        [postsToSend addObject:[post jsonObject]];
     }
     
     galleryDigest[@"caption"] = (gallery.caption) ? gallery.caption : @"";
