@@ -109,7 +109,7 @@
     
     self.creator = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:context];
     self.creator.uid = dict[@"owner"][@"id"];
-    self.creator.username = dict[@"owner"][@"username"];
+    self.creator.username = (dict[@"owner"][@"username"] != Nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ?dict[@"owner"][@"username"] : @"";
     self.creator.firstName = (dict[@"owner"][@"full_name"] != Nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]] && [[dict[@"owner"][@"full_name"] class] isSubclassOfClass:[NSString class]]) ? dict[@"owner"][@"full_name"] : @"";;
     self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
 
