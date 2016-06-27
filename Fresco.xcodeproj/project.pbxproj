@@ -2163,6 +2163,7 @@
 					1EDA44AF1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = Z7R96S8K3N;
+						DevelopmentTeamName = "Fresco News Inc";
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -2627,7 +2628,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2668,7 +2669,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2792,7 +2793,7 @@
 				INFOPLIST_FILE = "Fresco News/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
 				PRODUCT_NAME = VPN;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
