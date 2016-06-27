@@ -118,13 +118,17 @@ static NSString * const cellIdentifier = @"assignment-cell";
     UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
     collectionViewLayout.itemSize = CGSizeMake(50, 50);
     [collectionViewLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    collectionViewLayout.minimumInteritemSpacing = 2;//should be 0
+    collectionViewLayout.minimumLineSpacing = 2;//should be 0
     
     self.galleryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height) collectionViewLayout:collectionViewLayout];
+    self.galleryCollectionView.showsHorizontalScrollIndicator = NO;
     self.galleryCollectionView.collectionViewLayout = collectionViewLayout;
+    self.galleryCollectionView.pagingEnabled = YES;
     self.galleryCollectionView.delegate = self;
     self.galleryCollectionView.dataSource = self;
     [self.galleryCollectionView registerNib:[UINib nibWithNibName:@"FRSCarouselCell" bundle:nil] forCellWithReuseIdentifier:@"FRSCarouselCell"];
-    [self.view addSubview:self.galleryCollectionView];
+    [self.scrollView addSubview:self.galleryCollectionView];
 
     /* DEBUG */
     self.galleryCollectionView.backgroundColor = [UIColor redColor];
@@ -141,7 +145,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(25, 25);
+    return CGSizeMake(self.view.frame.size.width, collectionView.frame.size.height);
 }
 
 
@@ -256,6 +260,17 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height);
     
     NSLog(@"self.scrollView.contentSize.height = %f", self.scrollView.contentSize.height);
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+
+    //Disables scrolling past top
+//    if (scrollView.contentOffset.y <= 0) {
+//        self.scrollView.bounces = NO;
+//    } else {
+//        self.scrollView.bounces = YES;
+//    }
+
 }
 
 
