@@ -42,6 +42,8 @@
 @property (strong, nonatomic) UIView *globalAssignmentsDrawer;
 @property (strong, nonatomic) UITableView *globalAssignmentsTableView;
 
+@property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardGestureRecognizer;
+
 @end
 
 @implementation FRSUploadViewController
@@ -201,6 +203,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 //    self.scrollView.backgroundColor = [UIColor redColor];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:self.scrollView];
+    
+
 }
 
 
@@ -225,6 +229,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     /* DEBUG */
     self.galleryTableView.backgroundColor = [UIColor blueColor];
     self.galleryTableView.alpha = 0.1;
+    
 }
 
 -(void)configureAssignmentsTableView {
@@ -237,7 +242,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.assignmentsTableView.showsVerticalScrollIndicator = NO;
     self.assignmentsTableView.delaysContentTouches = NO;
     self.assignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    self.dismissKeyboardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    self.dismissKeyboardGestureRecognizer.enabled = NO;
+    [self.view addGestureRecognizer:self.dismissKeyboardGestureRecognizer];
+    
     [self.scrollView addSubview:self.assignmentsTableView];
+
 }
 
 -(void)configureGlobalAssignmentsDrawer {
@@ -278,6 +289,19 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.globalAssignmentsEnabled = YES;
         [self configureAndShowGlobalAssignments];
         NSLog(@"enabled");
+    }
+}
+
+-(void)toggleGestureRecognizer {
+
+    NSLog(@"toggle");
+    
+    if (self.dismissKeyboardGestureRecognizer.enabled) {
+        NSLog(@"disable");
+        self.dismissKeyboardGestureRecognizer.enabled = NO;
+    } else {
+        NSLog(@"enable");
+        self.dismissKeyboardGestureRecognizer.enabled = YES;
     }
 }
 
@@ -371,9 +395,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configureTextView {
     
+    
     NSInteger textViewHeight = 200;
     
     self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
+//    self.captionContainer.backgroundColor = [UIColor redColor];
     [self.scrollView addSubview:self.captionContainer];
     
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, textViewHeight)];
@@ -389,8 +415,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     line.backgroundColor = [UIColor frescoShadowColor];
     [self.captionContainer addSubview:line];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-    [self.view addGestureRecognizer:tap];
     
     self.placeholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 17)];
     self.placeholderLabel.text = @"What's happening?";
@@ -420,6 +444,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - Keyboard
 
 -(void)handleKeyboardWillShow:(NSNotification *)sender {
+    [self toggleGestureRecognizer];
     
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
@@ -429,6 +454,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
+    [self toggleGestureRecognizer];
     
 //    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, 0);
     self.view.transform           = CGAffineTransformMakeTranslation(0, 0);
@@ -490,7 +516,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.assignmentsArray = nearBy; //should be nearby, make new array for global
         [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
-        //[self configureTextView]; //Disables cell selection/deselection (?)
+        [self configureTextView]; //Disables cell selection/deselection (?)
     }];
 }
 
