@@ -833,7 +833,9 @@
             
         }
         else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
-            [self.players addObject:imageView];
+            if (self.players && imageView) {
+                [self.players addObject:imageView];
+            }
         }
         else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

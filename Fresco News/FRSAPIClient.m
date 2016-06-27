@@ -323,6 +323,8 @@
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
+    NSLog(@"ENDPOINT: %@", endpoint);
+    
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
@@ -579,6 +581,8 @@
         NSString *currentBearerToken = [self authenticationToken];
         if (currentBearerToken) {
             currentBearerToken = [NSString stringWithFormat:@"Bearer %@", currentBearerToken];
+            NSLog(@"BEARER: %@", currentBearerToken);
+            
             [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
             [self startLocator];
         }
