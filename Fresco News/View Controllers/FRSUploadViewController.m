@@ -44,6 +44,8 @@
 
 @property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardGestureRecognizer;
 
+@property (strong, nonatomic) UICollectionView *galleryCollectionView;
+
 @end
 
 @implementation FRSUploadViewController
@@ -89,6 +91,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [self configureScrollView];
     [self configureGalleryTableView];
+    [self configureGalleryCollectionView];
     [self configureNavigationBar];
     [self configureAssignments]; //Tableview configures are called here
     [self configureBottomBar];
@@ -98,6 +101,48 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)checkButtonStates {
 
 }
+
+#pragma mark - UICollectionView
+
+-(void)configureGalleryCollectionView {
+    
+    int height;
+    if (IS_IPHONE_5) {
+        height = 240;
+    } else if (IS_IPHONE_6) {
+        height = 280;
+    } else if (IS_IPHONE_6_PLUS) {
+        height = 310;
+    }
+    
+    UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
+    collectionViewLayout.itemSize = CGSizeMake(50, 50);
+    [collectionViewLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    
+    self.galleryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height) collectionViewLayout:collectionViewLayout];
+    self.galleryCollectionView.collectionViewLayout = collectionViewLayout;
+    self.galleryCollectionView.delegate = self;
+    self.galleryCollectionView.dataSource = self;
+    [self.view addSubview:self.galleryCollectionView];
+
+    /* DEBUG */
+    self.galleryCollectionView.backgroundColor = [UIColor redColor];
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return 3;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell-identifierr" forIndexPath:indexPath];
+    cell.backgroundColor = [UIColor blueColor];
+    return cell;
+}
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(25, 25);
+}
+
 
 
 #pragma mark - Navigation Bar
