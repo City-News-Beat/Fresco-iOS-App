@@ -536,7 +536,6 @@
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
     
-    
     self.timeLabel.clipsToBounds = NO;
     self.timeLabel.layer.masksToBounds = NO;
     

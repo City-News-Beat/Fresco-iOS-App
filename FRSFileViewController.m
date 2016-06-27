@@ -74,6 +74,8 @@ static NSString *imageTile = @"ImageTile";
     
     //self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
     //Navigation bar color is not Fresco Yellow. Not sure where it's set
+    
+    self.backTapButton.userInteractionEnabled = YES;
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -98,6 +100,8 @@ static NSString *imageTile = @"ImageTile";
         self.uploadViewController.anonButton.selected = NO;
         self.uploadViewController.anonLabel.alpha = 0;
     }
+    
+    self.backTapButton.userInteractionEnabled = NO;
     
 //    self.navigationController.navigationBarHidden = NO;
 }
