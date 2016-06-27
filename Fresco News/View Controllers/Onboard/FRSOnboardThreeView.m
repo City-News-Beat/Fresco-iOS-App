@@ -171,9 +171,12 @@
         self.cloudIV.transform = CGAffineTransformMakeScale(.96,.96);
         self.cloudIV.alpha = 1;
     
-        self.cashOneIV.backgroundColor = [UIColor redColor];
-        self.cashTwoIV.backgroundColor = [UIColor blackColor];
-
+        //self.cashOneIV.backgroundColor = [UIColor redColor];
+        //self.cashTwoIV.backgroundColor = [UIColor blackColor];
+        self.cashOneIV.backgroundColor = [UIColor whiteColor];
+        self.cashTwoIV.backgroundColor = [UIColor whiteColor];
+        self.cashThreeIV.backgroundColor = [UIColor whiteColor];
+    
         [self animateCash1];
         [self animateCash2];
         [self animateCash3];
@@ -181,8 +184,6 @@
 //    }
 //    self.animating = YES;
 }
-
-
 
 - (void)animateCash1 {
     [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -200,7 +201,7 @@
             [UIView animateWithDuration:0.7 delay:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.cashOneIV.transform = CGAffineTransformMakeRotation(0.3);
             } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.5 delay: 0.8 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                [UIView animateWithDuration:0.5 delay: 0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                     self.cashOneIV.transform = CGAffineTransformMakeRotation(-0.3);
                     self.cashOneIV.alpha = 0;
                 } completion:nil];
@@ -237,7 +238,7 @@
                 self.cashTwoIV.transform = CGAffineTransformMakeRotation(-0.3);
                 
             } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.5 delay: 0.8 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                [UIView animateWithDuration:0.5 delay: 0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                     self.cashTwoIV.transform = CGAffineTransformMakeRotation(0.3);
                     self.cashTwoIV.alpha = 0;
                 } completion:nil];
@@ -270,7 +271,7 @@
             [UIView animateWithDuration:0.7 delay:0.3 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.cashThreeIV.transform = CGAffineTransformMakeRotation(-0.3);
             } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.5 delay: 0.8 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                [UIView animateWithDuration:0.5 delay: 0.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                     self.cashThreeIV.transform = CGAffineTransformMakeRotation(0.3);
                     self.cashThreeIV.alpha = 0;
                 } completion:nil];

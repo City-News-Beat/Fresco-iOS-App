@@ -16,6 +16,7 @@
 @property (strong, nonatomic) UIImageView *cloudIV;
 @property (strong, nonatomic) UIImageView *arrowIV;
 @property (strong, nonatomic) UIImageView *cameraIV;
+@property (strong, nonatomic) UIView *container;
 
 @end
 
@@ -27,8 +28,23 @@
         [self configureText];
         [self configureIV];
         [self configureParallax];
+        [self reset];
     }
     return self;
+}
+
+-(void)reset{
+    self.arrowIV.alpha = 0;
+    self.arrowIV.frame = CGRectMake(self.container.frame.size.width/2 - 28/2, 143+18, 28, 26);
+}
+
+-(void)animate{
+    [UIView animateWithDuration:0.25 delay:0 options:0 animations:^{
+        [self.arrowIV setFrame:CGRectMake(self.arrowIV.frame.origin.x, self.arrowIV.frame.origin.y-18, self.arrowIV.frame.size.width, self.arrowIV.frame.size.height)];
+        [self.arrowIV setAlpha:1];
+    }completion:^(BOOL finished){
+        //Finished animation
+    }];
 }
 
 -(void)configureText{
@@ -88,20 +104,20 @@
         camHeight = 86.4;
     }
     
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 320, 288)];
-    [self addSubview:container];
+    self.container = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 320, 288)];
+    [self addSubview:self.container];
 
-    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2 - width/2, yOrigin-5, width, height)];
+    self.cloudIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.container.frame.size.width/2 - width/2, yOrigin-5, width, height)];
     self.cloudIV.image = [UIImage imageNamed:@"cloud"];
-    [container addSubview:self.cloudIV];
+    [self.container addSubview:self.cloudIV];
     
-    self.arrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2 - 28/2, 143, 28, 26)];
+    self.arrowIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.container.frame.size.width/2 - 28/2, 143, 28, 26)];
     self.arrowIV.image = [UIImage imageNamed:@"upload"];
-    [container addSubview:self.arrowIV];
+    [self.container addSubview:self.arrowIV];
     
-    self.cameraIV = [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2 - camWidth/2, 194, camWidth, camHeight)];
+    self.cameraIV = [[UIImageView alloc] initWithFrame:CGRectMake(self.container.frame.size.width/2 - camWidth/2, 194, camWidth, camHeight)];
     self.cameraIV.image = [UIImage imageNamed:@"camera"];
-    [container addSubview:self.cameraIV];
+    [self.container addSubview:self.cameraIV];
 }
 
 -(void)configureParallax{

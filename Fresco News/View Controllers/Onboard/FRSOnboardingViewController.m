@@ -31,6 +31,7 @@
 @property (strong, nonatomic) UIButton *closeButton;
 @property (strong, nonatomic) UIImageView *logo;
 @property (strong, nonatomic) FRSOnboardThreeView *viewThree;
+@property (strong, nonatomic) FRSOnboardTwoView *viewTwo;
 @property (strong, nonatomic) FRSOnboardOneView *viewOne;
 @property (strong, nonatomic) UIView *actionBarContainer;
 @property (strong, nonatomic) UIButton *logInButton;
@@ -148,8 +149,8 @@
     self.viewOne = [[FRSOnboardOneView alloc] initWithOrigin:CGPointMake(offset, 0)];
     [self.scrollView addSubview:self.viewOne];
     
-    FRSOnboardTwoView *viewTwo = [[FRSOnboardTwoView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width + offset, 0)];
-    [self.scrollView addSubview:viewTwo];
+    self.viewTwo = [[FRSOnboardTwoView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width + offset, 0)];
+    [self.scrollView addSubview:self.viewTwo];
     
     self.viewThree = [[FRSOnboardThreeView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width * 2 + offset, 0)];
     [self.scrollView addSubview:self.viewThree];
@@ -498,10 +499,13 @@
     
     if (self.page == 0){
         [self.viewOne animate];
+        [self.viewTwo reset];
     } else if (self.page == 1){
         [self.viewOne reset];
+        [self.viewTwo animate];
     } else if (self.page == 2) {
         [self.viewThree animate];
+        [self.viewTwo reset];
     }
     
     self.pageControl.currentPage = self.page;
