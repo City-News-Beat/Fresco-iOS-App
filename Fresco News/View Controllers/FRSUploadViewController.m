@@ -90,7 +90,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self addObservers];
     
     [self configureScrollView];
-    [self configureGalleryTableView];
+    //[self configureGalleryTableView];
     [self configureGalleryCollectionView];
     [self configureNavigationBar];
     [self configureAssignments]; //Tableview configures are called here
@@ -257,7 +257,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)adjustScrollViewContentSize {
     
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height);
     
     NSLog(@"self.scrollView.contentSize.height = %f", self.scrollView.contentSize.height);
 }
@@ -300,7 +300,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configureAssignmentsTableView {
     
-    self.assignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height, self.view.frame.size.width, self.assignmentsArray.count *44)];
+    self.assignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, self.assignmentsArray.count *44)];
     self.assignmentsTableView.scrollEnabled = NO;
     self.assignmentsTableView.delegate = self;
     self.assignmentsTableView.dataSource = self;
@@ -318,7 +318,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)configureGlobalAssignmentsDrawer {
-    self.globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44)];
+    self.globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44)];
     self.globalAssignmentsDrawer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.globalAssignmentsDrawer];
     
@@ -460,7 +460,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     NSInteger textViewHeight = 200;
     
-    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
+    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
 //    self.captionContainer.backgroundColor = [UIColor redColor];
     [self.scrollView addSubview:self.captionContainer];
     
