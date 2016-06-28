@@ -20,7 +20,7 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     
-    self.creditsArray = @[@"Philip Bernstein", @"Omar Elfanek", @"Imogen Olsen", @"Elmir Kõuliev", @"Daniel Sun"];
+    self.creditsArray = @[@"Philip Bernstein", @"Omar Elfanek", @"Arthur De Araujo", @"Imogen Olsen", @"Elmir Kõuliev", @"Daniel Sun"];
     
     [self configureUI];
 }
@@ -59,13 +59,17 @@
 -(void)configureVersionHeader {
     
     UILabel *versionLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -288/2, 122, 288, 17)];
-    versionLabel.text = @"Version 3.0";
+    NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
+    NSString *version = [info objectForKey:@"CFBundleShortVersionString"];
+    versionLabel.text = [NSString stringWithFormat:@"Version %@", version];
     versionLabel.font = [UIFont notaBoldWithSize:17];
     versionLabel.textColor = [UIColor frescoDarkTextColor];
     versionLabel.textAlignment = NSTextAlignmentCenter;
     
     UILabel *buildLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -288/2, 139, 288, 16)];
-    buildLabel.text = @"Build 420 • May 6, 2016";
+    NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+    NSString *dateStr = [NSString stringWithUTF8String:__DATE__];
+    buildLabel.text = [NSString stringWithFormat:@"Build %@ • %@",build,dateStr];
     buildLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
     buildLabel.textColor = [UIColor frescoMediumTextColor];
     buildLabel.textAlignment = NSTextAlignmentCenter;
