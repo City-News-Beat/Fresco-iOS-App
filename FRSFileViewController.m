@@ -291,13 +291,13 @@ static NSString *imageTile = @"ImageTile";
     PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
     FRSImageViewCell *cell = (FRSImageViewCell *)[fileCollectionView cellForItemAtIndexPath:indexPath];
     
+    
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
         [cell selected:FALSE];
-        [nextButton.titleLabel setTextColor:[UIColor frescoLightTextColor]];
-        nextButton.userInteractionEnabled = NO;
     }
     else {
+        
         if ([selectedAssets count] == 10) {
             //should tell user why they can't select anymore cc:imogen
             return;
@@ -309,8 +309,15 @@ static NSString *imageTile = @"ImageTile";
         }
         [selectedAssets addObject:representedAsset];
         [cell selected:TRUE];
-        [nextButton.titleLabel setTextColor:[UIColor frescoBlueColor]];
+    }
+    
+    if (selectedAssets.count >= 1) {
+        [nextButton setTintColor:[UIColor frescoBlueColor]];
         nextButton.userInteractionEnabled = YES;
+        
+    } else {
+        [nextButton setTintColor:[UIColor frescoLightTextColor]];
+        nextButton.userInteractionEnabled = NO;
     }
 }
 
