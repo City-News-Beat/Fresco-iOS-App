@@ -46,6 +46,10 @@
 
 @property (strong, nonatomic) UICollectionView *galleryCollectionView;
 
+@property (strong, nonatomic) FRSCarouselCell *carouselCell;
+
+@property (strong, nonatomic) UIPageControl *pageControl;
+
 @end
 
 @implementation FRSUploadViewController
@@ -68,17 +72,22 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self checkBottomBar];
     
     self.assignmentIDs = [[NSMutableArray alloc] init];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
+    NSLog(@"COUNT IN VC: %ld", self.contentCount);
+    [self.galleryCollectionView reloadData]; //used when navigating through view controllers
+    [self configurePageController];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self dismissKeyboard];
+    [self.pageControl removeFromSuperview];
     
 }
 
@@ -92,6 +101,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureScrollView];
     //[self configureGalleryTableView];
     [self configureGalleryCollectionView];
+    [self configurePageController];
     [self configureNavigationBar];
     [self configureAssignments]; //Tableview configures are called here
     [self configureBottomBar];
@@ -134,21 +144,41 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.galleryCollectionView.backgroundColor = [UIColor redColor];
 }
 
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 3;
+    return self.contentCount;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    FRSCarouselCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor blueColor];
-    return cell;
+    self.carouselCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
+    //self.carouselCell.assets = @[@"one", @"two", @"three"];
+    self.carouselCell.backgroundColor = [UIColor blueColor];
+    return self.carouselCell;
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(self.view.frame.size.width, collectionView.frame.size.height);
 }
 
-
+-(void)configurePageController {
+    self.pageControl = [[UIPageControl alloc] init];
+    self.pageControl.numberOfPages = self.contentCount;
+    self.pageControl.currentPage = 0;
+    self.pageControl.userInteractionEnabled = NO;
+    
+    self.pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
+    self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:1 alpha:0.7];
+    
+    [self.pageControl sizeToFit];
+    [self.pageControl setFrame:CGRectMake(self.galleryCollectionView.frame.size.width - 16 - self.pageControl.frame.size.width, self.galleryCollectionView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8)];
+    
+    self.pageControl.hidesForSinglePage = YES;
+    
+    [self.scrollView addSubview:self.pageControl];
+}
 
 #pragma mark - Navigation Bar
 
@@ -271,6 +301,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
 //        self.scrollView.bounces = YES;
 //    }
 
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    //Update pageControl on galleryCollectionView
+    if (scrollView == self.galleryCollectionView) {
+        CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
+        self.pageControl.currentPage = self.galleryCollectionView.contentOffset.x / pageWidth;
+    }
 }
 
 

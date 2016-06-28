@@ -15,6 +15,10 @@
     UIImageView *imageView;
     FRSPlayer *videoView;
 }
+
 -(void)loadImage:(PHAsset *)asset;
 -(void)loadVideo:(PHAsset *)asset;
+
+@property (strong, nonatomic) NSArray *assets;
+
 @end
