@@ -82,6 +82,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     NSLog(@"COUNT IN VC: %ld", self.contentCount);
     [self.galleryCollectionView reloadData]; //used when navigating through view controllers
     [self configurePageController];
+    
+    [self.galleryCollectionView setContentOffset:CGPointMake(0, 0)];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
