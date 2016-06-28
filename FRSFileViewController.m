@@ -290,7 +290,7 @@ static NSString *imageTile = @"ImageTile";
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
     FRSImageViewCell *cell = (FRSImageViewCell *)[fileCollectionView cellForItemAtIndexPath:indexPath];
-
+    
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
         [cell selected:FALSE];
@@ -298,6 +298,11 @@ static NSString *imageTile = @"ImageTile";
         nextButton.userInteractionEnabled = NO;
     }
     else {
+        if ([selectedAssets count] == 10) {
+            //should tell user why they can't select anymore cc:imogen
+            return;
+        }
+
         if (cell.currentAVAsset) {
             self.currentTime = cell.currentAVAsset.duration;
             [self presentVideoTrimmerViewController];
