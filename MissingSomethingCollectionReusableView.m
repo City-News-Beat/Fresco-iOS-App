@@ -11,42 +11,42 @@
 
 @interface MissingSomethingCollectionReusableView ()
 @property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *settingsTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *questionLeftConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *chatWithTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *chatWithRightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *chatWithLeftConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *settingsButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *settingsRightConstraint;
 @property BOOL isSetup;
 @end
 
 @implementation MissingSomethingCollectionReusableView
 
+- (IBAction)pressedSettings:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+}
+- (IBAction)pressedChatWithUs:(id)sender {
+    NSLog(@"Pressed 'Chat with us'");
+}
+
 -(void)setup {
     if (!self.isSetup) {
         self.isSetup = TRUE;
-        
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:self.textView.text];
-        [attributedString addAttribute:NSLinkAttributeName value:UIApplicationOpenSettingsURLString range:NSMakeRange(self.textView.text.length - @"Settings.".length-1, @"Settings.".length)];
-        [self.textView setAttributedText:attributedString];
-        
         self.textView.delegate = (id<UITextViewDelegate>)self;
-        
-        NSArray *textViewGestureRecognizers = self.textView.gestureRecognizers;
-        
-        NSMutableArray *mutableArrayOfGestureRecognizers = [[NSMutableArray alloc] init];
-        for (UIGestureRecognizer *gestureRecognizer in textViewGestureRecognizers) {
-            if (![gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]]) {
-                [mutableArrayOfGestureRecognizers addObject:gestureRecognizer];
-            } else {
-                UILongPressGestureRecognizer *longPressGestureRecognizer = (UILongPressGestureRecognizer *)gestureRecognizer;
-                if (longPressGestureRecognizer.minimumPressDuration < 0.3) {
-                    [mutableArrayOfGestureRecognizers addObject:gestureRecognizer];
-                }
-            }
-        }
-        self.textView.gestureRecognizers = mutableArrayOfGestureRecognizers;
+    }    
+    self.textView.allowsEditingTextAttributes = false;
+    if(IS_IPHONE_6_PLUS){
+        self.settingsRightConstraint.constant = 85;
+    }else if(IS_IPHONE_5){
+        self.settingsTopConstraint.constant = 45;
+        self.settingsRightConstraint.constant = 117;
+        self.chatWithTopConstraint.constant = 30;
+        self.chatWithRightConstraint.constant = 100;
+        [super removeConstraint:self.chatWithLeftConstraint];
+        self.questionLeftConstraint.constant = 50;
     }
-    self.textView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    self.textView.textAlignment = NSTextAlignmentCenter;
-    
-    self.textView.textColor = [UIColor frescoMediumTextColor];
-    self.textView.tintColor = [UIColor frescoDarkTextColor];
-    
+    [self.superview setBackgroundColor:[UIColor frescoBackgroundColorDark]];
     
 //    NSString *strTextView = @"We can only verify photos and videos from the past 24 hours. If nothing’s showing up, make sure Location Services are turned on in Settings.";
 //    
