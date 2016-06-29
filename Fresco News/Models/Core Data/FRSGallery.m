@@ -91,12 +91,6 @@
             NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSPost" inManagedObjectContext:self.currentContext];
             FRSPost *post = (FRSPost *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
             
-            if (dict[@"owner"] != [NSNull null]) {
-                if (!dict[@"owner"][@"avatar"]) {
-                    return;
-                }
-                post.creator.profileImage = dict[@"owner"][@"avatar"];
-            }
             [post configureWithDictionary:dict context:self.currentContext save:FALSE];
             [self addPostsObject:post];
         }
