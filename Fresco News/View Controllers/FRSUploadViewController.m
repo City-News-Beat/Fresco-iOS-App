@@ -87,6 +87,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configurePageController];
     
     [self.galleryCollectionView setContentOffset:CGPointMake(0, 0)];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -158,8 +159,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     self.carouselCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
-    //self.carouselCell.assets = @[@"one", @"two", @"three"];
+
+    NSLog(@"carouselCell.assets = %@", self.carouselCell.assets);
+    
     self.carouselCell.backgroundColor = [UIColor blueColor];
+    [self.carouselCell loadImage:[self.content objectAtIndex:indexPath.row]];
+    
     return self.carouselCell;
 }
 
