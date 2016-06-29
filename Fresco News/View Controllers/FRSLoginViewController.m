@@ -276,7 +276,8 @@
     [spinner setPullProgress:90];
     [spinner startAnimating];
     [self.twitterButton.superview addSubview:spinner];
-    [spinner  setFrame:self.twitterButton.frame];
+    [spinner  setFrame:CGRectMake(self.twitterButton.frame.origin.x, self.twitterButton.frame.origin.y, self.twitterButton.frame.size.width, self.twitterButton.frame.size.width)];
+    //NSLog(@"%f x %f", self.twitterButton.frame.size.width,self.twitterButton.frame.size.width-2);
     
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         if (authenticated) {
@@ -284,10 +285,6 @@
             self.didAuthenticateSocial = YES;
             
             [self popToOrigin];
-        }else{
-            //Gives error message when user doesn't have twitter linked with Fresco
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Social account is not linked to a Fresco user" delegate:self cancelButtonTitle:@"Okay :(" otherButtonTitles:@"Cancel", nil];
-            [alert show];
         }
         [spinner stopLoading];
         [spinner removeFromSuperview];
@@ -328,7 +325,7 @@
     [spinner setPullProgress:90];
     [spinner startAnimating];
     [self.facebookButton.superview addSubview:spinner];
-    [spinner  setFrame:self.facebookButton.frame];
+    [spinner  setFrame:CGRectMake(self.facebookButton.frame.origin.x, self.facebookButton.frame.origin.y, self.facebookButton.frame.size.width, self.facebookButton.frame.size.width)];
     
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         if (authenticated) {
