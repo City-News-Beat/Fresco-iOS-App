@@ -16,6 +16,6 @@
 @property (retain, nonatomic) UIButton *anonButton;
 @property (retain, nonatomic) UILabel *anonLabel;
 
-@property (nonatomic) NSUInteger contentCount;
+@property (nonatomic, weak) NSArray *content;
 
 @end

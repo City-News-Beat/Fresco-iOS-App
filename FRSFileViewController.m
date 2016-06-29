@@ -205,7 +205,7 @@ static NSString *imageTile = @"ImageTile";
 -(void)next:(id)sender {
     
     [self.navigationController pushViewController:self.uploadViewController animated:YES];
-    self.uploadViewController.contentCount = selectedAssets.count;
+    self.uploadViewController.content = selectedAssets;
     
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }

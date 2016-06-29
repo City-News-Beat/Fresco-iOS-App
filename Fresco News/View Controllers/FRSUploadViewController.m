@@ -82,7 +82,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
-    NSLog(@"COUNT IN VC: %ld", self.contentCount);
+    NSLog(@"COUNT IN VC: %ld", self.content.count);
     [self.galleryCollectionView reloadData]; //used when navigating through view controllers
     [self configurePageController];
     
@@ -153,7 +153,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.contentCount;
+    return self.content.count;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -169,7 +169,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configurePageController {
     self.pageControl = [[UIPageControl alloc] init];
-    self.pageControl.numberOfPages = self.contentCount;
+    self.pageControl.numberOfPages = self.content.count;
     self.pageControl.currentPage = 0;
     self.pageControl.userInteractionEnabled = NO;
     
@@ -296,10 +296,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
 
     CGFloat offset = scrollView.contentOffset.y + 20;
-    NSInteger currentYOffset = scrollView.contentOffset.y;
-    
+
     //If user is scrolling down, return and act like a normal scroll view
-    if (currentYOffset > self.scrollView.contentSize.height - self.scrollView.frame.size.height) {
+    if (offset > self.scrollView.contentSize.height - self.scrollView.frame.size.height) {
         return;
     }
     
