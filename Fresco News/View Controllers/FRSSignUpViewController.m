@@ -515,19 +515,19 @@
 
 
 -(void)addSocialButtonsToBottomBar {
-    _facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
-    [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-    [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateHighlighted];
-    [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
-    [_facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self.bottomBar addSubview:_facebookButton];
-    
-    _twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(_facebookButton.frame.origin.x + _facebookButton.frame.size.width, 1, 24 + 18, 24 + 18)];
+    _twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 1, 24 + 18, 24 + 18)];
     [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
     [_twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateHighlighted];
     [_twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateSelected];
     [_twitterButton addTarget:self action:@selector(twitterTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.bottomBar addSubview:_twitterButton];
+    
+    _facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(_twitterButton.frame.origin.x + _twitterButton.frame.size.width, 1, 24 + 18, 24 + 18)];
+    [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+    [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateHighlighted];
+    [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
+    [_facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomBar addSubview:_facebookButton];
 }
 
 -(void)animateTextFieldError:(UITextField *)textField {
@@ -1018,8 +1018,20 @@
 
 -(void)twitterTapped {
     
+    //Create Spinner
+    self.twitterButton.hidden = true;
+    DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    spinner.tintColor = [UIColor frescoOrangeColor];
+    [spinner setPullProgress:90];
+    [spinner startAnimating];
+    [self.twitterButton.superview addSubview:spinner];
+    [spinner setFrame:CGRectMake(16, self.twitterButton.imageView.frame.origin.y, self.twitterButton.imageView.frame.size.width, self.twitterButton.imageView.frame.size.height)];
+    
     if (_twitterSession) {
         _twitterSession = Nil;
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
+        self.twitterButton.hidden = false;
         [UIView animateWithDuration:.2 animations:^{
             [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
         }];
@@ -1031,20 +1043,39 @@
     [FRSSocial registerWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         _twitterButton.enabled = TRUE;
         
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
+        self.twitterButton.hidden = false;
+        
         if (error) {
             [self handleSocialChallenge:error];
+            [spinner stopLoading];
+            [spinner removeFromSuperview];
+            self.twitterButton.hidden = false;
+            [UIView animateWithDuration:.2 animations:^{
+                [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+                
+            }];
             return;
+        }else{
+            [UIView animateWithDuration:.2 animations:^{
+                [_twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateNormal];
+            }];
         }
-        
-        [UIView animateWithDuration:.2 animations:^{
-            [_twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateNormal];
-        }];
-        
         _twitterSession = session;
     }];
 }
 
 -(void)facebookTapped {
+
+    //Create Spinner
+    self.facebookButton.hidden = true;
+    DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    spinner.tintColor = [UIColor frescoOrangeColor];
+    [spinner setPullProgress:90];
+    [spinner startAnimating];
+    [spinner setFrame:CGRectMake(56, self.facebookButton.imageView.frame.origin.y, self.facebookButton.imageView.frame.size.width, self.facebookButton.imageView.frame.size.height)];
+    [self.facebookButton.superview addSubview:spinner];
     
     if (_facebookToken) {
         _facebookToken = Nil;
@@ -1068,7 +1099,9 @@
         [UIView animateWithDuration:.2 animations:^{
             [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
         }];
-        
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
+        self.facebookButton.hidden = false;
         _facebookToken = token;
         
     } parent:self]; // presenting view controller for safari view login

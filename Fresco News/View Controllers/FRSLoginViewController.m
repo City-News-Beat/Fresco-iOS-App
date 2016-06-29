@@ -270,6 +270,14 @@
 }
 
 -(IBAction)twitter:(id)sender {
+    self.twitterButton.hidden = true;
+    DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    spinner.tintColor = [UIColor frescoOrangeColor];
+    [spinner setPullProgress:90];
+    [spinner startAnimating];
+    [self.twitterButton.superview addSubview:spinner];
+    [spinner  setFrame:CGRectMake(self.twitterButton.frame.origin.x, self.twitterButton.frame.origin.y, self.twitterButton.frame.size.width, self.twitterButton.frame.size.width)];
+    //NSLog(@"%f x %f", self.twitterButton.frame.size.width,self.twitterButton.frame.size.width-2);
     
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         if (authenticated) {
@@ -278,6 +286,9 @@
             
             [self popToOrigin];
         }
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
+        self.twitterButton.hidden = false;
     }];
 }
 
@@ -308,6 +319,13 @@
 }
 
 -(IBAction)facebook:(id)sender {
+    self.facebookButton.hidden = true;
+    DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    spinner.tintColor = [UIColor frescoOrangeColor];
+    [spinner setPullProgress:90];
+    [spinner startAnimating];
+    [self.facebookButton.superview addSubview:spinner];
+    [spinner  setFrame:CGRectMake(self.facebookButton.frame.origin.x, self.facebookButton.frame.origin.y, self.facebookButton.frame.size.width, self.facebookButton.frame.size.width)];
     
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         if (authenticated) {
@@ -316,6 +334,9 @@
             
             [self popToOrigin];
         }
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
+        self.facebookButton.hidden = false;
     } parent:self];
 }
 

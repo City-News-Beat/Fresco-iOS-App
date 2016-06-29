@@ -13,5 +13,7 @@
 -(instancetype)initWithOrigin:(CGPoint)origin;
 
 -(void)animate;
+-(UIImageView*)getCloud;
+-(UIView*)getCloudContainer;
 
 @end

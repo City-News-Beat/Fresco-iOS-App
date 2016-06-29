@@ -31,9 +31,11 @@
 @property (strong, nonatomic) UIButton *closeButton;
 @property (strong, nonatomic) UIImageView *logo;
 @property (strong, nonatomic) FRSOnboardThreeView *viewThree;
+@property (strong, nonatomic) FRSOnboardTwoView *viewTwo;
 @property (strong, nonatomic) FRSOnboardOneView *viewOne;
 @property (strong, nonatomic) UIView *actionBarContainer;
 @property (strong, nonatomic) UIButton *logInButton;
+@property (strong, nonatomic) UIButton *cashButton;
 @property (strong, nonatomic) UIView *mainContainer;
 
 @property NSInteger page;
@@ -41,12 +43,10 @@
 @end
 
 @implementation FRSOnboardingViewController
-
-
-
 #pragma mark - Lifecycle
 
 -(void)viewDidLoad {
+    
     [super viewDidLoad];
     [self configureUI];
     
@@ -54,8 +54,22 @@
     
     //Make delegate
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(animateIn) name:@"returnToOnboard" object:nil];
+    
+    UIImageView *cloud = [self.viewThree getCloud];
+    UIView *container = [self.viewThree getCloudContainer];
+    CGPoint cloudBasePoint = [container convertPoint:cloud.frame.origin toView:self.scrollView];
+    
+    self.cashButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    //Place on top of cloud and add an 8pt border padding
+    self.cashButton.frame = CGRectMake(cloudBasePoint.x-8, cloudBasePoint.y-8, cloud.frame.size.width+16, cloud.frame.size.height+16);
+    [self.cashButton addTarget:self action:@selector(animateViewThree) forControlEvents:UIControlEventTouchUpInside];
+    //self.cashButton.backgroundColor = [UIColor redColor];
+    [self.scrollView addSubview:self.cashButton];
 }
 
+-(void)animateViewThree{
+    [self.viewThree animate];
+}
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -135,8 +149,8 @@
     self.viewOne = [[FRSOnboardOneView alloc] initWithOrigin:CGPointMake(offset, 0)];
     [self.scrollView addSubview:self.viewOne];
     
-    FRSOnboardTwoView *viewTwo = [[FRSOnboardTwoView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width + offset, 0)];
-    [self.scrollView addSubview:viewTwo];
+    self.viewTwo = [[FRSOnboardTwoView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width + offset, 0)];
+    [self.scrollView addSubview:self.viewTwo];
     
     self.viewThree = [[FRSOnboardThreeView alloc] initWithOrigin:CGPointMake(self.view.frame.size.width * 2 + offset, 0)];
     [self.scrollView addSubview:self.viewThree];
@@ -485,10 +499,13 @@
     
     if (self.page == 0){
         [self.viewOne animate];
+        [self.viewTwo reset];
     } else if (self.page == 1){
         [self.viewOne reset];
+        [self.viewTwo animate];
     } else if (self.page == 2) {
         [self.viewThree animate];
+        [self.viewTwo reset];
     }
     
     self.pageControl.currentPage = self.page;
