@@ -82,7 +82,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
-    NSLog(@"COUNT IN VC: %ld", self.content.count);
     [self.galleryCollectionView reloadData]; //used when navigating through view controllers
     [self configurePageController];
     
@@ -485,7 +484,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configureTextView {
     
-    
     NSInteger textViewHeight = 200;
     
     self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
@@ -504,7 +502,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(-16, 0, self.view.frame.size.width, 0.5)];
     line.backgroundColor = [UIColor frescoShadowColor];
     [self.captionContainer addSubview:line];
-    
     
     self.placeholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 17)];
     self.placeholderLabel.text = @"What's happening?";
