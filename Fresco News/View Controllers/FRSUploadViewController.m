@@ -51,6 +51,8 @@
 
 @property (strong, nonatomic) UIPageControl *pageControl;
 
+@property NSInteger galleryCollectionViewHeight;
+
 @end
 
 @implementation FRSUploadViewController
@@ -119,13 +121,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configureGalleryCollectionView {
     
-    int height;
     if (IS_IPHONE_5) {
-        height = 240;
+        self.galleryCollectionViewHeight = 240;
     } else if (IS_IPHONE_6) {
-        height = 280;
+        self.galleryCollectionViewHeight = 280;
     } else if (IS_IPHONE_6_PLUS) {
-        height = 310;
+        self.galleryCollectionViewHeight = 310;
     }
     
     self.galleryCollectionViewFlowLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -134,7 +135,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.galleryCollectionViewFlowLayout.minimumInteritemSpacing = 2;//should be 0
     self.galleryCollectionViewFlowLayout.minimumLineSpacing = 2;//should be 0
     
-    self.galleryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height) collectionViewLayout:self.galleryCollectionViewFlowLayout];
+    self.galleryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.galleryCollectionViewHeight) collectionViewLayout:self.galleryCollectionViewFlowLayout];
     self.galleryCollectionView.showsHorizontalScrollIndicator = NO;
     self.galleryCollectionView.collectionViewLayout = self.galleryCollectionViewFlowLayout;//?
     self.galleryCollectionView.pagingEnabled = YES;
@@ -289,13 +290,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)adjustScrollViewContentSize {
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height +44);
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
 
-    
-    CGFloat offset = scrollView.contentOffset.y;
+    CGFloat offset = scrollView.contentOffset.y + 20;
     NSInteger currentYOffset = scrollView.contentOffset.y;
     
     //If user is scrolling down, return and act like a normal scroll view
@@ -304,14 +304,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
     
     //If user is scrolling up, scale with content offset.
-    if (offset <= -20) {
-
-        self.galleryCollectionView.frame = CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionView.frame.size.height);
+    if (offset <= 0) {
+        self.galleryCollectionView.frame = CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset));
         [self.galleryCollectionViewFlowLayout invalidateLayout];
     }
-    
-    
-
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -324,29 +320,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 
-#pragma mark - UITableView
-
--(void)configureGalleryTableView {
-    
-    /* Height for galleryTableView */
-    int height;
-    if (IS_IPHONE_5) {
-        height = 240;
-    } else if (IS_IPHONE_6) {
-        height = 280;
-    } else if (IS_IPHONE_6_PLUS) {
-        height = 310;
-    }
-    
-    /* Configure galleryTableView */
-    self.galleryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height)];
-    [self.scrollView addSubview:self.galleryTableView];
-    
-    /* DEBUG */
-    self.galleryTableView.backgroundColor = [UIColor blueColor];
-    self.galleryTableView.alpha = 0.1;
-    
-}
+#pragma mark - UITableViewx
 
 -(void)configureAssignmentsTableView {
     
