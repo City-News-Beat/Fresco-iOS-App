@@ -852,17 +852,6 @@
         }
     }
     
-    if (scrollView.contentOffset.x >= 0 && scrollView.contentOffset.x <= scrollView.contentSize.width) {
-        if (post.creator.profileImage && post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
-            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-            [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
-        }
-        else {
-            [self.profileIV setImage:Nil];
-            [self.nameLabel setOriginWithPoint:CGPointMake(0, self.nameLabel.frame.origin.y)];
-        }   
-    }
-    
     if (self.imageViews.count > page+1 && self.orderedPosts.count > page+1) {
         UIImageView *nextImage = self.imageViews[page+1];
         FRSPost *nextPost = self.orderedPosts[page+1];
@@ -936,7 +925,6 @@
     if (adjustedPost.videoUrl == nil) {
         self.muteImageView.alpha = 0;
     }
-    
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
