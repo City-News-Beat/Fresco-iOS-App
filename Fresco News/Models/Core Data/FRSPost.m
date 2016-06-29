@@ -150,8 +150,50 @@
     return str;
 }
 
+-(BOOL)checkVal:(id)val {
+    if (val && ![val isEqual:[NSNull null]]) {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+/*
+ 
+ @property (nullable, nonatomic, retain) NSString *address;
+ @property (nullable, nonatomic, retain) NSString *byline;
+ @property (nullable, nonatomic, retain) NSDate *createdDate;
+ @property (nullable, nonatomic, retain) id image;
+ @property (nullable, nonatomic, retain) NSString *imageUrl;
+ @property (nullable, nonatomic, retain) NSNumber *mediaType;
+ @property (nullable, nonatomic, retain) NSString *source;
+ @property (nullable, nonatomic, retain) NSString *uid;
+ @property (nullable, nonatomic, retain) NSString *videoUrl;
+ @property (nullable, nonatomic, retain) NSString *visibility;
+ @property (nullable, nonatomic, retain) id coordinates;
+ @property (nullable, nonatomic, retain) id meta;
+ @property (nullable, nonatomic, retain) FRSUser *creator;
+ @property (nullable, nonatomic, retain) FRSGallery *gallery;
+ 
+ */
+
 -(NSDictionary *)jsonObject {
     NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];
+    
+    if ([self checkVal:self.imageUrl]) {
+        jsonObject[@"media_url"] = self.imageUrl;
+    }
+    else if ([self checkVal:self.videoUrl]) {
+        jsonObject[@"media_url"] = self.videoUrl;
+    }
+    
+    if ([self checkVal:self.createdDate]) {
+        jsonObject[@"created_date"] = self.createdDate;
+    }
+    
+    if ([self checkVal:self.coordinates]) {
+        jsonObject[@"coordinates"] = self.coordinates;
+    }
     
     
     return jsonObject;
