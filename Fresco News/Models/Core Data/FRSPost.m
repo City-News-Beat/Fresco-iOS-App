@@ -46,19 +46,6 @@
         self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
     }
     
-    /*self.creator = [FRSUser MR_createEntity];
-    
-    if ([dict objectForKey:@"video"] != [NSNull null]) {
-        self.mediaType = @(1);
-        self.videoUrl = [dict objectForKey:@"video"];
-    }
-    
-    if ([dict objectForKey:@"owner"] != [NSNull null] && [dict objectForKey:@"owner"]) {
-        if ([[dict objectForKey:@"owner"] objectForKey:@"avatar"] != [NSNull null]) {
-            self.creator.profileImage = [[dict objectForKey:@"owner"] objectForKey:@"avatar"];
-        }
-    }*/
-    
     if (dict[@"video"] != Nil && dict[@"stream"] != [NSNull null]) {
         self.videoUrl = dict[@"stream"];
     }
