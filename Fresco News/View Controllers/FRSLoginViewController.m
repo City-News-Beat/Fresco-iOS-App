@@ -270,6 +270,13 @@
 }
 
 -(IBAction)twitter:(id)sender {
+    self.twitterButton.hidden = true;
+    DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    spinner.tintColor = [UIColor frescoOrangeColor];
+    [spinner setPullProgress:90];
+    [spinner startAnimating];
+    [self.twitterButton.superview addSubview:spinner];
+    [spinner  setFrame:self.twitterButton.frame];
     
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         if (authenticated) {
@@ -277,7 +284,14 @@
             self.didAuthenticateSocial = YES;
             
             [self popToOrigin];
+        }else{
+            //Gives error message when user doesn't have twitter linked with Fresco
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Social account is not linked to a Fresco user" delegate:self cancelButtonTitle:@"Okay :(" otherButtonTitles:@"Cancel", nil];
+            [alert show];
         }
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
+        self.twitterButton.hidden = false;
     }];
 }
 
@@ -308,6 +322,13 @@
 }
 
 -(IBAction)facebook:(id)sender {
+    self.facebookButton.hidden = true;
+    DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    spinner.tintColor = [UIColor frescoOrangeColor];
+    [spinner setPullProgress:90];
+    [spinner startAnimating];
+    [self.facebookButton.superview addSubview:spinner];
+    [spinner  setFrame:self.facebookButton.frame];
     
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         if (authenticated) {
@@ -316,6 +337,9 @@
             
             [self popToOrigin];
         }
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
+        self.facebookButton.hidden = false;
     } parent:self];
 }
 
