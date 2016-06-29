@@ -45,6 +45,7 @@
 @property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardGestureRecognizer;
 
 @property (strong, nonatomic) UICollectionView *galleryCollectionView;
+@property (strong, nonatomic) UICollectionViewFlowLayout *galleryCollectionViewFlowLayout;
 
 @property (strong, nonatomic) FRSCarouselCell *carouselCell;
 
@@ -127,15 +128,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
         height = 310;
     }
     
-    UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
-    collectionViewLayout.itemSize = CGSizeMake(50, 50);
-    [collectionViewLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    collectionViewLayout.minimumInteritemSpacing = 2;//should be 0
-    collectionViewLayout.minimumLineSpacing = 2;//should be 0
+    self.galleryCollectionViewFlowLayout = [[UICollectionViewFlowLayout alloc] init];
+    self.galleryCollectionViewFlowLayout.itemSize = CGSizeMake(50, 50);
+    [self.galleryCollectionViewFlowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self.galleryCollectionViewFlowLayout.minimumInteritemSpacing = 2;//should be 0
+    self.galleryCollectionViewFlowLayout.minimumLineSpacing = 2;//should be 0
     
-    self.galleryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height) collectionViewLayout:collectionViewLayout];
+    self.galleryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height) collectionViewLayout:self.galleryCollectionViewFlowLayout];
     self.galleryCollectionView.showsHorizontalScrollIndicator = NO;
-    self.galleryCollectionView.collectionViewLayout = collectionViewLayout;
+    self.galleryCollectionView.collectionViewLayout = self.galleryCollectionViewFlowLayout;//?
     self.galleryCollectionView.pagingEnabled = YES;
     self.galleryCollectionView.delegate = self;
     self.galleryCollectionView.dataSource = self;
@@ -288,20 +289,28 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)adjustScrollViewContentSize {
-    
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height);
-    
-    NSLog(@"self.scrollView.contentSize.height = %f", self.scrollView.contentSize.height);
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
 
-    //Disables scrolling past top
-//    if (scrollView.contentOffset.y <= 0) {
-//        self.scrollView.bounces = NO;
-//    } else {
-//        self.scrollView.bounces = YES;
-//    }
+    
+    CGFloat offset = scrollView.contentOffset.y;
+    NSInteger currentYOffset = scrollView.contentOffset.y;
+    
+    //If user is scrolling down, return and act like a normal scroll view
+    if (currentYOffset > self.scrollView.contentSize.height - self.scrollView.frame.size.height) {
+        return;
+    }
+    
+    //If user is scrolling up, scale with content offset.
+    if (offset <= 0) {
+
+        self.galleryCollectionView.frame = CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionView.frame.size.height);
+        [self.galleryCollectionViewFlowLayout invalidateLayout];
+    }
+    
+    
 
 }
 
