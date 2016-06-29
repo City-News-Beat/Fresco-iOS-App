@@ -36,6 +36,7 @@ static BOOL const stagingEnvironment = FALSE;
 
 // authorization constants
 static NSString * const clientAuthorization = @"aW9zOmFzZHBvaXF3ZWxramRmaGtpOWVvcmhneQ";
+//static NSString * const clientAuthorization = @"MTMzNzp0aGlzaXNhc2VjcmV0";
 static NSString * const testBearerToken = @"goog";
 static NSString * const serviceName = @"frescoNewsService3";
 static NSString * const FRSUploadNotification = @"FRSUploadUpdateNotification";

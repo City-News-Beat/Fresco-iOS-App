@@ -37,13 +37,15 @@
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"address"]];
-    self.creator = [FRSUser MR_createEntity];
     
-    self.creator.uid = dict[@"owner"][@"id"];
-    self.creator.username = dict[@"owner"][@"username"];
-    self.creator.firstName = (dict[@"owner"][@"full_name"] != Nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]] && [[dict[@"owner"][@"full_name"] class] isSubclassOfClass:[NSString class]]) ? dict[@"owner"][@"full_name"] : @"";;
-    self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
-
+    if (dict[@"owner"][@"id"] && ![dict[@"owner"][@"uid"] isEqual:[NSNull null]]) {
+        self.creator = [FRSUser MR_createEntity];
+        self.creator.uid = dict[@"owner"][@"id"];
+        self.creator.username = dict[@"owner"][@"username"];
+        self.creator.firstName = (dict[@"owner"][@"full_name"] != Nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]] && [[dict[@"owner"][@"full_name"] class] isSubclassOfClass:[NSString class]]) ? dict[@"owner"][@"full_name"] : @"";;
+        self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
+    }
+    
     /*self.creator = [FRSUser MR_createEntity];
     
     if ([dict objectForKey:@"video"] != [NSNull null]) {
@@ -155,8 +157,9 @@
         [str appendString:comps[1]];
     }
     else if (comps.count == 1){
-        [str appendString:comps[0]];
+        return address;
     }
+    
     return str;
 }
 

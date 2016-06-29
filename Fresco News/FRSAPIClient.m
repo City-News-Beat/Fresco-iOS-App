@@ -116,7 +116,8 @@
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
     NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
-
+    NSLog(@"%@", authDictionary);
+    
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error); // burden of error handling falls on sender
         
@@ -913,15 +914,6 @@
 
 -(id)objectFromDictionary:(NSDictionary *)dictionary context:(NSManagedObjectContext *)managedObjectContext {
     
-    if (![dictionary respondsToSelector:@selector(objectForKeyedSubscript:)]) {
-        return dictionary;
-    }
-    
-    if ([dictionary isEqual:[NSNull null]]) {
-        return dictionary;
-    }
-    
-    
     NSString *objectType = dictionary[@"object"];
     
     if ([objectType isEqualToString:galleryObjectType]) {
@@ -929,7 +921,7 @@
         FRSGallery *gallery = (FRSGallery *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
         gallery.currentContext = [self managedObjectContext];
         [gallery configureWithDictionary:dictionary];
-        return gallery;
+                return gallery;
     }
     else if ([objectType isEqualToString:storyObjectType]) {
         NSEntityDescription *storyEntity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:[self managedObjectContext]];

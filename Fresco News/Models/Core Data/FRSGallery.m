@@ -43,7 +43,7 @@
     self.caption = dict[@"caption"];
     self.byline = dict[@"byline"];
     
-    if (self.posts.count == 0) {
+    if (!self.posts || self.posts.count == 0) {
         [self addPostsWithArray:dict[@"posts"]];
     }
     
@@ -79,6 +79,7 @@
 }
 
 -(void)addPostsWithArray:(NSArray *)posts{
+        
     for (NSDictionary *dict in posts){
         if (save) {
             NSLog(@"SAVE");
