@@ -18,6 +18,7 @@
 
 -(void)loadImage:(PHAsset *)asset;
 -(void)loadVideo:(PHAsset *)asset;
+@property (weak, nonatomic) IBOutlet UIImageView *image;
 
 @property (strong, nonatomic) NSArray *assets;
 

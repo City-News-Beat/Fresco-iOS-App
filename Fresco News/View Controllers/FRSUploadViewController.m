@@ -12,6 +12,8 @@
 #import "FRSOnboardingViewController.h"
 #import "FRSCarouselCell.h"
 #import <Twitter/Twitter.h>
+#import "FRSImageViewCell.h"
+#import "FRSFileLoader.h"
 
 #import "FRSAPIClient.h"
 
@@ -124,7 +126,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - UICollectionView
 
 -(void)configureGalleryCollectionView {
-    
+
     if (IS_IPHONE_5) {
         self.galleryCollectionViewHeight = 240;
     } else if (IS_IPHONE_6) {
@@ -162,11 +164,45 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     self.carouselCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
-    
     self.carouselCell.backgroundColor = [UIColor blueColor];
-    [self.carouselCell loadImage:[self.content objectAtIndex:indexPath.row]];
+    self.carouselCell.image.image = [UIImage imageNamed:@"earth"];
+    
+    
+    
+
+    
+    [[PHImageManager defaultManager]
+     requestImageForAsset:[self.content objectAtIndex:indexPath.row]
+     targetSize:CGSizeMake(self.carouselCell.frame.size.width, self.carouselCell.frame.size.height)
+     contentMode:PHImageContentModeAspectFill
+     options:nil
+     resultHandler:^(UIImage *result, NSDictionary *info) {
+         
+         self.carouselCell.image.image = result;
+
+         
+//         if (phAsset.mediaType == PHAssetMediaTypeVideo) {
+//             
+//             [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:Nil resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+//                 callback(result, avAsset, phAsset.mediaType, error);
+//             }];
+//             
+//             return; // don't want 2 callbacks
+//         }
+         
+//         callback(result, Nil, phAsset.mediaType, error);
+     }];
+
     
     return self.carouselCell;
+
+    
+
+//    FRSImageViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
+//    [cell loadAsset:representedAsset];
+    
+//    return cell;
+    
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -279,7 +315,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
     [sendButton setTitle:@"SEND" forState:UIControlStateNormal];
     [sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
-//    sendButton.userInteractionEnabled = NO;
+    //sendButton.userInteractionEnabled = NO;
     [self.bottomContainer addSubview:sendButton];
 }
 
