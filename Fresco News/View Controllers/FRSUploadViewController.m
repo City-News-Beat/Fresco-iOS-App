@@ -138,8 +138,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.galleryCollectionViewFlowLayout = [[UICollectionViewFlowLayout alloc] init];
     self.galleryCollectionViewFlowLayout.itemSize = CGSizeMake(50, 50);
     [self.galleryCollectionViewFlowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    self.galleryCollectionViewFlowLayout.minimumInteritemSpacing = 2;//should be 0
-    self.galleryCollectionViewFlowLayout.minimumLineSpacing = 2;//should be 0
+    self.galleryCollectionViewFlowLayout.minimumInteritemSpacing = 0;
+    self.galleryCollectionViewFlowLayout.minimumLineSpacing = 0;
     
     self.galleryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.galleryCollectionViewHeight) collectionViewLayout:self.galleryCollectionViewFlowLayout];
     self.galleryCollectionView.showsHorizontalScrollIndicator = NO;
@@ -179,6 +179,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
      resultHandler:^(UIImage *result, NSDictionary *info) {
          
          self.carouselCell.image.image = result;
+         self.carouselCell.image.contentMode = UIViewContentModeScaleAspectFill;
 
          
 //         if (phAsset.mediaType == PHAssetMediaTypeVideo) {
@@ -187,7 +188,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 //                 callback(result, avAsset, phAsset.mediaType, error);
 //             }];
 //             
-//             return; // don't want 2 callbacks
+//             return;
 //         }
          
 //         callback(result, Nil, phAsset.mediaType, error);
@@ -325,7 +326,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)configureScrollView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.delegate = self;
-//    self.scrollView.backgroundColor = [UIColor redColor];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:self.scrollView];
 
