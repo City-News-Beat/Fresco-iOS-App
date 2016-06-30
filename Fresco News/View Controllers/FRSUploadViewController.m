@@ -85,7 +85,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.galleryCollectionView reloadData]; //used when navigating through view controllers
     [self configurePageController];
     
+    
     [self.galleryCollectionView setContentOffset:CGPointMake(0, 0)];
+    
+    self.carouselCell.assets = self.content;
+    NSLog(@"(UploadVC) ASSETS: %@", self.content);
     
 }
 
@@ -158,8 +162,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     self.carouselCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
-
-    NSLog(@"carouselCell.assets = %@", self.carouselCell.assets);
     
     self.carouselCell.backgroundColor = [UIColor blueColor];
     [self.carouselCell loadImage:[self.content objectAtIndex:indexPath.row]];
