@@ -1375,6 +1375,7 @@
 }
 
 -(void)segueToLogin {
+    [self dismissKeyboard];
     FRSLoginViewController *loginVC = [[FRSLoginViewController alloc] init];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.navigationController pushViewController:loginVC animated:YES];
