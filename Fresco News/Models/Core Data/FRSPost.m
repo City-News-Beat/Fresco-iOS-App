@@ -11,6 +11,7 @@
 #import "FRSUser.h"
 #import "FRSDateFormatter.h"
 #import "MagicalRecord.h"
+#import "FRSAPIClient.h"
 
 @implementation FRSPost
 @synthesize currentContext, location, contentType;
@@ -86,6 +87,10 @@
     NSNumber *width = dict[@"meta"][@"width"] ? : @0;
     
     self.meta = @{@"image_height" : height, @"image_width" : width};
+    
+    if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
+        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_at"]];
+    }
 }
 
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context save:(BOOL)save {
@@ -192,7 +197,8 @@
     }
     
     if ([self checkVal:self.coordinates]) {
-        jsonObject[@"coordinates"] = self.coordinates;
+        jsonObject[@"longitude"] = self.coordinates[1];
+        jsonObject[@"latitude"] = self.coordinates[0]; 
     }
     
     

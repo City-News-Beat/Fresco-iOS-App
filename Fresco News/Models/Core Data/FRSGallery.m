@@ -155,10 +155,18 @@
 -(NSDictionary *)jsonObject {
     NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];
     
-    
+    if ([self checkVal:[self valueForKey:@"caption"]]) {
+        jsonObject[@"caption"] = [self valueForKey:@"caption"];
+    }
     return jsonObject;
 }
 
-// Insert code here to add functionality to your managed object subclass
+-(BOOL)checkVal:(id)val {
+    if (val && ![val isEqual:[NSNull null]]) {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
 
 @end
