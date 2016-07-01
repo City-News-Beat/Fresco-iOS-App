@@ -624,6 +624,7 @@
         if (topView) {
             return topView;
         }
+        [self configureSectionView];
         
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
         [view addSubview:self.sectionView];
