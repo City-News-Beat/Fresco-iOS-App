@@ -47,6 +47,7 @@
 @property (strong, nonatomic) UIButton *likesButton;
 
 @property (strong, nonatomic) NSArray *galleries;
+@property (strong, nonatomic) NSArray *likes;
 
 @property (strong, nonatomic) UIView *whiteOverlay;
 @property (strong, nonatomic) UIView *socialButtonContainer;
@@ -190,6 +191,14 @@
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
         [self.tableView reloadData];
+    }];
+    
+    [self fetchLikes];
+}
+
+-(void)fetchLikes {
+    [[FRSAPIClient sharedClient] fetchLikesFeedForUser:self.representedUser completion:^(id responseObject, NSError *error) {
+        self.likes = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
     }];
 }
 

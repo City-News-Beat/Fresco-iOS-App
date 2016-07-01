@@ -166,6 +166,15 @@
     if ([self checkVal:[self valueForKey:@"caption"]]) {
         jsonObject[@"caption"] = [self valueForKey:@"caption"];
     }
+    
+    NSMutableArray *posts = [[NSMutableArray alloc] init];
+    
+    for (FRSPost *post in self.posts.allObjects) {
+        [posts addObject:[post jsonObject]];
+    }
+    
+    jsonObject[@"posts"] = posts;
+    
     return jsonObject;
 }
 
