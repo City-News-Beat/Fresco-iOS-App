@@ -147,11 +147,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.galleryCollectionView.pagingEnabled = YES;
     self.galleryCollectionView.delegate = self;
     self.galleryCollectionView.dataSource = self;
+    self.galleryCollectionView.backgroundColor = [UIColor whiteColor];
     [self.galleryCollectionView registerNib:[UINib nibWithNibName:@"FRSCarouselCell" bundle:nil] forCellWithReuseIdentifier:@"FRSCarouselCell"];
     [self.scrollView addSubview:self.galleryCollectionView];
 
     /* DEBUG */
-    self.galleryCollectionView.backgroundColor = [UIColor redColor];
+    //self.galleryCollectionView.backgroundColor = [UIColor redColor];
 }
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -170,9 +171,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     
 
+    PHAsset *asset = [self.content objectAtIndex:indexPath.row];
     
     [[PHImageManager defaultManager]
-     requestImageForAsset:[self.content objectAtIndex:indexPath.row]
+     requestImageForAsset:asset
      targetSize:CGSizeMake(self.carouselCell.frame.size.width, self.carouselCell.frame.size.height)
      contentMode:PHImageContentModeAspectFill
      options:nil
@@ -182,27 +184,24 @@ static NSString * const cellIdentifier = @"assignment-cell";
          self.carouselCell.image.contentMode = UIViewContentModeScaleAspectFill;
 
          
-//         if (phAsset.mediaType == PHAssetMediaTypeVideo) {
-//             
-//             [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:Nil resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-//                 callback(result, avAsset, phAsset.mediaType, error);
-//             }];
-//             
-//             return;
-//         }
-         
-//         callback(result, Nil, phAsset.mediaType, error);
+         if (asset.mediaType == PHAssetMediaTypeVideo) {
+
+             [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:nil resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                 
+                 AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
+                 AVPlayer *player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
+                 [player play];
+             
+             }];
+             return;
+             
+         } else {
+             NSLog(@"photo");
+         }
      }];
 
     
     return self.carouselCell;
-
-    
-
-//    FRSImageViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
-//    [cell loadAsset:representedAsset];
-    
-//    return cell;
     
 }
 
@@ -525,7 +524,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     NSInteger textViewHeight = 200;
     
     self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
-//    self.captionContainer.backgroundColor = [UIColor redColor];
     [self.scrollView addSubview:self.captionContainer];
     
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, textViewHeight)];
