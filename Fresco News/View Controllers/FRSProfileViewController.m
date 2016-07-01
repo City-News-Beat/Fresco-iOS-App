@@ -704,8 +704,9 @@
         self.usernameLabel.text = user.username;
         titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
         
-        if ([user.username isEqualToString:@""]) {
+        if ([user.username isEqualToString:@""] || !user.username || [user.username isEqual:[NSNull null]]) {
             if (![user.firstName isEqualToString:@""]) {
+                titleLabel.adjustsFontSizeToFitWidth = YES;
                 titleLabel.text = user.firstName;
             }
             else {
