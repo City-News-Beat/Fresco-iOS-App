@@ -459,6 +459,11 @@
 
 -(void)fetchFollowing:(void(^)(NSArray *galleries, NSError *error))completion {
     FRSUser *authenticatedUser = [self authenticatedUser];
+    
+    if (!authenticatedUser) {
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresconews.fresco" code:404 userInfo:@{@"error":@"no user u dingus"}]);
+    }
+    
     NSString *endpoint = [NSString stringWithFormat:followingFeed, authenticatedUser.uid];
     
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
