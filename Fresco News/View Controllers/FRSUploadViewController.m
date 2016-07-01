@@ -40,18 +40,14 @@
 @property (nonatomic) BOOL globalAssignmentsEnabled;
 @property (strong, nonatomic) NSArray *assignments;
 @property (strong, nonatomic) NSArray *globalAssignments;
-
 @property (strong, nonatomic) UIView *globalAssignmentsDrawer;
 @property (strong, nonatomic) UITableView *globalAssignmentsTableView;
-
 @property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardGestureRecognizer;
-
 @property (strong, nonatomic) UICollectionView *galleryCollectionView;
 @property (strong, nonatomic) UICollectionViewFlowLayout *galleryCollectionViewFlowLayout;
-
 @property (strong, nonatomic) FRSCarouselCell *carouselCell;
-
 @property (strong, nonatomic) UIPageControl *pageControl;
+@property (strong, nonatomic) AVPlayer *player;
 
 @property NSInteger galleryCollectionViewHeight;
 
@@ -99,7 +95,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [super viewWillDisappear:animated];
     [self dismissKeyboard];
     [self.pageControl removeFromSuperview];
-    
 }
 
 
@@ -110,7 +105,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self addObservers];
     
     [self configureScrollView];
-    //[self configureGalleryTableView];
     [self configureGalleryCollectionView];
     [self configurePageController];
     [self configureNavigationBar];
@@ -166,7 +160,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     self.carouselCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
-
+    
     PHAsset *asset = [self.content objectAtIndex:indexPath.row];
     
     [[PHImageManager defaultManager]
@@ -178,32 +172,42 @@ static NSString * const cellIdentifier = @"assignment-cell";
          
          self.carouselCell.image.image = result;
          self.carouselCell.image.contentMode = UIViewContentModeScaleAspectFill;
-
          
          if (asset.mediaType == PHAssetMediaTypeVideo) {
-
+             
              [[PHImageManager defaultManager]
               requestAVAssetForVideo:asset
               options:nil
               resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                 
-                 //check if exists to avoid duplicates (?)
-                 AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
-                 AVPlayer *player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
-                 AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-                 [self.view.layer addSublayer:playerLayer];
-                 [player play];
+                  AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
+                  self.player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
+                  AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
+                  playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, self.carouselCell.frame.size.height);
+                  playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                  [self.carouselCell.layer addSublayer:playerLayer];
+                  [self.player play];
+                  
+                  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
+                  [self.carouselCell addGestureRecognizer:tap];
+              
+              }];
              
-             }];
              return;
              
          } else {
-             NSLog(@"photo");
+
+             //photo
+         
          }
      }];
-
     
     return self.carouselCell;
+    
+}
+
+-(void)tapPlayer {
+
+//    [self.player pause];
     
 }
 
@@ -217,7 +221,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.pageControl.currentPage = 0;
     self.pageControl.userInteractionEnabled = NO;
     
-    self.pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
+    self.pageControl.currentPageIndicatorTintColor = [UIColor frescoBackgroundColorDark];
     self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:1 alpha:0.7];
     
     [self.pageControl sizeToFit];
