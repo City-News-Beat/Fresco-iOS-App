@@ -435,11 +435,12 @@
     
     //    self.bioTextView = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     
-    self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(origin, 50, 150, 50)];
+    self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(origin-4, 50, 150, 50)];
     
     self.bioTextView.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
     self.bioTextView.backgroundColor = [UIColor frescoOrangeColor];
-    self.bioTextView.textColor = [UIColor frescoLightTextColor];
+    self.bioTextView.textColor = [UIColor whiteColor];
+    self.bioTextView.font = [UIFont systemFontOfSize:15 weight:-300];
     self.bioTextView.delegate = self;
     //    [self.bioTextView sizeToFit];
     [self.profileContainer addSubview:self.bioTextView];
@@ -707,12 +708,10 @@
 -(void)configureWithUser:(FRSUser *)user {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
         self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.username;
         //self.locationLabel.text = user.
         self.bioTextView.text = user.bio;
-        [self.bioTextView setFrame:CGRectMake(origin, 50, self.nameLabel.frame.size.width, 140)];
         self.bioTextView.editable = false;
         //[self.bioTextView sizeToFit];
         

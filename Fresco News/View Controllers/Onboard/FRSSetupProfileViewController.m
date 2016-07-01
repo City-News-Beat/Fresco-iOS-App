@@ -21,6 +21,8 @@
 @property (strong, nonatomic) UIView *topContainer;
 
 @property (strong, nonatomic) UIView *profileShadow;
+@property (strong, nonatomic) UIView *bottomBar;
+
 @property (strong, nonatomic) UIImageView *profileIV;
 
 @property (strong, nonatomic) UIButton *cameraButton;
@@ -49,6 +51,9 @@
     [self addNotifications];
     [self configureImagePicker];
     [self configureBackButtonAnimated:YES];
+    
+    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
@@ -165,7 +170,10 @@
     }else{
         self.navigationItem.title = @"SETUP YOUR PROFILE";
     }
-}
+    [[UINavigationBar appearance] setTitleTextAttributes: @{
+                                                            NSForegroundColorAttributeName: [UIColor whiteColor],
+                                                            NSFontAttributeName: [UIFont fontWithName:@"Nota-Bold" size:17.0]
+                                                            }];}
 
 -(void)configureScrollView{
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -271,7 +279,7 @@
 
 -(void)configureNameField{
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.topContainer.frame.origin.y + self.topContainer.frame.size.height, self.view.frame.size.width, 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
+    backgroundView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.scrollView addSubview:backgroundView];
     
     self.nameTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 *2, 44)];
@@ -285,6 +293,7 @@
     self.nameTF.delegate = self;
     self.nameTF.font = [UIFont systemFontOfSize:15 weight:-1];
     self.nameTF.textColor = [UIColor frescoDarkTextColor];
+    self.nameTF.backgroundColor = [UIColor frescoBackgroundColorDark];
     [backgroundView addSubview:self.nameTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -294,7 +303,7 @@
 
 -(void)configureLocationField{
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y , self.view.frame.size.width, 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
+    backgroundView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.scrollView addSubview:backgroundView];
     
     self.locationTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 *2, 44)];
@@ -308,6 +317,7 @@
     self.locationTF.delegate = self;
     self.locationTF.font = [UIFont systemFontOfSize:15 weight:-1];
     self.locationTF.textColor = [UIColor frescoDarkTextColor];
+    self.locationTF.backgroundColor = [UIColor frescoBackgroundColorDark];
     [backgroundView addSubview:self.locationTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -318,7 +328,7 @@
 -(void)configureBioField{
     //64 is the nav bar, 44 is the bottom bar
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.view.frame.size.width, self.view.frame.size.height - self.y - 64 - 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
+    backgroundView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.scrollView addSubview:backgroundView];
 
     self.bioTV = [[UITextView alloc] initWithFrame:CGRectMake(16, 11, backgroundView.frame.size.width - 32, backgroundView.frame.size.height - 22)];
@@ -329,7 +339,7 @@
     self.bioTV.textContainerInset = UIEdgeInsetsZero;
     self.bioTV.font = [UIFont systemFontOfSize:15 weight:-1];
     self.bioTV.textColor = [UIColor frescoDarkTextColor];
-    self.bioTV.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.bioTV.backgroundColor = [UIColor frescoBackgroundColorDark];
     if(_isEditingProfile && _bioStr != (id)[NSNull null] && _bioStr.length != 0){
         self.bioTV.text = _bioStr;
     }else{
@@ -337,23 +347,79 @@
     }
     
     [backgroundView addSubview:self.bioTV];
-    
-    [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, backgroundView.frame.size.height - 0.5)]];
 }
 
 
 -(void)configureBottomBar{
-    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height - 44, self.scrollView.frame.size.width, 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [self.scrollView addSubview:backgroundView];
+    self.bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.bounds.size.height - 44, self.view.frame.size.width, 44)];
+
+    self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorDark];
+    [self.view addSubview:self.bottomBar];
     
-    UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(backgroundView.frame.size.width - 32 - 37, 0, 37 + 32, 44)];
+    [self.bottomBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
+    
+    UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 130, 0, 167, 44)];
     [doneButton setTitle:@"DONE" forState:UIControlStateNormal];
     [doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     [doneButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    [backgroundView addSubview:doneButton];
+    [self.bottomBar addSubview:doneButton];
     [doneButton addTarget:self action:@selector(addUserProfile) forControlEvents:UIControlEventTouchUpInside];
+    
+//    [self constrainSubview:bottomBar ToBottomOfParentView:self.view WithHeight:44];
 }
+
+
+-(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
+    
+    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    //Trailing
+    NSLayoutConstraint *trailing = [NSLayoutConstraint
+                                    constraintWithItem:subView
+                                    attribute:NSLayoutAttributeTrailing
+                                    relatedBy:NSLayoutRelationEqual
+                                    toItem:parentView
+                                    attribute:NSLayoutAttributeTrailing
+                                    multiplier:1
+                                    constant:0];
+    
+    //Leading
+    NSLayoutConstraint *leading = [NSLayoutConstraint
+                                   constraintWithItem:subView
+                                   attribute:NSLayoutAttributeLeading
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:parentView
+                                   attribute:NSLayoutAttributeLeading
+                                   multiplier:1
+                                   constant:0];
+    
+    //Bottom
+    NSLayoutConstraint *bottom = [NSLayoutConstraint
+                                  constraintWithItem:subView
+                                  attribute:NSLayoutAttributeBottom
+                                  relatedBy:NSLayoutRelationEqual
+                                  toItem:parentView
+                                  attribute:NSLayoutAttributeBottom
+                                  multiplier:1
+                                  constant:0];
+    
+    //Height
+    NSLayoutConstraint *constantHeight = [NSLayoutConstraint
+                                          constraintWithItem:subView
+                                          attribute:NSLayoutAttributeHeight
+                                          relatedBy:NSLayoutRelationEqual
+                                          toItem:nil
+                                          attribute:0
+                                          multiplier:0
+                                          constant:height];
+    
+    [parentView addConstraint:trailing];
+    [parentView addConstraint:bottom];
+    [parentView addConstraint:leading];
+    
+    [subView addConstraint:constantHeight];
+}
+
 
 #pragma TextField Delegate
 
@@ -413,6 +479,8 @@
 -(void)handleKeyboardWillShow:(NSNotification *)sender{
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
+    self.bottomBar.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+    
     NSInteger newScrollViewHeight = self.view.frame.size.height - keyboardSize.height;
     CGPoint point;
     
@@ -438,6 +506,8 @@
             self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, self.view.frame.size.height);
         }];
     }
+    self.bottomBar.transform = CGAffineTransformMakeTranslation(0, 0);
+
 }
 
 -(void)dismissKeyboard{
