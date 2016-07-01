@@ -13,8 +13,10 @@
 @interface FRSProfileViewController : FRSScrollingViewController
 {
     UILabel *titleLabel;
+    UIView *topView;
 }
 
+@property (nonatomic, weak) NSArray *currentFeed;
 @property (nonatomic, retain) UIScrollView *tablePageScroller;
 @property (nonatomic, retain) UITableView *contentTable;
 -(instancetype)initWithUser:(FRSUser *)user;

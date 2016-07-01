@@ -487,6 +487,12 @@
     
     self.feedButton.alpha = 1.0;
     self.likesButton.alpha = 0.7;
+    
+    
+    if (self.currentFeed != self.galleries) {
+        self.currentFeed = self.galleries;
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 -(void)handleLikesButtonTapped{
@@ -494,6 +500,11 @@
     
     self.likesButton.alpha = 1.0;
     self.feedButton.alpha = 0.7;
+    
+    if (self.currentFeed != self.likes) {
+        self.currentFeed = self.likes;
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 #pragma mark - UITableView Delegate & DataSource
@@ -510,7 +521,12 @@
         return 1;
     }
     else {
-        return self.galleries.count;
+        
+        if (!self.currentFeed) {
+            self.currentFeed = self.galleries;
+        }
+        
+        return self.currentFeed.count;
         return 0;
     }
 }
@@ -603,11 +619,18 @@
         view = [UIView new];
     }
     else if (section == 1){
-        [self configureSectionView];
+        //[self configureSectionView];
+        
+        if (topView) {
+            return topView;
+        }
         
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
         [view addSubview:self.sectionView];
         [view addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
+        
+        topView = view;
+        return topView;
     }
     
     return view;
