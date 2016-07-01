@@ -20,6 +20,7 @@
 #import "FRSAppDelegate.h"
 #import "FRSAPIClient.h"
 #import "FRSStoryCell.h"
+#import <Haneke/Haneke.h>
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -695,7 +696,7 @@
 -(void)configureWithUser:(FRSUser *)user {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
         self.nameLabel.text = user.firstName;
         self.bioLabel.text = user.bio;
         [self.bioLabel sizeToFit];
