@@ -491,7 +491,8 @@
     
     if (self.currentFeed != self.galleries) {
         self.currentFeed = self.galleries;
-        [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationLeft];
+        
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
@@ -503,7 +504,7 @@
     
     if (self.currentFeed != self.likes) {
         self.currentFeed = self.likes;
-        [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationRight];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
@@ -545,13 +546,13 @@
         return self.profileContainer.frame.size.height;
     }
     else {
-        if (!self.galleries.count) return 0;
-        if ([[self.galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
-            FRSGallery *gallery = self.galleries[indexPath.row];
+        if (!self.currentFeed.count) return 0;
+        if ([[self.currentFeed[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+            FRSGallery *gallery = self.currentFeed[indexPath.row];
             return [gallery heightForGallery];
         }
         else {
-            FRSStory *story = self.galleries[indexPath.row];
+            FRSStory *story = self.currentFeed[indexPath.row];
             return [story heightForStory];
         }
     }
@@ -567,14 +568,14 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     else {
-        if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+        if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
             
             if (!cell){
                 cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
             }
         }
-        else if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
+        else if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
             
             if (!cell){
@@ -598,14 +599,14 @@
             FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
             [galCell clearCell];
             
-            galCell.gallery = self.galleries[indexPath.row];
+            galCell.gallery = self.currentFeed[indexPath.row];
             [galCell configureCell];
         }
         else {
             FRSStoryCell *storyCell = (FRSStoryCell *)cell;
             [storyCell clearCell];
             
-            storyCell.story = self.galleries[indexPath.row];
+            storyCell.story = self.currentFeed[indexPath.row];
             [storyCell configureCell];
         }
     }
