@@ -491,7 +491,7 @@
     
     if (self.currentFeed != self.galleries) {
         self.currentFeed = self.galleries;
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationLeft];
     }
 }
 
@@ -503,7 +503,7 @@
     
     if (self.currentFeed != self.likes) {
         self.currentFeed = self.likes;
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationRight];
     }
 }
 
