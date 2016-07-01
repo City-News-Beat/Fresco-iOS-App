@@ -164,12 +164,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     self.carouselCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
-    self.carouselCell.backgroundColor = [UIColor blueColor];
-    self.carouselCell.image.image = [UIImage imageNamed:@"earth"];
-    
-    
-    
 
     PHAsset *asset = [self.content objectAtIndex:indexPath.row];
     
@@ -186,10 +182,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
          
          if (asset.mediaType == PHAssetMediaTypeVideo) {
 
-             [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:nil resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+             [[PHImageManager defaultManager]
+              requestAVAssetForVideo:asset
+              options:nil
+              resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
                  
+                 //check if exists to avoid duplicates (?)
                  AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
                  AVPlayer *player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
+                 AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+                 [self.view.layer addSublayer:playerLayer];
                  [player play];
              
              }];
