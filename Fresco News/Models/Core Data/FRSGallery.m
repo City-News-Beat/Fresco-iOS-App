@@ -34,6 +34,14 @@
 @dynamic isLiked;
 @dynamic numberOfLikes;
 
+-(NSArray *)sorted {
+    NSArray *sorted;
+    
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:YES];
+    sorted=[self.posts sortedArrayUsingDescriptors:@[sort]];
+
+    return sorted;
+}
 -(void)configureWithDictionary:(NSDictionary *)dict{
     
     self.tags = [[NSMutableDictionary alloc] init];
