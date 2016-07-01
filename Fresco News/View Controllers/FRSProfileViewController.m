@@ -703,6 +703,15 @@
         
         self.usernameLabel.text = user.username;
         titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
+        
+        if ([user.username isEqualToString:@""]) {
+            if (![user.firstName isEqualToString:@""]) {
+                titleLabel.text = user.firstName;
+            }
+            else {
+                titleLabel.text = @"";
+            }
+        }
         //  self.locationLabel.text = user.address; //user.address does not exiset yet
         self.followersLabel.text = @"1125";
         
