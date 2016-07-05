@@ -141,7 +141,7 @@
     if (!address || [address isEqual:[NSNull null]]) {
         return @"";
     }
-     
+    
     NSArray *comps = [address componentsSeparatedByString:@","];
     NSMutableString *str = [NSMutableString new];
     if (comps.count >= 3){
@@ -162,8 +162,22 @@
 
 -(NSDictionary *)jsonObject {
     NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];
+    if ([self checkVal:self.videoUrl]) {
+        jsonObject[@"videoUrl"] = self.videoUrl;
+    }
     
+    if ([self checkVal:self.source]) {
+        jsonObject[@"source"] = self.source;
+    }
     
     return jsonObject;
+}
+
+-(BOOL)checkVal:(id)val {
+    if (val && ![val isEqual:[NSNull null]]) {
+        return TRUE;
+    }
+    
+    return FALSE;
 }
 @end
