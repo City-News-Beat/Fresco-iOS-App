@@ -512,18 +512,9 @@
 
 -(void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     
-    NSArray *posts = [gallery.posts allObjects];
-    NSMutableDictionary *galleryDigest = [[NSMutableDictionary alloc] init];
-    NSMutableArray *postsToSend = [[NSMutableArray alloc] init];
-
-    for (FRSPost *post in posts) {
-        [postsToSend addObject:[post jsonObject]];
-    }
+    NSDictionary *params = [gallery jsonObject];
     
-    galleryDigest[@"caption"] = (gallery.caption) ? gallery.caption : @"";
-    galleryDigest[@"posts"] = posts;
-    
-    [self post:createGalleryEndpoint withParameters:galleryDigest completion:^(id responseObject, NSError *error) {
+    [self post:createGalleryEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }

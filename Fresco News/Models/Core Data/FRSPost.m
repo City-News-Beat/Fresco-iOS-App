@@ -198,8 +198,8 @@
     }
     
     if ([self checkVal:self.coordinates]) {
-        jsonObject[@"longitude"] = self.coordinates[1];
-        jsonObject[@"latitude"] = self.coordinates[0]; 
+        jsonObject[@"lat"] = self.coordinates[1];
+        jsonObject[@"lng"] = self.coordinates[0]; 
     }
     
     
