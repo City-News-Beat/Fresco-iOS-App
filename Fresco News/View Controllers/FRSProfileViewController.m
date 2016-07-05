@@ -315,9 +315,15 @@
 -(void)configureProfileSocialOverlay{
     
     self.whiteOverlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 96, 96)];
-    self.whiteOverlay.backgroundColor = [UIColor whiteColor];
-    self.whiteOverlay.alpha = 1;
+    self.whiteOverlay.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.7];
     [self.profileIV addSubview:self.whiteOverlay];
+    
+    UIVisualEffect *blurEffect;
+    blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView *visualEffectView;
+    visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        visualEffectView.frame = self.socialButtonContainer.bounds;
+    [self.profileIV addSubview:visualEffectView];
     
     UIButton *socialOverlayButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [socialOverlayButton addTarget:self action:@selector(presentSocialOverlay) forControlEvents:UIControlEventTouchUpInside];
@@ -327,6 +333,7 @@
     
     self.socialButtonContainer = [[UIView alloc] initWithFrame:CGRectMake(16, 36, 64.5, 24)];
     self.socialButtonContainer.alpha = 1;
+    
     [self.whiteOverlay addSubview:self.socialButtonContainer];
     //    [self.whiteOverlay insertSubview:self.socialButtonContainer aboveSubview:self.view];
     
