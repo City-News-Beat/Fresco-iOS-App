@@ -200,7 +200,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
                       resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
                           
                           dispatch_async(dispatch_get_main_queue(), ^{
-                              NSLog(@"CREATED PLAYER");
                               AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
                               FRSPlayer *player = [[FRSPlayer alloc] initWithPlayerItem:playerItem];
                               AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
@@ -232,12 +231,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 
 -(void)tapPlayer {
-    
 //    if (self.player.rate != 0) {
 //        [self.player pause];
 //    } else {
 //        [self.player play];
 //    }
+}
+
+-(BOOL)currentPageIsVideo {
+    NSInteger page = (self.scrollView.contentOffset.x + self.view.frame.size.width/2)/self.scrollView.frame.size.width;
+    return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -370,9 +373,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-
+    
     CGFloat offset = scrollView.contentOffset.y + 20;
 
+    NSLog(@"CURRENT PAGE IS VIDEO: %d", [self currentPageIsVideo]);
+    
     //If user is scrolling down, return and act like a normal scroll view
     if (offset > self.scrollView.contentSize.height - self.scrollView.frame.size.height) {
         return;
