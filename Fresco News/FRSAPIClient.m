@@ -366,6 +366,7 @@
  Fetch assignments w/in radius of user location, calls generic method w/ parameters & endpoint
  
  */
+
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
 
     NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];

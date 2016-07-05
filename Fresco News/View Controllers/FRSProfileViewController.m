@@ -188,18 +188,41 @@
 #pragma mark - Fetch Methods
 
 -(void)fetchGalleries {
+    BOOL reload = FALSE;
     
+    if (self.currentFeed == self.galleries) {
+        reload = TRUE;
+    }
+
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
         [self.tableView reloadData];
+        
+        if (reload) {
+            self.currentFeed = self.galleries;
+            [self.tableView reloadData];
+        }
+
     }];
     
     [self fetchLikes];
 }
 
 -(void)fetchLikes {
+    
+    BOOL reload = FALSE;
+    
+    if (self.currentFeed == self.likes) {
+        reload = TRUE;
+    }
+    
     [[FRSAPIClient sharedClient] fetchLikesFeedForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.likes = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
+        
+        if (reload) {
+            self.currentFeed = self.likes;
+            [self.tableView reloadData];
+        }
     }];
 }
 
