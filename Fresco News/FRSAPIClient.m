@@ -116,7 +116,8 @@
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
     NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
-
+    NSLog(@"%@", authDictionary);
+    
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error); // burden of error handling falls on sender
         
@@ -124,6 +125,9 @@
         if (!error) {
             [self handleUserLogin:responseObject];
         }
+        
+        NSLog(@"FACEBOOK SIGN IN: %@", error);
+
     }];
 }
 
@@ -137,6 +141,9 @@
     
     
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
+        if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
+            [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
+        }
         completion(responseObject, error);
     }];
 }
@@ -359,6 +366,7 @@
  Fetch assignments w/in radius of user location, calls generic method w/ parameters & endpoint
  
  */
+
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
 
     NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
@@ -452,8 +460,20 @@
 
 -(void)fetchFollowing:(void(^)(NSArray *galleries, NSError *error))completion {
     FRSUser *authenticatedUser = [self authenticatedUser];
+    
+    if (!authenticatedUser) {
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresconews.fresco" code:404 userInfo:@{@"error":@"no user u dingus"}]);
+    }
+    
     NSString *endpoint = [NSString stringWithFormat:followingFeed, authenticatedUser.uid];
     
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)fetchLikesFeedForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:likeFeed, user.uid];
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
@@ -492,29 +512,9 @@
 
 -(void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     
-    NSArray *posts = [gallery.posts allObjects];
-    NSMutableDictionary *galleryDigest = [[NSMutableDictionary alloc] init];
-    NSMutableArray *postsToSend = [[NSMutableArray alloc] init];
-
-    for (FRSPost *post in posts) {
-        NSMutableDictionary *currentPost = [[NSMutableDictionary alloc] init];
-        currentPost[@"address"] = (post.address) ? post.address : @"";
-        currentPost[@"lat"] = @(post.location.coordinate.latitude);
-        currentPost[@"lng"] = @(post.location.coordinate.longitude);
-        currentPost[@"contentType"] = (post.contentType) ? post.contentType : @"image/jpeg";
-        
-        if (post.videoUrl) {
-            currentPost[@"fileSize"] = [self fileSizeForURL:[NSURL fileURLWithPath:post.videoUrl]];
-            currentPost[@"chunkSize"] = @(5242880); // 5mb in bytes
-        }
-        
-        [postsToSend addObject:currentPost];
-    }
+    NSDictionary *params = [gallery jsonObject];
     
-    galleryDigest[@"caption"] = (gallery.caption) ? gallery.caption : @"";
-    galleryDigest[@"posts"] = posts;
-    
-    [self post:createGalleryEndpoint withParameters:galleryDigest completion:^(id responseObject, NSError *error) {
+    [self post:createGalleryEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
@@ -921,15 +921,6 @@
 
 -(id)objectFromDictionary:(NSDictionary *)dictionary context:(NSManagedObjectContext *)managedObjectContext {
     
-    if (![dictionary respondsToSelector:@selector(objectForKeyedSubscript:)]) {
-        return dictionary;
-    }
-    
-    if ([dictionary isEqual:[NSNull null]]) {
-        return dictionary;
-    }
-    
-    
     NSString *objectType = dictionary[@"object"];
     
     if ([objectType isEqualToString:galleryObjectType]) {
@@ -937,7 +928,7 @@
         FRSGallery *gallery = (FRSGallery *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
         gallery.currentContext = [self managedObjectContext];
         [gallery configureWithDictionary:dictionary];
-        return gallery;
+                return gallery;
     }
     else if ([objectType isEqualToString:storyObjectType]) {
         NSEntityDescription *storyEntity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:[self managedObjectContext]];
@@ -970,5 +961,25 @@
     return FALSE;
 }
 
+-(void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion {
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    __block NSString *address;
+    
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error)
+     {
+         if(placemarks && placemarks.count > 0) {
+             CLPlacemark *placemark= [placemarks objectAtIndex:0];
+             
+             address = [NSString stringWithFormat:@"%@ %@,%@ %@", [placemark subThoroughfare],[placemark thoroughfare],[placemark locality], [placemark administrativeArea]];
+             
+             NSLog(@"Found address: %@",address);
+             completion(address, Nil);
+         }
+         else {
+             completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:404 userInfo:Nil]);
+         }
+         
+     }];
+}
 
 @end

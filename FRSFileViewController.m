@@ -203,8 +203,9 @@ static NSString *imageTile = @"ImageTile";
 }
 
 -(void)next:(id)sender {
-    
+    self.uploadViewController.content = selectedAssets;
     [self.navigationController pushViewController:self.uploadViewController animated:YES];
+    NSLog(@"(FileVC) ASSETS: %@", self.uploadViewController.content);
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
@@ -288,22 +289,34 @@ static NSString *imageTile = @"ImageTile";
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
     FRSImageViewCell *cell = (FRSImageViewCell *)[fileCollectionView cellForItemAtIndexPath:indexPath];
-
+    
+    
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
         [cell selected:FALSE];
-        [nextButton.titleLabel setTextColor:[UIColor frescoLightTextColor]];
-        nextButton.userInteractionEnabled = NO;
     }
     else {
+        
+        if ([selectedAssets count] == 10) {
+            //should tell user why they can't select anymore cc:imogen
+            return;
+        }
+
         if (cell.currentAVAsset) {
             self.currentTime = cell.currentAVAsset.duration;
             [self presentVideoTrimmerViewController];
         }
         [selectedAssets addObject:representedAsset];
         [cell selected:TRUE];
-        [nextButton.titleLabel setTextColor:[UIColor frescoBlueColor]];
+    }
+    
+    if (selectedAssets.count >= 1) {
+        [nextButton setTintColor:[UIColor frescoBlueColor]];
         nextButton.userInteractionEnabled = YES;
+        
+    } else {
+        [nextButton setTintColor:[UIColor frescoLightTextColor]];
+        nextButton.userInteractionEnabled = NO;
     }
 }
 

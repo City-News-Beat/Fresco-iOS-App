@@ -9,5 +9,20 @@
 #import <CoreData/CoreData.h>
 
 @interface FRSUpload : NSManagedObject
+/* 
+ 
+ chunkSize
+ completed
+ creationDate
+ destinationURLS
+ etags
+ fileSize
+ multipart
+ partsComplete
+ resourceURL
+ startDate
+ uid
+ */
+
 
 @end
