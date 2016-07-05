@@ -14,6 +14,7 @@
 #import <Twitter/Twitter.h>
 #import "FRSImageViewCell.h"
 #import "FRSFileLoader.h"
+#import "FRSPlayer.h"
 
 #import "FRSAPIClient.h"
 
@@ -47,7 +48,8 @@
 @property (strong, nonatomic) UICollectionViewFlowLayout *galleryCollectionViewFlowLayout;
 @property (strong, nonatomic) FRSCarouselCell *carouselCell;
 @property (strong, nonatomic) UIPageControl *pageControl;
-@property (strong, nonatomic) AVPlayer *player;
+@property (strong, nonatomic) FRSPlayer *player;
+@property (strong, nonatomic) AVPlayerLayer *playerLayer;
 
 @property NSInteger galleryCollectionViewHeight;
 
@@ -80,9 +82,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
-    [self.galleryCollectionView reloadData]; //used when navigating through view controllers
+    [self.galleryCollectionView reloadData];
     [self configurePageController];
-    
     
     [self.galleryCollectionView setContentOffset:CGPointMake(0, 0)];
     
@@ -95,6 +96,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [super viewWillDisappear:animated];
     [self dismissKeyboard];
     [self.pageControl removeFromSuperview];
+    [self.player pause];
+    [self.playerLayer.player pause];
 }
 
 
@@ -174,19 +177,18 @@ static NSString * const cellIdentifier = @"assignment-cell";
          self.carouselCell.image.contentMode = UIViewContentModeScaleAspectFill;
          
          if (asset.mediaType == PHAssetMediaTypeVideo) {
-             
              [[PHImageManager defaultManager]
               requestAVAssetForVideo:asset
               options:nil
               resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
                   AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
                   self.player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
-                  AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
-                  playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, self.carouselCell.frame.size.height);
-                  playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-                  [self.carouselCell.layer addSublayer:playerLayer];
+                  self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
+                  self.playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, self.carouselCell.frame.size.height);
+                  self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                  [self.carouselCell.layer addSublayer:self.playerLayer];
                   [self.player play];
-                  
+                  NSLog(@"video");
                   UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
                   [self.carouselCell addGestureRecognizer:tap];
               
@@ -206,9 +208,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)tapPlayer {
-
-//    [self.player pause];
     
+    if (self.player.rate != 0) {
+        [self.player pause];
+    } else {
+        [self.player play];
+    }
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -597,7 +602,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
     self.assignmentsArray = self.assignments;
     
-    
 }
 
 
@@ -612,7 +616,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
-        
+
         FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         
         if (globalAssignments.count > 0) {
@@ -637,7 +641,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
         
-        //NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
+//        NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
         //NSArray *global = @[@"Global", @"Global Two"];
         
         if ([global count] >  0) {
