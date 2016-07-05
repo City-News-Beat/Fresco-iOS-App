@@ -20,6 +20,9 @@
 #import "FRSAppDelegate.h"
 #import "FRSAPIClient.h"
 #import "FRSStoryCell.h"
+#import "FRSSetupProfileViewController.h"
+
+#import "FRSAPIClient.h"
 #import <Haneke/Haneke.h>
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
@@ -32,11 +35,6 @@
 @property (strong, nonatomic) UIView *profileBG;
 
 //@property (strong, nonatomic) UIImageView *profileIV;
-@property (strong, nonatomic) FRSBorderedImageView *profileIV;
-
-@property (strong, nonatomic) UILabel *nameLabel;
-@property (strong, nonatomic) UILabel *locationLabel;
-@property (strong, nonatomic) UILabel *bioLabel;
 
 @property (strong, nonatomic) UIImageView *followersIV;
 @property (strong, nonatomic) UILabel *followersLabel;
@@ -349,9 +347,15 @@
 -(void)configureProfileSocialOverlay{
     
     self.whiteOverlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 96, 96)];
-    self.whiteOverlay.backgroundColor = [UIColor whiteColor];
-    self.whiteOverlay.alpha = 1;
+    self.whiteOverlay.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.7];
     [self.profileIV addSubview:self.whiteOverlay];
+    
+    UIVisualEffect *blurEffect;
+    blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView *visualEffectView;
+    visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        visualEffectView.frame = self.socialButtonContainer.bounds;
+    [self.profileIV addSubview:visualEffectView];
     
     UIButton *socialOverlayButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [socialOverlayButton addTarget:self action:@selector(presentSocialOverlay) forControlEvents:UIControlEventTouchUpInside];
@@ -361,6 +365,7 @@
     
     self.socialButtonContainer = [[UIView alloc] initWithFrame:CGRectMake(16, 36, 64.5, 24)];
     self.socialButtonContainer.alpha = 1;
+    
     [self.whiteOverlay addSubview:self.socialButtonContainer];
     //    [self.whiteOverlay insertSubview:self.socialButtonContainer aboveSubview:self.view];
     
@@ -467,20 +472,30 @@
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
     
-    //    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
+    //    self.bioTextView = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     
-    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 50, self.nameLabel.frame.size.width, 0)];
+    self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(origin-4, 50, 150, 50)];
     
-    self.bioLabel.numberOfLines = 0;
-    self.bioLabel.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
-    self.bioLabel.textColor = [UIColor whiteColor];
-    //    [self.bioLabel sizeToFit];
-    [self.profileContainer addSubview:self.bioLabel];
+    self.bioTextView.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
+    self.bioTextView.backgroundColor = [UIColor frescoOrangeColor];
+    self.bioTextView.textColor = [UIColor whiteColor];
+    self.bioTextView.font = [UIFont systemFontOfSize:15 weight:-300];
+    self.bioTextView.delegate = self;
+    //    [self.bioTextView sizeToFit];
+    [self.profileContainer addSubview:self.bioTextView];
+}
+-(void)textViewDidEndEditing:(UITextView *)textView{
+    if (textView.text) {
+        /*[[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"bio":textView.text} completion:^(id responseObject, NSError *error) {
+            NSLog(@"%@ %@", responseObject, error);
+        }];*/
+        [textView resignFirstResponder];
+    }
 }
 
 -(void)resizeProfileContainer{
     
-    CGFloat height = MAX(self.bioLabel.frame.origin.y + self.bioLabel.frame.size.height + 6, 160);
+    CGFloat height = MAX(self.bioTextView.frame.origin.y + self.bioTextView.frame.size.height + 6, 160);
     
     [self.profileContainer setSizeWithSize:CGSizeMake(self.profileContainer.frame.size.width, height)];
 }
@@ -709,7 +724,20 @@
 }
 
 -(void)showEditProfile {
+    [self segueToSetup];
+}
+
+-(void)segueToSetup {
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate reloadUser];
     
+    FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
+    setupProfileVC.nameStr = self.nameLabel.text;
+    setupProfileVC.locStr = self.locationLabel.text;
+    setupProfileVC.bioStr = self.bioTextView.text;
+    setupProfileVC.profileImage = self.profileIV.image;
+    setupProfileVC.isEditingProfile = true;
+    [self.navigationController pushViewController:setupProfileVC animated:YES];
 }
 
 -(void)showFollowers {
@@ -744,10 +772,15 @@
 -(void)configureWithUser:(FRSUser *)user {
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+        //self.locationLabel.text = user.
+        self.bioTextView.text = user.bio;
+        self.bioTextView.editable = false;
+        //[self.bioTextView sizeToFit];
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
         self.nameLabel.text = user.firstName;
-        self.bioLabel.text = user.bio;
-        [self.bioLabel sizeToFit];
+        //self.bioLabel.text = user.bio;
+        //[self.bioLabel sizeToFit];
         
         self.usernameLabel.text = user.username;
         titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];

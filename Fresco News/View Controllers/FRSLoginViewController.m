@@ -331,8 +331,10 @@
         if (authenticated) {
             
             self.didAuthenticateSocial = YES;
-            
+            NSLog(@"Popped");
             [self popToOrigin];
+        }else{
+            NSLog(@"Else");
         }
         [spinner stopLoading];
         [spinner removeFromSuperview];

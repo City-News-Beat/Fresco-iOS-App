@@ -8,10 +8,12 @@
 
 #import "FRSSetupProfileViewController.h"
 #import "FRSBaseViewController.h"
+#import "FRSProfileViewController.h"
 
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
+#import <Haneke/Haneke.h>
 
 @interface FRSSetupProfileViewController () <UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate>
 
@@ -19,14 +21,16 @@
 @property (strong, nonatomic) UIView *topContainer;
 
 @property (strong, nonatomic) UIView *profileShadow;
+@property (strong, nonatomic) UIView *bottomBar;
+
 @property (strong, nonatomic) UIImageView *profileIV;
 
 @property (strong, nonatomic) UIButton *cameraButton;
 @property (strong, nonatomic) UIButton *photosButton;
 
+@property (strong, nonatomic) UITextView *bioTV;
 @property (strong, nonatomic) UITextField *nameTF;
 @property (strong, nonatomic) UITextField *locationTF;
-@property (strong, nonatomic) UITextView *bioTV;
 
 @property (strong, nonatomic) UIImageView *placeHolderUserIcon;
 
@@ -48,7 +52,11 @@
     [self configureImagePicker];
     [self configureBackButtonAnimated:YES];
     
+    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
+    
     self.navigationController.navigationBarHidden = NO;
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
 }
 
 -(void)addNotifications{
@@ -68,6 +76,9 @@
     if (self.locationTF.text) {
         profileInfo[@"location"] = self.locationTF.text;
     }
+    if (self.profileIV.image) {
+       
+    }
     
     return profileInfo;
 }
@@ -86,6 +97,8 @@
             else if (error.code/100 == 3) {
                 // auth fucked up
             }
+            
+            NSLog(@"ERROR:%@ ", error);
             
             return;
         }
@@ -117,10 +130,20 @@
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     transition.type = kCATransitionFade;
     transition.subtype = kCATransitionFromTop;
-    [self.navigationController.view.layer addAnimation:transition forKey:nil];
-    [[self navigationController] setNavigationBarHidden:YES];
-    [[self navigationController] popToRootViewControllerAnimated:NO];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    if(_isEditingProfile){
+        [self.navigationController.view.layer addAnimation:transition forKey:nil];
+        FRSProfileViewController *profileController = (FRSProfileViewController *)[self.navigationController.viewControllers objectAtIndex: 0];
+        profileController.nameLabel.text = self.nameTF.text;
+        profileController.locationLabel.text = self.locationTF.text;
+        profileController.bioTextView.text = self.bioTV.text;
+        profileController.profileIV.image = self.profileIV.image;
+        [[self navigationController] popToRootViewControllerAnimated:NO];
+    }else{
+        [self.navigationController.view.layer addAnimation:transition forKey:nil];
+        [[self navigationController] setNavigationBarHidden:YES];
+        [[self navigationController] popToRootViewControllerAnimated:NO];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    }
 }
 
 
@@ -141,9 +164,16 @@
 }
 
 -(void)configureNavigationBar{
-    self.navigationItem.title = @"SETUP YOUR PROFILE";
-
-}
+    self.navigationItem.titleView.backgroundColor = [UIColor whiteColor];
+    if(self.isEditingProfile){
+        self.navigationItem.title = @"EDIT YOUR PROFILE";
+    }else{
+        self.navigationItem.title = @"SETUP YOUR PROFILE";
+    }
+    [[UINavigationBar appearance] setTitleTextAttributes: @{
+                                                            NSForegroundColorAttributeName: [UIColor whiteColor],
+                                                            NSFontAttributeName: [UIFont fontWithName:@"Nota-Bold" size:17.0]
+                                                            }];}
 
 -(void)configureScrollView{
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -194,7 +224,12 @@
     if (IS_IPHONE_5) {
         self.placeHolderUserIcon.frame = CGRectMake(40, 40, 48, 48);
     }
-    [self.profileIV addSubview:self.placeHolderUserIcon];
+    
+    if(_isEditingProfile){
+        [self.profileIV setImage:self.profileImage];
+    }else{
+        [self.profileIV addSubview:self.placeHolderUserIcon];
+    }
     
     
     UIView *ring = [[UIView alloc] initWithFrame:CGRectMake(self.profileIV.frame.origin.x-1, self.profileShadow.frame.origin.y-1, height+2, height+2)];
@@ -243,18 +278,22 @@
 }
 
 -(void)configureNameField{
-    
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.topContainer.frame.origin.y + self.topContainer.frame.size.height, self.view.frame.size.width, 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
+    backgroundView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.scrollView addSubview:backgroundView];
     
     self.nameTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 *2, 44)];
     self.nameTF.tag = 1;
     self.nameTF.tintColor = [UIColor frescoOrangeColor];
-    self.nameTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Name" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
+    if(_isEditingProfile && _nameStr != (id)[NSNull null] && _nameStr.length != 0){
+        self.nameTF.text = _nameStr;
+    }else{
+        self.nameTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Name" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
+    }
     self.nameTF.delegate = self;
     self.nameTF.font = [UIFont systemFontOfSize:15 weight:-1];
     self.nameTF.textColor = [UIColor frescoDarkTextColor];
+    self.nameTF.backgroundColor = [UIColor frescoBackgroundColorDark];
     [backgroundView addSubview:self.nameTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -264,16 +303,21 @@
 
 -(void)configureLocationField{
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y , self.view.frame.size.width, 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
+    backgroundView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.scrollView addSubview:backgroundView];
     
     self.locationTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 *2, 44)];
     self.locationTF.tag = 2;
     self.locationTF.tintColor = [UIColor frescoOrangeColor];
-    self.locationTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Location" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
+    if(_isEditingProfile && _locStr != (id)[NSNull null] && _locStr.length != 0){
+        self.locationTF.text = _locStr;
+    }else{
+        self.locationTF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Location" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
+    }
     self.locationTF.delegate = self;
     self.locationTF.font = [UIFont systemFontOfSize:15 weight:-1];
     self.locationTF.textColor = [UIColor frescoDarkTextColor];
+    self.locationTF.backgroundColor = [UIColor frescoBackgroundColorDark];
     [backgroundView addSubview:self.locationTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -284,7 +328,7 @@
 -(void)configureBioField{
     //64 is the nav bar, 44 is the bottom bar
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.view.frame.size.width, self.view.frame.size.height - self.y - 64 - 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
+    backgroundView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.scrollView addSubview:backgroundView];
 
     self.bioTV = [[UITextView alloc] initWithFrame:CGRectMake(16, 11, backgroundView.frame.size.width - 32, backgroundView.frame.size.height - 22)];
@@ -295,45 +339,107 @@
     self.bioTV.textContainerInset = UIEdgeInsetsZero;
     self.bioTV.font = [UIFont systemFontOfSize:15 weight:-1];
     self.bioTV.textColor = [UIColor frescoDarkTextColor];
-    self.bioTV.backgroundColor = [UIColor frescoBackgroundColorLight];
-    self.bioTV.attributedText = [[NSAttributedString alloc] initWithString:@"Bio" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
-    
+    self.bioTV.backgroundColor = [UIColor frescoBackgroundColorDark];
+    if(_isEditingProfile && _bioStr != (id)[NSNull null] && _bioStr.length != 0){
+        self.bioTV.text = _bioStr;
+    }else{
+        self.bioTV.attributedText = [[NSAttributedString alloc] initWithString:@"Bio" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
+    }
     
     [backgroundView addSubview:self.bioTV];
-    
-    [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, backgroundView.frame.size.height - 0.5)]];
 }
 
 
 -(void)configureBottomBar{
-    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height - 44, self.scrollView.frame.size.width, 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
-    [self.scrollView addSubview:backgroundView];
+    self.bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.bounds.size.height - 44, self.view.frame.size.width, 44)];
+
+    self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorDark];
+    [self.view addSubview:self.bottomBar];
     
-    UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(backgroundView.frame.size.width - 32 - 37, 0, 37 + 32, 44)];
+    [self.bottomBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
+    
+    UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 130, 0, 167, 44)];
     [doneButton setTitle:@"DONE" forState:UIControlStateNormal];
     [doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     [doneButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    [backgroundView addSubview:doneButton];
+    [self.bottomBar addSubview:doneButton];
     [doneButton addTarget:self action:@selector(addUserProfile) forControlEvents:UIControlEventTouchUpInside];
+    
+//    [self constrainSubview:bottomBar ToBottomOfParentView:self.view WithHeight:44];
 }
+
+
+-(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
+    
+    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    //Trailing
+    NSLayoutConstraint *trailing = [NSLayoutConstraint
+                                    constraintWithItem:subView
+                                    attribute:NSLayoutAttributeTrailing
+                                    relatedBy:NSLayoutRelationEqual
+                                    toItem:parentView
+                                    attribute:NSLayoutAttributeTrailing
+                                    multiplier:1
+                                    constant:0];
+    
+    //Leading
+    NSLayoutConstraint *leading = [NSLayoutConstraint
+                                   constraintWithItem:subView
+                                   attribute:NSLayoutAttributeLeading
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:parentView
+                                   attribute:NSLayoutAttributeLeading
+                                   multiplier:1
+                                   constant:0];
+    
+    //Bottom
+    NSLayoutConstraint *bottom = [NSLayoutConstraint
+                                  constraintWithItem:subView
+                                  attribute:NSLayoutAttributeBottom
+                                  relatedBy:NSLayoutRelationEqual
+                                  toItem:parentView
+                                  attribute:NSLayoutAttributeBottom
+                                  multiplier:1
+                                  constant:0];
+    
+    //Height
+    NSLayoutConstraint *constantHeight = [NSLayoutConstraint
+                                          constraintWithItem:subView
+                                          attribute:NSLayoutAttributeHeight
+                                          relatedBy:NSLayoutRelationEqual
+                                          toItem:nil
+                                          attribute:0
+                                          multiplier:0
+                                          constant:height];
+    
+    [parentView addConstraint:trailing];
+    [parentView addConstraint:bottom];
+    [parentView addConstraint:leading];
+    
+    [subView addConstraint:constantHeight];
+}
+
 
 #pragma TextField Delegate
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
 
-    [[self.view viewWithTag:textField.tag+1] becomeFirstResponder];
+    if(textField == self.nameTF){
+        [_locationTF becomeFirstResponder];
+    }else if(textField == self.locationTF){
+        [_bioTV becomeFirstResponder];
+    }
     
     return YES;
 }
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
-    if (!self.dismissGR)
+    if (!self.dismissGR){
         self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    }
     
     [self.view addGestureRecognizer:self.dismissGR];
-    
-    
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
@@ -343,12 +449,15 @@
 #pragma Text View Delegate
 
 -(void)textViewDidBeginEditing:(UITextView *)textView{
-    if (!self.dismissGR)
+    if (!self.dismissGR){
         self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-    
+    }
     [self.view addGestureRecognizer:self.dismissGR];
     
-    if (textView.attributedText){
+    if ([_bioStr isEqualToString:@"Bio"] && _isEditingProfile){
+        textView.attributedText = nil;
+        textView.textColor = [UIColor frescoDarkTextColor];
+    }else if(self.bioTV.attributedText && [_bioStr isEqualToString:@"Bio"]){
         textView.attributedText = nil;
         textView.textColor = [UIColor frescoDarkTextColor];
     }
@@ -369,6 +478,8 @@
 
 -(void)handleKeyboardWillShow:(NSNotification *)sender{
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    
+    self.bottomBar.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
     
     NSInteger newScrollViewHeight = self.view.frame.size.height - keyboardSize.height;
     CGPoint point;
@@ -395,6 +506,8 @@
             self.scrollView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, self.view.frame.size.height);
         }];
     }
+    self.bottomBar.transform = CGAffineTransformMakeTranslation(0, 0);
+
 }
 
 -(void)dismissKeyboard{

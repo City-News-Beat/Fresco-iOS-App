@@ -19,27 +19,27 @@
             <subviews>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iiK-hu-wdc">
                     <constraints>
-                        <constraint firstAttribute="height" constant="88" id="GI6-t3-fkh"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="88" id="Asf-m1-aFE"/>
                     </constraints>
                     <attributedString key="attributedText">
                         <fragment>
-                            <string key="content">We can only verify photos and videos from the past 24 hours, taken with location data. If nothing’s showing up, make sure Location Services are turned on in</string>
+                            <string key="content">We can only verify photos and videos from the past 24 hours, taken with location data. If nothing is showing up, make sure Location is enabled in</string>
                             <attributes>
                                 <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                 <font key="NSFont" size="15" name="SFUIText-Light"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
-                        <fragment content=" ">
+                        <fragment content="S ettings   ">
                             <attributes>
-                                <color key="NSColor" red="0.4823529411764706" green="0.4823529411764706" blue="0.4823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="NSColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                                 <font key="NSFont" size="15" name="SFUIText-Light"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
-                        <fragment content="Settings">
+                        <fragment content="for next time.">
                             <attributes>
-                                <color key="NSColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                 <font key="NSFont" size="15" name="SFUIText-Light"/>
 
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
@@ -65,7 +65,7 @@
                         <accessibilityTraits key="traits" link="YES"/>
                     </accessibility>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                    <state key="normal" title="Settings.">
+                    <state key="normal" title="Settings">
                         <color key="titleColor" cyan="0.79000000000000004" magenta="0.72948938608169556" yellow="0.68550682067871094" black="0.29359161853790283" alpha="1" colorSpace="custom" customColorSpace="genericCMYKColorSpace"/>
                     </state>
                     <connections>
@@ -117,10 +117,9 @@
                 <constraint firstItem="lca-Wh-NsH" firstAttribute="top" secondItem="iiK-hu-wdc" secondAttribute="bottom" constant="-10" id="9a1-aF-TE4"/>
                 <constraint firstItem="iiK-hu-wdc" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="71" id="ATb-aH-bbw"/>
                 <constraint firstAttribute="trailing" secondItem="iiK-hu-wdc" secondAttribute="trailing" constant="35" id="CZf-3i-oTf"/>
+                <constraint firstItem="lR9-T7-zEL" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" constant="-10" id="HmV-DR-90r"/>
                 <constraint firstItem="lca-Wh-NsH" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="Ird-e9-SxX"/>
-                <constraint firstAttribute="trailing" secondItem="lR9-T7-zEL" secondAttribute="trailing" constant="66" id="Jge-Fk-UnI"/>
                 <constraint firstItem="3fF-hp-x1c" firstAttribute="top" secondItem="iiK-hu-wdc" secondAttribute="bottom" constant="-9" id="Otj-qO-ktp"/>
-                <constraint firstItem="lR9-T7-zEL" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="16" id="UXE-X9-0GK"/>
                 <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="48" id="VPH-Zk-DlY"/>
                 <constraint firstAttribute="trailing" secondItem="3fF-hp-x1c" secondAttribute="trailing" constant="16" id="b4a-5U-zqH"/>
                 <constraint firstItem="lca-Wh-NsH" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="16" id="ee7-U9-COT"/>
@@ -135,7 +134,7 @@
                 <outlet property="chatWithTopConstraint" destination="Otj-qO-ktp" id="tvt-JG-TdV"/>
                 <outlet property="questionLeftConstraint" destination="ee7-U9-COT" id="ShR-xh-z8f"/>
                 <outlet property="settingsButton" destination="lR9-T7-zEL" id="Kir-Hc-VSz"/>
-                <outlet property="settingsRightConstraint" destination="Jge-Fk-UnI" id="i86-P5-szl"/>
+                <outlet property="settingsRightConstraint" destination="HmV-DR-90r" id="vIG-dY-EQj"/>
                 <outlet property="settingsTopConstraint" destination="8sp-OX-Ib0" id="4Os-mW-D8T"/>
                 <outlet property="textView" destination="iiK-hu-wdc" id="NFg-66-RKL"/>
             </connections>

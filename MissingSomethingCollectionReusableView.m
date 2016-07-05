@@ -37,9 +37,9 @@
     }    
     self.textView.allowsEditingTextAttributes = false;
     if(IS_IPHONE_6_PLUS){
-        self.settingsRightConstraint.constant = 85;
+        self.settingsRightConstraint.constant = -48;
     }else if(IS_IPHONE_5){
-        self.settingsTopConstraint.constant = 45;
+        self.settingsTopConstraint.constant = 58;
         self.settingsRightConstraint.constant = 117;
         self.chatWithTopConstraint.constant = 30;
         self.chatWithRightConstraint.constant = 100;

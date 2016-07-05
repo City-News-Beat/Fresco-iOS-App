@@ -9,8 +9,9 @@
 #import "FRSScrollingViewController.h"
 #import "FRSUser.h"
 #import "FRSFeedTable.h"
+#import "FRSBorderedImageView.h"
 
-@interface FRSProfileViewController : FRSScrollingViewController
+@interface FRSProfileViewController : FRSScrollingViewController <UITextViewDelegate>
 {
     UILabel *titleLabel;
     UIView *topView;
@@ -25,4 +26,9 @@
 @property (nonatomic, retain) FRSUser *representedUser;
 @property BOOL authenticatedProfile;
 -(instancetype)initWithDefaultUser;
+@property (strong, nonatomic) UITextView *bioTextView;
+@property (strong, nonatomic) UILabel *nameLabel;
+@property (strong, nonatomic) UILabel *locationLabel;
+@property (strong, nonatomic) FRSBorderedImageView *profileIV;
+
 @end
