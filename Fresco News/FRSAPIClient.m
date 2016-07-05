@@ -961,5 +961,25 @@
     return FALSE;
 }
 
+-(void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion {
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    __block NSString *address;
+    
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error)
+     {
+         if(placemarks && placemarks.count > 0) {
+             CLPlacemark *placemark= [placemarks objectAtIndex:0];
+             
+             address = [NSString stringWithFormat:@"%@ %@,%@ %@", [placemark subThoroughfare],[placemark thoroughfare],[placemark locality], [placemark administrativeArea]];
+             
+             NSLog(@"Found address: %@",address);
+             completion(address, Nil);
+         }
+         else {
+             completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:404 userInfo:Nil]);
+         }
+         
+     }];
+}
 
 @end

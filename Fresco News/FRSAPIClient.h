@@ -95,4 +95,5 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 
 -(BOOL)checkAuthAndPresentOnboard;
 -(void)fetchLikesFeedForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion;
 @end
