@@ -185,41 +185,45 @@ static NSString * const cellIdentifier = @"assignment-cell";
          contentMode:PHImageContentModeAspectFill
          options:nil
          resultHandler:^(UIImage *result, NSDictionary *info) {
-             
-             self.carouselCell.image.image = result;
-             self.carouselCell.image.contentMode = UIViewContentModeScaleAspectFill;
-             
-             if (asset.mediaType == PHAssetMediaTypeVideo) {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 self.carouselCell.image.image = result;
+                 self.carouselCell.image.contentMode = UIViewContentModeScaleAspectFill;
                  
-                 [self.carouselCell loadVideo:asset];
-
-                 
-                 [[PHImageManager defaultManager]
-                  requestAVAssetForVideo:asset
-                  options:nil
-                  resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                      NSLog(@"CREATED PLAYER");
-                      AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
-                      FRSPlayer *player = [[FRSPlayer alloc] initWithPlayerItem:playerItem];
-                      AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-                      playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, self.carouselCell.frame.size.height);
-                      playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-                      [self.carouselCell.layer addSublayer:playerLayer];
-                      [player play];
-                      
-                      [self.players addObject:player];
-                      
-                      UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
-                      [self.carouselCell addGestureRecognizer:tap];
-                  }];
-                 
-                 return;
-                 
-             } else {
-                 
-                 //photo
-                 
-             }
+                 if (asset.mediaType == PHAssetMediaTypeVideo) {
+                     
+                     [self.carouselCell loadVideo:asset];
+                     
+                     
+                     [[PHImageManager defaultManager]
+                      requestAVAssetForVideo:asset
+                      options:nil
+                      resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                          
+                          dispatch_async(dispatch_get_main_queue(), ^{
+                              NSLog(@"CREATED PLAYER");
+                              AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
+                              FRSPlayer *player = [[FRSPlayer alloc] initWithPlayerItem:playerItem];
+                              AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+                              playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, self.carouselCell.frame.size.height);
+                              playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                              [self.carouselCell.layer addSublayer:playerLayer];
+                              [player play];
+                              
+                              [self.players addObject:player];
+                              
+                              UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
+                              [self.carouselCell addGestureRecognizer:tap];
+                          });
+                      }];
+                     
+                     return;
+                     
+                 } else {
+                     
+                     //photo
+                     
+                 }
+             });
          }];
     });
     return self.carouselCell;
