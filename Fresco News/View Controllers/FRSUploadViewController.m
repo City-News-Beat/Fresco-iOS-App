@@ -77,7 +77,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self checkBottomBar];
     
     self.assignmentIDs = [[NSMutableArray alloc] init];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated {

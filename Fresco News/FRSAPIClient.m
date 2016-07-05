@@ -539,6 +539,7 @@
 
 -(void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *tokenString = facebookToken.tokenString;
+    
     if (!tokenString) {
         completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:401 userInfo:Nil]);
         return;
