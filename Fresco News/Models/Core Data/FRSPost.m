@@ -189,11 +189,6 @@
         jsonObject[@"videoUrl"] = self.videoUrl;
     }
     
-<<<<<<< HEAD
-    if ([self checkVal:self.source]) {
-        jsonObject[@"source"] = self.source;
-    }
-=======
     if ([self checkVal:self.imageUrl]) {
         jsonObject[@"media_url"] = self.imageUrl;
     }
@@ -210,16 +205,8 @@
         jsonObject[@"lng"] = self.coordinates[0]; 
     }
     
->>>>>>> 3.0-phil
     
     return jsonObject;
 }
 
--(BOOL)checkVal:(id)val {
-    if (val && ![val isEqual:[NSNull null]]) {
-        return TRUE;
-    }
-    
-    return FALSE;
-}
 @end
