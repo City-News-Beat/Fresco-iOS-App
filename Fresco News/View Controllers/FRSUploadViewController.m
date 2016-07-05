@@ -48,8 +48,10 @@
 @property (strong, nonatomic) UICollectionViewFlowLayout *galleryCollectionViewFlowLayout;
 @property (strong, nonatomic) FRSCarouselCell *carouselCell;
 @property (strong, nonatomic) UIPageControl *pageControl;
-@property (strong, nonatomic) FRSPlayer *player;
-@property (strong, nonatomic) AVPlayerLayer *playerLayer;
+//@property (strong, nonatomic) FRSPlayer *player;
+//@property (strong, nonatomic) AVPlayerLayer *playerLayer;
+
+@property (strong, nonatomic) NSMutableArray *players;
 
 @property NSInteger galleryCollectionViewHeight;
 
@@ -88,16 +90,25 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.galleryCollectionView setContentOffset:CGPointMake(0, 0)];
     
     self.carouselCell.assets = self.content;
-    NSLog(@"(UploadVC) ASSETS: %@", self.content);
-    
+
+    self.players = [[NSMutableArray alloc] init];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self dismissKeyboard];
     [self.pageControl removeFromSuperview];
-    [self.player pause];
-    [self.playerLayer.player pause];
+    
+    NSLog(@"PLAYERS (%lu): %@", (unsigned long)self.players.count, self.players);
+    
+    for (FRSPlayer *player in self.players) {
+        if ([player respondsToSelector:@selector(pause)]) {
+            [player.container removeFromSuperview];
+            [player pause];
+            [player replaceCurrentItemWithPlayerItem:nil];
+            self.players = nil;
+        }
+    }
 }
 
 
@@ -166,54 +177,63 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     PHAsset *asset = [self.content objectAtIndex:indexPath.row];
     
-    [[PHImageManager defaultManager]
-     requestImageForAsset:asset
-     targetSize:CGSizeMake(self.carouselCell.frame.size.width, self.carouselCell.frame.size.height)
-     contentMode:PHImageContentModeAspectFill
-     options:nil
-     resultHandler:^(UIImage *result, NSDictionary *info) {
-         
-         self.carouselCell.image.image = result;
-         self.carouselCell.image.contentMode = UIViewContentModeScaleAspectFill;
-         
-         if (asset.mediaType == PHAssetMediaTypeVideo) {
-             [[PHImageManager defaultManager]
-              requestAVAssetForVideo:asset
-              options:nil
-              resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                  AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
-                  self.player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
-                  self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
-                  self.playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, self.carouselCell.frame.size.height);
-                  self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-                  [self.carouselCell.layer addSublayer:self.playerLayer];
-                  [self.player play];
-                  NSLog(@"video");
-                  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
-                  [self.carouselCell addGestureRecognizer:tap];
-              
-              }];
-             
-             return;
-             
-         } else {
-
-             //photo
-         
-         }
-     }];
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[PHImageManager defaultManager]
+         requestImageForAsset:asset
+         targetSize:CGSizeMake(self.carouselCell.frame.size.width, self.carouselCell.frame.size.height)
+         contentMode:PHImageContentModeAspectFill
+         options:nil
+         resultHandler:^(UIImage *result, NSDictionary *info) {
+             
+             self.carouselCell.image.image = result;
+             self.carouselCell.image.contentMode = UIViewContentModeScaleAspectFill;
+             
+             if (asset.mediaType == PHAssetMediaTypeVideo) {
+                 
+                 [self.carouselCell loadVideo:asset];
+
+                 
+                 [[PHImageManager defaultManager]
+                  requestAVAssetForVideo:asset
+                  options:nil
+                  resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                      NSLog(@"CREATED PLAYER");
+                      AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
+                      FRSPlayer *player = [[FRSPlayer alloc] initWithPlayerItem:playerItem];
+                      AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+                      playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, self.carouselCell.frame.size.height);
+                      playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                      [self.carouselCell.layer addSublayer:playerLayer];
+                      [player play];
+                      
+                      [self.players addObject:player];
+                      
+                      UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
+                      [self.carouselCell addGestureRecognizer:tap];
+                  }];
+                 
+                 return;
+                 
+             } else {
+                 
+                 //photo
+                 
+             }
+         }];
+    });
     return self.carouselCell;
     
 }
 
+
 -(void)tapPlayer {
     
-    if (self.player.rate != 0) {
-        [self.player pause];
-    } else {
-        [self.player play];
-    }
+//    if (self.player.rate != 0) {
+//        [self.player pause];
+//    } else {
+//        [self.player play];
+//    }
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
