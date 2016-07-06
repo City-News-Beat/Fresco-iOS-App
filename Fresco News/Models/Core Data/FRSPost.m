@@ -11,6 +11,7 @@
 #import "FRSUser.h"
 #import "FRSDateFormatter.h"
 #import "MagicalRecord.h"
+#import "FRSAPIClient.h"
 
 @implementation FRSPost
 @synthesize currentContext, location, contentType;
@@ -37,25 +38,14 @@
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"address"]];
-    self.creator = [FRSUser MR_createEntity];
     
-    self.creator.uid = dict[@"owner"][@"id"];
-    self.creator.username = dict[@"owner"][@"username"];
-    self.creator.firstName = (dict[@"owner"][@"full_name"] != Nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]] && [[dict[@"owner"][@"full_name"] class] isSubclassOfClass:[NSString class]]) ? dict[@"owner"][@"full_name"] : @"";;
-    self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
-
-    /*self.creator = [FRSUser MR_createEntity];
-    
-    if ([dict objectForKey:@"video"] != [NSNull null]) {
-        self.mediaType = @(1);
-        self.videoUrl = [dict objectForKey:@"video"];
+    if (dict[@"owner"][@"id"] && ![dict[@"owner"][@"uid"] isEqual:[NSNull null]]) {
+        self.creator = [FRSUser MR_createEntity];
+        self.creator.uid = dict[@"owner"][@"id"];
+        self.creator.username = dict[@"owner"][@"username"];
+        self.creator.firstName = (dict[@"owner"][@"full_name"] != Nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]] && [[dict[@"owner"][@"full_name"] class] isSubclassOfClass:[NSString class]]) ? dict[@"owner"][@"full_name"] : @"";;
+        self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
     }
-    
-    if ([dict objectForKey:@"owner"] != [NSNull null] && [dict objectForKey:@"owner"]) {
-        if ([[dict objectForKey:@"owner"] objectForKey:@"avatar"] != [NSNull null]) {
-            self.creator.profileImage = [[dict objectForKey:@"owner"] objectForKey:@"avatar"];
-        }
-    }*/
     
     if (dict[@"video"] != Nil && dict[@"stream"] != [NSNull null]) {
         self.videoUrl = dict[@"stream"];
@@ -77,10 +67,11 @@
     self.creator = [FRSUser MR_createEntityInContext:context];
     
     self.creator.uid = dict[@"owner"][@"id"];
+
     self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
 
     self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
-    
+
     self.creator.bio = (dict[@"owner"][@"bio"] != nil) ? dict[@"owner"][@"bio"] : @"";
 
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
@@ -97,6 +88,10 @@
     NSNumber *width = dict[@"meta"][@"width"] ? : @0;
     
     self.meta = @{@"image_height" : height, @"image_width" : width};
+    
+    if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
+        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_at"]];
+    }
 }
 
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context save:(BOOL)save {
@@ -141,7 +136,7 @@
     if (!address || [address isEqual:[NSNull null]]) {
         return @"";
     }
-     
+    
     NSArray *comps = [address componentsSeparatedByString:@","];
     NSMutableString *str = [NSMutableString new];
     if (comps.count >= 3){
@@ -155,15 +150,63 @@
         [str appendString:comps[1]];
     }
     else if (comps.count == 1){
-        [str appendString:comps[0]];
+        return address;
     }
+    
     return str;
 }
 
+-(BOOL)checkVal:(id)val {
+    if (val && ![val isEqual:[NSNull null]]) {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+/*
+ 
+ @property (nullable, nonatomic, retain) NSString *address;
+ @property (nullable, nonatomic, retain) NSString *byline;
+ @property (nullable, nonatomic, retain) NSDate *createdDate;
+ @property (nullable, nonatomic, retain) id image;
+ @property (nullable, nonatomic, retain) NSString *imageUrl;
+ @property (nullable, nonatomic, retain) NSNumber *mediaType;
+ @property (nullable, nonatomic, retain) NSString *source;
+ @property (nullable, nonatomic, retain) NSString *uid;
+ @property (nullable, nonatomic, retain) NSString *videoUrl;
+ @property (nullable, nonatomic, retain) NSString *visibility;
+ @property (nullable, nonatomic, retain) id coordinates;
+ @property (nullable, nonatomic, retain) id meta;
+ @property (nullable, nonatomic, retain) FRSUser *creator;
+ @property (nullable, nonatomic, retain) FRSGallery *gallery;
+ 
+ */
+
 -(NSDictionary *)jsonObject {
     NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];
+    if ([self checkVal:self.videoUrl]) {
+        jsonObject[@"videoUrl"] = self.videoUrl;
+    }
+    
+    if ([self checkVal:self.imageUrl]) {
+        jsonObject[@"media_url"] = self.imageUrl;
+    }
+    else if ([self checkVal:self.videoUrl]) {
+        jsonObject[@"media_url"] = self.videoUrl;
+    }
+    
+    if ([self checkVal:self.createdDate]) {
+        jsonObject[@"created_date"] = self.createdDate;
+    }
+    
+    if ([self checkVal:self.coordinates]) {
+        jsonObject[@"lat"] = self.coordinates[1];
+        jsonObject[@"lng"] = self.coordinates[0]; 
+    }
     
     
     return jsonObject;
 }
+
 @end

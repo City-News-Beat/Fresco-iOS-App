@@ -23,6 +23,7 @@
 #import "FRSSetupProfileViewController.h"
 
 #import "FRSAPIClient.h"
+#import <Haneke/Haneke.h>
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -45,6 +46,7 @@
 @property (strong, nonatomic) UIButton *likesButton;
 
 @property (strong, nonatomic) NSArray *galleries;
+@property (strong, nonatomic) NSArray *likes;
 
 @property (strong, nonatomic) UIView *whiteOverlay;
 @property (strong, nonatomic) UIView *socialButtonContainer;
@@ -184,11 +186,41 @@
 #pragma mark - Fetch Methods
 
 -(void)fetchGalleries {
-    NSLog(@"%@", self.representedUser);
+    BOOL reload = FALSE;
     
+    if (self.currentFeed == self.galleries) {
+        reload = TRUE;
+    }
+
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
         [self.tableView reloadData];
+        
+        if (reload) {
+            self.currentFeed = self.galleries;
+            [self.tableView reloadData];
+        }
+
+    }];
+    
+    [self fetchLikes];
+}
+
+-(void)fetchLikes {
+    
+    BOOL reload = FALSE;
+    
+    if (self.currentFeed == self.likes) {
+        reload = TRUE;
+    }
+    
+    [[FRSAPIClient sharedClient] fetchLikesFeedForUser:self.representedUser completion:^(id responseObject, NSError *error) {
+        self.likes = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
+        
+        if (reload) {
+            self.currentFeed = self.likes;
+            [self.tableView reloadData];
+        }
     }];
 }
 
@@ -493,6 +525,13 @@
     
     self.feedButton.alpha = 1.0;
     self.likesButton.alpha = 0.7;
+    
+    
+    if (self.currentFeed != self.galleries) {
+        self.currentFeed = self.galleries;
+        
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 -(void)handleLikesButtonTapped{
@@ -500,6 +539,11 @@
     
     self.likesButton.alpha = 1.0;
     self.feedButton.alpha = 0.7;
+    
+    if (self.currentFeed != self.likes) {
+        self.currentFeed = self.likes;
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 #pragma mark - UITableView Delegate & DataSource
@@ -516,7 +560,12 @@
         return 1;
     }
     else {
-        return self.galleries.count;
+        
+        if (!self.currentFeed) {
+            self.currentFeed = self.galleries;
+        }
+        
+        return self.currentFeed.count;
         return 0;
     }
 }
@@ -535,13 +584,13 @@
         return self.profileContainer.frame.size.height;
     }
     else {
-        if (!self.galleries.count) return 0;
-        if ([[self.galleries[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
-            FRSGallery *gallery = self.galleries[indexPath.row];
+        if (!self.currentFeed.count) return 0;
+        if ([[self.currentFeed[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+            FRSGallery *gallery = self.currentFeed[indexPath.row];
             return [gallery heightForGallery];
         }
         else {
-            FRSStory *story = self.galleries[indexPath.row];
+            FRSStory *story = self.currentFeed[indexPath.row];
             return [story heightForStory];
         }
     }
@@ -557,14 +606,14 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     else {
-        if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+        if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
             
             if (!cell){
                 cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
             }
         }
-        else if ([[[self.galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
+        else if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
             
             if (!cell){
@@ -588,14 +637,14 @@
             FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
             [galCell clearCell];
             
-            galCell.gallery = self.galleries[indexPath.row];
+            galCell.gallery = self.currentFeed[indexPath.row];
             [galCell configureCell];
         }
         else {
             FRSStoryCell *storyCell = (FRSStoryCell *)cell;
             [storyCell clearCell];
             
-            storyCell.story = self.galleries[indexPath.row];
+            storyCell.story = self.currentFeed[indexPath.row];
             [storyCell configureCell];
         }
     }
@@ -609,11 +658,19 @@
         view = [UIView new];
     }
     else if (section == 1){
+        //[self configureSectionView];
+        
+        if (topView) {
+            return topView;
+        }
         [self configureSectionView];
         
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
         [view addSubview:self.sectionView];
         [view addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
+        
+        topView = view;
+        return topView;
     }
     
     return view;
@@ -717,13 +774,28 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.username;
+        self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         //self.locationLabel.text = user.
         self.bioTextView.text = user.bio;
         self.bioTextView.editable = false;
         //[self.bioTextView sizeToFit];
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
+        self.nameLabel.text = user.firstName;
+        //self.bioLabel.text = user.bio;
+        //[self.bioLabel sizeToFit];
         
         self.usernameLabel.text = user.username;
         titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
+        
+        if ([user.username isEqualToString:@""] || !user.username || [user.username isEqual:[NSNull null]]) {
+            if (![user.firstName isEqualToString:@""]) {
+                titleLabel.adjustsFontSizeToFitWidth = YES;
+                titleLabel.text = user.firstName;
+            }
+            else {
+                titleLabel.text = @"";
+            }
+        }
         //  self.locationLabel.text = user.address; //user.address does not exiset yet
         self.followersLabel.text = @"1125";
         

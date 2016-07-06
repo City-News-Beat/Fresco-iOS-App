@@ -10,8 +10,11 @@
 #import "FRSAssignmentPickerTableViewCell.h"
 #import "FRSAssignment.h"
 #import "FRSOnboardingViewController.h"
+#import "FRSCarouselCell.h"
 #import <Twitter/Twitter.h>
-
+#import "FRSImageViewCell.h"
+#import "FRSFileLoader.h"
+#import "FRSPlayer.h"
 
 #import "FRSAPIClient.h"
 
@@ -38,11 +41,19 @@
 @property (nonatomic) BOOL globalAssignmentsEnabled;
 @property (strong, nonatomic) NSArray *assignments;
 @property (strong, nonatomic) NSArray *globalAssignments;
-
 @property (strong, nonatomic) UIView *globalAssignmentsDrawer;
 @property (strong, nonatomic) UITableView *globalAssignmentsTableView;
-
 @property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardGestureRecognizer;
+@property (strong, nonatomic) UICollectionView *galleryCollectionView;
+@property (strong, nonatomic) UICollectionViewFlowLayout *galleryCollectionViewFlowLayout;
+@property (strong, nonatomic) FRSCarouselCell *carouselCell;
+@property (strong, nonatomic) UIPageControl *pageControl;
+//@property (strong, nonatomic) FRSPlayer *player;
+//@property (strong, nonatomic) AVPlayerLayer *playerLayer;
+
+@property (strong, nonatomic) NSMutableArray *players;
+
+@property NSInteger galleryCollectionViewHeight;
 
 @end
 
@@ -72,12 +83,31 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
+    [self.galleryCollectionView reloadData];
+    [self configurePageController];
+    
+    [self.galleryCollectionView setContentOffset:CGPointMake(0, 0)];
+    
+    self.carouselCell.assets = self.content;
+
+    self.players = [[NSMutableArray alloc] init];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self dismissKeyboard];
+    [self.pageControl removeFromSuperview];
     
+    NSLog(@"PLAYERS (%lu): %@", (unsigned long)self.players.count, self.players);
+    
+    for (FRSPlayer *player in self.players) {
+        if ([player respondsToSelector:@selector(pause)]) {
+            [player.container removeFromSuperview];
+            [player pause];
+            [player replaceCurrentItemWithPlayerItem:nil];
+            self.players = nil;
+        }
+    }
 }
 
 
@@ -88,7 +118,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self addObservers];
     
     [self configureScrollView];
-    [self configureGalleryTableView];
+    [self configureGalleryCollectionView];
+    [self configurePageController];
     [self configureNavigationBar];
     [self configureAssignments]; //Tableview configures are called here
     [self configureBottomBar];
@@ -99,6 +130,88 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 }
 
+#pragma mark - UICollectionView
+
+-(void)configureGalleryCollectionView {
+
+    if (IS_IPHONE_5) {
+        self.galleryCollectionViewHeight = 240;
+    } else if (IS_IPHONE_6) {
+        self.galleryCollectionViewHeight = 280;
+    } else if (IS_IPHONE_6_PLUS) {
+        self.galleryCollectionViewHeight = 310;
+    }
+    
+    self.galleryCollectionViewFlowLayout = [[UICollectionViewFlowLayout alloc] init];
+    self.galleryCollectionViewFlowLayout.itemSize = CGSizeMake(50, 50);
+    [self.galleryCollectionViewFlowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self.galleryCollectionViewFlowLayout.minimumInteritemSpacing = 0;
+    self.galleryCollectionViewFlowLayout.minimumLineSpacing = 0;
+    
+    self.galleryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.galleryCollectionViewHeight) collectionViewLayout:self.galleryCollectionViewFlowLayout];
+    self.galleryCollectionView.showsHorizontalScrollIndicator = NO;
+    self.galleryCollectionView.collectionViewLayout = self.galleryCollectionViewFlowLayout;//?
+    self.galleryCollectionView.pagingEnabled = YES;
+    self.galleryCollectionView.delegate = self;
+    self.galleryCollectionView.dataSource = self;
+    self.galleryCollectionView.backgroundColor = [UIColor whiteColor];
+    [self.galleryCollectionView registerNib:[UINib nibWithNibName:@"FRSCarouselCell" bundle:nil] forCellWithReuseIdentifier:@"FRSCarouselCell"];
+    [self.scrollView addSubview:self.galleryCollectionView];
+
+    /* DEBUG */
+    //self.galleryCollectionView.backgroundColor = [UIColor redColor];
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.content.count;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    self.carouselCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
+    
+    PHAsset *asset = [self.content objectAtIndex:indexPath.row];
+    
+    if (asset.mediaType == PHAssetMediaTypeImage) {
+        [self.carouselCell loadImage:asset];
+    } else if (asset.mediaType == PHAssetMediaTypeVideo) {
+        [self.carouselCell loadVideo:asset];
+    } else if (asset.mediaType == PHAssetMediaTypeAudio) {
+        // 3.x feature
+    }
+    
+    return self.carouselCell;
+}
+
+-(BOOL)currentPageIsVideo {
+    NSInteger page = (self.scrollView.contentOffset.x + self.view.frame.size.width/2)/self.scrollView.frame.size.width;
+    return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
+}
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(self.view.frame.size.width, collectionView.frame.size.height);
+}
+
+-(void)configurePageController {
+    self.pageControl = [[UIPageControl alloc] init];
+    self.pageControl.numberOfPages = self.content.count;
+    self.pageControl.currentPage = 0;
+    self.pageControl.userInteractionEnabled = NO;
+    
+    self.pageControl.currentPageIndicatorTintColor = [UIColor frescoBackgroundColorDark];
+    self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:1 alpha:0.7];
+    
+    [self.pageControl sizeToFit];
+    [self.pageControl setFrame:CGRectMake(self.galleryCollectionView.frame.size.width - 16 - self.pageControl.frame.size.width, self.galleryCollectionView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8)];
+    
+    self.pageControl.hidesForSinglePage = YES;
+    
+    [self.scrollView addSubview:self.pageControl];
+}
 
 #pragma mark - Navigation Bar
 
@@ -189,7 +302,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
     [sendButton setTitle:@"SEND" forState:UIControlStateNormal];
     [sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
-//    sendButton.userInteractionEnabled = NO;
+    //sendButton.userInteractionEnabled = NO;
     [self.bottomContainer addSubview:sendButton];
 }
 
@@ -199,47 +312,48 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)configureScrollView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.delegate = self;
-//    self.scrollView.backgroundColor = [UIColor redColor];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:self.scrollView];
 
 }
 
 -(void)adjustScrollViewContentSize {
-    
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height);
-    
-    NSLog(@"self.scrollView.contentSize.height = %f", self.scrollView.contentSize.height);
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height +44);
 }
 
-
-#pragma mark - UITableView
-
--(void)configureGalleryTableView {
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    /* Height for galleryTableView */
-    int height;
-    if (IS_IPHONE_5) {
-        height = 240;
-    } else if (IS_IPHONE_6) {
-        height = 280;
-    } else if (IS_IPHONE_6_PLUS) {
-        height = 310;
+    CGFloat offset = scrollView.contentOffset.y + 20;
+
+    NSLog(@"CURRENT PAGE IS VIDEO: %d", [self currentPageIsVideo]);
+    
+    //If user is scrolling down, return and act like a normal scroll view
+    if (offset > self.scrollView.contentSize.height - self.scrollView.frame.size.height) {
+        return;
     }
     
-    /* Configure galleryTableView */
-    self.galleryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, height)];
-    [self.scrollView addSubview:self.galleryTableView];
-    
-    /* DEBUG */
-    self.galleryTableView.backgroundColor = [UIColor blueColor];
-    self.galleryTableView.alpha = 0.1;
-    
+    //If user is scrolling up, scale with content offset.
+    if (offset <= 0) {
+        self.galleryCollectionView.frame = CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset));
+        [self.galleryCollectionViewFlowLayout invalidateLayout];
+    }
 }
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    //Update pageControl on galleryCollectionView
+    if (scrollView == self.galleryCollectionView) {
+        CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
+        self.pageControl.currentPage = self.galleryCollectionView.contentOffset.x / pageWidth;
+    }
+}
+
+
+#pragma mark - UITableViewx
 
 -(void)configureAssignmentsTableView {
     
-    self.assignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height, self.view.frame.size.width, self.assignmentsArray.count *44)];
+    self.assignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, self.assignmentsArray.count *44)];
     self.assignmentsTableView.scrollEnabled = NO;
     self.assignmentsTableView.delegate = self;
     self.assignmentsTableView.dataSource = self;
@@ -257,7 +371,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)configureGlobalAssignmentsDrawer {
-    self.globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44)];
+    self.globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44)];
     self.globalAssignmentsDrawer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.globalAssignmentsDrawer];
     
@@ -396,11 +510,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configureTextView {
     
-    
     NSInteger textViewHeight = 200;
     
-    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryTableView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
-//    self.captionContainer.backgroundColor = [UIColor redColor];
+    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
     [self.scrollView addSubview:self.captionContainer];
     
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, textViewHeight)];
@@ -415,7 +527,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(-16, 0, self.view.frame.size.width, 0.5)];
     line.backgroundColor = [UIColor frescoShadowColor];
     [self.captionContainer addSubview:line];
-    
     
     self.placeholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 17)];
     self.placeholderLabel.text = @"What's happening?";
@@ -469,7 +580,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
     self.assignmentsArray = self.assignments;
     
-    
 }
 
 
@@ -484,7 +594,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
-        
+
         FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         
         if (globalAssignments.count > 0) {
@@ -509,7 +619,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
         
-        //NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
+//        NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
         //NSArray *global = @[@"Global", @"Global Two"];
         
         if ([global count] >  0) {

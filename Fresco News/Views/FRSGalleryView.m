@@ -927,7 +927,6 @@
     if (adjustedPost.videoUrl == nil) {
         self.muteImageView.alpha = 0;
     }
-    
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object

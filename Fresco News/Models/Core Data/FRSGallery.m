@@ -34,6 +34,14 @@
 @dynamic isLiked;
 @dynamic numberOfLikes;
 
+-(NSArray *)sorted {
+    NSArray *sorted;
+    
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:YES];
+    sorted=[self.posts sortedArrayUsingDescriptors:@[sort]];
+
+    return sorted;
+}
 -(void)configureWithDictionary:(NSDictionary *)dict{
     
     self.tags = [[NSMutableDictionary alloc] init];
@@ -43,7 +51,7 @@
     self.caption = dict[@"caption"];
     self.byline = dict[@"byline"];
     
-    if (self.posts.count == 0) {
+    if (!self.posts || self.posts.count == 0) {
         [self addPostsWithArray:dict[@"posts"]];
     }
     
@@ -79,6 +87,7 @@
 }
 
 -(void)addPostsWithArray:(NSArray *)posts{
+        
     for (NSDictionary *dict in posts){
         if (save) {
             NSLog(@"SAVE");
@@ -90,12 +99,6 @@
             NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSPost" inManagedObjectContext:self.currentContext];
             FRSPost *post = (FRSPost *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
             
-            if (dict[@"owner"] != [NSNull null]) {
-                if (!dict[@"owner"][@"avatar"]) {
-                    return;
-                }
-                post.creator.profileImage = dict[@"owner"][@"avatar"];
-            }
             [post configureWithDictionary:dict context:self.currentContext save:FALSE];
             [self addPostsObject:post];
         }
@@ -160,10 +163,27 @@
 -(NSDictionary *)jsonObject {
     NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];
     
+    if ([self checkVal:[self valueForKey:@"caption"]]) {
+        jsonObject[@"caption"] = [self valueForKey:@"caption"];
+    }
+    
+    NSMutableArray *posts = [[NSMutableArray alloc] init];
+    
+    for (FRSPost *post in self.posts.allObjects) {
+        [posts addObject:[post jsonObject]];
+    }
+    
+    jsonObject[@"posts"] = posts;
     
     return jsonObject;
 }
 
-// Insert code here to add functionality to your managed object subclass
+-(BOOL)checkVal:(id)val {
+    if (val && ![val isEqual:[NSNull null]]) {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
 
 @end
