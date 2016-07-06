@@ -16,6 +16,7 @@
 }
 
 -(void)loadImage:(PHAsset *)asset {
+    
     if (!imageView) {
         imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
@@ -54,8 +55,6 @@
                  playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
                  [self.layer addSublayer:playerLayer];
                  [videoView play];
-            
-                 [self.players addObject:videoView];
                  
                  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
                  [self addGestureRecognizer:tap];
@@ -66,10 +65,18 @@
 
 -(void)tapPlayer {
     if (videoView.rate != 0) {
-        [videoView pause];
+        [self pausePlayer];
     } else {
-        [videoView play];
+        [self playPlayer];
     }
+}
+
+-(void)pausePlayer {
+    [videoView pause];
+}
+
+-(void)playPlayer {
+    [videoView play];
 }
 
 -(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {

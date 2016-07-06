@@ -18,9 +18,12 @@
 
 -(void)loadImage:(PHAsset *)asset;
 -(void)loadVideo:(PHAsset *)asset;
-@property (weak, nonatomic) IBOutlet UIImageView *image;
 
+-(void)pausePlayer;
+-(void)playPlayer;
+
+@property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (strong, nonatomic) NSArray *assets;
-@property (nonatomic, retain) NSMutableArray *players;
+@property (strong, nonatomic) NSMutableArray *players;
 
 @end
