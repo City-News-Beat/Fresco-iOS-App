@@ -177,65 +177,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     PHAsset *asset = [self.content objectAtIndex:indexPath.row];
     
+    if (asset.mediaType == PHAssetMediaTypeImage) {
+        [self.carouselCell loadImage:asset];
+    } else if (asset.mediaType == PHAssetMediaTypeVideo) {
+        [self.carouselCell loadVideo:asset];
+    } else if (asset.mediaType == PHAssetMediaTypeAudio) {
+        // 3.x feature
+    }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[PHImageManager defaultManager]
-         requestImageForAsset:asset
-         targetSize:CGSizeMake(self.carouselCell.frame.size.width, self.carouselCell.frame.size.height)
-         contentMode:PHImageContentModeAspectFill
-         options:nil
-         resultHandler:^(UIImage *result, NSDictionary *info) {
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 self.carouselCell.image.image = result;
-                 self.carouselCell.image.contentMode = UIViewContentModeScaleAspectFill;
-                 
-                 if (asset.mediaType == PHAssetMediaTypeVideo) {
-                     
-                     [self.carouselCell loadVideo:asset];
-                     
-                     
-                     [[PHImageManager defaultManager]
-                      requestAVAssetForVideo:asset
-                      options:nil
-                      resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                          
-                          dispatch_async(dispatch_get_main_queue(), ^{
-                              AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
-                              FRSPlayer *player = [[FRSPlayer alloc] initWithPlayerItem:playerItem];
-                              AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-                              playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, self.carouselCell.frame.size.height);
-                              playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-                              [self.carouselCell.layer addSublayer:playerLayer];
-                              [player play];
-                              
-                              [self.players addObject:player];
-                              
-                              UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
-                              [self.carouselCell addGestureRecognizer:tap];
-                          });
-                      }];
-                     
-                     return;
-                     
-                 } else {
-                     
-                     //photo
-                     
-                 }
-             });
-         }];
-    });
     return self.carouselCell;
-    
-}
-
-
--(void)tapPlayer {
-//    if (self.player.rate != 0) {
-//        [self.player pause];
-//    } else {
-//        [self.player play];
-//    }
 }
 
 -(BOOL)currentPageIsVideo {

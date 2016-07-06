@@ -19,16 +19,56 @@
     if (!imageView) {
         imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-        imageView.backgroundColor = [UIColor greenColor];
         [self addSubview:imageView];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[PHImageManager defaultManager]
+             requestImageForAsset:asset
+             targetSize:CGSizeMake(self.frame.size.width, self.frame.size.height)
+             contentMode:PHImageContentModeAspectFill
+             options:nil
+             resultHandler:^(UIImage *result, NSDictionary *info) {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     imageView.image = result;
+                     imageView.contentMode = UIViewContentModeScaleAspectFill;
+                 });
+             }];
+        });        
     }
-    
-    // load resource
 }
 
 -(void)loadVideo:(PHAsset *)asset {
+    
     if (!videoView) {
         videoView = [[FRSPlayer alloc] init];
+        [[PHImageManager defaultManager]
+         requestAVAssetForVideo:asset
+         options:nil
+         resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+             
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
+                 videoView = [[FRSPlayer alloc] initWithPlayerItem:playerItem];
+                 AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoView];
+                 playerLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+                 playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                 [self.layer addSublayer:playerLayer];
+                 [videoView play];
+            
+                 [self.players addObject:videoView];
+                 
+                 UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
+                 [self addGestureRecognizer:tap];
+             });
+         }];
+    }
+}
+
+-(void)tapPlayer {
+    if (videoView.rate != 0) {
+        [videoView pause];
+    } else {
+        [videoView play];
     }
 }
 
