@@ -537,6 +537,13 @@
     }];
 }
 
+-(void)getFollowersForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:followersEndpoint, user.uid];
+    
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
 -(void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *tokenString = facebookToken.tokenString;
     
@@ -815,7 +822,18 @@
         return;
     }
     
-    [self followUserID:user.uid completion:completion];
+    if ([user valueForKey:@"following"] && [[user valueForKey:@"following"] boolValue] == TRUE) {
+        [self unfollowUser:user completion:^(id responseObject, NSError *error) {
+            completion(responseObject, error);
+        }];
+        return;
+    }
+    
+    [self followUserID:user.uid completion:^(id responseObject, NSError *error) {
+        [user setValue:@(TRUE) forKey:@"following"];
+        [[self managedObjectContext] save:Nil];
+        completion(responseObject, error);
+    }];
 }
 -(void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([self checkAuthAndPresentOnboard]) {
@@ -823,7 +841,11 @@
         return;
     }
     
-    [self unfollowUserID:user.uid completion:completion];
+    [self unfollowUserID:user.uid completion:^(id responseObject, NSError *error) {
+        [user setValue:@(FALSE) forKey:@"following"];
+        [[self managedObjectContext] save:Nil];
+        completion(responseObject, error);
+    }];
 }
 
 -(void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion {
