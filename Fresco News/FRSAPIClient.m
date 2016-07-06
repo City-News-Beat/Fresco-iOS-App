@@ -848,6 +848,14 @@
     }];
 }
 
+-(void)getFollowingForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:followingEndpoint, user.uid];
+    
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 -(void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:followUserEndpoint, userID];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
