@@ -837,7 +837,7 @@
 }
 -(void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresconews.news" code:101 userInfo:Nil]);
         return;
     }
     
