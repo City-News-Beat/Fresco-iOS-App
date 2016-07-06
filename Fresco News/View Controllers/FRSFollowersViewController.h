@@ -7,7 +7,8 @@
 //
 
 #import "FRSScrollingViewController.h"
+#import "FRSUser.h"
 
 @interface FRSFollowersViewController : FRSScrollingViewController
-
+@property (nonatomic, weak) FRSUser *representedUser;
 @end

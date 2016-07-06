@@ -18,7 +18,7 @@
 @property (strong, nonatomic) UIButton *followersTab;
 @property (strong, nonatomic) UIButton *followingTab;
 
-@property (strong, nonatomic) NSArray *dataSourceArray;
+@property (strong, nonatomic) NSArray *followerArray;
 
 @end
 
@@ -35,9 +35,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
+    
+    [[FRSAPIClient sharedClient] getFollowersForUser:_representedUser completion:^(id responseObject, NSError *error) {
+        NSLog(@"%@ %@", responseObject, error);
+        NSDictionary *userInfo = (NSDictionary *)responseObject;
+        self.followerArray = [userInfo objectForKey:@"user"];
+    }];
     // Do any additional setup after loading the view.
 }
-
 #pragma mark - Override Super
 
 -(void)configureNavigationBar{
@@ -116,8 +121,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    //return self.dataSourceArray.count;
-    return 10;
+    return self.followerArray.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -135,7 +139,7 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     FRSUserTableViewCell *userCell = (FRSUserTableViewCell *)cell;
     [userCell clearCell];
-    [userCell configureCellWithUser:nil];
+    [userCell configureCellWithUser:[self.followerArray objectAtIndex:(int)indexPath]];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
