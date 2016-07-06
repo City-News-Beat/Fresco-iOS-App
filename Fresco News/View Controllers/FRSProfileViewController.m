@@ -754,8 +754,7 @@
 -(void)showFollowers {
     FRSFollowersViewController *vc = [[FRSFollowersViewController alloc] init];
     vc.representedUser = _representedUser;
-    FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:vc];
-    [self presentViewController:nav animated:YES completion:nil];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

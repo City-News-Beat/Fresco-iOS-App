@@ -9,6 +9,6 @@
 #import "FRSScrollingViewController.h"
 #import "FRSUser.h"
 
-@interface FRSFollowersViewController : FRSScrollingViewController
+@interface FRSFollowersViewController : FRSScrollingViewController <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, weak) FRSUser *representedUser;
 @end

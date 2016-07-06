@@ -13,5 +13,6 @@
 
 -(void)clearCell;
 -(void)configureCellWithUser:(FRSUser *)user;
+@property (nonatomic) CGFloat cellHeight;
 
 @end

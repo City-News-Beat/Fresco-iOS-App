@@ -31,7 +31,7 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 @property BOOL managerAuthenticated;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 +(instancetype)sharedClient;
-
+-(NSManagedObjectContext *)managedObjectContext;
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void(^)(NSArray *stories, NSError *error))completion;
 -(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void(^)(NSArray *galleries, NSError *error))completion;

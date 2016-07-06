@@ -15,6 +15,7 @@
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
 
+#import <Haneke/Haneke.h>
 @interface FRSUserTableViewCell()
 
 @property (strong, nonatomic) UIImageView *profileIV;
@@ -71,23 +72,41 @@
 }
 
 -(void)configureCellWithUser:(FRSUser *)user{
+    CGRect newFrame = self.frame;
+    newFrame.size.height = self.cellHeight;
+    [self setFrame:newFrame];
     
     self.profileIV.frame = CGRectMake(16, 12, 32, 32);
     self.profileIV.layer.cornerRadius = 32/2;
-    self.profileIV.image = [UIImage imageNamed:@"kobe"];
     
-    self.nameLabel.text = @"Kobe Bryant";
+    if(user.profileImage){
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
+    }else{
+        self.profileIV.image = [UIImage imageNamed:@"kobe"];
+    }
+    
+    if(user.firstName){
+        self.nameLabel.text = [NSString stringWithFormat:@"%@", user.firstName];
+    }else{
+        self.nameLabel.text = @"Kobe Bryant";
+    }
+    
     [self.nameLabel sizeToFit];
     [self.nameLabel centerVerticallyInView:self];
     [self.nameLabel setFrame:CGRectMake(64, self.nameLabel.frame.origin.y, self.nameLabel.frame.size.width, self.nameLabel.frame.size.height)];
     //CHECK FOR RELEASE we need to set a max width
     
-    self.usernameLabel.text = @"@theblackmamba";
+    if(user.username.length > 0){
+        self.usernameLabel.text = [NSString stringWithFormat:@"@%@", user.username];
+    }else{
+        self.usernameLabel.text = @"@theblackmamba";
+    }
+    
     [self.usernameLabel sizeToFit];
     [self.usernameLabel centerVerticallyInView:self];
     [self.usernameLabel setFrame:CGRectMake(self.nameLabel.frame.size.width + self.nameLabel.frame.origin.x + 8, self.usernameLabel.frame.origin.y, self.usernameLabel.frame.size.width, self.usernameLabel.frame.size.height)];
     
-    self.accessoryIV.frame = CGRectMake(self.frame.size.width - 16 - 24, 16, 24, 24);
+    self.accessoryIV.frame = CGRectMake(self.frame.size.width + 10, 16, 24, 24);
     self.accessoryIV.image = [UIImage imageNamed:@"add-follower"];
     
     self.bottomLine.frame = CGRectMake(0, self.frame.size.height - 0.5, self.bottomLine.frame.size.width, 0.5);\
