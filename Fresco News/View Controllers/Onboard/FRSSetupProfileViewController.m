@@ -55,6 +55,10 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     
+    if(!_isEditingProfile){//Back Button Disabled
+        //[self.navigationItem setLeftItemsSupplementBackButton:false];
+    }
+    
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
 }

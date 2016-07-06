@@ -103,7 +103,6 @@
     [self.navigationItem setLeftBarButtonItem:backItem animated:animated];
     
     
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnToPreviousViewController) name:@"returnToPreviousViewController" object:nil];
 }
 
@@ -504,8 +503,7 @@
     if (controlState == UIControlStateNormal){
         [self.createAccountButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.createAccountButton.enabled = NO;
-    }
-    else {
+    }else {
         [self.createAccountButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         [self.createAccountButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
         self.createAccountButton.enabled = YES;
