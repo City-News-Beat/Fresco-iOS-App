@@ -61,6 +61,7 @@
 @property (nonatomic) BOOL presentingUser;
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+@property (strong, nonatomic) UIBarButtonItem *followBarButtonItem;
 
 @end
 
@@ -158,10 +159,14 @@
     self.navigationItem.titleView = self.usernameLabel;
     self.navigationItem.titleView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
     
-    UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
-    followButton.tintColor = [UIColor whiteColor];
+    self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
+    self.followBarButtonItem.tintColor = [UIColor whiteColor];
     
-    self.navigationItem.rightBarButtonItem = followButton;
+    if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+        [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+    }
+    
+    self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     
@@ -718,7 +723,13 @@
 
 -(void)followUser {
     [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
-        //
+        
+        if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+            [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+        } else {
+            [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
+            //does not actually unfollow
+        }
         NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
     }];
 }
