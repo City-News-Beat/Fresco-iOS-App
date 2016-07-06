@@ -21,5 +21,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 
 @property (strong, nonatomic) NSArray *assets;
+@property (nonatomic, retain) NSMutableArray *players;
 
 @end

@@ -95,7 +95,7 @@
         
         // update user
         authenticatedUser.uid = responseObject[@"id"];
-        authenticatedUser.email = responseObject[@"email"];
+//        authenticatedUser.email = responseObject[@"email"];
         
         if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
             authenticatedUser.firstName = responseObject[@"full_name"];
