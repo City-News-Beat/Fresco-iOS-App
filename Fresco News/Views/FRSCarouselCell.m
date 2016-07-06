@@ -48,15 +48,22 @@
          resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
              
              dispatch_async(dispatch_get_main_queue(), ^{
+                 
+                 if (videoView) {
+                     [self removePlayers];
+                 }
+                 
                  AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
                  videoView = [[FRSPlayer alloc] initWithPlayerItem:playerItem];
                  videoView.actionAtItemEnd = AVPlayerActionAtItemEndNone;
                  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemDidReachEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:[videoView currentItem]];
-                 AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoView];
+                 playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoView];
                  playerLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
                  playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
                  [self.layer addSublayer:playerLayer];
                  [videoView play];
+                 
+                 //[self.players addObject:videoView];
                  
                  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
                  [self addGestureRecognizer:tap];
@@ -84,6 +91,14 @@
 
 -(void)playPlayer {
     [videoView play];
+}
+
+-(void)removePlayers {
+    [playerLayer removeFromSuperlayer];
+    [videoView pause];
+    
+    playerLayer = Nil;
+    videoView = Nil;
 }
 
 -(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {

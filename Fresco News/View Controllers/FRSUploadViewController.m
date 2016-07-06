@@ -66,10 +66,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)viewDidLoad {
     [super viewDidLoad];
     
-    
     [self configureUI];
     [self checkButtonStates];
-    
     
     self.postToTwitter  = NO;
     self.postToFacebook = NO;
@@ -100,7 +98,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     NSLog(@"PLAYERS (%lu): %@", (unsigned long)self.players.count, self.players);
     
-    [self.carouselCell pausePlayer];
+    [self.carouselCell removePlayers];
 }
 
 
@@ -116,7 +114,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureNavigationBar];
     [self configureAssignments]; //Tableview configures are called here
     [self configureBottomBar];
-    
 }
 
 -(void)checkButtonStates {
@@ -147,6 +144,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.galleryCollectionView.pagingEnabled = YES;
     self.galleryCollectionView.delegate = self;
     self.galleryCollectionView.dataSource = self;
+    self.galleryCollectionView.bounces = NO;
     self.galleryCollectionView.backgroundColor = [UIColor whiteColor];
     [self.galleryCollectionView registerNib:[UINib nibWithNibName:@"FRSCarouselCell" bundle:nil] forCellWithReuseIdentifier:@"FRSCarouselCell"];
     [self.scrollView addSubview:self.galleryCollectionView];
@@ -316,6 +314,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
+    //check mute toggle
+    [self.carouselCell pausePlayer];
+    
     CGFloat offset = scrollView.contentOffset.y + 20;
 
     NSLog(@"CURRENT PAGE IS VIDEO: %d", [self currentPageIsVideo]);
@@ -330,9 +331,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.galleryCollectionView.frame = CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset));
         [self.galleryCollectionViewFlowLayout invalidateLayout];
     }
+    
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    //check mute toggle
+    [self.carouselCell playPlayer];
     
     //Update pageControl on galleryCollectionView
     if (scrollView == self.galleryCollectionView) {
