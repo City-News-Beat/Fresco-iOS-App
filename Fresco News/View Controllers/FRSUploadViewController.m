@@ -15,7 +15,7 @@
 #import "FRSImageViewCell.h"
 #import "FRSFileLoader.h"
 #import "FRSPlayer.h"
-
+#import "AWFileHash.h" // md5 etc.
 #import "FRSAPIClient.h"
 
 @interface FRSUploadViewController () {
@@ -699,6 +699,20 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     if (self.postAnon) {
         NSLog(@"Post anonymously");
+    }
+    else {
+        FRSGallery *gallery = [FRSGallery MR_createEntity];
+        gallery.caption = (self.captionTextView.text) ? self.captionTextView.text : @"";
+        
+        for (PHAsset *asset in self.content) {
+            CLLocation *postLocation = asset.location;
+            
+        }
+        
+        // stage 1
+        [[FRSAPIClient sharedClient] createGallery:Nil completion:^(id responseObject, NSError *error) {
+            
+        }];
     }
 }
 
