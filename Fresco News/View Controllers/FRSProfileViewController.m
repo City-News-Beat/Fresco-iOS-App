@@ -795,7 +795,8 @@
             }
         }
         //  self.locationLabel.text = user.address; //user.address does not exiset yet
-        self.followersLabel.text = @"1125";
+        self.
+        ersLabel.text = @"1125";
         
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
