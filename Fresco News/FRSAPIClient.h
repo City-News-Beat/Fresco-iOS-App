@@ -90,7 +90,7 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 
 -(void)fetchCommentsForGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchCommentsForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion;
-
+-(void)getFollowersForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 -(NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache;
 
 -(BOOL)checkAuthAndPresentOnboard;
