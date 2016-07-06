@@ -830,6 +830,8 @@
     }
     
     [self followUserID:user.uid completion:^(id responseObject, NSError *error) {
+        [user setValue:@(TRUE) forKey:@"following"];
+        [[self managedObjectContext] save:Nil];
         completion(responseObject, error);
     }];
 }
@@ -840,6 +842,8 @@
     }
     
     [self unfollowUserID:user.uid completion:^(id responseObject, NSError *error) {
+        [user setValue:@(FALSE) forKey:@"following"];
+        [[self managedObjectContext] save:Nil];
         completion(responseObject, error);
     }];
 }
