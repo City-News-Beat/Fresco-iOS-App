@@ -101,15 +101,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     NSLog(@"PLAYERS (%lu): %@", (unsigned long)self.players.count, self.players);
     
     [self.carouselCell pausePlayer];
-    
-//    for (FRSPlayer *player in self.players) {
-//        if ([player respondsToSelector:@selector(pause)]) {
-//            [player.container removeFromSuperview];
-//            [player pause];
-//            [player replaceCurrentItemWithPlayerItem:nil];
-//            self.players = nil;
-//        }
-//    }
 }
 
 

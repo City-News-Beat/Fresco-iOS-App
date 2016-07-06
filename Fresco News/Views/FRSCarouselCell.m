@@ -50,6 +50,8 @@
              dispatch_async(dispatch_get_main_queue(), ^{
                  AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
                  videoView = [[FRSPlayer alloc] initWithPlayerItem:playerItem];
+                 videoView.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemDidReachEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:[videoView currentItem]];
                  AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoView];
                  playerLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
                  playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
@@ -61,6 +63,11 @@
              });
          }];
     }
+}
+
+-(void)playerItemDidReachEnd:(NSNotification *)notification {
+    AVPlayerItem *playerItem = [notification object];
+    [playerItem seekToTime:kCMTimeZero];
 }
 
 -(void)tapPlayer {
