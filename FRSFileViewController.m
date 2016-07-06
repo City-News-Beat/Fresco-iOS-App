@@ -257,6 +257,10 @@ static NSString *imageTile = @"ImageTile";
     if (kind == UICollectionElementKindSectionFooter){
         MissingSomethingCollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter forIndexPath:indexPath];
         
+        CGRect newFrame = footer.frame;
+        newFrame.size.height = 250;
+        [footer setFrame:newFrame];
+        
         [footer setup];
         
         return footer;

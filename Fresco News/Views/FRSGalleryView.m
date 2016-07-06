@@ -813,6 +813,7 @@
     }
     
     NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+    
     if (page < 0) {
         return;
     }
@@ -869,9 +870,10 @@
     }
     
     if (page != self.pageControl.currentPage){
-        [self updateLabels];
         [self.videoPlayer pause];
     }
+    [self updateLabels];
+
     
     if (scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > ((self.gallery.posts.count -1) * self.scrollView.frame.size.width)) return;
     
