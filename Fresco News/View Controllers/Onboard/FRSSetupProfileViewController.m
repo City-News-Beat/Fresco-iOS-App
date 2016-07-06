@@ -50,12 +50,12 @@
     [self configureUI];
     [self addNotifications];
     [self configureImagePicker];
-    [self configureBackButtonAnimated:YES];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     
     if(!_isEditingProfile){//Back Button Disabled
+        [self configureBackButtonAnimated:YES];
         //[self.navigationItem setLeftItemsSupplementBackButton:false];
     }
     
