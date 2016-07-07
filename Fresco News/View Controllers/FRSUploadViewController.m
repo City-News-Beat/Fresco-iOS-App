@@ -177,6 +177,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
         // 3.x feature
     }
     
+    [self.carouselCell pausePlayer];
+    
     return self.carouselCell;
 }
 
@@ -366,6 +368,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     if (scrollView == self.galleryCollectionView) {
         self.pageControl.currentPage = self.galleryCollectionView.contentOffset.x / pageWidth;
     }
+    
+    [self.carouselCell playPlayer];
+    
+//    self.carouselCell = [[self.galleryCollectionView visibleCells] objectAtIndex:(self.galleryCollectionView.contentOffset.x / pageWidth) -1];
+//    [self.carouselCell playPlayer];
+
 
 }
 
