@@ -26,5 +26,6 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (strong, nonatomic) NSArray *assets;
+@property BOOL didUnmute;
 
 @end

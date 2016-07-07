@@ -13,12 +13,12 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.didUnmute = NO;
 }
 
 -(void)loadImage:(PHAsset *)asset {
     [self removePlayers];
     if (!imageView) {
-        NSLog(@"CREATING IMAGE");
         imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
         [self addSubview:imageView];
@@ -41,8 +41,9 @@
 
 -(void)loadVideo:(PHAsset *)asset {
     [self removePlayers];
+    [self playPlayer];
+    
     if (!videoView) {
-        NSLog(@"CREATING VIDEO");
         videoView = [[FRSPlayer alloc] init];
         [[PHImageManager defaultManager]
          requestAVAssetForVideo:asset
@@ -50,11 +51,9 @@
          resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
              
              dispatch_async(dispatch_get_main_queue(), ^{
-                 
                  if (videoView) {
                      [self removePlayers];
                  }
-                 
                  AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
                  videoView = [[FRSPlayer alloc] initWithPlayerItem:playerItem];
                  videoView.actionAtItemEnd = AVPlayerActionAtItemEndNone;
@@ -78,7 +77,16 @@
 }
 
 -(void)tapPlayer {
+    
     if (videoView.rate != 0) {
+        if (!self.didUnmute) {
+            if (videoView.volume == 0) {
+                videoView.volume = 1;
+                self.didUnmute = YES;
+                return;
+            }
+        }
+        
         [self pausePlayer];
     } else {
         [self playPlayer];
@@ -91,14 +99,17 @@
 
 -(void)playPlayer {
     [videoView play];
+    if (!self.didUnmute) {
+        videoView.volume = 0.0;
+    }
 }
 
 -(void)removePlayers {
     [playerLayer removeFromSuperlayer];
     [videoView pause];
     
-    playerLayer = Nil;
-    videoView = Nil;
+    playerLayer = nil;
+    videoView = nil;
 }
 
 -(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
