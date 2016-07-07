@@ -40,6 +40,8 @@
 
 @property (strong, nonatomic) UITapGestureRecognizer *dismissGR;
 
+@property (strong, nonatomic) UIButton *backTapButton;
+
 @end
 
 @implementation FRSSetupProfileViewController
@@ -171,13 +173,44 @@
     self.navigationItem.titleView.backgroundColor = [UIColor whiteColor];
     if(self.isEditingProfile){
         self.navigationItem.title = @"EDIT YOUR PROFILE";
+        
+        UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
+        UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+        [container addSubview:backButton];
+        
+        backButton.tintColor = [UIColor whiteColor];
+        //    backButton.backgroundColor = [UIColor redColor];
+        backButton.frame = CGRectMake(-15, -12, 48, 48);
+        backButton.imageView.frame = CGRectMake(-12, 0, 48, 48); //this doesnt change anything
+        //    backButton.imageView.backgroundColor = [UIColor greenColor];
+        [backButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+        [backButton setImage:backButtonImage forState:UIControlStateNormal];
+        UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
+        
+        
+        self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
+        [self.backTapButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+        //    self.backTapButton.backgroundColor = [UIColor blueColor];
+        [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
+        
+        //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
+        //    [view addGestureRecognizer:tap];
+        
+        self.navigationItem.leftBarButtonItem = backBarButtonItem;
     }else{
         self.navigationItem.title = @"SETUP YOUR PROFILE";
     }
     [[UINavigationBar appearance] setTitleTextAttributes: @{
                                                             NSForegroundColorAttributeName: [UIColor whiteColor],
                                                             NSFontAttributeName: [UIFont fontWithName:@"Nota-Bold" size:17.0]
-                                                            }];}
+                                                            }];
+}
+
+-(void)dismiss{
+    [self.navigationController popViewControllerAnimated:YES];
+    [self.backTapButton removeFromSuperview];
+}
 
 -(void)configureScrollView{
     self.automaticallyAdjustsScrollViewInsets = NO;

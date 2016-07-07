@@ -36,11 +36,6 @@
 
 //@property (strong, nonatomic) UIImageView *profileIV;
 
-@property (strong, nonatomic) UIImageView *followersIV;
-@property (strong, nonatomic) UILabel *followersLabel;
-
-@property (strong, nonatomic) UIButton *followersButton;
-
 @property (strong, nonatomic) UIView *sectionView;
 @property (strong, nonatomic) UIButton *feedButton;
 @property (strong, nonatomic) UIButton *likesButton;
@@ -325,28 +320,13 @@
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
     
-    self.followersIV = [[UIImageView alloc] initWithFrame:CGRectMake(6, 6, 24, 24)];
-    self.followersIV.image = [UIImage imageNamed:@"followers-icon"];
-    self.followersIV.contentMode = UIViewContentModeCenter;
-    self.followersIV.userInteractionEnabled = YES;
+    UIButton *followersButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 12 + 24 + 50, 12 + 24)];
+    followersButton.center = self.profileBG.center;
+    [followersButton setOriginWithPoint:CGPointMake(followersButton.frame.origin.x, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 6)];
+    [followersButton setImage:[UIImage imageNamed:@"followers-icon"] forState:UIControlStateNormal];
+    [self.profileContainer addSubview:followersButton];
     
-    self.followersLabel = [[UILabel alloc] init];
-    self.followersLabel.text = @"";
-    self.followersLabel.userInteractionEnabled = YES;
-    self.followersLabel.textColor = [UIColor whiteColor];
-    self.followersLabel.font = [UIFont notaBoldWithSize:15];
-    [self.followersLabel sizeToFit];
-    self.followersLabel.frame = CGRectMake(self.followersIV.frame.origin.x + self.followersIV.frame.size.width + 7, self.followersIV.frame.origin.y, self.followersLabel.frame.size.width, self.followersIV.frame.size.height);
-    
-    UIView *followersContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 12 + 24 + self.followersLabel.frame.size.width + 7, 12 + 24)];
-    followersContainer.center = self.profileBG.center;
-    [followersContainer setOriginWithPoint:CGPointMake(followersContainer.frame.origin.x, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 6)];
-    [followersContainer addSubview:self.followersIV];
-    [followersContainer addSubview:self.followersLabel];
-    [self.profileContainer addSubview:followersContainer];
-    
-    [followersContainer addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showFollowers)]];
-    
+    [followersButton addTarget:self action:@selector(showFollowers) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)configureProfileSocialOverlay{
@@ -752,8 +732,11 @@
 }
 
 -(void)showFollowers {
+    NSLog(@"Pushing1");
     FRSFollowersViewController *vc = [[FRSFollowersViewController alloc] init];
+    NSLog(@"Pushing2");
     vc.representedUser = _representedUser;
+    NSLog(@"Pushing3");
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -808,7 +791,6 @@
             }
         }
         //  self.locationLabel.text = user.address; //user.address does not exiset yet
-        self.followersLabel.text = @"1125";
         
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
