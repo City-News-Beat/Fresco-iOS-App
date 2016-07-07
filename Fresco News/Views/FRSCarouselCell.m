@@ -88,6 +88,7 @@
         if (!self.didUnmute) {
             if (videoView.volume == 0) {
                 videoView.volume = 1;
+                self.muteImageView.alpha = 0;
                 self.didUnmute = YES;
                 return;
             }
@@ -107,6 +108,7 @@
     [videoView play];
     if (!self.didUnmute) {
         videoView.volume = 0.0;
+        self.muteImageView.alpha = 1;
     }
 }
 
@@ -123,9 +125,8 @@
 -(void)configureMuteIcon {
     if (!self.muteImageView) {
         self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
-        self.muteImageView.backgroundColor = [UIColor redColor];
         self.muteImageView.alpha = 1;
-        self.muteImageView.frame = CGRectMake(self.frame.size.width - 24 - 16, 16, 24, 24);
+        self.muteImageView.frame = CGRectMake(16, self.frame.size.height - 24 - 16, 24, 24);
         [self addSubview:self.muteImageView];
         [self bringSubviewToFront:self.muteImageView];
     }

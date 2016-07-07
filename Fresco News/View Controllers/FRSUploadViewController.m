@@ -95,9 +95,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self dismissKeyboard];
     [self.pageControl removeFromSuperview];
     
-    NSLog(@"PLAYERS (%lu): %@", (unsigned long)self.players.count, self.players);
-    
     [self.carouselCell removePlayers];
+    [self.carouselCell removeFromSuperview];
 }
 
 
@@ -210,27 +209,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.scrollView addSubview:self.pageControl];
 }
 
--(void)configureMuteIcon {
-    NSInteger page = (self.galleryCollectionView.contentOffset.x + self.galleryCollectionView.frame.size.width/2)/self.galleryCollectionView.frame.size.width;
-    if (!self.muteImageView) {
-        self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
-        self.muteImageView.alpha = 0;
-        [self.scrollView addSubview:self.muteImageView];
-    }
-    
-    if ([self currentPageIsVideo]) {
-        
-        FRSPlayer *player = self.players[page];
-        
-        if (player.muted == FALSE) {
-            return;
-        }
-        
-        self.muteImageView.alpha = 1;
-        self.muteImageView.frame = CGRectMake(((page + 1) * self.view.frame.size.width) - 24 - 16, 16, 24, 24);
-        [self.scrollView bringSubviewToFront:self.muteImageView];
-    }
-}
 
 #pragma mark - Navigation Bar
 
