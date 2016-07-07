@@ -16,8 +16,9 @@
 }
 
 -(void)loadImage:(PHAsset *)asset {
-    
+    [self removePlayers];
     if (!imageView) {
+        NSLog(@"CREATING IMAGE");
         imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
         [self addSubview:imageView];
@@ -39,8 +40,9 @@
 }
 
 -(void)loadVideo:(PHAsset *)asset {
-    
+    [self removePlayers];
     if (!videoView) {
+        NSLog(@"CREATING VIDEO");
         videoView = [[FRSPlayer alloc] init];
         [[PHImageManager defaultManager]
          requestAVAssetForVideo:asset
@@ -62,9 +64,7 @@
                  playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
                  [self.layer addSublayer:playerLayer];
                  [videoView play];
-                 
-                 //[self.players addObject:videoView];
-                 
+                                  
                  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
                  [self addGestureRecognizer:tap];
              });

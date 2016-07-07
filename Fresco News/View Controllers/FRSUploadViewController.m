@@ -48,6 +48,7 @@
 @property (strong, nonatomic) UICollectionViewFlowLayout *galleryCollectionViewFlowLayout;
 @property (strong, nonatomic) FRSCarouselCell *carouselCell;
 @property (strong, nonatomic) UIPageControl *pageControl;
+@property (strong, nonatomic) UIImageView *muteImageView;
 //@property (strong, nonatomic) FRSPlayer *player;
 //@property (strong, nonatomic) AVPlayerLayer *playerLayer;
 
@@ -171,6 +172,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self.carouselCell loadImage:asset];
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
         [self.carouselCell loadVideo:asset];
+        [self.players addObject:asset];
     } else if (asset.mediaType == PHAssetMediaTypeAudio) {
         // 3.x feature
     }
@@ -179,7 +181,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(BOOL)currentPageIsVideo {
-    NSInteger page = (self.scrollView.contentOffset.x + self.view.frame.size.width/2)/self.scrollView.frame.size.width;
+    CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
+    NSInteger page = self.galleryCollectionView.contentOffset.x / pageWidth;
+    
+    //does not work, self.players is nil
     return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
 }
 
@@ -202,6 +207,28 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.pageControl.hidesForSinglePage = YES;
     
     [self.scrollView addSubview:self.pageControl];
+}
+
+-(void)configureMuteIcon {
+    NSInteger page = (self.galleryCollectionView.contentOffset.x + self.galleryCollectionView.frame.size.width/2)/self.galleryCollectionView.frame.size.width;
+    if (!self.muteImageView) {
+        self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
+        self.muteImageView.alpha = 0;
+        [self.scrollView addSubview:self.muteImageView];
+    }
+    
+    if ([self currentPageIsVideo]) {
+        
+        FRSPlayer *player = self.players[page];
+        
+        if (player.muted == FALSE) {
+            return;
+        }
+        
+        self.muteImageView.alpha = 1;
+        self.muteImageView.frame = CGRectMake(((page + 1) * self.view.frame.size.width) - 24 - 16, 16, 24, 24);
+        [self.scrollView bringSubviewToFront:self.muteImageView];
+    }
 }
 
 #pragma mark - Navigation Bar
@@ -318,8 +345,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.carouselCell pausePlayer];
     
     CGFloat offset = scrollView.contentOffset.y + 20;
-
-    NSLog(@"CURRENT PAGE IS VIDEO: %d", [self currentPageIsVideo]);
     
     //If user is scrolling down, return and act like a normal scroll view
     if (offset > self.scrollView.contentSize.height - self.scrollView.frame.size.height) {
@@ -336,14 +361,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
-    //check mute toggle
-    [self.carouselCell playPlayer];
-    
     //Update pageControl on galleryCollectionView
+    CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
     if (scrollView == self.galleryCollectionView) {
-        CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
         self.pageControl.currentPage = self.galleryCollectionView.contentOffset.x / pageWidth;
     }
+
 }
 
 
