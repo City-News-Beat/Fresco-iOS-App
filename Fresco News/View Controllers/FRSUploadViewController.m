@@ -49,8 +49,6 @@
 @property (strong, nonatomic) FRSCarouselCell *carouselCell;
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) UIImageView *muteImageView;
-//@property (strong, nonatomic) FRSPlayer *player;
-//@property (strong, nonatomic) AVPlayerLayer *playerLayer;
 
 @property (strong, nonatomic) NSMutableArray *players;
 
@@ -363,18 +361,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
-    //Update pageControl on galleryCollectionView
+    //Update pageControl in galleryCollectionView
     CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
     if (scrollView == self.galleryCollectionView) {
         self.pageControl.currentPage = self.galleryCollectionView.contentOffset.x / pageWidth;
     }
     
     [self.carouselCell playPlayer];
-    
-//    self.carouselCell = [[self.galleryCollectionView visibleCells] objectAtIndex:(self.galleryCollectionView.contentOffset.x / pageWidth) -1];
-//    [self.carouselCell playPlayer];
-
-
 }
 
 
@@ -531,7 +524,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     for (NSInteger i = 0; i < self.assignmentsArray.count + 1; i++){
         FRSAssignmentPickerTableViewCell *cell = [self.assignmentsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.isSelectedAssignment = NO;
-//        [cell toggleImage];
     }
 }
 
@@ -588,18 +580,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self toggleGestureRecognizer];
     
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    
-//    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-    self.view.transform           = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-//    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+    self.view.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
     [self toggleGestureRecognizer];
     
-//    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, 0);
-    self.view.transform           = CGAffineTransformMakeTranslation(0, 0);
-//    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, 0);
+    self.view.transform  = CGAffineTransformMakeTranslation(0, 0);
 }
 
 #pragma mark - Assignments
@@ -608,7 +595,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
     self.assignmentsArray = self.assignments;
-    
 }
 
 
@@ -647,13 +633,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [delegate saveContext];
         NSArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
-        
-//        NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
-        //NSArray *global = @[@"Global", @"Global Two"];
-        
+
         if ([global count] >  0) {
-            
+            self.globalAssignmentsDrawer.alpha = 0;
         }
+        
         self.assignmentsArray = nearBy;
         [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
@@ -687,7 +671,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     NSError *error = nil;
     NSArray *stored = [moc executeFetchRequest:request error:&error];
     self.assignmentsArray= [NSMutableArray arrayWithArray:stored];
-//    [self configureAnnotationsForMap];
 }
 
 -(void)cacheAssignments {
@@ -747,7 +730,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)tweet:(NSString *)string {
     
-    // Objective-C
+    //DOES NOT TWEET
+
     NSString *userID = [Twitter sharedInstance].sessionStore.session.userID;
     TWTRAPIClient *client = [[TWTRAPIClient alloc] initWithUserID:userID];
 
@@ -762,7 +746,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
             NSLog(@"Twitter Ressponse: %@", response);
             
             if (data) {
-                // handle the response data e.g.
                 NSError *jsonError;
                 NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
                 NSLog(@"Twitter Response: %@", json);
