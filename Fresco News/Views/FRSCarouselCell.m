@@ -10,11 +10,12 @@
 
 @implementation FRSCarouselCell
 
-- (void)awakeFromNib {
+-(void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
     self.didUnmute = NO;
 }
+
+#pragma mark - Asset Initialization
 
 -(void)loadImage:(PHAsset *)asset {
     [self removePlayers];
@@ -66,10 +67,15 @@
                                   
                  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
                  [self addGestureRecognizer:tap];
+                 
+                 [self configureMuteIcon];
+                 [self bringSubviewToFront:self.muteImageView];
              });
          }];
     }
 }
+
+#pragma mark - Player
 
 -(void)playerItemDidReachEnd:(NSNotification *)notification {
     AVPlayerItem *playerItem = [notification object];
@@ -111,6 +117,21 @@
     playerLayer = nil;
     videoView = nil;
 }
+
+#pragma mark - Mute Icon
+
+-(void)configureMuteIcon {
+    if (!self.muteImageView) {
+        self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
+        self.muteImageView.backgroundColor = [UIColor redColor];
+        self.muteImageView.alpha = 1;
+        self.muteImageView.frame = CGRectMake(self.frame.size.width - 24 - 16, 16, 24, 24);
+        [self addSubview:self.muteImageView];
+        [self bringSubviewToFront:self.muteImageView];
+    }
+}
+
+#pragma mark - Constraints
 
 -(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
     

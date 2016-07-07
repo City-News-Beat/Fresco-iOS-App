@@ -168,6 +168,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     if (asset.mediaType == PHAssetMediaTypeImage) {
         [self.carouselCell loadImage:asset];
+        self.carouselCell.muteImageView.alpha = 0;
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
         [self.carouselCell loadVideo:asset];
         [self.players addObject:asset];
