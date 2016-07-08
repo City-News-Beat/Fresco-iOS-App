@@ -75,9 +75,10 @@
                     </connections>
                 </button>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lca-Wh-NsH">
-                    <rect key="frame" x="50" y="125" width="500" height="55"/>
+                    <rect key="frame" x="30" y="125" width="300" height="55"/>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstAttribute="width" constant="300" id="hTR-Lw-Z7y"/>
                         <constraint firstAttribute="height" constant="55" id="sUk-qV-cwf"/>
                     </constraints>
                     <attributedString key="attributedText">
@@ -103,7 +104,7 @@
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3fF-hp-x1c">
-                    <rect key="frame" x="357" y="126" width="227" height="30"/>
+                    <rect key="frame" x="252" y="126" width="332" height="30"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                     <state key="normal" title="Chat with us.">
                         <color key="titleColor" cyan="0.79000000000000004" magenta="0.72948938608169556" yellow="0.68550682067871094" black="0.29359161853790283" alpha="1" colorSpace="custom" customColorSpace="genericCMYKColorSpace"/>
@@ -124,12 +125,18 @@
                 <constraint firstItem="3fF-hp-x1c" firstAttribute="top" secondItem="iiK-hu-wdc" secondAttribute="bottom" constant="-9" id="Otj-qO-ktp"/>
                 <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="24" id="VPH-Zk-DlY"/>
                 <constraint firstAttribute="trailing" secondItem="3fF-hp-x1c" secondAttribute="trailing" constant="16" id="b4a-5U-zqH"/>
-                <constraint firstItem="lca-Wh-NsH" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="50" id="ee7-U9-COT"/>
+                <constraint firstItem="lca-Wh-NsH" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="30" id="ee7-U9-COT"/>
                 <constraint firstItem="iiK-hu-wdc" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="gcA-Hb-mtD"/>
                 <constraint firstItem="iiK-hu-wdc" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="35" id="hZU-Za-dlS"/>
-                <constraint firstItem="3fF-hp-x1c" firstAttribute="leading" secondItem="lca-Wh-NsH" secondAttribute="centerX" constant="57" id="zAK-Rg-rcZ"/>
+                <constraint firstItem="3fF-hp-x1c" firstAttribute="leading" secondItem="lca-Wh-NsH" secondAttribute="centerX" constant="72" id="zAK-Rg-rcZ"/>
                 <constraint firstItem="mc4-1b-s15" firstAttribute="centerX" secondItem="iiK-hu-wdc" secondAttribute="centerX" id="zfJ-OM-T3e"/>
             </constraints>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="gcA-Hb-mtD"/>
+                    <exclude reference="Ird-e9-SxX"/>
+                </mask>
+            </variation>
             <connections>
                 <outlet property="chatWithLeftConstraint" destination="zAK-Rg-rcZ" id="I1J-lX-ZkD"/>
                 <outlet property="chatWithRightConstraint" destination="b4a-5U-zqH" id="XMZ-4A-hKf"/>
