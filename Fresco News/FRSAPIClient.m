@@ -13,6 +13,7 @@
 #import "FRSRequestSerializer.h"
 #import "FRSAppDelegate.h"
 #import "FRSOnboardingViewController.h"
+#import "AWFileHash.h"
 
 @implementation FRSAPIClient
 
@@ -1029,6 +1030,28 @@
             callback([size integerValue], fetchError);
         }
     }];
+}
+
+-(NSString *)md5:(PHAsset *)asset {
+    return [AWFileHash md5HashOfPHAsset:asset];
+}
+
+-(NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {
+    NSMutableDictionary *digest = [[NSMutableDictionary alloc] init];
+    
+    if (asset.mediaType == PHAssetMediaTypeImage) {
+        
+    }
+    else {
+        [self fetchFileSizeForVideo:asset callback:^(NSInteger size, NSError *error) {
+            digest[@"file_size"] = @(size);
+            callback(digest, error);
+        }];
+    }
+    
+    digest[@"md5"] = [self md5:asset];
+    
+    return digest;
 }
 
 @end

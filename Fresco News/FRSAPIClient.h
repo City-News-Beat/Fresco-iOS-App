@@ -14,6 +14,7 @@
 #import "FRSJSONResponseSerializer.h"
 #import <AFNetworking/AFNetworking.h>
 #import "SSKeychain.h"
+#import <Photos/Photos.h>
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
@@ -99,4 +100,9 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(BOOL)checkAuthAndPresentOnboard;
 -(void)fetchLikesFeedForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion;
+
+// file
+-(void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback;
+-(NSString *)md5:(PHAsset *)asset;
+-(NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
 @end
