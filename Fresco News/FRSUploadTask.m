@@ -24,6 +24,20 @@
     _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]]; // think queue might be able to bet set to nil but test this for now
 }
 
+-(void)createUploadFromData:(NSData *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
+    
+    // save meta-data & callbacks, prepare to be called upon to start
+    self.requestData = asset;
+    self.destinationURL = destination;
+    self.progressBlock = progress;
+    self.completionBlock = completion;
+    
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
+    sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
+    _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]]; // think queue might be able to bet set to nil but test this for now
+}
+
+
 -(void)stop {
     [_uploadTask suspend];
 }

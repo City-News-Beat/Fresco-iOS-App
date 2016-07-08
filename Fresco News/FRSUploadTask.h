@@ -47,6 +47,7 @@ typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success)
 @property TransferProgressBlock progressBlock;
 @property BOOL hasStarted;
 -(void)createUploadFromSource:(NSURL *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion;
+-(void)createUploadFromData:(NSData *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion;
 
 // were going to be internal but needed in all classes inheriting this structure
 -(void)signRequest:(NSMutableURLRequest *)request;
