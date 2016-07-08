@@ -701,12 +701,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSLog(@"Post anonymously");
     }
     else {
-        FRSGallery *gallery = [FRSGallery MR_createEntity];
-        gallery.caption = (self.captionTextView.text) ? self.captionTextView.text : @"";
-        
         for (PHAsset *asset in self.content) {
-            CLLocation *postLocation = asset.location;
-            
+            [[FRSAPIClient sharedClient] digestForAsset:asset callback:^(id responseObject, NSError *error) {
+                NSLog(@"RES: %@", responseObject);
+            }];
         }
         
         // stage 1

@@ -1032,6 +1032,13 @@
     }];
 }
 
+-(void)fetchFileSizeForImage:(PHAsset *)image callback:(FRSAPISizeCompletionBlock)callback {
+    [[PHImageManager defaultManager] requestImageDataForAsset:image options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+        float imageSize = imageData.length;
+        callback([@(imageSize) integerValue], Nil);
+    }];
+}
+
 -(NSString *)md5:(PHAsset *)asset {
     return [AWFileHash md5HashOfPHAsset:asset];
 }
@@ -1042,13 +1049,23 @@
     [self fetchAddressFromLocation:asset.location completion:^(id responseObject, NSError *error) {
         
         digest[@"address"] = responseObject;
+        digest[@"lat"] = @(asset.location.coordinate.latitude);
+        digest[@"lng"] = @(asset.location.coordinate.latitude);
         
         if (asset.mediaType == PHAssetMediaTypeImage) {
-            
+            digest[@"contentType"] = @"image/jpeg";
+            [self fetchFileSizeForImage:asset callback:^(NSInteger size, NSError *err) {
+                digest[@"fileSize"] = @(size);
+                digest[@"chunkSize"] = @(size);
+                callback(digest, err);
+            }];
         }
         else {
             [self fetchFileSizeForVideo:asset callback:^(NSInteger size, NSError *err) {
-                digest[@"file_size"] = @(size);
+                digest[@"fileSize"] = @(size);
+                digest[@"chunkSize"] = @(size);
+                digest[@"contentType"] = @"video/quicktime";
+
                 callback(digest, err);
             }];
         }
