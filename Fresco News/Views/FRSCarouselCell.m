@@ -68,7 +68,7 @@
                  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
                  [self addGestureRecognizer:tap];
                  
-                 [self configureMuteIcon];
+                 //[self configureMuteIcon];
                  [self bringSubviewToFront:self.muteImageView];
              });
          }];
@@ -85,14 +85,14 @@
 -(void)tapPlayer {
     
     if (videoView.rate != 0) {
-        if (!self.didUnmute) {
-            if (videoView.volume == 0) {
-                videoView.volume = 1;
-                self.muteImageView.alpha = 0;
-                self.didUnmute = YES;
-                return;
-            }
-        }
+        //if (!self.didUnmute) {
+        //    if (videoView.volume == 0) {
+        //        videoView.volume = 1;
+        //        self.muteImageView.alpha = 0;
+        //        self.didUnmute = YES;
+        //        return;
+        //    }
+        //}
         
         [self pausePlayer];
     } else {
@@ -107,8 +107,8 @@
 -(void)playPlayer {
     [videoView play];
     if (!self.didUnmute) {
-        videoView.volume = 0.0;
-        self.muteImageView.alpha = 1;
+        //videoView.volume = 0.0;
+        //self.muteImageView.alpha = 1;
     }
 }
 
