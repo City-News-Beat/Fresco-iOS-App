@@ -1013,4 +1013,22 @@
      }];
 }
 
+// FILE DEALINGS
+-(void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback {
+    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+    options.version = PHVideoRequestOptionsVersionOriginal;
+    
+    [[PHImageManager defaultManager] requestAVAssetForVideo:video options:options resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
+        if ([asset isKindOfClass:[AVURLAsset class]]) {
+            AVURLAsset* urlAsset = (AVURLAsset*)asset;
+            
+            NSNumber *size;
+            NSError *fetchError;
+            
+            [urlAsset.URL getResourceValue:&size forKey:NSURLFileSizeKey error:&fetchError];
+            callback([size integerValue], fetchError);
+        }
+    }];
+}
+
 @end
