@@ -56,5 +56,6 @@ SOFTWARE.
 - (void)dg_setPullToRefreshBackgroundColor:(UIColor*)color;
 - (void)dg_setPullToRefreshFillColor:(UIColor*)color;
 - (void)dg_stopLoading;
+-(void)dg_setFrame:(CGRect)frame;
 
 @end

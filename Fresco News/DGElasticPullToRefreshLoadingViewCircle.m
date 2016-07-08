@@ -37,7 +37,7 @@ static NSString* kRotationAnimation = @"kRotationAnimation";
 
 - (instancetype)init
 {
-    self = [super initWithFrame:CGRectZero];
+    self = [super init];
     if (self) {
         _shapeLayer = [CAShapeLayer layer];
         _shapeLayer.lineWidth = 2.0;
@@ -48,6 +48,30 @@ static NSString* kRotationAnimation = @"kRotationAnimation";
         _shapeLayer.anchorPoint = CGPointMake(0.5, 0.5);
         [self.layer addSublayer:_shapeLayer];
 
+        _identityTransform = CATransform3DIdentity;
+        _identityTransform.m34 = (1 / -500.0);
+        _identityTransform = CATransform3DRotate(_identityTransform, toRadians(-90.0), 0.0, 0.0, 1.0);
+    }
+    return self;
+}
+
+-(instancetype)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    if (self) {
+        _shapeLayer = [CAShapeLayer layer];
+        [_shapeLayer setFrame:frame];
+        [self.layer setFrame:frame];
+        [self setFrame:frame];
+        
+        
+        _shapeLayer.lineWidth = 2.0;
+        _shapeLayer.fillColor = [UIColor clearColor].CGColor;
+        _shapeLayer.strokeColor = self.tintColor.CGColor;
+        _shapeLayer.actions = @{ @"strokeEnd" : [NSNull null],
+                                 @"transform" : [NSNull null] };
+        _shapeLayer.anchorPoint = CGPointMake(0.5, 0.5);
+        [self.layer addSublayer:_shapeLayer];
+        
         _identityTransform = CATransform3DIdentity;
         _identityTransform.m34 = (1 / -500.0);
         _identityTransform = CATransform3DRotate(_identityTransform, toRadians(-90.0), 0.0, 0.0, 1.0);
@@ -109,6 +133,12 @@ static NSString* kRotationAnimation = @"kRotationAnimation";
     self.shapeLayer.frame = self.bounds;
     CGFloat inset = self.shapeLayer.lineWidth / 2.0;
     self.shapeLayer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(self.shapeLayer.bounds, inset, inset)].CGPath;
+}
+
+- (void)setOriginY: (int)y{
+    CGRect newFrame = self.shapeLayer.frame;
+    newFrame.origin.y = y;
+    [self.shapeLayer setFrame:newFrame];
 }
 
 static float toRadians(float value)

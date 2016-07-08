@@ -65,6 +65,7 @@ static NSString* pullToRefreshViewKey = @"pullToRefreshView";
     pullToRefreshView.observing = YES;
     
 }
+
 - (void)dg_addPullToRefreshWithActionHandler:(void (^)())actionHandler
                                  loadingView:(DGElasticPullToRefreshLoadingView*)loadingView
 {

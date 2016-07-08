@@ -51,6 +51,7 @@
     [self reloadFollowing];
     [self reloadFollowers];
     [self configureFollowing];
+    [self configurePullToRefresh];
     
     self.scrollView.delegate = self;
 
@@ -98,13 +99,18 @@
 }
 
 -(void)configurePullToRefresh {
-    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+        self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.loadingView.tintColor = [UIColor whiteColor];
     
-    __weak typeof(self) weakSelf = self;
+    [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
+        [self.followingTable reloadData];
+    } loadingView:self.loadingView];
+    
+    [self.followingTable dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+    [self.followingTable dg_setPullToRefreshBackgroundColor:self.followingTable.backgroundColor];
     
     [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-        [weakSelf reloadData];
+        [self.tableView reloadData];
     } loadingView:self.loadingView];
     
     [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
@@ -194,11 +200,8 @@
 }
 
 -(void)reloadFollowing{
-    [self configurePullToRefresh];
-
     [[FRSAPIClient sharedClient] getFollowingForUser:_representedUser completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", responseObject, error);
-        NSDictionary *userInfo = (NSDictionary *)responseObject;
         
         NSMutableArray *following = [[NSMutableArray alloc] init];
         
@@ -211,10 +214,7 @@
         
         [self.followingTable reloadData];
         [self.followingTable dg_stopLoading];
-        if(self.loadingView){
-            [self.loadingView stopLoading];
-            [self.loadingView removeFromSuperview];
-        }
+
         self.hasLoadedOnce = TRUE;
     }];
 }
@@ -222,7 +222,6 @@
 -(void)reloadFollowers{
     [[FRSAPIClient sharedClient] getFollowersForUser:_representedUser completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", responseObject, error);
-        NSDictionary *userInfo = (NSDictionary *)responseObject;
         
         NSMutableArray *followers = [[NSMutableArray alloc] init];
         
@@ -267,11 +266,12 @@
 }
 
 -(void)configureFollowing {
-    CGRect newFrame = self.view.frame;
-    newFrame.origin.y = self.view.frame.origin.y + 64;
-    newFrame.origin.x = self.view.frame.size.width;
+    CGRect scrollFrame = self.tableView.frame;
+    scrollFrame.origin.x = scrollFrame.size.width;
+    scrollFrame.origin.y = -64;
     
-    self.followingTable = [[UITableView alloc] initWithFrame:newFrame];
+    self.followingTable = [[UITableView alloc] initWithFrame:scrollFrame];
+    [self.followingTable setBackgroundColor:[UIColor frescoBackgroundColorDark]];
     self.followingTable.delegate = self;
     self.followingTable.dataSource = self;
     self.followingTable.bounces = YES;
@@ -285,7 +285,10 @@
     
     CGRect newFrame = self.view.frame;
     newFrame.origin.y = self.view.frame.origin.y + 64;
-    self.tableView = [[UITableView alloc] initWithFrame:newFrame style:UITableViewStylePlain];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
+    self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height+20);
+    //self.tableView = [[UITableView alloc] initWithFrame:newFrame style:UITableViewStylePlain];
+    [self.tableView setBackgroundColor:[UIColor frescoBackgroundColorDark]];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.bounces = YES;
@@ -359,6 +362,9 @@
 }
 
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 125;
+}
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     FRSUserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"user-cell"];
@@ -423,9 +429,8 @@
             self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
             self.loadingView.tintColor = [UIColor whiteColor];
             
-            __weak typeof(self) weakSelf = self;
             [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-                [weakSelf reloadData];
+                [self reloadData];
             } loadingView:self.loadingView];
             
             [self.followingTable dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
@@ -443,9 +448,8 @@
             self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
             self.loadingView.tintColor = [UIColor whiteColor];
             
-            __weak typeof(self) weakSelf = self;
             [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-                [weakSelf reloadData];
+                [self reloadData];
             } loadingView:self.loadingView];
             
             [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
