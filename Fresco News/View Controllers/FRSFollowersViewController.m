@@ -145,14 +145,15 @@
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
     //(self.navigationController.navigationBar.frame.size.width/24)
-    self.followersTabButton = [[UIButton alloc] initWithFrame:CGRectMake((self.tableView.frame.size.width/4) - (self.view.frame.size.width/6), 6, 100, 30)];
+    NSLog(@"awddwadwadw %f",self.navigationItem.accessibilityFrame.size.width);
+    self.followersTabButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width/2 - 60 - 45 - titleView.frame.size.width/6, 6, 120, 30)];
     [self.followersTabButton setTitle:@"FOLLOWERS" forState:UIControlStateNormal];
     [self.followersTabButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
     [self.followersTabButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.followersTabButton addTarget:self action:@selector(handleFollowersTabTapped) forControlEvents:UIControlEventTouchUpInside];
     [titleView addSubview:self.followersTabButton];
     
-    self.followingTabButton = [[UIButton alloc] initWithFrame:CGRectMake((self.tableView.frame.size.width/4) + (self.view.frame.size.width/6), 6, 100, 30)];
+    self.followingTabButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width/2 - 60 - 45 + titleView.frame.size.width/6, 6, 120, 30)];
     self.followingTabButton.alpha = 0.7;
     self.followingTabButton.contentMode = UIViewContentModeCenter;
     [self.followingTabButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
@@ -166,13 +167,13 @@
     self.sudoNavBar.backgroundColor = [UIColor frescoOrangeColor];
     [self.view addSubview:self.sudoNavBar];
     
-    UIButton *sudoHighlightButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width/2) - 50 - (self.view.frame.size.width/6), 6, 100, 30)];
+    UIButton *sudoHighlightButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width/2 - 60 - 45 - titleView.frame.size.width/6, 6, 120, 30)];
     [sudoHighlightButton setTitle:@"FOLLOWERS" forState:UIControlStateNormal];
     [sudoHighlightButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
     [sudoHighlightButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.sudoNavBar addSubview:sudoHighlightButton];
     
-    UIButton *sudoFollowingButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width/2) - 50 + (self.view.frame.size.width/6), 6, 100, 30)];
+    UIButton *sudoFollowingButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width/2 - 60 - 45 + titleView.frame.size.width/6, 6, 120, 30)];
     [sudoFollowingButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
     [sudoFollowingButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
     [sudoFollowingButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
