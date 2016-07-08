@@ -12,6 +12,8 @@
 @interface FRSUserTableViewCell : UITableViewCell
 
 -(void)clearCell;
--(void)configureCellWithUser:(FRSUser *)user;
+-(void)configureCellWithUser:(FRSUser *)user isFollowing:(BOOL)followingUser;
+@property (nonatomic) CGFloat cellHeight;
+@property (nonatomic) FRSUser *user;
 
 @end

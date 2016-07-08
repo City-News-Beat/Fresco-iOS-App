@@ -40,9 +40,8 @@
         self.settingsRightConstraint.constant = -48;
     }else if(IS_IPHONE_5){
         self.settingsTopConstraint.constant = 58;
-        self.settingsRightConstraint.constant = 117;
-        self.chatWithTopConstraint.constant = 30;
-        self.chatWithRightConstraint.constant = 100;
+        self.chatWithTopConstraint.constant = 20;
+        self.chatWithRightConstraint.constant = 110;
         [super removeConstraint:self.chatWithLeftConstraint];
         self.questionLeftConstraint.constant = 50;
     }
