@@ -73,14 +73,16 @@
 }
 
 -(void)toggleFollowButton{
-    [[FRSAPIClient sharedClient] followUser:self.user completion:^(id responseObject, NSError *error) {
-        [self.followButton setSelected:!self.followButton.selected];
-        if(self.followButton.selected){
+    [self.followButton setSelected:!self.followButton.selected];
+    if(self.followButton.selected){
+        [[FRSAPIClient sharedClient] followUser:self.user completion:^(id responseObject, NSError *error) {
             NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.user.uid);
-        }else{
+        }];
+    }else{
+        [[FRSAPIClient sharedClient] unfollowUser:self.user completion:^(id responseObject, NSError *error) {
             NSLog(@"UNFOLLOWED USER: %d %@", (error == Nil), self.user.uid);
-        }
-    }];
+        }];
+    }
 }
 
 -(void)configureCellWithUser:(FRSUser *)user isFollowing:(BOOL)followingUser{

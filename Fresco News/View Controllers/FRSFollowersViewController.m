@@ -51,7 +51,6 @@
     [self reloadFollowing];
     [self reloadFollowers];
     [self configureFollowing];
-    [self configurePullToRefresh];
     
     self.scrollView.delegate = self;
 
@@ -80,7 +79,7 @@
     [self showTabBarAnimated:YES];
     
     if (!self.hasLoadedOnce) {
-        [self reloadData];
+        //[self reloadData];
     }
 }
 
@@ -102,15 +101,14 @@
         self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.loadingView.tintColor = [UIColor whiteColor];
     
-    [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-        [self.followingTable reloadData];
-    } loadingView:self.loadingView];
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.tintColor = [UIColor whiteColor];
     
-    [self.followingTable dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
-    [self.followingTable dg_setPullToRefreshBackgroundColor:self.followingTable.backgroundColor];
+    [self.tableView dg_stopLoading];
+    [self.followingTable dg_stopLoading];
     
     [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-        [self.tableView reloadData];
+        [self reloadData];
     } loadingView:self.loadingView];
     
     [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
@@ -363,6 +361,7 @@
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    [self configurePullToRefresh];
     return 125;
 }
 
