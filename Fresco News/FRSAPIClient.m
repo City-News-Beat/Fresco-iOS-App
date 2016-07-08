@@ -1039,17 +1039,22 @@
 -(NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {
     NSMutableDictionary *digest = [[NSMutableDictionary alloc] init];
     
-    if (asset.mediaType == PHAssetMediaTypeImage) {
+    [self fetchAddressFromLocation:asset.location completion:^(id responseObject, NSError *error) {
         
-    }
-    else {
-        [self fetchFileSizeForVideo:asset callback:^(NSInteger size, NSError *error) {
-            digest[@"file_size"] = @(size);
-            callback(digest, error);
-        }];
-    }
-    
-    digest[@"md5"] = [self md5:asset];
+        digest[@"address"] = responseObject;
+        
+        if (asset.mediaType == PHAssetMediaTypeImage) {
+            
+        }
+        else {
+            [self fetchFileSizeForVideo:asset callback:^(NSInteger size, NSError *err) {
+                digest[@"file_size"] = @(size);
+                callback(digest, err);
+            }];
+        }
+        
+        digest[@"md5"] = [self md5:asset];
+    }];
     
     return digest;
 }
