@@ -764,15 +764,22 @@ static NSString * const cellIdentifier = @"assignment-cell";
             [[PHImageManager defaultManager] requestImageDataForAsset:currentAsset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
                 
                 FRSUploadTask  *task = [[FRSUploadTask alloc] init];
-                NSLog(@"UPLOADING");
                 
                 [task createUploadFromData:imageData destination:[NSURL URLWithString:post[@"urls"][0]] progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
                     NSLog(@"UPLOADING");
                 } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
                     if (success) {
                         if (success) {
-                            NSDictionary* headers = [(NSHTTPURLResponse *)response allHeaderFields];
-                            NSLog(@"%@", headers);
+                            NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
+                            NSString *eTag = headers[@"Etag"];
+                            
+                            NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
+                            postCompletionDigest[@"eTags"] = @[eTag];
+                            postCompletionDigest[@"uploadId"] = post[@"uploadId"];
+                            postCompletionDigest[@"key"] = post[@"key"];
+                            [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
+                                NSLog(@"POST COMPLETED: %@ %@", responseObject, error);
+                            }];
                         }
                     }
                 }];

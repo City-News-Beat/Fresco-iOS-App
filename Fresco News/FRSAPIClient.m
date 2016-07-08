@@ -1076,9 +1076,8 @@
 }
 
 -(void)completePost:(NSString *)postID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:completePostEndpoint, postID];
     
-    [self post:endpoint withParameters:params completion:^(id responseObject, NSError *error) {
+    [self post:completePostEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
