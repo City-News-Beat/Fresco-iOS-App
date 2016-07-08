@@ -713,7 +713,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
         
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
-            NSLog(@"GALLERY/CREATE: %@ %@", responseObject, error);
+            if (!error) {
+                NSLog(@"Gallery creation success... (1/2)");
+            }
+            else {
+                NSLog(@"Gallery creation error... (%@)", error);
+            }
         }];
     }
 }

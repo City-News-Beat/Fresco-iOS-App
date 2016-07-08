@@ -38,25 +38,50 @@
     [uploadRequest setHTTPMethod:@"PUT"];
     [self signRequest:uploadRequest];
     
-    _uploadTask = [self.session uploadTaskWithRequest:uploadRequest fromFile:self.assetURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        
-        if (error) {
-            if (self.delegate) {
-                [self.delegate uploadDidFail:self withError:error response:data];
+    if (self.requestData) {
+        _uploadTask = [self.session uploadTaskWithRequest:uploadRequest fromData:self.requestData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            
+            self.requestData = Nil;
+            
+            if (error) {
+                if (self.delegate) {
+                    [self.delegate uploadDidFail:self withError:error response:data];
+                }
             }
-        }
-        else {
-            [self checkEtag:data];
-            if (self.delegate) {
-                [self.delegate uploadDidSucceed:self withResponse:data];
+            else {
+                [self checkEtag:data];
+                if (self.delegate) {
+                    [self.delegate uploadDidSucceed:self withResponse:data];
+                }
             }
-        }
-        
-        if (self.completionBlock) {
-            self.completionBlock(self, data, error, (error == Nil)); // reference to task, response data, whether or not error present
-        }
-        
-    }];
+            
+            if (self.completionBlock) {
+                self.completionBlock(self, data, error, (error == Nil)); // reference to task, response data, whether or not error present
+            }
+        }];
+    }
+    else {
+        _uploadTask = [self.session uploadTaskWithRequest:uploadRequest fromFile:self.assetURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            
+            if (error) {
+                if (self.delegate) {
+                    [self.delegate uploadDidFail:self withError:error response:data];
+                }
+            }
+            else {
+                [self checkEtag:data];
+                if (self.delegate) {
+                    [self.delegate uploadDidSucceed:self withResponse:data];
+                }
+            }
+            
+            if (self.completionBlock) {
+                self.completionBlock(self, data, error, (error == Nil)); // reference to task, response data, whether or not error present
+            }
+            
+        }];
+
+    }
     
     _hasStarted = TRUE;
     [_uploadTask resume]; // starts initial request

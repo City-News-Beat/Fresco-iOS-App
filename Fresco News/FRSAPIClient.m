@@ -667,7 +667,6 @@
     }];
 }
 
-
 /*
     One-off tools for use within class
  */
@@ -1074,6 +1073,14 @@
     }];
     
     return digest;
+}
+
+-(void)completePost:(NSString *)postID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:completePostEndpoint, postID];
+    
+    [self post:endpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 

@@ -34,7 +34,7 @@ typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success)
 @property (nonatomic, retain, readonly) NSURLSessionUploadTask *uploadTask;
 @property (nonatomic, retain, readonly) NSURLSession *session;
 @property (nonatomic, retain, readonly) NSString *eTag;
-
+@property (nonatomic, retain) NSData *requestData;
 // file sizing & progress
 @property int64_t bytesUploaded;
 @property int64_t totalBytes;

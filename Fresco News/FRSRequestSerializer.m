@@ -27,9 +27,7 @@
         [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
         [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:parameters options:0 error:Nil]];
     }
-    
-    //NSLog(@"%@", [[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding]);
-    
+        
     return request;
 }
 @end

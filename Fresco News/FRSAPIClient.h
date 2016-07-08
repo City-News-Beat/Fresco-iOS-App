@@ -100,6 +100,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(BOOL)checkAuthAndPresentOnboard;
 -(void)fetchLikesFeedForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)completePost:(NSString *)postID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 
 // file
 -(void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback;
