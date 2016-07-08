@@ -707,10 +707,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
     else {
         // upload
-        NSLog(@"%@", current);
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
         gallery[@"posts"] = current;
         gallery[@"caption"] = self.captionTextView.text;
+
         
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
             NSLog(@"GALLERY/CREATE: %@ %@", responseObject, error);
