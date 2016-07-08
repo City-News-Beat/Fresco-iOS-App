@@ -30,13 +30,17 @@
 }
 
 -(void)updateUIForAsset { // always called on main thread
-    if (_currentAsset.mediaType == PHAssetMediaTypeVideo) { // we need timing shown & updated
-        timeLabel.hidden = FALSE;
-        timeLabel.text = [self readableTimeForSeconds:CMTimeGetSeconds(_currentAVAsset.duration) milliseconds:FALSE];
-    }
-    else { // we need timing hidden
-        timeLabel.hidden = TRUE;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (_currentAsset.mediaType == PHAssetMediaTypeVideo) { // we need timing shown & updated
+            timeLabel.hidden = FALSE;
+            timeLabel.text = [self readableTimeForSeconds:CMTimeGetSeconds(_currentAVAsset.duration) milliseconds:FALSE];
+        }
+        else { // we need timing hidden
+            timeLabel.hidden = TRUE;
+        }
+    });
+    
 }
 
 // made this @ overture hence the ms

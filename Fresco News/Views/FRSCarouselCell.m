@@ -18,7 +18,13 @@
 #pragma mark - Asset Initialization
 
 -(void)loadImage:(PHAsset *)asset {
+    
+//    if (self.asset != nil) {
+//        return;
+//    }
+    
     [self removePlayers];
+    
     if (!imageView) {
         imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
@@ -34,6 +40,7 @@
                  dispatch_async(dispatch_get_main_queue(), ^{
                      imageView.image = result;
                      imageView.contentMode = UIViewContentModeScaleAspectFill;
+                     //self.asset = asset;
                  });
              }];
         });        
@@ -41,6 +48,11 @@
 }
 
 -(void)loadVideo:(PHAsset *)asset {
+    
+//    if (self.asset != nil) {
+//        return;
+//    }
+    
     [self removePlayers];
     [self playPlayer];
     
@@ -64,11 +76,13 @@
                  playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
                  [self.layer addSublayer:playerLayer];
                  [videoView play];
-                                  
+                 
+                 //self.asset = asset;
+                 
                  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
                  [self addGestureRecognizer:tap];
                  
-                 [self configureMuteIcon];
+                 //[self configureMuteIcon];
                  [self bringSubviewToFront:self.muteImageView];
              });
          }];
@@ -85,14 +99,14 @@
 -(void)tapPlayer {
     
     if (videoView.rate != 0) {
-        if (!self.didUnmute) {
-            if (videoView.volume == 0) {
-                videoView.volume = 1;
-                self.muteImageView.alpha = 0;
-                self.didUnmute = YES;
-                return;
-            }
-        }
+        //if (!self.didUnmute) {
+        //    if (videoView.volume == 0) {
+        //        videoView.volume = 1;
+        //        self.muteImageView.alpha = 0;
+        //        self.didUnmute = YES;
+        //        return;
+        //    }
+        //}
         
         [self pausePlayer];
     } else {
@@ -107,12 +121,14 @@
 -(void)playPlayer {
     [videoView play];
     if (!self.didUnmute) {
-        videoView.volume = 0.0;
-        self.muteImageView.alpha = 1;
+        //videoView.volume = 0.0;
+        //self.muteImageView.alpha = 1;
     }
 }
 
 -(void)removePlayers {
+    imageView = nil;
+
     [playerLayer removeFromSuperlayer];
     [videoView pause];
     

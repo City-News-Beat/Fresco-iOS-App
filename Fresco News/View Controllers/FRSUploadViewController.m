@@ -52,8 +52,6 @@
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) UIImageView *muteImageView;
 
-@property (strong, nonatomic) NSMutableArray *players;
-
 @property NSInteger galleryCollectionViewHeight;
 
 @end
@@ -82,6 +80,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
+    
+    
     [self.galleryCollectionView reloadData];
     [self configurePageController];
     
@@ -97,8 +97,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self dismissKeyboard];
     [self.pageControl removeFromSuperview];
     
+    self.content = nil;
+    self.players = nil;
+    
     [self.carouselCell removePlayers];
     [self.carouselCell removeFromSuperview];
+    [self.galleryCollectionView reloadData];
 }
 
 
@@ -162,17 +166,22 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
     self.carouselCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
     
     PHAsset *asset = [self.content objectAtIndex:indexPath.row];
     
     if (asset.mediaType == PHAssetMediaTypeImage) {
+        NSLog(@"photo");
+        [self.carouselCell removePlayers];
         [self.carouselCell loadImage:asset];
         self.carouselCell.muteImageView.alpha = 0;
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
+        NSLog(@"video");
+        [self.carouselCell removePlayers];
         [self.carouselCell loadVideo:asset];
-        [self.players addObject:asset];
+        if (![self.players containsObject:asset]) {
+            [self.players addObject:asset];
+        }
     } else if (asset.mediaType == PHAssetMediaTypeAudio) {
         // 3.x feature
     }
@@ -347,12 +356,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
     if (scrollView == self.galleryCollectionView) {
         self.pageControl.currentPage = self.galleryCollectionView.contentOffset.x / pageWidth;
     }
-    
     [self.carouselCell playPlayer];
+    
+//    for (UICollectionViewCell *cell in [self.galleryCollectionView visibleCells]) {
+//        NSIndexPath *indexPath = [self.galleryCollectionView indexPathForCell:cell];
+//        NSLog(@"%@", indexPath);
+//    }
 }
 
 
-#pragma mark - UITableViewx
+#pragma mark - UITableView
 
 -(void)configureAssignmentsTableView {
     
