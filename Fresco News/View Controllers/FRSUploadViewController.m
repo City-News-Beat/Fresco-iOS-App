@@ -17,6 +17,8 @@
 #import "FRSPlayer.h"
 #import "AWFileHash.h" // md5 etc.
 #import "FRSAPIClient.h"
+#import <Photos/Photos.h>
+#import "FRSUploadTask.h"
 
 @interface FRSUploadViewController () {
     NSMutableArray *dictionaryRepresentations;
@@ -715,11 +717,72 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
             if (!error) {
                 NSLog(@"Gallery creation success... (1/2)");
+                [self moveToUpload:responseObject];
             }
             else {
                 NSLog(@"Gallery creation error... (%@)", error);
             }
         }];
+    }
+}
+
+-(void)moveToUpload:(NSDictionary *)postData {
+    int currentIndex = 0;
+    
+    for (NSDictionary *post in postData[@"posts"]) {
+        PHAsset *currentAsset = self.content[currentIndex];
+        
+        if (currentAsset.mediaType == PHAssetMediaTypeVideo) {
+
+            
+            PHVideoRequestOptions* options = [[PHVideoRequestOptions alloc] init];
+            options.version = PHVideoRequestOptionsVersionOriginal;
+            options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+            options.networkAccessAllowed = YES;
+            options.progressHandler =  ^(double progress,NSError *error,BOOL* stop, NSDictionary* dict) {
+                NSLog(@"progress %lf",progress);  //never gets called
+            };
+            
+            
+            [[PHImageManager defaultManager] requestAVAssetForVideo:currentAsset options:options resultHandler:^(AVAsset* avasset, AVAudioMix* audioMix, NSDictionary* info){
+                AVURLAsset* myAsset = (AVURLAsset*)avasset;
+                
+                FRSUploadTask  *task = [[FRSUploadTask alloc] init];
+                NSLog(@"UPLOADING");
+                
+                [task createUploadFromData:[NSData dataWithContentsOfURL:myAsset.URL] destination:[NSURL URLWithString:post[@"urls"][0]] progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
+                    NSLog(@"UPLOADING");
+                } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
+                   
+                }];
+                
+                [task start];
+
+            }];
+        }
+        else {
+            [[PHImageManager defaultManager] requestImageDataForAsset:currentAsset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+                
+                FRSUploadTask  *task = [[FRSUploadTask alloc] init];
+                NSLog(@"UPLOADING");
+                
+                [task createUploadFromData:imageData destination:[NSURL URLWithString:post[@"urls"][0]] progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
+                    NSLog(@"UPLOADING");
+                } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
+                    if (success) {
+                        if (success) {
+                            NSDictionary* headers = [(NSHTTPURLResponse *)response allHeaderFields];
+                            NSLog(@"%@", headers);
+                        }
+                    }
+                }];
+                
+                [task start];
+            }];
+
+        }
+
+        currentIndex++;
     }
 }
 

@@ -19,7 +19,7 @@
 @end
 
 typedef void (^TransferProgressBlock)(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
-typedef void (^TransferCompletionBlock)(id task, NSData *responseData, NSError *error, BOOL success);
+typedef void (^TransferCompletionBlock)(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response);
 typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success);
 
 

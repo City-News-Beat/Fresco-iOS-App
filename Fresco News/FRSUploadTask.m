@@ -19,9 +19,9 @@
     self.progressBlock = progress;
     self.completionBlock = completion;
     
-    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
-    sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
-    _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]]; // think queue might be able to bet set to nil but test this for now
+   // NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
+   // sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
+    _session = [NSURLSession sharedSession]; // think queue might be able to bet set to nil but test this for now
 }
 
 -(void)createUploadFromData:(NSData *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
@@ -32,9 +32,10 @@
     self.progressBlock = progress;
     self.completionBlock = completion;
     
-    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
-    sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
-    _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]]; // think queue might be able to bet set to nil but test this for now
+    //NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
+   // sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
+    _session = [NSURLSession sharedSession];
+                //sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]]; // think queue might be able to bet set to nil but test this for now
 }
 
 
@@ -53,6 +54,9 @@
     [self signRequest:uploadRequest];
     
     if (self.requestData) {
+        
+        NSLog(@"UPLOADING FROM DATA");
+        
         _uploadTask = [self.session uploadTaskWithRequest:uploadRequest fromData:self.requestData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             
             self.requestData = Nil;
@@ -70,13 +74,14 @@
             }
             
             if (self.completionBlock) {
-                self.completionBlock(self, data, error, (error == Nil)); // reference to task, response data, whether or not error present
+                self.completionBlock(self, data, error, (error == Nil), response); // reference to task, response data, whether or not error present
             }
         }];
     }
     else {
         _uploadTask = [self.session uploadTaskWithRequest:uploadRequest fromFile:self.assetURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            
+            NSLog(@"UPLOADING FROM FILE URL");
+
             if (error) {
                 if (self.delegate) {
                     [self.delegate uploadDidFail:self withError:error response:data];
@@ -90,7 +95,7 @@
             }
             
             if (self.completionBlock) {
-                self.completionBlock(self, data, error, (error == Nil)); // reference to task, response data, whether or not error present
+                self.completionBlock(self, data, error, (error == Nil), response); // reference to task, response data, whether or not error present
             }
             
         }];
@@ -136,6 +141,9 @@
 }
 
 -(void)signRequest:(NSMutableURLRequest *)request {
+    
+    return;
+    
     NSString *authorizationString = [self authenticationToken];
     [request setValue:authorizationString forHTTPHeaderField:@"Authorization"];
 }
