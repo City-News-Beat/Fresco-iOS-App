@@ -353,7 +353,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateUserLocation:userInfo.userInfo completion:^(NSDictionary *response, NSError *error) {
             if (!error) {
-                NSLog(@"Sent Location");
+               // NSLog(@"Sent Location");
             }
             else {
                 NSLog(@"Location Error: %@", error);
@@ -590,7 +590,6 @@
         NSString *currentBearerToken = [self authenticationToken];
         if (currentBearerToken) {
             currentBearerToken = [NSString stringWithFormat:@"Bearer %@", currentBearerToken];
-            NSLog(@"BEARER: %@", currentBearerToken);
             
             [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
             [self startLocator];
