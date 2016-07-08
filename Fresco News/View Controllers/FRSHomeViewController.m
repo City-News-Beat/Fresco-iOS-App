@@ -242,7 +242,8 @@
 
 -(void)configureSpinner {
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    //Doesn't do anything
+    //self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
@@ -295,31 +296,22 @@
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
 
-    self.highlightTabButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7, 12, 87, 20)];
+    NSLog(@"View Width/2: %f", self.view.frame.size.width/2);
+    NSLog(@"Origin: %f", (self.tableView.frame.size.width/4));
+    self.highlightTabButton = [[UIButton alloc] initWithFrame:CGRectMake((self.tableView.frame.size.width/2) - 50 - (self.tableView.frame.size.width/6), 6, 100, 30)];
     [self.highlightTabButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
     [self.highlightTabButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
     [self.highlightTabButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.highlightTabButton addTarget:self action:@selector(handleHighlightsTabTapped) forControlEvents:UIControlEventTouchUpInside];
     [titleView addSubview:self.highlightTabButton];
     
-    self.followingTabButton = [[UIButton alloc] initWithFrame:CGRectMake(208.3, 12, 87, 20)];
+    self.followingTabButton = [[UIButton alloc] initWithFrame:CGRectMake((self.tableView.frame.size.width/2) - 50 + (self.tableView.frame.size.width/6), 6, 100, 30)];
     self.followingTabButton.alpha = 0.7;
     [self.followingTabButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
     [self.followingTabButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
     [self.followingTabButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.followingTabButton addTarget:self action:@selector(handleFollowingTabTapped) forControlEvents:UIControlEventTouchUpInside];
     [titleView addSubview:self.followingTabButton];
-    
-    if (IS_IPHONE_6) {
-        self.highlightTabButton.frame = CGRectMake(80.7  - offset, 12, 87, 20);
-        self.followingTabButton.frame  = CGRectMake(208.3 - offset, 12, 87, 20);
-    } else if (IS_IPHONE_6_PLUS) {
-        self.highlightTabButton.frame = CGRectMake(93.7  - offset, 12, 87, 20);
-        self.followingTabButton.frame  = CGRectMake(234.3 - offset, 12, 87, 20);
-    } else if (IS_IPHONE_5) {
-        self.highlightTabButton.frame = CGRectMake(62.3  - offset, 12, 87, 20);
-        self.followingTabButton.frame  = CGRectMake(171.7 - offset, 12, 87, 20);
-    }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
@@ -329,28 +321,17 @@
     self.sudoNavBar.backgroundColor = [UIColor frescoOrangeColor];
     [self.view addSubview:self.sudoNavBar];
     
-    UIButton *sudoHighlightButton = [[UIButton alloc] initWithFrame:CGRectMake(80.7, 12, 87, 20)];
+    UIButton *sudoHighlightButton = [[UIButton alloc] initWithFrame:CGRectMake((self.tableView.frame.size.width/2) - 50 - (self.tableView.frame.size.width/6), 6, 100, 30)];
     [sudoHighlightButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
     [sudoHighlightButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
     [sudoHighlightButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.sudoNavBar addSubview:sudoHighlightButton];
     
-    UIButton *sudoFollowingButton = [[UIButton alloc] initWithFrame:CGRectMake(208.3, 12, 87, 20)];
+    UIButton *sudoFollowingButton = [[UIButton alloc] initWithFrame:CGRectMake((self.tableView.frame.size.width/2) - 50 + (self.tableView.frame.size.width/6), 6, 100, 30)];
     [sudoFollowingButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
     [sudoFollowingButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
     [sudoFollowingButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.sudoNavBar addSubview:sudoFollowingButton];
-    
-    if (IS_IPHONE_6) {
-        sudoHighlightButton.frame = CGRectMake(80.7, 12, 87, 20);
-        sudoFollowingButton.frame  = CGRectMake(208.3, 12, 87, 20);
-    } else if (IS_IPHONE_6_PLUS) {
-        sudoHighlightButton.frame = CGRectMake(93.7, 12, 87, 20);
-        sudoFollowingButton.frame  = CGRectMake(234.3, 12, 87, 20);
-    } else if (IS_IPHONE_5) {
-        sudoHighlightButton.frame = CGRectMake(62.3, 12, 87, 20);
-        sudoFollowingButton.frame  = CGRectMake(171.7, 12, 87, 20);
-    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {

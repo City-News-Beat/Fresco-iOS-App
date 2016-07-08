@@ -56,7 +56,7 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorDark];
     
-    if(!_isEditingProfile){//Back Button Disabled
+    if(_isEditingProfile){//Back Button Disabled
         [self configureBackButtonAnimated:YES];
         //[self.navigationItem setLeftItemsSupplementBackButton:false];
     }
@@ -200,6 +200,7 @@
         self.navigationItem.leftBarButtonItem = backBarButtonItem;
     }else{
         self.navigationItem.title = @"SETUP YOUR PROFILE";
+        self.navigationItem.hidesBackButton = YES;
     }
     [[UINavigationBar appearance] setTitleTextAttributes: @{
                                                             NSForegroundColorAttributeName: [UIColor whiteColor],
