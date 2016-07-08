@@ -717,10 +717,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         // upload
         NSLog(@"%@", current);
+        NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
+        gallery[@"posts"] = current;
+        gallery[@"caption"] = self.captionTextView.text;
         
-        // stage 1
-        [[FRSAPIClient sharedClient] createGallery:Nil completion:^(id responseObject, NSError *error) {
-            
+        [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
+            NSLog(@"GALLERY/CREATE: %@ %@", responseObject, error);
         }];
     }
 }

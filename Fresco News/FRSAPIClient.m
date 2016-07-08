@@ -1050,7 +1050,7 @@
         
         digest[@"address"] = responseObject;
         digest[@"lat"] = @(asset.location.coordinate.latitude);
-        digest[@"lng"] = @(asset.location.coordinate.latitude);
+        digest[@"lng"] = @(asset.location.coordinate.longitude);
         
         if (asset.mediaType == PHAssetMediaTypeImage) {
             digest[@"contentType"] = @"image/jpeg";
@@ -1064,7 +1064,7 @@
             [self fetchFileSizeForVideo:asset callback:^(NSInteger size, NSError *err) {
                 digest[@"fileSize"] = @(size);
                 digest[@"chunkSize"] = @(size);
-                digest[@"contentType"] = @"video/quicktime";
+                digest[@"contentType"] = @"video/mp4";
 
                 callback(digest, err);
             }];
