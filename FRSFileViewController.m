@@ -203,6 +203,8 @@ static NSString *imageTile = @"ImageTile";
 }
 
 -(void)next:(id)sender {
+    self.uploadViewController.content = nil;
+    self.uploadViewController.players = nil;
     self.uploadViewController.content = selectedAssets;
     [self.navigationController pushViewController:self.uploadViewController animated:YES];
     NSLog(@"(FileVC) ASSETS: %@", self.uploadViewController.content);

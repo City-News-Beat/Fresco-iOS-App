@@ -15,6 +15,7 @@
 @property (retain, nonatomic) UIButton *facebookButton;
 @property (retain, nonatomic) UIButton *anonButton;
 @property (retain, nonatomic) UILabel *anonLabel;
+@property (strong, nonatomic) NSMutableArray *players;
 
 @property (nonatomic, weak) NSArray *content;
 

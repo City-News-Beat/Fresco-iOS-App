@@ -50,8 +50,6 @@
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) UIImageView *muteImageView;
 
-@property (strong, nonatomic) NSMutableArray *players;
-
 @property NSInteger galleryCollectionViewHeight;
 
 @end
@@ -80,6 +78,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
+    
+    
     [self.galleryCollectionView reloadData];
     [self configurePageController];
     
@@ -95,8 +95,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self dismissKeyboard];
     [self.pageControl removeFromSuperview];
     
+    self.content = nil;
+    self.players = nil;
+    
     [self.carouselCell removePlayers];
     [self.carouselCell removeFromSuperview];
+    [self.galleryCollectionView reloadData];
 }
 
 
@@ -176,7 +180,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
         if (![self.players containsObject:asset]) {
             [self.players addObject:asset];
         }
-        NSLog(@"PLAYERS: %@", self.players);
     } else if (asset.mediaType == PHAssetMediaTypeAudio) {
         // 3.x feature
     }
@@ -352,10 +355,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.pageControl.currentPage = self.galleryCollectionView.contentOffset.x / pageWidth;
     }
     [self.carouselCell playPlayer];
+    
+//    for (UICollectionViewCell *cell in [self.galleryCollectionView visibleCells]) {
+//        NSIndexPath *indexPath = [self.galleryCollectionView indexPathForCell:cell];
+//        NSLog(@"%@", indexPath);
+//    }
 }
 
 
-#pragma mark - UITableViewx
+#pragma mark - UITableView
 
 -(void)configureAssignmentsTableView {
     
