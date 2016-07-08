@@ -29,5 +29,6 @@
 @interface DGElasticPullToRefreshLoadingViewCircle : DGElasticPullToRefreshLoadingView
 
 -(instancetype)init;
+- (void)setOriginY: (int)y;
 
 @end
