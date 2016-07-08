@@ -701,11 +701,22 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSLog(@"Post anonymously");
     }
     else {
-        for (PHAsset *asset in self.content) {
-            [[FRSAPIClient sharedClient] digestForAsset:asset callback:^(id responseObject, NSError *error) {
-                NSLog(@"RES: %@", responseObject);
-            }];
-        }
+        [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
+    }
+}
+
+-(void)getPostData:(NSMutableArray *)posts current:(NSMutableArray *)current {
+    if (posts.count > 0) {
+        PHAsset *firstAsset = posts[0];
+        [[FRSAPIClient sharedClient] digestForAsset:firstAsset callback:^(id responseObject, NSError *error) {
+            [posts removeObject:firstAsset];
+            [current addObject:responseObject];
+            [self getPostData:posts current:current];
+        }];
+    }
+    else {
+        // upload
+        NSLog(@"%@", current);
         
         // stage 1
         [[FRSAPIClient sharedClient] createGallery:Nil completion:^(id responseObject, NSError *error) {
