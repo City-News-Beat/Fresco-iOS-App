@@ -160,7 +160,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    self.carouselCell = nil;
     self.carouselCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
     
     PHAsset *asset = [self.content objectAtIndex:indexPath.row];

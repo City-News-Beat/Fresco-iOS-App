@@ -113,6 +113,8 @@
 }
 
 -(void)removePlayers {
+    imageView = nil;
+
     [playerLayer removeFromSuperlayer];
     [videoView pause];
     
