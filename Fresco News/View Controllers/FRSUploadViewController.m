@@ -160,17 +160,23 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    self.carouselCell = nil;
     self.carouselCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
     
     PHAsset *asset = [self.content objectAtIndex:indexPath.row];
     
     if (asset.mediaType == PHAssetMediaTypeImage) {
+        NSLog(@"photo");
+        [self.carouselCell removePlayers];
         [self.carouselCell loadImage:asset];
         self.carouselCell.muteImageView.alpha = 0;
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
+        NSLog(@"video");
+        [self.carouselCell removePlayers];
         [self.carouselCell loadVideo:asset];
-        [self.players addObject:asset];
+        if (![self.players containsObject:asset]) {
+            [self.players addObject:asset];
+        }
+        NSLog(@"PLAYERS: %@", self.players);
     } else if (asset.mediaType == PHAssetMediaTypeAudio) {
         // 3.x feature
     }
@@ -345,7 +351,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     if (scrollView == self.galleryCollectionView) {
         self.pageControl.currentPage = self.galleryCollectionView.contentOffset.x / pageWidth;
     }
-    
     [self.carouselCell playPlayer];
 }
 

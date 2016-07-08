@@ -18,7 +18,13 @@
 #pragma mark - Asset Initialization
 
 -(void)loadImage:(PHAsset *)asset {
+    
+//    if (self.asset != nil) {
+//        return;
+//    }
+    
     [self removePlayers];
+    
     if (!imageView) {
         imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
@@ -34,6 +40,7 @@
                  dispatch_async(dispatch_get_main_queue(), ^{
                      imageView.image = result;
                      imageView.contentMode = UIViewContentModeScaleAspectFill;
+                     //self.asset = asset;
                  });
              }];
         });        
@@ -41,6 +48,11 @@
 }
 
 -(void)loadVideo:(PHAsset *)asset {
+    
+//    if (self.asset != nil) {
+//        return;
+//    }
+    
     [self removePlayers];
     [self playPlayer];
     
@@ -64,7 +76,9 @@
                  playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
                  [self.layer addSublayer:playerLayer];
                  [videoView play];
-                                  
+                 
+                 //self.asset = asset;
+                 
                  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
                  [self addGestureRecognizer:tap];
                  
