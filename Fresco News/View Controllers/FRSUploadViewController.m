@@ -48,8 +48,7 @@
 @property (strong, nonatomic) UICollectionViewFlowLayout *galleryCollectionViewFlowLayout;
 @property (strong, nonatomic) FRSCarouselCell *carouselCell;
 @property (strong, nonatomic) UIPageControl *pageControl;
-//@property (strong, nonatomic) FRSPlayer *player;
-//@property (strong, nonatomic) AVPlayerLayer *playerLayer;
+@property (strong, nonatomic) UIImageView *muteImageView;
 
 @property (strong, nonatomic) NSMutableArray *players;
 
@@ -66,10 +65,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)viewDidLoad {
     [super viewDidLoad];
     
-    
     [self configureUI];
     [self checkButtonStates];
-    
     
     self.postToTwitter  = NO;
     self.postToFacebook = NO;
@@ -98,16 +95,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self dismissKeyboard];
     [self.pageControl removeFromSuperview];
     
-    NSLog(@"PLAYERS (%lu): %@", (unsigned long)self.players.count, self.players);
-    
-    for (FRSPlayer *player in self.players) {
-        if ([player respondsToSelector:@selector(pause)]) {
-            [player.container removeFromSuperview];
-            [player pause];
-            [player replaceCurrentItemWithPlayerItem:nil];
-            self.players = nil;
-        }
-    }
+    [self.carouselCell removePlayers];
+    [self.carouselCell removeFromSuperview];
 }
 
 
@@ -123,7 +112,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureNavigationBar];
     [self configureAssignments]; //Tableview configures are called here
     [self configureBottomBar];
-    
 }
 
 -(void)checkButtonStates {
@@ -154,6 +142,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.galleryCollectionView.pagingEnabled = YES;
     self.galleryCollectionView.delegate = self;
     self.galleryCollectionView.dataSource = self;
+    self.galleryCollectionView.bounces = NO;
     self.galleryCollectionView.backgroundColor = [UIColor whiteColor];
     [self.galleryCollectionView registerNib:[UINib nibWithNibName:@"FRSCarouselCell" bundle:nil] forCellWithReuseIdentifier:@"FRSCarouselCell"];
     [self.scrollView addSubview:self.galleryCollectionView];
@@ -178,17 +167,24 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     if (asset.mediaType == PHAssetMediaTypeImage) {
         [self.carouselCell loadImage:asset];
+        self.carouselCell.muteImageView.alpha = 0;
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
         [self.carouselCell loadVideo:asset];
+        [self.players addObject:asset];
     } else if (asset.mediaType == PHAssetMediaTypeAudio) {
         // 3.x feature
     }
+    
+    [self.carouselCell pausePlayer];
     
     return self.carouselCell;
 }
 
 -(BOOL)currentPageIsVideo {
-    NSInteger page = (self.scrollView.contentOffset.x + self.view.frame.size.width/2)/self.scrollView.frame.size.width;
+    CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
+    NSInteger page = self.galleryCollectionView.contentOffset.x / pageWidth;
+    
+    //does not work, self.players is nil
     return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
 }
 
@@ -212,6 +208,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [self.scrollView addSubview:self.pageControl];
 }
+
 
 #pragma mark - Navigation Bar
 
@@ -323,9 +320,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
+    //check mute toggle
+    [self.carouselCell pausePlayer];
+    
     CGFloat offset = scrollView.contentOffset.y + 20;
-
-    NSLog(@"CURRENT PAGE IS VIDEO: %d", [self currentPageIsVideo]);
     
     //If user is scrolling down, return and act like a normal scroll view
     if (offset > self.scrollView.contentSize.height - self.scrollView.frame.size.height) {
@@ -337,15 +335,18 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.galleryCollectionView.frame = CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset));
         [self.galleryCollectionViewFlowLayout invalidateLayout];
     }
+    
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
-    //Update pageControl on galleryCollectionView
+    //Update pageControl in galleryCollectionView
+    CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
     if (scrollView == self.galleryCollectionView) {
-        CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
         self.pageControl.currentPage = self.galleryCollectionView.contentOffset.x / pageWidth;
     }
+    
+    [self.carouselCell playPlayer];
 }
 
 
@@ -502,7 +503,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     for (NSInteger i = 0; i < self.assignmentsArray.count + 1; i++){
         FRSAssignmentPickerTableViewCell *cell = [self.assignmentsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.isSelectedAssignment = NO;
-//        [cell toggleImage];
     }
 }
 
@@ -559,18 +559,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self toggleGestureRecognizer];
     
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    
-//    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-    self.view.transform           = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-//    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+    self.view.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
 }
 
 -(void)handleKeyboardWillHide:(NSNotification *)sender{
     [self toggleGestureRecognizer];
     
-//    self.bottomContainer.transform      = CGAffineTransformMakeTranslation(0, 0);
-    self.view.transform           = CGAffineTransformMakeTranslation(0, 0);
-//    self.assignmentsTableView.transform = CGAffineTransformMakeTranslation(0, 0);
+    self.view.transform  = CGAffineTransformMakeTranslation(0, 0);
 }
 
 #pragma mark - Assignments
@@ -579,7 +574,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
     self.assignmentsArray = self.assignments;
-    
 }
 
 
@@ -618,13 +612,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [delegate saveContext];
         NSArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
-        
-//        NSArray *nearBy = @[@"Bill Cosby Court Hearing @ 9 a.m. in Norristown", @"Multi-Vehicle Accident in Northeast Philadelphia", @"No assignment"];
-        //NSArray *global = @[@"Global", @"Global Two"];
-        
+
         if ([global count] >  0) {
-            
+            self.globalAssignmentsDrawer.alpha = 0;
         }
+        
         self.assignmentsArray = nearBy;
         [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
@@ -658,7 +650,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     NSError *error = nil;
     NSArray *stored = [moc executeFetchRequest:request error:&error];
     self.assignmentsArray= [NSMutableArray arrayWithArray:stored];
-//    [self configureAnnotationsForMap];
 }
 
 -(void)cacheAssignments {
@@ -729,7 +720,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)tweet:(NSString *)string {
     
-    // Objective-C
+    //DOES NOT TWEET
+
     NSString *userID = [Twitter sharedInstance].sessionStore.session.userID;
     TWTRAPIClient *client = [[TWTRAPIClient alloc] initWithUserID:userID];
 
@@ -744,7 +736,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
             NSLog(@"Twitter Ressponse: %@", response);
             
             if (data) {
-                // handle the response data e.g.
                 NSError *jsonError;
                 NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
                 NSLog(@"Twitter Response: %@", json);

@@ -10,12 +10,15 @@
 
 @implementation FRSCarouselCell
 
-- (void)awakeFromNib {
+-(void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    self.didUnmute = NO;
 }
 
+#pragma mark - Asset Initialization
+
 -(void)loadImage:(PHAsset *)asset {
+    [self removePlayers];
     if (!imageView) {
         imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
@@ -38,6 +41,8 @@
 }
 
 -(void)loadVideo:(PHAsset *)asset {
+    [self removePlayers];
+    [self playPlayer];
     
     if (!videoView) {
         videoView = [[FRSPlayer alloc] init];
@@ -47,30 +52,87 @@
          resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
              
              dispatch_async(dispatch_get_main_queue(), ^{
+                 if (videoView) {
+                     [self removePlayers];
+                 }
                  AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:avAsset];
                  videoView = [[FRSPlayer alloc] initWithPlayerItem:playerItem];
-                 AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoView];
+                 videoView.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemDidReachEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:[videoView currentItem]];
+                 playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoView];
                  playerLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
                  playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
                  [self.layer addSublayer:playerLayer];
                  [videoView play];
-            
-                 [self.players addObject:videoView];
-                 
+                                  
                  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
                  [self addGestureRecognizer:tap];
+                 
+                 [self configureMuteIcon];
+                 [self bringSubviewToFront:self.muteImageView];
              });
          }];
     }
 }
 
+#pragma mark - Player
+
+-(void)playerItemDidReachEnd:(NSNotification *)notification {
+    AVPlayerItem *playerItem = [notification object];
+    [playerItem seekToTime:kCMTimeZero];
+}
+
 -(void)tapPlayer {
+    
     if (videoView.rate != 0) {
-        [videoView pause];
+        if (!self.didUnmute) {
+            if (videoView.volume == 0) {
+                videoView.volume = 1;
+                self.muteImageView.alpha = 0;
+                self.didUnmute = YES;
+                return;
+            }
+        }
+        
+        [self pausePlayer];
     } else {
-        [videoView play];
+        [self playPlayer];
     }
 }
+
+-(void)pausePlayer {
+    [videoView pause];
+}
+
+-(void)playPlayer {
+    [videoView play];
+    if (!self.didUnmute) {
+        videoView.volume = 0.0;
+        self.muteImageView.alpha = 1;
+    }
+}
+
+-(void)removePlayers {
+    [playerLayer removeFromSuperlayer];
+    [videoView pause];
+    
+    playerLayer = nil;
+    videoView = nil;
+}
+
+#pragma mark - Mute Icon
+
+-(void)configureMuteIcon {
+    if (!self.muteImageView) {
+        self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
+        self.muteImageView.alpha = 1;
+        self.muteImageView.frame = CGRectMake(16, self.frame.size.height - 24 - 16, 24, 24);
+        [self addSubview:self.muteImageView];
+        [self bringSubviewToFront:self.muteImageView];
+    }
+}
+
+#pragma mark - Constraints
 
 -(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
     

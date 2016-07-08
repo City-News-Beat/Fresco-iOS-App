@@ -14,13 +14,20 @@
 {
     UIImageView *imageView;
     FRSPlayer *videoView;
+    AVPlayerLayer *playerLayer;
 }
 
 -(void)loadImage:(PHAsset *)asset;
 -(void)loadVideo:(PHAsset *)asset;
-@property (weak, nonatomic) IBOutlet UIImageView *image;
 
+-(void)pausePlayer;
+-(void)playPlayer;
+-(void)removePlayers;
+
+@property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (strong, nonatomic) NSArray *assets;
-@property (nonatomic, retain) NSMutableArray *players;
+@property (strong, nonatomic) UIImageView *muteImageView;
+@property BOOL didUnmute;
+
 
 @end
