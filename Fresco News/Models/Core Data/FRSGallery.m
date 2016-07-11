@@ -79,7 +79,7 @@
     return gallery;
 }
 
-
+ 
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context {
     _currentContext = context;
     save = TRUE;

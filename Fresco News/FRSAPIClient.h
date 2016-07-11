@@ -14,9 +14,12 @@
 #import "FRSJSONResponseSerializer.h"
 #import <AFNetworking/AFNetworking.h>
 #import "SSKeychain.h"
+#import <Photos/Photos.h>
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
+typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
+
 @protocol FRSApp
 -(UITabBarController *)tabBar;
 @end
@@ -31,7 +34,7 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 @property BOOL managerAuthenticated;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 +(instancetype)sharedClient;
-
+-(NSManagedObjectContext *)managedObjectContext;
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void(^)(NSArray *stories, NSError *error))completion;
 -(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void(^)(NSArray *galleries, NSError *error))completion;
@@ -91,9 +94,17 @@ typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
 -(void)fetchCommentsForGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchCommentsForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)getFollowersForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)getFollowingForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 -(NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache;
 
 -(BOOL)checkAuthAndPresentOnboard;
 -(void)fetchLikesFeedForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)completePost:(NSString *)postID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
+
+// file
+-(void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback;
+-(NSString *)md5:(PHAsset *)asset;
+-(NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
+-(void)getAssignmentsWithinRadius:(float)radius ofLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
 @end

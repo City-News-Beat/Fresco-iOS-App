@@ -19,7 +19,7 @@
 @end
 
 typedef void (^TransferProgressBlock)(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
-typedef void (^TransferCompletionBlock)(id task, NSData *responseData, NSError *error, BOOL success);
+typedef void (^TransferCompletionBlock)(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response);
 typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success);
 
 
@@ -34,7 +34,7 @@ typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success)
 @property (nonatomic, retain, readonly) NSURLSessionUploadTask *uploadTask;
 @property (nonatomic, retain, readonly) NSURLSession *session;
 @property (nonatomic, retain, readonly) NSString *eTag;
-
+@property (nonatomic, retain) NSData *requestData;
 // file sizing & progress
 @property int64_t bytesUploaded;
 @property int64_t totalBytes;
@@ -47,6 +47,7 @@ typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success)
 @property TransferProgressBlock progressBlock;
 @property BOOL hasStarted;
 -(void)createUploadFromSource:(NSURL *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion;
+-(void)createUploadFromData:(NSData *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion;
 
 // were going to be internal but needed in all classes inheriting this structure
 -(void)signRequest:(NSMutableURLRequest *)request;

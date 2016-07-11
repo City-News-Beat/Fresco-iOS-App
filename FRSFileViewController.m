@@ -250,7 +250,7 @@ static NSString *imageTile = @"ImageTile";
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     float screenWidth = [UIScreen mainScreen].bounds.size.width;
-    return  CGSizeMake(screenWidth, 175);
+    return  CGSizeMake(screenWidth, 225);
 }
 
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -260,7 +260,7 @@ static NSString *imageTile = @"ImageTile";
         MissingSomethingCollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:UICollectionElementKindSectionFooter forIndexPath:indexPath];
         
         CGRect newFrame = footer.frame;
-        newFrame.size.height = 250;
+        newFrame.size.height = 225;
         [footer setFrame:newFrame];
         
         [footer setup];
