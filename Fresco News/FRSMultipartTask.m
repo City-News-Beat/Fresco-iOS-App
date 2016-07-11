@@ -57,8 +57,8 @@
 -(void)next {
     // loop on background thread to not interrupt UI, but on HIGH priority to supercede any default thread needs
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        if (!currentData) // don't want multiple running loops
-            [self readDataInputStream];
+        currentData = Nil;
+        [self readDataInputStream];
     });
 }
 
@@ -100,6 +100,7 @@
         [self startChunkUpload];
         needsData = FALSE;
         [dataInputStream close];
+        NSLog(@"LAST CHUNK");
     }
 }
 
