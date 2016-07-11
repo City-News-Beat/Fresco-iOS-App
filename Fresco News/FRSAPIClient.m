@@ -1088,9 +1088,10 @@
         else {
             [self fetchFileSizeForVideo:asset callback:^(NSInteger size, NSError *err) {
                 digest[@"fileSize"] = @(size);
-                digest[@"chunkSize"] = @(size);
+                digest[@"chunkSize"] = @(chunkSize * megabyteDefinition);
                 digest[@"contentType"] = @"video/mp4";
-
+                NSLog(@"%@", digest);
+                
                 callback(digest, err);
             }];
         }

@@ -19,6 +19,7 @@
 #import "FRSAPIClient.h"
 #import <Photos/Photos.h>
 #import "FRSUploadTask.h"
+#import "FRSMultipartTask.h"
 
 @interface FRSUploadViewController () {
     NSMutableArray *dictionaryRepresentations;
@@ -760,16 +761,22 @@ static NSString * const cellIdentifier = @"assignment-cell";
             [[PHImageManager defaultManager] requestAVAssetForVideo:currentAsset options:options resultHandler:^(AVAsset* avasset, AVAudioMix* audioMix, NSDictionary* info){
                 AVURLAsset* myAsset = (AVURLAsset*)avasset;
                 
-                FRSUploadTask  *task = [[FRSUploadTask alloc] init];
-                NSLog(@"UPLOADING asset (%d of %lu)", currentIndex+1, self.content.count);
+                FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
+
+                NSMutableArray *urls = [[NSMutableArray alloc] init];
                 
-                [task createUploadFromData:[NSData dataWithContentsOfURL:myAsset.URL] destination:[NSURL URLWithString:post[@"urls"][0]] progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
-                    NSLog(@"UPLOADING");
+                for (NSString *url in post[@"urls"]) {
+                    [urls addObject:[NSURL URLWithString:url]];
+                }
+                NSLog(@"%@", post[@"urls"]);
+                
+                [multipartTask createUploadFromSource:myAsset.URL destinations:urls progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
+                    
                 } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
-                   
+                        NSLog(@"UPLOADED: %@ %@", error, response);
                 }];
                 
-                [task start];
+                [multipartTask start];
 
             }];
         }
@@ -777,14 +784,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
             [[PHImageManager defaultManager] requestImageDataForAsset:currentAsset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
                 
                 FRSUploadTask  *task = [[FRSUploadTask alloc] init];
-                NSLog(@"UPLOADING asset (%d of %lu)", currentIndex+1, self.content.count);
 
                 [task createUploadFromData:imageData destination:[NSURL URLWithString:post[@"urls"][0]] progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
                     NSLog(@"UPLOADING");
                 } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
                     if (success) {
                         if (success) {
-                            NSLog(@"UPLOADED asset (%d of %lu)", currentIndex+1, self.content.count);
                             NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
                             NSString *eTag = headers[@"Etag"];
                             
@@ -793,7 +798,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
                             postCompletionDigest[@"uploadId"] = post[@"uploadId"];
                             postCompletionDigest[@"key"] = post[@"key"];
                             [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
-                                NSLog(@"POST COMPLETED (%d of %lu): %@ %@ %@",currentIndex+1, self.content.count, responseObject, error, post[@"post_id"]);
                             }];
                         }
                     }
