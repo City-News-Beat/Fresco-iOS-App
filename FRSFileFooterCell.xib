@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11129.15" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11103.10"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -14,10 +14,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="aCh-Sb-31u" customClass="MissingSomethingCollectionReusableView">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iiK-hu-wdc">
+                    <rect key="frame" x="35" y="47" width="530" height="88"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="88" id="Asf-m1-aFE"/>
                     </constraints>
@@ -41,7 +42,6 @@
                             <attributes>
                                 <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                 <font key="NSFont" size="15" name="SFUIText-Light"/>
-
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
@@ -52,6 +52,7 @@
                     </connections>
                 </textView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Missing Something?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mc4-1b-s15">
+                    <rect key="frame" x="140" y="24" width="320" height="33"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="33" id="Ek7-62-YEr"/>
                         <constraint firstAttribute="width" constant="320" id="V2n-Un-O0c"/>
@@ -61,6 +62,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lR9-T7-zEL">
+                    <rect key="frame" x="260" y="98" width="60" height="30"/>
                     <accessibility key="accessibilityConfiguration" label="Settings">
                         <accessibilityTraits key="traits" link="YES"/>
                     </accessibility>
@@ -73,8 +75,10 @@
                     </connections>
                 </button>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lca-Wh-NsH">
+                    <rect key="frame" x="30" y="125" width="300" height="55"/>
                     <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstAttribute="width" constant="300" id="hTR-Lw-Z7y"/>
                         <constraint firstAttribute="height" constant="55" id="sUk-qV-cwf"/>
                     </constraints>
                     <attributedString key="attributedText">
@@ -98,9 +102,9 @@
                         </fragment>
                     </attributedString>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                    <dataDetectorType key="dataDetectorTypes" shipmentTrackingNumber="YES"/>
                 </textView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3fF-hp-x1c">
+                    <rect key="frame" x="252" y="126" width="332" height="30"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                     <state key="normal" title="Chat with us.">
                         <color key="titleColor" cyan="0.79000000000000004" magenta="0.72948938608169556" yellow="0.68550682067871094" black="0.29359161853790283" alpha="1" colorSpace="custom" customColorSpace="genericCMYKColorSpace"/>
@@ -112,22 +116,27 @@
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="lca-Wh-NsH" secondAttribute="trailing" constant="16" id="2gt-qV-2if"/>
                 <constraint firstItem="lR9-T7-zEL" firstAttribute="top" secondItem="mc4-1b-s15" secondAttribute="bottom" constant="41" id="8sp-OX-Ib0"/>
                 <constraint firstItem="lca-Wh-NsH" firstAttribute="top" secondItem="iiK-hu-wdc" secondAttribute="bottom" constant="-10" id="9a1-aF-TE4"/>
-                <constraint firstItem="iiK-hu-wdc" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="71" id="ATb-aH-bbw"/>
+                <constraint firstItem="iiK-hu-wdc" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="47" id="ATb-aH-bbw"/>
                 <constraint firstAttribute="trailing" secondItem="iiK-hu-wdc" secondAttribute="trailing" constant="35" id="CZf-3i-oTf"/>
                 <constraint firstItem="lR9-T7-zEL" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" constant="-10" id="HmV-DR-90r"/>
                 <constraint firstItem="lca-Wh-NsH" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="Ird-e9-SxX"/>
                 <constraint firstItem="3fF-hp-x1c" firstAttribute="top" secondItem="iiK-hu-wdc" secondAttribute="bottom" constant="-9" id="Otj-qO-ktp"/>
-                <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="48" id="VPH-Zk-DlY"/>
+                <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="24" id="VPH-Zk-DlY"/>
                 <constraint firstAttribute="trailing" secondItem="3fF-hp-x1c" secondAttribute="trailing" constant="16" id="b4a-5U-zqH"/>
-                <constraint firstItem="lca-Wh-NsH" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="16" id="ee7-U9-COT"/>
+                <constraint firstItem="lca-Wh-NsH" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="30" id="ee7-U9-COT"/>
                 <constraint firstItem="iiK-hu-wdc" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="gcA-Hb-mtD"/>
                 <constraint firstItem="iiK-hu-wdc" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="35" id="hZU-Za-dlS"/>
-                <constraint firstItem="3fF-hp-x1c" firstAttribute="leading" secondItem="lca-Wh-NsH" secondAttribute="centerX" constant="57" id="zAK-Rg-rcZ"/>
+                <constraint firstItem="3fF-hp-x1c" firstAttribute="leading" secondItem="lca-Wh-NsH" secondAttribute="centerX" constant="72" id="zAK-Rg-rcZ"/>
                 <constraint firstItem="mc4-1b-s15" firstAttribute="centerX" secondItem="iiK-hu-wdc" secondAttribute="centerX" id="zfJ-OM-T3e"/>
             </constraints>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="gcA-Hb-mtD"/>
+                    <exclude reference="Ird-e9-SxX"/>
+                </mask>
+            </variation>
             <connections>
                 <outlet property="chatWithLeftConstraint" destination="zAK-Rg-rcZ" id="I1J-lX-ZkD"/>
                 <outlet property="chatWithRightConstraint" destination="b4a-5U-zqH" id="XMZ-4A-hKf"/>

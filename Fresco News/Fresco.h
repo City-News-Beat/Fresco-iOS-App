@@ -70,6 +70,7 @@ static NSString * const addSocialEndpoint = @"social/connect/";
 
 // gallery creation
 static NSString * const createGalleryEndpoint = @"gallery/create";
+static NSString * const completePostEndpoint = @"post/complete";
 
 // formatted endpoints
 static NSString * const likeGalleryEndpoint = @"gallery/%@/like";

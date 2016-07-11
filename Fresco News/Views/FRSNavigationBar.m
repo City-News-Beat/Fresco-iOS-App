@@ -53,6 +53,12 @@
 }
 
 -(void)uploadStatus:(NSNotification *)notification {
+    NSDictionary *userInfo = notification.userInfo;
+    NSNumber *percentage = userInfo[@"complete"];
+    float percent = [percentage floatValue];
+    CGRect progressFrame = _progressBar.frame;
+    progressFrame.size.width = percent * [UIScreen mainScreen].bounds.size.width;
+    _progressBar.frame = progressFrame;
     
 }
 @end

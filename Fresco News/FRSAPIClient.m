@@ -13,6 +13,7 @@
 #import "FRSRequestSerializer.h"
 #import "FRSAppDelegate.h"
 #import "FRSOnboardingViewController.h"
+#import "AWFileHash.h"
 
 @implementation FRSAPIClient
 
@@ -352,7 +353,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateUserLocation:userInfo.userInfo completion:^(NSDictionary *response, NSError *error) {
             if (!error) {
-                NSLog(@"Sent Location");
+               // NSLog(@"Sent Location");
             }
             else {
                 NSLog(@"Location Error: %@", error);
@@ -383,6 +384,33 @@
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
+}
+
+-(void)getAssignmentsWithinRadius:(float)radius ofLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
+    [geoData setObject:@"MultiPoint" forKey:@"type"];
+
+    
+    NSMutableArray *coordinates = [[NSMutableArray alloc] init];
+    
+    for (CLLocation *loc in location) {
+        NSArray *coordinateLocation = @[@(loc.coordinate.longitude), @(loc.coordinate.latitude)];
+        [coordinates addObject:coordinateLocation];
+    }
+    
+    [geoData setObject:coordinates forKey:@"coordinates"];
+    
+    NSDictionary *params = @{
+                             @"geo" : geoData,
+                             @"where" : @"contained"
+                             };
+    
+    
+    
+    [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+
 }
 
 #pragma mark - Gallery Fetch
@@ -589,7 +617,6 @@
         NSString *currentBearerToken = [self authenticationToken];
         if (currentBearerToken) {
             currentBearerToken = [NSString stringWithFormat:@"Bearer %@", currentBearerToken];
-            NSLog(@"BEARER: %@", currentBearerToken);
             
             [self.requestManager.requestSerializer setValue:currentBearerToken forHTTPHeaderField:@"Authorization"];
             [self startLocator];
@@ -665,7 +692,6 @@
         [self handleError:error];
     }];
 }
-
 
 /*
     One-off tools for use within class
@@ -837,13 +863,21 @@
 }
 -(void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([self checkAuthAndPresentOnboard]) {
-        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresconews.news" code:101 userInfo:Nil]);
         return;
     }
     
     [self unfollowUserID:user.uid completion:^(id responseObject, NSError *error) {
         [user setValue:@(FALSE) forKey:@"following"];
         [[self managedObjectContext] save:Nil];
+        completion(responseObject, error);
+    }];
+}
+
+-(void)getFollowingForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:followingEndpoint, user.uid];
+    
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
@@ -1004,5 +1038,75 @@
          
      }];
 }
+
+// FILE DEALINGS
+-(void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback {
+    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+    options.version = PHVideoRequestOptionsVersionOriginal;
+    
+    [[PHImageManager defaultManager] requestAVAssetForVideo:video options:options resultHandler:^(AVAsset *asset, AVAudioMix *audioMix, NSDictionary *info) {
+        if ([asset isKindOfClass:[AVURLAsset class]]) {
+            AVURLAsset* urlAsset = (AVURLAsset*)asset;
+            
+            NSNumber *size;
+            NSError *fetchError;
+            
+            [urlAsset.URL getResourceValue:&size forKey:NSURLFileSizeKey error:&fetchError];
+            callback([size integerValue], fetchError);
+        }
+    }];
+}
+
+-(void)fetchFileSizeForImage:(PHAsset *)image callback:(FRSAPISizeCompletionBlock)callback {
+    [[PHImageManager defaultManager] requestImageDataForAsset:image options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+        float imageSize = imageData.length;
+        callback([@(imageSize) integerValue], Nil);
+    }];
+}
+
+-(NSString *)md5:(PHAsset *)asset {
+    return [AWFileHash md5HashOfPHAsset:asset];
+}
+
+-(NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {
+    NSMutableDictionary *digest = [[NSMutableDictionary alloc] init];
+    
+    [self fetchAddressFromLocation:asset.location completion:^(id responseObject, NSError *error) {
+        
+        digest[@"address"] = responseObject;
+        digest[@"lat"] = @(asset.location.coordinate.latitude);
+        digest[@"lng"] = @(asset.location.coordinate.longitude);
+        
+        if (asset.mediaType == PHAssetMediaTypeImage) {
+            digest[@"contentType"] = @"image/jpeg";
+            [self fetchFileSizeForImage:asset callback:^(NSInteger size, NSError *err) {
+                digest[@"fileSize"] = @(size);
+                digest[@"chunkSize"] = @(size);
+                callback(digest, err);
+            }];
+        }
+        else {
+            [self fetchFileSizeForVideo:asset callback:^(NSInteger size, NSError *err) {
+                digest[@"fileSize"] = @(size);
+                digest[@"chunkSize"] = @(size);
+                digest[@"contentType"] = @"video/mp4";
+
+                callback(digest, err);
+            }];
+        }
+        
+        digest[@"md5"] = [self md5:asset];
+    }];
+    
+    return digest;
+}
+
+-(void)completePost:(NSString *)postID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    [self post:completePostEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 
 @end
