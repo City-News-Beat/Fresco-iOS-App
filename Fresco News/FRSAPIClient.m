@@ -386,6 +386,34 @@
     }];
 }
 
+-(void)getAssignmentsWithinRadius:(float)radius ofLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
+    [geoData setObject:@"MultiPoint" forKey:@"type"];
+
+    
+    NSMutableArray *coordinates = [[NSMutableArray alloc] init];
+    
+    for (CLLocation *loc in location) {
+        NSArray *coordinateLocation = @[@(loc.coordinate.longitude), @(loc.coordinate.latitude)];
+        [coordinates addObject:coordinateLocation];
+    }
+    
+    [geoData setObject:coordinates forKey:@"coordinates"];
+    
+    NSDictionary *params = @{
+                             @"geo" : geoData,
+                             @"radius" : @(radius),
+                             @"where" : @"contained"
+                             };
+    
+    
+    
+    [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+
+}
+
 #pragma mark - Gallery Fetch
 
 /*
