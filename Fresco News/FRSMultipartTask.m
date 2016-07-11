@@ -142,15 +142,16 @@
             
             [self.eTags addObject:eTag];
             
+            [_openConnections removeObject:task];
+            if (_openConnections.count < maxConcurrentUploads && needsData) {
+                [self next];
+            }
+            else if (!needsData) {
+                self.completionBlock(self, Nil, Nil, TRUE, Nil);
+            }
+
             if (self.delegate) {
                 [self.delegate uploadDidSucceed:self withResponse:data];
-                [_openConnections removeObject:task];
-                if (_openConnections.count < maxConcurrentUploads && needsData) {
-                    [self next];
-                }
-                else if (!needsData) {
-                    self.completionBlock(self, Nil, Nil, TRUE, Nil);
-                }
             }
         }
         

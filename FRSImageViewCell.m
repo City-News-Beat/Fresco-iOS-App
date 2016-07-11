@@ -30,6 +30,7 @@
 }
 
 -(void)updateUIForAsset { // always called on main thread
+    return;
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (_currentAsset.mediaType == PHAssetMediaTypeVideo) { // we need timing shown & updated
