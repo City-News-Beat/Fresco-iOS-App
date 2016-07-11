@@ -57,12 +57,12 @@
 -(void)next {
     // loop on background thread to not interrupt UI, but on HIGH priority to supercede any default thread needs
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        currentData = Nil;
         [self readDataInputStream];
     });
 }
 
 -(void)start {
+    [dataInputStream open];
     [self readDataInputStream];
 }
 -(void)readDataInputStream {
@@ -70,7 +70,6 @@
     if (!currentData) {
         needsData = TRUE;
         currentData = [[NSMutableData alloc] init];
-        [dataInputStream open];
     }
     
     uint8_t buffer[1024];
@@ -91,6 +90,10 @@
         if ([currentData length] >= chunkSize * megabyteDefinition) {
             [self startChunkUpload];
             triggeredUpload = TRUE;
+            if (openConnections < maxConcurrentUploads && needsData) {
+                currentData = Nil;
+                [self next];
+            }
             break;
         }
     }
@@ -121,18 +124,20 @@
     [chunkRequest setHTTPMethod:@"PUT"];
     
     [self signRequest:chunkRequest];
+    NSData *dataToUpload = currentData;
     
-    NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:currentData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:dataToUpload completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         if (error) {
-
             // put in provision for # of errors, and icing the task, and being able to resume it when asked to
             if (self.delegate) {
                 [self.delegate uploadDidFail:self withError:error response:data];
             }
         }
         else {
-            NSLog(@"CHUNK SUCCEEDED");
+            openConnections--;
+            NSLog(@"%d %d", totalConnections, self.destinationURLS.count);
+            
             NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
             NSString *eTag = headers[@"Etag"];
             
@@ -141,15 +146,8 @@
             }
             
             [self.eTags addObject:eTag];
-            
             [_openConnections removeObject:task];
-            if (_openConnections.count < maxConcurrentUploads && needsData) {
-                [self next];
-            }
-            else if (!needsData) {
-                self.completionBlock(self, Nil, Nil, TRUE, Nil);
-            }
-
+            
             if (self.delegate) {
                 [self.delegate uploadDidSucceed:self withResponse:data];
             }
