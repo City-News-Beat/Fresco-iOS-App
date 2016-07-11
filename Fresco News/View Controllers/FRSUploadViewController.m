@@ -94,6 +94,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self dismissKeyboard];
+}
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
     [self.pageControl removeFromSuperview];
     
     self.content = nil;
