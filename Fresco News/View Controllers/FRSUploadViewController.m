@@ -27,7 +27,6 @@
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UITableView *assignmentsTableView;
 @property (strong, nonatomic) UITableView *galleryTableView;
-@property (strong, nonatomic) NSArray *assignmentsArray;
 @property (strong, nonatomic) UITextView *captionTextView;
 @property (strong, nonatomic) UIView *captionContainer;
 @property (strong, nonatomic) UIView *bottomContainer;
@@ -169,14 +168,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
     PHAsset *asset = [self.content objectAtIndex:indexPath.row];
     
     if (asset.mediaType == PHAssetMediaTypeImage) {
-        NSLog(@"photo");
+        self.carouselCell.muteImageView.alpha = 0;
         [self.carouselCell removePlayers];
         [self.carouselCell loadImage:asset];
-        self.carouselCell.muteImageView.alpha = 0;
+        
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
-        NSLog(@"video");
         [self.carouselCell removePlayers];
         [self.carouselCell loadVideo:asset];
+        
         if (![self.players containsObject:asset]) {
             [self.players addObject:asset];
         }
@@ -385,6 +384,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)configureGlobalAssignmentsDrawer {
+    
+    if (!_globalAssignments || _globalAssignments.count == 0) {
+        return;
+    }
+    
     self.globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44)];
     self.globalAssignmentsDrawer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.globalAssignmentsDrawer];
@@ -449,11 +453,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    NSLog(@"self.assignmentsArray.count = %llu", (unsigned long long)self.assignmentsArray.count);
-
-    
     if (tableView == self.assignmentsTableView) {
-        return self.assignmentsArray.count;
+        return self.assignmentsArray.count +1;
     } else if (tableView == self.globalAssignmentsTableView) {
         return self.globalAssignments.count;
     } else {
@@ -586,7 +587,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)configureAssignments {
 
     [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
-    self.assignmentsArray = self.assignments;
+    self.assignmentsArray = [self.assignments mutableCopy];
+ 
+    NSLog(@"ee");
+    
 }
 
 
@@ -603,15 +607,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
 
         FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-        
-        if (globalAssignments.count > 0) {
-            self.globalAssignmentsDrawer.alpha = 0;
-            //and globalAssignments tableview.alpha?
-        } else {
-            self.globalAssignmentsDrawer.alpha = 0;
-        }
 
-        self.assignmentsArray  = [assignments copy];
+        self.assignmentsArray  = [assignments mutableCopy];
         self.globalAssignments = [globalAssignments copy];
         
         self.isFetching = NO;
@@ -623,18 +620,18 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         [delegate.managedObjectContext save:Nil];
         [delegate saveContext];
-        NSArray *nearBy = responseObject[@"nearby"];
+        NSMutableArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
-
-        if ([global count] >  0) {
-            self.globalAssignmentsDrawer.alpha = 0;
-        }
         
         self.assignmentsArray = nearBy;
+        self.globalAssignments = global;
+        
         [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
         [self configureTextView];
         [self adjustScrollViewContentSize];
+        
+        
     }];
 }
 

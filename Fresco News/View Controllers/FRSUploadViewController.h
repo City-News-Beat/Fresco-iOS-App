@@ -16,6 +16,7 @@
 @property (retain, nonatomic) UIButton *anonButton;
 @property (retain, nonatomic) UILabel *anonLabel;
 @property (strong, nonatomic) NSMutableArray *players;
+@property (strong, nonatomic) NSMutableArray *assignmentsArray;
 
 @property (nonatomic, weak) NSArray *content;
 

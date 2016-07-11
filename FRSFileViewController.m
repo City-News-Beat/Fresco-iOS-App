@@ -296,6 +296,8 @@ static NSString *imageTile = @"ImageTile";
     PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
     FRSImageViewCell *cell = (FRSImageViewCell *)[fileCollectionView cellForItemAtIndexPath:indexPath];
     
+//    CLLocation *assetLocation = representedAsset.location;
+//    [[self.uploadViewController.assignmentsArray objectAtIndex:indexPath.row] objectForKey:@"location"];
     
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
