@@ -19,6 +19,7 @@
     self.destinationURLS = destinations;
     self.progressBlock = progress;
     self.completionBlock = completion;
+    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
     
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
     sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
@@ -61,10 +62,14 @@
     });
 }
 
+-(void)start {
+    [self readDataInputStream];
+}
 -(void)readDataInputStream {
     
     if (!currentData) {
         currentData = [[NSMutableData alloc] init];
+        [dataInputStream open];
     }
     
     uint8_t buffer[1024];
@@ -74,6 +79,7 @@
     
     while ([dataInputStream hasBytesAvailable])
     {
+        NSLog(@"READING");
         length = [dataInputStream read:buffer maxLength:1024];
         dataRead += length;
         ranOnce = TRUE;
@@ -99,6 +105,7 @@
 
 // moves to next chunk based on previously succeeded blocks, does not iterate if we are above max # concurrent requests
 -(void)startChunkUpload {
+    NSLog(@"START CHUNK UPLOAD");
     openConnections++;
     totalConnections++;
     
@@ -117,12 +124,15 @@
     NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:currentData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         if (error) {
+            NSLog(@"UPLOAD FAILED");
+
             // put in provision for # of errors, and icing the task, and being able to resume it when asked to
             if (self.delegate) {
                 [self.delegate uploadDidFail:self withError:error response:data];
             }
         }
         else {
+            NSLog(@"UPLOAD SUCCEEDED");
             if (self.delegate) {
                 [self.delegate uploadDidSucceed:self withResponse:data];
                 [_openConnections removeObject:task];
@@ -133,6 +143,7 @@
         }
         
     }];
+    
     
     [task resume];
     [_openConnections addObject:task];
@@ -157,6 +168,8 @@
     if (self.progressBlock) {
         self.progressBlock(self, bytesSent, self.bytesUploaded, self.fileSizeFromMetadata);
     }
+    
+    NSLog(@"BYTES SENT");
 }
 
 // pause all open requests

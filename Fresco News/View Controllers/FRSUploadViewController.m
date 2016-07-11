@@ -726,7 +726,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
         gallery[@"posts"] = current;
         gallery[@"caption"] = self.captionTextView.text;
-
         
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
             if (!error) {
@@ -768,7 +767,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
                 for (NSString *url in post[@"urls"]) {
                     [urls addObject:[NSURL URLWithString:url]];
                 }
-                NSLog(@"%@", post[@"urls"]);
                 
                 [multipartTask createUploadFromSource:myAsset.URL destinations:urls progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
                     
