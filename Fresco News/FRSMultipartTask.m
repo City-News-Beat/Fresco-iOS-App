@@ -124,7 +124,6 @@
     NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:currentData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         if (error) {
-            NSLog(@"UPLOAD FAILED");
 
             // put in provision for # of errors, and icing the task, and being able to resume it when asked to
             if (self.delegate) {
@@ -132,8 +131,7 @@
             }
         }
         else {
-            NSLog(@"UPLOAD SUCCEEDED %@", response);
-            
+            NSLog(@"CHUNK SUCCEEDED");
             NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
             NSString *eTag = headers[@"Etag"];
             
@@ -146,7 +144,7 @@
             if (self.delegate) {
                 [self.delegate uploadDidSucceed:self withResponse:data];
                 [_openConnections removeObject:task];
-                if (openConnections < maxConcurrentUploads && needsData) {
+                if (_openConnections.count < maxConcurrentUploads && needsData) {
                     [self next];
                 }
                 else if (!needsData) {
