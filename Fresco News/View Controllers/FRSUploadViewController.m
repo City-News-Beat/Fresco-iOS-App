@@ -59,8 +59,6 @@
 
 static NSString * const cellIdentifier = @"assignment-cell";
 
-
-
 -(void)viewDidLoad {
     [super viewDidLoad];
     
@@ -78,8 +76,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-    
-    
     
     [self.galleryCollectionView reloadData];
     [self configurePageController];

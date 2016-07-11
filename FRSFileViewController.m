@@ -296,11 +296,11 @@ static NSString *imageTile = @"ImageTile";
     PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
     FRSImageViewCell *cell = (FRSImageViewCell *)[fileCollectionView cellForItemAtIndexPath:indexPath];
     
-//    CLLocation *assetLocation = representedAsset.location;
-//    [[self.uploadViewController.assignmentsArray objectAtIndex:indexPath.row] objectForKey:@"location"];
+    CLLocation *assetLocation = representedAsset.location;
     
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
+        
         [cell selected:FALSE];
     }
     else {
@@ -309,7 +309,7 @@ static NSString *imageTile = @"ImageTile";
             //should tell user why they can't select anymore cc:imogen
             return;
         }
-
+    
         if (cell.currentAVAsset) {
             self.currentTime = cell.currentAVAsset.duration;
             [self presentVideoTrimmerViewController];
@@ -326,6 +326,21 @@ static NSString *imageTile = @"ImageTile";
         [nextButton setTintColor:[UIColor frescoLightTextColor]];
         nextButton.userInteractionEnabled = NO;
     }
+    
+    NSMutableArray *locations = [[NSMutableArray alloc] init];
+    
+    for (PHAsset *asset in selectedAssets) {
+        [locations addObject:asset.location];
+    }
+    
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:1000 ofLocations:locations withCompletion:^(id responseObject, NSError *error) {
+        
+        NSLog(@"LOCATIONS ARRAY: %@", locations);
+        NSLog(@"FILTERED ASSIGNMENTS: %@", responseObject);
+        NSLog(@"ERROR: %@", error);
+        
+    }];
+
 }
 
 -(void)applicationNotAuthorized {
