@@ -338,6 +338,7 @@ static NSString *imageTile = @"ImageTile";
         NSLog(@"LOCATIONS ARRAY: %@", locations);
         NSLog(@"FILTERED ASSIGNMENTS: %@", responseObject);
         NSLog(@"ERROR: %@", error);
+        //self.uploadViewController.assignmentsArray = responseObject;
         
     }];
 
