@@ -771,7 +771,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
                 [multipartTask createUploadFromSource:myAsset.URL destinations:urls progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
                     
                 } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
-                        NSLog(@"UPLOADED: %@ %@", error, response);
+                    if (success) {
+                        NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
+                        postCompletionDigest[@"eTags"] = multipartTask.eTags;
+                        postCompletionDigest[@"uploadId"] = post[@"uploadId"];
+                        postCompletionDigest[@"key"] = post[@"key"];
+                        [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
+                        }];
+                    }
                 }];
                 
                 [multipartTask start];

@@ -68,6 +68,7 @@
 -(void)readDataInputStream {
     
     if (!currentData) {
+        needsData = TRUE;
         currentData = [[NSMutableData alloc] init];
         [dataInputStream open];
     }
@@ -79,7 +80,6 @@
     
     while ([dataInputStream hasBytesAvailable])
     {
-        NSLog(@"READING");
         length = [dataInputStream read:buffer maxLength:1024];
         dataRead += length;
         ranOnce = TRUE;
@@ -132,12 +132,25 @@
             }
         }
         else {
-            NSLog(@"UPLOAD SUCCEEDED");
+            NSLog(@"UPLOAD SUCCEEDED %@", response);
+            
+            NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
+            NSString *eTag = headers[@"Etag"];
+            
+            if (!self.eTags) {
+                self.eTags = [[NSMutableArray alloc] init];
+            }
+            
+            [self.eTags addObject:eTag];
+            
             if (self.delegate) {
                 [self.delegate uploadDidSucceed:self withResponse:data];
                 [_openConnections removeObject:task];
                 if (openConnections < maxConcurrentUploads && needsData) {
                     [self next];
+                }
+                else if (!needsData) {
+                    self.completionBlock(self, Nil, Nil, TRUE, Nil);
                 }
             }
         }

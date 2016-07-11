@@ -25,12 +25,14 @@ static int const chunkFailWaitTime = 2; // resets between chunks (otherwise beha
     NSInteger dataRead;
     NSInteger totalConnections;
     BOOL needsData;
+    
 }
 
 @property int totalParts;
 @property int completedParts;
 @property (nonatomic, retain) NSArray *destinationURLS;
 @property (nonatomic, retain, readonly) NSMutableArray *openConnections;
+@property (nonatomic, retain) NSMutableArray *eTags;
 
 -(void)startFromChunk:(NSInteger)chunk; // allows restarting (killed app etc)
 -(NSString *)contentMD5ForChunk:(NSData *)data; // used for MD5 of specific chunks (not streamed)
