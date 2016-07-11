@@ -77,10 +77,16 @@
     if(self.followButton.selected){
         [[FRSAPIClient sharedClient] followUser:self.user completion:^(id responseObject, NSError *error) {
             NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.user.uid);
+            if (self.reloadBlock) {
+                self.reloadBlock();
+            }
         }];
     }else{
         [[FRSAPIClient sharedClient] unfollowUser:self.user completion:^(id responseObject, NSError *error) {
             NSLog(@"UNFOLLOWED USER: %d %@", (error == Nil), self.user.uid);
+            if (self.reloadBlock) {
+                self.reloadBlock();
+            }
         }];
     }
 }
@@ -123,7 +129,8 @@
     [self.usernameLabel setFrame:CGRectMake(self.nameLabel.frame.size.width + self.nameLabel.frame.origin.x + 8, self.usernameLabel.frame.origin.y, self.usernameLabel.frame.size.width, self.usernameLabel.frame.size.height)];
     NSLog(@"Width %f",self.frame.size.width);
     NSLog(@"X %f",self.frame.origin.x);
-    self.followButton.frame = CGRectMake(self.frame.size.width - 40, 16, 24, 24);
+    self.followButton.frame = CGRectMake(self.frame.size.width - self.frame.size.height, 0, self.frame.size.height, self.frame.size.height);
+    self.followButton.contentMode = UIViewContentModeCenter;
 
     [self.followButton setImage:[UIImage imageNamed:@"add-follower"] forState:UIControlStateNormal];
     [self.followButton setImage:[UIImage imageNamed:@"already-following"] forState:UIControlStateSelected];

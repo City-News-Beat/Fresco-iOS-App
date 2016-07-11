@@ -12,6 +12,7 @@
 #import "FRSTabbedNavigationTitleView.h"
 #import "DGElasticPullToRefresh.h"
 #import "FRSProfileViewController.h"
+#import "FRSAwkwardView.h"
 
 #define CELL_HEIGHT 56
 
@@ -32,6 +33,11 @@
 @property (nonatomic, strong) UITableView *followingTable;
 @property (strong, nonatomic) UIButton *backTapButton;
 @property (strong, nonatomic) FRSUserTableViewCell *selectedCell;
+@property (strong, nonatomic) FRSAwkwardView *followingAwkward;
+@property (strong, nonatomic) FRSAwkwardView *followerAwkward;
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *followingSpinner;
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *followerSpinner;
+
 
 @end
 
@@ -48,9 +54,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
-    [self reloadFollowing];
-    [self reloadFollowers];
-    [self configureFollowing];
+    [self reloadData];
     
     self.scrollView.delegate = self;
 
@@ -70,7 +74,7 @@
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
-    //[FRSUser reloadUser];
+    [self reloadData];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -89,12 +93,18 @@
 #pragma mark - Override Super
 
 -(void)configureSpinner {
-    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
-    self.loadingView.tintColor = [UIColor frescoOrangeColor];
-    [self.loadingView setPullProgress:90];
-    [self.loadingView startAnimating];
-    [self.view addSubview:self.loadingView];
+    self.followerSpinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.followerSpinner.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.followerSpinner.tintColor = [UIColor frescoOrangeColor];
+    [self.followerSpinner setPullProgress:90];
+    [self.followerSpinner startAnimating];
+    [self.tableView addSubview:self.followerSpinner];
+    self.followingSpinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.followingSpinner.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.followingSpinner.tintColor = [UIColor frescoOrangeColor];
+    [self.followingSpinner setPullProgress:90];
+    [self.followingSpinner startAnimating];
+    [self.followingTable addSubview:self.followingSpinner];
 }
 
 -(void)configurePullToRefresh {
@@ -210,8 +220,12 @@
         
         self.followingArray = following;
         
+        [self.tableView reloadData];
+        [self.tableView dg_stopLoading];
         [self.followingTable reloadData];
         [self.followingTable dg_stopLoading];
+        [self.followingSpinner stopLoading];
+        self.followingSpinner.hidden = true;
 
         self.hasLoadedOnce = TRUE;
     }];
@@ -230,9 +244,21 @@
         
         self.followerArray = followers;
         
+        [self.followingTable reloadData];
+        [self.followingTable dg_stopLoading];
         [self.tableView reloadData];
         [self.tableView dg_stopLoading];
+        [self.followerSpinner stopLoading];
+        self.followerSpinner.hidden = true;
     }];
+}
+
+-(void)displayAwkwardView: (BOOL)show followingTable:(BOOL)following{
+    if(following){
+        _followingAwkward.hidden = !show;
+    }else{
+        _followerAwkward.hidden = !show;
+    }
 }
 
 -(void)handFollowersTabTapped{
@@ -260,7 +286,9 @@
 -(void)configureUI{
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self configureTableView];
+    [self configureFollowing];
     [self configureNavigationBar];
+    [self configureAwkwardViews];
 }
 
 -(void)configureFollowing {
@@ -296,7 +324,27 @@
     [self.view addSubview:self.pageScroller];
 }
 
+-(void)configureAwkwardViews{
+    self.followerAwkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64)];
+    [self.pageScroller addSubview:self.followerAwkward];
+    self.followerAwkward.hidden = true;
+    self.followerAwkward.userInteractionEnabled = false;
+    
+    self.followingAwkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 64, self.view.frame.size.width, self.view.frame.size.height-64)];
+    [self.pageScroller addSubview:self.followingAwkward];
+    self.followingAwkward.hidden = true;
+    self.followerAwkward.userInteractionEnabled = false;
+}
+
 -(void)reloadData {
+    if(!self.followerSpinner || !self.followingSpinner){
+        [self configureSpinner];
+    }else{
+        [self.followerSpinner startAnimating];
+        self.followerSpinner.hidden = false;
+        [self.followingSpinner startAnimating];
+        self.followingSpinner.hidden = false;
+    }
     [self reloadFollowing];
     [self reloadFollowers];
 }
@@ -387,6 +435,24 @@
         cell.cellHeight = CELL_HEIGHT;
         [cell configureCellWithUser:user isFollowing:[self isFollowingUser:user]];
     }
+    //Awkward View
+    if(self.followerArray.count == 0 && _hasLoadedOnce){
+        [self displayAwkwardView:true followingTable:false];
+    }else if(_hasLoadedOnce){
+        [self displayAwkwardView:false followingTable:false];
+    }
+    if(self.followingArray.count == 0 && _hasLoadedOnce){
+        [self displayAwkwardView:true followingTable:true];
+    }else if(_hasLoadedOnce){
+        [self displayAwkwardView:false followingTable:true];
+    }
+    
+    __weak typeof(self) weakSelf;
+    
+    cell.reloadBlock = ^{
+        [self reloadData];
+    };
+    
     return cell;
 }
 
