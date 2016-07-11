@@ -20,7 +20,7 @@
     self.progressBlock = progress;
     self.completionBlock = completion;
     dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
-    
+    tags = [[NSMutableDictionary alloc] init];
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
     sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
     _session = [NSURLSession sharedSession];
@@ -91,10 +91,6 @@
         if ([currentData length] >= chunkSize * megabyteDefinition) {
             [self startChunkUpload];
             triggeredUpload = TRUE;
-            if (openConnections < maxConcurrentUploads && needsData) {
-                currentData = Nil;
-                [self next];
-            }
             break;
         }
     }
@@ -114,7 +110,7 @@
     NSURL *urlToUploadTo = _destinationURLS[totalConnections];
     openConnections++;
     totalConnections++;
-
+    int connect = totalConnections;
     
     if (!urlToUploadTo) {
         return; // error
@@ -146,7 +142,11 @@
                 self.eTags = [[NSMutableArray alloc] init];
             }
             
-            [self.eTags addObject:eTag];
+            if (eTag) {
+                [tags setObject:eTag forKey:@(connect-1)];
+            }
+
+            
             [_openConnections removeObject:task];
             
             if (self.delegate) {
@@ -159,6 +159,13 @@
             
             if (openConnections == 0 && needsData == FALSE) {
                 NSLog(@"UPLOAD COMPLETE");
+                
+                for (int i = 0; i < self.destinationURLS.count; i++) {
+                    NSString *eTag = tags[@(i)];
+                    if (eTag) {
+                        [self.eTags addObject:eTag];
+                    }
+                }
                 if (self.completionBlock) {
                     self.completionBlock(self, Nil, Nil, TRUE, Nil);
                 }
