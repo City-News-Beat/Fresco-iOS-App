@@ -25,7 +25,6 @@ static int const chunkFailWaitTime = 2; // resets between chunks (otherwise beha
     NSInteger dataRead;
     NSInteger totalConnections;
     BOOL needsData;
-    
 }
 
 @property int totalParts;

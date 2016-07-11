@@ -57,7 +57,9 @@
 -(void)next {
     // loop on background thread to not interrupt UI, but on HIGH priority to supercede any default thread needs
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        [self readDataInputStream];
+        if (currentData == Nil) {
+            [self readDataInputStream];
+        }
     });
 }
 
@@ -127,17 +129,17 @@
     NSData *dataToUpload = currentData;
     
     NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:dataToUpload completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        openConnections--;
         
         if (error) {
+            NSLog(@"CHUNK ERROR: %@", error);
             // put in provision for # of errors, and icing the task, and being able to resume it when asked to
             if (self.delegate) {
                 [self.delegate uploadDidFail:self withError:error response:data];
             }
         }
         else {
-            openConnections--;
-            NSLog(@"%d %d", totalConnections, self.destinationURLS.count);
-            
+            NSLog(@"CHUNK UPLOADED");
             NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
             NSString *eTag = headers[@"Etag"];
             
@@ -150,6 +152,16 @@
             
             if (self.delegate) {
                 [self.delegate uploadDidSucceed:self withResponse:data];
+            }
+            
+            if (openConnections < maxConcurrentUploads && needsData) {
+                [self next];
+            }
+            
+            if (self.eTags.count == self.destinationURLS.count) {
+                if (self.completionBlock) {
+                    self.completionBlock(self, Nil, Nil, TRUE, Nil); // reference to task, response data, whether or not error present
+                }
             }
         }
         
