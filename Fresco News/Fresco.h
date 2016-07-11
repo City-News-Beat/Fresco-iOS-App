@@ -145,6 +145,11 @@ static NSString * const storyCellIdentifier = @"StoryCell";
 static NSString * const settingsCellIdentifier = @"SettingsCell";
 static NSString * const galleryCellIdentifier = @"gallery-cell";
 
+#define USER_NAME @"username"
+#define PASS_WORD @"password"
+#define E_MAIL @"email"
+#define FULL_NAME @"full_name"
+
 // callbacks / blocks
 typedef void (^StoryImageBlock)(NSInteger storyImageIndex);
 typedef void (^ShareSheetBlock)(NSArray *sharedContent);

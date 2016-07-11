@@ -777,6 +777,18 @@ static NSString * const cellIdentifier = @"assignment-cell";
                         postCompletionDigest[@"uploadId"] = post[@"uploadId"];
                         postCompletionDigest[@"key"] = post[@"key"];
                         [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
+                            
+                            NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
+                            postCompletionDigest[@"eTags"] = multipartTask.eTags;
+                            postCompletionDigest[@"uploadId"] = post[@"uploadId"];
+                            postCompletionDigest[@"key"] = post[@"key"];
+                            
+                            NSLog(@"%@", postCompletionDigest);
+                            
+                            [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
+                                NSLog(@"%@ %@", responseObject, error);
+                            }];
+
                         }];
                     }
                 }];

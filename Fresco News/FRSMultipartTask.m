@@ -24,7 +24,6 @@
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
     sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
     _session = [NSURLSession sharedSession];
-    
 }
 
 -(instancetype)init {
@@ -112,10 +111,10 @@
 // moves to next chunk based on previously succeeded blocks, does not iterate if we are above max # concurrent requests
 -(void)startChunkUpload {
     NSLog(@"START CHUNK UPLOAD");
+    NSURL *urlToUploadTo = _destinationURLS[totalConnections];
     openConnections++;
     totalConnections++;
-    
-    NSURL *urlToUploadTo = (totalConnections < self.destinationURLS.count)  ? self.destinationURLS[totalConnections-1] : Nil;
+
     
     if (!urlToUploadTo) {
         return; // error
@@ -158,9 +157,10 @@
                 [self next];
             }
             
-            if (self.eTags.count == self.destinationURLS.count) {
+            if (openConnections == 0 && needsData == FALSE) {
+                NSLog(@"UPLOAD COMPLETE");
                 if (self.completionBlock) {
-                    self.completionBlock(self, Nil, Nil, TRUE, Nil); // reference to task, response data, whether or not error present
+                    self.completionBlock(self, Nil, Nil, TRUE, Nil);
                 }
             }
         }
