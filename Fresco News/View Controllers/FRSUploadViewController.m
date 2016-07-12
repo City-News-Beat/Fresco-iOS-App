@@ -99,14 +99,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [self.pageControl removeFromSuperview];
-    
-    self.content = nil;
-    self.players = nil;
-    
-    [self.carouselCell removePlayers];
-    [self.carouselCell removeFromSuperview];
-    [self.galleryCollectionView reloadData];
 }
 
 
@@ -125,9 +117,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)resetFrames {
+    
     self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.assignmentsArray.count+1) *44);
     self.globalAssignmentsDrawer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44);
-    self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height+14, self.view.frame.size.width, 200 + 16);
+    if (self.globalAssignmentsTableView) {
+        self.globalAssignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.globalAssignments.count) *44);
+    }
+    self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height +14, self.view.frame.size.width, 200 + 16);
+
     [self adjustScrollViewContentSize];
 }
 
@@ -462,13 +459,27 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)configureAndShowGlobalAssignments {
     
-    //create tableview and animate in
-    //textfield should move down (*number of global assignments+1) with animation
+    self.globalAssignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.globalAssignments.count) *44)];
+    self.globalAssignmentsTableView.scrollEnabled = NO;
+    self.globalAssignmentsTableView.delegate = self;
+    self.globalAssignmentsTableView.dataSource = self;
+    self.globalAssignmentsTableView.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.globalAssignmentsTableView.showsVerticalScrollIndicator = NO;
+    self.globalAssignmentsTableView.delaysContentTouches = NO;
+    self.globalAssignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.scrollView addSubview:self.globalAssignmentsTableView];
+    
+    [self resetFrames];
 }
 
 -(void)hideAndRemoveGlobalAssignments {
-    //animate out and remove from superview in completion
-    //textfield should move up (*number of gloal assignments+1) with animation
+    
+    self.globalAssignmentsTableView.frame = CGRectMake(0, 0, self.view.frame.size.width, 0);
+    
+    [self.globalAssignmentsTableView removeFromSuperview];
+    self.globalAssignmentsTableView = nil;
+    [self resetFrames];
+    
 }
 
 
@@ -511,7 +522,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
         }
     
     } else if (tableView == self.globalAssignmentsTableView) {
-        //configure global cells
+        FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.globalAssignments objectAtIndex:indexPath.row]];
+        [cell configureCellForIndexPath:indexPath];
+        return cell;
     } else {
         FRSAssignmentPickerTableViewCell *cell;
         return cell;
@@ -553,11 +566,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     NSInteger textViewHeight = 200;
     
-    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height +14, self.view.frame.size.width, textViewHeight + 16)];
+    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height +14, self.view.frame.size.width, 200 + 16)];
     [self.scrollView addSubview:self.captionContainer];
     
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 32, textViewHeight)];
     self.captionTextView.delegate = self;
+    self.scrollView.showsVerticalScrollIndicator = NO;
     self.captionTextView.clipsToBounds = YES;
     self.captionTextView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.captionTextView.textColor = [UIColor frescoDarkTextColor];
@@ -683,6 +697,18 @@ static NSString * const cellIdentifier = @"assignment-cell";
     //Back button action
 -(void)back {
     [self.navigationController popViewControllerAnimated:YES];
+    
+    //Delay to avoid white flash
+    [self performSelector:@selector(resetView) withObject:self afterDelay:0.35];
+}
+
+-(void)resetView {
+    [self.pageControl removeFromSuperview];
+    self.content = nil;
+    self.players = nil;
+    [self.carouselCell removePlayers];
+    [self.carouselCell removeFromSuperview];
+    [self.galleryCollectionView reloadData];
 }
 
     //Next button action
