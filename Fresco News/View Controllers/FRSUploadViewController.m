@@ -145,7 +145,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
     
     self.galleryCollectionViewFlowLayout = [[UICollectionViewFlowLayout alloc] init];
-    self.galleryCollectionViewFlowLayout.itemSize = CGSizeMake(50, 50);
+    self.galleryCollectionViewFlowLayout.itemSize = CGSizeMake(200, 200);
     [self.galleryCollectionViewFlowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
     self.galleryCollectionViewFlowLayout.minimumInteritemSpacing = 0;
     self.galleryCollectionViewFlowLayout.minimumLineSpacing = 0;
@@ -157,7 +157,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.galleryCollectionView.delegate = self;
     self.galleryCollectionView.dataSource = self;
     self.galleryCollectionView.bounces = NO;
-    self.galleryCollectionView.backgroundColor = [UIColor whiteColor];
+    self.galleryCollectionView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.galleryCollectionView registerNib:[UINib nibWithNibName:@"FRSCarouselCell" bundle:nil] forCellWithReuseIdentifier:@"FRSCarouselCell"];
     [self.scrollView addSubview:self.galleryCollectionView];
 
@@ -328,6 +328,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)configureScrollView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.delegate = self;
+    self.scrollView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:self.scrollView];
 
@@ -348,6 +349,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     CGFloat offset = scrollView.contentOffset.y + 20;
     
+    
+    
     //If user is scrolling down, return and act like a normal scroll view
     if (offset > self.scrollView.contentSize.height - self.scrollView.frame.size.height) {
         return;
@@ -355,11 +358,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     //If user is scrolling up, scale with content offset.
     if (offset <= 0) {
+        NSLog(@"offset = %f", offset);
         self.galleryCollectionView.frame = CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset));
         [self.galleryCollectionViewFlowLayout invalidateLayout];
     }
-    
 }
+
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
@@ -556,6 +560,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)resetOtherCells {
     for (NSInteger i = 0; i < self.assignmentsArray.count + 1; i++){
         FRSAssignmentPickerTableViewCell *cell = [self.assignmentsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        cell.isSelectedAssignment = NO;
+    }
+    
+    for (NSInteger i = 0; i < self.globalAssignments.count + 1; i++){
+        FRSAssignmentPickerTableViewCell *cell = [self.globalAssignmentsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.isSelectedAssignment = NO;
     }
 }

@@ -69,9 +69,9 @@
         self.titleLabel.text = @"No assignment";
     }
     
-    if (indexPath.row == 0) {
-        self.isSelectedAssignment = YES;
-    }
+//    if (indexPath.row == 0) {
+//        self.isSelectedAssignment = YES;
+//    }
 }
 
 -(BOOL)isSelectedAssignment {
