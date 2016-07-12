@@ -127,7 +127,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)resetFrames {
     self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.assignmentsArray.count+1) *44);
     self.globalAssignmentsDrawer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44);
-    self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, 200 + 16);
+    self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height+14, self.view.frame.size.width, 200 + 16);
     [self adjustScrollViewContentSize];
 }
 
@@ -337,7 +337,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)adjustScrollViewContentSize {
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height +44);
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height +38);
     
     if (self.scrollView.contentSize.height <= self.view.frame.size.height) {
         self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.view.frame.size.height +1);
@@ -553,10 +553,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     NSInteger textViewHeight = 200;
     
-    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, textViewHeight + 16)];
+    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height +14, self.view.frame.size.width, textViewHeight + 16)];
     [self.scrollView addSubview:self.captionContainer];
     
-    self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, textViewHeight)];
+    self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 32, textViewHeight)];
     self.captionTextView.delegate = self;
     self.captionTextView.clipsToBounds = YES;
     self.captionTextView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -565,11 +565,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.captionTextView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.captionContainer addSubview:self.captionTextView];
     
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(-16, 0, self.view.frame.size.width, 0.5)];
-    line.backgroundColor = [UIColor frescoShadowColor];
-    [self.captionContainer addSubview:line];
+//    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(-16, 0, self.view.frame.size.width, 0.5)];
+//    line.backgroundColor = [UIColor frescoShadowColor];
+//    [self.captionContainer addSubview:line];
     
-    self.placeholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 17)];
+    self.placeholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 32, 17)];
     self.placeholderLabel.text = @"What's happening?";
     self.placeholderLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.placeholderLabel.textColor = [UIColor frescoLightTextColor];

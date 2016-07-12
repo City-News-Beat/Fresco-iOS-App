@@ -343,7 +343,7 @@ static NSString *imageTile = @"ImageTile";
             self.uploadViewController.assignmentsArray = [[NSMutableArray alloc] init];
         }
         
-        self.uploadViewController.assignmentsArray = [responseObject objectForKey:@"nearby"];
+        self.uploadViewController.assignmentsArray = [responseObject objectForKey:@"global"];
         self.uploadViewController.globalAssignments = [responseObject objectForKey:@"global"];
         NSLog(@"NEAR BY: %@", self.uploadViewController.assignmentsArray);
         NSLog(@"GLOBAL: %@", self.uploadViewController.globalAssignments);
