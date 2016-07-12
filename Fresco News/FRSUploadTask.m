@@ -51,7 +51,6 @@
     
     NSMutableURLRequest *uploadRequest = [NSMutableURLRequest requestWithURL:self.destinationURL];
     [uploadRequest setHTTPMethod:@"PUT"];
-    [self signRequest:uploadRequest];
     
     if (self.requestData) {
         
@@ -142,10 +141,6 @@
 
 -(void)signRequest:(NSMutableURLRequest *)request {
     
-    return;
-    
-    NSString *authorizationString = [self authenticationToken];
-    [request setValue:authorizationString forHTTPHeaderField:@"Authorization"];
 }
 
 - (void)URLSession:(NSURLSession *)urlSession task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
@@ -165,20 +160,6 @@
     if (self.delegate) {
         [self.delegate uploadDidProgress:self bytesSent:bytesSent totalBytes:totalBytesExpectedToSend];
     }
-}
-
--(NSString *)authenticationToken {
-
-    NSArray *allAccounts = [SSKeychain accountsForService:serviceName];
-    
-    if ([allAccounts count] == 0) {
-        return [NSString stringWithFormat:@"Basic: %@", clientAuthorization]; // client as default
-    }
-    
-    NSDictionary *credentialsDictionary = [allAccounts firstObject];
-    NSString *accountName = credentialsDictionary[kSSKeychainAccountKey];
-    
-    return [NSString stringWithFormat:@"Bearer: %@", [SSKeychain passwordForService:serviceName account:accountName]];
 }
 
 @end
