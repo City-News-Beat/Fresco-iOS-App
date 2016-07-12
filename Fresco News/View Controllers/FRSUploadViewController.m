@@ -788,7 +788,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
                             [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
                                 NSLog(@"%@ %@", responseObject, error);
                             }];
-
                         }];
                     }
                 }];

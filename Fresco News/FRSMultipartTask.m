@@ -148,9 +148,6 @@
                 [tags setObject:eTag forKey:@(connect-1)];
             }
 
-            
-            [_openConnections removeObject:task];
-            
             if (weakSelf.delegate) {
                 [weakSelf.delegate uploadDidSucceed:weakSelf withResponse:data];
             }
@@ -176,10 +173,7 @@
         
     }];
     
-    
     [task resume];
-    [_openConnections addObject:task];
-    
     
     currentData = Nil;
     // if we have open stream & below max connections
