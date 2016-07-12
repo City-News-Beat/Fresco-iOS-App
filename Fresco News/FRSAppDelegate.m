@@ -290,7 +290,7 @@
     NSDictionary *installationDigest = [[FRSAPIClient sharedClient] currentInstallation];
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"installation":installationDigest} completion:^(id responseObject, NSError *error) {
-        NSLog(@"Updated Installation: %@ %@", responseObject, error);
+        NSLog(@"Updated user installation");
     }];
 }
 

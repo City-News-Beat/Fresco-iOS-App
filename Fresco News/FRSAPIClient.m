@@ -331,7 +331,6 @@
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
-    NSLog(@"ENDPOINT: %@", endpoint);
     
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -788,7 +787,6 @@
 
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
-    NSLog(@"ENDPOINT: %@", endpoint);
     
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -819,7 +817,6 @@
 
 -(void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
-    NSLog(@"ENDPOINT: %@", endpoint);
 
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
