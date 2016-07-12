@@ -814,6 +814,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                             postCompletionDigest[@"uploadId"] = post[@"uploadId"];
                             postCompletionDigest[@"key"] = post[@"key"];
                             [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
+                                NSLog(@"%@ %@", responseObject, error);
                             }];
                         }
                     }
