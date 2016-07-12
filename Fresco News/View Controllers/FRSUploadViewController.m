@@ -87,6 +87,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     self.players = [[NSMutableArray alloc] init];
     
+    [self resetFrames];
+    
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -119,6 +122,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureNavigationBar];
     [self configureAssignments]; //Tableview configures are called here
     [self configureBottomBar];
+}
+
+-(void)resetFrames {
+    self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.assignmentsArray.count+1) *44);
+    self.globalAssignmentsDrawer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44);
+    self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, 200 + 16);
+    [self adjustScrollViewContentSize];
 }
 
 -(void)checkButtonStates {
@@ -492,7 +502,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     if (tableView == self.assignmentsTableView) {
         if (indexPath.row != self.assignmentsArray.count) {
-            FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:0]];
+            FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:indexPath.row]];
             [cell configureCellForIndexPath:indexPath];
             return cell;
         } else {
