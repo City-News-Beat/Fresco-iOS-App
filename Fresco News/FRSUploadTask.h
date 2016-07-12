@@ -43,8 +43,8 @@ typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success)
 @property (nonatomic, retain) NSURL *assetURL;
 @property (nonatomic, retain) NSURL *destinationURL;
 
-@property TransferCompletionBlock completionBlock;
-@property TransferProgressBlock progressBlock;
+@property (nonatomic, copy) TransferCompletionBlock completionBlock;
+@property (nonatomic, copy) TransferProgressBlock progressBlock;
 @property BOOL hasStarted;
 -(void)createUploadFromSource:(NSURL *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion;
 -(void)createUploadFromData:(NSData *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion;

@@ -19,11 +19,11 @@
     self.destinationURLS = destinations;
     self.progressBlock = progress;
     self.completionBlock = completion;
-    
-    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
-    sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
-    _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
-    
+    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
+    tags = [[NSMutableDictionary alloc] init];
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
+    _session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 }
 
 -(instancetype)init {
@@ -56,14 +56,20 @@
 -(void)next {
     // loop on background thread to not interrupt UI, but on HIGH priority to supercede any default thread needs
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        if (!currentData) // don't want multiple running loops
+        if (currentData == Nil) {
             [self readDataInputStream];
+        }
     });
 }
 
+-(void)start {
+    [dataInputStream open];
+    [self readDataInputStream];
+}
 -(void)readDataInputStream {
     
     if (!currentData) {
+        needsData = TRUE;
         currentData = [[NSMutableData alloc] init];
     }
     
@@ -75,7 +81,7 @@
     while ([dataInputStream hasBytesAvailable])
     {
         length = [dataInputStream read:buffer maxLength:1024];
-        dataRead += length;
+       // dataRead += length;
         ranOnce = TRUE;
         
         if (length > 0)
@@ -94,15 +100,17 @@
         [self startChunkUpload];
         needsData = FALSE;
         [dataInputStream close];
+        NSLog(@"LAST CHUNK");
     }
 }
 
 // moves to next chunk based on previously succeeded blocks, does not iterate if we are above max # concurrent requests
 -(void)startChunkUpload {
+    NSLog(@"START CHUNK UPLOAD");
+    NSURL *urlToUploadTo = _destinationURLS[totalConnections];
     openConnections++;
     totalConnections++;
-    
-    NSURL *urlToUploadTo = (totalConnections < self.destinationURLS.count)  ? self.destinationURLS[totalConnections-1] : Nil;
+    NSInteger connect = totalConnections;
     
     if (!urlToUploadTo) {
         return; // error
@@ -112,22 +120,53 @@
     NSMutableURLRequest *chunkRequest = [NSMutableURLRequest requestWithURL:urlToUploadTo];
     [chunkRequest setHTTPMethod:@"PUT"];
     
-    [self signRequest:chunkRequest];
+    __block NSData *dataToUpload = [currentData copy];
+    currentData = Nil;
+    __weak typeof(self) weakSelf = self;
     
-    NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:currentData completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:dataToUpload completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        openConnections--;
         
         if (error) {
+            NSLog(@"CHUNK ERROR: %@", error);
             // put in provision for # of errors, and icing the task, and being able to resume it when asked to
-            if (self.delegate) {
-                [self.delegate uploadDidFail:self withError:error response:data];
+            if (weakSelf.delegate) {
+                [weakSelf.delegate uploadDidFail:self withError:error response:data];
             }
         }
         else {
-            if (self.delegate) {
-                [self.delegate uploadDidSucceed:self withResponse:data];
-                [_openConnections removeObject:task];
-                if (openConnections < maxConcurrentUploads && needsData) {
-                    [self next];
+            dataToUpload = Nil;
+            NSLog(@"CHUNK UPLOADED");
+            NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
+            NSString *eTag = headers[@"Etag"];
+            
+            if (!weakSelf.eTags) {
+                weakSelf.eTags = [[NSMutableArray alloc] init];
+            }
+            
+            if (eTag) {
+                [tags setObject:eTag forKey:@(connect-1)];
+            }
+
+            if (weakSelf.delegate) {
+                [weakSelf.delegate uploadDidSucceed:weakSelf withResponse:data];
+            }
+            
+            if (openConnections < maxConcurrentUploads && needsData) {
+                [weakSelf next];
+            }
+            
+            if (openConnections == 0 && needsData == FALSE) {
+                NSLog(@"UPLOAD COMPLETE");
+                
+                for (int i = 0; i < self.destinationURLS.count; i++) {
+                    NSString *eTag = tags[@(i)];
+                    if (eTag) {
+                        [weakSelf.eTags addObject:eTag];
+                    }
+                }
+                if (weakSelf.completionBlock) {
+                    weakSelf.completionBlock(self, Nil, Nil, TRUE, Nil);
                 }
             }
         }
@@ -135,8 +174,6 @@
     }];
     
     [task resume];
-    [_openConnections addObject:task];
-    
     
     currentData = Nil;
     // if we have open stream & below max connections
