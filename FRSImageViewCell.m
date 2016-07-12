@@ -19,23 +19,25 @@
     _currentAsset = asset;
     //imageView.image = Nil;
     
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_fileLoader getDataFromAsset:_currentAsset callback:^(UIImage *image, AVAsset *video, PHAssetMediaType mediaType, NSError *error) {
-                imageView.image = image;
-                _currentAVAsset = video; // nils out if image
-                [self updateUIForAsset]; // timing etc
-        }];
-    });
+    PHImageManager *manager = [PHImageManager defaultManager];
+    [manager requestImageForAsset:asset
+                       targetSize:CGSizeMake(100.0, 100.0)
+                      contentMode:PHImageContentModeAspectFill
+                          options:nil
+                    resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            imageView.image = result;
+                            [self updateUIForAsset];
+                        });
+                }];
 }
 
 -(void)updateUIForAsset { // always called on main thread
-    return;
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (_currentAsset.mediaType == PHAssetMediaTypeVideo) { // we need timing shown & updated
             timeLabel.hidden = FALSE;
-            timeLabel.text = [self readableTimeForSeconds:CMTimeGetSeconds(_currentAVAsset.duration) milliseconds:FALSE];
+            timeLabel.text = [self readableTimeForSeconds:_currentAsset.duration milliseconds:FALSE];
         }
         else { // we need timing hidden
             timeLabel.hidden = TRUE;

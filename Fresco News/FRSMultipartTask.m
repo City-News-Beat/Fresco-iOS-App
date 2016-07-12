@@ -194,8 +194,6 @@
     if (self.progressBlock) {
         self.progressBlock(self, bytesSent, self.bytesUploaded, self.fileSizeFromMetadata);
     }
-    
-    NSLog(@"BYTES SENT");
 }
 
 // pause all open requests
