@@ -81,7 +81,7 @@
     while ([dataInputStream hasBytesAvailable])
     {
         length = [dataInputStream read:buffer maxLength:1024];
-        dataRead += length;
+       // dataRead += length;
         ranOnce = TRUE;
         
         if (length > 0)
@@ -110,7 +110,7 @@
     NSURL *urlToUploadTo = _destinationURLS[totalConnections];
     openConnections++;
     totalConnections++;
-    int connect = totalConnections;
+    NSInteger connect = totalConnections;
     
     if (!urlToUploadTo) {
         return; // error
@@ -120,8 +120,9 @@
     NSMutableURLRequest *chunkRequest = [NSMutableURLRequest requestWithURL:urlToUploadTo];
     [chunkRequest setHTTPMethod:@"PUT"];
     
-    [self signRequest:chunkRequest];
-    __block NSData *dataToUpload = currentData;
+    __block NSData *dataToUpload = [currentData copy];
+    currentData = Nil;
+    __weak typeof(self) weakSelf = self;
     
     NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:dataToUpload completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         openConnections--;
@@ -129,8 +130,8 @@
         if (error) {
             NSLog(@"CHUNK ERROR: %@", error);
             // put in provision for # of errors, and icing the task, and being able to resume it when asked to
-            if (self.delegate) {
-                [self.delegate uploadDidFail:self withError:error response:data];
+            if (weakSelf.delegate) {
+                [weakSelf.delegate uploadDidFail:self withError:error response:data];
             }
         }
         else {
@@ -139,8 +140,8 @@
             NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
             NSString *eTag = headers[@"Etag"];
             
-            if (!self.eTags) {
-                self.eTags = [[NSMutableArray alloc] init];
+            if (!weakSelf.eTags) {
+                weakSelf.eTags = [[NSMutableArray alloc] init];
             }
             
             if (eTag) {
@@ -150,12 +151,12 @@
             
             [_openConnections removeObject:task];
             
-            if (self.delegate) {
-                [self.delegate uploadDidSucceed:self withResponse:data];
+            if (weakSelf.delegate) {
+                [weakSelf.delegate uploadDidSucceed:weakSelf withResponse:data];
             }
             
             if (openConnections < maxConcurrentUploads && needsData) {
-                [self next];
+                [weakSelf next];
             }
             
             if (openConnections == 0 && needsData == FALSE) {
@@ -164,11 +165,11 @@
                 for (int i = 0; i < self.destinationURLS.count; i++) {
                     NSString *eTag = tags[@(i)];
                     if (eTag) {
-                        [self.eTags addObject:eTag];
+                        [weakSelf.eTags addObject:eTag];
                     }
                 }
-                if (self.completionBlock) {
-                    self.completionBlock(self, Nil, Nil, TRUE, Nil);
+                if (weakSelf.completionBlock) {
+                    weakSelf.completionBlock(self, Nil, Nil, TRUE, Nil);
                 }
             }
         }
