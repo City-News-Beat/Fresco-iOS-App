@@ -21,9 +21,9 @@
     self.completionBlock = completion;
     dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
     tags = [[NSMutableDictionary alloc] init];
-    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
-    sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
-    _session = [NSURLSession sharedSession];
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
+    _session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 }
 
 -(instancetype)init {
