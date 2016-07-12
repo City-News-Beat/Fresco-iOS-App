@@ -391,11 +391,13 @@
     [geoData setObject:@"MultiPoint" forKey:@"type"];
 
     
-    NSMutableArray *coordinates = [[NSMutableArray alloc] init];
+    NSMutableDictionary *coordinates = [[NSMutableDictionary alloc] init];
     
+    int counter = 0;
     for (CLLocation *loc in location) {
         NSArray *coordinateLocation = @[@(loc.coordinate.longitude), @(loc.coordinate.latitude)];
-        [coordinates addObject:coordinateLocation];
+        [coordinates setObject:coordinateLocation forKey:[NSNumber numberWithInt:counter]];
+        counter++;
     }
     
     [geoData setObject:coordinates forKey:@"coordinates"];

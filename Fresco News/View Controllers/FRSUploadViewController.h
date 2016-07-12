@@ -17,7 +17,10 @@
 @property (retain, nonatomic) UILabel *anonLabel;
 @property (strong, nonatomic) NSMutableArray *players;
 @property (strong, nonatomic) NSMutableArray *assignmentsArray;
+@property (strong, nonatomic) NSArray *globalAssignments;
 
 @property (nonatomic, weak) NSArray *content;
+
+-(void)configureAssignmentsTableView;
 
 @end
