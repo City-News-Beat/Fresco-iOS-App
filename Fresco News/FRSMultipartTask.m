@@ -121,7 +121,7 @@
     [chunkRequest setHTTPMethod:@"PUT"];
     
     [self signRequest:chunkRequest];
-    NSData *dataToUpload = currentData;
+    __block NSData *dataToUpload = currentData;
     
     NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:dataToUpload completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         openConnections--;
@@ -134,6 +134,7 @@
             }
         }
         else {
+            dataToUpload = Nil;
             NSLog(@"CHUNK UPLOADED");
             NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
             NSString *eTag = headers[@"Etag"];

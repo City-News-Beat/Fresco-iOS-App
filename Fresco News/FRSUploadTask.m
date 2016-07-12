@@ -51,7 +51,6 @@
     
     NSMutableURLRequest *uploadRequest = [NSMutableURLRequest requestWithURL:self.destinationURL];
     [uploadRequest setHTTPMethod:@"PUT"];
-    [self signRequest:uploadRequest];
     
     if (self.requestData) {
         
