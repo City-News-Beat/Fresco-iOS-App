@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface FRSAwkwardView : UIView
-
+@property (strong, nonatomic) UILabel *messageLabel;
 @end
