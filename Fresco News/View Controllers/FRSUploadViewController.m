@@ -360,7 +360,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     if (offset <= 0) {
         NSLog(@"OFFSET: %f", offset);
         self.galleryCollectionView.clipsToBounds = NO;
-        [self.galleryCollectionView setFrame:CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset) )];
+        [self.galleryCollectionView setFrame:CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset))];
 //        [self.galleryCollectionView.collectionViewLayout invalidateLayout];
     }
 }
@@ -547,6 +547,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if (cell.outlets.count > 1) {
+        NSLog(@"OUTLETS IN THE ASIGNMENT");
+//        [cell configureOutletCellForIndexPath:indexPath];
+        
+    }
     
     if (cell.isSelectedAssignment){
         cell.isSelectedAssignment = NO;

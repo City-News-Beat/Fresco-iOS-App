@@ -29,7 +29,7 @@
 
 }
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment {
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSDictionary *)assignment {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
     if (self) {
@@ -38,7 +38,6 @@
         
         self.selectionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24)];
         
-//        [self toggleImage];
         self.isSelectedAssignment = FALSE;
         
         [self addSubview:self.selectionImageView];
@@ -47,12 +46,11 @@
         self.titleLabel.textColor = [UIColor frescoDarkTextColor];
         [self addSubview:self.titleLabel];
         
-        
         NSArray *outlets = [self.assignment objectForKey:@"outlets"];
         if (outlets.count > 1) {
-            NSLog(@"more than one outlet for assignment %@", [self.assignment objectForKey:@"title"]);
+            self.outlets = outlets;
+            //NSLog(@"more than one outlet for assignment %@", [self.assignment objectForKey:@"title"]);
         }
-
     }
     
     return self;
@@ -100,38 +98,6 @@
     self.titleLabel.text = nil;
     self.isSelectedAssignment = NO;
 }
-
-
-
-
-//-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier outlet:(NSArray *)outlet {
-//    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-//    
-//    if (self) {
-//        
-//        NSArray *outlets = [self.assignment objectForKey:@"outlets"];
-//        
-//        if (outlets.count > 1) {
-//            NSLog(@"more than one outlet");
-//        }
-//        
-//        //self.outlet = outlet;
-//        self.backgroundColor = [UIColor frescoBackgroundColorLight];
-//        self.selectionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24)];
-//        
-//        self.isSelectedAssignment = NO;
-//        
-//        [self addSubview:self.selectionImageView];
-//        
-//        [self addSubview:self.selectionImageView];
-//        
-//        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(32, 12, 100, 20)];
-//        self.titleLabel.textColor = [UIColor frescoDarkTextColor];
-//        [self addSubview:self.titleLabel];
-//    }
-//    
-//    return self;
-//}
 
 
 -(void)configureOutletCellForIndexPath:(NSIndexPath *)indexPath {
