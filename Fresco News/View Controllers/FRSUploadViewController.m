@@ -145,14 +145,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
     
     self.galleryCollectionViewFlowLayout = [[UICollectionViewFlowLayout alloc] init];
-    self.galleryCollectionViewFlowLayout.itemSize = CGSizeMake(200, 200);
+    self.galleryCollectionViewFlowLayout.itemSize = CGSizeMake(50, 50);
     [self.galleryCollectionViewFlowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
     self.galleryCollectionViewFlowLayout.minimumInteritemSpacing = 0;
     self.galleryCollectionViewFlowLayout.minimumLineSpacing = 0;
     
     self.galleryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.galleryCollectionViewHeight) collectionViewLayout:self.galleryCollectionViewFlowLayout];
     self.galleryCollectionView.showsHorizontalScrollIndicator = NO;
-    self.galleryCollectionView.collectionViewLayout = self.galleryCollectionViewFlowLayout;//?
+    self.galleryCollectionView.collectionViewLayout = self.galleryCollectionViewFlowLayout;
     self.galleryCollectionView.pagingEnabled = YES;
     self.galleryCollectionView.delegate = self;
     self.galleryCollectionView.dataSource = self;
@@ -358,9 +358,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     //If user is scrolling up, scale with content offset.
     if (offset <= 0) {
-        NSLog(@"offset = %f", offset);
-        self.galleryCollectionView.frame = CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset));
-        [self.galleryCollectionViewFlowLayout invalidateLayout];
+        NSLog(@"OFFSET: %f", offset);
+        [self.galleryCollectionView setFrame:CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset) )];
+//        [self.galleryCollectionView.collectionViewLayout invalidateLayout];
     }
 }
 

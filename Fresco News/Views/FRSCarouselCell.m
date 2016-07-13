@@ -25,7 +25,7 @@
     
     [self removePlayers];
     
-    if (!imageView) {
+    if (!imageView) {        
         imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
         [self addSubview:imageView];
@@ -40,6 +40,8 @@
                  dispatch_async(dispatch_get_main_queue(), ^{
                      imageView.image = result;
                      imageView.contentMode = UIViewContentModeScaleAspectFill;
+                     
+                     //[self constrainSubview:imageView ToBottomOfParentView:self]
                      //self.asset = asset;
                  });
              }];
@@ -150,7 +152,7 @@
 
 #pragma mark - Constraints
 
--(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
+-(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView {
     
     subView.translatesAutoresizingMaskIntoConstraints = NO;
     
@@ -185,8 +187,8 @@
                                   constant:0];
     
     [parentView addConstraint:trailing];
-    [parentView addConstraint:bottom];
     [parentView addConstraint:leading];
+    [parentView addConstraint:bottom];
     
 }
 
