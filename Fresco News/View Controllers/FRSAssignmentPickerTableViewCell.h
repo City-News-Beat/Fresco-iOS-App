@@ -13,6 +13,7 @@
 
 @property (strong, nonatomic) NSDictionary *assignment;
 @property (nonatomic) BOOL isSelectedAssignment;
+@property (strong, nonatomic) NSArray *outlet;
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment;
 -(void)configureAssignmentCellForIndexPath:(NSIndexPath *)indexPath;
