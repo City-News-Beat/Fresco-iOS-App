@@ -296,9 +296,11 @@ static NSString *imageTile = @"ImageTile";
     PHAsset *representedAsset = [fileLoader assetAtIndex:indexPath.row]; // pulls asset from array
     FRSImageViewCell *cell = (FRSImageViewCell *)[fileCollectionView cellForItemAtIndexPath:indexPath];
     
+    CLLocation *assetLocation = representedAsset.location;
     
     if ([selectedAssets containsObject:representedAsset]) {
         [selectedAssets removeObject:representedAsset];
+        
         [cell selected:FALSE];
     }
     else {
@@ -307,7 +309,7 @@ static NSString *imageTile = @"ImageTile";
             //should tell user why they can't select anymore cc:imogen
             return;
         }
-
+    
         if (cell.currentAVAsset) {
             self.currentTime = cell.currentAVAsset.duration;
             [self presentVideoTrimmerViewController];
@@ -324,6 +326,29 @@ static NSString *imageTile = @"ImageTile";
         [nextButton setTintColor:[UIColor frescoLightTextColor]];
         nextButton.userInteractionEnabled = NO;
     }
+    
+    NSMutableArray *locations = [[NSMutableArray alloc] init];
+    
+    for (PHAsset *asset in selectedAssets) {
+        [locations addObject:asset.location];
+    }
+    
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:100 ofLocations:locations withCompletion:^(id responseObject, NSError *error) {
+        
+        NSLog(@"LOCATIONS ARRAY: %@", locations);
+        NSLog(@"FILTERED ASSIGNMENTS: %@", [responseObject objectForKey:@"nearby"]);
+        NSLog(@"ERROR: %@", error);
+        
+        if (!self.uploadViewController.assignmentsArray) {
+            self.uploadViewController.assignmentsArray = [[NSMutableArray alloc] init];
+        }
+        
+        self.uploadViewController.assignmentsArray = [responseObject objectForKey:@"nearby"];
+        self.uploadViewController.globalAssignments = [responseObject objectForKey:@"global"];
+        NSLog(@"NEAR BY: %@", self.uploadViewController.assignmentsArray);
+        NSLog(@"GLOBAL: %@", self.uploadViewController.globalAssignments);
+
+    }];
 }
 
 -(void)applicationNotAuthorized {

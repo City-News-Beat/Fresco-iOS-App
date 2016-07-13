@@ -46,6 +46,7 @@
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 12, 100, 20)];
         self.titleLabel.textColor = [UIColor frescoDarkTextColor];
         [self addSubview:self.titleLabel];
+
     }
     
     return self;
@@ -65,8 +66,12 @@
         self.titleLabel.text = [self.assignment objectForKey:@"caption"];
         
     } else {
-        self.titleLabel.text = @"Untitled Assignment";
+        self.titleLabel.text = @"No assignment";
     }
+    
+//    if (indexPath.row == 0) {
+//        self.isSelectedAssignment = YES;
+//    }
 }
 
 -(BOOL)isSelectedAssignment {
