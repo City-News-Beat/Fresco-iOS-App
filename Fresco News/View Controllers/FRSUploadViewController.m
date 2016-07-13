@@ -51,6 +51,7 @@
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) UIImageView *muteImageView;
 @property (strong, nonatomic) UIImageView *globalAssignmentsCaret;
+@property (nonatomic) NSInteger numberOfRowsInAssignmentTableView;
 
 @property NSInteger galleryCollectionViewHeight;
 
@@ -87,8 +88,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     self.players = [[NSMutableArray alloc] init];
     
+    self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count +1;
     [self resetFrames];
-    
     
 }
 
@@ -118,7 +119,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)resetFrames {
     
-    self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.assignmentsArray.count+1) *44);
+    NSLog(@"RESET FRAMES: %ld", self.numberOfRowsInAssignmentTableView);
+    
+    self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, self.numberOfRowsInAssignmentTableView *44);
     self.globalAssignmentsDrawer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44);
     if (self.globalAssignmentsTableView) {
         self.globalAssignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.globalAssignments.count) *44);
@@ -393,7 +396,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.assignmentsTableView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.assignmentsTableView.showsVerticalScrollIndicator = NO;
     self.assignmentsTableView.delaysContentTouches = NO;
-    self.assignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    self.assignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     self.dismissKeyboardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     self.dismissKeyboardGestureRecognizer.enabled = NO;
@@ -493,7 +496,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.assignmentsTableView) {
-        NSLog(@"self.assignmentsArray.count = %lu", (unsigned long)self.assignmentsArray.count);
+        
+        NSLog(@"NUMBER OF ROWS IN ASSIGNMENT TV = %lu", self.numberOfRowsInAssignmentTableView);
         return self.assignmentsArray.count +1;
     } else if (tableView == self.globalAssignmentsTableView) {
         return self.globalAssignments.count;
@@ -503,7 +507,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     
     [cell configureAssignmentCellForIndexPath:indexPath];
 }
@@ -523,6 +526,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         if (indexPath.row != self.assignmentsArray.count) {
             FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:indexPath.row]];
             [cell configureAssignmentCellForIndexPath:indexPath];
+
             return cell;
         } else {
             FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
@@ -548,21 +552,28 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    if (cell.outlets.count > 1) {
-        NSLog(@"OUTLETS IN THE ASIGNMENT");
-//        [cell configureOutletCellForIndexPath:indexPath];
-        
-    }
+
     
     if (cell.isSelectedAssignment){
         cell.isSelectedAssignment = NO;
         self.selectedAssignment = nil;
-    }
-    else {
+        
+        if (cell.outlets.count > 1) {
+            self.numberOfRowsInAssignmentTableView = self.numberOfRowsInAssignmentTableView - cell.outlets.count;
+            [self resetFrames];
+        }
+        
+    } else {
         [self resetOtherCells];
         cell.isSelectedAssignment = YES;
         if (self.selectedAssignment != nil) {
             self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
+        }
+        
+        if (cell.outlets.count > 1) {
+
+            self.numberOfRowsInAssignmentTableView = self.numberOfRowsInAssignmentTableView + cell.outlets.count;
+            [self resetFrames];
         }
     }
 }

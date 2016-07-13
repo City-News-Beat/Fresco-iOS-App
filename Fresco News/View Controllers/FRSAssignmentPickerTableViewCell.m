@@ -13,7 +13,6 @@
 
 @interface FRSAssignmentPickerTableViewCell ()
 
-@property (strong, nonatomic) UIImageView *selectionImageView;
 @property (strong, nonatomic) UILabel *titleLabel;
 
 @end
@@ -33,7 +32,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
     if (self) {
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
+        self.backgroundColor = [UIColor clearColor];
         self.assignment = assignment;
         
         self.selectionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24)];
@@ -49,7 +48,6 @@
         NSArray *outlets = [self.assignment objectForKey:@"outlets"];
         if (outlets.count > 1) {
             self.outlets = outlets;
-            //NSLog(@"more than one outlet for assignment %@", [self.assignment objectForKey:@"title"]);
         }
     }
     
@@ -87,6 +85,11 @@
     
     if (self.isSelectedAssignment) {
         self.selectionImageView.image = [UIImage imageNamed:@"check-box-circle-filled"];
+        
+        if (self.outlets.count > 1) {
+            self.selectionImageView.image = [UIImage imageNamed:@"question"];
+        }
+        
         self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
     } else {
         self.selectionImageView.image = [UIImage imageNamed:@"check-box-circle-outline"];
