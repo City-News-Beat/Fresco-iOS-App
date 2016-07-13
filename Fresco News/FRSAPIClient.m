@@ -354,7 +354,7 @@
                // NSLog(@"Sent Location");
             }
             else {
-                NSLog(@"Location Error: %@", error);
+                NSLog(@"Location Error: %ld", (long)error.code);
             }
         }];
     });
