@@ -27,6 +27,10 @@ static NSString * const smallImageSize = @"320x";
 static NSString * const mediumImageSize = @"600x";
 static NSString * const largeImageSize = @""; // actual image
 
+// file upload
+static int const chunkSize = 5;
+static int const megabyteDefinition = 1048576;
+
 // notifications
 static NSString * const kStatusBarTappedNotification = @"statusBarTappedNotification";
 

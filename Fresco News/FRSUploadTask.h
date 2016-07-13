@@ -51,7 +51,6 @@ typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success)
 
 // were going to be internal but needed in all classes inheriting this structure
 -(void)signRequest:(NSMutableURLRequest *)request;
--(NSString *)authenticationToken;
 -(NSString *)contentMD5; // md5 of entire file, streamed to reduce memory load
 
 -(void)start;

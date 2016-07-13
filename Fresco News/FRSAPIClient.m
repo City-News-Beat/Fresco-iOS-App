@@ -186,7 +186,7 @@
     signedInRequest.predicate = signedInPredicate;
     
     // get context from app deleegate (hate this dependency but no need to re-write rn to move up)
-    NSManagedObjectContext *context = [FRSFileUploadManager uploaderContext]; // temp (replace with internal or above method
+    NSManagedObjectContext *context = [self managedObjectContext]; // temp (replace with internal or above method
     
     // no need to sort response, because theoretically there is 1
     NSError *userFetchError;
