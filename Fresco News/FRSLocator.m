@@ -207,6 +207,15 @@
 /*
  Handle a location update from the location manager
  */
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    stopTimer = [NSTimer timerWithTimeInterval:10
+                                        target:self
+                                      selector:@selector(restartActiveUpdates)
+                                      userInfo:Nil
+                                       repeats:FALSE];
+}
+
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
     if ([locations count] == 0) {
