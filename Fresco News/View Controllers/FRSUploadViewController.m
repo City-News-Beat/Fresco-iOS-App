@@ -416,6 +416,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
     label.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
     label.text = [NSString stringWithFormat:@"%ld global assignments", self.globalAssignments.count];
+    if (self.globalAssignments.count == 1) {
+        label.text = [NSString stringWithFormat:@"%ld global assignment", self.globalAssignments.count];
+    }
     [label sizeToFit];
     label.frame = CGRectMake(self.globalAssignmentsDrawer.frame.size.width/2 - label.frame.size.width/2, 6, label.frame.size.width, 14);
     [self.globalAssignmentsDrawer addSubview:label];

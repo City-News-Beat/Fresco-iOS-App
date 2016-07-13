@@ -123,7 +123,7 @@
 
 -(void)configureOutletCellForIndexPath:(NSIndexPath *)indexPath {
     self.selectionImageView.frame = CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24);
-    self.titleLabel.frame = CGRectMake(16, 12, self.frame.size.width - 32 - 24 - 16, 20);
+    self.titleLabel.frame = CGRectMake(32, 12, self.frame.size.width - 32 - 24 - 16, 20);
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
     
     self.isSelectedAssignment = FALSE;
