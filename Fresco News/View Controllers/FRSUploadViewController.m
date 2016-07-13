@@ -20,7 +20,6 @@
 #import <Photos/Photos.h>
 #import "FRSUploadTask.h"
 #import "FRSMultipartTask.h"
-#import "FRSFileUploadManager.h"
 
 @interface FRSUploadViewController () {
     NSMutableArray *dictionaryRepresentations;
@@ -793,7 +792,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     }
                 }];
                 
-                [[FRSFileUploadManager sharedUploader] addUploadTask:multipartTask];
+                [multipartTask start];
 
             }];
         }
@@ -816,12 +815,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
                             postCompletionDigest[@"key"] = post[@"key"];
                             [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
                                 NSLog(@"%@ %@", responseObject, error);
+
                             }];
                         }
                     }
                 }];
                 
-                [[FRSFileUploadManager sharedUploader] addUploadTask:task];
+                [task start];
             }];
 
         }
