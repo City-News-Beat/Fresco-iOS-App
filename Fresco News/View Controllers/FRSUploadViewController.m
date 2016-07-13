@@ -359,6 +359,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     //If user is scrolling up, scale with content offset.
     if (offset <= 0) {
         NSLog(@"OFFSET: %f", offset);
+        self.galleryCollectionView.clipsToBounds = NO;
         [self.galleryCollectionView setFrame:CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset) )];
 //        [self.galleryCollectionView.collectionViewLayout invalidateLayout];
     }

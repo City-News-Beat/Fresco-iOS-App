@@ -52,6 +52,15 @@
     return self;
 }
 
+//-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier outlet:(NSArray *)outlet {
+//    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+////    self.outlet = outlet;
+//    
+//    
+//    
+//    return self;
+//}
+
 -(void)configureCellForIndexPath:(NSIndexPath *)indexPath {
     
     self.selectionImageView.frame = CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24);
@@ -63,7 +72,7 @@
     self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     
     if (self.assignment) {
-        self.titleLabel.text = [self.assignment objectForKey:@"caption"];
+        self.titleLabel.text = [self.assignment objectForKey:@"title"];
         
     } else {
         self.titleLabel.text = @"No assignment";
