@@ -170,7 +170,7 @@
     
     [_locationManager requestWhenInUseAuthorization];
     _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [_locationManager startUpdatingLocation];
+    [_locationManager requestLocation];
 }
 
 /*
@@ -263,7 +263,7 @@
     }
     
     if (_currentState == UIApplicationStateActive) {
-        [_locationManager startUpdatingLocation];
+        [_locationManager requestLocation];
     }
 }
 
