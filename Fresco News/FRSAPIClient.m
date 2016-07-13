@@ -9,7 +9,6 @@
 #import "FRSAPIClient.h"
 #import "Fresco.h"
 #import "FRSPost.h"
-#import "FRSFileUploadManager.h" // temp patch
 #import "FRSRequestSerializer.h"
 #import "FRSAppDelegate.h"
 #import "FRSOnboardingViewController.h"

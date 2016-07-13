@@ -22,7 +22,6 @@
 #import "FRSAPIClient.h"
 #import "VideoTrimmerViewController.h"
 #import "Fresco.h"
-#import "FRSFileUploadManager.h"
 #import "SSKeychain.h"
 #import "FRSUser.h"
 
@@ -428,7 +427,7 @@
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(nonnull NSString *)identifier completionHandler:(nonnull void (^)())completionHandler {
     // pass responsibility onto FRSFileUploadManager (will trigger completion handler when done with work needed)
-    [[FRSFileUploadManager sharedUploader] handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+   // [[FRSFileUploadManager sharedUploader] handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
 }
 
 @end
