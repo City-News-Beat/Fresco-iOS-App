@@ -16,8 +16,6 @@
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment;
 
--(void)configureCellForIndexPath:(NSIndexPath *)indexPath;
-
-//-(void)toggleImage;
+-(void)configureAssignmentCellForIndexPath:(NSIndexPath *)indexPath;
 
 @end

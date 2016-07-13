@@ -502,7 +502,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
-    [cell configureCellForIndexPath:indexPath];
+    [cell configureAssignmentCellForIndexPath:indexPath];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -519,7 +519,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     if (tableView == self.assignmentsTableView) {
         if (indexPath.row != self.assignmentsArray.count) {
             FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:indexPath.row]];
-            [cell configureCellForIndexPath:indexPath];
+            [cell configureAssignmentCellForIndexPath:indexPath];
             return cell;
         } else {
             FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
@@ -528,7 +528,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     } else if (tableView == self.globalAssignmentsTableView) {
         FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.globalAssignments objectAtIndex:indexPath.row]];
-        [cell configureCellForIndexPath:indexPath];
+        [cell configureAssignmentCellForIndexPath:indexPath];
         return cell;
     } else {
         FRSAssignmentPickerTableViewCell *cell;
