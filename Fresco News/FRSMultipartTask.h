@@ -24,6 +24,7 @@ static int const chunkFailWaitTime = 2; // resets between chunks (otherwise beha
     NSInteger openConnections;
     NSInteger dataRead;
     NSInteger totalConnections;
+    NSInteger totalErrors;
     BOOL needsData;
     NSMutableDictionary *tags;
 }
