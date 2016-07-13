@@ -46,6 +46,6 @@ static int const failWaitTime = 5; // seconds waited between fail count trigger
 /*
     Post creation (pre-upload stage)
  */
-
+-(void)addUploadTask:(FRSUploadTask *)task;
 -(void)createGalleryWithPosts:(nonnull NSArray *)posts;
 @end
