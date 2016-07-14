@@ -558,8 +558,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
         cell.isSelectedAssignment = NO;
         self.selectedAssignment = nil;
         
+        //Remove outlet cells from tableview
         if (cell.outlets.count > 1) {
             self.numberOfRowsInAssignmentTableView = self.numberOfRowsInAssignmentTableView - cell.outlets.count;
+            
+            //[cell configureOutletCellForIndexPath:indexPath];
+            
+            //[self.assignmentsTableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+
             [self resetFrames];
         }
         
@@ -570,9 +576,19 @@ static NSString * const cellIdentifier = @"assignment-cell";
             self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
         }
         
-        if (cell.outlets.count > 1) {
 
+        //Checks if the current cell has more than one outlet
+        if (cell.outlets.count > 1) {
             self.numberOfRowsInAssignmentTableView = self.numberOfRowsInAssignmentTableView + cell.outlets.count;
+            [self resetFrames];
+            return; //Return to avoid removing cells twice
+        }
+        
+        //Removes previously added outlet cells when the user selects a cell that does not contain outlets
+        //Ex: User selects cell with outlets, user selects "No assignment"
+        if (self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1) {
+            NSLog(@"NUMBER OF ROWS: %ld, ASSIGNMENT COUNT: %ld", self.numberOfRowsInAssignmentTableView, self.assignmentsArray.count);
+            self.numberOfRowsInAssignmentTableView = self.numberOfRowsInAssignmentTableView - (self.numberOfRowsInAssignmentTableView - self.assignmentsArray.count-1); //Add one for "No assignment cell"
             [self resetFrames];
         }
     }
