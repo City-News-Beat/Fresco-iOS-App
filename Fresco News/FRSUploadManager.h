@@ -23,6 +23,7 @@ static int const maxConcurrent = 5;
 @property (nonatomic, retain) NSMutableArray *etags;
 @property (nonatomic, retain) NSDictionary *gallery;
 @property (nonatomic, retain) NSArray *assets;
+@property (nonatomic, retain) NSArray *posts;
 -(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post;
 -(void)addMultipartTaskForAsset:(PHAsset *)asset urls:(NSArray *)urls post:(NSDictionary *)post;
 -(void)start;

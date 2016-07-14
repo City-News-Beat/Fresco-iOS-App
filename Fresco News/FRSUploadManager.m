@@ -171,6 +171,7 @@
     if (self) {
         _assets = assets;
         _gallery = gallery;
+        _posts = _gallery[@"posts"];
         [self commonInit];
     }
     
