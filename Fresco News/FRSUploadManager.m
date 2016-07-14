@@ -27,16 +27,6 @@
     
 }
 
--(void)createTaskForAsset:(PHAsset *)asset {
-    
-    if (asset.mediaType == PHAssetMediaTypeVideo) {
-        // add to end
-    }
-    else {
-        // add to beginning
-    }
-}
-
 -(void)addTask:(FRSUploadTask *)task {
     BOOL needsRestart = (_tasks.count == 0 && _currentTasks == 0);
     
@@ -71,7 +61,7 @@
         AVURLAsset* myAsset = (AVURLAsset*)avasset;
         
         FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
-                
+        
         [multipartTask createUploadFromSource:myAsset.URL destinations:urls progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
             
         } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
