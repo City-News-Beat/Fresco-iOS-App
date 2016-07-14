@@ -76,6 +76,10 @@
                     
                     [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
                         NSLog(@"POST COMPLETED: %@", (error == Nil) ? @"TRUE" : @"FALSE");
+                        
+                        if (!error) {
+                            [self next:task];
+                        }
                     }];
                 }];
             }
@@ -103,8 +107,11 @@
                     postCompletionDigest[@"uploadId"] = post[@"uploadId"];
                     postCompletionDigest[@"key"] = post[@"key"];
                     [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
-                        NSLog(@"%@ %@", responseObject, error);
+                        NSLog(@"POST COMPLETED: %@", (error == Nil) ? @"TRUE" : @"FALSE");
                         
+                        if (!error) {
+                            [self next:task];
+                        }
                     }];
                 }
             }
@@ -120,6 +127,16 @@
 
 -(void)resume {
     
+}
+
+-(void)next:(FRSUploadTask *)task {
+    
+    [_tasks removeObject:task];
+    
+    if (_currentTasks.count < maxConcurrent) {
+        FRSUploadTask *task = [_tasks firstObject];
+        [task start];
+    }
 }
 
 -(void)commonInit {

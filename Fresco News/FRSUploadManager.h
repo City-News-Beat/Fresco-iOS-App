@@ -11,6 +11,8 @@
 #import "FRSMultipartTask.h"
 #import "FRSUploadTask.h"
 
+static int const maxConcurrent = 5;
+
 @interface FRSUploadManager : NSObject
 {
     __weak id weakSelf;
