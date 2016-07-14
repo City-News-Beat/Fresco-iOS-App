@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <Photos/Photos.h>
 #import "FRSMultipartTask.h"
+#import "FRSUploadTask.h"
 
 @interface FRSUploadManager : NSObject
 {
-    
+    __weak id weakSelf;
 }
 @property (nonatomic, retain) NSMutableArray *tasks;
 @property (nonatomic, retain) NSMutableArray *currentTasks;
