@@ -71,9 +71,7 @@
         AVURLAsset* myAsset = (AVURLAsset*)avasset;
         
         FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
-        
-        NSMutableArray *urls = [[NSMutableArray alloc] init];
-        
+                
         [multipartTask createUploadFromSource:myAsset.URL destinations:urls progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
             
         } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
