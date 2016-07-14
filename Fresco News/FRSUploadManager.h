@@ -17,6 +17,7 @@
 }
 @property (nonatomic, retain) NSMutableArray *tasks;
 @property (nonatomic, retain) NSMutableArray *currentTasks;
+@property (nonatomic, retain) NSMutableArray *etags;
 -(void)createTaskForAsset:(PHAsset *)asset;
 -(void)start;
 -(void)pause;
