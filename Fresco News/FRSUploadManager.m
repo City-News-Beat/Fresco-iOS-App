@@ -12,6 +12,21 @@
 
 @implementation FRSUploadManager
 
+-(void)commonInit {
+    _tasks = [[NSMutableArray alloc] init];
+    _currentTasks = [[NSMutableArray alloc] init];
+    _etags = [[NSMutableArray alloc] init];
+    weakSelf = self;
+    
+    if (_gallery) {
+        [self startUploadProcess];
+    }
+}
+
+-(void)startUploadProcess {
+    
+}
+
 -(void)createTaskForAsset:(PHAsset *)asset {
     
     if (asset.mediaType == PHAssetMediaTypeVideo) {
@@ -43,7 +58,7 @@
 
 -(void)addMultipartTaskForAsset:(PHAsset *)asset urls:(NSArray *)urls post:(NSDictionary *)post {
     
-    PHVideoRequestOptions* options = [[PHVideoRequestOptions alloc] init];
+    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
     options.version = PHVideoRequestOptionsVersionOriginal;
     options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
     options.networkAccessAllowed = YES;
@@ -132,17 +147,12 @@
 -(void)next:(FRSUploadTask *)task {
     
     [_tasks removeObject:task];
+    [_currentTasks removeObject:task];
     
-    if (_currentTasks.count < maxConcurrent) {
+    if (_currentTasks.count < maxConcurrent && _tasks.count > 0) {
         FRSUploadTask *task = [_tasks firstObject];
         [task start];
     }
-}
-
--(void)commonInit {
-    _tasks = [[NSMutableArray alloc] init];
-    _currentTasks = [[NSMutableArray alloc] init];
-    weakSelf = self;
 }
 
 -(instancetype)init {
@@ -155,10 +165,11 @@
     return self;
 }
 
--(instancetype)initWithGallery:(NSDictionary *)gallery {
+-(instancetype)initWithGallery:(NSDictionary *)gallery assets:(NSArray *)assets {
     self = [super init];
     
     if (self) {
+        _assets = assets;
         _gallery = gallery;
         [self commonInit];
     }
