@@ -155,4 +155,15 @@
     return self;
 }
 
+-(instancetype)initWithGallery:(NSDictionary *)gallery {
+    self = [super init];
+    
+    if (self) {
+        _gallery = gallery;
+        [self commonInit];
+    }
+    
+    return self;
+}
+
 @end

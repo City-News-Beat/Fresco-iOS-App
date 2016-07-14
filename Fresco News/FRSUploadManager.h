@@ -17,10 +17,13 @@ static int const maxConcurrent = 5;
 {
     __weak id weakSelf;
 }
+-(instancetype)initWithGallery:(NSDictionary *)gallery;
 @property (nonatomic, retain) NSMutableArray *tasks;
 @property (nonatomic, retain) NSMutableArray *currentTasks;
 @property (nonatomic, retain) NSMutableArray *etags;
--(void)createTaskForAsset:(PHAsset *)asset;
+@property (nonatomic, retain) NSDictionary *gallery;
+-(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post;
+-(void)addMultipartTaskForAsset:(PHAsset *)asset urls:(NSArray *)urls post:(NSDictionary *)post;
 -(void)start;
 -(void)pause;
 -(void)resume;
