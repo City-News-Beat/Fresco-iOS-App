@@ -10,7 +10,10 @@
 #import "FRSBaseViewController.h"
 
 @interface FRSUploadViewController : FRSBaseViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
-
+{
+    NSInteger selectedRow;
+    NSInteger numberOfOutlets;
+}
 @property (retain, nonatomic) UIButton *twitterButton;
 @property (retain, nonatomic) UIButton *facebookButton;
 @property (retain, nonatomic) UIButton *anonButton;
