@@ -59,6 +59,31 @@
 
     [self.navigationBar addSubview:_progressView];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSUploadUpdate" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        NSDictionary *update = notification.userInfo;
+        
+        if ([update[@"type"] isEqualToString:@"progress"]) {
+            NSNumber *uploadPercentage = update[@"percentage"];
+            float percentage = [uploadPercentage floatValue];
+            
+            CGRect navFrame = self.navigationBar.frame;
+            navFrame.origin.y -= 20;
+            navFrame.size.height += 20;
+            navFrame.size.width *= percentage;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _progressView.frame = navFrame;
+            });
+        }
+        else if ([update[@"type"] isEqualToString:@"completion"]) {
+            
+        }
+        else if ([update[@"type"] isEqualToString:@"failure"]) {
+            
+        }
+        
+    }];
 }
 
 
