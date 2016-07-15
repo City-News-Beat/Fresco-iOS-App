@@ -209,13 +209,69 @@
     
 }
 
--(void)constrainToEdges:(UIView *)view {
+-(void)constrainLayer:(AVPlayerLayer *)subView ToBottomOfParentView:(UIView *)parentView {
     
-//    NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:0 constant:0];
-//    NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:0 constant:0];
-//    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:0 constant:0];
-//    NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:0 constant:0];
-//    [view addConstraints:@[topConstraint,bottomConstraint,leftConstraint,rightConstraint]];
+    NSLog(@"SUBVIEW: %@", subView);
+    NSLog(@"PARENTVIEW: %@", parentView);
+    
+//    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    //Trailing
+    NSLayoutConstraint *trailing = [NSLayoutConstraint
+                                    constraintWithItem:subView
+                                    attribute:NSLayoutAttributeTrailing
+                                    relatedBy:NSLayoutRelationEqual
+                                    toItem:parentView
+                                    attribute:NSLayoutAttributeTrailing
+                                    multiplier:1
+                                    constant:0];
+    
+    //Leading
+    NSLayoutConstraint *leading = [NSLayoutConstraint
+                                   constraintWithItem:subView
+                                   attribute:NSLayoutAttributeLeading
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:parentView
+                                   attribute:NSLayoutAttributeLeading
+                                   multiplier:1
+                                   constant:0];
+    
+    //Bottom
+    NSLayoutConstraint *bottom = [NSLayoutConstraint
+                                  constraintWithItem:subView
+                                  attribute:NSLayoutAttributeBottom
+                                  relatedBy:NSLayoutRelationEqual
+                                  toItem:parentView
+                                  attribute:NSLayoutAttributeBottom
+                                  multiplier:1
+                                  constant:0];
+    
+    
+    //top
+    NSLayoutConstraint *top = [NSLayoutConstraint
+                               constraintWithItem:subView
+                               attribute:NSLayoutAttributeTop
+                               relatedBy:NSLayoutRelationEqual
+                               toItem:parentView
+                               attribute:NSLayoutAttributeTop
+                               multiplier:1
+                               constant:0];
+    
+    
+    [parentView addConstraint:trailing];
+    [parentView addConstraint:leading];
+    [parentView addConstraint:bottom];
+    [parentView addConstraint:top];
+    
+    
+}
+
+-(void)layoutSubviews {
+    [super layoutSubviews];
+    if (playerLayer) {
+//        [self pausePlayer];
+        playerLayer.frame = self.bounds;
+    }
 }
 
 
