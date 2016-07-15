@@ -358,7 +358,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     //If user is scrolling up, scale with content offset.
     if (offset <= 0) {
-        NSLog(@"OFFSET: %f", offset);
         self.galleryCollectionView.clipsToBounds = NO;
         [self.galleryCollectionView setFrame:CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset))];
 //        [self.galleryCollectionView.collectionViewLayout invalidateLayout];
@@ -415,9 +414,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
     label.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
-    label.text = [NSString stringWithFormat:@"%ld global assignments", self.globalAssignments.count];
+    label.text = [NSString stringWithFormat:@"%lu global assignments", self.globalAssignments.count];
     if (self.globalAssignments.count == 1) {
-        label.text = [NSString stringWithFormat:@"%ld global assignment", self.globalAssignments.count];
+        label.text = [NSString stringWithFormat:@"%lu global assignment", self.globalAssignments.count];
     }
     [label sizeToFit];
     label.frame = CGRectMake(self.globalAssignmentsDrawer.frame.size.width/2 - label.frame.size.width/2, 6, label.frame.size.width, 14);
