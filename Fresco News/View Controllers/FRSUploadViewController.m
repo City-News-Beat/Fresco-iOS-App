@@ -790,94 +790,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)moveToUpload:(NSDictionary *)postData {
-    int currentIndex = 0;
-    
-    for (NSDictionary *post in postData[@"posts"]) {
-        PHAsset *currentAsset = self.content[currentIndex];
-        
-        if (currentAsset.mediaType == PHAssetMediaTypeVideo) {
-
-            
-            PHVideoRequestOptions* options = [[PHVideoRequestOptions alloc] init];
-            options.version = PHVideoRequestOptionsVersionOriginal;
-            options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
-            options.networkAccessAllowed = YES;
-            options.progressHandler =  ^(double progress,NSError *error,BOOL* stop, NSDictionary* dict) {
-                NSLog(@"progress %lf",progress);  //never gets called
-            };
-            
-            
-            [[PHImageManager defaultManager] requestAVAssetForVideo:currentAsset options:options resultHandler:^(AVAsset* avasset, AVAudioMix* audioMix, NSDictionary* info){
-                AVURLAsset* myAsset = (AVURLAsset*)avasset;
-                
-                FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
-
-                NSMutableArray *urls = [[NSMutableArray alloc] init];
-                
-                for (NSString *url in post[@"urls"]) {
-                    [urls addObject:[NSURL URLWithString:url]];
-                }
-                
-                [multipartTask createUploadFromSource:myAsset.URL destinations:urls progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
-                    
-                } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
-                    if (success) {
-                        NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
-                        postCompletionDigest[@"eTags"] = multipartTask.eTags;
-                        postCompletionDigest[@"uploadId"] = post[@"uploadId"];
-                        postCompletionDigest[@"key"] = post[@"key"];
-                        [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
-                            
-                            NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
-                            postCompletionDigest[@"eTags"] = multipartTask.eTags;
-                            postCompletionDigest[@"uploadId"] = post[@"uploadId"];
-                            postCompletionDigest[@"key"] = post[@"key"];
-                            
-                            NSLog(@"%@", postCompletionDigest);
-                            
-                            [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
-                                NSLog(@"%@ %@", responseObject, error);
-                            }];
-                        }];
-                    }
-                }];
-                
-                [multipartTask start];
-
-            }];
-        }
-        else {
-            [[PHImageManager defaultManager] requestImageDataForAsset:currentAsset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-                
-                FRSUploadTask  *task = [[FRSUploadTask alloc] init];
-
-                [task createUploadFromData:imageData destination:[NSURL URLWithString:post[@"urls"][0]] progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
-                    NSLog(@"UPLOADING");
-                } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
-                    if (success) {
-                        if (success) {
-                            NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
-                            NSString *eTag = headers[@"Etag"];
-                            
-                            NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
-                            postCompletionDigest[@"eTags"] = @[eTag];
-                            postCompletionDigest[@"uploadId"] = post[@"uploadId"];
-                            postCompletionDigest[@"key"] = post[@"key"];
-                            [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
-                                NSLog(@"%@ %@", responseObject, error);
-
-                            }];
-                        }
-                    }
-                }];
-                
-                [task start];
-            }];
-
-        }
-
-        currentIndex++;
+    if (!_uploadManager) {
+        _uploadManager = [[FRSUploadManager alloc] initWithGallery:postData assets:_content];
+        [_uploadManager start];
     }
+    else {
+        NSLog(@"NO UPLOAD: ALREADY STARTED");
+    }
+    
 }
 
 -(void)tweet:(NSString *)string {

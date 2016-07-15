@@ -24,7 +24,28 @@
 }
 
 -(void)startUploadProcess {
+    if (!_posts) {
+        return;
+    }
     
+    for (int i = 0; i < _posts.count; i++) {
+        PHAsset *currentAsset = _assets[i];
+        NSDictionary *currentPost = _posts[i];
+        
+        if (currentAsset.mediaType == PHAssetMediaTypeVideo) {
+            
+            NSMutableArray *urls = [[NSMutableArray alloc] init];
+            
+            for (NSString *partURL in currentPost[@"urls"]) {
+                [urls addObject:[NSURL URLWithString:partURL]];
+            }
+            
+            [self addMultipartTaskForAsset:currentAsset urls:urls post:currentPost];
+        }
+        else {
+            [self addTaskForImageAsset:currentAsset url:currentPost[@"urls"][0] post:currentPost];
+        }
+    }
 }
 
 -(void)addTask:(FRSUploadTask *)task {
