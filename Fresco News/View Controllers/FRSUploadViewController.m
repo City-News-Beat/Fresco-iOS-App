@@ -363,10 +363,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     //If user is scrolling up, scale with content offset.
     if (offset <= 0) {
-        NSLog(@"OFFSET: %f", offset);
         self.galleryCollectionView.clipsToBounds = NO;
-        [self.galleryCollectionView setFrame:CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset))];
-//        [self.galleryCollectionView.collectionViewLayout invalidateLayout];
+        NSLog(@"COLLECTIONVIEW HEIGHT: %f", self.galleryCollectionView.frame.size.height);
+
+        [self.galleryCollectionView setFrame:CGRectMake(0, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset))];
+        [self.galleryCollectionView.collectionViewLayout invalidateLayout];
+        NSLog(@"COLLECTIONVIEW HEIGHT: %f", self.galleryCollectionView.frame.size.height);
+
     }
 }
 
@@ -638,10 +641,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
             }
             
             [tableView endUpdates];
-            
-            
-            
-            
+
             
             [self resetFrames];
             return; //Return to avoid removing cells twice
