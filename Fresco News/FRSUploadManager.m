@@ -46,16 +46,13 @@
             [self addTaskForImageAsset:currentAsset url:currentPost[@"urls"][0] post:currentPost];
         }
     }
+    
+    NSLog(@"%@", _tasks);
 }
 
 -(void)addTask:(FRSUploadTask *)task {
-    BOOL needsRestart = (_tasks.count == 0 && _currentTasks == 0);
-    
+    NSLog(@"%@", task);
     [_tasks addObject:task];
-    
-    if (needsRestart) {
-        [self start];
-    }
 }
 
 -(void)start {
@@ -109,7 +106,7 @@
             }
         }];
         
-        [weakSelf addTask:multipartTask];
+        [self addTask:multipartTask];
     }];
 }
 
@@ -141,7 +138,7 @@
             }
         }];
         
-        [weakSelf addTask:task];
+        [self addTask:task];
     }];
 }
 
@@ -180,6 +177,7 @@
     if (self) {
         _assets = assets;
         _gallery = gallery;
+        
         _posts = _gallery[@"posts"];
         [self commonInit];
     }
