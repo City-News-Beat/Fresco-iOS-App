@@ -46,13 +46,14 @@
             [self addTaskForImageAsset:currentAsset url:currentPost[@"urls"][0] post:currentPost];
         }
     }
-    
-    NSLog(@"%@", _tasks);
 }
 
 -(void)addTask:(FRSUploadTask *)task {
-    NSLog(@"%@", task);
     [_tasks addObject:task];
+    
+    if (_currentTasks.count == 0 && _tasks.count == 1) {
+        [self start];
+    }
 }
 
 -(void)start {

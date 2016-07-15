@@ -792,7 +792,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)moveToUpload:(NSDictionary *)postData {
     if (!_uploadManager) {
         _uploadManager = [[FRSUploadManager alloc] initWithGallery:postData assets:_content];
-        [_uploadManager start];
     }
     else {
         NSLog(@"NO UPLOAD: ALREADY STARTED");
