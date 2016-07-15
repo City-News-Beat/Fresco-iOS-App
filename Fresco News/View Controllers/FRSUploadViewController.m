@@ -145,14 +145,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
     
     self.galleryCollectionViewFlowLayout = [[UICollectionViewFlowLayout alloc] init];
-    self.galleryCollectionViewFlowLayout.itemSize = CGSizeMake(200, 200);
+    self.galleryCollectionViewFlowLayout.itemSize = CGSizeMake(50, 50);
     [self.galleryCollectionViewFlowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
     self.galleryCollectionViewFlowLayout.minimumInteritemSpacing = 0;
     self.galleryCollectionViewFlowLayout.minimumLineSpacing = 0;
     
     self.galleryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.galleryCollectionViewHeight) collectionViewLayout:self.galleryCollectionViewFlowLayout];
     self.galleryCollectionView.showsHorizontalScrollIndicator = NO;
-    self.galleryCollectionView.collectionViewLayout = self.galleryCollectionViewFlowLayout;//?
+    self.galleryCollectionView.collectionViewLayout = self.galleryCollectionViewFlowLayout;
     self.galleryCollectionView.pagingEnabled = YES;
     self.galleryCollectionView.delegate = self;
     self.galleryCollectionView.dataSource = self;
@@ -358,9 +358,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     //If user is scrolling up, scale with content offset.
     if (offset <= 0) {
-        NSLog(@"offset = %f", offset);
-        self.galleryCollectionView.frame = CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset));
-        [self.galleryCollectionViewFlowLayout invalidateLayout];
+        NSLog(@"OFFSET: %f", offset);
+        self.galleryCollectionView.clipsToBounds = NO;
+        [self.galleryCollectionView setFrame:CGRectMake(self.galleryCollectionView.frame.origin.x, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset))];
+//        [self.galleryCollectionView.collectionViewLayout invalidateLayout];
     }
 }
 
@@ -415,6 +416,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
     label.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
     label.text = [NSString stringWithFormat:@"%ld global assignments", self.globalAssignments.count];
+    if (self.globalAssignments.count == 1) {
+        label.text = [NSString stringWithFormat:@"%ld global assignment", self.globalAssignments.count];
+    }
     [label sizeToFit];
     label.frame = CGRectMake(self.globalAssignmentsDrawer.frame.size.width/2 - label.frame.size.width/2, 6, label.frame.size.width, 14);
     [self.globalAssignmentsDrawer addSubview:label];
@@ -501,7 +505,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
-    [cell configureCellForIndexPath:indexPath];
+    [cell configureAssignmentCellForIndexPath:indexPath];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -518,7 +522,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     if (tableView == self.assignmentsTableView) {
         if (indexPath.row != self.assignmentsArray.count) {
             FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:indexPath.row]];
-            [cell configureCellForIndexPath:indexPath];
+            [cell configureAssignmentCellForIndexPath:indexPath];
             return cell;
         } else {
             FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
@@ -527,7 +531,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     } else if (tableView == self.globalAssignmentsTableView) {
         FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.globalAssignments objectAtIndex:indexPath.row]];
-        [cell configureCellForIndexPath:indexPath];
+        [cell configureAssignmentCellForIndexPath:indexPath];
         return cell;
     } else {
         FRSAssignmentPickerTableViewCell *cell;
@@ -543,6 +547,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if (cell.outlets.count > 1) {
+        NSLog(@"OUTLETS IN THE ASIGNMENT");
+//        [cell configureOutletCellForIndexPath:indexPath];
+        
+    }
     
     if (cell.isSelectedAssignment){
         cell.isSelectedAssignment = NO;

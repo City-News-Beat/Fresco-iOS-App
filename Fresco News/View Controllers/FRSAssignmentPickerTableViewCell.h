@@ -13,11 +13,10 @@
 
 @property (strong, nonatomic) NSDictionary *assignment;
 @property (nonatomic) BOOL isSelectedAssignment;
+@property (strong, nonatomic) NSArray *outlets;
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment;
-
--(void)configureCellForIndexPath:(NSIndexPath *)indexPath;
-
-//-(void)toggleImage;
+-(void)configureAssignmentCellForIndexPath:(NSIndexPath *)indexPath;
+-(void)configureOutletCellForIndexPath:(NSIndexPath *)indexPath;
 
 @end

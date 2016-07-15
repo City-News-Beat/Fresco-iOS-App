@@ -29,7 +29,7 @@
 
 }
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment {
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSDictionary *)assignment {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
     if (self) {
@@ -38,7 +38,6 @@
         
         self.selectionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24)];
         
-//        [self toggleImage];
         self.isSelectedAssignment = FALSE;
         
         [self addSubview:self.selectionImageView];
@@ -46,13 +45,18 @@
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 12, 100, 20)];
         self.titleLabel.textColor = [UIColor frescoDarkTextColor];
         [self addSubview:self.titleLabel];
-
+        
+        NSArray *outlets = [self.assignment objectForKey:@"outlets"];
+        if (outlets.count > 1) {
+            self.outlets = outlets;
+            //NSLog(@"more than one outlet for assignment %@", [self.assignment objectForKey:@"title"]);
+        }
     }
     
     return self;
 }
 
--(void)configureCellForIndexPath:(NSIndexPath *)indexPath {
+-(void)configureAssignmentCellForIndexPath:(NSIndexPath *)indexPath {
     
     self.selectionImageView.frame = CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24);
     self.titleLabel.frame = CGRectMake(16, 12, self.frame.size.width - 32 - 24 - 16, 20);
@@ -63,15 +67,15 @@
     self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     
     if (self.assignment) {
-        self.titleLabel.text = [self.assignment objectForKey:@"caption"];
+        self.titleLabel.text = [self.assignment objectForKey:@"title"];
         
     } else {
         self.titleLabel.text = @"No assignment";
     }
     
-//    if (indexPath.row == 0) {
-//        self.isSelectedAssignment = YES;
-//    }
+    //    if (indexPath.row == 0) {
+    //        self.isSelectedAssignment = YES;
+    //    }
 }
 
 -(BOOL)isSelectedAssignment {
@@ -94,6 +98,23 @@
     self.titleLabel.text = nil;
     self.isSelectedAssignment = NO;
 }
+
+
+-(void)configureOutletCellForIndexPath:(NSIndexPath *)indexPath {
+    self.selectionImageView.frame = CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24);
+    self.titleLabel.frame = CGRectMake(32, 12, self.frame.size.width - 32 - 24 - 16, 20);
+    self.titleLabel.textAlignment = NSTextAlignmentLeft;
+    
+    self.isSelectedAssignment = FALSE;
+    
+    self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    
+    if (self.assignment) {
+        self.titleLabel.text = [self.assignment objectForKey:@"title"];
+        
+    }
+}
+
 
 
 @end
