@@ -32,10 +32,9 @@
     self.progressBlock = progress;
     self.completionBlock = completion;
     
-    //NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@"com.fresconews.upload.background"];
-   // sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
-    _session = [NSURLSession sharedSession];
-                //sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]]; // think queue might be able to bet set to nil but test this for now
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
+    _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]]; // think queue might be able to bet set to nil but test this for now
 }
 
 
@@ -100,6 +99,7 @@
         }];
 
     }
+    
     
     _hasStarted = TRUE;
     [_uploadTask resume]; // starts initial request
