@@ -184,8 +184,8 @@
                 [item setImageInsets:UIEdgeInsetsMake(item.imageInsets.top, item.imageInsets.left, 0, item.imageInsets.right)];
             }*/
 //            self.navigationItem.titleView.alpha = 1.0;
-            [self.navigationItem.titleView setBounds:CGRectMake(self.navigationItem.titleView.bounds.origin.x, (self.navBarHeight/2)-4, self.navigationItem.titleView.bounds.size.width,5)];
-        
+   /*         [self.navigationItem.titleView setBounds:CGRectMake(self.navigationItem.titleView.bounds.origin.x, (self.navBarHeight/2)-4, self.navigationItem.titleView.bounds.size.width,5)];
+
     } completion:nil];
     }else{
         [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -196,13 +196,12 @@
                 [item setImageInsets:UIEdgeInsetsMake(item.imageInsets.top, item.imageInsets.left, item.image.size.height + 5, item.imageInsets.right)];
             }*/
 //            self.navigationItem.titleView.alpha = 0.0;
-            [self.navigationItem.titleView setBounds:CGRectMake(self.navigationItem.titleView.bounds.origin.x, self.navBarHeight-4, self.navigationItem.titleView.bounds.size.width,5)];
+          /*  [self.navigationItem.titleView setBounds:CGRectMake(self.navigationItem.titleView.bounds.origin.x, self.navBarHeight-4, self.navigationItem.titleView.bounds.size.width,5)];
             
         } completion:nil];
     }
     
-}
-*/
+}*/
 -(void)collapseNavBar{
     NSLog(@"Collapsed Nav bar");
     [self.navigationController.navigationBar setBounds:CGRectMake(self.navigationController.navigationBar.bounds.origin.x, self.navBarHeight, self.navigationController.navigationBar.bounds.size.width,self.navigationController.navigationBar.bounds.size.height)];
