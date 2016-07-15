@@ -86,7 +86,10 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:.2 animations:^{
+                    _progressView.alpha = 0;
+                } completion:^(BOOL finished) {
                     _progressView.frame = navFrame;
+                    _progressView.alpha = 1;
                 }];
             });
         }
