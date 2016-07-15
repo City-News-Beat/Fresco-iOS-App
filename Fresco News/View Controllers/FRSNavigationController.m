@@ -73,11 +73,22 @@
             navFrame.size.width *= percentage;
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                _progressView.frame = navFrame;
+                [UIView animateWithDuration:.05 animations:^{
+                    _progressView.frame = navFrame;
+                }];
             });
         }
         else if ([update[@"type"] isEqualToString:@"completion"]) {
+            CGRect navFrame = self.navigationBar.frame;
+            navFrame.origin.y -= 20;
+            navFrame.size.height += 20;
+            navFrame.size.width = 0;
             
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:.2 animations:^{
+                    _progressView.frame = navFrame;
+                }];
+            });
         }
         else if ([update[@"type"] isEqualToString:@"failure"]) {
             
