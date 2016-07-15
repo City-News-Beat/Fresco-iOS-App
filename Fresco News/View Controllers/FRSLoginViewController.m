@@ -19,6 +19,9 @@
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAppDelegate.h"
 
+//Alert View
+#import "FRSAlertView.h"
+
 @interface FRSLoginViewController () <UITextFieldDelegate>
 
 @property (nonatomic) BOOL didAnimate;
@@ -280,12 +283,20 @@
     //NSLog(@"%f x %f", self.twitterButton.frame.size.width,self.twitterButton.frame.size.width-2);
     
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        
         if (authenticated) {
-            
             self.didAuthenticateSocial = YES;
-            
             [self popToOrigin];
         }
+        
+        
+        if (error) {
+            NSLog(@"TWITTER SIGN IN: %@", error);
+
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to log in with Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [alert show];
+        }
+
         [spinner stopLoading];
         [spinner removeFromSuperview];
         self.twitterButton.hidden = false;
@@ -336,6 +347,12 @@
         }else{
             NSLog(@"Else");
         }
+        
+        if (error) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to log in with Facebook. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [alert show];
+        }
+        
         [spinner stopLoading];
         [spinner removeFromSuperview];
         self.facebookButton.hidden = false;

@@ -109,7 +109,6 @@
             [self handleUserLogin:responseObject];
         }
         
-        NSLog(@"TWITTER SIGN IN: %@", error);
         
     }];
 }
