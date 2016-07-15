@@ -11,7 +11,9 @@
 #import "FRSUploadManager.h"
 
 @interface FRSUploadViewController : FRSBaseViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
-
+{
+    unsigned long long contentSize;
+}
 @property (retain, nonatomic) UIButton *twitterButton;
 @property (retain, nonatomic) UIButton *facebookButton;
 @property (retain, nonatomic) UIButton *anonButton;

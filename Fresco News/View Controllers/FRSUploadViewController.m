@@ -731,7 +731,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     //Next button action
 -(void)send {
-    
+
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
         
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
@@ -765,6 +765,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     if (posts.count > 0) {
         PHAsset *firstAsset = posts[0];
         [[FRSAPIClient sharedClient] digestForAsset:firstAsset callback:^(id responseObject, NSError *error) {
+            NSNumber *fileSize = responseObject[@"fileSize"];
+            contentSize += [fileSize longLongValue];
+            
             [posts removeObject:firstAsset];
             [current addObject:responseObject];
             [self getPostData:posts current:current];
@@ -791,11 +794,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)moveToUpload:(NSDictionary *)postData {
     if (!_uploadManager) {
         _uploadManager = [[FRSUploadManager alloc] initWithGallery:postData assets:_content];
+        _uploadManager.contentSize = contentSize;
     }
     else {
         NSLog(@"NO UPLOAD: ALREADY STARTED");
     }
-    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)tweet:(NSString *)string {

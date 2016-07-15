@@ -16,6 +16,7 @@ static int const maxConcurrent = 5;
 @interface FRSUploadManager : NSObject
 {
     __weak id weakSelf;
+    unsigned long long totalBytesSent;
 }
 -(instancetype)initWithGallery:(NSDictionary *)gallery assets:(NSArray *)assets;
 @property (nonatomic, retain) NSMutableArray *tasks;
@@ -24,6 +25,7 @@ static int const maxConcurrent = 5;
 @property (nonatomic, retain) NSDictionary *gallery;
 @property (nonatomic, retain) NSArray *assets;
 @property (nonatomic, retain) NSArray *posts;
+@property unsigned long long contentSize;
 -(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post;
 -(void)addMultipartTaskForAsset:(PHAsset *)asset urls:(NSArray *)urls post:(NSDictionary *)post;
 -(void)start;

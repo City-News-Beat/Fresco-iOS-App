@@ -65,6 +65,12 @@
     [task start];
 }
 
+-(void)uploadedData:(int64_t)bytes {
+    totalBytesSent += bytes;
+    NSLog(@"PROGRESS: %f", (totalBytesSent * 1.0) / (_contentSize * 1.0));
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"progress", @"percentage":@((totalBytesSent * 1.0) / (_contentSize * 1.0))}];
+}
+
 -(void)addMultipartTaskForAsset:(PHAsset *)asset urls:(NSArray *)urls post:(NSDictionary *)post {
     
     PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
@@ -82,7 +88,7 @@
         FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
         
         [multipartTask createUploadFromSource:myAsset.URL destinations:urls progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
-            NSLog(@"CHUNK PROGRESS: %f", (totalBytesSent * 1.0) / (totalBytesExpectedToSend * 1.0));
+            [self uploadedData:bytesSent];
         } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
             if (success) {
                 NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
@@ -117,8 +123,7 @@
         FRSUploadTask *task = [[FRSUploadTask alloc] init];
         
         [task createUploadFromData:imageData destination:url progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
-            NSLog(@"TASK PROGRESS: %f", (totalBytesSent * 1.0) / (totalBytesExpectedToSend * 1.0));
-            
+            [self uploadedData:bytesSent];
         } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
             if (success) {
                 if (success) {
@@ -165,6 +170,8 @@
         [task start];
     }
     else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
+
         NSLog(@"GALLERY CREATION COMPLETE");
     }
 }
