@@ -18,7 +18,6 @@
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment;
 -(void)configureAssignmentCellForIndexPath:(NSIndexPath *)indexPath;
--(void)configureOutletCellForIndexPath:(NSIndexPath *)indexPath;
-
+-(void)configureOutletCellWithOutlet:(NSDictionary *)outlet;
 
 @end

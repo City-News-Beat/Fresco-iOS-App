@@ -528,8 +528,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
         if (indexPath.row < _assignmentsArray.count + numberOfOutlets) {
             if (_showingOutlets) {
                 if (indexPath.row > selectedRow && indexPath.row <= selectedRow + numberOfOutlets) {
-                    FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:Nil];
-//                    [cell configureOutletCellForIndexPath:indexPath];
+                    FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
+                    
+                    // :(
+                    [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
                     [self resetFrames];
                     return cell;
                 }
@@ -570,9 +572,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
+    
+//    if (_showingOutlets) {
+//        [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedRow inSection:0]];
+//    }
+    
     if (cell.isSelectedAssignment){
         
-        NSLog(@"WE OUT HERE");
         cell.isSelectedAssignment = NO;
         self.selectedAssignment = nil;
         
@@ -582,7 +588,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
             if (tableView == self.globalAssignmentsTableView) {
                 return; //temp
             }
-        
+            
             [tableView beginUpdates];
             
             int operand = 1;
@@ -630,9 +636,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
                 [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row+operand inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
                 operand++;
             }
-//            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:indexPath.row+1 inSection:0];
-//            [tableView moveRowAtIndexPath:selectedIndexPath toIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
-//            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
             
             [tableView endUpdates];
             
