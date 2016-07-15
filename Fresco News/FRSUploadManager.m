@@ -43,7 +43,7 @@
             [self addMultipartTaskForAsset:currentAsset urls:urls post:currentPost];
         }
         else {
-            [self addTaskForImageAsset:currentAsset url:currentPost[@"urls"][0] post:currentPost];
+            [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"urls"][0]] post:currentPost];
         }
     }
 }
@@ -82,7 +82,7 @@
         FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
         
         [multipartTask createUploadFromSource:myAsset.URL destinations:urls progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
-            
+            NSLog(@"CHUNK PROGRESS: %f", (totalBytesSent * 1.0) / (totalBytesExpectedToSend * 1.0));
         } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
             if (success) {
                 NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
@@ -117,7 +117,8 @@
         FRSUploadTask *task = [[FRSUploadTask alloc] init];
         
         [task createUploadFromData:imageData destination:url progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
-            NSLog(@"UPLOADING");
+            NSLog(@"TASK PROGRESS: %f", (totalBytesSent * 1.0) / (totalBytesExpectedToSend * 1.0));
+            
         } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
             if (success) {
                 if (success) {
@@ -136,6 +137,9 @@
                         }
                     }];
                 }
+            }
+            else {
+                NSLog(@"%@", error);
             }
         }];
         
@@ -159,6 +163,9 @@
     if (_currentTasks.count < maxConcurrent && _tasks.count > 0) {
         FRSUploadTask *task = [_tasks firstObject];
         [task start];
+    }
+    else {
+        NSLog(@"GALLERY CREATION COMPLETE");
     }
 }
 
