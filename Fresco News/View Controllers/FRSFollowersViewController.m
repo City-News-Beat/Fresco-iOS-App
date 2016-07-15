@@ -31,7 +31,7 @@
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (nonatomic, strong) UITableView *followingTable;
-@property (strong, nonatomic) UIButton *backTapButton;
+@property (strong, nonatomic) UIBarButtonItem *backTapButton;
 @property (strong, nonatomic) FRSUserTableViewCell *selectedCell;
 @property (strong, nonatomic) FRSAwkwardView *followingAwkward;
 @property (strong, nonatomic) FRSAwkwardView *followerAwkward;
@@ -129,30 +129,11 @@
 //    [super configureNavigationBar];
     [self removeNavigationBarLine];
     
-    UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
-    [container addSubview:backButton];
-    
-    backButton.tintColor = [UIColor whiteColor];
-    //    backButton.backgroundColor = [UIColor redColor];
-    backButton.frame = CGRectMake(-15, -12, 48, 48);
-    backButton.imageView.frame = CGRectMake(-12, 0, 48, 48); //this doesnt change anything
-    //    backButton.imageView.backgroundColor = [UIColor greenColor];
-    [backButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setImage:backButtonImage forState:UIControlStateNormal];
-    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
-    
-    
-    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
-    [self.backTapButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-    //    self.backTapButton.backgroundColor = [UIColor blueColor];
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
-    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismiss)];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+
     //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
     //    [view addGestureRecognizer:tap];
-    
-    self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
 //    int offset = 8;
     
@@ -198,8 +179,7 @@
 
 -(void)dismiss{
     [self.navigationController popViewControllerAnimated:YES];
-    [self.backTapButton removeFromSuperview];
-}
+ }
 
 -(void)dealloc{
     [self.tableView dg_removePullToRefresh];
@@ -297,12 +277,11 @@
     scrollFrame.origin.y = -64;
     
     self.followingTable = [[UITableView alloc] initWithFrame:scrollFrame];
-    [self.followingTable setBackgroundColor:[UIColor frescoBackgroundColorDark]];
     self.followingTable.delegate = self;
     self.followingTable.dataSource = self;
     self.followingTable.bounces = YES;
     self.followingTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
+    //[self.followingTable :false];
     [self.pageScroller addSubview:self.followingTable];
 }
 
@@ -407,10 +386,16 @@
     return CELL_HEIGHT;
 }
 
-
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    [self configurePullToRefresh];
     return 125;
+}
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    [self configurePullToRefresh];
+
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 125)];
+    //header.backgroundColor = [UIColor redColor];
+    
+    return header;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -521,8 +506,7 @@
             [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
         }
         
-    }
-    else {
+    }else {
         [super scrollViewDidScroll:scrollView];
     }
 }

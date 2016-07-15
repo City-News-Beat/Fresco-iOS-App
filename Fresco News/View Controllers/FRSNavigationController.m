@@ -41,6 +41,9 @@
     
     self.navigationBar.translucent = NO;
     self.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    self.hidesBarsOnSwipe = false;
+    self.hidesBarsOnTap = false;
+    self.hidesBarsWhenVerticallyCompact=false;
     
     self.containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 44)];
     
@@ -70,6 +73,30 @@
     self.navigationBar.topItem.titleView = self.containerView;
 }
 
+-(void)setNavigationBarHidden:(BOOL)navigationBarHidden{
+    NSLog(@"Hid Nav1");
+}
+
+-(void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated{
+    if(!hidden && animated){
+        NSLog(@"Hid Nav2");
+    }else if(hidden && animated){
+        NSLog(@"Hid Nav3");
+    }
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    NSLog(@"Showed Nav");
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    NSLog(@"Disappear Nav");
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    NSLog(@"Showed Nav");
+}
 
 -(void)adjustFrames{
     
