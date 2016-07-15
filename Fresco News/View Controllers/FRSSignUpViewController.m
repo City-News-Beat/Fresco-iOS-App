@@ -969,6 +969,11 @@
         NSLog(@"%@", errorMessage);
         
         
+        if (error) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to create an account. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [alert show];
+        }
+        
         if (error.code == 0) {
             _isAlreadyRegistered = TRUE;
             [self segueToSetup];
