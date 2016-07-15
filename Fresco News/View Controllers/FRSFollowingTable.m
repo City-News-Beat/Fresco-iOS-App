@@ -302,9 +302,7 @@
         FRSStory *story = _galleries[indexPath.row];
         height = [story heightForStory];
     }
-    
-    NSLog(@"HT: %f", height);
-    
+        
     if (height <= 0) {
         height = 200;
     }

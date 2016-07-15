@@ -90,7 +90,6 @@
         
     for (NSDictionary *dict in posts){
         if (save) {
-            NSLog(@"SAVE");
             FRSPost *post = [NSEntityDescription insertNewObjectForEntityForName:@"FRSPost" inManagedObjectContext:self.currentContext];
             [post configureWithDictionary:dict context:_currentContext];
             [self addPostsObject:post];

@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
+#import "FRSUploadManager.h"
 
 @interface FRSUploadViewController : FRSBaseViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
 {
     NSInteger selectedRow;
     NSInteger numberOfOutlets;
+    unsigned long long contentSize;
 }
 @property (retain, nonatomic) UIButton *twitterButton;
 @property (retain, nonatomic) UIButton *facebookButton;
@@ -21,7 +23,7 @@
 @property (strong, nonatomic) NSMutableArray *players;
 @property (strong, nonatomic) NSMutableArray *assignmentsArray;
 @property (strong, nonatomic) NSArray *globalAssignments;
-
+@property (strong, nonatomic) FRSUploadManager *uploadManager;
 @property (nonatomic, weak) NSArray *content;
 
 -(void)configureAssignmentsTableView;

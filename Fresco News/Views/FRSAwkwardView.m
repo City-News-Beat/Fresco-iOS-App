@@ -34,14 +34,12 @@
     awkwardLabel.textColor = [UIColor frescoDarkTextColor];
     [self addSubview:awkwardLabel];
     
-    UILabel *subLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 175/2, 106, 175, 20)];
-    subLabel.text = @"There’s nothing here yet.";
-    subLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    subLabel.textColor = [UIColor frescoMediumTextColor];
-    [self addSubview:subLabel];
-    
+    self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 175/2, 106, 175, 20)];
+    self.messageLabel.text = @"There’s nothing here yet.";
+    self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.messageLabel.textColor = [UIColor frescoMediumTextColor];
+    [self addSubview:self.messageLabel];
 }
-
 
 
 

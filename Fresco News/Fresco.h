@@ -27,6 +27,10 @@ static NSString * const smallImageSize = @"320x";
 static NSString * const mediumImageSize = @"600x";
 static NSString * const largeImageSize = @""; // actual image
 
+// file upload
+static int const chunkSize = 5;
+static int const megabyteDefinition = 1048576;
+
 // notifications
 static NSString * const kStatusBarTappedNotification = @"statusBarTappedNotification";
 
@@ -35,8 +39,8 @@ static BOOL const developmentEnvironment = FALSE; // both of these effect the ba
 static BOOL const stagingEnvironment = FALSE;
 
 // authorization constants
-static NSString * const clientAuthorization = @"aW9zOmFzZHBvaXF3ZWxramRmaGtpOWVvcmhneQ";
-//static NSString * const clientAuthorization = @"MTMzNzp0aGlzaXNhc2VjcmV0";
+//static NSString * const clientAuthorization = @"aW9zOmFzZHBvaXF3ZWxramRmaGtpOWVvcmhneQ";
+static NSString * const clientAuthorization = @"MTMzNzp0aGlzaXNhc2VjcmV0";
 static NSString * const testBearerToken = @"goog";
 static NSString * const serviceName = @"frescoNewsService3";
 static NSString * const FRSUploadNotification = @"FRSUploadUpdateNotification";

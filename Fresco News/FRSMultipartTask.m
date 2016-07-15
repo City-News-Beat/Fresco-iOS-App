@@ -110,8 +110,7 @@
     NSURL *urlToUploadTo = _destinationURLS[totalConnections];
     openConnections++;
     totalConnections++;
-    NSInteger connect = totalConnections;
-    
+    int connect = (int)totalConnections;
     if (!urlToUploadTo) {
         return; // error
     }
@@ -122,20 +121,34 @@
     
     __block NSData *dataToUpload = [currentData copy];
     currentData = Nil;
+    
+    [self uploadChunk:chunkRequest data:dataToUpload index:connect];
+}
+
+-(void)uploadChunk:(NSURLRequest *)chunkRequest data:(NSData *)dataToUpload index:(int)connect {
     __weak typeof(self) weakSelf = self;
     
     NSURLSessionUploadTask *task = [self.session uploadTaskWithRequest:chunkRequest fromData:dataToUpload completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         openConnections--;
         
         if (error) {
+            totalErrors++;
+            
             NSLog(@"CHUNK ERROR: %@", error);
+            
             // put in provision for # of errors, and icing the task, and being able to resume it when asked to
-            if (weakSelf.delegate) {
+            if (weakSelf.delegate && totalErrors > chunkMaxFailures) {
                 [weakSelf.delegate uploadDidFail:self withError:error response:data];
+            }
+            else {
+                [self uploadChunk:chunkRequest data:dataToUpload index:connect];
+                return;
             }
         }
         else {
-            dataToUpload = Nil;
+            
+            totalErrors = 0;
+            
             NSLog(@"CHUNK UPLOADED");
             NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
             NSString *eTag = headers[@"Etag"];
@@ -147,7 +160,7 @@
             if (eTag) {
                 [tags setObject:eTag forKey:@(connect-1)];
             }
-
+            
             if (weakSelf.delegate) {
                 [weakSelf.delegate uploadDidSucceed:weakSelf withResponse:data];
             }
@@ -180,7 +193,6 @@
     if (openConnections < maxConcurrentUploads && needsData) {
         [self next];
     }
-    
 }
 
 // have to override to take into account multiple chunks

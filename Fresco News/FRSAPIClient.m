@@ -9,7 +9,6 @@
 #import "FRSAPIClient.h"
 #import "Fresco.h"
 #import "FRSPost.h"
-#import "FRSFileUploadManager.h" // temp patch
 #import "FRSRequestSerializer.h"
 #import "FRSAppDelegate.h"
 #import "FRSOnboardingViewController.h"
@@ -186,7 +185,7 @@
     signedInRequest.predicate = signedInPredicate;
     
     // get context from app deleegate (hate this dependency but no need to re-write rn to move up)
-    NSManagedObjectContext *context = [FRSFileUploadManager uploaderContext]; // temp (replace with internal or above method
+    NSManagedObjectContext *context = [self managedObjectContext]; // temp (replace with internal or above method
     
     // no need to sort response, because theoretically there is 1
     NSError *userFetchError;
@@ -233,7 +232,6 @@
 
 // all info needed for "installation" field of registration/signin
 -(NSDictionary *)currentInstallation {
-    
     
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
@@ -330,7 +328,6 @@
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
-    NSLog(@"ENDPOINT: %@", endpoint);
     
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -355,7 +352,7 @@
                // NSLog(@"Sent Location");
             }
             else {
-                NSLog(@"Location Error: %@", error);
+                NSLog(@"Location Error: %ld", (long)error.code);
             }
         }];
     });
@@ -786,7 +783,6 @@
 
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
-    NSLog(@"ENDPOINT: %@", endpoint);
     
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -817,7 +813,6 @@
 
 -(void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
-    NSLog(@"ENDPOINT: %@", endpoint);
 
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
