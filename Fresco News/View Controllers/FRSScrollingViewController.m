@@ -102,6 +102,10 @@
     NSLog(@"Scrolling");
     NSLog(@"Difference: %ld", (long)difference);
     
+    NSMutableArray *barButtonItems = [NSMutableArray array];
+    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
+    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
+    
     //NSLog(@"\n");
 
     //NSLog(@"Nav Bar Bounds Y: %f", navBarHeight);
@@ -117,9 +121,6 @@
         if((scrollingDifferenceDown < self.navBarHeight) && self.scrollDirection == UIScrollViewScrollDirectionDown){
             [self.navigationController.navigationBar setBounds:CGRectMake(self.navigationController.navigationBar.bounds.origin.x, scrollingDifferenceDown, self.navigationController.navigationBar.bounds.size.width,self.navigationController.navigationBar.bounds.size.height)];
             //Change nav buttons alpha & size
-            NSMutableArray *barButtonItems = [NSMutableArray array];
-            [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
-            [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
             for(UIBarButtonItem *item in barButtonItems){
                 [item setTintColor:[item.tintColor colorWithAlphaComponent:1.0-(scrollingDifferenceDown/self.navBarHeight)]];
                 if(item.imageInsets.bottom < item.image.size.height + 5){
@@ -130,16 +131,12 @@
             self.navigationItem.titleView.alpha = 1.0-(scrollingDifferenceDown/self.navBarHeight);
             [self.navigationItem.titleView setBounds:CGRectMake(self.navigationItem.titleView.bounds.origin.x, scrollingDifferenceDown+(self.navBarHeight/2)-4, self.navigationItem.titleView.bounds.size.width,self.navigationItem.titleView.bounds.size.height)];
         }else if(!(scrollingDifferenceDown < self.navBarHeight) && self.scrollDirection == UIScrollViewScrollDirectionDown){
-            [self collapseNavBar];
+            [self collapseNavBar:barButtonItems];
         }
         //If the users scrolls up (scrollview expands)
         if((scrollingDifferenceUp > 0) && self.scrollDirection == UIScrollViewScrollDirectionUp){
             [self.navigationController.navigationBar setBounds:CGRectMake(self.navigationController.navigationBar.bounds.origin.x, scrollingDifferenceUp, self.navigationController.navigationBar.bounds.size.width,self.navigationController.navigationBar.bounds.size.height)];
             //NSLog(@"awjdakjwndandiandkjanwdkjnawdkjandkjanwjkdnawkjdnkawndkwndkjandlknawkljdnakjwnd");
-            
-            NSMutableArray *barButtonItems = [NSMutableArray array];
-            [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
-            [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
             for(UIBarButtonItem *item in barButtonItems){
                 [item setTintColor:[item.tintColor colorWithAlphaComponent:1.0-(scrollingDifferenceUp/self.navBarHeight)]];
                 NSLog(@"Alpha %f: ", 1.0-(scrollingDifferenceUp/self.navBarHeight));
@@ -154,7 +151,7 @@
             //NSLog(@"Inset Top:%fd",item.imageInsets.top);
             //NSLog(@"Inset Bot: %f",item.imageInsets.bottom);
         }else if(!(scrollingDifferenceUp > 0) && self.scrollDirection == UIScrollViewScrollDirectionUp){
-            [self expandNavBar];
+            [self expandNavBar:barButtonItems];
         }
         //NSLog(@"Scroll Difference: %ld",scrollDifference);
         //NSLog(@"self.prevDirectOffSetY: %f",self.prevDirectOffSetY);
@@ -169,7 +166,7 @@
     
     self.prevContentOffY = currentContentOffY;
 }
-/*
+
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
@@ -178,36 +175,21 @@
     if (self.navigationController.navigationBar.bounds.origin.y < self.navBarHeight/2) {
         [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
-            [self.navigationController.navigationBar setBounds:CGRectMake(self.navigationController.navigationBar.bounds.origin.x, 0, self.navigationController.navigationBar.bounds.size.width,self.navigationController.navigationBar.bounds.size.height)];
-            /*for(UIBarButtonItem *item in barButtonItems){
-                [item setTintColor:[item.tintColor colorWithAlphaComponent:1]];
-                [item setImageInsets:UIEdgeInsetsMake(item.imageInsets.top, item.imageInsets.left, 0, item.imageInsets.right)];
-            }*/
-//            self.navigationItem.titleView.alpha = 1.0;
-   /*         [self.navigationItem.titleView setBounds:CGRectMake(self.navigationItem.titleView.bounds.origin.x, (self.navBarHeight/2)-4, self.navigationItem.titleView.bounds.size.width,5)];
+            [self collapseNavBar:barButtonItems];
 
     } completion:nil];
     }else{
         [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             
-            [self.navigationController.navigationBar setBounds:CGRectMake(self.navigationController.navigationBar.bounds.origin.x, self.navBarHeight, self.navigationController.navigationBar.bounds.size.width,self.navigationController.navigationBar.bounds.size.height)];
-            /*for(UIBarButtonItem *item in barButtonItems){
-                [item setTintColor:[item.tintColor colorWithAlphaComponent:0]];
-                [item setImageInsets:UIEdgeInsetsMake(item.imageInsets.top, item.imageInsets.left, item.image.size.height + 5, item.imageInsets.right)];
-            }*/
-//            self.navigationItem.titleView.alpha = 0.0;
-          /*  [self.navigationItem.titleView setBounds:CGRectMake(self.navigationItem.titleView.bounds.origin.x, self.navBarHeight-4, self.navigationItem.titleView.bounds.size.width,5)];
+            [self expandNavBar:barButtonItems];
             
         } completion:nil];
     }
     
-}*/
--(void)collapseNavBar{
+}
+-(void)collapseNavBar:(NSArray *)barButtonITems{
     NSLog(@"Collapsed Nav bar");
     [self.navigationController.navigationBar setBounds:CGRectMake(self.navigationController.navigationBar.bounds.origin.x, self.navBarHeight, self.navigationController.navigationBar.bounds.size.width,self.navigationController.navigationBar.bounds.size.height)];
-    NSMutableArray *barButtonItems = [NSMutableArray array];
-    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
-    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
     for(UIBarButtonItem *item in barButtonItems){
         [item setTintColor:[item.tintColor colorWithAlphaComponent:0]];
         [item setImageInsets:UIEdgeInsetsMake(item.imageInsets.top, item.imageInsets.left, item.image.size.height + 5, item.imageInsets.right)];
@@ -216,12 +198,9 @@
     [self.navigationItem.titleView setBounds:CGRectMake(self.navigationItem.titleView.bounds.origin.x, self.navBarHeight-4, self.navigationItem.titleView.bounds.size.width,5)];
 }
 
--(void)expandNavBar{
+-(void)expandNavBar:(NSArray *)barButtonITems{
     NSLog(@"Expanded Nav bar");
     [self.navigationController.navigationBar setBounds:CGRectMake(self.navigationController.navigationBar.bounds.origin.x, 0, self.navigationController.navigationBar.bounds.size.width,self.navigationController.navigationBar.bounds.size.height)];
-    NSMutableArray *barButtonItems = [NSMutableArray array];
-    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
-    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
     for(UIBarButtonItem *item in barButtonItems){
         [item setTintColor:[item.tintColor colorWithAlphaComponent:1]];
         [item setImageInsets:UIEdgeInsetsMake(item.imageInsets.top, item.imageInsets.left, 0, item.imageInsets.right)];
