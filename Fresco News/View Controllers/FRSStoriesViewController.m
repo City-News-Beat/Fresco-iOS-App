@@ -137,13 +137,16 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(searchStories)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.navigationItem.titleView = titleView;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(self.navigationItem.titleView.frame.size.width/2 - 44, 6, 75, 30)];
     label.text = @"STORIES";
     label.font = [UIFont notaBoldWithSize:17];
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = [UIColor whiteColor];
     
-    [self.navigationItem setTitleView:label];
+    [self.navigationItem.titleView addSubview:label];
 }
 
 -(void)configurePullToRefresh {

@@ -61,7 +61,8 @@
         //[self.navigationItem setLeftItemsSupplementBackButton:false];
     }
     
-    self.navigationController.navigationBarHidden = NO;
+    [self.navigationController setNavigationBarHidden:false];
+    NSLog(@"%f",self.navigationController.navigationBar.bounds.origin.y);
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
 }
 
@@ -172,7 +173,7 @@
 -(void)configureNavigationBar{
     self.navigationItem.titleView.backgroundColor = [UIColor whiteColor];
     if(self.isEditingProfile){
-        self.navigationItem.title = @"EDIT YOUR PROFILE";
+        self.navigationItem.title = @"EDIT PROFILE";
         
         UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -199,7 +200,7 @@
         
         self.navigationItem.leftBarButtonItem = backBarButtonItem;
     }else{
-        self.navigationItem.title = @"SETUP YOUR PROFILE";
+        self.navigationItem.title = @"SET UP YOUR PROFILE";
         self.navigationItem.hidesBackButton = YES;
     }
     [[UINavigationBar appearance] setTitleTextAttributes: @{
@@ -487,18 +488,16 @@
 #pragma Text View Delegate
 
 -(void)textViewDidBeginEditing:(UITextView *)textView{
+    if ([textView.text isEqualToString:@"Bio"] || [textView.text isEqualToString:@"bio"]){
+        textView.attributedText = nil;
+        textView.text = @"";
+        textView.textColor = [UIColor frescoDarkTextColor];
+    }
+    
     if (!self.dismissGR){
         self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     }
     [self.view addGestureRecognizer:self.dismissGR];
-    
-    if ([_bioStr isEqualToString:@"Bio"] && _isEditingProfile){
-        textView.attributedText = nil;
-        textView.textColor = [UIColor frescoDarkTextColor];
-    }else if(self.bioTV.attributedText && [_bioStr isEqualToString:@"Bio"]){
-        textView.attributedText = nil;
-        textView.textColor = [UIColor frescoDarkTextColor];
-    }
 }
 
 -(void)textViewDidEndEditing:(UITextView *)textView{

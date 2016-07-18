@@ -42,6 +42,9 @@
     
     self.navigationBar.translucent = NO;
     self.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    self.hidesBarsOnSwipe = false;
+    self.hidesBarsOnTap = false;
+    self.hidesBarsWhenVerticallyCompact=false;
     
     self.containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 44)];
     
@@ -116,6 +119,10 @@
     self.navigationBar.topItem.titleView = self.containerView;
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    NSLog(@"Showed Nav");
+}
 
 -(void)adjustFrames{
     
