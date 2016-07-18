@@ -195,6 +195,16 @@
     }
 }
 
+-(NSArray *)sortedTags {
+    
+    NSMutableArray *tag = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < _eTags.count; i++) {
+        [tag addObject:tags[@(i)]];
+    }
+    
+    return tag;
+}
 // have to override to take into account multiple chunks
 - (void)URLSession:(NSURLSession *)urlSession task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
     self.bytesUploaded += bytesSent;

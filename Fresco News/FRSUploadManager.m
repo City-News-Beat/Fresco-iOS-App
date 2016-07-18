@@ -98,7 +98,7 @@
                 [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
                     
                     NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
-                    postCompletionDigest[@"eTags"] = multipartTask.eTags;
+                    postCompletionDigest[@"eTags"] = [multipartTask sortedTags];
                     postCompletionDigest[@"uploadId"] = post[@"uploadId"];
                     postCompletionDigest[@"key"] = post[@"key"];
                     
