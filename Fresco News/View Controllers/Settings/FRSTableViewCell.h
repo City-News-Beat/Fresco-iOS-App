@@ -40,5 +40,8 @@
 
 -(void)configureFindFriendsCell;
 
+@property (strong, nonatomic) UIButton *rightAlignedButton;
+@property (strong, nonatomic) UITextField *textField;
+
 @end
 

@@ -40,10 +40,6 @@
 
 @property (strong, nonatomic) UILabel *logOutLabel;
 
-@property (strong, nonatomic) UITextField *textField;
-
-@property (strong, nonatomic) UIButton *rightAlignedButton;
-
 @property (strong, nonatomic) UILabel *disableAccountTitleLabel;
 @property (strong, nonatomic) UILabel *disableAccountSubtitleLabel;
 @property (strong, nonatomic) UIImageView *sadEmojiIV;
@@ -213,10 +209,9 @@
     if(secure){
         self.textField.secureTextEntry = YES;
     }
-    
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if(range.length + range.location > textField.text.length) {
         return NO;
     }
@@ -226,14 +221,15 @@
 }
 
 -(void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width withColor:(UIColor *)color {
+    
     self.backgroundColor = [UIColor clearColor];
-    self.rightAlignedButton = [[UIButton alloc] initWithFrame: CGRectMake(self.frame.size.width - width, 0, width, self.frame.size.height)];
+    self.rightAlignedButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.rightAlignedButton.frame = CGRectMake(self.frame.size.width - width, 0, width, self.frame.size.height);
     [self.rightAlignedButton setTitle:title forState:UIControlStateNormal];
     [self.rightAlignedButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.rightAlignedButton setTitleColor:color forState:UIControlStateNormal];
     [self addSubview:self.rightAlignedButton];
 }
-
 
 -(void)configureCheckBoxCellWithTitle:(NSString *)title withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSelected:(BOOL)isSelected {
     
