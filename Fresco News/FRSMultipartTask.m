@@ -63,8 +63,10 @@
 }
 
 -(void)start {
-    [dataInputStream open];
-    [self readDataInputStream];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [dataInputStream open];
+        [self readDataInputStream];
+    });
 }
 -(void)readDataInputStream {
     
@@ -161,14 +163,6 @@
                 [tags setObject:eTag forKey:@(connect-1)];
             }
             
-            if (weakSelf.delegate) {
-                [weakSelf.delegate uploadDidSucceed:weakSelf withResponse:data];
-            }
-            
-            if (openConnections < maxConcurrentUploads && needsData) {
-                [weakSelf next];
-            }
-            
             if (openConnections == 0 && needsData == FALSE) {
                 NSLog(@"UPLOAD COMPLETE");
                 
@@ -179,8 +173,19 @@
                     }
                 }
                 if (weakSelf.completionBlock) {
+                    NSLog(@"TAGS: %@", weakSelf.eTags);
+                    
                     weakSelf.completionBlock(self, Nil, Nil, TRUE, Nil);
                 }
+            }
+            
+            
+            if (weakSelf.delegate) {
+                [weakSelf.delegate uploadDidSucceed:weakSelf withResponse:data];
+            }
+            
+            if (openConnections < maxConcurrentUploads && needsData) {
+                [weakSelf next];
             }
         }
         
