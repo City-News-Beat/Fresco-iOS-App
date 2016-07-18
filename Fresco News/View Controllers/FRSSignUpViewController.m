@@ -145,7 +145,6 @@
         // View is disappearing because it was popped from the stack
         [self.navigationController setNavigationBarHidden:YES animated:YES];
     }
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

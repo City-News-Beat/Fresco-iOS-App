@@ -173,7 +173,7 @@
 -(void)configureNavigationBar{
     self.navigationItem.titleView.backgroundColor = [UIColor whiteColor];
     if(self.isEditingProfile){
-        self.navigationItem.title = @"EDIT YOUR PROFILE";
+        self.navigationItem.title = @"EDIT PROFILE";
         
         UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -200,7 +200,7 @@
         
         self.navigationItem.leftBarButtonItem = backBarButtonItem;
     }else{
-        self.navigationItem.title = @"SETUP YOUR PROFILE";
+        self.navigationItem.title = @"SET UP YOUR PROFILE";
         self.navigationItem.hidesBackButton = YES;
     }
     [[UINavigationBar appearance] setTitleTextAttributes: @{
