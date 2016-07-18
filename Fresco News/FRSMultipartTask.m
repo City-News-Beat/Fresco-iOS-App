@@ -63,46 +63,54 @@
 }
 
 -(void)start {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0);
+    dispatch_async(queue, ^ {
+        [dataInputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+                                   forMode:NSDefaultRunLoopMode];
         [dataInputStream open];
         [self readDataInputStream];
+
+        // here: start the loop
+        [[NSRunLoop currentRunLoop] run];
+        // note: all code below this line won't be executed, because the above method NEVER returns.
+    });
 }
 -(void)readDataInputStream {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if (!currentData) {
-            needsData = TRUE;
-            currentData = [[NSMutableData alloc] init];
-        }
+    
+    if (!currentData) {
+        needsData = TRUE;
+        currentData = [[NSMutableData alloc] init];
+    }
+    
+    uint8_t buffer[1024];
+    NSInteger length;
+    BOOL ranOnce = FALSE;
+    BOOL triggeredUpload = FALSE;
+    
+    while ([dataInputStream hasBytesAvailable])
+    {
+        length = [dataInputStream read:buffer maxLength:1024];
+       // dataRead += length;
+        ranOnce = TRUE;
         
-        uint8_t buffer[1024];
-        NSInteger length;
-        BOOL ranOnce = FALSE;
-        BOOL triggeredUpload = FALSE;
-        
-        while ([dataInputStream hasBytesAvailable])
+        if (length > 0)
         {
-            length = [dataInputStream read:buffer maxLength:1024];
-            // dataRead += length;
-            ranOnce = TRUE;
-            
-            if (length > 0)
-            {
-                [currentData appendBytes:buffer length:length];
-            }
-            if ([currentData length] >= chunkSize * megabyteDefinition) {
-                [self startChunkUpload];
-                triggeredUpload = TRUE;
-                break;
-            }
+            [currentData appendBytes:buffer length:length];
         }
-        
-        // last chunk, less than 5mb, streaming process ends here
-        if (ranOnce && !triggeredUpload) {
+        if ([currentData length] >= chunkSize * megabyteDefinition) {
             [self startChunkUpload];
-            needsData = FALSE;
-            [dataInputStream close];
-            NSLog(@"LAST CHUNK");
+            triggeredUpload = TRUE;
+            break;
         }
-    });
+    }
+    
+    // last chunk, less than 5mb, streaming process ends here
+    if (ranOnce && !triggeredUpload) {
+        [self startChunkUpload];
+        needsData = FALSE;
+        [dataInputStream close];
+        NSLog(@"LAST CHUNK");
+    }
 }
 
 // moves to next chunk based on previously succeeded blocks, does not iterate if we are above max # concurrent requests
