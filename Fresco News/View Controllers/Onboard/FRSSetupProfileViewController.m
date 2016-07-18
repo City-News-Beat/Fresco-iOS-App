@@ -31,16 +31,12 @@
 @property (strong, nonatomic) UITextView *bioTV;
 @property (strong, nonatomic) UITextField *nameTF;
 @property (strong, nonatomic) UITextField *locationTF;
-
 @property (strong, nonatomic) UIImageView *placeHolderUserIcon;
-
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
-
 @property (nonatomic) NSInteger y;
-
 @property (strong, nonatomic) UITapGestureRecognizer *dismissGR;
-
 @property (strong, nonatomic) UIButton *backTapButton;
+@property (strong, nonatomic) UIButton *doneButton;
 
 @end
 
@@ -90,6 +86,11 @@
 }
 
 -(void)addUserProfile {
+    
+    if (self.nameTF.text == nil) {
+        return;
+    }
+    
     [[FRSAPIClient sharedClient] updateUserWithDigestion:[self updateDigest] completion:^(id responseObject, NSError *error) {
         
         if (error) {
@@ -332,6 +333,9 @@
     self.nameTF.font = [UIFont systemFontOfSize:15 weight:-1];
     self.nameTF.textColor = [UIColor frescoDarkTextColor];
     self.nameTF.backgroundColor = [UIColor frescoBackgroundColorDark];
+    
+    [self.nameTF addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+    
     [backgroundView addSubview:self.nameTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -396,12 +400,13 @@
     
     [self.bottomBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
-    UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 130, 0, 167, 44)];
-    [doneButton setTitle:@"DONE" forState:UIControlStateNormal];
-    [doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-    [doneButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    [self.bottomBar addSubview:doneButton];
-    [doneButton addTarget:self action:@selector(addUserProfile) forControlEvents:UIControlEventTouchUpInside];
+    self.doneButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 130, 0, 167, 44)];
+    [self.doneButton setTitle:@"DONE" forState:UIControlStateNormal];
+    self.doneButton.userInteractionEnabled = NO;
+    [self.doneButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    [self.doneButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    [self.bottomBar addSubview:self.doneButton];
+    [self.doneButton addTarget:self action:@selector(addUserProfile) forControlEvents:UIControlEventTouchUpInside];
     
 //    [self constrainSubview:bottomBar ToBottomOfParentView:self.view WithHeight:44];
 }
@@ -461,6 +466,20 @@
 
 #pragma TextField Delegate
 
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+
+    if ([self.nameTF.text isEqualToString:@""]) {
+        self.doneButton.userInteractionEnabled = NO;
+        [self.doneButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    } else {
+        self.doneButton.userInteractionEnabled = YES;
+        [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+
+    }
+    
+    return YES;
+}
+
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
 
     if(textField == self.nameTF){
@@ -473,6 +492,7 @@
 }
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
+    
     if (!self.dismissGR){
         self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     }
