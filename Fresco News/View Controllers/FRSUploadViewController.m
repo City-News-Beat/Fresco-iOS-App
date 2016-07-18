@@ -401,7 +401,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.assignmentsTableView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.assignmentsTableView.showsVerticalScrollIndicator = NO;
     self.assignmentsTableView.delaysContentTouches = NO;
-//    self.assignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.assignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     self.dismissKeyboardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     self.dismissKeyboardGestureRecognizer.enabled = NO;
