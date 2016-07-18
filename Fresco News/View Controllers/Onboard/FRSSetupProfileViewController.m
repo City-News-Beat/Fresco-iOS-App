@@ -400,8 +400,8 @@
     
     [self.bottomBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
-    self.doneButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 130, 0, 167, 44)];
-    [self.doneButton setTitle:@"DONE" forState:UIControlStateNormal];
+    self.doneButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 91 - 16, 0, 91, 44)];
+    [self.doneButton setTitle:@"SAVE PROFILE" forState:UIControlStateNormal];
     self.doneButton.userInteractionEnabled = NO;
     [self.doneButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     [self.doneButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
