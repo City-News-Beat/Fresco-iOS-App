@@ -162,7 +162,7 @@
     
     [self determineScrollDirection:scrollView];
     
-    //[self adjustFramesForDifference:difference forScrollView:scrollView];
+    [self adjustFramesForDifference:difference forScrollView:scrollView];
     
     self.prevContentOffY = currentContentOffY;
 }

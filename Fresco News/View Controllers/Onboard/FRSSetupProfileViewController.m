@@ -61,7 +61,8 @@
         //[self.navigationItem setLeftItemsSupplementBackButton:false];
     }
     
-    self.navigationController.navigationBarHidden = NO;
+    [self.navigationController setNavigationBarHidden:false];
+    NSLog(@"%f",self.navigationController.navigationBar.bounds.origin.y);
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
 }
 
@@ -487,18 +488,16 @@
 #pragma Text View Delegate
 
 -(void)textViewDidBeginEditing:(UITextView *)textView{
+    if ([textView.text isEqualToString:@"Bio"] || [textView.text isEqualToString:@"bio"]){
+        textView.attributedText = nil;
+        textView.text = @"";
+        textView.textColor = [UIColor frescoDarkTextColor];
+    }
+    
     if (!self.dismissGR){
         self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     }
     [self.view addGestureRecognizer:self.dismissGR];
-    
-    if ([_bioStr isEqualToString:@"Bio"] && _isEditingProfile){
-        textView.attributedText = nil;
-        textView.textColor = [UIColor frescoDarkTextColor];
-    }else if(self.bioTV.attributedText && [_bioStr isEqualToString:@"Bio"]){
-        textView.attributedText = nil;
-        textView.textColor = [UIColor frescoDarkTextColor];
-    }
 }
 
 -(void)textViewDidEndEditing:(UITextView *)textView{

@@ -73,28 +73,8 @@
     self.navigationBar.topItem.titleView = self.containerView;
 }
 
--(void)setNavigationBarHidden:(BOOL)navigationBarHidden{
-    NSLog(@"Hid Nav1");
-}
-
--(void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated{
-    if(!hidden && animated){
-        NSLog(@"Hid Nav2");
-    }else if(hidden && animated){
-        NSLog(@"Hid Nav3");
-    }
-}
-
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    NSLog(@"Showed Nav");
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    NSLog(@"Disappear Nav");
-}
-
--(void)viewDidAppear:(BOOL)animated{
     NSLog(@"Showed Nav");
 }
 
