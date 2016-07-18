@@ -95,7 +95,21 @@
             });
         }
         else if ([update[@"type"] isEqualToString:@"failure"]) {
+            CGRect navFrame = self.navigationBar.frame;
+            navFrame.origin.y -= 20;
+            navFrame.size.height += 20;
+            navFrame.size.width = 0;
             
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:.2 animations:^{
+                    _progressView.alpha = 0;
+                    self.navigationBar.barTintColor = [UIColor frescoRedHeartColor];
+                } completion:^(BOOL finished) {
+                    _progressView.frame = navFrame;
+                    _progressView.alpha = 1;
+                }];
+            });
+
         }
         
     }];
