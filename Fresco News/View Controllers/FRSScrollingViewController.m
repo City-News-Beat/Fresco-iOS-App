@@ -187,7 +187,7 @@
     }
     
 }
--(void)collapseNavBar:(NSArray *)barButtonITems{
+-(void)collapseNavBar:(NSArray *)barButtonItems{
     NSLog(@"Collapsed Nav bar");
     [self.navigationController.navigationBar setBounds:CGRectMake(self.navigationController.navigationBar.bounds.origin.x, self.navBarHeight, self.navigationController.navigationBar.bounds.size.width,self.navigationController.navigationBar.bounds.size.height)];
     for(UIBarButtonItem *item in barButtonItems){
@@ -198,7 +198,7 @@
     [self.navigationItem.titleView setBounds:CGRectMake(self.navigationItem.titleView.bounds.origin.x, self.navBarHeight-4, self.navigationItem.titleView.bounds.size.width,5)];
 }
 
--(void)expandNavBar:(NSArray *)barButtonITems{
+-(void)expandNavBar:(NSArray *)barButtonItems{
     NSLog(@"Expanded Nav bar");
     [self.navigationController.navigationBar setBounds:CGRectMake(self.navigationController.navigationBar.bounds.origin.x, 0, self.navigationController.navigationBar.bounds.size.width,self.navigationController.navigationBar.bounds.size.height)];
     for(UIBarButtonItem *item in barButtonItems){
