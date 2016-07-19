@@ -373,6 +373,9 @@
     NSDictionary *params = @{
                              @"geo" : geoData,
                              @"radius" : @(radius),
+                             @"rating" : @1,
+                             @"starts_before" : @"asd", //iso date or millisecond timestamp
+                             @"starts_after" : @"asa" //iso date or millisecond timestamp
                             };    
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
