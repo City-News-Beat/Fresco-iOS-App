@@ -76,6 +76,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:.05 animations:^{
                     _progressView.frame = navFrame;
+                    [self showUploadButtons:TRUE];
                 }];
             });
         }
@@ -88,6 +89,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:.2 animations:^{
                     _progressView.alpha = 0;
+                    [self showUploadButtons:FALSE];
                 } completion:^(BOOL finished) {
                     _progressView.frame = navFrame;
                     _progressView.alpha = 1;
@@ -104,6 +106,8 @@
                 [UIView animateWithDuration:.2 animations:^{
                     _progressView.alpha = 0;
                     self.navigationBar.barTintColor = [UIColor frescoRedHeartColor];
+                    [self showFailureButtons:TRUE];
+                    [self showUploadButtons:FALSE];
                 } completion:^(BOOL finished) {
                     _progressView.frame = navFrame;
                     _progressView.alpha = 1;
@@ -113,6 +117,14 @@
         }
         
     }];
+}
+
+-(void)showFailureButtons:(BOOL)show {
+    
+}
+
+-(void)showUploadButtons:(BOOL)show {
+    
 }
 
 
