@@ -88,7 +88,7 @@
         FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
         
         [multipartTask createUploadFromSource:myAsset.URL destinations:urls progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
-            [self uploadedData:bytesSent];
+           // [self uploadedData:bytesSent];
         } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
             if (success) {
                 NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
