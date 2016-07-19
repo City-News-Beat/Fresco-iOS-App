@@ -18,6 +18,8 @@
 @property (strong, nonatomic) FRSTableViewCell *cell;
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) UIImageView *usernameCheckIV;
+@property (strong, nonatomic) NSTimer *usernameTimer;
+@property (nonatomic) BOOL usernameTaken;
 
 @end
 
@@ -63,6 +65,8 @@
     
     NSString *cellIdentifier;
     self.cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    self.cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
     if (self.cell == nil) {
         self.cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
@@ -121,10 +125,19 @@
     
     if ([textField.text isEqualToString:@""] || textField.text == nil) {
         self.usernameCheckIV.alpha = 0;
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = NO;
+        self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
     }
     
     self.username = textField.text;
-    [self checkUsername];
+    if ([self isValidUsername:self.username]) {
+        [self checkUsername];
+    } else {
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = NO;
+        self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
+    }
     
     //Set max length to 40
     if(range.length + range.location > textField.text.length) {
@@ -140,7 +153,6 @@
     
     NSDictionary *digestion = @{@"username" : self.username};
     
-    
     [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
         NSLog(@"RESPONSE: %@ \n ERROR: %@", responseObject, error);
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -150,26 +162,51 @@
     [self popViewController];
 }
 
--(void)checkUsername {
-
-    NSLog(@"SAVE USERNAME");
+-(BOOL)isValidUsername:(NSString *)username {
     
-    if ([self.username isEqualToString:@""] || self.username == nil) {
+    if ([self stringContainsEmoji:username]) {
+        return NO;
+    }
+    
+    if ([username isEqualToString:@"@"]) {
+        return NO;
+    }
+    
+    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
+    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
+    if (([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound) /*&& ([username length] >= 4)*/ && (!([username length] > 20))) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+-(void)checkUsername {    
+    
+    if (![self isValidUsername:self.username]) {
+        return;
+    }
+    
+    NSRange whiteSpaceRange = [self.username rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if ([self.username isEqualToString:@""] || self.username == nil || whiteSpaceRange.location != NSNotFound || [self stringContainsEmoji:self.username]) {
         self.usernameCheckIV.alpha = 0;
         return;
     }
     
-    [[FRSAPIClient sharedClient] checkUsername:self.username completion:^(id responseObject, NSError *error) {
-        
-        NSLog(@"RESPONSE OBJECT: %@", responseObject);
-        NSLog(@"ERROR: %@", error);
-        
-        if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
-            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-        } else {
-            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-        }
-    }];
+    [self startUsernameTimer];
+    
+//    [[FRSAPIClient sharedClient] checkUsername:self.username completion:^(id responseObject, NSError *error) {
+//        
+//        NSLog(@"RESPONSE OBJECT: %@", responseObject);
+//        NSLog(@"ERROR: %@", error);
+//        
+//        if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
+//            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+//        } else {
+//            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+//        }
+//    }];
 }
 
 -(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
@@ -183,12 +220,12 @@
     
     if(!success) {
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
-        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        self.cell.rightAlignedButton.userInteractionEnabled = YES;
+//        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+//        self.cell.rightAlignedButton.userInteractionEnabled = YES;
     } else {
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
-        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        self.cell.rightAlignedButton.userInteractionEnabled = NO;
+//        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+//        self.cell.rightAlignedButton.userInteractionEnabled = NO;
     }
     
     if (animateIn) {
@@ -206,7 +243,104 @@
     }
 }
 
+#pragma mark - Username timer
 
+-(void)startUsernameTimer {
+    if (!self.usernameTimer) {
+        self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(usernameTimerFired) userInfo:nil repeats:YES];
+    }
+}
+
+-(void)stopUsernameTimer {
+    if ([self.usernameTimer isValid]) {
+        [self.usernameTimer invalidate];
+    }
+    
+    self.usernameTimer = nil;
+}
+
+-(void)usernameTimerFired {
+    
+    if (![self isValidUsername:self.username]) {
+        return;
+    }
+    
+    NSRange whiteSpaceRange = [self.username rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if ([self.username isEqualToString:@""] || self.username == nil || whiteSpaceRange.location != NSNotFound || [self stringContainsEmoji:self.username]) {
+        self.usernameCheckIV.alpha = 0;
+        return;
+    }
+    
+    // Check for emoji and error
+    if ([self stringContainsEmoji:[self.cell.textField.text substringFromIndex:1]]){
+        [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+        return;
+    }
+    
+    if (![self stringContainsEmoji:self.cell.textField.text]) {
+        
+        if ((![self.cell.textField.text isEqualToString:@""])) {
+            
+            [[FRSAPIClient sharedClient] checkUsername:self.username completion:^(id responseObject, NSError *error) {
+                
+                if (![error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
+                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                    self.usernameTaken = NO;
+                    [self stopUsernameTimer];
+                    [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+                    self.cell.rightAlignedButton.userInteractionEnabled = NO;
+                } else {
+                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                    self.usernameTaken = YES;
+                    [self stopUsernameTimer];
+                    [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+                    self.cell.rightAlignedButton.userInteractionEnabled = YES;
+                }
+            }];
+        }
+    }
+}
+
+-(BOOL)stringContainsEmoji:(NSString *)string {
+    __block BOOL returnValue = NO;
+    [string enumerateSubstringsInRange:NSMakeRange(0, [string length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:
+     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+         
+         const unichar hs = [substring characterAtIndex:0];
+         // surrogate pair
+         if (0xd800 <= hs && hs <= 0xdbff) {
+             if (substring.length > 1) {
+                 const unichar ls = [substring characterAtIndex:1];
+                 const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+                 if (0x1d000 <= uc && uc <= 0x1f77f) {
+                     returnValue = YES;
+                 }
+             }
+         } else if (substring.length > 1) {
+             const unichar ls = [substring characterAtIndex:1];
+             if (ls == 0x20e3) {
+                 returnValue = YES;
+             }
+             
+         } else {
+             // non surrogate
+             if (0x2100 <= hs && hs <= 0x27ff) {
+                 returnValue = YES;
+             } else if (0x2B05 <= hs && hs <= 0x2b07) {
+                 returnValue = YES;
+             } else if (0x2934 <= hs && hs <= 0x2935) {
+                 returnValue = YES;
+             } else if (0x3297 <= hs && hs <= 0x3299) {
+                 returnValue = YES;
+             } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
+                 returnValue = YES;
+             }
+         }
+     }];
+    
+    return returnValue;
+}
 
 
 
