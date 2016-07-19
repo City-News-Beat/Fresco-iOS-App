@@ -98,7 +98,10 @@
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
-    self.imageUrl = dict[@"image"];
+    
+    if (dict[@"image"] && ![dict[@"image"] isEqual:[NSNull null]]) {
+        self.imageUrl = dict[@"image"];
+    }
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"address"]];
     
