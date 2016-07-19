@@ -70,7 +70,9 @@
             NSNumber *uploadPercentage = update[@"percentage"];
             float percentage = [uploadPercentage floatValue];
             
-            CGRect navFrame = _progressView.frame;
+            CGRect navFrame = self.navigationBar.frame;
+            navFrame.origin.y -= 40;
+            navFrame.size.height += 20;
             navFrame.size.width = self.navigationBar.frame.size.width * percentage;
             
             dispatch_async(dispatch_get_main_queue(), ^{
