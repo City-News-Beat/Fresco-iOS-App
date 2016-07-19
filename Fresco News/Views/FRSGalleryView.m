@@ -592,14 +592,8 @@
     if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            NSLog(@"Set profile image");
-
             //Set user image
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-            
-            if (post.creator.profileImage != nil) {
-                NSLog(@"User has image");
-            }
             
             //Add gesture recognizer only if user has a photo
             
@@ -650,7 +644,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-            
+            NSLog(@"%@",[NSURL URLWithString:post.creator.profileImage]);
             //Add gesture recognizer only if user has a photo
             UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
             [bylineTap setNumberOfTapsRequired:1];
