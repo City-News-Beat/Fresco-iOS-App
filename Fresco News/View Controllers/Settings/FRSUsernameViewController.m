@@ -10,6 +10,7 @@
 #import "FRSAPIClient.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSUsernameViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -61,25 +62,26 @@
 - (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     NSString *cellIdentifier;
-    FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    self.cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (self.cell == nil) {
+        self.cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
+    if ([self.cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.cell setSeparatorInset:UIEdgeInsetsZero];
     }
-    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-        [cell setPreservesSuperviewLayoutMargins:NO];
+    if ([self.cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+        [self.cell setPreservesSuperviewLayoutMargins:NO];
     }
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
+    if ([self.cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [self.cell setLayoutMargins:UIEdgeInsetsZero];
     }
     
-    return cell;
+    return self.cell;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    cell = self.cell;
     
     switch (indexPath.row) {
         case 0:
@@ -101,7 +103,7 @@
             break;
         case 1:
             [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142 withColor:[UIColor frescoLightTextColor]];
-            [cell.rightAlignedButton addTarget:self action:@selector(checkUsername) forControlEvents:UIControlEventTouchUpInside];
+            [cell.rightAlignedButton addTarget:self action:@selector(saveUsername) forControlEvents:UIControlEventTouchUpInside];
             
             break;
             
@@ -134,6 +136,19 @@
     return YES;
 }
 
+-(void)saveUsername {
+    
+    NSDictionary *digestion = @{@"username" : self.username};
+    
+    
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
+        NSLog(@"RESPONSE: %@ \n ERROR: %@", responseObject, error);
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [delegate reloadUser];
+    }];
+    
+    [self popViewController];
+}
 
 -(void)checkUsername {
 
@@ -155,26 +170,25 @@
             [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
         }
     }];
-    
-    //display loader
-    //check username status
-    //give feedback
-    //if success show success alert green check
-    //if error show error alert and red x
-
 }
 
 -(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
     
     if ([self.username isEqualToString:@""] || self.username == nil) {
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = NO;
         self.usernameCheckIV.alpha = 0;
         return;
     }
     
     if(!success) {
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = YES;
     } else {
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = NO;
     }
     
     if (animateIn) {

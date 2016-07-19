@@ -20,6 +20,7 @@
 #import "FRSProfileViewController.h"
 //#import "FRSUserProfileViewController.h"
 #import "FRSAPIClient.h"
+#import "FRSAlertView.h"
 
 #define TEXTVIEW_TOP_PAD 12
 
