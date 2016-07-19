@@ -63,8 +63,17 @@
 }
 
 -(void)start {
-    [dataInputStream open];
-    [self readDataInputStream];
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0);
+    dispatch_async(queue, ^ {
+        [dataInputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+                                   forMode:NSDefaultRunLoopMode];
+        [dataInputStream open];
+        [self readDataInputStream];
+
+        // here: start the loop
+        [[NSRunLoop currentRunLoop] run];
+        // note: all code below this line won't be executed, because the above method NEVER returns.
+    });
 }
 -(void)readDataInputStream {
     
@@ -161,14 +170,6 @@
                 [tags setObject:eTag forKey:@(connect-1)];
             }
             
-            if (weakSelf.delegate) {
-                [weakSelf.delegate uploadDidSucceed:weakSelf withResponse:data];
-            }
-            
-            if (openConnections < maxConcurrentUploads && needsData) {
-                [weakSelf next];
-            }
-            
             if (openConnections == 0 && needsData == FALSE) {
                 NSLog(@"UPLOAD COMPLETE");
                 
@@ -179,8 +180,19 @@
                     }
                 }
                 if (weakSelf.completionBlock) {
+                    NSLog(@"TAGS: %@", weakSelf.eTags);
+                    
                     weakSelf.completionBlock(self, Nil, Nil, TRUE, Nil);
                 }
+            }
+            
+            
+            if (weakSelf.delegate) {
+                [weakSelf.delegate uploadDidSucceed:weakSelf withResponse:data];
+            }
+            
+            if (openConnections < maxConcurrentUploads && needsData) {
+                [weakSelf next];
             }
         }
         
@@ -195,6 +207,16 @@
     }
 }
 
+-(NSArray *)sortedTags {
+    
+    NSMutableArray *tag = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < _eTags.count; i++) {
+        [tag addObject:tags[@(i)]];
+    }
+    
+    return tag;
+}
 // have to override to take into account multiple chunks
 - (void)URLSession:(NSURLSession *)urlSession task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
     self.bytesUploaded += bytesSent;

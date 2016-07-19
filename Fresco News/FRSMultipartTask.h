@@ -31,7 +31,7 @@ static int const chunkFailWaitTime = 2; // resets between chunks (otherwise beha
 @property (nonatomic, retain) NSArray *destinationURLS;
 @property (nonatomic, retain, readonly) NSMutableArray *openConnections;
 @property (nonatomic, retain) NSMutableArray *eTags;
-
+-(NSArray *)sortedTags;
 -(void)startFromChunk:(NSInteger)chunk; // allows restarting (killed app etc)
 -(NSString *)contentMD5ForChunk:(NSData *)data; // used for MD5 of specific chunks (not streamed)
 -(void)createUploadFromSource:(NSURL *)asset destinations:(NSArray *)destinations progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion;
