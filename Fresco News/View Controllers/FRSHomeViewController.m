@@ -100,6 +100,7 @@
     //[self configureNoFollowers];
     
     [self.pageScroller addSubview:self.followingTable];
+    self.followingTable.scrollDelegate = self;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -745,9 +746,9 @@
         [self expandNavBarBy:scrollingDifference BarButtonItems:barButtonItems];
     }
     
-    NSLog(@"TABLEVIEW WIDTH: %f",self.tableView.frame.size.width);
-    NSLog(@"CONTENT X: %f",scrollView.contentOffset.x);
-    NSLog(@"SCROLLING Y: %f",scrollingDifference);
+    //NSLog(@"TABLEVIEW WIDTH: %f",self.tableView.frame.size.width);
+    //NSLog(@"CONTENT X: %f",scrollView.contentOffset.x);
+    //NSLog(@"SCROLLING Y: %f",scrollingDifference);
 
     if (scrollView == self.pageScroller) {
         

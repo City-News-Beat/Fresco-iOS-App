@@ -20,5 +20,7 @@
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, retain) NSArray *feed;
 @property (nonatomic, weak) id<FRSFollowingControllerDelegate> delegate;
+@property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
+
 -(void)reloadData;
 @end

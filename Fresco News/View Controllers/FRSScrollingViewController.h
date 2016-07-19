@@ -35,7 +35,6 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
 -(void)condenseNavBarBy:(float)value BarButtonItems: (NSArray *)barButtonItems;
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView;
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView;
 
 -(void)determineScrollDirection:(UIScrollView *)scrollView;
 

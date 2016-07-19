@@ -281,6 +281,7 @@
     self.followingTable.dataSource = self;
     self.followingTable.bounces = YES;
     self.followingTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.followingTable setBackgroundColor:[UIColor frescoBackgroundColorDark]];
     //[self.followingTable :false];
     [self.pageScroller addSubview:self.followingTable];
 }
