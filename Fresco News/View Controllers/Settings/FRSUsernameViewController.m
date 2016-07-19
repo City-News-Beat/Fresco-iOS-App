@@ -123,6 +123,14 @@
     
     self.username = textField.text;
     [self checkUsername];
+    
+    //Set max length to 40
+    if(range.length + range.location > textField.text.length) {
+        return NO;
+    }
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return newLength <= 40;
+    
     return YES;
 }
 
