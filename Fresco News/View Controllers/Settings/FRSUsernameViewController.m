@@ -10,6 +10,7 @@
 #import "FRSAPIClient.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSUsernameViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -17,6 +18,8 @@
 @property (strong, nonatomic) FRSTableViewCell *cell;
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) UIImageView *usernameCheckIV;
+@property (strong, nonatomic) NSTimer *usernameTimer;
+@property (nonatomic) BOOL usernameTaken;
 
 @end
 
@@ -61,25 +64,28 @@
 - (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     NSString *cellIdentifier;
-    FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (cell == nil) {
-        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    self.cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    self.cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
+    if (self.cell == nil) {
+        self.cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
+    if ([self.cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        [self.cell setSeparatorInset:UIEdgeInsetsZero];
     }
-    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-        [cell setPreservesSuperviewLayoutMargins:NO];
+    if ([self.cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+        [self.cell setPreservesSuperviewLayoutMargins:NO];
     }
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
+    if ([self.cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [self.cell setLayoutMargins:UIEdgeInsetsZero];
     }
     
-    return cell;
+    return self.cell;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    cell = self.cell;
     
     switch (indexPath.row) {
         case 0:
@@ -101,7 +107,7 @@
             break;
         case 1:
             [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142 withColor:[UIColor frescoLightTextColor]];
-            [cell.rightAlignedButton addTarget:self action:@selector(checkUsername) forControlEvents:UIControlEventTouchUpInside];
+            [cell.rightAlignedButton addTarget:self action:@selector(saveUsername) forControlEvents:UIControlEventTouchUpInside];
             
             break;
             
@@ -119,54 +125,107 @@
     
     if ([textField.text isEqualToString:@""] || textField.text == nil) {
         self.usernameCheckIV.alpha = 0;
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = NO;
+        self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
     }
     
     self.username = textField.text;
-    [self checkUsername];
+    if ([self isValidUsername:self.username]) {
+        [self checkUsername];
+    } else {
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = NO;
+        self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
+    }
+    
+    //Set max length to 40
+    if(range.length + range.location > textField.text.length) {
+        return NO;
+    }
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return newLength <= 40;
+    
     return YES;
 }
 
-
--(void)checkUsername {
-
-    NSLog(@"SAVE USERNAME");
+-(void)saveUsername {
     
-    if ([self.username isEqualToString:@""] || self.username == nil) {
+    NSDictionary *digestion = @{@"username" : self.username};
+    
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
+        NSLog(@"RESPONSE: %@ \n ERROR: %@", responseObject, error);
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [delegate reloadUser];
+    }];
+    
+    [self popViewController];
+}
+
+-(BOOL)isValidUsername:(NSString *)username {
+    
+    if ([self stringContainsEmoji:username]) {
+        return NO;
+    }
+    
+    if ([username isEqualToString:@"@"]) {
+        return NO;
+    }
+    
+    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
+    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
+    if (([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound) /*&& ([username length] >= 4)*/ && (!([username length] > 20))) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+-(void)checkUsername {    
+    
+    if (![self isValidUsername:self.username]) {
+        return;
+    }
+    
+    NSRange whiteSpaceRange = [self.username rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if ([self.username isEqualToString:@""] || self.username == nil || whiteSpaceRange.location != NSNotFound || [self stringContainsEmoji:self.username]) {
         self.usernameCheckIV.alpha = 0;
         return;
     }
     
-    [[FRSAPIClient sharedClient] checkUsername:self.username completion:^(id responseObject, NSError *error) {
-        
-        NSLog(@"RESPONSE OBJECT: %@", responseObject);
-        NSLog(@"ERROR: %@", error);
-        
-        if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
-            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-        } else {
-            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-        }
-    }];
+    [self startUsernameTimer];
     
-    //display loader
-    //check username status
-    //give feedback
-    //if success show success alert green check
-    //if error show error alert and red x
-
+//    [[FRSAPIClient sharedClient] checkUsername:self.username completion:^(id responseObject, NSError *error) {
+//        
+//        NSLog(@"RESPONSE OBJECT: %@", responseObject);
+//        NSLog(@"ERROR: %@", error);
+//        
+//        if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
+//            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+//        } else {
+//            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+//        }
+//    }];
 }
 
 -(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
     
     if ([self.username isEqualToString:@""] || self.username == nil) {
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = NO;
         self.usernameCheckIV.alpha = 0;
         return;
     }
     
     if(!success) {
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
+//        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+//        self.cell.rightAlignedButton.userInteractionEnabled = YES;
     } else {
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
+//        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+//        self.cell.rightAlignedButton.userInteractionEnabled = NO;
     }
     
     if (animateIn) {
@@ -184,7 +243,104 @@
     }
 }
 
+#pragma mark - Username timer
 
+-(void)startUsernameTimer {
+    if (!self.usernameTimer) {
+        self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(usernameTimerFired) userInfo:nil repeats:YES];
+    }
+}
+
+-(void)stopUsernameTimer {
+    if ([self.usernameTimer isValid]) {
+        [self.usernameTimer invalidate];
+    }
+    
+    self.usernameTimer = nil;
+}
+
+-(void)usernameTimerFired {
+    
+    if (![self isValidUsername:self.username]) {
+        return;
+    }
+    
+    NSRange whiteSpaceRange = [self.username rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if ([self.username isEqualToString:@""] || self.username == nil || whiteSpaceRange.location != NSNotFound || [self stringContainsEmoji:self.username]) {
+        self.usernameCheckIV.alpha = 0;
+        return;
+    }
+    
+    // Check for emoji and error
+    if ([self stringContainsEmoji:[self.cell.textField.text substringFromIndex:1]]){
+        [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+        return;
+    }
+    
+    if (![self stringContainsEmoji:self.cell.textField.text]) {
+        
+        if ((![self.cell.textField.text isEqualToString:@""])) {
+            
+            [[FRSAPIClient sharedClient] checkUsername:self.username completion:^(id responseObject, NSError *error) {
+                
+                if (![error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
+                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                    self.usernameTaken = NO;
+                    [self stopUsernameTimer];
+                    [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+                    self.cell.rightAlignedButton.userInteractionEnabled = NO;
+                } else {
+                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                    self.usernameTaken = YES;
+                    [self stopUsernameTimer];
+                    [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+                    self.cell.rightAlignedButton.userInteractionEnabled = YES;
+                }
+            }];
+        }
+    }
+}
+
+-(BOOL)stringContainsEmoji:(NSString *)string {
+    __block BOOL returnValue = NO;
+    [string enumerateSubstringsInRange:NSMakeRange(0, [string length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:
+     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+         
+         const unichar hs = [substring characterAtIndex:0];
+         // surrogate pair
+         if (0xd800 <= hs && hs <= 0xdbff) {
+             if (substring.length > 1) {
+                 const unichar ls = [substring characterAtIndex:1];
+                 const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+                 if (0x1d000 <= uc && uc <= 0x1f77f) {
+                     returnValue = YES;
+                 }
+             }
+         } else if (substring.length > 1) {
+             const unichar ls = [substring characterAtIndex:1];
+             if (ls == 0x20e3) {
+                 returnValue = YES;
+             }
+             
+         } else {
+             // non surrogate
+             if (0x2100 <= hs && hs <= 0x27ff) {
+                 returnValue = YES;
+             } else if (0x2B05 <= hs && hs <= 0x2b07) {
+                 returnValue = YES;
+             } else if (0x2934 <= hs && hs <= 0x2935) {
+                 returnValue = YES;
+             } else if (0x3297 <= hs && hs <= 0x3299) {
+                 returnValue = YES;
+             } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
+                 returnValue = YES;
+             }
+         }
+     }];
+    
+    return returnValue;
+}
 
 
 

@@ -110,7 +110,7 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
-    if (!_representedUser) {
+    if (!_representedUser || _representedUser == [[FRSAPIClient sharedClient] authenticatedUser]) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
         [self configureWithUser:_representedUser];

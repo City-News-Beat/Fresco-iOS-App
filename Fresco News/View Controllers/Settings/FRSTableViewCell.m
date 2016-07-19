@@ -227,6 +227,7 @@
     self.rightAlignedButton.frame = CGRectMake(self.frame.size.width - width, 0, width, self.frame.size.height);
     [self.rightAlignedButton setTitle:title forState:UIControlStateNormal];
     [self.rightAlignedButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    self.rightAlignedButton.userInteractionEnabled = NO;
     [self.rightAlignedButton setTitleColor:color forState:UIControlStateNormal];
     [self addSubview:self.rightAlignedButton];
 }
