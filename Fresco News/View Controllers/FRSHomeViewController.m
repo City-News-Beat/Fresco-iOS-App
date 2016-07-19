@@ -51,6 +51,8 @@
 @property (strong, nonatomic) NSMutableArray *pulled;
 @property (weak, nonatomic) FRSAppDelegate *appDelegate;
 @property (nonatomic, strong) FRSFollowingTable *followingTable;
+@property (nonatomic) bool isInHighlights;
+@property (nonatomic) bool isInFollowers;
 
 @property (strong, nonatomic) UIView *sudoNavBar;
 
@@ -75,6 +77,9 @@
     [self configureNavigationBar];
 
     self.scrollView.delegate = self;
+    
+    self.isInHighlights = true;
+    self.isInFollowers = true;
 }
 
 -(BOOL)shouldHaveTextLimit {
@@ -723,9 +728,25 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    self.sudoNavBar.frame = CGRectMake(0, (scrollView.contentOffset.x/8.5)-88, self.view.frame.size.width, 44);
+    //self.sudoNavBar.frame = CGRectMake(0, (scrollView.contentOffset.x/8.5)-88, self.view.frame.size.width, 44);
 
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
+    
+    NSMutableArray *barButtonItems = [NSMutableArray array];
+    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
+    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
+    float navBarHeight=20.0;
+    float scrollingDifference = (scrollView.contentOffset.x/self.tableView.frame.size.width*(navBarHeight*2))-navBarHeight;
+    
+    if(scrollView.contentOffset.x>0&&scrollView.contentOffset.x<self.tableView.frame.size.width && self.navigationController.navigationBar.frame.origin.y != navBarHeight){
+        self.scrollDirection = UIAccessibilityScrollDirectionDown;
+        [self expandNavBarBy:scrollingDifference BarButtonItems:barButtonItems];
+    }
+    
+    NSLog(@"TABLEVIEW WIDTH: %f",self.tableView.frame.size.width);
+    NSLog(@"CONTENT X: %f",scrollView.contentOffset.x);
+    NSLog(@"SCROLLING Y: %f",scrollingDifference);
+
     if (scrollView == self.pageScroller) {
         
         self.loadingView.alpha = 1-(scrollView.contentOffset.x/(scrollView.contentSize.width - scrollView.frame.size.width));
@@ -735,8 +756,8 @@
             self.followingTabButton.alpha = 1;
             self.highlightTabButton.alpha = 0.7;
             
-            [self showNavBarForScrollView:self.scrollView animated:NO];
-            self.navigationItem.titleView.alpha = 1;
+            //[self showNavBarForScrollView:self.scrollView animated:NO];
+            //self.navigationItem.titleView.alpha = 1;
             [self.tableView dg_stopLoading];
             [self.followingTable dg_stopLoading];
 
@@ -754,6 +775,8 @@
         }
         
         if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
+            self.isInHighlights = true;
+            self.isInFollowers = false;
             self.followingTabButton.alpha = 0.7;
             self.highlightTabButton.alpha = 1;
             [self.tableView dg_stopLoading];
@@ -771,6 +794,9 @@
             
             [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
             [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+        }else if(self.pageScroller.contentOffset.x == self.tableView.frame.size.width){
+            self.isInHighlights = false;
+            self.isInFollowers = true;
         }
 
     }
