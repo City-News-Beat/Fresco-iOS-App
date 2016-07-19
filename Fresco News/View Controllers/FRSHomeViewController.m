@@ -320,7 +320,7 @@
     self.sudoNavBar = [[UIView alloc] initWithFrame:CGRectMake(0, -88, self.view.frame.size.width, 44)];
     self.sudoNavBar.backgroundColor = [UIColor frescoOrangeColor];
     [self.view addSubview:self.sudoNavBar];
-    
+        
     UIButton *sudoHighlightButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width/2 - 60 - 10 - titleView.frame.size.width/6, 6, 120, 30)];
     [sudoHighlightButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
     [sudoHighlightButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];

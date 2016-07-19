@@ -40,6 +40,10 @@
     return self;
 }
 
+-(void)pushNavigationItem:(UINavigationItem *)item animated:(BOOL)animated{
+    NSLog(@"Pushed Nav");
+}
+
 -(void)commonInit {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(uploadStatus:)

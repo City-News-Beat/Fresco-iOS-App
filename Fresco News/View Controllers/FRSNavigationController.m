@@ -42,6 +42,9 @@
     
     self.navigationBar.translucent = NO;
     self.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    self.hidesBarsOnSwipe = false;
+    self.hidesBarsOnTap = false;
+    self.hidesBarsWhenVerticallyCompact=false;
     
     self.containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 44)];
     
@@ -73,6 +76,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:.05 animations:^{
                     _progressView.frame = navFrame;
+                    [self showUploadButtons:TRUE];
                 }];
             });
         }
@@ -85,6 +89,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:.2 animations:^{
                     _progressView.alpha = 0;
+                    [self showUploadButtons:FALSE];
                 } completion:^(BOOL finished) {
                     _progressView.frame = navFrame;
                     _progressView.alpha = 1;
@@ -92,10 +97,34 @@
             });
         }
         else if ([update[@"type"] isEqualToString:@"failure"]) {
+            CGRect navFrame = self.navigationBar.frame;
+            navFrame.origin.y -= 20;
+            navFrame.size.height += 20;
+            navFrame.size.width = 0;
             
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:.2 animations:^{
+                    _progressView.alpha = 0;
+                    self.navigationBar.barTintColor = [UIColor frescoRedHeartColor];
+                    [self showFailureButtons:TRUE];
+                    [self showUploadButtons:FALSE];
+                } completion:^(BOOL finished) {
+                    _progressView.frame = navFrame;
+                    _progressView.alpha = 1;
+                }];
+            });
+
         }
         
     }];
+}
+
+-(void)showFailureButtons:(BOOL)show {
+    
+}
+
+-(void)showUploadButtons:(BOOL)show {
+    
 }
 
 
@@ -116,6 +145,10 @@
     self.navigationBar.topItem.titleView = self.containerView;
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    NSLog(@"Showed Nav");
+}
 
 -(void)adjustFrames{
     
