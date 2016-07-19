@@ -216,6 +216,7 @@
 // have to override to take into account multiple chunks
 - (void)URLSession:(NSURLSession *)urlSession task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
     counter++;
+    counterBuffer+= bytesSent;
     
     if (counter%5 != 0) {
         return;
@@ -228,8 +229,10 @@
     }
     
     if (self.progressBlock) {
-        self.progressBlock(self, bytesSent, self.bytesUploaded, self.fileSizeFromMetadata);
+        self.progressBlock(self, counterBuffer, self.bytesUploaded, self.fileSizeFromMetadata);
     }
+    
+    counterBuffer = 0;
 }
 
 // pause all open requests
