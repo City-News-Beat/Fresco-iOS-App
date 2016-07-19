@@ -732,11 +732,13 @@
 
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     
+    //Make the nav bar expand relative to the x offset
+    
     NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
     [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
     float navBarHeight=20.0;
-    float scrollingDifference = (scrollView.contentOffset.x/self.tableView.frame.size.width*(navBarHeight*2))-navBarHeight;
+    float scrollingDifference = (scrollView.contentOffset.x/self.tableView.frame.size.width*(navBarHeight*2))-navBarHeight-3;
     
     if(scrollView.contentOffset.x>0&&scrollView.contentOffset.x<self.tableView.frame.size.width && self.navigationController.navigationBar.frame.origin.y != navBarHeight){
         self.scrollDirection = UIAccessibilityScrollDirectionDown;
