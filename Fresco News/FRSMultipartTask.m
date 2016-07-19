@@ -215,6 +215,12 @@
 }
 // have to override to take into account multiple chunks
 - (void)URLSession:(NSURLSession *)urlSession task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
+    counter++;
+    
+    if (counter%5 != 0) {
+        return;
+    }
+    
     self.bytesUploaded += bytesSent;
     
     if (self.delegate) {
