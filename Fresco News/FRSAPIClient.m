@@ -374,13 +374,15 @@
                              @"geo" : geoData,
                              @"radius" : @(radius),
                              @"rating" : @1,
-                             @"starts_before" : @"asd", //iso date or millisecond timestamp
-                             @"starts_after" : @"asa" //iso date or millisecond timestamp
                             };    
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
+}
+
+-(void)showErrorWithMessage:(NSString *)message onCancel:(FRSAPIBooleanCompletionBlock)onCancel onRetry:(FRSAPIBooleanCompletionBlock)onRetry {
+    
 }
 
 -(void)getAssignmentsWithinRadius:(float)radius ofLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
