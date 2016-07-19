@@ -102,6 +102,7 @@
     if (dict[@"image"] && ![dict[@"image"] isEqual:[NSNull null]]) {
         self.imageUrl = dict[@"image"];
     }
+    
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"address"]];
     
