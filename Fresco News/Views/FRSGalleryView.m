@@ -575,7 +575,7 @@
     
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
     
-    self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
+    self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@",post.creator.firstName] fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
@@ -592,8 +592,14 @@
     if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             
+            NSLog(@"Set profile image");
+
             //Set user image
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+            
+            if (post.creator.profileImage != nil) {
+                NSLog(@"User has image");
+            }
             
             //Add gesture recognizer only if user has a photo
             
@@ -619,7 +625,8 @@
     
     FRSPost *post = self.orderedPosts[self.adjustedPage];
     
-    self.nameLabel.text = post.byline;
+    self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
+    
     self.locationLabel.text = post.address;
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
     
