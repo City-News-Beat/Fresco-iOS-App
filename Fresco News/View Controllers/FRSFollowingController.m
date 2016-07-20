@@ -79,6 +79,12 @@
     }];
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (self.scrollDelegate) {
+        [self.scrollDelegate scrollViewDidScroll:scrollView];
+    }
+}
+
 -(void)setTableView:(UITableView *)tableView {
     _tableView = tableView;
     _tableView.delegate = self;

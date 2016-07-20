@@ -77,16 +77,10 @@
     if(self.followButton.selected){
         [[FRSAPIClient sharedClient] followUser:self.user completion:^(id responseObject, NSError *error) {
             NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.user.uid);
-            if (self.reloadBlock) {
-                self.reloadBlock();
-            }
         }];
     }else{
         [[FRSAPIClient sharedClient] unfollowUser:self.user completion:^(id responseObject, NSError *error) {
             NSLog(@"UNFOLLOWED USER: %d %@", (error == Nil), self.user.uid);
-            if (self.reloadBlock) {
-                self.reloadBlock();
-            }
         }];
     }
 }

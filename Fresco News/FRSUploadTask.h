@@ -25,7 +25,8 @@ typedef void (^TransferCancellationBlock)(id task, NSError *error, BOOL success)
 
 @interface FRSUploadTask : NSObject <NSURLSessionDelegate, NSURLSessionDataDelegate> // allows granular feedback on upload
 {
-    
+    NSInteger counterBuffer;
+    int counter;
 }
 
 @property (nonatomic, retain) NSManagedObject *managedObject;

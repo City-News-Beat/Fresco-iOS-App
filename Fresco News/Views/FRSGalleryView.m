@@ -576,7 +576,7 @@
     
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
     
-    self.nameLabel = [self galleryInfoLabelWithText:post.byline fontSize:17];
+    self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@",post.creator.firstName] fontSize:17];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
@@ -620,7 +620,8 @@
     
     FRSPost *post = self.orderedPosts[self.adjustedPage];
     
-    self.nameLabel.text = post.byline;
+    self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
+    
     self.locationLabel.text = post.address;
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
     
@@ -644,7 +645,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-            
+            NSLog(@"%@",[NSURL URLWithString:post.creator.profileImage]);
             //Add gesture recognizer only if user has a photo
             UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
             [bylineTap setNumberOfTapsRequired:1];

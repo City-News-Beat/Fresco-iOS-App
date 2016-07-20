@@ -146,17 +146,24 @@
     _totalBytes = totalBytesExpectedToSend;
     _bytesUploaded += bytesSent;
     
+    counter++;
+    counterBuffer+= bytesSent;
     
-    // update delegate ( or block )
-    // typedef void (^TransferProgressBlock)(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend);
-
-    if (self.progressBlock) {
-        self.progressBlock(task, bytesSent, totalBytesSent, totalBytesExpectedToSend);
+    if (counter%3 != 0) {
+        return;
     }
+    
+    self.bytesUploaded += bytesSent;
     
     if (self.delegate) {
-        [self.delegate uploadDidProgress:self bytesSent:bytesSent totalBytes:totalBytesExpectedToSend];
+        [self.delegate uploadDidProgress:self bytesSent:self.bytesUploaded totalBytes:self.fileSizeFromMetadata];
     }
+    
+    if (self.progressBlock) {
+        self.progressBlock(self, counterBuffer, self.bytesUploaded, self.fileSizeFromMetadata);
+    }
+    
+    counterBuffer = 0;
 }
 
 @end

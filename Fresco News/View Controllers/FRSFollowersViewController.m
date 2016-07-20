@@ -200,6 +200,13 @@
         
         self.followingArray = following;
         
+        
+        if(self.followingArray.count == 0){
+            [self displayAwkwardView:true followingTable:true];
+        }else if(_hasLoadedOnce){
+            [self displayAwkwardView:false followingTable:true];
+        }
+        
         [self.tableView reloadData];
         [self.tableView dg_stopLoading];
         [self.followingTable reloadData];
@@ -223,6 +230,13 @@
         }
         
         self.followerArray = followers;
+        
+        //Awkward View
+        if(self.followerArray.count == 0){
+            [self displayAwkwardView:true followingTable:false];
+        }else if(_hasLoadedOnce){
+            [self displayAwkwardView:false followingTable:false];
+        }
         
         [self.followingTable reloadData];
         [self.followingTable dg_stopLoading];
@@ -281,6 +295,7 @@
     self.followingTable.dataSource = self;
     self.followingTable.bounces = YES;
     self.followingTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.followingTable setBackgroundColor:[UIColor frescoBackgroundColorDark]];
     //[self.followingTable :false];
     [self.pageScroller addSubview:self.followingTable];
 }
@@ -304,13 +319,13 @@
 }
 
 -(void)configureAwkwardViews{
-    self.followerAwkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64)];
-    [self.pageScroller addSubview:self.followerAwkward];
+    self.followerAwkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, 150, self.view.frame.size.width, self.view.frame.size.height-64)];
+    [self.tableView addSubview:self.followerAwkward];
     self.followerAwkward.hidden = true;
     self.followerAwkward.userInteractionEnabled = false;
     
-    self.followingAwkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 64, self.view.frame.size.width, self.view.frame.size.height-64)];
-    [self.pageScroller addSubview:self.followingAwkward];
+    self.followingAwkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, 150, self.view.frame.size.width, self.view.frame.size.height-64)];
+    [self.followingTable addSubview:self.followingAwkward];
     self.followingAwkward.hidden = true;
     self.followerAwkward.userInteractionEnabled = false;
 }
@@ -420,23 +435,8 @@
         cell.cellHeight = CELL_HEIGHT;
         [cell configureCellWithUser:user isFollowing:[self isFollowingUser:user]];
     }
-    //Awkward View
-    if(self.followerArray.count == 0 && _hasLoadedOnce){
-        [self displayAwkwardView:true followingTable:false];
-    }else if(_hasLoadedOnce){
-        [self displayAwkwardView:false followingTable:false];
-    }
-    if(self.followingArray.count == 0 && _hasLoadedOnce){
-        [self displayAwkwardView:true followingTable:true];
-    }else if(_hasLoadedOnce){
-        [self displayAwkwardView:false followingTable:true];
-    }
     
     __weak typeof(self) weakSelf;
-    
-    cell.reloadBlock = ^{
-        [self reloadData];
-    };
     
     return cell;
 }
