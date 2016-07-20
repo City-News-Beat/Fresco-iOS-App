@@ -100,6 +100,7 @@
     NSString *twitterAccessToken = session.authToken;
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
     NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
+    NSLog(@"%@", authDictionary);
     
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);

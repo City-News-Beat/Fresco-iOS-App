@@ -570,8 +570,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:YES];
+    NSInteger row = 0;
+    
+    if (_showingOutlets && indexPath.row > selectedRow) {
+        row = indexPath.row - numberOfOutlets;
+    }
+    else {
+        row = indexPath.row;
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
     
