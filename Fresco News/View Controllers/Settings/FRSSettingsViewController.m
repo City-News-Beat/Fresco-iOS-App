@@ -31,6 +31,9 @@
 /* Cocoa Pods */
 #import <MessageUI/MessageUI.h>
 
+/* API */
+#import "FRSAPIClient.h"
+
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -56,6 +59,7 @@
     [self configureBackButtonAnimated:NO];
 
     [self.navigationItem setTitle:@"SETTINGS"];
+    [self.tableView reloadData];
 }
 
 
@@ -207,10 +211,10 @@
         case 0:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureCellWithUsername:@"@username"];
+                    [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSAPIClient sharedClient] authenticatedUser].username]];
                     break;
                 case 1:
-                    [cell configureDefaultCellWithTitle:@"omar@fresconews.com" andCarret:YES andRightAlignedTitle:@""];
+                    [cell configureDefaultCellWithTitle:[[FRSAPIClient sharedClient] authenticatedUser].email andCarret:YES andRightAlignedTitle:@""];
                     break;
                 case 2:
                     [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES andRightAlignedTitle:@""];
@@ -316,8 +320,8 @@
                     break;
                 case 1:
                 {
-                    FRSEmailViewController *email = [[FRSEmailViewController alloc] init];
-                    [self.navigationController pushViewController:email animated:YES];
+                    FRSEmailViewController *emailViewController = [[FRSEmailViewController alloc] init];
+                    [self.navigationController pushViewController:emailViewController animated:YES];
                     self.navigationItem.title = @"";
                 }
                     break;

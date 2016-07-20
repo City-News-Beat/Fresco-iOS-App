@@ -933,6 +933,9 @@
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             if (error) {
                 // show error
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to sign up. Please try again later." actionTitle:@"OK" cancelTitle:nil cancelTitleColor:nil delegate:self];
+                [alert show];
+                
             }
             else {
                 // continue on whatever

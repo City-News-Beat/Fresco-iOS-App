@@ -10,6 +10,7 @@
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSAPIClient.h"
+#import "FRSAlertView.h"
 
 @interface FRSEmailViewController()
 
@@ -19,6 +20,8 @@
 @property (strong, nonatomic) NSString *password;
 @property BOOL emailIsValid;
 @property BOOL passwordIsValid;
+
+@property (strong, nonatomic) FRSAlertView *alert;
 
 @end
 
@@ -60,7 +63,7 @@
     return 44;
 }
 
-- (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier;
     self.cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (self.cell == nil) {
@@ -111,13 +114,24 @@
 }
 
 -(void)saveEmail {
-    NSLog(@"SAVE EMAIL");
-    
-    [[FRSAPIClient sharedClient] checkEmail:self.email completion:^(id responseObject, NSError *error) {
-        NSLog(@"RESPONSE: %@", responseObject);
-        NSLog(@"ERROR: %@", error);
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"email":self.email} completion:^(id responseObject, NSError *error) {
+        
+        if (!error && responseObject) {
+            FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+            userToUpdate.email = self.email;
+            [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
+            
+            [self popViewController];
+        } else if (error.code == -1009) {
+            if (!self.alert) {
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [self.alert show];
+            }
+        } else if (error){
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Email is already taken." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [alert show];
+        }
     }];
-    
 }
 
 #pragma mark - TextField Delegate
