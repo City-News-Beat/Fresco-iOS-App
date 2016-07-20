@@ -1272,12 +1272,6 @@
         return NO;
     }
     
-    // check length
-    // return false
-    
-    // check against pattern (i.e. xxXXxxx1)
-    // return false
-    
     return YES;
 }
 
