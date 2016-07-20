@@ -601,7 +601,7 @@
         return self.profileContainer.frame.size.height;
     }
     else {
-        if (!self.currentFeed.count) return 0;
+        if (!self.currentFeed.count) return 60;
         if ([[self.currentFeed[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             FRSGallery *gallery = self.currentFeed[indexPath.row];
             return [gallery heightForGallery];
@@ -625,7 +625,12 @@
     else {
         if(self.currentFeed.count == 0){
             cell = [[UITableViewCell alloc] init];
-            [cell.contentView addSubview:[[FRSAwkwardView alloc] initWithFrame:tableView.frame]];
+            CGRect newFrame = tableView.frame;
+            newFrame.size.height = 40;
+            newFrame.origin.y = tableView.frame.size.height/6;
+            [cell.contentView addSubview:[[FRSAwkwardView alloc] initWithFrame:newFrame]];
+            [cell.contentView setBackgroundColor:[UIColor redColor]];
+            [cell setBackgroundColor:[UIColor redColor]];
         }else if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
             
