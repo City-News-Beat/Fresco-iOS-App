@@ -24,8 +24,6 @@ static int const chunkFailWaitTime = 2; // resets between chunks (otherwise beha
     NSInteger totalErrors;
     BOOL needsData;
     NSMutableDictionary *tags;
-    NSInteger counterBuffer;
-    int counter;
 }
 
 @property int totalParts;
