@@ -152,7 +152,7 @@
 }
 
 -(void)startFabric {
-    [[Twitter sharedInstance] startWithConsumerKey:@"LuzgKf2eus1EGzxf2CyEtFJCJ" consumerSecret:@"kxlgOYo7SdgvLsHDUwUo90DkCbooDMbHQyDCayNSgD7oeUUUjT"];
+    [[Twitter sharedInstance] startWithConsumerKey:@"kT772ISFiuWQdVQblU4AmBWw3" consumerSecret:@"navenvTSRCcyUL7F4Ait3gACnxfc7YXWyaee2bAX1sWnYGe4oY"];
     
     [Fabric with:@[[Twitter class], [Crashlytics class]]];
 }
