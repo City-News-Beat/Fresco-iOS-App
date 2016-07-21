@@ -15,7 +15,7 @@
 
 -(void)configureCellWithUsername:(NSString *)username;
 
--(void)configureAssignmentCell;
+-(void)configureAssignmentCellEnabled:(BOOL)enabled;
 
 -(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType;
 

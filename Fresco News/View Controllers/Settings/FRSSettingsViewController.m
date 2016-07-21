@@ -53,6 +53,8 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self checkNotificationStatus];
+    
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     
@@ -60,6 +62,12 @@
 
     [self.navigationItem setTitle:@"SETTINGS"];
     [self.tableView reloadData];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    
 }
 
 
@@ -229,7 +237,10 @@
         case 2:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureAssignmentCell];
+                    [self checkNotificationStatus];
+                    [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                    
+                    
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
@@ -507,6 +518,21 @@
     
     [self dismissViewControllerAnimated:YES completion:nil];
     
+}
+
+
+#pragma mark - Notifications
+
+-(void)checkNotificationStatus {
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
+        UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        
+        if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
+            //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+        } else {
+            //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+        }
+    }
 }
 
 

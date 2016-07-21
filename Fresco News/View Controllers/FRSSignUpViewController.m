@@ -789,6 +789,8 @@
     
     if (toggle.on){
         
+        [self checkNotificationStatus];
+        [self requestNotifications];
         
         self.notificationsEnabled = YES;
         self.scrollView.scrollEnabled = YES;
@@ -935,7 +937,6 @@
                 // show error
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to sign up. Please try again later." actionTitle:@"OK" cancelTitle:nil cancelTitleColor:nil delegate:self];
                 [alert show];
-                
             }
             else {
                 // continue on whatever
@@ -1402,4 +1403,36 @@
         }
     }
 }
+
+#pragma mark - Notifications
+
+-(void)checkNotificationStatus {
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
+        UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        
+        if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+        } else {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+        }
+    }
+}
+
+-(void)requestNotifications {
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]) {
+        return;
+    }
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"NotificationsRequested"]) {
+        UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    } else {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NotificationsRequested"];
+}
+
+
 @end
