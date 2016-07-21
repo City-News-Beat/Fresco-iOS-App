@@ -33,11 +33,16 @@
 
 /* API */
 #import "FRSAPIClient.h"
+#import "FRSSocial.h"
 
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) NSString *twitterHandle;
+@property (strong, nonatomic) FRSTableViewCell *twitterCell;
+@property (strong, nonatomic) FRSTableViewCell *facebookCell;
+@property (strong, nonatomic) UISwitch *twitterSwitch;
+@property (strong, nonatomic) UISwitch *facebookSwitch;
 
 @end
 
@@ -48,7 +53,6 @@
     
     [self configureTableView];
 }
-
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -66,16 +70,12 @@
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
-    
 }
-
 
 -(void)popViewController {
     [super popViewController];
     [self showTabBarAnimated:YES];
 }
-
 
 -(void)configureTableView {
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -240,7 +240,6 @@
                     [self checkNotificationStatus];
                     [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
                     
-                    
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
@@ -265,10 +264,19 @@
                     [cell configureFindFriendsCell];
                     break;
                 case 1:
-                    [cell configureSocialCellWithTitle:@"Connect Twitter" andTag:1];
+                    self.twitterCell = cell;
+                    if (self.twitterCell.twitterHandle) {
+                        [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
+                        self.twitterCell.twitterSwitch.on = YES;
+                    } else {
+                        self.twitterCell.twitterSwitch.on = NO;
+                        self.twitterHandle = nil;
+                        [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
+                    }
                     break;
                 case 2:
-                    [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2];
+                    self.facebookCell = cell;
+                    [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:NO];
                     break;
                 default:
                     break;
@@ -313,7 +321,6 @@
             break;
     }
 }
-
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -388,12 +395,18 @@
                     [alert show];
                 }
                     break;
-                case 1:
-                    NSLog(@"twitter");
-                    break;
-                case 2:
-                    NSLog(@"facebook");
-                    break;
+                case 1: {
+                    
+                    //Twitter
+                    //[self.twitterCell twitterToggle];
+                    
+                } break;
+                case 2: {
+                    
+                    //Facebook
+                    //[self.facebookCell facebookToggle];
+                    
+                } break;
                 default:
                     break;
             }
@@ -437,7 +450,7 @@
                     FRSDisableAccountViewController *disableVC = [[FRSDisableAccountViewController alloc] init];
                     [self.navigationController pushViewController:disableVC animated:YES];
                 }
-
+                    
                     break;
             }
             break;
