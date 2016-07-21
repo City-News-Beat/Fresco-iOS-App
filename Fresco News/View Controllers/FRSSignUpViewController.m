@@ -835,6 +835,8 @@
             
         } else {
             
+            //Unregister notifications
+            [[UIApplication sharedApplication] unregisterForRemoteNotifications];
             
             [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.mapView.transform = CGAffineTransformMakeScale(1, 1);
