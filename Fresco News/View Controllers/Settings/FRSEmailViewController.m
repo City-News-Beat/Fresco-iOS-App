@@ -116,6 +116,9 @@
 -(void)saveEmail {
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"email":self.email} completion:^(id responseObject, NSError *error) {
         
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [delegate reloadUser];
+        
         if (!error && responseObject) {
             FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
             userToUpdate.email = self.email;

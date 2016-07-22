@@ -9,10 +9,26 @@
 #import "FRSPasswordChangeViewController.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
+#import "FRSAPIClient.h"
+#import "FRSAlertView.h"
 
 @interface FRSPasswordChangeViewController ()
 
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) FRSTableViewCell *currentPasswordCell;
+@property (strong, nonatomic) FRSTableViewCell *updatedPasswordCell;
+@property (strong, nonatomic) FRSTableViewCell *updatedPasswordVerifyCell;
+@property (strong, nonatomic) FRSTableViewCell *buttonCell;
+
+@property (strong, nonatomic) NSString *currentPassword;
+@property (strong, nonatomic) NSString *updatedPassword;
+@property (strong, nonatomic) NSString *updatedPasswordVerify;
+
+@property BOOL currentPasswordIsValid;
+@property BOOL updatedPasswordIsValid;
+@property BOOL updatedPasswordVerifyIsValid;
+
+@property (strong, nonatomic) FRSAlertView *alert;
 
 @end
 
@@ -23,6 +39,10 @@
     
     [self configureTableView];
     [self configureBackButtonAnimated:NO];
+    
+    self.currentPasswordIsValid = NO;
+    self.updatedPasswordIsValid = NO;
+    self.updatedPasswordVerifyIsValid = NO;
 }
 
 -(void)configureTableView{
@@ -76,32 +96,102 @@
     
     switch (indexPath.row) {
         case 0:
+            self.currentPasswordCell = cell;
+            cell.textField.delegate = self;
             [cell configureEditableCellWithDefaultText:@"Current password" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
+            [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+            cell.textField.tag = 1;
             break;
             
         case 1:
+            self.updatedPasswordCell = cell;
+            cell.textField.delegate = self;
             [cell configureEditableCellWithDefaultText:@"New password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
+            [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+            cell.textField.tag = 2;
             break;
         
         case 2:
+            self.updatedPasswordVerifyCell = cell;
+            cell.textField.delegate = self;
             [cell configureEditableCellWithDefaultText:@"Confirm new password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
+            [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+            cell.textField.tag = 3;
             break;
         
         case 3:
+            self.buttonCell = cell;
             [cell configureCellWithRightAlignedButtonTitle:@"SAVE PASSWORD" withWidth:143 withColor:[UIColor frescoLightTextColor]];
+            [cell.rightAlignedButton addTarget:self action:@selector(savePassword) forControlEvents:UIControlEventTouchUpInside];
             break;
             
         default:
             break;
     }
     
-    
-    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+}
+
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
     
+    //Match strings to proper textfield.text
+    if (textField.tag == 1) {
+        self.currentPassword = textField.text;
+    } else if (textField.tag == 2) {
+        self.updatedPassword = textField.text;
+    } else if (textField.tag == 3) {
+        self.updatedPasswordVerify = textField.text;
+    }
+    
+    //If passwords are invalid, do not continue
+    if (![self isValidPassword:self.currentPassword] || ![self isValidPassword:self.updatedPassword] || ![self isValidPassword:self.updatedPasswordVerify]) {
+        [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.buttonCell.rightAlignedButton.userInteractionEnabled = NO;
+        return YES;
+    }
+    
+    //If new passwords do not match, do not continue
+    if ((self.updatedPassword == self.updatedPasswordVerify)) {
+        [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.buttonCell.rightAlignedButton.userInteractionEnabled = YES;
+        return YES;
+    }
+    
+
+    
+    return YES;
 }
 
 
+-(BOOL)isValidPassword:(NSString *)password {
+    if (password.length < 8) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+-(void)savePassword {
+    
+    NSDictionary *digestion = @{@"verify_password" : self.currentPassword, @"password" : self.updatedPassword};
+    
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
+        NSLog(@"RESPONSE: %@ \n ERROR: %@", responseObject, error);
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [delegate reloadUser];
+        
+        if (error) {
+            self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to update password. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [self.alert show];
+        }
+    }];
+    
+    FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+    userToUpdate.password = self.updatedPassword;
+    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+    
+    [self popViewController];
+}
 
 
 @end
