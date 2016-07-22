@@ -124,6 +124,7 @@
         default:
             break;
     }
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
