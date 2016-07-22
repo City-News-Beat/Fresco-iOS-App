@@ -112,12 +112,27 @@
         [UIView animateWithDuration:.2 animations:^{
             [_failureView removeFromSuperview];
         }];
+        
+        CGRect navFrame = self.frame;
+        navFrame.origin.y -= 20;
+        navFrame.size.height += 20;
+        navFrame.size.width = 0;
+        
+        _progressView.frame = navFrame;
+
     }];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
         [UIView animateWithDuration:.2 animations:^{
             [_failureView removeFromSuperview];
         }];
+        
+        CGRect navFrame = self.frame;
+        navFrame.origin.y -= 20;
+        navFrame.size.height += 20;
+        navFrame.size.width = 0;
+        
+        _progressView.frame = navFrame;
     }];
 
 }
