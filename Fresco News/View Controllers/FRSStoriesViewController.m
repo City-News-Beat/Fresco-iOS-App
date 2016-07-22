@@ -109,10 +109,10 @@
     
     id presentingViewController = self.presentingViewController;
     if ([presentingViewController isKindOfClass:[FRSStoryDetailViewController class]]) {
-        self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height);
+        self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height);
     }
     
-    self.tableView.frame = CGRectMake(0, -44-20, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height+20);
+    self.tableView.frame = CGRectMake(0, -64-44-20, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height+20);
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -122,7 +122,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 93;
+    return 109;
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
