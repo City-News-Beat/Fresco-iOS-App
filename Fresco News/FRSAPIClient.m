@@ -472,6 +472,17 @@
     }];
 }
 
+-(void)createPaymentWithToken:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    if (!token) {
+        return;
+    }
+    
+    [self post:createPayment withParameters:@{@"token":token, @"active":@(TRUE)} completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 -(void)startLocator {
     [FRSLocator sharedLocator];
 }
