@@ -40,29 +40,73 @@
     return self;
 }
 
--(void)pushNavigationItem:(UINavigationItem *)item animated:(BOOL)animated{
-    NSLog(@"Pushed Nav");
-}
-
 -(void)commonInit {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(uploadStatus:)
-                                                 name:FRSUploadNotification
-                                               object:nil];
+    CGRect navFrame = self.frame;
+    navFrame.origin.y -= 20;
+    navFrame.size.height += 20;
+    navFrame.size.width = 0;
+    _progressView = [[UIView alloc] initWithFrame:navFrame];
+    _progressView.backgroundColor = [UIColor colorWithRed:1.00 green:0.71 blue:0.00 alpha:1.0];
     
-    _progressBar = [[UIView alloc] init];
-    _progressBar.frame = CGRectMake(0, self.frame.size.height-2, 0, 2);
-    _progressBar.backgroundColor = [UIColor whiteColor];
-    [self addSubview:_progressBar];
+    [self addSubview:_progressView];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSUploadUpdate" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        NSDictionary *update = notification.userInfo;
+        
+        if ([update[@"type"] isEqualToString:@"progress"]) {
+            NSNumber *uploadPercentage = update[@"percentage"];
+            float percentage = [uploadPercentage floatValue];
+            
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                CGRect navFrame = self.frame;
+                navFrame.origin.y -= 40;
+                navFrame.size.height += 20;
+                navFrame.size.width = self.frame.size.width * percentage;
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [UIView animateWithDuration:.05 animations:^{
+                        _progressView.frame = navFrame;
+                    }];
+                });
+            });
+        }
+        else if ([update[@"type"] isEqualToString:@"completion"]) {
+            CGRect navFrame = self.frame;
+            navFrame.origin.y -= 20;
+            navFrame.size.height += 20;
+            navFrame.size.width = 0;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:.2 animations:^{
+                    _progressView.alpha = 0;
+
+                } completion:^(BOOL finished) {
+                    _progressView.frame = navFrame;
+                    _progressView.alpha = 1;
+                }];
+            });
+        }
+        else if ([update[@"type"] isEqualToString:@"failure"]) {
+            CGRect navFrame = self.frame;
+            navFrame.origin.y -= 20;
+            navFrame.size.height += 20;
+            navFrame.size.width = 0;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [UIView animateWithDuration:.2 animations:^{
+                    _progressView.alpha = 0;
+
+                } completion:^(BOOL finished) {
+                    _progressView.frame = navFrame;
+                    _progressView.alpha = 1;
+                }];
+            });
+            
+        }
+        
+    }];
+
 }
 
--(void)uploadStatus:(NSNotification *)notification {
-    NSDictionary *userInfo = notification.userInfo;
-    NSNumber *percentage = userInfo[@"complete"];
-    float percent = [percentage floatValue];
-    CGRect progressFrame = _progressBar.frame;
-    progressFrame.size.width = percent * [UIScreen mainScreen].bounds.size.width;
-    _progressBar.frame = progressFrame;
-    
-}
 @end

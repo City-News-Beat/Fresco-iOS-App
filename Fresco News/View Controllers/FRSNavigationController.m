@@ -53,93 +53,10 @@
     self.titleView.backgroundColor = [UIColor frescoOrangeColor];
     
     [self.containerView addSubview:self.titleView];
-    
-    CGRect navFrame = self.navigationBar.frame;
-    navFrame.origin.y -= 20;
-    navFrame.size.height += 20;
-    navFrame.size.width = 0;
-    _progressView = [[UIView alloc] initWithFrame:navFrame];
-    _progressView.backgroundColor = [UIColor colorWithRed:1.00 green:0.71 blue:0.00 alpha:1.0];
-    
-    [self.navigationBar addSubview:_progressView];
     [self.navigationBar bringSubviewToFront:self.containerView];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSUploadUpdate" object:nil queue:nil usingBlock:^(NSNotification *notification) {
-        NSDictionary *update = notification.userInfo;
-        
-        if ([update[@"type"] isEqualToString:@"progress"]) {
-            NSNumber *uploadPercentage = update[@"percentage"];
-            float percentage = [uploadPercentage floatValue];
-            
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                CGRect navFrame = self.navigationBar.frame;
-                navFrame.origin.y -= 40;
-                navFrame.size.height += 20;
-                navFrame.size.width = self.navigationBar.frame.size.width * percentage;
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [UIView animateWithDuration:.05 animations:^{
-                        _progressView.frame = navFrame;
-                        [self showUploadButtons:TRUE];
-                    }];
-                });
-            });
-        }
-        else if ([update[@"type"] isEqualToString:@"completion"]) {
-            CGRect navFrame = self.navigationBar.frame;
-            navFrame.origin.y -= 20;
-            navFrame.size.height += 20;
-            navFrame.size.width = 0;
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [UIView animateWithDuration:.2 animations:^{
-                    _progressView.alpha = 0;
-                    [self showUploadButtons:FALSE];
-                } completion:^(BOOL finished) {
-                    _progressView.frame = navFrame;
-                    _progressView.alpha = 1;
-                }];
-            });
-        }
-        else if ([update[@"type"] isEqualToString:@"failure"]) {
-            CGRect navFrame = self.navigationBar.frame;
-            navFrame.origin.y -= 20;
-            navFrame.size.height += 20;
-            navFrame.size.width = 0;
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [UIView animateWithDuration:.2 animations:^{
-                    _progressView.alpha = 0;
-                    [self showFailureUI];
-                } completion:^(BOOL finished) {
-                    _progressView.frame = navFrame;
-                    _progressView.alpha = 1;
-                }];
-            });
-
-        }
-        
-    }];
 }
-
--(void)showFailureUI {
-    
-    //
-    [self showFailureButtons:TRUE];
-    [self showUploadButtons:FALSE];
-}
-
--(void)showFailureButtons:(BOOL)show {
-    
-}
-
--(void)showUploadButtons:(BOOL)show {
-    
-}
-
 
 -(void)configureFRSNavigationBarWithTitle:(NSString *)title{
     
