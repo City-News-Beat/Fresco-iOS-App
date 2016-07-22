@@ -205,10 +205,22 @@
 
 -(void)saveCard {
     
-    STPCardParams *params = [FRSStripe creditCardWithNumber:cardNumberTextField.text expiration:expirationDateTextField.text cvc:securityCodeTextField.text];
+    NSArray *components = [expirationDateTextField.text componentsSeparatedByString:@"/"];
+    NSArray *expiration;
+    
+    if (components.count == 2) {
+        expiration = @[@([components[0] intValue]), @([components[1] intValue])];
+    }
+    else {
+        return;
+    }
+    
+    STPCardParams *params = [FRSStripe creditCardWithNumber:cardNumberTextField.text expiration:expiration cvc:securityCodeTextField.text];
     
     [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
-//        [FRSAPIClient sharedClient] createPayment
+        [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId completion:^(id responseObject, NSError *error) {
+            //
+        }];
     }];
 }
 

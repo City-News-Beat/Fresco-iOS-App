@@ -172,6 +172,8 @@
 
 -(void)saveUsername {
     
+    [self.view endEditing:YES];
+    
     NSDictionary *digestion = @{@"username" : self.username, @"verify_password" : self.password};
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
@@ -183,6 +185,11 @@
             self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to update username. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
             [self.alert show];
         }
+        
+        if (!error) {
+            [self popViewController];
+        }
+        
     }];
     
     
@@ -190,7 +197,6 @@
     userToUpdate.username = self.username;
     [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
     
-    [self popViewController];
     
 }
 
@@ -372,7 +378,7 @@
 
 -(BOOL)isValidPassword:(NSString *)password {
     
-    if (password.length < 8) {
+    if (password.length < 7) {
         return NO;
     }
     

@@ -114,7 +114,10 @@
 }
 
 -(void)saveEmail {
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"email":self.email} completion:^(id responseObject, NSError *error) {
+    
+    [self.view endEditing:YES];
+    
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"email":self.email, @"verify_password" : self.password} completion:^(id responseObject, NSError *error) {
         
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         [delegate reloadUser];
@@ -131,7 +134,8 @@
                 [self.alert show];
             }
         } else if (error){
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Email is already taken." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to save email. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
             [alert show];
         }
     }];

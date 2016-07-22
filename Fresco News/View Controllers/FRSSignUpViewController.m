@@ -935,6 +935,7 @@
         }
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
+            
             if (error) {
                 // show error
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to sign up. Please try again later." actionTitle:@"OK" cancelTitle:nil cancelTitleColor:nil delegate:self];
@@ -953,7 +954,6 @@
         
         NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
         NSLog(@"%@", errorMessage);
-        
         
         if (error) {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to create an account. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];

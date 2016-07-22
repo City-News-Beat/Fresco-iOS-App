@@ -134,6 +134,8 @@
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
     
+    NSLog(@"SHOULD CHANGE IN RANGE");
+    
     //Match strings to proper textfield.text
     if (textField.tag == 1) {
         self.currentPassword = textField.text;
@@ -151,20 +153,21 @@
     }
     
     //If new passwords do not match, do not continue
-    if ((self.updatedPassword == self.updatedPasswordVerify)) {
+    if (([self.updatedPassword isEqualToString: self.updatedPasswordVerify])) {
         [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.buttonCell.rightAlignedButton.userInteractionEnabled = YES;
         return YES;
     }
     
-
+//    [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+//    self.buttonCell.rightAlignedButton.userInteractionEnabled = YES;
     
     return YES;
 }
 
 
 -(BOOL)isValidPassword:(NSString *)password {
-    if (password.length < 8) {
+    if (password.length < 7) {
         return NO;
     }
     
@@ -172,6 +175,8 @@
 }
 
 -(void)savePassword {
+    
+    [self.view endEditing:YES];
     
     NSDictionary *digestion = @{@"verify_password" : self.currentPassword, @"password" : self.updatedPassword};
     
@@ -184,13 +189,16 @@
             self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to update password. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
             [self.alert show];
         }
+        
+        if (!error) {
+            [self popViewController];
+        }
     }];
     
     FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
     userToUpdate.password = self.updatedPassword;
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
     
-    [self popViewController];
 }
 
 
