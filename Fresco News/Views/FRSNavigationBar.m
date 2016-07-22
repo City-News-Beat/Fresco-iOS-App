@@ -56,13 +56,7 @@
         if ([update[@"type"] isEqualToString:@"progress"]) {
             NSNumber *uploadPercentage = update[@"percentage"];
             float percentage = [uploadPercentage floatValue];
-            
-            if (_lastAnimated) {
-                if ([_lastAnimated timeIntervalSinceNow] < -0.01) {
-                    return;
-                }
-            }
-            
+          
             dispatch_async(dispatch_get_main_queue(), ^{
                 CGRect navFrame = self.frame;
                 navFrame.origin.y = -20;
