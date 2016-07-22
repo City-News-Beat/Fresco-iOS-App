@@ -94,14 +94,4 @@
     [super didReceiveMemoryWarning];
 }
 
--(instancetype)init {
-    self = [super initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
-    
-    if (self) {
-        
-    }
-    
-    return self;
-}
-
 @end
