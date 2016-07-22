@@ -66,7 +66,9 @@
     self.address = [self shortAddressFromAddress:dict[@"address"]];
     self.creator = [FRSUser MR_createEntityInContext:context];
     
-    self.creator.uid = dict[@"owner"][@"id"];
+    if (dict[@"owner"] != Nil && ![dict[@"owner"] isEqual:[NSNull null]]) {
+        self.creator.uid = dict[@"owner"][@"id"];
+    }
 
     self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
 
