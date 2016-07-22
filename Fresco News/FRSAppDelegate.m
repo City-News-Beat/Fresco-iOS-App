@@ -24,6 +24,7 @@
 #import "Fresco.h"
 #import "SSKeychain.h"
 #import "FRSUser.h"
+#import "FRSNavigationBar.h"
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -239,7 +240,7 @@
 -(void)startAuthentication {
     _tabBarController = [[FRSTabBarController alloc] init];
     
-    FRSNavigationController *mainNav = [[FRSNavigationController alloc] init];
+    FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
     [mainNav pushViewController:_tabBarController animated:FALSE];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [mainNav pushViewController:[[FRSOnboardingViewController alloc] init] animated:FALSE];

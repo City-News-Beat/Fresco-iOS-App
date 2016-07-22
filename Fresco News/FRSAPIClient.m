@@ -375,7 +375,8 @@
                              @"geo" : geoData,
                              @"radius" : @(radius),
                              @"rating" : @1,
-                            };    
+                             @"where" : @"contained"
+                            };
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
