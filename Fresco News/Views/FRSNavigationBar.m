@@ -114,6 +114,8 @@
     
     CGRect progressFrame = _progressView.frame;
     progressFrame.size.height = frame.size.height + 20;
+    progressFrame.origin.y = frame.origin.y -= 40;
+
     _progressView.frame = progressFrame;
 }
 
