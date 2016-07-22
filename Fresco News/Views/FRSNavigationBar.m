@@ -176,7 +176,7 @@
         [self bringSubviewToFront:_failureView];
         
         CGRect navFrame = self.frame;
-        navFrame.origin.y -= 20;
+        navFrame.origin.y = -20;
         navFrame.size.height += 20;
         navFrame.size.width = 0;
         
