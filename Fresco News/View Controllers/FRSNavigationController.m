@@ -11,6 +11,7 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
+#import "FRSNavigationBar.h"
 
 #define BAR_BUTTON_WIDTH 24
 #define SIDE_MARGIN 6
@@ -112,9 +113,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:.2 animations:^{
                     _progressView.alpha = 0;
-                    self.navigationBar.barTintColor = [UIColor frescoRedHeartColor];
-                    [self showFailureButtons:TRUE];
-                    [self showUploadButtons:FALSE];
+                    [self showFailureUI];
                 } completion:^(BOOL finished) {
                     _progressView.frame = navFrame;
                     _progressView.alpha = 1;
@@ -124,6 +123,13 @@
         }
         
     }];
+}
+
+-(void)showFailureUI {
+    
+    //
+    [self showFailureButtons:TRUE];
+    [self showUploadButtons:FALSE];
 }
 
 -(void)showFailureButtons:(BOOL)show {
@@ -169,6 +175,16 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+-(instancetype)init {
+    self = [super initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
+    
+    if (self) {
+        
+    }
+    
+    return self;
 }
 
 @end
