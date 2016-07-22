@@ -145,14 +145,15 @@
             if (weakSelf.delegate && totalErrors > chunkMaxFailures) {
                 [weakSelf.delegate uploadDidFail:self withError:error response:data];
             }
-            else {
-                [self uploadChunk:chunkRequest data:dataToUpload index:connect];
-                return;
-            }
+            
+            self.completionBlock(self, Nil, Nil, FALSE, Nil);
+            return;
         }
         else {
             
             totalErrors = 0;
+            
+            
             
             NSLog(@"CHUNK UPLOADED");
             NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];

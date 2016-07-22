@@ -119,9 +119,11 @@
     
     if (!_failureView) {
         _failureView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.frame.size.width, self.frame.size.height+20)];
+        _failureView.backgroundColor = [UIColor colorWithRed:0.82 green:0.01 blue:0.11 alpha:1.0];
     }
     
-    // show failure view
+    [self addSubview:_failureView];
+    [self bringSubviewToFront:_failureView];
 }
 
 -(void)setFrame:(CGRect)frame {
