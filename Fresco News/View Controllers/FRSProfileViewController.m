@@ -23,6 +23,7 @@
 #import "FRSSetupProfileViewController.h"
 
 #import "FRSAPIClient.h"
+#import "FRSAwkwardView.h"
 #import <Haneke/Haneke.h>
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
@@ -54,6 +55,11 @@
 @property (nonatomic) NSInteger count;
 
 @property (nonatomic) BOOL presentingUser;
+@property (nonatomic) BOOL feedAwkward;
+@property (nonatomic) BOOL likesAwkward;
+
+@property (strong, nonatomic) FRSAwkwardView *feedAwkwardView;
+@property (strong, nonatomic) FRSAwkwardView *likesAwkwardView;
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) UIBarButtonItem *followBarButtonItem;
@@ -200,7 +206,6 @@
             self.currentFeed = self.galleries;
             [self.tableView reloadData];
         }
-
     }];
     
     [self fetchLikes];
@@ -222,6 +227,14 @@
             [self.tableView reloadData];
         }
     }];
+}
+
+-(void)displayAwkwardView: (BOOL)show feedTable:(BOOL)feed{
+    if(feed){
+        self.feedAwkwardView.hidden = !show;
+    }else{
+        self.likesAwkwardView.hidden = !show;
+    }
 }
 
 #pragma mark - UI Elements
@@ -545,12 +558,31 @@
         return 1;
     }
     else {
-        
         if (!self.currentFeed) {
             self.currentFeed = self.galleries;
         }
+
+        //Awkward View
+        if(tableView == self.tableView){
+            if(self.currentFeed.count == 0){
+                [self displayAwkwardView:true feedTable:false];
+            }else{
+                [self displayAwkwardView:false feedTable:false];
+            }
+        }else if(tableView == self.contentTable){
+            if(self.currentFeed.count == 0){
+                [self displayAwkwardView:true feedTable:true];
+            }else{
+                [self displayAwkwardView:false feedTable:true];
+            }
+        }
         
-        return self.currentFeed.count;
+        if(self.currentFeed.count == 0){
+            return 1;
+        }else{
+            return self.currentFeed.count;
+        }
+        
         return 0;
     }
 }
@@ -569,7 +601,7 @@
         return self.profileContainer.frame.size.height;
     }
     else {
-        if (!self.currentFeed.count) return 0;
+        if (!self.currentFeed.count) return 60;
         if ([[self.currentFeed[indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             FRSGallery *gallery = self.currentFeed[indexPath.row];
             return [gallery heightForGallery];
@@ -591,7 +623,15 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     else {
-        if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
+        if(self.currentFeed.count == 0){
+            cell = [[UITableViewCell alloc] init];
+            CGRect newFrame = tableView.frame;
+            newFrame.size.height = 40;
+            newFrame.origin.y = tableView.frame.size.height/6;
+            [cell.contentView addSubview:[[FRSAwkwardView alloc] initWithFrame:newFrame]];
+            [cell.contentView setBackgroundColor:[UIColor redColor]];
+            [cell setBackgroundColor:[UIColor redColor]];
+        }else if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
             
             if (!cell){
@@ -624,8 +664,9 @@
             
             galCell.gallery = self.currentFeed[indexPath.row];
             [galCell configureCell];
-        }
-        else {
+        }else if(self.currentFeed.count == 0){
+            
+        }else {
             FRSStoryCell *storyCell = (FRSStoryCell *)cell;
             [storyCell clearCell];
             

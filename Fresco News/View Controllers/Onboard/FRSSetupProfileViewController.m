@@ -59,7 +59,12 @@
     
     [self.navigationController setNavigationBarHidden:false];
     NSLog(@"%f",self.navigationController.navigationBar.bounds.origin.y);
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    
+    [self.navigationController.navigationBar setTitleTextAttributes: @{
+                                                            NSForegroundColorAttributeName: [UIColor whiteColor],
+                                                            NSFontAttributeName: [UIFont fontWithName:@"Nota-Bold" size:17.0]
+                                                            }];
+
 }
 
 -(void)addNotifications{
@@ -203,12 +208,7 @@
     }else{
         self.navigationItem.title = @"SET UP YOUR PROFILE";
         self.navigationItem.hidesBackButton = YES;
-    }
-    [[UINavigationBar appearance] setTitleTextAttributes: @{
-                                                            NSForegroundColorAttributeName: [UIColor whiteColor],
-                                                            NSFontAttributeName: [UIFont fontWithName:@"Nota-Bold" size:17.0]
-                                                            }];
-}
+    }}
 
 -(void)dismiss{
     [self.navigationController popViewControllerAnimated:YES];
