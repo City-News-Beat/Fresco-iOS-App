@@ -153,8 +153,6 @@
             
             totalErrors = 0;
             
-            
-            
             NSLog(@"CHUNK UPLOADED");
             NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
             NSString *eTag = headers[@"Etag"];

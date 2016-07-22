@@ -42,7 +42,7 @@
     container.backgroundColor = [UIColor colorWithWhite:1 alpha:.92];
     [self.view addSubview:container];
     
-    UITextField *cardNumberTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    cardNumberTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     cardNumberTextField  = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, [UIScreen mainScreen].bounds.size.width - (32), 44)];
     cardNumberTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     cardNumberTextField.placeholder =  @"0000 0000 0000 0000";
@@ -54,7 +54,7 @@
     [cardNumberTextField setSecureTextEntry: YES];
     
     
-    UITextField *expirationDateTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    expirationDateTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     expirationDateTextField  = [[UITextField alloc] initWithFrame:CGRectMake(16, 44, [UIScreen mainScreen].bounds.size.width/2, 44)];
     expirationDateTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     expirationDateTextField.placeholder =  @"00 / 00";
@@ -64,7 +64,7 @@
     
     expirationDateTextField.keyboardType = UIKeyboardTypeNumberPad;
 
-    UITextField *securityCodeTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    securityCodeTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     securityCodeTextField  = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 , 44, [UIScreen mainScreen].bounds.size.width/2, 44)];
     securityCodeTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     securityCodeTextField.placeholder =  @"CVV";
@@ -130,15 +130,24 @@
 
 - (void)cardIOView:(CardIOView *)cardIOView didScanCard:(CardIOCreditCardInfo *)info {
     if (info) {
-        // The full card number is available as info.cardNumber, but don't log that!
-        NSLog(@"Received card info. Number: %@, expiry: %02i/%i, cvv: %@.", info.redactedCardNumber, info.expiryMonth, info.expiryYear, info.cvv);
-        // Use the card info...
+        NSString *cardNumber = info.cardNumber;
+      //  NSString *name = info.cardholderName;
+        NSInteger expirationYear = info.expiryYear;
+        NSInteger expirationMonth = info.expiryMonth;
+        NSString *cvv = info.cvv;
+        
+        if (cardNumber) {
+            cardNumberTextField.text = cardNumber;
+        }
+        
+        if (cvv) {
+            securityCodeTextField.text = cvv;
+        }
+        
+        if (expirationYear != 0 && expirationMonth != 0) {
+            expirationDateTextField.text = [NSString stringWithFormat:@"%@%lu/%lu", (expirationMonth < 10) ? @"0" : @"", (long)expirationMonth, (long)expirationYear];
+        }
     }
-    else {
-        NSLog(@"User cancelled payment info");
-        // Handle user cancellation here...
-    }
-    
 }
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
