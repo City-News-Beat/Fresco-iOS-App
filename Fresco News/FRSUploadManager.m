@@ -108,8 +108,14 @@
                         if (!error) {
                             [self next:task];
                         }
+                        else {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                        }
                     }];
                 }];
+            }
+            else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
             }
         }];
         
@@ -140,11 +146,15 @@
                         if (!error) {
                             [self next:task];
                         }
+                        else {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                        }
                     }];
                 }
             }
             else {
                 NSLog(@"%@", error);
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
             }
         }];
         
