@@ -321,7 +321,6 @@
 		07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGlobalAssignmentTableViewCell.xib; sourceTree = "<group>"; };
 		07B6FB531D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalAssignmentsTableViewCell.h; sourceTree = "<group>"; };
 		07B6FB541D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalAssignmentsTableViewCell.m; sourceTree = "<group>"; };
-		07BB581B1CB5717A00091C86 /* lalaunch.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = lalaunch.mp4; sourceTree = "<group>"; };
 		07E9366B1CB4534B00D3CC39 /* VideoTrimmerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTrimmerViewController.h; sourceTree = "<group>"; };
 		07E9366C1CB4534B00D3CC39 /* VideoTrimmerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoTrimmerViewController.m; sourceTree = "<group>"; };
 		07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSLaunchScreen.xib; sourceTree = "<group>"; };
@@ -1355,7 +1354,6 @@
 				D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */,
 				07E9366B1CB4534B00D3CC39 /* VideoTrimmerViewController.h */,
 				07E9366C1CB4534B00D3CC39 /* VideoTrimmerViewController.m */,
-				07BB581B1CB5717A00091C86 /* lalaunch.mp4 */,
 			);
 			name = "Image Picker";
 			path = ../..;
