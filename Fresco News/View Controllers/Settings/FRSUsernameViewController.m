@@ -131,6 +131,11 @@
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
     
+    if ([self isValidPassword:self.password] && self.usernameTaken) {
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = YES;
+    }
+    
     if (textField.isSecureTextEntry) {
         self.password = textField.text;
         NSLog(@"PASSWORD: %@", textField.text);
@@ -221,18 +226,6 @@
     }
     
     [self startUsernameTimer];
-    
-//    [[FRSAPIClient sharedClient] checkUsername:self.username completion:^(id responseObject, NSError *error) {
-//        
-//        NSLog(@"RESPONSE OBJECT: %@", responseObject);
-//        NSLog(@"ERROR: %@", error);
-//        
-//        if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
-//            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-//        } else {
-//            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-//        }
-//    }];
 }
 
 -(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
@@ -246,12 +239,8 @@
     
     if(!success) {
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
-//        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-//        self.cell.rightAlignedButton.userInteractionEnabled = YES;
     } else {
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
-//        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-//        self.cell.rightAlignedButton.userInteractionEnabled = NO;
     }
     
     if (animateIn) {
@@ -310,7 +299,6 @@
             
             [[FRSAPIClient sharedClient] checkUsername:self.username completion:^(id responseObject, NSError *error) {
                 
-                if ([self isValidPassword:self.password]) {
                     if (!error && responseObject) {
                         [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
                         self.usernameTaken = NO;
@@ -326,12 +314,17 @@
                         [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
                         self.usernameTaken = YES;
                         [self stopUsernameTimer];
-                        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-                        self.cell.rightAlignedButton.userInteractionEnabled = YES;
                     }
-                }
             }];
         }
+    }
+}
+
+-(void)checkPassword {
+    if ([self isValidPassword:self.password]) {
+        
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = YES;
     }
 }
 
@@ -384,14 +377,6 @@
     
     return YES;
 }
-
-
-
-
-
-
-
-
 
 
 @end
