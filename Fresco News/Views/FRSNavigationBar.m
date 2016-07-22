@@ -111,15 +111,6 @@
 
 -(void)setFrame:(CGRect)frame {
     [super setFrame:frame];
-    
-    NSLog(@"%@", [NSValue valueWithCGRect:frame]);
-    
-    CGRect navFrame = self.frame;
-    navFrame.origin.y -= 20;
-    navFrame.size.height += 20;
-    navFrame.size.width = _progressView.frame.size.width;
-
-    _progressView.frame = navFrame;
 }
 
 @end
