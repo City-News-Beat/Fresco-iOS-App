@@ -32,9 +32,8 @@
 
 
 -(void)configureView{
-    UIView *cardViewport = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2 - 44)];
-    cardViewport.backgroundColor = [UIColor redColor];
-    cardViewport.alpha = 0.2;
+    cardViewport = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2 - 44)];
+    cardViewport.clipsToBounds = YES;
     [self.view addSubview:cardViewport];
     
     [cardViewport addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
@@ -115,6 +114,32 @@
     [self.view addSubview:rightAlignedButton];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [CardIOUtilities preload];
+    CardIOView *cardIOView = [[CardIOView alloc] initWithFrame:CGRectMake(0, -185, self.view.frame.size.width, self.view.frame.size.height)];
+    cardIOView.delegate = self;
+    
+    [cardViewport addSubview:cardIOView];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+}
+
+- (void)cardIOView:(CardIOView *)cardIOView didScanCard:(CardIOCreditCardInfo *)info {
+    if (info) {
+        // The full card number is available as info.cardNumber, but don't log that!
+        NSLog(@"Received card info. Number: %@, expiry: %02i/%i, cvv: %@.", info.redactedCardNumber, info.expiryMonth, info.expiryYear, info.cvv);
+        // Use the card info...
+    }
+    else {
+        NSLog(@"User cancelled payment info");
+        // Handle user cancellation here...
+    }
+    
+}
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
