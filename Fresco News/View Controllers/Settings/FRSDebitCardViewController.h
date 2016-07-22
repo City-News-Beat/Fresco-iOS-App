@@ -13,5 +13,8 @@
 @interface FRSDebitCardViewController : FRSBaseViewController <UITextFieldDelegate,CardIOViewDelegate>
 {
     UIView *cardViewport;
+    UITextField *cardNumberTextField;
+    UITextField *expirationDateTextField;
+    UITextField *securityCodeTextField;
 }
 @end
