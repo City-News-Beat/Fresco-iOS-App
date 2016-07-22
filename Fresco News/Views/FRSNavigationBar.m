@@ -158,7 +158,7 @@
 }
 
 -(void)retryUpload {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSRetryUpload" object:nil userInfo:@{@"type":@"retry"}];
 }
 
 
