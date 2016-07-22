@@ -166,6 +166,12 @@
         if (expirationYear != 0 && expirationMonth != 0) {
             expirationDateTextField.text = [NSString stringWithFormat:@"%@%lu/%lu", (expirationMonth < 10) ? @"0" : @"", (long)expirationMonth, (long)expirationYear];
         }
+        
+        [cardIOView removeFromSuperview];
+        CardIOView *cardIOView = [[CardIOView alloc] initWithFrame:CGRectMake(0, -185, self.view.frame.size.width, self.view.frame.size.height)];
+        cardIOView.delegate = self;
+        
+        [cardViewport addSubview:cardIOView];
     }
 }
 
