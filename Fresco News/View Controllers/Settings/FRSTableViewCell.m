@@ -519,10 +519,6 @@
     }
     
     [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
-    
-    
-    NSLog(@"STATE: %d", state);
-    NSLog(@"BOOL: %d", [[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]);
 }
 
 -(void)checkNotificationStatus {
