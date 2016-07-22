@@ -107,6 +107,18 @@
         }
         
     }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSDismissUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        [UIView animateWithDuration:.2 animations:^{
+            [_failureView removeFromSuperview];
+        }];
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        [UIView animateWithDuration:.2 animations:^{
+            [_failureView removeFromSuperview];
+        }];
+    }];
 
 }
 
@@ -149,7 +161,8 @@
 
 -(void)dismissFailureView {
     NSLog(@"dismiss");
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSDismissUpload" object:nil userInfo:@{@"type":@"dismiss"}];
+
     [UIView animateWithDuration:.2 animations:^{
         [_failureView removeFromSuperview];
     }];
