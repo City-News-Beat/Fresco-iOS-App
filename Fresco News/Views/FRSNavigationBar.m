@@ -109,4 +109,12 @@
 
 }
 
+-(void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    
+    CGRect progressFrame = _progressView.frame;
+    progressFrame.size.height = frame.size.height + 20;
+    _progressView.frame = progressFrame;
+}
+
 @end
