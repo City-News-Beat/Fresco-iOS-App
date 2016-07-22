@@ -10,4 +10,5 @@
 
 @interface FRSNavigationBar : UINavigationBar
 @property (nonatomic, retain) UIView *progressView;
+@property (nonatomic, retain) UIView *failureView;
 @end

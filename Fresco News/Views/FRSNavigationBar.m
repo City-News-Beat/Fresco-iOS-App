@@ -96,6 +96,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:.2 animations:^{
                     _progressView.alpha = 0;
+                    [self showFailureView];
 
                 } completion:^(BOOL finished) {
                     _progressView.frame = navFrame;
@@ -107,6 +108,15 @@
         
     }];
 
+}
+
+-(void)showFailureView {
+    
+    if (!_failureView) {
+        _failureView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.frame.size.width, self.frame.size.height+20)];
+    }
+    
+    // show failure view
 }
 
 -(void)setFrame:(CGRect)frame {
