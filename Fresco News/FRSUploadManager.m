@@ -24,6 +24,10 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
         totalBytesSent = 0;
+        _tasks = [[NSMutableArray alloc] init];
+        _currentTasks = [[NSMutableArray alloc] init];
+        _etags = [[NSMutableArray alloc] init];
+
         if (_gallery) {
             [self startUploadProcess];
         }
