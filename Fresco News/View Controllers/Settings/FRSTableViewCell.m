@@ -123,13 +123,13 @@
         self.twitterHandle = nil;
         self.socialTitleLabel.text = @"Connect Twitter";
     } else {
-        self.twitterSwitch.userInteractionEnabled = NO;
-        self.userInteractionEnabled = NO;
-        self.twitterIV.alpha = 0;
-        [self configureSpinner];
+//        self.twitterSwitch.userInteractionEnabled = NO;
+//        self.userInteractionEnabled = NO;
+//        self.twitterIV.alpha = 0;
+//        [self configureSpinner];
         [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
-            [self.loadingView stopLoading];
-            [self.loadingView removeFromSuperview];
+//            [self.loadingView stopLoading];
+//            [self.loadingView removeFromSuperview];
             self.twitterIV.alpha = 1;
             self.twitterSwitch.userInteractionEnabled = YES;
             self.userInteractionEnabled = YES;
@@ -157,7 +157,7 @@
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
-    [self addSubview:self.loadingView];
+//    [self addSubview:self.loadingView];
 }
 
 
