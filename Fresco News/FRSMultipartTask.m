@@ -138,7 +138,7 @@
         
         if (error) {
             totalErrors++;
-            
+            totalConnections--;
             NSLog(@"CHUNK ERROR: %@", error);
             
             // put in provision for # of errors, and icing the task, and being able to resume it when asked to
