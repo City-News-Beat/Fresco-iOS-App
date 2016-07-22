@@ -101,15 +101,8 @@
             navFrame.size.width = 0;
             [self showFailureView];
 
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [UIView animateWithDuration:.2 animations:^{
-                    _progressView.alpha = 0;
-
-                } completion:^(BOOL finished) {
-                    _progressView.frame = navFrame;
-                    _progressView.alpha = 1;
-                }];
-            });
+            _progressView.frame = navFrame;
+            _progressView.alpha = 1;
             
         }
         
@@ -119,46 +112,55 @@
 
 -(void)showFailureView {
     
-    if (!_failureView) {
-        _failureView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.frame.size.width, self.frame.size.height+20)];
-        _failureView.backgroundColor = [UIColor frescoRedHeartColor];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!_failureView) {
+            _failureView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.frame.size.width, self.frame.size.height+20)];
+            _failureView.backgroundColor = [UIColor frescoRedHeartColor];
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(_failureView.frame.size.width/2 - 115/2, 35, 115, 19)];
+            label.text = @"UPLOAD FAILED";
+            label.textColor = [UIColor whiteColor];
+            label.textAlignment = NSTextAlignmentCenter;
+            [label setFont:[UIFont notaBoldWithSize:17]];
+            [_failureView addSubview:label];
+            
+            UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
+            [dismissButton addTarget:self action:@selector(dismissFailureView) forControlEvents:UIControlEventTouchUpInside];
+            dismissButton.frame = CGRectMake(12, 30, 24, 24);
+            [dismissButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+            dismissButton.tintColor = [UIColor whiteColor];
+            [_failureView addSubview:dismissButton];
+            
+            UIButton *retryUploadButton = [UIButton buttonWithType:UIButtonTypeSystem];
+            [retryUploadButton addTarget:self action:@selector(retryUpload) forControlEvents:UIControlEventTouchUpInside];
+            retryUploadButton.frame = CGRectMake(_failureView.frame.size.width-24-10, 30, 24, 24);
+            [retryUploadButton setImage:[UIImage imageNamed:@"refresh"] forState:UIControlStateNormal];
+            retryUploadButton.tintColor = [UIColor whiteColor];
+            [_failureView addSubview:retryUploadButton];
+            
+        }
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(_failureView.frame.size.width/2 - 115/2, 35, 115, 19)];
-        label.text = @"UPLOAD FAILED";
-        label.textColor = [UIColor whiteColor];
-        label.textAlignment = NSTextAlignmentCenter;
-        [label setFont:[UIFont notaBoldWithSize:17]];
-        [_failureView addSubview:label];
-        
-        UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [dismissButton addTarget:self action:@selector(dismissFailureView) forControlEvents:UIControlEventTouchUpInside];
-        dismissButton.frame = CGRectMake(12, 30, 24, 24);
-        [dismissButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
-        dismissButton.tintColor = [UIColor whiteColor];
-        [_failureView addSubview:dismissButton];
-        
-        UIButton *retryUploadButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [retryUploadButton addTarget:self action:@selector(retryUpload) forControlEvents:UIControlEventTouchUpInside];
-        retryUploadButton.frame = CGRectMake(_failureView.frame.size.width-24-10, 30, 24, 24);
-        [retryUploadButton setImage:[UIImage imageNamed:@"refresh"] forState:UIControlStateNormal];
-        retryUploadButton.tintColor = [UIColor whiteColor];
-        [_failureView addSubview:retryUploadButton];
+        [self addSubview:_failureView];
+        [self bringSubviewToFront:_failureView];
+    });
     
-    }
-    
-    [self addSubview:_failureView];
-    [self bringSubviewToFront:_failureView];
 }
 
 
 -(void)dismissFailureView {
     NSLog(@"dismiss");
     
-    [_failureView removeFromSuperview];
+    [UIView animateWithDuration:.2 animations:^{
+        [_failureView removeFromSuperview];
+    }];
 }
 
 -(void)retryUpload {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSRetryUpload" object:nil userInfo:@{@"type":@"retry"}];
+    
+    [UIView animateWithDuration:.2 animations:^{
+        [_failureView removeFromSuperview];
+    }];
 }
 
 
