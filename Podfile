@@ -31,6 +31,7 @@ target 'Fresco' do
 	pod 'TwitterKit'
 	pod 'TwitterCore'
 	pod 'Appsee'
+	pod 'CardIO'
 	pod 'Adjust', :git => 'git://github.com/adjust/ios_sdk.git', :tag => 'v4.5.0'
     pod 'AttributedMarkdown', :git => 'https://github.com/dreamwieber/AttributedMarkdown.git'
 end
