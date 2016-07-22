@@ -60,7 +60,7 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 CGRect navFrame = self.frame;
-                navFrame.origin.y -= 40;
+                navFrame.origin.y = -20;
                 navFrame.size.height += 20;
                 navFrame.size.width = self.frame.size.width * percentage;
                 
@@ -73,7 +73,7 @@
         }
         else if ([update[@"type"] isEqualToString:@"completion"]) {
             CGRect navFrame = self.frame;
-            navFrame.origin.y -= 20;
+            navFrame.origin.y = -20;
             navFrame.size.height += 20;
             navFrame.size.width = 0;
             
@@ -112,11 +112,14 @@
 -(void)setFrame:(CGRect)frame {
     [super setFrame:frame];
     
-    CGRect progressFrame = _progressView.frame;
-    progressFrame.size.height = frame.size.height + 20;
-    progressFrame.origin.y = frame.origin.y -= 40;
+    NSLog(@"%@", [NSValue valueWithCGRect:frame]);
+    
+    CGRect navFrame = self.frame;
+    navFrame.origin.y -= 20;
+    navFrame.size.height += 20;
+    navFrame.size.width = _progressView.frame.size.width;
 
-    _progressView.frame = progressFrame;
+    _progressView.frame = navFrame;
 }
 
 @end
