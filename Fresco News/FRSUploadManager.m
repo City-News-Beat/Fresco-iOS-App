@@ -12,6 +12,10 @@
 
 @implementation FRSUploadManager
 
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 -(void)commonInit {
     _tasks = [[NSMutableArray alloc] init];
     _currentTasks = [[NSMutableArray alloc] init];
@@ -108,8 +112,14 @@
                         if (!error) {
                             [self next:task];
                         }
+                        else {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                        }
                     }];
                 }];
+            }
+            else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
             }
         }];
         
@@ -140,11 +150,15 @@
                         if (!error) {
                             [self next:task];
                         }
+                        else {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                        }
                     }];
                 }
             }
             else {
                 NSLog(@"%@", error);
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
             }
         }];
         
