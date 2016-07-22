@@ -10,6 +10,10 @@
 
 @implementation FRSNavigationBar
 
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 -(instancetype)init {
     self = [super init];
     
