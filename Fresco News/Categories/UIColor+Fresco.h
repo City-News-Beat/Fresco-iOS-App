@@ -34,4 +34,8 @@
 
 +(UIColor *)frescoSliderGray;
 
++(UIColor *)twitterBlueColor;
+
++(UIColor *)facebookBlueColor;
+
 @end

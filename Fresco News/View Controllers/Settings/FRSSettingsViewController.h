@@ -11,4 +11,6 @@
 
 @interface FRSSettingsViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate>
 
+@property (strong, nonatomic) UITableView *tableView;
+
 @end

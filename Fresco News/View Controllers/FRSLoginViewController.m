@@ -199,6 +199,7 @@
     
     
     [[FRSAPIClient sharedClient] signIn:username password:password completion:^(id responseObject, NSError *error) {
+        
         if (error.code == 0) {
             FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
             [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{

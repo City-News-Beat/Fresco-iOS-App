@@ -58,4 +58,15 @@
     return [UIColor colorWithWhite:182.0/255.0 alpha:1.0];
 }
 
++(UIColor *)twitterBlueColor {
+    return [UIColor colorWithRed:85.0/255.0 green:172.0/255.0 blue:238.0/255.0 alpha:1.0];
+}
+
++(UIColor *)facebookBlueColor {
+    return [UIColor colorWithRed:59.0/255.0 green:89.0/255.0 blue:152.0/255.0 alpha:1.0];
+}
+
+
+
+
 @end

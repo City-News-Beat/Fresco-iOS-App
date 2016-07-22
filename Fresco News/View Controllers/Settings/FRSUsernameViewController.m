@@ -11,6 +11,7 @@
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSAppDelegate.h"
+#import "FRSAlertView.h"
 
 @interface FRSUsernameViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -20,6 +21,8 @@
 @property (strong, nonatomic) UIImageView *usernameCheckIV;
 @property (strong, nonatomic) NSTimer *usernameTimer;
 @property (nonatomic) BOOL usernameTaken;
+
+@property (strong, nonatomic) FRSAlertView *alert;
 
 @end
 
@@ -159,7 +162,13 @@
         [delegate reloadUser];
     }];
     
+    
+    FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+    userToUpdate.username = self.username;
+    [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
+    
     [self popViewController];
+    
 }
 
 -(BOOL)isValidUsername:(NSString *)username {
@@ -284,12 +293,17 @@
             
             [[FRSAPIClient sharedClient] checkUsername:self.username completion:^(id responseObject, NSError *error) {
                 
-                if (![error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
+                if (!error && responseObject) {
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
                     self.usernameTaken = NO;
                     [self stopUsernameTimer];
                     [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
                     self.cell.rightAlignedButton.userInteractionEnabled = NO;
+                } else if (error.code == -1009){
+                    if (!self.alert) {
+                        self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                        [self.alert show];
+                    }
                 } else {
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
                     self.usernameTaken = YES;

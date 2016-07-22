@@ -105,6 +105,9 @@
         if (![responseObject[@"bio"] isEqual:[NSNull null]]) {
             authenticatedUser.bio = responseObject[@"bio"];
         }
+        if (![responseObject[@"email"] isEqual:[NSNull null]]) {
+            authenticatedUser.email = responseObject[@"email"];
+        }
         authenticatedUser.isLoggedIn = @(TRUE);
         if (![responseObject[@"avatar"] isEqual:[NSNull null]]) {
             authenticatedUser.profileImage = responseObject[@"avatar"];
