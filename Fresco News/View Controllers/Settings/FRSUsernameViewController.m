@@ -21,6 +21,7 @@
 @property (strong, nonatomic) UIImageView *usernameCheckIV;
 @property (strong, nonatomic) NSTimer *usernameTimer;
 @property (nonatomic) BOOL usernameTaken;
+@property (strong, nonatomic) NSString *password;
 
 @property (strong, nonatomic) FRSAlertView *alert;
 
@@ -56,7 +57,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 2;
+    return 3;
 }
 
 
@@ -94,7 +95,7 @@
         case 0:
             switch (indexPath.section) {
                 case 0:
-                    [cell configureEditableCellWithDefaultText:@"New username" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
+                    [cell configureEditableCellWithDefaultText:@"New username" withTopSeperator:YES withBottomSeperator:NO isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.textField.delegate = self;
                     [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
                     
@@ -109,9 +110,13 @@
             }
             break;
         case 1:
+            [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
+            cell.textField.delegate = self;
+            [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+            break;
+        case 2:
             [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142 withColor:[UIColor frescoLightTextColor]];
             [cell.rightAlignedButton addTarget:self action:@selector(saveUsername) forControlEvents:UIControlEventTouchUpInside];
-            
             break;
             
             break;
@@ -126,6 +131,13 @@
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
     
+    if (textField.isSecureTextEntry) {
+        self.password = textField.text;
+        NSLog(@"PASSWORD: %@", textField.text);
+        return YES;
+    }
+    
+    NSLog(@"USERNAME: %@", textField.text);
     if ([textField.text isEqualToString:@""] || textField.text == nil) {
         self.usernameCheckIV.alpha = 0;
         [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
@@ -154,12 +166,17 @@
 
 -(void)saveUsername {
     
-    NSDictionary *digestion = @{@"username" : self.username};
+    NSDictionary *digestion = @{@"username" : self.username, @"verify_password" : self.password};
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
         NSLog(@"RESPONSE: %@ \n ERROR: %@", responseObject, error);
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         [delegate reloadUser];
+        
+        if (error) {
+            self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to update username. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [self.alert show];
+        }
     }];
     
     
@@ -293,23 +310,25 @@
             
             [[FRSAPIClient sharedClient] checkUsername:self.username completion:^(id responseObject, NSError *error) {
                 
-                if (!error && responseObject) {
-                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                    self.usernameTaken = NO;
-                    [self stopUsernameTimer];
-                    [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-                    self.cell.rightAlignedButton.userInteractionEnabled = NO;
-                } else if (error.code == -1009){
-                    if (!self.alert) {
-                        self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
-                        [self.alert show];
+                if ([self isValidPassword:self.password]) {
+                    if (!error && responseObject) {
+                        [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                        self.usernameTaken = NO;
+                        [self stopUsernameTimer];
+                        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+                        self.cell.rightAlignedButton.userInteractionEnabled = NO;
+                    } else if (error.code == -1009){
+                        if (!self.alert) {
+                            self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                            [self.alert show];
+                        }
+                    } else {
+                        [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                        self.usernameTaken = YES;
+                        [self stopUsernameTimer];
+                        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+                        self.cell.rightAlignedButton.userInteractionEnabled = YES;
                     }
-                } else {
-                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-                    self.usernameTaken = YES;
-                    [self stopUsernameTimer];
-                    [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-                    self.cell.rightAlignedButton.userInteractionEnabled = YES;
                 }
             }];
         }
@@ -354,6 +373,16 @@
      }];
     
     return returnValue;
+}
+
+
+-(BOOL)isValidPassword:(NSString *)password {
+    
+    if (password.length < 8) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 
