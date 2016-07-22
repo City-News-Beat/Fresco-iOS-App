@@ -154,11 +154,17 @@
 -(void)dismissFailureView {
     NSLog(@"dismiss");
     
-    [_failureView removeFromSuperview];
+    [UIView animateWithDuration:.2 animations:^{
+        [_failureView removeFromSuperview];
+    }];
 }
 
 -(void)retryUpload {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSRetryUpload" object:nil userInfo:@{@"type":@"retry"}];
+    
+    [UIView animateWithDuration:.2 animations:^{
+        [_failureView removeFromSuperview];
+    }];
 }
 
 

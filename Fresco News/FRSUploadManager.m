@@ -22,6 +22,13 @@
     _etags = [[NSMutableArray alloc] init];
     weakSelf = self;
     
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        totalBytesSent = 0;
+        if (_gallery) {
+            [self startUploadProcess];
+        }
+    }];
+    
     if (_gallery) {
         [self startUploadProcess];
     }
