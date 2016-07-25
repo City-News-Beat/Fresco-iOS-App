@@ -41,6 +41,7 @@
 @property (nonatomic) BOOL postAnon;
 @property (nonatomic) BOOL isFetching;
 @property (nonatomic) BOOL globalAssignmentsEnabled;
+@property (nonatomic) BOOL userSelectedAssigment;
 @property (strong, nonatomic) NSArray *assignments;
 @property (strong, nonatomic) UIView *globalAssignmentsDrawer;
 @property (strong, nonatomic) UITableView *globalAssignmentsTableView;
@@ -52,6 +53,7 @@
 @property (strong, nonatomic) UIImageView *muteImageView;
 @property (strong, nonatomic) UIImageView *globalAssignmentsCaret;
 @property (nonatomic) NSInteger numberOfRowsInAssignmentTableView;
+@property (strong, nonatomic) UIButton *sendButton;
 @property BOOL showingOutlets;
 
 @property NSInteger galleryCollectionViewHeight;
@@ -92,7 +94,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count +1;
     [self resetFrames];
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -317,14 +318,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.bottomContainer addSubview:self.anonLabel];
     
     //Configure next button
-    UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeSystem]; //Should be green when valid
-    [sendButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [sendButton setTintColor:[UIColor frescoLightTextColor]];
-    sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
-    [sendButton setTitle:@"SEND" forState:UIControlStateNormal];
-    [sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
-    //sendButton.userInteractionEnabled = NO;
-    [self.bottomContainer addSubview:sendButton];
+    self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem]; //Should be green when valid
+    [_sendButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [_sendButton setTintColor:[UIColor frescoLightTextColor]];
+    _sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
+    [_sendButton setTitle:@"SEND" forState:UIControlStateNormal];
+    [_sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
+    _sendButton.userInteractionEnabled = NO;
+    [self.bottomContainer addSubview:_sendButton];
 }
 
 
@@ -586,11 +587,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
 //    if (_showingOutlets) {
 //        [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedRow inSection:0]];
 //    }
+    self.userSelectedAssigment = !cell.isSelectedAssignment;
     
     if (cell.isSelectedAssignment){
         
         cell.isSelectedAssignment = NO;
         self.selectedAssignment = nil;
+        
         
         //Remove outlet cells from tableview
         if (cell.outlets.count > 1) {
@@ -658,6 +661,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
             [self resetFrames];
         }
     }
+    
+    //Check the send button state
+    self.sendButton.userInteractionEnabled = [self userCanSend];
+    if(self.sendButton.userInteractionEnabled){
+        [self.sendButton setTintColor:[UIColor frescoBlueColor]];
+    }else{
+        [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
+    }
 }
 
 -(void)resetOtherCells {
@@ -703,9 +714,18 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)textViewDidEndEditing:(UITextView *)textView {
-    
     if ([textView.text isEqualToString:@""]) { //Check for spaces
         self.placeholderLabel.alpha = 1;
+    }
+}
+
+-(void)textViewDidChange:(UITextView *)textView{
+    //Check the send button state
+    self.sendButton.userInteractionEnabled = [self userCanSend];
+    if(self.sendButton.userInteractionEnabled){
+        [self.sendButton setTintColor:[UIColor frescoBlueColor]];
+    }else{
+        [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
     }
 }
 
@@ -822,6 +842,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.carouselCell removePlayers];
     [self.carouselCell removeFromSuperview];
     [self.galleryCollectionView reloadData];
+}
+
+-(BOOL)userCanSend{
+    NSLog(@"Length %lu",(unsigned long)_captionTextView.text.length);
+    NSLog(@"Bool %d",self.userSelectedAssigment);
+    return (_captionTextView.text.length > 0 && self.userSelectedAssigment);
 }
 
     //Next button action
