@@ -740,21 +740,41 @@
             
             [[FRSAPIClient sharedClient] checkUsername:[self.usernameTF.text substringFromIndex:1] completion:^(id responseObject, NSError *error) {
                 
+                //Return if no internet
                 if (error.code == -1009) {
                     return;
                 }
                 
-                if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
+                
+                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                NSInteger responseCode = response.statusCode;
+                NSLog(@"ERROR: %ld", (long)responseCode);
+                
+                if (responseCode == 404) { //
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
                     self.usernameTaken = NO;
                     [self stopUsernameTimer];
                     [self checkCreateAccountButtonState];
+                    return;
                 } else {
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
                     self.usernameTaken = YES;
                     [self stopUsernameTimer];
                     [self checkCreateAccountButtonState];
                 }
+                
+                
+//                if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
+//                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+//                    self.usernameTaken = NO;
+//                    [self stopUsernameTimer];
+//                    [self checkCreateAccountButtonState];
+//                } else {
+//                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+//                    self.usernameTaken = YES;
+//                    [self stopUsernameTimer];
+//                    [self checkCreateAccountButtonState];
+//                }
             }];
         }
     }
