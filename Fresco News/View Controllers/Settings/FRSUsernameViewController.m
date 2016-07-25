@@ -210,7 +210,7 @@
         }
         else if (responseCode >= 500 && responseCode < 600) {
             // 500 level, server
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 500" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
             [alert show];
             return;
         }
@@ -224,12 +224,9 @@
         
     }];
     
-    
     FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
     userToUpdate.username = self.username;
     [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
-    
-    
 }
 
 -(BOOL)isValidUsername:(NSString *)username {

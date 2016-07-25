@@ -153,14 +153,14 @@
     }
     
     //If new passwords do not match, do not continue
-    if (([self.updatedPassword isEqualToString: self.updatedPasswordVerify])) {
-        [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        self.buttonCell.rightAlignedButton.userInteractionEnabled = YES;
-        return YES;
-    }
+//    if (([self.updatedPassword isEqualToString:self.updatedPasswordVerify])) {
+//        [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+//        self.buttonCell.rightAlignedButton.userInteractionEnabled = YES;
+//        return YES;
+//    }
     
-//    [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-//    self.buttonCell.rightAlignedButton.userInteractionEnabled = YES;
+    [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    self.buttonCell.rightAlignedButton.userInteractionEnabled = YES;
     
     return YES;
 }
@@ -178,6 +178,14 @@
     
     [self.view endEditing:YES];
     
+    
+    if ((![self.updatedPassword isEqualToString: self.updatedPasswordVerify])) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"New passwords do not match." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+        [alert show];
+        return;
+    }
+
+    
     NSDictionary *digestion = @{@"verify_password" : self.currentPassword, @"password" : self.updatedPassword};
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
@@ -185,13 +193,46 @@
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         [delegate reloadUser];
         
-        if (error) {
-            self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to update password. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
-            [self.alert show];
-        }
+        
         
         if (!error) {
             [self popViewController];
+            return;
+        }
+        
+        
+        if (error) {
+            if (error.code == -1009) {
+                NSLog(@"Unable to connect.");
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+                return;
+            }
+            
+            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+            NSInteger responseCode = response.statusCode;
+            NSLog(@"ERROR: %ld", (long)responseCode);
+            
+            if (responseCode >= 400 && responseCode < 500) {
+                // 400 level, client
+                if (responseCode == 403) {
+                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Incorrect password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                    [alert show];
+                } else {
+                    
+                }
+                
+                return;
+            }
+            else if (responseCode >= 500 && responseCode < 600) {
+                // 500 level, server
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+                return;
+            }
+            else {
+                //generic error
+            }
         }
     }];
     
