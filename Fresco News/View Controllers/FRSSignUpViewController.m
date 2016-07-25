@@ -940,13 +940,27 @@
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             
-            if (error) {
-                // show error
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to sign up. Please try again later." actionTitle:@"OK" cancelTitle:nil cancelTitleColor:nil delegate:self];
+            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+            NSInteger responseCode = response.statusCode;
+            NSLog(@"ERROR: %ld", (long)responseCode);
+            
+            if (responseCode >= 400 && responseCode < 500) {
+                // 400 level, client
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 400" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
                 [alert show];
+                return;
             }
-            else {
-                // continue on whatever
+            else if (responseCode >= 500 && responseCode < 600) {
+                // 500 level, server
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 500" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+                return;
+            }
+            else if (responseCode >= 300 && responseCode < 400) {
+                // 300  level, unauthorized
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 300" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+                return;
             }
         }];
         
