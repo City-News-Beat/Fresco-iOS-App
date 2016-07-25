@@ -740,6 +740,10 @@
             
             [[FRSAPIClient sharedClient] checkUsername:[self.usernameTF.text substringFromIndex:1] completion:^(id responseObject, NSError *error) {
                 
+                if (error.code == -1009) {
+                    return;
+                }
+                
                 if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
                     self.usernameTaken = NO;
