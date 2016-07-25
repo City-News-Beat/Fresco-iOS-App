@@ -148,12 +148,12 @@
 -(void)adjustFrame {
     self.height = self.actionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height + 15;
     
-    UIViewController* vc = (UIViewController *)self.delegate;
+    //UIViewController* vc = (UIViewController *)self.delegate;
     
-    NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH)/2;
-    NSInteger yOrigin = (vc.view.frame.size.height - self.height)/2 + self.height/2;
-    self.frame = CGRectMake(xOrigin, yOrigin - 20, ALERT_WIDTH, self.height);
+    NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width  - ALERT_WIDTH)/2;
+    NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height)/2;
     
+    self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
 }
 
 -(void)addShadowAndClip {
