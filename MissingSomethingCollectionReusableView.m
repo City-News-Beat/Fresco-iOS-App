@@ -39,12 +39,15 @@
     if(IS_IPHONE_6_PLUS){
         self.settingsRightConstraint.constant = -48;
     }else if(IS_IPHONE_5){
-        self.settingsTopConstraint.constant = 58;
-        self.chatWithTopConstraint.constant = 20;
+        self.settingsTopConstraint.constant = 67;
+        self.settingsRightConstraint.constant = -10;
+        self.chatWithTopConstraint.constant = 10;
         self.chatWithRightConstraint.constant = 110;
         [super removeConstraint:self.chatWithLeftConstraint];
         self.questionLeftConstraint.constant = 50;
     }
+    [self.superview setBackgroundColor:[UIColor whiteColor]];
+
     [self.superview setBackgroundColor:[UIColor frescoBackgroundColorDark]];
     
 //    NSString *strTextView = @"We can only verify photos and videos from the past 24 hours. If nothing’s showing up, make sure Location Services are turned on in Settings.";

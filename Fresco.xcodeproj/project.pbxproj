@@ -128,7 +128,7 @@
 		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
-		CA27F7501D2C193A000965F7 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA27F74F1D2C193A000965F7 /* FRSFileFooterCell.xib */; };
+		CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */; };
 		D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */; };
 		D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3D01CDE1EAE00E39701 /* Reachability.m */; };
 		D40BD3D61CE28A8300E39701 /* AWFileHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3D51CE28A8300E39701 /* AWFileHash.m */; };
@@ -479,7 +479,7 @@
 		BC419B6D1B70052500122B87 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
 		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
-		CA27F74F1D2C193A000965F7 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
+		CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
 		D40BD3CC1CDE076000E39701 /* FRSGalleryTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryTable.h; sourceTree = "<group>"; };
 		D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryTable.m; sourceTree = "<group>"; };
 		D40BD3CF1CDE1EAE00E39701 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -1341,7 +1341,7 @@
 		D43C7FCC1C8E464800A7A7A7 /* Image Picker */ = {
 			isa = PBXGroup;
 			children = (
-				CA27F74F1D2C193A000965F7 /* FRSFileFooterCell.xib */,
+				CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */,
 				078CEB191CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.h */,
 				078CEB1A1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m */,
 				D43C7FDB1C8E474C00A7A7A7 /* FRSCheckBox.h */,
@@ -2229,7 +2229,7 @@
 				D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */,
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
 				D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */,
-				CA27F7501D2C193A000965F7 /* FRSFileFooterCell.xib in Resources */,
+				CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
