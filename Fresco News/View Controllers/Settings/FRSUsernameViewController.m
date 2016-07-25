@@ -36,6 +36,12 @@
     [self configureBackButtonAnimated:NO];
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self stopUsernameTimer];
+}
+
 -(void)configureTableView{
     self.title = @"USERNAME";
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -181,10 +187,36 @@
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         [delegate reloadUser];
         
-        if (error) {
-            self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to update username. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
-            [self.alert show];
+        
+        
+        if (error.code == -1009) {
+            NSLog(@"Unable to connect.");
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [alert show];
+            return;
         }
+        
+        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+        NSInteger responseCode = response.statusCode;
+        NSLog(@"ERROR: %ld", (long)responseCode);
+        
+        if (responseCode >= 400 && responseCode < 500) {
+            // 400 level, client
+            if (responseCode == 403) {
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Incorrect password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+            }
+            return;
+        }
+        else if (responseCode >= 500 && responseCode < 600) {
+            // 500 level, server
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 500" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [alert show];
+            return;
+        }
+        
+        
+        
         
         if (!error) {
             [self popViewController];
