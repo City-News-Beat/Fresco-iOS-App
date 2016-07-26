@@ -103,6 +103,8 @@
                 case 0:
                     [cell configureEditableCellWithDefaultText:@"New username" withTopSeperator:YES withBottomSeperator:NO isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.textField.delegate = self;
+                    cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+                    cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                     [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
                     
                     self.usernameCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-green"]];
