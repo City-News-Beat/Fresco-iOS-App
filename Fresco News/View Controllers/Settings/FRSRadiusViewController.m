@@ -24,9 +24,11 @@
 
 @interface FRSRadiusViewController() <MKMapViewDelegate>
 
-@property (strong, nonatomic) UISlider           *radiusSlider;
-@property (strong, nonatomic) MKMapView          *mapView;
-@property (strong, nonatomic) CLLocationManager  *locationManager;
+@property (strong, nonatomic) UISlider          *radiusSlider;
+@property (strong, nonatomic) MKMapView         *mapView;
+@property (strong, nonatomic) CLLocationManager *locationManager;
+
+@property (nonatomic) CGFloat miles;
 
 @end
 
@@ -40,6 +42,12 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
 }
 
 
@@ -90,6 +98,11 @@
     [self.radiusSlider setMinimumTrackTintColor:[UIColor frescoBlueColor]];
     [self.radiusSlider setMaximumTrackTintColor:[UIColor frescoSliderGray]];
     [self.radiusSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+    
+    NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+    CGFloat milesFloat = [miles floatValue];
+    self.radiusSlider.value = milesFloat/50;
+    
     [sliderContainer addSubview:self.radiusSlider];
     
     UIImageView *smallIV = [[UIImageView alloc] initWithFrame:CGRectMake(12, 16, 24, 24)];
@@ -111,14 +124,15 @@
 }
 
 -(void)saveRadius {
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+    
     [self popViewController];
 }
 
-
-
 -(void)sliderValueChanged:(UISlider *)slider {
 
-    NSLog(@"VALUE: %f", slider.value);
+    self.miles = slider.value * 50;
     
     if (slider.value == 0) {
         return;
@@ -127,8 +141,8 @@
     MKCoordinateRegion region;
     region.center.latitude  = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
     region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-    region.span.latitudeDelta  = slider.value/10;
-    region.span.longitudeDelta = slider.value/10;
+    region.span.latitudeDelta  = self.miles/500;
+    region.span.longitudeDelta = self.miles/500;
     
     self.mapView.region = region;
 }
