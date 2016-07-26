@@ -19,5 +19,6 @@
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment;
 -(void)configureAssignmentCellForIndexPath:(NSIndexPath *)indexPath;
 -(void)configureOutletCellWithOutlet:(NSDictionary *)outlet;
+-(void)setIsSelectedAssignment:(BOOL)isSelectedAssignment;
 
 @end
