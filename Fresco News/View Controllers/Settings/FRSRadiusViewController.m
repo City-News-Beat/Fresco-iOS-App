@@ -63,22 +63,23 @@
     self.mapView.scrollEnabled = NO;
     self.mapView.centerCoordinate = [[FRSLocator sharedLocator] currentLocation].coordinate;
     
+    NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+    CGFloat milesFloat = [miles floatValue];
+    
     MKCoordinateRegion region;
     region.center.latitude = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
     region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-    region.span.latitudeDelta = 0.0;
-    region.span.longitudeDelta = 0.0;
+    region.span.latitudeDelta = milesFloat/500;
+    region.span.longitudeDelta = milesFloat/500;
     self.mapView.region = region;
     
     [self.view addSubview:self.mapView];
     
     [self.mapView addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
-    
     FRSAssignmentAnnotation *annotation = [[FRSAssignmentAnnotation alloc] init];
     annotation.coordinate = [[FRSLocator sharedLocator] currentLocation].coordinate;
     [self.mapView addAnnotation:annotation];
-    
     
     UIView *sliderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, self.view.frame.size.width, 55)];
     sliderContainer.backgroundColor = [UIColor colorWithWhite:1 alpha:.92];
@@ -99,8 +100,6 @@
     [self.radiusSlider setMaximumTrackTintColor:[UIColor frescoSliderGray]];
     [self.radiusSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
     
-    NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
-    CGFloat milesFloat = [miles floatValue];
     self.radiusSlider.value = milesFloat/50;
     
     [sliderContainer addSubview:self.radiusSlider];
