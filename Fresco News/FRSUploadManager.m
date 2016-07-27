@@ -112,21 +112,14 @@
                 postCompletionDigest[@"key"] = post[@"key"];
                 [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
                     
-                    NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
-                    postCompletionDigest[@"eTags"] = multipartTask.eTags;
-                    postCompletionDigest[@"uploadId"] = post[@"uploadId"];
-                    postCompletionDigest[@"key"] = post[@"key"];
-                    
-                    [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
-                        NSLog(@"POST COMPLETED: %@", (error == Nil) ? @"TRUE" : @"FALSE");
+                    NSLog(@"POST COMPLETED: %@", (error == Nil) ? @"TRUE" : @"FALSE");
                         
-                        if (!error) {
-                            [self next:task];
-                        }
-                        else {
-                            [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
-                        }
-                    }];
+                    if (!error) {
+                        [self next:task];
+                    }
+                    else {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                    }
                 }];
             }
             else {
