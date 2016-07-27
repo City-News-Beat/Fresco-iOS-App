@@ -631,7 +631,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         //Ex: User selects cell with outlets, user selects "No assignment"
         if (self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1 && self.prevCell != nil) {
             self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count+1; //Add one for "No assignment cell"
-            [tableView beginUpdates];//
+            [tableView beginUpdates];////
             for(int i = 1; i <= self.prevCell.outlets.count; i++){
                 [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[tableView indexPathForCell:self.prevCell].row+i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             }
