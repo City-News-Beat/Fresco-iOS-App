@@ -413,7 +413,11 @@
     self.locationEnabled = NO;
     if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse)) {
         self.locationEnabled = YES;
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"location-enabled"];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"location-enabled"];
     }
+
 }
 
 -(void)checkNotificationStatus {
@@ -423,8 +427,10 @@
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
             self.notificationsEnabled = NO;
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
         } else {
             self.notificationsEnabled = YES;
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
         }
     }
 }

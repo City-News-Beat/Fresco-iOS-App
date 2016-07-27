@@ -51,6 +51,9 @@
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
+@property BOOL notificationsEnabled;
+@property BOOL locationEnabled;
+
 @end
 
 
@@ -542,13 +545,18 @@
 
 -(void)notificationToggle:(id)sender {
     [self checkNotificationStatus];
+    [self checkLocationStatus];
     
     BOOL state;
     
     
     if ([sender isOn]) {
         state = YES;
-        [self requestNotifications]; //Request and enable notifications
+        if (!self.notificationsEnabled || !self.locationEnabled) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+            [alert show];
+        }
+//        [self requestNotifications]; //Request and enable notifications
     } else {
         state = NO;
         [[UIApplication sharedApplication] unregisterForRemoteNotifications]; //Unregister from notifications
@@ -563,10 +571,23 @@
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
             [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+            self.notificationsEnabled = NO;
         } else {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+            self.notificationsEnabled = YES;
         }
     }
+}
+
+-(void)checkLocationStatus {
+    if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse)) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"location-enabled"];
+        self.locationEnabled = YES;
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"location-enabled"];
+        self.locationEnabled = NO;
+    }
+    
 }
 
 
