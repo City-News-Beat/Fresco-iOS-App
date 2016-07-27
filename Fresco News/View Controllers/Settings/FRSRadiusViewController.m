@@ -61,6 +61,7 @@
     self.mapView.delegate = self;
     self.mapView.zoomEnabled = NO;
     self.mapView.scrollEnabled = NO;
+    self.mapView.rotateEnabled = NO;
     self.mapView.centerCoordinate = [[FRSLocator sharedLocator] currentLocation].coordinate;
     
     NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
@@ -69,8 +70,8 @@
     MKCoordinateRegion region;
     region.center.latitude = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
     region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-    region.span.latitudeDelta = milesFloat/500;
-    region.span.longitudeDelta = milesFloat/500;
+    region.span.latitudeDelta = milesFloat/50;
+    region.span.longitudeDelta = milesFloat/50;
     self.mapView.region = region;
     
     [self.view addSubview:self.mapView];
@@ -140,8 +141,8 @@
     MKCoordinateRegion region;
     region.center.latitude  = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
     region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-    region.span.latitudeDelta  = self.miles/500;
-    region.span.longitudeDelta = self.miles/500;
+    region.span.latitudeDelta  = self.miles/50;
+    region.span.longitudeDelta = self.miles/50;
     
     self.mapView.region = region;
 }

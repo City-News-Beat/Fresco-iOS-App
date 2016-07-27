@@ -404,8 +404,8 @@
     MKCoordinateRegion region;
     region.center.latitude  = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
     region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-    region.span.latitudeDelta  = self.miles/500;
-    region.span.longitudeDelta = self.miles/500;
+    region.span.latitudeDelta  = self.miles/50;
+    region.span.longitudeDelta = self.miles/50;
     
     self.mapView.region = region;
 }
