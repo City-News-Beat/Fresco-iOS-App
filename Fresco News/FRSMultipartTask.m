@@ -164,7 +164,7 @@
             if (eTag) {
                 [tags setObject:eTag forKey:@(connect-1)];
             }
-            
+
             if (openConnections == 0 && needsData == FALSE) {
                 NSLog(@"UPLOAD COMPLETE");
                 
