@@ -602,37 +602,40 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         selectedRow = indexPath.row;
         
+        NSLog(@"Rows: %lu", tableView.indexPathsForVisibleRows.count);
+        
         //Checks if the current cell has more than one outlet
-        if (cell.outlets.count > 1) {
+        if (cell.outlets.count > 1 && tableView != self.globalAssignmentsTableView) {
             
-            if (tableView == self.globalAssignmentsTableView) {
-                return; //temp
-            }
+                [tableView beginUpdates];
+                
+                self.numberOfRowsInAssignmentTableView += cell.outlets.count;
             
-            [tableView beginUpdates];
+                numberOfOutlets = cell.outlets.count;
+                self.showingOutlets = YES;
             
-            self.numberOfRowsInAssignmentTableView += cell.outlets.count;
-            numberOfOutlets = cell.outlets.count;
-            self.showingOutlets = YES;
+                for(int i = 1; i <= cell.outlets.count; i++){
+                    [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row+i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                }
             
-            int operand = 1;
-            for (id assignment in cell.outlets) {
-                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row+operand inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                operand++;
-            }
+                //set prevcell so the outlets will be removed if user selects a different assignment
+                self.prevCell = cell;
             
-            [tableView endUpdates];
+                [tableView endUpdates];
             
-            
-            [self resetFrames];
+                [self resetFrames];
             return; //Return to avoid removing cells twice
         }
         
         //Removes previously added outlet cells when the user selects a cell that does not contain outlets
         //Ex: User selects cell with outlets, user selects "No assignment"
-        if (self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1) {
-            NSLog(@"NUMBER OF ROWS: %ld, ASSIGNMENT COUNT: %ld", self.numberOfRowsInAssignmentTableView, self.assignmentsArray.count);
-            self.numberOfRowsInAssignmentTableView = self.numberOfRowsInAssignmentTableView - (self.numberOfRowsInAssignmentTableView - self.assignmentsArray.count-1); //Add one for "No assignment cell"
+        if (self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1 && self.prevCell != nil) {
+            self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count+1; //Add one for "No assignment cell"
+            [tableView beginUpdates];
+            for(int i = 1; i <= self.prevCell.outlets.count; i++){
+                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[tableView indexPathForCell:self.prevCell].row+i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            }
+            [tableView endUpdates];
             [self resetFrames];
         }
     }

@@ -85,7 +85,8 @@
     if (self.isSelectedAssignment) {
         self.selectionImageView.image = [UIImage imageNamed:@"check-box-circle-filled"];
         
-        if (self.outlets.count > 1) {
+        //2nd condition is for global assignments
+        if (self.outlets.count > 1 && ![[self.assignment objectForKey:@"location"] isEqual:[NSNull null]]) {
             self.selectionImageView.image = [UIImage imageNamed:@"question"];
         }
         
