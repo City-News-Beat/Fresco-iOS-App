@@ -167,10 +167,18 @@
 
 -(void)cancelTapped {
     [self animateOut];
+    
+    if (self.delegate) {
+        [self.delegate didPressButtonAtIndex:1];
+    }
 }
 
 -(void)actionTapped {
     [self animateOut];
+    
+    if (self.delegate) {
+        [self.delegate didPressButtonAtIndex:0];
+    }
 }
 
 
@@ -272,9 +280,8 @@
         paragraphStyle.minimumLineHeight = -100;
         
         locationTextView.attributedText = [[NSAttributedString alloc] initWithString:@"Your location is only shared when you \n post a gallery to Fresco. In all other cases \n your location is fully anonymous."
-                                                                           attributes:
-                                            @{NSParagraphStyleAttributeName : paragraphStyle,
-                                              NSFontAttributeName: [UIFont systemFontOfSize:12 weight:UIFontWeightLight]}];
+                                                                          attributes: @{NSParagraphStyleAttributeName : paragraphStyle,
+                                                                                        NSFontAttributeName: [UIFont systemFontOfSize:12 weight:UIFontWeightLight]}];
         
         locationTextView.textAlignment = NSTextAlignmentCenter;
         locationTextView.textColor = [UIColor frescoMediumTextColor];
@@ -652,10 +659,18 @@
 
 -(void)returnToPreviousViewController {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"returnToPreviousViewController" object:self];
+    
+//    if (self.delegate) {
+//        [self.delegate didPressButtonAtIndex:0];
+//    }
 }
 
 -(void)dismiss {
     [self animateOut];
+    
+//    if (self.delegate) {
+//        [self.delegate didPressButtonAtIndex:1];
+//    }
 }
 
 

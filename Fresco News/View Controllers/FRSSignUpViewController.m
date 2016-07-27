@@ -808,13 +808,18 @@
 #pragma mark Action Logic
 
 -(void)handleToggleSwitched:(UISwitch *)toggle {
-    id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
-    [delegate registerForPushNotifications];
+//    id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
+//    [delegate registerForPushNotifications];
     
     if (toggle.on){
         
-        [self checkNotificationStatus];
-        [self requestNotifications];
+        
+        FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+        [alert show];
+        
+        
+//        [self checkNotificationStatus];
+//        [self requestNotifications];
         
         self.notificationsEnabled = YES;
         self.scrollView.scrollEnabled = YES;
