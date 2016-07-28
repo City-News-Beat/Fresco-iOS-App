@@ -16,6 +16,7 @@
 #import "FRSAlertView.h"
 #import "FRSSettingsViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
+#import "FRSAPIClient.h"
 
 @interface FRSTableViewCell() <FRSAlertViewDelegate>
 
@@ -91,7 +92,8 @@
         self.twitterSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
         [self.twitterSwitch addTarget:self action:@selector(twitterToggle) forControlEvents:UIControlEventValueChanged];
         self.twitterSwitch.onTintColor = [UIColor twitterBlueColor];
-        [self.twitterSwitch setOn:enabled animated:YES];
+        [self.twitterSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected" ] animated:YES];
+
         [self addSubview:self.twitterSwitch];
         
         if (self.twitterHandle) {
@@ -123,10 +125,12 @@
     if (index == 0) {
         //cancel
         [self.twitterSwitch setOn:YES animated:YES];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
     } else {
         [self.twitterSwitch setOn:NO animated:YES];
         self.twitterHandle = nil;
         self.socialTitleLabel.text = @"Connect Twitter";
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
     }
 }
 
@@ -150,6 +154,7 @@
             if (session) {
                 self.twitterHandle = session.userName;
                 [self.twitterSwitch setOn:YES animated:YES];
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
                 self.socialTitleLabel.text = self.twitterHandle;
             } else if (error) {
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
