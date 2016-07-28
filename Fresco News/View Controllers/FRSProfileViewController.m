@@ -120,7 +120,7 @@
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
         [self configureWithUser:_representedUser];
-        [self fetchGalleries];
+        //[self fetchGalleries];
     }
 }
 
@@ -215,7 +215,7 @@
     
     BOOL reload = FALSE;
     
-    if (self.currentFeed == self.likes) {
+    if (self.currentFeed == self.likes && self.likes != Nil) {
         reload = TRUE;
     }
     

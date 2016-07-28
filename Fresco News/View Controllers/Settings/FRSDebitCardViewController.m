@@ -17,13 +17,12 @@
 @interface FRSDebitCardViewController()
 
 @property (strong, nonatomic) UITableView *tableView;
+
 @property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardGestureRecognizer;
 
 @property (strong, nonatomic) NSString *CVV;
 
 @property (strong, nonatomic) UIButton *rightAlignedButton;
-
-
 
 @end
 
