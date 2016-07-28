@@ -92,7 +92,7 @@
         self.twitterSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
         [self.twitterSwitch addTarget:self action:@selector(twitterToggle) forControlEvents:UIControlEventValueChanged];
         self.twitterSwitch.onTintColor = [UIColor twitterBlueColor];
-        [self.twitterSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected" ] animated:YES];
+        [self.twitterSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected" ] animated:NO];
 
         [self addSubview:self.twitterSwitch];
         

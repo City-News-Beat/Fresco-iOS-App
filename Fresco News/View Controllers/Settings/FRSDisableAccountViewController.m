@@ -10,9 +10,15 @@
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 
-@interface FRSDisableAccountViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface FRSDisableAccountViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
+
+@property (strong, nonatomic) NSString *username;
+@property (strong, nonatomic) NSString *email;
+@property (strong, nonatomic) NSString *password;
+
+@property (strong, nonatomic) UIButton *rightAlignedButton;
 
 @end
 
@@ -90,25 +96,41 @@
     
     switch (indexPath.row) {
         case 0:
-            //configureDisableAccountCell
+
             [cell configureDisableAccountCell];
             
             break;
         case 1:
             [cell configureEditableCellWithDefaultText:@"Username" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
-            
+            cell.textField.delegate = self;
+            [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+            cell.textField.tag = 1;
+            cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+
             break;
         case 2:
             [cell configureEditableCellWithDefaultText:@"Email address" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeEmailAddress];
-            
+            cell.textField.delegate = self;
+            [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+            cell.textField.tag = 2;
+            cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+
             break;
         case 3:
             [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
+            cell.textField.delegate = self;
+            cell.textField.tag = 3;
+            [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
             
-//            [cell configureCellWithRightAlignedButtonTitle:@"DISABLE MY ACCOUNT" withWidth:173];
             break;
         case 4:
             [cell configureCellWithRightAlignedButtonTitle:@"DISABLE MY ACCOUNT" withWidth:173 withColor:[UIColor frescoLightTextColor]];
+            [cell.rightAlignedButton addTarget:self action:@selector(disableAccount) forControlEvents:UIControlEventTouchUpInside];
+            cell.rightAlignedButton.userInteractionEnabled = NO;
+            self.rightAlignedButton = cell.rightAlignedButton;
+
             break;
             
         default:
@@ -116,6 +138,26 @@
     }
 }
 
+-(void)disableAccount {
+    NSLog(@"disable account");
+}
+
+
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
+    
+    if (textField.tag == 1) {
+        self.username = textField.text;
+        
+    } else if (textField.tag == 2) {
+        self.email = textField.text;
+        
+    } else if (textField.tag == 3) {
+        self.password = textField.text;
+        
+    }
+
+    return YES;
+}
 
 
 
