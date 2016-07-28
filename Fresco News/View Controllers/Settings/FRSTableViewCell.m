@@ -96,10 +96,13 @@
 
         [self addSubview:self.twitterSwitch];
         
-        if (self.twitterHandle) {
+        if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
+            self.socialTitleLabel.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"];
+        } else if (self.twitterHandle) {
             self.socialTitleLabel.text = self.twitterHandle;
+            [[NSUserDefaults standardUserDefaults] setValue:self.twitterHandle forKey:@"twitter-handle"];
         }
-        
+
     } else if (tag == 2){
         self.facebookIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"social-facebook"]];
         self.facebookIV.frame = CGRectMake(16, 10 ,24, 24);
@@ -129,13 +132,14 @@
     } else {
         [self.twitterSwitch setOn:NO animated:YES];
         self.twitterHandle = nil;
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
         self.socialTitleLabel.text = @"Connect Twitter";
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
     }
 }
 
 -(void)twitterToggle {
-    if (self.twitterHandle) {
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
         NSLog(@"DISABLED TWITTER");
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
         alert.delegate = self;
@@ -156,6 +160,7 @@
                 [self.twitterSwitch setOn:YES animated:YES];
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
                 self.socialTitleLabel.text = self.twitterHandle;
+                [[NSUserDefaults standardUserDefaults] setValue:self.twitterHandle forKey:@"twitter-handle"];
             } else if (error) {
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
                 [alert show];
