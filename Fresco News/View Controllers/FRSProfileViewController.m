@@ -24,6 +24,7 @@
 
 #import "FRSAPIClient.h"
 #import "FRSAwkwardView.h"
+#import "FRSGalleryExpandedViewController.h"
 #import <Haneke/Haneke.h>
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
@@ -544,6 +545,27 @@
     }
 }
 
+-(void)showShareSheetWithContent:(NSArray *)content {
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
+    [self.navigationController presentViewController:activityController animated:YES completion:nil];
+}
+
+-(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
+    
+    FRSGallery *gallery = self.galleries[notification.row];
+    
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+    vc.shouldHaveBackButton = YES;
+    [super showNavBarForScrollView:self.tableView animated:NO];
+    
+    self.navigationItem.title = @"";
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    [self hideTabBarAnimated:YES];
+}
+
 #pragma mark - UITableView Delegate & DataSource
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -658,9 +680,19 @@
         [cell addSubview:self.profileContainer];
     }
     else {
+        __weak typeof(self) weakSelf = self;
+
         if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
             FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
             [galCell clearCell];
+            
+            galCell.shareBlock = ^void(NSArray *sharedContent) {
+                [weakSelf showShareSheetWithContent:sharedContent];
+            };
+            
+            galCell.readMoreBlock = ^(NSArray *bullshit){
+                [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+            };
             
             galCell.gallery = self.currentFeed[indexPath.row];
             [galCell configureCell];
@@ -669,6 +701,14 @@
         }else {
             FRSStoryCell *storyCell = (FRSStoryCell *)cell;
             [storyCell clearCell];
+            
+            storyCell.shareBlock = ^void(NSArray *sharedContent) {
+                [weakSelf showShareSheetWithContent:sharedContent];
+            };
+            
+            storyCell.readMoreBlock = ^(NSArray *bullshit){
+                [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+            };
             
             storyCell.story = self.currentFeed[indexPath.row];
             [storyCell configureCell];

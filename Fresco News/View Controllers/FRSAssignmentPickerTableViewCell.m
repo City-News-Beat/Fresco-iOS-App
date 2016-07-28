@@ -82,6 +82,8 @@
 -(void)setIsSelectedAssignment:(BOOL)isSelectedAssignment {
     _isSelectedAssignment = isSelectedAssignment;
     
+    BOOL cellIsOutlet = self.assignment == nil;
+    
     if (self.isSelectedAssignment) {
         self.selectionImageView.image = [UIImage imageNamed:@"check-box-circle-filled"];
         
@@ -91,7 +93,7 @@
         }
         
         self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
-    } else {
+    } else{
         self.selectionImageView.image = [UIImage imageNamed:@"check-box-circle-outline"];
         self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     }

@@ -94,8 +94,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     self.players = [[NSMutableArray alloc] init];
     
-    self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count +1;
-    [self resetFrames];
+    self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count + 1;
+    [self resetFrames:false];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -122,18 +122,35 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureBottomBar];
 }
 
--(void)resetFrames {
+-(void)resetFrames: (BOOL)animate {
     
     NSLog(@"RESET FRAMES: %ld", self.numberOfRowsInAssignmentTableView);
-    
-    self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, self.numberOfRowsInAssignmentTableView *44);
-    self.globalAssignmentsDrawer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44);
-    if (self.globalAssignmentsTableView) {
-        self.globalAssignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.globalAssignments.count) *44);
+    if(animate){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:0.2];
+            //[UIView setAnimationCurve:UIViewAnimationTransitionCurlUp];
+            
+            self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.numberOfRowsInAssignmentTableView) *44);
+            self.globalAssignmentsDrawer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44);
+            if (self.globalAssignmentsTableView) {
+                self.globalAssignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.globalAssignments.count) *44);
+            }
+            self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height +14, self.view.frame.size.width, 200 + 16);
+            
+            [self adjustScrollViewContentSize];
+            [UIView commitAnimations];
+        });
+    }else{
+            self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.numberOfRowsInAssignmentTableView+1) *44);
+            self.globalAssignmentsDrawer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44);
+            if (self.globalAssignmentsTableView) {
+                self.globalAssignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.globalAssignments.count) *44);
+            }
+            self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height +14, self.view.frame.size.width, 200 + 16);
+            
+            [self adjustScrollViewContentSize];
     }
-    self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height +14, self.view.frame.size.width, 200 + 16);
-
-    [self adjustScrollViewContentSize];
 }
 
 -(void)checkButtonStates {
@@ -487,7 +504,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.globalAssignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.scrollView addSubview:self.globalAssignmentsTableView];
     
-    [self resetFrames];
+    [self resetFrames:false];
 }
 
 -(void)hideAndRemoveGlobalAssignments {
@@ -496,14 +513,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [self.globalAssignmentsTableView removeFromSuperview];
     self.globalAssignmentsTableView = nil;
-    [self resetFrames];
+    [self resetFrames:false];
     
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.assignmentsTableView) {
         NSLog(@"NUMBER OF ROWS IN ASSIGNMENT TV = %lu", self.numberOfRowsInAssignmentTableView);
-        return self.numberOfRowsInAssignmentTableView + 1;
+        return self.numberOfRowsInAssignmentTableView;
     } else if (tableView == self.globalAssignmentsTableView) {
         return self.globalAssignments.count;
     } else {
@@ -534,7 +551,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
                     
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
-                    [self resetFrames];
+                    //[self resetFrames:true];
                     return cell;
                 }
             }
@@ -569,6 +586,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     NSLog(@"Selected an assignment");
     return indexPath;
 }
@@ -583,8 +601,22 @@ static NSString * const cellIdentifier = @"assignment-cell";
         row = indexPath.row;
     }
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    BOOL cellIsOutlet = (cell.assignment == nil);
+    BOOL prevCellIsOutlet = (self.prevCell.assignment == nil);
+    
+    if(!cellIsOutlet && self.prevCell.outlets.count <= 1){
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }else if(!cellIsOutlet && !prevCellIsOutlet){
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }else if(cellIsOutlet && _prevCell.outlets.count > 1 && [tableView indexPathsForSelectedRows].count == 3){
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }else {
+
+    }
+
+    ;
     if(cell == nil){
         NSLog(@"THE CELL IS NIL");
     }
@@ -605,38 +637,52 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSLog(@"Rows: %lu", tableView.indexPathsForVisibleRows.count);
         
         //Checks if the current cell has more than one outlet
-        if (cell.outlets.count > 1 && tableView != self.globalAssignmentsTableView) {
+        if (cell.outlets.count > 1 && tableView != self.globalAssignmentsTableView && !_showingOutlets) {
+            self.numberOfRowsInAssignmentTableView += cell.outlets.count;
             
-                [tableView beginUpdates];
-                
-                self.numberOfRowsInAssignmentTableView += cell.outlets.count;
+            numberOfOutlets = cell.outlets.count;
+            self.showingOutlets = YES;
+
+            //set prevcell so the outlets will be removed if user selects a different assignment
+            self.prevCell = cell;
             
-                numberOfOutlets = cell.outlets.count;
-                self.showingOutlets = YES;
             
-                for(int i = 1; i <= cell.outlets.count; i++){
-                    [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row+i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                }
+            NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+            for(int i = 1; i <= cell.outlets.count; i++){
+                [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+i inSection:0]];
+                NSLog(@"Inserting Row at IndexPath.row = %ld", indexPath.row+i);
+            }
             
-                //set prevcell so the outlets will be removed if user selects a different assignment
-                self.prevCell = cell;
+            [CATransaction begin];
+            [self resetFrames:true];
             
-                [tableView endUpdates];
+            [CATransaction setCompletionBlock:^{
+                [tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+                //[self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
+                // animation has finished
+            }];
+            [CATransaction commit];
             
-                [self resetFrames];
             return; //Return to avoid removing cells twice
         }
         
         //Removes previously added outlet cells when the user selects a cell that does not contain outlets
         //Ex: User selects cell with outlets, user selects "No assignment"
-        if (self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1 && self.prevCell != nil) {
+        if (self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1 && self.prevCell != nil && !cellIsOutlet && !prevCellIsOutlet) {
             self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count+1; //Add one for "No assignment cell"
-            [tableView beginUpdates];////
+            NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
             for(int i = 1; i <= self.prevCell.outlets.count; i++){
-                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[tableView indexPathForCell:self.prevCell].row+i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                [indexPaths addObject:[NSIndexPath indexPathForRow:[self.assignmentsTableView indexPathForCell:self.prevCell].row+i inSection:0]];
             }
-            [tableView endUpdates];
-            [self resetFrames];
+            self.showingOutlets = false;
+            [CATransaction begin];
+            [self.assignmentsTableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+            
+            [CATransaction setCompletionBlock:^{
+                [self resetFrames:true];
+                // animation has finished
+            }];
+            [CATransaction commit];
         }
     }
 }
