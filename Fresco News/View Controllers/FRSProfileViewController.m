@@ -809,7 +809,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.username;
-        self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+        
+        if (user.profileImage && ![user.profileImage isEqual:[NSNull null]]) {
+            self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+        }
+        
         //self.locationLabel.text = user.
         self.bioTextView.text = user.bio;
         self.bioTextView.editable = false;

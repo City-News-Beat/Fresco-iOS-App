@@ -225,6 +225,7 @@
     [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
         [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId completion:^(id responseObject, NSError *error) {
             //
+            NSLog(@"RESPNS OBJECT: %@ ERROR: %@", responseObject, error);
         }];
     }];
 }
