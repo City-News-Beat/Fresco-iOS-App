@@ -128,6 +128,8 @@
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"notification_radius" : @(self.miles)} completion:^(id responseObject, NSError *error) {
         
+        //handle error
+        
         if (responseObject) {
             [self popViewController];
         }
