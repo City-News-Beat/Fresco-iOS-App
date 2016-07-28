@@ -120,7 +120,7 @@
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
         [self configureWithUser:_representedUser];
-        //[self fetchGalleries];
+        [self fetchGalleries];
     }
 }
 
