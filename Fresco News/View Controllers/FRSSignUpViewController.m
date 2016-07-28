@@ -984,6 +984,8 @@
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
     [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
+    [registrationDigest setObject:@(self.miles) forKey:@"notification_radius"];
+
     
     if (_isAlreadyRegistered) {
         
