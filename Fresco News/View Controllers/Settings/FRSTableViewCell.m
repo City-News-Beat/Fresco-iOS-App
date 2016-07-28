@@ -161,6 +161,7 @@
                 [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"twitter_handle" : session.userName} completion:^(id responseObject, NSError *error) {
                 }];
                 
+                
                 self.twitterHandle = session.userName;
                 [self.twitterSwitch setOn:YES animated:YES];
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
