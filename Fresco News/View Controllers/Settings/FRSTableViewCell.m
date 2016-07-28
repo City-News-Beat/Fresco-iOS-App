@@ -104,11 +104,11 @@
         [self.facebookIV sizeToFit];
         [self addSubview:self.facebookIV];
         
-        self.twitterSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
-        [self.twitterSwitch addTarget:self action:@selector(facebookToggle) forControlEvents:UIControlEventValueChanged];
-        self.twitterSwitch.onTintColor = [UIColor facebookBlueColor];
-        [self.twitterSwitch setOn:enabled animated:YES];
-        [self addSubview:self.twitterSwitch];
+        self.facebookSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
+        [self.facebookSwitch addTarget:self action:@selector(facebookToggle) forControlEvents:UIControlEventValueChanged];
+        self.facebookSwitch.onTintColor = [UIColor facebookBlueColor];
+        [self.facebookSwitch setOn:enabled animated:YES];
+        [self addSubview:self.facebookSwitch];
         
     } else if (tag == 3){
         self.googleIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"google-icon-filled"]];

@@ -49,17 +49,14 @@
 @property (strong, nonatomic) UIView *errorContainer;
 @property (strong, nonatomic) UIView *assignmentsCard;
 @property (nonatomic) BOOL emailError;
-
 @property (nonatomic) BOOL usernameTaken;
 @property (nonatomic) BOOL emailTaken;
 @property (strong, nonatomic) NSTimer *usernameTimer;
-
 @property (nonatomic) NSInteger yPos;
 @property (nonatomic) NSInteger height;
-
 @property BOOL locationEnabled;
-
 @property (nonatomic) CGFloat miles;
+@property NSInteger multiplier;
 
 @end
 
@@ -75,6 +72,14 @@
     
     self.notificationsEnabled = NO;
     self.emailError = NO;
+    
+    if (IS_IPHONE_5) {
+        self.multiplier = 50;
+    } else if (IS_IPHONE_6) {
+        self.multiplier = 68;
+    } else if (IS_IPHONE_6_PLUS) {
+        
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -401,11 +406,26 @@
         return;
     }
     
-    MKCoordinateRegion region;
+    MKCoordinateRegion region =  self.mapView.region;
     region.center.latitude  = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
     region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-    region.span.latitudeDelta  = self.miles/50;
-    region.span.longitudeDelta = self.miles/50;
+    region.span.latitudeDelta  = self.miles/self.multiplier;
+    region.span.longitudeDelta = self.miles/self.multiplier;
+    
+    
+    
+    CLLocationCoordinate2D center = region.center;
+    MKCoordinateSpan span = region.span;
+    
+    CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:(center.latitude - span.latitudeDelta * 0.5) longitude:center.longitude];
+    CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:(center.latitude + span.latitudeDelta * 0.5) longitude:center.longitude];
+    NSInteger metersLatitude = [loc1 distanceFromLocation:loc2];
+    NSInteger milesLatitude = metersLatitude / 1609.34;
+    
+    //CLLocation *location = [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
+    
+    NSLog(@"MILES LAT: %ld", (long)milesLatitude);
+    
     
     self.mapView.region = region;
 }
