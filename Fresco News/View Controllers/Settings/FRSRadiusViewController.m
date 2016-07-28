@@ -28,8 +28,7 @@
 @property (strong, nonatomic) MKMapView         *mapView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-@property CGFloat   miles;
-@property NSInteger multiplier;
+@property CGFloat  miles;
 
 @end
 
@@ -37,14 +36,6 @@
 
 -(void)viewDidLoad{
     [super viewDidLoad];
-    
-    if (IS_IPHONE_5) {
-        self.multiplier = 50;
-    } else if (IS_IPHONE_6) {
-        self.multiplier = 50;
-    } else if (IS_IPHONE_6_PLUS) {
-        self.multiplier = 50;
-    }
     
     [self configureView];
 }
@@ -79,8 +70,8 @@
     MKCoordinateRegion region;
     region.center.latitude = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
     region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-    region.span.latitudeDelta = milesFloat/self.multiplier;
-    region.span.longitudeDelta = milesFloat/self.multiplier;
+    region.span.latitudeDelta = milesFloat/68;
+    region.span.longitudeDelta = milesFloat/68;
     self.mapView.region = region;
     
     [self.view addSubview:self.mapView];
@@ -110,7 +101,7 @@
     [self.radiusSlider setMaximumTrackTintColor:[UIColor frescoSliderGray]];
     [self.radiusSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
     
-    self.radiusSlider.value = milesFloat/self.multiplier;
+    self.radiusSlider.value = milesFloat/68;
     
     [sliderContainer addSubview:self.radiusSlider];
     
@@ -141,7 +132,7 @@
 
 -(void)sliderValueChanged:(UISlider *)slider {
 
-    self.miles = slider.value * 50;
+    self.miles = slider.value * 68;
     
     if (slider.value == 0) {
         return;
@@ -150,8 +141,9 @@
     MKCoordinateRegion region;
     region.center.latitude  = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
     region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-    region.span.latitudeDelta  = self.miles/self.multiplier;
-    region.span.longitudeDelta = self.miles/self.multiplier;
+    region.span.latitudeDelta  = self.miles/68;
+    region.span.longitudeDelta = self.miles/68;
+    
     
     CLLocationCoordinate2D center = region.center;
     MKCoordinateSpan span = region.span;
@@ -160,8 +152,11 @@
     CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:(center.latitude + span.latitudeDelta * 0.5) longitude:center.longitude];
     NSInteger metersLatitude = [loc1 distanceFromLocation:loc2];
     NSInteger milesLatitude = metersLatitude / 1609.34;
+    
+    //CLLocation *location = [[CLLocation alloc] initWithLatitude:center.latitude longitude:center.longitude];
+    
     NSLog(@"MILES LAT: %ld", (long)milesLatitude);
-    NSLog(@"self.miles: %f", self.miles);
+    
     
     self.mapView.region = region;
 }

@@ -56,7 +56,6 @@
 @property (nonatomic) NSInteger height;
 @property BOOL locationEnabled;
 @property (nonatomic) CGFloat miles;
-@property NSInteger multiplier;
 
 @end
 
@@ -73,13 +72,6 @@
     self.notificationsEnabled = NO;
     self.emailError = NO;
     
-    if (IS_IPHONE_5) {
-        self.multiplier = 50;
-    } else if (IS_IPHONE_6) {
-        self.multiplier = 68;
-    } else if (IS_IPHONE_6_PLUS) {
-        
-    }
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -409,8 +401,8 @@
     MKCoordinateRegion region =  self.mapView.region;
     region.center.latitude  = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
     region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-    region.span.latitudeDelta  = self.miles/self.multiplier;
-    region.span.longitudeDelta = self.miles/self.multiplier;
+    region.span.latitudeDelta  = self.miles/68;
+    region.span.longitudeDelta = self.miles/68;
     
     
     
