@@ -46,7 +46,14 @@
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-        
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    NSMutableArray *barButtonItems = [NSMutableArray array];
+    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
+    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
+    [self expandNavBar:barButtonItems];
+    [super viewWillAppear:animated];
 }
 
 -(void)appWillResignActive:(NSNotification*)notification {

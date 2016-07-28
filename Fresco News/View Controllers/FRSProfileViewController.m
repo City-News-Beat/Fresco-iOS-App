@@ -629,8 +629,8 @@
             newFrame.size.height = 40;
             newFrame.origin.y = tableView.frame.size.height/6;
             [cell.contentView addSubview:[[FRSAwkwardView alloc] initWithFrame:newFrame]];
-            [cell.contentView setBackgroundColor:[UIColor redColor]];
-            [cell setBackgroundColor:[UIColor redColor]];
+            [cell.contentView setBackgroundColor:[UIColor frescoBackgroundColorDark]];
+            [cell setBackgroundColor:[UIColor frescoBackgroundColorDark]];
         }else if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
             

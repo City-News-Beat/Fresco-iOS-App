@@ -35,7 +35,9 @@
 @property (strong, nonatomic) UIView *bottomContainer;
 @property (strong, nonatomic) UILabel *placeholderLabel;
 @property (nonatomic, retain) NSMutableArray *assignmentIDs;
+@property (strong, nonatomic) FRSAssignmentPickerTableViewCell *prevCell;
 @property (strong, nonatomic) FRSAssignment *selectedAssignment;
+@property int closestAssignmentIndex;
 @property (nonatomic) BOOL postToFacebook;
 @property (nonatomic) BOOL postToTwitter;
 @property (nonatomic) BOOL postAnon;
@@ -48,10 +50,12 @@
 @property (strong, nonatomic) UICollectionView *galleryCollectionView;
 @property (strong, nonatomic) UICollectionViewFlowLayout *galleryCollectionViewFlowLayout;
 @property (strong, nonatomic) FRSCarouselCell *carouselCell;
+@property (strong, nonatomic) NSIndexPath *prevIndexPath;
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) UIImageView *muteImageView;
 @property (strong, nonatomic) UIImageView *globalAssignmentsCaret;
 @property (nonatomic) NSInteger numberOfRowsInAssignmentTableView;
+@property (strong, nonatomic) UIButton *sendButton;
 @property BOOL showingOutlets;
 
 @property NSInteger galleryCollectionViewHeight;
@@ -92,7 +96,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count +1;
     [self resetFrames];
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -317,14 +320,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.bottomContainer addSubview:self.anonLabel];
     
     //Configure next button
-    UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeSystem]; //Should be green when valid
-    [sendButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
-    [sendButton setTintColor:[UIColor frescoLightTextColor]];
-    sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
-    [sendButton setTitle:@"SEND" forState:UIControlStateNormal];
-    [sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
-    //sendButton.userInteractionEnabled = NO;
-    [self.bottomContainer addSubview:sendButton];
+    self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem]; //Should be green when valid
+    [_sendButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [_sendButton setTintColor:[UIColor frescoLightTextColor]];
+    _sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
+    [_sendButton setTitle:@"SEND" forState:UIControlStateNormal];
+    [_sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
+    _sendButton.userInteractionEnabled = NO;
+    [self.bottomContainer addSubview:_sendButton];
 }
 
 
@@ -408,7 +411,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.view addGestureRecognizer:self.dismissKeyboardGestureRecognizer];
     
     [self.scrollView addSubview:self.assignmentsTableView];
-
 }
 
 -(void)configureGlobalAssignmentsDrawer {
@@ -498,10 +500,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
 }
 
-
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.assignmentsTableView) {
-        
         NSLog(@"NUMBER OF ROWS IN ASSIGNMENT TV = %lu", self.numberOfRowsInAssignmentTableView);
         return self.numberOfRowsInAssignmentTableView + 1;
     } else if (tableView == self.globalAssignmentsTableView) {
@@ -512,8 +512,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     [cell configureAssignmentCellForIndexPath:indexPath];
+    NSLog(@"Displaying Row #%li",(long)indexPath.row);
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -524,10 +524,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
     return 44;
 }
 
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (tableView == self.assignmentsTableView) {
+        NSLog(@"Setup cells");
         if (indexPath.row < _assignmentsArray.count + numberOfOutlets) {
             if (_showingOutlets) {
                 if (indexPath.row > selectedRow && indexPath.row <= selectedRow + numberOfOutlets) {
@@ -568,6 +568,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
     return nil;
 }
 
+-(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"Selected an assignment");
+    return indexPath;
+}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = 0;
@@ -581,40 +585,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if(cell == nil){
+        NSLog(@"THE CELL IS NIL");
+    }
     
+    //    if (_showingOutlets) {
+    //        [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedRow inSection:0]];
+    //    }
     
-//    if (_showingOutlets) {
-//        [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedRow inSection:0]];
-//    }
-    
-    if (cell.isSelectedAssignment){
-        
-        cell.isSelectedAssignment = NO;
-        self.selectedAssignment = nil;
-        
-        //Remove outlet cells from tableview
-        if (cell.outlets.count > 1) {
-            
-            if (tableView == self.globalAssignmentsTableView) {
-                return; //temp
-            }
-            
-            [tableView beginUpdates];
-            
-            int operand = 1;
-            for (id assignment in cell.outlets) {
-                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row+operand inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                operand++;
-            }
-            self.numberOfRowsInAssignmentTableView = _assignmentsArray.count + 1;
-            self.showingOutlets = NO;
-            numberOfOutlets = 0;
-            
-            [tableView endUpdates];
-            [self resetFrames];
-        }
-        
-    } else {
+    if (!cell.isSelectedAssignment){
         [self resetOtherCells];
         cell.isSelectedAssignment = YES;
         if (self.selectedAssignment != nil) {
@@ -623,38 +602,40 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         selectedRow = indexPath.row;
         
-
+        NSLog(@"Rows: %lu", tableView.indexPathsForVisibleRows.count);
+        
         //Checks if the current cell has more than one outlet
-        if (cell.outlets.count > 1) {
+        if (cell.outlets.count > 1 && tableView != self.globalAssignmentsTableView) {
             
-            if (tableView == self.globalAssignmentsTableView) {
-                return; //temp
-            }
+                [tableView beginUpdates];
+                
+                self.numberOfRowsInAssignmentTableView += cell.outlets.count;
             
-            [tableView beginUpdates];
+                numberOfOutlets = cell.outlets.count;
+                self.showingOutlets = YES;
             
-            self.numberOfRowsInAssignmentTableView += cell.outlets.count;
-            numberOfOutlets = cell.outlets.count;
-            self.showingOutlets = YES;
+                for(int i = 1; i <= cell.outlets.count; i++){
+                    [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row+i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                }
             
-            int operand = 1;
-            for (id assignment in cell.outlets) {
-                [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row+operand inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                operand++;
-            }
+                //set prevcell so the outlets will be removed if user selects a different assignment
+                self.prevCell = cell;
             
-            [tableView endUpdates];
-
+                [tableView endUpdates];
             
-            [self resetFrames];
+                [self resetFrames];
             return; //Return to avoid removing cells twice
         }
         
         //Removes previously added outlet cells when the user selects a cell that does not contain outlets
         //Ex: User selects cell with outlets, user selects "No assignment"
-        if (self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1) {
-            NSLog(@"NUMBER OF ROWS: %ld, ASSIGNMENT COUNT: %ld", self.numberOfRowsInAssignmentTableView, self.assignmentsArray.count);
-            self.numberOfRowsInAssignmentTableView = self.numberOfRowsInAssignmentTableView - (self.numberOfRowsInAssignmentTableView - self.assignmentsArray.count-1); //Add one for "No assignment cell"
+        if (self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1 && self.prevCell != nil) {
+            self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count+1; //Add one for "No assignment cell"
+            [tableView beginUpdates];////
+            for(int i = 1; i <= self.prevCell.outlets.count; i++){
+                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[tableView indexPathForCell:self.prevCell].row+i inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            }
+            [tableView endUpdates];
             [self resetFrames];
         }
     }
@@ -703,9 +684,18 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)textViewDidEndEditing:(UITextView *)textView {
-    
     if ([textView.text isEqualToString:@""]) { //Check for spaces
         self.placeholderLabel.alpha = 1;
+    }
+}
+
+-(void)textViewDidChange:(UITextView *)textView{
+    //Check the send button state
+    self.sendButton.userInteractionEnabled = (_captionTextView.text.length > 0);
+    if(self.sendButton.userInteractionEnabled){
+        [self.sendButton setTintColor:[UIColor frescoBlueColor]];
+    }else{
+        [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
     }
 }
 
@@ -738,10 +728,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - Assignments
 
 -(void)configureAssignments {
-    
     [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
 }
-
 
 
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
@@ -776,11 +764,33 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.numberOfRowsInAssignmentTableView = _assignmentsArray.count + 1;
         self.globalAssignments = global;
         
+        //Get the closest assignment to the user
+        CLLocationDistance closestDistance = 9999999999999999999.0;
+        int closestIndex = 0;
+        for(int i = 0; i < self.assignmentsArray.count; i++){
+            NSDictionary *assignmentDic = [self.assignmentsArray objectAtIndex:i];
+            NSArray *coords = assignmentDic[@"location"][@"coordinates"];
+            NSLog(@"Lat: %@ Long: %@",[coords objectAtIndex:0], [coords objectAtIndex:1]);
+            CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:0] floatValue] longitude:[[coords objectAtIndex:1] floatValue]];
+            CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
+            NSLog(@"Distance: %f",distanceFromAssignment);
+            if(closestDistance > distanceFromAssignment){
+                closestDistance = distanceFromAssignment;
+                NSLog(@"Closest Distance: %f",closestDistance);
+                closestIndex = i;
+            }
+        }
+        self.closestAssignmentIndex = closestIndex;
+        
         [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
         [self configureTextView];
         [self adjustScrollViewContentSize];
         
+        [self.assignmentsTableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+        });
     }];
 }
 
@@ -823,7 +833,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.carouselCell removeFromSuperview];
     [self.galleryCollectionView reloadData];
 }
-
     //Next button action
 -(void)send {
 
