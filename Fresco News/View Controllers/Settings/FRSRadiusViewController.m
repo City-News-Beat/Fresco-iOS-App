@@ -137,39 +137,11 @@
     if (slider.value == 0) {
         return;
     }
-
-//    MKCoordinateRegion region;
-//    region.center.latitude  = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
-//    region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-//    region.span.latitudeDelta  = self.miles/50;
-//    region.span.longitudeDelta = self.miles/50;
-    
-    
-//    CLLocationCoordinate2D center = region.center;
-//    MKCoordinateSpan span = region.span;
-//    
-//    CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:(center.latitude - span.latitudeDelta * 0.5) longitude:center.longitude];
-//    CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:(center.latitude + span.latitudeDelta * 0.5) longitude:center.longitude];
-//    NSInteger metersLatitude = [loc1 distanceFromLocation:loc2];
-//    NSInteger milesLatitude = metersLatitude / 1609.34;
-//    
-//    NSLog(@"MILES LAT: %ld", (long)milesLatitude);
-    
-    
-//    self.mapView.region = region;
     
     [self zoomToCoordinates:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.latitude] lon:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.longitude] withRadius:@(self.miles) withAnimation:YES];
 }
 
-
-
-
-
-
-
-
-- (void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate
-{
+-(void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate {
     // Span uses degrees, 1 degree = 69 miles
     MKCoordinateSpan span = MKCoordinateSpanMake(
                                                  ([radius floatValue] / 30),
@@ -180,23 +152,6 @@
     
     [self.mapView setRegion:regionThatFits animated:animate];
 }
-
-+ (CGFloat)roundedValueForRadiusSlider:(UISlider *)slider {
-    CGFloat roundedValue;
-    if (slider.value < 10)
-        roundedValue = (int)slider.value;
-    else
-        roundedValue = ((int)slider.value / 10) * 10;
-    
-    return roundedValue;
-}
-
-
-
-
-
-
-
 
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
