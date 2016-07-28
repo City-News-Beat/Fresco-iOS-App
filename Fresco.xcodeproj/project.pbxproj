@@ -18,6 +18,7 @@
 		075473571D19B5640020636E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 075473561D19B5640020636E /* Info.plist */; };
 		075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */; };
 		075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */; };
+		0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0772512B1D47EF4A007FDB6C /* FRSUserAnnotation.m */; };
 		077CF9D91CE62793006FE908 /* FRSAboutFrescoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */; };
 		077FBC3A1CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 077FBC391CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m */; };
 		0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0780914A1CD93A0D00D7FA40 /* FRSUploadViewController.m */; };
@@ -272,6 +273,8 @@
 		0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraViewController.m; sourceTree = "<group>"; };
 		075998311C6BCF5300A0FE73 /* FRSAVSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAVSessionManager.h; sourceTree = "<group>"; };
 		075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAVSessionManager.m; sourceTree = "<group>"; };
+		0772512A1D47EF4A007FDB6C /* FRSUserAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserAnnotation.h; sourceTree = "<group>"; };
+		0772512B1D47EF4A007FDB6C /* FRSUserAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserAnnotation.m; sourceTree = "<group>"; };
 		077CF9D71CE62793006FE908 /* FRSAboutFrescoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSAboutFrescoViewController.h; path = "Fresco News/View Controllers/Settings/FRSAboutFrescoViewController.h"; sourceTree = "<group>"; };
 		077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSAboutFrescoViewController.m; path = "Fresco News/View Controllers/Settings/FRSAboutFrescoViewController.m"; sourceTree = "<group>"; };
 		077FBC381CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentPickerTableViewCell.h; sourceTree = "<group>"; };
@@ -924,7 +927,7 @@
 				D43C7FF61C90746700A7A7A7 /* User Table */,
 				D43C7FF71C90746C00A7A7A7 /* Story Cell */,
 				D43C7FF81C90747300A7A7A7 /* Story View */,
-				D43C7FF91C90747B00A7A7A7 /* Assignment Annotation */,
+				D43C7FF91C90747B00A7A7A7 /* Map Annotations */,
 				D43C7FFA1C90748600A7A7A7 /* Map Circle */,
 				D43C7FFB1C90748B00A7A7A7 /* Comment Table */,
 				D43C7FFC1C90749F00A7A7A7 /* Comments View */,
@@ -1575,13 +1578,15 @@
 			name = "Story View";
 			sourceTree = "<group>";
 		};
-		D43C7FF91C90747B00A7A7A7 /* Assignment Annotation */ = {
+		D43C7FF91C90747B00A7A7A7 /* Map Annotations */ = {
 			isa = PBXGroup;
 			children = (
 				65D1E4EA1C4EE7C2003362D3 /* FRSAssignmentAnnotation.h */,
 				65D1E4EB1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m */,
+				0772512A1D47EF4A007FDB6C /* FRSUserAnnotation.h */,
+				0772512B1D47EF4A007FDB6C /* FRSUserAnnotation.m */,
 			);
-			name = "Assignment Annotation";
+			name = "Map Annotations";
 			sourceTree = "<group>";
 		};
 		D43C7FFA1C90748600A7A7A7 /* Map Circle */ = {
@@ -2441,6 +2446,7 @@
 				D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
 				07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */,
+				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
 				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,

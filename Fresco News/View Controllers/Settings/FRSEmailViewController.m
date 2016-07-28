@@ -89,6 +89,8 @@
         case 0:
             [cell configureEditableCellWithDefaultText:@"New email" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeEmailAddress];
             cell.textField.delegate = self;
+            cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
             [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
             cell.textField.returnKeyType = UIReturnKeyNext;
             break;
@@ -114,7 +116,10 @@
 }
 
 -(void)saveEmail {
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"email":self.email} completion:^(id responseObject, NSError *error) {
+    
+    [self.view endEditing:YES];
+    
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"email":self.email, @"verify_password" : self.password} completion:^(id responseObject, NSError *error) {
         
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         [delegate reloadUser];
@@ -125,14 +130,42 @@
             [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
             
             [self popViewController];
-        } else if (error.code == -1009) {
-            if (!self.alert) {
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
-                [self.alert show];
-            }
-        } else if (error){
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Email is already taken." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            return;
+        }
+        
+        
+        if (error.code == -1009) {
+            NSLog(@"Unable to connect.");
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
             [alert show];
+            return;
+        }
+        
+        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+        NSInteger responseCode = response.statusCode;
+        NSLog(@"ERROR: %ld", (long)responseCode);
+        
+        if (responseCode >= 400 && responseCode < 500) {
+            // 400 level, client
+            if (responseCode == 403) {
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Incorrect password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+            } else {
+                // Email is already in use (400)
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Email is already in use." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+            }
+            
+            return;
+        }
+        else if (responseCode >= 500 && responseCode < 600) {
+            // 500 level, server
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [alert show];
+            return;
+        }
+        else {
+            //generic error
         }
     }];
 }

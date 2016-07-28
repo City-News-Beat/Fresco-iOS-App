@@ -17,7 +17,7 @@
 #import "FRSSettingsViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 
-@interface FRSTableViewCell()
+@interface FRSTableViewCell() <FRSAlertViewDelegate>
 
 @property CGFloat leftPadding;
 @property CGFloat rightPadding;
@@ -50,6 +50,9 @@
 @property (strong, nonatomic) UILabel *findFriendsLabel;
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
+@property BOOL notificationsEnabled;
+@property BOOL locationEnabled;
 
 @end
 
@@ -88,7 +91,7 @@
         self.twitterSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
         [self.twitterSwitch addTarget:self action:@selector(twitterToggle) forControlEvents:UIControlEventValueChanged];
         self.twitterSwitch.onTintColor = [UIColor twitterBlueColor];
-        self.twitterSwitch.on = enabled;
+        [self.twitterSwitch setOn:enabled animated:YES];
         [self addSubview:self.twitterSwitch];
         
         if (self.twitterHandle) {
@@ -97,14 +100,14 @@
         
     } else if (tag == 2){
         self.facebookIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"social-facebook"]];
-        self.facebookIV.frame = CGRectMake(16, 10 ,24,24);
+        self.facebookIV.frame = CGRectMake(16, 10 ,24, 24);
         [self.facebookIV sizeToFit];
         [self addSubview:self.facebookIV];
         
         self.twitterSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
         [self.twitterSwitch addTarget:self action:@selector(facebookToggle) forControlEvents:UIControlEventValueChanged];
         self.twitterSwitch.onTintColor = [UIColor facebookBlueColor];
-        self.twitterSwitch.on = enabled;
+        [self.twitterSwitch setOn:enabled animated:YES];
         [self addSubview:self.twitterSwitch];
         
     } else if (tag == 3){
@@ -115,27 +118,38 @@
     }
 }
 
+
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    if (index == 0) {
+        //cancel
+        [self.twitterSwitch setOn:YES animated:YES];
+    } else {
+        [self.twitterSwitch setOn:NO animated:YES];
+        self.twitterHandle = nil;
+        self.socialTitleLabel.text = @"Connect Twitter";
+    }
+}
+
 -(void)twitterToggle {
     if (self.twitterHandle) {
         NSLog(@"DISABLED TWITTER");
-        [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:nil]; //why is fb here?
-        self.twitterSwitch.on = NO;
-        self.twitterHandle = nil;
-        self.socialTitleLabel.text = @"Connect Twitter";
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
+        alert.delegate = self;
+        [alert show];
+        
     } else {
-        self.twitterSwitch.userInteractionEnabled = NO;
-        self.userInteractionEnabled = NO;
-        self.twitterIV.alpha = 0;
-        [self configureSpinner];
+//        self.twitterSwitch.userInteractionEnabled = NO;
+//        self.userInteractionEnabled = NO;
+//        self.twitterIV.alpha = 0;
+//        [self configureSpinner];
         [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
-            [self.loadingView stopLoading];
-            [self.loadingView removeFromSuperview];
-            self.twitterIV.alpha = 1;
+//            [self.loadingView stopLoading];
+//            [self.loadingView removeFromSuperview];
             self.twitterSwitch.userInteractionEnabled = YES;
             self.userInteractionEnabled = YES;
             if (session) {
                 self.twitterHandle = session.userName;
-                self.twitterSwitch.on = YES;
+                [self.twitterSwitch setOn:YES animated:YES];
                 self.socialTitleLabel.text = self.twitterHandle;
             } else if (error) {
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
@@ -146,9 +160,34 @@
 }
 
 -(void)facebookToggle {
-    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+    
+    if (self.facebookName) {
+        NSLog(@"DISABLE FACEBOOK");
         
-    } parent:self.inputViewController];
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT FACEBOOK?" message:@"You’ll be unable to use your Facebook account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
+        alert.delegate = self;
+        [alert show];
+        
+    } else {
+        
+        [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+            
+            NSLog(@"AUTHENTICATED: %d", authenticated);
+            NSLog(@"ERROR: %@", error);
+            NSLog(@"TOKEN: %@", token);
+            
+            if (authenticated) {
+                [self.facebookSwitch setOn:YES animated:YES];
+                self.facebookName = @"FIRST LAST";
+                self.socialTitleLabel.text = self.facebookName;
+            } else if (error) {
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Facebook. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+            }
+            
+            
+        } parent:self.inputViewController];
+    }
 }
 
 -(void)configureSpinner {
@@ -157,7 +196,7 @@
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
-    [self addSubview:self.loadingView];
+//    [self addSubview:self.loadingView];
 }
 
 
@@ -178,7 +217,7 @@
     
     self.notificationSwitch = [[UISwitch alloc] init];
     self.notificationSwitch.center = self.center;
-    self.notificationSwitch.on = enabled;
+    [self.notificationSwitch setOn:enabled animated:NO];
     [self.notificationSwitch addTarget:self action:@selector(notificationToggle:) forControlEvents:UIControlEventValueChanged];
     self.notificationSwitch.center = CGPointMake([UIScreen mainScreen].bounds.size.width - self.notificationSwitch.bounds.size.width/2 - 13.5, self.notificationSwitch.bounds.size.height/2 + 14);
     [self addSubview:self.notificationSwitch];
@@ -506,13 +545,18 @@
 
 -(void)notificationToggle:(id)sender {
     [self checkNotificationStatus];
+    [self checkLocationStatus];
     
     BOOL state;
     
     
     if ([sender isOn]) {
         state = YES;
-        [self requestNotifications]; //Request and enable notifications
+        if (!self.notificationsEnabled || !self.locationEnabled) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+            [alert show];
+        }
+//        [self requestNotifications]; //Request and enable notifications
     } else {
         state = NO;
         [[UIApplication sharedApplication] unregisterForRemoteNotifications]; //Unregister from notifications
@@ -527,10 +571,23 @@
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
             [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+            self.notificationsEnabled = NO;
         } else {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+            self.notificationsEnabled = YES;
         }
     }
+}
+
+-(void)checkLocationStatus {
+    if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse)) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"location-enabled"];
+        self.locationEnabled = YES;
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"location-enabled"];
+        self.locationEnabled = NO;
+    }
+    
 }
 
 

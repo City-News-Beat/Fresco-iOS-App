@@ -24,6 +24,7 @@
 +(STPCardParams *)creditCardWithNumber:(NSString *)number expiration:(NSArray *)expiration cvc:(NSString *)cvc firstName:(NSString *)firstName lastName:(NSString *)lastName {
     
     STPCardParams *cardParams = [FRSStripe creditCardWithNumber:number expiration:expiration cvc:cvc];
+    
     cardParams.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
     return cardParams;
 }

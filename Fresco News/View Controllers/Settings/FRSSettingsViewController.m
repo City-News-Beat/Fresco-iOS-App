@@ -242,9 +242,15 @@
                     
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
-                case 1:
-                    [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@"2 mi"];
-                    break;
+                case 1: {
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
+                        NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+                        CGFloat milesFloat = [miles floatValue];
+                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%.0f mi", milesFloat]];
+                    } else {
+                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@""];
+                    }
+                } break;
                 case 2:
                     [cell configureDefaultCellWithTitle:@"Debit card" andCarret:YES andRightAlignedTitle:@"VISA (3189)"];
                     break;
@@ -445,8 +451,8 @@
                     [self presentModalMailComposerViewController:YES];
                     break;
                 case 2:{
-                    //FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
-                    //[alert show];
+//                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+//                    [alert show];
                     FRSDisableAccountViewController *disableVC = [[FRSDisableAccountViewController alloc] init];
                     [self.navigationController pushViewController:disableVC animated:YES];
                 }

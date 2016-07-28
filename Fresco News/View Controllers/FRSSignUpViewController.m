@@ -57,6 +57,10 @@
 @property (nonatomic) NSInteger yPos;
 @property (nonatomic) NSInteger height;
 
+@property BOOL locationEnabled;
+
+@property (nonatomic) CGFloat miles;
+
 @end
 
 @implementation FRSSignUpViewController
@@ -146,6 +150,7 @@
         [self.navigationController setNavigationBarHidden:YES animated:YES];
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
 }
 
 
@@ -371,6 +376,7 @@
     self.radiusSlider = [[UISlider alloc] initWithFrame:CGRectMake(52, 14, self.view.frame.size.width - 104, 28)];
     [self.radiusSlider setMinimumTrackTintColor:[UIColor frescoBlueColor]];
     [self.radiusSlider setMaximumTrackTintColor:[UIColor colorWithWhite:181/255.0 alpha:1.0]];
+    [self.radiusSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.sliderContainer addSubview:self.radiusSlider];
     
     UIImageView *smallIV = [[UIImageView alloc] initWithFrame:CGRectMake(12, 16, 24, 24)];
@@ -385,6 +391,23 @@
     
     self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, -(self.mapView.frame.size.height + self.sliderContainer.frame.size.height +18));
     self.sliderContainer.alpha = 0;
+}
+
+-(void)sliderValueChanged:(UISlider *)slider {
+    
+    self.miles = slider.value * 50;
+    
+    if (slider.value == 0) {
+        return;
+    }
+    
+    MKCoordinateRegion region;
+    region.center.latitude  = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
+    region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
+    region.span.latitudeDelta  = self.miles/50;
+    region.span.longitudeDelta = self.miles/50;
+    
+    self.mapView.region = region;
 }
 
 -(void)configurePromoSection {
@@ -740,17 +763,41 @@
             
             [[FRSAPIClient sharedClient] checkUsername:[self.usernameTF.text substringFromIndex:1] completion:^(id responseObject, NSError *error) {
                 
-                if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
+                //Return if no internet
+                if (error.code == -1009) {
+                    return;
+                }
+                
+                
+                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                NSInteger responseCode = response.statusCode;
+                NSLog(@"ERROR: %ld", (long)responseCode);
+                
+                if (responseCode == 404) { //
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
                     self.usernameTaken = NO;
                     [self stopUsernameTimer];
                     [self checkCreateAccountButtonState];
+                    return;
                 } else {
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
                     self.usernameTaken = YES;
                     [self stopUsernameTimer];
                     [self checkCreateAccountButtonState];
                 }
+                
+                
+//                if ([error.userInfo[@"NSLocalizedDescription"][@"type"] isEqualToString:@"not_found"]) {
+//                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+//                    self.usernameTaken = NO;
+//                    [self stopUsernameTimer];
+//                    [self checkCreateAccountButtonState];
+//                } else {
+//                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+//                    self.usernameTaken = YES;
+//                    [self stopUsernameTimer];
+//                    [self checkCreateAccountButtonState];
+//                }
             }];
         }
     }
@@ -784,13 +831,21 @@
 #pragma mark Action Logic
 
 -(void)handleToggleSwitched:(UISwitch *)toggle {
-    id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
-    [delegate registerForPushNotifications];
+//    id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
+//    [delegate registerForPushNotifications];
+    
+    [self checkLocationStatus];
+    [self checkNotificationStatus];
     
     if (toggle.on){
         
-        [self checkNotificationStatus];
-        [self requestNotifications];
+        if (!self.notificationsEnabled || !self.locationEnabled) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+            [alert show];
+        }
+
+//        [self checkNotificationStatus];
+//        [self requestNotifications];
         
         self.notificationsEnabled = YES;
         self.scrollView.scrollEnabled = YES;
@@ -852,11 +907,7 @@
                 self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height +self.sliderContainer.frame.size.height);
             } completion:nil];
         }
-        
-        
-        
-        
-        
+
     } else {
         
         [self.scrollView setContentOffset:CGPointMake(0, -self.scrollView.contentInset.top) animated:YES];
@@ -901,6 +952,8 @@
 
 -(void)createAccount {
     
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+    
     [self dismissKeyboard];
     
     if (_isAlreadyRegistered) {
@@ -935,13 +988,28 @@
         }
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
-            if (error) {
-                // show error
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to sign up. Please try again later." actionTitle:@"OK" cancelTitle:nil cancelTitleColor:nil delegate:self];
+            
+            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+            NSInteger responseCode = response.statusCode;
+            NSLog(@"ERROR: %ld", (long)responseCode);
+            
+            if (responseCode >= 400 && responseCode < 500) {
+                // 400 level, client
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 400" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
                 [alert show];
+                return;
             }
-            else {
-                // continue on whatever
+            else if (responseCode >= 500 && responseCode < 600) {
+                // 500 level, server
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 500" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+                return;
+            }
+            else if (responseCode >= 300 && responseCode < 400) {
+                // 300  level, unauthorized
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 300" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+                return;
             }
         }];
         
@@ -953,7 +1021,6 @@
         
         NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
         NSLog(@"%@", errorMessage);
-        
         
         if (error) {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to create an account. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
@@ -1406,34 +1473,33 @@
     }
 }
 
-#pragma mark - Notifications
+#pragma mark - Notification Status
 
 -(void)checkNotificationStatus {
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
         UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
+            self.notificationsEnabled = YES;
             [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
         } else {
+            self.notificationsEnabled = NO;
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
         }
     }
 }
 
--(void)requestNotifications {
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]) {
-        return;
-    }
-    
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"NotificationsRequested"]) {
-        UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+#pragma mark - Location Status
+
+-(void)checkLocationStatus {
+    if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse)) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"location-enabled"];
+        self.locationEnabled = YES;
     } else {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"location-enabled"];
+        self.locationEnabled = NO;
     }
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NotificationsRequested"];
+    
 }
 
 

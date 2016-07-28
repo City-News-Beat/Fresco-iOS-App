@@ -11,10 +11,19 @@
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 #import "UIFont+Fresco.h"
+#import "FRSStripe.h"
+#import "FRSAPIClient.h"
 
 @interface FRSDebitCardViewController()
 
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardGestureRecognizer;
+
+@property (strong, nonatomic) NSString *CVV;
+
+@property (strong, nonatomic) UIButton *rightAlignedButton;
+
+
 
 @end
 
@@ -28,6 +37,9 @@
     self.title = @"DEBIT CARD";
     
     [self configureBackButtonAnimated:NO];
+    
+    self.dismissKeyboardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    [self.view addGestureRecognizer:self.dismissKeyboardGestureRecognizer];
 }
 
 
@@ -48,6 +60,8 @@
     cardNumberTextField.placeholder =  @"0000 0000 0000 0000";
     cardNumberTextField.textColor = [UIColor frescoDarkTextColor];
     cardNumberTextField.tintColor = [UIColor frescoBlueColor];
+    cardNumberTextField.delegate = self;
+    [cardNumberTextField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
     [container addSubview:cardNumberTextField];
     
     cardNumberTextField.keyboardType = UIKeyboardTypeNumberPad;
@@ -60,6 +74,8 @@
     expirationDateTextField.placeholder =  @"00 / 00";
     expirationDateTextField.textColor = [UIColor frescoDarkTextColor];
     expirationDateTextField.tintColor = [UIColor frescoBlueColor];
+    expirationDateTextField.delegate = self;
+    [expirationDateTextField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
     [container addSubview:expirationDateTextField];
     
     expirationDateTextField.keyboardType = UIKeyboardTypeNumberPad;
@@ -70,6 +86,8 @@
     securityCodeTextField.placeholder =  @"CVV";
     securityCodeTextField.textColor = [UIColor frescoDarkTextColor];
     securityCodeTextField.tintColor = [UIColor frescoBlueColor];
+    securityCodeTextField.delegate = self;
+    [securityCodeTextField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
     [container addSubview:securityCodeTextField];
     
     securityCodeTextField.keyboardType = UIKeyboardTypeNumberPad;
@@ -80,15 +98,15 @@
     
     UIImageView *cardNumberCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"acceptedNot"]];
     cardNumberCheckIV.frame = CGRectMake(self.view.frame.size.width - 30, 10, 24, 24);
-    [container addSubview:cardNumberCheckIV];
+//    [container addSubview:cardNumberCheckIV];
     
     UIImageView *expirationDateCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"acceptedNot"]];
     expirationDateCheckIV.frame = CGRectMake(self.view.frame.size.width/2 - 24 - 16, 54, 24, 24);
-    [container addSubview:expirationDateCheckIV];
+//    [container addSubview:expirationDateCheckIV];
     
     UIImageView *CVVcheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"acceptedNot"]];
     CVVcheckIV.frame = CGRectMake(self.view.frame.size.width - 30, 54, 24, 24);
-    [container addSubview:CVVcheckIV];
+//    [container addSubview:CVVcheckIV];
     
     UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
     top.alpha = 1;
@@ -105,13 +123,14 @@
     bottom.backgroundColor = [UIColor frescoLightTextColor];
     [container addSubview:bottom];
     
-    UIButton *rightAlignedButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightAlignedButton.frame =CGRectMake(self.view.frame.size.width - 105, cardViewport.frame.size.height + 88, 105, 44);
-    [rightAlignedButton setTitle:@"SAVE CARD" forState:UIControlStateNormal];
-    [rightAlignedButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    [rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    self.rightAlignedButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.rightAlignedButton addTarget:self action:@selector(saveCard) forControlEvents:UIControlEventTouchUpInside];
+    self.rightAlignedButton.frame = CGRectMake(self.view.frame.size.width - 105, cardViewport.frame.size.height + 88, 105, 44);
+    [self.rightAlignedButton setTitle:@"SAVE CARD" forState:UIControlStateNormal];
+    [self.rightAlignedButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     
-    [self.view addSubview:rightAlignedButton];
+    [self.view addSubview:self.rightAlignedButton];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -162,31 +181,73 @@
 }
 
 
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+-(BOOL)textFieldShouldEndEditing:(UITextField *)textField {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardWillHideNotification object:nil];
     [self.view endEditing:YES];
     return YES;
 }
 
-
-- (void)keyboardDidShow:(NSNotification *)notification
-{    
-    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        [self.view setFrame:CGRectMake(0, 30, self.view.frame.size.width,self.view.frame.size.height)];
-        
-    } completion:nil];
-}
-
-
--(void)keyboardDidHide:(NSNotification *)notification
-{
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
     
+    if (cardNumberTextField.isEditing) {
+        NSLog(@"CARD NUMBER: %@", cardNumberTextField);
+    } else if (expirationDateTextField.isEditing) {
+        NSLog(@"EXP DATE: %@", expirationDateTextField);
+    } else if (securityCodeTextField.isEditing) {
+        NSLog(@"CVV: %@", securityCodeTextField);
+    }
+
+    
+    
+    if ((cardNumberTextField.text.length == 16) && (securityCodeTextField.text.length >= 3)) {
+        [self.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.rightAlignedButton.userInteractionEnabled = YES;
+    }
+    
+    
+    return YES;
+}
+
+
+-(void)saveCard {
+    
+    NSArray *components = [expirationDateTextField.text componentsSeparatedByString:@"/"];
+    NSArray *expiration;
+    
+    if (components.count == 2) {
+        expiration = @[@([components[0] intValue]), @([components[1] intValue])];
+    }
+    else {
+        return;
+    }
+    
+    STPCardParams *params = [FRSStripe creditCardWithNumber:cardNumberTextField.text expiration:expiration cvc:securityCodeTextField.text];
+    
+    [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
+        [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId completion:^(id responseObject, NSError *error) {
+            //
+        }];
+    }];
+}
+
+-(void)keyboardDidShow:(NSNotification *)notification {
     [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        [self.view setFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height)];
-        
+        self.view.frame = CGRectMake(0, -30, self.view.frame.size.width,self.view.frame.size.height);
     } completion:nil];
 }
+
+
+-(void)keyboardDidHide:(NSNotification *)notification {
+    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.view.frame = CGRectMake(0, 64, self.view.frame.size.width,self.view.frame.size.height);
+    } completion:nil];
+}
+
+
+-(void)dismissKeyboard {
+    [self.view resignFirstResponder];
+    [self.view endEditing:YES];
+}
+
 
 @end
