@@ -421,6 +421,11 @@
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
+    CGPoint location = [tap locationInView:self];
+    
+    if (location.y > _scrollView.frame.size.height) {
+        return;
+    }
     
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     FRSPlayer *player = self.players[page];
