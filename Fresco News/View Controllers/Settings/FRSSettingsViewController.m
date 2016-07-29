@@ -289,7 +289,12 @@
                 case 2:
                     self.facebookCell = cell;
                     
-                    [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+                    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]) {
+                        [cell configureSocialCellWithTitle:@"Facebook Name" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+                    } else {
+                        [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+                    }
+                    
                     break;
                 default:
                     break;
