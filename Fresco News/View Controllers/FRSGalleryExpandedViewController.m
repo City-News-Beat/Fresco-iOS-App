@@ -113,7 +113,7 @@
     [self configureScrollView];
     [self configureGalleryView];
     [self configureArticles];
-    [self configureComments];
+    //[self configureComments];
     [self configureActionBar];
     [self configureNavigationBar];
 
@@ -141,6 +141,11 @@
 }
 
 -(void)configureArticles{
+    
+    if (self.orderedArticles.count == 0) {
+        return;
+    }
+    
     self.articlesTV = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + TOP_PAD, self.view.frame.size.width, CELL_HEIGHT * self.orderedArticles.count)];
     self.articlesTV.delegate = self;
     self.articlesTV.dataSource = self;
