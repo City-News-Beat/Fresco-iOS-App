@@ -658,13 +658,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             [CATransaction setCompletionBlock:^{
                 [tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-                //[self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
                 for(int i = 0; i < indexPaths.count; i++){
                     FRSAssignmentPickerTableViewCell *outletCell = [tableView cellForRowAtIndexPath:[indexPaths objectAtIndex:i]];
                     outletCell.isAnOutlet = true;
                     NSDictionary *outletDic = [cell.outlets objectAtIndex:i];
                     [outletCell.titleLabel setText:outletDic[@"title"]];
                 }
+                [self tableView:tableView willSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
+                [self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
                 // animation has finished
             }];
             [CATransaction commit];
@@ -681,6 +682,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                 [indexPaths addObject:[NSIndexPath indexPathForRow:[self.assignmentsTableView indexPathForCell:self.prevCell].row+i inSection:0]];
             }
             self.showingOutlets = false;
+            [self resetOtherOutlets];
 
             _prevCell.isSelectedAssignment = false;
             [CATransaction begin];
