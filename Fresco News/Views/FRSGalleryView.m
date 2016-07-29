@@ -576,7 +576,11 @@
     
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
     
-    self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@",post.creator.firstName] fontSize:17];
+    if(post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0){
+        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@",post.creator.username] fontSize:17];;
+    }else{
+        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@",post.creator.firstName] fontSize:17];;
+    }
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
@@ -620,7 +624,11 @@
     
     FRSPost *post = self.orderedPosts[self.adjustedPage];
     
-    self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
+    if(post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0){
+        self.nameLabel.text = [NSString stringWithFormat:@"@%@",post.creator.username];
+    }else{
+        self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
+    }
     
     self.locationLabel.text = post.address;
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
