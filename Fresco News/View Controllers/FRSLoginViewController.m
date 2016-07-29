@@ -211,7 +211,7 @@
         
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
             [alert show];
             return;
         }
@@ -220,29 +220,34 @@
         NSInteger responseCode = response.statusCode;
         NSLog(@"ERROR: %ld", (long)responseCode);
         
+        if (responseCode == 401) {
+            [self presentInvalidInfo];
+            return;
+        }
+        
         if (responseCode >= 400 && responseCode < 500) {
             // 400 level, client
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
             return;
         }
         else if (responseCode >= 500 && responseCode < 600) {
             // 500 level, server
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
             return;
         }
         else if (responseCode >= 300 && responseCode < 400) {
             // 300  level, unauthorized
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
             return;
         }
         
-        if (error.code == -1011) {
-            NSLog(@"Invalid username or password.");
-            [self presentInvalidInfo];
-        }
+        //if (error.code == -1011) {
+        //    NSLog(@"Invalid username or password.");
+        //    [self presentInvalidInfo];
+        //}
     }];
 }
 
@@ -250,27 +255,42 @@
     
     //should turn fields red instead of this
     
-    self.loginButton.userInteractionEnabled = NO;
-    self.invalidUserLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.passwordField.frame.origin.x, self.passwordField.frame.origin.y + self.passwordField.frame.size.height + 16, 200, 18)];
-    self.invalidUserLabel.textAlignment = NSTextAlignmentLeft;
-    self.invalidUserLabel.text = @"Invalid username or password.";
-    self.invalidUserLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
-    self.invalidUserLabel.textColor = [UIColor frescoRedHeartColor];
-    self.invalidUserLabel.alpha = 0;
-    [self.view addSubview:self.invalidUserLabel];
-    
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.invalidUserLabel.alpha = 1;
-        self.invalidUserLabel.transform = CGAffineTransformMakeTranslation(0, 8);
+    [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.passwordHighlightLine.backgroundColor = [UIColor frescoRedHeartColor];
+        self.usernameHighlightLine.backgroundColor = [UIColor frescoRedHeartColor];
+        
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.3 delay:0.7 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.invalidUserLabel.alpha = 0;
-            self.invalidUserLabel.transform = CGAffineTransformMakeTranslation(0, 16);
-        } completion:^(BOOL finished) {
-            [self.invalidUserLabel removeFromSuperview];
-            self.loginButton.userInteractionEnabled = YES;
-        }];
+        [UIView animateWithDuration:0.15 delay:1.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            self.passwordHighlightLine.backgroundColor = [UIColor frescoLightTextColor];
+            self.usernameHighlightLine.backgroundColor = [UIColor frescoLightTextColor];
+            
+        } completion:nil];
     }];
+    
+
+//    self.loginButton.userInteractionEnabled = NO;
+//    self.invalidUserLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.passwordField.frame.origin.x, self.passwordField.frame.origin.y + self.passwordField.frame.size.height + 16, 200, 18)];
+//    self.invalidUserLabel.textAlignment = NSTextAlignmentLeft;
+//    self.invalidUserLabel.text = @"Invalid username or password.";
+//    self.invalidUserLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
+//    self.invalidUserLabel.textColor = [UIColor frescoRedHeartColor];
+//    self.invalidUserLabel.alpha = 0;
+//    [self.view addSubview:self.invalidUserLabel];
+//    
+//    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//        self.invalidUserLabel.alpha = 1;
+//        self.invalidUserLabel.transform = CGAffineTransformMakeTranslation(0, 8);
+//    } completion:^(BOOL finished) {
+//        [UIView animateWithDuration:0.3 delay:0.7 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//            self.invalidUserLabel.alpha = 0;
+//            self.invalidUserLabel.transform = CGAffineTransformMakeTranslation(0, 16);
+//        } completion:^(BOOL finished) {
+//            [self.invalidUserLabel removeFromSuperview];
+//            self.loginButton.userInteractionEnabled = YES;
+//        }];
+//    }];
 }
 
 -(void)dismiss {
@@ -322,7 +342,7 @@
         if (error) {
             NSLog(@"TWITTER SIGN IN: %@", error);
 
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
             [alert show];
         }
 
@@ -378,7 +398,7 @@
         }
         
         if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
             [alert show];
         }
         
