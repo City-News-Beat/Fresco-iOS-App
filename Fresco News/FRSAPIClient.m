@@ -329,7 +329,7 @@
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
-    
+    NSLog(@"%@", endpoint);
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
@@ -444,7 +444,7 @@
 
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion {
     
-    NSString *endpoint = [storyGalleriesEndpoint stringByAppendingString:storyID];
+    NSString *endpoint = [NSString stringWithFormat:storyGalleriesEndpoint, storyID];
     
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {        
         completion(responseObject, error);
@@ -770,6 +770,21 @@
         completion(responseObject, error);
         [gallery setValue:@(TRUE) forKey:@"liked"];
         [[self managedObjectContext] save:Nil];
+    }];
+}
+
+-(void)searchWithQuery:(NSString *)query completion:(FRSAPIDefaultCompletionBlock)completion {
+    if (!query) {
+        // error out
+        
+        return;
+    }
+    
+    NSDictionary *params = @{@"q":query};
+    
+    [self get:searchEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        NSLog(@"SEARCH: %@", (responseObject) ? responseObject : error);
+        completion(responseObject,error);
     }];
 }
 -(void)likeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {

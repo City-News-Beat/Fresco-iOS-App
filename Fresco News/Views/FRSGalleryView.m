@@ -46,6 +46,7 @@
         return;
     }
     
+    
     self.gallery = gallery;
     
     for (FRSPlayer *player in self.players) {
@@ -121,6 +122,17 @@
     
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
+    }
+    
+    [self checkOwner];
+}
+
+-(void)checkOwner {
+    NSString *ownerID = self.gallery.creator.uid;
+    NSString *userID = [[FRSAPIClient sharedClient] authenticatedUser].uid;
+    
+    if (userID && ownerID && [ownerID isEqualToString:userID]) {
+        // owner == self
     }
 }
 
