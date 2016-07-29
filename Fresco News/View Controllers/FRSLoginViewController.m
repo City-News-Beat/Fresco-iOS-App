@@ -222,19 +222,19 @@
         
         if (responseCode >= 400 && responseCode < 500) {
             // 400 level, client
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 400" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             [alert show];
             return;
         }
         else if (responseCode >= 500 && responseCode < 600) {
             // 500 level, server
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 500" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             [alert show];
             return;
         }
         else if (responseCode >= 300 && responseCode < 400) {
             // 300  level, unauthorized
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 300" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             [alert show];
             return;
         }
@@ -247,6 +247,8 @@
 }
 
 -(void)presentInvalidInfo {
+    
+    //should turn fields red instead of this
     
     self.loginButton.userInteractionEnabled = NO;
     self.invalidUserLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.passwordField.frame.origin.x, self.passwordField.frame.origin.y + self.passwordField.frame.size.height + 16, 200, 18)];
@@ -320,7 +322,7 @@
         if (error) {
             NSLog(@"TWITTER SIGN IN: %@", error);
 
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to log in with Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
             [alert show];
         }
 
