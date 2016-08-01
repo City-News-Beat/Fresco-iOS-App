@@ -157,8 +157,8 @@
     NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
     [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
-    
-    if (self.scrollDirection == UIScrollViewScrollDirectionDown && self.navigationController.navigationBar.frame.origin.y < self.navBarHeight) {
+    NSLog(@"Y ORIGIN: %f",self.navigationController.navigationBar.frame.origin.y);
+    if (self.scrollDirection == UIScrollViewScrollDirectionDown && self.navigationController.navigationBar.frame.origin.y < self.navBarHeight*2) {
         [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             [self collapseNavBar:barButtonItems];
         } completion:nil];
