@@ -16,6 +16,7 @@
 #import "FRSAlertView.h"
 #import "FRSSettingsViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
+#import "FRSAPIClient.h"
 
 @interface FRSTableViewCell() <FRSAlertViewDelegate>
 
@@ -49,10 +50,15 @@
 
 @property (strong, nonatomic) UILabel *findFriendsLabel;
 
+@property (strong, nonatomic) FRSAlertView *alert;
+
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
 @property BOOL notificationsEnabled;
 @property BOOL locationEnabled;
+
+@property BOOL didToggleTwitter;
+@property BOOL didToggleFacebook;
 
 @end
 
@@ -91,24 +97,29 @@
         self.twitterSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
         [self.twitterSwitch addTarget:self action:@selector(twitterToggle) forControlEvents:UIControlEventValueChanged];
         self.twitterSwitch.onTintColor = [UIColor twitterBlueColor];
-        [self.twitterSwitch setOn:enabled animated:YES];
+        [self.twitterSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected" ] animated:NO];
+
         [self addSubview:self.twitterSwitch];
         
-        if (self.twitterHandle) {
+        if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
+            self.socialTitleLabel.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"];
+        } else if (self.twitterHandle) {
             self.socialTitleLabel.text = self.twitterHandle;
+            [[NSUserDefaults standardUserDefaults] setValue:self.twitterHandle forKey:@"twitter-handle"];
         }
-        
+
     } else if (tag == 2){
         self.facebookIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"social-facebook"]];
         self.facebookIV.frame = CGRectMake(16, 10 ,24, 24);
         [self.facebookIV sizeToFit];
         [self addSubview:self.facebookIV];
         
-        self.twitterSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
-        [self.twitterSwitch addTarget:self action:@selector(facebookToggle) forControlEvents:UIControlEventValueChanged];
-        self.twitterSwitch.onTintColor = [UIColor facebookBlueColor];
-        [self.twitterSwitch setOn:enabled animated:YES];
-        [self addSubview:self.twitterSwitch];
+        self.facebookSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
+        [self.facebookSwitch addTarget:self action:@selector(facebookToggle) forControlEvents:UIControlEventValueChanged];
+        self.facebookSwitch.onTintColor = [UIColor facebookBlueColor];
+        
+        [self.facebookSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"] animated:NO];
+        [self addSubview:self.facebookSwitch];
         
     } else if (tag == 3){
         self.googleIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"google-icon-filled"]];
@@ -120,22 +131,52 @@
 
 
 -(void)didPressButtonAtIndex:(NSInteger)index {
-    if (index == 0) {
-        //cancel
-        [self.twitterSwitch setOn:YES animated:YES];
-    } else {
-        [self.twitterSwitch setOn:NO animated:YES];
-        self.twitterHandle = nil;
-        self.socialTitleLabel.text = @"Connect Twitter";
+    if (self.didToggleTwitter) {
+        self.didToggleTwitter = NO;
+        if (index == 0) {
+            NSLog(@"twitter index = 0");
+            [self.twitterSwitch setOn:YES animated:YES];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+        } else {
+            NSLog(@"twitter index = 1");
+            [self.twitterSwitch setOn:NO animated:YES];
+            self.twitterHandle = nil;
+            [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+            self.socialTitleLabel.text = @"Connect Twitter";
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+        }
+    } else if (self.didToggleFacebook) {
+        self.didToggleFacebook = NO;
+        if (index == 0) {
+            NSLog(@"facebook index = 0");
+            [self.facebookSwitch setOn:YES animated:YES];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+
+        } else if (index == 1) {
+            NSLog(@"facebook index = 1");
+            [self.facebookSwitch setOn:NO animated:YES];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+        }
     }
+    
+    self.alert = nil;
 }
 
+
 -(void)twitterToggle {
-    if (self.twitterHandle) {
+    
+    if (self.alert) {
+        return;
+    }
+    
+    self.didToggleTwitter = YES;
+    
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
+        
         NSLog(@"DISABLED TWITTER");
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
-        alert.delegate = self;
-        [alert show];
+        self.alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
+        self.alert.delegate = self;
+        [self.alert show];
         
     } else {
 //        self.twitterSwitch.userInteractionEnabled = NO;
@@ -147,12 +188,20 @@
 //            [self.loadingView removeFromSuperview];
             self.twitterSwitch.userInteractionEnabled = YES;
             self.userInteractionEnabled = YES;
+            
             if (session) {
+                
+                [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"twitter_handle" : session.userName} completion:^(id responseObject, NSError *error) {
+                }];
+                
+                
                 self.twitterHandle = session.userName;
                 [self.twitterSwitch setOn:YES animated:YES];
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
                 self.socialTitleLabel.text = self.twitterHandle;
+                [[NSUserDefaults standardUserDefaults] setValue:self.twitterHandle forKey:@"twitter-handle"];
             } else if (error) {
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
                 [alert show];
             }
         }];
@@ -161,32 +210,42 @@
 
 -(void)facebookToggle {
     
-    if (self.facebookName) {
+    
+    if (self.alert) {
+        return;
+    }
+    
+    
+    self.didToggleFacebook = YES;
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
         NSLog(@"DISABLE FACEBOOK");
         
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT FACEBOOK?" message:@"You’ll be unable to use your Facebook account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
-        alert.delegate = self;
-        [alert show];
-        
+        self.alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT FACEBOOK?" message:@"You’ll be unable to use your Facebook account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
+        self.alert.delegate = self;
+        [self.alert show];
+
     } else {
         
-        [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
-            
-            NSLog(@"AUTHENTICATED: %d", authenticated);
-            NSLog(@"ERROR: %@", error);
-            NSLog(@"TOKEN: %@", token);
-            
-            if (authenticated) {
-                [self.facebookSwitch setOn:YES animated:YES];
-                self.facebookName = @"FIRST LAST";
-                self.socialTitleLabel.text = self.facebookName;
-            } else if (error) {
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Facebook. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
-                [alert show];
+        FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+        
+        [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:self.inputViewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+
+            if (error) {
+                //handle errors
             }
             
-            
-        } parent:self.inputViewController];
+            if (result && !error) {
+                NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
+                
+                [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
+                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                    [self.facebookSwitch setOn:YES animated:YES];
+                    self.facebookSwitch.alpha = 0;
+                    self.facebookName = @"FIRST LAST";
+                    self.socialTitleLabel.text = self.facebookName;
+                }];
+            }
+        }];
     }
 }
 

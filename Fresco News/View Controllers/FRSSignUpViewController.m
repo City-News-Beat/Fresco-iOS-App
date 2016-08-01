@@ -49,16 +49,12 @@
 @property (strong, nonatomic) UIView *errorContainer;
 @property (strong, nonatomic) UIView *assignmentsCard;
 @property (nonatomic) BOOL emailError;
-
 @property (nonatomic) BOOL usernameTaken;
 @property (nonatomic) BOOL emailTaken;
 @property (strong, nonatomic) NSTimer *usernameTimer;
-
 @property (nonatomic) NSInteger yPos;
 @property (nonatomic) NSInteger height;
-
 @property BOOL locationEnabled;
-
 @property (nonatomic) CGFloat miles;
 
 @end
@@ -75,6 +71,7 @@
     
     self.notificationsEnabled = NO;
     self.emailError = NO;
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -401,14 +398,21 @@
         return;
     }
     
-    MKCoordinateRegion region;
-    region.center.latitude  = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
-    region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-    region.span.latitudeDelta  = self.miles/50;
-    region.span.longitudeDelta = self.miles/50;
-    
-    self.mapView.region = region;
+    [self zoomToCoordinates:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.latitude] lon:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.longitude] withRadius:@(self.miles) withAnimation:YES];
 }
+
+-(void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate {
+    // Span uses degrees, 1 degree = 69 miles
+    MKCoordinateSpan span = MKCoordinateSpanMake(
+                                                 ([radius floatValue] / 30),
+                                                 ([radius floatValue] / 30)
+                                                 );
+    MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
+    MKCoordinateRegion regionThatFits = [self.mapView regionThatFits:region];
+    
+    [self.mapView setRegion:regionThatFits animated:animate];
+}
+
 
 -(void)configurePromoSection {
     
@@ -765,6 +769,7 @@
                 
                 //Return if no internet
                 if (error.code == -1009) {
+                    
                     return;
                 }
                 
@@ -980,6 +985,8 @@
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
     [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
+    [registrationDigest setObject:@(self.miles) forKey:@"notification_radius"];
+
     
     if (_isAlreadyRegistered) {
         
@@ -989,25 +996,35 @@
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             
+            
+            if (error.code == -1009) {
+                
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                [alert show];
+                return;
+            }
+            
+            
+            
             NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
             NSInteger responseCode = response.statusCode;
             NSLog(@"ERROR: %ld", (long)responseCode);
             
             if (responseCode >= 400 && responseCode < 500) {
                 // 400 level, client
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 400" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [alert show];
                 return;
             }
             else if (responseCode >= 500 && responseCode < 600) {
                 // 500 level, server
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 500" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [alert show];
                 return;
             }
             else if (responseCode >= 300 && responseCode < 400) {
                 // 300  level, unauthorized
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 300" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [alert show];
                 return;
             }
@@ -1023,7 +1040,7 @@
         NSLog(@"%@", errorMessage);
         
         if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to create an account. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
         }
         
@@ -1104,7 +1121,10 @@
         self.twitterButton.hidden = false;
         
         if (error) {
-            [self handleSocialChallenge:error];
+
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try signing in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+            [alert show];
+            
             [spinner stopLoading];
             [spinner removeFromSuperview];
             self.twitterButton.hidden = false;
@@ -1148,7 +1168,10 @@
         _facebookButton.enabled = TRUE;
         
         if (error) {
-            [self handleSocialChallenge:error];
+
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try signing in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+            [alert show];
+            
             return;
         }
         
@@ -1164,6 +1187,7 @@
 }
 
 -(void)handleSocialChallenge:(NSError *)error {
+    
     
 }
 

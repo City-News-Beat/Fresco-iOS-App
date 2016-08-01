@@ -45,9 +45,11 @@
                 completion:^(id responseObject, NSError *error) {
                     if (error) {
                         completion(FALSE, error, Nil, Nil);
+                        
                     }
                     else {
                         completion(TRUE, Nil, Nil, [FBSDKAccessToken currentAccessToken]);
+                        
                     }
             }];
         }
