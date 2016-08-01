@@ -724,6 +724,9 @@
     
     UIView *view;
     
+    view.backgroundColor = [UIColor clearColor];
+    topView.backgroundColor = [UIColor clearColor];
+    
     if (section == 0){
         view = [UIView new];
     }
@@ -736,8 +739,8 @@
         [self configureSectionView];
         
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-        [view addSubview:self.sectionView];
         [view addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
+        [view addSubview:self.sectionView];
         
         topView = view;
         return topView;
@@ -754,6 +757,34 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
     //    [self dismissSocialOverlay];
+    NSLog(@"Content Offset %f", scrollView.contentOffset.y);
+    NSLog(@"Frame Y ORIGIN %f",     self.sectionView.frame.origin.y);
+    NSLog(@"SUBVIEW COUNT: %lu",(unsigned long)[self.navigationController.navigationBar subviews].count);
+    if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height) {
+        if([self.navigationController.navigationBar subviews].count <= 7 && self.sectionView.frame.size.height + self.profileContainer.frame.size.height){
+            [self.sectionView removeFromSuperview];
+            CGRect newFrame = self.sectionView.frame;
+            newFrame.origin.y = self.navigationController.navigationBar.frame.size.height;
+            [self.sectionView setFrame:newFrame];
+            [self.navigationController.navigationBar addSubview:self.sectionView];
+            
+//            self.navBarHeight = 40;
+            
+            self.prevContentOffY = scrollView.contentOffset.y;
+            [self determineScrollDirection:scrollView];
+        }
+        [super scrollViewDidScroll:scrollView];
+    }else if(scrollView.contentOffset.y <= self.profileContainer.frame.size.height + self.sectionView.frame.size.height && [self.navigationController.navigationBar subviews].count == 8){
+        [self.sectionView removeFromSuperview];
+        CGRect newFrame = self.sectionView.frame;
+        newFrame.origin.y = 0;
+        [self.sectionView setFrame:newFrame];
+        [topView addSubview:self.sectionView];
+        
+//        self.navBarHeight = 20;
+    }
+    
+   // self.sectionView
     
     if (scrollView == self.tableView){
         [super determineScrollDirection:scrollView];
