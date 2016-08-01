@@ -688,6 +688,7 @@
 
         if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
             FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+            galCell.galleryView.delegate.navigationController = self.navigationController;
             [galCell clearCell];
             
             galCell.shareBlock = ^void(NSArray *sharedContent) {
@@ -760,7 +761,7 @@
     NSLog(@"Content Offset %f", scrollView.contentOffset.y);
     NSLog(@"Frame Y ORIGIN %f",     self.sectionView.frame.origin.y);
     NSLog(@"SUBVIEW COUNT: %lu",(unsigned long)[self.navigationController.navigationBar subviews].count);
-    if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height) {
+    /*if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height) {
         if([self.navigationController.navigationBar subviews].count <= 7 && self.sectionView.frame.size.height + self.profileContainer.frame.size.height){
             [self.sectionView removeFromSuperview];
             CGRect newFrame = self.sectionView.frame;
@@ -782,7 +783,7 @@
         [topView addSubview:self.sectionView];
         
 //        self.navBarHeight = 20;
-    }
+    }*/
     
    // self.sectionView
     

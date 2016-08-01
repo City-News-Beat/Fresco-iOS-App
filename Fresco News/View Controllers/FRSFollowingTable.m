@@ -244,6 +244,7 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
         FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+        galCell.galleryView.delegate.navigationController = self.navigationController;
         [galCell clearCell];
         
         galCell.gallery = _galleries[indexPath.row];
