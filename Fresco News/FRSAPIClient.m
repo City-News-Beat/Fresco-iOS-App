@@ -783,7 +783,6 @@
     NSDictionary *params = @{@"q":query};
     
     [self get:searchEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
-        NSLog(@"SEARCH: %@", (responseObject) ? responseObject : error);
         completion(responseObject,error);
     }];
 }

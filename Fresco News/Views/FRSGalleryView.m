@@ -456,7 +456,6 @@
     } else {
         [player pause];
     }
-    
 }
 
 -(void)handlePhotoTap:(NSInteger)index {
