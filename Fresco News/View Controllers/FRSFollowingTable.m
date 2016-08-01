@@ -204,6 +204,12 @@
 
 }
 
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (self.scrollDelegate) {
+        [self.scrollDelegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    }
+}
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }

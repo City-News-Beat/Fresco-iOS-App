@@ -726,7 +726,6 @@
 
 #pragma mark - UIScrollViewDelegate
 
-
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     //self.sudoNavBar.frame = CGRectMake(0, (scrollView.contentOffset.x/8.5)-88, self.view.frame.size.width, 44);
@@ -751,7 +750,6 @@
     //NSLog(@"SCROLLING Y: %f",scrollingDifference);
 
     if (scrollView == self.pageScroller) {
-        
         self.loadingView.alpha = 1-(scrollView.contentOffset.x/(scrollView.contentSize.width - scrollView.frame.size.width));
         
         [self pausePlayers];
