@@ -145,23 +145,6 @@
     
 }
 
--(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)indexPath {
-    
-    FRSGallery *gallery = _galleries[indexPath.row];
-    
-    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
-    vc.shouldHaveBackButton = YES;
-//    [super showNavBarForScrollView:self.inputViewController animated:NO];
-
-    self.inputViewController.navigationController.title = @"";
-    
-    [self.inputViewController.navigationController pushViewController:vc animated:YES];
-    self.inputViewController.navigationController.navigationController.interactivePopGestureRecognizer.enabled = YES;
-    self.inputViewController.navigationController.navigationController.interactivePopGestureRecognizer.delegate = nil;
-
-//    [self.inputViewController hideTabBarAnimated:YES];
-}
-
 -(void)readMore:(NSIndexPath *)indexPath {
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[_galleries objectAtIndex:indexPath.row]];
     vc.shouldHaveBackButton = YES;
@@ -267,7 +250,7 @@
         };
         
         galCell.readMoreBlock = ^(NSArray *bullshit){
-            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+            [weakSelf readMore:indexPath];
         };
     }
     else {

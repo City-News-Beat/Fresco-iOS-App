@@ -40,12 +40,14 @@
 }
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
-    /*
+    
     FRSGallery *gallery = self.feed[notification.row];
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
-    [super showNavBarForScrollView:self.tableView animated:NO];
+    /*
+    
+    [self showNavBarForScrollView:self.tableView animated:NO];
     
     self.navigationItem.title = @"";
     
