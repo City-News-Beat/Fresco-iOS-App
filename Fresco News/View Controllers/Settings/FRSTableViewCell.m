@@ -237,6 +237,8 @@
             if (result && !error) {
                 NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
                 
+            
+                
                 [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
                     [self.facebookSwitch setOn:YES animated:YES];

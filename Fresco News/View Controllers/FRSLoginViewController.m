@@ -319,6 +319,16 @@
         
         
         if (error) {
+            
+            
+            if (error.code == -1009) {
+                NSLog(@"Unable to connect.");
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                [self.alert show];
+                return;
+            }
+            
+            
             NSLog(@"TWITTER SIGN IN: %@", error);
 
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
@@ -369,6 +379,15 @@
         }
         
         if (error) {
+            
+            if (error.code == -1009) {
+                NSLog(@"Unable to connect.");
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                [self.alert show];
+                return;
+            }
+            
+            
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
             [alert show];
         }
