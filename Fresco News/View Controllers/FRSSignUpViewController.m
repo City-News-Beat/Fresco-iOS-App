@@ -101,6 +101,7 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+    backItem.imageInsets = UIEdgeInsetsMake(2, -4.5, 0, 0);
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     [self.navigationItem setLeftBarButtonItem:backItem animated:animated];
     
@@ -999,7 +1000,17 @@
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             
             if (error.code == -1009) {
-                FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:@"ERROR ERROR" backButton:YES];
+                NSString *title;
+                
+                if (IS_IPHONE_5) {
+                    title = @"UNABLE TO CONNECT";
+                } else if (IS_IPHONE_6) {
+                    title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+                } else if (IS_IPHONE_6_PLUS) {
+                    title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+                }
+                
+                FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
                 [alert show];
                 return;
             }
@@ -1041,7 +1052,7 @@
         
         if (error.code == -1009) {
             
-            NSString *title;
+            NSString *title = @"";
             
             if (IS_IPHONE_5) {
                 title = @"UNABLE TO CONNECT";

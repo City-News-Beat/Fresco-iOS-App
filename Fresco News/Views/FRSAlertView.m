@@ -699,7 +699,7 @@
         if (backButton) {
             UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
             [backButton setImage:[UIImage imageNamed:@"back-arrow-light"] forState:UIControlStateNormal];
-            backButton.frame = CGRectMake(8, 30, 24, 24);
+            backButton.frame = CGRectMake(12, 30, 24, 24);
             backButton.tintColor = [UIColor whiteColor];
             [self addSubview:backButton];
         }
