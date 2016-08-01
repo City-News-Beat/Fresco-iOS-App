@@ -17,13 +17,12 @@
 @interface FRSDebitCardViewController()
 
 @property (strong, nonatomic) UITableView *tableView;
+
 @property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardGestureRecognizer;
 
 @property (strong, nonatomic) NSString *CVV;
 
 @property (strong, nonatomic) UIButton *rightAlignedButton;
-
-
 
 @end
 
@@ -226,6 +225,7 @@
     [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
         [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId completion:^(id responseObject, NSError *error) {
             //
+            NSLog(@"RESPNS OBJECT: %@ ERROR: %@", responseObject, error);
         }];
     }];
 }

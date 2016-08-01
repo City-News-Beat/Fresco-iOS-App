@@ -213,7 +213,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
         NSLog(@"%@", galleries);
 
         FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-        NSArray *galleriesArray = ((NSDictionary *)galleries)[@"galleries"];
+        NSArray *galleriesArray = galleries;
         
         for (NSDictionary *gallery in galleriesArray) {
             FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];

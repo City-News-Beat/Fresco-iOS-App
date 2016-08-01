@@ -50,11 +50,14 @@ static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 
+// search endpoint
+static NSString * const searchEndpoint = @"search";
+
 // content endpoints
 static NSString * const storiesEndpoint = @"story/recent";
 static NSString * const highlightsEndpoint = @"gallery/highlights";
 static NSString * const assignmentsEndpoint = @"assignment/find";
-static NSString * const storyGalleriesEndpoint = @"story/";
+static NSString * const storyGalleriesEndpoint = @"story/%@/galleries";
 
 // location endpoints
 static NSString * const locationEndpoint = @"user/location"; // send location

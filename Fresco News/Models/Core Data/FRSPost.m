@@ -98,7 +98,10 @@
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context save:(BOOL)save {
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
-    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
+    
+    if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
+        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_at"]];
+    }
     
     if (dict[@"image"] && ![dict[@"image"] isEqual:[NSNull null]]) {
         self.imageUrl = dict[@"image"];
