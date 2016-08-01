@@ -15,17 +15,19 @@
 
 @interface FRSUsernameViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FRSAlertViewDelegate>
 
-@property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) FRSTableViewCell *cell;
-@property (strong, nonatomic) NSString *username;
-@property (strong, nonatomic) UIImageView *usernameCheckIV;
-@property (strong, nonatomic) NSTimer *usernameTimer;
-@property (nonatomic) BOOL usernameTaken;
-@property (strong, nonatomic) NSString *password;
-
 @property (strong, nonatomic) FRSAlertView *alert;
+@property (strong, nonatomic) UIImageView *usernameCheckIV;
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) NSString *username;
+@property (strong, nonatomic) NSString *password;
+@property (strong, nonatomic) NSTimer *usernameTimer;
+
+@property (nonatomic) BOOL usernameTaken;
+
 
 @end
+
 
 @implementation FRSUsernameViewController
 
@@ -36,11 +38,13 @@
     [self configureBackButtonAnimated:NO];
 }
 
+
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     [self stopUsernameTimer];
 }
+
 
 -(void)configureTableView{
     self.title = @"USERNAME";
@@ -58,20 +62,22 @@
     
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+
+#pragma mark - UITableView
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 3;
 }
 
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 44;
 }
 
-- (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSString *cellIdentifier;
     self.cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -93,7 +99,7 @@
     return self.cell;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     cell = self.cell;
     
@@ -138,6 +144,8 @@
 
 
 
+#pragma mark - UITextField Delegate
+
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
     
     if ([self isValidPassword:self.password] && self.usernameTaken) {
@@ -178,6 +186,10 @@
     return YES;
 }
 
+
+
+#pragma mark - Actions
+
 -(void)saveUsername {
     
     [self.view endEditing:YES];
@@ -190,11 +202,12 @@
         [delegate reloadUser];
         
         
-        
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-            [alert show];
+            if (!self.alert) {
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                [self.alert show];
+            }
             return;
         }
         
@@ -231,28 +244,6 @@
     [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
 }
 
--(void)didPressButtonAtIndex:(NSInteger)index {
-    
-}
-
--(BOOL)isValidUsername:(NSString *)username {
-    
-    if ([self stringContainsEmoji:username]) {
-        return NO;
-    }
-    
-    if ([username isEqualToString:@"@"]) {
-        return NO;
-    }
-    
-    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
-    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
-    if (([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound) /*&& ([username length] >= 4)*/ && (!([username length] > 20))) {
-        return YES;
-    } else {
-        return NO;
-    }
-}
 
 -(void)checkUsername {    
     
@@ -300,13 +291,16 @@
     }
 }
 
-#pragma mark - Username timer
+
+
+#pragma mark - Username Timer
 
 -(void)startUsernameTimer {
     if (!self.usernameTimer) {
         self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(usernameTimerFired) userInfo:nil repeats:YES];
     }
 }
+
 
 -(void)stopUsernameTimer {
     if ([self.usernameTimer isValid]) {
@@ -315,6 +309,7 @@
     
     self.usernameTimer = nil;
 }
+
 
 -(void)usernameTimerFired {
     
@@ -349,8 +344,9 @@
                         self.cell.rightAlignedButton.userInteractionEnabled = NO;
                     } else if (error.code == -1009){
                         if (!self.alert) {
-                            self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                            self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                             [self.alert show];
+                            [self.cell.textField resignFirstResponder];
                         }
                     } else {
                         [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
@@ -362,6 +358,10 @@
     }
 }
 
+
+
+#pragma mark - Validators
+
 -(void)checkPassword {
     if ([self isValidPassword:self.password]) {
         
@@ -369,6 +369,7 @@
         self.cell.rightAlignedButton.userInteractionEnabled = YES;
     }
 }
+
 
 -(BOOL)stringContainsEmoji:(NSString *)string {
     __block BOOL returnValue = NO;
@@ -420,5 +421,34 @@
     return YES;
 }
 
+
+-(BOOL)isValidUsername:(NSString *)username {
+    
+    if ([self stringContainsEmoji:username]) {
+        return NO;
+    }
+    
+    if ([username isEqualToString:@"@"]) {
+        return NO;
+    }
+    
+    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
+    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
+    if (([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound) /*&& ([username length] >= 4)*/ && (!([username length] > 20))) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+
+
+#pragma mark - FRSAlertView Delegate
+
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    if (index == 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
+}
 
 @end

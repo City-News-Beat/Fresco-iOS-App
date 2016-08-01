@@ -30,6 +30,7 @@
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) UILabel *invalidUserLabel;
 @property (nonatomic) BOOL didAuthenticateSocial;
+@property (strong, nonatomic) FRSAlertView *alert;
 
 @end
 
@@ -211,8 +212,8 @@
         
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-            [alert show];
+            self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [self.alert show];
             return;
         }
         
@@ -227,33 +228,33 @@
         
         if (responseCode >= 400 && responseCode < 500) {
             // 400 level, client
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            if (!self.alert) {
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                [self.alert show];
+            }
+
             return;
         }
         else if (responseCode >= 500 && responseCode < 600) {
             // 500 level, server
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            if (!self.alert) {
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                [self.alert show];
+            }
             return;
         }
         else if (responseCode >= 300 && responseCode < 400) {
             // 300  level, unauthorized
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            if (!self.alert) {
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                [self.alert show];
+            }
             return;
         }
-        
-        //if (error.code == -1011) {
-        //    NSLog(@"Invalid username or password.");
-        //    [self presentInvalidInfo];
-        //}
     }];
 }
 
 -(void)presentInvalidInfo {
-    
-    //should turn fields red instead of this
     
     [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
@@ -269,28 +270,6 @@
         } completion:nil];
     }];
     
-
-//    self.loginButton.userInteractionEnabled = NO;
-//    self.invalidUserLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.passwordField.frame.origin.x, self.passwordField.frame.origin.y + self.passwordField.frame.size.height + 16, 200, 18)];
-//    self.invalidUserLabel.textAlignment = NSTextAlignmentLeft;
-//    self.invalidUserLabel.text = @"Invalid username or password.";
-//    self.invalidUserLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
-//    self.invalidUserLabel.textColor = [UIColor frescoRedHeartColor];
-//    self.invalidUserLabel.alpha = 0;
-//    [self.view addSubview:self.invalidUserLabel];
-//    
-//    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//        self.invalidUserLabel.alpha = 1;
-//        self.invalidUserLabel.transform = CGAffineTransformMakeTranslation(0, 8);
-//    } completion:^(BOOL finished) {
-//        [UIView animateWithDuration:0.3 delay:0.7 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-//            self.invalidUserLabel.alpha = 0;
-//            self.invalidUserLabel.transform = CGAffineTransformMakeTranslation(0, 16);
-//        } completion:^(BOOL finished) {
-//            [self.invalidUserLabel removeFromSuperview];
-//            self.loginButton.userInteractionEnabled = YES;
-//        }];
-//    }];
 }
 
 -(void)dismiss {
@@ -354,15 +333,6 @@
 
 -(void)popToOrigin {
     
-    //FRSUploadViewController *uploadVC = [[FRSUploadViewController alloc] init];
-    //[self pushViewControllerWithCompletion:uploadVC animated:NO completion:nil];
-    
-    //    FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
-    //    [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:nil];
-    
-    //    [self.navigationController popToRootViewControllerAnimated:YES];
-    
-    
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
     
@@ -379,6 +349,7 @@
 }
 
 -(IBAction)facebook:(id)sender {
+    
     self.facebookButton.hidden = true;
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     spinner.tintColor = [UIColor frescoOrangeColor];
@@ -457,42 +428,7 @@
     return TRUE;
 }
 
--(void)animateTextFieldError:(UITextField *)textField {
-    
-    CGFloat duration = 0.1;
-    
-    /* SHAKE */
-    
-    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        textField.transform = CGAffineTransformMakeTranslation(-7.5, 0);
-        
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            
-            textField.transform = CGAffineTransformMakeTranslation(5, 0);
-            
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                
-                textField.transform = CGAffineTransformMakeTranslation(-2.5, 0);
-                
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                    
-                    textField.transform = CGAffineTransformMakeTranslation(2.5, 0);
-                    
-                } completion:^(BOOL finished) {
-                    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                        
-                        textField.transform = CGAffineTransformMakeTranslation(0, 0);
-                        
-                    } completion:nil];
-                }];
-            }];
-        }];
-    }];
-}
+
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (self.userField.editing) {
@@ -672,7 +608,7 @@
 
 
 
-#pragma mark - Textfield Validation
+#pragma mark - Validators
 
 -(BOOL)validEmail:(NSString *)emailString {
     
@@ -700,8 +636,44 @@
 
 
 
-
 #pragma mark - Animation
+
+-(void)animateTextFieldError:(UITextField *)textField {
+    
+    CGFloat duration = 0.1;
+    
+    /* SHAKE */
+    
+    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        textField.transform = CGAffineTransformMakeTranslation(-7.5, 0);
+        
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            
+            textField.transform = CGAffineTransformMakeTranslation(5, 0);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                
+                textField.transform = CGAffineTransformMakeTranslation(-2.5, 0);
+                
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                    
+                    textField.transform = CGAffineTransformMakeTranslation(2.5, 0);
+                    
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:duration delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                        
+                        textField.transform = CGAffineTransformMakeTranslation(0, 0);
+                        
+                    } completion:nil];
+                }];
+            }];
+        }];
+    }];
+}
 
 -(void)prepareForAnimation {
     
@@ -932,15 +904,17 @@
     [UIView animateWithDuration:0.5/2 delay:0.6/2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.socialLabel.alpha = 0;
     } completion:nil];
-    
 }
 
 
 
+#pragma mark - FRSAlertView Delegate
 
-
-
-
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    if (index == 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
+}
 
 
 @end

@@ -143,6 +143,11 @@
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
             [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
+            
+            NSLog(@"DIGESTION: %@", digestion);
+            NSLog(@"RESPONSE: %@", responseObject);
+            NSLog(@"ERROR: %@", error);
+            
         }
         completion(responseObject, error);
     }];
@@ -332,6 +337,10 @@
     
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+       
+        NSLog(@"RESPONSE: %@", responseObject);
+        NSLog(@"ERROR: %@", error);
+
     }];
 }
 

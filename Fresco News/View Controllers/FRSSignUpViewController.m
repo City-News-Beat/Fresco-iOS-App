@@ -22,6 +22,7 @@
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FRSAppDelegate.h"
+#import "FRSNavigationController.h"
 
 @import MapKit;
 
@@ -989,6 +990,7 @@
 
     
     if (_isAlreadyRegistered) {
+        //does this ever get called?
         
         if (![_pastRegistration[@"email"] isEqualToString:self.emailTF.text]) {
             
@@ -996,16 +998,12 @@
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             
-            
             if (error.code == -1009) {
-                
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:@"ERROR ERROR" backButton:YES];
                 [alert show];
                 return;
             }
-            
-            
-            
+
             NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
             NSInteger responseCode = response.statusCode;
             NSLog(@"ERROR: %ld", (long)responseCode);
@@ -1038,6 +1036,26 @@
         
         NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
         NSLog(@"%@", errorMessage);
+        
+        [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+        
+        if (error.code == -1009) {
+            
+            NSString *title;
+            
+            if (IS_IPHONE_5) {
+                title = @"UNABLE TO CONNECT";
+            } else if (IS_IPHONE_6) {
+                title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+            } else if (IS_IPHONE_6_PLUS) {
+                title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+            }
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+            [alert show];
+            return;
+        }
+        
         
         if (error) {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];

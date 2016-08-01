@@ -142,6 +142,7 @@
     /* keyWindow places the view above all. Add overlay view first, and then alertView*/
     [[UIApplication sharedApplication].keyWindow addSubview:self.overlayView];
     [[UIApplication sharedApplication].keyWindow addSubview:self];
+    [self.inputViewController.view endEditing:YES];
     
 }
 
@@ -677,6 +678,37 @@
 //    if (self.delegate) {
 //        [self.delegate didPressButtonAtIndex:1];
 //    }
+}
+
+-(instancetype)initBannerWithTitle:(NSString *)title backButton:(BOOL)backButton {
+    
+    self = [super init];
+    
+    if (self) {
+        self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 64);
+        self.backgroundColor = [UIColor frescoRedHeartColor];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 35, [UIScreen mainScreen].bounds.size.width -80, 19)];
+        label.font = [UIFont notaBoldWithSize:17];
+        label.textColor = [UIColor whiteColor];
+        label.text = title;
+        label.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:label];
+        
+        
+        if (backButton) {
+            UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+            [backButton setImage:[UIImage imageNamed:@"back-arrow-light"] forState:UIControlStateNormal];
+            backButton.frame = CGRectMake(8, 30, 24, 24);
+            backButton.tintColor = [UIColor whiteColor];
+            [self addSubview:backButton];
+        }
+
+        [UIView animateWithDuration:0.3 delay:2.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.alpha = 0;
+        } completion:nil];
+    }
+    return self;
 }
 
 
