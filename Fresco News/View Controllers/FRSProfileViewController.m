@@ -112,6 +112,10 @@
     
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [self showTabBarAnimated:YES];
+}
+
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self addStatusBarNotification];
