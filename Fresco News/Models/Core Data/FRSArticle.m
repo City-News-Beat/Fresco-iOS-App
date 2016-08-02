@@ -26,9 +26,16 @@
 -(void)configureWithDictionary:(NSDictionary *)dictionary{
     //CHECK FOR RELEASE data validation especially favicon
     
-    self.title = dictionary[@"title"];
     self.imageStringURL = [dictionary[@"favicon"] isEqual:[NSNull null]] ? @"" : dictionary[@"favicon"];
     self.articleStringURL = dictionary[@"link"];
+    
+    if (dictionary[@"title"] && ![dictionary[@"title"] isEqual:[NSNull null]]) {
+        self.title = dictionary[@"title"];
+    }
+    else {
+        self.title = self.articleStringURL;
+    }
+    
     self.source = dictionary[@"source"];
     self.uid = dictionary[@"_id"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"time_created"] milliseconds:YES];
