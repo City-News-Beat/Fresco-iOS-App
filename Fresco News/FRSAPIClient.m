@@ -178,6 +178,10 @@
     
 }
 
+-(void)updateSettingsWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:settingsUpdateEndpoint withParameters:digestion completion:completion];
+}
+
 -(FRSUser *)authenticatedUser {
     
     // predicate searching for users in store w/ loggedIn as TRUE/1
