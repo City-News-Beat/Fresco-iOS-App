@@ -170,7 +170,6 @@
 }
 
 -(void)expandNavBar:(NSArray *)barButtonItems{
-    NSLog(@"Expanded Nav bar");
     [self.navigationController.navigationBar setFrame:CGRectMake(self.navigationController.navigationBar.frame.origin.x,self.navBarHeight, self.navigationController.navigationBar.frame.size.width,self.navigationController.navigationBar.frame.size.height)];
     for(UIBarButtonItem *item in barButtonItems){
         [item setTintColor:[item.tintColor colorWithAlphaComponent:1]];
@@ -180,7 +179,6 @@
 }
 
 -(void)collapseNavBar:(NSArray *)barButtonItems{
-    NSLog(@"Collapsed Nav bar");
     [self.navigationController.navigationBar setFrame:CGRectMake(self.navigationController.navigationBar.frame.origin.x,-self.navBarHeight-3, self.navigationController.navigationBar.frame.size.width,self.navigationController.navigationBar.frame.size.height)];
     for(UIBarButtonItem *item in barButtonItems){
         [item setTintColor:[item.tintColor colorWithAlphaComponent:0.0]];
