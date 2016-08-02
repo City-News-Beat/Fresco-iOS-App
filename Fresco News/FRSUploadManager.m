@@ -71,7 +71,7 @@
     [_tasks addObject:task];
     
     
-    if (toComplete == [_tasks count] && !isStarted) {
+    if (!isStarted) {
         [self start];
     }
 }
@@ -84,6 +84,8 @@
     if (isStarted) {
         return;
     }
+    
+    NSLog(@"STARTING UPLOAD");
     
     isStarted = TRUE;
     
@@ -213,9 +215,9 @@
 -(void)next:(FRSUploadTask *)task {
     
     if (_tasks.count > 0) {
-        FRSUploadTask *task = [_tasks firstObject];
-        [task start];
-        [_tasks removeObject:task];
+        FRSUploadTask *theTask = [_tasks firstObject];
+        [theTask start];
+        [_tasks removeObject:theTask];
         NSLog(@"STARTING NEXT %@", task);
     }
     else {
