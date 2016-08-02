@@ -758,9 +758,15 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
     //    [self dismissSocialOverlay];
+    
     NSLog(@"Content Offset %f", scrollView.contentOffset.y);
     NSLog(@"Frame Y ORIGIN %f",     self.sectionView.frame.origin.y);
     NSLog(@"SUBVIEW COUNT: %lu",(unsigned long)[self.navigationController.navigationBar subviews].count);
+    NSMutableArray *barButtonItems = [NSMutableArray array];
+    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
+    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
+    [super expandNavBar:barButtonItems];
+    return;
     /*if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height) {
         if([self.navigationController.navigationBar subviews].count <= 7 && self.sectionView.frame.size.height + self.profileContainer.frame.size.height){
             [self.sectionView removeFromSuperview];
@@ -786,7 +792,7 @@
     }*/
     
    // self.sectionView
-    
+    /*
     if (scrollView == self.tableView){
         [super determineScrollDirection:scrollView];
         
@@ -801,7 +807,10 @@
             
             self.tableView.backgroundColor = [UIColor frescoOrangeColor];
         }
-    }
+    }*/
+}
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
 }
 
 #pragma mark - Navigation
