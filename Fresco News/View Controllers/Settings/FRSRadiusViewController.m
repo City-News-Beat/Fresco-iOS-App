@@ -129,7 +129,7 @@
     
     NSString *radius = [NSString stringWithFormat:@"%.0f", self.miles];
     
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"notification_radius" : radius} completion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"radius" : radius} completion:^(id responseObject, NSError *error) {
         
         if (error.code == -1009) {
             NSString *title = @"";

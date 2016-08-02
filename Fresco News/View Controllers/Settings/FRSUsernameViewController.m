@@ -18,12 +18,14 @@
 @property (strong, nonatomic) FRSTableViewCell *cell;
 @property (strong, nonatomic) FRSAlertView *alert;
 @property (strong, nonatomic) UIImageView *usernameCheckIV;
+@property (strong, nonatomic) UIImageView *errorImageView;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *password;
 @property (strong, nonatomic) NSTimer *usernameTimer;
 
 @property (nonatomic) BOOL usernameTaken;
+
 
 
 @end
@@ -187,6 +189,27 @@
 }
 
 
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (textField.isSecureTextEntry) {
+        if (self.errorImageView) {
+            [textField clearsOnBeginEditing];
+            self.errorImageView.alpha = 0;
+            self.errorImageView = nil;
+            [self.errorImageView removeFromSuperview];
+        }
+    }
+}
+
+-(void)addErrorToView {
+    
+    if (!self.errorImageView) {
+        self.errorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.errorImageView.frame = CGRectMake(self.view.frame.size.width - 34, 55, 24, 24);
+        self.errorImageView.alpha = 1; // 0 when animating
+        [self.view addSubview:self.errorImageView];
+    }
+}
+
 
 #pragma mark - Actions
 
@@ -218,18 +241,24 @@
         if (responseCode >= 400 && responseCode < 500) {
             // 400 level, client
             if (responseCode == 403) {
+                
+                [self addErrorToView];
+                
+            } else {
                 if (!self.alert) {
-                    self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Incorrect password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                    self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                     [self.alert show];
+                    [self.cell.textField resignFirstResponder];
                 }
+                return;
             }
-            return;
         }
         else if (responseCode >= 500 && responseCode < 600) {
             // 500 level, server
             if (!self.alert) {
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.alert show];
+                [self.cell.textField resignFirstResponder];
             }
 
             return;

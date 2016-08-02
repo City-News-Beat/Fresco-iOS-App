@@ -375,7 +375,7 @@
  */
 
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
-
+    
     NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
     [geoData setObject:@"Point" forKey:@"type"];
     [geoData setObject:location forKey:@"coordinates"];
