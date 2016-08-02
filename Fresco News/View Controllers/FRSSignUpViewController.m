@@ -1075,7 +1075,6 @@
         
         if (error.code == 0) {
             _isAlreadyRegistered = TRUE;
-            [self segueToSetup];
             [self saveRadius];
             //check dictionary
         }
@@ -1114,7 +1113,7 @@
         }
         
         if (responseObject) {
-            [self popViewController];
+            [self segueToSetup];
         }
     }];
 }
