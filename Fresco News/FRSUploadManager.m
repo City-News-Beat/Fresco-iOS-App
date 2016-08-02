@@ -197,9 +197,7 @@
 
 -(void)next:(FRSUploadTask *)task {
     
-    [_currentTasks removeObject:task];
-    
-    if (_currentTasks.count < maxConcurrent && _tasks.count > 0) {
+    if (_tasks.count > 0) {
         FRSUploadTask *task = [_tasks firstObject];
         [task start];
         [_tasks removeObject:task];
