@@ -14,6 +14,7 @@
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSAwkwardView.h"
 #import "FRSStoryCell.h"
+#import "FRSStoryDetailViewController.h"
 
 
 @implementation FRSFollowingTable
@@ -159,6 +160,20 @@
     [(FRSScrollingViewController *)self.scrollDelegate hideTabBarAnimated:YES];
 }
 
+-(void)readMoreStory:(NSIndexPath *)indexPath {
+    FRSStoryCell *storyCell = [self cellForRowAtIndexPath:indexPath];
+    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:storyCell.story];
+    detailView.navigationController = self.navigationController;
+    [self.navigationController pushViewController:detailView animated:YES];
+}
+
+-(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    detailView.story = story;
+    [detailView reloadData];
+    return detailView;
+}
+
 -(void)followStory {
     NSLog(@"Follow Story");
 }
@@ -245,6 +260,7 @@
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
         FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
         galCell.galleryView.delegate.navigationController = self.navigationController;
+        galCell.navigationController = self.navigationController;
         [galCell clearCell];
         
         galCell.gallery = _galleries[indexPath.row];
@@ -262,6 +278,7 @@
     }
     else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
+        storyCell.storyView.navigationController = self.navigationController;
         [storyCell clearCell];
         
         storyCell.story = _galleries[indexPath.row];
@@ -275,7 +292,7 @@
         
         storyCell.readMoreBlock = ^(NSArray *bullshit){
 //            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
-            [weakSelf readMore:indexPath];
+            [weakSelf readMoreStory:indexPath];
         };
     }
 }
