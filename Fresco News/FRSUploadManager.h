@@ -17,6 +17,7 @@ static int const maxConcurrent = 5;
 {
     __weak id weakSelf;
     unsigned long long totalBytesSent;
+    BOOL invalidated;
 }
 -(instancetype)initWithGallery:(NSDictionary *)gallery assets:(NSArray *)assets;
 @property (nonatomic, retain) NSMutableArray *tasks;

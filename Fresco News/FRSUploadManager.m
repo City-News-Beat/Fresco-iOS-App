@@ -23,6 +23,11 @@
     weakSelf = self;
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        
+        if (invalidated) {
+            return;
+        }
+        
         totalBytesSent = 0;
         _tasks = [[NSMutableArray alloc] init];
         _currentTasks = [[NSMutableArray alloc] init];
@@ -204,6 +209,7 @@
         NSLog(@"STARTING NEXT %@", task);
     }
     else {
+        invalidated = TRUE;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
         NSLog(@"GALLERY CREATION COMPLETE");
     }

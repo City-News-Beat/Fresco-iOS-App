@@ -62,7 +62,8 @@
         if ([update[@"type"] isEqualToString:@"progress"]) {
             NSNumber *uploadPercentage = update[@"percentage"];
             float percentage = [uploadPercentage floatValue];
-          
+            NSLog(@"PROGRESS: %f", percentage);
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 CGRect navFrame = self.frame;
                 navFrame.origin.y = -20;
@@ -79,6 +80,8 @@
             _lastAnimated = [NSDate date];
         }
         else if ([update[@"type"] isEqualToString:@"completion"]) {
+            NSLog(@"COMPLETION");
+
             CGRect navFrame = self.frame;
             navFrame.origin.y = -20;
             navFrame.size.height += 20;
@@ -95,6 +98,8 @@
             });
         }
         else if ([update[@"type"] isEqualToString:@"failure"]) {
+            NSLog(@"FAILURE");
+
             CGRect navFrame = self.frame;
             navFrame.origin.y -= 20;
             navFrame.size.height += 20;
