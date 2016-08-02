@@ -62,13 +62,17 @@
         if ([update[@"type"] isEqualToString:@"progress"]) {
             NSNumber *uploadPercentage = update[@"percentage"];
             float percentage = [uploadPercentage floatValue];
-            NSLog(@"PROGRESS: %f", percentage);
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 CGRect navFrame = self.frame;
                 navFrame.origin.y = -20;
                 navFrame.size.height += 20;
                 navFrame.size.width = self.frame.size.width * percentage;
+                
+                
+                if (navFrame.size.width < _progressView.frame.size.width) {
+                    return;
+                }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [UIView animateWithDuration:.05 animations:^{
