@@ -71,10 +71,6 @@
     hasRan = TRUE;
     NSLog(@"STARTING: %@", ([dataInputStream hasBytesAvailable]) ? @"HAS DATA":@"NO DATA");
     
-    if (![dataInputStream hasBytesAvailable]) {
-        dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
-    }
-    
     [dataInputStream open];
     [self readDataInputStream];
 }

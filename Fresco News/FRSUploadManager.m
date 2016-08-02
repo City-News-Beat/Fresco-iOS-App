@@ -92,7 +92,6 @@
     
     FRSUploadTask *task = [_tasks firstObject];
     [task start];
-    [_tasks removeObject:task];
 }
 
 -(void)uploadedData:(int64_t)bytes {
@@ -214,11 +213,11 @@
 }
 
 -(void)next:(FRSUploadTask *)task {
+    currentIndex++;
     
-    if (_tasks.count > 0) {
-        FRSUploadTask *theTask = [_tasks firstObject];
+    if (_tasks.count > currentIndex) {
+        FRSUploadTask *theTask = [_tasks objectAtIndex:currentIndex];
         [theTask start];
-        [_tasks removeObject:theTask];
         NSLog(@"STARTING NEXT %@", theTask);
     }
     else {
