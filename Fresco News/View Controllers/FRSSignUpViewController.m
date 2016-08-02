@@ -1164,8 +1164,11 @@
         [spinner removeFromSuperview];
         self.twitterButton.hidden = false;
         
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-        [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
+        if (session) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+            [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
+        }
+
         
         if (error) {
 
