@@ -65,6 +65,8 @@
             [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"urls"][0]] post:currentPost];
         }
     }
+    
+    [self start];
 }
 
 -(void)addTask:(FRSUploadTask *)task {
@@ -142,7 +144,7 @@
             }
         }];
         
-        [self addTask:multipartTask];
+        [_tasks addObject:multipartTask];
     }];
 }
 
@@ -191,7 +193,7 @@
             }
         }];
         
-        [self addTask:task];
+        [_tasks addObject:task];
     }];
 }
 
