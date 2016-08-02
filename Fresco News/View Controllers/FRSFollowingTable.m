@@ -145,23 +145,6 @@
     
 }
 
--(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)indexPath {
-    
-    FRSGallery *gallery = _galleries[indexPath.row];
-    
-    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
-    vc.shouldHaveBackButton = YES;
-//    [super showNavBarForScrollView:self.inputViewController animated:NO];
-
-    self.inputViewController.navigationController.title = @"";
-    
-    [self.inputViewController.navigationController pushViewController:vc animated:YES];
-    self.inputViewController.navigationController.navigationController.interactivePopGestureRecognizer.enabled = YES;
-    self.inputViewController.navigationController.navigationController.interactivePopGestureRecognizer.delegate = nil;
-
-//    [self.inputViewController hideTabBarAnimated:YES];
-}
-
 -(void)readMore:(NSIndexPath *)indexPath {
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[_galleries objectAtIndex:indexPath.row]];
     vc.shouldHaveBackButton = YES;
@@ -181,13 +164,13 @@
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *head = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 90)];
+    UIView *head = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 125)];
     head.backgroundColor = [UIColor clearColor];
     return head;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 128;
+    return 125;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -219,6 +202,12 @@
         }
     });
 
+}
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (self.scrollDelegate) {
+        [self.scrollDelegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    }
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -255,6 +244,7 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
         FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+        galCell.galleryView.delegate.navigationController = self.navigationController;
         [galCell clearCell];
         
         galCell.gallery = _galleries[indexPath.row];
@@ -267,7 +257,7 @@
         };
         
         galCell.readMoreBlock = ^(NSArray *bullshit){
-            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+            [weakSelf readMore:indexPath];
         };
     }
     else {

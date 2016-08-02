@@ -13,6 +13,7 @@
 #import "Fresco.h"
 #import "FRSAwkwardView.h"
 #import "UIColor+Fresco.h"
+#import "FRSGalleryExpandedViewController.h"
 
 @implementation FRSFollowingController
 @synthesize tableView = _tableView, feed = _feed;
@@ -37,11 +38,25 @@
 -(NSArray *)feed {
     return _feed;
 }
+
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
-    if (self.delegate) {
-        [self.delegate galleryClicked:self.feed[notification.row]];
-    }
+    
+    FRSGallery *gallery = self.feed[notification.row];
+    
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+    vc.shouldHaveBackButton = YES;
+    /*
+    
+    [self showNavBarForScrollView:self.tableView animated:NO];
+    
+    self.navigationItem.title = @"";
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    [self hideTabBarAnimated:YES];*/
 }
+
 -(void)commonInit {
     NSLog(@"COMMON INIT");
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
@@ -134,13 +149,13 @@
     return cell;
 }
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    __weak typeof(self) weakSelf = self;
+
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
         FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
         [galCell clearCell];
             
         galCell.gallery = self.feed[indexPath.row];
-        
-        __weak typeof(self) weakSelf = self;
         
         galCell.readMoreBlock = ^(NSArray *bullshit){
             [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
@@ -151,6 +166,10 @@
     else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
         [storyCell clearCell];
+        
+        storyCell.readMoreBlock = ^(NSArray *bullshit){
+            [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+        };
         
         storyCell.story = self.feed[indexPath.row];
         [storyCell configureCell];

@@ -21,7 +21,6 @@
 @property (nonatomic) BOOL backButtonHidden;
 @property (nonatomic) float prevDirectOffSetY;
 @property (nonatomic) float prevNavBarY;
-@property (nonatomic) float navBarHeight;
 
 @end
 
@@ -36,7 +35,7 @@
     }
     
     self.navBarHeight = 20;
-    NSLog(@"Nav Bar Height: %f", self.navBarHeight);
+    //NSLog(@"Nav Bar Height: %f", self.navBarHeight);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     
@@ -106,8 +105,8 @@
     
     NSInteger scrollDifference = currentContentOffY-self.prevDirectOffSetY;
     
-    NSLog(@"Scrolling");
-    NSLog(@"Difference: %ld", (long)difference);
+    //NSLog(@"Scrolling");
+    //NSLog(@"Difference: %ld", (long)difference);
     
     NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
@@ -124,8 +123,8 @@
         //If the users scrolls down (scrollview condenses)
         float scrollingDifference = self.navigationController.navigationBar.frame.origin.y+(self.prevDirectOffSetY-difference);
         
-        NSLog(@"%f",self.navigationController.navigationBar.frame.origin.y);
-        NSLog(@"Scrolling Difference %f",scrollingDifference);
+        //NSLog(@"%f",self.navigationController.navigationBar.frame.origin.y);
+        //NSLog(@"Scrolling Difference %f",scrollingDifference);
         
         if((scrollingDifference > -self.navBarHeight-3) && self.scrollDirection == UIScrollViewScrollDirectionDown){
             [self condenseNavBarBy:scrollingDifference BarButtonItems:barButtonItems];
@@ -157,12 +156,12 @@
     NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
     [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
-    
-    if (self.scrollDirection == UIScrollViewScrollDirectionDown && self.navigationController.navigationBar.frame.origin.y < self.navBarHeight) {
+    //NSLog(@"Y OFFSET: %f",scrollView.contentOffset.y);
+    if (self.scrollDirection == UIScrollViewScrollDirectionDown && scrollView.contentOffset.y > self.navBarHeight*2) {
         [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             [self collapseNavBar:barButtonItems];
         } completion:nil];
-    }else if(self.scrollDirection == UIScrollViewScrollDirectionUp && self.navigationController.navigationBar.frame.origin.y > -self.navBarHeight-3){
+    }else if(self.scrollDirection == UIScrollViewScrollDirectionUp){
         [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             [self expandNavBar:barButtonItems];
         } completion:nil];

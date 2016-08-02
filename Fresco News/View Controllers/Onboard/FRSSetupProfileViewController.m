@@ -319,7 +319,7 @@
 
 -(void)configureNameField{
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.topContainer.frame.origin.y + self.topContainer.frame.size.height, self.view.frame.size.width, 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorDark];
+    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
     
     self.nameTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 *2, 44)];
@@ -333,7 +333,9 @@
     self.nameTF.delegate = self;
     self.nameTF.font = [UIFont systemFontOfSize:15 weight:-1];
     self.nameTF.textColor = [UIColor frescoDarkTextColor];
-    self.nameTF.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.nameTF.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.nameTF.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.nameTF.autocapitalizationType = UITextAutocapitalizationTypeWords;
     
     [self.nameTF addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
     
@@ -346,7 +348,7 @@
 
 -(void)configureLocationField{
     UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y , self.view.frame.size.width, 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorDark];
+    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
     
     self.locationTF = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16 *2, 44)];
@@ -360,7 +362,7 @@
     self.locationTF.delegate = self;
     self.locationTF.font = [UIFont systemFontOfSize:15 weight:-1];
     self.locationTF.textColor = [UIColor frescoDarkTextColor];
-    self.locationTF.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.locationTF.backgroundColor = [UIColor frescoBackgroundColorLight];
     [backgroundView addSubview:self.locationTF];
     
     [backgroundView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
@@ -370,8 +372,8 @@
 
 -(void)configureBioField{
     //64 is the nav bar, 44 is the bottom bar
-    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.view.frame.size.width, self.view.frame.size.height - self.y - 64 - 44)];
-    backgroundView.backgroundColor = [UIColor frescoBackgroundColorDark];
+    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.view.frame.size.width, self.view.frame.size.height - self.y - 64)];
+    backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
 
     self.bioTV = [[UITextView alloc] initWithFrame:CGRectMake(16, 11, backgroundView.frame.size.width - 32, backgroundView.frame.size.height - 22)];
@@ -382,7 +384,7 @@
     self.bioTV.textContainerInset = UIEdgeInsetsZero;
     self.bioTV.font = [UIFont systemFontOfSize:15 weight:-1];
     self.bioTV.textColor = [UIColor frescoDarkTextColor];
-    self.bioTV.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.bioTV.backgroundColor = [UIColor frescoBackgroundColorLight];
     if(_isEditingProfile && _bioStr != (id)[NSNull null] && _bioStr.length != 0){
         self.bioTV.text = _bioStr;
     }else{

@@ -24,6 +24,7 @@
 
 #import "FRSAPIClient.h"
 #import "FRSAwkwardView.h"
+#import "FRSGalleryExpandedViewController.h"
 #import <Haneke/Haneke.h>
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
@@ -109,6 +110,10 @@
     
     [super removeNavigationBarLine];
     
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [self showTabBarAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -544,6 +549,27 @@
     }
 }
 
+-(void)showShareSheetWithContent:(NSArray *)content {
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
+    [self.navigationController presentViewController:activityController animated:YES completion:nil];
+}
+
+-(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
+    
+    FRSGallery *gallery = self.galleries[notification.row];
+    
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+    vc.shouldHaveBackButton = YES;
+    [super showNavBarForScrollView:self.tableView animated:NO];
+    
+    self.navigationItem.title = @"";
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    [self hideTabBarAnimated:YES];
+}
+
 #pragma mark - UITableView Delegate & DataSource
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -658,9 +684,20 @@
         [cell addSubview:self.profileContainer];
     }
     else {
+        __weak typeof(self) weakSelf = self;
+
         if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
             FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+            galCell.galleryView.delegate.navigationController = self.navigationController;
             [galCell clearCell];
+            
+            galCell.shareBlock = ^void(NSArray *sharedContent) {
+                [weakSelf showShareSheetWithContent:sharedContent];
+            };
+            
+            galCell.readMoreBlock = ^(NSArray *bullshit){
+                [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+            };
             
             galCell.gallery = self.currentFeed[indexPath.row];
             [galCell configureCell];
@@ -669,6 +706,14 @@
         }else {
             FRSStoryCell *storyCell = (FRSStoryCell *)cell;
             [storyCell clearCell];
+            
+            storyCell.shareBlock = ^void(NSArray *sharedContent) {
+                [weakSelf showShareSheetWithContent:sharedContent];
+            };
+            
+            storyCell.readMoreBlock = ^(NSArray *bullshit){
+                [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+            };
             
             storyCell.story = self.currentFeed[indexPath.row];
             [storyCell configureCell];
@@ -679,6 +724,9 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
     UIView *view;
+    
+    view.backgroundColor = [UIColor clearColor];
+    topView.backgroundColor = [UIColor clearColor];
     
     if (section == 0){
         view = [UIView new];
@@ -692,8 +740,8 @@
         [self configureSectionView];
         
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-        [view addSubview:self.sectionView];
         [view addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
+        [view addSubview:self.sectionView];
         
         topView = view;
         return topView;
@@ -710,6 +758,34 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
     //    [self dismissSocialOverlay];
+    NSLog(@"Content Offset %f", scrollView.contentOffset.y);
+    NSLog(@"Frame Y ORIGIN %f",     self.sectionView.frame.origin.y);
+    NSLog(@"SUBVIEW COUNT: %lu",(unsigned long)[self.navigationController.navigationBar subviews].count);
+    /*if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height) {
+        if([self.navigationController.navigationBar subviews].count <= 7 && self.sectionView.frame.size.height + self.profileContainer.frame.size.height){
+            [self.sectionView removeFromSuperview];
+            CGRect newFrame = self.sectionView.frame;
+            newFrame.origin.y = self.navigationController.navigationBar.frame.size.height;
+            [self.sectionView setFrame:newFrame];
+            [self.navigationController.navigationBar addSubview:self.sectionView];
+            
+//            self.navBarHeight = 40;
+            
+            self.prevContentOffY = scrollView.contentOffset.y;
+            [self determineScrollDirection:scrollView];
+        }
+        [super scrollViewDidScroll:scrollView];
+    }else if(scrollView.contentOffset.y <= self.profileContainer.frame.size.height + self.sectionView.frame.size.height && [self.navigationController.navigationBar subviews].count == 8){
+        [self.sectionView removeFromSuperview];
+        CGRect newFrame = self.sectionView.frame;
+        newFrame.origin.y = 0;
+        [self.sectionView setFrame:newFrame];
+        [topView addSubview:self.sectionView];
+        
+//        self.navBarHeight = 20;
+    }*/
+    
+   // self.sectionView
     
     if (scrollView == self.tableView){
         [super determineScrollDirection:scrollView];
@@ -809,16 +885,15 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.username;
-        
-        if (user.profileImage && ![user.profileImage isEqual:[NSNull null]]) {
+        if(user.profileImage != [NSNull null]){
             self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
         }
         
         //self.locationLabel.text = user.
         self.bioTextView.text = user.bio;
         self.bioTextView.editable = false;
         //[self.bioTextView sizeToFit];
-        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
         self.nameLabel.text = user.firstName;
         //self.bioLabel.text = user.bio;
         //[self.bioLabel sizeToFit];
