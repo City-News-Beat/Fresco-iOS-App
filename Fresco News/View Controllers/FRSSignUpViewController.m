@@ -1206,6 +1206,9 @@
             [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
         }];
         
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+        
         return;
     }
     
@@ -1213,6 +1216,20 @@
     
     [FRSSocial registerWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         _facebookButton.enabled = TRUE;
+        
+        if (token) {
+            FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+            
+            [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:self.inputViewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+                
+                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                    if (!error) {
+                        [[NSUserDefaults standardUserDefaults] setValue:[result valueForKey:@"name"] forKey:@"facebook-name"];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                    }
+                }];
+            }];
+        }
         
         if (error) {
 
