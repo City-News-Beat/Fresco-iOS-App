@@ -126,9 +126,11 @@
 }
 
 -(void)saveRadius {
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
     
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"notification_radius" : @(self.miles)} completion:^(id responseObject, NSError *error) {
+    NSString *radius = [NSString stringWithFormat:@"%.0f", self.miles];
+    
+    
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"notification_radius" : radius} completion:^(id responseObject, NSError *error) {
         
         if (error.code == -1009) {
             NSString *title = @"";
@@ -154,6 +156,7 @@
         
         if (responseObject) {
             [self popViewController];
+            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
         }
     }];
 }
