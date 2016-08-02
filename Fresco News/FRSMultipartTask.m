@@ -74,13 +74,12 @@
     }
     
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         uint8_t buffer[1024];
         NSInteger length;
         BOOL ranOnce = FALSE;
         BOOL triggeredUpload = FALSE;
-
         while ([dataInputStream hasBytesAvailable])
         {
             length = [dataInputStream read:buffer maxLength:1024];
