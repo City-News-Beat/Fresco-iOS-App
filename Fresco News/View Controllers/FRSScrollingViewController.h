@@ -33,6 +33,7 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
 
 -(void)configureTableView;
 
+-(void)expandNavBar:(NSArray *)barButtonItems;
 -(void)expandNavBarBy:(float)value BarButtonItems: (NSArray *)barButtonItems;
 -(void)condenseNavBarBy:(float)value BarButtonItems: (NSArray *)barButtonItems;
 
