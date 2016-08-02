@@ -1072,15 +1072,50 @@
             [alert show];
         }
         
+        
         if (error.code == 0) {
             _isAlreadyRegistered = TRUE;
             [self segueToSetup];
+            [self saveRadius];
             //check dictionary
         }
         _pastRegistration = registrationDigest;
         
         [self stopSpinner:self.loadingView onButton:self.createAccountButton];
         
+    }];
+}
+
+
+-(void)saveRadius {
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+    
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"notification_radius" : @(self.miles)} completion:^(id responseObject, NSError *error) {
+        
+        if (error.code == -1009) {
+            NSString *title = @"";
+            
+            if (IS_IPHONE_5) {
+                title = @"UNABLE TO CONNECT";
+            } else if (IS_IPHONE_6) {
+                title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+            } else if (IS_IPHONE_6_PLUS) {
+                title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+            }
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+            [alert show];
+            return;
+        }
+        
+        if (error) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [alert show];
+        }
+        
+        if (responseObject) {
+            [self popViewController];
+        }
     }];
 }
 

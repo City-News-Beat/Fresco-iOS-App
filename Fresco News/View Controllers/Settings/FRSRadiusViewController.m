@@ -18,6 +18,7 @@
 #import "FRSMapCircle.h"
 #import "FRSUser.h"
 #import "FRSAPIClient.h"
+#import "FRSAlertView.h"
 
 @import MapKit;
 
@@ -27,6 +28,7 @@
 @property (strong, nonatomic) UISlider          *radiusSlider;
 @property (strong, nonatomic) MKMapView         *mapView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) FRSAlertView      *alert;
 
 @property CGFloat  miles;
 
@@ -128,7 +130,27 @@
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"notification_radius" : @(self.miles)} completion:^(id responseObject, NSError *error) {
         
-        //handle error
+        if (error.code == -1009) {
+            NSString *title = @"";
+            
+            if (IS_IPHONE_5) {
+                title = @"UNABLE TO CONNECT";
+            } else if (IS_IPHONE_6) {
+                title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+            } else if (IS_IPHONE_6_PLUS) {
+                title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+            }
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+            [alert show];
+            return;
+        }
+        
+        if (error) {
+            
+            self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [self.alert show];
+        }
         
         if (responseObject) {
             [self popViewController];

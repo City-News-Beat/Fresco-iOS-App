@@ -40,6 +40,7 @@
 
 -(void)configureBackButtonAnimated:(BOOL)animated{
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(popViewController)];
+    backItem.imageInsets = UIEdgeInsetsMake(2, -4.5, 0, 0);
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     [self.navigationItem setLeftBarButtonItem:backItem animated:animated];
 }
