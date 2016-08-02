@@ -63,7 +63,13 @@
 }
 
 -(void)start {
-    NSLog(@"STARTING: %@", dataInputStream);
+    
+    if (hasRan) {
+        NSLog(@"ERROR: ALREADY EXHAUSTED DATA");
+    }
+    
+    hasRan = TRUE;
+    NSLog(@"STARTING: %@", ([dataInputStream hasBytesAvailable]) ? @"HAS DATA":@"NO DATA");
     [dataInputStream open];
     [self readDataInputStream];
 }

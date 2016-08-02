@@ -28,7 +28,8 @@
         _tasks = [[NSMutableArray alloc] init];
         _currentTasks = [[NSMutableArray alloc] init];
         _etags = [[NSMutableArray alloc] init];
-
+        isRetry = TRUE;
+        
         if (_gallery) {
             [self startUploadProcess];
         }
@@ -64,6 +65,12 @@
         else {
             [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"urls"][0]] post:currentPost];
         }
+    }
+    
+    if (isRetry) {
+        FRSUploadTask *task = [_tasks firstObject];
+        [task start];
+        [_tasks removeObject:task];
     }
 }
 
@@ -218,7 +225,7 @@
         FRSUploadTask *theTask = [_tasks firstObject];
         [theTask start];
         [_tasks removeObject:theTask];
-        NSLog(@"STARTING NEXT %@", task);
+        NSLog(@"STARTING NEXT %@", theTask);
     }
     else {
         invalidated = TRUE;
