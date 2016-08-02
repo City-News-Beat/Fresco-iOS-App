@@ -186,6 +186,7 @@
     if (_currentTasks.count < maxConcurrent && _tasks.count > 0) {
         FRSUploadTask *task = [_tasks firstObject];
         [task start];
+        NSLog(@"STARTING NEXT");
     }
     else {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
