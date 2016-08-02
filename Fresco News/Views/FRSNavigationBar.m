@@ -69,11 +69,6 @@
                 navFrame.size.height += 20;
                 navFrame.size.width = self.frame.size.width * percentage;
                 
-                
-                if (navFrame.size.width < _progressView.frame.size.width) {
-                    return;
-                }
-                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [UIView animateWithDuration:.05 animations:^{
                         _progressView.frame = navFrame;
