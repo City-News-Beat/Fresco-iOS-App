@@ -19,7 +19,7 @@
     self.destinationURLS = destinations;
     self.progressBlock = progress;
     self.completionBlock = completion;
-    dataInputStream = [[NSInputStream alloc] initWithFileAtPath:self.assetURL.absoluteString];
+    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
     tags = [[NSMutableDictionary alloc] init];
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
