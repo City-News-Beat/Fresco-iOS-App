@@ -1047,8 +1047,6 @@
         NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
         NSLog(@"%@", errorMessage);
         
-        [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-        
         if (error.code == -1009) {
             
             NSString *title = @"";
@@ -1075,8 +1073,7 @@
         
         if (error.code == 0) {
             _isAlreadyRegistered = TRUE;
-            [self saveRadius];
-            //check dictionary
+            [self saveRadius]; //Segue is called on saveRadius success
         }
         _pastRegistration = registrationDigest;
         
@@ -1090,6 +1087,8 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"notification_radius" : @(self.miles)} completion:^(id responseObject, NSError *error) {
+        
+        [self stopSpinner:self.loadingView onButton:self.createAccountButton];
         
         if (error.code == -1009) {
             NSString *title = @"";
