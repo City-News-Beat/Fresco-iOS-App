@@ -19,6 +19,7 @@
     self.destinationURLS = destinations;
     self.progressBlock = progress;
     self.completionBlock = completion;
+    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
     tags = [[NSMutableDictionary alloc] init];
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
@@ -62,16 +63,16 @@
 }
 
 -(void)start {
-    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
-
+    
     if (hasRan) {
         NSLog(@"ERROR: ALREADY EXHAUSTED DATA");
     }
     
     hasRan = TRUE;
-    NSLog(@"STARTING: %@", ([dataInputStream hasBytesAvailable]) ? @"HAS DATA":@"NO DATA");
     
     [dataInputStream open];
+    NSLog(@"STARTING: %@", ([dataInputStream hasBytesAvailable]) ? @"HAS DATA":@"NO DATA");
+
     [self readDataInputStream];
 }
 -(void)readDataInputStream {

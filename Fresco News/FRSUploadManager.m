@@ -43,7 +43,6 @@
 -(void)startUploadProcess {
     toComplete = 0;
     isComplete = 0;
-    currentIndex = 0;
     
     if (!_posts) {
         return;
@@ -91,8 +90,9 @@
     
     isStarted = TRUE;
     
-    FRSUploadTask *task = [_tasks objectAtIndex:0];
+    FRSUploadTask *task = [_tasks firstObject];
     [task start];
+    [_tasks removeObject:task];
 }
 
 -(void)uploadedData:(int64_t)bytes {
@@ -214,12 +214,12 @@
 }
 
 -(void)next:(FRSUploadTask *)task {
-    currentIndex++;
     
-    if (_tasks.count > currentIndex) {
-        FRSUploadTask *theTask = [_tasks objectAtIndex:currentIndex];
+    if (_tasks.count > 0) {
+        FRSUploadTask *theTask = [_tasks firstObject];
         [theTask start];
-        NSLog(@"STARTING NEXT %@ %d", theTask, currentIndex);
+        [_tasks removeObject:theTask];
+        NSLog(@"STARTING NEXT %@", theTask);
     }
     else {
         invalidated = TRUE;
