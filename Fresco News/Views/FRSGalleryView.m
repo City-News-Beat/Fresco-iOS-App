@@ -140,7 +140,7 @@
     FRSPost *firstPost = (FRSPost *)[self.orderedPosts firstObject];
     
     if (firstPost.creator.profileImage != Nil && ![firstPost.creator.profileImage isEqual:[NSNull null]] && [[firstPost.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![firstPost.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:firstPost.creator.profileImage].absoluteString.length > 1) {
-        NSLog(@"aaAvatar: %@",firstPost.creator.profileImage);
+        //NSLog(@"aaAvatar: %@",firstPost.creator.profileImage);
 
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:firstPost.creator.profileImage]];
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
@@ -617,7 +617,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             //Set user image
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-            NSLog(@"wwAvatar: %@",post.creator.profileImage);
+            //NSLog(@"wwAvatar: %@",post.creator.profileImage);
 
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
             [photoTap setNumberOfTapsRequired:1];
@@ -669,7 +669,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-            NSLog(@"kkAvatar: %@",post.creator.profileImage);
+            //NSLog(@"kkAvatar: %@",post.creator.profileImage);
 
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
             [photoTap setNumberOfTapsRequired:1];
@@ -944,7 +944,7 @@
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:adjustedPost.creator.profileImage]];
         //self.profileIV.alpha = 1;
-        NSLog(@"mmAvatar: %@",post.creator.profileImage);
+        //NSLog(@"mmAvatar: %@",post.creator.profileImage);
         
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];

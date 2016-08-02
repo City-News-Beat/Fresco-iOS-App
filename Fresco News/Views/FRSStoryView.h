@@ -26,6 +26,7 @@
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
 @property (strong, nonatomic) ShareSheetBlock readMoreBlock;
 @property (strong, nonatomic) FRSStory *story;
+@property (weak, nonatomic) UINavigationController *navigationController;
 
 
 -(instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id <FRSStoryViewDelegate>)delegate;

@@ -26,6 +26,7 @@
 #import "FRSAwkwardView.h"
 #import "FRSGalleryExpandedViewController.h"
 #import <Haneke/Haneke.h>
+#import "FRSStoryDetailViewController.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -570,6 +571,20 @@
     [self hideTabBarAnimated:YES];
 }
 
+-(void)readMoreStory:(NSIndexPath *)indexPath {
+    FRSStoryCell *storyCell = [self.tableView cellForRowAtIndexPath:indexPath];
+    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:storyCell.story];
+    detailView.navigationController = self.navigationController;
+    [self.navigationController pushViewController:detailView animated:YES];
+}
+
+-(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    detailView.story = story;
+    [detailView reloadData];
+    return detailView;
+}
+
 #pragma mark - UITableView Delegate & DataSource
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -705,6 +720,7 @@
             
         }else {
             FRSStoryCell *storyCell = (FRSStoryCell *)cell;
+            storyCell.storyView.navigationController = self.navigationController;
             [storyCell clearCell];
             
             storyCell.shareBlock = ^void(NSArray *sharedContent) {
@@ -712,7 +728,7 @@
             };
             
             storyCell.readMoreBlock = ^(NSArray *bullshit){
-                [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
+                [weakSelf readMoreStory:indexPath];
             };
             
             storyCell.story = self.currentFeed[indexPath.row];
