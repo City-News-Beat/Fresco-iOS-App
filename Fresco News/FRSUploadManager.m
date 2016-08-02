@@ -70,13 +70,17 @@
 -(void)addTask:(FRSUploadTask *)task {
     [_tasks addObject:task];
     
-    if (_currentTasks.count == 0 && _tasks.count == 1) {
+    if (toComplete == 1 && _tasks.count == 1) {
         [self start];
     }
 }
 
 -(void)start {
-    if (_tasks.count == 0 || isStarted) {
+    if (_tasks.count == 0) {
+        return;
+    }
+    
+    if (isStarted) {
         return;
     }
     
