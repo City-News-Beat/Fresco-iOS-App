@@ -94,7 +94,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     self.players = [[NSMutableArray alloc] init];
     
-    self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count + 1;
+    self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count;
     [self resetFrames:false];
 }
 
@@ -809,7 +809,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
-
+        
         FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         self.assignmentsArray = [[NSMutableArray alloc] init];
         self.assignmentsArray  = [assignments mutableCopy];
@@ -828,8 +828,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSArray *global = responseObject[@"global"];
         
         self.assignmentsArray = nearBy;
-        self.numberOfRowsInAssignmentTableView = _assignmentsArray.count + 1;
+        self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
+        
         self.globalAssignments = global;
+        
+        NSLog(@"Response Object: %@", responseObject);
+        NSLog(@"Assignments: %@", nearBy);
+        NSLog(@"Global Assignments: %@", global);
         
         //Get the closest assignment to the user
         CLLocationDistance closestDistance = 9999999999999999999.0;
