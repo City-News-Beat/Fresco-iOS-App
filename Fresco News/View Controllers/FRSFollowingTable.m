@@ -245,6 +245,7 @@
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
         FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
         galCell.galleryView.delegate.navigationController = self.navigationController;
+        galCell.navigationController = self.navigationController;
         [galCell clearCell];
         
         galCell.gallery = _galleries[indexPath.row];
