@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) FRSTableViewCell *cell;
 @property (strong, nonatomic) FRSAlertView *alert;
+@property (strong, nonatomic) UIImageView *errorImageView;
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *password;
@@ -157,8 +158,9 @@
         if (responseCode >= 400 && responseCode < 500) {
             // 400 level, client
             if (responseCode == 403) {
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Incorrect password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                [self.alert show];
+                if (!self.errorImageView) {
+                    [self addErrorToView];
+                }
             } else {
                 // Email is already in use (400)
                 self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Email is already in use." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
@@ -182,6 +184,29 @@
 
 
 #pragma mark - TextField Delegate
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (textField.isSecureTextEntry) {
+        if (self.errorImageView) {
+            textField.text = 0;
+            self.errorImageView.alpha = 0;
+            self.errorImageView = nil;
+            [self.errorImageView removeFromSuperview];
+        }
+    }
+}
+
+-(void)addErrorToView {
+    if (!self.errorImageView) {
+        self.errorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.errorImageView.frame = CGRectMake(self.view.frame.size.width - 34, 55, 24, 24);
+        self.errorImageView.alpha = 1; // 0 when animating
+        [self.view addSubview:self.errorImageView];
+        
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = NO;
+    }
+}
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
     

@@ -207,6 +207,9 @@
         self.errorImageView.frame = CGRectMake(self.view.frame.size.width - 34, 55, 24, 24);
         self.errorImageView.alpha = 1; // 0 when animating
         [self.view addSubview:self.errorImageView];
+        
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = NO;
     }
 }
 
@@ -241,9 +244,9 @@
         if (responseCode >= 400 && responseCode < 500) {
             // 400 level, client
             if (responseCode == 403) {
-                
-                [self addErrorToView];
-                
+                if (!self.errorImageView) {
+                    [self addErrorToView];
+                }
             } else {
                 if (!self.alert) {
                     self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
