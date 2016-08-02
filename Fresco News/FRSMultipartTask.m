@@ -73,8 +73,6 @@
     }
     
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
         uint8_t buffer[1024];
         NSInteger length;
         BOOL ranOnce = FALSE;
@@ -105,8 +103,6 @@
             [dataInputStream close];
             NSLog(@"LAST CHUNK");
         }
-
-    });
 }
 
 // moves to next chunk based on previously succeeded blocks, does not iterate if we are above max # concurrent requests
