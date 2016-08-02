@@ -156,9 +156,9 @@
             NSLog(@"facebook index = 1");
             [self.facebookSwitch setOn:NO animated:YES];
             self.facebookName = nil;
-            [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
-            self.socialTitleLabel.text = @"Connect Facebook";
             [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+            self.socialTitleLabel.text = @"Connect Facebook";
+            [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
 
         }
     }
@@ -242,20 +242,16 @@
             if (result && !error) {
                 NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
                 
-
-                
                 [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
                     [self.facebookSwitch setOn:YES animated:YES];
                     self.facebookSwitch.alpha = 0;
                     
-                    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"name"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                         if (!error) {
                             self.facebookName = [result valueForKey:@"name"];
                             self.socialTitleLabel.text = self.facebookName;
                             [[NSUserDefaults standardUserDefaults] setObject:self.facebookName forKey:@"facebook-name"];
-                            
-                            
                         }
                     }];
                     

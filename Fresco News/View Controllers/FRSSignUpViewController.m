@@ -150,6 +150,7 @@
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+    
 }
 
 
@@ -987,12 +988,10 @@
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
     [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
-    [registrationDigest setObject:@(self.miles) forKey:@"notification_radius"];
+//    [registrationDigest setObject:@(self.miles) forKey:@"notification_radius"];
 
     
     if (_isAlreadyRegistered) {
-        //does this ever get called?
-        
         if (![_pastRegistration[@"email"] isEqualToString:self.emailTF.text]) {
             
         }

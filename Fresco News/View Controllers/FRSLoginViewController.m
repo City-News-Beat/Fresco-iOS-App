@@ -313,6 +313,10 @@
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         
         if (authenticated) {
+            
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+            [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
+            
             self.didAuthenticateSocial = YES;
             [self popToOrigin];
         }
@@ -370,6 +374,19 @@
     
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         if (authenticated) {
+            
+            FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+            
+            [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:self.inputViewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+                
+                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                    if (!error) {
+                        [[NSUserDefaults standardUserDefaults] setValue:[result valueForKey:@"name"] forKey:@"facebook-name"];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                    }
+                }];
+            }];
+
             
             self.didAuthenticateSocial = YES;
             NSLog(@"Popped");
