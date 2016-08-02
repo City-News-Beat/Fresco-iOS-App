@@ -120,6 +120,14 @@
                     }
                     else {
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                        
+                        _tasks = [[NSMutableArray alloc] init];
+                        
+                        for (FRSUploadTask *task in _currentTasks) {
+                            [task stop];
+                        }
+                        
+                        _currentTasks = [[NSMutableArray alloc] init];
                     }
                 }];
             }
@@ -157,6 +165,14 @@
                         }
                         else {
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                            
+                            _tasks = [[NSMutableArray alloc] init];
+                            
+                            for (FRSUploadTask *task in _currentTasks) {
+                                [task stop];
+                            }
+                            
+                            _currentTasks = [[NSMutableArray alloc] init];
                         }
                     }];
                 }
