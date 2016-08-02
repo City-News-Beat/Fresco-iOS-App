@@ -63,6 +63,7 @@
 }
 
 -(void)start {
+    NSLog(@"STARTING: %@", dataInputStream);
     [dataInputStream open];
     [self readDataInputStream];
 }
@@ -73,7 +74,7 @@
     }
     
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         
         uint8_t buffer[1024];
         NSInteger length;
@@ -82,7 +83,6 @@
 
         while ([dataInputStream hasBytesAvailable])
         {
-            NSLog(@"READING");
             length = [dataInputStream read:buffer maxLength:1024];
             // dataRead += length;
             ranOnce = TRUE;
