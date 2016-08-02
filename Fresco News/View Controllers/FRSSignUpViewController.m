@@ -1038,6 +1038,13 @@
             }
         }];
         
+        
+        
+        
+        
+        
+        
+        
         return;
     }
     
@@ -1074,6 +1081,14 @@
         if (error.code == 0) {
             _isAlreadyRegistered = TRUE;
             [self segueToSetup];
+            
+            
+            
+            
+            
+            
+            
+            
         }
         _pastRegistration = registrationDigest;
         
@@ -1134,6 +1149,9 @@
         [UIView animateWithDuration:.2 animations:^{
             [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
         }];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
         return;
     }
     
@@ -1145,6 +1163,9 @@
         [spinner stopLoading];
         [spinner removeFromSuperview];
         self.twitterButton.hidden = false;
+        
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+        [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
         
         if (error) {
 
