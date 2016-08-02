@@ -15,6 +15,7 @@
 @interface FRSPasswordChangeViewController ()
 
 @property (strong, nonatomic) UITableView *tableView;
+
 @property (strong, nonatomic) FRSTableViewCell *currentPasswordCell;
 @property (strong, nonatomic) FRSTableViewCell *updatedPasswordCell;
 @property (strong, nonatomic) FRSTableViewCell *updatedPasswordVerifyCell;
@@ -24,11 +25,14 @@
 @property (strong, nonatomic) NSString *updatedPassword;
 @property (strong, nonatomic) NSString *updatedPasswordVerify;
 
+@property (strong, nonatomic) FRSAlertView *alert;
+
+@property (strong, nonatomic) UIImageView *errorImageView;
+
 @property BOOL currentPasswordIsValid;
 @property BOOL updatedPasswordIsValid;
 @property BOOL updatedPasswordVerifyIsValid;
 
-@property (strong, nonatomic) FRSAlertView *alert;
 
 @end
 
@@ -221,9 +225,8 @@
             if (responseCode >= 400 && responseCode < 500) {
                 // 400 level, client
                 if (responseCode == 403) {
-                    if (!self.alert) {
-                        self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Incorrect password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                        [self.alert show];
+                    if (!self.errorImageView) {
+                        [self addErrorToView];
                     }
 
                 } else {
@@ -251,6 +254,31 @@
     userToUpdate.password = self.updatedPassword;
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
 }
+
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (textField.isSecureTextEntry) {
+        if (self.errorImageView) {
+            textField.text = 0;
+            self.errorImageView.alpha = 0;
+            self.errorImageView = nil;
+            [self.errorImageView removeFromSuperview];
+        }
+    }
+}
+
+-(void)addErrorToView {
+    if (!self.errorImageView) {
+        self.errorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.errorImageView.frame = CGRectMake(self.view.frame.size.width - 34, 10, 24, 24);
+        self.errorImageView.alpha = 1; // 0 when animating
+        [self.view addSubview:self.errorImageView];
+        
+        [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.buttonCell.rightAlignedButton.userInteractionEnabled = NO;
+    }
+}
+
 
 
 
