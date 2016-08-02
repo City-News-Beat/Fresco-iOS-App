@@ -26,12 +26,7 @@
 -(void)configureWithDictionary:(NSDictionary *)dictionary{
     //CHECK FOR RELEASE data validation especially favicon
     
-<<<<<<< HEAD
-    if(dictionary[@"title"] != [NSNull null]){
-        self.title = dictionary[@"title"];
-    }
-=======
->>>>>>> 3.0-phil
+
     self.imageStringURL = [dictionary[@"favicon"] isEqual:[NSNull null]] ? @"" : dictionary[@"favicon"];
     self.articleStringURL = dictionary[@"link"];
     
