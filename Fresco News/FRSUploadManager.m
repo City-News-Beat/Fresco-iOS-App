@@ -216,8 +216,9 @@
         NSLog(@"STARTING NEXT %@", task);
     }
     else {
-        if (isComplete == toComplete) {
-            invalidated = TRUE;
+        invalidated = TRUE;
+        
+        if (toComplete == isComplete) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
             NSLog(@"GALLERY CREATION COMPLETE");
         }
