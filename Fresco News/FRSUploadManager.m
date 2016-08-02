@@ -65,8 +65,6 @@
             [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"urls"][0]] post:currentPost];
         }
     }
-    
-    [self start];
 }
 
 -(void)addTask:(FRSUploadTask *)task {
@@ -78,9 +76,11 @@
 }
 
 -(void)start {
-    if (_tasks.count == 0) {
+    if (_tasks.count == 0 || isStarted) {
         return;
     }
+    
+    isStarted = TRUE;
     
     FRSUploadTask *task = [_tasks firstObject];
     [task start];
@@ -144,7 +144,7 @@
             }
         }];
         
-        [_tasks addObject:multipartTask];
+        [self addTask:multipartTask];
     }];
 }
 
@@ -193,7 +193,7 @@
             }
         }];
         
-        [_tasks addObject:task];
+        [self addTask:task];
     }];
 }
 

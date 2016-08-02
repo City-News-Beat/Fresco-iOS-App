@@ -20,6 +20,7 @@ static int const maxConcurrent = 5;
     BOOL invalidated;
     int toComplete;
     int isComplete;
+    BOOL isStarted;
 }
 -(instancetype)initWithGallery:(NSDictionary *)gallery assets:(NSArray *)assets;
 @property (nonatomic, retain) NSMutableArray *tasks;
