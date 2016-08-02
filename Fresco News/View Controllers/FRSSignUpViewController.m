@@ -988,7 +988,7 @@
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
     [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
-//    [registrationDigest setObject:@(self.miles) forKey:@"notification_radius"];
+    [registrationDigest setObject:@(self.miles) forKey:@"radius"];
 
     
     if (_isAlreadyRegistered) {
@@ -1073,49 +1073,12 @@
         
         if (error.code == 0) {
             _isAlreadyRegistered = TRUE;
-            [self saveRadius]; //Segue is called on saveRadius success
+            [self segueToSetup];
         }
         _pastRegistration = registrationDigest;
         
         [self stopSpinner:self.loadingView onButton:self.createAccountButton];
         
-    }];
-}
-
-
--(void)saveRadius {
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
-    
-    NSString *radius = [NSString stringWithFormat:@"%.0f", self.miles];
-
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"notification_radius" : radius} completion:^(id responseObject, NSError *error) {
-        
-        [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-        
-        if (error.code == -1009) {
-            NSString *title = @"";
-            
-            if (IS_IPHONE_5) {
-                title = @"UNABLE TO CONNECT";
-            } else if (IS_IPHONE_6) {
-                title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-            } else if (IS_IPHONE_6_PLUS) {
-                title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-            }
-            
-            FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
-            [alert show];
-            return;
-        }
-        
-        if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
-        }
-        
-        if (responseObject) {
-            [self segueToSetup];
-        }
     }];
 }
 

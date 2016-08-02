@@ -192,7 +192,7 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField {
     if (textField.isSecureTextEntry) {
         if (self.errorImageView) {
-            [textField clearsOnBeginEditing];
+            textField.text = 0;
             self.errorImageView.alpha = 0;
             self.errorImageView = nil;
             [self.errorImageView removeFromSuperview];
