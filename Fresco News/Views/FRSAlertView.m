@@ -148,12 +148,12 @@
 -(void)adjustFrame {
     self.height = self.actionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height + 15;
     
-    UIViewController* vc = (UIViewController *)self.delegate;
+    //UIViewController* vc = (UIViewController *)self.delegate;
     
-    NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH)/2;
-    NSInteger yOrigin = (vc.view.frame.size.height - self.height)/2 + self.height/2;
-    self.frame = CGRectMake(xOrigin, yOrigin - 20, ALERT_WIDTH, self.height);
+    NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width  - ALERT_WIDTH)/2;
+    NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height)/2;
     
+    self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
 }
 
 -(void)addShadowAndClip {
@@ -167,10 +167,18 @@
 
 -(void)cancelTapped {
     [self animateOut];
+    
+    if (self.delegate) {
+        [self.delegate didPressButtonAtIndex:1];
+    }
 }
 
 -(void)actionTapped {
     [self animateOut];
+    
+    if (self.delegate) {
+        [self.delegate didPressButtonAtIndex:0];
+    }
 }
 
 
@@ -272,9 +280,8 @@
         paragraphStyle.minimumLineHeight = -100;
         
         locationTextView.attributedText = [[NSAttributedString alloc] initWithString:@"Your location is only shared when you \n post a gallery to Fresco. In all other cases \n your location is fully anonymous."
-                                                                           attributes:
-                                            @{NSParagraphStyleAttributeName : paragraphStyle,
-                                              NSFontAttributeName: [UIFont systemFontOfSize:12 weight:UIFontWeightLight]}];
+                                                                          attributes: @{NSParagraphStyleAttributeName : paragraphStyle,
+                                                                                        NSFontAttributeName: [UIFont systemFontOfSize:12 weight:UIFontWeightLight]}];
         
         locationTextView.textAlignment = NSTextAlignmentCenter;
         locationTextView.textColor = [UIColor frescoMediumTextColor];
@@ -406,7 +413,11 @@
     self.locationEnabled = NO;
     if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse)) {
         self.locationEnabled = YES;
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"location-enabled"];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"location-enabled"];
     }
+
 }
 
 -(void)checkNotificationStatus {
@@ -416,8 +427,10 @@
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
             self.notificationsEnabled = NO;
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
         } else {
             self.notificationsEnabled = YES;
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
         }
     }
 }
@@ -652,10 +665,18 @@
 
 -(void)returnToPreviousViewController {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"returnToPreviousViewController" object:self];
+    
+//    if (self.delegate) {
+//        [self.delegate didPressButtonAtIndex:0];
+//    }
 }
 
 -(void)dismiss {
     [self animateOut];
+    
+//    if (self.delegate) {
+//        [self.delegate didPressButtonAtIndex:1];
+//    }
 }
 
 

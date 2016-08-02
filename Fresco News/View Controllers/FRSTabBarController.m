@@ -15,6 +15,7 @@
 #import "FRSStoriesViewController.h"
 #import "FRSCameraViewController.h"
 #import "UIColor+Fresco.h"
+#import "FRSNavigationBar.h"
 
 @interface FRSTabBarController () <UITabBarControllerDelegate>
 
@@ -128,16 +129,19 @@
 }
 
 -(void)configureViewControllers {
-    UIViewController *vc = [[FRSNavigationController alloc] initWithRootViewController:[[FRSHomeViewController alloc] init]];
+    UINavigationController *vc = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
+    [vc pushViewController:[[FRSHomeViewController alloc] init] animated:NO];
     
-    UIViewController *vc1 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSStoriesViewController alloc] init]];
+    UINavigationController *vc1 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
+    [vc1 pushViewController:[[FRSStoriesViewController alloc] init] animated:NO];
     
     UIViewController *vc2 = [UIViewController new];
     vc2.view.backgroundColor = [UIColor blackColor];
+    UINavigationController *vc3 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
+    [vc3 pushViewController:[[FRSAssignmentsViewController alloc] init] animated:NO];
     
-    UIViewController *vc3 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSAssignmentsViewController alloc] init]];
-    
-    UIViewController *vc4 = [[FRSNavigationController alloc] initWithRootViewController:[[FRSProfileViewController alloc] initWithUser:[[FRSAPIClient sharedClient] authenticatedUser]]];
+    UINavigationController *vc4 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
+    [vc4 pushViewController:[[FRSProfileViewController alloc] initWithUser:[[FRSAPIClient sharedClient] authenticatedUser]] animated:NO];
 
     self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
 }

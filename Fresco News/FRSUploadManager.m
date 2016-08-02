@@ -12,11 +12,26 @@
 
 @implementation FRSUploadManager
 
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 -(void)commonInit {
     _tasks = [[NSMutableArray alloc] init];
     _currentTasks = [[NSMutableArray alloc] init];
     _etags = [[NSMutableArray alloc] init];
     weakSelf = self;
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        totalBytesSent = 0;
+        _tasks = [[NSMutableArray alloc] init];
+        _currentTasks = [[NSMutableArray alloc] init];
+        _etags = [[NSMutableArray alloc] init];
+
+        if (_gallery) {
+            [self startUploadProcess];
+        }
+    }];
     
     if (_gallery) {
         [self startUploadProcess];
@@ -97,19 +112,18 @@
                 postCompletionDigest[@"key"] = post[@"key"];
                 [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
                     
-                    NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
-                    postCompletionDigest[@"eTags"] = multipartTask.eTags;
-                    postCompletionDigest[@"uploadId"] = post[@"uploadId"];
-                    postCompletionDigest[@"key"] = post[@"key"];
-                    
-                    [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
-                        NSLog(@"POST COMPLETED: %@", (error == Nil) ? @"TRUE" : @"FALSE");
+                    NSLog(@"POST COMPLETED: %@", (error == Nil) ? @"TRUE" : @"FALSE");
                         
-                        if (!error) {
-                            [self next:task];
-                        }
-                    }];
+                    if (!error) {
+                        [self next:task];
+                    }
+                    else {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                    }
                 }];
+            }
+            else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
             }
         }];
         
@@ -140,11 +154,15 @@
                         if (!error) {
                             [self next:task];
                         }
+                        else {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                        }
                     }];
                 }
             }
             else {
                 NSLog(@"%@", error);
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
             }
         }];
         

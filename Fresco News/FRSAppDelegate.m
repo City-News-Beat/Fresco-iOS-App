@@ -24,6 +24,7 @@
 #import "Fresco.h"
 #import "SSKeychain.h"
 #import "FRSUser.h"
+#import "FRSNavigationBar.h"
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -105,6 +106,9 @@
         if (![responseObject[@"bio"] isEqual:[NSNull null]]) {
             authenticatedUser.bio = responseObject[@"bio"];
         }
+        if (![responseObject[@"email"] isEqual:[NSNull null]]) {
+            authenticatedUser.email = responseObject[@"email"];
+        }
         authenticatedUser.isLoggedIn = @(TRUE);
         if (![responseObject[@"avatar"] isEqual:[NSNull null]]) {
             authenticatedUser.profileImage = responseObject[@"avatar"];
@@ -155,6 +159,10 @@
     [[Twitter sharedInstance] startWithConsumerKey:@"kT772ISFiuWQdVQblU4AmBWw3" consumerSecret:@"navenvTSRCcyUL7F4Ait3gACnxfc7YXWyaee2bAX1sWnYGe4oY"];
     
     [Fabric with:@[[Twitter class], [Crashlytics class]]];
+    
+    [[FRSAPIClient sharedClient] searchWithQuery:@"bernie" completion:^(id responseObject, NSError *error) {
+        NSLog(@"RESP: %@ ERR: %@", responseObject, error);
+    }];
 }
 
 - (NSManagedObjectModel *)managedObjectModel {
@@ -236,7 +244,7 @@
 -(void)startAuthentication {
     _tabBarController = [[FRSTabBarController alloc] init];
     
-    FRSNavigationController *mainNav = [[FRSNavigationController alloc] init];
+    FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
     [mainNav pushViewController:_tabBarController animated:FALSE];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [mainNav pushViewController:[[FRSOnboardingViewController alloc] init] animated:FALSE];

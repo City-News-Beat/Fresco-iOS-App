@@ -11,16 +11,12 @@
 @implementation FRSStripe
 
 +(STPCardParams *)creditCardWithNumber:(NSString *)number expiration:(NSArray *)expiration cvc:(NSString *)cvc {
+    [FRSStripe startLive];
     
     STPCardParams *cardParams = [[STPCardParams alloc] init];
     cardParams.number = number;
     cardParams.expMonth = [expiration[0] intValue];
     cardParams.expYear = [expiration[1] intValue];
-    STPCardParams *params = [FRSStripe creditCardWithNumber:@"00000000000" expiration:@[@(01), @(2016)] cvc:@"168"];
-    [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
-        // user update
-    }];
-    
     return cardParams;
 }
 
@@ -28,6 +24,7 @@
 +(STPCardParams *)creditCardWithNumber:(NSString *)number expiration:(NSArray *)expiration cvc:(NSString *)cvc firstName:(NSString *)firstName lastName:(NSString *)lastName {
     
     STPCardParams *cardParams = [FRSStripe creditCardWithNumber:number expiration:expiration cvc:cvc];
+    
     cardParams.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
     return cardParams;
 }

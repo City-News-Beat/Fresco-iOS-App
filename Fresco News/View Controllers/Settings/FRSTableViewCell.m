@@ -13,8 +13,11 @@
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
 
+#import "FRSAlertView.h"
+#import "FRSSettingsViewController.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
-@interface FRSTableViewCell()
+@interface FRSTableViewCell() <FRSAlertViewDelegate>
 
 @property CGFloat leftPadding;
 @property CGFloat rightPadding;
@@ -46,6 +49,11 @@
 
 @property (strong, nonatomic) UILabel *findFriendsLabel;
 
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
+@property BOOL notificationsEnabled;
+@property BOOL locationEnabled;
+
 @end
 
 
@@ -65,8 +73,9 @@
     return self;
 }
 
--(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag {
-    
+-(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag enabled:(BOOL)enabled {
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+
     self.socialTitleLabel  = [[UILabel alloc] initWithFrame:CGRectMake(56, 0, [UIScreen mainScreen].bounds.size.width - (self.rightPadding+self.leftPadding) - 10, self.frame.size.height)];
     self.socialTitleLabel.text = title;
     self.socialTitleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -78,11 +87,29 @@
         self.twitterIV.frame = CGRectMake(16, 10 ,24,24);
         [self.twitterIV sizeToFit];
         [self addSubview:self.twitterIV];
+        
+        self.twitterSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
+        [self.twitterSwitch addTarget:self action:@selector(twitterToggle) forControlEvents:UIControlEventValueChanged];
+        self.twitterSwitch.onTintColor = [UIColor twitterBlueColor];
+        [self.twitterSwitch setOn:enabled animated:YES];
+        [self addSubview:self.twitterSwitch];
+        
+        if (self.twitterHandle) {
+            self.socialTitleLabel.text = self.twitterHandle;
+        }
+        
     } else if (tag == 2){
         self.facebookIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"social-facebook"]];
-        self.facebookIV.frame = CGRectMake(16, 10 ,24,24);
+        self.facebookIV.frame = CGRectMake(16, 10 ,24, 24);
         [self.facebookIV sizeToFit];
         [self addSubview:self.facebookIV];
+        
+        self.twitterSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
+        [self.twitterSwitch addTarget:self action:@selector(facebookToggle) forControlEvents:UIControlEventValueChanged];
+        self.twitterSwitch.onTintColor = [UIColor facebookBlueColor];
+        [self.twitterSwitch setOn:enabled animated:YES];
+        [self addSubview:self.twitterSwitch];
+        
     } else if (tag == 3){
         self.googleIV =  [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"google-icon-filled"]];
         self.googleIV.frame = CGRectMake(16, 10 ,24,24);
@@ -91,7 +118,89 @@
     }
 }
 
--(void)configureAssignmentCell {
+
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    if (index == 0) {
+        //cancel
+        [self.twitterSwitch setOn:YES animated:YES];
+    } else {
+        [self.twitterSwitch setOn:NO animated:YES];
+        self.twitterHandle = nil;
+        self.socialTitleLabel.text = @"Connect Twitter";
+    }
+}
+
+-(void)twitterToggle {
+    if (self.twitterHandle) {
+        NSLog(@"DISABLED TWITTER");
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
+        alert.delegate = self;
+        [alert show];
+        
+    } else {
+//        self.twitterSwitch.userInteractionEnabled = NO;
+//        self.userInteractionEnabled = NO;
+//        self.twitterIV.alpha = 0;
+//        [self configureSpinner];
+        [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+//            [self.loadingView stopLoading];
+//            [self.loadingView removeFromSuperview];
+            self.twitterSwitch.userInteractionEnabled = YES;
+            self.userInteractionEnabled = YES;
+            if (session) {
+                self.twitterHandle = session.userName;
+                [self.twitterSwitch setOn:YES animated:YES];
+                self.socialTitleLabel.text = self.twitterHandle;
+            } else if (error) {
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+            }
+        }];
+    }
+}
+
+-(void)facebookToggle {
+    
+    if (self.facebookName) {
+        NSLog(@"DISABLE FACEBOOK");
+        
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT FACEBOOK?" message:@"You’ll be unable to use your Facebook account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
+        alert.delegate = self;
+        [alert show];
+        
+    } else {
+        
+        [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+            
+            NSLog(@"AUTHENTICATED: %d", authenticated);
+            NSLog(@"ERROR: %@", error);
+            NSLog(@"TOKEN: %@", token);
+            
+            if (authenticated) {
+                [self.facebookSwitch setOn:YES animated:YES];
+                self.facebookName = @"FIRST LAST";
+                self.socialTitleLabel.text = self.facebookName;
+            } else if (error) {
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Facebook. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+                [alert show];
+            }
+            
+            
+        } parent:self.inputViewController];
+    }
+}
+
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.frame = CGRectMake(16, 10, 24, 24);
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+    [self.loadingView startAnimating];
+//    [self addSubview:self.loadingView];
+}
+
+
+-(void)configureAssignmentCellEnabled:(BOOL)enabled {
     
     self.assignmentNotificationsLabel = [UILabel new];
     self.assignmentNotificationsLabel.frame = CGRectMake(16, 15, 185, 17);
@@ -108,6 +217,8 @@
     
     self.notificationSwitch = [[UISwitch alloc] init];
     self.notificationSwitch.center = self.center;
+    [self.notificationSwitch setOn:enabled animated:NO];
+    [self.notificationSwitch addTarget:self action:@selector(notificationToggle:) forControlEvents:UIControlEventValueChanged];
     self.notificationSwitch.center = CGPointMake([UIScreen mainScreen].bounds.size.width - self.notificationSwitch.bounds.size.width/2 - 13.5, self.notificationSwitch.bounds.size.height/2 + 14);
     [self addSubview:self.notificationSwitch];
     
@@ -431,6 +542,80 @@
     [self.carrotIV sizeToFit];
     [self addSubview:self.carrotIV];
 }
+
+-(void)notificationToggle:(id)sender {
+    [self checkNotificationStatus];
+    [self checkLocationStatus];
+    
+    BOOL state;
+    
+    
+    if ([sender isOn]) {
+        state = YES;
+        if (!self.notificationsEnabled || !self.locationEnabled) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+            [alert show];
+        }
+//        [self requestNotifications]; //Request and enable notifications
+    } else {
+        state = NO;
+        [[UIApplication sharedApplication] unregisterForRemoteNotifications]; //Unregister from notifications
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
+}
+
+-(void)checkNotificationStatus {
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
+        UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        
+        if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+            self.notificationsEnabled = NO;
+        } else {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+            self.notificationsEnabled = YES;
+        }
+    }
+}
+
+-(void)checkLocationStatus {
+    if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse)) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"location-enabled"];
+        self.locationEnabled = YES;
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"location-enabled"];
+        self.locationEnabled = NO;
+    }
+    
+}
+
+
+-(void)requestNotifications {
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]) {
+        return;
+    }
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"NotificationsRequested"]) {
+        UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    } else {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NotificationsRequested"];
+}
+
+
+
+
+
+
+
+
+
+
 
 
 @end
