@@ -664,7 +664,7 @@
     timeFrame.size.width = 100;
     self.timeLabel.frame = timeFrame;
     if(post.creator.profileImage){
-        NSLog(@"%@",[NSURL URLWithString:post.creator.profileImage]);
+        //NSLog(@"%@",[NSURL URLWithString:post.creator.profileImage]);
     }
     if (post.creator.profileImage && post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"]) {
         
