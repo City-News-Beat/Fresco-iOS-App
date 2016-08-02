@@ -19,7 +19,6 @@
     self.destinationURLS = destinations;
     self.progressBlock = progress;
     self.completionBlock = completion;
-    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
     tags = [[NSMutableDictionary alloc] init];
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
@@ -63,7 +62,8 @@
 }
 
 -(void)start {
-    
+    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
+
     if (hasRan) {
         NSLog(@"ERROR: ALREADY EXHAUSTED DATA");
     }

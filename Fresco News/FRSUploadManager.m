@@ -43,6 +43,7 @@
 -(void)startUploadProcess {
     toComplete = 0;
     isComplete = 0;
+    currentIndex = 0;
     
     if (!_posts) {
         return;
@@ -90,7 +91,7 @@
     
     isStarted = TRUE;
     
-    FRSUploadTask *task = [_tasks firstObject];
+    FRSUploadTask *task = [_tasks objectAtIndex:0];
     [task start];
 }
 
@@ -218,7 +219,7 @@
     if (_tasks.count > currentIndex) {
         FRSUploadTask *theTask = [_tasks objectAtIndex:currentIndex];
         [theTask start];
-        NSLog(@"STARTING NEXT %@", theTask);
+        NSLog(@"STARTING NEXT %@ %d", theTask, currentIndex);
     }
     else {
         invalidated = TRUE;
