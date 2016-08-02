@@ -319,12 +319,12 @@
 }
 
 -(void)configureAwkwardViews{
-    self.followerAwkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, 150, self.view.frame.size.width, self.view.frame.size.height-64)];
+    self.followerAwkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 - 64, self.view.frame.size.width, self.view.frame.size.height/2)];
     [self.tableView addSubview:self.followerAwkward];
     self.followerAwkward.hidden = true;
     self.followerAwkward.userInteractionEnabled = false;
     
-    self.followingAwkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, 150, self.view.frame.size.width, self.view.frame.size.height-64)];
+    self.followingAwkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 - 64, self.view.frame.size.width, self.view.frame.size.height/2)];
     [self.followingTable addSubview:self.followingAwkward];
     self.followingAwkward.hidden = true;
     self.followerAwkward.userInteractionEnabled = false;

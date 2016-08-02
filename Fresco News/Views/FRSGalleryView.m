@@ -46,6 +46,7 @@
         return;
     }
     
+    
     self.gallery = gallery;
     
     for (FRSPlayer *player in self.players) {
@@ -121,6 +122,17 @@
     
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
+    }
+    
+    [self checkOwner];
+}
+
+-(void)checkOwner {
+    NSString *ownerID = self.gallery.creator.uid;
+    NSString *userID = [[FRSAPIClient sharedClient] authenticatedUser].uid;
+    
+    if (userID && ownerID && [ownerID isEqualToString:userID]) {
+        // owner == self
     }
 }
 
@@ -409,6 +421,11 @@
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
+    CGPoint location = [tap locationInView:self];
+    
+    if (location.y > _scrollView.frame.size.height) {
+        return;
+    }
     
     NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
     FRSPlayer *player = self.players[page];
@@ -439,7 +456,6 @@
     } else {
         [player pause];
     }
-    
 }
 
 -(void)handlePhotoTap:(NSInteger)index {

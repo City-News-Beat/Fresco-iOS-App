@@ -215,7 +215,7 @@
     
     BOOL reload = FALSE;
     
-    if (self.currentFeed == self.likes) {
+    if (self.currentFeed == self.likes && self.likes != Nil) {
         reload = TRUE;
     }
     
@@ -629,8 +629,8 @@
             newFrame.size.height = 40;
             newFrame.origin.y = tableView.frame.size.height/6;
             [cell.contentView addSubview:[[FRSAwkwardView alloc] initWithFrame:newFrame]];
-            [cell.contentView setBackgroundColor:[UIColor redColor]];
-            [cell setBackgroundColor:[UIColor redColor]];
+            [cell.contentView setBackgroundColor:[UIColor frescoBackgroundColorDark]];
+            [cell setBackgroundColor:[UIColor frescoBackgroundColorDark]];
         }else if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
             
@@ -809,7 +809,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.username;
-        self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+        
+        if (user.profileImage && ![user.profileImage isEqual:[NSNull null]]) {
+            self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
+        }
+        
         //self.locationLabel.text = user.
         self.bioTextView.text = user.bio;
         self.bioTextView.editable = false;

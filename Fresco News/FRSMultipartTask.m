@@ -69,7 +69,6 @@
 -(void)readDataInputStream {
     
     if (!currentData) {
-        needsData = TRUE;
         currentData = [[NSMutableData alloc] init];
     }
     
@@ -94,6 +93,7 @@
             if ([currentData length] >= chunkSize * megabyteDefinition) {
                 [self startChunkUpload];
                 triggeredUpload = TRUE;
+                needsData = TRUE;
                 break;
             }
         }
