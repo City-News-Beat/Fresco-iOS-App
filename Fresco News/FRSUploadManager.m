@@ -24,10 +24,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
         
-        if (invalidated) {
-            return;
-        }
-        
         totalBytesSent = 0;
         _tasks = [[NSMutableArray alloc] init];
         _currentTasks = [[NSMutableArray alloc] init];
