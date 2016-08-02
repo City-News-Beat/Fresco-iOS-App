@@ -292,7 +292,9 @@
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
     
-    if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+    NSLog(@"CHILDREN: %lu", self.navigationController.childViewControllers.count);
+    
+    if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid] && self.navigationController.childViewControllers.count == 1) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
         editItem.tintColor = [UIColor whiteColor];

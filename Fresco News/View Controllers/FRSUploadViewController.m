@@ -835,6 +835,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSLog(@"Response Object: %@", responseObject);
         NSLog(@"Assignments: %@", nearBy);
         NSLog(@"Global Assignments: %@", global);
+        NSLog(@"Error: %@", error);
         
         //Get the closest assignment to the user
         CLLocationDistance closestDistance = 9999999999999999999.0;
