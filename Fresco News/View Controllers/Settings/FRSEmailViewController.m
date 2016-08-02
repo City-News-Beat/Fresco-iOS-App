@@ -157,20 +157,20 @@
         if (responseCode >= 400 && responseCode < 500) {
             // 400 level, client
             if (responseCode == 403) {
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Incorrect password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                [alert show];
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Incorrect password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                [self.alert show];
             } else {
                 // Email is already in use (400)
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Email is already in use." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                [alert show];
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Email is already in use." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                [self.alert show];
             }
             
             return;
         }
         else if (responseCode >= 500 && responseCode < 600) {
             // 500 level, server
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-            [alert show];
+            self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+            [self.alert show];
             return;
         }
         else {

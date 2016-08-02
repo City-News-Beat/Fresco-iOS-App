@@ -1086,8 +1086,6 @@
 -(void)saveRadius {
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
     
-    
-    
     NSString *radius = [NSString stringWithFormat:@"%.0f", self.miles];
 
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"notification_radius" : radius} completion:^(id responseObject, NSError *error) {

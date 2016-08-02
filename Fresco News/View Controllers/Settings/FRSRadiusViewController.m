@@ -129,7 +129,6 @@
     
     NSString *radius = [NSString stringWithFormat:@"%.0f", self.miles];
     
-    
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"notification_radius" : radius} completion:^(id responseObject, NSError *error) {
         
         if (error.code == -1009) {
@@ -143,8 +142,11 @@
                 title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
             }
             
-            FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
-            [alert show];
+            if (!self.alert) {
+                self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                [self.alert show];
+            }
+
             return;
         }
         
