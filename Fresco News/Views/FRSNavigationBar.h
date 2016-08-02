@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface FRSNavigationBar : UINavigationBar
-@property (nonatomic, retain) UIView *progressBar;
+@property (nonatomic, retain) UIView *progressView;
+@property (nonatomic, retain) UIView *failureView;
+@property (nonatomic, retain) NSDate *lastAnimated;
 @end

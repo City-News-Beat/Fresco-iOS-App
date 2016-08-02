@@ -220,7 +220,7 @@
     
     BOOL reload = FALSE;
     
-    if (self.currentFeed == self.likes) {
+    if (self.currentFeed == self.likes && self.likes != Nil) {
         reload = TRUE;
     }
     
@@ -898,6 +898,7 @@
             self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
         }
+        
         //self.locationLabel.text = user.
         self.bioTextView.text = user.bio;
         self.bioTextView.editable = false;

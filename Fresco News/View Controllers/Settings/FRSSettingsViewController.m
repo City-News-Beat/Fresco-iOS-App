@@ -31,10 +31,18 @@
 /* Cocoa Pods */
 #import <MessageUI/MessageUI.h>
 
+/* API */
+#import "FRSAPIClient.h"
+#import "FRSSocial.h"
+
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) NSString *twitterHandle;
+@property (strong, nonatomic) FRSTableViewCell *twitterCell;
+@property (strong, nonatomic) FRSTableViewCell *facebookCell;
+@property (strong, nonatomic) UISwitch *twitterSwitch;
+@property (strong, nonatomic) UISwitch *facebookSwitch;
 
 @end
 
@@ -46,9 +54,10 @@
     [self configureTableView];
 }
 
-
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    [self checkNotificationStatus];
     
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
@@ -56,14 +65,17 @@
     [self configureBackButtonAnimated:NO];
 
     [self.navigationItem setTitle:@"SETTINGS"];
+    [self.tableView reloadData];
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+}
 
 -(void)popViewController {
     [super popViewController];
     [self showTabBarAnimated:YES];
 }
-
 
 -(void)configureTableView {
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -207,10 +219,10 @@
         case 0:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureCellWithUsername:@"@username"];
+                    [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSAPIClient sharedClient] authenticatedUser].username]];
                     break;
                 case 1:
-                    [cell configureDefaultCellWithTitle:@"omar@fresconews.com" andCarret:YES andRightAlignedTitle:@""];
+                    [cell configureDefaultCellWithTitle:[[FRSAPIClient sharedClient] authenticatedUser].email andCarret:YES andRightAlignedTitle:@""];
                     break;
                 case 2:
                     [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES andRightAlignedTitle:@""];
@@ -225,12 +237,20 @@
         case 2:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureAssignmentCell];
+                    [self checkNotificationStatus];
+                    [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                    
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
-                case 1:
-                    [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@"2 mi"];
-                    break;
+                case 1: {
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
+                        NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+                        CGFloat milesFloat = [miles floatValue];
+                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%.0f mi", milesFloat]];
+                    } else {
+                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@""];
+                    }
+                } break;
                 case 2:
                     [cell configureDefaultCellWithTitle:@"Debit card" andCarret:YES andRightAlignedTitle:@"VISA (3189)"];
                     break;
@@ -250,10 +270,19 @@
                     [cell configureFindFriendsCell];
                     break;
                 case 1:
-                    [cell configureSocialCellWithTitle:@"Connect Twitter" andTag:1];
+                    self.twitterCell = cell;
+                    if (self.twitterCell.twitterHandle) {
+                        [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
+                        self.twitterCell.twitterSwitch.on = YES;
+                    } else {
+                        self.twitterCell.twitterSwitch.on = NO;
+                        self.twitterHandle = nil;
+                        [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
+                    }
                     break;
                 case 2:
-                    [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2];
+                    self.facebookCell = cell;
+                    [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:NO];
                     break;
                 default:
                     break;
@@ -299,7 +328,6 @@
     }
 }
 
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -316,8 +344,8 @@
                     break;
                 case 1:
                 {
-                    FRSEmailViewController *email = [[FRSEmailViewController alloc] init];
-                    [self.navigationController pushViewController:email animated:YES];
+                    FRSEmailViewController *emailViewController = [[FRSEmailViewController alloc] init];
+                    [self.navigationController pushViewController:emailViewController animated:YES];
                     self.navigationItem.title = @"";
                 }
                     break;
@@ -373,12 +401,18 @@
                     [alert show];
                 }
                     break;
-                case 1:
-                    NSLog(@"twitter");
-                    break;
-                case 2:
-                    NSLog(@"facebook");
-                    break;
+                case 1: {
+                    
+                    //Twitter
+                    //[self.twitterCell twitterToggle];
+                    
+                } break;
+                case 2: {
+                    
+                    //Facebook
+                    //[self.facebookCell facebookToggle];
+                    
+                } break;
                 default:
                     break;
             }
@@ -417,12 +451,12 @@
                     [self presentModalMailComposerViewController:YES];
                     break;
                 case 2:{
-                    //FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
-                    //[alert show];
+//                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+//                    [alert show];
                     FRSDisableAccountViewController *disableVC = [[FRSDisableAccountViewController alloc] init];
                     [self.navigationController pushViewController:disableVC animated:YES];
                 }
-
+                    
                     break;
             }
             break;
@@ -503,6 +537,21 @@
     
     [self dismissViewControllerAnimated:YES completion:nil];
     
+}
+
+
+#pragma mark - Notifications
+
+-(void)checkNotificationStatus {
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
+        UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        
+        if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
+            //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+        } else {
+            //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+        }
+    }
 }
 
 

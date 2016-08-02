@@ -8,18 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-
 @interface FRSTableViewCell : UITableViewCell
 
 -(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle;
 
 -(void)configureCellWithUsername:(NSString *)username;
 
--(void)configureAssignmentCell;
+-(void)configureAssignmentCellEnabled:(BOOL)enabled;
 
 -(void)configureEditableCellWithDefaultText:(NSString *)string withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType;
 
--(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag;
+-(void)configureSocialCellWithTitle:(NSString *)title andTag:(NSInteger)tag enabled:(BOOL)enabled;
 
 -(void)configureCellWithRightAlignedButtonTitle:(NSString *)title withWidth:(CGFloat)width withColor:(UIColor *)color;
 
@@ -42,6 +41,14 @@
 
 @property (strong, nonatomic) UIButton *rightAlignedButton;
 @property (strong, nonatomic) UITextField *textField;
+@property (strong, nonatomic) UISwitch *twitterSwitch;
+@property (strong, nonatomic) NSString *twitterHandle;
+
+@property (strong, nonatomic) UISwitch *facebookSwitch;
+@property (strong, nonatomic) NSString *facebookName;
+
+-(void)twitterToggle;
+-(void)facebookToggle;
 
 @end
 

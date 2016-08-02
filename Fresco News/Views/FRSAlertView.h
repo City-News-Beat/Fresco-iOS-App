@@ -25,9 +25,7 @@
 -(void)dismiss;
 
 -(instancetype)initPermissionsAlert;
-
 -(instancetype)initFindFriendsAlert;
-
 -(instancetype)initSignUpAlert;
 
 @end

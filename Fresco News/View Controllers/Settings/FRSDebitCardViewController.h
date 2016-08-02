@@ -8,7 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
+#import "CardIO.h"
 
-@interface FRSDebitCardViewController : FRSBaseViewController <UITextFieldDelegate>
-
+@interface FRSDebitCardViewController : FRSBaseViewController <UITextFieldDelegate,CardIOViewDelegate>
+{
+    UIView *cardViewport;
+    UITextField *cardNumberTextField;
+    UITextField *expirationDateTextField;
+    UITextField *securityCodeTextField;
+}
 @end

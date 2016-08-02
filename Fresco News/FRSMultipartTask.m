@@ -69,7 +69,6 @@
 -(void)readDataInputStream {
     
     if (!currentData) {
-        needsData = TRUE;
         currentData = [[NSMutableData alloc] init];
     }
     
@@ -94,6 +93,7 @@
             if ([currentData length] >= chunkSize * megabyteDefinition) {
                 [self startChunkUpload];
                 triggeredUpload = TRUE;
+                needsData = TRUE;
                 break;
             }
         }
@@ -138,17 +138,16 @@
         
         if (error) {
             totalErrors++;
-            
+            totalConnections--;
             NSLog(@"CHUNK ERROR: %@", error);
             
             // put in provision for # of errors, and icing the task, and being able to resume it when asked to
             if (weakSelf.delegate && totalErrors > chunkMaxFailures) {
                 [weakSelf.delegate uploadDidFail:self withError:error response:data];
             }
-            else {
-                [self uploadChunk:chunkRequest data:dataToUpload index:connect];
-                return;
-            }
+            
+            self.completionBlock(self, Nil, Nil, FALSE, Nil);
+            return;
         }
         else {
             

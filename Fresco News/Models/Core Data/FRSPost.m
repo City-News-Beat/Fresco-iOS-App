@@ -66,13 +66,14 @@
     self.address = [self shortAddressFromAddress:dict[@"address"]];
     self.creator = [FRSUser MR_createEntityInContext:context];
     
-    self.creator.uid = dict[@"owner"][@"id"];
-
-    self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
-
-    self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
-
-    self.creator.bio = (dict[@"owner"][@"bio"] != nil) ? dict[@"owner"][@"bio"] : @"";
+    if (dict[@"owner"] != Nil && ![dict[@"owner"] isEqual:[NSNull null]]) {
+        self.creator.uid = dict[@"owner"][@"id"];
+        self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
+        
+        self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
+        
+        self.creator.bio = (dict[@"owner"][@"bio"] != nil) ? dict[@"owner"][@"bio"] : @"";
+    }
 
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
         self.mediaType = @(1);
@@ -97,7 +98,10 @@
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context save:(BOOL)save {
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
-    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
+    
+    if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
+        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_at"]];
+    }
     
     if (dict[@"image"] && ![dict[@"image"] isEqual:[NSNull null]]) {
         self.imageUrl = dict[@"image"];

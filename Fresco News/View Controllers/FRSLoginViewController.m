@@ -199,6 +199,9 @@
     
     
     [[FRSAPIClient sharedClient] signIn:username password:password completion:^(id responseObject, NSError *error) {
+        
+        [self stopSpinner:self.loadingView onButton:self.loginButton];
+        
         if (error.code == 0) {
             FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
             [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
@@ -206,15 +209,39 @@
             }];
         }
         
-        if (error.code == -1011) {
-            NSLog(@"Invalid username or password.");
-            [self stopSpinner:self.loadingView onButton:self.loginButton];
-            [self presentInvalidInfo];
-        }
-        
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
-            [self stopSpinner:self.loadingView onButton:self.loginButton];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [alert show];
+            return;
+        }
+        
+        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+        NSInteger responseCode = response.statusCode;
+        NSLog(@"ERROR: %ld", (long)responseCode);
+        
+        if (responseCode >= 400 && responseCode < 500) {
+            // 400 level, client
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 400" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [alert show];
+            return;
+        }
+        else if (responseCode >= 500 && responseCode < 600) {
+            // 500 level, server
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 500" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [alert show];
+            return;
+        }
+        else if (responseCode >= 300 && responseCode < 400) {
+            // 300  level, unauthorized
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"error code: 300" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:self];
+            [alert show];
+            return;
+        }
+        
+        if (error.code == -1011) {
+            NSLog(@"Invalid username or password.");
+            [self presentInvalidInfo];
         }
     }];
 }
