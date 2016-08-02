@@ -63,6 +63,13 @@
 }
 
 -(void)start {
+    
+    if (hasRan) {
+        NSLog(@"ERROR: ALREADY EXHAUSTED DATA");
+    }
+    
+    hasRan = TRUE;
+    NSLog(@"STARTING: %@", ([dataInputStream hasBytesAvailable]) ? @"HAS DATA":@"NO DATA");
     [dataInputStream open];
     [self readDataInputStream];
 }
@@ -79,7 +86,6 @@
         NSInteger length;
         BOOL ranOnce = FALSE;
         BOOL triggeredUpload = FALSE;
-
         while ([dataInputStream hasBytesAvailable])
         {
             length = [dataInputStream read:buffer maxLength:1024];

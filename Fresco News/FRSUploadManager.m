@@ -23,11 +23,13 @@
     weakSelf = self;
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        
         totalBytesSent = 0;
         _tasks = [[NSMutableArray alloc] init];
         _currentTasks = [[NSMutableArray alloc] init];
         _etags = [[NSMutableArray alloc] init];
-
+        isStarted = FALSE;
+        
         if (_gallery) {
             [self startUploadProcess];
         }
@@ -39,6 +41,9 @@
 }
 
 -(void)startUploadProcess {
+    toComplete = 0;
+    isComplete = 0;
+    
     if (!_posts) {
         return;
     }
@@ -66,7 +71,8 @@
 -(void)addTask:(FRSUploadTask *)task {
     [_tasks addObject:task];
     
-    if (_currentTasks.count == 0 && _tasks.count == 1) {
+    
+    if (!isStarted) {
         [self start];
     }
 }
@@ -76,8 +82,17 @@
         return;
     }
     
+    if (isStarted) {
+        return;
+    }
+    
+    NSLog(@"STARTING UPLOAD");
+    
+    isStarted = TRUE;
+    
     FRSUploadTask *task = [_tasks firstObject];
     [task start];
+    [_tasks removeObject:task];
 }
 
 -(void)uploadedData:(int64_t)bytes {
@@ -87,6 +102,7 @@
 }
 
 -(void)addMultipartTaskForAsset:(PHAsset *)asset urls:(NSArray *)urls post:(NSDictionary *)post {
+    toComplete++;
     
     PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
     options.version = PHVideoRequestOptionsVersionOriginal;
@@ -115,10 +131,19 @@
                     NSLog(@"POST COMPLETED: %@", (error == Nil) ? @"TRUE" : @"FALSE");
                         
                     if (!error) {
+                        isComplete++;
                         [self next:task];
                     }
                     else {
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                        
+                        _tasks = [[NSMutableArray alloc] init];
+                        
+                        for (FRSUploadTask *task in _currentTasks) {
+                            [task stop];
+                        }
+                        
+                        _currentTasks = [[NSMutableArray alloc] init];
                     }
                 }];
             }
@@ -132,6 +157,7 @@
 }
 
 -(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post {
+    toComplete++;
     [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
         
         FRSUploadTask *task = [[FRSUploadTask alloc] init];
@@ -152,10 +178,19 @@
                         NSLog(@"POST COMPLETED: %@", (error == Nil) ? @"TRUE" : @"FALSE");
                         
                         if (!error) {
+                            isComplete++;
                             [self next:task];
                         }
                         else {
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                            
+                            _tasks = [[NSMutableArray alloc] init];
+                            
+                            for (FRSUploadTask *task in _currentTasks) {
+                                [task stop];
+                            }
+                            
+                            _currentTasks = [[NSMutableArray alloc] init];
                         }
                     }];
                 }
@@ -180,16 +215,19 @@
 
 -(void)next:(FRSUploadTask *)task {
     
-    [_tasks removeObject:task];
-    [_currentTasks removeObject:task];
-    
-    if (_currentTasks.count < maxConcurrent && _tasks.count > 0) {
-        FRSUploadTask *task = [_tasks firstObject];
-        [task start];
+    if (_tasks.count > 0) {
+        FRSUploadTask *theTask = [_tasks firstObject];
+        [theTask start];
+        [_tasks removeObject:theTask];
+        NSLog(@"STARTING NEXT %@", theTask);
     }
     else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
-        NSLog(@"GALLERY CREATION COMPLETE");
+        invalidated = TRUE;
+        
+        if (toComplete == isComplete) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
+            NSLog(@"GALLERY CREATION COMPLETE");
+        }
     }
 }
 

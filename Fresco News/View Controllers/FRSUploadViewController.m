@@ -954,6 +954,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
         gallery[@"posts"] = current;
         gallery[@"caption"] = self.captionTextView.text;
+        NSLog(@"CREATING");
         
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
             if (!error) {
