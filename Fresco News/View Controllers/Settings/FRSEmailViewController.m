@@ -144,9 +144,20 @@
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
             if (!self.alert) {
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                [self.alert show];
-                [self.cell.textField resignFirstResponder];
+                NSString *title = @"";
+                
+                if (IS_IPHONE_5) {
+                    title = @"UNABLE TO CONNECT";
+                } else if (IS_IPHONE_6) {
+                    title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+                } else if (IS_IPHONE_6_PLUS) {
+                    title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+                }
+                
+                if (!self.alert) {
+                    self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                    [self.alert show];
+                }
             }
             return;
         }

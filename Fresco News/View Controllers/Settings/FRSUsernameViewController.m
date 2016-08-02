@@ -248,32 +248,46 @@
                     [self addErrorToView];
                 }
             } else {
+                NSString *title = @"";
+                
+                if (IS_IPHONE_5) {
+                    title = @"UNABLE TO CONNECT";
+                } else if (IS_IPHONE_6) {
+                    title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+                } else if (IS_IPHONE_6_PLUS) {
+                    title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+                }
+                
                 if (!self.alert) {
-                    self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                    self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
                     [self.alert show];
-                    [self.cell.textField resignFirstResponder];
                 }
                 return;
             }
         }
         else if (responseCode >= 500 && responseCode < 600) {
             // 500 level, server
+            NSString *title = @"";
+            
+            if (IS_IPHONE_5) {
+                title = @"UNABLE TO CONNECT";
+            } else if (IS_IPHONE_6) {
+                title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+            } else if (IS_IPHONE_6_PLUS) {
+                title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+            }
+            
             if (!self.alert) {
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
                 [self.alert show];
-                [self.cell.textField resignFirstResponder];
             }
 
             return;
         }
         
-        
-        
-        
         if (!error) {
             [self popViewController];
         }
-        
     }];
     
     FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
@@ -380,10 +394,19 @@
                         [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
                         self.cell.rightAlignedButton.userInteractionEnabled = NO;
                     } else if (error.code == -1009){
+                        NSString *title = @"";
+                        
+                        if (IS_IPHONE_5) {
+                            title = @"UNABLE TO CONNECT";
+                        } else if (IS_IPHONE_6) {
+                            title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+                        } else if (IS_IPHONE_6_PLUS) {
+                            title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+                        }
+                        
                         if (!self.alert) {
-                            self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                            self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
                             [self.alert show];
-                            [self.cell.textField resignFirstResponder];
                         }
                     } else {
                         [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
