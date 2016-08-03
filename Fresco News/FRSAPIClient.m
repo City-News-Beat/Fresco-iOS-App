@@ -378,14 +378,13 @@
     NSDictionary *params = @{
                              @"geo" : geoData,
                              @"radius" : @(radius),
-                             @"where" : @"contained"
                             };
     
     NSLog(@"PARAMS: %@", params);
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        NSLog(@"%@ %@", responseObject, error);
+        NSLog(@"BLECAHK%@", responseObject);
     }];
     
 }
