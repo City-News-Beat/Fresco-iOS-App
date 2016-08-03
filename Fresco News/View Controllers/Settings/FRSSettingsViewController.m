@@ -35,7 +35,7 @@
 #import "FRSSocial.h"
 
 
-@interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource, FRSAlertViewDelegate>
 
 @property (strong, nonatomic) NSString *twitterHandle;
 @property (strong, nonatomic) FRSTableViewCell *twitterCell;
@@ -457,7 +457,7 @@
         case 8:
             switch (indexPath.row) {
                 case 0: {
-                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We'll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We'll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                     
                     [alert show];
                     
@@ -561,6 +561,24 @@
     
 }
 
+
+#pragma mark - FRSAlertView Delegate
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    //for logout alert
+    if (index == 0) {
+        NSLog(@"index 0");
+    } else if (index == 1) {
+        [self logout];
+    }
+}
+
+-(void)logout {
+    
+    [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
+    
+    [self popViewController];
+    
+}
 
 #pragma mark - Notifications
 
