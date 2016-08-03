@@ -683,7 +683,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
         //Removes previously added outlet cells when the user selects a cell that does not contain outlets
         //Ex: User selects cell with outlets, user selects "No assignment"
-        if ((self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1 && self.prevCell != nil && !cellIsOutlet && !prevCellIsOutlet) || (_showingOutlets && cell.outlets.count > 1)) {
+        if ((self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1 && self.prevCell != nil && !cellIsOutlet && !prevCellIsOutlet) && self.prevCell != cell) {
             self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count; //Add one for "No assignment cell"
             NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
             for(int i = 1; i <= self.prevCell.outlets.count; i++){
