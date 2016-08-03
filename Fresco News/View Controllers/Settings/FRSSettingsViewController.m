@@ -122,7 +122,7 @@
             return 1;
             break;
         case 4:
-            return 3;
+            return 2;
             break;
         case 5:
             return 1;
@@ -273,9 +273,8 @@
         case 4:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureFindFriendsCell];
-                    break;
-                case 1:
+//                    [cell configureFindFriendsCell];
+                    
                     self.twitterCell = cell;
                     if (self.twitterCell.twitterHandle) {
                         [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
@@ -286,7 +285,7 @@
                         [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
                     }
                     break;
-                case 2:
+                case 1:
                     self.facebookCell = cell;
                     
                     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
@@ -295,8 +294,8 @@
                     } else {
                         [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
                     }
-                    
                     break;
+
                 default:
                     break;
             }
@@ -409,9 +408,8 @@
         case 4:
             switch (indexPath.row) {
                 case 0:{
-                    NSLog(@"find friends");
-                    FRSAlertView *alert = [[FRSAlertView alloc] initFindFriendsAlert];
-                    [alert show];
+//                    FRSAlertView *alert = [[FRSAlertView alloc] initFindFriendsAlert];
+//                    [alert show];
                 }
                     break;
                 case 1: {
