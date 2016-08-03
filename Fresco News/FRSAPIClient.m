@@ -411,11 +411,8 @@
     
     NSDictionary *params = @{
                              @"geo" : geoData,
-<<<<<<< HEAD
                              @"radius" : @(radius)
-=======
->>>>>>> 3.0-phil
-                             };
+                            };
     
 
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
