@@ -411,7 +411,7 @@
     
     NSDictionary *params = @{
                              @"geo" : geoData,
-                             @"where" : @"contained"
+                             @"radius" : @(radius)
                              };
     
 
