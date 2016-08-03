@@ -46,7 +46,8 @@
 
 @property (strong, nonatomic) UISwitch *facebookSwitch;
 @property (strong, nonatomic) NSString *facebookName;
-
+@property (nonatomic) NSInteger cellType;
+@property (strong, nonatomic) NSString *representedID;
 -(void)twitterToggle;
 -(void)facebookToggle;
 
