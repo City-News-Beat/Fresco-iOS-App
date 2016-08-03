@@ -183,6 +183,10 @@
     
 }
 
+-(void)updateSettingsWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:settingsUpdateEndpoint withParameters:digestion completion:completion];
+}
+
 -(FRSUser *)authenticatedUser {
     
     // predicate searching for users in store w/ loggedIn as TRUE/1
@@ -383,12 +387,13 @@
     NSDictionary *params = @{
                              @"geo" : geoData,
                              @"radius" : @(radius),
-                             @"rating" : @1,
-                             @"where" : @"contained"
                             };
+    
+    NSLog(@"PARAMS: %@", params);
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        NSLog(@"BLECAHK%@", responseObject);
     }];
     
 }

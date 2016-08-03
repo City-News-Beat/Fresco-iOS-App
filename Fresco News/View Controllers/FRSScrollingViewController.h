@@ -27,10 +27,13 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
 
 @property (nonatomic) BOOL shouldHaveBackButton;
 
+@property (nonatomic) float navBarHeight;
+
 @property (nonatomic, retain) UIScrollView *pageScroller;
 
 -(void)configureTableView;
 
+-(void)expandNavBar:(NSArray *)barButtonItems;
 -(void)expandNavBarBy:(float)value BarButtonItems: (NSArray *)barButtonItems;
 -(void)condenseNavBarBy:(float)value BarButtonItems: (NSArray *)barButtonItems;
 

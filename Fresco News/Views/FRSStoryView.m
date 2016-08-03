@@ -330,6 +330,7 @@
 #pragma mark - Action Bar Deletate
 
 -(NSString *)titleForActionButton{
+    
     return @"READ MORE";
 }
 
@@ -338,6 +339,11 @@
 }
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
+    NSLog(@"READ MORE");
+    
+    if (self.readMoreBlock) {
+        self.readMoreBlock(Nil);
+    }
     if (self.actionBlock) {
         self.actionBlock();
     }

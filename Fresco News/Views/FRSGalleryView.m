@@ -139,7 +139,9 @@
 -(void)updateUser {
     FRSPost *firstPost = (FRSPost *)[self.orderedPosts firstObject];
     
-    if (firstPost.creator.profileImage && firstPost.creator.profileImage != Nil && ![firstPost.creator.profileImage isEqual:[NSNull null]] && [[firstPost.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
+    if (firstPost.creator.profileImage != Nil && ![firstPost.creator.profileImage isEqual:[NSNull null]] && [[firstPost.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![firstPost.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:firstPost.creator.profileImage].absoluteString.length > 1) {
+        //NSLog(@"aaAvatar: %@",firstPost.creator.profileImage);
+
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:firstPost.creator.profileImage]];
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
@@ -147,6 +149,7 @@
         [self.profileIV setImage:Nil];
         [self.nameLabel setOriginWithPoint:CGPointMake(0, self.nameLabel.frame.origin.y)];
     }
+    
 }
 
 -(void)updateSocial {
@@ -592,7 +595,11 @@
     
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
     
-    self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@",post.creator.firstName] fontSize:17];
+    if(post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0){
+        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@",post.creator.username] fontSize:17];;
+    }else{
+        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@",post.creator.firstName] fontSize:17];;
+    }
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
@@ -606,18 +613,11 @@
     self.nameLabel.layer.masksToBounds = NO;
     [self addSubview:self.nameLabel];
     
-    if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
+    if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            
             //Set user image
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-            
-            //Add gesture recognizer only if user has a photo
-            
-            UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
-            [bylineTap setNumberOfTapsRequired:1];
-            [self.nameLabel setUserInteractionEnabled:YES];
-            [self.nameLabel addGestureRecognizer:bylineTap];
+            //NSLog(@"wwAvatar: %@",post.creator.profileImage);
 
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
             [photoTap setNumberOfTapsRequired:1];
@@ -628,6 +628,11 @@
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
+    UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+    [bylineTap setNumberOfTapsRequired:1];
+    [self.nameLabel setUserInteractionEnabled:YES];
+    [self.nameLabel addGestureRecognizer:bylineTap];
+
 }
 
 -(void)updateLabels{
@@ -636,7 +641,11 @@
     
     FRSPost *post = self.orderedPosts[self.adjustedPage];
     
-    self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
+    if(post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0){
+        self.nameLabel.text = [NSString stringWithFormat:@"@%@",post.creator.username];
+    }else{
+        self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
+    }
     
     self.locationLabel.text = post.address;
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
@@ -656,18 +665,12 @@
     CGRect timeFrame = self.timeLabel.frame;
     timeFrame.size.width = 100;
     self.timeLabel.frame = timeFrame;
-    
-    if (post.creator.profileImage != [NSNull null] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
+    if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-            NSLog(@"%@",[NSURL URLWithString:post.creator.profileImage]);
-            //Add gesture recognizer only if user has a photo
-            UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
-            [bylineTap setNumberOfTapsRequired:1];
-            [self.nameLabel setUserInteractionEnabled:YES];
-            [self.nameLabel addGestureRecognizer:bylineTap];
-            
+            //NSLog(@"kkAvatar: %@",post.creator.profileImage);
+
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
             [photoTap setNumberOfTapsRequired:1];
             [self.profileIV setUserInteractionEnabled:YES];
@@ -676,8 +679,13 @@
         
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
-        [self.nameLabel setUserInteractionEnabled:NO];
+        //[self.nameLabel setUserInteractionEnabled:NO];
     }
+
+    UITapGestureRecognizer *bylineTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+    [bylineTap setNumberOfTapsRequired:1];
+    [self.nameLabel setUserInteractionEnabled:YES];
+    [self.nameLabel addGestureRecognizer:bylineTap];
 
     [self addShadowToLabel:self.nameLabel];
     [self addShadowToLabel:self.locationLabel];
@@ -933,14 +941,17 @@
     
     
     FRSPost *adjustedPost = self.orderedPosts[self.adjustedPage];
-    if (adjustedPost.creator.profileImage != [NSNull null] && [[adjustedPost.creator.profileImage class] isSubclassOfClass:[NSString class]]) {
+    if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:adjustedPost.creator.profileImage]];
         //self.profileIV.alpha = 1;
+        //NSLog(@"mmAvatar: %@",post.creator.profileImage);
         
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
        // self.profileIV.alpha = 0;
     }
+    
+    
     
     if (adjustedPost.videoUrl == nil) {
         self.muteImageView.alpha = 0;

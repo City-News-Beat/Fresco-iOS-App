@@ -13,19 +13,18 @@
 
 @interface FRSAssignmentPickerTableViewCell ()
 
-@property (strong, nonatomic) UILabel *titleLabel;
-
 @end
 
 @implementation FRSAssignmentPickerTableViewCell
 @synthesize isSelectedAssignment = _isSelectedAssignment;
+@synthesize isSelectedOutlet = _isSelectedOutlet;
+@synthesize isAnOutlet = _isAnOutlet;
 -(void)awakeFromNib {
 //    [super awakeFromNib];
 }
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSDictionary *)assignment {
@@ -38,6 +37,8 @@
         self.selectionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24)];
         
         self.isSelectedAssignment = FALSE;
+        self.isSelectedOutlet = FALSE;
+        self.isAnOutlet = false;
         
         [self addSubview:self.selectionImageView];
         
@@ -60,6 +61,7 @@
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
     
     self.isSelectedAssignment = FALSE;
+    self.isSelectedOutlet = FALSE;
     
     self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     
@@ -79,10 +81,18 @@
     return _isSelectedAssignment;
 }
 
+-(BOOL)isSelectedOutlet{
+    return _isSelectedOutlet;
+}
+
+-(BOOL)isAnOutlet{
+    return _isAnOutlet;
+}
+
 -(void)setIsSelectedAssignment:(BOOL)isSelectedAssignment {
     _isSelectedAssignment = isSelectedAssignment;
     
-    if (self.isSelectedAssignment) {
+    if (self.isSelectedAssignment && !_isAnOutlet) {
         self.selectionImageView.image = [UIImage imageNamed:@"check-box-circle-filled"];
         
         //2nd condition is for global assignments
@@ -91,7 +101,34 @@
         }
         
         self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
-    } else {
+    } else if(!_isAnOutlet){
+        self.selectionImageView.image = [UIImage imageNamed:@"check-box-circle-outline"];
+        self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    }
+}
+
+-(void)setIsAnOutlet:(BOOL)isAnOutlet{
+    _isAnOutlet = isAnOutlet;
+    
+    if(isAnOutlet){
+        self.titleLabel.text = @"I'm an outlet";
+        int indent = 16;
+        CGRect newFrame = self.titleLabel.frame;
+        newFrame.origin.x+=indent;
+        newFrame.size.width-=indent;
+        [self.titleLabel setFrame:newFrame];
+    }else{
+        self.titleLabel.text = @"No assignment";
+    }
+}
+
+-(void)setIsSelectedOutlet:(BOOL)isSelectedOutlet{
+    _isSelectedOutlet = isSelectedOutlet;
+    
+    if (self.isSelectedOutlet && _isAnOutlet) {
+        self.selectionImageView.image = [UIImage imageNamed:@"check-box-circle-filled"];
+        self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
+    } else if(_isAnOutlet){
         self.selectionImageView.image = [UIImage imageNamed:@"check-box-circle-outline"];
         self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     }
@@ -100,8 +137,8 @@
 -(void)clearCell {
     self.titleLabel.text = nil;
     self.isSelectedAssignment = NO;
+    self.isSelectedOutlet = NO;
 }
-
 
 -(void)configureOutletCellWithOutlet:(NSDictionary *)outlet {
     
