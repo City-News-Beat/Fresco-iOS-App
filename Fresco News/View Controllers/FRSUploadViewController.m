@@ -94,7 +94,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     self.players = [[NSMutableArray alloc] init];
     
-    self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count;
+    self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count + numberOfOutlets;
     
     
     [self resetFrames:false];
@@ -567,7 +567,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
             else {
                 row = indexPath.row;
             }
-            
             FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:row]];
             [cell configureAssignmentCellForIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
 
@@ -606,6 +605,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
+    NSLog(@"CELL FOR ROW AT INDEX: %@", cell.assignment);
+
     BOOL cellIsOutlet = cell.isAnOutlet;
     BOOL prevCellIsOutlet = self.prevCell.isAnOutlet;
     /*
@@ -638,7 +639,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         selectedRow = indexPath.row;
         
         NSLog(@"Rows: %lu", tableView.indexPathsForVisibleRows.count);
-        
+         
         //Checks if the current cell has more than one outlet
         if (cell.outlets.count > 1 && tableView != self.globalAssignmentsTableView && !_showingOutlets) {
             self.numberOfRowsInAssignmentTableView += cell.outlets.count;
