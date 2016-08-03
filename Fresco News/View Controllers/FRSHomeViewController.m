@@ -739,9 +739,9 @@
     [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
     float navBarHeight=20.0;
     float scrollingDifference = (scrollView.contentOffset.x/self.tableView.frame.size.width*(navBarHeight*2))-navBarHeight-3;
+    float scrollingDifferenceFollowing = (scrollView.contentOffset.x/self.followingTable.frame.size.width*(navBarHeight*2))-navBarHeight-3;
     
-    if(scrollView.contentOffset.x>0&&scrollView.contentOffset.x<self.tableView.frame.size.width && self.navigationController.navigationBar.frame.origin.y != navBarHeight){
-        self.scrollDirection = UIAccessibilityScrollDirectionDown;
+    if(scrollView.contentOffset.x>0&&scrollView.contentOffset.x<self.tableView.frame.size.width && self.navigationController.navigationBar.frame.origin.y != navBarHeight && scrollingDifferenceFollowing < navBarHeight){
         [self expandNavBarBy:scrollingDifference BarButtonItems:barButtonItems];
     }
     
