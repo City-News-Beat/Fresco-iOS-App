@@ -200,7 +200,7 @@
     [self configureNotificationSection];
     [self configureMapView];
     [self configureSliderSection];
-    [self configurePromoSection];
+//    [self configurePromoSection];
     [self adjustScrollViewContentSize];
     [self configureBottomBar];
 }
