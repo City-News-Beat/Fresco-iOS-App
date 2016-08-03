@@ -49,6 +49,11 @@
     
     NSEntityDescription *userEntity = [NSEntityDescription entityForName:@"FRSUser" inManagedObjectContext:context];
     FRSUser *user = (FRSUser *)[[NSManagedObject alloc] initWithEntity:userEntity insertIntoManagedObjectContext:nil];
+    
+    if ([properties isEqual:[NSNull null]]) {
+        return user;
+    }
+    
     user.uid = (properties[@"id"] != nil ? properties[@"id"] : @"");
     
     if (!properties || [properties isEqual:[NSNull null]]){
