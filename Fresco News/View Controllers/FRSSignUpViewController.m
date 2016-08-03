@@ -77,6 +77,18 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+        
+        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+        
+    } else {
+        
+        
+        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+        
+        
+    }
 }
 
 -(NSDictionary *)currentSocialDigest {
@@ -85,6 +97,8 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    
     
     if (!_hasShown) {
         //        [self.usernameTF becomeFirstResponder];
@@ -107,6 +121,10 @@
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnToPreviousViewController) name:@"returnToPreviousViewController" object:nil];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+        
+    }
 }
 
 -(void)back {
