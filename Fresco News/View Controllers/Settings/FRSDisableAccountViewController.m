@@ -9,10 +9,14 @@
 #import "FRSDisableAccountViewController.h"
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
+#import "FRSAPIClient.h"
+#import "FRSAlertView.h"
 
 @interface FRSDisableAccountViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
+
+@property (strong, nonatomic) UIImageView *errorImageView;
 
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *email;
@@ -143,8 +147,40 @@
 
 -(void)disableAccount {
     NSLog(@"disable account");
+    
+    if (![[FRSAPIClient sharedClient].authenticatedUser.username isEqualToString:self.username]) {
+        [self addErrorViewAtYPos:108];
+        [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.rightAlignedButton.userInteractionEnabled = NO;
+    }
+    
+    if (![[FRSAPIClient sharedClient].authenticatedUser.email isEqualToString:self.email]) {
+        [self addErrorViewAtYPos:153];
+        [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.rightAlignedButton.userInteractionEnabled = NO;
+    }
+    
+    if (self.password) { //should check if self.password != user password
+        [self addErrorViewAtYPos:196];
+    }
+    
+    
+    //Endpoint is not live, waiting on Mike
+    [[FRSAPIClient sharedClient] disableAccountWithDigestion:@{@"password" : self.password} completion:^(id responseObject, NSError *error) {
+
+    }];
 }
 
+
+#pragma mark - Error
+
+-(void)addErrorViewAtYPos:(CGFloat)yPos {
+    self.errorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+    self.errorImageView.frame = CGRectMake(self.view.frame.size.width - 34, yPos, 24, 24);
+    self.errorImageView.alpha = 1; // 0 when animating
+    
+    [self.tableView addSubview:self.errorImageView];
+}
 
 
 #pragma mark - Validators
@@ -201,8 +237,6 @@
         [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.rightAlignedButton.userInteractionEnabled = NO;
     }
-    
-    
     
     return YES;
 }

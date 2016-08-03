@@ -76,6 +76,7 @@ static NSString * const userEndpoint = @"user/";
 static NSString * const updateUserEndpoint = @"user/update";
 static NSString * const authenticatedUserEndpoint = @"user/me";
 static NSString * const addSocialEndpoint = @"social/connect/";
+static NSString * const disableAccountEndpoint = @"user/disable/";
 
 // gallery creation
 static NSString * const createGalleryEndpoint = @"gallery/create";
