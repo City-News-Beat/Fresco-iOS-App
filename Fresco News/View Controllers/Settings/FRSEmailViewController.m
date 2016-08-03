@@ -10,33 +10,34 @@
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSAPIClient.h"
-#import "FRSAlertView.h"
 
 @interface FRSEmailViewController()
 
-@property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) FRSTableViewCell *cell;
+@property (strong, nonatomic) FRSAlertView *alert;
+@property (strong, nonatomic) UIImageView *errorImageView;
+@property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *password;
+
 @property BOOL emailIsValid;
 @property BOOL passwordIsValid;
 
-@property (strong, nonatomic) FRSAlertView *alert;
-
 @end
+
 
 @implementation FRSEmailViewController
 
--(void)viewDidLoad{
+-(void)viewDidLoad {
     [super viewDidLoad];
     
     [self configureTableView];
     [self configureBackButtonAnimated:NO];
 }
 
--(void)configureTableView{
-    self.title = @"EMAIL ADDRESS";
+-(void)configureTableView {
     
+    self.title = @"EMAIL ADDRESS";
     self.automaticallyAdjustsScrollViewInsets = NO;
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
@@ -50,6 +51,9 @@
     [self.view addSubview:self.tableView];
 }
 
+
+#pragma mark - UITableView
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
@@ -58,10 +62,10 @@
     return 3;
 }
 
-
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 44;
 }
+
 
 -(FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellIdentifier;
@@ -80,6 +84,7 @@
     }
     return self.cell;
 }
+
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -112,8 +117,11 @@
     }
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
 }
+
+
+
+#pragma mark - Actions
 
 -(void)saveEmail {
     
@@ -133,11 +141,24 @@
             return;
         }
         
-        
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-            [alert show];
+            if (!self.alert) {
+                NSString *title = @"";
+                
+                if (IS_IPHONE_5) {
+                    title = @"UNABLE TO CONNECT";
+                } else if (IS_IPHONE_6) {
+                    title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+                } else if (IS_IPHONE_6_PLUS) {
+                    title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+                }
+                
+                if (!self.alert) {
+                    self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                    [self.alert show];
+                }
+            }
             return;
         }
         
@@ -148,20 +169,21 @@
         if (responseCode >= 400 && responseCode < 500) {
             // 400 level, client
             if (responseCode == 403) {
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Incorrect password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                [alert show];
+                if (!self.errorImageView) {
+                    [self addErrorToView];
+                }
             } else {
                 // Email is already in use (400)
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Email is already in use." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                [alert show];
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Email is already in use." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                [self.alert show];
             }
             
             return;
         }
         else if (responseCode >= 500 && responseCode < 600) {
             // 500 level, server
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-            [alert show];
+            self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+            [self.alert show];
             return;
         }
         else {
@@ -170,7 +192,32 @@
     }];
 }
 
+
+
 #pragma mark - TextField Delegate
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (textField.isSecureTextEntry) {
+        if (self.errorImageView) {
+            textField.text = 0;
+            self.errorImageView.alpha = 0;
+            self.errorImageView = nil;
+            [self.errorImageView removeFromSuperview];
+        }
+    }
+}
+
+-(void)addErrorToView {
+    if (!self.errorImageView) {
+        self.errorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.errorImageView.frame = CGRectMake(self.view.frame.size.width - 34, 55, 24, 24);
+        self.errorImageView.alpha = 1; // 0 when animating
+        [self.view addSubview:self.errorImageView];
+        
+        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cell.rightAlignedButton.userInteractionEnabled = NO;
+    }
+}
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
     
@@ -219,6 +266,7 @@
 }
 
 
+
 #pragma mark - Validators
 
 -(BOOL)isValidEmail:(NSString *)emailString {
@@ -228,7 +276,6 @@
     }
     
     NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-    
     NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
     NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
     
@@ -244,9 +291,17 @@
     if (password.length < 8) {
         return NO;
     }
-    
     return YES;
 }
 
+
+
+#pragma mark - FRSAlertView Delegate
+
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    if (index == 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
+}
 
 @end

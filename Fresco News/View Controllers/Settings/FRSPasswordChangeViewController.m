@@ -15,6 +15,7 @@
 @interface FRSPasswordChangeViewController ()
 
 @property (strong, nonatomic) UITableView *tableView;
+
 @property (strong, nonatomic) FRSTableViewCell *currentPasswordCell;
 @property (strong, nonatomic) FRSTableViewCell *updatedPasswordCell;
 @property (strong, nonatomic) FRSTableViewCell *updatedPasswordVerifyCell;
@@ -24,17 +25,20 @@
 @property (strong, nonatomic) NSString *updatedPassword;
 @property (strong, nonatomic) NSString *updatedPasswordVerify;
 
+@property (strong, nonatomic) FRSAlertView *alert;
+
+@property (strong, nonatomic) UIImageView *errorImageView;
+
 @property BOOL currentPasswordIsValid;
 @property BOOL updatedPasswordIsValid;
 @property BOOL updatedPasswordVerifyIsValid;
 
-@property (strong, nonatomic) FRSAlertView *alert;
 
 @end
 
 @implementation FRSPasswordChangeViewController
 
--(void)viewDidLoad{
+-(void)viewDidLoad {
     [super viewDidLoad];
     
     [self configureTableView];
@@ -61,20 +65,24 @@
     [self.view addSubview:self.tableView];
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+
+
+#pragma mark - UITableView
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 4;
 }
 
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 44;
 }
 
-- (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *cellIdentifier;
     FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
@@ -92,7 +100,7 @@
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     switch (indexPath.row) {
         case 0:
@@ -132,9 +140,11 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
+
+
+#pragma mark - UITextField Delegate
+
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
-    
-    NSLog(@"SHOULD CHANGE IN RANGE");
     
     //Match strings to proper textfield.text
     if (textField.tag == 1) {
@@ -152,19 +162,15 @@
         return YES;
     }
     
-    //If new passwords do not match, do not continue
-//    if (([self.updatedPassword isEqualToString:self.updatedPasswordVerify])) {
-//        [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-//        self.buttonCell.rightAlignedButton.userInteractionEnabled = YES;
-//        return YES;
-//    }
-    
     [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     self.buttonCell.rightAlignedButton.userInteractionEnabled = YES;
     
     return YES;
 }
 
+
+
+#pragma mark - Validators
 
 -(BOOL)isValidPassword:(NSString *)password {
     if (password.length < 7) {
@@ -174,18 +180,22 @@
     return YES;
 }
 
+
+
+#pragma mark - Actions
+
 -(void)savePassword {
     
     [self.view endEditing:YES];
     
-    
     if ((![self.updatedPassword isEqualToString: self.updatedPasswordVerify])) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"New passwords do not match." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-        [alert show];
+        if (!self.alert) {
+            self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"New passwords do not match." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+            [self.alert show];
+        }
         return;
     }
 
-    
     NSDictionary *digestion = @{@"verify_password" : self.currentPassword, @"password" : self.updatedPassword};
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
@@ -193,19 +203,18 @@
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         [delegate reloadUser];
         
-        
-        
         if (!error) {
             [self popViewController];
             return;
         }
         
-        
         if (error) {
             if (error.code == -1009) {
                 NSLog(@"Unable to connect.");
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                [alert show];
+                if (!self.alert) {
+                    self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                    [self.alert show];
+                }
                 return;
             }
             
@@ -216,8 +225,10 @@
             if (responseCode >= 400 && responseCode < 500) {
                 // 400 level, client
                 if (responseCode == 403) {
-                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Incorrect password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                    [alert show];
+                    if (!self.errorImageView) {
+                        [self addErrorToView];
+                    }
+
                 } else {
                     
                 }
@@ -226,8 +237,11 @@
             }
             else if (responseCode >= 500 && responseCode < 600) {
                 // 500 level, server
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                [alert show];
+                if (!self.alert) {
+                    self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                    [self.alert show];
+                }
+
                 return;
             }
             else {
@@ -239,7 +253,41 @@
     FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
     userToUpdate.password = self.updatedPassword;
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
-    
+}
+
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (textField.isSecureTextEntry) {
+        if (self.errorImageView) {
+            textField.text = 0;
+            self.errorImageView.alpha = 0;
+            self.errorImageView = nil;
+            [self.errorImageView removeFromSuperview];
+        }
+    }
+}
+
+-(void)addErrorToView {
+    if (!self.errorImageView) {
+        self.errorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.errorImageView.frame = CGRectMake(self.view.frame.size.width - 34, 10, 24, 24);
+        self.errorImageView.alpha = 1; // 0 when animating
+        [self.view addSubview:self.errorImageView];
+        
+        [self.buttonCell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.buttonCell.rightAlignedButton.userInteractionEnabled = NO;
+    }
+}
+
+
+
+
+#pragma mark - FRSAlertView Delegate
+
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    if (index == 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
 }
 
 

@@ -289,8 +289,9 @@
                 case 2:
                     self.facebookCell = cell;
                     
-                    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]) {
-                        [cell configureSocialCellWithTitle:@"Facebook Name" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+                    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
+                        [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+                        
                     } else {
                         [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
                     }

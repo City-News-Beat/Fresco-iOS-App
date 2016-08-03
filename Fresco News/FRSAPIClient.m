@@ -143,6 +143,11 @@
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
             [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
+            
+            NSLog(@"DIGESTION: %@", digestion);
+            NSLog(@"RESPONSE: %@", responseObject);
+            NSLog(@"ERROR: %@", error);
+            
         }
         completion(responseObject, error);
     }];
@@ -180,6 +185,10 @@
 
 -(void)updateSettingsWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:settingsUpdateEndpoint withParameters:digestion completion:completion];
+}
+
+-(void)disableAccountWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:disableAccountEndpoint withParameters:digestion completion:completion];
 }
 
 -(FRSUser *)authenticatedUser {
@@ -336,6 +345,10 @@
     NSLog(@"%@", endpoint);
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+       
+        NSLog(@"RESPONSE: %@", responseObject);
+        NSLog(@"ERROR: %@", error);
+
     }];
 }
 
@@ -370,7 +383,7 @@
  */
 
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion{
-
+    
     NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
     [geoData setObject:@"Point" forKey:@"type"];
     [geoData setObject:location forKey:@"coordinates"];

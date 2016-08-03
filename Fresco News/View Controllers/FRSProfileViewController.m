@@ -913,7 +913,6 @@
         // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.username;
         if(user.profileImage != [NSNull null]){
-            self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
         }
         

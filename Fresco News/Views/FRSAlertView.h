@@ -27,5 +27,6 @@
 -(instancetype)initPermissionsAlert;
 -(instancetype)initFindFriendsAlert;
 -(instancetype)initSignUpAlert;
+-(instancetype)initBannerWithTitle:(NSString *)title backButton:(BOOL)backButton;
 
 @end

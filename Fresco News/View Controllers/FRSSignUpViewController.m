@@ -22,6 +22,7 @@
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FRSAppDelegate.h"
+#import "FRSNavigationController.h"
 
 @import MapKit;
 
@@ -76,6 +77,18 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+        
+        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+        
+    } else {
+        
+        
+        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+        
+        
+    }
 }
 
 -(NSDictionary *)currentSocialDigest {
@@ -84,6 +97,8 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    
     
     if (!_hasShown) {
         //        [self.usernameTF becomeFirstResponder];
@@ -100,11 +115,16 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
+    backItem.imageInsets = UIEdgeInsetsMake(2, -4.5, 0, 0);
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     [self.navigationItem setLeftBarButtonItem:backItem animated:animated];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnToPreviousViewController) name:@"returnToPreviousViewController" object:nil];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+        
+    }
 }
 
 -(void)back {
@@ -148,6 +168,7 @@
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+    
 }
 
 
@@ -985,27 +1006,32 @@
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
     [registrationDigest setObject:self.passwordTF.text forKey:@"password"];
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
-    [registrationDigest setObject:@(self.miles) forKey:@"notification_radius"];
+    [registrationDigest setObject:@(self.miles) forKey:@"radius"];
 
     
     if (_isAlreadyRegistered) {
-        
         if (![_pastRegistration[@"email"] isEqualToString:self.emailTF.text]) {
             
         }
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             
-            
             if (error.code == -1009) {
+                NSString *title;
                 
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect to the internet. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                if (IS_IPHONE_5) {
+                    title = @"UNABLE TO CONNECT";
+                } else if (IS_IPHONE_6) {
+                    title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+                } else if (IS_IPHONE_6_PLUS) {
+                    title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+                }
+                
+                FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
                 [alert show];
                 return;
             }
-            
-            
-            
+
             NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
             NSInteger responseCode = response.statusCode;
             NSLog(@"ERROR: %ld", (long)responseCode);
@@ -1030,6 +1056,13 @@
             }
         }];
         
+        
+        
+        
+        
+        
+        
+        
         return;
     }
     
@@ -1039,15 +1072,41 @@
         NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
         NSLog(@"%@", errorMessage);
         
+        if (error.code == -1009) {
+            
+            NSString *title = @"";
+            
+            if (IS_IPHONE_5) {
+                title = @"UNABLE TO CONNECT";
+            } else if (IS_IPHONE_6) {
+                title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+            } else if (IS_IPHONE_6_PLUS) {
+                title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+            }
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+            [alert show];
+            return;
+        }
+        
+        
         if (error) {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
         }
         
+        
         if (error.code == 0) {
             _isAlreadyRegistered = TRUE;
             [self segueToSetup];
-            //check dictionary
+            
+            
+            
+            
+            
+            
+            
+            
         }
         _pastRegistration = registrationDigest;
         
@@ -1108,6 +1167,9 @@
         [UIView animateWithDuration:.2 animations:^{
             [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
         }];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
         return;
     }
     
@@ -1119,6 +1181,12 @@
         [spinner stopLoading];
         [spinner removeFromSuperview];
         self.twitterButton.hidden = false;
+        
+        if (session) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+            [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
+        }
+
         
         if (error) {
 
@@ -1159,6 +1227,9 @@
             [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
         }];
         
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+        
         return;
     }
     
@@ -1166,6 +1237,20 @@
     
     [FRSSocial registerWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         _facebookButton.enabled = TRUE;
+        
+        if (token) {
+            FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+            
+            [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:self.inputViewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+                
+                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                    if (!error) {
+                        [[NSUserDefaults standardUserDefaults] setValue:[result valueForKey:@"name"] forKey:@"facebook-name"];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                    }
+                }];
+            }];
+        }
         
         if (error) {
 
