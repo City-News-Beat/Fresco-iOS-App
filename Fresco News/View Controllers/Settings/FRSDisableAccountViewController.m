@@ -148,6 +148,9 @@
 -(void)disableAccount {
     NSLog(@"disable account");
     
+    
+    //Does not check case sensitive
+    
     if (![[FRSAPIClient sharedClient].authenticatedUser.username isEqualToString:self.username]) {
         [self addErrorViewAtYPos:108];
         [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
