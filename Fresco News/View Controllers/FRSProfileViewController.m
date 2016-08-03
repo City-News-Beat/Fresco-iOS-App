@@ -292,7 +292,9 @@
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
     
-    if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+    //NSLog(@"CHILDREN: %lu", self.navigationController.childViewControllers.count);
+    
+    if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid] && self.navigationController.childViewControllers.count == 1) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
         editItem.tintColor = [UIColor whiteColor];
@@ -775,9 +777,9 @@
     
     //    [self dismissSocialOverlay];
     
-    NSLog(@"Content Offset %f", scrollView.contentOffset.y);
-    NSLog(@"Frame Y ORIGIN %f",     self.sectionView.frame.origin.y);
-    NSLog(@"SUBVIEW COUNT: %lu",(unsigned long)[self.navigationController.navigationBar subviews].count);
+    //NSLog(@"Content Offset %f", scrollView.contentOffset.y);
+    //NSLog(@"Frame Y ORIGIN %f",     self.sectionView.frame.origin.y);
+    //NSLog(@"SUBVIEW COUNT: %lu",(unsigned long)[self.navigationController.navigationBar subviews].count);
     NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
     [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];

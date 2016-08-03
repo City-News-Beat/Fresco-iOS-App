@@ -424,8 +424,8 @@
     
     NSDictionary *params = @{
                              @"geo" : geoData,
-                             @"where" : @"contained"
-                             };
+                             @"radius" : @(radius)
+                            };
     
 
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {

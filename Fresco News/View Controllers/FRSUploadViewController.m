@@ -94,7 +94,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
     self.players = [[NSMutableArray alloc] init];
     
-    self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count;
+    self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count + numberOfOutlets;
+    
+    
     [self resetFrames:false];
 }
 
@@ -125,12 +127,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)resetFrames: (BOOL)animate {
     
     NSLog(@"RESET FRAMES: %ld", self.numberOfRowsInAssignmentTableView);
+    NSLog(@"Count: %lu", (unsigned long)self.assignmentsArray.count);
+
     if(animate){
         dispatch_async(dispatch_get_main_queue(), ^{
             [UIView beginAnimations:nil context:nil];
             [UIView setAnimationDuration:0.3];
             //[UIView setAnimationCurve:UIViewAnimationTransitionCurlUp];
-            
             self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.numberOfRowsInAssignmentTableView+1) *44);
             self.globalAssignmentsDrawer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44);
             if (self.globalAssignmentsTableView) {
@@ -384,11 +387,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
     //If user is scrolling up, scale with content offset.
     if (offset <= 0) {
         self.galleryCollectionView.clipsToBounds = NO;
-        NSLog(@"COLLECTIONVIEW HEIGHT: %f", self.galleryCollectionView.frame.size.height);
+        //NSLog(@"COLLECTIONVIEW HEIGHT: %f", self.galleryCollectionView.frame.size.height);
 
         [self.galleryCollectionView setFrame:CGRectMake(0, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset))];
         [self.galleryCollectionView.collectionViewLayout invalidateLayout];
-        NSLog(@"COLLECTIONVIEW HEIGHT: %f", self.galleryCollectionView.frame.size.height);
+        //NSLog(@"COLLECTIONVIEW HEIGHT: %f", self.galleryCollectionView.frame.size.height);
 
     }
 }
@@ -551,6 +554,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
                     
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
+                    NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
+                    cell.representedOutletID = [outlet objectForKey:@"id"];
+                    
                     //[self resetFrames:true];
                     return cell;
                 }
@@ -564,7 +570,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
             else {
                 row = indexPath.row;
             }
-            
             FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:row]];
             [cell configureAssignmentCellForIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
 
@@ -603,6 +608,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
+    NSLog(@"CELL FOR ROW AT INDEX: %@", cell.assignment);
+
     BOOL cellIsOutlet = cell.isAnOutlet;
     BOOL prevCellIsOutlet = self.prevCell.isAnOutlet;
     /*
@@ -624,6 +631,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     if(cellIsOutlet && !cell.isSelectedOutlet){
         [self resetOtherOutlets];
         cell.isSelectedOutlet = YES;
+        selectedOutlet = cell.representedOutletID;
     }else if (!cell.isSelectedAssignment && !cellIsOutlet){
         [self resetOtherCells];
         [self resetOtherOutlets];
@@ -635,7 +643,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         selectedRow = indexPath.row;
         
         NSLog(@"Rows: %lu", tableView.indexPathsForVisibleRows.count);
-        
+         
         //Checks if the current cell has more than one outlet
         if (cell.outlets.count > 1 && tableView != self.globalAssignmentsTableView && !_showingOutlets) {
             self.numberOfRowsInAssignmentTableView += cell.outlets.count;
@@ -676,7 +684,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         //Removes previously added outlet cells when the user selects a cell that does not contain outlets
         //Ex: User selects cell with outlets, user selects "No assignment"
         if ((self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1 && self.prevCell != nil && !cellIsOutlet && !prevCellIsOutlet) || (_showingOutlets && cell.outlets.count > 1)) {
-            self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count+1; //Add one for "No assignment cell"
+            self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count; //Add one for "No assignment cell"
             NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
             for(int i = 1; i <= self.prevCell.outlets.count; i++){
                 [indexPaths addObject:[NSIndexPath indexPathForRow:[self.assignmentsTableView indexPathForCell:self.prevCell].row+i inSection:0]];
@@ -815,7 +823,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.assignmentsArray  = [assignments mutableCopy];
         self.globalAssignments = [globalAssignments copy];
         
-        NSLog(@"%@ %@ %@", _assignmentsArray, _globalAssignments, error);
+        //NSLog(@"%@ %@ %@", _assignmentsArray, _globalAssignments, error);
         self.isFetching = NO;
         
         if (!notFirstFetch) {
@@ -831,25 +839,28 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.assignmentsArray = nearBy;
         self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
         
-        self.globalAssignments = global;
+        NSLog(@"ASSIGNMENT ARRAY COUNT: %lu", (unsigned long)self.assignmentsArray.count);
         
+        self.globalAssignments = global;
+        /*
         NSLog(@"Response Object: %@", responseObject);
         NSLog(@"Assignments: %@", nearBy);
         NSLog(@"Global Assignments: %@", global);
-        
+        NSLog(@"Error: %@", error);
+        */
         //Get the closest assignment to the user
         CLLocationDistance closestDistance = 9999999999999999999.0;
         int closestIndex = 0;
         for(int i = 0; i < self.assignmentsArray.count; i++){
             NSDictionary *assignmentDic = [self.assignmentsArray objectAtIndex:i];
             NSArray *coords = assignmentDic[@"location"][@"coordinates"];
-            NSLog(@"Lat: %@ Long: %@",[coords objectAtIndex:0], [coords objectAtIndex:1]);
+            //NSLog(@"Lat: %@ Long: %@",[coords objectAtIndex:0], [coords objectAtIndex:1]);
             CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:0] floatValue] longitude:[[coords objectAtIndex:1] floatValue]];
             CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
-            NSLog(@"Distance: %f",distanceFromAssignment);
+            //NSLog(@"Distance: %f",distanceFromAssignment);
             if(closestDistance > distanceFromAssignment){
                 closestDistance = distanceFromAssignment;
-                NSLog(@"Closest Distance: %f",closestDistance);
+                //NSLog(@"Closest Distance: %f",closestDistance);
                 closestIndex = i;
             }
         }
@@ -955,6 +966,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
         gallery[@"posts"] = current;
         gallery[@"caption"] = self.captionTextView.text;
+        
+        if (_showingOutlets && selectedOutlet) {
+            gallery[@"outlet_id"] = selectedOutlet;
+        }
+        
         NSLog(@"CREATING");
         
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
