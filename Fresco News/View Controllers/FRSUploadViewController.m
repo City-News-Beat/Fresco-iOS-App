@@ -554,6 +554,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
                     
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
+                    NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
+                    cell.representedOutletID = [outlet objectForKey:@"id"];
+                    
                     //[self resetFrames:true];
                     return cell;
                 }
@@ -628,6 +631,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     if(cellIsOutlet && !cell.isSelectedOutlet){
         [self resetOtherOutlets];
         cell.isSelectedOutlet = YES;
+        selectedOutlet = cell.representedOutletID;
     }else if (!cell.isSelectedAssignment && !cellIsOutlet){
         [self resetOtherCells];
         [self resetOtherOutlets];
@@ -962,6 +966,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
         gallery[@"posts"] = current;
         gallery[@"caption"] = self.captionTextView.text;
+        
+        if (_showingOutlets && selectedOutlet) {
+            gallery[@"outlet_id"] = selectedOutlet;
+        }
+        
         NSLog(@"CREATING");
         
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {

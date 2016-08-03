@@ -18,6 +18,7 @@
 @property (strong, nonatomic) NSArray *outlets;
 @property (strong, nonatomic) UIImageView *selectionImageView;
 @property (strong, nonatomic) UILabel *titleLabel;
+@property NSString *representedOutletID;
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment;
 -(void)configureAssignmentCellForIndexPath:(NSIndexPath *)indexPath;

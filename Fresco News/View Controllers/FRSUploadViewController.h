@@ -15,6 +15,7 @@
     NSInteger selectedRow;
     NSInteger numberOfOutlets;
     unsigned long long contentSize;
+    NSString *selectedOutlet;
 }
 @property (retain, nonatomic) UIButton *twitterButton;
 @property (retain, nonatomic) UIButton *facebookButton;
