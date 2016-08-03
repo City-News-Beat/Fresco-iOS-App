@@ -151,19 +151,21 @@
     
     //Does not check case sensitive
     
-    if (![[FRSAPIClient sharedClient].authenticatedUser.username isEqualToString:self.username]) {
+    if (![[[FRSAPIClient sharedClient].authenticatedUser.username lowercaseString] isEqualToString:[self.username lowercaseString]]) {
         [self addErrorViewAtYPos:108];
         [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.rightAlignedButton.userInteractionEnabled = NO;
     }
     
-    if (![[FRSAPIClient sharedClient].authenticatedUser.email isEqualToString:self.email]) {
+    if (![[[FRSAPIClient sharedClient].authenticatedUser.email lowercaseString] isEqualToString:[self.email lowercaseString]]) {
         [self addErrorViewAtYPos:153];
         [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.rightAlignedButton.userInteractionEnabled = NO;
     }
     
-    if (self.password) { //should check if self.password != user password
+    if (self.password) {
+        //should check if self.password != user password
+        //do not check if case insensitive (*)
         [self addErrorViewAtYPos:196];
     }
     
