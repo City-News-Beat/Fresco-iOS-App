@@ -28,7 +28,7 @@
 @property (strong, nonatomic) MKMapView         *mapView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-@property (nonatomic) CGFloat miles;
+@property CGFloat  miles;
 
 @end
 
@@ -36,7 +36,7 @@
 
 -(void)viewDidLoad{
     [super viewDidLoad];
-
+    
     [self configureView];
 }
 
@@ -124,10 +124,16 @@
 }
 
 -(void)saveRadius {
-    
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
     
-    [self popViewController];
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"notification_radius" : @(self.miles)} completion:^(id responseObject, NSError *error) {
+        
+        //handle error
+        
+        if (responseObject) {
+            [self popViewController];
+        }
+    }];
 }
 
 -(void)sliderValueChanged:(UISlider *)slider {
@@ -137,14 +143,20 @@
     if (slider.value == 0) {
         return;
     }
-
-    MKCoordinateRegion region;
-    region.center.latitude  = [[FRSLocator sharedLocator] currentLocation].coordinate.latitude;
-    region.center.longitude = [[FRSLocator sharedLocator] currentLocation].coordinate.longitude;
-    region.span.latitudeDelta  = self.miles/50;
-    region.span.longitudeDelta = self.miles/50;
     
-    self.mapView.region = region;
+    [self zoomToCoordinates:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.latitude] lon:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.longitude] withRadius:@(self.miles) withAnimation:YES];
+}
+
+-(void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate {
+    // Span uses degrees, 1 degree = 69 miles
+    MKCoordinateSpan span = MKCoordinateSpanMake(
+                                                 ([radius floatValue] / 30),
+                                                 ([radius floatValue] / 30)
+                                                 );
+    MKCoordinateRegion region = {CLLocationCoordinate2DMake([lat floatValue], [lon floatValue]), span};
+    MKCoordinateRegion regionThatFits = [self.mapView regionThatFits:region];
+    
+    [self.mapView setRegion:regionThatFits animated:animate];
 }
 
 
