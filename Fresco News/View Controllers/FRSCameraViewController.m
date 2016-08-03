@@ -502,7 +502,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self.nextButton setBackgroundColor:[UIColor whiteColor]];
     [self.nextButton clipAsCircle];
     //    [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
-    [self.nextButton.titleLabel setFont:[UIFont fontWithName:HELVETICA_NEUE_MEDIUM size:15]];
+    [self.nextButton.titleLabel setFont:[UIFont notaBoldWithSize: 15]];
     [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.nextButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -1496,8 +1496,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         
         [self stopRecordingAnimation];
         self.previewBackgroundIV.alpha = 1.0;
+        [self createNextButtonWithFrame: self.previewButton.frame];
+        [self.previewBackgroundIV addSubview:self.nextButton];
         [self animateCloseButtonHide:NO];
-        
     }
     else {
         self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:maxVideoLength target:self selector:@selector(videoEnded:) userInfo:nil repeats:NO];
@@ -1763,6 +1764,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                              
                              self.apertureButton.alpha = 1;
                              self.apertureButton.transform = CGAffineTransformMakeScale(1.000, 1.000);
+                             
                          }
                          completion:^(BOOL finished) {
                              [self.circleLayer removeFromSuperlayer];
@@ -1930,7 +1932,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)alertUserOfWobble:(BOOL)isTooFast {
-    NSLog(@"STOP WOBBLING");
+    //NSLog(@"STOP WOBBLING");
     [self configureAlertWithText:@"Hold your phone steadier for a better shot."];
     
     if (wobble && [wobble isValid]) {
