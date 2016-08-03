@@ -24,11 +24,16 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
         
+        if (isRunning) {
+            return;
+        }
+        
         totalBytesSent = 0;
         _tasks = [[NSMutableArray alloc] init];
         _currentTasks = [[NSMutableArray alloc] init];
         _etags = [[NSMutableArray alloc] init];
         isStarted = FALSE;
+        isRunning = TRUE;
         
         if (_gallery) {
             [self startUploadProcess];
@@ -136,7 +141,7 @@
                     }
                     else {
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
-                        
+                        isRunning = FALSE;
                         _tasks = [[NSMutableArray alloc] init];
                         
                         for (FRSUploadTask *task in _currentTasks) {
@@ -148,6 +153,7 @@
                 }];
             }
             else {
+                isRunning = FALSE;
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
             }
         }];
@@ -183,7 +189,7 @@
                         }
                         else {
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
-                            
+                            isRunning = FALSE;
                             _tasks = [[NSMutableArray alloc] init];
                             
                             for (FRSUploadTask *task in _currentTasks) {
@@ -197,6 +203,7 @@
             }
             else {
                 NSLog(@"%@", error);
+                isRunning = FALSE;
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
             }
         }];

@@ -69,8 +69,10 @@
     }
     
     hasRan = TRUE;
-    NSLog(@"STARTING: %@", ([dataInputStream hasBytesAvailable]) ? @"HAS DATA":@"NO DATA");
+    
     [dataInputStream open];
+    NSLog(@"STARTING: %@", ([dataInputStream hasBytesAvailable]) ? @"HAS DATA":@"NO DATA");
+
     [self readDataInputStream];
 }
 -(void)readDataInputStream {

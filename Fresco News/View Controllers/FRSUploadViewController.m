@@ -815,6 +815,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.assignmentsArray  = [assignments mutableCopy];
         self.globalAssignments = [globalAssignments copy];
         
+        NSLog(@"%@ %@ %@", _assignmentsArray, _globalAssignments, error);
         self.isFetching = NO;
         
         if (!notFirstFetch) {
