@@ -49,7 +49,7 @@
     
     NSEntityDescription *userEntity = [NSEntityDescription entityForName:@"FRSUser" inManagedObjectContext:context];
     FRSUser *user = (FRSUser *)[[NSManagedObject alloc] initWithEntity:userEntity insertIntoManagedObjectContext:nil];
-    user.uid = properties[@"id"];
+    user.uid = (properties[@"id"] != nil ? properties[@"id"] : @"");
     user.firstName = (properties[@"full_name"] != Nil && ![properties[@"full_name"] isEqual:[NSNull null]] && [[properties[@"full_name"] class] isSubclassOfClass:[NSString class]]) ? properties[@"full_name"] : @"";;
     user.username = (properties[@"username"] != Nil && ![properties[@"username"] isEqual:[NSNull null]]) ? properties[@"username"] : @"";
     user.isLoggedIn = @(FALSE);
