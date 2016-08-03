@@ -321,11 +321,11 @@
 
 -(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
     [self determineScrollDirection:scrollView];
-    NSLog(@"Decelerating");
+    //NSLog(@"Decelerating");
 }
 -(void)scrollViewWillEndDecelerating:(UIScrollView *)scrollView{
     [self scrollViewDidScroll:scrollView];
-    NSLog(@"Decelerating");
+    //NSLog(@"Decelerating");
 }
 
 -(void)determineScrollDirection:(UIScrollView *)scrollView{
@@ -338,7 +338,7 @@
             self.scrollDirectionChanged = YES;
             self.prevDirectOffSetY = difference;
             self.prevNavBarY = self.navigationController.navigationBar.bounds.origin.y;
-            NSLog(@"Changed Direction!");
+            //NSLog(@"Changed Direction!");
         }
         else {
             self.scrollDirectionChanged = NO;
@@ -352,7 +352,7 @@
             self.scrollDirectionChanged = YES;
             self.prevDirectOffSetY = difference;
             self.prevNavBarY = self.navigationController.navigationBar.bounds.origin.y;
-            NSLog(@"Changed Direction!");
+            //NSLog(@"Changed Direction!");
         }
         else {
             self.scrollDirectionChanged = NO;

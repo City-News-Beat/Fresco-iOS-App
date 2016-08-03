@@ -86,6 +86,9 @@
     
     // RIGHT HUR
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
+    [self.profileIV setContentMode:UIViewContentModeScaleAspectFill];
+    NSLog(@"AVATAR: %@", self.profileIV.image);
+    
     self.captionLabel.text = self.gallery.caption;
     
     if ([self.delegate shouldHaveTextLimit]){
