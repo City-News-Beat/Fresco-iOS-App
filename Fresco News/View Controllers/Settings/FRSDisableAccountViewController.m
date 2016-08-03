@@ -146,6 +146,10 @@
 }
 
 
+
+#pragma mark - Validators
+
+
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
     
     if (textField.tag == 1) {
@@ -160,7 +164,6 @@
         } else {
             self.usernameIsValid = NO;
         }
-        
         
     } else if (textField.tag == 2) {
         self.email = textField.text;
@@ -191,11 +194,19 @@
     
     NSLog(@"user: (%d), email: (%d), pass: (%d)", self.usernameIsValid, self.emailIsValid, self.passwordIsValid);
 
+    if (self.usernameIsValid && self.emailIsValid && self.passwordIsValid) {
+        [self.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.rightAlignedButton.userInteractionEnabled = YES;
+    } else {
+        [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.rightAlignedButton.userInteractionEnabled = NO;
+    }
+    
+    
+    
     return YES;
 }
 
-
-#pragma mark - Validators
 
 -(BOOL)stringContainsEmoji:(NSString *)string {
     __block BOOL returnValue = NO;
