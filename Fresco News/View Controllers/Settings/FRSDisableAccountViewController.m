@@ -57,6 +57,9 @@
     [self.view addSubview:self.tableView];
 }
 
+
+#pragma mark - UITableViewDelegate
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
@@ -114,6 +117,7 @@
             cell.textField.tag = 1;
             cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+            cell.textField.delegate = self;
 
             break;
         case 2:
@@ -123,6 +127,7 @@
             cell.textField.tag = 2;
             cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+            cell.textField.delegate = self;
 
             break;
         case 3:
@@ -130,6 +135,7 @@
             cell.textField.delegate = self;
             cell.textField.tag = 3;
             [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+            cell.textField.delegate = self;
             
             break;
         case 4:
@@ -145,32 +151,37 @@
     }
 }
 
+
+#pragma mark - Actions
+
 -(void)disableAccount {
-    NSLog(@"disable account");
     
-    
-    //Does not check case sensitive
-    
-    if (![[FRSAPIClient sharedClient].authenticatedUser.username isEqualToString:self.username]) {
+    //These checks should return when the API responds in the block below
+    if (![[[FRSAPIClient sharedClient].authenticatedUser.username lowercaseString] isEqualToString:[self.username lowercaseString]]) {
         [self addErrorViewAtYPos:108];
         [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.rightAlignedButton.userInteractionEnabled = NO;
     }
     
-    if (![[FRSAPIClient sharedClient].authenticatedUser.email isEqualToString:self.email]) {
+    if (![[[FRSAPIClient sharedClient].authenticatedUser.email lowercaseString] isEqualToString:[self.email lowercaseString]]) {
         [self addErrorViewAtYPos:153];
         [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.rightAlignedButton.userInteractionEnabled = NO;
     }
     
-    if (self.password) { //should check if self.password != user password
+    if (self.password) { //if responseCode == 403
         [self addErrorViewAtYPos:196];
     }
+
     
     
     //Endpoint is not live, waiting on Mike
     [[FRSAPIClient sharedClient] disableAccountWithDigestion:@{@"password" : self.password} completion:^(id responseObject, NSError *error) {
-
+        
+        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+        NSInteger responseCode = response.statusCode;
+        NSLog(@"ERROR: %ld", (long)responseCode);
+        
     }];
 }
 
@@ -186,7 +197,14 @@
 }
 
 
-#pragma mark - Validators
+#pragma mark - UITextField Deleagte
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+//    textField.text = 0;
+//    self.errorImageView.alpha = 0;
+//    self.errorImageView = nil;
+//    [self.errorImageView removeFromSuperview];
+}
 
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
@@ -243,6 +261,9 @@
     
     return YES;
 }
+
+
+#pragma mark - Validators
 
 
 -(BOOL)stringContainsEmoji:(NSString *)string {

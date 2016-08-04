@@ -28,7 +28,6 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSAboutFrescoViewController.h"
 
-/* Cocoa Pods */
 #import <MessageUI/MessageUI.h>
 
 /* API */
@@ -36,7 +35,7 @@
 #import "FRSSocial.h"
 
 
-@interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource, FRSAlertViewDelegate>
 
 @property (strong, nonatomic) NSString *twitterHandle;
 @property (strong, nonatomic) FRSTableViewCell *twitterCell;
@@ -103,7 +102,7 @@
 #pragma mark - UITableViewDelegate
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 12;
+    return 10;
 }
 
 
@@ -122,7 +121,7 @@
             return 1;
             break;
         case 4:
-            return 3;
+            return 2;
             break;
         case 5:
             return 1;
@@ -134,7 +133,7 @@
             return 1;
             break;
         case 8:
-            return 1;
+            return 3;
             break;
         case 9:
             return 1;
@@ -142,12 +141,12 @@
         case 10:
             return 3;
             break;
-        case 11:
-            return 1;
-            break;
-        case 12:
-            return 1;
-            break;
+//        case 11:
+//            return 1;
+//            break;
+//        case 12:
+//            return 1;
+//            break;
         default:
             return 0;
             break;
@@ -273,9 +272,8 @@
         case 4:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureFindFriendsCell];
-                    break;
-                case 1:
+//                    [cell configureFindFriendsCell];
+                    
                     self.twitterCell = cell;
                     if (self.twitterCell.twitterHandle) {
                         [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
@@ -286,7 +284,7 @@
                         [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
                     }
                     break;
-                case 2:
+                case 1:
                     self.facebookCell = cell;
                     
                     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
@@ -295,8 +293,8 @@
                     } else {
                         [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
                     }
-                    
                     break;
+
                 default:
                     break;
             }
@@ -305,22 +303,23 @@
             [cell configureEmptyCellSpace:NO];
             break;
         case 6:
-            [cell configureDefaultCellWithTitle:@"Promo codes" andCarret:YES andRightAlignedTitle:@""];
+            [cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil];
+            //[cell configureDefaultCellWithTitle:@"Promo codes" andCarret:YES andRightAlignedTitle:@""];
             break;
             
         case 7:
             [cell configureEmptyCellSpace:NO];
             break;
+
+//        case 8:
+//            //[cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil];
+//            break;
+//        
+//        case 9:
+//            //[cell configureEmptyCellSpace:NO];
+//            break;
             
         case 8:
-            [cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil];
-            break;
-        
-        case 9:
-            [cell configureEmptyCellSpace:NO];
-            break;
-            
-        case 10:
             switch (indexPath.row) {
                 case 0:
                     [cell configureLogOut];
@@ -333,7 +332,7 @@
                     break;
             }
             break;
-        case 11:
+        case 9:
             [cell configureEmptyCellSpace:YES];
             break;
         default:
@@ -409,9 +408,8 @@
         case 4:
             switch (indexPath.row) {
                 case 0:{
-                    NSLog(@"find friends");
-                    FRSAlertView *alert = [[FRSAlertView alloc] initFindFriendsAlert];
-                    [alert show];
+//                    FRSAlertView *alert = [[FRSAlertView alloc] initFindFriendsAlert];
+//                    [alert show];
                 }
                     break;
                 case 1: {
@@ -435,8 +433,12 @@
             break;
         case 6:
         {
-            FRSPromoCodeViewController *promo = [[FRSPromoCodeViewController alloc] init];
-            [self.navigationController pushViewController:promo animated:YES];
+//            FRSPromoCodeViewController *promo = [[FRSPromoCodeViewController alloc] init];
+//            [self.navigationController pushViewController:promo animated:YES];
+//            self.navigationItem.title = @"";
+            
+            FRSAboutFrescoViewController *about = [[FRSAboutFrescoViewController alloc] init];
+            [self.navigationController pushViewController:about animated:YES];
             self.navigationItem.title = @"";
         }
             
@@ -444,24 +446,24 @@
         case 7:
             //Empty
             break;
-        case 8: {
-            FRSAboutFrescoViewController *about = [[FRSAboutFrescoViewController alloc] init];
-            [self.navigationController pushViewController:about animated:YES];
-            self.navigationItem.title = @"";
-        } break;
-        case 9:
-            //Empty
-            break;
-        case 10:
+//        case 8: {
+//            FRSAboutFrescoViewController *about = [[FRSAboutFrescoViewController alloc] init];
+//            [self.navigationController pushViewController:about animated:YES];
+//            self.navigationItem.title = @"";
+//        } break;
+//        case 9:
+//            //Empty
+//            break;
+        case 8:
             switch (indexPath.row) {
                 case 0: {
-                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We'll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We'll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                     
                     [alert show];
                     
                 } break;
                 case 1:
-                    [self presentModalMailComposerViewController:YES];
+                    [self presentMail];
                     break;
                 case 2:{
 //                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
@@ -532,6 +534,10 @@
 
 #pragma mark - MFMailComposeViewControllerDelegate
 
+-(void)presentMail {
+    [self presentModalMailComposerViewController:YES];
+}
+
 -(void)presentModalMailComposerViewController:(BOOL)animated {
     
     if ([MFMailComposeViewController canSendMail]) {
@@ -543,6 +549,9 @@
         [composeViewController setToRecipients:@[@"support@fresconews.com"]];
         
         [self presentViewController:composeViewController animated:animated completion:nil];
+    } else {
+        //cc:imogen
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Cannot Send Mail Message", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
     }
 }
 
@@ -552,6 +561,24 @@
     
 }
 
+
+#pragma mark - FRSAlertView Delegate
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    //for logout alert
+    if (index == 0) {
+        NSLog(@"index 0");
+    } else if (index == 1) {
+        [self logout];
+    }
+}
+
+-(void)logout {
+    
+    [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
+    
+    [self popViewController];
+    
+}
 
 #pragma mark - Notifications
 
