@@ -43,13 +43,16 @@
     return sorted;
 }
 -(void)configureWithDictionary:(NSDictionary *)dict{
-    
+    NSLog(@"THE DIC: %@", dict);
     self.tags = [[NSMutableDictionary alloc] init];
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
     self.caption = dict[@"caption"];
-    self.byline = dict[@"byline"];
+    if([dict valueForKey:@"owner"] != [NSNull null] && [[dict valueForKey:@"owner"] valueForKey:@"full_name"] != [NSNull null]){
+        self.byline = dict[@"owner"][@"full_name"];
+    }
+    NSLog(@"BYLINE: %@", self.byline);
     
     if (!self.posts || self.posts.count == 0) {
         [self addPostsWithArray:dict[@"posts"]];

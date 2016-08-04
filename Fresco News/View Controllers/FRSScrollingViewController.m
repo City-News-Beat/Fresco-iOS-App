@@ -92,6 +92,7 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     NSInteger currentContentOffY = scrollView.contentOffset.y;
+    NSInteger currentContentOffX = scrollView.contentOffset.x;
     NSInteger difference = currentContentOffY - self.prevContentOffY;
     if(!self.scrollDirectionChanged){
         self.prevDirectOffSetY-=self.prevDirectOffSetY;
@@ -137,12 +138,63 @@
         }
     }
     
+    if(self.isBeingDismissed && self.tabBarController.tabBar.hidden){
+        CGRect newFrame = self.tabBarController.tabBar.frame;
+        newFrame.origin.y = currentContentOffX - self.tabBarController.tabBar.frame.size.height;
+        [self.tabBarController.tabBar setFrame:newFrame];
+    }
+    
     [self determineScrollDirection:scrollView];
     
     [self adjustFramesForDifference:difference forScrollView:scrollView];
     
     self.prevContentOffY = currentContentOffY;
 }
+/*
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    id<UIViewControllerTransitionCoordinator> tc = navigationController.topViewController.transitionCoordinator;
+    [tc notifyWhenInteractionEndsUsingBlock:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        NSLog(@"Is cancelled: %i", [context isCancelled]);
+    }];
+}
+
+-(void)popViewController{
+    NSLog(@"Popped");
+    //[self.navigationController dismiss]
+}
+-(BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item{
+    NSLog(@"POPPed");
+}
+
+-(void)setModalInPopover:(BOOL)modalInPopover{
+    NSLog(@"POOOPED");
+}
+*/
+
+
+-(void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item{
+    NSLog(@"It is popped");
+}
+
+-(void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext{
+    NSLog(@"Transitioning");
+}
+
+-(void)unwindForSegue:(UIStoryboardSegue *)unwindSegue towardsViewController:(UIViewController *)subsequentVC{
+    NSLog(@"SEGUEING");
+}
+
+/*
+- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                  animationControllerForOperation:(UINavigationControllerOperation)operation
+                                               fromViewController:(UIViewController*)fromVC
+                                                 toViewController:(UIViewController*)toVC
+{
+    NSLog(@"ANIMATING");
+    return nil;
+}*/
 
 -(void)scrollViewDidScrollToTop:(UIScrollView *)scrollView{
     NSMutableArray *barButtonItems = [NSMutableArray array];
