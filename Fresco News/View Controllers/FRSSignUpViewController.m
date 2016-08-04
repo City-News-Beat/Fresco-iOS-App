@@ -68,7 +68,7 @@
     [self configureUI];
     
     
-    [self addNotifications];
+    //[self addNotifications];
     
     self.notificationsEnabled = NO;
     self.emailError = NO;
@@ -79,16 +79,11 @@
     [super viewDidAppear:animated];
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
-        
         [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
-        
     } else {
-        
-        
         [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-        
-        
     }
+    [self addNotifications];
 }
 
 -(NSDictionary *)currentSocialDigest {
@@ -97,8 +92,6 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    
     
     if (!_hasShown) {
         //        [self.usernameTF becomeFirstResponder];
@@ -123,8 +116,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnToPreviousViewController) name:@"returnToPreviousViewController" object:nil];
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
-        
+        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+    } else {
+        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
     }
+    
 }
 
 -(void)back {
@@ -572,6 +568,13 @@
     [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateHighlighted];
     [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
     [_facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+    } else {
+        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+    }
+    
     [self.bottomBar addSubview:_facebookButton];
 }
 
@@ -1016,6 +1019,7 @@
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             
+            
             if (error.code == -1009) {
                 NSString *title;
                 
@@ -1223,6 +1227,9 @@
     
     if (_facebookToken) {
         _facebookToken = Nil;
+        [spinner stopLoading];
+        spinner.alpha = 0;
+        [spinner removeFromSuperview];
         [UIView animateWithDuration:.2 animations:^{
             [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
         }];
@@ -1238,7 +1245,13 @@
     [FRSSocial registerWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         _facebookButton.enabled = TRUE;
         
+        [self stopSpinner:spinner onButton:self.createAccountButton];
+        
         if (token) {
+            
+            [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+            
             FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
             
             [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:self.inputViewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
@@ -1247,6 +1260,7 @@
                     if (!error) {
                         [[NSUserDefaults standardUserDefaults] setValue:[result valueForKey:@"name"] forKey:@"facebook-name"];
                         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
                     }
                 }];
             }];
