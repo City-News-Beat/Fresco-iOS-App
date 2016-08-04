@@ -19,6 +19,7 @@
     self.destinationURLS = destinations;
     self.progressBlock = progress;
     self.completionBlock = completion;
+    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
     tags = [[NSMutableDictionary alloc] init];
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
@@ -54,9 +55,11 @@
 
 -(void)next {
     // loop on background thread to not interrupt UI, but on HIGH priority to supercede any default thread needs
-    if (currentData == Nil) {
-        [self readDataInputStream];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        if (currentData == Nil) {
+            [self readDataInputStream];
+        }
+    });
 }
 
 -(void)start {
@@ -65,19 +68,12 @@
         NSLog(@"ERROR: ALREADY EXHAUSTED DATA");
     }
     
-    [self openStream];
-}
-
--(void)openStream {
-    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
-    [dataInputStream setDelegate:self];
-    NSLog(@"%@", self.assetURL);
-    [dataInputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
-                           forMode:NSRunLoopCommonModes];
-    [dataInputStream open];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
+    hasRan = TRUE;
     
-   // [self readDataInputStream];
+    [dataInputStream open];
+    NSLog(@"STARTING: %@", ([dataInputStream hasBytesAvailable]) ? @"HAS DATA":@"NO DATA");
+
+    [self readDataInputStream];
 }
 -(void)readDataInputStream {
     
@@ -86,6 +82,8 @@
     }
     
     
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
         uint8_t buffer[1024];
         NSInteger length;
         BOOL ranOnce = FALSE;
@@ -110,14 +108,13 @@
         
         // last chunk, less than 5mb, streaming process ends here
         if (ranOnce && !triggeredUpload) {
+            [self startChunkUpload];
             needsData = FALSE;
             [dataInputStream close];
-            [dataInputStream removeFromRunLoop:[NSRunLoop currentRunLoop]
-                              forMode:NSDefaultRunLoopMode];
-            dataInputStream = nil; // stream is ivar, so reinit it
-            NSLog(@"LAST CHUNK UPLOADING");
-            [self startChunkUpload];
+            NSLog(@"LAST CHUNK");
         }
+
+    });
 }
 
 // moves to next chunk based on previously succeeded blocks, does not iterate if we are above max # concurrent requests
@@ -243,20 +240,6 @@
     }
     
     counterBuffer = 0;
-}
-
-- (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
-    NSLog(@"EVENT: %d", eventCode);
-    
-    switch(eventCode) {
-        case NSStreamEventHasBytesAvailable:
-        {
-            if (!hasRan) {
-                hasRan = TRUE;
-                [self readDataInputStream];
-            }
-        }
-    }
 }
 
 // pause all open requests

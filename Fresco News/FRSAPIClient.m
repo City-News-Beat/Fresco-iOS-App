@@ -343,6 +343,7 @@
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
     NSLog(@"%@", endpoint);
+    
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
        
