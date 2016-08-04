@@ -67,19 +67,18 @@
         NSLog(@"ERROR: ALREADY EXHAUSTED DATA");
     }
     
-    hasRan = TRUE;
     [NSThread detachNewThreadSelector:@selector(openStream) toTarget:self withObject:nil];
-
-    NSLog(@"STARTING: %@", ([dataInputStream hasBytesAvailable]) ? @"HAS DATA":@"NO DATA");
-
 }
 
 -(void)openStream {
     dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
+    dataInputStream.delegate = self;
+    NSLog(@"%@", self.assetURL);
     [dataInputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
                            forMode:NSRunLoopCommonModes];
     [dataInputStream open];
-    [self readDataInputStream];
+    
+   // [self readDataInputStream];
 }
 -(void)readDataInputStream {
     
@@ -242,6 +241,19 @@
     }
     
     counterBuffer = 0;
+}
+
+- (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
+    
+    switch(eventCode) {
+        case NSStreamEventHasBytesAvailable:
+        {
+            if (!hasRan) {
+                hasRan = TRUE;
+                [self readDataInputStream];
+            }
+        }
+    }
 }
 
 // pause all open requests
