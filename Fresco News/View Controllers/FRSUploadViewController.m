@@ -656,6 +656,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             
             NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+            
             for(int i = 1; i <= cell.outlets.count; i++){
                 [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+i inSection:0]];
                 NSLog(@"Inserting Row at IndexPath.row = %ld", indexPath.row+i);
@@ -964,14 +965,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         // upload
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
-        gallery[@"posts"] = current;
+        gallery[@"posts_new"] = current;
         gallery[@"caption"] = self.captionTextView.text;
         
         if (_showingOutlets && selectedOutlet) {
             gallery[@"outlet_id"] = selectedOutlet;
         }
         
-        NSLog(@"CREATING");
+        
+        
+        NSLog(@"CREATING: %@", gallery);
         
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
             if (!error) {
