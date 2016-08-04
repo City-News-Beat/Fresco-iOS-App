@@ -233,17 +233,17 @@
  Handle location update as if user has application open
  */
 -(void)handleActiveChange:(NSArray *)locations {
-    
-    [_locationManager stopUpdatingLocation];
-    
-    stopTimer = [NSTimer timerWithTimeInterval:10
-                                        target:self
-                                      selector:@selector(restartActiveUpdates)
-                                      userInfo:Nil
-                                       repeats:FALSE];
-    
-    [[NSRunLoop mainRunLoop] addTimer:stopTimer forMode:NSRunLoopCommonModes];
-    [self cacheLocation:[locations firstObject]];
+    if(stopTimer == Nil){
+        [_locationManager stopUpdatingLocation];
+        stopTimer = [NSTimer timerWithTimeInterval:10
+                                            target:self
+                                          selector:@selector(restartActiveUpdates)
+                                          userInfo:Nil
+                                           repeats:FALSE];
+        
+        [[NSRunLoop mainRunLoop] addTimer:stopTimer forMode:NSRunLoopCommonModes];
+        [self cacheLocation:[locations firstObject]];
+    }
 }
 
 -(void)cacheLocation:(CLLocation *)location {
@@ -256,6 +256,7 @@
 }
 
 -(void)restartActiveUpdates {
+    NSLog(@"RESTART ACTIVE UPDATES");
     
     if (stopTimer) {
         [stopTimer invalidate];

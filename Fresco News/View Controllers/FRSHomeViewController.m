@@ -141,6 +141,7 @@
 }
 
 -(void)reloadData {
+    NSLog(@"awdawd");
     [self.followingTable reloadFollowing];
     
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
@@ -734,7 +735,6 @@
     
     //Make the nav bar expand relative to the x offset
     [super scrollViewDidScroll:scrollView];
-    
 
     NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
