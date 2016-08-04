@@ -12,5 +12,8 @@
 {
     
 }
+@property (nonatomic, retain) NSArray *users;
+@property (nonatomic, retain) NSArray *stories;
+@property (nonatomic, retain) NSArray *galleries;
 -(void)loadResults:(NSArray *)results; // 0->users 1-> stories 2-> galleries
 @end

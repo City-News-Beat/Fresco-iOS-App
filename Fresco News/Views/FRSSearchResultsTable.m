@@ -10,12 +10,14 @@
 
 @implementation FRSSearchResultsTable
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+-(void)loadResults:(NSArray *)results {
+    if (results.count != 3) {
+        return;
+    }
+    
+    self.users = results[0];
+    self.stories = results[1];
+    self.galleries = results[2];
+    [self reloadData];
 }
-*/
-
 @end
