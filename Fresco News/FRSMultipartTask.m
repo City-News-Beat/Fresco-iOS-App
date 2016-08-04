@@ -245,6 +245,8 @@
 }
 
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
+    NSLog(@"EVENT: %d", eventCode);
+    
     switch(eventCode) {
         case NSStreamEventHasBytesAvailable:
         {
@@ -252,6 +254,14 @@
                 hasRan = TRUE;
                 [self readDataInputStream];
             }
+        }
+        case NSStreamEventEndEncountered:
+        {
+            [stream close];
+            [stream removeFromRunLoop:[NSRunLoop currentRunLoop]
+                              forMode:NSDefaultRunLoopMode];
+            stream = nil; // stream is ivar, so reinit it
+            break;
         }
     }
 }
