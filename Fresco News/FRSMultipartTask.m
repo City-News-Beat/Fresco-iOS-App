@@ -37,7 +37,7 @@
 }
 
 /*
- Integral part of upload process, this allows for the app to re-claim old/failed uploads, and continue uploading them in the background
+    Integral part of upload process, this allows for the app to re-claim old/failed uploads, and continue uploading them in the background
  */
 -(void)startFromChunk:(NSInteger)chunk {
     unsigned long long currentPoint = chunk * chunkSize * megabyteDefinition;
@@ -63,13 +63,21 @@
 }
 
 -(void)start {
+    
+    if (hasRan) {
+        NSLog(@"ERROR: ALREADY EXHAUSTED DATA");
+    }
+    
+    hasRan = TRUE;
+    
     [dataInputStream open];
+    NSLog(@"STARTING: %@", ([dataInputStream hasBytesAvailable]) ? @"HAS DATA":@"NO DATA");
+
     [self readDataInputStream];
 }
 -(void)readDataInputStream {
     
     if (!currentData) {
-        needsData = TRUE;
         currentData = [[NSMutableData alloc] init];
     }
     
@@ -80,7 +88,6 @@
         NSInteger length;
         BOOL ranOnce = FALSE;
         BOOL triggeredUpload = FALSE;
-        
         while ([dataInputStream hasBytesAvailable])
         {
             length = [dataInputStream read:buffer maxLength:1024];
@@ -94,6 +101,7 @@
             if ([currentData length] >= chunkSize * megabyteDefinition) {
                 [self startChunkUpload];
                 triggeredUpload = TRUE;
+                needsData = TRUE;
                 break;
             }
         }
@@ -105,7 +113,7 @@
             [dataInputStream close];
             NSLog(@"LAST CHUNK");
         }
-        
+
     });
 }
 
