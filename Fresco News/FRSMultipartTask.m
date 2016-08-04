@@ -19,7 +19,6 @@
     self.destinationURLS = destinations;
     self.progressBlock = progress;
     self.completionBlock = completion;
-    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
     tags = [[NSMutableDictionary alloc] init];
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
@@ -69,10 +68,17 @@
     }
     
     hasRan = TRUE;
-    
-    [dataInputStream open];
+    [NSThread detachNewThreadSelector:@selector(openStream) toTarget:self withObject:nil];
+
     NSLog(@"STARTING: %@", ([dataInputStream hasBytesAvailable]) ? @"HAS DATA":@"NO DATA");
 
+}
+
+-(void)openStream {
+    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
+    [dataInputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+                           forMode:NSRunLoopCommonModes];
+    [dataInputStream open];
     [self readDataInputStream];
 }
 -(void)readDataInputStream {
@@ -82,8 +88,6 @@
     }
     
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
         uint8_t buffer[1024];
         NSInteger length;
         BOOL ranOnce = FALSE;
@@ -113,8 +117,6 @@
             [dataInputStream close];
             NSLog(@"LAST CHUNK");
         }
-
-    });
 }
 
 // moves to next chunk based on previously succeeded blocks, does not iterate if we are above max # concurrent requests
