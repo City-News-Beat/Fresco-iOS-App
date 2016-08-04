@@ -115,6 +115,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [self showTabBarAnimated:YES];
+    self.tableView.bounces = false;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
