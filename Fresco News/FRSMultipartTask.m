@@ -54,11 +54,9 @@
 
 -(void)next {
     // loop on background thread to not interrupt UI, but on HIGH priority to supercede any default thread needs
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        if (currentData == Nil) {
-            [self readDataInputStream];
-        }
-    });
+    if (currentData == Nil) {
+        [self readDataInputStream];
+    }
 }
 
 -(void)start {
@@ -67,7 +65,7 @@
         NSLog(@"ERROR: ALREADY EXHAUSTED DATA");
     }
     
-    [NSThread detachNewThreadSelector:@selector(openStream) toTarget:self withObject:nil];
+    [self openStream];
 }
 
 -(void)openStream {
@@ -112,13 +110,13 @@
         
         // last chunk, less than 5mb, streaming process ends here
         if (ranOnce && !triggeredUpload) {
-            [self startChunkUpload];
             needsData = FALSE;
             [dataInputStream close];
             [dataInputStream removeFromRunLoop:[NSRunLoop currentRunLoop]
                               forMode:NSDefaultRunLoopMode];
             dataInputStream = nil; // stream is ivar, so reinit it
-            NSLog(@"LAST CHUNK");
+            NSLog(@"LAST CHUNK UPLOADING");
+            [self startChunkUpload];
         }
 }
 
