@@ -733,17 +733,14 @@
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     
     //Make the nav bar expand relative to the x offset
+    [super scrollViewDidScroll:scrollView];
     
+
     NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
     [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
     float navBarHeight=20.0;
-    float scrollingDifference = (scrollView.contentOffset.x/self.tableView.frame.size.width*(navBarHeight*2))-navBarHeight-3;
-    float scrollingDifferenceFollowing = (scrollView.contentOffset.x/self.followingTable.frame.size.width*(navBarHeight*2))-navBarHeight-3;
-    
-    if(scrollView.contentOffset.x>0&&scrollView.contentOffset.x<self.tableView.frame.size.width && self.navigationController.navigationBar.frame.origin.y != navBarHeight && scrollingDifferenceFollowing < navBarHeight){
-        [self expandNavBarBy:scrollingDifference BarButtonItems:barButtonItems];
-    }
+    float scrollingDifferenceX = (scrollView.contentOffset.x/self.tableView.frame.size.width*(navBarHeight*2))-navBarHeight-3;
     
     //NSLog(@"TABLEVIEW WIDTH: %f",self.tableView.frame.size.width);
     //NSLog(@"CONTENT X: %f",scrollView.contentOffset.x);
@@ -800,9 +797,6 @@
             self.isInFollowers = true;
         }
 
-    }
-    else {
-        [super scrollViewDidScroll:scrollView];
     }
     
     if (scrollView == self.tableView) {
