@@ -72,11 +72,12 @@
 
 -(void)openStream {
     dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
-    dataInputStream.delegate = self;
+    [dataInputStream setDelegate:self];
     NSLog(@"%@", self.assetURL);
     [dataInputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
                            forMode:NSRunLoopCommonModes];
     [dataInputStream open];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
     
    // [self readDataInputStream];
 }
@@ -244,7 +245,6 @@
 }
 
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
-    
     switch(eventCode) {
         case NSStreamEventHasBytesAvailable:
         {
