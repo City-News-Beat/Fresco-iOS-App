@@ -115,6 +115,9 @@
             [self startChunkUpload];
             needsData = FALSE;
             [dataInputStream close];
+            [dataInputStream removeFromRunLoop:[NSRunLoop currentRunLoop]
+                              forMode:NSDefaultRunLoopMode];
+            dataInputStream = nil; // stream is ivar, so reinit it
             NSLog(@"LAST CHUNK");
         }
 }
@@ -254,14 +257,6 @@
                 hasRan = TRUE;
                 [self readDataInputStream];
             }
-        }
-        case NSStreamEventEndEncountered:
-        {
-            [stream close];
-            [stream removeFromRunLoop:[NSRunLoop currentRunLoop]
-                              forMode:NSDefaultRunLoopMode];
-            stream = nil; // stream is ivar, so reinit it
-            break;
         }
     }
 }
