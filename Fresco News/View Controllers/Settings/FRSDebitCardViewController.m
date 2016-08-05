@@ -228,12 +228,12 @@
     bottom.backgroundColor = [UIColor frescoLightTextColor];
     [container addSubview:bottom];
     
-    self.bankButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.bankButton addTarget:self action:@selector(saveBankInfo) forControlEvents:UIControlEventTouchUpInside];
-    self.bankButton.frame = CGRectMake(self.view.frame.size.width - 160, cardViewport.frame.size.height + 88, 160, 44);
-    [self.bankButton setTitle:@"SAVE BANK ACCOUNT" forState:UIControlStateNormal];
-    [self.bankButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    [self.bankButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    self.saveBankButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.saveBankButton addTarget:self action:@selector(saveBankInfo) forControlEvents:UIControlEventTouchUpInside];
+    self.saveBankButton.frame = CGRectMake(self.view.frame.size.width - 160, cardViewport.frame.size.height + 88, 160, 44);
+    [self.saveBankButton setTitle:@"SAVE BANK ACCOUNT" forState:UIControlStateNormal];
+    [self.saveBankButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    [self.saveBankButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     
     [container addSubview:self.bankButton];
 
@@ -251,7 +251,6 @@
     [_contentScroller setContentOffset:CGPointMake(0, 0) animated:YES];
     self.debitButton.alpha = 1.0;
     self.bankButton.alpha = 0.7;
-
 }
 
 -(void)saveBankInfo {
