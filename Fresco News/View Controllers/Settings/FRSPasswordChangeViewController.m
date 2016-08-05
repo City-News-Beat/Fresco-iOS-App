@@ -189,10 +189,10 @@
     [self.view endEditing:YES];
     
     if ((![self.updatedPassword isEqualToString: self.updatedPasswordVerify])) {
-        if (!self.alert) {
+//        if (!self.alert) {
             self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"New passwords do not match." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
             [self.alert show];
-        }
+//        }
         return;
     }
 
@@ -211,10 +211,10 @@
         if (error) {
             if (error.code == -1009) {
                 NSLog(@"Unable to connect.");
-                if (!self.alert) {
+//                if (!self.alert) {
                     self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                     [self.alert show];
-                }
+//                }
                 return;
             }
             
@@ -288,6 +288,7 @@
     if (index == 0) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
+    self.alert = nil;
 }
 
 
