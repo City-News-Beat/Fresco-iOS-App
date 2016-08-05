@@ -23,6 +23,7 @@
 #import <Fabric/Fabric.h>
 #import <TwitterKit/TwitterKit.h>
 #import <Crashlytics/Crashlytics.h>
+#import <Smooch/Smooch.h>
 
 @interface FRSAppDelegate : UIResponder <UIApplicationDelegate>
 
