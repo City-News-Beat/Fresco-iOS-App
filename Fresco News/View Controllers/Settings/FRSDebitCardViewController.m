@@ -199,6 +199,12 @@
     middle.alpha = 1;
     middle.backgroundColor = [UIColor frescoLightTextColor];
     [container addSubview:middle];
+    
+    UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 88, self.view.bounds.size.width, 0.5)];
+    bottom.alpha = 1;
+    bottom.backgroundColor = [UIColor frescoLightTextColor];
+    [container addSubview:bottom];
+
 }
 
 -(void)bankTapped {
