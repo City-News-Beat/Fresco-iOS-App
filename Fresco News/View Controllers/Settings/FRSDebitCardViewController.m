@@ -26,6 +26,7 @@
 @property (strong, nonatomic) UIButton *rightAlignedButton;
 
 @property (strong, nonatomic) FRSAlertView *alertView;
+@property (strong, nonatomic) UIScrollView *contentScroller;
 
 @end
 
@@ -46,15 +47,18 @@
 
 
 -(void)configureView{
+    _contentScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    _contentScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height);
+    
     cardViewport = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2 - 44)];
     cardViewport.clipsToBounds = YES;
-    [self.view addSubview:cardViewport];
+    [_contentScroller addSubview:cardViewport];
     
     [cardViewport addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, cardViewport.frame.size.height, self.view.frame.size.width, 88)];
     container.backgroundColor = [UIColor colorWithWhite:1 alpha:.92];
-    [self.view addSubview:container];
+    [_contentScroller addSubview:container];
     
     cardNumberTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     cardNumberTextField  = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, [UIScreen mainScreen].bounds.size.width - (32), 44)];
@@ -132,7 +136,7 @@
     [self.rightAlignedButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     
-    [self.view addSubview:self.rightAlignedButton];
+    [_contentScroller addSubview:self.rightAlignedButton];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
