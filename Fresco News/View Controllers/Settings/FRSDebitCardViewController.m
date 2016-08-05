@@ -75,6 +75,7 @@
     _contentScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-100);
     _contentScroller.bounces = TRUE;
     _contentScroller.pagingEnabled = TRUE;
+    _contentScroller.delegate = self;
     
     _bankView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height)];
     [_contentScroller addSubview:_bankView];
@@ -171,6 +172,15 @@
     [_contentScroller addSubview:self.rightAlignedButton];
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView.contentOffset.x == 0) {
+        
+    }
+    else if (scrollView.contentOffset.x == scrollView.frame.size.width) {
+        
+    }
+}
+
 -(void)configureBankView {
     UIView *container = [[UIView alloc] init];
     container.backgroundColor = [UIColor whiteColor];
@@ -218,7 +228,7 @@
     
     self.bankButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.bankButton addTarget:self action:@selector(saveBankInfo) forControlEvents:UIControlEventTouchUpInside];
-    self.bankButton.frame = CGRectMake(self.view.frame.size.width - 120, cardViewport.frame.size.height + 88, 120, 44);
+    self.bankButton.frame = CGRectMake(self.view.frame.size.width - 160, cardViewport.frame.size.height + 88, 160, 44);
     [self.bankButton setTitle:@"SAVE BANK ACCOUNT" forState:UIControlStateNormal];
     [self.bankButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.bankButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
@@ -229,11 +239,11 @@
 }
 
 -(void)bankTapped {
-    
+    [_contentScroller setContentOffset:CGPointMake(_contentScroller.frame.size.width, 0) animated:YES];
 }
 
 -(void)debitTapped {
-    
+    [_contentScroller setContentOffset:CGPointMake(0, 0) animated:YES];
 }
 
 -(void)saveBankInfo {
