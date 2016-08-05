@@ -31,6 +31,8 @@
 @property (strong, nonatomic) UIButton *saveBankButton;
 @property (strong, nonatomic) NSString *accountNumberField;
 @property (strong, nonatomic) NSString *routingNumberField;
+@property (strong, nonatomic) UIButton *debitButton;
+@property (strong, nonatomic) UIButton *bankButton;
 @end
 
 @implementation FRSDebitCardViewController
@@ -50,6 +52,25 @@
 
 
 -(void)configureView{
+    
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.navigationItem.titleView = titleView;
+    
+    self.debitButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width/2 - 60 - 10 - titleView.frame.size.width/6 - 60, 6, 120, 30)];
+    [self.debitButton setTitle:@"DEBIT CARD" forState:UIControlStateNormal];
+    [self.debitButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    [self.debitButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.debitButton addTarget:self action:@selector(debitTapped) forControlEvents:UIControlEventTouchUpInside];
+    [titleView addSubview:self.debitButton];
+    
+    self.bankButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width/2 - 60 - 10 + titleView.frame.size.width/6 - 60, 6, 120, 30)];
+    self.bankButton.alpha = 0.7;
+    [self.bankButton setTitle:@"BANK ACCOUNT" forState:UIControlStateNormal];
+    [self.bankButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    [self.bankButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.bankButton addTarget:self action:@selector(bankTapped) forControlEvents:UIControlEventTouchUpInside];
+    [titleView addSubview:self.bankButton];
+
     _contentScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     _contentScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-100);
     _contentScroller.bounces = TRUE;
@@ -144,6 +165,14 @@
     [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     
     [_contentScroller addSubview:self.rightAlignedButton];
+}
+
+-(void)bankTapped {
+    
+}
+
+-(void)debitTapped {
+    
 }
 
 -(void)saveBankInfo {
