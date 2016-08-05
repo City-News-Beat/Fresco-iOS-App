@@ -312,7 +312,7 @@
     [self createProfileSection];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -322,7 +322,7 @@
 }
 
 -(void)createProfileSection{
-    self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 269.5)];
+    self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 269.5)];
     self.profileContainer.backgroundColor = [UIColor frescoOrangeColor];
     
     [self configureProfileImage];
@@ -480,7 +480,7 @@
     [self.profileContainer addSubview:self.locationLabel];
     
     //    self.bioTextView = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
-    
+    /*
     self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(origin-4, 50, 150, 50)];
     
     self.bioTextView.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
@@ -489,7 +489,7 @@
     self.bioTextView.font = [UIFont systemFontOfSize:15 weight:-300];
     self.bioTextView.delegate = self;
     //    [self.bioTextView sizeToFit];
-    [self.profileContainer addSubview:self.bioTextView];
+    [self.profileContainer addSubview:self.bioTextView];*/
 }
 -(void)textViewDidEndEditing:(UITextView *)textView{
     if (textView.text) {
@@ -642,7 +642,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0){
-        return self.profileContainer.frame.size.height;
+        return self.profileContainer.frame.size.height+64;
     }
     else {
         if (!self.currentFeed.count) return 60;
@@ -781,13 +781,44 @@
     //NSLog(@"Content Offset %f", scrollView.contentOffset.y);
     //NSLog(@"Frame Y ORIGIN %f",     self.sectionView.frame.origin.y);
     //NSLog(@"SUBVIEW COUNT: %lu",(unsigned long)[self.navigationController.navigationBar subviews].count);
-    NSMutableArray *barButtonItems = [NSMutableArray array];
+    /*NSMutableArray *barButtonItems = [NSMutableArray array];
     [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
     [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
-    [super expandNavBar:barButtonItems];
-    return;
-    /*if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height) {
-        if([self.navigationController.navigationBar subviews].count <= 7 && self.sectionView.frame.size.height + self.profileContainer.frame.size.height){
+     [super expandNavBar:barButtonItems];
+     */
+    
+    //Once the user has scroll past the feed/likes section view, start moving it with the nav bar
+    //if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height) {
+    [super scrollViewDidScroll:scrollView];
+    CGRect newFrame = self.sectionView.frame;
+    
+    // Navigation bar travels up until it is collapsed (so it doesn't travel past the screen)
+    if(self.navBarYValue > -self.navBarHeight-3-self.sectionView.frame.size.height && self.scrollDirection == UIScrollViewScrollDirectionDown){
+        newFrame.origin.y = (self.navBarYValue*2)+15;
+        
+    // Navigation bar travels down until it is fully expanded
+    }else if((self.navBarYValue < self.navBarHeight) && self.scrollDirection == UIScrollViewScrollDirectionUp){ // done scrolling, stick
+        newFrame.origin.y = (self.navBarYValue*2)+15;
+    //
+    }else if(self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height > 0){
+        newFrame.origin.y = 0 + (self.navBarHeight - (self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height));
+        
+    // When the user scrolls up past the fully expanded nav bar condition, keep it in the fully expanded state
+    }else if(self.scrollDirection == UIScrollViewScrollDirectionUp){
+        newFrame.origin.y = 22+35;
+    
+    // When the user scrolls down past the collapsed nav bar condition, keep it in the collapsed state
+    }else if(self.scrollDirection == UIScrollViewScrollDirectionDown){
+        newFrame.origin.y = -self.sectionView.frame.size.height;
+    }
+    NSLog(@"FRAME Y: %f", self.sectionView.frame.origin.y);
+    [self.sectionView setFrame:newFrame];
+    [self.sectionView.superview setFrame:newFrame];
+    //}
+    /*
+     return;
+     if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height) {
+     if([self.navigationController.navigationBar subviews].count <= 7 && self.sectionView.frame.size.height + self.profileContainer.frame.size.height){
             [self.sectionView removeFromSuperview];
             CGRect newFrame = self.sectionView.frame;
             newFrame.origin.y = self.navigationController.navigationBar.frame.size.height;
@@ -830,6 +861,8 @@
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    //[super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    
 }
 
 #pragma mark - Navigation

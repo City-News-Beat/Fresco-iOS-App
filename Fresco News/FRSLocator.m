@@ -256,7 +256,7 @@
 }
 
 -(void)restartActiveUpdates {
-    NSLog(@"RESTART ACTIVE UPDATES");
+    //NSLog(@"RESTART ACTIVE UPDATES");
     
     if (stopTimer) {
         [stopTimer invalidate];

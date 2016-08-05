@@ -123,6 +123,7 @@
     if(currentContentOffY > 0){
         //If the users scrolls down (scrollview condenses)
         float scrollingDifference = self.navigationController.navigationBar.frame.origin.y+(self.prevDirectOffSetY-difference);
+        self.navBarYValue = scrollingDifference;
         
         //NSLog(@"%f",self.navigationController.navigationBar.frame.origin.y);
         //NSLog(@"Scrolling Difference %f",scrollingDifference);
