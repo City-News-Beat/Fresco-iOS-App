@@ -326,6 +326,11 @@
         self.rightAlignedButton.userInteractionEnabled = YES;
     }
     
+    if (_accountNumberField.text.length > 0 && _routingNumberField.text.length == 9) {
+        [self.saveBankButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.saveBankButton.userInteractionEnabled = YES;
+    }
+    
     
     return YES;
 }
