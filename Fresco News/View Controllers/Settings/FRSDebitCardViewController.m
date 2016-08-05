@@ -29,8 +29,8 @@
 @property (strong, nonatomic) UIScrollView *contentScroller;
 @property (strong, nonatomic) UIView *bankView;
 @property (strong, nonatomic) UIButton *saveBankButton;
-@property (strong, nonatomic) NSString *accountNumberField;
-@property (strong, nonatomic) NSString *routingNumberField;
+@property (strong, nonatomic) UITextField *accountNumberField;
+@property (strong, nonatomic) UITextField *routingNumberField;
 @property (strong, nonatomic) UIButton *debitButton;
 @property (strong, nonatomic) UIButton *bankButton;
 @end
@@ -75,6 +75,10 @@
     _contentScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-100);
     _contentScroller.bounces = TRUE;
     _contentScroller.pagingEnabled = TRUE;
+    
+    _bankView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    [_contentScroller addSubview:_bankView];
+    [self configureBankView];
     
     [self.view addSubview:_contentScroller];
     
@@ -165,6 +169,21 @@
     [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     
     [_contentScroller addSubview:self.rightAlignedButton];
+}
+
+-(void)configureBankView {
+    _accountNumberField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    _accountNumberField  = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, [UIScreen mainScreen].bounds.size.width - (32), 44)];
+    _accountNumberField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    _accountNumberField.placeholder =  @"Bank Account Number";
+    _accountNumberField.textColor = [UIColor frescoDarkTextColor];
+    _accountNumberField.tintColor = [UIColor frescoBlueColor];
+    _accountNumberField.delegate = self;
+    [_accountNumberField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+    _accountNumberField.keyboardType = UIKeyboardTypeNumberPad;
+    [_accountNumberField setSecureTextEntry: NO];
+
+    [_bankView addSubview:cardNumberTextField];
 }
 
 -(void)bankTapped {
