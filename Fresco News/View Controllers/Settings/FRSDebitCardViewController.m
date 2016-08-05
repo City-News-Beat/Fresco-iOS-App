@@ -27,7 +27,10 @@
 
 @property (strong, nonatomic) FRSAlertView *alertView;
 @property (strong, nonatomic) UIScrollView *contentScroller;
-
+@property (strong, nonatomic) UIView *bankView;
+@property (strong, nonatomic) UIButton *saveBankButton;
+@property (strong, nonatomic) NSString *accountNumberField;
+@property (strong, nonatomic) NSString *routingNumberField;
 @end
 
 @implementation FRSDebitCardViewController
@@ -49,6 +52,7 @@
 -(void)configureView{
     _contentScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     _contentScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height-100);
+    _contentScroller.bounces = FALSE;
     [self.view addSubview:_contentScroller];
     
     cardViewport = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2 - 44)];
@@ -138,6 +142,10 @@
     [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     
     [_contentScroller addSubview:self.rightAlignedButton];
+}
+
+-(void)saveBankInfo {
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
