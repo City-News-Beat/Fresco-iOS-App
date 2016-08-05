@@ -79,7 +79,7 @@ static NSString * const addSocialEndpoint = @"social/connect/";
 static NSString * const disableAccountEndpoint = @"user/disable/";
 
 // gallery creation
-static NSString * const createGalleryEndpoint = @"gallery/create";
+static NSString * const createGalleryEndpoint = @"gallery/submit";
 static NSString * const completePostEndpoint = @"post/complete";
 
 // formatted endpoints

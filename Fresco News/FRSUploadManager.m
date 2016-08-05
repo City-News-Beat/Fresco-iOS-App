@@ -257,7 +257,7 @@
         _assets = assets;
         _gallery = gallery;
         
-        _posts = _gallery[@"posts"];
+        _posts = _gallery[@"posts_new"];
         [self commonInit];
     }
     
