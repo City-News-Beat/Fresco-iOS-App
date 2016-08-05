@@ -220,6 +220,9 @@
         expiration = @[@([components[0] intValue]), @([components[1] intValue])];
     }
     else {
+        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"SETTINGS" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [self.alertView show];
+
         return;
     }
     
@@ -233,6 +236,7 @@
     [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
         [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId completion:^(id responseObject, NSError *error) {
             //
+            NSLog(@"RESP: %@ \n ERR:%@", responseObject, error);
             if (error) {
                 self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"We were unable to save your debit card information at this time. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.alertView show];
