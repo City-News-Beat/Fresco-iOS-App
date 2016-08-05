@@ -233,7 +233,11 @@
         [self.alertView show];
 
     }
+    
+    NSLog(@"CARD PARAMS: %@", params);
+    
     [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
+        NSLog(@"TOKEN: %@", stripeToken);
         [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId completion:^(id responseObject, NSError *error) {
             //
             NSLog(@"RESP: %@ \n ERR:%@", responseObject, error);
