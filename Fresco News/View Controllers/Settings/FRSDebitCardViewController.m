@@ -259,6 +259,9 @@
     NSString *routingNumber = _routingNumberField.text;
     
     STPBankAccountParams *params = [FRSStripe bankAccountWithNumber:bankAccountNumber routing:routingNumber name:Nil ssn:Nil type:FRSBankAccountTypeIndividual];
+    
+    NSLog(@"PARAMS: %@", params);
+    
     [FRSStripe createTokenWithBank:params completion:^(STPToken *stripeToken, NSError *error) {
         NSLog(@"%@ %@", stripeToken, error);
     }];

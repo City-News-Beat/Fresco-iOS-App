@@ -45,7 +45,9 @@
 }
 
 +(void)createTokenWithBank:(STPBankAccountParams *)params completion:(FRSStripeBlock)completion {
-    
+    [[STPAPIClient sharedClient] createTokenWithBankAccount:params completion:^(STPToken * _Nullable token, NSError * _Nullable error) {
+        completion(token, error);
+    }];
 }
 
 +(void)startLive {
