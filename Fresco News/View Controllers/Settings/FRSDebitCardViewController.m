@@ -228,9 +228,9 @@
     bottom.backgroundColor = [UIColor frescoLightTextColor];
     [container addSubview:bottom];
     
-    self.saveBankButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.saveBankButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.saveBankButton addTarget:self action:@selector(saveBankInfo) forControlEvents:UIControlEventTouchUpInside];
-    self.saveBankButton.frame = CGRectMake(self.view.frame.size.width - 160, cardViewport.frame.size.height + 88, 160, 44);
+    self.saveBankButton.frame = CGRectMake(self.view.frame.size.width - 160, bottom.frame.origin.y+5, 160, 44);
     [self.saveBankButton setTitle:@"SAVE BANK ACCOUNT" forState:UIControlStateNormal];
     [self.saveBankButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.saveBankButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
@@ -252,6 +252,9 @@
 }
 
 -(void)saveBankInfo {
+    
+    NSLog(@"SAVING BANK INFO");
+    
     NSString *bankAccountNumber = _accountNumberField.text;
     NSString *routingNumber = _routingNumberField.text;
     
@@ -344,6 +347,7 @@
     if (_accountNumberField.text.length > 0 && _routingNumberField.text.length == 9) {
         [self.saveBankButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.saveBankButton.userInteractionEnabled = YES;
+        self.saveBankButton.enabled = TRUE;
     }
     
     
