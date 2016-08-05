@@ -189,6 +189,17 @@
     [_bankView addSubview:container];
     container.frame = CGRectMake(0, 0, self.view.frame.size.width, _accountNumberField.frame.size.height * 2);
     
+    _routingNumberField  = [[UITextField alloc] initWithFrame:CGRectMake(16, 44, [UIScreen mainScreen].bounds.size.width - (32), 44)];
+    _routingNumberField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    _routingNumberField.placeholder =  @"Bank Routing Number";
+    _routingNumberField.textColor = [UIColor frescoDarkTextColor];
+    _routingNumberField.tintColor = [UIColor frescoBlueColor];
+    _routingNumberField.delegate = self;
+    [_routingNumberField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+    _routingNumberField.keyboardType = UIKeyboardTypeNumberPad;
+    [_routingNumberField setSecureTextEntry: NO];
+    
+    [container addSubview:_routingNumberField];
     
     UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
     top.alpha = 1;
