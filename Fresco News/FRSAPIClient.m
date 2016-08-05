@@ -493,7 +493,7 @@
 }
 
 -(void)createPaymentWithToken:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
-    
+    NSLog(@"%@", token);
     if (!token) {
         return;
     }

@@ -13,6 +13,7 @@
 #import "UIFont+Fresco.h"
 #import "FRSStripe.h"
 #import "FRSAPIClient.h"
+#import "FRSAlertView.h"
 
 @interface FRSDebitCardViewController()
 
@@ -23,6 +24,8 @@
 @property (strong, nonatomic) NSString *CVV;
 
 @property (strong, nonatomic) UIButton *rightAlignedButton;
+
+@property (strong, nonatomic) FRSAlertView *alertView;
 
 @end
 
@@ -77,7 +80,7 @@
     [expirationDateTextField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
     [container addSubview:expirationDateTextField];
     
-    expirationDateTextField.keyboardType = UIKeyboardTypeNumberPad;
+    expirationDateTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
 
     securityCodeTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     securityCodeTextField  = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 , 44, [UIScreen mainScreen].bounds.size.width/2, 44)];
@@ -198,7 +201,7 @@
 
     
     
-    if ((cardNumberTextField.text.length == 16) && (securityCodeTextField.text.length >= 3)) {
+    if ((cardNumberTextField.text.length == 16) && (securityCodeTextField.text.length >=3)) {
         [self.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.rightAlignedButton.userInteractionEnabled = YES;
     }
@@ -222,12 +225,24 @@
     
     STPCardParams *params = [FRSStripe creditCardWithNumber:cardNumberTextField.text expiration:expiration cvc:securityCodeTextField.text];
     
+    if (!params) {
+        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please check your card information and try again." actionTitle:@"SETTINGS" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [self.alertView show];
+
+    }
     [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
         [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId completion:^(id responseObject, NSError *error) {
             //
-            NSLog(@"RESPNS OBJECT: %@ ERROR: %@", responseObject, error);
+            if (error) {
+                self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"We were unable to save your debit card information at this time. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                [self.alertView show];
+            }
         }];
     }];
+}
+
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    
 }
 
 -(void)keyboardDidShow:(NSNotification *)notification {
