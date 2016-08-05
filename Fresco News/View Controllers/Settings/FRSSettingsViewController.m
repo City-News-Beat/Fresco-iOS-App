@@ -249,7 +249,7 @@
                     
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
-                case 1: {
+                case 1:
                     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
                         NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
                         CGFloat milesFloat = [miles floatValue];
@@ -257,10 +257,14 @@
                     } else {
                         [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@""];
                     }
-                } break;
-                case 2:
-                    [cell configureDefaultCellWithTitle:@"Debit card" andCarret:YES andRightAlignedTitle:@"VISA (3189)"];
-                    break;
+                break;
+                case 2: {
+                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
+                    
+                    
+                    [cell configureDefaultCellWithTitle:@"Debit card" andCarret:YES andRightAlignedTitle:(card) ? card : @""];
+                }
+                break;
                 case 3:
                     [cell configureDefaultCellWithTitle:@"Add tax info" andCarret:YES andRightAlignedTitle:@""];
                     break;
