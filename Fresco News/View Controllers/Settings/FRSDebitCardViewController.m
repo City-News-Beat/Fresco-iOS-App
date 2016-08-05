@@ -237,13 +237,27 @@
     NSLog(@"CARD PARAMS: %@", params);
     
     [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
-        NSLog(@"TOKEN: %@", stripeToken);
+        NSLog(@"TOKEN: %@ \n TOKEN_ERROR:%@", stripeToken, error);
         [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId completion:^(id responseObject, NSError *error) {
             //
             NSLog(@"RESP: %@ \n ERR:%@", responseObject, error);
             if (error) {
                 self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"We were unable to save your debit card information at this time. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.alertView show];
+            }
+            else if (responseObject) {
+                NSString *brand = [responseObject objectForKey:@"brand"];
+                NSString *last4 = [responseObject objectForKey:@"last4"];
+                
+                if ([[responseObject valueForKey:@"valid"] boolValue]) {
+                    NSString *creditCard = [NSString stringWithFormat:@"%@ %@", brand, last4];
+                    [[[FRSAPIClient sharedClient] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                else {
+                    self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"The card you entered was invalid. Please try again." actionTitle:@"TRY AGAIN" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                    [self.alertView show];
+                }
             }
         }];
     }];

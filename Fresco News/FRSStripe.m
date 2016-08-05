@@ -17,7 +17,7 @@
     cardParams.number = number;
     cardParams.expMonth = [expiration[0] intValue];
     cardParams.expYear = [expiration[1] intValue];
-    cardParams.currency = @"USD";
+    cardParams.currency = @"usd";
     return cardParams;
 }
 
