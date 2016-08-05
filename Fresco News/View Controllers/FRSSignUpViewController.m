@@ -1041,6 +1041,8 @@
                 
                 FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
                 [alert show];
+                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
                 return;
             }
 
@@ -1052,18 +1054,24 @@
                 // 400 level, client
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [alert show];
+                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
                 return;
             }
             else if (responseCode >= 500 && responseCode < 600) {
                 // 500 level, server
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [alert show];
+                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
                 return;
             }
             else if (responseCode >= 300 && responseCode < 400) {
                 // 300  level, unauthorized
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [alert show];
+                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
                 return;
             }
         }];
@@ -1098,6 +1106,8 @@
             
             FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
             [alert show];
+            [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
             return;
         }
         
@@ -1105,6 +1115,8 @@
         if (error) {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
+            [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
         }
         
         
@@ -1201,8 +1213,28 @@
 
         
         if (error) {
+            
+            if (error.code == -1009) {
+                NSLog(@"Unable to connect.");
+                NSString *title;
+                
+                if (IS_IPHONE_5) {
+                    title = @"UNABLE TO CONNECT";
+                } else if (IS_IPHONE_6) {
+                    title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+                } else if (IS_IPHONE_6_PLUS) {
+                    title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+                }
+                
+                FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                [alert show];
+                [spinner stopLoading];
+                [spinner removeFromSuperview];
+                self.twitterButton.hidden = false;
+                return;
+            }
 
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try signing in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try signing in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
             [alert show];
             
             [spinner stopLoading];
@@ -1261,6 +1293,7 @@
         
         if (error) {
             //handle errors
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
         }
         
         if (result && !error) {
@@ -1270,12 +1303,32 @@
             NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
             
             [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
                 
                 [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"name"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                     if (!error) {
                         [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
                     }
+                    
+                    if (error.code == -1009) {
+                        NSString *title;
+                        
+                        if (IS_IPHONE_5) {
+                            title = @"UNABLE TO CONNECT";
+                        } else if (IS_IPHONE_6) {
+                            title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+                        } else if (IS_IPHONE_6_PLUS) {
+                            title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+                        }
+                        
+                        FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                        [alert show];
+                        [spinner stopLoading];
+                        [spinner removeFromSuperview];
+                        return;
+                    }
+                    
+                    
                     
                     
                 }];
@@ -1631,6 +1684,15 @@
         self.locationEnabled = NO;
     }
     
+}
+
+
+#pragma mark - FRSAlertViewDelegate
+
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    if (index == 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
 }
 
 
