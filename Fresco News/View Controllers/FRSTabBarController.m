@@ -177,6 +177,7 @@
     }
     
     if ([self.tabBar.items indexOfObject:item] == 4) {
+        
         if (![[FRSAPIClient sharedClient] isAuthenticated]) {
             
             FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];

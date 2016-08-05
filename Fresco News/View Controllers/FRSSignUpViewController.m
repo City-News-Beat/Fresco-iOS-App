@@ -68,7 +68,7 @@
     [self configureUI];
     
     
-    [self addNotifications];
+    //[self addNotifications];
     
     self.notificationsEnabled = NO;
     self.emailError = NO;
@@ -79,16 +79,11 @@
     [super viewDidAppear:animated];
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
-        
         [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
-        
     } else {
-        
-        
         [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-        
-        
     }
+    [self addNotifications];
 }
 
 -(NSDictionary *)currentSocialDigest {
@@ -97,8 +92,6 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    
     
     if (!_hasShown) {
         //        [self.usernameTF becomeFirstResponder];
@@ -123,8 +116,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnToPreviousViewController) name:@"returnToPreviousViewController" object:nil];
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
-        
+        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+    } else {
+        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
     }
+    
 }
 
 -(void)back {
@@ -165,6 +161,14 @@
     } else if ([viewControllers indexOfObject:self] == NSNotFound) {
         // View is disappearing because it was popped from the stack
         [self.navigationController setNavigationBarHidden:YES animated:YES];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
+        
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
@@ -572,6 +576,13 @@
     [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateHighlighted];
     [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
     [_facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+    } else {
+        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+    }
+    
     [self.bottomBar addSubview:_facebookButton];
 }
 
@@ -1016,6 +1027,7 @@
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             
+            
             if (error.code == -1009) {
                 NSString *title;
                 
@@ -1223,6 +1235,9 @@
     
     if (_facebookToken) {
         _facebookToken = Nil;
+        [spinner stopLoading];
+        spinner.alpha = 0;
+        [spinner removeFromSuperview];
         [UIView animateWithDuration:.2 animations:^{
             [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
         }];
@@ -1234,30 +1249,38 @@
     }
     
     _facebookButton.enabled = FALSE; // prevent double tapping
+
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     
-    [FRSSocial registerWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+    [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:self.inputViewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+        
         _facebookButton.enabled = TRUE;
         
-        if (token) {
-            FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-            
-            [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:self.inputViewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-                
-                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                    if (!error) {
-                        [[NSUserDefaults standardUserDefaults] setValue:[result valueForKey:@"name"] forKey:@"facebook-name"];
-                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
-                    }
-                }];
-            }];
-        }
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
         
         if (error) {
-
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try signing in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-            [alert show];
+            //handle errors
+        }
+        
+        if (result && !error) {
             
-            return;
+            [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+            
+            NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
+            
+            [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                
+                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"name"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                    if (!error) {
+                        [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
+                    }
+                    
+                    
+                }];
+                
+            }];
         }
         
         [UIView animateWithDuration:.2 animations:^{
@@ -1266,9 +1289,8 @@
         [spinner stopLoading];
         [spinner removeFromSuperview];
         self.facebookButton.hidden = false;
-        _facebookToken = token;
         
-    } parent:self]; // presenting view controller for safari view login
+    }];
 }
 
 -(void)handleSocialChallenge:(NSError *)error {

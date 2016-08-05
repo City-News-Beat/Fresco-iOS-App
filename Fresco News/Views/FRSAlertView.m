@@ -667,9 +667,11 @@
 -(void)returnToPreviousViewController {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"returnToPreviousViewController" object:self];
     
-//    if (self.delegate) {
-//        [self.delegate didPressButtonAtIndex:0];
-//    }
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+    
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
 }
 
 -(void)dismiss {

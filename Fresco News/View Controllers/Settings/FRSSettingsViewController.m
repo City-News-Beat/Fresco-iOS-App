@@ -35,6 +35,8 @@
 #import "FRSAPIClient.h"
 #import "FRSSocial.h"
 
+#import "SSKeychain.h"
+
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource, FRSAlertViewDelegate>
 
@@ -267,7 +269,7 @@
                     
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
-                case 1: {
+                case 1:
                     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
                         NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
                         CGFloat milesFloat = [miles floatValue];
@@ -275,10 +277,14 @@
                     } else {
                         [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@""];
                     }
-                } break;
-                case 2:
-                    [cell configureDefaultCellWithTitle:@"Debit card" andCarret:YES andRightAlignedTitle:@"VISA (3189)"];
-                    break;
+                break;
+                case 2: {
+                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
+                    
+                    
+                    [cell configureDefaultCellWithTitle:@"Debit card" andCarret:YES andRightAlignedTitle:(card) ? card : @""];
+                }
+                break;
                 case 3:
                     [cell configureDefaultCellWithTitle:@"Add tax info" andCarret:YES andRightAlignedTitle:@""];
                     break;
@@ -595,10 +601,26 @@
 -(void)logout {
     
     [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
+    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
     
+    [SSKeychain deletePasswordForService:serviceName account:clientAuthorization];
+
+    [NSUserDefaults resetStandardUserDefaults];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+
     [self popViewController];
     
+    [self.tabBarController setSelectedIndex:0];
 }
+
 
 #pragma mark - Notifications
 
