@@ -177,7 +177,7 @@
     
     _accountNumberField  = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, [UIScreen mainScreen].bounds.size.width - (32), 44)];
     _accountNumberField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    _accountNumberField.placeholder =  @"Bank Account Number";
+    _accountNumberField.placeholder =  @"Account Number";
     _accountNumberField.textColor = [UIColor frescoDarkTextColor];
     _accountNumberField.tintColor = [UIColor frescoBlueColor];
     _accountNumberField.delegate = self;
@@ -191,7 +191,7 @@
     
     _routingNumberField  = [[UITextField alloc] initWithFrame:CGRectMake(16, 44, [UIScreen mainScreen].bounds.size.width - (32), 44)];
     _routingNumberField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    _routingNumberField.placeholder =  @"Bank Routing Number";
+    _routingNumberField.placeholder =  @"Routing Number";
     _routingNumberField.textColor = [UIColor frescoDarkTextColor];
     _routingNumberField.tintColor = [UIColor frescoBlueColor];
     _routingNumberField.delegate = self;
@@ -215,6 +215,16 @@
     bottom.alpha = 1;
     bottom.backgroundColor = [UIColor frescoLightTextColor];
     [container addSubview:bottom];
+    
+    self.bankButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.bankButton addTarget:self action:@selector(saveBankInfo) forControlEvents:UIControlEventTouchUpInside];
+    self.bankButton.frame = CGRectMake(self.view.frame.size.width - 105, cardViewport.frame.size.height + 88, 105, 44);
+    [self.bankButton setTitle:@"SAVE BANK ACCOUNT" forState:UIControlStateNormal];
+    [self.bankButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    [self.bankButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    
+    [container addSubview:self.bankButton];
+
 
 }
 
