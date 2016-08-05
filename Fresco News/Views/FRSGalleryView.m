@@ -136,6 +136,10 @@
     
     if (userID && ownerID && [ownerID isEqualToString:userID]) {
         // owner == self
+        [self.actionBar setCurrentUser:TRUE];
+    }
+    else {
+        [self.actionBar setCurrentUser:FALSE];
     }
 }
 

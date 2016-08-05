@@ -143,6 +143,7 @@
 		D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D418E3431CCC1A9B0003B080 /* AccountKitStrings.bundle */; };
 		D418E34C1CCC1B240003B080 /* FRSSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E34B1CCC1B240003B080 /* FRSSocial.m */; };
 		D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E34D1CCC1C360003B080 /* Twitter.framework */; };
+		D41B2EFA1D53E5960007C61F /* FRSSearchResultsTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D41B2EF91D53E5960007C61F /* FRSSearchResultsTable.m */; };
 		D41C10CB1CE9A54900F96B25 /* FRSStripe.m in Sources */ = {isa = PBXBuildFile; fileRef = D41C10CA1CE9A54900F96B25 /* FRSStripe.m */; };
 		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
@@ -505,6 +506,8 @@
 		D418E34B1CCC1B240003B080 /* FRSSocial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSocial.m; sourceTree = "<group>"; };
 		D418E34D1CCC1C360003B080 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		D418E3571CCC1DE50003B080 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../Library/Developer/Xcode/DerivedData/Fresco-fdljnwvdniqudpbfysumtikmtfbi/Build/Products/Release-iphoneos/AFNetworking.framework"; sourceTree = "<group>"; };
+		D41B2EF81D53E5960007C61F /* FRSSearchResultsTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSearchResultsTable.h; sourceTree = "<group>"; };
+		D41B2EF91D53E5960007C61F /* FRSSearchResultsTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchResultsTable.m; sourceTree = "<group>"; };
 		D41C10C91CE9A54900F96B25 /* FRSStripe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStripe.h; sourceTree = "<group>"; };
 		D41C10CA1CE9A54900F96B25 /* FRSStripe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStripe.m; sourceTree = "<group>"; };
 		D42C907F1CC6191400B25C99 /* UIImage+Pixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Pixels.h"; path = "../../UIImage+Pixels.h"; sourceTree = "<group>"; };
@@ -915,6 +918,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D41B2EF71D53E5810007C61F /* Search */,
 				D48C72211D09D8BC000677BF /* Split Table View */,
 				D4AF8EF01CFF654A00A33FAB /* Nav Bar */,
 				D4AF8EEC1CFDFEB100A33FAB /* Feed Table */,
@@ -1331,6 +1335,15 @@
 				D418E34B1CCC1B240003B080 /* FRSSocial.m */,
 			);
 			name = Social;
+			sourceTree = "<group>";
+		};
+		D41B2EF71D53E5810007C61F /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				D41B2EF81D53E5960007C61F /* FRSSearchResultsTable.h */,
+				D41B2EF91D53E5960007C61F /* FRSSearchResultsTable.m */,
+			);
+			name = Search;
 			sourceTree = "<group>";
 		};
 		D41C10C81CE9A4AF00F96B25 /* Stripe */ = {
@@ -2469,6 +2482,7 @@
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
 				D453CC811CCA80850091A004 /* NSManagedObject+MagicalDataImport.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
+				D41B2EFA1D53E5960007C61F /* FRSSearchResultsTable.m in Sources */,
 				6547C9041C6A68A700DAD98C /* FRSUserTableViewCell.m in Sources */,
 				D4B35F4E1CCEB47200F5C8A8 /* NSString+NSHash.m in Sources */,
 				D453CC7B1CCA80850091A004 /* MagicalRecord+iCloud.m in Sources */,
