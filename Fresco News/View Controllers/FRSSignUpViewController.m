@@ -161,6 +161,14 @@
     } else if ([viewControllers indexOfObject:self] == NSNotFound) {
         // View is disappearing because it was popped from the stack
         [self.navigationController setNavigationBarHidden:YES animated:YES];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
+        
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
@@ -1241,19 +1249,7 @@
     }
     
     _facebookButton.enabled = FALSE; // prevent double tapping
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     
     [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:self.inputViewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
