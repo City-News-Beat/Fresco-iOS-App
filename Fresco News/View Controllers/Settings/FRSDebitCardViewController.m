@@ -348,7 +348,6 @@
         [self.saveBankButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.saveBankButton.userInteractionEnabled = YES;
         self.saveBankButton.enabled = TRUE;
-        self.saveBankButton.backgroundColor = [UIColor redColor];
     }
     
     NSLog(@"INTERACTION ENABLED: %d", self.saveBankButton.userInteractionEnabled);
