@@ -586,8 +586,13 @@
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
     
-    [self popViewController];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
     
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+
+    [self popViewController];
     
     [self.tabBarController setSelectedIndex:0];
 }

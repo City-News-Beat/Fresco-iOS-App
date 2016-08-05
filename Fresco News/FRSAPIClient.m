@@ -683,6 +683,7 @@
 }
 
 -(BOOL)isAuthenticated {
+    
     if ([[SSKeychain accountsForService:serviceName] count] > 0) {
         return TRUE;
     }
