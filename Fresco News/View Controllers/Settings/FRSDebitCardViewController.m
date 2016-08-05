@@ -188,6 +188,17 @@
     [container addSubview:_accountNumberField];
     [_bankView addSubview:container];
     container.frame = CGRectMake(0, 0, self.view.frame.size.width, _accountNumberField.frame.size.height * 2);
+    
+    
+    UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 0.5)];
+    top.alpha = 1;
+    top.backgroundColor = [UIColor frescoLightTextColor];
+    [container addSubview:top];
+    
+    UIView *middle = [[UIView alloc] initWithFrame:CGRectMake(0, 44, self.view.bounds.size.width, 0.5)];
+    middle.alpha = 1;
+    middle.backgroundColor = [UIColor frescoLightTextColor];
+    [container addSubview:middle];
 }
 
 -(void)bankTapped {
