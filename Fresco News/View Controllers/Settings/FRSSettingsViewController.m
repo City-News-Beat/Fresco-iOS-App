@@ -619,7 +619,7 @@
     [self popViewController];
     
     [self.tabBarController setSelectedIndex:0];
-}
+ }
 
 
 #pragma mark - Notifications

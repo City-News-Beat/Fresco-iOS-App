@@ -173,8 +173,7 @@
                     [self addErrorToView];
                 }
             } else {
-                // Email is already in use (400)
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Email is already in use." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"An account already exists with this username. Would you like to log in?" actionTitle:@"CANCEL" cancelTitle:@"LOGIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [self.alert show];
             }
             
