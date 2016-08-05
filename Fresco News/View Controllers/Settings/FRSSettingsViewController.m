@@ -34,6 +34,8 @@
 #import "FRSAPIClient.h"
 #import "FRSSocial.h"
 
+#import "SSKeychain.h"
+
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource, FRSAlertViewDelegate>
 
@@ -575,10 +577,21 @@
 -(void)logout {
     
     [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
+    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+    
+    [SSKeychain deletePasswordForService:serviceName account:clientAuthorization];
+
+    [NSUserDefaults resetStandardUserDefaults];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
     
     [self popViewController];
     
+    
+    [self.tabBarController setSelectedIndex:0];
 }
+
 
 #pragma mark - Notifications
 

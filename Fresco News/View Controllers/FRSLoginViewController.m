@@ -384,16 +384,13 @@
                     if (!error) {
                         [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
                     }
-                    
-                    
                 }];
-                
             }];
 
             self.didAuthenticateSocial = YES;
             NSLog(@"Popped");
             [self popToOrigin];
-        }else{
+        } else {
             NSLog(@"Else");
         }
         
@@ -405,7 +402,6 @@
                 [self.alert show];
                 return;
             }
-            
             
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
             [alert show];
