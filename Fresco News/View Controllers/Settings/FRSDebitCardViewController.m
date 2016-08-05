@@ -49,6 +49,7 @@
 -(void)configureView{
     _contentScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     _contentScroller.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height);
+    [self.view addSubview:_contentScroller];
     
     cardViewport = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2 - 44)];
     cardViewport.clipsToBounds = YES;
