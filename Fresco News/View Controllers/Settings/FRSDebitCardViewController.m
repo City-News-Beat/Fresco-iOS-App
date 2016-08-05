@@ -218,7 +218,7 @@
     
     self.bankButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.bankButton addTarget:self action:@selector(saveBankInfo) forControlEvents:UIControlEventTouchUpInside];
-    self.bankButton.frame = CGRectMake(self.view.frame.size.width - 105, cardViewport.frame.size.height + 88, 105, 44);
+    self.bankButton.frame = CGRectMake(self.view.frame.size.width - 120, cardViewport.frame.size.height + 88, 120, 44);
     [self.bankButton setTitle:@"SAVE BANK ACCOUNT" forState:UIControlStateNormal];
     [self.bankButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.bankButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
