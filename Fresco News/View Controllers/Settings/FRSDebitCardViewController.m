@@ -230,12 +230,12 @@
     
     self.saveBankButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.saveBankButton addTarget:self action:@selector(saveBankInfo) forControlEvents:UIControlEventTouchUpInside];
-    self.saveBankButton.frame = CGRectMake(self.view.frame.size.width - 160, bottom.frame.origin.y+5, 160, 44);
+    self.saveBankButton.frame = CGRectMake(self.view.frame.size.width + (self.view.frame.size.width - 160), bottom.frame.origin.y+5, 160, 44);
     [self.saveBankButton setTitle:@"SAVE BANK ACCOUNT" forState:UIControlStateNormal];
     [self.saveBankButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.saveBankButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     
-    [container addSubview:self.saveBankButton];
+    [_contentScroller addSubview:self.saveBankButton];
 }
 
 -(void)bankTapped {
@@ -348,7 +348,10 @@
         [self.saveBankButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.saveBankButton.userInteractionEnabled = YES;
         self.saveBankButton.enabled = TRUE;
+        self.saveBankButton.backgroundColor = [UIColor redColor];
     }
+    
+    NSLog(@"INTERACTION ENABLED: %d", self.saveBankButton.userInteractionEnabled);
     
     
     return YES;
