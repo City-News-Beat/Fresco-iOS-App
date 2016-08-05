@@ -252,7 +252,13 @@
 }
 
 -(void)saveBankInfo {
+    NSString *bankAccountNumber = _accountNumberField.text;
+    NSString *routingNumber = _routingNumberField.text;
     
+    STPBankAccountParams *params = [FRSStripe bankAccountWithNumber:bankAccountNumber routing:routingNumber name:Nil ssn:Nil type:FRSBankAccountTypeIndividual];
+    [FRSStripe createTokenWithBank:params completion:^(STPToken *stripeToken, NSError *error) {
+        NSLog(@"%@ %@", stripeToken, error);
+    }];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -298,12 +304,21 @@
 }
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    
+    if (textField == _routingNumberField || textField == _accountNumberField) {
+        return TRUE;
+    }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardWillShowNotification object:nil];
     return YES;
 }
 
 
 -(BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    if (textField == _routingNumberField || textField == _accountNumberField) {
+        return TRUE;
+    }
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardWillHideNotification object:nil];
     [self.view endEditing:YES];
     return YES;
