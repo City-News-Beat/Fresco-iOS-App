@@ -301,6 +301,7 @@
 }
 
 -(IBAction)twitter:(id)sender {
+    
     self.twitterButton.hidden = true;
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     spinner.tintColor = [UIColor frescoOrangeColor];
@@ -329,6 +330,9 @@
                 NSLog(@"Unable to connect.");
                 self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.alert show];
+                [spinner stopLoading];
+                [spinner removeFromSuperview];
+                self.twitterButton.hidden = false;
                 return;
             }
             
@@ -400,10 +404,20 @@
                 NSLog(@"Unable to connect.");
                 self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.alert show];
+                [spinner stopLoading];
+                [spinner removeFromSuperview];
+                self.facebookButton.hidden = false;
+                return;
+            } else if (error.code == 301) {
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                [self.alert show];
+                [spinner stopLoading];
+                [spinner removeFromSuperview];
+                self.facebookButton.hidden = false;
                 return;
             }
             
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
             [alert show];
         }
         
