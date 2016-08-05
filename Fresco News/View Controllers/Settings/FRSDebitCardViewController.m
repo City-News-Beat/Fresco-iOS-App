@@ -235,9 +235,7 @@
     [self.saveBankButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.saveBankButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     
-    [container addSubview:self.bankButton];
-
-
+    [container addSubview:self.saveBankButton];
 }
 
 -(void)bankTapped {
