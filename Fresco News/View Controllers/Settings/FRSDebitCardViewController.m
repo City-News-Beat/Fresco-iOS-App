@@ -172,7 +172,6 @@
 }
 
 -(void)configureBankView {
-    _accountNumberField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     _accountNumberField  = [[UITextField alloc] initWithFrame:CGRectMake(16, 0, [UIScreen mainScreen].bounds.size.width - (32), 44)];
     _accountNumberField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     _accountNumberField.placeholder =  @"Bank Account Number";
@@ -183,7 +182,7 @@
     _accountNumberField.keyboardType = UIKeyboardTypeNumberPad;
     [_accountNumberField setSecureTextEntry: NO];
 
-    [_bankView addSubview:cardNumberTextField];
+    [_bankView addSubview:_accountNumberField];
 }
 
 -(void)bankTapped {
