@@ -345,7 +345,7 @@
                     [cell configureLogOut];
                     break;
                 case 1:
-                    [cell configureDefaultCellWithTitle:@"Email support" andCarret:NO andRightAlignedTitle:@""];
+                    [cell configureDefaultCellWithTitle:@"Ask us anything" andCarret:YES andRightAlignedTitle:@""];
                     break;
                 case 2:
                     [cell configureDefaultCellWithTitle:@"Disable my account" andCarret:YES andRightAlignedTitle:@""];
@@ -483,7 +483,7 @@
                     
                 } break;
                 case 1:
-                    [self presentMail];
+                    [self smooch];
                     break;
                 case 2:{
 //                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
