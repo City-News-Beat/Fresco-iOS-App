@@ -648,7 +648,7 @@
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 0, 44);
-        [self.cancelButton addTarget:self action:@selector(returnToPreviousViewController) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton addTarget:self action:@selector(logOut) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelButton setTitleColor:[UIColor frescoRedHeartColor] forState:UIControlStateNormal];
         [self.cancelButton setTitle:@"DELETE" forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
@@ -664,7 +664,7 @@
     return self;
 }
 
--(void)returnToPreviousViewController {
+-(void)logOut {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"returnToPreviousViewController" object:self];
     
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
@@ -672,6 +672,11 @@
     
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+    
+
+    [self.inputViewController.tabBarController setSelectedIndex:1];
+    
+    
 }
 
 -(void)dismiss {
