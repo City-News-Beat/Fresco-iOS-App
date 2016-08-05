@@ -29,6 +29,7 @@
 #import "FRSAboutFrescoViewController.h"
 
 #import <MessageUI/MessageUI.h>
+#import <Smooch/Smooch.h>
 
 /* API */
 #import "FRSAPIClient.h"
@@ -65,6 +66,25 @@
 
     [self.navigationItem setTitle:@"SETTINGS"];
     [self.tableView reloadData];
+}
+
+-(void)smooch {
+    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    
+    if (currentUser.firstName) {
+        [SKTUser currentUser].firstName = currentUser.firstName;
+    }
+    
+    if (currentUser.email) {
+        [SKTUser currentUser].email = currentUser.email;
+    }
+    
+    if (currentUser.uid) {
+        [[SKTUser currentUser] addProperties:@{ @"Fresco ID" : currentUser.uid }];
+    }
+    
+    [Smooch show];
+
 }
 
 -(void)viewDidAppear:(BOOL)animated{
