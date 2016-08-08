@@ -211,10 +211,8 @@
         if (error) {
             if (error.code == -1009) {
                 NSLog(@"Unable to connect.");
-//                if (!self.alert) {
-                    self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                    [self.alert show];
-//                }
+                self.alert = [[FRSAlertView alloc] initNoConnection];
+                [self.alert show];
                 return;
             }
             
