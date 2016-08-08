@@ -57,7 +57,6 @@
 @property (nonatomic) NSInteger height;
 @property BOOL locationEnabled;
 @property (nonatomic) CGFloat miles;
-@property (strong, nonatomic) UIView *mapCircleView;
 
 @end
 
@@ -396,13 +395,13 @@
     }
     
     
-    self.mapCircleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - circleRadius/2, 16, circleRadius, circleRadius)];
-    self.mapCircleView.backgroundColor = [UIColor frescoLightBlueColor];
-    self.mapCircleView.layer.cornerRadius = circleRadius/2;
-    [self.mapView addSubview:self.mapCircleView];
+    UIView *mapCircleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - circleRadius/2, 16, circleRadius, circleRadius)];
+    mapCircleView.backgroundColor = [UIColor frescoLightBlueColor];
+    mapCircleView.layer.cornerRadius = circleRadius/2;
+    [self.mapView addSubview:mapCircleView];
     
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(self.mapCircleView.frame.size.width/2 - 24/2, self.mapCircleView.frame.size.height/2 - 24/2, 24, 24)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(mapCircleView.frame.size.width/2 - 24/2, mapCircleView.frame.size.height/2 - 24/2, 24, 24)];
     view.backgroundColor = [UIColor whiteColor];
     
     view.layer.cornerRadius = 12;
@@ -413,12 +412,12 @@
     view.layer.shouldRasterize = YES;
     view.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     
-    [self.mapCircleView addSubview:view];
+    [mapCircleView addSubview:view];
     
     UIImageView *imageView = [[UIImageView alloc] init];
-    imageView.frame = CGRectMake(self.mapCircleView.frame.size.width/2 - 18/2, self.mapCircleView.frame.size.height/2 - 18/2, 18, 18);
+    imageView.frame = CGRectMake(mapCircleView.frame.size.width/2 - 18/2, mapCircleView.frame.size.height/2 - 18/2, 18, 18);
     imageView.layer.cornerRadius = 9;
-    [self.mapCircleView addSubview:imageView];
+    [mapCircleView addSubview:imageView];
     
     
     if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {

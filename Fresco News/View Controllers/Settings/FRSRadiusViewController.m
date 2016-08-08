@@ -196,6 +196,20 @@
         
         MKAnnotationView *annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationIdentifier];
         
+        CGFloat circleRadius;
+        if (IS_IPHONE_5) {
+            circleRadius = 208;
+        } else if (IS_IPHONE_6) {
+            circleRadius = 248;
+        } else if (IS_IPHONE_6_PLUS) {
+            circleRadius = 278;
+        }
+        
+        UIView *mapCircleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - circleRadius/2, 16, circleRadius, circleRadius)];
+        mapCircleView.backgroundColor = [UIColor frescoLightBlueColor];
+        mapCircleView.layer.cornerRadius = circleRadius/2;
+        [mapView addSubview:mapCircleView];
+                
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
         view.backgroundColor = [UIColor whiteColor];
         
