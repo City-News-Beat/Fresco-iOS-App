@@ -100,17 +100,18 @@
     if (!_representedUser) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
-    }
+        [self configureWithUser:_representedUser];
+    }else{
+        [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
+            _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+            [self configureWithUser:_representedUser];
+        }];
+     }
     
     [self setupUI];
-    
     [self configureUI];
-    
-    [self configureWithUser:_representedUser];
     [self fetchGalleries];
-    
     [super removeNavigationBarLine];
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -126,7 +127,7 @@
     if (!_representedUser || _representedUser == [[FRSAPIClient sharedClient] authenticatedUser]) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
-        [self configureWithUser:_representedUser];
+        //[self configureWithUser:_representedUser];
         [self fetchGalleries];
     }
 }
@@ -166,17 +167,6 @@
     self.usernameLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = self.usernameLabel;
     self.navigationItem.titleView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
-    
-    self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
-    self.followBarButtonItem.tintColor = [UIColor whiteColor];
-    
-    if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
-        [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
-    }
-    
-    self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
     
     /* TABLE VIEW */
     [self configureTableView];
@@ -295,7 +285,7 @@
     
     //NSLog(@"CHILDREN: %lu", self.navigationController.childViewControllers.count);
     
-    if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid] && self.navigationController.childViewControllers.count == 1) {
+    if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid] && [self.navigationController.childViewControllers  objectAtIndex:0]==self) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
         editItem.tintColor = [UIColor whiteColor];
@@ -304,6 +294,19 @@
         
         self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //?
+    }else{
+        if(![self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]){
+            self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
+            self.followBarButtonItem.tintColor = [UIColor whiteColor];
+            
+            if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+                [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+            }
+            
+            self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
+        }
+        [self configureBackButtonAnimated:true];
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     }
 }
 
@@ -468,28 +471,27 @@
     NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
     
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.profileBG.frame.origin.y, self.view.frame.size.width - origin - 16, 22)];
-    self.nameLabel.text = @"";
+    //self.nameLabel.text = @"";
     self.nameLabel.textColor = [UIColor whiteColor];
     self.nameLabel.font = [UIFont notaMediumWithSize:17];
     [self.profileContainer addSubview:self.nameLabel];
     
     self.locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height, self.nameLabel.frame.size.width, 14)];
-    self.locationLabel.text = @"New York, NY";
     self.locationLabel.textColor = [UIColor whiteColor];
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
     
     //    self.bioTextView = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
-    /*
+    
     self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(origin-4, 50, 150, 50)];
     
-    self.bioTextView.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
+    //self.bioTextView.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
     self.bioTextView.backgroundColor = [UIColor frescoOrangeColor];
     self.bioTextView.textColor = [UIColor whiteColor];
     self.bioTextView.font = [UIFont systemFontOfSize:15 weight:-300];
     self.bioTextView.delegate = self;
     //    [self.bioTextView sizeToFit];
-    [self.profileContainer addSubview:self.bioTextView];*/
+    [self.profileContainer addSubview:self.bioTextView];
 }
 -(void)textViewDidEndEditing:(UITextView *)textView{
     if (textView.text) {
@@ -952,9 +954,11 @@
         
         //self.locationLabel.text = user.
         self.bioTextView.text = user.bio;
+        NSLog(@"USER'S BIO: %@", user.bio);
         self.bioTextView.editable = false;
         //[self.bioTextView sizeToFit];
         self.nameLabel.text = user.firstName;
+        //self.locationLabel.text = user.loca
         //self.bioLabel.text = user.bio;
         //[self.bioLabel sizeToFit];
         

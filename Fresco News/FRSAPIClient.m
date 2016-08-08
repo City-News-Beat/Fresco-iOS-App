@@ -758,6 +758,25 @@
     }];
 }
 
+-(void)getUserWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"user/%@", user];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        if (error) {
+            completion(responseObject, error);
+            return;
+        }
+        
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(responseObject, error);
+        }
+        
+        // shouldn't happen
+        completion(responseObject, error);
+    }];
+}
+
 -(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
     
     [self post:acceptAssignmentEndpoint withParameters:@{@"assignment_id":assignmentID} completion:^(id responseObject, NSError *error) {

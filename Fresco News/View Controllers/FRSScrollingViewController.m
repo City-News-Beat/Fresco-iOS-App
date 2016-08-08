@@ -172,7 +172,6 @@
 -(void)setModalInPopover:(BOOL)modalInPopover{
     NSLog(@"POOOPED");
 }
-*/
 
 
 -(void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item{
@@ -185,7 +184,8 @@
 
 -(void)unwindForSegue:(UIStoryboardSegue *)unwindSegue towardsViewController:(UIViewController *)subsequentVC{
     NSLog(@"SEGUEING");
-}
+}*/
+
 
 /*
 - (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
