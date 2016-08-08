@@ -32,6 +32,7 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain) id tabBarController;
 -(void)reloadUser;
-- (void)saveContext;
+-(void)saveContext;
 -(UITabBarController *)tabBar;
+-(BOOL)isFirstRun;
 @end

@@ -16,6 +16,7 @@
 #import "FRSCameraViewController.h"
 #import "UIColor+Fresco.h"
 #import "FRSNavigationBar.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSTabBarController () <UITabBarControllerDelegate>
 
@@ -179,7 +180,7 @@
     if ([self.tabBar.items indexOfObject:item] == 4) {
         
         if (![[FRSAPIClient sharedClient] isAuthenticated]) {
-            
+
             FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
             [self.navigationController pushViewController:onboardVC animated:NO];
         }
