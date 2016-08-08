@@ -211,7 +211,7 @@
         if (error) {
             if (error.code == -1009) {
                 NSLog(@"Unable to connect.");
-                self.alert = [[FRSAlertView alloc] initNoConnection];
+                self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
                 [self.alert show];
                 return;
             }
@@ -219,31 +219,21 @@
             NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
             NSInteger responseCode = response.statusCode;
             NSLog(@"ERROR: %ld", (long)responseCode);
-            
-            if (responseCode >= 400 && responseCode < 500) {
-                // 400 level, client
-                if (responseCode == 403) {
-                    if (!self.errorImageView) {
-                        [self addErrorToView];
-                    }
 
-                } else {
-                    
+            if (responseCode == 403) {
+                if (!self.errorImageView) {
+                    [self addErrorToView];
+                    return;
                 }
-                
-                return;
             }
-            else if (responseCode >= 500 && responseCode < 600) {
+            else if (responseCode >= 300 && responseCode < 600) {
                 // 500 level, server
                 if (!self.alert) {
-                    self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                    self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                     [self.alert show];
                 }
 
                 return;
-            }
-            else {
-                //generic error
             }
         }
     }];

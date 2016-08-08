@@ -1082,7 +1082,7 @@
                     title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
                 }
                 
-                FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                 [alert show];
                 [self stopSpinner:self.loadingView onButton:self.createAccountButton];
 
@@ -1137,17 +1137,7 @@
         
         if (error.code == -1009) {
             
-            NSString *title = @"";
-            
-            if (IS_IPHONE_5) {
-                title = @"UNABLE TO CONNECT";
-            } else if (IS_IPHONE_6) {
-                title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-            } else if (IS_IPHONE_6_PLUS) {
-                title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-            }
-            
-            FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+            FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
             [alert show];
             [self stopSpinner:self.loadingView onButton:self.createAccountButton];
 
@@ -1251,18 +1241,7 @@
         if (error) {
             
             if (error.code == -1009) {
-                NSLog(@"Unable to connect.");
-                NSString *title;
-                
-                if (IS_IPHONE_5) {
-                    title = @"UNABLE TO CONNECT";
-                } else if (IS_IPHONE_6) {
-                    title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-                } else if (IS_IPHONE_6_PLUS) {
-                    title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-                }
-                
-                FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                 [alert show];
                 [spinner stopLoading];
                 [spinner removeFromSuperview];
@@ -1347,17 +1326,7 @@
                     }
                     
                     if (error.code == -1009) {
-                        NSString *title;
-                        
-                        if (IS_IPHONE_5) {
-                            title = @"UNABLE TO CONNECT";
-                        } else if (IS_IPHONE_6) {
-                            title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-                        } else if (IS_IPHONE_6_PLUS) {
-                            title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-                        }
-                        
-                        FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                        FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                         [alert show];
                         [spinner stopLoading];
                         [spinner removeFromSuperview];

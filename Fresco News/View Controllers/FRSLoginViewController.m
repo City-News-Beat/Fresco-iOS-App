@@ -212,7 +212,7 @@
         
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
-            self.alert = [[FRSAlertView alloc] initNoConnection];
+            self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
             [self.alert show];
             return;
         }
@@ -328,7 +328,7 @@
             
             if (error.code == -1009) {
                 
-                self.alert = [[FRSAlertView alloc] initNoConnection];
+                self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
                 [self.alert show];
                 [spinner stopLoading];
                 [spinner removeFromSuperview];
@@ -402,7 +402,7 @@
             
             if (error.code == -1009) {
                 NSLog(@"Unable to connect.");
-                self.alert = [[FRSAlertView alloc] initNoConnection];
+                self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
                 [self.alert show];
                 [spinner stopLoading];
                 [spinner removeFromSuperview];

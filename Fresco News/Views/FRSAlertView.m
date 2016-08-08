@@ -599,7 +599,7 @@
 }
 
 
--(instancetype)initNoConnection {
+-(instancetype)initNoConnectionAlert {
     self = [super init];
     
     if (self) {
@@ -765,13 +765,25 @@
 //    }
 }
 
--(instancetype)initBannerWithTitle:(NSString *)title backButton:(BOOL)backButton {
+-(instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton {
     
     self = [super init];
     
     if (self) {
         self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 64);
         self.backgroundColor = [UIColor frescoRedHeartColor];
+        
+        
+        NSString *title = @"";
+        
+        if (IS_IPHONE_5) {
+            title = @"UNABLE TO CONNECT";
+        } else if (IS_IPHONE_6) {
+            title = @"UNABLE TO CONNECT. CHECK SIGNAL";
+        } else if (IS_IPHONE_6_PLUS) {
+            title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
+        }
+        
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 35, [UIScreen mainScreen].bounds.size.width -80, 19)];
         label.font = [UIFont notaBoldWithSize:17];

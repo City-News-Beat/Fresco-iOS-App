@@ -143,7 +143,7 @@
             }
             
             if (!self.alert) {
-                self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                 [self.alert show];
             }
 

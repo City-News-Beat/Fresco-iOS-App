@@ -231,7 +231,7 @@
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
             if (!self.alert) {
-                self.alert = [[FRSAlertView alloc] initNoConnection];
+                self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                 [self.alert show];
             }
             return;
@@ -241,48 +241,14 @@
         NSInteger responseCode = response.statusCode;
         NSLog(@"ERROR: %ld", (long)responseCode);
         
-        if (responseCode >= 400 && responseCode < 500) {
-            // 400 level, client
-            if (responseCode == 403) {
-                if (!self.errorImageView) {
-                    [self addErrorToView];
-                }
-            } else {
-                NSString *title = @"";
-                
-                if (IS_IPHONE_5) {
-                    title = @"UNABLE TO CONNECT";
-                } else if (IS_IPHONE_6) {
-                    title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-                } else if (IS_IPHONE_6_PLUS) {
-                    title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-                }
-                
-                if (!self.alert) {
-                    self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
-                    [self.alert show];
-                }
+        if (responseCode == 403) { //incorrect
+            if (!self.errorImageView) {
+                [self addErrorToView];
                 return;
             }
-        }
-        else if (responseCode >= 500 && responseCode < 600) {
-            // 500 level, server
-            NSString *title = @"";
-            
-            if (IS_IPHONE_5) {
-                title = @"UNABLE TO CONNECT";
-            } else if (IS_IPHONE_6) {
-                title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-            } else if (IS_IPHONE_6_PLUS) {
-                title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-            }
-            
-            if (!self.alert) {
-                self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
-                [self.alert show];
-            }
-
-            return;
+        } else { //300, 400, 500 should return this alert
+            self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [self.alert show];
         }
         
         if (!error) {
@@ -394,18 +360,8 @@
                         [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
                         self.cell.rightAlignedButton.userInteractionEnabled = NO;
                     } else if (error.code == -1009){
-                        NSString *title = @"";
-                        
-                        if (IS_IPHONE_5) {
-                            title = @"UNABLE TO CONNECT";
-                        } else if (IS_IPHONE_6) {
-                            title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-                        } else if (IS_IPHONE_6_PLUS) {
-                            title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-                        }
-                        
                         if (!self.alert) {
-                            self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                            self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                             [self.alert show];
                         }
                     } else {
