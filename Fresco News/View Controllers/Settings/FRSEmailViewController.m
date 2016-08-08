@@ -173,7 +173,7 @@
                     [self addErrorToView];
                 }
             } else {
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"An account already exists with this username. Would you like to log in?" actionTitle:@"CANCEL" cancelTitle:@"LOGIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"An account already exists with this email. Would you like to log in?" actionTitle:@"CANCEL" cancelTitle:@"LOGIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [self.alert show];
             }
             
