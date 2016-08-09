@@ -348,10 +348,9 @@
     
     MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"assignment-annotation"];
 
-
     if (!annotationView) {
         
-        if (annotation == mapView.userLocation) {
+        if ([annotation isKindOfClass:FRSMapCircleTypeUser]) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"user-annotation"];
         
             UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
