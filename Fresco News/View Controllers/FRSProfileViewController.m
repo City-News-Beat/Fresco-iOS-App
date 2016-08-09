@@ -804,8 +804,13 @@
             newFrame.origin.y = -self.sectionView.frame.size.height;
         }
         //NSLog(@"FRAME Y: %f", self.sectionView.frame.origin.y);
-        [self.feedButton setAlpha:(self.navBarYValue/(self.navBarHeight))*2];
-        [self.likesButton setAlpha:(self.navBarYValue/(self.navBarHeight))*2];
+        if(self.tablePageScroller == scrollView){
+            [self.feedButton setAlpha:(self.navBarYValue/(self.navBarHeight))-0.3];
+            [self.likesButton setAlpha:(self.navBarYValue/(self.navBarHeight))];
+        }else{
+            [self.feedButton setAlpha:(self.navBarYValue/(self.navBarHeight))];
+            [self.likesButton setAlpha:(self.navBarYValue/(self.navBarHeight))-0.3];
+        }
         [self.sectionView setFrame:newFrame];
         [self.sectionView.superview setFrame:newFrame];
         [topView setFrame:newFrame];
@@ -815,19 +820,56 @@
         [self.sectionView setFrame:newFrame];
         [self.sectionView.superview setFrame:newFrame];
         [topView setFrame:newFrame];
-        
+        if(self.tablePageScroller == scrollView){
+            [self.feedButton setAlpha:1.0-0.3];
+            [self.likesButton setAlpha:1.0];
+        }else{
+            [self.feedButton setAlpha:1.0];
+            [self.likesButton setAlpha:1.0-0.3];
+        }
     }else{//Set the likes/feed sectionView to stay just below the profileContainer until it goes past it
         CGRect newFrame = self.sectionView.frame;
         newFrame.origin.y = 0;
         [self.sectionView setFrame:newFrame];
         [self.sectionView.superview setFrame:newFrame];
         [topView setFrame:newFrame];
+        if(self.tablePageScroller == scrollView){
+            [self.feedButton setAlpha:1.0-0.3];
+            [self.likesButton setAlpha:1.0];
+        }else{
+            [self.feedButton setAlpha:1.0];
+            [self.likesButton setAlpha:1.0-0.3];
+        }
     }
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    //[super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    /*[super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    if (self.scrollDirection == UIScrollViewScrollDirectionDown && scrollView.contentOffset.y > self.navBarHeight*2) {
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            CGRect newFrame = self.sectionView.frame;
+            
+            float yValue = (-self.navBarHeight-3);
+            newFrame.origin.y = (yValue*2)+15;
+            [self.feedButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
+            [self.likesButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
+            [self.sectionView setFrame:newFrame];
+            [self.sectionView.superview setFrame:newFrame];
+            [topView setFrame:newFrame];
+        } completion:nil];
+    }else if(self.scrollDirection == UIScrollViewScrollDirectionUp){
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            CGRect newFrame = self.sectionView.frame;
     
+            float yValue = self.navBarHeight;
+            newFrame.origin.y = (yValue*2)+15;
+            [self.feedButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
+            [self.likesButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
+            [self.sectionView setFrame:newFrame];
+            [self.sectionView.superview setFrame:newFrame];
+            [topView setFrame:newFrame];
+        } completion:nil];
+    }*/
 }
 
 #pragma mark - Navigation
