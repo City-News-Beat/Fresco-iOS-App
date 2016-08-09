@@ -19,6 +19,7 @@
 #import "FRSUser.h"
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
+#import "Haneke.h"
 
 @import MapKit;
 
@@ -219,6 +220,7 @@
         view.layer.shadowOpacity = 0.15;
         view.layer.shadowRadius = 1.5;
         view.layer.shouldRasterize = YES;
+        view.clipsToBounds = YES;
         view.layer.rasterizationScale = [[UIScreen mainScreen] scale];
         
         [annotationView addSubview:view];
@@ -227,11 +229,16 @@
         UIImageView *imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(-9, -9, 18, 18);
         imageView.layer.cornerRadius = 9;
+        imageView.clipsToBounds = YES;
         [annotationView addSubview:imageView];
-        
         
         if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
 
+            NSString *link = [[FRSAPIClient sharedClient].authenticatedUser valueForKey:@"profileImage"];
+            NSURL *url = [NSURL URLWithString:link];
+            [imageView hnk_setImageFromURL:url];
+            imageView.backgroundColor = [UIColor redColor];
+            
         } else {
             imageView.backgroundColor = [UIColor frescoBlueColor];
         }

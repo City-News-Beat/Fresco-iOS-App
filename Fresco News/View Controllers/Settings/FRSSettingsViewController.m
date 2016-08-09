@@ -265,7 +265,19 @@
             switch (indexPath.row) {
                 case 0:
                     [self checkNotificationStatus];
-                    [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                    
+                     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
+                         NSNumber *notifRadius = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+                         
+                         if ([notifRadius integerValue] <= 1) {
+                             [cell configureAssignmentCellEnabled:NO];
+                         } else {
+                             [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                         }
+                     } else {
+                         [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                     }
+                    
                     
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
