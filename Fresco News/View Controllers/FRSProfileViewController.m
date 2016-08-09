@@ -288,9 +288,12 @@
     if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid] && [self.navigationController.childViewControllers  objectAtIndex:0]==self) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
-        editItem.tintColor = [UIColor whiteColor];
         UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
         editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
+        
+        gearItem.tintColor = [UIColor whiteColor];
+        editItem.tintColor = [UIColor whiteColor];
+        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
         
         self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //?
@@ -315,7 +318,7 @@
     [self createProfileSection];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , self.view.frame.size.height - 44)];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -760,8 +763,8 @@
         }
         [self configureSectionView];
         
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-        [view addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.view.frame.size.width, 44)];
+        [self.sectionView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
         [view addSubview:self.sectionView];
         
         topView = view;
@@ -777,89 +780,49 @@
 
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
-    //    [self dismissSocialOverlay];
-    
-    //NSLog(@"Content Offset %f", scrollView.contentOffset.y);
-    //NSLog(@"Frame Y ORIGIN %f",     self.sectionView.frame.origin.y);
-    //NSLog(@"SUBVIEW COUNT: %lu",(unsigned long)[self.navigationController.navigationBar subviews].count);
-    /*NSMutableArray *barButtonItems = [NSMutableArray array];
-    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
-    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
-     [super expandNavBar:barButtonItems];
-     */
-    
-    //Once the user has scroll past the feed/likes section view, start moving it with the nav bar
-    //if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height) {
     [super scrollViewDidScroll:scrollView];
-    CGRect newFrame = self.sectionView.frame;
-    
-    // Navigation bar travels up until it is collapsed (so it doesn't travel past the screen)
-    if(self.navBarYValue > -self.navBarHeight-3-self.sectionView.frame.size.height && self.scrollDirection == UIScrollViewScrollDirectionDown){
-        newFrame.origin.y = (self.navBarYValue*2)+15;
-        
-    // Navigation bar travels down until it is fully expanded
-    }else if((self.navBarYValue < self.navBarHeight) && self.scrollDirection == UIScrollViewScrollDirectionUp){ // done scrolling, stick
-        newFrame.origin.y = (self.navBarYValue*2)+15;
-    //
-    }else if(self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height > 0){
-        newFrame.origin.y = 0 + (self.navBarHeight - (self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height));
-        
-    // When the user scrolls up past the fully expanded nav bar condition, keep it in the fully expanded state
-    }else if(self.scrollDirection == UIScrollViewScrollDirectionUp){
-        newFrame.origin.y = 22+35;
-    
-    // When the user scrolls down past the collapsed nav bar condition, keep it in the collapsed state
-    }else if(self.scrollDirection == UIScrollViewScrollDirectionDown){
-        newFrame.origin.y = -self.sectionView.frame.size.height;
-    }
-    NSLog(@"FRAME Y: %f", self.sectionView.frame.origin.y);
-    [self.sectionView setFrame:newFrame];
-    [self.sectionView.superview setFrame:newFrame];
-    //}
-    /*
-     return;
-     if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height) {
-     if([self.navigationController.navigationBar subviews].count <= 7 && self.sectionView.frame.size.height + self.profileContainer.frame.size.height){
-            [self.sectionView removeFromSuperview];
-            CGRect newFrame = self.sectionView.frame;
-            newFrame.origin.y = self.navigationController.navigationBar.frame.size.height;
-            [self.sectionView setFrame:newFrame];
-            [self.navigationController.navigationBar addSubview:self.sectionView];
+    //Once the user has scroll past the feed/likes section view, start moving it with the nav bar
+    if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height + (self.sectionView.frame.size.height*2)) {
+        CGRect newFrame = self.sectionView.frame;
+        // Navigation bar travels up until it is collapsed (so it doesn't travel past the screen)
+        if(self.navBarYValue > -self.navBarHeight-3-self.sectionView.frame.size.height && self.scrollDirection == UIScrollViewScrollDirectionDown){
+            newFrame.origin.y = (self.navBarYValue*2)+15;
             
-//            self.navBarHeight = 40;
+            // Navigation bar travels down until it is fully expanded
+        }else if((self.navBarYValue < self.navBarHeight) && self.scrollDirection == UIScrollViewScrollDirectionUp){ // done scrolling, stick
+            newFrame.origin.y = (self.navBarYValue*2)+15;
+            //
+        }else if(self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height > 0){
+            newFrame.origin.y = 0 + (self.navBarHeight - (self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height));
             
-            self.prevContentOffY = scrollView.contentOffset.y;
-            [self determineScrollDirection:scrollView];
+            // When the user scrolls up past the fully expanded nav bar condition, keep it in the fully expanded state
+        }else if(self.scrollDirection == UIScrollViewScrollDirectionUp){
+            newFrame.origin.y = 22+35;
+            
+            // When the user scrolls down past the collapsed nav bar condition, keep it in the collapsed state
+        }else if(self.scrollDirection == UIScrollViewScrollDirectionDown){
+            newFrame.origin.y = -self.sectionView.frame.size.height;
         }
-        [super scrollViewDidScroll:scrollView];
-    }else if(scrollView.contentOffset.y <= self.profileContainer.frame.size.height + self.sectionView.frame.size.height && [self.navigationController.navigationBar subviews].count == 8){
-        [self.sectionView removeFromSuperview];
+        //NSLog(@"FRAME Y: %f", self.sectionView.frame.origin.y);
+        [self.feedButton setAlpha:(self.navBarYValue/(self.navBarHeight))*2];
+        [self.likesButton setAlpha:(self.navBarYValue/(self.navBarHeight))*2];
+        [self.sectionView setFrame:newFrame];
+        [self.sectionView.superview setFrame:newFrame];
+        [topView setFrame:newFrame];
+    }else if(scrollView.contentOffset.y >= self.profileContainer.frame.size.height + (self.sectionView.frame.size.height*1.5)){
+        CGRect newFrame = self.sectionView.frame;
+        newFrame.origin.y = -self.sectionView.frame.size.height/2;
+        [self.sectionView setFrame:newFrame];
+        [self.sectionView.superview setFrame:newFrame];
+        [topView setFrame:newFrame];
+        
+    }else{//Set the likes/feed sectionView to stay just below the profileContainer until it goes past it
         CGRect newFrame = self.sectionView.frame;
         newFrame.origin.y = 0;
         [self.sectionView setFrame:newFrame];
-        [topView addSubview:self.sectionView];
-        
-//        self.navBarHeight = 20;
-    }*/
-    
-   // self.sectionView
-    /*
-    if (scrollView == self.tableView){
-        [super determineScrollDirection:scrollView];
-        
-        if (self.scrollDirection == UIScrollViewScrollDirectionDown){
-            if ([self.tableView.backgroundColor isEqual:[UIColor frescoBackgroundColorDark]]) return;
-            self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
-            [self.tableView dg_stopLoading];
-            
-        }
-        else {
-            //            if ([self.tableView.backgroundColor isEqual:[UIColor frescoOrangeColor]]) return;
-            
-            self.tableView.backgroundColor = [UIColor frescoOrangeColor];
-        }
-    }*/
+        [self.sectionView.superview setFrame:newFrame];
+        [topView setFrame:newFrame];
+    }
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{

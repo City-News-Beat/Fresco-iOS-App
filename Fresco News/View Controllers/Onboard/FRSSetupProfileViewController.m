@@ -87,9 +87,12 @@
         profileInfo[@"location"] = self.locationTF.text;
     }
     if (self.profileIV.image) {
+        //Send image to backend and set the url to the avatar :)
+        /*
         CGDataProviderRef provider = CGImageGetDataProvider(self.profileImage.CGImage);
         NSData* data = (id)CFBridgingRelease(CGDataProviderCopyData(provider));
         profileInfo[@"avatar"] = [NSURL URLWithDataRepresentation:data relativeToURL:[[NSURL alloc] init]];
+        [self.profileIV hnk_](*/
     }
     
     return profileInfo;
