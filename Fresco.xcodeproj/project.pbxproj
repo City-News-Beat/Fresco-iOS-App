@@ -145,6 +145,10 @@
 		D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E34D1CCC1C360003B080 /* Twitter.framework */; };
 		D41B2EFA1D53E5960007C61F /* FRSSearchResultsTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D41B2EF91D53E5960007C61F /* FRSSearchResultsTable.m */; };
 		D41C10CB1CE9A54900F96B25 /* FRSStripe.m in Sources */ = {isa = PBXBuildFile; fileRef = D41C10CA1CE9A54900F96B25 /* FRSStripe.m */; };
+		D421FC501D5B7ACF004C76B7 /* FRSSearchStoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D421FC4E1D5B7ACF004C76B7 /* FRSSearchStoryCell.m */; };
+		D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D421FC4F1D5B7ACF004C76B7 /* FRSSearchStoryCell.xib */; };
+		D421FC551D5B7AE3004C76B7 /* FRSSearchUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D421FC531D5B7AE3004C76B7 /* FRSSearchUserCell.m */; };
+		D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D421FC541D5B7AE3004C76B7 /* FRSSearchUserCell.xib */; };
 		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
@@ -510,6 +514,12 @@
 		D41B2EF91D53E5960007C61F /* FRSSearchResultsTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchResultsTable.m; sourceTree = "<group>"; };
 		D41C10C91CE9A54900F96B25 /* FRSStripe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStripe.h; sourceTree = "<group>"; };
 		D41C10CA1CE9A54900F96B25 /* FRSStripe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStripe.m; sourceTree = "<group>"; };
+		D421FC4D1D5B7ACF004C76B7 /* FRSSearchStoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSearchStoryCell.h; sourceTree = "<group>"; };
+		D421FC4E1D5B7ACF004C76B7 /* FRSSearchStoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchStoryCell.m; sourceTree = "<group>"; };
+		D421FC4F1D5B7ACF004C76B7 /* FRSSearchStoryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSearchStoryCell.xib; sourceTree = "<group>"; };
+		D421FC521D5B7AE3004C76B7 /* FRSSearchUserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSearchUserCell.h; sourceTree = "<group>"; };
+		D421FC531D5B7AE3004C76B7 /* FRSSearchUserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSearchUserCell.m; sourceTree = "<group>"; };
+		D421FC541D5B7AE3004C76B7 /* FRSSearchUserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSearchUserCell.xib; sourceTree = "<group>"; };
 		D42C907F1CC6191400B25C99 /* UIImage+Pixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Pixels.h"; path = "../../UIImage+Pixels.h"; sourceTree = "<group>"; };
 		D42C90801CC6191400B25C99 /* UIImage+Pixels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Pixels.m"; path = "../../UIImage+Pixels.m"; sourceTree = "<group>"; };
 		D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSFileLoader.h; path = ../FRSFileLoader.h; sourceTree = "<group>"; };
@@ -1340,6 +1350,8 @@
 		D41B2EF71D53E5810007C61F /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				D421FC4C1D5B7A8A004C76B7 /* Story Cell */,
+				D421FC4A1D5B7A0D004C76B7 /* User Cell */,
 				D41B2EF81D53E5960007C61F /* FRSSearchResultsTable.h */,
 				D41B2EF91D53E5960007C61F /* FRSSearchResultsTable.m */,
 			);
@@ -1353,6 +1365,26 @@
 				D41C10CA1CE9A54900F96B25 /* FRSStripe.m */,
 			);
 			name = Stripe;
+			sourceTree = "<group>";
+		};
+		D421FC4A1D5B7A0D004C76B7 /* User Cell */ = {
+			isa = PBXGroup;
+			children = (
+				D421FC521D5B7AE3004C76B7 /* FRSSearchUserCell.h */,
+				D421FC531D5B7AE3004C76B7 /* FRSSearchUserCell.m */,
+				D421FC541D5B7AE3004C76B7 /* FRSSearchUserCell.xib */,
+			);
+			name = "User Cell";
+			sourceTree = "<group>";
+		};
+		D421FC4C1D5B7A8A004C76B7 /* Story Cell */ = {
+			isa = PBXGroup;
+			children = (
+				D421FC4D1D5B7ACF004C76B7 /* FRSSearchStoryCell.h */,
+				D421FC4E1D5B7ACF004C76B7 /* FRSSearchStoryCell.m */,
+				D421FC4F1D5B7ACF004C76B7 /* FRSSearchStoryCell.xib */,
+			);
+			name = "Story Cell";
 			sourceTree = "<group>";
 		};
 		D43C7FCC1C8E464800A7A7A7 /* Image Picker */ = {
@@ -2252,6 +2284,7 @@
 				CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
+				D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */,
 				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				075473571D19B5640020636E /* Info.plist in Resources */,
@@ -2261,6 +2294,7 @@
 				D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */,
 				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
 				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
+				D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
 				D48C723E1D11D352000677BF /* FRSUserCell.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
@@ -2457,6 +2491,7 @@
 				D4BE3E311D17D6760039394C /* FRSCarouselCell.m in Sources */,
 				07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */,
 				D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */,
+				D421FC501D5B7ACF004C76B7 /* FRSSearchStoryCell.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
 				07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */,
 				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
@@ -2465,6 +2500,7 @@
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				07A30C061C50488800C536EB /* FRSTaxInformationViewController.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,
+				D421FC551D5B7AE3004C76B7 /* FRSSearchUserCell.m in Sources */,
 				D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */,
 				07A30C011C50488800C536EB /* FRSPasswordChangeViewController.m in Sources */,
 				D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */,
