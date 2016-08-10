@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface FRSDefaultNotificationTableViewCell : UITableViewCell
+
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *bodyLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *image;

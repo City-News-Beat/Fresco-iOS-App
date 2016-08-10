@@ -17,11 +17,13 @@
 
 @implementation FRSUserNotificationViewController
 
-- (void)viewDidLoad {
+-(void)viewDidLoad {
     [super viewDidLoad];
 
     [self configureUI];
-
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
+    
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -36,7 +38,14 @@
 
 -(void)configureUI {
     [self configureBackButtonAnimated:NO];
+    [self configureNavigationBar];
     [self configureTableView];
+}
+
+-(void)configureNavigationBar {
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
+    self.title = @"ACTIVITY";
 }
 
 -(void)configureTableView {
@@ -51,6 +60,12 @@
     self.tableView.dataSource = self;
     self.tableView.bounces = YES;
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.separatorColor = [UIColor clearColor];
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 200;
+    
     [self.view addSubview:self.tableView];
 }
 
@@ -60,32 +75,19 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSString *cellIdentifier;
+    NSString *cellIdentifier = @"notificationCell";
     FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-
-    if (cell == nil) {
-        cell = [[FRSDefaultNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-    }
     
-//    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-//        [cell setSeparatorInset:UIEdgeInsetsZero];
-//    }
-//    if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-//        [cell setPreservesSuperviewLayoutMargins:NO];
-//    }
-//    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-//        [cell setLayoutMargins:UIEdgeInsetsZero];
-//    }
+    cell.titleLabel.text = @"This is a two line notification with more than one line but less than three. But if I add text it will become three.";
+    cell.bodyLabel.text = @"BREAKING: Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? Do you see a little Asian child with a blank expression on his face sitting outside on a mechanical helicopter that shakes when you put quarters in it? No? Well, that's what you see at a toy store. And you must think you're in a toy store, because you're here shopping for an infant named Jeb.";
     
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(FRSDefaultNotificationTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    cell.titleLabel.text = @"Today in News";
-    cell.bodyLabel.text  = @"My money's in that office, right? If she start giving me some bullshit about it ain't there, and we got to go…";
-    
-}
+//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    
+//    return 200;
+//}
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
@@ -96,6 +98,12 @@
 }
 
 
+-(CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
+    [sizingCell layoutIfNeeded];
+    
+    CGSize size = [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    return size.height;
+}
 
 
 

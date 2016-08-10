@@ -7,17 +7,27 @@
 //
 
 #import "FRSDefaultNotificationTableViewCell.h"
+#import "UIColor+Fresco.h"
 
 @implementation FRSDefaultNotificationTableViewCell
 
-- (void)awakeFromNib {
+-(void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+
     
-    self.backgroundColor = [UIColor redColor];
+    self.backgroundColor = [UIColor frescoBackgroundColorLight];
+    
+    
+    self.titleLabel.numberOfLines = 0;
+    self.bodyLabel.numberOfLines  = 0;
+    
+    
+    self.image.backgroundColor = [UIColor frescoLightTextColor];
+    self.image.layer.cornerRadius = 20;
+    
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+-(void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
