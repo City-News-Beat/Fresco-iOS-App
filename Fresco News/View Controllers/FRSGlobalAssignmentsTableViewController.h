@@ -11,4 +11,6 @@
 
 @interface FRSGlobalAssignmentsTableViewController : FRSScrollingViewController
 
+@property (strong, nonatomic) NSArray *assignments;
+
 @end

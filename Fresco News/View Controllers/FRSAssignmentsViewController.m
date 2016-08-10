@@ -72,6 +72,9 @@
 @property (strong, nonatomic) UILabel *photoCashLabel;
 @property (strong, nonatomic) UILabel *videoCashLabel;
 
+@property (strong, nonatomic) UILabel *globalAssignmentsLabel;
+@property (strong, nonatomic) NSArray *globalAssignmentsArray;
+
 @property (strong, nonatomic) UIButton *closeButton;
 
 @property (strong, nonatomic) UIView *assignmentStatsContainer;
@@ -93,9 +96,6 @@
                                                object:nil];
     
     self.assignmentIDs = [[NSMutableArray alloc] init];
-    
-    //Should only be visible when global assignments
-    [self configureGlobalAsignmentsBar];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -177,9 +177,16 @@
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
         
         if (globalAssignments.count > 0) {
-            
+            [self configureGlobalAssignmentsBar];
+            if (globalAssignments.count > 1) {
+                self.globalAssignmentsLabel.text = [NSString stringWithFormat:@"%lu global assignments", (unsigned long)globalAssignments.count];
+            }else{
+                self.globalAssignmentsLabel.text = [NSString stringWithFormat:@"%lu global assignment", (unsigned long)globalAssignments.count];
+            }
         }
-                
+        
+        self.globalAssignmentsArray = [globalAssignments copy];
+        
         for (NSDictionary *dict in assignments){
             
             FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
@@ -839,17 +846,21 @@
 
 #pragma mark - Global Assignments
 
--(void)configureGlobalAsignmentsBar {
+-(void)configureGlobalAssignmentsBar {
     
     self.globalAssignmentsBottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height -44-49, self.view.frame.size.width, 44)];
     self.globalAssignmentsBottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.globalAssignmentsBottomContainer];
     
-    UILabel *globalAssignmentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 12, self.view.frame.size.width -56 -24 -18 -6, 20)];
-    globalAssignmentsLabel.text = @"6 global assignments";
-    globalAssignmentsLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    globalAssignmentsLabel.textColor = [UIColor frescoDarkTextColor];
-    [self.globalAssignmentsBottomContainer addSubview:globalAssignmentsLabel];
+    self.globalAssignmentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 12, self.view.frame.size.width -56 -24 -18 -6, 20)];
+    self.globalAssignmentsLabel.text = @"6 global assignments";
+    //TO DO GRAB THE NUMBER OF GLOBAL ASSIGNMENTS
+    
+    
+    
+    self.globalAssignmentsLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.globalAssignmentsLabel.textColor = [UIColor frescoDarkTextColor];
+    [self.globalAssignmentsBottomContainer addSubview:self.globalAssignmentsLabel];
     
     UIImageView *globeImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"earth-small"]];
     globeImageView.frame = CGRectMake(16, 10, 24, 24);
@@ -864,9 +875,8 @@
 }
 
 -(void)globalAssignmentsSegue {
-    NSLog(@"hello");
-    
     FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
+    tableViewController.assignments = self.globalAssignmentsArray;
     [self.navigationController pushViewController:tableViewController animated:YES];
 }
 
