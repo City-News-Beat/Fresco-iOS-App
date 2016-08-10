@@ -840,7 +840,6 @@
     [self.navigationController pushViewController:notifVC animated:YES];
     self.navigationItem.title = @"";
     
-    
 }
 
 -(void)showSettings {
