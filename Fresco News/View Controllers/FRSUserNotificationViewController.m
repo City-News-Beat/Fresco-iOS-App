@@ -79,7 +79,7 @@
     
     cell.titleLabel.text = @"Omar Elfanek";
     cell.bodyLabel.text  = @"Followed you.";
-    cell.count = 1;
+    cell.count = 2;
 
     
     [cell configureCell];
