@@ -22,7 +22,7 @@
 }
 
 -(void)commonInit {
-    
+    self.delegate = self;
 }
 
 -(instancetype)init {
@@ -54,4 +54,20 @@
     
     return self;
 }
+
+
+// table methods
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 3;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 0;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return Nil;
+}
+
 @end

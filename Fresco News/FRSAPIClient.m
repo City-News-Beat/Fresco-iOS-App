@@ -484,7 +484,7 @@
     if (!offsetID) {
         params = @{
                     @"limit" : [NSNumber numberWithInteger:limit],
-                };
+                  };
     }
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
@@ -493,9 +493,9 @@
 }
 
 -(void)createPaymentWithToken:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSLog(@"%@", token);
+
     if (!token) {
-        return;
+        completion(Nil, Nil);
     }
     
     [self post:createPayment withParameters:@{@"token":token, @"active":@(TRUE)} completion:^(id responseObject, NSError *error) {
@@ -513,7 +513,7 @@
         return;
     }
     
-    [self post:@"user/locate" withParameters:inputParams completion:^(id responseObject, NSError *error) {
+    [self post:locationEndpoint withParameters:inputParams completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
         
