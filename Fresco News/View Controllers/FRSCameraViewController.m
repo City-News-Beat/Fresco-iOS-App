@@ -140,6 +140,22 @@
     return self;
 }
 
+-(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode selecetedAssignment:(NSDictionary *)assignment{
+    self = [super init];
+    
+    if (self){
+        self.sessionManager = [FRSAVSessionManager defaultManager];
+        self.locationManager = [FRSLocationManager sharedManager];
+        self.captureMode = captureMode;
+        self.lastOrientation = UIDeviceOrientationPortrait;
+        self.firstTime = YES;
+        self.firstTimeAni = YES;
+        
+    }
+    
+    return self;
+}
+
 - (void)captureOutput:(AVCaptureOutput *)captureOutput
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection {

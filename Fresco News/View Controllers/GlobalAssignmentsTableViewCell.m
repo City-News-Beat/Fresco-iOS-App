@@ -83,8 +83,12 @@
     //Set the frame to resize the entire cell in the tableview
     CGRect newFrame = self.frame;
     int botPaddingInZeplin = 12 - 8;//-8 because interface padding
-    newFrame.size.height = openCameraButton.frame.origin.x + openCameraButton.frame.size.height + botPaddingInZeplin;
+    newFrame.size.height = openCameraButton.frame.origin.x+botPaddingInZeplin;
     [self setFrame:newFrame];
+    
+    //Add lines
+    [self addSubview:[UIView lineAtPoint:CGPointMake(0, 0.5)]];
+    [self addSubview:[UIView lineAtPoint:CGPointMake(0, self.frame.size.height-0.5)]];
 }
 
 -(void)configureOutletImagesWithOutletArray:(NSArray *)outletArray{
