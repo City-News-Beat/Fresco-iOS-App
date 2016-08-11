@@ -8,6 +8,7 @@
 
 #import "FRSUserNotificationViewController.h"
 #import "FRSDefaultNotificationTableViewCell.h"
+#import "FRSTextNotificationTableViewCell.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -23,6 +24,7 @@
     [self configureUI];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
     
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"textNotificationCell"];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -74,17 +76,25 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSString *cellIdentifier = @"notificationCell";
-    FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//    NSString *cellIdentifier = @"notificationCell";
+//    FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//    
+//    cell.titleLabel.text = @"Omar Elfanek";
+//    cell.bodyLabel.text  = @"Followed you.";
+//    cell.count = 2;
+//
+//    [cell configureCell];
     
-    cell.titleLabel.text = @"Omar Elfanek";
-    cell.bodyLabel.text  = @"Followed you.";
-    cell.count = 2;
-
-
+    
+    NSString *cellIdentifier = @"textNotificationCell";
+    FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    cell.bodyLabel.text  = @"BREAKING: Wild elephant runs down FDR chasing a small dog. No injuries reported.";
+    
     [cell configureCell];
     
     return cell;
+    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
