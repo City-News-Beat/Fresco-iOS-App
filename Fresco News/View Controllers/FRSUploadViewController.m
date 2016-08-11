@@ -457,6 +457,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
         return;
     }
     
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:0.2];
     self.globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44)];
     self.globalAssignmentsDrawer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.globalAssignmentsDrawer];
@@ -486,6 +488,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 43.5, self.globalAssignmentsDrawer.frame.size.width, .5)];
     line.backgroundColor = [UIColor frescoShadowColor];
     [self.globalAssignmentsDrawer addSubview:line];
+    [CATransaction commit];
 }
 
 -(void)toggleGlobalAssignmentsDrawer {

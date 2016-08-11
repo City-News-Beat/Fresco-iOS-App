@@ -8,7 +8,7 @@
 
 #import "FRSGlobalAssignmentsTableViewController.h"
 #import "GlobalAssignmentsTableViewCell.h"
-#import "FRSAssignmentPickerTableViewCell.h"
+#import "FRSCameraViewController.h"
 
 @interface FRSGlobalAssignmentsTableViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -47,7 +47,7 @@
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.bounces = YES;
-    self.tableView.backgroundColor = [UIColor blueColor];
+    self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.tableView];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSGlobalAssignmentTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"global-assignment-cell"];
@@ -63,24 +63,41 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    //TODO
-    
-    return 484;
+
+    return [self tableView:tableView cellForRowAtIndexPath:indexPath].frame.size.height;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *cellIdentifier = @"cell";
+    static NSString *cellIdentifier = @"global-assignment-cell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"global-assignment-cell"];
+    GlobalAssignmentsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"global-assignment-cell"];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell configureGlobalAssignmentCellWithAssignment:[self.assignments objectAtIndex:indexPath.row]];
+
     if (cell == nil) {
-        FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignments objectAtIndex:indexPath.row]];
-        [cell configureAssignmentCellForIndexPath:indexPath];
+        GlobalAssignmentsTableViewCell *cell = [[GlobalAssignmentsTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignments objectAtIndex:indexPath.row]];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell configureGlobalAssignmentCellWithAssignment:[self.assignments objectAtIndex:indexPath.row]];
     }
     
+    __weak typeof(self) weakSelf = self;
+    
+    cell.openCameraBlock = ^{
+        NSDictionary *assignment = [self.assignments objectAtIndex:indexPath.row];
+        [weakSelf openCameraWithAssignment:assignment];
+    };
+
     return cell;
 }
 
+-(void)openCameraWithAssignment:(NSDictionary *)assignment {
+    // Open camera and attach assignment
+    FRSCameraViewController *cameraVC = [[FRSCameraViewController alloc] init];
+    [cameraVC initWithCaptureMode:FRSCaptureModeVideo];
+    [self.navigationController pushViewController:cameraVC animated:true];
+    [self hideTabBarAnimated:true];
+}
 
 //-(void)tableView:(UITableView *)tableView willDisplayCell:(GlobalAssignmentsTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 //    
