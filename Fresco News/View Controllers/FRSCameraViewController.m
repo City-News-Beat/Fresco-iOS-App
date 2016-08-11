@@ -140,7 +140,7 @@
     return self;
 }
 
--(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode selecetedAssignment:(NSDictionary *)assignment{
+-(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode selectedAssignment:(NSDictionary *)assignment{
     self = [super init];
     
     if (self){
@@ -150,7 +150,7 @@
         self.lastOrientation = UIDeviceOrientationPortrait;
         self.firstTime = YES;
         self.firstTimeAni = YES;
-        
+        self.preselectedAssignment = assignment;
     }
     
     return self;
@@ -409,9 +409,15 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     //
     ////    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:previouslySelectedTabKey];
     
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [self shouldShowStatusBar:YES animated:YES];
+    if(self.preselectedAssignment){//If it was pushed by the FRSGlobalAssignmentsVC
+        [self.navigationController setNavigationBarHidden:false animated:true];
+        [self showTabBarAnimated:true];
+        [self.navigationController popViewControllerAnimated:true];
+    }else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        [self shouldShowStatusBar:YES animated:YES];
+    }
 }
 
 

@@ -26,6 +26,12 @@
     
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self showTabBarAnimated:animated];
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -93,8 +99,7 @@
 
 -(void)openCameraWithAssignment:(NSDictionary *)assignment {
     // Open camera and attach assignment
-    FRSCameraViewController *cameraVC = [[FRSCameraViewController alloc] init];
-    [cameraVC initWithCaptureMode:FRSCaptureModeVideo];
+    FRSCameraViewController *cameraVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
     [self.navigationController pushViewController:cameraVC animated:true];
     [self hideTabBarAnimated:true];
 }

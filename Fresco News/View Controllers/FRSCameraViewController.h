@@ -32,7 +32,10 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 
 @property (nonatomic, retain) FRSFileLoader *fileLoader;
 
+@property (nonatomic, retain) NSDictionary *preselectedAssignment;
+
 -(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode;
+-(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode selectedAssignment:(NSDictionary *)assignment;
 
 -(void)handlePreviewButtonTapped;
 -(void)toggleCaptureMode;
