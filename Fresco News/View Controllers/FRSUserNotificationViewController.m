@@ -23,7 +23,6 @@
     [self configureUI];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
     
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -51,7 +50,7 @@
 -(void)configureTableView {
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    CGFloat width  = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
@@ -78,16 +77,15 @@
     NSString *cellIdentifier = @"notificationCell";
     FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    cell.titleLabel.text = @"This is a two line notification with more than one line but less than three. But if I add text it will become three.";
-    cell.bodyLabel.text = @"BREAKING: Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? Do you see a little Asian child with a blank expression on his face sitting outside on a mechanical helicopter that shakes when you put quarters in it? No? Well, that's what you see at a toy store. And you must think you're in a toy store, because you're here shopping for an infant named Jeb.";
+    cell.titleLabel.text = @"Omar Elfanek";
+    cell.bodyLabel.text  = @"Followed you.";
+    cell.count = 1;
+
+    
+    [cell configureCell];
     
     return cell;
 }
-
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    
-//    return 200;
-//}
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
