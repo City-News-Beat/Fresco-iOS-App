@@ -60,11 +60,11 @@
     
     if (!videoView) {
         videoView = [[FRSPlayer alloc] init];
+
         [[PHImageManager defaultManager]
          requestAVAssetForVideo:asset
          options:nil
          resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-             
              dispatch_async(dispatch_get_main_queue(), ^{
                  if (videoView) {
                      [self removePlayers];
@@ -74,16 +74,16 @@
                  videoView.actionAtItemEnd = AVPlayerActionAtItemEndNone;
                  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerItemDidReachEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:[videoView currentItem]];
                  playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoView];
-                 playerLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+                 playerLayer.frame = CGRectMake(0, 0, self.layer.frame.size.width, self.layer.frame.size.height);
                  playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+
                  [self.layer addSublayer:playerLayer];
                  [videoView play];
                  
-                 //self.asset = asset;
+                 //[self constrainLayer:playerLayer ToBottomOfParentView:self];
                  
                  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPlayer)];
                  [self addGestureRecognizer:tap];
-                 
                  //[self configureMuteIcon];
                  [self bringSubviewToFront:self.muteImageView];
              });
@@ -214,7 +214,8 @@
     NSLog(@"SUBVIEW: %@", subView);
     NSLog(@"PARENTVIEW: %@", parentView);
     
-//    subView.translatesAutoresizingMaskIntoConstraints = NO;
+   // subView.translatesAutoresizingMaskIntoConstraints = NO;
+   // [subView resize]
     
     //Trailing
     NSLayoutConstraint *trailing = [NSLayoutConstraint

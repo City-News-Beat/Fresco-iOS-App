@@ -57,6 +57,8 @@
         //[self.navigationItem setLeftItemsSupplementBackButton:false];
     }
     
+    [self hideTabBarAnimated:true];
+    
     [self.navigationController setNavigationBarHidden:false];
     NSLog(@"%f",self.navigationController.navigationBar.bounds.origin.y);
     
@@ -85,7 +87,12 @@
         profileInfo[@"location"] = self.locationTF.text;
     }
     if (self.profileIV.image) {
-       
+        //Send image to backend and set the url to the avatar :)
+        /*
+        CGDataProviderRef provider = CGImageGetDataProvider(self.profileImage.CGImage);
+        NSData* data = (id)CFBridgingRelease(CGDataProviderCopyData(provider));
+        profileInfo[@"avatar"] = [NSURL URLWithDataRepresentation:data relativeToURL:[[NSURL alloc] init]];
+        [self.profileIV hnk_](*/
     }
     
     return profileInfo;
@@ -96,9 +103,9 @@
     if (self.nameTF.text == nil) {
         return;
     }
+
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:[self updateDigest] completion:^(id responseObject, NSError *error) {
-        
         if (error) {
             // show modal
             if (error.code/100 == 4) {
@@ -110,53 +117,50 @@
             else if (error.code/100 == 3) {
                 // auth fucked up
             }
-            
-            NSLog(@"ERROR:%@ ", error);
+            //NSLog(@"RESPONSE:%@ ", responseObject);
+            NSLog(@"ERROR!:%@ ", error);
             
             return;
         }
-    
-        
         // dismiss modal
         
-    }];
-    
-    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
-    
-    CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
-    [translate setFromValue:[NSNumber numberWithFloat:self.view.center.y]];
-    [translate setToValue:[NSNumber numberWithFloat:self.view.center.y +50]];
-    [translate setDuration:0.6];
-    [translate setRemovedOnCompletion:NO];
-    [translate setFillMode:kCAFillModeForwards];
-    [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4 :0 :0 :1.0]];
-    [[self.view layer] addAnimation:translate forKey:@"translate"];
-    
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.view.alpha = 0;
-    } completion:^(BOOL finished) {
+        self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
         
+        CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
+        [translate setFromValue:[NSNumber numberWithFloat:self.view.center.y]];
+        [translate setToValue:[NSNumber numberWithFloat:self.view.center.y +50]];
+        [translate setDuration:0.6];
+        [translate setRemovedOnCompletion:NO];
+        [translate setFillMode:kCAFillModeForwards];
+        [translate setTimingFunction:[CAMediaTimingFunction functionWithControlPoints:0.4 :0 :0 :1.0]];
+        [[self.view layer] addAnimation:translate forKey:@"translate"];
+        
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.view.alpha = 0;
+        } completion:^(BOOL finished) {
+            
+        }];
+        
+        CATransition *transition = [CATransition animation];
+        transition.duration = 0.3;
+        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        transition.type = kCATransitionFade;
+        transition.subtype = kCATransitionFromTop;
+        if(_isEditingProfile){
+            [self.navigationController.view.layer addAnimation:transition forKey:nil];
+            FRSProfileViewController *profileController = (FRSProfileViewController *)[self.navigationController.viewControllers objectAtIndex: 0];
+            profileController.nameLabel.text = self.nameTF.text;
+            profileController.locationLabel.text = self.locationTF.text;
+            profileController.bioTextView.text = self.bioTV.text;
+            profileController.profileIV.image = self.profileIV.image;
+            [[self navigationController] popToRootViewControllerAnimated:NO];
+        }else{
+            [self.navigationController.view.layer addAnimation:transition forKey:nil];
+            [[self navigationController] setNavigationBarHidden:YES];
+            [[self navigationController] popToRootViewControllerAnimated:NO];
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+        }
     }];
-    
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.3;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = kCATransitionFade;
-    transition.subtype = kCATransitionFromTop;
-    if(_isEditingProfile){
-        [self.navigationController.view.layer addAnimation:transition forKey:nil];
-        FRSProfileViewController *profileController = (FRSProfileViewController *)[self.navigationController.viewControllers objectAtIndex: 0];
-        profileController.nameLabel.text = self.nameTF.text;
-        profileController.locationLabel.text = self.locationTF.text;
-        profileController.bioTextView.text = self.bioTV.text;
-        profileController.profileIV.image = self.profileIV.image;
-        [[self navigationController] popToRootViewControllerAnimated:NO];
-    }else{
-        [self.navigationController.view.layer addAnimation:transition forKey:nil];
-        [[self navigationController] setNavigationBarHidden:YES];
-        [[self navigationController] popToRootViewControllerAnimated:NO];
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-    }
 }
 
 
@@ -398,7 +402,7 @@
 -(void)configureBottomBar{
     self.bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.bounds.size.height - 44, self.view.frame.size.width, 44)];
 
-    self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.bottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.bottomBar];
     
     [self.bottomBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
@@ -470,14 +474,17 @@
 #pragma TextField Delegate
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-
-    if ([self.nameTF.text isEqualToString:@""]) {
-        self.doneButton.userInteractionEnabled = NO;
-        [self.doneButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-    } else {
+    if(_isEditingProfile){
         self.doneButton.userInteractionEnabled = YES;
         [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-
+    }else{
+        if ([self.nameTF.text isEqualToString:@""]) {
+            self.doneButton.userInteractionEnabled = NO;
+            [self.doneButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        } else {
+            self.doneButton.userInteractionEnabled = YES;
+            [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        }
     }
     
     return YES;
@@ -520,6 +527,13 @@
         self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     }
     [self.view addGestureRecognizer:self.dismissGR];
+}
+
+-(void)textViewDidChange:(UITextView *)textView{
+    if(_isEditingProfile){
+        self.doneButton.userInteractionEnabled = YES;
+        [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+    }
 }
 
 -(void)textViewDidEndEditing:(UITextView *)textView{
@@ -600,6 +614,8 @@
     
     if (selectedImage){
         self.profileIV.image = selectedImage;
+        self.doneButton.userInteractionEnabled = YES;
+        [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     }
     
     [self dismissViewControllerAnimated:YES completion:^{

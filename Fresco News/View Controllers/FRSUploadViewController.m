@@ -214,6 +214,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
         [self.carouselCell removePlayers];
         [self.carouselCell loadVideo:asset];
+        CGRect newFrame = self.carouselCell.frame;
+        newFrame.size.width = self.view.frame.size.width;
+        [self.carouselCell setFrame:newFrame];
         
         if (![self.players containsObject:asset]) {
             [self.players addObject:asset];
@@ -373,7 +376,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     //check mute toggle
-    [self.carouselCell pausePlayer];
+    //[self.carouselCell pausePlayer];
     
     CGFloat offset = scrollView.contentOffset.y + 20;
     
@@ -387,9 +390,24 @@ static NSString * const cellIdentifier = @"assignment-cell";
     //If user is scrolling up, scale with content offset.
     if (offset <= 0) {
         self.galleryCollectionView.clipsToBounds = NO;
+        
+        //self.galleryCollectionView.layer.masksToBounds = NO;
         //NSLog(@"COLLECTIONVIEW HEIGHT: %f", self.galleryCollectionView.frame.size.height);
-
         [self.galleryCollectionView setFrame:CGRectMake(0, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset))];
+        
+        for(FRSCarouselCell *cell in self.galleryCollectionView.visibleCells){
+            for(CALayer *layer in cell.layer.sublayers){
+                CGRect newFrame = layer.frame;
+                newFrame.size.height = self.galleryCollectionView.frame.size.height;
+
+                [CATransaction begin];
+                [CATransaction setDisableActions:YES];
+                [layer setFrame:newFrame];
+                [CATransaction commit];
+            }
+            [cell.layer setFrame:self.galleryCollectionView.frame];
+        }
+        
         [self.galleryCollectionView.collectionViewLayout invalidateLayout];
         //NSLog(@"COLLECTIONVIEW HEIGHT: %f", self.galleryCollectionView.frame.size.height);
 

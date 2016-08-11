@@ -72,6 +72,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion;
 
 // check user
+-(void)getUserWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion;
 -(NSDate *)dateFromString:(NSString *)string;
 

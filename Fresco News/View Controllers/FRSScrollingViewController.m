@@ -123,6 +123,7 @@
     if(currentContentOffY > 0){
         //If the users scrolls down (scrollview condenses)
         float scrollingDifference = self.navigationController.navigationBar.frame.origin.y+(self.prevDirectOffSetY-difference);
+        self.navBarYValue = scrollingDifference;
         
         //NSLog(@"%f",self.navigationController.navigationBar.frame.origin.y);
         //NSLog(@"Scrolling Difference %f",scrollingDifference);
@@ -171,7 +172,6 @@
 -(void)setModalInPopover:(BOOL)modalInPopover{
     NSLog(@"POOOPED");
 }
-*/
 
 
 -(void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item{
@@ -184,7 +184,8 @@
 
 -(void)unwindForSegue:(UIStoryboardSegue *)unwindSegue towardsViewController:(UIViewController *)subsequentVC{
     NSLog(@"SEGUEING");
-}
+}*/
+
 
 /*
 - (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController

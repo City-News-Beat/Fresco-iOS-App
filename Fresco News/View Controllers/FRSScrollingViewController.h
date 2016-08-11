@@ -31,6 +31,8 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
 
 @property (nonatomic, retain) UIScrollView *pageScroller;
 
+@property (nonatomic) float navBarYValue;
+
 -(void)configureTableView;
 
 -(void)expandNavBar:(NSArray *)barButtonItems;
@@ -38,6 +40,7 @@ typedef NS_ENUM(NSUInteger, UIScrollViewScrollDirection){
 -(void)condenseNavBarBy:(float)value BarButtonItems: (NSArray *)barButtonItems;
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView;
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
 
 -(void)determineScrollDirection:(UIScrollView *)scrollView;
 
