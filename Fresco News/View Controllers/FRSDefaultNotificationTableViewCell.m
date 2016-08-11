@@ -42,6 +42,15 @@
     } else {
         self.annotationLabel.text = @"+";
     }
+
+    
+    
+    if (self.image.image == nil) {
+        self.image.alpha = 0;
+        self.annotationView.alpha = 0;
+        self.titleLabelLeftConstraint.constant = 8;
+        self.bodyLabelLeftConstraint.constant = -40;
+    }
     
     
     
@@ -55,7 +64,7 @@
     //Button is set to system in IB to keep default fading behavior
     //Alpha is set in the png, setting tint to black retains original alpha in png
     self.followButton.tintColor = [UIColor blackColor];
-
+    
 }
 
 -(IBAction)followTapped:(id)sender {

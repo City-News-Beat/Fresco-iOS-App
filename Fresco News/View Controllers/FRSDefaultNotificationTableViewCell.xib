@@ -121,9 +121,11 @@
                 <outlet property="annotationLabel" destination="2UI-JN-8if" id="J85-lS-I37"/>
                 <outlet property="annotationView" destination="qHy-RB-rdD" id="cFe-Et-Lly"/>
                 <outlet property="bodyLabel" destination="J1x-3Q-zNg" id="lGP-ky-0ld"/>
+                <outlet property="bodyLabelLeftConstraint" destination="43c-cl-t6L" id="AoO-kf-mEK"/>
                 <outlet property="followButton" destination="MrT-1n-09K" id="aEx-iD-Tbz"/>
                 <outlet property="image" destination="NU1-pp-tGP" id="f16-4j-5fN"/>
                 <outlet property="titleLabel" destination="zLd-w2-8NS" id="Zdk-GZ-d80"/>
+                <outlet property="titleLabelLeftConstraint" destination="lo8-Of-nMG" id="FQz-0n-fVt"/>
             </connections>
             <point key="canvasLocation" x="410" y="286"/>
         </tableViewCell>

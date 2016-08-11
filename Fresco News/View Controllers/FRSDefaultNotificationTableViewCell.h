@@ -20,6 +20,8 @@
 @property (weak, nonatomic) IBOutlet UIView *annotationView;
 
 @property (strong, nonatomic) UIColor *backgroundViewColor;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleLabelLeftConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bodyLabelLeftConstraint;
 
 @property (nonatomic) NSInteger count;
 

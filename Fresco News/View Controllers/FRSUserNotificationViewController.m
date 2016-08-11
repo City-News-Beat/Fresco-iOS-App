@@ -76,22 +76,22 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-//    NSString *cellIdentifier = @"notificationCell";
-//    FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//    
-//    cell.titleLabel.text = @"Omar Elfanek";
-//    cell.bodyLabel.text  = @"Followed you.";
-//    cell.count = 2;
-//
-//    [cell configureCell];
+    NSString *cellIdentifier = @"notificationCell";
+    FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    
-    NSString *cellIdentifier = @"textNotificationCell";
-    FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    cell.bodyLabel.text  = @"BREAKING: Wild elephant runs down FDR chasing a small dog. No injuries reported.";
-    
+    cell.titleLabel.text = @"Omar Elfanek";
+    cell.bodyLabel.text  = @"Followed you.";
+    cell.count = 2;
+
     [cell configureCell];
+    
+    
+//    NSString *cellIdentifier = @"textNotificationCell";
+//    FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//    
+//    cell.bodyLabel.text  = @"BREAKING: Wild elephant runs down FDR chasing a small dog. No injuries reported.";
+//    
+//    [cell configureCell];
     
     return cell;
     
