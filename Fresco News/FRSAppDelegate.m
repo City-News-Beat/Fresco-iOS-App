@@ -147,6 +147,9 @@
 }
 
 -(BOOL)isFirstRun {
+    [[FRSAPIClient sharedClient] searchWithQuery:@"hillary" completion:^(id responseObject, NSError *error) {
+        NSLog(@"search %@", responseObject);
+    }];
     BOOL firstRun = (![[[NSUserDefaults standardUserDefaults] stringForKey:@"isFirstRun"] isEqualToString:@"Yeah It Totally Is"]);
     [[NSUserDefaults standardUserDefaults] setObject:@"Yeah It Totally Is" forKey:@"isFirstRun"];
     [[NSUserDefaults standardUserDefaults] synchronize];
