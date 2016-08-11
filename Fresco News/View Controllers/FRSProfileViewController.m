@@ -27,6 +27,7 @@
 #import "FRSGalleryExpandedViewController.h"
 #import <Haneke/Haneke.h>
 #import "FRSStoryDetailViewController.h"
+#import "FRSUserNotificationViewController.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
@@ -875,6 +876,10 @@
 #pragma mark - Navigation
 
 -(void)showNotifications {
+
+    FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
+    [self.navigationController pushViewController:notifVC animated:YES];
+    self.navigationItem.title = @"";
     
 }
 

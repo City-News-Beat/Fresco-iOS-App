@@ -42,6 +42,10 @@
     return [UIColor colorWithRed:0 green:71/255.0 blue:187/255.0 alpha:1.0];
 }
 
++(UIColor *)frescoLightBlueColor{
+    return [UIColor colorWithRed:0 green:71/255.0 blue:187/255.0 alpha:0.3];
+}
+
 +(UIColor *)frescoMediumTextColor{
     return [UIColor colorWithWhite:0.0 alpha:0.54];
 }

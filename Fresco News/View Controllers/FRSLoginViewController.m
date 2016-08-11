@@ -212,7 +212,7 @@
         
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
-            self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
             [self.alert show];
             return;
         }
@@ -327,8 +327,8 @@
             
             
             if (error.code == -1009) {
-                NSLog(@"Unable to connect.");
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                
+                self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
                 [self.alert show];
                 [spinner stopLoading];
                 [spinner removeFromSuperview];
@@ -402,19 +402,14 @@
             
             if (error.code == -1009) {
                 NSLog(@"Unable to connect.");
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
                 [self.alert show];
                 [spinner stopLoading];
                 [spinner removeFromSuperview];
                 self.facebookButton.hidden = false;
                 return;
             } else if (error.code == 301) {
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"NO CONNECTION" message:@"Please check your internet connection." actionTitle:@"SETTINGS" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                [self.alert show];
-                [spinner stopLoading];
-                [spinner removeFromSuperview];
-                self.facebookButton.hidden = false;
-                return;
+                //User dismisses view controller (done/cancel top left)
             }
             
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
@@ -958,11 +953,12 @@
 
 #pragma mark - FRSAlertView Delegate
 
--(void)didPressButtonAtIndex:(NSInteger)index {
-    if (index == 0) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-    }
-}
+//-(void)didPressButtonAtIndex:(NSInteger)index {
+//    if (index == 0) {
+//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+//    }
+//}
+
 
 
 @end

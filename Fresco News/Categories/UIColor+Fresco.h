@@ -38,4 +38,6 @@
 
 +(UIColor *)facebookBlueColor;
 
++(UIColor *)frescoLightBlueColor;
+
 @end

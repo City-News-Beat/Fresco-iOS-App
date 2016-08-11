@@ -327,20 +327,20 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.bottomContainer addSubview:self.facebookButton];
     
     //Configure anonymous posting button
-    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.anonButton addTarget:self action:@selector(postAnonymously:) forControlEvents:UIControlEventTouchDown];
-    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
-    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
-    self.anonButton.frame = CGRectMake(96, 10, 24, 24);
-    [self.bottomContainer addSubview:self.anonButton];
+//    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [self.anonButton addTarget:self action:@selector(postAnonymously:) forControlEvents:UIControlEventTouchDown];
+//    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
+//    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
+//    self.anonButton.frame = CGRectMake(96, 10, 24, 24);
+//    [self.bottomContainer addSubview:self.anonButton];
     
-    //Configure anonymous label (default alpha = 0)
-    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, 15, 83, 17)];
-    self.anonLabel.text = @"ANONYMOUS";
-    self.anonLabel.font = [UIFont notaBoldWithSize:15];
-    self.anonLabel.textColor = [UIColor frescoOrangeColor];
-    self.anonLabel.alpha = 0;
-    [self.bottomContainer addSubview:self.anonLabel];
+//    //Configure anonymous label (default alpha = 0)
+//    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, 15, 83, 17)];
+//    self.anonLabel.text = @"ANONYMOUS";
+//    self.anonLabel.font = [UIFont notaBoldWithSize:15];
+//    self.anonLabel.textColor = [UIColor frescoOrangeColor];
+//    self.anonLabel.alpha = 0;
+//    [self.bottomContainer addSubview:self.anonLabel];
     
     //Configure next button
     self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem]; //Should be green when valid

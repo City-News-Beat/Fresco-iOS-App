@@ -384,6 +384,48 @@
     
     self.mapView.transform = CGAffineTransformMakeScale(0.93, 0.93);
     self.mapView.alpha = 0;
+    
+    CGFloat circleRadius;
+    if (IS_IPHONE_5) {
+        circleRadius = 208;
+    } else if (IS_IPHONE_6) {
+        circleRadius = 248;
+    } else if (IS_IPHONE_6_PLUS) {
+        circleRadius = 278;
+    }
+    
+    
+    UIView *mapCircleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - circleRadius/2, 16, circleRadius, circleRadius)];
+    mapCircleView.backgroundColor = [UIColor frescoLightBlueColor];
+    mapCircleView.layer.cornerRadius = circleRadius/2;
+    [self.mapView addSubview:mapCircleView];
+    
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(mapCircleView.frame.size.width/2 - 24/2, mapCircleView.frame.size.height/2 - 24/2, 24, 24)];
+    view.backgroundColor = [UIColor whiteColor];
+    
+    view.layer.cornerRadius = 12;
+    view.layer.shadowColor = [UIColor blackColor].CGColor;
+    view.layer.shadowOffset = CGSizeMake(0, 2);
+    view.layer.shadowOpacity = 0.15;
+    view.layer.shadowRadius = 1.5;
+    view.layer.shouldRasterize = YES;
+    view.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+    
+    [mapCircleView addSubview:view];
+    
+    UIImageView *imageView = [[UIImageView alloc] init];
+    imageView.frame = CGRectMake(mapCircleView.frame.size.width/2 - 18/2, mapCircleView.frame.size.height/2 - 18/2, 18, 18);
+    imageView.layer.cornerRadius = 9;
+    [mapCircleView addSubview:imageView];
+    
+    
+    if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
+        
+    } else {
+        imageView.backgroundColor = [UIColor frescoBlueColor];
+    }
+    
 }
 
 -(void)configureSliderSection {
@@ -424,6 +466,7 @@
     }
     
     [self zoomToCoordinates:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.latitude] lon:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.longitude] withRadius:@(self.miles) withAnimation:YES];
+    
 }
 
 -(void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate {
@@ -936,7 +979,7 @@
             } completion:nil];
             
             [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 0);
+                self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 10);
                 self.sliderContainer.alpha = 1;
             } completion:nil];
             
@@ -1039,7 +1082,7 @@
                     title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
                 }
                 
-                FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                 [alert show];
                 [self stopSpinner:self.loadingView onButton:self.createAccountButton];
 
@@ -1094,17 +1137,7 @@
         
         if (error.code == -1009) {
             
-            NSString *title = @"";
-            
-            if (IS_IPHONE_5) {
-                title = @"UNABLE TO CONNECT";
-            } else if (IS_IPHONE_6) {
-                title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-            } else if (IS_IPHONE_6_PLUS) {
-                title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-            }
-            
-            FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+            FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
             [alert show];
             [self stopSpinner:self.loadingView onButton:self.createAccountButton];
 
@@ -1123,14 +1156,7 @@
         if (error.code == 0) {
             _isAlreadyRegistered = TRUE;
             [self segueToSetup];
-            
-            
-            
-            
-            
-            
-            
-            
+
         }
         _pastRegistration = registrationDigest;
         
@@ -1215,18 +1241,7 @@
         if (error) {
             
             if (error.code == -1009) {
-                NSLog(@"Unable to connect.");
-                NSString *title;
-                
-                if (IS_IPHONE_5) {
-                    title = @"UNABLE TO CONNECT";
-                } else if (IS_IPHONE_6) {
-                    title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-                } else if (IS_IPHONE_6_PLUS) {
-                    title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-                }
-                
-                FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                 [alert show];
                 [spinner stopLoading];
                 [spinner removeFromSuperview];
@@ -1311,17 +1326,7 @@
                     }
                     
                     if (error.code == -1009) {
-                        NSString *title;
-                        
-                        if (IS_IPHONE_5) {
-                            title = @"UNABLE TO CONNECT";
-                        } else if (IS_IPHONE_6) {
-                            title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-                        } else if (IS_IPHONE_6_PLUS) {
-                            title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-                        }
-                        
-                        FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                        FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                         [alert show];
                         [spinner stopLoading];
                         [spinner removeFromSuperview];

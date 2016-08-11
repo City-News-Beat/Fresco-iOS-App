@@ -102,7 +102,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
         cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.navigationController = self.navigationController;
-
     }
     
     cell.delegate = self;
