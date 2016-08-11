@@ -81,7 +81,7 @@
     cell.bodyLabel.text  = @"Followed you.";
     cell.count = 2;
 
-    
+
     [cell configureCell];
     
     return cell;

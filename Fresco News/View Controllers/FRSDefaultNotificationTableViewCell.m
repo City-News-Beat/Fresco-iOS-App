@@ -48,15 +48,13 @@
     //if cell.type == follower
     //Configure follow button
     //if following
-    [self.followButton setImage:[UIImage imageNamed:@"already-following"] forState:UIControlStateNormal];
-    self.followButton.tintColor = [UIColor frescoOrangeColor];
+//    [self.followButton setImage:[UIImage imageNamed:@"already-following"] forState:UIControlStateNormal];
+//    self.followButton.tintColor = [UIColor frescoOrangeColor];
     //else if not following
     [self.followButton setImage:[UIImage imageNamed:@"add-follower"] forState:UIControlStateNormal];
     //Button is set to system in IB to keep default fading behavior
     //Alpha is set in the png, setting tint to black retains original alpha in png
     self.followButton.tintColor = [UIColor blackColor];
-
-
 
 }
 
@@ -67,6 +65,7 @@
         self.followButton.tintColor = [UIColor frescoOrangeColor];
     } else if ([self.followButton.imageView.image isEqual: [UIImage imageNamed:@"add-follower"]]) {
         [self.followButton setImage:[UIImage imageNamed:@"already-following"] forState:UIControlStateNormal];
+        self.followButton.tintColor = [UIColor blackColor];
     }
 }
 
