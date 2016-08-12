@@ -19,6 +19,7 @@
 
 -(void)configureCell {
     
+    
     //Configure background color
     if (self.backgroundViewColor == nil) {
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
@@ -30,7 +31,6 @@
     self.bodyLabel.numberOfLines  = 0;
     self.image.backgroundColor = [UIColor frescoLightTextColor];
     self.image.layer.cornerRadius = 20;
-
     
     
     //Configure count annotation
@@ -42,16 +42,14 @@
     } else {
         self.annotationLabel.text = @"+";
     }
-
     
     
-    if (self.image.image == nil) {
-        self.image.alpha = 0;
-        self.annotationView.alpha = 0;
-        self.titleLabelLeftConstraint.constant = 8;
-        self.bodyLabelLeftConstraint.constant = -40;
-    }
-    
+    //if (self.image.image == nil) {
+    //    self.image.alpha = 0;
+    //    self.annotationView.alpha = 0;
+    //    self.titleLabelLeftConstraint.constant = 8;
+    //    self.bodyLabelLeftConstraint.constant = -40;
+    //}
     
     
     //if cell.type == follower

@@ -7,8 +7,10 @@
 //
 
 #import "FRSUserNotificationViewController.h"
+
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "FRSTextNotificationTableViewCell.h"
+#import "FRSAssignmentNotificationTableViewCell.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -22,9 +24,13 @@
     [super viewDidLoad];
 
     [self configureUI];
+    
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"textNotificationCell"];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"assignmentNotificationCell"];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -76,29 +82,61 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSString *cellIdentifier = @"notificationCell";
-    FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    cell.titleLabel.text = @"Omar Elfanek";
-    cell.bodyLabel.text  = @"Followed you.";
-    cell.count = 2;
+    
+    switch (indexPath.row) {
+        case 0: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            cell.titleLabel.text = @"Omar Elfanek";
+            cell.bodyLabel.text  = @"Followed you.";
+            cell.count = 5;
+            
+            [cell configureCell];
+            return cell;
 
-    [cell configureCell];
+        } break;
+            
+        case 1: {
+            NSString *cellIdentifier = @"textNotificationCell";
+            FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            cell.bodyLabel.text  = @"BREAKING: Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? Do you see a little Asian child with a blank expression on his face sitting outside on a mechanical helicopter that shakes when you put quarters in it? No? Well, that's what you see at a toy store. And you must think you're in a toy store, because you're here shopping for an infant named Jeb.";
+            
+            [cell configureCell];
+            return cell;
+
+        } break;
+            
+        case 2: {
+            
+            NSString *cellIdentifier = @"assignmentNotificationCell";
+            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            cell.titleLabel.text  = @"Assignment: Raining Figs Over Tennessee";
+            cell.bodyLabel.text = @"Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun";
+            cell.backgroundColor = [UIColor frescoBackgroundColorDark];
+            
+            [cell configureCell];
+            return cell;
+            
+        } break;
+            
+        default:
+            break;
+    }
+    
+
     
     
-//    NSString *cellIdentifier = @"textNotificationCell";
-//    FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//    
-//    cell.bodyLabel.text  = @"BREAKING: Wild elephant runs down FDR chasing a small dog. No injuries reported.";
-//    
-//    [cell configureCell];
-    
+    UITableViewCell *cell;
     return cell;
     
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return 3;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
