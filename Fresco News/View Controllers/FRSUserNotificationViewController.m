@@ -22,7 +22,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [self configureUI];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
@@ -40,11 +40,9 @@
 }
 
 
-
 #pragma mark - UI
 
 -(void)configureUI {
-    [self configureBackButtonAnimated:NO];
     [self configureNavigationBar];
     [self configureTableView];
 }
@@ -53,6 +51,12 @@
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     self.title = @"ACTIVITY";
+    
+    UIBarButtonItem *userIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"profile-icon-light"] style:UIBarButtonItemStylePlain target:self action:@selector(segueToProfile)];
+    userIcon.tintColor = [UIColor whiteColor];
+    
+    self.navigationItem.rightBarButtonItem = userIcon;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 -(void)configureTableView {
@@ -76,6 +80,12 @@
     [self.view addSubview:self.tableView];
 }
 
+
+#pragma mark - Actions 
+
+-(void)segueToProfile {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 
 #pragma mark - UITableView

@@ -837,8 +837,13 @@
 -(void)showNotifications {
 
     FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
-    [self.navigationController pushViewController:notifVC animated:YES];
-    self.navigationItem.title = @"";
+//    [self.navigationController pushViewController:notifVC animated:YES];
+//    self.navigationItem.title = @"";
+    
+    FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:notifVC];
+    
+    [self presentViewController:nav animated:YES completion:nil];
+    
     
 }
 
