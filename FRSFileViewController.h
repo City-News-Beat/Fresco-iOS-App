@@ -39,6 +39,7 @@
 @property (strong, nonatomic) UIButton *facebookButton;
 @property (strong, nonatomic) UIButton *anonButton;
 @property (strong, nonatomic) UILabel *anonLabel;
+@property (strong, nonatomic) NSDictionary *preselectedAssignment;
 
 
 @end

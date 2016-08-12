@@ -8,6 +8,7 @@
 
 #import "FRSGlobalAssignmentsTableViewController.h"
 #import "GlobalAssignmentsTableViewCell.h"
+#import "FRSCameraViewController.h"
 
 @interface FRSGlobalAssignmentsTableViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -22,6 +23,12 @@
     
     [self configureNavigationBar];
     [self configureTableView];
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self showTabBarAnimated:animated];
     
 }
 
@@ -41,16 +48,15 @@
 -(void)configureTableView {
     [super configureTableView];
     
-    self.tableView.frame = CGRectMake(0, -35, self.view.frame.size.width, self.view.frame.size.height);
+    self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.bounces = YES;
-    self.tableView.backgroundColor = [UIColor blueColor];
+    self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.tableView];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSGlobalAssignmentTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"global-assignment-cell"];
-
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -58,22 +64,55 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return self.assignments.count;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+
+    return [self tableView:tableView cellForRowAtIndexPath:indexPath].frame.size.height+12;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"cell";
+    static NSString *cellIdentifier = @"global-assignment-cell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"global-assignment-cell"];
+    GlobalAssignmentsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"global-assignment-cell"];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell configureGlobalAssignmentCellWithAssignment:[self.assignments objectAtIndex:indexPath.row]];
+
     if (cell == nil) {
-        cell = [[GlobalAssignmentsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        GlobalAssignmentsTableViewCell *cell = [[GlobalAssignmentsTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignments objectAtIndex:indexPath.row]];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell configureGlobalAssignmentCellWithAssignment:[self.assignments objectAtIndex:indexPath.row]];
     }
     
+    __weak typeof(self) weakSelf = self;
+    
+    cell.openCameraBlock = ^{
+        NSDictionary *assignment = [self.assignments objectAtIndex:indexPath.row];
+        [weakSelf openCameraWithAssignment:assignment];
+    };
+
     return cell;
 }
 
+-(void)openCameraWithAssignment:(NSDictionary *)assignment {
+    // Open camera and attach assignment
+    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
+    UINavigationController *navControl = [[UINavigationController alloc] init];
+    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    [navControl pushViewController:cam animated:NO];
+    [navControl setNavigationBarHidden:YES];
+    
+    [self presentViewController:navControl animated:YES completion:^{
+
+    }];
+
+//    FRSCameraViewController *cameraVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
+//    [self.navigationController pushViewController:cameraVC animated:true];
+//    [self hideTabBarAnimated:true];
+}
 
 //-(void)tableView:(UITableView *)tableView willDisplayCell:(GlobalAssignmentsTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
 //    

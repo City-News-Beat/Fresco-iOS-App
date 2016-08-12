@@ -211,8 +211,8 @@
         [self.tableView dg_stopLoading];
         [self.followingTable reloadData];
         [self.followingTable dg_stopLoading];
-        [self.followingSpinner stopLoading];
-        self.followingSpinner.hidden = true;
+        //[self.followingSpinner stopLoading];
+        //self.followingSpinner.hidden = true;
 
         self.hasLoadedOnce = TRUE;
     }];
@@ -242,8 +242,8 @@
         [self.followingTable dg_stopLoading];
         [self.tableView reloadData];
         [self.tableView dg_stopLoading];
-        [self.followerSpinner stopLoading];
-        self.followerSpinner.hidden = true;
+        //[self.followerSpinner stopLoading];
+        //self.followerSpinner.hidden = true;
     }];
 }
 
@@ -331,14 +331,15 @@
 }
 
 -(void)reloadData {
-    if(!self.followerSpinner || !self.followingSpinner){
+    /*if(!self.followerSpinner || !self.followingSpinner){
         [self configureSpinner];
     }else{
+     
         [self.followerSpinner startAnimating];
         self.followerSpinner.hidden = false;
         [self.followingSpinner startAnimating];
         self.followingSpinner.hidden = false;
-    }
+    }*/
     [self reloadFollowing];
     [self reloadFollowers];
 }

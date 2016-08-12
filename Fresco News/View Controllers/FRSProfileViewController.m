@@ -103,21 +103,23 @@
     if (!_representedUser) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
-    }
+        [self configureWithUser:_representedUser];
+    }else{
+        [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
+            _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+            [self configureWithUser:_representedUser];
+        }];
+     }
     
     [self setupUI];
-    
     [self configureUI];
-    
-    [self configureWithUser:_representedUser];
     [self fetchGalleries];
-    
     [super removeNavigationBarLine];
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [self showTabBarAnimated:YES];
+    self.tableView.bounces = false;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -128,7 +130,7 @@
     if (!_representedUser || _representedUser == [[FRSAPIClient sharedClient] authenticatedUser]) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
-        [self configureWithUser:_representedUser];
+        //[self configureWithUser:_representedUser];
         [self fetchGalleries];
     }
 }
@@ -168,17 +170,6 @@
     self.usernameLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = self.usernameLabel;
     self.navigationItem.titleView.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
-    
-    self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
-    self.followBarButtonItem.tintColor = [UIColor whiteColor];
-    
-    if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
-        [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
-    }
-    
-    self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
     
     /* TABLE VIEW */
     [self configureTableView];
@@ -297,15 +288,31 @@
     
     //NSLog(@"CHILDREN: %lu", self.navigationController.childViewControllers.count);
     
-    if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid] && self.navigationController.childViewControllers.count == 1) {
+    if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid] && [self.navigationController.childViewControllers  objectAtIndex:0]==self) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
-        editItem.tintColor = [UIColor whiteColor];
         UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
         editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
         
+        gearItem.tintColor = [UIColor whiteColor];
+        editItem.tintColor = [UIColor whiteColor];
+        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+        
         self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //?
+    }else{
+        if(![self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]){
+            self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
+            self.followBarButtonItem.tintColor = [UIColor whiteColor];
+            
+            if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+                [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+            }
+            
+            self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
+        }
+        [self configureBackButtonAnimated:true];
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     }
 }
 
@@ -314,7 +321,7 @@
     [self createProfileSection];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height - 64 - 49)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , self.view.frame.size.height - 44)];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -324,7 +331,7 @@
 }
 
 -(void)createProfileSection{
-    self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 269.5)];
+    self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 269.5)];
     self.profileContainer.backgroundColor = [UIColor frescoOrangeColor];
     
     [self configureProfileImage];
@@ -470,13 +477,12 @@
     NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
     
     self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.profileBG.frame.origin.y, self.view.frame.size.width - origin - 16, 22)];
-    self.nameLabel.text = @"";
+    //self.nameLabel.text = @"";
     self.nameLabel.textColor = [UIColor whiteColor];
     self.nameLabel.font = [UIFont notaMediumWithSize:17];
     [self.profileContainer addSubview:self.nameLabel];
     
     self.locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.nameLabel.frame.origin.y + self.nameLabel.frame.size.height, self.nameLabel.frame.size.width, 14)];
-    self.locationLabel.text = @"New York, NY";
     self.locationLabel.textColor = [UIColor whiteColor];
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
@@ -485,7 +491,7 @@
     
     self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(origin-4, 50, 150, 50)];
     
-    self.bioTextView.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
+    //self.bioTextView.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
     self.bioTextView.backgroundColor = [UIColor frescoOrangeColor];
     self.bioTextView.textColor = [UIColor whiteColor];
     self.bioTextView.font = [UIFont systemFontOfSize:15 weight:-300];
@@ -644,7 +650,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0){
-        return self.profileContainer.frame.size.height;
+        return self.profileContainer.frame.size.height+64;
     }
     else {
         if (!self.currentFeed.count) return 60;
@@ -760,8 +766,8 @@
         }
         [self configureSectionView];
         
-        view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
-        [view addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
+        view = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.view.frame.size.width, 44)];
+        [self.sectionView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
         [view addSubview:self.sectionView];
         
         topView = view;
@@ -777,61 +783,96 @@
 
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
-    //    [self dismissSocialOverlay];
-    
-    //NSLog(@"Content Offset %f", scrollView.contentOffset.y);
-    //NSLog(@"Frame Y ORIGIN %f",     self.sectionView.frame.origin.y);
-    //NSLog(@"SUBVIEW COUNT: %lu",(unsigned long)[self.navigationController.navigationBar subviews].count);
-    NSMutableArray *barButtonItems = [NSMutableArray array];
-    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
-    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
-    [super expandNavBar:barButtonItems];
-    return;
-    /*if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height) {
-        if([self.navigationController.navigationBar subviews].count <= 7 && self.sectionView.frame.size.height + self.profileContainer.frame.size.height){
-            [self.sectionView removeFromSuperview];
-            CGRect newFrame = self.sectionView.frame;
-            newFrame.origin.y = self.navigationController.navigationBar.frame.size.height;
-            [self.sectionView setFrame:newFrame];
-            [self.navigationController.navigationBar addSubview:self.sectionView];
+    [super scrollViewDidScroll:scrollView];
+    //Once the user has scroll past the feed/likes section view, start moving it with the nav bar
+    if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height + (self.sectionView.frame.size.height*2)) {
+        CGRect newFrame = self.sectionView.frame;
+        // Navigation bar travels up until it is collapsed (so it doesn't travel past the screen)
+        if(self.navBarYValue > -self.navBarHeight-3-self.sectionView.frame.size.height && self.scrollDirection == UIScrollViewScrollDirectionDown){
+            newFrame.origin.y = (self.navBarYValue*2)+15;
             
-//            self.navBarHeight = 40;
+            // Navigation bar travels down until it is fully expanded
+        }else if((self.navBarYValue < self.navBarHeight) && self.scrollDirection == UIScrollViewScrollDirectionUp){ // done scrolling, stick
+            newFrame.origin.y = (self.navBarYValue*2)+15;
+            //
+        }else if(self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height > 0){
+            newFrame.origin.y = 0 + (self.navBarHeight - (self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height));
             
-            self.prevContentOffY = scrollView.contentOffset.y;
-            [self determineScrollDirection:scrollView];
+            // When the user scrolls up past the fully expanded nav bar condition, keep it in the fully expanded state
+        }else if(self.scrollDirection == UIScrollViewScrollDirectionUp){
+            newFrame.origin.y = 22+35;
+            
+            // When the user scrolls down past the collapsed nav bar condition, keep it in the collapsed state
+        }else if(self.scrollDirection == UIScrollViewScrollDirectionDown){
+            newFrame.origin.y = -self.sectionView.frame.size.height;
         }
-        [super scrollViewDidScroll:scrollView];
-    }else if(scrollView.contentOffset.y <= self.profileContainer.frame.size.height + self.sectionView.frame.size.height && [self.navigationController.navigationBar subviews].count == 8){
-        [self.sectionView removeFromSuperview];
+        //NSLog(@"FRAME Y: %f", self.sectionView.frame.origin.y);
+        if(self.tablePageScroller == scrollView){
+            [self.feedButton setAlpha:(self.navBarYValue/(self.navBarHeight))-0.3];
+            [self.likesButton setAlpha:(self.navBarYValue/(self.navBarHeight))];
+        }else{
+            [self.feedButton setAlpha:(self.navBarYValue/(self.navBarHeight))];
+            [self.likesButton setAlpha:(self.navBarYValue/(self.navBarHeight))-0.3];
+        }
+        [self.sectionView setFrame:newFrame];
+        [self.sectionView.superview setFrame:newFrame];
+        [topView setFrame:newFrame];
+    }else if(scrollView.contentOffset.y >= self.profileContainer.frame.size.height + (self.sectionView.frame.size.height*1.5)){
+        CGRect newFrame = self.sectionView.frame;
+        newFrame.origin.y = -self.sectionView.frame.size.height/2;
+        [self.sectionView setFrame:newFrame];
+        [self.sectionView.superview setFrame:newFrame];
+        [topView setFrame:newFrame];
+        if(self.tablePageScroller == scrollView){
+            [self.feedButton setAlpha:1.0-0.3];
+            [self.likesButton setAlpha:1.0];
+        }else{
+            [self.feedButton setAlpha:1.0];
+            [self.likesButton setAlpha:1.0-0.3];
+        }
+    }else{//Set the likes/feed sectionView to stay just below the profileContainer until it goes past it
         CGRect newFrame = self.sectionView.frame;
         newFrame.origin.y = 0;
         [self.sectionView setFrame:newFrame];
-        [topView addSubview:self.sectionView];
-        
-//        self.navBarHeight = 20;
-    }*/
-    
-   // self.sectionView
-    /*
-    if (scrollView == self.tableView){
-        [super determineScrollDirection:scrollView];
-        
-        if (self.scrollDirection == UIScrollViewScrollDirectionDown){
-            if ([self.tableView.backgroundColor isEqual:[UIColor frescoBackgroundColorDark]]) return;
-            self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
-            [self.tableView dg_stopLoading];
-            
+        [self.sectionView.superview setFrame:newFrame];
+        [topView setFrame:newFrame];
+        if(self.tablePageScroller == scrollView){
+            [self.feedButton setAlpha:1.0-0.3];
+            [self.likesButton setAlpha:1.0];
+        }else{
+            [self.feedButton setAlpha:1.0];
+            [self.likesButton setAlpha:1.0-0.3];
         }
-        else {
-            //            if ([self.tableView.backgroundColor isEqual:[UIColor frescoOrangeColor]]) return;
-            
-            self.tableView.backgroundColor = [UIColor frescoOrangeColor];
-        }
-    }*/
+    }
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    /*[super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    if (self.scrollDirection == UIScrollViewScrollDirectionDown && scrollView.contentOffset.y > self.navBarHeight*2) {
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            CGRect newFrame = self.sectionView.frame;
+            
+            float yValue = (-self.navBarHeight-3);
+            newFrame.origin.y = (yValue*2)+15;
+            [self.feedButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
+            [self.likesButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
+            [self.sectionView setFrame:newFrame];
+            [self.sectionView.superview setFrame:newFrame];
+            [topView setFrame:newFrame];
+        } completion:nil];
+    }else if(self.scrollDirection == UIScrollViewScrollDirectionUp){
+        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            CGRect newFrame = self.sectionView.frame;
+    
+            float yValue = self.navBarHeight;
+            newFrame.origin.y = (yValue*2)+15;
+            [self.feedButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
+            [self.likesButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
+            [self.sectionView setFrame:newFrame];
+            [self.sectionView.superview setFrame:newFrame];
+            [topView setFrame:newFrame];
+        } completion:nil];
+    }*/
 }
 
 #pragma mark - Navigation
@@ -926,9 +967,11 @@
         
         //self.locationLabel.text = user.
         self.bioTextView.text = user.bio;
+        NSLog(@"USER'S BIO: %@", user.bio);
         self.bioTextView.editable = false;
         //[self.bioTextView sizeToFit];
         self.nameLabel.text = user.firstName;
+        //self.locationLabel.text = user.loca
         //self.bioLabel.text = user.bio;
         //[self.bioLabel sizeToFit];
         
