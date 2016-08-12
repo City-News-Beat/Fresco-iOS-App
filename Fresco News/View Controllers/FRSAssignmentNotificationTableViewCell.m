@@ -7,6 +7,7 @@
 //
 
 #import "FRSAssignmentNotificationTableViewCell.h"
+#import "FRSCameraViewController.h"
 
 @implementation FRSAssignmentNotificationTableViewCell
 
@@ -22,10 +23,17 @@
     
 }
 
+- (IBAction)didTapAssignmentButton:(id)sender {
+    
+    
+}
+
 -(void)configureCell {
     self.titleLabel.numberOfLines = 0;
     self.bodyLabel.numberOfLines  = 0;
     self.assignmentButton.tintColor = [UIColor blackColor];
 }
+
+
 
 @end

@@ -11,6 +11,7 @@
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "FRSTextNotificationTableViewCell.h"
 #import "FRSAssignmentNotificationTableViewCell.h"
+#import "FRSCameraViewController.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -173,6 +174,16 @@
     
     UITableViewCell *cell;
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.row == 4) {
+        FRSCameraViewController *camVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+        FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:camVC];
+        [self.tabBarController presentViewController:nav animated:YES completion:nil];
+    }
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

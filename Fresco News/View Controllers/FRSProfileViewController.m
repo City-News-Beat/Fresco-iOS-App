@@ -29,6 +29,8 @@
 #import "FRSStoryDetailViewController.h"
 #import "FRSUserNotificationViewController.h"
 
+#import "FRSTabBarController.h"
+
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
@@ -837,13 +839,9 @@
 -(void)showNotifications {
 
     FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
-//    [self.navigationController pushViewController:notifVC animated:YES];
-//    self.navigationItem.title = @"";
     
     FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:notifVC];
-    
-    [self presentViewController:nav animated:YES completion:nil];
-    
+    [self.navigationController.tabBarController presentViewController:nav animated:YES completion:nil];
     
 }
 
