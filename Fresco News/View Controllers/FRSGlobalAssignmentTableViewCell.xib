@@ -234,6 +234,13 @@
                             </mask>
                         </variation>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SZL-xv-DyW">
+                        <rect key="frame" x="0.0" y="471.5" width="375" height="12"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.05000000074505806" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="12" id="A7y-ua-scw"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="KUX-3g-Y6j" firstAttribute="top" secondItem="SNw-Gn-mLB" secondAttribute="bottom" constant="32" id="1Pb-Cb-284"/>
@@ -265,16 +272,20 @@
                     <constraint firstAttribute="trailingMargin" secondItem="34c-07-SJa" secondAttribute="trailing" constant="8" id="T7O-qP-2d8"/>
                     <constraint firstItem="0kd-in-cRr" firstAttribute="top" secondItem="SNw-Gn-mLB" secondAttribute="bottom" constant="37" id="TdA-1D-Uhw"/>
                     <constraint firstItem="SNw-Gn-mLB" firstAttribute="top" secondItem="SNg-km-1KH" secondAttribute="bottom" constant="20" id="V4X-9T-Iv6"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="SZL-xv-DyW" secondAttribute="trailing" constant="-8" id="Y42-Nc-AmY"/>
                     <constraint firstItem="34c-07-SJa" firstAttribute="leading" secondItem="jpu-6w-YYc" secondAttribute="leadingMargin" constant="8" id="Zy9-5a-sdh"/>
                     <constraint firstAttribute="trailingMargin" secondItem="SNw-Gn-mLB" secondAttribute="trailing" constant="16" id="aG5-RR-hdO"/>
                     <constraint firstAttribute="bottomMargin" secondItem="KUX-3g-Y6j" secondAttribute="bottom" constant="10" id="al4-hg-TMn"/>
                     <constraint firstAttribute="trailingMargin" secondItem="EOj-1T-883" secondAttribute="trailing" constant="8" id="bF6-sV-9W1"/>
                     <constraint firstItem="XH2-zL-2GB" firstAttribute="leading" secondItem="qJb-dQ-ifY" secondAttribute="trailing" constant="16" id="bFx-kg-YJu"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="SZL-xv-DyW" secondAttribute="trailing" constant="119" id="chE-3E-Vmy"/>
                     <constraint firstItem="c2f-dt-5zU" firstAttribute="leading" secondItem="KUX-3g-Y6j" secondAttribute="trailing" constant="10" id="dva-PM-cGM"/>
                     <constraint firstAttribute="bottomMargin" secondItem="0kd-in-cRr" secondAttribute="bottom" constant="12" id="egd-m1-IYU"/>
                     <constraint firstItem="c2f-dt-5zU" firstAttribute="leading" secondItem="KUX-3g-Y6j" secondAttribute="trailing" constant="6" id="gm4-N1-Yp5"/>
                     <constraint firstAttribute="bottomMargin" secondItem="c2f-dt-5zU" secondAttribute="bottom" constant="12" id="mFb-Xa-1bj"/>
                     <constraint firstItem="c2f-dt-5zU" firstAttribute="centerX" secondItem="SNg-km-1KH" secondAttribute="centerX" id="myd-oh-yVo"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="SZL-xv-DyW" secondAttribute="bottom" constant="-8" id="n9e-qh-e6b"/>
+                    <constraint firstItem="SZL-xv-DyW" firstAttribute="leading" secondItem="jpu-6w-YYc" secondAttribute="leadingMargin" constant="-8" id="pO4-Dq-koj"/>
                     <constraint firstItem="c2f-dt-5zU" firstAttribute="leading" secondItem="KUX-3g-Y6j" secondAttribute="trailing" constant="6" id="qc3-QP-deG"/>
                     <constraint firstItem="34c-07-SJa" firstAttribute="top" secondItem="XH2-zL-2GB" secondAttribute="bottom" constant="10" id="r1k-2r-pdm"/>
                     <constraint firstItem="KUX-3g-Y6j" firstAttribute="leading" secondItem="0kd-in-cRr" secondAttribute="trailing" constant="16" id="t5R-eU-JkD"/>
@@ -304,6 +315,7 @@
                         <exclude reference="myd-oh-yVo"/>
                         <exclude reference="qc3-QP-deG"/>
                         <exclude reference="yL6-aS-vrV"/>
+                        <exclude reference="chE-3E-Vmy"/>
                         <exclude reference="8EQ-o1-7pe"/>
                     </mask>
                 </variation>

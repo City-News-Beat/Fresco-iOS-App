@@ -409,15 +409,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     //
     ////    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:previouslySelectedTabKey];
     
-    if(self.preselectedAssignment){//If it was pushed by the FRSGlobalAssignmentsVC
-        [self.navigationController setNavigationBarHidden:false animated:true];
-        [self showTabBarAnimated:true];
-        [self.navigationController popViewControllerAnimated:true];
-    }else{
-        [self dismissViewControllerAnimated:YES completion:nil];
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        [self shouldShowStatusBar:YES animated:YES];
-    }
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [self shouldShowStatusBar:YES animated:YES];
 }
 
 
@@ -1818,6 +1812,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         }
         
         FRSFileViewController *fileView = [[FRSFileViewController alloc] initWithNibName:Nil bundle:Nil];
+        fileView.preselectedAssignment = self.preselectedAssignment;
         fileView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         
         [self.navigationController pushViewController:fileView animated:YES];

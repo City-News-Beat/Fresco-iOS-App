@@ -94,8 +94,13 @@
 -(void)configureOutletImagesWithOutletArray:(NSArray *)outletArray{
     NSMutableArray *outletImageUrls = [[NSMutableArray alloc] init];
     for(NSDictionary *outlet in outletArray){
-        [outletImageUrls addObject:[NSURL URLWithString:(NSString *)[outlet objectForKey:@"avatar"]]];
+        if([outlet objectForKey:@"avatar"] != [NSNull null]){
+            [outletImageUrls addObject:[NSURL URLWithString:(NSString *)[outlet objectForKey:@"avatar"]]];
+        }
     }
+    
+    if(outletImageUrls.count != 0){
+        
     
     UIImageView *defaultImageView = (UIImageView *)[outletIconsView.subviews objectAtIndex:0];
     
@@ -111,6 +116,10 @@
             
             [imageView hnk_setImageFromURL:imageUrl];
         }
+    }
+    }else{
+        //TODO
+        //This happens when they don't have an avatar for the outlet
     }
 }
 

@@ -57,7 +57,6 @@
     [self.view addSubview:self.tableView];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSGlobalAssignmentTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"global-assignment-cell"];
-
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -69,8 +68,9 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
 
-    return [self tableView:tableView cellForRowAtIndexPath:indexPath].frame.size.height;
+    return [self tableView:tableView cellForRowAtIndexPath:indexPath].frame.size.height+12;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -99,9 +99,19 @@
 
 -(void)openCameraWithAssignment:(NSDictionary *)assignment {
     // Open camera and attach assignment
-    FRSCameraViewController *cameraVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
-    [self.navigationController pushViewController:cameraVC animated:true];
-    [self hideTabBarAnimated:true];
+    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
+    UINavigationController *navControl = [[UINavigationController alloc] init];
+    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    [navControl pushViewController:cam animated:NO];
+    [navControl setNavigationBarHidden:YES];
+    
+    [self presentViewController:navControl animated:YES completion:^{
+
+    }];
+
+//    FRSCameraViewController *cameraVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
+//    [self.navigationController pushViewController:cameraVC animated:true];
+//    [self hideTabBarAnimated:true];
 }
 
 //-(void)tableView:(UITableView *)tableView willDisplayCell:(GlobalAssignmentsTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {

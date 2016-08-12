@@ -657,8 +657,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self resetOtherCells];
         [self resetOtherOutlets];
         cell.isSelectedAssignment = YES;
-        if (self.selectedAssignment != nil) {
+        
+        if (self.selectedAssignment != nil && tableView == self.assignmentsTableView) {
             self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
+        }else if(self.selectedAssignment != nil && tableView == self.globalAssignmentsTableView){
+            self.selectedAssignment = [self.globalAssignments objectAtIndex:indexPath.row];
         }
         
         selectedRow = indexPath.row;
@@ -885,16 +888,33 @@ static NSString * const cellIdentifier = @"assignment-cell";
                 closestIndex = i;
             }
         }
+        
         self.closestAssignmentIndex = closestIndex;
+        
+        //If there is a preselectedGlobalAssignment then change the index
+        if(self.preselectedAssignment){
+            for(int i = 0; i < self.globalAssignments.count; i++){
+                if([[self.globalAssignments objectAtIndex:i] isEqual:self.preselectedAssignment]){
+                    self.closestAssignmentIndex = i;
+                }
+            }
+        }
         
         [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
+        if(self.preselectedAssignment){
+            [self toggleGlobalAssignmentsDrawer];
+        }
         [self configureTextView];
         [self adjustScrollViewContentSize];
         
         [self.assignmentsTableView reloadData];
+        [self.globalAssignmentsTableView reloadData];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+            if(self.preselectedAssignment){
+                [self tableView:self.globalAssignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+            }
         });
     }];
 }
