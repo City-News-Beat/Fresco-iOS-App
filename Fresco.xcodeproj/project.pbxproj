@@ -770,8 +770,8 @@
 			children = (
 				074154681D5A66C20008C34E /* FRSUserNotificationViewController.h */,
 				074154691D5A66C20008C34E /* FRSUserNotificationViewController.m */,
-				078737F61D5D057F00F7C27B /* Text Cell */,
 				078737F51D5CFDC100F7C27B /* Default Cell */,
+				078737F61D5D057F00F7C27B /* Text Cell */,
 				0767A55C1D5E2EDA00330761 /* Assignment Cell */,
 			);
 			name = "User Notifications";

@@ -31,6 +31,7 @@
     self.bodyLabel.numberOfLines  = 0;
     self.image.backgroundColor = [UIColor frescoLightTextColor];
     self.image.layer.cornerRadius = 20;
+    self.image.clipsToBounds = YES;
     
     
     //Configure count annotation
@@ -38,18 +39,19 @@
     if (self.count <= 1) {
         self.annotationView.alpha = 0;
     } else if (self.count <= 9) {
+        self.titleLabel.text = [NSString stringWithFormat:@"%@ + %ld others", self.titleLabel.text, self.count];
         self.annotationLabel.text = [NSString stringWithFormat:@"+%ld", self.count];
     } else {
         self.annotationLabel.text = @"+";
     }
     
     
-    //if (self.image.image == nil) {
-    //    self.image.alpha = 0;
-    //    self.annotationView.alpha = 0;
-    //    self.titleLabelLeftConstraint.constant = 8;
-    //    self.bodyLabelLeftConstraint.constant = -40;
-    //}
+    if (self.image.image == nil) {
+        self.image.alpha = 0;
+        self.annotationView.alpha = 0;
+        self.titleLabelLeftConstraint.constant = 8;
+        self.bodyLabelLeftConstraint.constant = -40;
+    }
     
     
     //if cell.type == follower

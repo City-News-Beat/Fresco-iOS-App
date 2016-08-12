@@ -36,14 +36,6 @@
                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bsF-Lw-6Fg">
-                        <rect key="frame" x="280" y="34.5" width="24" height="24"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="24" id="Frs-lm-ztx"/>
-                            <constraint firstAttribute="width" constant="24" id="gbe-yb-ZFF"/>
-                        </constraints>
-                        <state key="normal" image="sad-emoticon"/>
-                    </button>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1rG-eb-dcz">
                         <rect key="frame" x="0.0" y="91" width="320" height="1"/>
                         <color key="backgroundColor" white="0.0" alpha="0.12" colorSpace="calibratedWhite"/>
@@ -51,6 +43,14 @@
                             <constraint firstAttribute="height" constant="1" id="pho-QZ-bQt"/>
                         </constraints>
                     </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bsF-Lw-6Fg">
+                        <rect key="frame" x="280" y="35" width="24" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="Frs-lm-ztx"/>
+                            <constraint firstAttribute="width" constant="24" id="gbe-yb-ZFF"/>
+                        </constraints>
+                        <state key="normal" image="shutter-24"/>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="EDm-cp-lUq" firstAttribute="leading" secondItem="EMV-DO-Efv" secondAttribute="leadingMargin" constant="8" id="0zp-4j-Coo"/>
@@ -76,6 +76,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="sad-emoticon" width="24" height="24"/>
+        <image name="shutter-24" width="24" height="24"/>
     </resources>
 </document>

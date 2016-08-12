@@ -92,6 +92,7 @@
             cell.titleLabel.text = @"Omar Elfanek";
             cell.bodyLabel.text  = @"Followed you.";
             cell.count = 5;
+            cell.image.image = [UIImage imageNamed:@"apple-user-byrn"];
             
             [cell configureCell];
             return cell;
@@ -99,6 +100,38 @@
         } break;
             
         case 1: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            cell.titleLabel.text = @"Today in News";
+            cell.bodyLabel.text  = @"My money's in that office, right? If she start giving me some bullshit about it ain't there, and we got to go.";
+            cell.followButton.alpha = 0;
+            cell.image.image = [UIImage imageNamed:@"apple-story-2"];
+            
+            [cell configureCell];
+            
+            return cell;
+            
+        } break;
+            
+        case 2: {
+            
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            cell.titleLabel.text = @"You have $20 expiring soon";
+            cell.bodyLabel.text  = @"Add a card by Tuesday to get paid";
+            cell.followButton.alpha = 0;
+            
+            [cell configureCell];
+            
+            return cell;
+
+            
+        } break;
+            
+        case 3: {
+            
             NSString *cellIdentifier = @"textNotificationCell";
             FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
@@ -106,10 +139,10 @@
             
             [cell configureCell];
             return cell;
-
+            
         } break;
             
-        case 2: {
+        case 4: {
             
             NSString *cellIdentifier = @"assignmentNotificationCell";
             FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -127,16 +160,13 @@
             break;
     }
     
-
-    
     
     UITableViewCell *cell;
     return cell;
-    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return 5;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
