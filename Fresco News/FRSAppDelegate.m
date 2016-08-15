@@ -114,6 +114,10 @@
             authenticatedUser.profileImage = responseObject[@"avatar"];
         }
         
+        if (responseObject[@"location"] != Nil && ![responseObject[@"location"] isEqual:[NSNull null]]) {
+            [authenticatedUser setValue:responseObject[@"location"] forKey:@"location"];
+        }
+        
         [[self managedObjectContext] save:Nil];
     }];
 }

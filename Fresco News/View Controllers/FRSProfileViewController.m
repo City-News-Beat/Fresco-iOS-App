@@ -972,7 +972,9 @@
         self.bioTextView.editable = false;
         //[self.bioTextView sizeToFit];
         self.nameLabel.text = user.firstName;
-        //self.locationLabel.text = user.loca
+        
+        NSLog(@"%@", user);
+        self.locationLabel.text = [user valueForKey:@"location"];
         //self.bioLabel.text = user.bio;
         //[self.bioLabel sizeToFit];
         

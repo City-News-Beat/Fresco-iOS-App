@@ -179,6 +179,7 @@
     
     [self post:updateUserEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        
     }];
     
 }
