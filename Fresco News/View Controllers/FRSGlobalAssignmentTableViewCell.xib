@@ -77,7 +77,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expires in 24 minutes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SNg-km-1KH">
-                        <rect key="frame" x="58" y="313.5" width="144" height="20"/>
+                        <rect key="frame" x="58" y="314" width="144" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="HkL-lp-1rp"/>
                         </constraints>
@@ -86,14 +86,14 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clock" highlightedImage="clock" translatesAutoresizingMaskIntoConstraints="NO" id="4Zn-ax-szl">
-                        <rect key="frame" x="18" y="311.5" width="24" height="24"/>
+                        <rect key="frame" x="18" y="312" width="24" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="A1o-PW-x2n"/>
                             <constraint firstAttribute="width" constant="24" id="WpB-Lt-dbC"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not all events are safe. Be careful!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SNw-Gn-mLB">
-                        <rect key="frame" x="58" y="353.5" width="293" height="20"/>
+                        <rect key="frame" x="58" y="354" width="293" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="HCG-ZW-efo"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="Tkq-cJ-wqV"/>
@@ -109,7 +109,7 @@
                         </variation>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="warning" highlightedImage="warning" translatesAutoresizingMaskIntoConstraints="NO" id="bdj-4p-8OH">
-                        <rect key="frame" x="18" y="351.5" width="24" height="24"/>
+                        <rect key="frame" x="18" y="352" width="24" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="53g-LA-skV"/>
                             <constraint firstAttribute="height" constant="24" id="DRo-hV-A28"/>
@@ -128,7 +128,7 @@
                         </variation>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kd-in-cRr">
-                        <rect key="frame" x="46" y="410.5" width="23" height="17"/>
+                        <rect key="frame" x="46" y="411" width="23" height="17"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="NMu-pD-gMo"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="PP0-OF-uma"/>
@@ -145,7 +145,7 @@
                         </variation>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo-icon-profile" highlightedImage="photo-icon-profile" translatesAutoresizingMaskIntoConstraints="NO" id="8mu-q5-f49">
-                        <rect key="frame" x="16" y="405.5" width="24" height="24"/>
+                        <rect key="frame" x="16" y="406" width="24" height="24"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="24" id="EhD-q2-M4h"/>
                             <constraint firstAttribute="height" constant="24" id="N5l-9z-QDq"/>
@@ -164,7 +164,7 @@
                         </variation>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video-icon" highlightedImage="video-icon" translatesAutoresizingMaskIntoConstraints="NO" id="KUX-3g-Y6j">
-                        <rect key="frame" x="85" y="405.5" width="24" height="24"/>
+                        <rect key="frame" x="85" y="406" width="24" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="61y-Jn-x7n"/>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="W3L-da-CMU"/>
@@ -187,7 +187,7 @@
                         </variation>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EOj-1T-883">
-                        <rect key="frame" x="265" y="410.5" width="94" height="17"/>
+                        <rect key="frame" x="265" y="411" width="94" height="17"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="17" id="Te4-vk-AtV"/>
                         </constraints>
@@ -200,7 +200,7 @@
                         </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34c-07-SJa" userLabel="AssignmentDescriptionLabel">
-                        <rect key="frame" x="16" y="112" width="343" height="179.5"/>
+                        <rect key="frame" x="16" y="112" width="343" height="180"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="208" id="OSh-sg-I9G"/>
                             <constraint firstAttribute="height" constant="208" id="t2g-wd-Se5"/>
@@ -217,7 +217,7 @@
                         </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$50" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c2f-dt-5zU">
-                        <rect key="frame" x="115" y="410.5" width="50" height="17"/>
+                        <rect key="frame" x="115" y="411" width="50" height="17"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="JqX-eg-cAE"/>
                             <constraint firstAttribute="width" constant="50" id="cCB-Ka-IVl"/>
@@ -235,7 +235,7 @@
                         </variation>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SZL-xv-DyW">
-                        <rect key="frame" x="0.0" y="471.5" width="375" height="12"/>
+                        <rect key="frame" x="0.0" y="472" width="375" height="12"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.05000000074505806" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="12" id="A7y-ua-scw"/>

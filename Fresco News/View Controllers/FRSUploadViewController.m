@@ -376,7 +376,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     //check mute toggle
-    //[self.carouselCell pausePlayer];
+    [self.carouselCell pausePlayer];
     
     CGFloat offset = scrollView.contentOffset.y + 20;
     
