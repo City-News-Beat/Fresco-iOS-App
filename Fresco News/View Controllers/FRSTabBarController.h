@@ -23,5 +23,6 @@
 -(void)respondToQuickAction:(NSString *)quickAction;
 
 @property (strong, nonatomic) UIView *dot;
+-(void)updateUserIcon;
 
 @end

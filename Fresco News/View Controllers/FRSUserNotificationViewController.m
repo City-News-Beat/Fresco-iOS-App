@@ -12,6 +12,8 @@
 #import "FRSTextNotificationTableViewCell.h"
 #import "FRSAssignmentNotificationTableViewCell.h"
 #import "FRSCameraViewController.h"
+#import "FRSTabBarController.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -47,7 +49,6 @@
     [super viewWillAppear:animated];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
-    
 }
 
 
@@ -68,6 +69,8 @@
     
     self.navigationItem.rightBarButtonItem = userIcon;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    [self.navigationItem setHidesBackButton:YES animated:NO];
 }
 
 -(void)configureTableView {
@@ -97,7 +100,10 @@
 -(void)segueToProfile {
 
     [self dismissViewControllerAnimated:YES completion:nil];
-
+    [self.navigationController popViewControllerAnimated:NO];
+    
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate updateTabBarToUser];
 }
 
 

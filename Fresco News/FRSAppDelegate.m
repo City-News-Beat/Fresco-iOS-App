@@ -431,6 +431,14 @@
     }
 }
 
+
+-(void)updateTabBarToUser {
+    
+    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
+    [frsTabBar updateUserIcon];
+    frsTabBar.dot.alpha = 0;
+}
+
 #pragma mark - Status Bar
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [super touchesBegan:touches withEvent:event];

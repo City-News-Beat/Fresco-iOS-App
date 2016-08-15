@@ -35,4 +35,5 @@
 -(void)saveContext;
 -(UITabBarController *)tabBar;
 -(BOOL)isFirstRun;
+-(void)updateTabBarToUser;
 @end

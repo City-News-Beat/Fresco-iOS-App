@@ -150,11 +150,11 @@
     [super viewDidDisappear:animated];
     //This logic should be happen once the notif view is dismissed.
     //We should see the tab bar in the notification view with the notification icon.
-    UITabBarItem *item4 = [self.tabBarController.tabBar.items objectAtIndex:4];
-    item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
-    frsTabBar.dot.alpha = 0;
+//    UITabBarItem *item4 = [self.tabBarController.tabBar.items objectAtIndex:4];
+//    item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
+//    frsTabBar.dot.alpha = 0;
 }
 
 -(instancetype)initWithUser:(FRSUser *)user {
@@ -897,24 +897,13 @@
 -(void)showNotificationsAnimated {
     FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
 
-    CATransition* transition = [CATransition animation];
-    transition.duration = 0.3;
-    transition.type = kCATransitionFromBottom;
-//    transition.subtype = kCATransitionFromTop;
-    
-    [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
     [self.navigationController pushViewController:notifVC animated:NO];
 }
 
 //Breaking this up into two methods because presentVC:animated: is being passed into the notification button's selector and defaulting to NO.
 -(void)showNotificationsNotAnimated {
     FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
-    CATransition* transition = [CATransition animation];
-    transition.duration = 0.3;
-    transition.type = kCATransitionFade;
-    transition.subtype = kCATransitionFromTop;
     
-    [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
     [self.navigationController pushViewController:notifVC animated:NO];
 }
 

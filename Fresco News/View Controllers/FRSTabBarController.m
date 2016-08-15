@@ -189,6 +189,14 @@
 
 #pragma mark Delegate
 
+-(void)updateUserIcon {
+    UITabBarItem *item4 = [self.tabBar.items objectAtIndex:4];
+    item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
+    frsTabBar.dot.alpha = 0;
+}
+
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     
     item.title = @"";
