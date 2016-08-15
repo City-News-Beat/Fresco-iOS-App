@@ -21,4 +21,7 @@
 -(void)setIrisItemColor:(UIColor *)color;
 -(void)handleNotification:(NSDictionary *)notification;
 -(void)respondToQuickAction:(NSString *)quickAction;
+
+@property (strong, nonatomic) UIView *dot;
+
 @end

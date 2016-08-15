@@ -47,6 +47,7 @@
     [super viewWillAppear:animated];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+        
 }
 
 
@@ -94,16 +95,16 @@
 #pragma mark - Actions 
 
 -(void)segueToProfile {
+
     [self dismissViewControllerAnimated:YES completion:nil];
+
 }
 
 
 #pragma mark - UITableView
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    
-    
+
     switch (indexPath.row) {
         case 0: {
             NSString *cellIdentifier = @"notificationCell";

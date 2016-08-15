@@ -144,14 +144,14 @@
     item4.selectedImage = [[UIImage imageNamed:@"tab-bar-bell-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item4.title = @"";
     
-    UIView *dot = [[UIView alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width - 9 - notificationDotXOffset, self.tabBar.frame.size.height - 9 - 10.5, 9, 9)]; //10.5 y value coming from spec, adding 2px to w/h for borderWidth
-    dot.layer.masksToBounds = YES;
-    dot.layer.cornerRadius = 9/2;
-    dot.layer.borderWidth = 2;
-    dot.layer.borderColor = [UIColor frescoTabBarColor].CGColor;
-    dot.backgroundColor = [UIColor frescoOrangeColor];
-    dot.layer.zPosition = 1;
-    [self.tabBar addSubview:dot];
+    self.dot = [[UIView alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width - 9 - notificationDotXOffset, self.tabBar.frame.size.height - 9 - 10.5, 9, 9)]; //10.5 y value coming from spec, adding 2px to w/h for borderWidth
+    self.dot.layer.masksToBounds = YES;
+    self.dot.layer.cornerRadius = 9/2;
+    self.dot.layer.borderWidth = 2;
+    self.dot.layer.borderColor = [UIColor frescoTabBarColor].CGColor;
+    self.dot.backgroundColor = [UIColor frescoOrangeColor];
+    self.dot.layer.zPosition = 1;
+    [self.tabBar addSubview:self.dot];
     //Seeing yellow around border
     //}
 }
@@ -169,8 +169,8 @@
     [vc3 pushViewController:[[FRSAssignmentsViewController alloc] init] animated:NO];
     
     UINavigationController *vc4 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
-//    [vc4 pushViewController:[[FRSProfileViewController alloc] initWithUser:[[FRSAPIClient sharedClient] authenticatedUser]] animated:NO];
-    [vc4 pushViewController:[[FRSUserNotificationViewController alloc] init] animated:NO];
+    [vc4 pushViewController:[[FRSProfileViewController alloc] initWithUser:[[FRSAPIClient sharedClient] authenticatedUser]] animated:NO];
+//    [vc4 pushViewController:[[FRSUserNotificationViewController alloc] init] animated:NO];
     
     self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
 }
@@ -209,20 +209,25 @@
     
     if ([self.tabBar.items indexOfObject:item] == 4) {
         
-//        if (![[FRSAPIClient sharedClient] isAuthenticated]) {
-//            FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-//            [self.navigationController pushViewController:onboardVC animated:NO];
-//        } else {
-//            UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
-//            FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
-//            [profile loadAuthenticatedUser];
-//        }
+        if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+            FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
+            [self.navigationController pushViewController:onboardVC animated:NO];
+        } else {
+            UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
+            FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
+            [profile loadAuthenticatedUser];
+            
+            
+//            if (userNotificationCount >= 1) {
+                profile.shouldShowNotificationsOnLoad = YES;
+//            }
+            
+        }
         
-        
-        //if (userNotificationCount >= 1) {
-        FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
-        [self.navigationController pushViewController:notificationVC animated:NO];
-        //}
+//        //if (userNotificationCount >= 1) {
+//        FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
+//        [self.navigationController pushViewController:notificationVC animated:NO];
+//        //}
     }
 }
 
@@ -281,22 +286,21 @@
             
         case 4:{
             
-//            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
-//                FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
-//                [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
-//            } else {
-//                return NO;
-//            }
+            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+                FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
+                [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+            } else {
+                return NO;
+            }
             
-            
-            //if (userNotificationCount >= 1) {
-            FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
-            [self.navigationController pushViewController:notificationVC animated:NO];
-            //FRSUserNotificationViewController *profileVC = (FRSUserNotificationViewController *)selectedVC;
-            //[profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
-            
-            //}
-            
+//            //if (userNotificationCount >= 1) {
+//            FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
+//            [self.navigationController pushViewController:notificationVC animated:NO];
+//            //FRSUserNotificationViewController *profileVC = (FRSUserNotificationViewController *)selectedVC;
+//            //[profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+//            
+//            //}
+
             if (self.lastActiveIndex != 4) {
                 break;
             }
