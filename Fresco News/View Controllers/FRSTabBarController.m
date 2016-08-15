@@ -103,8 +103,15 @@
     item3.selectedImage = [[UIImage imageNamed:@"tab-bar-assign-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     UITabBarItem *item4 = [self.tabBar.items objectAtIndex:4];
-    item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    
+    item4.image = [[UIImage imageNamed:@"tab-bar-bell"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item4.selectedImage = [[UIImage imageNamed:@"bell-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    
+    
+    
+    
     
     //Image insets are hard coded to follow the spec
     
