@@ -134,10 +134,7 @@
         item4.imageInsets = UIEdgeInsetsMake(5, -5, -5, 5);
         notificationDotXOffset = 23;
     }
-    
-    
-    
-    
+
     //if (unreadNotificationCount >= 1) {
     item4.image = [[UIImage imageNamed:@"tab-bar-bell"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item4.selectedImage = [[UIImage imageNamed:@"tab-bar-bell-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];

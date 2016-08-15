@@ -47,7 +47,7 @@
     [super viewWillAppear:animated];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
-        
+    
 }
 
 
@@ -76,7 +76,7 @@
     CGFloat width  = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height-49)];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

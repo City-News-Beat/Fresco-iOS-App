@@ -896,17 +896,26 @@
 //Breaking this up into two methods because presentVC:animated: is being passed into the notification button's selector and defaulting to NO.
 -(void)showNotificationsAnimated {
     FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
+
+    CATransition* transition = [CATransition animation];
+    transition.duration = 0.3;
+    transition.type = kCATransitionFromBottom;
+//    transition.subtype = kCATransitionFromTop;
     
-    FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:notifVC];
-    [self.navigationController presentViewController:nav animated:YES completion:nil];
+    [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
+    [self.navigationController pushViewController:notifVC animated:NO];
 }
 
 //Breaking this up into two methods because presentVC:animated: is being passed into the notification button's selector and defaulting to NO.
 -(void)showNotificationsNotAnimated {
     FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
+    CATransition* transition = [CATransition animation];
+    transition.duration = 0.3;
+    transition.type = kCATransitionFade;
+    transition.subtype = kCATransitionFromTop;
     
-    FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:notifVC];
-    [self.navigationController presentViewController:nav animated:NO completion:nil];
+    [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
+    [self.navigationController pushViewController:notifVC animated:NO];
 }
 
 -(void)showSettings {
