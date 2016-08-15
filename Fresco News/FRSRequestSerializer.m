@@ -28,6 +28,10 @@
         [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:parameters options:0 error:Nil]];
     }
     
+    if ([endpoint containsString:@"user/avatar"]) {
+        [request setValue:@"multipart/form-data" forHTTPHeaderField:@"content-type"];
+    }
+    
     
     return request;
 }
