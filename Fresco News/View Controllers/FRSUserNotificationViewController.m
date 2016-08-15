@@ -15,11 +15,20 @@
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (strong, nonatomic) UITableView *tableView;
 
 @end
 
 @implementation FRSUserNotificationViewController
+
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        self.tabBarController.tabBarItem.title = @"";
+    }
+    
+    return self;
+}
 
 -(void)viewDidLoad {
     [super viewDidLoad];
@@ -51,7 +60,7 @@
 -(void)configureNavigationBar {
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
-    self.title = @"ACTIVITY";
+    self.navigationItem.title = @"ACTIVITY";
     
     UIBarButtonItem *userIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"profile-icon-light"] style:UIBarButtonItemStylePlain target:self action:@selector(segueToProfile)];
     userIcon.tintColor = [UIColor whiteColor];
