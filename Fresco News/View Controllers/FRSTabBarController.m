@@ -145,6 +145,7 @@
     self.dot.layer.cornerRadius = 9/2;
     self.dot.backgroundColor = [UIColor frescoTabBarColor];
     self.dot.layer.zPosition = 1;
+    self.dot.userInteractionEnabled = NO;
     [self.tabBar addSubview:self.dot];
     
     UIView *yellowCircle = [[UIView alloc] initWithFrame:CGRectMake(2, 2, 7, 7)];
@@ -229,11 +230,6 @@
 //            }
             
         }
-        
-//        //if (userNotificationCount >= 1) {
-//        FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
-//        [self.navigationController pushViewController:notificationVC animated:NO];
-//        //}
     }
 }
 
@@ -294,18 +290,18 @@
             
             if ([[FRSAPIClient sharedClient] isAuthenticated]) {
                 FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
-                [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+                [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:NO];
             } else {
                 return NO;
             }
             
-//            //if (userNotificationCount >= 1) {
-//            FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
-//            [self.navigationController pushViewController:notificationVC animated:NO];
-//            //FRSUserNotificationViewController *profileVC = (FRSUserNotificationViewController *)selectedVC;
-//            //[profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
-//            
-//            //}
+            //if (userNotificationCount >= 1) {
+            FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
+            [self.navigationController pushViewController:notificationVC animated:NO];
+            //FRSUserNotificationViewController *profileVC = (FRSUserNotificationViewController *)selectedVC;
+            //[profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+            
+            //}
 
             if (self.lastActiveIndex != 4) {
                 break;

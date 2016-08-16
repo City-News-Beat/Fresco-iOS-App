@@ -9,16 +9,18 @@
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "UIColor+Fresco.h"
 
+@interface FRSDefaultNotificationTableViewCell ()
+@property (weak, nonatomic) IBOutlet UIView *line;
+@end
+
 @implementation FRSDefaultNotificationTableViewCell
 
 -(void)awakeFromNib {
     [super awakeFromNib];
 
-
 }
 
 -(void)configureCell {
-    
     
     //Configure background color
     if (self.backgroundViewColor == nil) {
@@ -64,7 +66,6 @@
     //Button is set to system in IB to keep default fading behavior
     //Alpha is set in the png, setting tint to black retains original alpha in png
     self.followButton.tintColor = [UIColor blackColor];
-    
 }
 
 -(IBAction)followTapped:(id)sender {
@@ -81,6 +82,19 @@
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     
+    //UITableViewCell subviews' background colors turn to clearColor when selecting/highlighting.
+    //Setting the background color overrides this
+    self.annotationView.backgroundColor = [UIColor whiteColor];
+    self.line.backgroundColor = [UIColor frescoLightTextColor];
+}
+
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [super setHighlighted:highlighted animated:animated];
+    
+    //UITableViewCell subviews' background colors turn to clearColor when selecting/highlighting.
+    //Setting the background color overrides this
+    self.annotationView.backgroundColor = [UIColor whiteColor];
+    self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
 
 @end
