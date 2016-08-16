@@ -1112,11 +1112,7 @@
          if(placemarks && placemarks.count > 0) {
              CLPlacemark *placemark= [placemarks objectAtIndex:0];
              
-<<<<<<< HEAD
              address = [NSString stringWithFormat:@"%@,%@", [placemark locality], [placemark administrativeArea]];
-=======
-             address = [NSString stringWithFormat:@"%@ %@, %@ %@", [placemark subThoroughfare],[placemark thoroughfare],[placemark locality], [placemark administrativeArea]];
->>>>>>> f6ad6226d8e48ae9d8f127a16baac55ce70d7dfd
              
              NSLog(@"Found address: %@",address);
              completion(address, Nil);
