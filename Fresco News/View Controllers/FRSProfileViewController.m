@@ -343,6 +343,7 @@
     self.tableView.dataSource = self;
     self.tableView.delaysContentTouches = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.showsVerticalScrollIndicator = FALSE;
     [self.view addSubview:self.tableView];
 }
 
