@@ -11,9 +11,13 @@
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "FRSTextNotificationTableViewCell.h"
 #import "FRSAssignmentNotificationTableViewCell.h"
+#import "FRSProfileViewController.h"
 #import "FRSCameraViewController.h"
 #import "FRSTabBarController.h"
 #import "FRSAppDelegate.h"
+#import "FRSAssignment.h"
+#import "FRSDebitCardViewController.h"
+#import "FRSAssignmentsViewController.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -37,12 +41,6 @@
     
     [self configureUI];
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"textNotificationCell"];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"assignmentNotificationCell"];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -57,6 +55,7 @@
 -(void)configureUI {
     [self configureNavigationBar];
     [self configureTableView];
+    [self registerNibs];
 }
 
 -(void)configureNavigationBar {
@@ -64,7 +63,7 @@
      @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     self.navigationItem.title = @"ACTIVITY";
     
-    UIBarButtonItem *userIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"profile-icon-light"] style:UIBarButtonItemStylePlain target:self action:@selector(segueToProfile)];
+    UIBarButtonItem *userIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"profile-icon-light"] style:UIBarButtonItemStylePlain target:self action:@selector(returnToProfile)];
     userIcon.tintColor = [UIColor whiteColor];
     
     self.navigationItem.rightBarButtonItem = userIcon;
@@ -94,11 +93,47 @@
     [self.view addSubview:self.tableView];
 }
 
+-(void)registerNibs {
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"textNotificationCell"];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"assignmentNotificationCell"];
+}
+
+
 
 #pragma mark - Actions 
 
--(void)segueToProfile {
+-(void)segueToUser:(FRSUser *)user {
+    
+    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:profileVC animated:YES];
+}
 
+
+-(void)segueToAssignment:(FRSAssignment *)assignment {
+    
+    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithAssignment:assignment];
+    [self.navigationController pushViewController:assignmentsVC animated:YES];
+    
+}
+
+-(void)segueToBankInfo {
+
+    FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
+    debitCardVC.shouldDisplayBankViewOnLoad = YES;
+    [self.navigationController pushViewController:debitCardVC animated:YES];
+}
+
+-(void)segueToDebitCard {
+    
+    FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
+    [self.navigationController pushViewController:debitCardVC animated:YES];
+}
+
+
+-(void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:NO];
     
@@ -195,6 +230,14 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    if (indexPath.row == 0) {
+        [self segueToUser:[[FRSAPIClient sharedClient] authenticatedUser]];
+    }
+    
+    if (indexPath.row == 2) {
+        [self segueToDebitCard];
+    }
+    
     if (indexPath.row == 4) {
         FRSCameraViewController *camVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
         FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:camVC];
@@ -203,7 +246,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return 6;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

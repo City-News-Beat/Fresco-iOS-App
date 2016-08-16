@@ -17,4 +17,8 @@
     UITextField *expirationDateTextField;
     UITextField *securityCodeTextField;
 }
+
+-(void)configureBankFromNavigationController;
+@property BOOL shouldDisplayBankViewOnLoad;
+
 @end

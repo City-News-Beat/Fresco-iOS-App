@@ -8,6 +8,7 @@
 
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "UIColor+Fresco.h"
+#import "FRSProfileViewController.h"
 
 @interface FRSDefaultNotificationTableViewCell ()
 @property (weak, nonatomic) IBOutlet UIView *line;
@@ -18,6 +19,10 @@
 -(void)awakeFromNib {
     [super awakeFromNib];
 
+}
+
+-(void)prepareForReuse {
+    [super prepareForReuse];
 }
 
 -(void)configureCell {
@@ -96,5 +101,17 @@
     self.annotationView.backgroundColor = [UIColor whiteColor];
     self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 @end

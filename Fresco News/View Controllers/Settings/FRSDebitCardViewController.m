@@ -238,6 +238,12 @@
     [_contentScroller addSubview:self.saveBankButton];
 }
 
+-(void)configureBankFromNavigationController {
+    [_contentScroller setContentOffset:CGPointMake(_contentScroller.frame.size.width, 0) animated:NO];
+    self.bankButton.alpha = 1.0;
+    self.debitButton.alpha = 0.7;
+}
+
 -(void)bankTapped {
     [_contentScroller setContentOffset:CGPointMake(_contentScroller.frame.size.width, 0) animated:YES];
     self.bankButton.alpha = 1.0;
@@ -275,6 +281,11 @@
     cardIOView.delegate = self;
     
     [cardViewport addSubview:cardIOView];
+    
+    if (self.shouldDisplayBankViewOnLoad) {
+        
+        [self configureBankFromNavigationController];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated {
