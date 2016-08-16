@@ -214,6 +214,7 @@
 		D4BE3E311D17D6760039394C /* FRSCarouselCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BE3E2F1D17D6760039394C /* FRSCarouselCell.m */; };
 		D4BE3E321D17D6760039394C /* FRSCarouselCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4BE3E301D17D6760039394C /* FRSCarouselCell.xib */; };
 		D4C217CA1D63AE230076172D /* FRSIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C217C91D63AE230076172D /* FRSIdentityViewController.m */; };
+		D4C217CE1D63B7B40076172D /* FRSPaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C217CD1D63B7B40076172D /* FRSPaymentViewController.m */; };
 		D4D60D0C1CC829C000059EBA /* following.json in Resources */ = {isa = PBXBuildFile; fileRef = D4D60D0B1CC829C000059EBA /* following.json */; };
 		D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
@@ -654,6 +655,8 @@
 		D4BEEB891D1DCD720019D2AB /* Fresco.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Fresco.entitlements; sourceTree = "<group>"; };
 		D4C217C81D63AE230076172D /* FRSIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSIdentityViewController.h; sourceTree = "<group>"; };
 		D4C217C91D63AE230076172D /* FRSIdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSIdentityViewController.m; sourceTree = "<group>"; };
+		D4C217CC1D63B7B40076172D /* FRSPaymentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPaymentViewController.h; sourceTree = "<group>"; };
+		D4C217CD1D63B7B40076172D /* FRSPaymentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPaymentViewController.m; sourceTree = "<group>"; };
 		D4D60D0B1CC829C000059EBA /* following.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = following.json; path = ../following.json; sourceTree = "<group>"; };
 		D4D60D0E1CC8368300059EBA /* FRSFollowingTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingTable.h; sourceTree = "<group>"; };
 		D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingTable.m; sourceTree = "<group>"; };
@@ -762,7 +765,8 @@
 			isa = PBXGroup;
 			children = (
 				D43C7FE41C8F354500A7A7A7 /* Business Type */,
-				D43C7FE51C8F354F00A7A7A7 /* Debit Card */,
+				D4C217CB1D63B7230076172D /* Manage Payment */,
+				D43C7FE51C8F354F00A7A7A7 /* Add Payment */,
 				D43C7FE61C8F355500A7A7A7 /* Disable Account */,
 				D43C7FE71C8F355D00A7A7A7 /* Email */,
 				D43C7FE81C8F356200A7A7A7 /* Password */,
@@ -1517,13 +1521,13 @@
 			name = "Business Type";
 			sourceTree = "<group>";
 		};
-		D43C7FE51C8F354F00A7A7A7 /* Debit Card */ = {
+		D43C7FE51C8F354F00A7A7A7 /* Add Payment */ = {
 			isa = PBXGroup;
 			children = (
 				07A30BE91C50488800C536EB /* FRSDebitCardViewController.h */,
 				07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */,
 			);
-			name = "Debit Card";
+			name = "Add Payment";
 			sourceTree = "<group>";
 		};
 		D43C7FE61C8F355500A7A7A7 /* Disable Account */ = {
@@ -2074,6 +2078,15 @@
 			name = Identity;
 			sourceTree = "<group>";
 		};
+		D4C217CB1D63B7230076172D /* Manage Payment */ = {
+			isa = PBXGroup;
+			children = (
+				D4C217CC1D63B7B40076172D /* FRSPaymentViewController.h */,
+				D4C217CD1D63B7B40076172D /* FRSPaymentViewController.m */,
+			);
+			name = "Manage Payment";
+			sourceTree = "<group>";
+		};
 		D4D60D0D1CC8365B00059EBA /* Highlights */ = {
 			isa = PBXGroup;
 			children = (
@@ -2455,6 +2468,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4C217CE1D63B7B40076172D /* FRSPaymentViewController.m in Sources */,
 				65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */,
 				07ED92E51C752037000DBEA8 /* DGElasticPullToRefreshView.m in Sources */,
 				6596EC9F1C5031FA0011C18B /* FRSBorderedImageView.m in Sources */,
