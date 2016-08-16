@@ -27,9 +27,6 @@
     [self configureBackButtonAnimated:NO];
 }
 
-- (void) incomingNotification:(NSNotification *)notification{
-    self.businessType = [notification object];
-}
 
 -(void)viewWillAppear:(BOOL)animated{    [self.navigationItem setTitle:@"TAX INFORMATION"];
     [self.tableView reloadData];
