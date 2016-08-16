@@ -80,7 +80,7 @@ static NSString * const addSocialEndpoint = @"social/connect/";
 static NSString * const disableAccountEndpoint = @"user/disable/";
 
 // gallery creation
-static NSString * const createGalleryEndpoint = @"gallery/create";
+static NSString * const createGalleryEndpoint = @"gallery/submit";
 static NSString * const completePostEndpoint = @"post/complete";
 
 // formatted endpoints
@@ -117,6 +117,8 @@ static NSString * const storyObjectType = @"story";
 // payments
 
 static NSString * const createPayment = @"user/payment/create";
+static NSString * const getPaymentsEndpoint = @"user/payment";
+static NSString * const deletePaymentEndpoint = @"user/payment/%@/delete";
 
 // legacy user defaults
 static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
