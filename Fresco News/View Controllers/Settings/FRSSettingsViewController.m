@@ -27,6 +27,7 @@
 #import "FRSRadiusViewController.h"
 #import "FRSDebitCardViewController.h"
 #import "FRSAboutFrescoViewController.h"
+#import "FRSIdentityViewController.h"
 
 #import <MessageUI/MessageUI.h>
 #import <Smooch/Smooch.h>
@@ -137,7 +138,7 @@
             return 1;
             break;
         case 2:
-            return 4;
+            return 5;
             break;
         case 3:
             return 1;
@@ -294,11 +295,14 @@
                     NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
                     
                     
-                    [cell configureDefaultCellWithTitle:@"Debit card" andCarret:YES andRightAlignedTitle:(card) ? card : @""];
+                    [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @""];
                 }
                 break;
                 case 3:
-                    [cell configureDefaultCellWithTitle:@"Add tax info" andCarret:YES andRightAlignedTitle:@""];
+                    [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:@""];
+                    break;
+                case 4:
+                    [cell configureDefaultCellWithTitle:@"ID info" andCarret:YES andRightAlignedTitle:@""];
                     break;
                 default:
                     break;
@@ -436,6 +440,14 @@
                     self.navigationItem.title = @"";
                 }
                     break;
+                case 4:
+                {
+                    FRSIdentityViewController *identity = [[FRSIdentityViewController alloc] init];
+                    [self.navigationController pushViewController:identity animated:YES];
+                    self.navigationItem.title = @"";
+                }
+                    break;
+
                 default:
                     break;
             }
