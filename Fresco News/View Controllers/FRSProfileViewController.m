@@ -127,11 +127,15 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
-    if (!_representedUser || _representedUser == [[FRSAPIClient sharedClient] authenticatedUser]) {
+    if (!_representedUser) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
-        //[self configureWithUser:_representedUser];
-        [self fetchGalleries];
+        [self configureWithUser:_representedUser];
+    }else{
+        [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
+            _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+            [self configureWithUser:_representedUser];
+        }];
     }
 }
 
@@ -351,12 +355,22 @@
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
     
-    UIButton *followersButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 12 + 24 + 50, 12 + 24)];
-    followersButton.center = self.profileBG.center;
-    [followersButton setOriginWithPoint:CGPointMake(followersButton.frame.origin.x, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 6)];
-    [followersButton setImage:[UIImage imageNamed:@"followers-icon"] forState:UIControlStateNormal];
-    [self.profileContainer addSubview:followersButton];
+    float paddingFromProfileIV = 20.0;
+    float center = 50.0;
+    float titleInset = 5.0;
+    float characterLength = 4.25;
     
+    UIButton *followersButton = [[UIButton alloc] init];
+    [followersButton setImage:[UIImage imageNamed:@"followers-icon"] forState:UIControlStateNormal];
+    [followersButton setTitle:@"0" forState:UIControlStateNormal];
+    [followersButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    followersButton.titleEdgeInsets = UIEdgeInsetsMake(0.0f, titleInset, 0.0f, 0.0f);
+    [followersButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    [self.profileContainer addSubview:followersButton];
+    //Make the center of the button to be the same center as the profile bg with title length versatility
+    float titleLength = followersButton.currentTitle.length * characterLength;
+    [followersButton setFrame:CGRectMake(center - titleInset - titleLength, (self.profileBG.frame.size.height) + paddingFromProfileIV, 100, 50)];
+
     [followersButton addTarget:self action:@selector(showFollowers) forControlEvents:UIControlEventTouchUpInside];
 }
 

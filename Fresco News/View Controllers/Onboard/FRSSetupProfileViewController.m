@@ -154,8 +154,8 @@
             profileController.nameLabel.text = self.nameTF.text;
             profileController.locationLabel.text = self.locationTF.text;
             profileController.bioTextView.text = self.bioTV.text;
-            profileController.profileIV.contentMode = UIViewContentModeScaleAspectFit;
             profileController.profileIV.image = self.profileIV.image;
+            profileController.profileIV.contentMode = UIViewContentModeScaleAspectFill;
             [[self navigationController] popToRootViewControllerAnimated:NO];
         }else{
             [self.navigationController.view.layer addAnimation:transition forKey:nil];
