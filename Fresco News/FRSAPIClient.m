@@ -180,6 +180,7 @@
     
     [self post:updateUserEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        
     }];
     
 }
@@ -728,6 +729,24 @@
     }];
 }
 
+-(void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion
+{
+    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+
+    [manager POST:endPoint parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData){
+        NSString *paramNameForImage = @"avatar";
+        [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+    }
+          success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         completion(responseObject, Nil);
+         
+     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+         completion(Nil, error);
+         [self handleError:error];
+     }];
+}
+
 /*
     One-off tools for use within class
  */
@@ -1093,7 +1112,7 @@
          if(placemarks && placemarks.count > 0) {
              CLPlacemark *placemark= [placemarks objectAtIndex:0];
              
-             address = [NSString stringWithFormat:@"%@ %@, %@ %@", [placemark subThoroughfare],[placemark thoroughfare],[placemark locality], [placemark administrativeArea]];
+             address = [NSString stringWithFormat:@"%@,%@", [placemark locality], [placemark administrativeArea]];
              
              NSLog(@"Found address: %@",address);
              completion(address, Nil);

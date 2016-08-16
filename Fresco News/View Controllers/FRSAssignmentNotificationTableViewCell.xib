@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="Nota-Medium.otf">
+            <string>Nota-Medium</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="assignmentNotificationCell" rowHeight="93" id="RoZ-Sz-ikC" customClass="FRSAssignmentNotificationTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="93"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RoZ-Sz-ikC" id="EMV-DO-Efv">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="92.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="look at my notification" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EDm-cp-lUq">
+                        <rect key="frame" x="16" y="10" width="248" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="22" id="Gne-rq-h2Q"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="Nota-Medium" family="Nota" pointSize="17"/>
+                        <color key="textColor" white="0.0" alpha="0.87" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="whoa dude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="omR-AR-fQB">
+                        <rect key="frame" x="16" y="33" width="248" height="48.5"/>
+                        <color key="backgroundColor" red="1" green="0.0" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1rG-eb-dcz">
+                        <rect key="frame" x="0.0" y="91" width="320" height="1"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.12" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="pho-QZ-bQt"/>
+                        </constraints>
+                    </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bsF-Lw-6Fg">
+                        <rect key="frame" x="280" y="35" width="24" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="Frs-lm-ztx"/>
+                            <constraint firstAttribute="width" constant="24" id="gbe-yb-ZFF"/>
+                        </constraints>
+                        <state key="normal" image="shutter-24"/>
+                        <connections>
+                            <action selector="didTapAssignmentButton:" destination="RoZ-Sz-ikC" eventType="touchUpInside" id="2yk-tn-KbE"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="EDm-cp-lUq" firstAttribute="leading" secondItem="EMV-DO-Efv" secondAttribute="leadingMargin" constant="8" id="0zp-4j-Coo"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="EDm-cp-lUq" secondAttribute="trailing" constant="48" id="4oC-jw-PnZ"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="bsF-Lw-6Fg" secondAttribute="trailing" constant="8" id="78j-VU-7Uo"/>
+                    <constraint firstItem="1rG-eb-dcz" firstAttribute="leading" secondItem="EMV-DO-Efv" secondAttribute="leadingMargin" constant="-8" id="CrU-vX-A6B"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="omR-AR-fQB" secondAttribute="bottom" constant="3" id="F71-sz-HXw"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="omR-AR-fQB" secondAttribute="trailing" constant="48" id="cCJ-0P-X6Z"/>
+                    <constraint firstItem="EDm-cp-lUq" firstAttribute="top" secondItem="EMV-DO-Efv" secondAttribute="topMargin" constant="2" id="fnZ-81-ZEZ"/>
+                    <constraint firstItem="omR-AR-fQB" firstAttribute="top" secondItem="EDm-cp-lUq" secondAttribute="bottom" constant="1" id="g0l-FV-Wpv"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="1rG-eb-dcz" secondAttribute="bottom" constant="-8" id="gwu-eq-7qa"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="1rG-eb-dcz" secondAttribute="trailing" constant="-8" id="reV-pG-SAN"/>
+                    <constraint firstItem="omR-AR-fQB" firstAttribute="leading" secondItem="EMV-DO-Efv" secondAttribute="leadingMargin" constant="8" id="rxf-IA-Dqt"/>
+                    <constraint firstItem="bsF-Lw-6Fg" firstAttribute="centerY" secondItem="EMV-DO-Efv" secondAttribute="centerY" id="u70-PW-9lY"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="assignmentButton" destination="bsF-Lw-6Fg" id="aQ0-bF-fMy"/>
+                <outlet property="bodyLabel" destination="omR-AR-fQB" id="wbz-sP-thF"/>
+                <outlet property="titleLabel" destination="EDm-cp-lUq" id="h1u-Qz-nYH"/>
+            </connections>
+            <point key="canvasLocation" x="495" y="297.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="shutter-24" width="24" height="24"/>
+    </resources>
+</document>

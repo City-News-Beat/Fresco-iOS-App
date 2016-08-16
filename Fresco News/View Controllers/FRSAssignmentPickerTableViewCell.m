@@ -98,6 +98,8 @@
         //2nd condition is for global assignments
         if (self.outlets.count > 1 && ![[self.assignment objectForKey:@"location"] isEqual:[NSNull null]]) {
             self.selectionImageView.image = [UIImage imageNamed:@"question"];
+        }else if([[self.assignment objectForKey:@"location"] isEqual:[NSNull null]] && ![self.titleLabel.text isEqualToString:@"No assignment"]){
+            self.selectionImageView.image = [UIImage imageNamed:@"question"];
         }
         
         self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];

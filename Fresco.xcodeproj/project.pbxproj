@@ -19,12 +19,16 @@
 		075473571D19B5640020636E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 075473561D19B5640020636E /* Info.plist */; };
 		075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */; };
 		075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */; };
+		0767A55F1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0767A55E1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m */; };
+		0767A5611D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0767A5601D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib */; };
 		076F4D9E1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 076F4D9D1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m */; };
 		076F4DA01D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 076F4D9F1D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib */; };
 		0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0772512B1D47EF4A007FDB6C /* FRSUserAnnotation.m */; };
 		077CF9D91CE62793006FE908 /* FRSAboutFrescoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */; };
 		077FBC3A1CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 077FBC391CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m */; };
 		0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0780914A1CD93A0D00D7FA40 /* FRSUploadViewController.m */; };
+		078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078737F91D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib */; };
+		078737FD1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 078737FC1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m */; };
 		078CEB1B1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078CEB1A1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m */; };
 		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
 		07A138BF1CBC053C00163BA0 /* FRSLoadingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A138BE1CBC053C00163BA0 /* FRSLoadingTableViewCell.m */; };
@@ -284,6 +288,9 @@
 		0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCameraViewController.m; sourceTree = "<group>"; };
 		075998311C6BCF5300A0FE73 /* FRSAVSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAVSessionManager.h; sourceTree = "<group>"; };
 		075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAVSessionManager.m; sourceTree = "<group>"; };
+		0767A55D1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAssignmentNotificationTableViewCell.h; sourceTree = "<group>"; };
+		0767A55E1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentNotificationTableViewCell.m; sourceTree = "<group>"; };
+		0767A5601D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSAssignmentNotificationTableViewCell.xib; sourceTree = "<group>"; };
 		076F4D9C1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSDefaultNotificationTableViewCell.h; sourceTree = "<group>"; };
 		076F4D9D1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSDefaultNotificationTableViewCell.m; sourceTree = "<group>"; };
 		076F4D9F1D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSDefaultNotificationTableViewCell.xib; sourceTree = "<group>"; };
@@ -295,6 +302,9 @@
 		077FBC391CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAssignmentPickerTableViewCell.m; sourceTree = "<group>"; };
 		078091491CD93A0D00D7FA40 /* FRSUploadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadViewController.h; sourceTree = "<group>"; };
 		0780914A1CD93A0D00D7FA40 /* FRSUploadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadViewController.m; sourceTree = "<group>"; };
+		078737F91D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSTextNotificationTableViewCell.xib; sourceTree = "<group>"; };
+		078737FB1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTextNotificationTableViewCell.h; sourceTree = "<group>"; };
+		078737FC1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTextNotificationTableViewCell.m; sourceTree = "<group>"; };
 		078CEB191CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingSomethingCollectionReusableView.h; sourceTree = "<group>"; };
 		078CEB1A1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissingSomethingCollectionReusableView.m; sourceTree = "<group>"; };
 		079CEEFA1C28740B00E559F3 /* FRSAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAlertView.h; sourceTree = "<group>"; };
@@ -773,9 +783,9 @@
 			children = (
 				074154681D5A66C20008C34E /* FRSUserNotificationViewController.h */,
 				074154691D5A66C20008C34E /* FRSUserNotificationViewController.m */,
-				076F4D9F1D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib */,
-				076F4D9C1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.h */,
-				076F4D9D1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m */,
+				078737F51D5CFDC100F7C27B /* Default Cell */,
+				078737F61D5D057F00F7C27B /* Text Cell */,
+				0767A55C1D5E2EDA00330761 /* Assignment Cell */,
 			);
 			name = "User Notifications";
 			sourceTree = "<group>";
@@ -792,6 +802,16 @@
 			name = Utilities;
 			sourceTree = "<group>";
 		};
+		0767A55C1D5E2EDA00330761 /* Assignment Cell */ = {
+			isa = PBXGroup;
+			children = (
+				0767A5601D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib */,
+				0767A55D1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.h */,
+				0767A55E1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m */,
+			);
+			name = "Assignment Cell";
+			sourceTree = "<group>";
+		};
 		078091481CD939E500D7FA40 /* Upload */ = {
 			isa = PBXGroup;
 			children = (
@@ -801,6 +821,26 @@
 				077FBC391CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m */,
 			);
 			name = Upload;
+			sourceTree = "<group>";
+		};
+		078737F51D5CFDC100F7C27B /* Default Cell */ = {
+			isa = PBXGroup;
+			children = (
+				076F4D9F1D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib */,
+				076F4D9C1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.h */,
+				076F4D9D1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m */,
+			);
+			name = "Default Cell";
+			sourceTree = "<group>";
+		};
+		078737F61D5D057F00F7C27B /* Text Cell */ = {
+			isa = PBXGroup;
+			children = (
+				078737F91D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib */,
+				078737FB1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.h */,
+				078737FC1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m */,
+			);
+			name = "Text Cell";
 			sourceTree = "<group>";
 		};
 		07EAFF281CEA226D00E224E2 /* Launch Screen */ = {
@@ -2316,6 +2356,7 @@
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
 				D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */,
 				CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */,
+				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */,
@@ -2333,6 +2374,7 @@
 				D48C723E1D11D352000677BF /* FRSUserCell.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
 				07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */,
+				0767A5611D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib in Resources */,
 				076F4DA01D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib in Resources */,
 				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,
 			);
@@ -2478,6 +2520,7 @@
 				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
 				D48C72431D11D39F000677BF /* FRSBreakingCell.m in Sources */,
 				D412549F1C91E46D00E3B85C /* FRSMultipartTask.m in Sources */,
+				078737FD1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m in Sources */,
 				07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */,
 				D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */,
 				65135FD51C286DCF00839149 /* FRSStory+CoreDataProperties.m in Sources */,
@@ -2514,6 +2557,7 @@
 				07B6FB551D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m in Sources */,
 				D4A7D8A01CCA7D4E002C6EA3 /* SSKeychain.m in Sources */,
 				D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */,
+				0767A55F1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m in Sources */,
 				D453CC7E1CCA80850091A004 /* MagicalRecord+ShorthandMethods.m in Sources */,
 				D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */,
 				65EBEDB11C4404A800BE671F /* FRSDateFormatter.m in Sources */,

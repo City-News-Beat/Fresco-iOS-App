@@ -14,7 +14,7 @@
 static NSString * const photoCell = @"photoCell";
 static NSString * const videoCell = @"videoCell";
 
--(instancetype)init {
+-(instancetype)init { 
     self = [super init];
     
     if (self) {

@@ -376,7 +376,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     //check mute toggle
-    //[self.carouselCell pausePlayer];
+    [self.carouselCell pausePlayer];
     
     CGFloat offset = scrollView.contentOffset.y + 20;
     
@@ -457,6 +457,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
         return;
     }
     
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:0.2];
     self.globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44)];
     self.globalAssignmentsDrawer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.globalAssignmentsDrawer];
@@ -486,6 +488,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 43.5, self.globalAssignmentsDrawer.frame.size.width, .5)];
     line.backgroundColor = [UIColor frescoShadowColor];
     [self.globalAssignmentsDrawer addSubview:line];
+    [CATransaction commit];
 }
 
 -(void)toggleGlobalAssignmentsDrawer {
@@ -654,8 +657,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self resetOtherCells];
         [self resetOtherOutlets];
         cell.isSelectedAssignment = YES;
-        if (self.selectedAssignment != nil) {
+        
+        if (self.selectedAssignment != nil && tableView == self.assignmentsTableView) {
             self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
+        }else if(self.selectedAssignment != nil && tableView == self.globalAssignmentsTableView){
+            self.selectedAssignment = [self.globalAssignments objectAtIndex:indexPath.row];
         }
         
         selectedRow = indexPath.row;
@@ -883,16 +889,33 @@ static NSString * const cellIdentifier = @"assignment-cell";
                 closestIndex = i;
             }
         }
+        
         self.closestAssignmentIndex = closestIndex;
+        
+        //If there is a preselectedGlobalAssignment then change the index
+        if(self.preselectedAssignment){
+            for(int i = 0; i < self.globalAssignments.count; i++){
+                if([[self.globalAssignments objectAtIndex:i] isEqual:self.preselectedAssignment]){
+                    self.closestAssignmentIndex = i;
+                }
+            }
+        }
         
         [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
+        if(self.preselectedAssignment){
+            [self toggleGlobalAssignmentsDrawer];
+        }
         [self configureTextView];
         [self adjustScrollViewContentSize];
         
         [self.assignmentsTableView reloadData];
+        [self.globalAssignmentsTableView reloadData];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+            if(self.preselectedAssignment){
+                [self tableView:self.globalAssignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+            }
         });
     }];
 }

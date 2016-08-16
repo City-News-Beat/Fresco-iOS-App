@@ -29,6 +29,8 @@
 #import "FRSStoryDetailViewController.h"
 #import "FRSUserNotificationViewController.h"
 
+#import "FRSTabBarController.h"
+
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
@@ -783,7 +785,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [super scrollViewDidScroll:scrollView];
     //Once the user has scroll past the feed/likes section view, start moving it with the nav bar
-    if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height + (self.sectionView.frame.size.height*2)) {
+    if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height + (self.sectionView.frame.size.height * 2.5)) {
         CGRect newFrame = self.sectionView.frame;
         // Navigation bar travels up until it is collapsed (so it doesn't travel past the screen)
         if(self.navBarYValue > -self.navBarHeight-3-self.sectionView.frame.size.height && self.scrollDirection == UIScrollViewScrollDirectionDown){
@@ -815,9 +817,18 @@
         [self.sectionView setFrame:newFrame];
         [self.sectionView.superview setFrame:newFrame];
         [topView setFrame:newFrame];
-    }else if(scrollView.contentOffset.y >= self.profileContainer.frame.size.height + (self.sectionView.frame.size.height*1.5)){
+    }else if(self.sectionView.frame.origin.y > 0){
         CGRect newFrame = self.sectionView.frame;
-        newFrame.origin.y = -self.sectionView.frame.size.height/2;
+        //newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height);//top of the thing - the bot of nav bar);
+        /*if(((scrollView.contentOffset.y - self.profileContainer.frame.size.height)-(self.navBarYValue - self.sectionView.frame.origin.y)) - (scrollView.contentOffset.y - self.profileContainer.frame.size.height) < 10){
+            newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height) + (self.navBarYValue - self.sectionView.frame.origin.y);
+        }else{
+            newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height);
+        }*/
+        //newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height) + (self.navBarYValue - self.sectionView.frame.origin.y);
+        newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height) - (self.sectionView.frame.size.height);
+        NSLog(@"Scroll Y: %f", (self.navBarYValue - self.sectionView.frame.origin.y));
+        NSLog(@"Y: %f", newFrame.origin.y);
         [self.sectionView setFrame:newFrame];
         [self.sectionView.superview setFrame:newFrame];
         [topView setFrame:newFrame];
@@ -878,8 +889,9 @@
 -(void)showNotifications {
 
     FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
-    [self.navigationController pushViewController:notifVC animated:YES];
-    self.navigationItem.title = @"";
+    
+    FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:notifVC];
+    [self.navigationController.tabBarController presentViewController:nav animated:YES completion:nil];
     
 }
 
@@ -968,7 +980,9 @@
         self.bioTextView.editable = false;
         //[self.bioTextView sizeToFit];
         self.nameLabel.text = user.firstName;
-        //self.locationLabel.text = user.loca
+        
+        NSLog(@"%@", user);
+        self.locationLabel.text = [user valueForKey:@"location"];
         //self.bioLabel.text = user.bio;
         //[self.bioLabel sizeToFit];
         
