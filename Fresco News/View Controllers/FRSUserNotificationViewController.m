@@ -139,6 +139,20 @@
     [self.navigationController pushViewController:debitCardVC animated:YES];
 }
 
+-(void)segueToCamera {
+    
+    
+    //FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
+    FRSCameraViewController *camVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+    UINavigationController *navigationController = [[UINavigationController alloc] init];
+    navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    [navigationController pushViewController:camVC animated:NO];
+    [navigationController setNavigationBarHidden:YES];
+    
+    [self presentViewController:navigationController animated:YES completion:nil];
+
+}
+
 
 -(void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -257,9 +271,8 @@
     }
     
     if (indexPath.row == 4) {
-        FRSCameraViewController *camVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
-        FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:camVC];
-        [self.tabBarController presentViewController:nav animated:YES completion:nil];
+
+        [self segueToCamera];
     }
 }
 
