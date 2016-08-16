@@ -10,5 +10,9 @@
 #import "FRSBaseViewController.h"
 
 @interface FRSSearchViewController : FRSBaseViewController<UITextFieldDelegate>
-
+{
+    BOOL isInDefault;
+}
+@property (nonatomic, retain) NSArray *representedData;
+@property (nonatomic, retain) NSArray *defaultData;
 @end

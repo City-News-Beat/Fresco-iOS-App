@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FRSSearchResultsTable : UITableView
+@interface FRSSearchResultsTable : UITableView <UITableViewDelegate, UITableViewDataSource>
 {
     
 }
