@@ -11,4 +11,6 @@
 
 @interface FRSUserNotificationViewController : FRSBaseViewController
 
+@property (strong, nonatomic) UITableView *tableView;
+
 @end

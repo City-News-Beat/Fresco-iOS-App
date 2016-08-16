@@ -87,6 +87,15 @@
 
 @implementation FRSAssignmentsViewController
 
+-(instancetype)initWithAssignment:(FRSAssignment *)assignment {
+    self = [super init];
+    
+    
+    
+    
+    return self;
+}
+
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self configureMap];

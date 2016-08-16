@@ -21,11 +21,13 @@
 -(void)setIrisItemColor:(UIColor *)color;
 -(void)handleNotification:(NSDictionary *)notification;
 -(void)respondToQuickAction:(NSString *)quickAction;
-
 -(void)openGalleryID:(NSString *)galleryID;
 -(void)openStoryID:(NSString *)storyID;
 -(void)openUserID:(NSString *)userID;
-
 -(void)openGalleryIDS:(NSArray *)galleryIDS;
 -(void)openAssignmentID:(NSString *)assignmentID;
+
+-(void)updateUserIcon;
+@property (strong, nonatomic) UIView *dot;
+
 @end

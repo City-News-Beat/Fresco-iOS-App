@@ -9,6 +9,12 @@
 #import "FRSAssignmentNotificationTableViewCell.h"
 #import "FRSCameraViewController.h"
 
+@interface FRSAssignmentNotificationTableViewCell ()
+
+@property (weak, nonatomic) IBOutlet UIView *line;
+
+@end
+
 @implementation FRSAssignmentNotificationTableViewCell
 
 -(void)awakeFromNib {
@@ -19,18 +25,28 @@
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-    // Configure the view for the selected state
     
+    //UITableViewCell subviews' background colors turn to clearColor when selecting/highlighting.
+    //Setting the background color overrides this
+    self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
 
-- (IBAction)didTapAssignmentButton:(id)sender {
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [super setHighlighted:highlighted animated:animated];
+    
+    //UITableViewCell subviews' background colors turn to clearColor when selecting/highlighting.
+    //Setting the background color overrides this
+    self.line.backgroundColor = [UIColor frescoLightTextColor];
+}
+
+-(IBAction)didTapAssignmentButton:(id)sender {
     
     
 }
 
 -(void)configureCell {
     self.titleLabel.numberOfLines = 0;
-    self.bodyLabel.numberOfLines  = 0;
+    self.bodyLabel.numberOfLines  = 3;
     self.assignmentButton.tintColor = [UIColor blackColor];
 }
 

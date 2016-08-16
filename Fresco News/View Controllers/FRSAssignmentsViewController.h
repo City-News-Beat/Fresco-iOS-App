@@ -9,6 +9,7 @@
 #import "FRSBaseViewController.h"
 #import <CoreData/CoreData.h>
 #import "MagicalRecord.h"
+#import "FRSAssignment.h"
 #import "Fresco.h"
 
 @interface FRSAssignmentsViewController : FRSBaseViewController <UIScrollViewDelegate>
@@ -20,5 +21,6 @@
     BOOL notFirstFetch;
 }
 -(void)setInitialMapRegion;
+-(instancetype)initWithAssignment:(FRSAssignment *)assignment;
 
 @end

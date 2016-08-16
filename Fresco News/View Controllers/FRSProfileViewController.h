@@ -30,5 +30,6 @@
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *locationLabel;
 @property (strong, nonatomic) FRSBorderedImageView *profileIV;
+@property BOOL shouldShowNotificationsOnLoad;
 
 @end

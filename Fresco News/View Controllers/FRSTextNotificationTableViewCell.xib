@@ -41,6 +41,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="bodyLabel" destination="pi9-eJ-jqS" id="v3S-38-j4R"/>
+                <outlet property="line" destination="uaI-Dl-sC2" id="cuo-sr-DI0"/>
             </connections>
             <point key="canvasLocation" x="414" y="393.5"/>
         </tableViewCell>

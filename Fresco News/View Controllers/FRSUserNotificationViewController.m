@@ -11,26 +11,36 @@
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "FRSTextNotificationTableViewCell.h"
 #import "FRSAssignmentNotificationTableViewCell.h"
+#import "FRSProfileViewController.h"
 #import "FRSCameraViewController.h"
+#import "FRSTabBarController.h"
+#import "FRSAppDelegate.h"
+#import "FRSAssignment.h"
+#import "FRSDebitCardViewController.h"
+#import "FRSAssignmentsViewController.h"
+#import "FRSTaxInformationViewController.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (strong, nonatomic) UITableView *tableView;
 
 @end
 
 @implementation FRSUserNotificationViewController
 
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        self.tabBarController.tabBarItem.title = @"";
+    }
+    
+    return self;
+}
+
 -(void)viewDidLoad {
     [super viewDidLoad];
     
     [self configureUI];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"textNotificationCell"];
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"assignmentNotificationCell"];
     
 }
 
@@ -46,18 +56,21 @@
 -(void)configureUI {
     [self configureNavigationBar];
     [self configureTableView];
+    [self registerNibs];
 }
 
 -(void)configureNavigationBar {
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
-    self.title = @"ACTIVITY";
+    self.navigationItem.title = @"ACTIVITY";
     
-    UIBarButtonItem *userIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"profile-icon-light"] style:UIBarButtonItemStylePlain target:self action:@selector(segueToProfile)];
+    UIBarButtonItem *userIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"profile-icon-light"] style:UIBarButtonItemStylePlain target:self action:@selector(returnToProfile)];
     userIcon.tintColor = [UIColor whiteColor];
     
     self.navigationItem.rightBarButtonItem = userIcon;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    [self.navigationItem setHidesBackButton:YES animated:NO];
 }
 
 -(void)configureTableView {
@@ -66,7 +79,7 @@
     CGFloat width  = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height-49)];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -81,20 +94,73 @@
     [self.view addSubview:self.tableView];
 }
 
+-(void)registerNibs {
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"textNotificationCell"];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"assignmentNotificationCell"];
+}
+
+
 
 #pragma mark - Actions 
 
--(void)segueToProfile {
+-(void)segueToUser:(FRSUser *)user {
+    
+    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:profileVC animated:YES];
+}
+
+
+-(void)segueToAssignment:(FRSAssignment *)assignment {
+    
+    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithAssignment:assignment];
+    [self.navigationController pushViewController:assignmentsVC animated:YES];
+    
+}
+
+-(void)segueToTaxInfo {
+    
+    FRSTaxInformationViewController *taxInfoVC = [[FRSTaxInformationViewController alloc] init];
+    [self.navigationController pushViewController:taxInfoVC animated:YES];
+}
+
+-(void)segueToBankInfo {
+
+    FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
+    debitCardVC.shouldDisplayBankViewOnLoad = YES;
+    [self.navigationController pushViewController:debitCardVC animated:YES];
+}
+
+-(void)segueToDebitCard {
+    
+    FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
+    [self.navigationController pushViewController:debitCardVC animated:YES];
+}
+
+
+-(void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:NO];
+    
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate updateTabBarToUser];
 }
 
 
 #pragma mark - UITableView
 
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 5;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    
-    
+
     switch (indexPath.row) {
         case 0: {
             NSString *cellIdentifier = @"notificationCell";
@@ -159,7 +225,7 @@
             FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
             cell.titleLabel.text  = @"Assignment: Raining Figs Over Tennessee";
-            cell.bodyLabel.text = @"Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun";
+            cell.bodyLabel.text = @"Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun. This should eventually tuncate after going over three lines maybe let's try and see if it truncates.";
             cell.backgroundColor = [UIColor frescoBackgroundColorDark];
             
             [cell configureCell];
@@ -179,21 +245,23 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate updateTabBarToUser];
+    
+    if (indexPath.row == 0) {
+        [self segueToUser:[[FRSAPIClient sharedClient] authenticatedUser]];
+    }
+    
+    if (indexPath.row == 2) {
+        [self segueToDebitCard];
+    }
+    
     if (indexPath.row == 4) {
         FRSCameraViewController *camVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
         FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:camVC];
         [self.tabBarController presentViewController:nav animated:YES completion:nil];
     }
 }
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
-}
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
 
 -(CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
     [sizingCell layoutIfNeeded];
