@@ -62,7 +62,7 @@ static NSString * const storyGalleriesEndpoint = @"story/%@/galleries";
 static NSString * const settingsUpdateEndpoint = @"user/settings/update";
 
 // location endpoints
-static NSString * const locationEndpoint = @"user/location"; // send location
+static NSString * const locationEndpoint = @"user/locate"; // send location
 static NSString * const dualLocationEndpoint = @"user/locationcall";  // send location & get nearby assignments
 static NSString * const acceptAssignmentEndpoint = @"assignment/accept";
 
