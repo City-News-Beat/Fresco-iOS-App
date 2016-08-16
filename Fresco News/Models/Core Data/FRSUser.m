@@ -34,7 +34,11 @@
     user.bio = (properties[@"bio"] != Nil) ? properties[@"bio"] : @"";
     
     user.email = (properties[@"email"] != nil) ? properties[@"email"] : @"";
-
+    
+    if (properties[@"location"] != Nil && ![properties[@"location"] isEqual:[NSNull null]]) {
+        [user setValue:properties[@"location"] forKey:@"location"];
+        NSLog(@"USER LOC: %@",properties[@"location"]);
+    }
     
     if ([[properties objectForKey:@"following"] boolValue]) {
         [user setValue:@(TRUE) forKey:@"following"];
@@ -65,9 +69,15 @@
     user.username = (properties[@"username"] != Nil && ![properties[@"username"] isEqual:[NSNull null]]) ? properties[@"username"] : @"";
     user.isLoggedIn = @(FALSE);
     user.bio = (properties[@"bio"] != Nil) ? properties[@"bio"] : @"";
-
+    
     user.email = (properties[@"email"] != nil) ? properties[@"email"] : @"";
-
+    
+    if (properties[@"location"] != Nil && ![properties[@"location"] isEqual:[NSNull null]]) {
+        [user setValue:properties[@"location"] forKey:@"location"];
+        NSLog(@"USER LOC: %@",properties[@"location"]);
+    }
+    
+    
     if ([[properties objectForKey:@"following"] boolValue]) {
         [user setValue:@(TRUE) forKey:@"following"];
     }

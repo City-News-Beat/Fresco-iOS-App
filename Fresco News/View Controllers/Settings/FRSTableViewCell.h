@@ -48,6 +48,7 @@
 @property (strong, nonatomic) NSString *facebookName;
 @property (nonatomic) NSInteger cellType;
 @property (strong, nonatomic) NSString *representedID;
+@property (weak, nonatomic) NSManagedObject *representedObject;
 -(void)twitterToggle;
 -(void)facebookToggle;
 

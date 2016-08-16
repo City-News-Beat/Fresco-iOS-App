@@ -73,13 +73,14 @@ static NSString * const socialLoginEndpoint = @"auth/signin/social";
 
 // user endpoints
 static NSString * const userEndpoint = @"user/";
+static NSString * const setAvatarEndpoint = @"user/avatar";
 static NSString * const updateUserEndpoint = @"user/update";
 static NSString * const authenticatedUserEndpoint = @"user/me";
 static NSString * const addSocialEndpoint = @"social/connect/";
 static NSString * const disableAccountEndpoint = @"user/disable/";
 
 // gallery creation
-static NSString * const createGalleryEndpoint = @"gallery/create";
+static NSString * const createGalleryEndpoint = @"gallery/submit";
 static NSString * const completePostEndpoint = @"post/complete";
 
 // formatted endpoints
@@ -116,6 +117,8 @@ static NSString * const storyObjectType = @"story";
 // payments
 
 static NSString * const createPayment = @"user/payment/create";
+static NSString * const getPaymentsEndpoint = @"user/payment";
+static NSString * const deletePaymentEndpoint = @"user/payment/%@/delete";
 
 // legacy user defaults
 static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";

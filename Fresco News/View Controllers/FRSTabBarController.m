@@ -322,4 +322,24 @@
     
 }
 
+-(void)openGalleryID:(NSString *)galleryID {
+    
+}
+
+-(void)openStoryID:(NSString *)storyID {
+    
+}
+
+-(void)openUserID:(NSString *)userID {
+    
+}
+
+-(void)openGalleryIDS:(NSArray *)galleryIDS {
+    
+}
+
+-(void)openAssignmentID:(NSString *)assignmentID {
+    
+}
+
 @end

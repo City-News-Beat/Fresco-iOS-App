@@ -180,6 +180,7 @@
     
     [self post:updateUserEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        
     }];
     
 }
@@ -485,7 +486,7 @@
     if (!offsetID) {
         params = @{
                     @"limit" : [NSNumber numberWithInteger:limit],
-                };
+                  };
     }
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
@@ -494,9 +495,9 @@
 }
 
 -(void)createPaymentWithToken:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSLog(@"%@", token);
+
     if (!token) {
-        return;
+        completion(Nil, Nil);
     }
     
     [self post:createPayment withParameters:@{@"token":token, @"active":@(TRUE)} completion:^(id responseObject, NSError *error) {
@@ -514,7 +515,7 @@
         return;
     }
     
-    [self post:@"user/locate" withParameters:inputParams completion:^(id responseObject, NSError *error) {
+    [self post:locationEndpoint withParameters:inputParams completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
         
@@ -726,6 +727,24 @@
         completion(Nil, error);
         [self handleError:error];
     }];
+}
+
+-(void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion
+{
+    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+
+    [manager POST:endPoint parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData){
+        NSString *paramNameForImage = @"avatar";
+        [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+    }
+          success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         completion(responseObject, Nil);
+         
+     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+         completion(Nil, error);
+         [self handleError:error];
+     }];
 }
 
 /*
@@ -1093,7 +1112,7 @@
          if(placemarks && placemarks.count > 0) {
              CLPlacemark *placemark= [placemarks objectAtIndex:0];
              
-             address = [NSString stringWithFormat:@"%@ %@, %@ %@", [placemark subThoroughfare],[placemark thoroughfare],[placemark locality], [placemark administrativeArea]];
+             address = [NSString stringWithFormat:@"%@,%@", [placemark locality], [placemark administrativeArea]];
              
              NSLog(@"Found address: %@",address);
              completion(address, Nil);
@@ -1169,6 +1188,20 @@
 -(void)completePost:(NSString *)postID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
     
     [self post:completePostEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)fetchPayments:(FRSAPIDefaultCompletionBlock)completion {
+    [self get:getPaymentsEndpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)deletePayment:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:deletePaymentEndpoint, paymentID];
+    
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }

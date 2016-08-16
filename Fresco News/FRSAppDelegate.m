@@ -125,6 +125,10 @@
             authenticatedUser.profileImage = responseObject[@"avatar"];
         }
         
+        if (responseObject[@"location"] != Nil && ![responseObject[@"location"] isEqual:[NSNull null]]) {
+            [authenticatedUser setValue:responseObject[@"location"] forKey:@"location"];
+        }
+        
         [[self managedObjectContext] save:Nil];
     }];
 }
@@ -147,6 +151,7 @@
 }
 
 -(BOOL)isFirstRun {
+
     BOOL firstRun = (![[[NSUserDefaults standardUserDefaults] stringForKey:@"isFirstRun"] isEqualToString:@"Yeah It Totally Is"]);
     [[NSUserDefaults standardUserDefaults] setObject:@"Yeah It Totally Is" forKey:@"isFirstRun"];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -174,6 +179,8 @@
     [[FRSAPIClient sharedClient] searchWithQuery:@"bernie" completion:^(id responseObject, NSError *error) {
         NSLog(@"RESP: %@ ERR: %@", responseObject, error);
     }];
+    
+    [Smooch initWithSettings:[SKTSettings settingsWithAppToken:@"bmk6otjwgrb5wyaiohse0qbr0"]];
 }
 
 - (NSManagedObjectModel *)managedObjectModel {

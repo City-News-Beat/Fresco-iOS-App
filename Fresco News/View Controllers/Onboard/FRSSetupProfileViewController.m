@@ -88,11 +88,13 @@
     }
     if (self.profileIV.image) {
         //Send image to backend and set the url to the avatar :)
-        /*
-        CGDataProviderRef provider = CGImageGetDataProvider(self.profileImage.CGImage);
-        NSData* data = (id)CFBridgingRelease(CGDataProviderCopyData(provider));
-        profileInfo[@"avatar"] = [NSURL URLWithDataRepresentation:data relativeToURL:[[NSURL alloc] init]];
-        [self.profileIV hnk_](*/
+        NSData *imageData = UIImageJPEGRepresentation(self.profileIV.image, 1.0);
+        
+        [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint withParameters:@{@"avatar":imageData} completion:^(id responseObject, NSError *error) {
+            NSLog(@"Response Object: %@", responseObject);
+            NSLog(@"Error: %@", error);
+        }];
+        //profileInfo[@"avatar"] = [NSURL URLWithDataRepresentation:data relativeToURL:[[NSURL alloc] init]];
     }
     
     return profileInfo;
@@ -152,6 +154,7 @@
             profileController.nameLabel.text = self.nameTF.text;
             profileController.locationLabel.text = self.locationTF.text;
             profileController.bioTextView.text = self.bioTV.text;
+            profileController.profileIV.contentMode = UIViewContentModeScaleAspectFit;
             profileController.profileIV.image = self.profileIV.image;
             [[self navigationController] popToRootViewControllerAnimated:NO];
         }else{
