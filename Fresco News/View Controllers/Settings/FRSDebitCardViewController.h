@@ -10,7 +10,7 @@
 #import "FRSBaseViewController.h"
 #import "CardIO.h"
 
-@interface FRSDebitCardViewController : FRSBaseViewController <UITextFieldDelegate,CardIOViewDelegate>
+@interface FRSDebitCardViewController : FRSBaseViewController <UITextFieldDelegate,CardIOViewDelegate, UIScrollViewDelegate>
 {
     UIView *cardViewport;
     UITextField *cardNumberTextField;

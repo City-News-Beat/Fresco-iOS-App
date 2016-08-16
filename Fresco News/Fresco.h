@@ -116,7 +116,7 @@ static NSString * const storyObjectType = @"story";
 
 // payments
 
-static NSString * const createPayment = @"payment/create";
+static NSString * const createPayment = @"user/payment/create";
 
 // legacy user defaults
 static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";

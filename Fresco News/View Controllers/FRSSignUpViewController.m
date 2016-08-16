@@ -68,7 +68,7 @@
     [self configureUI];
     
     
-    [self addNotifications];
+    //[self addNotifications];
     
     self.notificationsEnabled = NO;
     self.emailError = NO;
@@ -79,16 +79,11 @@
     [super viewDidAppear:animated];
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
-        
         [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
-        
     } else {
-        
-        
         [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-        
-        
     }
+    [self addNotifications];
 }
 
 -(NSDictionary *)currentSocialDigest {
@@ -97,8 +92,6 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    
     
     if (!_hasShown) {
         //        [self.usernameTF becomeFirstResponder];
@@ -123,8 +116,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returnToPreviousViewController) name:@"returnToPreviousViewController" object:nil];
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
-        
+        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+    } else {
+        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
     }
+    
 }
 
 -(void)back {
@@ -165,6 +161,14 @@
     } else if ([viewControllers indexOfObject:self] == NSNotFound) {
         // View is disappearing because it was popped from the stack
         [self.navigationController setNavigationBarHidden:YES animated:YES];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+        [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
+        
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
@@ -200,7 +204,7 @@
     [self configureNotificationSection];
     [self configureMapView];
     [self configureSliderSection];
-    [self configurePromoSection];
+//    [self configurePromoSection];
     [self adjustScrollViewContentSize];
     [self configureBottomBar];
 }
@@ -380,6 +384,48 @@
     
     self.mapView.transform = CGAffineTransformMakeScale(0.93, 0.93);
     self.mapView.alpha = 0;
+    
+    CGFloat circleRadius;
+    if (IS_IPHONE_5) {
+        circleRadius = 208;
+    } else if (IS_IPHONE_6) {
+        circleRadius = 248;
+    } else if (IS_IPHONE_6_PLUS) {
+        circleRadius = 278;
+    }
+    
+    
+    UIView *mapCircleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - circleRadius/2, 16, circleRadius, circleRadius)];
+    mapCircleView.backgroundColor = [UIColor frescoLightBlueColor];
+    mapCircleView.layer.cornerRadius = circleRadius/2;
+    [self.mapView addSubview:mapCircleView];
+    
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(mapCircleView.frame.size.width/2 - 24/2, mapCircleView.frame.size.height/2 - 24/2, 24, 24)];
+    view.backgroundColor = [UIColor whiteColor];
+    
+    view.layer.cornerRadius = 12;
+    view.layer.shadowColor = [UIColor blackColor].CGColor;
+    view.layer.shadowOffset = CGSizeMake(0, 2);
+    view.layer.shadowOpacity = 0.15;
+    view.layer.shadowRadius = 1.5;
+    view.layer.shouldRasterize = YES;
+    view.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+    
+    [mapCircleView addSubview:view];
+    
+    UIImageView *imageView = [[UIImageView alloc] init];
+    imageView.frame = CGRectMake(mapCircleView.frame.size.width/2 - 18/2, mapCircleView.frame.size.height/2 - 18/2, 18, 18);
+    imageView.layer.cornerRadius = 9;
+    [mapCircleView addSubview:imageView];
+    
+    
+    if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
+        
+    } else {
+        imageView.backgroundColor = [UIColor frescoBlueColor];
+    }
+    
 }
 
 -(void)configureSliderSection {
@@ -420,6 +466,7 @@
     }
     
     [self zoomToCoordinates:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.latitude] lon:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.longitude] withRadius:@(self.miles) withAnimation:YES];
+    
 }
 
 -(void)zoomToCoordinates:(NSNumber*)lat lon:(NSNumber *)lon withRadius:(NSNumber *)radius withAnimation:(BOOL)animate {
@@ -572,6 +619,13 @@
     [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateHighlighted];
     [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
     [_facebookButton addTarget:self action:@selector(facebookTapped) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+        [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+    } else {
+        [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+    }
+    
     [self.bottomBar addSubview:_facebookButton];
 }
 
@@ -925,7 +979,7 @@
             } completion:nil];
             
             [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 0);
+                self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 10);
                 self.sliderContainer.alpha = 1;
             } completion:nil];
             
@@ -1016,6 +1070,7 @@
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             
+            
             if (error.code == -1009) {
                 NSString *title;
                 
@@ -1027,8 +1082,10 @@
                     title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
                 }
                 
-                FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                 [alert show];
+                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
                 return;
             }
 
@@ -1040,18 +1097,24 @@
                 // 400 level, client
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [alert show];
+                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
                 return;
             }
             else if (responseCode >= 500 && responseCode < 600) {
                 // 500 level, server
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [alert show];
+                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
                 return;
             }
             else if (responseCode >= 300 && responseCode < 400) {
                 // 300  level, unauthorized
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [alert show];
+                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
                 return;
             }
         }];
@@ -1074,18 +1137,10 @@
         
         if (error.code == -1009) {
             
-            NSString *title = @"";
-            
-            if (IS_IPHONE_5) {
-                title = @"UNABLE TO CONNECT";
-            } else if (IS_IPHONE_6) {
-                title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-            } else if (IS_IPHONE_6_PLUS) {
-                title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-            }
-            
-            FRSAlertView *alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+            FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
             [alert show];
+            [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
             return;
         }
         
@@ -1093,20 +1148,15 @@
         if (error) {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
+            [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
         }
         
         
         if (error.code == 0) {
             _isAlreadyRegistered = TRUE;
             [self segueToSetup];
-            
-            
-            
-            
-            
-            
-            
-            
+
         }
         _pastRegistration = registrationDigest;
         
@@ -1189,8 +1239,17 @@
 
         
         if (error) {
+            
+            if (error.code == -1009) {
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                [alert show];
+                [spinner stopLoading];
+                [spinner removeFromSuperview];
+                self.twitterButton.hidden = false;
+                return;
+            }
 
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try signing in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try signing in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
             [alert show];
             
             [spinner stopLoading];
@@ -1223,6 +1282,9 @@
     
     if (_facebookToken) {
         _facebookToken = Nil;
+        [spinner stopLoading];
+        spinner.alpha = 0;
+        [spinner removeFromSuperview];
         [UIView animateWithDuration:.2 animations:^{
             [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
         }];
@@ -1234,30 +1296,49 @@
     }
     
     _facebookButton.enabled = FALSE; // prevent double tapping
+
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     
-    [FRSSocial registerWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+    [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:self.inputViewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+        
         _facebookButton.enabled = TRUE;
         
-        if (token) {
-            FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-            
-            [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:self.inputViewController handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-                
-                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                    if (!error) {
-                        [[NSUserDefaults standardUserDefaults] setValue:[result valueForKey:@"name"] forKey:@"facebook-name"];
-                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
-                    }
-                }];
-            }];
-        }
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
         
         if (error) {
-
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Facebook account. Please try signing in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-            [alert show];
+            //handle errors
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+        }
+        
+        if (result && !error) {
             
-            return;
+            [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+            
+            NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
+            
+            [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
+                
+                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"name"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                    if (!error) {
+                        [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                    }
+                    
+                    if (error.code == -1009) {
+                        FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                        [alert show];
+                        [spinner stopLoading];
+                        [spinner removeFromSuperview];
+                        return;
+                    }
+                    
+                    
+                    
+                    
+                }];
+                
+            }];
         }
         
         [UIView animateWithDuration:.2 animations:^{
@@ -1266,9 +1347,8 @@
         [spinner stopLoading];
         [spinner removeFromSuperview];
         self.facebookButton.hidden = false;
-        _facebookToken = token;
         
-    } parent:self]; // presenting view controller for safari view login
+    }];
 }
 
 -(void)handleSocialChallenge:(NSError *)error {
@@ -1609,6 +1689,15 @@
         self.locationEnabled = NO;
     }
     
+}
+
+
+#pragma mark - FRSAlertViewDelegate
+
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    if (index == 0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
 }
 
 

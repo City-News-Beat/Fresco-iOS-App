@@ -144,18 +144,8 @@
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
             if (!self.alert) {
-                NSString *title = @"";
-                
-                if (IS_IPHONE_5) {
-                    title = @"UNABLE TO CONNECT";
-                } else if (IS_IPHONE_6) {
-                    title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-                } else if (IS_IPHONE_6_PLUS) {
-                    title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-                }
-                
                 if (!self.alert) {
-                    self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                    self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                     [self.alert show];
                 }
             }
@@ -166,29 +156,21 @@
         NSInteger responseCode = response.statusCode;
         NSLog(@"ERROR: %ld", (long)responseCode);
         
-        if (responseCode >= 400 && responseCode < 500) {
-            // 400 level, client
-            if (responseCode == 403) {
-                if (!self.errorImageView) {
-                    [self addErrorToView];
-                }
-            } else {
-                // Email is already in use (400)
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Email is already in use." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                [self.alert show];
+        
+        if (responseCode == 403) {
+            if (!self.errorImageView) {
+                [self addErrorToView];
             }
             
-            return;
-        }
-        else if (responseCode >= 500 && responseCode < 600) {
-            // 500 level, server
+        } else if (responseCode == 400) {
+            self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"An account already exists with this email. Would you like to log in?" actionTitle:@"CANCEL" cancelTitle:@"LOGIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [self.alert show];
+            
+        } else {
             self.alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to reach server. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
             [self.alert show];
-            return;
         }
-        else {
-            //generic error
-        }
+        return;
     }];
 }
 

@@ -221,6 +221,10 @@
     [self.actionButton setSizeWithSize:CGSizeMake(self.actionButton.frame.size.width, self.frame.size.height)];
 }
 
+-(void)setCurrentUser:(BOOL)isAuth {
+    self.repostButton.enabled = !isAuth;
+}
+
 
 -(void)handleButtonSelected:(UIButton*)button{
     [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{

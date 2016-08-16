@@ -144,19 +144,19 @@ static NSString *imageTile = @"ImageTile";
     [self.facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
     [self.view addSubview:self.facebookButton];
     
-    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.anonButton addTarget:self action:@selector(anonTapped:) forControlEvents:UIControlEventTouchDown];
-    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
-    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
-    self.anonButton.frame = CGRectMake(96, self.view.frame.size.height -24 -10, 24, 24);
-    [self.view addSubview:self.anonButton];
-    
-    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, self.view.frame.size.height -17 -12, 83, 17)];
-    self.anonLabel.text = @"ANONYMOUS";
-    self.anonLabel.font = [UIFont notaBoldWithSize:15];
-    self.anonLabel.textColor = [UIColor frescoOrangeColor];
-    self.anonLabel.alpha = 0;
-    [self.view addSubview:self.anonLabel];
+//    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [self.anonButton addTarget:self action:@selector(anonTapped:) forControlEvents:UIControlEventTouchDown];
+//    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
+//    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
+//    self.anonButton.frame = CGRectMake(96, self.view.frame.size.height -24 -10, 24, 24);
+//    [self.view addSubview:self.anonButton];
+//    
+//    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, self.view.frame.size.height -17 -12, 83, 17)];
+//    self.anonLabel.text = @"ANONYMOUS";
+//    self.anonLabel.font = [UIFont notaBoldWithSize:15];
+//    self.anonLabel.textColor = [UIColor frescoOrangeColor];
+//    self.anonLabel.alpha = 0;
+//    [self.view addSubview:self.anonLabel];
     
 }
 

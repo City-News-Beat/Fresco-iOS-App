@@ -28,15 +28,17 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSAboutFrescoViewController.h"
 
-/* Cocoa Pods */
 #import <MessageUI/MessageUI.h>
+#import <Smooch/Smooch.h>
 
 /* API */
 #import "FRSAPIClient.h"
 #import "FRSSocial.h"
 
+#import "SSKeychain.h"
 
-@interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
+
+@interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource, FRSAlertViewDelegate>
 
 @property (strong, nonatomic) NSString *twitterHandle;
 @property (strong, nonatomic) FRSTableViewCell *twitterCell;
@@ -66,6 +68,25 @@
 
     [self.navigationItem setTitle:@"SETTINGS"];
     [self.tableView reloadData];
+}
+
+-(void)smooch {
+    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    
+    if (currentUser.firstName) {
+        [SKTUser currentUser].firstName = currentUser.firstName;
+    }
+    
+    if (currentUser.email) {
+        [SKTUser currentUser].email = currentUser.email;
+    }
+    
+    if (currentUser.uid) {
+        [[SKTUser currentUser] addProperties:@{ @"Fresco ID" : currentUser.uid }];
+    }
+    
+    [Smooch show];
+
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -103,7 +124,7 @@
 #pragma mark - UITableViewDelegate
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 12;
+    return 10;
 }
 
 
@@ -122,7 +143,7 @@
             return 1;
             break;
         case 4:
-            return 3;
+            return 2;
             break;
         case 5:
             return 1;
@@ -134,7 +155,7 @@
             return 1;
             break;
         case 8:
-            return 1;
+            return 3;
             break;
         case 9:
             return 1;
@@ -142,12 +163,12 @@
         case 10:
             return 3;
             break;
-        case 11:
-            return 1;
-            break;
-        case 12:
-            return 1;
-            break;
+//        case 11:
+//            return 1;
+//            break;
+//        case 12:
+//            return 1;
+//            break;
         default:
             return 0;
             break;
@@ -244,11 +265,23 @@
             switch (indexPath.row) {
                 case 0:
                     [self checkNotificationStatus];
-                    [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                    
+                     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
+                         NSNumber *notifRadius = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+                         
+                         if ([notifRadius integerValue] <= 1) {
+                             [cell configureAssignmentCellEnabled:NO];
+                         } else {
+                             [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                         }
+                     } else {
+                         [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                     }
+                    
                     
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
-                case 1: {
+                case 1:
                     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
                         NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
                         CGFloat milesFloat = [miles floatValue];
@@ -256,10 +289,14 @@
                     } else {
                         [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@""];
                     }
-                } break;
-                case 2:
-                    [cell configureDefaultCellWithTitle:@"Debit card" andCarret:YES andRightAlignedTitle:@"VISA (3189)"];
-                    break;
+                break;
+                case 2: {
+                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
+                    
+                    
+                    [cell configureDefaultCellWithTitle:@"Debit card" andCarret:YES andRightAlignedTitle:(card) ? card : @""];
+                }
+                break;
                 case 3:
                     [cell configureDefaultCellWithTitle:@"Add tax info" andCarret:YES andRightAlignedTitle:@""];
                     break;
@@ -273,9 +310,8 @@
         case 4:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureFindFriendsCell];
-                    break;
-                case 1:
+//                    [cell configureFindFriendsCell];
+                    
                     self.twitterCell = cell;
                     if (self.twitterCell.twitterHandle) {
                         [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
@@ -286,7 +322,7 @@
                         [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
                     }
                     break;
-                case 2:
+                case 1:
                     self.facebookCell = cell;
                     
                     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
@@ -295,8 +331,8 @@
                     } else {
                         [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
                     }
-                    
                     break;
+
                 default:
                     break;
             }
@@ -305,22 +341,23 @@
             [cell configureEmptyCellSpace:NO];
             break;
         case 6:
-            [cell configureDefaultCellWithTitle:@"Promo codes" andCarret:YES andRightAlignedTitle:@""];
+            [cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil];
+            //[cell configureDefaultCellWithTitle:@"Promo codes" andCarret:YES andRightAlignedTitle:@""];
             break;
             
         case 7:
             [cell configureEmptyCellSpace:NO];
             break;
+
+//        case 8:
+//            //[cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil];
+//            break;
+//        
+//        case 9:
+//            //[cell configureEmptyCellSpace:NO];
+//            break;
             
         case 8:
-            [cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil];
-            break;
-        
-        case 9:
-            [cell configureEmptyCellSpace:NO];
-            break;
-            
-        case 10:
             switch (indexPath.row) {
                 case 0:
                     [cell configureLogOut];
@@ -333,7 +370,7 @@
                     break;
             }
             break;
-        case 11:
+        case 9:
             [cell configureEmptyCellSpace:YES];
             break;
         default:
@@ -409,9 +446,8 @@
         case 4:
             switch (indexPath.row) {
                 case 0:{
-                    NSLog(@"find friends");
-                    FRSAlertView *alert = [[FRSAlertView alloc] initFindFriendsAlert];
-                    [alert show];
+//                    FRSAlertView *alert = [[FRSAlertView alloc] initFindFriendsAlert];
+//                    [alert show];
                 }
                     break;
                 case 1: {
@@ -435,8 +471,12 @@
             break;
         case 6:
         {
-            FRSPromoCodeViewController *promo = [[FRSPromoCodeViewController alloc] init];
-            [self.navigationController pushViewController:promo animated:YES];
+//            FRSPromoCodeViewController *promo = [[FRSPromoCodeViewController alloc] init];
+//            [self.navigationController pushViewController:promo animated:YES];
+//            self.navigationItem.title = @"";
+            
+            FRSAboutFrescoViewController *about = [[FRSAboutFrescoViewController alloc] init];
+            [self.navigationController pushViewController:about animated:YES];
             self.navigationItem.title = @"";
         }
             
@@ -444,24 +484,24 @@
         case 7:
             //Empty
             break;
-        case 8: {
-            FRSAboutFrescoViewController *about = [[FRSAboutFrescoViewController alloc] init];
-            [self.navigationController pushViewController:about animated:YES];
-            self.navigationItem.title = @"";
-        } break;
-        case 9:
-            //Empty
-            break;
-        case 10:
+//        case 8: {
+//            FRSAboutFrescoViewController *about = [[FRSAboutFrescoViewController alloc] init];
+//            [self.navigationController pushViewController:about animated:YES];
+//            self.navigationItem.title = @"";
+//        } break;
+//        case 9:
+//            //Empty
+//            break;
+        case 8:
             switch (indexPath.row) {
                 case 0: {
-                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We'll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"LOG OUT?" message:@"We'll miss you!" actionTitle:@"CANCEL" cancelTitle:@"LOG OUT" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                     
                     [alert show];
                     
                 } break;
                 case 1:
-                    [self presentModalMailComposerViewController:YES];
+                    [self presentMail];
                     break;
                 case 2:{
 //                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
@@ -532,6 +572,10 @@
 
 #pragma mark - MFMailComposeViewControllerDelegate
 
+-(void)presentMail {
+    [self presentModalMailComposerViewController:YES];
+}
+
 -(void)presentModalMailComposerViewController:(BOOL)animated {
     
     if ([MFMailComposeViewController canSendMail]) {
@@ -543,6 +587,9 @@
         [composeViewController setToRecipients:@[@"support@fresconews.com"]];
         
         [self presentViewController:composeViewController animated:animated completion:nil];
+    } else {
+        //cc:imogen
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Cannot Send Mail Message", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
     }
 }
 
@@ -551,6 +598,40 @@
     [self dismissViewControllerAnimated:YES completion:nil];
     
 }
+
+
+#pragma mark - FRSAlertView Delegate
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    //for logout alert
+    if (index == 0) {
+        NSLog(@"index 0");
+    } else if (index == 1) {
+        [self logout];
+    }
+}
+
+-(void)logout {
+    
+    [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
+    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+    
+    [SSKeychain deletePasswordForService:serviceName account:clientAuthorization];
+
+    [NSUserDefaults resetStandardUserDefaults];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+
+    [self popViewController];
+    
+    [self.tabBarController setSelectedIndex:0];
+ }
 
 
 #pragma mark - Notifications

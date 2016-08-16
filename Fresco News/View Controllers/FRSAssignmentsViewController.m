@@ -25,6 +25,8 @@
 #import "FRSAppDelegate.h"
 #import "FRSGlobalAssignmentsTableViewController.h"
 
+#import "Haneke.h"
+
 @import MapKit;
 
 @interface FRSAssignmentsViewController () <MKMapViewDelegate>
@@ -353,55 +355,68 @@
     
     MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"assignment-annotation"];
 
-    
-//    for (id<MKOverlay>overlay in self.mapView.overlays) {
-//        if ([overlay isKindOfClass:[FRSMapCircle class]]) {
-//            FRSMapCircle *circle = (FRSMapCircle *)overlay;
-//            
-//            if (circle.circleType == FRSMapCircleTypeUser) {
-//               
-//                UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-//                view.backgroundColor = [UIColor redColor];
-//                [annotationView addSubview:view];
-//                
-//                return annotationView;
-//                
-//            } else {
-//
-//            }
-//        };
-//    }
-    
-    
     if (!annotationView) {
         
-        annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"assignment-annotation"];
-        UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
-        container.backgroundColor = [UIColor clearColor];
-        /* container.layer.borderColor = [UIColor redColor].CGColor;
-        container.layer.borderWidth = 1.0f;*/
+        if ([annotation isKindOfClass:FRSMapCircleTypeUser]) {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"user-annotation"];
         
-        UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(25.5, 25.5, 24, 24)];
-        whiteView.layer.cornerRadius = 12;
-        whiteView.backgroundColor = [UIColor whiteColor];
-        
-        whiteView.layer.shadowColor = [UIColor blackColor].CGColor;
-        whiteView.layer.shadowOffset = CGSizeMake(0, 2);
-        whiteView.layer.shadowOpacity = 0.15;
-        whiteView.layer.shadowRadius = 1.5;
-        whiteView.layer.shouldRasterize = YES;
-        whiteView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
-        
-        UIView *yellowView = [[UIView alloc] initWithFrame:CGRectMake(4, 4, 16, 16)];
-        yellowView.layer.cornerRadius = 8;
-        yellowView.backgroundColor = [UIColor frescoOrangeColor];
-        
-        [whiteView addSubview:yellowView];
-        [container addSubview:whiteView];
-        [annotationView addSubview:container];
-
-        annotationView.enabled = YES;
-        annotationView.frame = CGRectMake(0, 0, 75, 75);
+            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
+            view.backgroundColor = [UIColor whiteColor];
+            
+            view.layer.cornerRadius = 12;
+            view.layer.shadowColor = [UIColor blackColor].CGColor;
+            view.layer.shadowOffset = CGSizeMake(0, 2);
+            view.layer.shadowOpacity = 0.15;
+            view.layer.shadowRadius = 1.5;
+            view.layer.shouldRasterize = YES;
+            view.clipsToBounds = YES;
+            view.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+            
+            [annotationView addSubview:view];
+            
+            UIImageView *imageView = [[UIImageView alloc] init];
+            imageView.frame = CGRectMake(-9, -9, 18, 18);
+            imageView.layer.cornerRadius = 9;
+            imageView.clipsToBounds = YES;
+            [annotationView addSubview:imageView];
+            
+            if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
+                NSString *link = [[FRSAPIClient sharedClient].authenticatedUser valueForKey:@"profileImage"];
+                NSURL *url = [NSURL URLWithString:link];
+                [imageView hnk_setImageFromURL:url];
+                imageView.backgroundColor = [UIColor redColor];
+                
+            } else {
+                imageView.backgroundColor = [UIColor frescoBlueColor];
+            }
+            
+        } else {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"assignment-annotation"];
+            UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
+            container.backgroundColor = [UIColor clearColor];
+            
+            UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(25.5, 25.5, 24, 24)];
+            whiteView.layer.cornerRadius = 12;
+            whiteView.backgroundColor = [UIColor whiteColor];
+            
+            whiteView.layer.shadowColor = [UIColor blackColor].CGColor;
+            whiteView.layer.shadowOffset = CGSizeMake(0, 2);
+            whiteView.layer.shadowOpacity = 0.15;
+            whiteView.layer.shadowRadius = 1.5;
+            whiteView.layer.shouldRasterize = YES;
+            whiteView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
+            
+            UIView *yellowView = [[UIView alloc] initWithFrame:CGRectMake(4, 4, 16, 16)];
+            yellowView.layer.cornerRadius = 8;
+            yellowView.backgroundColor = [UIColor frescoOrangeColor];
+            
+            [whiteView addSubview:yellowView];
+            [container addSubview:whiteView];
+            [annotationView addSubview:container];
+            
+            annotationView.enabled = YES;
+            annotationView.frame = CGRectMake(0, 0, 75, 75);
+        }
         
     }
     
@@ -428,6 +443,7 @@
     [self.mapView addOverlay:self.userCircle];
 }
 
+
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay
 {
     MKCircleRenderer *circleR = [[MKCircleRenderer alloc] initWithCircle:(MKCircle *)overlay];
@@ -436,8 +452,8 @@
         FRSMapCircle *circle = (FRSMapCircle *)overlay;
         
         if (circle.circleType == FRSMapCircleTypeUser) {
-            circleR.fillColor = [UIColor frescoBlueColor];
-            circleR.alpha = 0.5;
+            circleR.fillColor = [UIColor frescoLightBlueColor];
+            
         }
         else if (circle.circleType == FRSMapCircleTypeAssignment) {
             circleR.fillColor = [UIColor frescoOrangeColor];

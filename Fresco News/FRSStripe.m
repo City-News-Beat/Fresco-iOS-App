@@ -11,12 +11,13 @@
 @implementation FRSStripe
 
 +(STPCardParams *)creditCardWithNumber:(NSString *)number expiration:(NSArray *)expiration cvc:(NSString *)cvc {
-    [FRSStripe startLive];
+    [FRSStripe startTest];
     
     STPCardParams *cardParams = [[STPCardParams alloc] init];
     cardParams.number = number;
     cardParams.expMonth = [expiration[0] intValue];
     cardParams.expYear = [expiration[1] intValue];
+    cardParams.currency = @"usd";
     return cardParams;
 }
 
@@ -44,7 +45,9 @@
 }
 
 +(void)createTokenWithBank:(STPBankAccountParams *)params completion:(FRSStripeBlock)completion {
-    
+    [[STPAPIClient sharedClient] createTokenWithBankAccount:params completion:^(STPToken * _Nullable token, NSError * _Nullable error) {
+        completion(token, error);
+    }];
 }
 
 +(void)startLive {

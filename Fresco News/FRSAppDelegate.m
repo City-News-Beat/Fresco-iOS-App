@@ -46,6 +46,13 @@
     
     [self configureCoreDataStack];
     
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"first-run"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"first-run"];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"first-run"];
+    }
+    
  
     if ([[FRSAPIClient sharedClient] isAuthenticated]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
@@ -75,6 +82,10 @@
     
     [[UINavigationBar appearance]setShadowImage:[[UIImage alloc] init]];
 
+    
+
+    
+    
     return YES;
 }
 
@@ -250,9 +261,11 @@
     
     FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
     [mainNav pushViewController:_tabBarController animated:FALSE];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [mainNav pushViewController:[[FRSOnboardingViewController alloc] init] animated:FALSE];
-    });
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"first-run"]) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [mainNav pushViewController:[[FRSOnboardingViewController alloc] init] animated:FALSE];
+        });
+    }
     [mainNav setNavigationBarHidden:YES];
     self.window.rootViewController = mainNav;
 }

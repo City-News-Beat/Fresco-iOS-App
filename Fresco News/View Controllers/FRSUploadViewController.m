@@ -327,20 +327,20 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.bottomContainer addSubview:self.facebookButton];
     
     //Configure anonymous posting button
-    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.anonButton addTarget:self action:@selector(postAnonymously:) forControlEvents:UIControlEventTouchDown];
-    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
-    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
-    self.anonButton.frame = CGRectMake(96, 10, 24, 24);
-    [self.bottomContainer addSubview:self.anonButton];
+//    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [self.anonButton addTarget:self action:@selector(postAnonymously:) forControlEvents:UIControlEventTouchDown];
+//    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
+//    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
+//    self.anonButton.frame = CGRectMake(96, 10, 24, 24);
+//    [self.bottomContainer addSubview:self.anonButton];
     
-    //Configure anonymous label (default alpha = 0)
-    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, 15, 83, 17)];
-    self.anonLabel.text = @"ANONYMOUS";
-    self.anonLabel.font = [UIFont notaBoldWithSize:15];
-    self.anonLabel.textColor = [UIColor frescoOrangeColor];
-    self.anonLabel.alpha = 0;
-    [self.bottomContainer addSubview:self.anonLabel];
+//    //Configure anonymous label (default alpha = 0)
+//    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, 15, 83, 17)];
+//    self.anonLabel.text = @"ANONYMOUS";
+//    self.anonLabel.font = [UIFont notaBoldWithSize:15];
+//    self.anonLabel.textColor = [UIColor frescoOrangeColor];
+//    self.anonLabel.alpha = 0;
+//    [self.bottomContainer addSubview:self.anonLabel];
     
     //Configure next button
     self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem]; //Should be green when valid
@@ -680,6 +680,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             
             NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+            
             for(int i = 1; i <= cell.outlets.count; i++){
                 [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+i inSection:0]];
                 NSLog(@"Inserting Row at IndexPath.row = %ld", indexPath.row+i);
@@ -1005,14 +1006,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         // upload
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
-        gallery[@"posts"] = current;
+        gallery[@"posts_new"] = current;
         gallery[@"caption"] = self.captionTextView.text;
         
         if (_showingOutlets && selectedOutlet) {
             gallery[@"outlet_id"] = selectedOutlet;
         }
         
-        NSLog(@"CREATING");
+        
+        
+        NSLog(@"CREATING: %@", gallery);
         
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
             if (!error) {

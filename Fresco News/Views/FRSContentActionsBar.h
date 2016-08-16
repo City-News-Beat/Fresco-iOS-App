@@ -21,6 +21,7 @@
 -(void)handleRepostState:(BOOL)state;
 -(void)handleHeartAmount:(NSInteger)amount;
 -(void)handleRepostAmount:(NSInteger)amount;
+-(void)setCurrentUser:(BOOL)isAuth;
 
 @end
 

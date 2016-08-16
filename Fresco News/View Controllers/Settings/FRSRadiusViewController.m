@@ -19,6 +19,7 @@
 #import "FRSUser.h"
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
+#import "Haneke.h"
 
 @import MapKit;
 
@@ -143,7 +144,7 @@
             }
             
             if (!self.alert) {
-                self.alert = [[FRSAlertView alloc] initBannerWithTitle:title backButton:YES];
+                self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                 [self.alert show];
             }
 
@@ -196,6 +197,20 @@
         
         MKAnnotationView *annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationIdentifier];
         
+        CGFloat circleRadius;
+        if (IS_IPHONE_5) {
+            circleRadius = 208;
+        } else if (IS_IPHONE_6) {
+            circleRadius = 248;
+        } else if (IS_IPHONE_6_PLUS) {
+            circleRadius = 278;
+        }
+        
+        UIView *mapCircleView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - circleRadius/2, 16, circleRadius, circleRadius)];
+        mapCircleView.backgroundColor = [UIColor frescoLightBlueColor];
+        mapCircleView.layer.cornerRadius = circleRadius/2;
+        [mapView addSubview:mapCircleView];
+                
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
         view.backgroundColor = [UIColor whiteColor];
         
@@ -205,6 +220,7 @@
         view.layer.shadowOpacity = 0.15;
         view.layer.shadowRadius = 1.5;
         view.layer.shouldRasterize = YES;
+        view.clipsToBounds = YES;
         view.layer.rasterizationScale = [[UIScreen mainScreen] scale];
         
         [annotationView addSubview:view];
@@ -213,11 +229,16 @@
         UIImageView *imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(-9, -9, 18, 18);
         imageView.layer.cornerRadius = 9;
+        imageView.clipsToBounds = YES;
         [annotationView addSubview:imageView];
-        
         
         if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
 
+            NSString *link = [[FRSAPIClient sharedClient].authenticatedUser valueForKey:@"profileImage"];
+            NSURL *url = [NSURL URLWithString:link];
+            [imageView hnk_setImageFromURL:url];
+            imageView.backgroundColor = [UIColor redColor];
+            
         } else {
             imageView.backgroundColor = [UIColor frescoBlueColor];
         }

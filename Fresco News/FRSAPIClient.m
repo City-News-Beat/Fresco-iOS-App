@@ -141,6 +141,7 @@
     
     
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
+        
         if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
             [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
             
@@ -344,6 +345,7 @@
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
     NSLog(@"%@", endpoint);
+    
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
        
@@ -493,7 +495,7 @@
 }
 
 -(void)createPaymentWithToken:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
-    
+    NSLog(@"%@", token);
     if (!token) {
         return;
     }
@@ -684,6 +686,7 @@
 }
 
 -(BOOL)isAuthenticated {
+    
     if ([[SSKeychain accountsForService:serviceName] count] > 0) {
         return TRUE;
     }
@@ -836,7 +839,7 @@
         return;
     }
     
-    NSDictionary *params = @{@"q":query};
+    NSDictionary *params = @{@"q":query, @"stories":@(TRUE), @"galleries":@(TRUE), @"users":@(TRUE)};
     
     [self get:searchEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject,error);
@@ -1109,7 +1112,11 @@
          if(placemarks && placemarks.count > 0) {
              CLPlacemark *placemark= [placemarks objectAtIndex:0];
              
+<<<<<<< HEAD
              address = [NSString stringWithFormat:@"%@,%@", [placemark locality], [placemark administrativeArea]];
+=======
+             address = [NSString stringWithFormat:@"%@ %@, %@ %@", [placemark subThoroughfare],[placemark thoroughfare],[placemark locality], [placemark administrativeArea]];
+>>>>>>> f6ad6226d8e48ae9d8f127a16baac55ce70d7dfd
              
              NSLog(@"Found address: %@",address);
              completion(address, Nil);

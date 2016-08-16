@@ -24,7 +24,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
         
-        if (isRunning) {
+        if (isRunning || didFinish) {
             return;
         }
         
@@ -232,8 +232,10 @@
         invalidated = TRUE;
         
         if (toComplete == isComplete) {
+            didFinish = TRUE;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
             NSLog(@"GALLERY CREATION COMPLETE");
+            [[NSNotificationCenter defaultCenter] removeObserver:self];
         }
     }
 }
