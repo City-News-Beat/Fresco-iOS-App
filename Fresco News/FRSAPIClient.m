@@ -1173,5 +1173,19 @@
     }];
 }
 
+-(void)fetchPayments:(FRSAPIDefaultCompletionBlock)completion {
+    [self get:getPaymentsEndpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)deletePayment:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:deletePaymentEndpoint, paymentID];
+    
+    [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 
 @end

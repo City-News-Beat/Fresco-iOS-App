@@ -110,6 +110,9 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)searchWithQuery:(NSString *)query completion:(FRSAPIDefaultCompletionBlock)completion;
 
 -(void)createPaymentWithToken:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)fetchPayments:(FRSAPIDefaultCompletionBlock)completion;
+-(void)deletePayment:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion;
+
 // file
 -(void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback;
 -(NSString *)md5:(PHAsset *)asset;
