@@ -153,7 +153,7 @@
             FRSProfileViewController *profileController = (FRSProfileViewController *)[self.navigationController.viewControllers objectAtIndex: 0];
             profileController.nameLabel.text = self.nameTF.text;
             profileController.locationLabel.text = self.locationTF.text;
-            profileController.bioTextView.text = self.bioTV.text;
+            profileController.bioLabel.text = self.bioTV.text;
             profileController.profileIV.image = self.profileIV.image;
             profileController.profileIV.contentMode = UIViewContentModeScaleAspectFill;
             [[self navigationController] popToRootViewControllerAnimated:NO];
