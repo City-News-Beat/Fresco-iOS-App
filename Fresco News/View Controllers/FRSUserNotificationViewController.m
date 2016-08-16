@@ -18,6 +18,7 @@
 #import "FRSAssignment.h"
 #import "FRSDebitCardViewController.h"
 #import "FRSAssignmentsViewController.h"
+#import "FRSTaxInformationViewController.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -119,6 +120,12 @@
     
 }
 
+-(void)segueToTaxInfo {
+    
+    FRSTaxInformationViewController *taxInfoVC = [[FRSTaxInformationViewController alloc] init];
+    [self.navigationController pushViewController:taxInfoVC animated:YES];
+}
+
 -(void)segueToBankInfo {
 
     FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
@@ -143,6 +150,14 @@
 
 
 #pragma mark - UITableView
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 5;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -210,7 +225,7 @@
             FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
             cell.titleLabel.text  = @"Assignment: Raining Figs Over Tennessee";
-            cell.bodyLabel.text = @"Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun";
+            cell.bodyLabel.text = @"Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun. This should eventually tuncate after going over three lines maybe let's try and see if it truncates.";
             cell.backgroundColor = [UIColor frescoBackgroundColorDark];
             
             [cell configureCell];
@@ -230,6 +245,9 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate updateTabBarToUser];
+    
     if (indexPath.row == 0) {
         [self segueToUser:[[FRSAPIClient sharedClient] authenticatedUser]];
     }
@@ -244,15 +262,6 @@
         [self.tabBarController presentViewController:nav animated:YES completion:nil];
     }
 }
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 6;
-}
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
 
 -(CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
     [sizingCell layoutIfNeeded];

@@ -35,7 +35,7 @@
     
     //Configure labels and rounded image
     self.titleLabel.numberOfLines = 0;
-    self.bodyLabel.numberOfLines  = 0;
+    self.bodyLabel.numberOfLines  = 3;
     self.image.backgroundColor = [UIColor frescoLightTextColor];
     self.image.layer.cornerRadius = 20;
     self.image.clipsToBounds = YES;

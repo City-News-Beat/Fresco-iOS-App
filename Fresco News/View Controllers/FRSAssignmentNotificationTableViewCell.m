@@ -46,7 +46,7 @@
 
 -(void)configureCell {
     self.titleLabel.numberOfLines = 0;
-    self.bodyLabel.numberOfLines  = 0;
+    self.bodyLabel.numberOfLines  = 3;
     self.assignmentButton.tintColor = [UIColor blackColor];
 }
 
