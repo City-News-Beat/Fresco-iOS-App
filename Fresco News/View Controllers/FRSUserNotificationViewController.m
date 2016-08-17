@@ -52,7 +52,6 @@
 }
 
 -(void)saveLastOpenedDate {
-    
     NSDate *today = [NSDate date];
     [[NSUserDefaults standardUserDefaults] setObject:today forKey:@"notification-date"];
 }
@@ -120,11 +119,10 @@
 }
 
 
--(void)segueToAssignment:(FRSAssignment *)assignment {
+-(void)segueToAssignmentWithID:(NSString *)assignmentID {
     
-    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithAssignment:assignment];
+    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithActiveAssignment:assignmentID];
     [self.navigationController pushViewController:assignmentsVC animated:YES];
-    
 }
 
 -(void)segueToTaxInfo {
@@ -168,17 +166,10 @@
 }
 
 
-#pragma mark - UITabBar
-
--(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    NSLog(@"item = %@", item);
-}
-
-
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return 6;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -259,6 +250,21 @@
             
         } break;
             
+        case 5: {
+           
+            NSString *cellIdentifier = @"assignmentNotificationCell";
+            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            cell.titleLabel.text  = @"Assignment: Fire on fire";
+            cell.bodyLabel.text = @"Alcatra ham brisket tail filet mignon. Ball tip bresaola biltong, corned beef andouille short ribs pork belly cupim flank. Spare ribs pancetta ham hock ham pig beef ribs frankfurter tongue shankle tenderloin sirloin, flank rump.";
+            cell.backgroundColor = [UIColor frescoBackgroundColorDark];
+            [cell.actionButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
+
+            [cell configureCell];
+            return cell;
+            
+        } break;
+            
         default:
             break;
     }
@@ -292,6 +298,11 @@
     if (indexPath.row == 4) {
 
         [self segueToCamera];
+    }
+    
+    if (indexPath.row == 5) {
+        
+        [self segueToAssignmentWithID:@"xLJE0QzW1G5B"]; //
     }
 }
 

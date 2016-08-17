@@ -87,10 +87,10 @@
 
 @implementation FRSAssignmentsViewController
 
--(instancetype)initWithAssignment:(FRSAssignment *)assignment {
+-(instancetype)initWithActiveAssignment:(NSString *)assignmentID {
     self = [super init];
-    
-    
+    [self fetchLocalAssignments];
+
     
     
     return self;
