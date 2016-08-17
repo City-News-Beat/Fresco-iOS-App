@@ -15,12 +15,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mastercard (0819)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TjK-FW-XAK">
-                        <rect key="frame" x="13" y="11" width="152" height="21"/>
-                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                        <color key="textColor" red="0.22745098039215686" green="0.22745098039215686" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check-box-circle-outline" translatesAutoresizingMaskIntoConstraints="NO" id="84h-BS-rxV">
                         <rect key="frame" x="287" y="11" width="20" height="20"/>
                         <constraints>
@@ -28,6 +22,12 @@
                             <constraint firstAttribute="width" constant="20" id="9cl-TQ-bjt"/>
                         </constraints>
                     </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mastercard (0819)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TjK-FW-XAK">
+                        <rect key="frame" x="13" y="11" width="152" height="21"/>
+                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                        <color key="textColor" red="0.22745098039215686" green="0.22745098039215686" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailingMargin" secondItem="TjK-FW-XAK" secondAttribute="trailing" constant="147" id="0Qh-yj-p1p"/>

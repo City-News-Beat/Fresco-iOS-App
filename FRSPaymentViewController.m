@@ -9,10 +9,12 @@
 #import "FRSPaymentViewController.h"
 
 @interface FRSPaymentViewController ()
-
 @end
 
 @implementation FRSPaymentViewController
+
+static NSString *paymentCell = @"paymentCell";
+static NSString *addPaymentCell = @"addPaymentCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
