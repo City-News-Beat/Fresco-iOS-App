@@ -192,8 +192,9 @@
         NSLog(@"%@ %@", responseObject, error);
         
         NSMutableArray *following = [[NSMutableArray alloc] init];
-        
-        for (NSDictionary *user in responseObject[@"users"]) {
+        NSArray *users = (NSArray *)responseObject;
+
+        for (NSDictionary *user in users) {
             FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
             [following addObject:newUser];
         }
@@ -223,8 +224,9 @@
         NSLog(@"%@ %@", responseObject, error);
         
         NSMutableArray *followers = [[NSMutableArray alloc] init];
+        NSArray *users = (NSArray *)responseObject;
         
-        for (NSDictionary *user in responseObject[@"users"]) {
+        for (NSDictionary *user in users) {
             FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
             [followers addObject:newUser];
         }
