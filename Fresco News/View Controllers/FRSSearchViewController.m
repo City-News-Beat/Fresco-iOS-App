@@ -294,6 +294,20 @@
                 break;
         }
     }
+    else {
+        if (indexPath.section == 0 && self.users && self.users.count != 0) {
+            // users
+        }
+        else if (indexPath.section == 0 && self.stories && self.stories.count != 0) {
+            // stories
+        }
+        else if (indexPath.section == 1 && self.users && self.users.count != 0) {
+            // stories
+        }
+        else {
+            // galleries
+        }
+    }
     
     return 0;
 }
