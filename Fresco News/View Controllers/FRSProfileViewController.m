@@ -513,6 +513,8 @@
     self.bioTextView.textColor = [UIColor whiteColor];
     self.bioTextView.font = [UIFont systemFontOfSize:15 weight:-300];
     self.bioTextView.delegate = self;
+    self.bioTextView.selectable = FALSE;
+    
     //    [self.bioTextView sizeToFit];
     [self.profileContainer addSubview:self.bioTextView];
 }
