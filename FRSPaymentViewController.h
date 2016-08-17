@@ -11,9 +11,10 @@
 #import "Fresco.h"
 #import "FRSAPIClient.h"
 
-@interface FRSPaymentViewController : FRSBaseViewController
+@interface FRSPaymentViewController : FRSBaseViewController<UITableViewDelegate, UITableViewDataSource>
 {
     
 }
 @property (nonatomic, retain) NSArray *payments;
+@property (nonatomic, retain) UITableView *tableView;
 @end

@@ -20,7 +20,31 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.navigationItem setTitle:@"PAYMENT METHOD"];
 
+    [self setupTableView];
     [self reloadPayments];
+    
+}
+
+-(void)setupTableView {
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 2;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 0) {
+        return self.payments.count;
+    }
+    
+    return 1;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return Nil;
 }
 
 -(void)reloadPayments {
