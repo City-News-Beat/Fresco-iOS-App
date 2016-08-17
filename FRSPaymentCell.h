@@ -10,4 +10,6 @@
 
 @interface FRSPaymentCell : UITableViewCell
 @property (nonatomic, retain) IBOutlet UILabel *paymentTitleLabel;
+@property (nonatomic, retain) IBOutlet UIImageView *selectionCircle;
+
 @end

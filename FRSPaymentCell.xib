@@ -21,18 +21,32 @@
                         <color key="textColor" red="0.22745098039215686" green="0.22745098039215686" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check-box-circle-outline" translatesAutoresizingMaskIntoConstraints="NO" id="84h-BS-rxV">
+                        <rect key="frame" x="287" y="11" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="8fK-GU-5xB"/>
+                            <constraint firstAttribute="width" constant="20" id="9cl-TQ-bjt"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailingMargin" secondItem="TjK-FW-XAK" secondAttribute="trailing" constant="147" id="0Qh-yj-p1p"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="84h-BS-rxV" secondAttribute="bottom" constant="4.5" id="9oP-Kb-SaN"/>
                     <constraint firstAttribute="bottomMargin" secondItem="TjK-FW-XAK" secondAttribute="bottom" constant="3.5" id="AEc-hD-nNG"/>
+                    <constraint firstItem="84h-BS-rxV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="BAM-Zv-yEh"/>
                     <constraint firstItem="TjK-FW-XAK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="S8C-4b-UxV"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="84h-BS-rxV" secondAttribute="trailing" constant="5" id="fud-Za-FPO"/>
                     <constraint firstItem="TjK-FW-XAK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="lqR-QB-DVC"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="paymentTitleLabel" destination="TjK-FW-XAK" id="10y-qm-lrY"/>
+                <outlet property="selectionCircle" destination="84h-BS-rxV" id="Ge9-9D-FZs"/>
             </connections>
             <point key="canvasLocation" x="203" y="241"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="check-box-circle-outline" width="24" height="24"/>
+    </resources>
 </document>
