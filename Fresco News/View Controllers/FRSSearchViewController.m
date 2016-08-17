@@ -187,7 +187,9 @@
 }
 
 -(void)reloadData {
-    
+    NSLog(@"USERS: %@", _users);
+    NSLog(@"GALLERIES: %@", _galleries);
+    NSLog(@"STORIES: %@", _stories);
 }
 -(void)searchError:(NSError *)error {
     
