@@ -13,6 +13,8 @@
 {
     BOOL isInDefault;
 }
-@property (nonatomic, retain) NSArray *representedData;
+@property (nonatomic, retain) NSArray *users;
+@property (nonatomic, retain) NSArray *stories;
+@property (nonatomic, retain) NSArray *galleries;
 @property (nonatomic, retain) NSArray *defaultData;
 @end

@@ -153,6 +153,44 @@
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
     [self hideClearButton];
+    
+    if (textField.text) {
+        [self performSearchWithQuery:textField.text];
+    }
+}
+
+-(void)performSearchWithQuery:(NSString *)query {
+    [[FRSAPIClient sharedClient] searchWithQuery:query completion:^(id responseObject, NSError *error) {
+        if (error || !responseObject) {
+            [self searchError:error];
+            return;
+        }
+        
+        NSDictionary *storyObject = responseObject[@"stories"];
+        NSDictionary *galleryObject = responseObject[@"galleries"];
+        NSDictionary *userObject = responseObject[@"users"];
+        
+        if (storyObject && ![storyObject isEqual:[NSNull null]]) {
+            self.stories = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:storyObject[@"results"] cache:FALSE];
+        }
+        
+        if (galleryObject && ![galleryObject isEqual:[NSNull null]]) {
+            self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:FALSE];
+        }
+        
+        if (userObject && ![userObject isEqual:[NSNull null]]) {
+            self.users = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:userObject[@"results"] cache:FALSE];
+        }
+        
+        [self reloadData];
+    }];
+}
+
+-(void)reloadData {
+    
+}
+-(void)searchError:(NSError *)error {
+    
 }
 
 #pragma mark - UITableView Datasource
