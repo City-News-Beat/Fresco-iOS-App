@@ -169,7 +169,6 @@
     
     UINavigationController *vc4 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
     [vc4 pushViewController:[[FRSProfileViewController alloc] initWithUser:[[FRSAPIClient sharedClient] authenticatedUser]] animated:NO];
-//    [vc4 pushViewController:[[FRSUserNotificationViewController alloc] init] animated:NO];
     
     self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
 }
@@ -220,6 +219,8 @@
             FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
             [self.navigationController pushViewController:onboardVC animated:NO];
         } else {
+            
+            
             UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
             FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
             [profile loadAuthenticatedUser];
@@ -227,6 +228,10 @@
             
 //            if (userNotificationCount >= 1) {
                 profile.shouldShowNotificationsOnLoad = YES;
+            //userNotificationCount resets once the vc is loaded
+            //else gets called when user tabs back on the tab bar
+//            } else {
+//                [self updateUserIcon];
 //            }
             
         }

@@ -41,6 +41,7 @@
     [super viewDidLoad];
     
     [self configureUI];
+    [self saveLastOpenedDate];
     
 }
 
@@ -48,6 +49,12 @@
     [super viewWillAppear:animated];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+}
+
+-(void)saveLastOpenedDate {
+    
+    NSDate *today = [NSDate date];
+    [[NSUserDefaults standardUserDefaults] setObject:today forKey:@"notification-date"];
 }
 
 
@@ -141,7 +148,6 @@
 
 -(void)segueToCamera {
     
-    
     //FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
     FRSCameraViewController *camVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
     UINavigationController *navigationController = [[UINavigationController alloc] init];
@@ -153,13 +159,19 @@
 
 }
 
-
 -(void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:NO];
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate updateTabBarToUser];
+}
+
+
+#pragma mark - UITabBar
+
+-(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    NSLog(@"item = %@", item);
 }
 
 
@@ -252,12 +264,19 @@
     }
     
     
+//    if (cell.isRead) {
+//        cell.backgroundColor = [UIColor frescoBackgroundColorDark];
+//    }
+    
+    
     UITableViewCell *cell;
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate updateTabBarToUser];
