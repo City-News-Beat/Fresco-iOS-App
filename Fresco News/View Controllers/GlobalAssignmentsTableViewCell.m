@@ -64,7 +64,7 @@
     self.assignment = assignment;
     NSString *dateInString = (NSString *)[self.assignment objectForKey:@"ends_at"];
     NSLog(@"Date %@", dateInString);
-    
+        
     //TODO
     //[photoPriceLabel setText:(NSString *)[self.assignment objectForKey:@"photo price key?"]];
     //[videoPriceLabel setText:(NSString *)[self.assignment objectForKey:@"video price key?"]];

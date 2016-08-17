@@ -68,6 +68,7 @@
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) UIBarButtonItem *followBarButtonItem;
+@property (strong, nonatomic) UIButton *followersButton;
 
 @end
 
@@ -360,18 +361,18 @@
     float titleInset = 5.0;
     float characterLength = 4.25;
     
-    UIButton *followersButton = [[UIButton alloc] init];
-    [followersButton setImage:[UIImage imageNamed:@"followers-icon"] forState:UIControlStateNormal];
-    [followersButton setTitle:@"0" forState:UIControlStateNormal];
-    [followersButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    followersButton.titleEdgeInsets = UIEdgeInsetsMake(0.0f, titleInset, 0.0f, 0.0f);
-    [followersButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-    [self.profileContainer addSubview:followersButton];
+    self.followersButton = [[UIButton alloc] init];
+    [self.followersButton setImage:[UIImage imageNamed:@"followers-icon"] forState:UIControlStateNormal];
+    [self.followersButton setTitle:@"0" forState:UIControlStateNormal];
+    [self.followersButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    self.followersButton.titleEdgeInsets = UIEdgeInsetsMake(0.0f, titleInset, 0.0f, 0.0f);
+    [self.followersButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    [self.profileContainer addSubview:self.followersButton];
     //Make the center of the button to be the same center as the profile bg with title length versatility
-    float titleLength = followersButton.currentTitle.length * characterLength;
-    [followersButton setFrame:CGRectMake(center - titleInset - titleLength, (self.profileBG.frame.size.height) + paddingFromProfileIV, 100, 50)];
+    float titleLength = self.followersButton.currentTitle.length * characterLength;
+    [self.followersButton setFrame:CGRectMake(center - titleInset - titleLength, (self.profileBG.frame.size.height) + paddingFromProfileIV, 100, 50)];
 
-    [followersButton addTarget:self action:@selector(showFollowers) forControlEvents:UIControlEventTouchUpInside];
+    [self.followersButton addTarget:self action:@selector(showFollowers) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)configureProfileSocialOverlay{
@@ -1001,6 +1002,10 @@
         //[self.bioLabel setFrame:CGRectMake(self.bioLabel.frame.origin.x, self.bioLabel.frame.origin.y, self.bioLabel.frame.size.width, lineHeight * self.bioLabel.numberOfLines)];
         
         self.nameLabel.text = user.firstName;
+        
+        NSLog(@"FOLLOWERS: %@",[user valueForKey:@"followed_count"]);
+        
+        [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followed_count"]] forState:UIControlStateNormal];
         
         NSLog(@"%@", user);
         self.locationLabel.text = [user valueForKey:@"location"];
