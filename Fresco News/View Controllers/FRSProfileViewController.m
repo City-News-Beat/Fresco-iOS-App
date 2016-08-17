@@ -1003,9 +1003,9 @@
         
         self.nameLabel.text = user.firstName;
         
-        NSLog(@"FOLLOWERS: %@",[user valueForKey:@"followed_count"]);
+        NSLog(@"FOLLOWERS: %@",[user valueForKey:@"followedCount"]);
         
-        [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followed_count"]] forState:UIControlStateNormal];
+        [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followedCount"]] forState:UIControlStateNormal];
         
         NSLog(@"%@", user);
         self.locationLabel.text = [user valueForKey:@"location"];
