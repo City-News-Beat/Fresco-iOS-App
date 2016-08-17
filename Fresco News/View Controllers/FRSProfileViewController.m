@@ -69,6 +69,7 @@
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) UIBarButtonItem *followBarButtonItem;
 @property (strong, nonatomic) UIButton *followersButton;
+@property (strong, nonatomic) NSURL *profileImageURL;
 
 @end
 
@@ -101,6 +102,8 @@
     
     [super viewDidLoad];
     
+    self.editedProfile = false;
+    
     if (!_representedUser) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
@@ -128,15 +131,19 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
-    if (!_representedUser) {
-        _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-        self.authenticatedProfile = TRUE;
-        [self configureWithUser:_representedUser];
-    }else{
-        [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
-            _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+    if(!self.editedProfile){
+        if (!_representedUser) {
+            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+            self.authenticatedProfile = TRUE;
             [self configureWithUser:_representedUser];
-        }];
+        }else{
+            [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
+                _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                [self configureWithUser:_representedUser];
+            }];
+        }
+    }else{
+        self.editedProfile = false;
     }
 }
 
@@ -942,7 +949,7 @@
     setupProfileVC.nameStr = self.nameLabel.text;
     setupProfileVC.locStr = self.locationLabel.text;
     setupProfileVC.bioStr = self.bioLabel.text;
-    setupProfileVC.profileImage = self.profileIV.image;
+    setupProfileVC.profileImageURL = self.profileImageURL;
     setupProfileVC.isEditingProfile = true;
     [self.navigationController pushViewController:setupProfileVC animated:YES];
 }
@@ -985,6 +992,7 @@
         // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.username;
         if(user.profileImage != [NSNull null]){
+            self.profileImageURL = [NSURL URLWithString:user.profileImage];
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
         }
         

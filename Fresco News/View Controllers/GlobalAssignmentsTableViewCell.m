@@ -93,6 +93,8 @@
 
 -(void)configureOutletImagesWithOutletArray:(NSArray *)outletArray{
     NSMutableArray *outletImageUrls = [[NSMutableArray alloc] init];
+    
+    
     for(NSDictionary *outlet in outletArray){
         if([outlet objectForKey:@"avatar"] != [NSNull null]){
             [outletImageUrls addObject:[NSURL URLWithString:(NSString *)[outlet objectForKey:@"avatar"]]];
