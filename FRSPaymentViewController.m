@@ -29,6 +29,7 @@
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self.view addSubview:self.tableView];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
