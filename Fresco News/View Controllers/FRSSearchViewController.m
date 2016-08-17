@@ -187,9 +187,7 @@
 }
 
 -(void)reloadData {
-    NSLog(@"USERS: %@", _users);
-    NSLog(@"GALLERIES: %@", _galleries);
-    NSLog(@"STORIES: %@", _stories);
+    [self.tableView reloadData];
 }
 -(void)searchError:(NSError *)error {
     
@@ -218,76 +216,83 @@
     return 5;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    switch (indexPath.section) {
-        case 0:
-            switch (indexPath.row) {
-                case 0:
-                    return 47;
-                    break;
-                case 1:
-                    return 56;
-                    break;
-                case 2:
-                    return 56;
-                    break;
-                case 3:
-                    return 56;
-                    break;
-                case 4:
-                    return 44;
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        case 1:
-            switch (indexPath.row) {
-                case 0:
-                    return 47;
-                    break;
-                case 1:
-                    return 56;
-                    break;
-                case 2:
-                    return 56;
-                    break;
-                case 3:
-                    return 56;
-                    break;
-                case 4:
-                    return 44;
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        case 2:
-            switch (indexPath.row) {
-                case 0:
-                    return 24;
-                    break;
-                case 1:
-                    return 44;
-                    break;
-                case 2:
-                    return 44;
-                    break;
-                case 3:
-                    return 44;
-                    break;
-                case 4:
-                    return 44;
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        default:
-            break;
+-(BOOL)isNoData {
+    return TRUE;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([self isNoData]) {
+        switch (indexPath.section) {
+            case 0:
+                switch (indexPath.row) {
+                    case 0:
+                        return 47;
+                        break;
+                    case 1:
+                        return 56;
+                        break;
+                    case 2:
+                        return 56;
+                        break;
+                    case 3:
+                        return 56;
+                        break;
+                    case 4:
+                        return 44;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+                
+            case 1:
+                switch (indexPath.row) {
+                    case 0:
+                        return 47;
+                        break;
+                    case 1:
+                        return 56;
+                        break;
+                    case 2:
+                        return 56;
+                        break;
+                    case 3:
+                        return 56;
+                        break;
+                    case 4:
+                        return 44;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+                
+            case 2:
+                switch (indexPath.row) {
+                    case 0:
+                        return 24;
+                        break;
+                    case 1:
+                        return 44;
+                        break;
+                    case 2:
+                        return 44;
+                        break;
+                    case 3:
+                        return 44;
+                        break;
+                    case 4:
+                        return 44;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+                
+            default:
+                break;
+        }
     }
     
     return 0;
@@ -315,74 +320,76 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    switch (indexPath.section) {
-        case 0:
-            switch (indexPath.row) {
-                case 0:
-                    [cell configureSettingsHeaderCellWithTitle:@"USERS"];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    break;
-                case 1:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-grace"] fullName:@"Grace Plihal" userName:@"@DJgracieP" isFollowing:YES];
-                    break;
-                case 2:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-byrn"] fullName:@"Bryn Gelbart" userName:@"@bryn" isFollowing:NO];
-                    break;
-                case 3:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-erik"] fullName:@"Erik Washington" userName:@"@erik" isFollowing:NO];
-                    break;
-                case 4:
-                    [cell configureSearchSeeAllCellWithTitle:@"SEE ALL 11 USERS"];
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        case 1:
-            switch (indexPath.row) {
-                case 0:
-                    [cell configureSettingsHeaderCellWithTitle:@"STORIES"];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    break;
-                case 1:
-                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-1"] storyName:@"Mardi Gras Celebration: New Orleans, LA"];
-                    break;
-                case 2:
-                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-2"] storyName:@"MLS Finals: Columbus, OH"];
-                    break;
-                case 3:
-                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-3"] storyName:@"Warehouse Fire: Hillsborough, NJ"];
-                    break;
-                case 4:
-                    [cell configureSearchSeeAllCellWithTitle:@"SEE ALL 25 STORIES"];
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        case 2:
-            switch (indexPath.row) {
-                case 0:
-                    [cell configureSettingsHeaderCellWithTitle:@""];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        default:
-            break;
+    if ([self isNoData]) {
+        switch (indexPath.section) {
+            case 0:
+                switch (indexPath.row) {
+                    case 0:
+                        [cell configureSettingsHeaderCellWithTitle:@"USERS"];
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                        break;
+                    case 1:
+                        [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-grace"] fullName:@"Grace Plihal" userName:@"@DJgracieP" isFollowing:YES];
+                        break;
+                    case 2:
+                        [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-byrn"] fullName:@"Bryn Gelbart" userName:@"@bryn" isFollowing:NO];
+                        break;
+                    case 3:
+                        [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-erik"] fullName:@"Erik Washington" userName:@"@erik" isFollowing:NO];
+                        break;
+                    case 4:
+                        [cell configureSearchSeeAllCellWithTitle:@"SEE ALL 11 USERS"];
+                        break;
+                    default:
+                        break;
+                }
+                break;
+                
+            case 1:
+                switch (indexPath.row) {
+                    case 0:
+                        [cell configureSettingsHeaderCellWithTitle:@"STORIES"];
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                        break;
+                    case 1:
+                        [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-1"] storyName:@"Mardi Gras Celebration: New Orleans, LA"];
+                        break;
+                    case 2:
+                        [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-2"] storyName:@"MLS Finals: Columbus, OH"];
+                        break;
+                    case 3:
+                        [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-3"] storyName:@"Warehouse Fire: Hillsborough, NJ"];
+                        break;
+                    case 4:
+                        [cell configureSearchSeeAllCellWithTitle:@"SEE ALL 25 STORIES"];
+                        break;
+                    default:
+                        break;
+                }
+                break;
+                
+            case 2:
+                switch (indexPath.row) {
+                    case 0:
+                        [cell configureSettingsHeaderCellWithTitle:@""];
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        break;
+                }
+                break;
+                
+            default:
+                break;
+        }
     }
 }
 
