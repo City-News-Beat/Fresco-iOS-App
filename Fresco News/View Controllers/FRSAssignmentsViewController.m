@@ -40,7 +40,8 @@
 @property (strong, nonatomic) NSArray *overlays;
 
 @property (nonatomic) BOOL isFetching;
-
+@property (nonatomic) BOOL hasDefault;
+@property (nonatomic, retain) NSString *defaultID;
 @property (nonatomic) BOOL isOriginalSpan;
 
 @property (strong, nonatomic) FRSMapCircle *userCircle;
@@ -83,16 +84,23 @@
 
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 
+@property (strong, nonatomic) FRSAssignment *currentAssignment;
+
 @end
 
 @implementation FRSAssignmentsViewController
 
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID {
     self = [super init];
-    [self fetchLocalAssignments];
+    
+    self.hasDefault = TRUE;
+    self.defaultID = assignmentID;
+    
+    
+//    [self fetchLocalAssignments];
+//    [self configureBackButtonAnimated:NO];
+    
 
-    
-    
     return self;
 }
 
@@ -269,6 +277,21 @@
 
 -(void)adjustMapRegionWithLocation:(CLLocation *)location {
     
+    if (self.defaultID) {
+        
+        MKCoordinateSpan currentSpan = self.mapView.region.span;
+        
+        if (self.isOriginalSpan){
+            currentSpan = MKCoordinateSpanMake(0.03f, 0.03f);
+            self.isOriginalSpan = NO;
+        }
+        
+        MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([self.currentAssignment.latitude doubleValue], [self.currentAssignment.longitude doubleValue]), currentSpan);
+        [self.mapView setRegion:region animated:YES];
+
+        return;
+    }
+    
     //We want to preserve the span if the user modified it.
     MKCoordinateSpan currentSpan = self.mapView.region.span;
     
@@ -292,7 +315,10 @@
     
     self.isOriginalSpan = YES;
     
+    
+    
     if ([FRSLocator sharedLocator].currentLocation) {
+        
         [self adjustMapRegionWithLocation:[FRSLocator sharedLocator].currentLocation];
     }
 }
@@ -314,6 +340,7 @@
     NSInteger count = 0;
     
     for(FRSAssignment *assignment in self.assignments) {
+        
         if ([self assignmentExists:assignment.uid]) {
             continue;
         }
@@ -324,7 +351,7 @@
     }
 }
 
-- (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index {
+-(void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index {
     
     FRSAssignmentAnnotation *ann = [[FRSAssignmentAnnotation alloc] initWithAssignment:assignment atIndex:index];
 //    NSLog(@"EXPIRATION %@", assignment.expirationDate);
@@ -338,6 +365,28 @@
     
     [self.mapView addOverlay:circle];
     [self.mapView addAnnotation:ann];
+
+    
+    if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
+        self.hasDefault = FALSE;
+       // self.defaultID = Nil;
+        
+        [self configureAssignmentCard];
+        [self animateAssignmentCard];
+        
+        self.currentAssignment = assignment;
+        
+        CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake([assignment.latitude doubleValue], [assignment.longitude doubleValue]);
+        newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
+        [self.mapView setCenterCoordinate:newCenter animated:YES];
+        
+        if ([self.mapView respondsToSelector:@selector(camera)]) {
+            [self.mapView setShowsBuildings:NO];
+            MKMapCamera *newCamera = [[self.mapView camera] copy];
+            [newCamera setHeading:0];
+            [self.mapView setCamera:newCamera animated:YES];
+        }
+    }
 }
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
