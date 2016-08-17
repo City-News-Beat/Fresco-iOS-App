@@ -17,8 +17,26 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+    [self.navigationItem setTitle:@"PAYMENT METHOD"];
+
+    [self reloadPayments];
 }
 
+-(void)reloadPayments {
+    [[FRSAPIClient sharedClient] fetchPayments:^(id responseObject, NSError *error) {
+        if (error || !responseObject) {
+            [self fetchError:error];
+            return;
+        }
+        
+        self.payments = responseObject;
+    }];
+}
+
+-(void)fetchError:(NSError *)error {
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

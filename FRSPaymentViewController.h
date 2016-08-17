@@ -12,5 +12,8 @@
 #import "FRSAPIClient.h"
 
 @interface FRSPaymentViewController : FRSBaseViewController
-
+{
+    
+}
+@property (nonatomic, retain) NSArray *payments;
 @end
