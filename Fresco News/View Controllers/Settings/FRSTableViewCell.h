@@ -27,7 +27,7 @@
 -(void)configureLogOut;
 
 -(void)configureCheckBoxCellWithTitle:(NSString *)title withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSelected:(BOOL)isSelected;
-
+-(void)configureEditableCellWithDefaultTextWithMultipleFields:(NSArray *)titles withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType;
 -(void)configureDisableAccountCell;
 -(void)configureSliderCell;
 -(void)configureMapCell;
@@ -41,6 +41,8 @@
 
 @property (strong, nonatomic) UIButton *rightAlignedButton;
 @property (strong, nonatomic) UITextField *textField;
+@property (strong, nonatomic) UITextField *secondaryField;
+@property (strong, nonatomic) UITextField *tertiaryField;
 @property (strong, nonatomic) UISwitch *twitterSwitch;
 @property (strong, nonatomic) NSString *twitterHandle;
 

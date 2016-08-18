@@ -15,7 +15,7 @@
 @property (nonatomic) NSString *nameStr;
 @property (nonatomic) NSString *locStr;
 @property (nonatomic) NSString *bioStr;
-@property (strong, nonatomic) UIImage *profileImage;
+@property (strong, nonatomic) NSURL *profileImageURL;
 
 @property (nonatomic) BOOL isEditingProfile;
 

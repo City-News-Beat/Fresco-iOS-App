@@ -86,7 +86,7 @@
     if (self.locationTF.text) {
         profileInfo[@"location"] = self.locationTF.text;
     }
-    if (self.profileIV.image) {
+    if (self.profileIV.image != nil) {
         //Send image to backend and set the url to the avatar :)
         NSData *imageData = UIImageJPEGRepresentation(self.profileIV.image, 1.0);
         
@@ -153,9 +153,10 @@
             FRSProfileViewController *profileController = (FRSProfileViewController *)[self.navigationController.viewControllers objectAtIndex: 0];
             profileController.nameLabel.text = self.nameTF.text;
             profileController.locationLabel.text = self.locationTF.text;
-            profileController.bioTextView.text = self.bioTV.text;
-            profileController.profileIV.contentMode = UIViewContentModeScaleAspectFit;
-            profileController.profileIV.image = self.profileIV.image;
+            profileController.bioLabel.text = self.bioTV.text;
+            [profileController.profileIV setImage:self.profileIV.image];
+            profileController.editedProfile = true;
+            //profileController.profileIV.image = self.profileIV.image;
             [[self navigationController] popToRootViewControllerAnimated:NO];
         }else{
             [self.navigationController.view.layer addAnimation:transition forKey:nil];
@@ -259,7 +260,7 @@
     [self.profileIV centerHorizontallyInView:self.topContainer];
     [self.profileIV clipAsCircle];
 //    [self.profileIV addBorderWithWidth:8 color:[UIColor whiteColor]];
-    self.profileIV.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.profileIV.contentMode = UIViewContentModeScaleAspectFill;
     self.profileIV.userInteractionEnabled = YES;
     self.profileIV.backgroundColor = [UIColor frescoBackgroundColorLight];
     
@@ -273,7 +274,7 @@
     }
     
     if(_isEditingProfile){
-        [self.profileIV setImage:self.profileImage];
+        [self.profileIV hnk_setImageFromURL:self.profileImageURL];
     }else{
         [self.profileIV addSubview:self.placeHolderUserIcon];
     }
@@ -489,17 +490,19 @@
             [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         }
     }
+    [textField setText:[textField.text stringByReplacingOccurrencesOfString:@"arthur" withString:@"💩🎉"]];
     
     return YES;
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
-
+    
     if(textField == self.nameTF){
         [_locationTF becomeFirstResponder];
     }else if(textField == self.locationTF){
         [_bioTV becomeFirstResponder];
     }
+    [textField setText:[textField.text stringByReplacingOccurrencesOfString:@"arthur" withString:@"💩🎉"]];
     
     return YES;
 }
@@ -509,6 +512,7 @@
     if (!self.dismissGR){
         self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     }
+    [textField setText:[textField.text stringByReplacingOccurrencesOfString:@"arthur" withString:@"💩🎉"]];
     
     [self.view addGestureRecognizer:self.dismissGR];
 }
@@ -537,6 +541,7 @@
         self.doneButton.userInteractionEnabled = YES;
         [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     }
+    [textView setText:[textView.text stringByReplacingOccurrencesOfString:@"arthur" withString:@"💩🎉"]];
 }
 
 -(void)textViewDidEndEditing:(UITextView *)textView{

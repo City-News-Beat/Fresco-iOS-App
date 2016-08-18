@@ -64,7 +64,7 @@
     self.assignment = assignment;
     NSString *dateInString = (NSString *)[self.assignment objectForKey:@"ends_at"];
     NSLog(@"Date %@", dateInString);
-    
+        
     //TODO
     //[photoPriceLabel setText:(NSString *)[self.assignment objectForKey:@"photo price key?"]];
     //[videoPriceLabel setText:(NSString *)[self.assignment objectForKey:@"video price key?"]];
@@ -93,6 +93,8 @@
 
 -(void)configureOutletImagesWithOutletArray:(NSArray *)outletArray{
     NSMutableArray *outletImageUrls = [[NSMutableArray alloc] init];
+    
+    
     for(NSDictionary *outlet in outletArray){
         if([outlet objectForKey:@"avatar"] != [NSNull null]){
             [outletImageUrls addObject:[NSURL URLWithString:(NSString *)[outlet objectForKey:@"avatar"]]];
@@ -100,27 +102,47 @@
     }
     
     if(outletImageUrls.count != 0){
-        
-    
-    UIImageView *defaultImageView = (UIImageView *)[outletIconsView.subviews objectAtIndex:0];
-    
-    for(int i = 0; i < outletImageUrls.count; i++){
-        NSURL *imageUrl = [outletImageUrls objectAtIndex:i];
-        if(i == 0){
-            [defaultImageView hnk_setImageFromURL:imageUrl];
-        }else{
-            UIImageView *imageView = [defaultImageView copy];
-            CGRect newFrame = imageView.frame;
-            newFrame.origin.x+=8*i;
-            [imageView setFrame:newFrame];
-            
-            [imageView hnk_setImageFromURL:imageUrl];
+        UIImageView *defaultImageView = (UIImageView *)[outletIconsView.subviews objectAtIndex:0];
+        UIImageView *defaultIVCopy = [self copyImageView:defaultImageView];
+        int i = 0;
+        for(i = 0; i < outletImageUrls.count; i++){
+            NSURL *imageUrl = [outletImageUrls objectAtIndex:i];
+            if(i == 0){
+                defaultImageView.contentMode = UIViewContentModeScaleAspectFit;
+                [defaultImageView hnk_setImageFromURL:imageUrl];
+            }else{
+                UIImageView *imageView = [self copyImageView:defaultIVCopy];
+                CGRect newFrame = imageView.frame;
+                newFrame.origin.x+=8*i;
+                [imageView setFrame:newFrame];
+                defaultImageView.contentMode = UIViewContentModeScaleAspectFit;
+                
+                [imageView hnk_setImageFromURL:imageUrl];
+            }
         }
-    }
+        //If any outlets don't have an avatar, add in the default avatar
+        if(outletArray.count - outletImageUrls.count > 0){
+            for(i = i; i < outletImageUrls.count; i++){
+                UIImageView *imageView = [self copyImageView:defaultIVCopy];
+                CGRect newFrame = imageView.frame;
+                newFrame.origin.x+=8*i;
+                [imageView setFrame:newFrame];
+            }
+        }
     }else{
         //TODO
         //This happens when they don't have an avatar for the outlet
     }
+}
+
+-(UIImageView *)copyImageView:(UIImageView *)imageView{
+    UIImageView *newImageView = [[UIImageView alloc] initWithImage:imageView.image];
+    [newImageView setCenter:imageView.center];
+    [newImageView setContentMode:imageView.contentMode];
+    [newImageView setFrame:imageView.frame];
+    [newImageView setClipsToBounds:imageView.clipsToBounds];
+    [newImageView.layer setCornerRadius:imageView.layer.cornerRadius];
+    return newImageView;
 }
 
 -(void)configureExpirationDateWithString:(NSString *)dateInString{

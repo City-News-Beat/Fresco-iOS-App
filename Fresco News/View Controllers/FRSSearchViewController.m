@@ -166,53 +166,32 @@
 }
 
 -(void)performSearchWithQuery:(NSString *)query {
+    self.users = @[];
+    self.galleries = @[];
+    self.stories = @[];
+    [self reloadData];
     
     [[FRSAPIClient sharedClient] searchWithQuery:query completion:^(id responseObject, NSError *error) {
         if (error || !responseObject) {
             [self searchError:error];
             return;
         }
-        
 
-        
         NSDictionary *storyObject = responseObject[@"stories"];
         NSDictionary *galleryObject = responseObject[@"galleries"];
         NSDictionary *userObject = responseObject[@"users"];
-        
-        if (storyObject && ![storyObject isEqual:[NSNull null]] && [storyObject isKindOfClass:[NSNull class]]) {
-            self.stories = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:storyObject[@"results"] cache:FALSE];
-        }
-        
-        if (galleryObject && ![galleryObject isEqual:[NSNull null]] && [galleryObject isKindOfClass:[NSNull class]]) {
-            self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:FALSE];
-        }
-        
-        if (userObject && ![userObject isEqual:[NSNull null]] && [userObject isKindOfClass:[NSNull class]]) {
-            self.users = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:userObject[@"results"] cache:FALSE];
-        }
-
-        
-        if (self.users.count == 0 || !self.users) {
-            userIndex = -1;
-            storyIndex--;
-            galleryIndex--;
-        }
-        
-        if (self.galleries.count == 0 || !self.galleries) {
-            galleryIndex = -1;
-        }
-        
-        if (self.stories.count == 0 || !self.stories) {
-            storyIndex = -1;
-            galleryIndex--;
-        }
-        
+        self.users = storyObject[@"results"];
+        self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
+        self.users = userObject[@"results"];
         [self reloadData];
     }];
 }
 
 -(void)reloadData {
-    [self.tableView reloadData];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 }
 -(void)searchError:(NSError *)error {
     
@@ -234,7 +213,7 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
+
     int numberOfSections = 0;
     if (_users && ![_users isEqual:[NSNull null]]) {
         numberOfSections++;
@@ -250,10 +229,24 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == userIndex) {
-        return _users.count + 2;
+        if (_users.count == 0) {
+            return 0;
+        }
+        if (_users.count < 5) {
+            return _users.count + 2;
+        }
+        
+        return 8;
     }
     if (section == storyIndex) {
-        return _stories.count + 2;
+        if (_stories.count == 0) {
+            return 0;
+        }
+        
+        if (_stories.count < 5) {
+            return _stories.count+2;
+        }
+        return 5 + 2;
     }
     if (section == galleryIndex) {
         return self.galleries.count;
@@ -302,22 +295,6 @@
     NSString *galleryIdentifier;
     NSString *cellIdentifier;
     
-    if (indexPath.section == galleryIndex) {
-        FRSGalleryCell *cell = [[FRSGalleryCell alloc] init];
-        
-        if (!cell) {
-            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryIdentifier];
-        }
-        
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.gallery = self.galleries[indexPath.row];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [cell clearCell];
-            [cell configureCell];
-        });
-    }
-    
     FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (cell == nil) {
@@ -357,10 +334,22 @@
         if (avatarURL) {
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
-        //[cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:user.firstName userName:user.username isFollowing:following];
-        NSLog(@"USER: %@", user);
+        
+        NSString *firstname = @"";
+        if (user[@"full_name"] || ![user[@"full_name"] isEqual:[NSNull null]]) {
+            firstname = user[@"full_name"];
+        }
+        
+        NSString *username = @"";
+        if (user[@"username"] || ![user[@"username"] isEqual:[NSNull null]]) {
+            username = user[@"username"];
+        }
+        
+        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue]];
+        return cell;
     }
     else if (indexPath.section == storyIndex) {
+        
         if (indexPath.row == self.stories.count) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL STORIES"];
             return cell;
@@ -371,11 +360,39 @@
             return cell;
         }
         
-        //[cell configureSearchStoryCellWithStoryPhoto:url storyName:story.title];
+        FRSStory *story = self.stories[0];
+        NSURL *photo;
         
+        if (story.imageURLs.count > 0) {
+            photo = [NSURL URLWithString:story.imageURLs[0]];
+        }
+        
+        NSString *title = @"";
+        if (story.title && ![story.title isEqual:[NSNull null]]) {
+            title = story.title;
+        }
+    
+        [cell configureSearchStoryCellWithStoryPhoto:photo storyName:title];
+    }
+    
+    if (indexPath.section == galleryIndex) {
+        FRSGalleryCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryIdentifier];
+        if (!cell) {
+            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryIdentifier];
+        }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.gallery = self.galleries[indexPath.row];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [cell clearCell];
+            [cell configureCell];
+        });
+        
+        return cell;
     }
 
-    return cell;
+    return Nil;
 }
 
 

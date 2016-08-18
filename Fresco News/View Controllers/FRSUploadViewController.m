@@ -797,6 +797,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }else{
         [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
     }
+    [textView setText:[textView.text stringByReplacingOccurrencesOfString:@"arthur" withString:@"💩🎉"]];
 }
 
 -(BOOL)textViewShouldBeginEditing:(UITextView *)textView {

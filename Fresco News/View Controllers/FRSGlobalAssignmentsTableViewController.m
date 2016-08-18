@@ -48,11 +48,12 @@
 -(void)configureTableView {
     [super configureTableView];
     
-    self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height);
+self.tableView.frame = CGRectMake(0, -self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height);// - self.navigationController.navigationBar.frame.size.height);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.bounces = YES;
+    self.tableView.scrollsToTop = false;
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.tableView];
     
@@ -68,9 +69,20 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
 
     return [self tableView:tableView cellForRowAtIndexPath:indexPath].frame.size.height+12;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+
+    return 44;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = [UIColor clearColor];
+    
+    return view;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -95,6 +107,10 @@
     };
 
     return cell;
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    [super scrollViewDidScroll:scrollView];
 }
 
 -(void)openCameraWithAssignment:(NSDictionary *)assignment {

@@ -40,6 +40,13 @@
         NSLog(@"USER LOC: %@",properties[@"location"]);
     }
     
+    if (properties[@"followed_count"] != Nil && ![properties[@"followed_count"] isEqual:[NSNull null]]) {
+        [user setValue:properties[@"followed_count"] forKey:@"followedCount"];
+    }
+    if (properties[@"following_count"] != Nil && ![properties[@"following_count"] isEqual:[NSNull null]]) {
+        [user setValue:properties[@"following_count"] forKey:@"followingCount"];
+    }
+    
     if ([[properties objectForKey:@"following"] boolValue]) {
         [user setValue:@(TRUE) forKey:@"following"];
     }
@@ -77,7 +84,13 @@
         NSLog(@"USER LOC: %@",properties[@"location"]);
     }
     
-    
+    if (properties[@"followed_count"] != Nil && ![properties[@"followed_count"] isEqual:[NSNull null]]) {
+        [user setValue:properties[@"followed_count"] forKey:@"followedCount"];
+    }
+    if (properties[@"following_count"] != Nil && ![properties[@"following_count"] isEqual:[NSNull null]]) {
+        [user setValue:properties[@"following_count"] forKey:@"followingCount"];
+    }
+
     if ([[properties objectForKey:@"following"] boolValue]) {
         [user setValue:@(TRUE) forKey:@"following"];
     }

@@ -12,5 +12,6 @@
 @interface FRSSettingsViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
-
+@property (strong, nonatomic) UITextField *secondartyTextField;
+@property (strong, nonatomic) UITextField *tertiaryTextField;
 @end

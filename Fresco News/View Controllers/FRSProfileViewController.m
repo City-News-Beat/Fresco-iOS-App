@@ -68,6 +68,8 @@
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) UIBarButtonItem *followBarButtonItem;
+@property (strong, nonatomic) UIButton *followersButton;
+@property (strong, nonatomic) NSURL *profileImageURL;
 
 @end
 
@@ -100,6 +102,8 @@
     
     [super viewDidLoad];
     
+    self.editedProfile = false;
+    
     if (!_representedUser) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
@@ -131,11 +135,19 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
-    if (!_representedUser || _representedUser == [[FRSAPIClient sharedClient] authenticatedUser]) {
-        _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-        self.authenticatedProfile = TRUE;
-        //[self configureWithUser:_representedUser];
-        [self fetchGalleries];
+    if(!self.editedProfile){
+        if (!_representedUser) {
+            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+            self.authenticatedProfile = TRUE;
+            [self configureWithUser:_representedUser];
+        }else{
+            [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
+                _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                [self configureWithUser:_representedUser];
+            }];
+        }
+    }else{
+        self.editedProfile = false;
     }
 }
 
@@ -192,6 +204,7 @@
     [self configureSpinner];
     
     [super removeNavigationBarLine];
+    [self configureSectionView];
 }
 
 
@@ -375,13 +388,23 @@
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
     
-    UIButton *followersButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 12 + 24 + 50, 12 + 24)];
-    followersButton.center = self.profileBG.center;
-    [followersButton setOriginWithPoint:CGPointMake(followersButton.frame.origin.x, self.profileBG.frame.origin.y + self.profileBG.frame.size.height + 6)];
-    [followersButton setImage:[UIImage imageNamed:@"followers-icon"] forState:UIControlStateNormal];
-    [self.profileContainer addSubview:followersButton];
+    float paddingFromProfileIV = 20.0;
+    float center = 50.0;
+    float titleInset = 5.0;
+    float characterLength = 4.25;
     
-    [followersButton addTarget:self action:@selector(showFollowers) forControlEvents:UIControlEventTouchUpInside];
+    self.followersButton = [[UIButton alloc] init];
+    [self.followersButton setImage:[UIImage imageNamed:@"followers-icon"] forState:UIControlStateNormal];
+    [self.followersButton setTitle:@"0" forState:UIControlStateNormal];
+    [self.followersButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    self.followersButton.titleEdgeInsets = UIEdgeInsetsMake(0.0f, titleInset, 0.0f, 0.0f);
+    [self.followersButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    [self.profileContainer addSubview:self.followersButton];
+    //Make the center of the button to be the same center as the profile bg with title length versatility
+    float titleLength = self.followersButton.currentTitle.length * characterLength;
+    [self.followersButton setFrame:CGRectMake(center - titleInset - titleLength, (self.profileBG.frame.size.height) + paddingFromProfileIV, 100, 50)];
+
+    [self.followersButton addTarget:self action:@selector(showFollowers) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)configureProfileSocialOverlay{
@@ -511,19 +534,17 @@
     self.locationLabel.font = [UIFont systemFontOfSize:12 weight:-1];
     [self.profileContainer addSubview:self.locationLabel];
     
-    //    self.bioTextView = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
+    //    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     
-    self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(origin-4, 50, 150, 50)];
+    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin-4, 65, 150, self.profileContainer.frame.size.width - (origin-4) - 16)];
     
-    //self.bioTextView.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
-    self.bioTextView.backgroundColor = [UIColor frescoOrangeColor];
-    self.bioTextView.textColor = [UIColor whiteColor];
-    self.bioTextView.font = [UIFont systemFontOfSize:15 weight:-300];
-    self.bioTextView.delegate = self;
-    self.bioTextView.selectable = FALSE;
-    
-    //    [self.bioTextView sizeToFit];
-    [self.profileContainer addSubview:self.bioTextView];
+    //self.bioLabel.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
+    self.bioLabel.backgroundColor = [UIColor frescoOrangeColor];
+    self.bioLabel.textColor = [UIColor whiteColor];
+    self.bioLabel.font = [UIFont systemFontOfSize:15 weight:-300];
+    //    [self.bioLabel sizeToFit];
+    [self.profileContainer addSubview:self.bioLabel];
+
 }
 -(void)textViewDidEndEditing:(UITextView *)textView{
     if (textView.text) {
@@ -536,13 +557,15 @@
 
 -(void)resizeProfileContainer{
     
-    CGFloat height = MAX(self.bioTextView.frame.origin.y + self.bioTextView.frame.size.height + 6, 160);
+    CGFloat height = MAX(self.bioLabel.frame.origin.y + self.bioLabel.frame.size.height + 6, 160);
     
     [self.profileContainer setSizeWithSize:CGSizeMake(self.profileContainer.frame.size.width, height)];
+    
+    [self.sectionView setFrame:CGRectMake(0, self.profileContainer.frame.size.height, self.view.frame.size.width, 44)];
 }
 
 -(void)configureSectionView{
-    self.sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.profileContainer.frame.size.height, self.view.frame.size.width, 44)];
     self.sectionView.backgroundColor = [UIColor frescoOrangeColor];
     
     self.feedButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.sectionView.frame.size.width/2, self.sectionView.frame.size.height)];
@@ -559,6 +582,7 @@
     [self.likesButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.likesButton addTarget:self action:@selector(handleLikesButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.sectionView addSubview:self.likesButton];
+    [self.view addSubview:self.sectionView];
 }
 
 -(void)handleFeedbackButtonTapped{
@@ -790,12 +814,11 @@
         if (topView) {
             return topView;
         }
-        [self configureSectionView];
+        //[self configureSectionView];
         
         view = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.view.frame.size.width, 44)];
         [self.sectionView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
-        [view addSubview:self.sectionView];
-        
+
         topView = view;
         return topView;
     }
@@ -811,103 +834,27 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [super scrollViewDidScroll:scrollView];
     //Once the user has scroll past the feed/likes section view, start moving it with the nav bar
-    if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height + (self.sectionView.frame.size.height * 2.5)) {
-        CGRect newFrame = self.sectionView.frame;
-        // Navigation bar travels up until it is collapsed (so it doesn't travel past the screen)
-        if(self.navBarYValue > -self.navBarHeight-3-self.sectionView.frame.size.height && self.scrollDirection == UIScrollViewScrollDirectionDown){
-            newFrame.origin.y = (self.navBarYValue*2)+15;
-            
-            // Navigation bar travels down until it is fully expanded
-        }else if((self.navBarYValue < self.navBarHeight) && self.scrollDirection == UIScrollViewScrollDirectionUp){ // done scrolling, stick
-            newFrame.origin.y = (self.navBarYValue*2)+15;
-            //
-        }else if(self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height > 0){
-            newFrame.origin.y = 0 + (self.navBarHeight - (self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height));
-            
-            // When the user scrolls up past the fully expanded nav bar condition, keep it in the fully expanded state
-        }else if(self.scrollDirection == UIScrollViewScrollDirectionUp){
-            newFrame.origin.y = 22+35;
-            
-            // When the user scrolls down past the collapsed nav bar condition, keep it in the collapsed state
-        }else if(self.scrollDirection == UIScrollViewScrollDirectionDown){
-            newFrame.origin.y = -self.sectionView.frame.size.height;
-        }
-        //NSLog(@"FRAME Y: %f", self.sectionView.frame.origin.y);
-        if(self.tablePageScroller == scrollView){
-            [self.feedButton setAlpha:(self.navBarYValue/(self.navBarHeight))-0.3];
-            [self.likesButton setAlpha:(self.navBarYValue/(self.navBarHeight))];
-        }else{
-            [self.feedButton setAlpha:(self.navBarYValue/(self.navBarHeight))];
-            [self.likesButton setAlpha:(self.navBarYValue/(self.navBarHeight))-0.3];
-        }
-        [self.sectionView setFrame:newFrame];
-        [self.sectionView.superview setFrame:newFrame];
-        [topView setFrame:newFrame];
-    }else if(self.sectionView.frame.origin.y > 0){
-        CGRect newFrame = self.sectionView.frame;
-        //newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height);//top of the thing - the bot of nav bar);
-        /*if(((scrollView.contentOffset.y - self.profileContainer.frame.size.height)-(self.navBarYValue - self.sectionView.frame.origin.y)) - (scrollView.contentOffset.y - self.profileContainer.frame.size.height) < 10){
-            newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height) + (self.navBarYValue - self.sectionView.frame.origin.y);
-        }else{
-            newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height);
-        }*/
-        //newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height) + (self.navBarYValue - self.sectionView.frame.origin.y);
-        newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height) - (self.sectionView.frame.size.height);
-        NSLog(@"Scroll Y: %f", (self.navBarYValue - self.sectionView.frame.origin.y));
-        NSLog(@"Y: %f", newFrame.origin.y);
-        [self.sectionView setFrame:newFrame];
-        [self.sectionView.superview setFrame:newFrame];
-        [topView setFrame:newFrame];
-        if(self.tablePageScroller == scrollView){
-            [self.feedButton setAlpha:1.0-0.3];
-            [self.likesButton setAlpha:1.0];
-        }else{
-            [self.feedButton setAlpha:1.0];
-            [self.likesButton setAlpha:1.0-0.3];
-        }
-    }else{//Set the likes/feed sectionView to stay just below the profileContainer until it goes past it
-        CGRect newFrame = self.sectionView.frame;
+    
+    CGRect newFrame = self.sectionView.frame;
+    
+    newFrame.origin.y = (self.navBarYValue/self.navBarHeight)*(self.sectionView.frame.size.height)-self.sectionView.frame.size.height;
+    
+    //Prevent it from over extending (going past the bottom of the nav bar)
+    if(newFrame.origin.y > 0){
         newFrame.origin.y = 0;
-        [self.sectionView setFrame:newFrame];
-        [self.sectionView.superview setFrame:newFrame];
-        [topView setFrame:newFrame];
-        if(self.tablePageScroller == scrollView){
-            [self.feedButton setAlpha:1.0-0.3];
-            [self.likesButton setAlpha:1.0];
-        }else{
-            [self.feedButton setAlpha:1.0];
-            [self.likesButton setAlpha:1.0-0.3];
-        }
     }
+    
+    //If it goes over the profile height, attach it to the bot of the profile container view
+    CGPoint localPoint = newFrame.origin;
+    CGPoint basePoint = [self.view convertPoint:localPoint toView:self.tableView];
+    if(basePoint.y < self.profileContainer.frame.size.height + (_sectionView.frame.size.height*1.5)){
+        newFrame.origin.y = self.profileContainer.frame.size.height-scrollView.contentOffset.y;
+    }
+    
+    [self.sectionView setFrame:newFrame];
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    /*[super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
-    if (self.scrollDirection == UIScrollViewScrollDirectionDown && scrollView.contentOffset.y > self.navBarHeight*2) {
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            CGRect newFrame = self.sectionView.frame;
-            
-            float yValue = (-self.navBarHeight-3);
-            newFrame.origin.y = (yValue*2)+15;
-            [self.feedButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
-            [self.likesButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
-            [self.sectionView setFrame:newFrame];
-            [self.sectionView.superview setFrame:newFrame];
-            [topView setFrame:newFrame];
-        } completion:nil];
-    }else if(self.scrollDirection == UIScrollViewScrollDirectionUp){
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            CGRect newFrame = self.sectionView.frame;
-    
-            float yValue = self.navBarHeight;
-            newFrame.origin.y = (yValue*2)+15;
-            [self.feedButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
-            [self.likesButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
-            [self.sectionView setFrame:newFrame];
-            [self.sectionView.superview setFrame:newFrame];
-            [topView setFrame:newFrame];
-        } completion:nil];
-    }*/
 }
 
 #pragma mark - Navigation
@@ -958,8 +905,8 @@
     FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
     setupProfileVC.nameStr = self.nameLabel.text;
     setupProfileVC.locStr = self.locationLabel.text;
-    setupProfileVC.bioStr = self.bioTextView.text;
-    setupProfileVC.profileImage = self.profileIV.image;
+    setupProfileVC.bioStr = self.bioLabel.text;
+    setupProfileVC.profileImageURL = self.profileImageURL;
     setupProfileVC.isEditingProfile = true;
     [self.navigationController pushViewController:setupProfileVC animated:YES];
 }
@@ -1002,15 +949,28 @@
         // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];
         self.nameLabel.text = user.username;
         if(user.profileImage != [NSNull null]){
+            self.profileImageURL = [NSURL URLWithString:user.profileImage];
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
         }
         
         //self.locationLabel.text = user.
-        self.bioTextView.text = user.bio;
+        [self.bioLabel setNumberOfLines:0];
+        self.bioLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.bioLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+
+        self.bioLabel.text = user.bio;
         NSLog(@"USER'S BIO: %@", user.bio);
-        self.bioTextView.editable = false;
-        //[self.bioTextView sizeToFit];
+        [self.bioLabel sizeToFit];
+        
+        //[self.profileContainer setFrame:CGRectMake(self.profileContainer.frame.origin.x, self.profileContainer.frame.origin.y, self.profileContainer.frame.size.width,269.5 + self.bioLabel.frame.size.height)];
+        [self resizeProfileContainer];
+        //[self.bioLabel setFrame:CGRectMake(self.bioLabel.frame.origin.x, self.bioLabel.frame.origin.y, self.bioLabel.frame.size.width, lineHeight * self.bioLabel.numberOfLines)];
+        
         self.nameLabel.text = user.firstName;
+        
+        NSLog(@"FOLLOWERS: %@",[user valueForKey:@"followedCount"]);
+        
+        [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followedCount"]] forState:UIControlStateNormal];
         
         NSLog(@"%@", user);
         self.locationLabel.text = [user valueForKey:@"location"];

@@ -129,6 +129,14 @@
             [authenticatedUser setValue:responseObject[@"location"] forKey:@"location"];
         }
         
+        if (responseObject[@"followed_count"] != Nil && ![responseObject[@"followed_count"] isEqual:[NSNull null]]) {
+            [authenticatedUser setValue:responseObject[@"followed_count"] forKey:@"followedCount"];
+        }
+        
+        if (responseObject[@"following_count"] != Nil && ![responseObject[@"following_count"] isEqual:[NSNull null]]) {
+            [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
+        }
+        
         [[self managedObjectContext] save:Nil];
     }];
 }

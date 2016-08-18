@@ -26,10 +26,11 @@
 @property (nonatomic, retain) FRSUser *representedUser;
 @property BOOL authenticatedProfile;
 -(instancetype)initWithDefaultUser;
-@property (strong, nonatomic) UITextView *bioTextView;
+@property (strong, nonatomic) UILabel *bioLabel;
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *locationLabel;
 @property (strong, nonatomic) FRSBorderedImageView *profileIV;
+@property BOOL editedProfile;
 @property BOOL shouldShowNotificationsOnLoad;
 
 @end
