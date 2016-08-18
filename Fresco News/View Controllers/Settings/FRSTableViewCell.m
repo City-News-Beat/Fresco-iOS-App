@@ -17,7 +17,7 @@
 #import "FRSSettingsViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAPIClient.h"
-
+#import <Haneke/Haneke.h>
 @interface FRSTableViewCell() <FRSAlertViewDelegate>
 
 @property CGFloat leftPadding;
@@ -545,12 +545,13 @@
 }
 
 
--(void)configureSearchUserCellWithProfilePhoto:(UIImage *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing {
+-(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing {
     
-    UIImageView *profileIV = [[UIImageView alloc] initWithImage:profile];
+    UIImageView *profileIV = [[UIImageView alloc] init];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
     profileIV.layer.cornerRadius = 16;
     profileIV.clipsToBounds = YES;
+    [profileIV hnk_setImageFromURL:profile];
     [self addSubview:profileIV];
 
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8, self.frame.size.width - 64, self.frame.size.height)];

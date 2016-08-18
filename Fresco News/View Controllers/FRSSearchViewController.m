@@ -209,8 +209,19 @@
     [self.view addSubview:self.tableView];
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    int numberOfSections = 0;
+    if (_users && ![_users isEqual:[NSNull null]]) {
+        numberOfSections++;
+    }
+    if (_stories && ![_stories isEqual:[NSNull null]]) {
+        numberOfSections++;
+    }
+    if (_galleries && ![_galleries isEqual:[NSNull null]]) {
+        numberOfSections++;
+    }
+    return numberOfSections;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -223,98 +234,25 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if ([self isNoData]) {
-        switch (indexPath.section) {
-            case 0:
-                switch (indexPath.row) {
-                    case 0:
-                        return 47;
-                        break;
-                    case 1:
-                        return 56;
-                        break;
-                    case 2:
-                        return 56;
-                        break;
-                    case 3:
-                        return 56;
-                        break;
-                    case 4:
-                        return 44;
-                        break;
-                    default:
-                        break;
-                }
-                break;
-                
-            case 1:
-                switch (indexPath.row) {
-                    case 0:
-                        return 47;
-                        break;
-                    case 1:
-                        return 56;
-                        break;
-                    case 2:
-                        return 56;
-                        break;
-                    case 3:
-                        return 56;
-                        break;
-                    case 4:
-                        return 44;
-                        break;
-                    default:
-                        break;
-                }
-                break;
-                
-            case 2:
-                switch (indexPath.row) {
-                    case 0:
-                        return 24;
-                        break;
-                    case 1:
-                        return 44;
-                        break;
-                    case 2:
-                        return 44;
-                        break;
-                    case 3:
-                        return 44;
-                        break;
-                    case 4:
-                        return 44;
-                        break;
-                    default:
-                        break;
-                }
-                break;
-                
-            default:
-                break;
-        }
+    
+    if (indexPath.section == 0 && self.users && self.users.count != 0) {
+        // users
+        return 56;
+    }
+    else if (indexPath.section == 0 && self.stories && self.stories.count != 0) {
+        // stories
+        return 56;
+    }
+    else if (indexPath.section == 1 && self.users && self.users.count != 0) {
+        // stories
+        return 56;
     }
     else {
-        if (indexPath.section == 0 && self.users && self.users.count != 0) {
-            // users
-            return 44;
-        }
-        else if (indexPath.section == 0 && self.stories && self.stories.count != 0) {
-            // stories
-            return 44;
-        }
-        else if (indexPath.section == 1 && self.users && self.users.count != 0) {
-            // stories
-            return 44;
-        }
-        else {
-            // galleries
-            FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
-            return [gallery heightForGallery];
-        }
+        // galleries
+        FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
+        return [gallery heightForGallery];
     }
-    
+
     return 0;
 }
 
@@ -322,9 +260,11 @@
     
     NSString *cellIdentifier;
     FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
     if (cell == nil) {
         cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
+   
     if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
         [cell setSeparatorInset:UIEdgeInsetsZero];
     }
@@ -334,83 +274,29 @@
     if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
         [cell setLayoutMargins:UIEdgeInsetsZero];
     }
+    
+    if (indexPath.section == 0 && self.users && self.users.count != 0) {
+        // users
+
+    }
+    else if (indexPath.section == 0 && self.stories && self.stories.count != 0) {
+        // stories
+
+    }
+    else if (indexPath.section == 1 && self.users && self.users.count != 0) {
+        // stories
+
+    }
+    else {
+        // galleries
+    }
+
     return cell;
 }
 
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    if ([self isNoData]) {
-        switch (indexPath.section) {
-            case 0:
-                switch (indexPath.row) {
-                    case 0:
-                        [cell configureSettingsHeaderCellWithTitle:@"USERS"];
-                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                        break;
-                    case 1:
-                        [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-grace"] fullName:@"Grace Plihal" userName:@"@DJgracieP" isFollowing:YES];
-                        break;
-                    case 2:
-                        [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-byrn"] fullName:@"Bryn Gelbart" userName:@"@bryn" isFollowing:NO];
-                        break;
-                    case 3:
-                        [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-erik"] fullName:@"Erik Washington" userName:@"@erik" isFollowing:NO];
-                        break;
-                    case 4:
-                        [cell configureSearchSeeAllCellWithTitle:@"SEE ALL 11 USERS"];
-                        break;
-                    default:
-                        break;
-                }
-                break;
-                
-            case 1:
-                switch (indexPath.row) {
-                    case 0:
-                        [cell configureSettingsHeaderCellWithTitle:@"STORIES"];
-                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                        break;
-                    case 1:
-                        [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-1"] storyName:@"Mardi Gras Celebration: New Orleans, LA"];
-                        break;
-                    case 2:
-                        [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-2"] storyName:@"MLS Finals: Columbus, OH"];
-                        break;
-                    case 3:
-                        [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-3"] storyName:@"Warehouse Fire: Hillsborough, NJ"];
-                        break;
-                    case 4:
-                        [cell configureSearchSeeAllCellWithTitle:@"SEE ALL 25 STORIES"];
-                        break;
-                    default:
-                        break;
-                }
-                break;
-                
-            case 2:
-                switch (indexPath.row) {
-                    case 0:
-                        [cell configureSettingsHeaderCellWithTitle:@""];
-                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                    default:
-                        break;
-                }
-                break;
-                
-            default:
-                break;
-        }
-    }
+
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
