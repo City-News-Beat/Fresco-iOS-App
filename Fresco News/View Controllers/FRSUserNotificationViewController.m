@@ -292,7 +292,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     
-    
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate updateTabBarToUser];
     
@@ -313,6 +312,11 @@
         
         [self segueToAssignmentWithID:@"xLJE0QzW1G5B"]; //
     }
+    
+    
+    
+    [self.navigationController popViewControllerAnimated:NO];
+
 }
 
 -(CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {

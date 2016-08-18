@@ -130,9 +130,7 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     [self removeNavigationBarLine];
-    
-    [self.mapView removeAnnotations:self.mapView.annotations];
-    [self configureAnnotationsForMap];
+
 }
 
 -(void)didReceiveLocationUpdate:(NSNotification *)notification {
