@@ -773,6 +773,8 @@
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
+    
+    self.assignmentCard.layer.zPosition = 1;
 }
 
 -(void)dismissTap:(UITapGestureRecognizer *)sender {
@@ -826,6 +828,8 @@
         self.closeButton.alpha = 1;
         
     } completion:nil];
+    
+    [self hideGlobalAssignmentsBar];
 }
 
 -(void)dismissAssignmentCard {
@@ -857,6 +861,8 @@
     [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.closeButton.alpha = 0;
     } completion:nil];
+    
+    [self showGlobalAssignmentsBar];
 }
 
 -(void)acceptAssignment {
@@ -926,15 +932,17 @@
 
 -(void)configureGlobalAssignmentsBar {
     
-    self.globalAssignmentsBottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height -44-49, self.view.frame.size.width, 44)];
+    if (self.globalAssignmentsBottomContainer) {
+        return;
+    }
+    
+    self.globalAssignmentsBottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, self.view.frame.size.width, 44)];
     self.globalAssignmentsBottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.globalAssignmentsBottomContainer];
     
     self.globalAssignmentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 12, self.view.frame.size.width -56 -24 -18 -6, 20)];
-    self.globalAssignmentsLabel.text = @"6 global assignments";
+    self.globalAssignmentsLabel.text = @"  global assignments";
     //TO DO GRAB THE NUMBER OF GLOBAL ASSIGNMENTS
-    
-    
     
     self.globalAssignmentsLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.globalAssignmentsLabel.textColor = [UIColor frescoDarkTextColor];
@@ -950,6 +958,28 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(globalAssignmentsSegue)];
     [self.globalAssignmentsBottomContainer addGestureRecognizer:tap];
+    
+    if (self.globalAssignmentsArray.count >= 1) {
+        [self showGlobalAssignmentsBar];
+    }
+    
+}
+
+-(void)showGlobalAssignmentsBar {
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, -44-49);
+        
+    } completion:nil];
+}
+
+-(void)hideGlobalAssignmentsBar {
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, self.globalAssignmentsBottomContainer.frame.size.height);
+
+        
+    } completion:nil];
 }
 
 -(void)globalAssignmentsSegue {
