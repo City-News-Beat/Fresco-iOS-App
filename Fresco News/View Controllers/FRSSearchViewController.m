@@ -9,6 +9,7 @@
 #import "FRSSearchViewController.h"
 #import "FRSTableViewCell.h"
 #import "FRSGallery.h"
+#import "FRSGalleryCell.h"
 
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -245,10 +246,10 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == userIndex) {
-        return _users.count + 1;
+        return _users.count + 2;
     }
     if (section == storyIndex) {
-        return _stories.count + 1;
+        return _stories.count + 2;
     }
     if (section == galleryIndex) {
         return self.galleries.count;
@@ -267,12 +268,19 @@
         if (indexPath.row == self.stories.count) {
             return 44;
         }
+        if (indexPath.row == self.stories.count + 1) {
+            return 12;
+        }
         
         return 56;
     }
     else if (indexPath.section == userIndex) {
         if (indexPath.row == self.users.count) {
             return 44;
+        }
+        
+        if (indexPath.row == self.users.count + 1) {
+            return 12;
         }
         
         return 56;
@@ -287,8 +295,25 @@
 }
 
 -(FRSTableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    NSString *galleryIdentifier;
     NSString *cellIdentifier;
+    
+    if (indexPath.section == galleryIndex) {
+        FRSGalleryCell *cell = [[FRSGalleryCell alloc] init];
+        
+        if (!cell) {
+            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryIdentifier];
+        }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.gallery = self.galleries[indexPath.row];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [cell clearCell];
+            [cell configureCell];
+        });
+    }
+    
     FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (cell == nil) {
@@ -312,6 +337,11 @@
             return cell;
         }
         
+        if (indexPath.row == self.users.count + 1) {
+            [cell configureEmptyCellSpace:NO];
+            return cell;
+        }
+        
         // users
         NSDictionary *user = self.users[indexPath.row];
         NSString *avatarURL;
@@ -332,13 +362,13 @@
             return cell;
         }
         
-        FRSStory *story = self.stories[indexPath.row];
+        if (indexPath.row == self.stories.count + 1) {
+            [cell configureEmptyCellSpace:NO];
+            return cell;
+        }
         
         //[cell configureSearchStoryCellWithStoryPhoto:url storyName:story.title];
         
-    }
-    else {
-        // galleries
     }
 
     return cell;
