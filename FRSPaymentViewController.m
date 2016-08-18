@@ -7,7 +7,7 @@
 //
 
 #import "FRSPaymentViewController.h"
-
+#import "FRSDebitCardViewController.h"
 @interface FRSPaymentViewController ()
 @end
 
@@ -64,6 +64,11 @@ static NSString *addPaymentCell = @"addPaymentCell";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.section == 1) {
+        FRSDebitCardViewController *debit = [[FRSDebitCardViewController alloc] init];
+        [self.navigationController pushViewController:debit animated:YES];
+    }
 }
 
 -(void)reloadPayments {
