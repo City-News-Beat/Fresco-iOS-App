@@ -503,9 +503,11 @@
 
 -(void)configureMapCell {
     
+    
+    
 //    MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
 //    mapView.delegate = self;
-//    mapView.zoomEnabled = NO;
+//    mapView.zoomEnabled = 
 //    mapView.scrollEnabled = NO;
 //    mapView.centerCoordinate = CLLocationCoordinate2DMake(40.00123, -70.10239);
 //    
