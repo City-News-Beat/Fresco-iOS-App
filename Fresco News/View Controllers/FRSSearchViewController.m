@@ -183,9 +183,6 @@
         self.users = storyObject[@"results"];
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
         self.users = userObject[@"results"];
-        
-        NSLog(@"STORIES: %@ %@ %@", self.stories, self.users, self.galleries);
-        
         [self reloadData];
     }];
 }
@@ -369,8 +366,13 @@
         if (story.imageURLs.count > 0) {
             photo = [NSURL URLWithString:story.imageURLs[0]];
         }
+        
+        NSString *title = @"";
+        if (story.title && ![story.title isEqual:[NSNull null]]) {
+            title = story.title;
+        }
     
-        [cell configureSearchStoryCellWithStoryPhoto:photo storyName:story.title];
+        [cell configureSearchStoryCellWithStoryPhoto:photo storyName:title];
     }
     
     if (indexPath.section == galleryIndex) {
@@ -389,7 +391,6 @@
         
         return cell;
     }
-
 
     return Nil;
 }
