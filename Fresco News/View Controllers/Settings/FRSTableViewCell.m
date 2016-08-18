@@ -17,7 +17,7 @@
 #import "FRSSettingsViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAPIClient.h"
-
+#import <Haneke/Haneke.h>
 @interface FRSTableViewCell() <FRSAlertViewDelegate>
 
 @property CGFloat leftPadding;
@@ -503,9 +503,11 @@
 
 -(void)configureMapCell {
     
+    
+    
 //    MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
 //    mapView.delegate = self;
-//    mapView.zoomEnabled = NO;
+//    mapView.zoomEnabled =
 //    mapView.scrollEnabled = NO;
 //    mapView.centerCoordinate = CLLocationCoordinate2DMake(40.00123, -70.10239);
 //    
@@ -545,12 +547,13 @@
 }
 
 
--(void)configureSearchUserCellWithProfilePhoto:(UIImage *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing {
+-(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing {
     
-    UIImageView *profileIV = [[UIImageView alloc] initWithImage:profile];
+    UIImageView *profileIV = [[UIImageView alloc] init];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
     profileIV.layer.cornerRadius = 16;
     profileIV.clipsToBounds = YES;
+    [profileIV hnk_setImageFromURL:profile];
     [self addSubview:profileIV];
 
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8, self.frame.size.width - 64, self.frame.size.height)];
@@ -580,12 +583,13 @@
     }
 }
 
--(void)configureSearchStoryCellWithStoryPhoto:(UIImage *)storyPhoto storyName:(NSString *)nameString {
+-(void)configureSearchStoryCellWithStoryPhoto:(NSURL *)storyPhoto storyName:(NSString *)nameString {
     
-    UIImageView *storyPreviewIV = [[UIImageView alloc] initWithImage:storyPhoto];
+    UIImageView *storyPreviewIV = [[UIImageView alloc] init];
     storyPreviewIV.frame = CGRectMake(16, 12, 32, 32);
     storyPreviewIV.layer.cornerRadius = 16;
     [self addSubview:storyPreviewIV];
+    [storyPreviewIV hnk_setImageFromURL:storyPhoto];
     
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2- 26, self.frame.size.width - 96, self.frame.size.height)];
     nameLabel.text = nameString;
