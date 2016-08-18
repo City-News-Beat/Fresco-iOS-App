@@ -28,12 +28,14 @@ static NSString *addPaymentCell = @"addPaymentCell";
 }
 
 -(void)setupTableView {
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -35, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSPaymentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:paymentCell];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSAddPaymentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:addPaymentCell];
     [self.view addSubview:self.tableView];
+    self.tableView.showsVerticalScrollIndicator = FALSE;
+    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
