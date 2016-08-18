@@ -12,4 +12,6 @@
 @interface FRSGalleryExpandedViewController : FRSScrollingViewController
 
 -(instancetype)initWithGallery:(FRSGallery *)gallery;
+-(instancetype)initWithGalleryID:(NSString *)galleryID;
+
 @end

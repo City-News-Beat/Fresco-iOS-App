@@ -136,22 +136,22 @@
     }
 
     //if (unreadNotificationCount >= 1) {
-    item4.image = [[UIImage imageNamed:@"tab-bar-bell"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-bell-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    item4.title = @"";
-    
-    self.dot = [[UIView alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width - 9 - notificationDotXOffset, self.tabBar.frame.size.height - 9 - 10.5, 9, 9)]; //10.5 y value coming from spec, adding 2px to w/h for borderWidth
-    self.dot.layer.masksToBounds = YES;
-    self.dot.layer.cornerRadius = 9/2;
-    self.dot.backgroundColor = [UIColor frescoTabBarColor];
-    self.dot.layer.zPosition = 1;
-    self.dot.userInteractionEnabled = NO;
-    [self.tabBar addSubview:self.dot];
-    
-    UIView *yellowCircle = [[UIView alloc] initWithFrame:CGRectMake(2, 2, 7, 7)];
-    yellowCircle.backgroundColor = [UIColor frescoOrangeColor];
-    yellowCircle.layer.cornerRadius = 3.5;
-    [self.dot addSubview:yellowCircle];
+//    item4.image = [[UIImage imageNamed:@"tab-bar-bell"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-bell-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    item4.title = @"";
+//    
+//    self.dot = [[UIView alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width - 9 - notificationDotXOffset, self.tabBar.frame.size.height - 9 - 10.5, 9, 9)]; //10.5 y value coming from spec, adding 2px to w/h for borderWidth
+//    self.dot.layer.masksToBounds = YES;
+//    self.dot.layer.cornerRadius = 9/2;
+//    self.dot.backgroundColor = [UIColor frescoTabBarColor];
+//    self.dot.layer.zPosition = 1;
+//    self.dot.userInteractionEnabled = NO;
+//    [self.tabBar addSubview:self.dot];
+//    
+//    UIView *yellowCircle = [[UIView alloc] initWithFrame:CGRectMake(2, 2, 7, 7)];
+//    yellowCircle.backgroundColor = [UIColor frescoOrangeColor];
+//    yellowCircle.layer.cornerRadius = 3.5;
+//    [self.dot addSubview:yellowCircle];
     //}
 }
 
@@ -227,7 +227,7 @@
             
             
 //            if (userNotificationCount >= 1) {
-                profile.shouldShowNotificationsOnLoad = YES;
+               // profile.shouldShowNotificationsOnLoad = YES;
             //userNotificationCount resets once the vc is loaded
             //else gets called when user tabs back on the tab bar
 //            } else {
@@ -301,8 +301,8 @@
             }
             
             //if (userNotificationCount >= 1) {
-            FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
-            [self.navigationController pushViewController:notificationVC animated:NO];
+//            FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
+//            [self.navigationController pushViewController:notificationVC animated:NO];
             //FRSUserNotificationViewController *profileVC = (FRSUserNotificationViewController *)selectedVC;
             //[profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
             

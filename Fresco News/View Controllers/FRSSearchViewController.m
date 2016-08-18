@@ -331,7 +331,7 @@
         }
         NSURL *avatarURLObject;
         
-        if (avatarURL) {
+        if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
         

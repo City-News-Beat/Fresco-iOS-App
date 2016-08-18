@@ -19,6 +19,7 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSAssignmentsViewController.h"
 #import "FRSTaxInformationViewController.h"
+#import "FRSGalleryExpandedViewController.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -121,14 +122,26 @@
 
 -(void)segueToAssignmentWithID:(NSString *)assignmentID {
     
-    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithActiveAssignment:assignmentID];
-    [self.navigationController pushViewController:assignmentsVC animated:YES];
+//    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithActiveAssignment:assignmentID];
+//    [self.navigationController pushViewController:assignmentsVC animated:YES];
+    
+    
+    FRSNavigationController *navCont = (FRSNavigationController *)[self.tabBarController.viewControllers objectAtIndex:3];
+    FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
+
+    assignmentsVC.hasDefault = YES;
+    assignmentsVC.defaultID = assignmentID;
+    self.tabBarController.selectedIndex = 3;
+    
+    
+    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
 }
 
 -(void)segueToTaxInfo {
     
     FRSTaxInformationViewController *taxInfoVC = [[FRSTaxInformationViewController alloc] init];
     [self.navigationController pushViewController:taxInfoVC animated:YES];
+    
 }
 
 -(void)segueToBankInfo {
@@ -136,12 +149,14 @@
     FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
     debitCardVC.shouldDisplayBankViewOnLoad = YES;
     [self.navigationController pushViewController:debitCardVC animated:YES];
+    
 }
 
 -(void)segueToDebitCard {
     
     FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
     [self.navigationController pushViewController:debitCardVC animated:YES];
+    
 }
 
 -(void)segueToCamera {
@@ -154,7 +169,15 @@
     [navigationController setNavigationBarHidden:YES];
     
     [self presentViewController:navigationController animated:YES completion:nil];
+    
+    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+}
 
+-(void)segueToGallery {
+    
+    FRSGalleryExpandedViewController *galleryVC = [[FRSGalleryExpandedViewController alloc] initWithGalleryID:@"evKa0MQz0Qd9"];
+    [self.navigationController pushViewController:galleryVC animated:YES];
+    
 }
 
 -(void)returnToProfile {
@@ -255,8 +278,10 @@
             NSString *cellIdentifier = @"assignmentNotificationCell";
             FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
-            cell.titleLabel.text  = @"Assignment: Fire on fire";
-            cell.bodyLabel.text = @"Alcatra ham brisket tail filet mignon. Ball tip bresaola biltong, corned beef andouille short ribs pork belly cupim flank. Spare ribs pancetta ham hock ham pig beef ribs frankfurter tongue shankle tenderloin sirloin, flank rump.";
+            
+            //Hard coded for now, response will return assignment data
+            cell.titleLabel.text  = @"Severe weather in New York";
+            cell.bodyLabel.text = @"Fresco News seeks photos and steady videos (must be 20 to 60 seconds) of severe thunderstorms in NYC. Capture content anywhere within the set radius. Take shots from a variety of angles, getting wide, medium, and tight shots.";
             cell.backgroundColor = [UIColor frescoBackgroundColorDark];
             [cell.actionButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
 
@@ -283,12 +308,15 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     
-    
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate updateTabBarToUser];
     
     if (indexPath.row == 0) {
         [self segueToUser:[[FRSAPIClient sharedClient] authenticatedUser]];
+    }
+    
+    if (indexPath.row == 1) {
+        [self segueToGallery];
     }
     
     if (indexPath.row == 2) {
@@ -302,8 +330,14 @@
     
     if (indexPath.row == 5) {
         
-        [self segueToAssignmentWithID:@"xLJE0QzW1G5B"]; //
+        [self segueToAssignmentWithID:@"xLJE0QzW1G5B"];
+        
     }
+    
+}
+
+-(void)popViewController {
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 -(CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
