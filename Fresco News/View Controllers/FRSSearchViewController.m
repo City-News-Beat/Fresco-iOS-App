@@ -232,6 +232,9 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == userIndex) {
+        if (_users.count == 0) {
+            return 0;
+        }
         if (_users.count < 5) {
             return _users.count + 2;
         }
@@ -239,6 +242,10 @@
         return 8;
     }
     if (section == storyIndex) {
+        if (_stories.count == 0) {
+            return 0;
+        }
+        
         if (_stories.count < 5) {
             return _stories.count+2;
         }
@@ -261,7 +268,7 @@
         if (indexPath.row == self.stories.count) {
             return 44;
         }
-        if (indexPath.row == self.stories.count + 2) {
+        if (indexPath.row == self.stories.count + 1) {
             return 12;
         }
         
@@ -272,7 +279,7 @@
             return 44;
         }
         
-        if (indexPath.row == self.users.count + 2) {
+        if (indexPath.row == self.users.count + 1) {
             return 12;
         }
         
