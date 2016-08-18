@@ -12,6 +12,10 @@
 @interface FRSSearchViewController : FRSBaseViewController<UITextFieldDelegate>
 {
     BOOL isInDefault;
+    
+    NSInteger userIndex;
+    NSInteger storyIndex;
+    NSInteger galleryIndex;
 }
 @property (nonatomic, retain) NSArray *users;
 @property (nonatomic, retain) NSArray *stories;

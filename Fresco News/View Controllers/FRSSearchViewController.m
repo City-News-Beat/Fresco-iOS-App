@@ -27,6 +27,10 @@
     [self configureNavigationBar];
     [self configureTableView];
     [self.navigationController setNavigationBarHidden:NO];
+    
+    userIndex = 0;
+    storyIndex = 1;
+    galleryIndex = 2;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -183,6 +187,21 @@
             self.users = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:userObject[@"results"] cache:FALSE];
         }
         
+        if (self.users.count == 0 || !self.users) {
+            userIndex = -1;
+            storyIndex--;
+            galleryIndex--;
+        }
+        
+        if (self.galleries.count == 0 || !self.galleries) {
+            galleryIndex = -1;
+        }
+        
+        if (self.stories.count == 0 || !self.stories) {
+            storyIndex = -1;
+            galleryIndex--;
+        }
+        
         [self reloadData];
     }];
 }
@@ -234,17 +253,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    
-    if (indexPath.section == 0 && self.users && self.users.count != 0) {
-        // users
-        return 56;
-    }
-    else if (indexPath.section == 0 && self.stories && self.stories.count != 0) {
-        // stories
-        return 56;
-    }
-    else if (indexPath.section == 1 && self.users && self.users.count != 0) {
-        // stories
+    if (indexPath.section == storyIndex || indexPath.section == userIndex) {
         return 56;
     }
     else {
@@ -275,17 +284,17 @@
         [cell setLayoutMargins:UIEdgeInsetsZero];
     }
     
-    if (indexPath.section == 0 && self.users && self.users.count != 0) {
+    if (indexPath.section == userIndex) {
         // users
+        FRSUser *user = self.users[indexPath.row];
+        BOOL following = [[user valueForKey:@"following"] boolValue];
+        
+        [cell configureSearchUserCellWithProfilePhoto:user.profileImage fullName:user.firstName userName:user.username isFollowing:following];
 
     }
-    else if (indexPath.section == 0 && self.stories && self.stories.count != 0) {
-        // stories
-
-    }
-    else if (indexPath.section == 1 && self.users && self.users.count != 0) {
-        // stories
-
+    else if (indexPath.section == storyIndex) {
+        FRSStory *story = self.users[indexPath.row];
+        
     }
     else {
         // galleries

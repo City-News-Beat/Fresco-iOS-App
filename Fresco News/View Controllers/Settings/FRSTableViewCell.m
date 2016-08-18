@@ -507,7 +507,7 @@
     
 //    MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
 //    mapView.delegate = self;
-//    mapView.zoomEnabled = 
+//    mapView.zoomEnabled =
 //    mapView.scrollEnabled = NO;
 //    mapView.centerCoordinate = CLLocationCoordinate2DMake(40.00123, -70.10239);
 //    
@@ -583,12 +583,13 @@
     }
 }
 
--(void)configureSearchStoryCellWithStoryPhoto:(UIImage *)storyPhoto storyName:(NSString *)nameString {
+-(void)configureSearchStoryCellWithStoryPhoto:(NSURL *)storyPhoto storyName:(NSString *)nameString {
     
-    UIImageView *storyPreviewIV = [[UIImageView alloc] initWithImage:storyPhoto];
+    UIImageView *storyPreviewIV = [[UIImageView alloc] init];
     storyPreviewIV.frame = CGRectMake(16, 12, 32, 32);
     storyPreviewIV.layer.cornerRadius = 16;
     [self addSubview:storyPreviewIV];
+    [storyPreviewIV hnk_setImageFromURL:storyPhoto];
     
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2- 26, self.frame.size.width - 96, self.frame.size.height)];
     nameLabel.text = nameString;
