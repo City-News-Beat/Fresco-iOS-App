@@ -8,6 +8,7 @@
 
 #import "FRSSearchViewController.h"
 #import "FRSTableViewCell.h"
+#import "FRSGallery.h"
 
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -297,15 +298,20 @@
     else {
         if (indexPath.section == 0 && self.users && self.users.count != 0) {
             // users
+            return 44;
         }
         else if (indexPath.section == 0 && self.stories && self.stories.count != 0) {
             // stories
+            return 44;
         }
         else if (indexPath.section == 1 && self.users && self.users.count != 0) {
             // stories
+            return 44;
         }
         else {
             // galleries
+            FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
+            return [gallery heightForGallery];
         }
     }
     
