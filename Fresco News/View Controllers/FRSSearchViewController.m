@@ -361,16 +361,16 @@
             return cell;
         }
         
-        FRSStory *story = self.stories[0];
+        NSDictionary *story = self.stories[0];
         NSURL *photo;
         
-        if (story.imageURLs.count > 0) {
-            photo = [NSURL URLWithString:story.imageURLs[0]];
+        if ([story[@"thumbnails"] count] > 0) {
+            photo = [NSURL URLWithString:story[@"thumbnails"][0]];
         }
         
         NSString *title = @"";
-        if (story.title && ![story.title isEqual:[NSNull null]]) {
-            title = story.title;
+        if (story[@"title"] && ![story[@"title"] isEqual:[NSNull null]]) {
+            title = story[@"title"];
         }
     
         [cell configureSearchStoryCellWithStoryPhoto:photo storyName:title];
