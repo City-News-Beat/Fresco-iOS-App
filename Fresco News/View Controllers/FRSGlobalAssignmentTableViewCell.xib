@@ -27,8 +27,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="375" height="483.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Viral cronut letterpress put a bird on it, ugh blog quinoa" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I0N-DT-wge">
-                        <rect key="frame" x="16" y="20" width="343" height="48"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Viral cronut letterpress put a bird on it, ugh blog quinoa" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I0N-DT-wge">
+                        <rect key="frame" x="16" y="20" width="343" height="79"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="100" id="IUU-fb-tfw"/>
                             <constraint firstAttribute="height" constant="48" id="osL-Jo-SaI"/>
@@ -43,11 +43,12 @@
                             </mask>
                         </variation>
                     </label>
-                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJb-dQ-ifY" userLabel="OutletImagesView">
-                        <rect key="frame" x="16" y="78" width="24" height="24"/>
+                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJb-dQ-ifY" userLabel="OutletImagesView">
+                        <rect key="frame" x="16" y="109" width="24" height="24"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="apple-user-grace" highlightedImage="apple-user-grace" translatesAutoresizingMaskIntoConstraints="NO" id="bab-rs-J40">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="newspaper16W" highlightedImage="newspaper16W" translatesAutoresizingMaskIntoConstraints="NO" id="bab-rs-J40">
                                 <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25999999046325684" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="HIg-LD-95R"/>
                                     <constraint firstAttribute="width" constant="24" id="khI-CY-O1U"/>
@@ -67,8 +68,8 @@
                             <constraint firstItem="bab-rs-J40" firstAttribute="leading" secondItem="qJb-dQ-ifY" secondAttribute="leading" id="sX2-JA-84D"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="2 active news outlets" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XH2-zL-2GB">
-                        <rect key="frame" x="56" y="78" width="303" height="24"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="2 active news outlets" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XH2-zL-2GB">
+                        <rect key="frame" x="56" y="109" width="303" height="24"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="24" id="7xR-xQ-6iw"/>
                         </constraints>
@@ -199,8 +200,8 @@
                             <action selector="pressedOpenCamera:" destination="kOB-pj-B9r" eventType="touchUpInside" id="Fzz-4y-Ih6"/>
                         </connections>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34c-07-SJa" userLabel="AssignmentDescriptionLabel">
-                        <rect key="frame" x="16" y="112" width="343" height="210"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34c-07-SJa" userLabel="AssignmentDescriptionLabel">
+                        <rect key="frame" x="16" y="143" width="343" height="179"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="208" id="OSh-sg-I9G"/>
                             <constraint firstAttribute="height" constant="208" id="t2g-wd-Se5"/>
@@ -267,6 +268,7 @@
                     <constraint firstItem="8mu-q5-f49" firstAttribute="top" secondItem="bdj-4p-8OH" secondAttribute="bottom" constant="30" id="NYa-6V-LIo"/>
                     <constraint firstItem="I0N-DT-wge" firstAttribute="leading" secondItem="jpu-6w-YYc" secondAttribute="leadingMargin" constant="8" id="QGs-lP-6Mr"/>
                     <constraint firstItem="bdj-4p-8OH" firstAttribute="leading" secondItem="jpu-6w-YYc" secondAttribute="leadingMargin" constant="10" id="QJl-nT-hp4"/>
+                    <constraint firstItem="SZL-xv-DyW" firstAttribute="top" secondItem="KUX-3g-Y6j" secondAttribute="bottom" constant="12" id="S8U-HL-zji"/>
                     <constraint firstItem="XH2-zL-2GB" firstAttribute="leading" secondItem="qJb-dQ-ifY" secondAttribute="trailing" constant="16" id="SEc-h7-725"/>
                     <constraint firstItem="c2f-dt-5zU" firstAttribute="top" secondItem="SNw-Gn-mLB" secondAttribute="bottom" constant="37" id="SSo-9U-2aP"/>
                     <constraint firstAttribute="trailingMargin" secondItem="34c-07-SJa" secondAttribute="trailing" constant="8" id="T7O-qP-2d8"/>
@@ -282,7 +284,6 @@
                     <constraint firstItem="c2f-dt-5zU" firstAttribute="leading" secondItem="KUX-3g-Y6j" secondAttribute="trailing" constant="10" id="dva-PM-cGM"/>
                     <constraint firstAttribute="bottomMargin" secondItem="0kd-in-cRr" secondAttribute="bottom" constant="12" id="egd-m1-IYU"/>
                     <constraint firstItem="c2f-dt-5zU" firstAttribute="leading" secondItem="KUX-3g-Y6j" secondAttribute="trailing" constant="6" id="gm4-N1-Yp5"/>
-                    <constraint firstItem="SZL-xv-DyW" firstAttribute="top" secondItem="KUX-3g-Y6j" secondAttribute="bottom" constant="12" id="kXb-xg-78m"/>
                     <constraint firstAttribute="bottomMargin" secondItem="c2f-dt-5zU" secondAttribute="bottom" constant="12" id="mFb-Xa-1bj"/>
                     <constraint firstItem="c2f-dt-5zU" firstAttribute="centerX" secondItem="SNg-km-1KH" secondAttribute="centerX" id="myd-oh-yVo"/>
                     <constraint firstAttribute="bottomMargin" secondItem="SZL-xv-DyW" secondAttribute="bottom" constant="-8" id="n9e-qh-e6b"/>
@@ -335,8 +336,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="apple-user-grace" width="135" height="135"/>
         <image name="clock" width="24" height="24"/>
+        <image name="newspaper16W" width="16" height="16"/>
         <image name="photo-icon-profile" width="24" height="24"/>
         <image name="video-icon" width="24" height="24"/>
         <image name="warning" width="24" height="24"/>
