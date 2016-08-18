@@ -264,8 +264,10 @@
             NSString *cellIdentifier = @"assignmentNotificationCell";
             FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
-            cell.titleLabel.text  = @"Assignment: Fire on fire";
-            cell.bodyLabel.text = @"Alcatra ham brisket tail filet mignon. Ball tip bresaola biltong, corned beef andouille short ribs pork belly cupim flank. Spare ribs pancetta ham hock ham pig beef ribs frankfurter tongue shankle tenderloin sirloin, flank rump.";
+            
+            //Hard coded for now, response will return assignment data
+            cell.titleLabel.text  = @"Severe weather in New York";
+            cell.bodyLabel.text = @"Fresco News seeks photos and steady videos (must be 20 to 60 seconds) of severe thunderstorms in NYC. Capture content anywhere within the set radius. Take shots from a variety of angles, getting wide, medium, and tight shots.";
             cell.backgroundColor = [UIColor frescoBackgroundColorDark];
             [cell.actionButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
 
@@ -310,13 +312,14 @@
     
     if (indexPath.row == 5) {
         
-        [self segueToAssignmentWithID:@"xLJE0QzW1G5B"]; //
+        [self segueToAssignmentWithID:@"xLJE0QzW1G5B"];
     }
     
-    
-    
-    [self.navigationController popViewControllerAnimated:NO];
+    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+}
 
+-(void)popViewController {
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 -(CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
