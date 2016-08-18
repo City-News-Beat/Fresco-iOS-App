@@ -278,7 +278,7 @@
         if (indexPath.row == self.stories.count) {
             return 44;
         }
-        if (indexPath.row == self.stories.count + 1) {
+        if (indexPath.row == self.stories.count + 2) {
             return 12;
         }
         
@@ -289,7 +289,7 @@
             return 44;
         }
         
-        if (indexPath.row == self.users.count + 1) {
+        if (indexPath.row == self.users.count + 2) {
             return 12;
         }
         
@@ -367,6 +367,7 @@
         NSLog(@"USER: %@", user);
     }
     else if (indexPath.section == storyIndex) {
+        
         if (indexPath.row == self.stories.count) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL STORIES"];
             return cell;
@@ -377,8 +378,14 @@
             return cell;
         }
         
-        //[cell configureSearchStoryCellWithStoryPhoto:url storyName:story.title];
+        FRSStory *story = self.stories[0];
+        NSURL *photo;
         
+        if (story.imageURLs.count > 0) {
+            photo = [NSURL URLWithString:story.imageURLs[0]];
+        }
+    
+        [cell configureSearchStoryCellWithStoryPhoto:photo storyName:story.title];
     }
 
     return cell;
