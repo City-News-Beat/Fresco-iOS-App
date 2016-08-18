@@ -170,7 +170,6 @@
     [[FRSAPIClient sharedClient] searchWithQuery:query completion:^(id responseObject, NSError *error) {
         if (error || !responseObject) {
             [self searchError:error];
-            NSLog(@"ERROR %@", error);
             return;
         }
         
@@ -250,6 +249,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    NSLog(@"CALLED");
     if (section == userIndex) {
         if (_users.count > 5) {
             return 5 + 2;
@@ -302,7 +302,7 @@
         return [gallery heightForGallery];
     }
 
-    return 0;
+    return 5;
 }
 
 -(FRSTableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -386,7 +386,7 @@
             photo = [NSURL URLWithString:story.imageURLs[0]];
         }
     
-        //[cell configureSearchStoryCellWithStoryPhoto:photo storyName:story.title];
+        [cell configureSearchStoryCellWithStoryPhoto:photo storyName:story.title];
     }
 
     return cell;
