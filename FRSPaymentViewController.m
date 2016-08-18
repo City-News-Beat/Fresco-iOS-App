@@ -8,6 +8,8 @@
 
 #import "FRSPaymentViewController.h"
 #import "FRSDebitCardViewController.h"
+#import "FRSPaymentCell.h"
+
 @interface FRSPaymentViewController ()
 @end
 
@@ -52,8 +54,9 @@ static NSString *addPaymentCell = @"addPaymentCell";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:paymentCell];
-        NSLog(@"%@ PAY CELL", cell);
+        FRSPaymentCell *cell = [self.tableView dequeueReusableCellWithIdentifier:paymentCell];
+        NSDictionary *payment = self.payments[indexPath.row];
+        cell.paymentTitleLabel.text = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
         return cell;
     }
     else if (indexPath.section == 1) {
@@ -104,6 +107,8 @@ static NSString *addPaymentCell = @"addPaymentCell";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+ 
+ brand last4
 }
 */
 
