@@ -246,10 +246,16 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == userIndex) {
-        return _users.count + 2;
+        if (_users.count > 5) {
+            return 5 + 2;
+        }
+        return 5 + 1;
     }
     if (section == storyIndex) {
-        return _stories.count + 2;
+        if (_stories.count > 5) {
+            return 5 + 2;
+        }
+        return 5 + 1;
     }
     if (section == galleryIndex) {
         return self.galleries.count;
