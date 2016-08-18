@@ -40,8 +40,7 @@
 @property (strong, nonatomic) NSArray *overlays;
 
 @property (nonatomic) BOOL isFetching;
-@property (nonatomic) BOOL hasDefault;
-@property (nonatomic, retain) NSString *defaultID;
+
 @property (nonatomic) BOOL isOriginalSpan;
 
 @property (strong, nonatomic) FRSMapCircle *userCircle;
@@ -93,8 +92,7 @@
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID {
     self = [super init];
     
-    self.hasDefault = TRUE;
-    self.defaultID = assignmentID;
+
     
     return self;
 }
@@ -110,6 +108,7 @@
                                                object:nil];
     
     self.assignmentIDs = [[NSMutableArray alloc] init];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -132,6 +131,8 @@
     
     [self removeNavigationBarLine];
     
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    [self configureAnnotationsForMap];
 }
 
 -(void)didReceiveLocationUpdate:(NSNotification *)notification {
@@ -160,6 +161,10 @@
     
 //    [[FRSLocationManager sharedManager] pauseLocationMonitoring];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    self.hasDefault = NO;
+    self.defaultID  = nil;
+    self.showsCard  = NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -363,7 +368,7 @@
 
     
     if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
-        
+
         self.assignmentTitle = assignment.title;
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
@@ -389,6 +394,10 @@
             [newCamera setHeading:0];
             [self.mapView setCamera:newCamera animated:YES];
         }
+        
+        self.hasDefault = NO;
+        self.defaultID  = nil;
+        self.showsCard  = NO;
     }
 }
 
@@ -789,28 +798,26 @@
 -(void)animateAssignmentCard{
     
     CGFloat yOffset;
-    if (self.hasDefault) {
-        yOffset = -60;
-    }
+
     
     //Animate scrollView in y
     [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         
         CGRect scrollFrame = self.scrollView.frame;
-        scrollFrame.origin.y = yOffset;
+        scrollFrame.origin.y = 0;
         self.scrollView.frame = scrollFrame;
         
     } completion:nil];
     
     //Animate bottom bar in y
     
-    CGFloat yValue = -93;
-    if (self.defaultID) {
-        yValue = -157;
-    }
+//    CGFloat yValue = -93;
+//    if (self.defaultID) {
+//        yValue = -157;
+//    }
     [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
-        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, yValue);
+        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -93);
         
     } completion:^(BOOL finished) {
         

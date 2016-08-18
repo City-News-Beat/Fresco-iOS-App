@@ -24,4 +24,7 @@
 -(void)setInitialMapRegion;
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID;
 
+@property (nonatomic) BOOL hasDefault;
+@property (nonatomic, retain) NSString *defaultID;
+
 @end

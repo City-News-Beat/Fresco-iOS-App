@@ -121,8 +121,17 @@
 
 -(void)segueToAssignmentWithID:(NSString *)assignmentID {
     
-    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithActiveAssignment:assignmentID];
-    [self.navigationController pushViewController:assignmentsVC animated:YES];
+//    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithActiveAssignment:assignmentID];
+//    [self.navigationController pushViewController:assignmentsVC animated:YES];
+    
+    
+    FRSNavigationController *navCont = (FRSNavigationController *)[self.tabBarController.viewControllers objectAtIndex:3];
+    FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
+
+    assignmentsVC.hasDefault = YES;
+    assignmentsVC.defaultID = assignmentID;
+    self.tabBarController.selectedIndex = 3;
+    
 }
 
 -(void)segueToTaxInfo {
