@@ -301,8 +301,8 @@
             }
             
             //if (userNotificationCount >= 1) {
-            FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
-            [self.navigationController pushViewController:notificationVC animated:NO];
+//            FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
+//            [self.navigationController pushViewController:notificationVC animated:NO];
             //FRSUserNotificationViewController *profileVC = (FRSUserNotificationViewController *)selectedVC;
             //[profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
             
