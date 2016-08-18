@@ -31,7 +31,7 @@
 
 #import "FRSTabBarController.h"
 
-@interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
+@interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
 
@@ -119,6 +119,10 @@
     [self configureUI];
     [self fetchGalleries];
     [super removeNavigationBarLine];
+    
+    if (self.shouldShowNotificationsOnLoad) {
+        [self showNotificationsNotAnimated];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -152,6 +156,17 @@
     [self removeStatusBarNotification];
 }
 
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    //This logic should be happen once the notif view is dismissed.
+    //We should see the tab bar in the notification view with the notification icon.
+//    UITabBarItem *item4 = [self.tabBarController.tabBar.items objectAtIndex:4];
+//    item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
+//    frsTabBar.dot.alpha = 0;
+}
 
 -(instancetype)initWithUser:(FRSUser *)user {
     
@@ -200,6 +215,14 @@
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
     [self.view addSubview:self.loadingView];
+}
+
+#pragma mark - UITabBarDelegate
+
+-(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    
+    
+    
 }
 
 #pragma mark - Fetch Methods
@@ -302,7 +325,7 @@
     //NSLog(@"CHILDREN: %lu", self.navigationController.childViewControllers.count);
     
     if ([self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid] && [self.navigationController.childViewControllers  objectAtIndex:0]==self) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotifications)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotificationsAnimated)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
         UIBarButtonItem *gearItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings)];
         editItem.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
@@ -340,6 +363,7 @@
     self.tableView.dataSource = self;
     self.tableView.delaysContentTouches = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.showsVerticalScrollIndicator = FALSE;
     [self.view addSubview:self.tableView];
 }
 
@@ -520,6 +544,7 @@
     self.bioLabel.font = [UIFont systemFontOfSize:15 weight:-300];
     //    [self.bioLabel sizeToFit];
     [self.profileContainer addSubview:self.bioLabel];
+
 }
 -(void)textViewDidEndEditing:(UITextView *)textView{
     if (textView.text) {
@@ -834,13 +859,18 @@
 
 #pragma mark - Navigation
 
--(void)showNotifications {
+//Breaking this up into two methods because presentVC:animated: is being passed into the notification button's selector and defaulting to NO.
+-(void)showNotificationsAnimated {
+    FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
 
+    [self.navigationController pushViewController:notifVC animated:NO];
+}
+
+//Breaking this up into two methods because presentVC:animated: is being passed into the notification button's selector and defaulting to NO.
+-(void)showNotificationsNotAnimated {
     FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
     
-    FRSNavigationController *nav = [[FRSNavigationController alloc] initWithRootViewController:notifVC];
-    [self.navigationController.tabBarController presentViewController:nav animated:YES completion:nil];
-    
+    [self.navigationController pushViewController:notifVC animated:NO];
 }
 
 -(void)showSettings {

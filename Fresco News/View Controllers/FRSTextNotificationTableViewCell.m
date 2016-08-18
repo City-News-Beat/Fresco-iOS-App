@@ -9,16 +9,32 @@
 #import "FRSTextNotificationTableViewCell.h"
 #import "UIColor+Fresco.h"
 
+@interface FRSTextNotificationTableViewCell ()
+
+@property (weak, nonatomic) IBOutlet UIView *line;
+
+@end
+
 @implementation FRSTextNotificationTableViewCell
 
 -(void)awakeFromNib {
     [super awakeFromNib];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+-(void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
+    
+    //UITableViewCell subviews' background colors turn to clearColor when selecting/highlighting.
+    //Setting the background color overrides this
+    self.line.backgroundColor = [UIColor frescoLightTextColor];
+}
 
-    // Configure the view for the selected state
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
+    [super setHighlighted:highlighted animated:animated];
+    
+    //UITableViewCell subviews' background colors turn to clearColor when selecting/highlighting.
+    //Setting the background color overrides this
+    self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
 
 -(void)configureCell {

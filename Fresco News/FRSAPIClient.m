@@ -373,7 +373,7 @@
                // NSLog(@"Sent Location");
             }
             else {
-                NSLog(@"Location Error: %ld", (long)error.code);
+                NSLog(@"Location Error: %@ %@", response, error);
             }
         }];
     });

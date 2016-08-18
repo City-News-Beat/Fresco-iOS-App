@@ -50,7 +50,7 @@
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6rk-aZ-RSA">
-                        <rect key="frame" x="0.0" y="82" width="320" height="1"/>
+                        <rect key="frame" x="0.0" y="83.5" width="320" height="1"/>
                         <color key="backgroundColor" white="0.0" alpha="0.12" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="AuF-eV-LM6"/>
@@ -103,7 +103,7 @@
                     <constraint firstItem="J1x-3Q-zNg" firstAttribute="leading" secondItem="NU1-pp-tGP" secondAttribute="trailing" constant="16" id="43c-cl-t6L"/>
                     <constraint firstAttribute="trailingMargin" secondItem="6rk-aZ-RSA" secondAttribute="trailing" constant="-8" id="5Kq-9u-QG7"/>
                     <constraint firstItem="zLd-w2-8NS" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="4" id="5Vg-YF-2Y3"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="6rk-aZ-RSA" secondAttribute="bottom" constant="-8" id="6Dg-C5-afl"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="6rk-aZ-RSA" secondAttribute="bottom" constant="-9" id="6Dg-C5-afl"/>
                     <constraint firstAttribute="trailingMargin" secondItem="J1x-3Q-zNg" secondAttribute="trailing" constant="16" id="9Um-Wa-n3g"/>
                     <constraint firstAttribute="bottomMargin" secondItem="J1x-3Q-zNg" secondAttribute="bottom" constant="8" id="IcT-ZI-E27"/>
                     <constraint firstItem="qHy-RB-rdD" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="24" id="NZR-q3-o1h"/>
@@ -119,11 +119,12 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="annotationLabel" destination="2UI-JN-8if" id="J85-lS-I37"/>
-                <outlet property="annotationView" destination="qHy-RB-rdD" id="cFe-Et-Lly"/>
+                <outlet property="annotationView" destination="qHy-RB-rdD" id="qRT-7v-p4x"/>
                 <outlet property="bodyLabel" destination="J1x-3Q-zNg" id="lGP-ky-0ld"/>
                 <outlet property="bodyLabelLeftConstraint" destination="43c-cl-t6L" id="AoO-kf-mEK"/>
                 <outlet property="followButton" destination="MrT-1n-09K" id="aEx-iD-Tbz"/>
                 <outlet property="image" destination="NU1-pp-tGP" id="f16-4j-5fN"/>
+                <outlet property="line" destination="6rk-aZ-RSA" id="ds7-nk-IYT"/>
                 <outlet property="titleLabel" destination="zLd-w2-8NS" id="Zdk-GZ-d80"/>
                 <outlet property="titleLabelLeftConstraint" destination="lo8-Of-nMG" id="FQz-0n-fVt"/>
             </connections>

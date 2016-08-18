@@ -17,7 +17,7 @@
 #import "FRSSettingsViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAPIClient.h"
-
+#import <Haneke/Haneke.h>
 @interface FRSTableViewCell() <FRSAlertViewDelegate>
 
 @property CGFloat leftPadding;
@@ -393,6 +393,48 @@
     }
 }
 
+-(void)configureEditableCellWithDefaultTextWithMultipleFields:(NSArray *)titles withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType {
+    
+    self.textField  = [[UITextField alloc] initWithFrame:CGRectMake(self.leftPadding, 0, ([UIScreen mainScreen].bounds.size.width/3)*2 - (self.self.rightPadding+self.leftPadding),44)];
+    self.textField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.textField.placeholder = titles[0];
+    self.textField.delegate = (id<UITextFieldDelegate>)self;
+    self.textField.textColor = [UIColor frescoDarkTextColor];
+    self.textField.tintColor = [UIColor frescoBlueColor];
+    [self addSubview:self.textField];
+    
+    self.secondaryField = [[UITextField alloc] initWithFrame:CGRectMake(_textField.frame.size.width, _textField.frame.origin.y, _textField.frame.size.width/3, _textField.frame.size.height)];
+    [self addSubview:self.secondaryField];
+    
+    self.secondaryField.placeholder = titles[1];
+    
+    self.tertiaryField = [[UITextField alloc] initWithFrame:CGRectMake(_textField.frame.size.width + _secondaryField.frame.size.width, _textField.frame.origin.y, _textField.frame.size.width/3, _textField.frame.size.height)];
+    [self addSubview:self.tertiaryField];
+    
+    self.tertiaryField.placeholder = titles[2];
+    
+    self.textField.keyboardType = keyboardType;
+    
+    if (topSeperator) {
+        UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];
+        top.alpha = 0.2;
+        top.backgroundColor = [UIColor frescoDarkTextColor];
+        [self addSubview:top];
+    }
+    
+    if (bottomSeperator){
+        UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 44, self.bounds.size.width, 0.5)];
+        bottom.alpha = 0.2;
+        bottom.backgroundColor = [UIColor frescoDarkTextColor];
+        [self addSubview:bottom];
+    }
+    
+    if(secure){
+        self.textField.secureTextEntry = YES;
+    }
+}
+
+
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if(range.length + range.location > textField.text.length) {
         return NO;
@@ -503,9 +545,11 @@
 
 -(void)configureMapCell {
     
+    
+    
 //    MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
 //    mapView.delegate = self;
-//    mapView.zoomEnabled = NO;
+//    mapView.zoomEnabled =
 //    mapView.scrollEnabled = NO;
 //    mapView.centerCoordinate = CLLocationCoordinate2DMake(40.00123, -70.10239);
 //    
@@ -545,12 +589,13 @@
 }
 
 
--(void)configureSearchUserCellWithProfilePhoto:(UIImage *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing {
+-(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing {
     
-    UIImageView *profileIV = [[UIImageView alloc] initWithImage:profile];
+    UIImageView *profileIV = [[UIImageView alloc] init];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
     profileIV.layer.cornerRadius = 16;
     profileIV.clipsToBounds = YES;
+    [profileIV hnk_setImageFromURL:profile];
     [self addSubview:profileIV];
 
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8, self.frame.size.width - 64, self.frame.size.height)];
@@ -580,12 +625,13 @@
     }
 }
 
--(void)configureSearchStoryCellWithStoryPhoto:(UIImage *)storyPhoto storyName:(NSString *)nameString {
+-(void)configureSearchStoryCellWithStoryPhoto:(NSURL *)storyPhoto storyName:(NSString *)nameString {
     
-    UIImageView *storyPreviewIV = [[UIImageView alloc] initWithImage:storyPhoto];
+    UIImageView *storyPreviewIV = [[UIImageView alloc] init];
     storyPreviewIV.frame = CGRectMake(16, 12, 32, 32);
     storyPreviewIV.layer.cornerRadius = 16;
     [self addSubview:storyPreviewIV];
+    [storyPreviewIV hnk_setImageFromURL:storyPhoto];
     
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2- 26, self.frame.size.width - 96, self.frame.size.height)];
     nameLabel.text = nameString;

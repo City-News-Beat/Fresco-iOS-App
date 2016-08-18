@@ -27,20 +27,22 @@
 -(void)configureLogOut;
 
 -(void)configureCheckBoxCellWithTitle:(NSString *)title withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSelected:(BOOL)isSelected;
-
+-(void)configureEditableCellWithDefaultTextWithMultipleFields:(NSArray *)titles withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType;
 -(void)configureDisableAccountCell;
 -(void)configureSliderCell;
 -(void)configureMapCell;
 
 -(void)configureSettingsHeaderCellWithTitle:(NSString *)title;
 -(void)configureSearchSeeAllCellWithTitle:(NSString *)title;
--(void)configureSearchUserCellWithProfilePhoto:(UIImage *)profile fullName:(NSString *)firstName userName:(NSString *)username isFollowing:(BOOL)isFollowing;
--(void)configureSearchStoryCellWithStoryPhoto:(UIImage *)storyPhoto storyName:(NSString *)nameString;
+-(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)firstName userName:(NSString *)username isFollowing:(BOOL)isFollowing;
+-(void)configureSearchStoryCellWithStoryPhoto:(NSURL *)storyPhoto storyName:(NSString *)nameString;
 
 -(void)configureFindFriendsCell;
 
 @property (strong, nonatomic) UIButton *rightAlignedButton;
 @property (strong, nonatomic) UITextField *textField;
+@property (strong, nonatomic) UITextField *secondaryField;
+@property (strong, nonatomic) UITextField *tertiaryField;
 @property (strong, nonatomic) UISwitch *twitterSwitch;
 @property (strong, nonatomic) NSString *twitterHandle;
 

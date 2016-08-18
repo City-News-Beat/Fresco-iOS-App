@@ -154,7 +154,7 @@
                     break;
                     
                 case 2:
-                    [cell configureEditableCellWithDefaultText:@"City" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
+                    [cell configureEditableCellWithDefaultTextWithMultipleFields:@[@"City", @"State", @"ZIP"] withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     
                     break;

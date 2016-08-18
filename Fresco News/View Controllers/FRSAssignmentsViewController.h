@@ -9,6 +9,7 @@
 #import "FRSBaseViewController.h"
 #import <CoreData/CoreData.h>
 #import "MagicalRecord.h"
+#import "FRSAssignment.h"
 #import "Fresco.h"
 
 @interface FRSAssignmentsViewController : FRSBaseViewController <UIScrollViewDelegate>
@@ -19,6 +20,8 @@
     NSTimer *scrollTimer;
     BOOL notFirstFetch;
 }
+
 -(void)setInitialMapRegion;
+-(instancetype)initWithActiveAssignment:(NSString *)assignmentID;
 
 @end

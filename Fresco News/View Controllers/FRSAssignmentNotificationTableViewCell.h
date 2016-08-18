@@ -12,7 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel  *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel  *bodyLabel;
-@property (weak, nonatomic) IBOutlet UIButton *assignmentButton;
+@property (weak, nonatomic) IBOutlet UIButton *actionButton;
 
 -(void)configureCell;
 
