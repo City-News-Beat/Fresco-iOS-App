@@ -8,6 +8,8 @@
 
 #import "FRSSearchViewController.h"
 #import "FRSTableViewCell.h"
+#import "FRSGallery.h"
+#import "FRSGalleryCell.h"
 
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -26,6 +28,10 @@
     [self configureNavigationBar];
     [self configureTableView];
     [self.navigationController setNavigationBarHidden:NO];
+    
+    userIndex = 0;
+    storyIndex = 1;
+    galleryIndex = 2;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -153,6 +159,59 @@
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
     [self hideClearButton];
+    
+    if (textField.text) {
+        [self performSearchWithQuery:textField.text];
+    }
+}
+
+-(void)performSearchWithQuery:(NSString *)query {
+    [[FRSAPIClient sharedClient] searchWithQuery:query completion:^(id responseObject, NSError *error) {
+        if (error || !responseObject) {
+            [self searchError:error];
+            return;
+        }
+        
+        NSDictionary *storyObject = responseObject[@"stories"];
+        NSDictionary *galleryObject = responseObject[@"galleries"];
+        NSDictionary *userObject = responseObject[@"users"];
+        
+        if (storyObject && ![storyObject isEqual:[NSNull null]]) {
+            self.stories = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:storyObject[@"results"] cache:FALSE];
+        }
+        
+        if (galleryObject && ![galleryObject isEqual:[NSNull null]]) {
+            self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:FALSE];
+        }
+        
+        if (userObject && ![userObject isEqual:[NSNull null]]) {
+            self.users = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:userObject[@"results"] cache:FALSE];
+        }
+        
+        if (self.users.count == 0 || !self.users) {
+            userIndex = -1;
+            storyIndex--;
+            galleryIndex--;
+        }
+        
+        if (self.galleries.count == 0 || !self.galleries) {
+            galleryIndex = -1;
+        }
+        
+        if (self.stories.count == 0 || !self.stories) {
+            storyIndex = -1;
+            galleryIndex--;
+        }
+        
+        [self reloadData];
+    }];
+}
+
+-(void)reloadData {
+    [self.tableView reloadData];
+}
+-(void)searchError:(NSError *)error {
+    
 }
 
 #pragma mark - UITableView Datasource
@@ -170,96 +229,97 @@
     [self.view addSubview:self.tableView];
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    int numberOfSections = 0;
+    if (_users && ![_users isEqual:[NSNull null]]) {
+        numberOfSections++;
+    }
+    if (_stories && ![_stories isEqual:[NSNull null]]) {
+        numberOfSections++;
+    }
+    if (_galleries && ![_galleries isEqual:[NSNull null]]) {
+        numberOfSections++;
+    }
+    return numberOfSections;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    switch (indexPath.section) {
-        case 0:
-            switch (indexPath.row) {
-                case 0:
-                    return 47;
-                    break;
-                case 1:
-                    return 56;
-                    break;
-                case 2:
-                    return 56;
-                    break;
-                case 3:
-                    return 56;
-                    break;
-                case 4:
-                    return 44;
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        case 1:
-            switch (indexPath.row) {
-                case 0:
-                    return 47;
-                    break;
-                case 1:
-                    return 56;
-                    break;
-                case 2:
-                    return 56;
-                    break;
-                case 3:
-                    return 56;
-                    break;
-                case 4:
-                    return 44;
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        case 2:
-            switch (indexPath.row) {
-                case 0:
-                    return 24;
-                    break;
-                case 1:
-                    return 44;
-                    break;
-                case 2:
-                    return 44;
-                    break;
-                case 3:
-                    return 44;
-                    break;
-                case 4:
-                    return 44;
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        default:
-            break;
+    if (section == userIndex) {
+        return _users.count + 2;
+    }
+    if (section == storyIndex) {
+        return _stories.count + 2;
+    }
+    if (section == galleryIndex) {
+        return self.galleries.count;
     }
     
     return 0;
 }
 
--(FRSTableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(BOOL)isNoData {
+    return TRUE;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    if (indexPath.section == storyIndex) {
+        if (indexPath.row == self.stories.count) {
+            return 44;
+        }
+        if (indexPath.row == self.stories.count + 1) {
+            return 12;
+        }
+        
+        return 56;
+    }
+    else if (indexPath.section == userIndex) {
+        if (indexPath.row == self.users.count) {
+            return 44;
+        }
+        
+        if (indexPath.row == self.users.count + 1) {
+            return 12;
+        }
+        
+        return 56;
+    }
+    else {
+        // galleries
+        FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
+        return [gallery heightForGallery];
+    }
+
+    return 0;
+}
+
+-(FRSTableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *galleryIdentifier;
     NSString *cellIdentifier;
+    
+    if (indexPath.section == galleryIndex) {
+        FRSGalleryCell *cell = [[FRSGalleryCell alloc] init];
+        
+        if (!cell) {
+            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryIdentifier];
+        }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.gallery = self.galleries[indexPath.row];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [cell clearCell];
+            [cell configureCell];
+        });
+    }
+    
     FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
     if (cell == nil) {
         cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
+   
     if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
         [cell setSeparatorInset:UIEdgeInsetsZero];
     }
@@ -269,81 +329,54 @@
     if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
         [cell setLayoutMargins:UIEdgeInsetsZero];
     }
+    
+    if (indexPath.section == userIndex) {
+        
+        if (indexPath.row == self.users.count) {
+            [cell configureSearchSeeAllCellWithTitle:@"SEE ALL USERS"];
+            return cell;
+        }
+        
+        if (indexPath.row == self.users.count + 1) {
+            [cell configureEmptyCellSpace:NO];
+            return cell;
+        }
+        
+        // users
+        NSDictionary *user = self.users[indexPath.row];
+        NSString *avatarURL;
+        if ([user objectForKey:@"avatar"] || ![[user objectForKey:@"avatar"] isEqual:[NSNull null]]) {
+            avatarURL = user[@"avatar"];
+        }
+        NSURL *avatarURLObject;
+        
+        if (avatarURL) {
+            avatarURLObject = [NSURL URLWithString:avatarURL];
+        }
+        //[cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:user.firstName userName:user.username isFollowing:following];
+        NSLog(@"USER: %@", user);
+    }
+    else if (indexPath.section == storyIndex) {
+        if (indexPath.row == self.stories.count) {
+            [cell configureSearchSeeAllCellWithTitle:@"SEE ALL STORIES"];
+            return cell;
+        }
+        
+        if (indexPath.row == self.stories.count + 1) {
+            [cell configureEmptyCellSpace:NO];
+            return cell;
+        }
+        
+        //[cell configureSearchStoryCellWithStoryPhoto:url storyName:story.title];
+        
+    }
+
     return cell;
 }
 
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    switch (indexPath.section) {
-        case 0:
-            switch (indexPath.row) {
-                case 0:
-                    [cell configureSettingsHeaderCellWithTitle:@"USERS"];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    break;
-                case 1:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-grace"] fullName:@"Grace Plihal" userName:@"@DJgracieP" isFollowing:YES];
-                    break;
-                case 2:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-byrn"] fullName:@"Bryn Gelbart" userName:@"@bryn" isFollowing:NO];
-                    break;
-                case 3:
-                    [cell configureSearchUserCellWithProfilePhoto:[UIImage imageNamed:@"apple-user-erik"] fullName:@"Erik Washington" userName:@"@erik" isFollowing:NO];
-                    break;
-                case 4:
-                    [cell configureSearchSeeAllCellWithTitle:@"SEE ALL 11 USERS"];
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        case 1:
-            switch (indexPath.row) {
-                case 0:
-                    [cell configureSettingsHeaderCellWithTitle:@"STORIES"];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    break;
-                case 1:
-                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-1"] storyName:@"Mardi Gras Celebration: New Orleans, LA"];
-                    break;
-                case 2:
-                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-2"] storyName:@"MLS Finals: Columbus, OH"];
-                    break;
-                case 3:
-                    [cell configureSearchStoryCellWithStoryPhoto:[UIImage imageNamed:@"apple-story-3"] storyName:@"Warehouse Fire: Hillsborough, NJ"];
-                    break;
-                case 4:
-                    [cell configureSearchSeeAllCellWithTitle:@"SEE ALL 25 STORIES"];
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        case 2:
-            switch (indexPath.row) {
-                case 0:
-                    [cell configureSettingsHeaderCellWithTitle:@""];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                default:
-                    break;
-            }
-            break;
-            
-        default:
-            break;
-    }
+
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

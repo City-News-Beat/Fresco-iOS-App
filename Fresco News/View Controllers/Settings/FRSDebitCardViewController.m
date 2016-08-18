@@ -104,7 +104,7 @@
     [container addSubview:cardNumberTextField];
     
     cardNumberTextField.keyboardType = UIKeyboardTypeNumberPad;
-    [cardNumberTextField setSecureTextEntry: YES];
+    [cardNumberTextField setSecureTextEntry: NO];
     
     
     expirationDateTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];

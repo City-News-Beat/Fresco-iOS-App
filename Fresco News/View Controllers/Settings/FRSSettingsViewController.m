@@ -26,6 +26,7 @@
 #import "FRSDisableAccountViewController.h"
 #import "FRSRadiusViewController.h"
 #import "FRSDebitCardViewController.h"
+#import "FRSPaymentViewController.h"
 #import "FRSAboutFrescoViewController.h"
 #import "FRSIdentityViewController.h"
 
@@ -428,7 +429,7 @@
                 }
                 case 2:
                 {
-                    FRSDebitCardViewController *card = [[FRSDebitCardViewController alloc] init];
+                    FRSPaymentViewController *card = [[FRSPaymentViewController alloc] init];
                     [self.navigationController pushViewController:card animated:YES];
                     self.navigationItem.title = @"";
                 }

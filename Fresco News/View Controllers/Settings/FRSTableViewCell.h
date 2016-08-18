@@ -34,8 +34,8 @@
 
 -(void)configureSettingsHeaderCellWithTitle:(NSString *)title;
 -(void)configureSearchSeeAllCellWithTitle:(NSString *)title;
--(void)configureSearchUserCellWithProfilePhoto:(UIImage *)profile fullName:(NSString *)firstName userName:(NSString *)username isFollowing:(BOOL)isFollowing;
--(void)configureSearchStoryCellWithStoryPhoto:(UIImage *)storyPhoto storyName:(NSString *)nameString;
+-(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)firstName userName:(NSString *)username isFollowing:(BOOL)isFollowing;
+-(void)configureSearchStoryCellWithStoryPhoto:(NSURL *)storyPhoto storyName:(NSString *)nameString;
 
 -(void)configureFindFriendsCell;
 
