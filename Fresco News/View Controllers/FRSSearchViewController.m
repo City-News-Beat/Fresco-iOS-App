@@ -170,6 +170,7 @@
     [[FRSAPIClient sharedClient] searchWithQuery:query completion:^(id responseObject, NSError *error) {
         if (error || !responseObject) {
             [self searchError:error];
+            NSLog(@"ERROR %@", error);
             return;
         }
         
@@ -385,7 +386,7 @@
             photo = [NSURL URLWithString:story.imageURLs[0]];
         }
     
-        [cell configureSearchStoryCellWithStoryPhoto:photo storyName:story.title];
+        //[cell configureSearchStoryCellWithStoryPhoto:photo storyName:story.title];
     }
 
     return cell;
