@@ -19,6 +19,7 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSAssignmentsViewController.h"
 #import "FRSTaxInformationViewController.h"
+#import "FRSGalleryExpandedViewController.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -132,12 +133,15 @@
     assignmentsVC.defaultID = assignmentID;
     self.tabBarController.selectedIndex = 3;
     
+    
+    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
 }
 
 -(void)segueToTaxInfo {
     
     FRSTaxInformationViewController *taxInfoVC = [[FRSTaxInformationViewController alloc] init];
     [self.navigationController pushViewController:taxInfoVC animated:YES];
+    
 }
 
 -(void)segueToBankInfo {
@@ -145,12 +149,14 @@
     FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
     debitCardVC.shouldDisplayBankViewOnLoad = YES;
     [self.navigationController pushViewController:debitCardVC animated:YES];
+    
 }
 
 -(void)segueToDebitCard {
     
     FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
     [self.navigationController pushViewController:debitCardVC animated:YES];
+    
 }
 
 -(void)segueToCamera {
@@ -163,7 +169,15 @@
     [navigationController setNavigationBarHidden:YES];
     
     [self presentViewController:navigationController animated:YES completion:nil];
+    
+    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+}
 
+-(void)segueToGallery {
+    
+    FRSGalleryExpandedViewController *galleryVC = [[FRSGalleryExpandedViewController alloc] initWithGalleryID:@"evKa0MQz0Qd9"];
+    [self.navigationController pushViewController:galleryVC animated:YES];
+    
 }
 
 -(void)returnToProfile {
@@ -301,6 +315,10 @@
         [self segueToUser:[[FRSAPIClient sharedClient] authenticatedUser]];
     }
     
+    if (indexPath.row == 1) {
+        [self segueToGallery];
+    }
+    
     if (indexPath.row == 2) {
         [self segueToDebitCard];
     }
@@ -313,9 +331,9 @@
     if (indexPath.row == 5) {
         
         [self segueToAssignmentWithID:@"xLJE0QzW1G5B"];
+        
     }
     
-    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
 }
 
 -(void)popViewController {
