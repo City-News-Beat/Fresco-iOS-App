@@ -774,7 +774,6 @@
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
     
-    self.assignmentCard.layer.zPosition = 1;
 }
 
 -(void)dismissTap:(UITapGestureRecognizer *)sender {
@@ -800,9 +799,14 @@
     } completion:nil];
     
     //Animate bottom bar in y
+    
+    CGFloat yValue = -93;
+    if (self.defaultID) {
+        yValue = -157;
+    }
     [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
-        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -93);
+        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, yValue);
         
     } completion:^(BOOL finished) {
         
