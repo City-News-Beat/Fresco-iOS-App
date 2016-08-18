@@ -257,6 +257,7 @@
     //    [self configureTableView];
     //    [self configurePullToRefresh];
     [self configureProfileSocialOverlay];
+    [self configureSectionView];
 }
 
 -(void)configurePullToRefresh {
@@ -537,7 +538,7 @@
 }
 
 -(void)configureSectionView{
-    self.sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.profileContainer.frame.size.height + (44*1.5), self.view.frame.size.width, 44)];
     self.sectionView.backgroundColor = [UIColor frescoOrangeColor];
     
     self.feedButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.sectionView.frame.size.width/2, self.sectionView.frame.size.height)];
@@ -554,6 +555,7 @@
     [self.likesButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [self.likesButton addTarget:self action:@selector(handleLikesButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     [self.sectionView addSubview:self.likesButton];
+    [self.view addSubview:self.sectionView];
 }
 
 -(void)handleFeedbackButtonTapped{
@@ -785,12 +787,11 @@
         if (topView) {
             return topView;
         }
-        [self configureSectionView];
+        //[self configureSectionView];
         
         view = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.view.frame.size.width, 44)];
         [self.sectionView addSubview:[UIView lineAtPoint:CGPointMake(0, 43.5)]];
-        [view addSubview:self.sectionView];
-        
+
         topView = view;
         return topView;
     }
@@ -806,103 +807,27 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [super scrollViewDidScroll:scrollView];
     //Once the user has scroll past the feed/likes section view, start moving it with the nav bar
-    if (scrollView.contentOffset.y >= self.profileContainer.frame.size.height + (self.sectionView.frame.size.height * 2.5)) {
-        CGRect newFrame = self.sectionView.frame;
-        // Navigation bar travels up until it is collapsed (so it doesn't travel past the screen)
-        if(self.navBarYValue > -self.navBarHeight-3-self.sectionView.frame.size.height && self.scrollDirection == UIScrollViewScrollDirectionDown){
-            newFrame.origin.y = (self.navBarYValue*2)+15;
-            
-            // Navigation bar travels down until it is fully expanded
-        }else if((self.navBarYValue < self.navBarHeight) && self.scrollDirection == UIScrollViewScrollDirectionUp){ // done scrolling, stick
-            newFrame.origin.y = (self.navBarYValue*2)+15;
-            //
-        }else if(self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height > 0){
-            newFrame.origin.y = 0 + (self.navBarHeight - (self.profileContainer.bounds.origin.y - self.profileContainer.frame.size.height));
-            
-            // When the user scrolls up past the fully expanded nav bar condition, keep it in the fully expanded state
-        }else if(self.scrollDirection == UIScrollViewScrollDirectionUp){
-            newFrame.origin.y = 22+35;
-            
-            // When the user scrolls down past the collapsed nav bar condition, keep it in the collapsed state
-        }else if(self.scrollDirection == UIScrollViewScrollDirectionDown){
-            newFrame.origin.y = -self.sectionView.frame.size.height;
-        }
-        //NSLog(@"FRAME Y: %f", self.sectionView.frame.origin.y);
-        if(self.tablePageScroller == scrollView){
-            [self.feedButton setAlpha:(self.navBarYValue/(self.navBarHeight))-0.3];
-            [self.likesButton setAlpha:(self.navBarYValue/(self.navBarHeight))];
-        }else{
-            [self.feedButton setAlpha:(self.navBarYValue/(self.navBarHeight))];
-            [self.likesButton setAlpha:(self.navBarYValue/(self.navBarHeight))-0.3];
-        }
-        [self.sectionView setFrame:newFrame];
-        [self.sectionView.superview setFrame:newFrame];
-        [topView setFrame:newFrame];
-    }else if(self.sectionView.frame.origin.y > 0){
-        CGRect newFrame = self.sectionView.frame;
-        //newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height);//top of the thing - the bot of nav bar);
-        /*if(((scrollView.contentOffset.y - self.profileContainer.frame.size.height)-(self.navBarYValue - self.sectionView.frame.origin.y)) - (scrollView.contentOffset.y - self.profileContainer.frame.size.height) < 10){
-            newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height) + (self.navBarYValue - self.sectionView.frame.origin.y);
-        }else{
-            newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height);
-        }*/
-        //newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height) + (self.navBarYValue - self.sectionView.frame.origin.y);
-        newFrame.origin.y = (scrollView.contentOffset.y - self.profileContainer.frame.size.height) - (self.sectionView.frame.size.height);
-        NSLog(@"Scroll Y: %f", (self.navBarYValue - self.sectionView.frame.origin.y));
-        NSLog(@"Y: %f", newFrame.origin.y);
-        [self.sectionView setFrame:newFrame];
-        [self.sectionView.superview setFrame:newFrame];
-        [topView setFrame:newFrame];
-        if(self.tablePageScroller == scrollView){
-            [self.feedButton setAlpha:1.0-0.3];
-            [self.likesButton setAlpha:1.0];
-        }else{
-            [self.feedButton setAlpha:1.0];
-            [self.likesButton setAlpha:1.0-0.3];
-        }
-    }else{//Set the likes/feed sectionView to stay just below the profileContainer until it goes past it
-        CGRect newFrame = self.sectionView.frame;
+    
+    CGRect newFrame = self.sectionView.frame;
+    
+    newFrame.origin.y = (self.navBarYValue/self.navBarHeight)*(self.sectionView.frame.size.height)-self.sectionView.frame.size.height;
+    
+    //Prevent it from over extending (going past the bottom of the nav bar)
+    if(newFrame.origin.y > 0){
         newFrame.origin.y = 0;
-        [self.sectionView setFrame:newFrame];
-        [self.sectionView.superview setFrame:newFrame];
-        [topView setFrame:newFrame];
-        if(self.tablePageScroller == scrollView){
-            [self.feedButton setAlpha:1.0-0.3];
-            [self.likesButton setAlpha:1.0];
-        }else{
-            [self.feedButton setAlpha:1.0];
-            [self.likesButton setAlpha:1.0-0.3];
-        }
     }
+    
+    //If it goes over the profile height, attach it to the bot of the profile container view
+    CGPoint localPoint = newFrame.origin;
+    CGPoint basePoint = [self.view convertPoint:localPoint toView:self.tableView];
+    if(basePoint.y < self.profileContainer.frame.size.height + (_sectionView.frame.size.height*1.5)){
+        newFrame.origin.y = self.profileContainer.frame.size.height-scrollView.contentOffset.y;
+    }
+    
+    [self.sectionView setFrame:newFrame];
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    /*[super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
-    if (self.scrollDirection == UIScrollViewScrollDirectionDown && scrollView.contentOffset.y > self.navBarHeight*2) {
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            CGRect newFrame = self.sectionView.frame;
-            
-            float yValue = (-self.navBarHeight-3);
-            newFrame.origin.y = (yValue*2)+15;
-            [self.feedButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
-            [self.likesButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
-            [self.sectionView setFrame:newFrame];
-            [self.sectionView.superview setFrame:newFrame];
-            [topView setFrame:newFrame];
-        } completion:nil];
-    }else if(self.scrollDirection == UIScrollViewScrollDirectionUp){
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            CGRect newFrame = self.sectionView.frame;
-    
-            float yValue = self.navBarHeight;
-            newFrame.origin.y = (yValue*2)+15;
-            [self.feedButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
-            [self.likesButton.titleLabel setAlpha:(yValue/(self.navBarHeight))*2];
-            [self.sectionView setFrame:newFrame];
-            [self.sectionView.superview setFrame:newFrame];
-            [topView setFrame:newFrame];
-        } completion:nil];
-    }*/
 }
 
 #pragma mark - Navigation
