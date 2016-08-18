@@ -365,7 +365,7 @@
         NSURL *photo;
         
         if ([story[@"thumbnails"] count] > 0) {
-            photo = [NSURL URLWithString:story[@"thumbnails"][0]];
+            photo = [NSURL URLWithString:story[@"thumbnails"][@"image"]];
         }
         
         NSString *title = @"";
