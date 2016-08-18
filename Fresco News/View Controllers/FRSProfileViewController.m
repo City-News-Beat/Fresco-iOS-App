@@ -189,6 +189,7 @@
     [self configureSpinner];
     
     [super removeNavigationBarLine];
+    [self configureSectionView];
 }
 
 
@@ -257,7 +258,6 @@
     //    [self configureTableView];
     //    [self configurePullToRefresh];
     [self configureProfileSocialOverlay];
-    [self configureSectionView];
 }
 
 -(void)configurePullToRefresh {
@@ -535,10 +535,12 @@
     CGFloat height = MAX(self.bioLabel.frame.origin.y + self.bioLabel.frame.size.height + 6, 160);
     
     [self.profileContainer setSizeWithSize:CGSizeMake(self.profileContainer.frame.size.width, height)];
+    
+    [self.sectionView setFrame:CGRectMake(0, self.profileContainer.frame.size.height, self.view.frame.size.width, 44)];
 }
 
 -(void)configureSectionView{
-    self.sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.profileContainer.frame.size.height + (44*1.5), self.view.frame.size.width, 44)];
+    self.sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.profileContainer.frame.size.height, self.view.frame.size.width, 44)];
     self.sectionView.backgroundColor = [UIColor frescoOrangeColor];
     
     self.feedButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.sectionView.frame.size.width/2, self.sectionView.frame.size.height)];
