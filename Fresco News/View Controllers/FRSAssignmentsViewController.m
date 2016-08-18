@@ -363,7 +363,6 @@
 
     
     if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
-        self.hasDefault = NO;
         
         self.assignmentTitle = assignment.title;
         self.assignmentCaption = assignment.caption;
@@ -789,11 +788,16 @@
 
 -(void)animateAssignmentCard{
     
+    CGFloat yOffset;
+    if (self.hasDefault) {
+        yOffset = -60;
+    }
+    
     //Animate scrollView in y
     [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         
         CGRect scrollFrame = self.scrollView.frame;
-        scrollFrame.origin.y = 0;
+        scrollFrame.origin.y = yOffset;
         self.scrollView.frame = scrollFrame;
         
     } completion:nil];
@@ -840,7 +844,6 @@
     
     self.showsCard = FALSE;
     
-    
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.assignmentCard.frame.origin.y + (self.view.frame.size.height - self.assignmentCard.frame.origin.y) +100, self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
@@ -867,6 +870,7 @@
     } completion:nil];
     
     [self showGlobalAssignmentsBar];
+    self.hasDefault = NO;
 }
 
 -(void)acceptAssignment {
