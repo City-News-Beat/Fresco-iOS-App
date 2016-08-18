@@ -211,7 +211,7 @@
         mapCircleView.layer.cornerRadius = circleRadius/2;
         [mapView addSubview:mapCircleView];
                 
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(circleRadius/2 -24/2, circleRadius/2 -24/2, 24, 24)];
         view.backgroundColor = [UIColor whiteColor];
         
         view.layer.cornerRadius = 12;
@@ -223,14 +223,14 @@
         view.clipsToBounds = YES;
         view.layer.rasterizationScale = [[UIScreen mainScreen] scale];
         
-        [annotationView addSubview:view];
+        [mapCircleView addSubview:view];
 
         
         UIImageView *imageView = [[UIImageView alloc] init];
-        imageView.frame = CGRectMake(-9, -9, 18, 18);
+        imageView.frame = CGRectMake(circleRadius/2 -18/2, circleRadius/2 -18/2, 18, 18);
         imageView.layer.cornerRadius = 9;
         imageView.clipsToBounds = YES;
-        [annotationView addSubview:imageView];
+        [mapCircleView addSubview:imageView];
         
         if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
 

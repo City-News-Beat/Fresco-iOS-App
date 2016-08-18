@@ -31,7 +31,7 @@
 
 #import "FRSTabBarController.h"
 
-@interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
+@interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
 
@@ -124,7 +124,6 @@
 -(void)viewDidAppear:(BOOL)animated{
     [self showTabBarAnimated:YES];
     self.tableView.bounces = false;
-
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -203,6 +202,14 @@
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
     [self.view addSubview:self.loadingView];
+}
+
+#pragma mark - UITabBarDelegate
+
+-(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    
+    
+    
 }
 
 #pragma mark - Fetch Methods

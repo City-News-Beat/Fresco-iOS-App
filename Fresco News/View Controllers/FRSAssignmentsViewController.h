@@ -20,7 +20,8 @@
     NSTimer *scrollTimer;
     BOOL notFirstFetch;
 }
+
 -(void)setInitialMapRegion;
--(instancetype)initWithAssignment:(FRSAssignment *)assignment;
+-(instancetype)initWithActiveAssignment:(NSString *)assignmentID;
 
 @end

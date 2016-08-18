@@ -41,6 +41,7 @@
     [super viewDidLoad];
     
     [self configureUI];
+    [self saveLastOpenedDate];
     
 }
 
@@ -48,6 +49,11 @@
     [super viewWillAppear:animated];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+}
+
+-(void)saveLastOpenedDate {
+    NSDate *today = [NSDate date];
+    [[NSUserDefaults standardUserDefaults] setObject:today forKey:@"notification-date"];
 }
 
 
@@ -113,11 +119,10 @@
 }
 
 
--(void)segueToAssignment:(FRSAssignment *)assignment {
+-(void)segueToAssignmentWithID:(NSString *)assignmentID {
     
-    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithAssignment:assignment];
+    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithActiveAssignment:assignmentID];
     [self.navigationController pushViewController:assignmentsVC animated:YES];
-    
 }
 
 -(void)segueToTaxInfo {
@@ -141,7 +146,6 @@
 
 -(void)segueToCamera {
     
-    
     //FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
     FRSCameraViewController *camVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
     UINavigationController *navigationController = [[UINavigationController alloc] init];
@@ -152,7 +156,6 @@
     [self presentViewController:navigationController animated:YES completion:nil];
 
 }
-
 
 -(void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -166,7 +169,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return 6;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -247,9 +250,29 @@
             
         } break;
             
+        case 5: {
+           
+            NSString *cellIdentifier = @"assignmentNotificationCell";
+            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            cell.titleLabel.text  = @"Assignment: Fire on fire";
+            cell.bodyLabel.text = @"Alcatra ham brisket tail filet mignon. Ball tip bresaola biltong, corned beef andouille short ribs pork belly cupim flank. Spare ribs pancetta ham hock ham pig beef ribs frankfurter tongue shankle tenderloin sirloin, flank rump.";
+            cell.backgroundColor = [UIColor frescoBackgroundColorDark];
+            [cell.actionButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
+
+            [cell configureCell];
+            return cell;
+            
+        } break;
+            
         default:
             break;
     }
+    
+    
+//    if (cell.isRead) {
+//        cell.backgroundColor = [UIColor frescoBackgroundColorDark];
+//    }
     
     
     UITableViewCell *cell;
@@ -258,6 +281,8 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate updateTabBarToUser];
@@ -273,6 +298,11 @@
     if (indexPath.row == 4) {
 
         [self segueToCamera];
+    }
+    
+    if (indexPath.row == 5) {
+        
+        [self segueToAssignmentWithID:@"xLJE0QzW1G5B"]; //
     }
 }
 

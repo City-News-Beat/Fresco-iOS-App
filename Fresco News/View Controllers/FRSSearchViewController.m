@@ -166,27 +166,31 @@
 }
 
 -(void)performSearchWithQuery:(NSString *)query {
+    
     [[FRSAPIClient sharedClient] searchWithQuery:query completion:^(id responseObject, NSError *error) {
         if (error || !responseObject) {
             [self searchError:error];
             return;
         }
         
+
+        
         NSDictionary *storyObject = responseObject[@"stories"];
         NSDictionary *galleryObject = responseObject[@"galleries"];
         NSDictionary *userObject = responseObject[@"users"];
         
-        if (storyObject && ![storyObject isEqual:[NSNull null]]) {
+        if (storyObject && ![storyObject isEqual:[NSNull null]] && [storyObject isKindOfClass:[NSNull class]]) {
             self.stories = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:storyObject[@"results"] cache:FALSE];
         }
         
-        if (galleryObject && ![galleryObject isEqual:[NSNull null]]) {
+        if (galleryObject && ![galleryObject isEqual:[NSNull null]] && [galleryObject isKindOfClass:[NSNull class]]) {
             self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:FALSE];
         }
         
-        if (userObject && ![userObject isEqual:[NSNull null]]) {
+        if (userObject && ![userObject isEqual:[NSNull null]] && [userObject isKindOfClass:[NSNull class]]) {
             self.users = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:userObject[@"results"] cache:FALSE];
         }
+
         
         if (self.users.count == 0 || !self.users) {
             userIndex = -1;

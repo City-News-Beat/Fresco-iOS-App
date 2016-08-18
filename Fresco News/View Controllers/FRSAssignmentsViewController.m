@@ -40,7 +40,8 @@
 @property (strong, nonatomic) NSArray *overlays;
 
 @property (nonatomic) BOOL isFetching;
-
+@property (nonatomic) BOOL hasDefault;
+@property (nonatomic, retain) NSString *defaultID;
 @property (nonatomic) BOOL isOriginalSpan;
 
 @property (strong, nonatomic) FRSMapCircle *userCircle;
@@ -83,15 +84,17 @@
 
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 
+@property (strong, nonatomic) FRSAssignment *currentAssignment;
+
 @end
 
 @implementation FRSAssignmentsViewController
 
--(instancetype)initWithAssignment:(FRSAssignment *)assignment {
+-(instancetype)initWithActiveAssignment:(NSString *)assignmentID {
     self = [super init];
     
-    
-    
+    self.hasDefault = TRUE;
+    self.defaultID = assignmentID;
     
     return self;
 }
@@ -269,6 +272,21 @@
 
 -(void)adjustMapRegionWithLocation:(CLLocation *)location {
     
+    if (self.defaultID) {
+        
+        MKCoordinateSpan currentSpan = self.mapView.region.span;
+        
+        if (self.isOriginalSpan){
+            currentSpan = MKCoordinateSpanMake(0.03f, 0.03f);
+            self.isOriginalSpan = NO;
+        }
+        
+        MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([self.currentAssignment.latitude doubleValue], [self.currentAssignment.longitude doubleValue]), currentSpan);
+        [self.mapView setRegion:region animated:YES];
+
+        return;
+    }
+    
     //We want to preserve the span if the user modified it.
     MKCoordinateSpan currentSpan = self.mapView.region.span;
     
@@ -292,7 +310,10 @@
     
     self.isOriginalSpan = YES;
     
+    
+    
     if ([FRSLocator sharedLocator].currentLocation) {
+        
         [self adjustMapRegionWithLocation:[FRSLocator sharedLocator].currentLocation];
     }
 }
@@ -314,6 +335,7 @@
     NSInteger count = 0;
     
     for(FRSAssignment *assignment in self.assignments) {
+        
         if ([self assignmentExists:assignment.uid]) {
             continue;
         }
@@ -324,7 +346,7 @@
     }
 }
 
-- (void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index {
+-(void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index {
     
     FRSAssignmentAnnotation *ann = [[FRSAssignmentAnnotation alloc] initWithAssignment:assignment atIndex:index];
 //    NSLog(@"EXPIRATION %@", assignment.expirationDate);
@@ -338,6 +360,37 @@
     
     [self.mapView addOverlay:circle];
     [self.mapView addAnnotation:ann];
+
+    
+    if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
+        self.hasDefault = NO;
+        
+        self.assignmentTitle = assignment.title;
+        self.assignmentCaption = assignment.caption;
+        self.assignmentExpirationDate = assignment.expirationDate;
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateStyle:NSDateFormatterFullStyle];
+        NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
+        self.expirationLabel.text = dateString;
+        
+        
+        [self configureAssignmentCard];
+        [self animateAssignmentCard];
+        
+        self.currentAssignment = assignment;
+        
+        CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake([assignment.latitude doubleValue], [assignment.longitude doubleValue]);
+        newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
+        [self.mapView setCenterCoordinate:newCenter animated:YES];
+        
+        if ([self.mapView respondsToSelector:@selector(camera)]) {
+            [self.mapView setShowsBuildings:NO];
+            MKMapCamera *newCamera = [[self.mapView camera] copy];
+            [newCamera setHeading:0];
+            [self.mapView setCamera:newCamera animated:YES];
+        }
+    }
 }
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
@@ -720,6 +773,7 @@
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
+    
 }
 
 -(void)dismissTap:(UITapGestureRecognizer *)sender {
@@ -745,9 +799,14 @@
     } completion:nil];
     
     //Animate bottom bar in y
+    
+    CGFloat yValue = -93;
+    if (self.defaultID) {
+        yValue = -157;
+    }
     [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
-        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -93);
+        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, yValue);
         
     } completion:^(BOOL finished) {
         
@@ -773,6 +832,8 @@
         self.closeButton.alpha = 1;
         
     } completion:nil];
+    
+    [self hideGlobalAssignmentsBar];
 }
 
 -(void)dismissAssignmentCard {
@@ -804,6 +865,8 @@
     [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.closeButton.alpha = 0;
     } completion:nil];
+    
+    [self showGlobalAssignmentsBar];
 }
 
 -(void)acceptAssignment {
@@ -873,15 +936,17 @@
 
 -(void)configureGlobalAssignmentsBar {
     
-    self.globalAssignmentsBottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height -44-49, self.view.frame.size.width, 44)];
+    if (self.globalAssignmentsBottomContainer) {
+        return;
+    }
+    
+    self.globalAssignmentsBottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.mapView.frame.size.height, self.view.frame.size.width, 44)];
     self.globalAssignmentsBottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.globalAssignmentsBottomContainer];
     
     self.globalAssignmentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 12, self.view.frame.size.width -56 -24 -18 -6, 20)];
-    self.globalAssignmentsLabel.text = @"6 global assignments";
+    self.globalAssignmentsLabel.text = @"  global assignments";
     //TO DO GRAB THE NUMBER OF GLOBAL ASSIGNMENTS
-    
-    
     
     self.globalAssignmentsLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.globalAssignmentsLabel.textColor = [UIColor frescoDarkTextColor];
@@ -897,6 +962,28 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(globalAssignmentsSegue)];
     [self.globalAssignmentsBottomContainer addGestureRecognizer:tap];
+    
+    if (self.globalAssignmentsArray.count >= 1) {
+        [self showGlobalAssignmentsBar];
+    }
+    
+}
+
+-(void)showGlobalAssignmentsBar {
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, -44-49);
+        
+    } completion:nil];
+}
+
+-(void)hideGlobalAssignmentsBar {
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, self.globalAssignmentsBottomContainer.frame.size.height);
+
+        
+    } completion:nil];
 }
 
 -(void)globalAssignmentsSegue {

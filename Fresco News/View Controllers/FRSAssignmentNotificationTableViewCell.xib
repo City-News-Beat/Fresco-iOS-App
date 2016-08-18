@@ -71,7 +71,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="assignmentButton" destination="bsF-Lw-6Fg" id="aQ0-bF-fMy"/>
+                <outlet property="actionButton" destination="bsF-Lw-6Fg" id="uFP-at-nIt"/>
                 <outlet property="bodyLabel" destination="omR-AR-fQB" id="wbz-sP-thF"/>
                 <outlet property="line" destination="1rG-eb-dcz" id="Duz-wt-VZa"/>
                 <outlet property="titleLabel" destination="EDm-cp-lUq" id="h1u-Qz-nYH"/>
