@@ -244,7 +244,17 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    if (section == userIndex) {
+        return _users.count + 1;
+    }
+    if (section == storyIndex) {
+        return _stories.count + 1;
+    }
+    if (section == galleryIndex) {
+        return self.galleries.count;
+    }
+    
+    return 0;
 }
 
 -(BOOL)isNoData {
@@ -253,7 +263,18 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == storyIndex || indexPath.section == userIndex) {
+    if (indexPath.section == storyIndex) {
+        if (indexPath.row == self.stories.count) {
+            return 44;
+        }
+        
+        return 56;
+    }
+    else if (indexPath.section == userIndex) {
+        if (indexPath.row == self.users.count) {
+            return 44;
+        }
+        
         return 56;
     }
     else {
@@ -285,15 +306,35 @@
     }
     
     if (indexPath.section == userIndex) {
-        // users
-        FRSUser *user = self.users[indexPath.row];
-        BOOL following = [[user valueForKey:@"following"] boolValue];
         
-        [cell configureSearchUserCellWithProfilePhoto:user.profileImage fullName:user.firstName userName:user.username isFollowing:following];
-
+        if (indexPath.row == self.users.count) {
+            [cell configureSearchSeeAllCellWithTitle:@"SEE ALL USERS"];
+            return cell;
+        }
+        
+        // users
+        NSDictionary *user = self.users[indexPath.row];
+        NSString *avatarURL;
+        if ([user objectForKey:@"avatar"] || ![[user objectForKey:@"avatar"] isEqual:[NSNull null]]) {
+            avatarURL = user[@"avatar"];
+        }
+        NSURL *avatarURLObject;
+        
+        if (avatarURL) {
+            avatarURLObject = [NSURL URLWithString:avatarURL];
+        }
+        //[cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:user.firstName userName:user.username isFollowing:following];
+        NSLog(@"USER: %@", user);
     }
     else if (indexPath.section == storyIndex) {
-        FRSStory *story = self.users[indexPath.row];
+        if (indexPath.row == self.stories.count) {
+            [cell configureSearchSeeAllCellWithTitle:@"SEE ALL STORIES"];
+            return cell;
+        }
+        
+        FRSStory *story = self.stories[indexPath.row];
+        
+        //[cell configureSearchStoryCellWithStoryPhoto:url storyName:story.title];
         
     }
     else {
