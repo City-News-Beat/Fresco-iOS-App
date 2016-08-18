@@ -195,7 +195,9 @@
         
         if (globalAssignments.count > 0) {
             [self configureGlobalAssignmentsBar];
-            [self showGlobalAssignmentsBar];
+            if (self.defaultID) {
+                [self showGlobalAssignmentsBar];
+            }
             if (globalAssignments.count > 1) {
                 self.globalAssignmentsLabel.text = [NSString stringWithFormat:@"%lu global assignments", (unsigned long)globalAssignments.count];
             }else{
