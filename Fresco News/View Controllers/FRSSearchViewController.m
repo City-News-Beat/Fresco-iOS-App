@@ -183,6 +183,7 @@
         self.users = storyObject[@"results"];
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
         self.users = userObject[@"results"];
+        self.stories = storyObject[@"results"];
         [self reloadData];
     }];
 }
