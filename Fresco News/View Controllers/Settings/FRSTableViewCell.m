@@ -393,6 +393,48 @@
     }
 }
 
+-(void)configureEditableCellWithDefaultTextWithMultipleFields:(NSArray *)titles withTopSeperator:(BOOL)topSeperator withBottomSeperator:(BOOL)bottomSeperator isSecure:(BOOL)secure withKeyboardType:(UIKeyboardType)keyboardType {
+    
+    self.textField  = [[UITextField alloc] initWithFrame:CGRectMake(self.leftPadding, 0, ([UIScreen mainScreen].bounds.size.width/3)*2 - (self.self.rightPadding+self.leftPadding),44)];
+    self.textField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.textField.placeholder = titles[0];
+    self.textField.delegate = (id<UITextFieldDelegate>)self;
+    self.textField.textColor = [UIColor frescoDarkTextColor];
+    self.textField.tintColor = [UIColor frescoBlueColor];
+    [self addSubview:self.textField];
+    
+    self.secondaryField = [[UITextField alloc] initWithFrame:CGRectMake(_textField.frame.size.width, _textField.frame.origin.y, _textField.frame.size.width/3, _textField.frame.size.height)];
+    [self addSubview:self.secondaryField];
+    
+    self.secondaryField.placeholder = titles[1];
+    
+    self.tertiaryField = [[UITextField alloc] initWithFrame:CGRectMake(_textField.frame.size.width + _secondaryField.frame.size.width, _textField.frame.origin.y, _textField.frame.size.width/3, _textField.frame.size.height)];
+    [self addSubview:self.tertiaryField];
+    
+    self.tertiaryField.placeholder = titles[2];
+    
+    self.textField.keyboardType = keyboardType;
+    
+    if (topSeperator) {
+        UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 0.5)];
+        top.alpha = 0.2;
+        top.backgroundColor = [UIColor frescoDarkTextColor];
+        [self addSubview:top];
+    }
+    
+    if (bottomSeperator){
+        UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 44, self.bounds.size.width, 0.5)];
+        bottom.alpha = 0.2;
+        bottom.backgroundColor = [UIColor frescoDarkTextColor];
+        [self addSubview:bottom];
+    }
+    
+    if(secure){
+        self.textField.secureTextEntry = YES;
+    }
+}
+
+
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if(range.length + range.location > textField.text.length) {
         return NO;
