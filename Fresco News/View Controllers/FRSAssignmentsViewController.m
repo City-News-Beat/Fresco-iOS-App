@@ -96,11 +96,6 @@
     self.hasDefault = TRUE;
     self.defaultID = assignmentID;
     
-    
-//    [self fetchLocalAssignments];
-//    [self configureBackButtonAnimated:NO];
-    
-
     return self;
 }
 
@@ -368,8 +363,17 @@
 
     
     if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
-        self.hasDefault = FALSE;
-       // self.defaultID = Nil;
+        self.hasDefault = NO;
+        
+        self.assignmentTitle = assignment.title;
+        self.assignmentCaption = assignment.caption;
+        self.assignmentExpirationDate = assignment.expirationDate;
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateStyle:NSDateFormatterFullStyle];
+        NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
+        self.expirationLabel.text = dateString;
+        
         
         [self configureAssignmentCard];
         [self animateAssignmentCard];
