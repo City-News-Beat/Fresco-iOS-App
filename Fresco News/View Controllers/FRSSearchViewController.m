@@ -36,6 +36,8 @@
     userIndex = 0;
     storyIndex = 1;
     galleryIndex = 2;
+    
+    [self.searchTextField becomeFirstResponder];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -341,7 +343,7 @@
     }
     
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30)];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, 300, 25)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width -32, 17)];
     titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:15];
     titleLabel.textColor = [UIColor frescoLightTextColor];
     
