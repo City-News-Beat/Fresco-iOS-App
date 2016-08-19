@@ -1206,5 +1206,13 @@
     }];
 }
 
+-(void)makePaymentActive:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:makePaymentActiveEndpoint, paymentID];
+    
+    [self post:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 
 @end

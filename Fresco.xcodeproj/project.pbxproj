@@ -219,6 +219,9 @@
 		D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4C217D21D64DC010076172D /* FRSPaymentCell.xib */; };
 		D4C217D91D64E1700076172D /* FRSAddPaymentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C217D71D64E1700076172D /* FRSAddPaymentCell.m */; };
 		D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4C217D81D64E1700076172D /* FRSAddPaymentCell.xib */; };
+		D4C217DE1D66E28E0076172D /* trash24K2.png in Resources */ = {isa = PBXBuildFile; fileRef = D4C217DB1D66E28E0076172D /* trash24K2.png */; };
+		D4C217DF1D66E28E0076172D /* trash24K2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4C217DC1D66E28E0076172D /* trash24K2@2x.png */; };
+		D4C217E01D66E28E0076172D /* trash24K2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4C217DD1D66E28E0076172D /* trash24K2@3x.png */; };
 		D4D60D0C1CC829C000059EBA /* following.json in Resources */ = {isa = PBXBuildFile; fileRef = D4D60D0B1CC829C000059EBA /* following.json */; };
 		D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
@@ -667,6 +670,9 @@
 		D4C217D61D64E1700076172D /* FRSAddPaymentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAddPaymentCell.h; sourceTree = "<group>"; };
 		D4C217D71D64E1700076172D /* FRSAddPaymentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAddPaymentCell.m; sourceTree = "<group>"; };
 		D4C217D81D64E1700076172D /* FRSAddPaymentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSAddPaymentCell.xib; sourceTree = "<group>"; };
+		D4C217DB1D66E28E0076172D /* trash24K2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trash24K2.png; sourceTree = "<group>"; };
+		D4C217DC1D66E28E0076172D /* trash24K2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash24K2@2x.png"; sourceTree = "<group>"; };
+		D4C217DD1D66E28E0076172D /* trash24K2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash24K2@3x.png"; sourceTree = "<group>"; };
 		D4D60D0B1CC829C000059EBA /* following.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = following.json; path = ../following.json; sourceTree = "<group>"; };
 		D4D60D0E1CC8368300059EBA /* FRSFollowingTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingTable.h; sourceTree = "<group>"; };
 		D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingTable.m; sourceTree = "<group>"; };
@@ -966,6 +972,9 @@
 				420DC7151ADB875000157762 /* Resources */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
 				65F237B81C24B21F002182DE /* Images_3.xcassets */,
+				D4C217DB1D66E28E0076172D /* trash24K2.png */,
+				D4C217DC1D66E28E0076172D /* trash24K2@2x.png */,
+				D4C217DD1D66E28E0076172D /* trash24K2@3x.png */,
 				1EDA44C31AA4CCC70082E08D /* Images.xcassets */,
 			);
 			path = "Fresco News";
@@ -2091,6 +2100,7 @@
 		D4C217CB1D63B7230076172D /* Manage Payment */ = {
 			isa = PBXGroup;
 			children = (
+				D4C217E11D6715370076172D /* Title Cell */,
 				D4C217D51D64E1510076172D /* Add Cell */,
 				D4C217CF1D64DBEC0076172D /* Payment Cell */,
 				D4C217CC1D63B7B40076172D /* FRSPaymentViewController.h */,
@@ -2117,6 +2127,13 @@
 				D4C217D81D64E1700076172D /* FRSAddPaymentCell.xib */,
 			);
 			name = "Add Cell";
+			sourceTree = "<group>";
+		};
+		D4C217E11D6715370076172D /* Title Cell */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Title Cell";
 			sourceTree = "<group>";
 		};
 		D4D60D0D1CC8365B00059EBA /* Highlights */ = {
@@ -2404,11 +2421,13 @@
 				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
 				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
+				D4C217DE1D66E28E0076172D /* trash24K2.png in Resources */,
 				D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */,
 				D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */,
 				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				075473571D19B5640020636E /* Info.plist in Resources */,
+				D4C217DF1D66E28E0076172D /* trash24K2@2x.png in Resources */,
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
 				D48C72441D11D39F000677BF /* FRSBreakingCell.xib in Resources */,
 				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
@@ -2423,6 +2442,7 @@
 				07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */,
 				0767A5611D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib in Resources */,
 				076F4DA01D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib in Resources */,
+				D4C217E01D66E28E0076172D /* trash24K2@3x.png in Resources */,
 				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
