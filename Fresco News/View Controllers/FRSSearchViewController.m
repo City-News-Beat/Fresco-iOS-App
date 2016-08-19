@@ -10,6 +10,8 @@
 #import "FRSTableViewCell.h"
 #import "FRSGallery.h"
 #import "FRSGalleryCell.h"
+#import "FRSGalleryExpandedViewController.h"
+#import "FRSScrollingViewController.h"
 
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -400,6 +402,16 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.gallery = self.galleries[indexPath.row];
         
+        __weak typeof(self) weakSelf = self;
+        
+        cell.shareBlock = ^void(NSArray *sharedContent) {
+            [weakSelf showShareSheetWithContent:sharedContent];
+        };
+        
+        cell.readMoreBlock = ^void(NSArray *sharedContent) {
+            [self readMore:indexPath];
+        };
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [cell clearCell];
             [cell configureCell];
@@ -409,6 +421,23 @@
     }
 
     return Nil;
+}
+
+-(void)showShareSheetWithContent:(NSArray *)content {
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
+    [[[self.view window] rootViewController] presentViewController:activityController animated:YES completion:nil];
+}
+
+-(void)readMore:(NSIndexPath *)indexPath {
+    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.galleries objectAtIndex:indexPath.row]];
+    vc.shouldHaveBackButton = YES;
+    
+    self.navigationItem.title = @"";
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    [self hideTabBarAnimated:YES];
 }
 
 
