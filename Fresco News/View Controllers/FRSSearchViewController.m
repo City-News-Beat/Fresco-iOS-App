@@ -15,6 +15,7 @@
 #import "FRSUser.h"
 #import "FRSProfileViewController.h"
 #import "FRSStoryDetailViewController.h"
+#import <MagicalRecord/MagicalRecord.h>
 
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -332,8 +333,9 @@
 }
 
 -(void)pushStoryView:(NSString *)storyID {
-    
-    FRSStory *story = [[FRSStory alloc] init];
+    NSManagedObjectContext *context = [[FRSAPIClient sharedClient] managedObjectContext];
+    FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:context];
+
     story.uid = storyID;
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
     [self.navigationController pushViewController:detailView animated:YES];
