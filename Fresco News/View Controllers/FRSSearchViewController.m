@@ -18,6 +18,8 @@
 @property (strong, nonatomic) UIButton *clearButton;
 
 @property (strong, nonatomic) UIButton *backTapButton;
+@property BOOL userExtended;
+@property BOOL storyExtended;
 
 @end
 
@@ -203,7 +205,7 @@
 -(void)configureTableView{
     self.title = @"";
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64-44)];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -230,16 +232,28 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == userIndex) {
+        
+        if (_userExtended) {
+            return _users.count;
+        }
+        
         if (_users.count == 0) {
             return 0;
         }
         if (_users.count > 5) {
+            return 6;
+        }
+        else {
             return _users.count + 2;
         }
         
         return _users.count + 1;
     }
     if (section == storyIndex) {
+        
+        if (_storyExtended) {
+            return _stories.count;
+        }
         if (_stories.count == 0) {
             return 0;
         }
@@ -273,7 +287,7 @@
         return 56;
     }
     else if (indexPath.section == userIndex) {
-        if (indexPath.row == self.users.count) {
+        if (indexPath.row == 5 && !_userExtended) {
             return 44;
         }
         
@@ -314,7 +328,7 @@
     
     if (indexPath.section == userIndex) {
         
-        if (indexPath.row == self.users.count) {
+        if (indexPath.row == 5 && !_userExtended) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL USERS"];
             return cell;
         }
