@@ -215,6 +215,7 @@
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
+    self.tableView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -235,6 +236,10 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == userIndex) {
         
+        if (_users.count == 0) {
+            return 0;
+        }
+        
         if (_userExtended) {
             return _users.count;
         }
@@ -252,6 +257,10 @@
         return _users.count + 2;
     }
     if (section == storyIndex) {
+        
+        if (_stories.count == 0) {
+            return 0;
+        }
         
         if (_storyExtended) {
             return _stories.count;
@@ -311,11 +320,11 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if ((section == userIndex && self.users.count > 0 && self.users)) {
-        return 50;
+        return 30;
     }
     
     if ((section == storyIndex && self.stories.count > 0)) {
-        return 50;
+        return 30;
     }
     
     return 0;
@@ -331,8 +340,8 @@
         return [UIView new];
     }
     
-    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40)];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, 300, 25)];
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, 300, 25)];
     titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:15];
     titleLabel.textColor = [UIColor frescoLightTextColor];
     
