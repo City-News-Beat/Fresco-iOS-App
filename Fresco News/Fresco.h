@@ -119,7 +119,7 @@ static NSString * const storyObjectType = @"story";
 static NSString * const createPayment = @"user/payment/create";
 static NSString * const getPaymentsEndpoint = @"user/payment";
 static NSString * const deletePaymentEndpoint = @"user/payment/%@/delete";
-static NSString * const makePaymentActiveEndpoint = @"/payment/update/%@";
+static NSString * const makePaymentActiveEndpoint = @"user/payment/%@/update/";
 
 // legacy user defaults
 static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
