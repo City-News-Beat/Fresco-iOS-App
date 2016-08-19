@@ -310,7 +310,7 @@
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == userIndex || section == storyIndex) {
+    if ((section == userIndex && self.users.count > 0) || (section == storyIndex && self.stories.count > 0)) {
         return 50;
     }
     
