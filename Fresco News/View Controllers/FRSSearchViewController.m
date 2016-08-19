@@ -253,6 +253,7 @@
         if (_users.count == 0) {
             return 0;
         }
+        
         if (_users.count > 5) {
             return 7;
         }
