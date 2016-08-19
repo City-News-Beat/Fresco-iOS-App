@@ -64,10 +64,13 @@ static NSString *addPaymentCell = @"addPaymentCell";
         __block NSDictionary *payment = self.payments[indexPath.row];
         cell.paymentTitleLabel.text = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
         cell.payment = payment;
-        cell.deletionBlock = ^void(NSDictionary *pay) {
-            NSIndexPath *path = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
-            [self deletePayment:path];
-        };
+        
+        if ([payment[@"active"] boolValue]) {
+            [cell setActive:TRUE];
+        }
+        else {
+            [cell setActive:FALSE];
+        }
         
         return cell;
     }
@@ -90,6 +93,33 @@ static NSString *addPaymentCell = @"addPaymentCell";
     if (indexPath.section == 1) {
         FRSDebitCardViewController *debit = [[FRSDebitCardViewController alloc] init];
         [self.navigationController pushViewController:debit animated:YES];
+    }
+    else {
+        if (indexPath.row == selectedIndex) {
+            return;
+        }
+        
+        NSDictionary *payment = [self.payments objectAtIndex:indexPath.row];
+        NSString *paymentID = payment[@"id"];
+        
+        [[FRSAPIClient sharedClient] makePaymentActive:paymentID completion:^(id responseObject, NSError *error) {
+            if (!error) {
+                [self resetOtherPayments:paymentID];
+            }
+        }];
+    }
+}
+
+-(void)resetOtherPayments:(NSString *)activePayment {
+    for (FRSPaymentCell *cell in self.tableView.visibleCells) {
+        NSDictionary *payment = cell.payment;
+        
+        if ([payment[@"id"] isEqualToString:activePayment]) {
+            
+        }
+        else {
+            [cell setActive:FALSE];
+        }
     }
 }
 

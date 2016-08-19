@@ -42,9 +42,6 @@
                         <state key="normal" image="trash24K2.png">
                             <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </state>
-                        <connections>
-                            <action selector="deletePayment:" destination="-2" eventType="touchUpInside" id="v8g-oR-qpp"/>
-                        </connections>
                     </button>
                 </subviews>
                 <constraints>
