@@ -365,7 +365,7 @@
         NSURL *photo;
         
         if ([story[@"thumbnails"] count] > 0) {
-            photo = [NSURL URLWithString:story[@"thumbnails"][@"image"]];
+            photo = [NSURL URLWithString:story[@"thumbnails"][0][@"image"]];
         }
         
         NSString *title = @"";
@@ -374,6 +374,7 @@
         }
     
         [cell configureSearchStoryCellWithStoryPhoto:photo storyName:title];
+        return cell;
     }
     
     if (indexPath.section == galleryIndex) {
@@ -403,6 +404,10 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.section == userIndex) {
+        
+    }
 }
 
 #pragma mark - UIScrollViewDelegate

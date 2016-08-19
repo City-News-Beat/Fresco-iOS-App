@@ -15,6 +15,16 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Mastercard (0819)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TjK-FW-XAK">
+                        <rect key="frame" x="25" y="11" width="152" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="cuI-T9-9nU"/>
+                            <constraint firstAttribute="width" constant="152" id="g3R-yZ-KNv"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                        <color key="textColor" red="0.22745098039215686" green="0.22745098039215686" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check-box-circle-outline" translatesAutoresizingMaskIntoConstraints="NO" id="84h-BS-rxV">
                         <rect key="frame" x="287" y="11" width="20" height="20"/>
                         <constraints>
@@ -22,21 +32,25 @@
                             <constraint firstAttribute="width" constant="20" id="9cl-TQ-bjt"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mastercard (0819)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TjK-FW-XAK">
-                        <rect key="frame" x="13" y="11" width="152" height="21"/>
-                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                        <color key="textColor" red="0.22745098039215686" green="0.22745098039215686" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOs-aE-3QB">
+                        <rect key="frame" x="250" y="9" width="24" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="24" id="RvB-1m-5sW"/>
+                            <constraint firstAttribute="height" constant="24" id="wLI-Hj-tC9"/>
+                        </constraints>
+                        <state key="normal" image="trash24K2.png"/>
+                    </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailingMargin" secondItem="TjK-FW-XAK" secondAttribute="trailing" constant="147" id="0Qh-yj-p1p"/>
                     <constraint firstAttribute="bottomMargin" secondItem="84h-BS-rxV" secondAttribute="bottom" constant="4.5" id="9oP-Kb-SaN"/>
                     <constraint firstAttribute="bottomMargin" secondItem="TjK-FW-XAK" secondAttribute="bottom" constant="3.5" id="AEc-hD-nNG"/>
                     <constraint firstItem="84h-BS-rxV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="BAM-Zv-yEh"/>
+                    <constraint firstItem="84h-BS-rxV" firstAttribute="leading" secondItem="bOs-aE-3QB" secondAttribute="trailing" constant="13" id="OKq-ol-T5j"/>
                     <constraint firstItem="TjK-FW-XAK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="S8C-4b-UxV"/>
+                    <constraint firstItem="TjK-FW-XAK" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Uit-pL-znE"/>
                     <constraint firstAttribute="trailingMargin" secondItem="84h-BS-rxV" secondAttribute="trailing" constant="5" id="fud-Za-FPO"/>
-                    <constraint firstItem="TjK-FW-XAK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="lqR-QB-DVC"/>
+                    <constraint firstItem="bOs-aE-3QB" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="geV-vc-iND"/>
+                    <constraint firstItem="TjK-FW-XAK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="14" id="lqR-QB-DVC"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -48,5 +62,6 @@
     </objects>
     <resources>
         <image name="check-box-circle-outline" width="24" height="24"/>
+        <image name="trash24K2.png" width="24" height="24"/>
     </resources>
 </document>
