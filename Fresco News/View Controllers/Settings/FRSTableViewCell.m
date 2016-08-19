@@ -579,7 +579,7 @@
 
 -(void)configureSearchSeeAllCellWithTitle:(NSString *)title {
     
-    self.defaultTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    self.defaultTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, self.frame.size.height)];
     self.defaultTitleLabel.text = title;
     self.defaultTitleLabel.textAlignment = NSTextAlignmentCenter;
     self.defaultTitleLabel.font = [UIFont notaBoldWithSize:15];
@@ -596,6 +596,17 @@
     profileIV.layer.cornerRadius = 16;
     profileIV.clipsToBounds = YES;
     [profileIV hnk_setImageFromURL:profile];
+    
+    
+    NSLog(@"profileIV = %@", profileIV.image);
+    profileIV.backgroundColor = [UIColor frescoLightTextColor];
+    
+    if (!profile) {
+        UIImageView *profileIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user-24"]];
+        profileIcon.frame = CGRectMake(4, 4, 24, 24);
+        [profileIV addSubview:profileIcon];
+    }
+    
     [self addSubview:profileIV];
 
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8 + 7, self.frame.size.width - 64, self.frame.size.height)];
@@ -630,6 +641,7 @@
     UIImageView *storyPreviewIV = [[UIImageView alloc] init];
     storyPreviewIV.frame = CGRectMake(16, 12, 32, 32);
     storyPreviewIV.layer.cornerRadius = 16;
+    storyPreviewIV.clipsToBounds = YES;
     [self addSubview:storyPreviewIV];
     [storyPreviewIV hnk_setImageFromURL:storyPhoto];
     

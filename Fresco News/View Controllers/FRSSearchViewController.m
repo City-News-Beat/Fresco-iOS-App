@@ -12,6 +12,10 @@
 #import "FRSGalleryCell.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSScrollingViewController.h"
+#import "FRSUser.h"
+#import "FRSProfileViewController.h"
+#import "FRSStoryDetailViewController.h"
+#import <MagicalRecord/MagicalRecord.h>
 
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -36,6 +40,8 @@
     userIndex = 0;
     storyIndex = 1;
     galleryIndex = 2;
+    
+    [self.searchTextField becomeFirstResponder];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -199,7 +205,7 @@
     });
 }
 -(void)searchError:(NSError *)error {
-    
+    NSLog(@"SEARCH ERROR: %@", error);
 }
 
 #pragma mark - UITableView Datasource
@@ -234,6 +240,10 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    NSLog(@"stories.count = %lu", self.stories.count);
+    NSLog(@"users.count = %lu", self.users.count);
+    
     if (section == userIndex) {
         
         if (_users.count == 0) {
@@ -247,11 +257,12 @@
         if (_users.count == 0) {
             return 0;
         }
+        
         if (_users.count > 5) {
             return 7;
         }
         else {
-            return _users.count + 2;
+            return _users.count;
         }
         
         return _users.count + 2;
@@ -270,7 +281,7 @@
         }
         
         if (_stories.count < 5) {
-            return _stories.count+2;
+            return _stories.count;
         }
         return 5 + 2;
     }
@@ -294,7 +305,6 @@
         if (indexPath.row == self.stories.count + 1) {
             return 12;
         }
-        
         return 56;
     }
     else if (indexPath.section == userIndex) {
@@ -302,14 +312,19 @@
             return 44;
         }
         
-        if (indexPath.row == self.users.count + 1) {
-            return 12;
+        if (indexPath.row == 6) { //The 6th row will be the empty space cell
+            return 0;
         }
         
         return 56;
     }
     else {
         // galleries
+        
+        if (self.galleries.count <= 0) {
+            return 0;
+        }
+        
         FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
         return [gallery heightForGallery];
     }
@@ -317,6 +332,22 @@
     return 0;
 }
 
+-(void)pushStoryView:(NSString *)storyID {
+    NSManagedObjectContext *context = [[FRSAPIClient sharedClient] managedObjectContext];
+    FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:context];
+
+    story.uid = storyID;
+    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
+    [self.navigationController pushViewController:detailView animated:YES];
+
+}
+
+-(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    detailView.story = story;
+    [detailView reloadData];
+    return detailView;
+}
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if ((section == userIndex && self.users.count > 0 && self.users)) {
@@ -330,31 +361,34 @@
     return 0;
 }
 
+
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    if (section == userIndex && self.users.count == 0) {
-        return [UIView new];
-    }
+//    if (section == userIndex && self.users.count == 0) {
+//        return [UIView new];
+//    }
+//    if (section == storyIndex && self.stories == 0) {
+//        return [UIView new];
+//    }
     
-    if (section == storyIndex && self.stories == 0) {
-        return [UIView new];
-    }
-    
-    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30)];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, 300, 25)];
-    titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:15];
-    titleLabel.textColor = [UIColor frescoLightTextColor];
-    
-    [header addSubview:titleLabel];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 47)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 6, tableView.frame.size.width -32, 17)];
+    [label setFont:[UIFont notaBoldWithSize:15]];
+    [label setTextColor:[UIColor frescoMediumTextColor]];
+    NSString *title = @"";
     
     if (section == userIndex && self.users.count > 0) {
-        titleLabel.text = @"USERS";
+        title = @"USERS";
     }
     else if (section == storyIndex && self.stories.count > 0) {
-        titleLabel.text = @"STORIES";
+        title = @"STORIES";
     }
-    
-    return header;
+
+
+    [label setText:title];
+    [view addSubview:label];
+    [view setBackgroundColor:[UIColor frescoBackgroundColorDark]];
+    return view;
 }
 
 -(UITableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -395,6 +429,7 @@
         if ([user objectForKey:@"avatar"] || ![[user objectForKey:@"avatar"] isEqual:[NSNull null]]) {
             avatarURL = user[@"avatar"];
         }
+        
         NSURL *avatarURLObject;
         ;
         
@@ -416,6 +451,8 @@
         return cell;
     }
     else if (indexPath.section == storyIndex) {
+        
+        
         
         if (indexPath.row == self.stories.count) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL STORIES"];
@@ -497,9 +534,21 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    if (indexPath.section == userIndex) {
         
+    if (indexPath.section == userIndex) {
+        if (indexPath.row >= self.users.count) {
+            return;
+        }
+        
+        NSDictionary *user = self.users[indexPath.row];
+        FRSUser *userObject = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:userObject];
+        [self.navigationController pushViewController:controller animated:TRUE];
+    }
+    
+    if (indexPath.section == storyIndex) {
+        NSDictionary *story = self.stories[indexPath.row];
+        [self pushStoryView:story[@"id"]];
     }
 }
 

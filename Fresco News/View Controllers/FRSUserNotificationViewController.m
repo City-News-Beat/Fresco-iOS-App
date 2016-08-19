@@ -115,7 +115,7 @@
 
 -(void)segueToUser:(FRSUser *)user {
     
-    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUser:user];
+    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] init];
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
@@ -124,7 +124,6 @@
     
 //    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithActiveAssignment:assignmentID];
 //    [self.navigationController pushViewController:assignmentsVC animated:YES];
-    
     
     FRSNavigationController *navCont = (FRSNavigationController *)[self.tabBarController.viewControllers objectAtIndex:3];
     FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
@@ -192,7 +191,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 6;
+    return 8;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -290,6 +289,37 @@
             
         } break;
             
+        case 6: {
+            
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            cell.titleLabel.text = @"Tax information needed";
+            cell.bodyLabel.text  = @"You’ve made over $2,000 on Fresco! Please add your tax info soon to continue receiving payments.";
+            cell.followButton.alpha = 0;
+            cell.count = 0;
+            cell.image.image = nil;
+            
+            [cell configureCell];
+            
+            return cell;
+            
+        } break;
+            
+        case 7: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            cell.titleLabel.text = @"Your photo was purchased!";
+            cell.bodyLabel.text  = @"WFLA purchased your photo! We’ve sent $20 to your Visa (3189).";
+            cell.followButton.alpha = 0;
+            cell.count = 0;
+            cell.image.image = [UIImage imageNamed:@"apple-story-1"];
+            [cell configureCell];
+            
+            return cell;
+        } break;
+            
         default:
             break;
     }
@@ -312,7 +342,8 @@
     [delegate updateTabBarToUser];
     
     if (indexPath.row == 0) {
-        [self segueToUser:[[FRSAPIClient sharedClient] authenticatedUser]];
+        
+        [self segueToUser:nil];
     }
     
     if (indexPath.row == 1) {
@@ -331,7 +362,14 @@
     if (indexPath.row == 5) {
         
         [self segueToAssignmentWithID:@"xLJE0QzW1G5B"];
-        
+    }
+    
+    if (indexPath.row == 6) {
+        [self segueToTaxInfo];
+    }
+    
+    if (indexPath.row == 7) {
+        [self segueToGallery];
     }
     
 }

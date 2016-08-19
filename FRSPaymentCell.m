@@ -22,7 +22,9 @@
 }
 
 -(IBAction)deletePayment:(id)sender {
-    NSLog(@"PAY: %@", self.payment);
+    if (_delegate) {
+        [_delegate deleteButtonClicked:self.payment];
+    }
 }
 
 -(void)setActive:(BOOL)active {
