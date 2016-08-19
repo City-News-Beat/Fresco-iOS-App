@@ -579,7 +579,7 @@
 
 -(void)configureSearchSeeAllCellWithTitle:(NSString *)title {
     
-    self.defaultTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    self.defaultTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, self.frame.size.height)];
     self.defaultTitleLabel.text = title;
     self.defaultTitleLabel.textAlignment = NSTextAlignmentCenter;
     self.defaultTitleLabel.font = [UIFont notaBoldWithSize:15];

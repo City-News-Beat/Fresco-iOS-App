@@ -203,7 +203,7 @@
     });
 }
 -(void)searchError:(NSError *)error {
-    
+    NSLog(@"SEARCH ERROR: %@", error);
 }
 
 #pragma mark - UITableView Datasource
@@ -279,7 +279,7 @@
         }
         
         if (_stories.count < 5) {
-            return _stories.count+2;
+            return _stories.count;
         }
         return 5 + 2;
     }
@@ -303,7 +303,6 @@
         if (indexPath.row == self.stories.count + 1) {
             return 12;
         }
-        
         return 56;
     }
     else if (indexPath.section == userIndex) {
@@ -311,8 +310,8 @@
             return 44;
         }
         
-        if (indexPath.row == self.users.count + 1) {
-            return 12;
+        if (indexPath.row == 6) { //The 6th row will be the empty space cell
+            return 0;
         }
         
         return 56;
@@ -342,12 +341,12 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    if (section == userIndex && self.users.count == 0) {
-        return [UIView new];
-    }
-    if (section == storyIndex && self.stories == 0) {
-        return [UIView new];
-    }
+//    if (section == userIndex && self.users.count == 0) {
+//        return [UIView new];
+//    }
+//    if (section == storyIndex && self.stories == 0) {
+//        return [UIView new];
+//    }
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 47)];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 6, tableView.frame.size.width -32, 17)];
@@ -429,6 +428,8 @@
     }
     else if (indexPath.section == storyIndex) {
         
+        
+        
         if (indexPath.row == self.stories.count) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL STORIES"];
             return cell;
@@ -509,6 +510,8 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    NSLog(@"ROW: %ld", indexPath.row);
     
     if (indexPath.section == userIndex) {
         if (indexPath.row >= self.users.count) {
