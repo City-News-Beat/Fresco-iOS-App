@@ -545,7 +545,7 @@
     }
     
     if (indexPath.section == storyIndex) {
-        NSDictionary *story = self.users[indexPath.row];
+        NSDictionary *story = self.stories[indexPath.row];
         [self pushStoryView:story[@"id"]];
     }
 }
