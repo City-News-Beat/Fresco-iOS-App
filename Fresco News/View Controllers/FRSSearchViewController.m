@@ -357,7 +357,7 @@
     return header;
 }
 
--(FRSTableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+-(UITableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *galleryIdentifier;
     NSString *cellIdentifier;
     
@@ -384,7 +384,7 @@
             return cell;
         }
         
-        if ((indexPath.row == self.users.count + 1) || (indexPath.row == 6 && !_userExtended)) {
+        if ((indexPath.row == self.users.count + 1) || (indexPath.row == 6 && !_userExtended) || (self.users.count < 5 && indexPath.row == self.users.count)) {
             [cell configureEmptyCellSpace:NO];
             return cell;
         }
@@ -396,17 +396,18 @@
             avatarURL = user[@"avatar"];
         }
         NSURL *avatarURLObject;
+        ;
         
         if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
         
-        NSString *firstname = @"";
+        NSString *firstname = @" ";
         if (user[@"full_name"] || ![user[@"full_name"] isEqual:[NSNull null]]) {
             firstname = user[@"full_name"];
         }
         
-        NSString *username = @"";
+        NSString *username = @" ";
         if (user[@"username"] || ![user[@"username"] isEqual:[NSNull null]]) {
             username = user[@"username"];
         }
@@ -433,7 +434,7 @@
             photo = [NSURL URLWithString:story[@"thumbnails"][0][@"image"]];
         }
         
-        NSString *title = @"";
+        NSString *title = @" ";
         if (story[@"title"] && ![story[@"title"] isEqual:[NSNull null]]) {
             title = story[@"title"];
         }
@@ -465,8 +466,8 @@
             [cell clearCell];
             [cell configureCell];
         });
-        
-        return cell;
+        UITableViewCell *cellToReturn = (UITableViewCell *)cell;
+        return cellToReturn;
     }
 
     return Nil;
