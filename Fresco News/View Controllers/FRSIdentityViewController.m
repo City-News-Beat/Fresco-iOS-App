@@ -197,14 +197,9 @@
                     
                 case 3:
                     [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
-<<<<<<< HEAD
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     self.saveIDInfoButton = cell.rightAlignedButton;
                     [self.saveIDInfoButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
-=======
-                    [cell.rightAlignedButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
->>>>>>> 3.0-phil
                     break;
                     
                     
@@ -218,7 +213,6 @@
     }
 }
 
-<<<<<<< HEAD
 -(void)textFieldDidChange:(UITextField *)textField{
     BOOL enableSaveButton = true;
     NSArray *mandatoryTextFieldArray = [[NSArray alloc] initWithObjects:_firstNameField,_lastNameField, _addressField, _cityField, _stateField, _zipField, _dateField, nil];
@@ -256,36 +250,11 @@
             //Failiure popup
             self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [self.alert show];
-=======
--(void)saveIDInfo{/*
-    NSString *firstName, *lastName;
-    NSMutableDictionary *addressDic = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary *dobDic = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary *idInfo = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"address", addressDic, @"dob", dobDic, @"first_name", firstName,@"last_name", lastName, nil];
-    for(int i = 0; i < self.tableView.visibleCells.count; i++){
-        FRSTableViewCell *cell = [self.tableView.visibleCells objectAtIndex:i];
-        NSIndexPath cellIndexPath = [self.tableView indexPathForCell:cell];
-        if(!cell.rightAlignedButton && cell.textField){
-            if(cellIndexPath.section == 0){
-                if(cellIndexPath.row == 0){
-                    firstName = cell.textField.text;
-                }else if(cellIndexPath.row == 1){
-                    lastName = cell.textField.text;
-                }else if(cellIndexPath.row == 2){
-                    [dobDic setValue:cell.textField.text forKey:@"day"];
-                    [dobDic setValue:<#(nullable id)#> forKey:@"month"];
-                    [dobDic setValue:<#(nullable id)#> forKey:@"year"];
-                }
-            }
->>>>>>> 3.0-phil
         }
         self.savingInfo = false;
     }];
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> 3.0-phil
 -(void)startDateSelected:(UIDatePicker *)sender {
     NSDate *currentDate = sender.date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -296,10 +265,6 @@
 }
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 3.0-phil
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -311,8 +276,6 @@
         NSLog(@"SAVING INFO: %@ %@ %@ %@ %@ %@ %@", _firstNameField.text, _lastNameField.text, _addressField.text, _unitField.text, _stateField.text, _zipField.text, _dateField.text);
     }
     
-    
-
 }
 
 @end
