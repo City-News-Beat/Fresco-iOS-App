@@ -207,7 +207,7 @@
 -(void)configureTableView{
     self.title = @"";
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64-44)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64-44) style:UITableViewStyleGrouped];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -215,6 +215,7 @@
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
+    self.tableView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -235,6 +236,10 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == userIndex) {
         
+        if (_users.count == 0) {
+            return 0;
+        }
+        
         if (_userExtended) {
             return _users.count;
         }
@@ -252,6 +257,10 @@
         return _users.count + 2;
     }
     if (section == storyIndex) {
+        
+        if (_stories.count == 0) {
+            return 0;
+        }
         
         if (_storyExtended) {
             return _stories.count;
@@ -308,7 +317,47 @@
     return 0;
 }
 
--(FRSTableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if ((section == userIndex && self.users.count > 0 && self.users)) {
+        return 30;
+    }
+    
+    if ((section == storyIndex && self.stories.count > 0)) {
+        return 30;
+    }
+    
+    return 0;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    if (section == userIndex && self.users.count == 0) {
+        return [UIView new];
+    }
+    
+    if (section == storyIndex && self.stories == 0) {
+        return [UIView new];
+    }
+    
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, 300, 25)];
+    titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:15];
+    titleLabel.textColor = [UIColor frescoLightTextColor];
+    
+    [header addSubview:titleLabel];
+    
+    if (section == userIndex && self.users.count > 0) {
+        titleLabel.text = @"USERS";
+    }
+    else if (section == storyIndex && self.stories.count > 0) {
+        titleLabel.text = @"STORIES";
+    }
+    
+    return header;
+}
+
+-(UITableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *galleryIdentifier;
     NSString *cellIdentifier;
     
@@ -335,7 +384,7 @@
             return cell;
         }
         
-        if ((indexPath.row == self.users.count + 1) || (indexPath.row == 6 && !_userExtended)) {
+        if ((indexPath.row == self.users.count + 1) || (indexPath.row == 6 && !_userExtended) || (self.users.count < 5 && indexPath.row == self.users.count)) {
             [cell configureEmptyCellSpace:NO];
             return cell;
         }
@@ -347,17 +396,18 @@
             avatarURL = user[@"avatar"];
         }
         NSURL *avatarURLObject;
+        ;
         
         if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
         
-        NSString *firstname = @"";
+        NSString *firstname = @" ";
         if (user[@"full_name"] || ![user[@"full_name"] isEqual:[NSNull null]]) {
             firstname = user[@"full_name"];
         }
         
-        NSString *username = @"";
+        NSString *username = @" ";
         if (user[@"username"] || ![user[@"username"] isEqual:[NSNull null]]) {
             username = user[@"username"];
         }
@@ -384,7 +434,7 @@
             photo = [NSURL URLWithString:story[@"thumbnails"][0][@"image"]];
         }
         
-        NSString *title = @"";
+        NSString *title = @" ";
         if (story[@"title"] && ![story[@"title"] isEqual:[NSNull null]]) {
             title = story[@"title"];
         }
@@ -416,8 +466,8 @@
             [cell clearCell];
             [cell configureCell];
         });
-        
-        return cell;
+        UITableViewCell *cellToReturn = (UITableViewCell *)cell;
+        return cellToReturn;
     }
 
     return Nil;

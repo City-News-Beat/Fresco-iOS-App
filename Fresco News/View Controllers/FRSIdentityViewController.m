@@ -14,7 +14,15 @@
 @interface FRSIdentityViewController()<UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
-
+@property (strong, nonnull) UITextField *firstNameField;
+@property (strong, nonnull) UITextField *lastNameField;
+@property (strong, nonnull) UITextField *addressField;
+@property (strong, nonnull) UITextField *unitField;
+@property (strong, nonnull) UITextField *cityField;
+@property (strong, nonnull) UITextField *stateField;
+@property (strong, nonnull) UITextField *zipField;
+@property (nonatomic, retain) UITextField *dateField;
+@property (strong, nonatomic) UIDatePicker *datePicker;
 @end
 
 
@@ -117,21 +125,26 @@
                     //Make custom editible cell
                     [cell configureEditableCellWithDefaultText:@"First name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+                    _firstNameField = cell.textField;
                     
                     break;
                     
                 case 1:
                     [cell configureEditableCellWithDefaultText:@"Last name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    _lastNameField = cell.textField;
                     break;
                     
                 case 2:
                     [cell configureEditableCellWithDefaultText:@"Date of birth" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeNumberPad];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    break;
-                    
-                default:
+                    _dateField = cell.textField;
+                    _dateField.secureTextEntry = FALSE;
+                    UIDatePicker *picker1   = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 210, 320, 216)];
+                    [picker1 setDatePickerMode:UIDatePickerModeDate];
+                    picker1.backgroundColor = [UIColor whiteColor];
+                    [picker1 addTarget:self action:@selector(startDateSelected:) forControlEvents:UIControlEventValueChanged];
+                    _dateField.inputView = picker1;
                     break;
             }
             break;
@@ -146,21 +159,26 @@
                 case 0:
                     [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    _addressField = cell.textField;
                     break;
                     
                 case 1:
                     [cell configureEditableCellWithDefaultText:@"Unit # (optional)" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    _unitField = cell.textField;
                     break;
                     
                 case 2:
                     [cell configureEditableCellWithDefaultTextWithMultipleFields:@[@"City", @"State", @"ZIP"] withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    
+                    _cityField = cell.textField;
+                    _stateField = cell.secondaryField;
+                    _zipField = cell.tertiaryField;
                     break;
                     
                 case 3:
                     [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                     
                     
@@ -174,11 +192,25 @@
     }
 }
 
+-(void)startDateSelected:(UIDatePicker *)sender {
+    NSDate *currentDate = sender.date;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MM/dd/yyyy"];
+    
+    NSString *stringFromDate = [formatter stringFromDate:currentDate];
+    _dateField.text = stringFromDate;
+}
+
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    
+    if (indexPath.row == 3 && indexPath.section == 2) {
+        // save
+        NSLog(@"SAVING INFO: %@ %@ %@ %@ %@ %@ %@", _firstNameField.text, _lastNameField.text, _addressField.text, _unitField.text, _stateField.text, _zipField.text, _dateField.text);
+    }
 
 }
 

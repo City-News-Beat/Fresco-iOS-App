@@ -33,11 +33,12 @@
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOs-aE-3QB">
-                        <rect key="frame" x="250" y="9" width="24" height="24"/>
+                        <rect key="frame" x="251" y="8" width="28" height="28"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="24" id="RvB-1m-5sW"/>
-                            <constraint firstAttribute="height" constant="24" id="wLI-Hj-tC9"/>
+                            <constraint firstAttribute="height" constant="28" id="cPD-1z-aDs"/>
+                            <constraint firstAttribute="width" constant="28" id="r0f-1L-JYt"/>
                         </constraints>
+                        <inset key="contentEdgeInsets" minX="2" minY="2" maxX="2" maxY="2"/>
                         <state key="normal" image="trash24K2.png">
                             <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </state>
@@ -50,12 +51,12 @@
                     <constraint firstAttribute="bottomMargin" secondItem="84h-BS-rxV" secondAttribute="bottom" constant="4.5" id="9oP-Kb-SaN"/>
                     <constraint firstAttribute="bottomMargin" secondItem="TjK-FW-XAK" secondAttribute="bottom" constant="3.5" id="AEc-hD-nNG"/>
                     <constraint firstItem="84h-BS-rxV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="BAM-Zv-yEh"/>
-                    <constraint firstItem="84h-BS-rxV" firstAttribute="leading" secondItem="bOs-aE-3QB" secondAttribute="trailing" constant="13" id="OKq-ol-T5j"/>
                     <constraint firstItem="TjK-FW-XAK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="S8C-4b-UxV"/>
                     <constraint firstItem="TjK-FW-XAK" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Uit-pL-znE"/>
+                    <constraint firstItem="84h-BS-rxV" firstAttribute="leading" secondItem="bOs-aE-3QB" secondAttribute="trailing" constant="8" id="cTv-xD-i2W"/>
                     <constraint firstAttribute="trailingMargin" secondItem="84h-BS-rxV" secondAttribute="trailing" constant="5" id="fud-Za-FPO"/>
-                    <constraint firstItem="bOs-aE-3QB" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="geV-vc-iND"/>
                     <constraint firstItem="TjK-FW-XAK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="14" id="lqR-QB-DVC"/>
+                    <constraint firstItem="bOs-aE-3QB" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="yNh-ce-IhZ"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
