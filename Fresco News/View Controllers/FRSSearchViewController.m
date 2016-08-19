@@ -426,6 +426,8 @@
     }
     else if (indexPath.section == storyIndex) {
         
+        
+        
         if (indexPath.row == self.stories.count) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL STORIES"];
             return cell;
