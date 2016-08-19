@@ -308,6 +308,37 @@
     return 0;
 }
 
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == userIndex || section == storyIndex) {
+        return 50;
+    }
+    
+    return 0;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 15, 300, 25)];
+    titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:15];
+    titleLabel.textColor = [UIColor frescoLightTextColor];
+    
+    [header addSubview:titleLabel];
+    
+    if (section == userIndex && self.users.count > 0) {
+        titleLabel.text = @"USERS";
+    }
+    else if (section == storyIndex && self.stories.count > 0) {
+        titleLabel.text = @"STORIES";
+    }
+    else {
+        return [UIView new];
+    }
+    
+    return header;
+}
+
 -(FRSTableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *galleryIdentifier;
     NSString *cellIdentifier;
