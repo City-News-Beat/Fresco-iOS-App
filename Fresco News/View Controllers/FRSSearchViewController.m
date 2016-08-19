@@ -258,7 +258,7 @@
             return 0;
         }
         
-        if (_stories.count < 5) {
+        if (_stories.count > 5) {
             return _stories.count+2;
         }
         return 5 + 2;
@@ -277,7 +277,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == storyIndex) {
-        if (indexPath.row == self.stories.count) {
+        if (indexPath.row == 5 && !_storyExtended) {
             return 44;
         }
         if (indexPath.row == self.stories.count + 1) {
