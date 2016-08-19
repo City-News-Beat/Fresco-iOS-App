@@ -92,7 +92,8 @@
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID {
     self = [super init];
     
-
+    
+    
     
     return self;
 }
@@ -195,7 +196,9 @@
         
         if (globalAssignments.count > 0) {
             [self configureGlobalAssignmentsBar];
-            [self showGlobalAssignmentsBar];
+            if (self.defaultID) {
+                [self showGlobalAssignmentsBar];
+            }
             if (globalAssignments.count > 1) {
                 self.globalAssignmentsLabel.text = [NSString stringWithFormat:@"%lu global assignments", (unsigned long)globalAssignments.count];
             }else{
@@ -365,9 +368,12 @@
     [self.mapView addOverlay:circle];
     [self.mapView addAnnotation:ann];
 
-    
-    if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
+    [self setDefaultAssignment:assignment];
+}
 
+-(void)setDefaultAssignment:(FRSAssignment *)assignment {
+    if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
+        
         self.assignmentTitle = assignment.title;
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;

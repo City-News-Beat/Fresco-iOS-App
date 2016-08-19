@@ -36,6 +36,8 @@
     userIndex = 0;
     storyIndex = 1;
     galleryIndex = 2;
+    
+    [self.searchTextField becomeFirstResponder];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -234,6 +236,10 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    NSLog(@"stories.count = %lu", self.stories.count);
+    NSLog(@"users.count = %lu", self.users.count);
+    
     if (section == userIndex) {
         
         if (_users.count == 0) {
@@ -247,11 +253,12 @@
         if (_users.count == 0) {
             return 0;
         }
+        
         if (_users.count > 5) {
             return 7;
         }
         else {
-            return _users.count + 2;
+            return _users.count;
         }
         
         return _users.count + 2;
@@ -330,31 +337,34 @@
     return 0;
 }
 
+
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
     if (section == userIndex && self.users.count == 0) {
         return [UIView new];
     }
-    
     if (section == storyIndex && self.stories == 0) {
         return [UIView new];
     }
     
-    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30)];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, 300, 25)];
-    titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:15];
-    titleLabel.textColor = [UIColor frescoLightTextColor];
-    
-    [header addSubview:titleLabel];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 47)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 6, tableView.frame.size.width -32, 17)];
+    [label setFont:[UIFont notaBoldWithSize:15]];
+    [label setTextColor:[UIColor frescoMediumTextColor]];
+    NSString *title = @"";
     
     if (section == userIndex && self.users.count > 0) {
-        titleLabel.text = @"USERS";
+        title = @"USERS";
     }
     else if (section == storyIndex && self.stories.count > 0) {
-        titleLabel.text = @"STORIES";
+        title = @"STORIES";
     }
-    
-    return header;
+
+
+    [label setText:title];
+    [view addSubview:label];
+    [view setBackgroundColor:[UIColor frescoBackgroundColorDark]];
+    return view;
 }
 
 -(UITableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
