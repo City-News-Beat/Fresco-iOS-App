@@ -241,13 +241,13 @@
             return 0;
         }
         if (_users.count > 5) {
-            return 6;
+            return 7;
         }
         else {
             return _users.count + 2;
         }
         
-        return _users.count + 1;
+        return _users.count + 2;
     }
     if (section == storyIndex) {
         
@@ -258,7 +258,7 @@
             return 0;
         }
         
-        if (_stories.count > 5) {
+        if (_stories.count < 5) {
             return _stories.count+2;
         }
         return 5 + 2;
@@ -333,7 +333,7 @@
             return cell;
         }
         
-        if (indexPath.row == self.users.count + 1) {
+        if ((indexPath.row == self.users.count + 1) || (indexPath.row == 6 && !_userExtended)) {
             [cell configureEmptyCellSpace:NO];
             return cell;
         }
