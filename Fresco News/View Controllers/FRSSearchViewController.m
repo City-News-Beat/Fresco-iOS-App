@@ -432,8 +432,6 @@
     }
     else if (indexPath.section == storyIndex) {
         
-        
-        
         if (indexPath.row == self.stories.count) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL STORIES"];
             return cell;
@@ -455,7 +453,7 @@
         if (story[@"title"] && ![story[@"title"] isEqual:[NSNull null]]) {
             title = story[@"title"];
         }
-    
+        
         [cell configureSearchStoryCellWithStoryPhoto:photo storyName:title];
         return cell;
     }
