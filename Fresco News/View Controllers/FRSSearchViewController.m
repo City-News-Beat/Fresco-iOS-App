@@ -233,11 +233,11 @@
         if (_users.count == 0) {
             return 0;
         }
-        if (_users.count < 5) {
+        if (_users.count > 5) {
             return _users.count + 2;
         }
         
-        return 8;
+        return _users.count + 1;
     }
     if (section == storyIndex) {
         if (_stories.count == 0) {

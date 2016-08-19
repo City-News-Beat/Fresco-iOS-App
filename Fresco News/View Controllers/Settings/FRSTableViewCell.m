@@ -633,7 +633,7 @@
     [self addSubview:storyPreviewIV];
     [storyPreviewIV hnk_setImageFromURL:storyPhoto];
     
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2- 26, self.frame.size.width - 96, self.frame.size.height)];
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2- 26+11, self.frame.size.width - 96, self.frame.size.height)];
     nameLabel.text = nameString;
     nameLabel.font = [UIFont notaMediumWithSize:17];
     nameLabel.textColor = [UIColor frescoDarkTextColor];

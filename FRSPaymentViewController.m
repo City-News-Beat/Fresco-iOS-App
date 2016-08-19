@@ -29,6 +29,11 @@ static NSString *addPaymentCell = @"addPaymentCell";
     
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self reloadPayments];
+}
+
 -(void)setupTableView {
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -35, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     self.tableView.delegate = self;
@@ -55,11 +60,12 @@ static NSString *addPaymentCell = @"addPaymentCell";
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         FRSPaymentCell *cell = [self.tableView dequeueReusableCellWithIdentifier:paymentCell];
-        NSDictionary *payment = self.payments[indexPath.row];
+        __block NSDictionary *payment = self.payments[indexPath.row];
         cell.paymentTitleLabel.text = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
         cell.payment = payment;
-        cell.deletionBlock = ^void(NSDictionary *payment) {
-            [self deletePayment:payment];
+        cell.deletionBlock = ^void(NSDictionary *pay) {
+            NSIndexPath *path = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
+            [self deletePayment:path];
         };
         
         return cell;
@@ -72,8 +78,9 @@ static NSString *addPaymentCell = @"addPaymentCell";
     return Nil;
 }
 
--(void)deletePayment:(NSDictionary *)payment {
-    
+-(void)deletePayment:(NSIndexPath *)path {
+    NSDictionary *pay = self.payments[path.row];
+    NSLog(@"%@", pay);
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
