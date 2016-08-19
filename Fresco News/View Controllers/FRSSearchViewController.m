@@ -12,6 +12,8 @@
 #import "FRSGalleryCell.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSScrollingViewController.h"
+#import "FRSUser.h"
+#import "FRSProfileViewController.h"
 
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -509,7 +511,14 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == userIndex) {
+        if (indexPath.row >= self.users.count) {
+            return;
+        }
         
+        NSDictionary *user = self.users[indexPath.row];
+        FRSUser *userObject = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:userObject];
+        [self.navigationController pushViewController:controller animated:TRUE];
     }
 }
 
