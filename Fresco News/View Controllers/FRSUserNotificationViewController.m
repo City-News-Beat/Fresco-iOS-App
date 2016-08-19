@@ -298,7 +298,7 @@
             cell.bodyLabel.text  = @"You’ve made over $2,000 on Fresco! Please add your tax info soon to continue receiving payments.";
             cell.followButton.alpha = 0;
             cell.count = 0;
-            cell.image = nil;
+            cell.image.image = nil;
             
             [cell configureCell];
             
