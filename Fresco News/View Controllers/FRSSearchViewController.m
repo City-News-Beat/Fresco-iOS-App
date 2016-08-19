@@ -236,6 +236,10 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    NSLog(@"stories.count = %lu", self.stories.count);
+    NSLog(@"users.count = %lu", self.users.count);
+    
     if (section == userIndex) {
         
         if (_users.count == 0) {
@@ -253,7 +257,7 @@
             return 7;
         }
         else {
-            return _users.count + 2;
+            return _users.count;
         }
         
         return _users.count + 2;
@@ -361,35 +365,6 @@
     [view setBackgroundColor:[UIColor frescoBackgroundColorDark]];
     return view;
 }
-
-//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//    
-//    if (section == userIndex && self.users.count == 0) {
-//        return [UIView new];
-//    }
-//    
-//    if (section == storyIndex && self.stories == 0) {
-//        return [UIView new];
-//    }
-//    
-//    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 47)];
-//    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width -32, 17)]; //17 is the label.height, 6 is the bottom padding
-//    titleLabel.backgroundColor = [UIColor redColor];
-//    titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:15];
-//    titleLabel.textColor = [UIColor frescoLightTextColor];
-//    
-//    [header addSubview:titleLabel];
-//    
-//    if (section == userIndex && self.users.count > 0) {
-//        titleLabel.text = @"USERS";
-//    }
-//    else if (section == storyIndex && self.stories.count > 0) {
-//        titleLabel.text = @"STORIES";
-//    }
-//    
-//    self.tableView.tableHeaderView = header; //Not sure why we need this if we're returning at the bottom, but it works as expected.
-//    return header;
-//}
 
 -(UITableViewCell *)tableView:(FRSTableViewCell *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *galleryIdentifier;
