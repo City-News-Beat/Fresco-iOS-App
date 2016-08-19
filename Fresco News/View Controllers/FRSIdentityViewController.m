@@ -139,6 +139,7 @@
                     [cell configureEditableCellWithDefaultText:@"Date of birth" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeNumberPad];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     _dateField = cell.textField;
+                    _dateField.secureTextEntry = FALSE;
                     UIDatePicker *picker1   = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 210, 320, 216)];
                     [picker1 setDatePickerMode:UIDatePickerModeDate];
                     picker1.backgroundColor = [UIColor whiteColor];
@@ -208,7 +209,7 @@
     
     if (indexPath.row == 3 && indexPath.section == 2) {
         // save
-        NSLog(@"SAVING INFO: %@ %@ %@ %@ %@ %@", _firstNameField.text, _lastNameField.text, _addressField.text, _unitField.text, _stateField.text, _zipField.text);
+        NSLog(@"SAVING INFO: %@ %@ %@ %@ %@ %@ %@", _firstNameField.text, _lastNameField.text, _addressField.text, _unitField.text, _stateField.text, _zipField.text, _dateField.text);
     }
 
 }
