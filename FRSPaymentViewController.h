@@ -10,10 +10,11 @@
 #import "FRSBaseViewController.h"
 #import "Fresco.h"
 #import "FRSAPIClient.h"
+#import "FRSPaymentCell.h"
 
-@interface FRSPaymentViewController : FRSBaseViewController<UITableViewDelegate, UITableViewDataSource>
+@interface FRSPaymentViewController : FRSBaseViewController<UITableViewDelegate, UITableViewDataSource, FRSPaymentCellDelegate>
 {
-    
+    NSInteger selectedIndex;
 }
 @property (nonatomic, retain) NSArray *payments;
 @property (nonatomic, retain) UITableView *tableView;

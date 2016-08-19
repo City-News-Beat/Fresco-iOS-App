@@ -178,7 +178,11 @@
                     
                 case 3:
                     [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
+<<<<<<< HEAD
+                    [cell.rightAlignedButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
+=======
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+>>>>>>> 614a2e69f135a54d4c9deb43981018fa2ebfee92
                     break;
                     
                     
@@ -192,6 +196,31 @@
     }
 }
 
+<<<<<<< HEAD
+-(void)saveIDInfo{/*
+    NSString *firstName, *lastName;
+    NSMutableDictionary *addressDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *dobDic = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *idInfo = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"address", addressDic, @"dob", dobDic, @"first_name", firstName,@"last_name", lastName, nil];
+    for(int i = 0; i < self.tableView.visibleCells.count; i++){
+        FRSTableViewCell *cell = [self.tableView.visibleCells objectAtIndex:i];
+        NSIndexPath cellIndexPath = [self.tableView indexPathForCell:cell];
+        if(!cell.rightAlignedButton && cell.textField){
+            if(cellIndexPath.section == 0){
+                if(cellIndexPath.row == 0){
+                    firstName = cell.textField.text;
+                }else if(cellIndexPath.row == 1){
+                    lastName = cell.textField.text;
+                }else if(cellIndexPath.row == 2){
+                    [dobDic setValue:cell.textField.text forKey:@"day"];
+                    [dobDic setValue:<#(nullable id)#> forKey:@"month"];
+                    [dobDic setValue:<#(nullable id)#> forKey:@"year"];
+                }
+            }
+        }
+    }*/
+}
+=======
 -(void)startDateSelected:(UIDatePicker *)sender {
     NSDate *currentDate = sender.date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -202,6 +231,7 @@
 }
 
 
+>>>>>>> 614a2e69f135a54d4c9deb43981018fa2ebfee92
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

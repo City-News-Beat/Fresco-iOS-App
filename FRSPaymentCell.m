@@ -22,8 +22,19 @@
 }
 
 -(IBAction)deletePayment:(id)sender {
-    if (self.deletionBlock) {
-        self.deletionBlock(self.payment);
+    if (_delegate) {
+        [_delegate deleteButtonClicked:self.payment];
+    }
+}
+
+-(void)setActive:(BOOL)active {
+    self.isActive = active;
+    
+    if (active) {
+        self.selectionCircle.image = [UIImage imageNamed:@"check-box-circle-filled"];
+    }
+    else {
+        self.selectionCircle.image = [UIImage imageNamed:@"check-box-circle-outline"];
     }
 }
 @end
