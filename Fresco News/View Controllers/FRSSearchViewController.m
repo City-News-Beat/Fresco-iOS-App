@@ -14,6 +14,7 @@
 #import "FRSScrollingViewController.h"
 #import "FRSUser.h"
 #import "FRSProfileViewController.h"
+#import "FRSStoryDetailViewController.h"
 
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -330,6 +331,21 @@
     return 0;
 }
 
+-(void)pushStoryView:(NSString *)storyID {
+    
+    FRSStory *story = [[FRSStory alloc] init];
+    story.uid = storyID;
+    FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
+    [self.navigationController pushViewController:detailView animated:YES];
+
+}
+
+-(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    detailView.story = story;
+    [detailView reloadData];
+    return detailView;
+}
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if ((section == userIndex && self.users.count > 0 && self.users)) {
@@ -516,9 +532,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    NSLog(@"ROW: %ld", indexPath.row);
-    
+        
     if (indexPath.section == userIndex) {
         if (indexPath.row >= self.users.count) {
             return;
@@ -528,6 +542,11 @@
         FRSUser *userObject = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:userObject];
         [self.navigationController pushViewController:controller animated:TRUE];
+    }
+    
+    if (indexPath.section == storyIndex) {
+        NSDictionary *story = self.users[indexPath.row];
+        [self pushStoryView:story[@"id"]];
     }
 }
 
