@@ -316,6 +316,11 @@
     }
     else {
         // galleries
+        
+        if (self.galleries.count <= 0) {
+            return 0;
+        }
+        
         FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
         return [gallery heightForGallery];
     }
@@ -404,6 +409,7 @@
         if ([user objectForKey:@"avatar"] || ![[user objectForKey:@"avatar"] isEqual:[NSNull null]]) {
             avatarURL = user[@"avatar"];
         }
+        
         NSURL *avatarURLObject;
         ;
         

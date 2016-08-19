@@ -596,6 +596,17 @@
     profileIV.layer.cornerRadius = 16;
     profileIV.clipsToBounds = YES;
     [profileIV hnk_setImageFromURL:profile];
+    
+    
+    NSLog(@"profileIV = %@", profileIV.image);
+    profileIV.backgroundColor = [UIColor frescoLightTextColor];
+    
+    if (!profile) {
+        UIImageView *profileIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user-24"]];
+        profileIcon.frame = CGRectMake(4, 4, 24, 24);
+        [profileIV addSubview:profileIcon];
+    }
+    
     [self addSubview:profileIV];
 
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8 + 7, self.frame.size.width - 64, self.frame.size.height)];
