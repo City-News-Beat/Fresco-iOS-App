@@ -310,7 +310,11 @@
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if ((section == userIndex && self.users.count > 0) || (section == storyIndex && self.stories.count > 0)) {
+    if ((section == userIndex && self.users.count > 0 && self.users)) {
+        return 50;
+    }
+    
+    if ((section == storyIndex && self.stories.count > 0)) {
         return 50;
     }
     
@@ -318,6 +322,14 @@
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    if (section == userIndex && self.users.count == 0) {
+        return [UIView new];
+    }
+    
+    if (section == storyIndex && self.stories == 0) {
+        return [UIView new];
+    }
     
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40)];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, 300, 25)];
@@ -331,9 +343,6 @@
     }
     else if (section == storyIndex && self.stories.count > 0) {
         titleLabel.text = @"STORIES";
-    }
-    else {
-        return [UIView new];
     }
     
     return header;
