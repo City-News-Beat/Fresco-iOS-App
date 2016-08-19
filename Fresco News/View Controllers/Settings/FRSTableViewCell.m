@@ -598,22 +598,22 @@
     [profileIV hnk_setImageFromURL:profile];
     [self addSubview:profileIV];
 
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8, self.frame.size.width - 64, self.frame.size.height)];
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8 + 7, self.frame.size.width - 64, self.frame.size.height)];
     nameLabel.text = nameString;
     nameLabel.font = [UIFont notaMediumWithSize:17];
     nameLabel.textColor = [UIColor frescoDarkTextColor];
     [nameLabel sizeToFit];
     [self addSubview:nameLabel];
     
-    UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64 + 8 + nameLabel.frame.size.width, self.frame.size.height/2 -5, self.frame.size.width - 64, self.frame.size.height)];
-    usernameLabel.text = username;
+    UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64 + 8 + nameLabel.frame.size.width, self.frame.size.height/2 +3, self.frame.size.width - 64, self.frame.size.height)];
+    usernameLabel.text = (username && ![username isEqual:[NSNull null]]) ? [@"@" stringByAppendingString:username] : @"";
     usernameLabel.font = [UIFont notaRegularWithSize:13];
     usernameLabel.textColor = [UIColor frescoMediumTextColor];
     [usernameLabel sizeToFit];
     [self addSubview:usernameLabel];
 
     UIButton *followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    followingButton.frame = CGRectMake(self.frame.size.width - 40, 16, 24, 24);
+    followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 24, 24);
     [self addSubview:followingButton];
     
     if (isFollowing){

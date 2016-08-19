@@ -57,6 +57,11 @@ static NSString *addPaymentCell = @"addPaymentCell";
         FRSPaymentCell *cell = [self.tableView dequeueReusableCellWithIdentifier:paymentCell];
         NSDictionary *payment = self.payments[indexPath.row];
         cell.paymentTitleLabel.text = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
+        cell.payment = payment;
+        cell.deletionBlock = ^void(NSDictionary *payment) {
+            [self deletePayment:payment];
+        };
+        
         return cell;
     }
     else if (indexPath.section == 1) {
@@ -65,6 +70,10 @@ static NSString *addPaymentCell = @"addPaymentCell";
     }
     
     return Nil;
+}
+
+-(void)deletePayment:(NSDictionary *)payment {
+    
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

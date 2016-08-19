@@ -32,13 +32,18 @@
                             <constraint firstAttribute="width" constant="20" id="9cl-TQ-bjt"/>
                         </constraints>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOs-aE-3QB">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOs-aE-3QB">
                         <rect key="frame" x="250" y="9" width="24" height="24"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="24" id="RvB-1m-5sW"/>
                             <constraint firstAttribute="height" constant="24" id="wLI-Hj-tC9"/>
                         </constraints>
-                        <state key="normal" image="trash24K2.png"/>
+                        <state key="normal" image="trash24K2.png">
+                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="deletePayment:" destination="-2" eventType="touchUpInside" id="v8g-oR-qpp"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>
@@ -54,6 +59,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="deletionButton" destination="bOs-aE-3QB" id="4Fl-ME-3m0"/>
                 <outlet property="paymentTitleLabel" destination="TjK-FW-XAK" id="10y-qm-lrY"/>
                 <outlet property="selectionCircle" destination="84h-BS-rxV" id="Ge9-9D-FZs"/>
             </connections>
