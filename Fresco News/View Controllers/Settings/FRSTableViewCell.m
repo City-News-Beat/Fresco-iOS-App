@@ -630,6 +630,7 @@
     UIImageView *storyPreviewIV = [[UIImageView alloc] init];
     storyPreviewIV.frame = CGRectMake(16, 12, 32, 32);
     storyPreviewIV.layer.cornerRadius = 16;
+    storyPreviewIV.clipsToBounds = YES;
     [self addSubview:storyPreviewIV];
     [storyPreviewIV hnk_setImageFromURL:storyPhoto];
     
