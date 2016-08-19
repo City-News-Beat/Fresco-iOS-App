@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@protocol FRSPaymentCellDelegate
+-(void)deleteButtonClicked:(NSDictionary *)payment;
+@end
 @interface FRSPaymentCell : UITableViewCell
 {
 
@@ -17,6 +19,7 @@
 @property (nonatomic, retain) IBOutlet UIButton *deletionButton;
 @property (nonatomic, copy) void (^deletionBlock)(NSDictionary *payment);
 @property (nonatomic, retain) NSDictionary *payment;
+@property (nonatomic, weak) id<FRSPaymentCellDelegate> delegate;
 @property BOOL isActive;
 
 -(IBAction)deletePayment:(id)sender;

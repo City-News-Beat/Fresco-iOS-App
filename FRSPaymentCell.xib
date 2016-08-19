@@ -33,7 +33,7 @@
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOs-aE-3QB">
-                        <rect key="frame" x="251" y="8" width="28" height="28"/>
+                        <rect key="frame" x="247" y="8" width="28" height="28"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="28" id="cPD-1z-aDs"/>
                             <constraint firstAttribute="width" constant="28" id="r0f-1L-JYt"/>
@@ -42,6 +42,9 @@
                         <state key="normal" image="trash24K2.png">
                             <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </state>
+                        <connections>
+                            <action selector="deletePayment:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="k00-g1-JBF"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>
@@ -50,7 +53,7 @@
                     <constraint firstItem="84h-BS-rxV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="BAM-Zv-yEh"/>
                     <constraint firstItem="TjK-FW-XAK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="S8C-4b-UxV"/>
                     <constraint firstItem="TjK-FW-XAK" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Uit-pL-znE"/>
-                    <constraint firstItem="84h-BS-rxV" firstAttribute="leading" secondItem="bOs-aE-3QB" secondAttribute="trailing" constant="8" id="cTv-xD-i2W"/>
+                    <constraint firstItem="84h-BS-rxV" firstAttribute="leading" secondItem="bOs-aE-3QB" secondAttribute="trailing" constant="12" id="cTv-xD-i2W"/>
                     <constraint firstAttribute="trailingMargin" secondItem="84h-BS-rxV" secondAttribute="trailing" constant="5" id="fud-Za-FPO"/>
                     <constraint firstItem="TjK-FW-XAK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="14" id="lqR-QB-DVC"/>
                     <constraint firstItem="bOs-aE-3QB" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="yNh-ce-IhZ"/>
