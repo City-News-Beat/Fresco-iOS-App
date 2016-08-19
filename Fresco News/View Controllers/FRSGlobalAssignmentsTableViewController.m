@@ -48,7 +48,7 @@
 -(void)configureTableView {
     [super configureTableView];
     
-self.tableView.frame = CGRectMake(0, -self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height);// - self.navigationController.navigationBar.frame.size.height);
+self.tableView.frame = CGRectMake(0, -self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-self.tabBarController.tabBar.frame.size.height);// - self.navigationController.navigationBar.frame.size.height);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;

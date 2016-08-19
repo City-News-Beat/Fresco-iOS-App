@@ -8,6 +8,8 @@
 
 #import "FRSPaymentViewController.h"
 #import "FRSDebitCardViewController.h"
+#import "FRSPaymentCell.h"
+
 @interface FRSPaymentViewController ()
 @end
 
@@ -25,6 +27,11 @@ static NSString *addPaymentCell = @"addPaymentCell";
     [self setupTableView];
     [self reloadPayments];
     
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self reloadPayments];
 }
 
 -(void)setupTableView {
@@ -52,8 +59,15 @@ static NSString *addPaymentCell = @"addPaymentCell";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:paymentCell];
-        NSLog(@"%@ PAY CELL", cell);
+        FRSPaymentCell *cell = [self.tableView dequeueReusableCellWithIdentifier:paymentCell];
+        __block NSDictionary *payment = self.payments[indexPath.row];
+        cell.paymentTitleLabel.text = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
+        cell.payment = payment;
+        cell.deletionBlock = ^void(NSDictionary *pay) {
+            NSIndexPath *path = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
+            [self deletePayment:path];
+        };
+        
         return cell;
     }
     else if (indexPath.section == 1) {
@@ -62,6 +76,11 @@ static NSString *addPaymentCell = @"addPaymentCell";
     }
     
     return Nil;
+}
+
+-(void)deletePayment:(NSIndexPath *)path {
+    NSDictionary *pay = self.payments[path.row];
+    NSLog(@"%@", pay);
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -104,6 +123,8 @@ static NSString *addPaymentCell = @"addPaymentCell";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+ 
+ brand last4
 }
 */
 

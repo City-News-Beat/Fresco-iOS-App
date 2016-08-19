@@ -18,6 +18,8 @@
 @property (strong, nonatomic) UIButton *clearButton;
 
 @property (strong, nonatomic) UIButton *backTapButton;
+@property BOOL userExtended;
+@property BOOL storyExtended;
 
 @end
 
@@ -183,6 +185,7 @@
         self.users = storyObject[@"results"];
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
         self.users = userObject[@"results"];
+        self.stories = storyObject[@"results"];
         [self reloadData];
     }];
 }
@@ -202,7 +205,7 @@
 -(void)configureTableView{
     self.title = @"";
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64-44)];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -229,16 +232,28 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == userIndex) {
+        
+        if (_userExtended) {
+            return _users.count;
+        }
+        
         if (_users.count == 0) {
             return 0;
         }
-        if (_users.count < 5) {
+        if (_users.count > 5) {
+            return 7;
+        }
+        else {
             return _users.count + 2;
         }
         
-        return 8;
+        return _users.count + 2;
     }
     if (section == storyIndex) {
+        
+        if (_storyExtended) {
+            return _stories.count;
+        }
         if (_stories.count == 0) {
             return 0;
         }
@@ -262,7 +277,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == storyIndex) {
-        if (indexPath.row == self.stories.count) {
+        if (indexPath.row == 5 && !_storyExtended) {
             return 44;
         }
         if (indexPath.row == self.stories.count + 1) {
@@ -272,7 +287,7 @@
         return 56;
     }
     else if (indexPath.section == userIndex) {
-        if (indexPath.row == self.users.count) {
+        if (indexPath.row == 5 && !_userExtended) {
             return 44;
         }
         
@@ -313,12 +328,12 @@
     
     if (indexPath.section == userIndex) {
         
-        if (indexPath.row == self.users.count) {
+        if (indexPath.row == 5 && !_userExtended) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL USERS"];
             return cell;
         }
         
-        if (indexPath.row == self.users.count + 1) {
+        if ((indexPath.row == self.users.count + 1) || (indexPath.row == 6 && !_userExtended)) {
             [cell configureEmptyCellSpace:NO];
             return cell;
         }
@@ -331,7 +346,7 @@
         }
         NSURL *avatarURLObject;
         
-        if (avatarURL) {
+        if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
         
@@ -360,19 +375,20 @@
             return cell;
         }
         
-        FRSStory *story = self.stories[0];
+        NSDictionary *story = self.stories[0];
         NSURL *photo;
         
-        if (story.imageURLs.count > 0) {
-            photo = [NSURL URLWithString:story.imageURLs[0]];
+        if ([story[@"thumbnails"] count] > 0) {
+            photo = [NSURL URLWithString:story[@"thumbnails"][0][@"image"]];
         }
         
         NSString *title = @"";
-        if (story.title && ![story.title isEqual:[NSNull null]]) {
-            title = story.title;
+        if (story[@"title"] && ![story[@"title"] isEqual:[NSNull null]]) {
+            title = story[@"title"];
         }
     
         [cell configureSearchStoryCellWithStoryPhoto:photo storyName:title];
+        return cell;
     }
     
     if (indexPath.section == galleryIndex) {
@@ -402,6 +418,10 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.section == userIndex) {
+        
+    }
 }
 
 #pragma mark - UIScrollViewDelegate

@@ -11,5 +11,9 @@
 @interface FRSPaymentCell : UITableViewCell
 @property (nonatomic, retain) IBOutlet UILabel *paymentTitleLabel;
 @property (nonatomic, retain) IBOutlet UIImageView *selectionCircle;
+@property (nonatomic, retain) IBOutlet UIButton *deletionButton;
+@property (nonatomic, copy) void (^deletionBlock)(NSDictionary *payment);
+@property (nonatomic, retain) NSDictionary *payment;
 
+-(IBAction)deletePayment:(id)sender;
 @end
