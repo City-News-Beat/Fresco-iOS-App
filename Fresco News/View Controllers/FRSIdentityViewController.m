@@ -14,6 +14,13 @@
 @interface FRSIdentityViewController()<UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonnull) UITextField *firstNameField;
+@property (strong, nonnull) UITextField *lastNameField;
+@property (strong, nonnull) UITextField *addressField;
+@property (strong, nonnull) UITextField *unitField;
+@property (strong, nonnull) UITextField *cityField;
+@property (strong, nonnull) UITextField *stateField;
+@property (strong, nonnull) UITextField *zipField;
 @end
 
 
@@ -116,13 +123,14 @@
                     //Make custom editible cell
                     [cell configureEditableCellWithDefaultText:@"First name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+                    _firstNameField = cell.textField;
                     
                     break;
                     
                 case 1:
                     [cell configureEditableCellWithDefaultText:@"Last name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    _lastNameField = cell.textField;
                     break;
                     
                 case 2:
@@ -145,17 +153,21 @@
                 case 0:
                     [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    _addressField = cell.textField;
                     break;
                     
                 case 1:
                     [cell configureEditableCellWithDefaultText:@"Unit # (optional)" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    _unitField = cell.textField;
                     break;
                     
                 case 2:
                     [cell configureEditableCellWithDefaultTextWithMultipleFields:@[@"City", @"State", @"ZIP"] withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    
+                    _cityField = cell.textField;
+                    _stateField = cell.secondaryField;
+                    _zipField = cell.tertiaryField;
                     break;
                     
                 case 3:
