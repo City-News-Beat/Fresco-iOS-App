@@ -207,7 +207,7 @@
 -(void)configureTableView{
     self.title = @"";
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64-44)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64-44) style:UITableViewStyleGrouped];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -320,7 +320,7 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 40)];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 15, 300, 25)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, 300, 25)];
     titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:15];
     titleLabel.textColor = [UIColor frescoLightTextColor];
     
