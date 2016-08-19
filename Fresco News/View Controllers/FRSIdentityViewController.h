@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
 
-@interface FRSIdentityViewController : FRSBaseViewController
+@interface FRSIdentityViewController : FRSBaseViewController <UITextFieldDelegate>
 
 @end
