@@ -833,7 +833,8 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [super scrollViewDidScroll:scrollView];
-    //Once the user has scroll past the feed/likes section view, start moving it with the nav bar
+    //Bounce only at the bottom of the tableview
+    scrollView.bounces = (scrollView.contentOffset.y > 10);
     
     CGRect newFrame = self.sectionView.frame;
     

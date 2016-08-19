@@ -2100,6 +2100,7 @@
 		D4C217CB1D63B7230076172D /* Manage Payment */ = {
 			isa = PBXGroup;
 			children = (
+				D4C217E11D6715370076172D /* Title Cell */,
 				D4C217D51D64E1510076172D /* Add Cell */,
 				D4C217CF1D64DBEC0076172D /* Payment Cell */,
 				D4C217CC1D63B7B40076172D /* FRSPaymentViewController.h */,
@@ -2126,6 +2127,13 @@
 				D4C217D81D64E1700076172D /* FRSAddPaymentCell.xib */,
 			);
 			name = "Add Cell";
+			sourceTree = "<group>";
+		};
+		D4C217E11D6715370076172D /* Title Cell */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Title Cell";
 			sourceTree = "<group>";
 		};
 		D4D60D0D1CC8365B00059EBA /* Highlights */ = {
