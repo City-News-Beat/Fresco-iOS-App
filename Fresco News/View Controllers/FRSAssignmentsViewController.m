@@ -432,7 +432,7 @@
 
     if (!annotationView) {
         
-        if ([annotation isKindOfClass:FRSMapCircleTypeUser]) {
+        if ([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"user-annotation"];
         
             UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
@@ -453,14 +453,14 @@
             imageView.frame = CGRectMake(-9, -9, 18, 18);
             imageView.layer.cornerRadius = 9;
             imageView.clipsToBounds = YES;
+            imageView.contentMode = UIViewContentModeScaleAspectFill;
             [annotationView addSubview:imageView];
             
             if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
                 NSString *link = [[FRSAPIClient sharedClient].authenticatedUser valueForKey:@"profileImage"];
                 NSURL *url = [NSURL URLWithString:link];
                 [imageView hnk_setImageFromURL:url];
-                imageView.backgroundColor = [UIColor redColor];
-                
+                imageView.backgroundColor = [UIColor frescoBlueColor];
             } else {
                 imageView.backgroundColor = [UIColor frescoBlueColor];
             }
@@ -516,6 +516,7 @@
     self.userCircle = [FRSMapCircle circleWithCenterCoordinate:userLocation.coordinate radius:radius];
     self.userCircle.circleType = FRSMapCircleTypeUser;
     [self.mapView addOverlay:self.userCircle];
+    [self.mapView addAnnotation:self.userCircle];
 }
 
 

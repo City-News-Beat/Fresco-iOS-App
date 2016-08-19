@@ -15,6 +15,16 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Mastercard (0819)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TjK-FW-XAK">
+                        <rect key="frame" x="25" y="11" width="152" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="cuI-T9-9nU"/>
+                            <constraint firstAttribute="width" constant="152" id="g3R-yZ-KNv"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                        <color key="textColor" red="0.22745098039215686" green="0.22745098039215686" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check-box-circle-outline" translatesAutoresizingMaskIntoConstraints="NO" id="84h-BS-rxV">
                         <rect key="frame" x="287" y="11" width="20" height="20"/>
                         <constraints>
@@ -22,24 +32,35 @@
                             <constraint firstAttribute="width" constant="20" id="9cl-TQ-bjt"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mastercard (0819)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TjK-FW-XAK">
-                        <rect key="frame" x="13" y="11" width="152" height="21"/>
-                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                        <color key="textColor" red="0.22745098039215686" green="0.22745098039215686" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOs-aE-3QB">
+                        <rect key="frame" x="251" y="8" width="28" height="28"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="28" id="cPD-1z-aDs"/>
+                            <constraint firstAttribute="width" constant="28" id="r0f-1L-JYt"/>
+                        </constraints>
+                        <inset key="contentEdgeInsets" minX="2" minY="2" maxX="2" maxY="2"/>
+                        <state key="normal" image="trash24K2.png">
+                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="deletePayment:" destination="-2" eventType="touchUpInside" id="v8g-oR-qpp"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailingMargin" secondItem="TjK-FW-XAK" secondAttribute="trailing" constant="147" id="0Qh-yj-p1p"/>
                     <constraint firstAttribute="bottomMargin" secondItem="84h-BS-rxV" secondAttribute="bottom" constant="4.5" id="9oP-Kb-SaN"/>
                     <constraint firstAttribute="bottomMargin" secondItem="TjK-FW-XAK" secondAttribute="bottom" constant="3.5" id="AEc-hD-nNG"/>
                     <constraint firstItem="84h-BS-rxV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="BAM-Zv-yEh"/>
                     <constraint firstItem="TjK-FW-XAK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="S8C-4b-UxV"/>
+                    <constraint firstItem="TjK-FW-XAK" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Uit-pL-znE"/>
+                    <constraint firstItem="84h-BS-rxV" firstAttribute="leading" secondItem="bOs-aE-3QB" secondAttribute="trailing" constant="8" id="cTv-xD-i2W"/>
                     <constraint firstAttribute="trailingMargin" secondItem="84h-BS-rxV" secondAttribute="trailing" constant="5" id="fud-Za-FPO"/>
-                    <constraint firstItem="TjK-FW-XAK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="lqR-QB-DVC"/>
+                    <constraint firstItem="TjK-FW-XAK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="14" id="lqR-QB-DVC"/>
+                    <constraint firstItem="bOs-aE-3QB" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="yNh-ce-IhZ"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="deletionButton" destination="bOs-aE-3QB" id="4Fl-ME-3m0"/>
                 <outlet property="paymentTitleLabel" destination="TjK-FW-XAK" id="10y-qm-lrY"/>
                 <outlet property="selectionCircle" destination="84h-BS-rxV" id="Ge9-9D-FZs"/>
             </connections>
@@ -48,5 +69,6 @@
     </objects>
     <resources>
         <image name="check-box-circle-outline" width="24" height="24"/>
+        <image name="trash24K2.png" width="24" height="24"/>
     </resources>
 </document>

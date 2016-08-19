@@ -21,4 +21,9 @@
     // Configure the view for the selected state
 }
 
+-(IBAction)deletePayment:(id)sender {
+    if (self.deletionBlock) {
+        self.deletionBlock(self.payment);
+    }
+}
 @end

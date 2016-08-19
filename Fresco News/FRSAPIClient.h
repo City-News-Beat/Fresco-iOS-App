@@ -112,6 +112,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)createPaymentWithToken:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchPayments:(FRSAPIDefaultCompletionBlock)completion;
 -(void)deletePayment:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)makePaymentActive:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion;
 
 // file
 -(void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
