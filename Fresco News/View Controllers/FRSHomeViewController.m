@@ -134,6 +134,7 @@
     [self configureTableView];
     [self configureDataSource];
     [self configurePullToRefresh];
+    [self displayPreviousTab];
 }
 
 -(void)addNotificationObservers {
@@ -729,6 +730,8 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
+    NSLog(@"self.pageScroller.contentOffset.x = %f", self.pageScroller.contentOffset.x);
+    
     //self.sudoNavBar.frame = CGRectMake(0, (scrollView.contentOffset.x/8.5)-88, self.view.frame.size.width, 44);
 
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
@@ -827,11 +830,24 @@
         // animate nav up
         
     }
-    
-    NSLog(@"shouldDisplayHighlights: %d", [[NSUserDefaults standardUserDefaults] boolForKey:@"shouldDisplayHighlights"]);
+}
+
+-(void)displayPreviousTab {
+    //Checks which tab the user left the view from and displays it on next launch
+
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"shouldDisplayHighlights"]) {
+        [self.pageScroller setContentOffset:CGPointMake(0, 0) animated:NO];
+    } else {
+        [self.pageScroller setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:NO];
+    }
 }
 
 -(void)pausePlayers {
+    
+    if (!self.tableView || !self.followingTable) {
+        return;
+    }
+    
     for (UITableView *tableView in @[self.tableView, self.followingTable]) {
         for (FRSGalleryCell *cell in [tableView visibleCells]) {
             if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
