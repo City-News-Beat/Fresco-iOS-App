@@ -183,6 +183,8 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
     Notification types
  */
 
+static NSString * const settingsKey = @"notification-type";
+
 // News
 static NSString * const photoOfDayNotification = @"user-news-photos-of-day";
 static NSString * const todayInNewsNotification = @"user-news-today-in-news";

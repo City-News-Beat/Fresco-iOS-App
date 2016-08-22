@@ -72,7 +72,7 @@
         [self handleLocalPush];
     }
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [self handleRemotePush];
+        [self handleRemotePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
         [self handleColdQuickAction:launchOptions[UIApplicationLaunchOptionsShortcutItemKey]];
@@ -337,7 +337,8 @@
     
 }
 
--(void)handleRemotePush {
+-(void)handleRemotePush:(NSDictionary *)push {
+    NSString *instruction = push[settingsKey];
     
 }
 
@@ -362,7 +363,6 @@
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     
     completionHandler(TRUE);
-    
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
