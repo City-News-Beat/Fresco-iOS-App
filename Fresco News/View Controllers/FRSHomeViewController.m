@@ -775,7 +775,7 @@
         }
         
         if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldDisplayHighlights"];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldDisplayFollowing"];
             self.isInHighlights = true;
             self.isInFollowers = false;
             self.followingTabButton.alpha = 0.7;
@@ -796,7 +796,7 @@
             [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
             [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
         }else if(self.pageScroller.contentOffset.x == self.tableView.frame.size.width){
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldDisplayHighlights"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldDisplayFollowing"];
             self.isInHighlights = false;
             self.isInFollowers = true;
         }
@@ -834,15 +834,16 @@
 -(void)displayPreviousTab {
     //Checks which tab the user left the view from and displays it on next launch
 
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"shouldDisplayHighlights"]) {
-        [self.pageScroller setContentOffset:CGPointMake(0, 0) animated:YES];
-        self.highlightTabButton.alpha = 1.0;
-        self.followingTabButton.alpha = 0.7;
-    
-    } else {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"shouldDisplayFollowing"]) {
         [self.pageScroller setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:YES];
         self.followingTabButton.alpha = 1.0;
         self.highlightTabButton.alpha = 0.7;
+    
+    } else {
+        [self.pageScroller setContentOffset:CGPointMake(0, 0) animated:YES];
+        self.highlightTabButton.alpha = 1.0;
+        self.followingTabButton.alpha = 0.7;
+
     }
 }
 
