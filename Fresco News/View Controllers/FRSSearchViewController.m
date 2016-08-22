@@ -16,13 +16,15 @@
 #import "FRSProfileViewController.h"
 #import "FRSStoryDetailViewController.h"
 //#import <MagicalRecord/MagicalRecord.h>
+#import "FRSAwkwardView.h"
+
 
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UITextField *searchTextField;
 @property (strong, nonatomic) UIButton *clearButton;
-
+@property (strong, nonatomic) FRSAwkwardView *awkwardView;
 @property (strong, nonatomic) UIButton *backTapButton;
 @property BOOL userExtended;
 @property BOOL storyExtended;
@@ -58,7 +60,7 @@
 -(void)clear{
     self.searchTextField.text = @"";
     [self hideClearButton];
-    [self.searchTextField resignFirstResponder];
+//    [self.searchTextField resignFirstResponder];
 }
 
 #pragma mark - UI
@@ -169,7 +171,8 @@
 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
     [self hideClearButton];
-    
+    [self.awkwardView removeFromSuperview];
+    self.awkwardView = nil;
     if (textField.text) {
         [self performSearchWithQuery:textField.text];
     }
@@ -195,6 +198,10 @@
         self.users = userObject[@"results"];
         self.stories = storyObject[@"results"];
         [self reloadData];
+        
+        if (self.users.count == 0 && self.galleries.count == 0 && self.stories.count == 0) {
+            [self configureNoResults];
+        }
     }];
 }
 
@@ -206,6 +213,13 @@
 }
 -(void)searchError:(NSError *)error {
     NSLog(@"SEARCH ERROR: %@", error);
+}
+
+-(void)configureNoResults {
+    if (!self.awkwardView) {
+        self.awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 - 64, self.view.frame.size.width, self.view.frame.size.height/2)];
+        [self.tableView addSubview:self.awkwardView];
+    }
 }
 
 #pragma mark - UITableView Datasource
