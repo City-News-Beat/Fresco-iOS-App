@@ -205,6 +205,9 @@ static NSString * const taxInfoRequiredNotification = @"user-payment-tax-info-re
 static NSString * const taxInfoProcessedNotification = @"user-payment-tax-info-processed";
 static NSString * const taxInfoDeclinedNotification = @"user-payment-tax-info-declined";
 
+// Assignments
+static NSString * const newAssignmentNotification = @"user-dispatch-new-assignment";
+
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]
