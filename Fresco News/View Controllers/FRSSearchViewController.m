@@ -258,10 +258,9 @@
             return 0;
         }
         
-        if (_users.count > 5) {
-            return 7;
-        }
-        else {
+        if (_users.count > 3) {
+            return 4;
+        } else {
             return _users.count;
         }
         
@@ -282,6 +281,8 @@
         
         if (_stories.count >= 3) {
             return 4;
+        } else {
+            return _stories.count;
         }
         
         return 0; //Will never get called
@@ -309,14 +310,12 @@
         return 56;
     }
     else if (indexPath.section == userIndex) {
-        if (indexPath.row == 5 && !_userExtended) {
+        if (indexPath.row == 3 && !_storyExtended) {
             return 44;
         }
-        
-        if (indexPath.row == 6) { //The 6th row will be the empty space cell
-            return 0;
+        if (indexPath.row == 4) {
+            return 12;
         }
-        
         return 56;
     }
     else {
@@ -414,7 +413,7 @@
     
     if (indexPath.section == userIndex) {
         
-        if (indexPath.row == 5 && !_userExtended) {
+        if (indexPath.row == 3 && !_userExtended) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL USERS"];
             return cell;
         }
