@@ -17,6 +17,7 @@
 #import "FRSStoryDetailViewController.h"
 //#import <MagicalRecord/MagicalRecord.h>
 #import "FRSAwkwardView.h"
+#import "DGElasticPullToRefresh.h"
 
 
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
@@ -26,6 +27,7 @@
 @property (strong, nonatomic) UIButton *clearButton;
 @property (strong, nonatomic) FRSAwkwardView *awkwardView;
 @property (strong, nonatomic) UIButton *backTapButton;
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property BOOL userExtended;
 @property BOOL storyExtended;
 
@@ -61,6 +63,21 @@
     self.searchTextField.text = @"";
     [self hideClearButton];
 //    [self.searchTextField resignFirstResponder];
+}
+
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+    [self.loadingView startAnimating];
+    [self.view addSubview:self.loadingView];
+}
+
+-(void)removeSpinner {
+    [self.loadingView stopLoading];
+    self.loadingView.alpha = 0;
+    [self.loadingView removeFromSuperview];
 }
 
 #pragma mark - UI
@@ -179,12 +196,14 @@
 }
 
 -(void)performSearchWithQuery:(NSString *)query {
+    [self configureSpinner];
     self.users = @[];
     self.galleries = @[];
     self.stories = @[];
     [self reloadData];
     
     [[FRSAPIClient sharedClient] searchWithQuery:query completion:^(id responseObject, NSError *error) {
+        [self removeSpinner];
         if (error || !responseObject) {
             [self searchError:error];
             return;
