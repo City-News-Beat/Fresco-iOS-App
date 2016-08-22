@@ -57,7 +57,7 @@
 //        self.hiddenTabBar = YES;
 //        self.actionBarVisible = YES;
 //        self.touchEnabled = NO;
-        
+        [self fetchCommentsWithID:galleryID];
         [self configureBackButtonAnimated:NO];
     }
     return self;
@@ -72,8 +72,25 @@
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
         self.touchEnabled = NO;
+        [self fetchCommentsWithID:gallery.uid];
     }
     return self;
+}
+
+
+-(void)fetchCommentsWithID:(NSString  *)galleryID {
+    [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID completion:^(id responseObject, NSError *error) {
+        
+        if (error || !responseObject) {
+            [self commentError:error];
+            return;
+        }
+        
+    }];
+}
+
+-(void)commentError:(NSError *)error {
+    
 }
 
 
