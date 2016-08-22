@@ -597,8 +597,6 @@
     profileIV.clipsToBounds = YES;
     [profileIV hnk_setImageFromURL:profile];
     
-    
-    NSLog(@"profileIV = %@", profileIV.image);
     profileIV.backgroundColor = [UIColor frescoLightTextColor];
     
     if (!profile) {
@@ -629,12 +627,10 @@
         usernameLabel.alpha = 0;
     }
     
-    
     CGSize nameLabelSize = [usernameLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont notaMediumWithSize:17]}];
     if (nameLabelSize.width > usernameLabel.bounds.size.width) {
 
     }
-    
     
     [self addSubview:usernameLabel];
 
@@ -660,12 +656,11 @@
     [self addSubview:storyPreviewIV];
     [storyPreviewIV hnk_setImageFromURL:storyPhoto];
     
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2- 26+11, self.frame.size.width - 96, self.frame.size.height)];
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2- 26+11, self.frame.size.width -16 -8, self.frame.size.height)];
     nameLabel.text = nameString;
     nameLabel.font = [UIFont notaMediumWithSize:17];
     nameLabel.textColor = [UIColor frescoDarkTextColor];
     [self addSubview:nameLabel];
-    
 }
 
 -(void)configureFindFriendsCell {
