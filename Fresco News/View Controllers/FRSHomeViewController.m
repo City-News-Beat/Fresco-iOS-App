@@ -80,6 +80,8 @@
     
     self.isInHighlights = true;
     self.isInFollowers = true;
+    
+    [self displayPreviousTab];
 }
 
 -(BOOL)shouldHaveTextLimit {
@@ -134,7 +136,6 @@
     [self configureTableView];
     [self configureDataSource];
     [self configurePullToRefresh];
-    [self displayPreviousTab];
 }
 
 -(void)addNotificationObservers {
@@ -730,8 +731,6 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    NSLog(@"self.pageScroller.contentOffset.x = %f", self.pageScroller.contentOffset.x);
-    
     //self.sudoNavBar.frame = CGRectMake(0, (scrollView.contentOffset.x/8.5)-88, self.view.frame.size.width, 44);
 
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
@@ -836,9 +835,14 @@
     //Checks which tab the user left the view from and displays it on next launch
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"shouldDisplayHighlights"]) {
-        [self.pageScroller setContentOffset:CGPointMake(0, 0) animated:NO];
+        [self.pageScroller setContentOffset:CGPointMake(0, 0) animated:YES];
+        self.highlightTabButton.alpha = 1.0;
+        self.followingTabButton.alpha = 0.7;
+    
     } else {
-        [self.pageScroller setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:NO];
+        [self.pageScroller setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:YES];
+        self.followingTabButton.alpha = 1.0;
+        self.highlightTabButton.alpha = 0.7;
     }
 }
 
