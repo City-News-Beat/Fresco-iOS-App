@@ -280,10 +280,11 @@
             return 0;
         }
         
-        if (_stories.count < 5) {
-            return _stories.count;
+        if (_stories.count >= 3) {
+            return 4;
         }
-        return 5 + 2;
+        
+        return 0; //Will never get called
     }
     if (section == galleryIndex) {
         return self.galleries.count;
@@ -299,10 +300,10 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == storyIndex) {
-        if (indexPath.row == 5 && !_storyExtended) {
+        if (indexPath.row == 3 && !_storyExtended) {
             return 44;
         }
-        if (indexPath.row == self.stories.count + 1) {
+        if (indexPath.row == 4) {
             return 12;
         }
         return 56;
@@ -431,7 +432,6 @@
         }
         
         NSURL *avatarURLObject;
-        ;
         
         if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
             avatarURLObject = [NSURL URLWithString:avatarURL];
@@ -452,7 +452,7 @@
     }
     else if (indexPath.section == storyIndex) {
         
-        if (indexPath.row == self.stories.count) {
+        if (indexPath.row == 3) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL STORIES"];
             return cell;
         }
