@@ -614,13 +614,30 @@
     nameLabel.font = [UIFont notaMediumWithSize:17];
     nameLabel.textColor = [UIColor frescoDarkTextColor];
     [nameLabel sizeToFit];
+    nameLabel.backgroundColor = [UIColor blueColor];
     [self addSubview:nameLabel];
     
-    UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64 + 8 + nameLabel.frame.size.width, self.frame.size.height/2 +3, self.frame.size.width - 64, self.frame.size.height)];
+    UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64 + 8 + nameLabel.frame.size.width, 23, self.frame.size.width - 64, 14)];
     usernameLabel.text = (username && ![username isEqual:[NSNull null]]) ? [@"@" stringByAppendingString:username] : @"";
-    usernameLabel.font = [UIFont notaRegularWithSize:13];
+    usernameLabel.font = [UIFont notaRegularWithSize:12];
     usernameLabel.textColor = [UIColor frescoMediumTextColor];
     [usernameLabel sizeToFit];
+    usernameLabel.backgroundColor = [UIColor redColor];
+    usernameLabel.frame = CGRectMake(64 + 8 + nameLabel.frame.size.width, 23, self.frame.size.width - 64 - nameLabel.frame.size.width, 14); //set label max width
+    
+    //Checks if username label is truncating and nameLabel.text is not empty
+    CGSize size = [usernameLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont notaRegularWithSize:12]}];
+    if ((size.width > usernameLabel.bounds.size.width) && ![nameLabel.text isEqualToString:@""]) {
+        usernameLabel.alpha = 0;
+    }
+    
+    
+    CGSize nameLabelSize = [usernameLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont notaMediumWithSize:17]}];
+    if (nameLabelSize.width > usernameLabel.bounds.size.width) {
+
+    }
+    
+    
     [self addSubview:usernameLabel];
 
     UIButton *followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
