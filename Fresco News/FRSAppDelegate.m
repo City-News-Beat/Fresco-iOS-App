@@ -46,14 +46,6 @@
     
     [self configureCoreDataStack];
     
-    
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"first-run"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"first-run"];
-    } else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"first-run"];
-    }
-    
- 
     if ([[FRSAPIClient sharedClient] isAuthenticated]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
         self.window.rootViewController = self.tabBarController;
@@ -61,7 +53,14 @@
         [self reloadUser];
     }
     else {
+        
         [self startAuthentication];
+        
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        
         return YES; // no other stuff going on (no quick action handling, etc)
     }
     
@@ -272,7 +271,7 @@
     
     FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
     [mainNav pushViewController:_tabBarController animated:FALSE];
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"first-run"]) {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [mainNav pushViewController:[[FRSOnboardingViewController alloc] init] animated:FALSE];
         });
