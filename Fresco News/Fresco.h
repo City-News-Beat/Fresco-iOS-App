@@ -178,6 +178,26 @@ typedef void(^FRSDataResponseBlock)(NSData *data, NSError *error);
 typedef void(^FRSAPISuccessBlock)(BOOL sucess, NSError *error);
 typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error);
 
+
+/*
+    Notification types
+ */
+// News
+static NSString * const photoOfDayNotification = @"user-news-photos-of-day";
+static NSString * const todayInNewsNotification = @"user-news-today-in-news";
+static NSString * const userNewsGalleryNotification = @"user-news-gallery";
+static NSString * const userNewsStoryNotification = @"user-news-story";
+static NSString * const userNewsCustomNotification = @"user-news-custom-push";
+
+// Social
+static NSString * const followedNotification = @"user-social-followed";
+static NSString * const likedNotification = @"user-social-liked";
+static NSString * const repostedNotification = @"user-social-reposted";
+static NSString * const commentedNotification = @"user-social-commented";
+
+// Payment
+
+
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]
