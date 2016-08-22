@@ -182,6 +182,7 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
 /*
     Notification types
  */
+
 // News
 static NSString * const photoOfDayNotification = @"user-news-photos-of-day";
 static NSString * const todayInNewsNotification = @"user-news-today-in-news";
@@ -196,7 +197,13 @@ static NSString * const repostedNotification = @"user-social-reposted";
 static NSString * const commentedNotification = @"user-social-commented";
 
 // Payment
-
+static NSString * const purchasedContentNotification = @"user-dispatch-purchased";
+static NSString * const paymentExpiringNotification = @"user-payment-payment-expiring";
+static NSString * const paymentSentNotification = @"user-payment-payment-sent";
+static NSString * const paymentDeclinedNotification = @"user-payment-payment-declined";
+static NSString * const taxInfoRequiredNotification = @"user-payment-tax-info-required";
+static NSString * const taxInfoProcessedNotification = @"user-payment-tax-info-processed";
+static NSString * const taxInfoDeclinedNotification = @"user-payment-tax-info-declined";
 
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
