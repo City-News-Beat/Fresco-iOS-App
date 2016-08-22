@@ -773,6 +773,7 @@
         }
         
         if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldDisplayHighlights"];
             self.isInHighlights = true;
             self.isInFollowers = false;
             self.followingTabButton.alpha = 0.7;
@@ -793,6 +794,7 @@
             [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
             [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
         }else if(self.pageScroller.contentOffset.x == self.tableView.frame.size.width){
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldDisplayHighlights"];
             self.isInHighlights = false;
             self.isInFollowers = true;
         }
@@ -825,6 +827,8 @@
         // animate nav up
         
     }
+    
+    NSLog(@"shouldDisplayHighlights: %d", [[NSUserDefaults standardUserDefaults] boolForKey:@"shouldDisplayHighlights"]);
 }
 
 -(void)pausePlayers {
