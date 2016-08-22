@@ -15,7 +15,6 @@
 #import "FRSUser.h"
 #import "FRSProfileViewController.h"
 #import "FRSStoryDetailViewController.h"
-#import <MagicalRecord/MagicalRecord.h>
 
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
 
