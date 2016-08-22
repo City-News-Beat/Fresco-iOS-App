@@ -614,7 +614,6 @@
     nameLabel.font = [UIFont notaMediumWithSize:17];
     nameLabel.textColor = [UIColor frescoDarkTextColor];
     [nameLabel sizeToFit];
-    nameLabel.backgroundColor = [UIColor blueColor];
     [self addSubview:nameLabel];
     
     UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64 + 8 + nameLabel.frame.size.width, 23, self.frame.size.width - 64, 14)];
@@ -622,7 +621,6 @@
     usernameLabel.font = [UIFont notaRegularWithSize:12];
     usernameLabel.textColor = [UIColor frescoMediumTextColor];
     [usernameLabel sizeToFit];
-    usernameLabel.backgroundColor = [UIColor redColor];
     usernameLabel.frame = CGRectMake(64 + 8 + nameLabel.frame.size.width, 23, self.frame.size.width - 64 - nameLabel.frame.size.width, 14); //set label max width
     
     //Checks if username label is truncating and nameLabel.text is not empty
