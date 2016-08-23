@@ -371,6 +371,11 @@
 
     story.uid = storyID;
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
+    
+    if (self.stories[0][@"title"] && ![self.stories[0][@"title"] isEqual:[NSNull null]]) {
+        detailView.title = self.stories[0][@"title"];
+    }
+    
     [self.navigationController pushViewController:detailView animated:YES];
 
 }

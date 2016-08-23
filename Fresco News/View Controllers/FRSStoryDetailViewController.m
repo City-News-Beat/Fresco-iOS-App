@@ -14,7 +14,7 @@
 #import "DGElasticPullToRefresh.h"
 #import "FRSGalleryExpandedViewController.h"
 
-@interface FRSStoryDetailViewController ()
+@interface FRSStoryDetailViewController () <UINavigationBarDelegate>
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
@@ -61,13 +61,22 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 -(void)configureNavigationBar {
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissDetail)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followStory)];
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+//    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissDetail)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followStory)];
+//    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+//    
+//    [self configureBackButtonAnimated:YES];
+    
+    
+    
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
-    label.text = [self.story.title uppercaseString];
+    if (self.story.title) {
+        label.text = [self.story.title uppercaseString];
+    } else if (self.title) {
+        label.text = [self.title uppercaseString];
+    }
     label.font = [UIFont notaBoldWithSize:17];
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = [UIColor whiteColor];
@@ -78,7 +87,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 }
 
+
 -(void)dismissDetail {
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
