@@ -30,6 +30,7 @@
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property BOOL userExtended;
 @property BOOL storyExtended;
+@property BOOL onlyDisplayGalleries;
 
 @end
 
@@ -107,8 +108,6 @@
 //    [view addGestureRecognizer:tap];
     
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
-    
-    
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
     self.navigationItem.titleView = titleView;
@@ -254,13 +253,13 @@
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
-    self.tableView.contentInset = UIEdgeInsetsMake(-20, 0, -20, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(-20, 0, -32, 0);
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
     int numberOfSections = 0;
-    if (_users && ![_users isEqual:[NSNull null]]) {
+    if (_users && ![_users isEqual:[NSNull null]])  {
         numberOfSections++;
     }
     if (_stories && ![_stories isEqual:[NSNull null]]) {
@@ -269,6 +268,7 @@
     if (_galleries && ![_galleries isEqual:[NSNull null]]) {
         numberOfSections++;
     }
+    NSLog(@"number of sections: %d", numberOfSections);
     return numberOfSections;
 }
 
@@ -276,6 +276,9 @@
     
     NSLog(@"stories.count = %lu", self.stories.count);
     NSLog(@"users.count = %lu", self.users.count);
+    NSLog(@"galleries.count = %lu", self.galleries.count);
+    
+    
     
     if (section == userIndex) {
         
@@ -335,6 +338,10 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == storyIndex) {
+        
+        if (_stories.count == 0) {
+            return 0;
+        }
         if (indexPath.row == 3 && !_storyExtended) {
             return 44;
         }
@@ -344,6 +351,10 @@
         return 56;
     }
     else if (indexPath.section == userIndex) {
+
+        if (_users.count <= 0) {
+            return 0;
+        }
         if (indexPath.row == 3 && !_storyExtended) {
             return 44;
         }
@@ -363,7 +374,7 @@
         }
         
         FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
-        return [gallery heightForGallery]-19; //-19px is the default bottom space height, should be 12px
+        return [gallery heightForGallery]-19 +12; //-19px is the default bottom space height, should be 12px
     }
 
     return 0;
@@ -406,12 +417,12 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-//    if (section == userIndex && self.users.count == 0) {
-//        return [UIView new];
-//    }
-//    if (section == storyIndex && self.stories == 0) {
-//        return [UIView new];
-//    }
+    if (section == userIndex && self.users.count == 0) {
+        return [UIView new];
+    }
+    if (section == storyIndex && self.stories.count == 0) {
+        return [UIView new];
+    }
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 47)];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16, 6, tableView.frame.size.width -32, 17)];
@@ -422,7 +433,8 @@
     if (section == userIndex && self.users.count > 0) {
         title = @"USERS";
     }
-    else if (section == storyIndex && self.stories.count > 0) {
+   
+    if (section == storyIndex && self.stories.count > 0) {
         title = @"STORIES";
     }
 
@@ -455,6 +467,10 @@
     
     if (indexPath.section == userIndex) {
         cell.delegate = self;
+        if (self.users.count == 0) {
+            return 0;
+        }
+        
         if (indexPath.row == 3 && !_userExtended) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL USERS"];
             return cell;
@@ -493,6 +509,12 @@
     }
     else if (indexPath.section == storyIndex) {
         
+        cell.backgroundColor = [UIColor blueColor];
+        
+        if (self.stories.count == 0) {
+            return 0;
+        }
+        
         if (indexPath.row == 3) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL STORIES"];
             return cell;
@@ -520,6 +542,7 @@
     }
     
     if (indexPath.section == galleryIndex) {
+        
         FRSGalleryCell *cell = [self.tableView dequeueReusableCellWithIdentifier:galleryIdentifier];
         if (!cell) {
             cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryIdentifier];
