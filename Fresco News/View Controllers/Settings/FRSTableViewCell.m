@@ -60,6 +60,9 @@
 @property BOOL didToggleTwitter;
 @property BOOL didToggleFacebook;
 
+@property (strong, nonatomic) FRSUser *currentUser;
+@property BOOL following;
+
 @end
 
 
@@ -589,7 +592,7 @@
 }
 
 
--(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing {
+-(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing user:(FRSUser *)user {
     
     UIImageView *profileIV = [[UIImageView alloc] init];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
@@ -635,7 +638,7 @@
     [self addSubview:usernameLabel];
 
     UIButton *followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [followingButton addTarget:self action:@selector(follow:) forControlEvents:UIControlEventTouchUpInside];
+    [followingButton addTarget:self action:@selector(follow) forControlEvents:UIControlEventTouchUpInside];
     followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 24, 24);
     
     [self addSubview:followingButton];
@@ -647,10 +650,20 @@
         [followingButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
         followingButton.tintColor = [UIColor frescoMediumTextColor];
     }
+
+    self.currentUser = user;
+    self.following = isFollowing;
+
 }
 
--(void)follow:(FRSUser *)user {
-    [self.delegate followUser:user];
+-(void)follow {
+    //Used to pass in current user
+    [self follow:self.currentUser following:self.following];
+}
+
+
+-(void)follow:(FRSUser *)user following:(BOOL)following {
+    [self.delegate followUser:user following:following];
     
 }
 
