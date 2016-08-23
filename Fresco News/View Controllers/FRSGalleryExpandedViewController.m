@@ -100,6 +100,7 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
+    [self showTabBarAnimated:YES];
     self.navigationItem.titleView = self.titleLabel;
 }
 

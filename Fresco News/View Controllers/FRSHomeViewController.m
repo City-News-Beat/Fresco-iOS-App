@@ -510,7 +510,7 @@
 -(UITableViewCell *)highlightCellForIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != Nil) { // we're reloading
-        
+
         UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
         CGRect cellFrame = cell.frame;
         cellFrame.size.height = 20;

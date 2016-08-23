@@ -598,7 +598,7 @@
     [profileIV hnk_setImageFromURL:profile];
     
     profileIV.backgroundColor = [UIColor frescoLightTextColor];
-    
+    NSLog(@"profile = %@", profile);
     if (!profile) {
         UIImageView *profileIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user-24"]];
         profileIcon.frame = CGRectMake(4, 4, 24, 24);
