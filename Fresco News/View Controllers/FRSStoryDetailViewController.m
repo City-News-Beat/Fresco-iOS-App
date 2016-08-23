@@ -61,12 +61,13 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 -(void)configureNavigationBar {
-//    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissDetail)];
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followStory)];
-//    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
-//    
-//    [self configureBackButtonAnimated:YES];
+    
+    [self configureBackButtonAnimated:YES];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followStory)];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+
     
     
     
@@ -82,8 +83,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
     label.textColor = [UIColor whiteColor];
     
     [self.navigationItem setTitleView:label];
-
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 
 }
 

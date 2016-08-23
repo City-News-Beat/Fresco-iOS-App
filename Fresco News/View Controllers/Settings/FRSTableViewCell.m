@@ -636,6 +636,7 @@
 
     UIButton *followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
     followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 24, 24);
+    
     [self addSubview:followingButton];
     
     if (isFollowing){

@@ -343,6 +343,8 @@
             
             if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
                 [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+            } else {
+                [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
             }
             
             self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
@@ -884,14 +886,32 @@
 
 -(void)followUser {
     [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
+        if (error) {
+            return;
+        }
+        
+        if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+            [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+            NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
+        } else {
+            [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
+            [self unfollowUser];
+        }
+    }];
+}
+
+-(void)unfollowUser {
+    [[FRSAPIClient sharedClient] unfollowUser:self.representedUser completion:^(id responseObject, NSError *error) {
+        if (error) {
+            return;
+        }
         
         if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
             [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
         } else {
             [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
-            //does not actually unfollow
         }
-        NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
+        NSLog(@"UNFOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
     }];
 }
 
