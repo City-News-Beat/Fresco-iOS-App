@@ -8,7 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol FRSTableViewCellDelegate <NSObject>
+
+-(void)followUser:(FRSUser *)user;
+
+@end
+
+
 @interface FRSTableViewCell : UITableViewCell
+
+@property (weak, nonatomic) NSObject <FRSTableViewCellDelegate> *delegate;
 
 -(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle;
 

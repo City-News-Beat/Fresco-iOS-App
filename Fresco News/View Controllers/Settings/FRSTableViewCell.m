@@ -635,6 +635,7 @@
     [self addSubview:usernameLabel];
 
     UIButton *followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [followingButton addTarget:self action:@selector(follow:) forControlEvents:UIControlEventTouchUpInside];
     followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 24, 24);
     
     [self addSubview:followingButton];
@@ -647,6 +648,12 @@
         followingButton.tintColor = [UIColor frescoMediumTextColor];
     }
 }
+
+-(void)follow:(FRSUser *)user {
+    [self.delegate followUser:user];
+    
+}
+
 
 -(void)configureSearchStoryCellWithStoryPhoto:(NSURL *)storyPhoto storyName:(NSString *)nameString {
     

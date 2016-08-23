@@ -20,7 +20,7 @@
 #import "DGElasticPullToRefresh.h"
 
 
-@interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource, FRSTableViewCellDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UITextField *searchTextField;
@@ -254,7 +254,7 @@
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
-    self.tableView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(-20, 0, -20, 0);
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -321,6 +321,7 @@
         return 0; //Will never get called
     }
     if (section == galleryIndex) {
+        NSLog(@"GALLERIES.COUNT = %lu", (unsigned long)self.galleries.count);
         return self.galleries.count;
     }
     
@@ -349,6 +350,9 @@
         if (indexPath.row == 4) {
             return 12;
         }
+        if (indexPath.row == 5) {
+            return 24;
+        }
         return 56;
     }
     else {
@@ -359,7 +363,7 @@
         }
         
         FRSGallery *gallery = [self.galleries objectAtIndex:indexPath.row];
-        return [gallery heightForGallery];
+        return [gallery heightForGallery]-19; //-19px is the default bottom space height, should be 12px
     }
 
     return 0;
@@ -450,7 +454,7 @@
     }
     
     if (indexPath.section == userIndex) {
-        
+        cell.delegate = self;
         if (indexPath.row == 3 && !_userExtended) {
             [cell configureSearchSeeAllCellWithTitle:@"SEE ALL USERS"];
             return cell;
@@ -545,6 +549,11 @@
     return Nil;
 }
 
+-(void)followUser:(FRSUser *)user {
+    
+
+}
+
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [[[self.view window] rootViewController] presentViewController:activityController animated:YES completion:nil];
@@ -569,7 +578,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        
+    
     if (indexPath.section == userIndex) {
         if (indexPath.row >= self.users.count) {
             return;
