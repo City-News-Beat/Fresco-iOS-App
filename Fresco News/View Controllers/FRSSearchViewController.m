@@ -242,10 +242,12 @@
     
     //If no users and no stories are returned, bump galleries to top
     if (self.users.count == 0 && self.stories.count == 0) {
+        self.tableView.contentInset = UIEdgeInsetsMake(-70, 0, -70, 0);
         userIndex    = 2;
         storyIndex   = 1;
         galleryIndex = 0;
-        return;
+    } else if (self.users.count != 0 && self.stories.count != 0) {
+        self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -32, 0);
     }
     
     //If no users are returned, bump stories and galleries up one index
@@ -263,12 +265,21 @@
     }
     
     //If users, stories, and galleries are returned
-    if (self.stories.count != 0 && self.users.count != 0 && self.galleries.count != 0) {
+    if (self.users.count != 0 && self.stories.count != 0 && self.galleries.count != 0) {
         userIndex    = 0;
         storyIndex   = 1;
         galleryIndex = 2;
     }
     
+    //If users are returned with galleries
+    if (self.users.count != 0 && self.galleries.count != 0 && self.stories.count == 0) {
+        self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -67, 0);
+    }
+    
+    //If stories are returned with galleries
+    if (self.stories.count != 0 && self.galleries.count != 0 && self.stories.count == 0) {
+        self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -68, 0);
+    }
 }
 
 -(void)reloadData {
@@ -301,8 +312,7 @@
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
-//    self.tableView.contentInset = UIEdgeInsetsMake(-35, 0, 0, 0);
-    self.tableView.contentInset = UIEdgeInsetsMake(-20, 0, -32, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(-35, 0, -32, 0);
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -465,6 +475,10 @@
 
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    if (section == galleryIndex) {
+        return [UIView new];
+    }
     
     if (section == userIndex && self.users.count == 0) {
         return [UIView new];
