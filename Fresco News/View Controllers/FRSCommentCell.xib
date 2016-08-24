@@ -15,14 +15,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="117.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iSa-2c-MoS">
-                        <rect key="frame" x="60" y="0.0" width="244" height="117.5"/>
-                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ffk-GZ-vjB">
-                        <rect key="frame" x="13" y="15" width="32" height="32"/>
+                        <rect key="frame" x="13" y="10" width="32" height="32"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="32" id="0P0-CO-m2t"/>
                             <constraint firstAttribute="height" constant="32" id="WA0-bn-lCr"/>
@@ -31,16 +25,11 @@
                 </subviews>
                 <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                 <constraints>
-                    <constraint firstItem="iSa-2c-MoS" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="N1P-yd-L1u"/>
+                    <constraint firstItem="ffk-GZ-vjB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="FvI-XQ-Wi3"/>
                     <constraint firstItem="ffk-GZ-vjB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="Rb9-Cm-1z8"/>
-                    <constraint firstItem="iSa-2c-MoS" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="ZXw-wh-qan"/>
-                    <constraint firstItem="ffk-GZ-vjB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="7" id="g3n-Tl-uCO"/>
-                    <constraint firstItem="iSa-2c-MoS" firstAttribute="leading" secondItem="ffk-GZ-vjB" secondAttribute="trailing" constant="15" id="hFf-Fg-nrg"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="iSa-2c-MoS" secondAttribute="trailing" constant="8" id="haI-Gw-RGJ"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="commentTextField" destination="iSa-2c-MoS" id="Lu6-vS-OTZ"/>
                 <outlet property="profilePicture" destination="ffk-GZ-vjB" id="P49-ds-xxK"/>
             </connections>
             <point key="canvasLocation" x="303" y="256"/>

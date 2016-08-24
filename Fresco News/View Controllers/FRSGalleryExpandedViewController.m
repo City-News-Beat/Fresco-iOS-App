@@ -431,9 +431,28 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             else {
                 // default
             }
-            cell.commentTextField.text = comment.comment;
+            
+            for (NSDictionary *attribute in comment.entities) {
+                if ([attribute[@"entity_type"] isEqualToString:@"user"]) {
+                    // load user
+                    NSString *name = attribute[@"text"];
+                    NSInteger startIndex = [attribute[@"start_index"] integerValue];
+                    NSInteger endIndex = [attribute[@"end_index"] integerValue];
+                    
+                    NSString *action = [@"user://" stringByAppendingString:name];
+                    NSString *labelText = comment.comment;
+                    cell.commentTextField = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(30, 10, self.view.frame.size.width-60, [comment calculateHeightForCell:cell])];
+                    [cell addSubview:cell.commentTextField];
+                    cell.commentTextField.text = labelText;
+                    [cell.commentTextField addLinkToURL:[NSURL URLWithString:action] withRange:NSMakeRange(startIndex, endIndex-startIndex)];
+
+                }
+                else if ([attribute[@"type"] isEqualToString:@"search"]) {
+                    
+                }
+            }
             [cell.commentTextField sizeToFit];
-                      
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
         }
     }
