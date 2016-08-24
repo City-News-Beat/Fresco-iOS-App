@@ -196,6 +196,7 @@
     
     if (self) {
         isLoadingUser = TRUE;
+        userId = userName;
         
         [[FRSAPIClient sharedClient] getUserWithUID:userName completion:^(id responseObject, NSError *error) {
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -219,7 +220,7 @@
                     self.authenticatedProfile = TRUE;
                     [self configureWithUser:_representedUser];
                 }else{
-                    [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
+                    [[FRSAPIClient sharedClient] getUserWithUID:userName completion:^(id responseObject, NSError *error) {
                         _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
                         [self configureWithUser:_representedUser];
                     }];
