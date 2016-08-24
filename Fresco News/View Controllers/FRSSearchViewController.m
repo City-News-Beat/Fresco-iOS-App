@@ -300,6 +300,7 @@
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
+//    self.tableView.contentInset = UIEdgeInsetsMake(-35, 0, 0, 0);
     self.tableView.contentInset = UIEdgeInsetsMake(-20, 0, -32, 0);
 }
 
@@ -497,7 +498,6 @@
     NSString *cellIdentifier;
     
     FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
     if (cell == nil) {
         cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
