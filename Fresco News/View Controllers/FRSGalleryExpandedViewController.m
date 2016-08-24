@@ -16,7 +16,7 @@
 #import "FRSGalleryView.h"
 #import "FRSCommentsView.h"
 #import "FRSContentActionsBar.h"
-
+#import "FRSProfileViewController.h"
 #import "PeekPopArticleViewController.h"
 #import "FRSComment.h"
 #import "Haneke.h"
@@ -216,17 +216,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     NSInteger index = 0;
     
     for (FRSComment *comment in _comments) {
-        NSInteger commentSize = [comment calculateHeightForCell:(FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]];
+        FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+        float commentSize = cell.commentTextField.frame.size.height;
         
         if (commentSize < 56) {
             height += 56;
         }
         else {
-            height += commentSize + 25;
+            height += commentSize;
         }
         
         index++;
-
     }
     
     self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height)];
@@ -433,8 +433,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             cell.commentTextField.attributedText = comment.attributedString;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell.commentTextField frs_resize];
+            cell.commentTextField.delegate = self;
             
-            // line shit
             if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
                 [cell setSeparatorInset:UIEdgeInsetsZero];
             }
@@ -449,6 +449,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     
     return Nil;
+}
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+        
+    if ([URL.absoluteString containsString:@"name"]) {
+        NSString *user = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
+        NSLog(@"USER: %@", user);
+        FRSProfileViewController *viewController = [[FRSProfileViewController alloc] initWithUserName:user];
+        [self.navigationController pushViewController:viewController animated:YES];
+        
+    }
+    
+    return NO;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{

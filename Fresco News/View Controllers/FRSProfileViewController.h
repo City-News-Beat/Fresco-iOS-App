@@ -21,6 +21,8 @@
 @property (nonatomic, retain) UIScrollView *tablePageScroller;
 @property (nonatomic, retain) UITableView *contentTable;
 -(instancetype)initWithUser:(FRSUser *)user;
+-(instancetype)initWithUserName:(NSString *)userName;
+
 -(void)loadAuthenticatedUser;
 -(FRSUser *)authenticatedUser;
 @property (nonatomic, retain) FRSUser *representedUser;

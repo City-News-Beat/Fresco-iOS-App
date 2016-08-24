@@ -182,6 +182,21 @@
     return self;
 }
 
+
+-(instancetype)initWithUserName:(NSString *)userName {
+    self = [super init];
+    
+    if (self) {
+        [[FRSAPIClient sharedClient] getUserWithUID:userName completion:^(id responseObject, NSError *error) {
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            
+            FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
+            [self configureWithUser:user];
+        }];
+    }
+    
+    return self;
+}
 -(void)setupUI {
     
     
