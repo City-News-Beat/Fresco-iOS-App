@@ -19,6 +19,7 @@
 
 #import "PeekPopArticleViewController.h"
 #import "FRSComment.h"
+#import "Haneke.h"
 
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
@@ -49,6 +50,7 @@
 
 @implementation FRSGalleryExpandedViewController
 
+static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(instancetype)initWithGalleryID:(NSString *)galleryID{
     self = [super init];
@@ -92,6 +94,7 @@
             FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
             [_comments addObject:commentObject];
         }
+        
         
         [self configureComments];
 
@@ -209,7 +212,24 @@
 
 -(void)configureComments{
     
-    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, CELL_HEIGHT * self.comments.count)];
+    float height = 0;
+    NSInteger index = 0;
+    
+    for (FRSComment *comment in _comments) {
+        NSInteger commentSize = [comment calculateHeightForCell:(FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]];
+        
+        if (commentSize < 56) {
+            height += 56;
+        }
+        else {
+            height += commentSize + 25;
+        }
+        
+        index++;
+
+    }
+    
+    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height)];
     self.commentTableView.delegate = self;
     self.commentTableView.dataSource = self;
     self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -220,6 +240,7 @@
     [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.commentTableView.frame.origin.y - 0.5)]];
     self.commentTableView.backgroundColor = [UIColor clearColor];
     self.commentTableView.backgroundView.backgroundColor = [UIColor clearColor];
+    [self.commentTableView registerNib:[UINib nibWithNibName:@"FRSCommentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:reusableCommentIdentifier];
     
     if (self.comments.count > 0) {
         UILabel *articlesLabel = [[UILabel alloc] init];
@@ -268,7 +289,7 @@
 }
 
 -(void)adjustScrollViewContentSize{
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryView.frame.size.height + self.articlesTV.frame.size.height + self.commentTableView.frame.size.height + TOP_PAD * 2 + 50);
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryView.frame.size.height + self.articlesTV.frame.size.height + self.commentTableView.frame.size.height + TOP_PAD * 2 + 50 + TOP_PAD);
 }
 
 
@@ -359,28 +380,76 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
     if (tableView == _articlesTV) {
+        
         return self.orderedArticles.count;
     }
     
-    return 3;
+    if (tableView == _commentTableView) {
+        
+        return self.comments.count;
+    }
+    
+    return 0;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return CELL_HEIGHT;
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (tableView == _articlesTV) {
+        return CELL_HEIGHT;
+    }
+    
+    if (tableView == _commentTableView) {
+        if (indexPath.row < self.comments.count) {
+            FRSComment *comment = self.comments[indexPath.row];
+            NSInteger commentSize = [comment calculateHeightForCell:(FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath]];
+            
+            if (commentSize < 56) {
+                return 56;
+            }
+        
+            return commentSize + 25;
+        }
+    }
+    
+    
+    return 0;
 }
 
--(FRSArticlesTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    FRSArticlesTableViewCell *cell = [[FRSArticlesTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"article-cell" article:self.orderedArticles[indexPath.row]];
-    return cell;
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (tableView == _articlesTV) {
+        FRSArticlesTableViewCell *cell = [[FRSArticlesTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"article-cell" article:self.orderedArticles[indexPath.row]];
+        return cell;
+    }
+    else if (tableView == _commentTableView) {
+        FRSCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCommentIdentifier];
+        if (indexPath.row < self.comments.count) {
+            FRSComment *comment = _comments[indexPath.row];
+
+            if (comment.imageURL) {
+                [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL]];
+            }
+            else {
+                // default
+            }
+            cell.commentTextField.attributedText = comment.attributedString;
+            [cell.commentTextField sizeToFit];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
+        }
+    }
+    
+    return Nil;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    [((FRSArticlesTableViewCell *)cell) configureCell];
+    
+    if (tableView == _articlesTV) {
+        [((FRSArticlesTableViewCell *)cell) configureCell];
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-
 }
 
 #pragma mark - Comments View Delegate

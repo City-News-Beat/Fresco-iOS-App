@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface FRSCommentCell : UITableViewCell
-
+@property (nonatomic, retain) IBOutlet UIImageView *profilePicture;
+@property (nonatomic, retain) IBOutlet UILabel *commentTextField;
 @end

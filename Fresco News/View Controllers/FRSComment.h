@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "FRSUser.h"
+#import "FRSCommentCell.h"
+
 @interface FRSComment : NSObject
 @property (nonatomic, weak) FRSUser *user;
 @property (nonatomic, weak) NSString *comment;
@@ -15,6 +17,8 @@
 @property (nonatomic, strong) NSDate *updatedAt;
 @property (nonatomic, strong) NSString *uid;
 @property (nonatomic, strong) NSArray *entities;
-@property (nonatomic, strong) NSAttributedString *attributedString;
+@property (nonnull, strong) NSString *imageURL;
+@property (nonatomic, strong) NSMutableAttributedString *attributedString;
 -(instancetype)initWithDictionary:(NSDictionary *)commentDictionary;
+-(NSInteger)calculateHeightForCell:(FRSCommentCell *)cell;
 @end
