@@ -140,6 +140,7 @@
 		D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA561D6DF57E008842E1 /* FRSCommentCell.m */; };
 		D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */; };
 		D400FA681D6E13FA008842E1 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */; };
+		D400FA6B1D6E1A9E008842E1 /* FRSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */; };
 		D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */; };
 		D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3D01CDE1EAE00E39701 /* Reachability.m */; };
 		D40BD3D61CE28A8300E39701 /* AWFileHash.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3D51CE28A8300E39701 /* AWFileHash.m */; };
@@ -525,6 +526,8 @@
 		D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSCommentCell.xib; sourceTree = "<group>"; };
 		D400FA661D6E13FA008842E1 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
 		D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
+		D400FA691D6E1A9E008842E1 /* FRSTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTextView.h; sourceTree = "<group>"; };
+		D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTextView.m; sourceTree = "<group>"; };
 		D40BD3CC1CDE076000E39701 /* FRSGalleryTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryTable.h; sourceTree = "<group>"; };
 		D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryTable.m; sourceTree = "<group>"; };
 		D40BD3CF1CDE1EAE00E39701 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -1427,6 +1430,8 @@
 			children = (
 				D400FA661D6E13FA008842E1 /* TTTAttributedLabel.h */,
 				D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */,
+				D400FA691D6E1A9E008842E1 /* FRSTextView.h */,
+				D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */,
 			);
 			path = TTTAttributedLabel;
 			sourceTree = "<group>";
@@ -2578,6 +2583,7 @@
 				07ED92E51C752037000DBEA8 /* DGElasticPullToRefreshView.m in Sources */,
 				6596EC9F1C5031FA0011C18B /* FRSBorderedImageView.m in Sources */,
 				07B61ECD1CAF1C4900D3454F /* PeekPopArticleViewController.m in Sources */,
+				D400FA6B1D6E1A9E008842E1 /* FRSTextView.m in Sources */,
 				D41C10CB1CE9A54900F96B25 /* FRSStripe.m in Sources */,
 				65D1E4EC1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m in Sources */,
 				D453CC861CCA80850091A004 /* NSManagedObjectContext+MagicalObserving.m in Sources */,

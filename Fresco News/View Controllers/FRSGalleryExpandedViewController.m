@@ -7,7 +7,7 @@
 //
 
 #import "FRSGalleryExpandedViewController.h"
-
+#import "UITextView+Resize.h"
 #import "FRSArticlesTableViewCell.h"
 
 #import "FRSGallery.h"
@@ -236,7 +236,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.commentTableView.backgroundColor = [UIColor whiteColor];
     self.commentTableView.scrollEnabled = NO;
     [self.scrollView addSubview:self.commentTableView];
-    
+    self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.commentTableView.frame.origin.y - 0.5)]];
     self.commentTableView.backgroundColor = [UIColor clearColor];
     self.commentTableView.backgroundView.backgroundColor = [UIColor clearColor];
@@ -400,17 +400,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     if (tableView == _commentTableView) {
         if (indexPath.row < self.comments.count) {
-            FRSComment *comment = self.comments[indexPath.row];
-            NSInteger commentSize = [comment calculateHeightForCell:(FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath]];
+            FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
+            NSInteger height = cell.commentTextField.frame.size.height;
             
-            if (commentSize < 56) {
+            if (height < 56) {
                 return 56;
             }
-        
-            return commentSize + 25;
+            
+            return height;
         }
     }
-    
     
     return 0;
 }
@@ -432,8 +431,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 // default
             }
             cell.commentTextField.attributedText = comment.attributedString;
-            [cell.commentTextField sizeToFit];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell.commentTextField frs_resize];
+            
+            // line shit
+            if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+                [cell setSeparatorInset:UIEdgeInsetsZero];
+            }
+            if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+                [cell setPreservesSuperviewLayoutMargins:NO];
+            }
+            if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+                [cell setLayoutMargins:UIEdgeInsetsZero];
+            }
             return cell;
         }
     }

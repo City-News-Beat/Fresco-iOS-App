@@ -36,6 +36,13 @@
 
 -(void)createAttributedText {
     _attributedString = [[NSMutableAttributedString alloc] initWithString:_comment];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+    
+    [_attributedString beginEditing];
+    
+    [_attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, _comment.length)];
+    [_attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, _comment.length)];
+    
     
     for (NSDictionary *attribute in _entities) {
         if ([attribute[@"entity_type"] isEqualToString:@"user"]) {
@@ -44,13 +51,14 @@
             NSInteger startIndex = [attribute[@"start_index"] integerValue];
             NSInteger endIndex = [attribute[@"end_index"] integerValue];
             
-            [_attributedString addAttribute: NSLinkAttributeName value:[@"name://" stringByAppendingString:name] range:NSMakeRange(startIndex, endIndex-startIndex)];
-
+            [_attributedString addAttribute: NSLinkAttributeName value:[@"name://" stringByAppendingString:name] range:NSMakeRange(startIndex, endIndex-startIndex+1)];
         }
         else if ([attribute[@"type"] isEqualToString:@"search"]) {
             
         }
     }
+    
+    [_attributedString endEditing];
 }
 
 -(NSInteger)calculateHeightForCell:(FRSCommentCell *)cell {
