@@ -27,12 +27,11 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)viewDidLoad {
     [super viewDidLoad];
 
-    [self setupTableView];
-    [self configureNavigationBar];
-    [self configureSpinner];
+
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 }
+
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -42,6 +41,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self setupTableView];
+    [self configureNavigationBar];
+    [self configureSpinner];
     [self addStatusBarNotification];
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
@@ -62,16 +64,18 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)configureNavigationBar {
     
-    [self configureBackButtonAnimated:YES];
+//    [self configureBackButtonAnimated:YES];
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back-arrow-light"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissDetail)];
+    backItem.imageInsets = UIEdgeInsetsMake(2, -4.5, 0, 0);
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-
+    [self.navigationItem setLeftBarButtonItem:backItem animated:NO];
+    
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followStory)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
 
-    
-    
-    
-    
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 20)];
     if (self.story.title) {
         label.text = [self.story.title uppercaseString];
@@ -85,7 +89,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [self.navigationItem setTitleView:label];
 
 }
-
 
 -(void)dismissDetail {
     

@@ -390,7 +390,7 @@
     if (self.stories[0][@"title"] && ![self.stories[0][@"title"] isEqual:[NSNull null]]) {
         detailView.title = self.stories[0][@"title"];
     }
-    
+    detailView.navigationController = self.navigationController;
     [self.navigationController pushViewController:detailView animated:YES];
 
 }
