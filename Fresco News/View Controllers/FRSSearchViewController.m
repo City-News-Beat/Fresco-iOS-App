@@ -405,9 +405,7 @@
         if (indexPath.row == 3 && !_storyExtended) {
             return 44;
         }
-        if (indexPath.row == 4) {
-            return 12;
-        }
+
         return 56;
     }
     else if (indexPath.section == userIndex) {
@@ -415,15 +413,12 @@
         if (_users.count <= 0) {
             return 0;
         }
-        if (indexPath.row == 3 && !_storyExtended) {
+        if (indexPath.row == 3 && !_userExtended) {
             return 44;
         }
-        if (indexPath.row == 4) {
-            return 12;
-        }
-        if (indexPath.row == 5) {
-            return 24;
-        }
+
+
+
         return 56;
     }
     else {
@@ -609,7 +604,7 @@
         if (!cell) {
             cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryIdentifier];
         }
-        cell.delegate = self;
+//        cell.delegate = self;
         cell.navigationController = self.navigationController;
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
