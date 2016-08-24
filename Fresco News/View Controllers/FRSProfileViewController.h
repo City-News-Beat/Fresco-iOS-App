@@ -15,6 +15,7 @@
 {
     UILabel *titleLabel;
     UIView *topView;
+    BOOL isLoadingUser;
 }
 
 @property (nonatomic, weak) NSArray *currentFeed;

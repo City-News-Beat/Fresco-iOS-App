@@ -104,6 +104,10 @@
     
     self.editedProfile = false;
     
+    if (isLoadingUser) {
+        return;
+    }
+    
     if (!_representedUser) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
@@ -134,6 +138,10 @@
     [super viewWillAppear:animated];
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
+    
+    if (isLoadingUser) {
+        return;
+    }
     
     if(!self.editedProfile){
         if (!_representedUser) {
@@ -192,6 +200,32 @@
             
             FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
             [self configureWithUser:user];
+            
+            [self setupUI];
+            [self configureUI];
+            [self fetchGalleries];
+            [super removeNavigationBarLine];
+            
+            if (self.shouldShowNotificationsOnLoad) {
+                [self showNotificationsNotAnimated];
+            }
+            
+            
+            if(!self.editedProfile){
+                if (!_representedUser) {
+                    _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+                    self.authenticatedProfile = TRUE;
+                    [self configureWithUser:_representedUser];
+                }else{
+                    [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
+                        _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                        [self configureWithUser:_representedUser];
+                    }];
+                }
+            }else{
+                self.editedProfile = false;
+            }
+
         }];
     }
     
