@@ -104,6 +104,10 @@
     
     self.editedProfile = false;
     
+    if (isLoadingUser) {
+        return;
+    }
+    
     if (!_representedUser) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
@@ -126,14 +130,25 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    if (isLoadingUser) {
+        return;
+    }
+
     [self showTabBarAnimated:YES];
     self.tableView.bounces = false;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    if (isLoadingUser) {
+        return;
+    }
+
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
+    
     
     if(!self.editedProfile){
         if (!_representedUser) {
@@ -182,6 +197,54 @@
     return self;
 }
 
+
+-(instancetype)initWithUserName:(NSString *)userName {
+    self = [super init];
+    
+    if (self) {
+        isLoadingUser = TRUE;
+        userId = userName;
+        [self setupUI];
+        [self configureUI];
+
+        [[FRSAPIClient sharedClient] getUserWithUID:userName completion:^(id responseObject, NSError *error) {
+            [self addStatusBarNotification];
+            [self showNavBarForScrollView:self.tableView animated:NO];
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            
+            FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
+            _representedUser = user;
+            
+            [self fetchGalleries];
+            [super removeNavigationBarLine];
+            
+            if (self.shouldShowNotificationsOnLoad) {
+                [self showNotificationsNotAnimated];
+            }
+            
+            
+            if(!self.editedProfile){
+                if (!_representedUser) {
+                    _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+                    self.authenticatedProfile = TRUE;
+                    [self configureWithUser:_representedUser];
+                }else{
+                    [[FRSAPIClient sharedClient] getUserWithUID:userName completion:^(id responseObject, NSError *error) {
+                        _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                        [self configureWithUser:_representedUser];
+                    }];
+                }
+            }else{
+                self.editedProfile = false;
+            }
+
+            [self showTabBarAnimated:YES];
+            self.tableView.bounces = false;
+        }];
+    }
+    
+    return self;
+}
 -(void)setupUI {
     
     
@@ -359,7 +422,13 @@
     [self createProfileSection];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , self.view.frame.size.height - 44)];
+    if (isLoadingUser) {
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , [UIScreen mainScreen].bounds.size.height)];
+    }
+    else {
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , self.view.frame.size.height-44)];
+    }
+    
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

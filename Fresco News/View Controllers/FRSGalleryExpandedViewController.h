@@ -9,8 +9,8 @@
 #import "FRSScrollingViewController.h"
 @class FRSGallery;
 
-@interface FRSGalleryExpandedViewController : FRSScrollingViewController
-
+@interface FRSGalleryExpandedViewController : FRSScrollingViewController <UITextViewDelegate>
+@property BOOL isLoadingUser;
 -(instancetype)initWithGallery:(FRSGallery *)gallery;
 -(instancetype)initWithGalleryID:(NSString *)galleryID;
 

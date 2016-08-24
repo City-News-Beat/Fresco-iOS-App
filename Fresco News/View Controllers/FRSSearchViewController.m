@@ -20,6 +20,7 @@
 #import "DGElasticPullToRefresh.h"
 
 
+
 @interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource, FRSTableViewCellDelegate, FRSGalleryViewDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
