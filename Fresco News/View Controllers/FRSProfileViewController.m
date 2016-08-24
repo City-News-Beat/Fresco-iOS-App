@@ -130,18 +130,25 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    if (isLoadingUser) {
+        return;
+    }
+
     [self showTabBarAnimated:YES];
     self.tableView.bounces = false;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self addStatusBarNotification];
-    [self showNavBarForScrollView:self.tableView animated:NO];
     
     if (isLoadingUser) {
         return;
     }
+
+    [self addStatusBarNotification];
+    [self showNavBarForScrollView:self.tableView animated:NO];
+    
     
     if(!self.editedProfile){
         if (!_representedUser) {
@@ -197,10 +204,10 @@
     if (self) {
         isLoadingUser = TRUE;
         userId = userName;
-        [self addStatusBarNotification];
-        [self showNavBarForScrollView:self.tableView animated:NO];
-
+     
         [[FRSAPIClient sharedClient] getUserWithUID:userName completion:^(id responseObject, NSError *error) {
+            [self addStatusBarNotification];
+            [self showNavBarForScrollView:self.tableView animated:NO];
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             
             FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
