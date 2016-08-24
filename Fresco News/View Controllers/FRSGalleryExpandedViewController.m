@@ -229,7 +229,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         index++;
     }
     
-    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height)];
+    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height-6)];
     self.commentTableView.delegate = self;
     self.commentTableView.dataSource = self;
     self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
