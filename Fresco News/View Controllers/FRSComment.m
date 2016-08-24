@@ -35,7 +35,21 @@
 }
 
 -(void)createAttributedText {
+    
+    for (NSDictionary *attribute in _entities) {
+        if ([attribute[@"entity_type"] isEqualToString:@"user"]) {
+            // load user
+            NSString *name = attribute[@"text"];
+            NSInteger startIndex = [attribute[@"start_index"] integerValue];
+            NSInteger endIndex = [attribute[@"end_index"] integerValue];
+            
+            [_attributedString addAttribute: NSLinkAttributeName value:[@"name://" stringByAppendingString:name] range:NSMakeRange(startIndex, endIndex-startIndex)];
 
+        }
+        else if ([attribute[@"type"] isEqualToString:@"search"]) {
+            
+        }
+    }
 }
 
 -(NSInteger)calculateHeightForCell:(FRSCommentCell *)cell {
