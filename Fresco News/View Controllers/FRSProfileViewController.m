@@ -195,6 +195,8 @@
     self = [super init];
     
     if (self) {
+        isLoadingUser = TRUE;
+        
         [[FRSAPIClient sharedClient] getUserWithUID:userName completion:^(id responseObject, NSError *error) {
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             
