@@ -42,8 +42,8 @@
     [self configureTableView];
     [self.navigationController setNavigationBarHidden:NO];
     
-    userIndex = 0;
-    storyIndex = 1;
+    userIndex    = 0;
+    storyIndex   = 1;
     galleryIndex = 2;
     
     [self.searchTextField becomeFirstResponder];
@@ -220,12 +220,50 @@
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
         self.users = userObject[@"results"];
         self.stories = storyObject[@"results"];
+        
+        
+        [self rearrangeIndexes];
+        
         [self reloadData];
         
         if (self.users.count == 0 && self.galleries.count == 0 && self.stories.count == 0) {
             [self configureNoResults];
         }
     }];
+}
+
+-(void)rearrangeIndexes {
+    //By changing the index we bump the given tableview group up when there aren't any results for that query.
+    
+    //If no users and no stories are returned, bump galleries to top
+    if (self.users.count == 0 && self.stories.count == 0) {
+        userIndex    = 2;
+        storyIndex   = 1;
+        galleryIndex = 0;
+        return;
+    }
+    
+    //If no users are returned, bump stories and galleries up one index
+    if (self.users.count == 0) {
+        userIndex    = 2;
+        storyIndex   = 0;
+        galleryIndex = 1;
+    }
+    
+    //If no stories are returnd, swap the indicies of galleries and stories
+    if (self.stories.count == 0) {
+        userIndex    = 0;
+        storyIndex   = 2;
+        galleryIndex = 1;
+    }
+    
+    //If users, stories, and galleries are returned
+    if (self.stories.count != 0 && self.users.count != 0 && self.galleries.count != 0) {
+        userIndex    = 0;
+        storyIndex   = 1;
+        galleryIndex = 2;
+    }
+    
 }
 
 -(void)reloadData {
