@@ -202,7 +202,7 @@
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             
             FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
-            [self configureWithUser:user];
+            _representedUser = user;
             
             [self setupUI];
             [self configureUI];
