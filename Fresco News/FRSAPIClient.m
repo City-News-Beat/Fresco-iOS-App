@@ -839,7 +839,7 @@
         return;
     }
     
-    NSDictionary *params = @{@"q":query, @"stories":@(TRUE), @"galleries":@(TRUE), @"users":@(TRUE)};
+    NSDictionary *params = @{@"q":query, @"stories":@(TRUE), @"galleries":@(TRUE), @"users":@(TRUE), @"limit":@999};
     
     [self get:searchEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject,error);

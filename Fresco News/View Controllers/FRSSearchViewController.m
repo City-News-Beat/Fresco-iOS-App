@@ -221,7 +221,6 @@
         self.users = userObject[@"results"];
         self.stories = storyObject[@"results"];
         
-        
         [self rearrangeIndexes];
         
         [self reloadData];
@@ -515,7 +514,7 @@
         }
         
         if (indexPath.row == 3 && !_userExtended) {
-            [cell configureSearchSeeAllCellWithTitle:@"SEE ALL USERS"];
+            [cell configureSearchSeeAllCellWithTitle:[NSString stringWithFormat:@"SEE ALL %lu USERS", self.users.count]];
             return cell;
         }
         
@@ -558,7 +557,7 @@
         }
         
         if (indexPath.row == 3) {
-            [cell configureSearchSeeAllCellWithTitle:@"SEE ALL STORIES"];
+            [cell configureSearchSeeAllCellWithTitle:[NSString stringWithFormat:@"SEE ALL %lu STORIES", self.stories.count]];
             return cell;
         }
         
