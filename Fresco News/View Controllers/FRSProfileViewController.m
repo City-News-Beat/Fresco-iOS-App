@@ -197,7 +197,9 @@
     if (self) {
         isLoadingUser = TRUE;
         userId = userName;
-        
+        [self addStatusBarNotification];
+        [self showNavBarForScrollView:self.tableView animated:NO];
+
         [[FRSAPIClient sharedClient] getUserWithUID:userName completion:^(id responseObject, NSError *error) {
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             
@@ -229,6 +231,8 @@
                 self.editedProfile = false;
             }
 
+            [self showTabBarAnimated:YES];
+            self.tableView.bounces = false;
         }];
     }
     
@@ -409,7 +413,8 @@
     [self createProfileSection];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , self.view.frame.size.height - 44)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , [UIScreen mainScreen].bounds.size.height)];
+    
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
