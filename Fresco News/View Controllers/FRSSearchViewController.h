@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
+#import "FRSScrollingViewController.h"
+#import "FRSNavigationController.h"
 
-@interface FRSSearchViewController : FRSBaseViewController<UITextFieldDelegate>
+@interface FRSSearchViewController : FRSBaseViewController <UITextFieldDelegate>
 {
     BOOL isInDefault;
     

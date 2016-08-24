@@ -55,6 +55,11 @@
     [self.searchTextField resignFirstResponder];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+}
+
 -(void)dismiss{
     [self.navigationController popViewControllerAnimated:YES];
     [self.backTapButton removeFromSuperview];
@@ -623,6 +628,7 @@
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [self.searchTextField resignFirstResponder];
+//    [super scrollViewDidScroll:scrollView];
 }
 
 #pragma mark - dealloc

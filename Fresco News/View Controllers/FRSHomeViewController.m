@@ -738,11 +738,11 @@
     //Make the nav bar expand relative to the x offset
     [super scrollViewDidScroll:scrollView];
 
-    NSMutableArray *barButtonItems = [NSMutableArray array];
-    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
-    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
-    float navBarHeight=20.0;
-    float scrollingDifferenceX = (scrollView.contentOffset.x/self.tableView.frame.size.width*(navBarHeight*2))-navBarHeight-3;
+//    NSMutableArray *barButtonItems = [NSMutableArray array];
+//    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
+//    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
+//    float navBarHeight=20.0;
+//    float scrollingDifferenceX = (scrollView.contentOffset.x/self.tableView.frame.size.width*(navBarHeight*2))-navBarHeight-3;
     
     //NSLog(@"TABLEVIEW WIDTH: %f",self.tableView.frame.size.width);
     //NSLog(@"CONTENT X: %f",scrollView.contentOffset.x);
