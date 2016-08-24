@@ -18,7 +18,7 @@
 #import "FRSContentActionsBar.h"
 
 #import "PeekPopArticleViewController.h"
-
+#import "FRSComment.h"
 
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
@@ -43,7 +43,8 @@
 
 @property (strong, nonatomic) UILabel *titleLabel;
 
-
+@property (nonatomic, retain) NSMutableArray *comments;
+@property (nonatomic, retain) UITableView *commentTableView;
 @end
 
 @implementation FRSGalleryExpandedViewController
@@ -80,12 +81,20 @@
 
 -(void)fetchCommentsWithID:(NSString  *)galleryID {
     [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID completion:^(id responseObject, NSError *error) {
-        
         if (error || !responseObject) {
             [self commentError:error];
             return;
         }
         
+        _comments = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *comment in responseObject) {
+            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
+            [_comments addObject:commentObject];
+        }
+        
+        [self configureComments];
+
     }];
 }
 
@@ -146,10 +155,8 @@
     [self configureScrollView];
     [self configureGalleryView];
     [self configureArticles];
-    //[self configureComments];
     [self configureActionBar];
     [self configureNavigationBar];
-
     [self adjustScrollViewContentSize];
 }
 
@@ -202,18 +209,29 @@
 
 -(void)configureComments{
     
-    self.commentsView = [[FRSCommentsView alloc] initWithComments:[NSArray new]];
-    self.commentsView.frame = CGRectMake(0, self.articlesTV.frame.origin.y + self.articlesTV.frame.size.height + TOP_PAD, self.view.frame.size.width, [self.commentsView height] + 15);
-    self.commentsView.delegate = self;
-    [self.scrollView addSubview:self.commentsView];
+    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, CELL_HEIGHT * self.comments.count)];
+    self.commentTableView.delegate = self;
+    self.commentTableView.dataSource = self;
+    self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.commentTableView.backgroundColor = [UIColor whiteColor];
+    self.commentTableView.scrollEnabled = NO;
+    [self.scrollView addSubview:self.commentTableView];
     
-    UILabel *commentsLabel = [[UILabel alloc] init];
-    commentsLabel.text = @"COMMENTS";
-    commentsLabel.textColor = [UIColor frescoMediumTextColor];
-    commentsLabel.font = [UIFont notaBoldWithSize:15];
-    [commentsLabel sizeToFit];
-    [commentsLabel setOriginWithPoint:CGPointMake(16, self.commentsView.frame.origin.y - 5 - commentsLabel.frame.size.height)];
-    [self.scrollView addSubview:commentsLabel];
+    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.commentTableView.frame.origin.y - 0.5)]];
+    self.commentTableView.backgroundColor = [UIColor clearColor];
+    self.commentTableView.backgroundView.backgroundColor = [UIColor clearColor];
+    
+    if (self.comments.count > 0) {
+        UILabel *articlesLabel = [[UILabel alloc] init];
+        articlesLabel.text = @"COMMENTS";
+        articlesLabel.textColor = [UIColor frescoMediumTextColor];
+        articlesLabel.font = [UIFont notaBoldWithSize:15];
+        [articlesLabel sizeToFit];
+        [articlesLabel setOriginWithPoint:CGPointMake(16, self.commentTableView.frame.origin.y - 5 - articlesLabel.frame.size.height)];
+        [self.scrollView addSubview:articlesLabel];
+    }
+    
+    [self adjustScrollViewContentSize];
 }
 
 -(void)configureActionBar{
@@ -250,7 +268,7 @@
 }
 
 -(void)adjustScrollViewContentSize{
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryView.frame.size.height + self.articlesTV.frame.size.height + self.commentsView.frame.size.height + TOP_PAD * 2 + 50);
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryView.frame.size.height + self.articlesTV.frame.size.height + self.commentTableView.frame.size.height + TOP_PAD * 2 + 50);
 }
 
 
@@ -261,7 +279,7 @@
 
 #pragma mark - FRSGalleryView Delegate
 
--(BOOL)shouldHaveActionBar{
+-(BOOL)shouldHaveActionBar {
     return NO;
 }
 
@@ -269,7 +287,7 @@
     return NO;
 }
 
--(NSInteger)heightForImageView{
+-(NSInteger)heightForImageView {
     return 300;
 }
 
@@ -339,7 +357,12 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.orderedArticles.count;
+    
+    if (tableView == _articlesTV) {
+        return self.orderedArticles.count;
+    }
+    
+    return 3;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
