@@ -505,6 +505,7 @@
         }
         
         [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] user:self.users[indexPath.row]];
+        
         return cell;
     }
     else if (indexPath.section == storyIndex) {
@@ -572,55 +573,50 @@
     return Nil;
 }
 
--(void)followUser:(FRSUser *)user following:(BOOL)following {
-    
-//    NSLog(@"USER: %@", user);
-//    NSLog(@"FOLLOWING: %d", following);
-    
-    
-    if (following) {
-        NSLog(@"USER IS FOLLOWING, UNFOLLOW AND CHANGE ICON");
-//        [self unfollow:user];
-
-    } else {
-        NSLog(@"USER IS NOT FOLLOWING, FOLLOW AND CHANGE ICON");
-//        [self follow:user];
-    }
+-(void)reloadDataDelegate {
+//    [self.tableView reloadData];
 
 }
 
+//-(void)followUser:(NSDictionary *)user following:(BOOL)following {
+//    
+//    
+//    FRSUser *currentUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+//    
+//    if (following) {
+//        NSLog(@"USER IS FOLLOWING, UNFOLLOW AND CHANGE ICON");
+//        [self unfollow:currentUser];
+//
+//    } else {
+//        NSLog(@"USER IS NOT FOLLOWING, FOLLOW AND CHANGE ICON");
+//        [self follow:currentUser];
+//    }
 
--(void)follow:(FRSUser *)user {
-    
-    
-    [[FRSAPIClient sharedClient] followUser:user completion:^(id responseObject, NSError *error) {
-        if (error) {
-            return;
-        }
-        
-//        if ([[user valueForKey:@"following"] boolValue] == TRUE) {
-////            [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
-//            NSLog(@"FOLLOWED USER: %d %@", (error == Nil), user.username);
-//        } else {
-////            [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
+//}
+//
+//
+//-(void)follow:(FRSUser *)user {
+//    
+//    
+//    [[FRSAPIClient sharedClient] followUser:user completion:^(id responseObject, NSError *error) {
+//        if (error) {
+//            return;
 //        }
-    }];
-}
-
--(void)unfollow:(FRSUser *)user {
-    
-    [[FRSAPIClient sharedClient] unfollowUser:user completion:^(id responseObject, NSError *error) {
-        if (error) {
-            return;
-        }
-
-//        if ([[user valueForKey:@"following"] boolValue] == TRUE) {
-////            [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
-//        } else {
-////            [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
+//        
+//        
+//        
+//    }];
+//}
+//
+//-(void)unfollow:(FRSUser *)user {
+//    
+//    [[FRSAPIClient sharedClient] unfollowUser:user completion:^(id responseObject, NSError *error) {
+//        if (error) {
+//            return;
 //        }
-    }];
-}
+//
+//    }];
+//}
 
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];

@@ -60,7 +60,8 @@
 @property BOOL didToggleTwitter;
 @property BOOL didToggleFacebook;
 
-@property (strong, nonatomic) FRSUser *currentUser;
+@property (strong, nonatomic) NSDictionary *currentUser;
+@property (strong, nonatomic) UIButton *followingButton;
 @property BOOL following;
 
 @end
@@ -592,7 +593,7 @@
 }
 
 
--(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing user:(FRSUser *)user {
+-(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing user:(NSDictionary *)user {
     
     UIImageView *profileIV = [[UIImageView alloc] init];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
@@ -637,18 +638,18 @@
     
     [self addSubview:usernameLabel];
 
-    UIButton *followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [followingButton addTarget:self action:@selector(follow) forControlEvents:UIControlEventTouchUpInside];
-    followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 24, 24);
+    self.followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.followingButton addTarget:self action:@selector(follow) forControlEvents:UIControlEventTouchUpInside];
+    self.followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 24, 24);
     
-    [self addSubview:followingButton];
+    [self addSubview:self.followingButton];
     
     if (isFollowing){
-        [followingButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
-        followingButton.tintColor = [UIColor frescoOrangeColor];
+        [self.followingButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+        self.followingButton.tintColor = [UIColor frescoOrangeColor];
     } else {
-        [followingButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
-        followingButton.tintColor = [UIColor frescoMediumTextColor];
+        [self.followingButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+        self.followingButton.tintColor = [UIColor frescoMediumTextColor];
     }
 
     self.currentUser = user;
@@ -662,9 +663,45 @@
 }
 
 
--(void)follow:(FRSUser *)user following:(BOOL)following {
-    [self.delegate followUser:user following:following];
+-(void)follow:(NSDictionary *)user following:(BOOL)following {
     
+    FRSUser *currentUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+    [self.delegate reloadDataDelegate];
+
+    if (following) {
+        NSLog(@"USER IS FOLLOWING, UNFOLLOW AND CHANGE ICON");
+        [self unfollow:currentUser];
+    } else {
+        NSLog(@"USER IS NOT FOLLOWING, FOLLOW AND CHANGE ICON");
+        [self follow:currentUser];
+    }
+}
+
+
+-(void)follow:(FRSUser *)user {
+    
+    [[FRSAPIClient sharedClient] followUser:user completion:^(id responseObject, NSError *error) {
+        if (error) {
+            return;
+        }
+
+        [self.followingButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+        self.followingButton.tintColor = [UIColor frescoOrangeColor];
+        self.following = YES;
+    }];
+}
+
+-(void)unfollow:(FRSUser *)user {
+    
+    [[FRSAPIClient sharedClient] unfollowUser:user completion:^(id responseObject, NSError *error) {
+        if (error) {
+            return;
+        }
+        
+        [self.followingButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+        self.followingButton.tintColor = [UIColor frescoMediumTextColor];
+        self.following = NO;
+    }];
 }
 
 

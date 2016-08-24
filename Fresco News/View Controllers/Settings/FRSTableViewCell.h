@@ -10,7 +10,7 @@
 
 @protocol FRSTableViewCellDelegate <NSObject>
 
--(void)followUser:(FRSUser *)user following:(BOOL)following;
+-(void)reloadDataDelegate;
 
 @end
 
@@ -43,7 +43,7 @@
 
 -(void)configureSettingsHeaderCellWithTitle:(NSString *)title;
 -(void)configureSearchSeeAllCellWithTitle:(NSString *)title;
--(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing user:(FRSUser *)user;
+-(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing user:(NSDictionary *)user;
 -(void)configureSearchStoryCellWithStoryPhoto:(NSURL *)storyPhoto storyName:(NSString *)nameString;
 
 -(void)configureFindFriendsCell;
