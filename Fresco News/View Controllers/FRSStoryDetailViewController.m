@@ -28,7 +28,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [super viewDidLoad];
 
 
-    
+    [self configureSpinner];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 }
 
@@ -43,7 +44,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [super viewWillAppear:animated];
     [self setupTableView];
     [self configureNavigationBar];
-    [self configureSpinner];
     [self addStatusBarNotification];
     
     [self.navigationController setNavigationBarHidden:NO animated:YES];
@@ -59,7 +59,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.galleriesTable.backgroundColor = [UIColor frescoBackgroundColorDark];
-    self.galleriesTable.scrollEnabled = NO;
+    //self.galleriesTable.scrollEnabled = NO;
 }
 
 -(void)configureNavigationBar {
@@ -226,13 +226,14 @@ static NSString *galleryCell = @"GalleryCellReuse";
             FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
             [galleryObject configureWithDictionary:gallery context:delegate.managedObjectContext];
             [self.stories addObject:galleryObject];
-            [self.loadingView stopLoading];
-            [self.loadingView removeFromSuperview];
-            self.galleriesTable.scrollEnabled = YES;
+
+            //self.galleriesTable.scrollEnabled = YES;
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.galleriesTable reloadData];
+            [self.loadingView stopLoading];
+            [self.loadingView removeFromSuperview];
         });
     }];
 }
@@ -265,6 +266,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 -(void)configureSpinner {
+    
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.loadingView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 -10, [UIScreen mainScreen].bounds.size.height/2  -44 -10, 20, 20);
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
