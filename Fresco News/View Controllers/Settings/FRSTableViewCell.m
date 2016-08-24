@@ -583,6 +583,14 @@
 
 -(void)configureSearchSeeAllCellWithTitle:(NSString *)title {
     
+    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
+    [self addSubview:topLine];
+    
+    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 44, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    bottomLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00];
+    [self addSubview:bottomLine];
+    
     self.defaultTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, self.frame.size.height)];
     self.defaultTitleLabel.text = title;
     self.defaultTitleLabel.textAlignment = NSTextAlignmentCenter;
@@ -594,6 +602,14 @@
 
 
 -(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing user:(NSDictionary *)user {
+    
+    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
+    [self addSubview:topLine];
+    
+    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 56, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    bottomLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00];
+    [self addSubview:bottomLine];
     
     UIImageView *profileIV = [[UIImageView alloc] init];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
@@ -706,6 +722,14 @@
 
 
 -(void)configureSearchStoryCellWithStoryPhoto:(NSURL *)storyPhoto storyName:(NSString *)nameString {
+    
+    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
+    [self addSubview:topLine];
+    
+    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 56, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    bottomLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00];
+    [self addSubview:bottomLine];
     
     UIImageView *storyPreviewIV = [[UIImageView alloc] init];
     storyPreviewIV.frame = CGRectMake(16, 12, 32, 32);

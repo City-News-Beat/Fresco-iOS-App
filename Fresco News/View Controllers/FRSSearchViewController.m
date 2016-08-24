@@ -309,6 +309,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.bounces = YES;
+    self.tableView.separatorColor = [UIColor clearColor];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
