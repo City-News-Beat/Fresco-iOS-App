@@ -204,7 +204,9 @@
     if (self) {
         isLoadingUser = TRUE;
         userId = userName;
-     
+        [self setupUI];
+        [self configureUI];
+
         [[FRSAPIClient sharedClient] getUserWithUID:userName completion:^(id responseObject, NSError *error) {
             [self addStatusBarNotification];
             [self showNavBarForScrollView:self.tableView animated:NO];
@@ -213,8 +215,6 @@
             FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
             _representedUser = user;
             
-            [self setupUI];
-            [self configureUI];
             [self fetchGalleries];
             [super removeNavigationBarLine];
             
