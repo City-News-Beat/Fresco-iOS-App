@@ -200,6 +200,11 @@
 }
 
 -(void)performSearchWithQuery:(NSString *)query {
+    
+    if ([query isEqualToString:@""]) {
+        return;
+    }
+    
     [self configureSpinner];
     self.users = @[];
     self.galleries = @[];
