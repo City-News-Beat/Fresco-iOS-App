@@ -222,7 +222,6 @@
                 [self showNotificationsNotAnimated];
             }
             
-            
             if(!self.editedProfile){
                 if (!_representedUser) {
                     _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
@@ -329,6 +328,11 @@
 }
 
 -(void)displayAwkwardView: (BOOL)show feedTable:(BOOL)feed{
+    
+    if (isLoadingUser) {
+        return;
+    }
+    
     if(feed){
         self.feedAwkwardView.hidden = !show;
     }else{
@@ -727,6 +731,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
     if (section == 0){
         return 1;
     }
