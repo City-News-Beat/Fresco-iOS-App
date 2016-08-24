@@ -578,46 +578,6 @@
 
 }
 
-//-(void)followUser:(NSDictionary *)user following:(BOOL)following {
-//    
-//    
-//    FRSUser *currentUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
-//    
-//    if (following) {
-//        NSLog(@"USER IS FOLLOWING, UNFOLLOW AND CHANGE ICON");
-//        [self unfollow:currentUser];
-//
-//    } else {
-//        NSLog(@"USER IS NOT FOLLOWING, FOLLOW AND CHANGE ICON");
-//        [self follow:currentUser];
-//    }
-
-//}
-//
-//
-//-(void)follow:(FRSUser *)user {
-//    
-//    
-//    [[FRSAPIClient sharedClient] followUser:user completion:^(id responseObject, NSError *error) {
-//        if (error) {
-//            return;
-//        }
-//        
-//        
-//        
-//    }];
-//}
-//
-//-(void)unfollow:(FRSUser *)user {
-//    
-//    [[FRSAPIClient sharedClient] unfollowUser:user completion:^(id responseObject, NSError *error) {
-//        if (error) {
-//            return;
-//        }
-//
-//    }];
-//}
-
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [[[self.view window] rootViewController] presentViewController:activityController animated:YES completion:nil];
