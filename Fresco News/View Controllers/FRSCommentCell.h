@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TTTAttributedLabel.h"
 
 @interface FRSCommentCell : UITableViewCell
 @property (nonatomic, retain) IBOutlet UIImageView *profilePicture;
-@property (nonatomic, retain) IBOutlet UILabel *commentTextField;
+@property (nonatomic, retain) IBOutlet TTTAttributedLabel *commentTextField;
 @end
