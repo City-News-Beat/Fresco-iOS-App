@@ -33,6 +33,9 @@
 @property BOOL storyExtended;
 @property BOOL onlyDisplayGalleries;
 
+@property NSInteger usersDisplayed;
+@property NSInteger storiesDisplayed;
+
 @end
 
 @implementation FRSSearchViewController
@@ -201,6 +204,9 @@
 }
 
 -(void)performSearchWithQuery:(NSString *)query {
+
+    _storyExtended = NO;
+    _userExtended  = NO;
     
     if ([query isEqualToString:@""]) {
         return;
@@ -666,6 +672,15 @@
             return;
         }
         
+        if (indexPath.row == 3) { // see all users cell
+            
+            _userExtended = YES;
+            [tableView reloadData];
+            
+            
+            return;
+        }
+        
         NSDictionary *user = self.users[indexPath.row];
         FRSUser *userObject = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:userObject];
@@ -673,6 +688,15 @@
     }
     
     if (indexPath.section == storyIndex) {
+        
+        if (indexPath.row == 3) { // see all stories cell
+            
+            _storyExtended = YES;
+            [tableView reloadData];
+            
+            return;
+        }
+        
         NSDictionary *story = self.stories[indexPath.row];
         [self pushStoryView:story[@"id"]];
     }
