@@ -548,9 +548,7 @@
 }
 
 -(void)configureMapCell {
-    
-    
-    
+
 //    MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
 //    mapView.delegate = self;
 //    mapView.zoomEnabled =
@@ -682,7 +680,6 @@
 -(void)follow:(NSDictionary *)user following:(BOOL)following {
     
     FRSUser *currentUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
-    [self.delegate reloadDataDelegate];
 
     if (following) {
         NSLog(@"USER IS FOLLOWING, UNFOLLOW AND CHANGE ICON");

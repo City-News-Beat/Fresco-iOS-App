@@ -36,6 +36,8 @@
 @property NSInteger usersDisplayed;
 @property NSInteger storiesDisplayed;
 
+@property BOOL shouldUpdateOnReturn;
+
 @end
 
 @implementation FRSSearchViewController
@@ -55,13 +57,21 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
     [self.searchTextField resignFirstResponder];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    if (self.shouldUpdateOnReturn) {
+        [self performSearchWithQuery:self.searchTextField.text];
+    } else {
+        self.shouldUpdateOnReturn = NO;
+    }
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
 }
 
 -(void)dismiss{
@@ -204,9 +214,10 @@
 }
 
 -(void)performSearchWithQuery:(NSString *)query {
-
+    
     _storyExtended = NO;
     _userExtended  = NO;
+    
     
     if ([query isEqualToString:@""]) {
         return;
@@ -652,8 +663,8 @@
 }
 
 -(void)reloadDataDelegate {
-//    [self.tableView reloadData];
-
+    [self reloadData];
+    [self performSearchWithQuery:self.searchTextField.text];
 }
 
 -(void)showShareSheetWithContent:(NSArray *)content {
@@ -687,7 +698,6 @@
         }
         
         if (indexPath.row == 3 && !_userExtended) { // see all users cell
-            
             _userExtended = YES;
             [tableView reloadData];
             
@@ -698,6 +708,8 @@
         FRSUser *userObject = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:userObject];
         [self.navigationController pushViewController:controller animated:TRUE];
+        
+        self.shouldUpdateOnReturn = YES;
     }
     
     if (indexPath.section == storyIndex) {
