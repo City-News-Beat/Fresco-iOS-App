@@ -433,15 +433,15 @@
     return 0;
 }
 
--(void)pushStoryView:(NSString *)storyID {
+-(void)pushStoryView:(NSString *)storyID inRow:(NSInteger)row {
     NSManagedObjectContext *context = [[FRSAPIClient sharedClient] managedObjectContext];
     FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:context];
 
     story.uid = storyID;
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
     
-    if (self.stories[0][@"title"] && ![self.stories[0][@"title"] isEqual:[NSNull null]]) {
-        detailView.title = self.stories[0][@"title"];
+    if (self.stories[row][@"title"] && ![self.stories[row][@"title"] isEqual:[NSNull null]]) {
+        detailView.title = self.stories[row][@"title"];
     }
     detailView.navigationController = self.navigationController;
     [self.navigationController pushViewController:detailView animated:YES];
@@ -691,7 +691,7 @@
         
         NSDictionary *story = self.stories[indexPath.row];
         
-        [self pushStoryView:story[@"id"]];
+        [self pushStoryView:story[@"id"] inRow:indexPath.row];
             NSLog(@"id: %@", story[@"id"]);
     }
 }
