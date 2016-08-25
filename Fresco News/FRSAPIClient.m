@@ -349,7 +349,6 @@
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
        
-        NSLog(@"RESPONSE: %@", responseObject);
         NSLog(@"ERROR: %@", error);
 
     }];

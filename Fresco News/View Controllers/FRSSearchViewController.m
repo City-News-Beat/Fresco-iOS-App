@@ -334,17 +334,11 @@
     if (_galleries && ![_galleries isEqual:[NSNull null]]) {
         numberOfSections++;
     }
-    NSLog(@"number of sections: %d", numberOfSections);
+
     return numberOfSections;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    
-    NSLog(@"stories.count = %lu", self.stories.count);
-    NSLog(@"users.count = %lu", self.users.count);
-    NSLog(@"galleries.count = %lu", self.galleries.count);
-    
-    
     
     if (section == userIndex) {
         
@@ -390,7 +384,6 @@
         return 0; //Will never get called
     }
     if (section == galleryIndex) {
-        NSLog(@"GALLERIES.COUNT = %lu", (unsigned long)self.galleries.count);
         return self.galleries.count;
     }
     
@@ -587,7 +580,7 @@
             return cell;
         }
         
-        NSDictionary *story = self.stories[0];
+        NSDictionary *story = self.stories[indexPath.row];
         NSURL *photo;
         
         if ([story[@"thumbnails"] count] > 0) {
@@ -597,6 +590,7 @@
         NSString *title = @" ";
         if (story[@"title"] && ![story[@"title"] isEqual:[NSNull null]]) {
             title = story[@"title"];
+            NSLog(@"title = %@", title);
         }
         
         [cell configureSearchStoryCellWithStoryPhoto:photo storyName:title];
@@ -696,7 +690,9 @@
         }
         
         NSDictionary *story = self.stories[indexPath.row];
+        
         [self pushStoryView:story[@"id"]];
+            NSLog(@"id: %@", story[@"id"]);
     }
 }
 
