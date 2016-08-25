@@ -414,7 +414,8 @@
 
         return 56;
     }
-    else if (indexPath.section == userIndex) {
+    
+    if (indexPath.section == userIndex) {
 
         if (_users.count <= 0) {
             return 0;
@@ -422,8 +423,6 @@
         if (indexPath.row == 3 && !_userExtended) {
             return 44;
         }
-
-
 
         return 56;
     }
@@ -578,12 +577,12 @@
             return 0;
         }
         
-        if (indexPath.row == 3) {
+        if (indexPath.row == 3 && !_storyExtended) {
             [cell configureSearchSeeAllCellWithTitle:[NSString stringWithFormat:@"SEE ALL %lu STORIES", self.stories.count]];
             return cell;
         }
         
-        if (indexPath.row == self.stories.count + 1) {
+        if (indexPath.row == self.stories.count + 1 && !_storyExtended) {
             [cell configureEmptyCellSpace:NO];
             return cell;
         }
