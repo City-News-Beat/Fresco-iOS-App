@@ -173,6 +173,10 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self removeStatusBarNotification];
+    
+    if (!self.didFollow) {
+        [self searchShouldRefresh:NO]; //Reset the bool. Used when the current user is browsing profiles in search
+    }
 }
 
 
@@ -186,10 +190,6 @@
 //    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
 //    frsTabBar.dot.alpha = 0;
     
-    
-    if (!self.didFollow) {
-        [self searchShouldRefresh:NO]; //Reset the bool. Used when the current user is browsing profiles in search
-    }
 }
 
 -(instancetype)initWithUser:(FRSUser *)user {
@@ -1004,12 +1004,20 @@
 
 -(void)searchShouldRefresh:(BOOL)refresh {
     
+    if ([self.navigationController.viewControllers count] < 2) {
+        return;
+    }
+    
     UIViewController *previousController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
     FRSSearchViewController *searchVC = (FRSSearchViewController *)previousController;
     
     if (refresh) {
         if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
             searchVC.shouldUpdateOnReturn = YES;
+        }
+    } else {
+        if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
+            searchVC.shouldUpdateOnReturn = NO;
         }
     }
 }
