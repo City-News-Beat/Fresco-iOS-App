@@ -18,6 +18,7 @@
 //#import <MagicalRecord/MagicalRecord.h>
 #import "FRSAwkwardView.h"
 #import "DGElasticPullToRefresh.h"
+#import "FRSAlertView.h"
 
 
 
@@ -35,6 +36,8 @@
 
 @property NSInteger usersDisplayed;
 @property NSInteger storiesDisplayed;
+
+@property (strong, nonatomic) FRSAlertView *alert;
 
 @end
 
@@ -332,7 +335,16 @@
     });
 }
 -(void)searchError:(NSError *)error {
-    NSLog(@"SEARCH ERROR: %@", error);
+
+    if (error.code == -1009) {
+        NSLog(@"Unable to connect.");
+        self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+        [self.alert show];
+        return;
+    } else { //300, 400, 500 should return this alert
+        self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        [self.alert show];
+    }
 }
 
 -(void)configureNoResults {
