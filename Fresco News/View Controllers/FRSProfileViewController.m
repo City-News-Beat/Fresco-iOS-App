@@ -72,6 +72,7 @@
 @property (strong, nonatomic) UIBarButtonItem *followBarButtonItem;
 @property (strong, nonatomic) UIButton *followersButton;
 @property (strong, nonatomic) NSURL *profileImageURL;
+@property BOOL didFollow;
 
 @end
 
@@ -139,6 +140,7 @@
 
     [self showTabBarAnimated:YES];
     self.tableView.bounces = false;
+    self.didFollow = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -183,6 +185,11 @@
 //    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 //    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
 //    frsTabBar.dot.alpha = 0;
+    
+    
+    if (!self.didFollow) {
+        [self searchShouldRefresh:NO]; //Reset the bool. Used when the current user is browsing profiles in search
+    }
 }
 
 -(instancetype)initWithUser:(FRSUser *)user {
@@ -961,18 +968,9 @@
 }
 
 -(void)followUser {
+    [self searchShouldRefresh:YES];
     
-    
-    UIViewController *previousController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
-    FRSSearchViewController *searchVC = (FRSSearchViewController *)previousController;
-    
-    if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
-        searchVC.shouldUpdateOnReturn = YES;
-    } else {
-        searchVC.shouldUpdateOnReturn = NO;
-    }
-
-    
+    self.didFollow = YES;
     
     [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
         if (error) {
@@ -1002,6 +1000,21 @@
         }
         NSLog(@"UNFOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
     }];
+}
+
+-(void)searchShouldRefresh:(BOOL)refresh {
+    
+    UIViewController *previousController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
+    FRSSearchViewController *searchVC = (FRSSearchViewController *)previousController;
+    searchVC.shouldUpdateOnReturn = NO;
+    
+    if (refresh) {
+        if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
+            searchVC.shouldUpdateOnReturn = YES;
+        }
+    } else {
+        searchVC.shouldUpdateOnReturn = NO;
+    }
 }
 
 -(void)showEditProfile {

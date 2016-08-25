@@ -58,6 +58,12 @@
     [self.searchTextField resignFirstResponder];
 }
 
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    self.searchTextField.text = @"";
+}
+
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -298,11 +304,17 @@
     //If users are returned with galleries
     if (self.users.count != 0 && self.galleries.count != 0 && self.stories.count == 0) {
         self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -67, 0);
+        userIndex    = 0;
+        storyIndex   = 2;
+        galleryIndex = 1;
     }
     
     //If stories are returned with galleries
-    if (self.stories.count != 0 && self.galleries.count != 0 && self.stories.count == 0) {
+    if (self.stories.count != 0 && self.galleries.count != 0 && self.users.count == 0) {
         self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -68, 0);
+        userIndex    = 2;
+        storyIndex   = 0;
+        galleryIndex = 1;
     }
     
     //If users are returned with stories
