@@ -671,11 +671,10 @@
             return;
         }
         
-        if (indexPath.row == 3) { // see all users cell
+        if (indexPath.row == 3 && !_userExtended) { // see all users cell
             
             _userExtended = YES;
             [tableView reloadData];
-            
             
             return;
         }
@@ -688,7 +687,7 @@
     
     if (indexPath.section == storyIndex) {
         
-        if (indexPath.row == 3) { // see all stories cell
+        if (indexPath.row == 3 && !_storyExtended) { // see all stories cell
             
             _storyExtended = YES;
             [tableView reloadData];
