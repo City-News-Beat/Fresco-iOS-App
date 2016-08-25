@@ -261,6 +261,11 @@
         userIndex    = 2;
         storyIndex   = 0;
         galleryIndex = 1;
+    } else if (self.users.count != 0 && self.stories.count == 0 && self.galleries.count == 0) { //Only users are returned
+        self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -56, 0);
+        userIndex    = 0;
+        storyIndex   = 1;
+        galleryIndex = 2;
     }
     
     //If no stories are returnd, swap the indicies of galleries and stories
@@ -268,6 +273,11 @@
         userIndex    = 0;
         storyIndex   = 2;
         galleryIndex = 1;
+    } else if (self.stories.count != 0 && self.users.count == 0 && self.galleries.count == 0) { //Only stories are returned
+        self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -56, 0);
+        userIndex    = 1;
+        storyIndex   = 0;
+        galleryIndex = 2;
     }
     
     //If users, stories, and galleries are returned
@@ -285,6 +295,14 @@
     //If stories are returned with galleries
     if (self.stories.count != 0 && self.galleries.count != 0 && self.stories.count == 0) {
         self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -68, 0);
+    }
+    
+    //If users are returned with stories
+    if (self.stories.count != 0 && self.users.count != 0 && self.galleries.count == 0) {
+        self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -56, 0);
+        userIndex    = 0;
+        storyIndex   = 1;
+        galleryIndex = 2;
     }
 }
 
@@ -584,7 +602,10 @@
         NSURL *photo;
         
         if ([story[@"thumbnails"] count] > 0) {
-            photo = [NSURL URLWithString:story[@"thumbnails"][0][@"image"]];
+            NSString *urlString = story[@"thumbnails"][0][@"image"];
+            if (urlString != nil) {
+                photo = [NSURL URLWithString:urlString];
+            }
         }
         
         NSString *title = @" ";
