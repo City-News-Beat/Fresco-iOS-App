@@ -968,9 +968,9 @@
 }
 
 -(void)followUser {
-    [self searchShouldRefresh:YES];
     
     self.didFollow = YES;
+    [self searchShouldRefresh:YES];
     
     [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
         if (error) {
@@ -1006,14 +1006,11 @@
     
     UIViewController *previousController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
     FRSSearchViewController *searchVC = (FRSSearchViewController *)previousController;
-    searchVC.shouldUpdateOnReturn = NO;
     
     if (refresh) {
         if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
             searchVC.shouldUpdateOnReturn = YES;
         }
-    } else {
-        searchVC.shouldUpdateOnReturn = NO;
     }
 }
 
