@@ -31,6 +31,8 @@
 
 #import "FRSTabBarController.h"
 
+#import "FRSSearchViewController.h"
+
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
@@ -959,6 +961,19 @@
 }
 
 -(void)followUser {
+    
+    
+    UIViewController *previousController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
+    FRSSearchViewController *searchVC = (FRSSearchViewController *)previousController;
+    
+    if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
+        searchVC.shouldUpdateOnReturn = YES;
+    } else {
+        searchVC.shouldUpdateOnReturn = NO;
+    }
+
+    
+    
     [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
         if (error) {
             return;

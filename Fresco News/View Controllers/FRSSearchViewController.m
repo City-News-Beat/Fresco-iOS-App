@@ -36,8 +36,6 @@
 @property NSInteger usersDisplayed;
 @property NSInteger storiesDisplayed;
 
-@property BOOL shouldUpdateOnReturn;
-
 @end
 
 @implementation FRSSearchViewController
@@ -217,7 +215,6 @@
     
     _storyExtended = NO;
     _userExtended  = NO;
-    
     
     if ([query isEqualToString:@""]) {
         return;
@@ -709,7 +706,7 @@
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:userObject];
         [self.navigationController pushViewController:controller animated:TRUE];
         
-        self.shouldUpdateOnReturn = YES;
+//        self.shouldUpdateOnReturn = YES;
     }
     
     if (indexPath.section == storyIndex) {
