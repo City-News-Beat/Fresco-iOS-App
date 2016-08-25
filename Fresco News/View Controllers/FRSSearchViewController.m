@@ -146,32 +146,32 @@
 
 -(void)showClearButton {
     
-    //Scale clearButton up with a little jiggle
-    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
-        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
+//    //Scale clearButton up with a little jiggle
+//    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
+//        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
+//    } completion:^(BOOL finished) {
+//        [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
             self.clearButton.transform = CGAffineTransformMakeScale(1, 1);
-        } completion:nil];
-    }];
+//        } completion:nil];
+//    }];
     
-    //Fade in clearButton over total duration of scale
-    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//    //Fade in clearButton over total duration of scale
+//    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.clearButton.alpha = 1;
-    } completion:nil];
+//    } completion:nil];
 }
 
 -(void)hideClearButton {
     
-    //Scale clearButton down with anticipation
-    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
-        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
+//    //Scale clearButton down with anticipation
+//    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
+//        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
+//    } completion:^(BOOL finished) {
+//        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
             self.clearButton.transform = CGAffineTransformMakeScale(0.0001, 0.0001); //iOS does not scale to (0,0) for some reason :(
             self.clearButton.alpha = 0;
-        } completion:nil];
-    }];
+//        } completion:nil];
+//    }];
 }
 
 #pragma mark - UITextField Delegate
