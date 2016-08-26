@@ -220,14 +220,14 @@
     }
     
     
-//    //Endpoint is not live, waiting on Mike
-//    [[FRSAPIClient sharedClient] disableAccountWithDigestion:@{@"password" : self.password} completion:^(id responseObject, NSError *error) {
-//        
+    //Endpoint is not live, waiting on Mike
+    [[FRSAPIClient sharedClient] disableAccountWithDigestion:@{@"password" : self.password} completion:^(id responseObject, NSError *error) {
+        
 //        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
 //        NSInteger responseCode = response.statusCode;
 //        NSLog(@"ERROR: %ld", (long)responseCode);
-//        
-//    }];
+        
+    }];
 }
 
 
