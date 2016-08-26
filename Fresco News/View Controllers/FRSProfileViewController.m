@@ -381,7 +381,7 @@
     
 }
 
-- (void)dealloc{
+-(void)dealloc{
     [self.tableView dg_removePullToRefresh];
 }
 
