@@ -457,7 +457,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if ([URL.absoluteString containsString:@"name"]) {
         NSString *user = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
         NSLog(@"USER: %@", user);
-        FRSProfileViewController *viewController = [[FRSProfileViewController alloc] initWithUserName:user];
+        FRSProfileViewController *viewController = [[FRSProfileViewController alloc] initWithUserID:user];
         self.navigationItem.title = @"";
         [self.tabBarController.tabBar setHidden:YES];
         [self.navigationController pushViewController:viewController animated:YES];

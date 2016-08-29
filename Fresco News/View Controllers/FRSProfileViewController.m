@@ -206,8 +206,7 @@
     return self;
 }
 
-
--(instancetype)initWithUserName:(NSString *)userName {
+-(instancetype)initWithUserID:(NSString *)userName {
     self = [super init];
     
     if (self) {

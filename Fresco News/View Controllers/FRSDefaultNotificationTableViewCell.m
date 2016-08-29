@@ -9,21 +9,130 @@
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSProfileViewController.h"
+#import "FRSAPIClient.h"
+#import <Haneke/Haneke.h>
 
 @interface FRSDefaultNotificationTableViewCell ()
+
+
 @property (weak, nonatomic) IBOutlet UIView *line;
+
 @end
 
 @implementation FRSDefaultNotificationTableViewCell
 
 -(void)awakeFromNib {
     [super awakeFromNib];
-
 }
-
 -(void)prepareForReuse {
     [super prepareForReuse];
 }
+
+
+-(void)configureCellWithType:(FRSNotificationType)notificationType objectID:(NSString *)objectID {
+    
+
+    
+    [self configureDefaultAttributesForNotification:notificationType];
+
+    
+    switch (notificationType) {
+            
+        case FRSNotificationTypeFollow:
+            
+            [self configureUserNotificationWithID:objectID];
+            
+            break;
+            
+            
+            
+            
+            
+            
+        default:
+            break;
+    }
+    
+    
+}
+
+-(void)configureDefaultAttributesForNotification:(FRSNotificationType)notificationType {
+    
+    self.image.backgroundColor = [UIColor frescoLightTextColor];
+    self.image.layer.cornerRadius = 20;
+    self.image.clipsToBounds = YES;
+    
+    if (self.count <= 1) {
+        
+        self.annotationView.alpha = 0;
+        self.annotationLabel.alpha = 0;
+        
+        switch (notificationType) {
+            case FRSNotificationTypeFollow:
+                self.bodyLabel.text = @"Followed you.";
+                break;
+            case FRSNotificationTypeLike:
+                self.bodyLabel.text = @"Liked your gallery.";
+                break;
+            case FRSNotificationTypeRepost:
+                self.bodyLabel.text = @"Reposted your gallery.";
+                break;
+            case FRSNotificationTypeComment:
+                self.bodyLabel.text = @"Commented on your gallery.";
+                break;
+                
+            default:
+                break;
+        }
+    } else {
+        
+    }
+}
+
+
+
+-(void)configureUserNotificationWithID:(NSString *)notificationID {
+    
+    self.backgroundColor = [UIColor frescoBackgroundColorLight];
+    
+    [[FRSAPIClient sharedClient] getUserWithUID:notificationID completion:^(id responseObject, NSError *error) {
+        
+        self.titleLabel.text = [responseObject objectForKey:@"full_name"];
+        
+        if([responseObject objectForKey:@"avatar"] != [NSNull null]){
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+        
+        if ([responseObject objectForKey:@"following"]) {
+            [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+            self.followButton.tintColor = [UIColor frescoOrangeColor];
+        } else {
+            [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+            self.followButton.tintColor = [UIColor frescoMediumTextColor];
+        }
+        
+        
+
+    }];
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -(void)configureCell {
     

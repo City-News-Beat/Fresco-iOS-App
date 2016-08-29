@@ -23,6 +23,7 @@
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
 
+@property (strong, nonatomic) NSDictionary *payload;
 
 @end
 
@@ -33,6 +34,10 @@
     
     if (self) {
         self.tabBarController.tabBarItem.title = @"";
+        
+        self.payload = [[NSDictionary alloc] init];
+        self.payload = @{@"user-social-followed" : @"ewOo1Pr8KvlN"};
+
     }
     
     return self;
@@ -43,7 +48,6 @@
     
     [self configureUI];
     [self saveLastOpenedDate];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -110,24 +114,220 @@
 }
 
 
+#pragma mark - UITableView
 
-#pragma mark - Actions 
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
 
--(void)segueToUser:(FRSUser *)user {
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 64;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+//    switch (indexPath.row) {
+//        case 0: {
+    NSString *cellIdentifier = @"notificationCell";
+    FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] init];
+    [cell configureCellWithType:FRSNotificationTypeFollow objectID:[self.payload objectForKey:@"user-social-followed"]];
+    cell.count = 0;
+    
+    return cell;
+    //
+//        } break;
+//
+//        case 1: {
+//            NSString *cellIdentifier = @"notificationCell";
+//            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//            
+//            cell.titleLabel.text = @"Today in News";
+//            cell.bodyLabel.text  = @"My money's in that office, right? If she start giving me some bullshit about it ain't there, and we got to go.";
+//            cell.followButton.alpha = 0;
+//            cell.image.image = [UIImage imageNamed:@"apple-story-2"];
+//            
+//            [cell configureCell];
+//            
+//            return cell;
+//            
+//        } break;
+//            
+//        case 2: {
+//            
+//            NSString *cellIdentifier = @"notificationCell";
+//            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//            
+//            cell.titleLabel.text = @"You have $20 expiring soon";
+//            cell.bodyLabel.text  = @"Add a card by Tuesday to get paid";
+//            cell.followButton.alpha = 0;
+//            
+//            [cell configureCell];
+//            
+//            return cell;
+//
+//            
+//        } break;
+//            
+//        case 3: {
+//            
+//            NSString *cellIdentifier = @"textNotificationCell";
+//            FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//            
+//            cell.bodyLabel.text  = @"BREAKING: Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? Do you see a little Asian child with a blank expression on his face sitting outside on a mechanical helicopter that shakes when you put quarters in it? No? Well, that's what you see at a toy store. And you must think you're in a toy store, because you're here shopping for an infant named Jeb.";
+//            
+//            [cell configureCell];
+//            return cell;
+//            
+//        } break;
+//            
+//        case 4: {
+//            
+//            NSString *cellIdentifier = @"assignmentNotificationCell";
+//            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//            
+//            cell.titleLabel.text  = @"Assignment: Raining Figs Over Tennessee";
+//            cell.bodyLabel.text = @"Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun. This should eventually tuncate after going over three lines maybe let's try and see if it truncates.";
+//            cell.backgroundColor = [UIColor frescoBackgroundColorDark];
+//            
+//            [cell configureCell];
+//            return cell;
+//            
+//        } break;
+//            
+//        case 5: {
+//           
+//            NSString *cellIdentifier = @"assignmentNotificationCell";
+//            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//            
+//            
+//            //Hard coded for now, response will return assignment data
+//            cell.titleLabel.text  = @"Severe weather in New York";
+//            cell.bodyLabel.text = @"Fresco News seeks photos and steady videos (must be 20 to 60 seconds) of severe thunderstorms in NYC. Capture content anywhere within the set radius. Take shots from a variety of angles, getting wide, medium, and tight shots.";
+//            cell.backgroundColor = [UIColor frescoBackgroundColorDark];
+//            [cell.actionButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
+//
+//            [cell configureCell];
+//            return cell;
+//            
+//        } break;
+//            
+//        case 6: {
+//            
+//            NSString *cellIdentifier = @"notificationCell";
+//            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//            
+//            cell.titleLabel.text = @"Tax information needed";
+//            cell.bodyLabel.text  = @"You’ve made over $2,000 on Fresco! Please add your tax info soon to continue receiving payments.";
+//            cell.followButton.alpha = 0;
+//            cell.count = 0;
+//            cell.image.image = nil;
+//            
+//            [cell configureCell];
+//            
+//            return cell;
+//            
+//        } break;
+//            
+//        case 7: {
+//            NSString *cellIdentifier = @"notificationCell";
+//            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//            
+//            cell.titleLabel.text = @"Your photo was purchased!";
+//            cell.bodyLabel.text  = @"WFLA purchased your photo! We’ve sent $20 to your Visa (3189).";
+//            cell.followButton.alpha = 0;
+//            cell.count = 0;
+//            cell.image.image = [UIImage imageNamed:@"apple-story-1"];
+//            [cell configureCell];
+//            
+//            return cell;
+//        } break;
+//            
+//        default:
+//            break;
+//    }
+//    
+//    
+////    if (cell.isRead) {
+////        cell.backgroundColor = [UIColor frescoBackgroundColorDark];
+////    }
+//    
+//    
+//    UITableViewCell *cell;
+    return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate updateTabBarToUser];
+    
+    if (indexPath.row == 0) {
+        
+        [self segueToUser:@"ewOo1Pr8KvlN"];
+    }
+    
+//    if (indexPath.row == 1) {
+//        [self segueToGallery];
+//    }
+//    
+//    if (indexPath.row == 2) {
+//        [self segueToDebitCard];
+//    }
+//    
+//    if (indexPath.row == 4) {
+//
+//        [self segueToCamera];
+//    }
+//    
+//    if (indexPath.row == 5) {
+//        
+//        [self segueToAssignmentWithID:@"xLJE0QzW1G5B"];
+//    }
+//    
+//    if (indexPath.row == 6) {
+//        [self segueToTaxInfo];
+//    }
+//    
+//    if (indexPath.row == 7) {
+//        [self segueToGallery];
+//    }
+    
+}
+
+#pragma mark - Actions
+
+-(void)popViewController {
+    [self.navigationController popViewControllerAnimated:NO];
+}
+
+-(CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
+    [sizingCell layoutIfNeeded];
+    
+    CGSize size = [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    return size.height;
+}
+
+-(void)segueToUser:(NSString *)userID {
+    
+    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUserID:userID];
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
-
 -(void)segueToAssignmentWithID:(NSString *)assignmentID {
     
-//    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithActiveAssignment:assignmentID];
-//    [self.navigationController pushViewController:assignmentsVC animated:YES];
+    //    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithActiveAssignment:assignmentID];
+    //    [self.navigationController pushViewController:assignmentsVC animated:YES];
     
     FRSNavigationController *navCont = (FRSNavigationController *)[self.tabBarController.viewControllers objectAtIndex:3];
     FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
-
+    
     assignmentsVC.hasDefault = YES;
     assignmentsVC.defaultID = assignmentID;
     self.tabBarController.selectedIndex = 3;
@@ -144,7 +344,7 @@
 }
 
 -(void)segueToBankInfo {
-
+    
     FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
     debitCardVC.shouldDisplayBankViewOnLoad = YES;
     [self.navigationController pushViewController:debitCardVC animated:YES];
@@ -186,207 +386,6 @@
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate updateTabBarToUser];
 }
-
-
-#pragma mark - UITableView
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 8;
-}
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    switch (indexPath.row) {
-        case 0: {
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
-            cell.titleLabel.text = @"Omar Elfanek";
-            cell.bodyLabel.text  = @"Followed you.";
-            cell.count = 5;
-            cell.image.image = [UIImage imageNamed:@"apple-user-byrn"];
-            
-            [cell configureCell];
-            return cell;
-
-        } break;
-            
-        case 1: {
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
-            cell.titleLabel.text = @"Today in News";
-            cell.bodyLabel.text  = @"My money's in that office, right? If she start giving me some bullshit about it ain't there, and we got to go.";
-            cell.followButton.alpha = 0;
-            cell.image.image = [UIImage imageNamed:@"apple-story-2"];
-            
-            [cell configureCell];
-            
-            return cell;
-            
-        } break;
-            
-        case 2: {
-            
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
-            cell.titleLabel.text = @"You have $20 expiring soon";
-            cell.bodyLabel.text  = @"Add a card by Tuesday to get paid";
-            cell.followButton.alpha = 0;
-            
-            [cell configureCell];
-            
-            return cell;
-
-            
-        } break;
-            
-        case 3: {
-            
-            NSString *cellIdentifier = @"textNotificationCell";
-            FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
-            cell.bodyLabel.text  = @"BREAKING: Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? Do you see a little Asian child with a blank expression on his face sitting outside on a mechanical helicopter that shakes when you put quarters in it? No? Well, that's what you see at a toy store. And you must think you're in a toy store, because you're here shopping for an infant named Jeb.";
-            
-            [cell configureCell];
-            return cell;
-            
-        } break;
-            
-        case 4: {
-            
-            NSString *cellIdentifier = @"assignmentNotificationCell";
-            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
-            cell.titleLabel.text  = @"Assignment: Raining Figs Over Tennessee";
-            cell.bodyLabel.text = @"Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun. This should eventually tuncate after going over three lines maybe let's try and see if it truncates.";
-            cell.backgroundColor = [UIColor frescoBackgroundColorDark];
-            
-            [cell configureCell];
-            return cell;
-            
-        } break;
-            
-        case 5: {
-           
-            NSString *cellIdentifier = @"assignmentNotificationCell";
-            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
-            
-            //Hard coded for now, response will return assignment data
-            cell.titleLabel.text  = @"Severe weather in New York";
-            cell.bodyLabel.text = @"Fresco News seeks photos and steady videos (must be 20 to 60 seconds) of severe thunderstorms in NYC. Capture content anywhere within the set radius. Take shots from a variety of angles, getting wide, medium, and tight shots.";
-            cell.backgroundColor = [UIColor frescoBackgroundColorDark];
-            [cell.actionButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
-
-            [cell configureCell];
-            return cell;
-            
-        } break;
-            
-        case 6: {
-            
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
-            cell.titleLabel.text = @"Tax information needed";
-            cell.bodyLabel.text  = @"You’ve made over $2,000 on Fresco! Please add your tax info soon to continue receiving payments.";
-            cell.followButton.alpha = 0;
-            cell.count = 0;
-            cell.image.image = nil;
-            
-            [cell configureCell];
-            
-            return cell;
-            
-        } break;
-            
-        case 7: {
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
-            cell.titleLabel.text = @"Your photo was purchased!";
-            cell.bodyLabel.text  = @"WFLA purchased your photo! We’ve sent $20 to your Visa (3189).";
-            cell.followButton.alpha = 0;
-            cell.count = 0;
-            cell.image.image = [UIImage imageNamed:@"apple-story-1"];
-            [cell configureCell];
-            
-            return cell;
-        } break;
-            
-        default:
-            break;
-    }
-    
-    
-//    if (cell.isRead) {
-//        cell.backgroundColor = [UIColor frescoBackgroundColorDark];
-//    }
-    
-    
-    UITableViewCell *cell;
-    return cell;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    
-    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate updateTabBarToUser];
-    
-    if (indexPath.row == 0) {
-        
-        [self segueToUser:nil];
-    }
-    
-    if (indexPath.row == 1) {
-        [self segueToGallery];
-    }
-    
-    if (indexPath.row == 2) {
-        [self segueToDebitCard];
-    }
-    
-    if (indexPath.row == 4) {
-
-        [self segueToCamera];
-    }
-    
-    if (indexPath.row == 5) {
-        
-        [self segueToAssignmentWithID:@"xLJE0QzW1G5B"];
-    }
-    
-    if (indexPath.row == 6) {
-        [self segueToTaxInfo];
-    }
-    
-    if (indexPath.row == 7) {
-        [self segueToGallery];
-    }
-    
-}
-
--(void)popViewController {
-    [self.navigationController popViewControllerAnimated:NO];
-}
-
--(CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
-    [sizingCell layoutIfNeeded];
-    
-    CGSize size = [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-    return size.height;
-}
-
-
-
 
 
 
