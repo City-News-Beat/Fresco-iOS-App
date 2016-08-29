@@ -36,8 +36,9 @@
         self.tabBarController.tabBarItem.title = @"";
         
         self.payload = [[NSDictionary alloc] init];
-        self.payload = @{@"user-social-followed" : @"ewOo1Pr8KvlN"};
-
+        NSArray *users = @[@"ewOo1Pr8KvlN", @"2vRW0Na8oEgQ", @"Ym4x8rK0Jjpd"];
+        NSString *gallery = @"Ym4x8rVK8Jjp";
+        self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery};
     }
     
     return self;
@@ -117,7 +118,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return 2;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -130,16 +131,39 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-//    switch (indexPath.row) {
-//        case 0: {
-    NSString *cellIdentifier = @"notificationCell";
-    FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    [cell configureCellWithType:FRSNotificationTypeFollow objectID:[self.payload objectForKey:@"user-social-followed"]];
-    cell.count = 0;
+    switch (indexPath.row) {
+        case 0: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            
+            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
+            cell.count = users.count;
+            
+            [cell configureUserNotificationWithID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0]];
+            
+            return cell;
+        } break;
+            
+            
+        case 1: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
+            cell.count = users.count;
+            
+            [cell configureLikedGalleryNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0] galleryID:[self.payload objectForKey:@"user-social-liked"]];
+        
+            return cell;
+        } break;
+            
+        default:
+            break;
+    }
+
     
-    return cell;
-    //
 //        } break;
 //
 //        case 1: {
@@ -257,9 +281,10 @@
 ////    }
 //    
 //    
-//    UITableViewCell *cell;
+    UITableViewCell *cell;
     return cell;
 }
+
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -273,10 +298,10 @@
         [self segueToUser:@"ewOo1Pr8KvlN"];
     }
     
-//    if (indexPath.row == 1) {
-//        [self segueToGallery];
-//    }
-//    
+    if (indexPath.row == 1) {
+        [self segueToGallery:@"Ym4x8rVK8Jjp"];
+    }
+//
 //    if (indexPath.row == 2) {
 //        [self segueToDebitCard];
 //    }
@@ -372,11 +397,29 @@
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
 }
 
--(void)segueToGallery {
+-(void)segueToGallery:(NSString *)galleryID {
     
-    FRSGalleryExpandedViewController *galleryVC = [[FRSGalleryExpandedViewController alloc] initWithGalleryID:@"evKa0MQz0Qd9"];
-    [self.navigationController pushViewController:galleryVC animated:YES];
     
+    
+    
+    
+    
+    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
+
+        FRSGallery *gallery = responseObject;
+        
+        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+        vc.shouldHaveBackButton = YES;
+//        [super showNavBarForScrollView:self.tableView animated:NO];
+        
+        self.navigationItem.title = @"";
+        
+        [self.navigationController pushViewController:vc animated:YES];
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        [self hideTabBarAnimated:YES];
+        
+    }];
 }
 
 -(void)returnToProfile {

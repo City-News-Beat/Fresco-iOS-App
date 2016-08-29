@@ -11,17 +11,27 @@
 @interface FRSDefaultNotificationTableViewCell : UITableViewCell
 
 typedef NS_ENUM(NSUInteger, FRSNotificationType) {
+    
+    /* Social */
     FRSNotificationTypeFollow,
     FRSNotificationTypeLike,
     FRSNotificationTypeRepost,
     FRSNotificationTypeComment
+    
+    /* News */
+    
+    /* Dispatch */
+    
+    /* Payment */
+    
+    /* Promo */
 };
 
 -(void)configureCell;
 
 -(void)configureUserNotificationWithID:(NSString *)notificationID;
+-(void)configureLikedGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
 
--(void)configureCellWithType:(FRSNotificationType)notificationType objectID:(NSString *)objectID;
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;

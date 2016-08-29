@@ -71,11 +71,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self = [super init];
     if (self){
         self.gallery = gallery;
-        self.orderedArticles = [self.gallery.articles allObjects];
+//        self.orderedArticles = [self.gallery.articles allObjects];
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
         self.touchEnabled = NO;
-        [self fetchCommentsWithID:gallery.uid];
+//        [self fetchCommentsWithID:gallery.uid];
     }
     return self;
 }

@@ -29,71 +29,100 @@
 }
 
 
--(void)configureCellWithType:(FRSNotificationType)notificationType objectID:(NSString *)objectID {
-    
-
-    
-    [self configureDefaultAttributesForNotification:notificationType];
-
-    
-    switch (notificationType) {
-            
-        case FRSNotificationTypeFollow:
-            
-            [self configureUserNotificationWithID:objectID];
-            
-            break;
-            
-            
-            
-            
-            
-            
-        default:
-            break;
-    }
-    
-    
-}
+//-(void)configureCellWithType:(FRSNotificationType)notificationType objectID:(NSString *)objectID {
+//    //Sets up default state for cell
+//    switch (notificationType) {
+//        case FRSNotificationTypeFollow:
+//            [self configureUserNotificationWithID:objectID];
+//            break;
+//        case FRSNotificationTypeLike:
+//            break;
+//        default:
+//            break;
+//    }
+//}
 
 -(void)configureDefaultAttributesForNotification:(FRSNotificationType)notificationType {
     
     self.image.backgroundColor = [UIColor frescoLightTextColor];
     self.image.layer.cornerRadius = 20;
     self.image.clipsToBounds = YES;
+    self.followButton.alpha = 0;
+    self.annotationView.layer.cornerRadius = 12;
     
+    //Set bodyLabel based on notifcation type
+    switch (notificationType) {
+        case FRSNotificationTypeFollow:
+            self.bodyLabel.text = @"Followed you.";
+            break;
+        case FRSNotificationTypeLike:
+            self.bodyLabel.text = @"Liked your gallery.";
+            break;
+        case FRSNotificationTypeRepost:
+            self.bodyLabel.text = @"Reposted your gallery.";
+            break;
+        case FRSNotificationTypeComment:
+            self.bodyLabel.text = @"Commented on your gallery.";
+            break;
+            
+        default:
+            break;
+    }
+
     if (self.count <= 1) {
-        
         self.annotationView.alpha = 0;
         self.annotationLabel.alpha = 0;
-        
-        switch (notificationType) {
-            case FRSNotificationTypeFollow:
-                self.bodyLabel.text = @"Followed you.";
-                break;
-            case FRSNotificationTypeLike:
-                self.bodyLabel.text = @"Liked your gallery.";
-                break;
-            case FRSNotificationTypeRepost:
-                self.bodyLabel.text = @"Reposted your gallery.";
-                break;
-            case FRSNotificationTypeComment:
-                self.bodyLabel.text = @"Commented on your gallery.";
-                break;
-                
-            default:
-                break;
+
+    }
+}
+
+-(void)updateLabelsForCount {
+    if (self.count > 1) {
+        //Update labels based on count
+        if (self.count <= 1) {
+            self.annotationView.alpha = 0;
+        } else if (self.count <= 9) {
+            self.titleLabel.text = [NSString stringWithFormat:@"%@ + %ld others", self.titleLabel.text, self.count];
+            self.annotationLabel.text = [NSString stringWithFormat:@"+%ld", self.count];
+        } else {
+            self.annotationLabel.text = @"+";
         }
-    } else {
-        
     }
 }
 
 
+-(void)configureLikedGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
+    
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeLike];
+    self.followButton.alpha = 0;
+    self.annotationView.alpha = 0;
+    
+    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
+        self.titleLabel.text = [responseObject objectForKey:@"full_name"];
+        
+        if([responseObject objectForKey:@"avatar"] != [NSNull null]){
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+        
+        [self updateLabelsForCount];
+        
+    }];
+    
+    
+    
+}
+
 
 -(void)configureUserNotificationWithID:(NSString *)notificationID {
     
-    self.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeFollow];
+    
+    
+    
+    self.followButton.tintColor = [UIColor frescoMediumTextColor];
+    
+
     
     [[FRSAPIClient sharedClient] getUserWithUID:notificationID completion:^(id responseObject, NSError *error) {
         
@@ -112,6 +141,7 @@
             self.followButton.tintColor = [UIColor frescoMediumTextColor];
         }
         
+        [self updateLabelsForCount];
         
 
     }];
@@ -184,14 +214,16 @@
 
 -(IBAction)followTapped:(id)sender {
 
-    if ([self.followButton.imageView.image isEqual:[UIImage imageNamed:@"already-following"]]) {
-        [self.followButton setImage:[UIImage imageNamed:@"add-follower"] forState:UIControlStateNormal];
+    if ([self.followButton.imageView.image isEqual:[UIImage imageNamed:@"account-check"]]) {
+        [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+        self.followButton.tintColor = [UIColor frescoMediumTextColor];
+    } else if ([self.followButton.imageView.image isEqual: [UIImage imageNamed:@"account-add"]]) {
+        [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
         self.followButton.tintColor = [UIColor frescoOrangeColor];
-    } else if ([self.followButton.imageView.image isEqual: [UIImage imageNamed:@"add-follower"]]) {
-        [self.followButton setImage:[UIImage imageNamed:@"already-following"] forState:UIControlStateNormal];
-        self.followButton.tintColor = [UIColor blackColor];
     }
 }
+
+
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
