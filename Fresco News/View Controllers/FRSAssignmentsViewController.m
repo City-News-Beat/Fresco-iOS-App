@@ -208,6 +208,10 @@
         
         self.globalAssignmentsArray = [globalAssignments copy];
         
+        if (self.globalAssignmentsArray.count >= 1) {
+            [self showGlobalAssignmentsBar];
+        }
+        
         for (NSDictionary *dict in assignments){
             
             FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
@@ -979,10 +983,6 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(globalAssignmentsSegue)];
     [self.globalAssignmentsBottomContainer addGestureRecognizer:tap];
-    
-    if (self.globalAssignmentsArray.count >= 1) {
-        [self showGlobalAssignmentsBar];
-    }
     
 }
 
