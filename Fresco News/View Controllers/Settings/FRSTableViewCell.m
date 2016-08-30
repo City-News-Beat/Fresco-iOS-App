@@ -613,7 +613,8 @@
     profileIV.frame = CGRectMake(16, 12, 32, 32);
     profileIV.layer.cornerRadius = 16;
     profileIV.clipsToBounds = YES;
-    [profileIV hnk_setImageFromURL:profile];
+    
+    [profileIV hnk_setImageFromURL:(NSURL *)profile];
     
     profileIV.backgroundColor = [UIColor frescoLightTextColor];
     NSLog(@"profile image URL: %@", profile);

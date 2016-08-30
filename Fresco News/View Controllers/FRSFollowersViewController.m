@@ -8,7 +8,7 @@
 
 #import "FRSFollowersViewController.h"
 
-#import "FRSUserTableViewCell.h"
+#import "FRSTableViewCell.h"
 #import "FRSTabbedNavigationTitleView.h"
 #import "DGElasticPullToRefresh.h"
 #import "FRSProfileViewController.h"
@@ -32,7 +32,7 @@
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (nonatomic, strong) UITableView *followingTable;
 @property (strong, nonatomic) UIBarButtonItem *backTapButton;
-@property (strong, nonatomic) FRSUserTableViewCell *selectedCell;
+@property (strong, nonatomic) FRSTableViewCell *selectedCell;
 @property (strong, nonatomic) FRSAwkwardView *followingAwkward;
 @property (strong, nonatomic) FRSAwkwardView *followerAwkward;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *followingSpinner;
@@ -417,38 +417,85 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    FRSUserTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"user-cell"];
-    if (!cell){
-        cell = [[FRSUserTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"user-cell"];
-    }
-    CGRect newFrame = cell.frame;
-    newFrame.size.width = self.view.frame.size.width;
-    [cell setFrame:newFrame];
-    if(self.followingArray.count > 0 && self.followingTable == tableView){
-        [cell clearCell];
-        FRSUser *user = [self.followingArray objectAtIndex:indexPath.row];
-        NSLog(@"Following Cell #%i %@",(int)indexPath.row, user.uid);
-        cell.cellHeight = CELL_HEIGHT;
-        [cell configureCellWithUser:user isFollowing:[self isFollowingUser:user]];
-    }
-    if(self.followerArray.count > 0 && self.tableView == tableView){
-        [cell clearCell];
-        FRSUser *user = [self.followerArray objectAtIndex:indexPath.row];
-        NSLog(@"Follower Cell #%i %@",(int)indexPath.row, user.uid);
-        cell.cellHeight = CELL_HEIGHT;
-        [cell configureCellWithUser:user isFollowing:[self isFollowingUser:user]];
+    
+    NSString *cellIdentifier;
+    
+    FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    __weak typeof(self) weakSelf;
+    
+    
+    if(self.followingArray.count > 0 && self.followingTable == tableView){
+        
+    }
+    
+    if(self.followerArray.count > 0 && self.tableView == tableView){
+        
+        FRSUser *user = [self.followerArray objectAtIndex:indexPath.row];
+        
+        NSString *avatarURL;
+        if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
+            avatarURL = user.profileImage;
+        }
+        
+        NSURL *avatarURLObject;
+        if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
+            avatarURLObject = [NSURL URLWithString:avatarURL];
+        }
+        
+        
+        
+        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:user.firstName userName:user.username isFollowing:nil user:nil];
+        
+    }
+    
     
     return cell;
+    
+    
+    
+    
+//    FRSTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"user-cell"];
+//    if (!cell){
+//        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"user-cell"];
+//    }
+//    CGRect newFrame = cell.frame;
+//    newFrame.size.width = self.view.frame.size.width;
+//    [cell setFrame:newFrame];
+//    if(self.followingArray.count > 0 && self.followingTable == tableView){
+//        
+//        
+//        
+////        [cell clearCell];
+////        FRSUser *user = [self.followingArray objectAtIndex:indexPath.row];
+////        NSLog(@"Following Cell #%i %@",(int)indexPath.row, user.uid);
+////        cell.cellHeight = CELL_HEIGHT;
+////        [cell configureCellWithUser:user isFollowing:[self isFollowingUser:user]];
+//    }
+//    if(self.followerArray.count > 0 && self.tableView == tableView){
+////        [cell clearCell];
+////        FRSUser *user = [self.followerArray objectAtIndex:indexPath.row];
+////        NSLog(@"Follower Cell #%i %@",(int)indexPath.row, user.uid);
+////        cell.cellHeight = CELL_HEIGHT;
+////        [cell configureCellWithUser:user isFollowing:[self isFollowingUser:user]];
+//        
+//        
+//        [cell configureSearchUserCellWithProfilePhoto:nil fullName:nil userName:nil isFollowing:nil user:nil];
+//        
+//    }
+//    
+////    __weak typeof(self) weakSelf;
+//    
+//    return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
-    FRSUserTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [self segueToUserProfile:cell.user];
-    self.selectedCell = cell;
+//    FRSUserTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+//    [self segueToUserProfile:cell.user];
+//    self.selectedCell = cell;
 }
 
 -(BOOL)isFollowingUser:(FRSUser *) user{
