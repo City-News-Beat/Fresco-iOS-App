@@ -37,7 +37,7 @@
 @property (strong, nonatomic) FRSAwkwardView *followerAwkward;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *followingSpinner;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *followerSpinner;
-
+@property (strong, nonatomic) FRSUser *currentUser;
 
 @end
 
@@ -425,15 +425,9 @@
         cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    
-    
-    if(self.followingArray.count > 0 && self.followingTable == tableView){
-        
-    }
-    
-    if(self.followerArray.count > 0 && self.tableView == tableView){
-        
-        FRSUser *user = [self.followerArray objectAtIndex:indexPath.row];
+    if (self.followingArray.count > 0 && self.followingTable == tableView){
+        FRSUser *user = [self.followingArray objectAtIndex:indexPath.row];
+        self.currentUser = user;
         
         NSString *avatarURL;
         if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
@@ -445,57 +439,41 @@
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
         
+        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:user.firstName userName:user.username isFollowing:YES user:nil];
+    }
+    
+    if (self.followerArray.count > 0 && self.tableView == tableView){
         
+        FRSUser *user = [self.followerArray objectAtIndex:indexPath.row];
+        self.currentUser = user;
         
-        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:user.firstName userName:user.username isFollowing:nil user:nil];
+        NSString *avatarURL;
+        if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
+            avatarURL = user.profileImage;
+        }
+        
+        NSURL *avatarURLObject;
+        if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
+            avatarURLObject = [NSURL URLWithString:avatarURL];
+        }
+        
+        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:user.firstName userName:user.username isFollowing:YES user:nil];
         
     }
     
     
     return cell;
-    
-    
-    
-    
-//    FRSTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"user-cell"];
-//    if (!cell){
-//        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"user-cell"];
-//    }
-//    CGRect newFrame = cell.frame;
-//    newFrame.size.width = self.view.frame.size.width;
-//    [cell setFrame:newFrame];
-//    if(self.followingArray.count > 0 && self.followingTable == tableView){
-//        
-//        
-//        
-////        [cell clearCell];
-////        FRSUser *user = [self.followingArray objectAtIndex:indexPath.row];
-////        NSLog(@"Following Cell #%i %@",(int)indexPath.row, user.uid);
-////        cell.cellHeight = CELL_HEIGHT;
-////        [cell configureCellWithUser:user isFollowing:[self isFollowingUser:user]];
-//    }
-//    if(self.followerArray.count > 0 && self.tableView == tableView){
-////        [cell clearCell];
-////        FRSUser *user = [self.followerArray objectAtIndex:indexPath.row];
-////        NSLog(@"Follower Cell #%i %@",(int)indexPath.row, user.uid);
-////        cell.cellHeight = CELL_HEIGHT;
-////        [cell configureCellWithUser:user isFollowing:[self isFollowingUser:user]];
-//        
-//        
-//        [cell configureSearchUserCellWithProfilePhoto:nil fullName:nil userName:nil isFollowing:nil user:nil];
-//        
-//    }
-//    
-////    __weak typeof(self) weakSelf;
-//    
-//    return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
-//    FRSUserTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    [self segueToUserProfile:cell.user];
-//    self.selectedCell = cell;
+    
+    if(self.tableView == tableView){
+        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:self.followerArray[indexPath.row]];
+        [self.navigationController pushViewController:controller animated:TRUE];
+    } else {
+        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:self.followingArray[indexPath.row]];
+        [self.navigationController pushViewController:controller animated:TRUE];
+    }
 }
 
 -(BOOL)isFollowingUser:(FRSUser *) user{
@@ -566,14 +544,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
