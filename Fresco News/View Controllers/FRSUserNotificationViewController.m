@@ -37,7 +37,7 @@
         
         self.payload = [[NSDictionary alloc] init];
         NSArray *users = @[@"ewOo1Pr8KvlN", @"2vRW0Na8oEgQ", @"Ym4x8rK0Jjpd"];
-        NSString *gallery = @"Ym4x8rVK8Jjp";
+        NSString *gallery = @"9rj0OeNA3Eok";
         self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery};
     }
     
@@ -55,6 +55,7 @@
     [super viewWillAppear:animated];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.navigationItem.title = @"ACTIVITY";
 }
 
 -(void)saveLastOpenedDate {
@@ -299,7 +300,7 @@
     }
     
     if (indexPath.row == 1) {
-        [self segueToGallery:@"Ym4x8rVK8Jjp"];
+        [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
     }
 //
 //    if (indexPath.row == 2) {
@@ -398,21 +399,15 @@
 }
 
 -(void)segueToGallery:(NSString *)galleryID {
-    
-    
-    
-    
-    
-    
+
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
 
         FRSGallery *gallery = responseObject;
         
         FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
         vc.shouldHaveBackButton = YES;
-//        [super showNavBarForScrollView:self.tableView animated:NO];
         
-        self.navigationItem.title = @"";
+//        self.navigationItem.title = @"";
         
         [self.navigationController pushViewController:vc animated:YES];
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
