@@ -402,12 +402,12 @@
 
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
 
+        
+        
         FRSGallery *gallery = responseObject;
         
         FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
         vc.shouldHaveBackButton = YES;
-        
-//        self.navigationItem.title = @"";
         
         [self.navigationController pushViewController:vc animated:YES];
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;

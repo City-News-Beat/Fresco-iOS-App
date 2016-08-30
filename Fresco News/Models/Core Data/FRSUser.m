@@ -82,6 +82,7 @@
     user.username = (properties[@"username"] != Nil && ![properties[@"username"] isEqual:[NSNull null]]) ? properties[@"username"] : @"";
     user.isLoggedIn = @(FALSE);
     user.bio = (properties[@"bio"] != Nil) ? properties[@"bio"] : @"";
+    user.following = (properties[@"following"] != Nil) ? properties[@"following"] : 0;
     
     user.email = (properties[@"email"] != nil) ? properties[@"email"] : @"";
     

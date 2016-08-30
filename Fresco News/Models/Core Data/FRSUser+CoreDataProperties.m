@@ -19,6 +19,7 @@
 @dynamic email;
 @dynamic firstName;
 @dynamic isLoggedIn;
+@dynamic following;
 @dynamic lastName;
 @dynamic loginType;
 @dynamic notificationRadius;

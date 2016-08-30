@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *email;
 @property (nullable, nonatomic, retain) NSString *firstName;
 @property (nullable, nonatomic, retain) NSNumber *isLoggedIn;
+@property (nullable, nonatomic, retain) NSNumber *following;
 @property (nullable, nonatomic, retain) NSString *lastName;
 @property (nullable, nonatomic, retain) NSNumber *loginType;
 @property (nullable, nonatomic, retain) NSNumber *notificationRadius;

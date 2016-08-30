@@ -439,7 +439,11 @@
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
         
-        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:user.firstName userName:user.username isFollowing:YES user:nil];
+        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
+                                             fullName:user.firstName
+                                             userName:user.username
+                                          isFollowing:[user.following boolValue]
+                                                 user:nil];
     }
     
     if (self.followerArray.count > 0 && self.tableView == tableView){
@@ -457,7 +461,11 @@
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
         
-        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:user.firstName userName:user.username isFollowing:YES user:nil];
+        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
+                                             fullName:user.firstName
+                                             userName:user.username
+                                          isFollowing:[user.following boolValue]
+                                                 user:nil];
         
     }
     
