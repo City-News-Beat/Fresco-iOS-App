@@ -74,6 +74,8 @@
 @property (strong, nonatomic) NSURL *profileImageURL;
 @property BOOL didFollow;
 
+@property (strong, nonatomic) UIImageView *placeholderUserIcon;
+
 @end
 
 @implementation FRSProfileViewController
@@ -466,10 +468,19 @@
     
     self.profileIV = [[FRSBorderedImageView alloc] initWithFrame:CGRectMake(0, 0, self.profileBG.frame.size.width, self.profileBG.frame.size.height) borderColor:[UIColor whiteColor] borderWidth:4];
     self.profileIV.image = [UIImage imageNamed:@""];
+    self.profileIV.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.profileIV.contentMode = UIViewContentModeScaleAspectFill;
     self.profileIV.layer.cornerRadius = self.profileIV.frame.size.width/2;
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
+    
+    
+    self.placeholderUserIcon = [[UIImageView alloc] initWithFrame:CGRectMake(self.profileIV.frame.size.width/2 - 40/2, self.profileIV.frame.size.height/2 -40/2, 40, 40)];
+    self.placeholderUserIcon.image = [UIImage imageNamed:@"user-40"];
+    self.placeholderUserIcon.alpha = 0;
+    [self.profileIV addSubview:self.placeholderUserIcon];
+    
+    
     
     float paddingFromProfileIV = 20.0;
     float center = 50.0;
@@ -1078,6 +1089,10 @@
         if(user.profileImage != [NSNull null]){
             self.profileImageURL = [NSURL URLWithString:user.profileImage];
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
+            
+            if (self.profileImageURL == nil) {
+                self.placeholderUserIcon.alpha = 1;
+            }
         }
         
         //self.locationLabel.text = user.
