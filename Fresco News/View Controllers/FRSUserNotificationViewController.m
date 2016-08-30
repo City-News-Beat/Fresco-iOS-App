@@ -37,7 +37,7 @@
         
         self.payload = [[NSDictionary alloc] init];
         NSArray *users = @[@"ewOo1Pr8KvlN", @"2vRW0Na8oEgQ", @"Ym4x8rK0Jjpd"];
-        NSString *gallery = @"9rj0OeNA3Eok";
+        NSString *gallery = @"arYd0y5Q0Dp5";
         self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery};
     }
     
@@ -400,13 +400,26 @@
 
 -(void)segueToGallery:(NSString *)galleryID {
 
+//    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
+//
+//        
+//        
+//        FRSGallery *gallery = responseObject;
+    
+    
+    
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
-
         
         
-        FRSGallery *gallery = responseObject;
+        NSLog(@"GALLERY RESPONSE OBJECT: %@", responseObject);
         
-        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+        FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
+        
+        [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
+        
+        
+        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:galleryToSave];
         vc.shouldHaveBackButton = YES;
         
         [self.navigationController pushViewController:vc animated:YES];
@@ -414,7 +427,16 @@
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
         [self hideTabBarAnimated:YES];
         
+        NSLog(@"GALLERY OBJECT: %@", galleryToSave);
     }];
+    
+    
+    
+    
+    
+
+        
+//    }];
 }
 
 -(void)returnToProfile {
