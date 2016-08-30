@@ -12,6 +12,5 @@
 @interface FRSGalleryExpandedViewController : FRSScrollingViewController <UITextViewDelegate>
 @property BOOL isLoadingUser;
 -(instancetype)initWithGallery:(FRSGallery *)gallery;
--(instancetype)initWithGalleryID:(NSString *)galleryID;
 
 @end

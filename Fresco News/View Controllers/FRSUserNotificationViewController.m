@@ -25,6 +25,8 @@
 
 @property (strong, nonatomic) NSDictionary *payload;
 
+@property BOOL isSegueingToGallery;
+
 @end
 
 @implementation FRSUserNotificationViewController
@@ -56,6 +58,12 @@
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.navigationItem.title = @"ACTIVITY";
+}
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    self.isSegueingToGallery = NO;
 }
 
 -(void)saveLastOpenedDate {
@@ -399,17 +407,10 @@
 }
 
 -(void)segueToGallery:(NSString *)galleryID {
+    
 
-//    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
-//
-//        
-//        
-//        FRSGallery *gallery = responseObject;
-    
-    
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
-        
         
         NSLog(@"GALLERY RESPONSE OBJECT: %@", responseObject);
         
@@ -422,21 +423,16 @@
         FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:galleryToSave];
         vc.shouldHaveBackButton = YES;
         
-        [self.navigationController pushViewController:vc animated:YES];
+        if (!self.isSegueingToGallery) {
+            self.isSegueingToGallery = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
         [self hideTabBarAnimated:YES];
         
         NSLog(@"GALLERY OBJECT: %@", galleryToSave);
     }];
-    
-    
-    
-    
-    
-
-        
-//    }];
 }
 
 -(void)returnToProfile {

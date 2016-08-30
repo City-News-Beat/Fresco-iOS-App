@@ -53,31 +53,6 @@
 
 static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
-//-(instancetype)initWithGalleryID:(NSString *)galleryID{
-//    self = [super init];
-//    if (self){
-//        
-//        [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
-//           
-//            
-//            NSLog(@"GALLERY RESPONSE OBJECT: %@", responseObject);
-//            
-//            FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-//            FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
-//            
-//            [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
-//            
-//            self.gallery = galleryToSave;
-//            
-//            
-//            NSLog(@"GALLERY OBJECT: %@", galleryToSave);
-//        }];
-//
-//
-//    }
-//    return self;
-//}
-
 
 -(instancetype)initWithGallery:(FRSGallery *)gallery{
     self = [super init];
@@ -190,7 +165,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)configureGalleryView{
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 500) gallery:self.gallery delegate:self];
-    self.galleryView.backgroundColor = [UIColor redColor];
     [self.scrollView addSubview:self.galleryView];
     
     
