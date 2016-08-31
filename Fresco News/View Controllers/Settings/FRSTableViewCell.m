@@ -60,9 +60,11 @@
 @property BOOL didToggleTwitter;
 @property BOOL didToggleFacebook;
 
-@property (strong, nonatomic) NSDictionary *currentUser;
+@property (strong, nonatomic) NSDictionary *currentUserDict;
 @property (strong, nonatomic) UIButton *followingButton;
 @property BOOL following;
+
+@property (strong, nonatomic) FRSUser *currentUser;
 
 @end
 
@@ -599,7 +601,7 @@
 }
 
 
--(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing user:(NSDictionary *)user {
+-(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing userDict:(NSDictionary *)userDict user:(FRSUser *)user {
     
     UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
     topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
@@ -667,20 +669,26 @@
         self.followingButton.tintColor = [UIColor frescoMediumTextColor];
     }
 
-    self.currentUser = user;
+    self.currentUserDict = userDict;
     self.following = isFollowing;
+    self.currentUser = user;
 
 }
 
 -(void)follow {
     //Used to pass in current user
-    [self follow:self.currentUser following:self.following];
+    [self follow:self.currentUserDict user:self.currentUser following:self.following];
 }
 
 
--(void)follow:(NSDictionary *)user following:(BOOL)following {
+-(void)follow:(NSDictionary *)userDict user:(FRSUser *)user following:(BOOL)following {
     
-    FRSUser *currentUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+    FRSUser *currentUser;
+    if (userDict) {
+         currentUser = [FRSUser nonSavedUserWithProperties:userDict context:[[FRSAPIClient sharedClient] managedObjectContext]];
+    } else {
+        currentUser = user;
+    }
 
     if (following) {
         NSLog(@"USER IS FOLLOWING, UNFOLLOW AND CHANGE ICON");

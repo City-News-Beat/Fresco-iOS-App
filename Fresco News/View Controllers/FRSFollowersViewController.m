@@ -443,7 +443,8 @@
                                              fullName:user.firstName
                                              userName:user.username
                                           isFollowing:[user.following boolValue]
-                                                 user:nil];
+                                                 userDict:nil
+                                                 user:user];
     }
     
     if (self.followerArray.count > 0 && self.tableView == tableView){
@@ -461,11 +462,20 @@
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
         
+        
+//        [[FRSAPIClient sharedClient] getUserWithUID:user.uid completion:^(id responseObject, NSError *error) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
         [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
                                              fullName:user.firstName
                                              userName:user.username
                                           isFollowing:[user.following boolValue]
-                                                 user:nil];
+                                             userDict:nil
+                                                 user:user];
+//            });
+//        }];
+        
+        
+
         
     }
     

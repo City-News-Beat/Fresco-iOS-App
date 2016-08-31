@@ -609,7 +609,7 @@
             username = user[@"username"];
         }
         
-        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] user:self.users[indexPath.row]];
+        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
         
         return cell;
     }
