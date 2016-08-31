@@ -74,7 +74,7 @@
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
-    [self reloadData];
+//    [self reloadData];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -462,21 +462,12 @@
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
         
-        
-//        [[FRSAPIClient sharedClient] getUserWithUID:user.uid completion:^(id responseObject, NSError *error) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
         [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
                                              fullName:user.firstName
                                              userName:user.username
                                           isFollowing:[user.following boolValue]
                                              userDict:nil
                                                  user:user];
-//            });
-//        }];
-        
-        
-
-        
     }
     
     
@@ -484,6 +475,8 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if(self.tableView == tableView){
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:self.followerArray[indexPath.row]];
