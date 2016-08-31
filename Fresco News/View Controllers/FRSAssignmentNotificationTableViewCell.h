@@ -16,4 +16,6 @@
 
 -(void)configureCell;
 
+-(void)configureAssignmentCellWithID:(NSString *)assignmentID;
+
 @end

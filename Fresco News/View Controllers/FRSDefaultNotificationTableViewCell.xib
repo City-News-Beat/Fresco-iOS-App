@@ -20,23 +20,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="83.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zLd-w2-8NS">
-                        <rect key="frame" x="72" y="12" width="232" height="17"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="17" id="EM8-cA-BIR"/>
-                            <constraint firstAttribute="height" constant="22" id="xtr-1O-LKI"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" name="Nota-Medium" family="Nota" pointSize="17"/>
-                        <color key="textColor" white="0.0" alpha="0.87" colorSpace="calibratedWhite"/>
-                        <nil key="highlightedColor"/>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="xtr-1O-LKI"/>
-                            </mask>
-                        </variation>
-                    </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1x-3Q-zNg">
-                        <rect key="frame" x="72" y="33" width="224" height="42.5"/>
+                        <rect key="frame" x="72" y="33" width="224" height="41.5"/>
                         <color key="backgroundColor" red="1" green="0.0" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -98,6 +83,21 @@
                             <action selector="followTapped:" destination="X5g-tq-JNY" eventType="touchUpInside" id="FMZ-P4-xrs"/>
                         </connections>
                     </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zLd-w2-8NS">
+                        <rect key="frame" x="72" y="12" width="232" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="EM8-cA-BIR"/>
+                            <constraint firstAttribute="height" constant="22" id="xtr-1O-LKI"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="Nota-Medium" family="Nota" pointSize="17"/>
+                        <color key="textColor" white="0.0" alpha="0.87" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="xtr-1O-LKI"/>
+                            </mask>
+                        </variation>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="MrT-1n-09K" firstAttribute="centerY" secondItem="cK0-vG-kkY" secondAttribute="centerY" id="3dM-qd-rCG"/>
@@ -106,7 +106,7 @@
                     <constraint firstItem="zLd-w2-8NS" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="4" id="5Vg-YF-2Y3"/>
                     <constraint firstAttribute="bottomMargin" secondItem="6rk-aZ-RSA" secondAttribute="bottom" constant="-9" id="6Dg-C5-afl"/>
                     <constraint firstAttribute="trailingMargin" secondItem="J1x-3Q-zNg" secondAttribute="trailing" constant="16" id="9Um-Wa-n3g"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="J1x-3Q-zNg" secondAttribute="bottom" id="IcT-ZI-E27"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="J1x-3Q-zNg" secondAttribute="bottom" constant="1" id="IcT-ZI-E27"/>
                     <constraint firstItem="qHy-RB-rdD" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="24" id="NZR-q3-o1h"/>
                     <constraint firstItem="NU1-pp-tGP" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="4" id="QiP-yw-klP"/>
                     <constraint firstItem="J1x-3Q-zNg" firstAttribute="top" secondItem="zLd-w2-8NS" secondAttribute="bottom" constant="4" id="RSx-xe-OUg"/>

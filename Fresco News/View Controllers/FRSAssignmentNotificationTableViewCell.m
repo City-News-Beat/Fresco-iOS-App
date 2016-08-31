@@ -54,5 +54,14 @@
 }
 
 
+-(void)configureAssignmentCellWithID:(NSString *)assignmentID {
+    
+    self.titleLabel.numberOfLines = 0;
+    self.bodyLabel.numberOfLines  = 3;
+    self.actionButton.tintColor = [UIColor blackColor];
+    
+}
+
+
 
 @end

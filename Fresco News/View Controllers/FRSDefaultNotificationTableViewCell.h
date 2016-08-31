@@ -32,6 +32,7 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 -(void)configureUserNotificationWithID:(NSString *)notificationID;
 -(void)configureLikedContentNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
 -(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID;
+-(void)configureAssignmentCellWithID:(NSString *)assignmentID;
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;

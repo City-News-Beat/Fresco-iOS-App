@@ -164,6 +164,9 @@
 
 
 
+
+
+
 -(IBAction)followTapped:(id)sender {
     if ([self.followButton.imageView.image isEqual:[UIImage imageNamed:@"account-check"]]) {
         [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];

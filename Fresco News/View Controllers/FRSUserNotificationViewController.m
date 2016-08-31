@@ -42,7 +42,8 @@
         NSArray *users = @[@"ewOo1Pr8KvlN", @"2vRW0Na8oEgQ", @"Ym4x8rK0Jjpd"];
         NSString *gallery = @"arYd0y5Q0Dp5";
         NSString *story = @"7mr93zRx3BlY";
-        self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery, @"user-news-story": story};
+        NSString *assignment = @"xLJE0QzW1G5B";
+        self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery, @"user-news-story": story, @"user-dispatch-new-assignment": assignment};
     }
     
     return self;
@@ -111,9 +112,9 @@
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.separatorColor = [UIColor clearColor];
-    
+
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 200;
+    self.tableView.estimatedRowHeight = 100;
     
     [self.view addSubview:self.tableView];
 }
@@ -147,7 +148,7 @@
             return 64;
             break;
         case 2:
-            return 104;
+            return 84;
             break;
             
         default:
@@ -193,10 +194,20 @@
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             [cell configureFeaturedStoryCellWithStoryID:[self.payload objectForKey:@"user-news-story"]];
-            
             return cell;
             
         } break;
+            
+            
+        case 3: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            [cell configureAssignmentCellWithID:@""];
+            
+            return cell;
+
+        }
             
         default:
             break;
@@ -259,7 +270,7 @@
 //            
 //            [cell configureCell];
 //            return cell;
-//            
+//
 //        } break;
 //            
 //        case 5: {
