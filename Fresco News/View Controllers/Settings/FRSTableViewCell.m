@@ -648,10 +648,14 @@
         usernameLabel.alpha = 0;
     }
     
-    CGSize nameLabelSize = [usernameLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont notaMediumWithSize:17]}];
-    if (nameLabelSize.width > usernameLabel.bounds.size.width) {
-
+    if ([nameLabel.text isEqualToString: @""]) {
+        usernameLabel.frame = CGRectMake(64 + nameLabel.frame.size.width, 23, self.frame.size.width - 64, 14);
     }
+    
+//    CGSize nameLabelSize = [usernameLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont notaMediumWithSize:17]}];
+//    if (nameLabelSize.width > usernameLabel.bounds.size.width) {
+//
+//    }
     
     [self addSubview:usernameLabel];
 
