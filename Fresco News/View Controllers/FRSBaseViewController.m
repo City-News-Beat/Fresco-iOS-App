@@ -8,8 +8,12 @@
 
 #import "FRSBaseViewController.h"
 #import "FRSNavigationController.h"
+#import "FRSGalleryExpandedViewController.h"
+#import "FRSProfileViewController.h"
 
 @interface FRSBaseViewController ()
+
+@property BOOL isSegueingToGallery;
 
 @end
 
@@ -19,6 +23,8 @@
     [super viewDidLoad];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     
     //    [self configureNavigationBar];
     // Do any additional setup after loading the view.
@@ -100,5 +106,44 @@
         statusBarApplicationWindow.alpha = alpha;
     }
 }
+
+#pragma mark - Deep Links
+
+-(void)segueToGallery:(NSString *)galleryID {
+    
+    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
+        
+        NSLog(@"GALLERY RESPONSE OBJECT: %@", responseObject);
+        
+        FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
+        
+        [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
+        
+        
+        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:galleryToSave];
+        vc.shouldHaveBackButton = YES;
+        
+        if (!self.isSegueingToGallery) {
+            self.isSegueingToGallery = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        [self hideTabBarAnimated:YES];
+        
+        NSLog(@"GALLERY OBJECT: %@", galleryToSave);
+    }];
+}
+
+
+-(void)segueToUser:(NSString *)userID {
+    
+    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUserID:userID];
+    [self.navigationController pushViewController:profileVC animated:YES];
+}
+
+
+
 
 @end

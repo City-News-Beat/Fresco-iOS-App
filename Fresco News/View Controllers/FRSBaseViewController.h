@@ -34,4 +34,9 @@
 
 -(void)shouldShowStatusBar:(BOOL)statusBar animated:(BOOL)animated;
 
+
+/* DEEP LINKS */
+-(void)segueToGallery:(NSString *)galleryID;
+-(void)segueToUser:(NSString *)userID;
+
 @end

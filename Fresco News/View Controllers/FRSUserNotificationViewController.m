@@ -308,7 +308,10 @@
     }
     
     if (indexPath.row == 1) {
+        
         [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+        
+//        [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
     }
 //
 //    if (indexPath.row == 2) {
@@ -348,11 +351,11 @@
     return size.height;
 }
 
--(void)segueToUser:(NSString *)userID {
-    
-    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUserID:userID];
-    [self.navigationController pushViewController:profileVC animated:YES];
-}
+//-(void)segueToUser:(NSString *)userID {
+//    
+//    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUserID:userID];
+//    [self.navigationController pushViewController:profileVC animated:YES];
+//}
 
 -(void)segueToAssignmentWithID:(NSString *)assignmentID {
     
@@ -406,34 +409,32 @@
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
 }
 
--(void)segueToGallery:(NSString *)galleryID {
-    
 
-    
-    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
-        
-        NSLog(@"GALLERY RESPONSE OBJECT: %@", responseObject);
-        
-        FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
-        
-        [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
-        
-        
-        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:galleryToSave];
-        vc.shouldHaveBackButton = YES;
-        
-        if (!self.isSegueingToGallery) {
-            self.isSegueingToGallery = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-        [self hideTabBarAnimated:YES];
-        
-        NSLog(@"GALLERY OBJECT: %@", galleryToSave);
-    }];
-}
+//-(void)segueToGallery:(NSString *)galleryID {
+//    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
+//        
+//        NSLog(@"GALLERY RESPONSE OBJECT: %@", responseObject);
+//        
+//        FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+//        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
+//        
+//        [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
+//        
+//        
+//        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:galleryToSave];
+//        vc.shouldHaveBackButton = YES;
+//        
+//        if (!self.isSegueingToGallery) {
+//            self.isSegueingToGallery = YES;
+//            [self.navigationController pushViewController:vc animated:YES];
+//        }
+//        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+//        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+//        [self hideTabBarAnimated:YES];
+//        
+//        NSLog(@"GALLERY OBJECT: %@", galleryToSave);
+//    }];
+//}
 
 -(void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];

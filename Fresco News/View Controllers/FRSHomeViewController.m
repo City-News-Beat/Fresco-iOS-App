@@ -82,6 +82,9 @@
     self.isInFollowers = true;
     
     [self displayPreviousTab];
+    
+    
+//    [self segueToGallery:@"arYd0y5Q0Dp5"];
 }
 
 -(BOOL)shouldHaveTextLimit {
