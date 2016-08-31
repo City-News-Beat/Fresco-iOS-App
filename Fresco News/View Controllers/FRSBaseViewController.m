@@ -15,6 +15,7 @@
 @interface FRSBaseViewController ()
 
 @property BOOL isSegueingToGallery;
+@property BOOL isSegueingToStory;
 
 @end
 
@@ -143,21 +144,20 @@
         NSLog(@"STORY ID: %@", storyID);
         NSLog(@"RESPONSE OBJ: %@", responseObject);
         
-        
         FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:[appDelegate managedObjectContext]];
         
         [story configureWithDictionary:responseObject];
-
-        [self.navigationController setNavigationBarHidden:YES animated:NO];
+        
         FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
         detailView.navigationController = self.navigationController;
-        [self.navigationController pushViewController:detailView animated:YES];
+        
+        if (!self.isSegueingToStory) {
+            self.isSegueingToStory = YES;
+            [self.navigationController pushViewController:detailView animated:YES];
+        }
         
     }];
-
-
-
 }
 
 -(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
