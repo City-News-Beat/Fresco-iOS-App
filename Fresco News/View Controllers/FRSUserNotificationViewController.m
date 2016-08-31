@@ -40,7 +40,7 @@
         self.payload = [[NSDictionary alloc] init];
         NSArray *users = @[@"ewOo1Pr8KvlN", @"2vRW0Na8oEgQ", @"Ym4x8rK0Jjpd"];
         NSString *gallery = @"arYd0y5Q0Dp5";
-        NSString *story = @"DJ6K3bAW1yGQ";
+        NSString *story = @"7mr93zRx3BlY";
         self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery, @"user-news-story": story};
     }
     
@@ -136,6 +136,22 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    switch (indexPath.row) {
+        case 0:
+            return 64;
+            break;
+        case 1:
+            return 64;
+            break;
+        case 2:
+            return 104;
+            break;
+            
+        default:
+            break;
+    }
+
     return 64;
 }
 
@@ -324,6 +340,10 @@
             [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
             break;
             
+        case 2:
+            [self segueToStory:[self.payload objectForKey:@"user-news-story"]];
+            break;
+            
         default:
             break;
     }
@@ -415,7 +435,6 @@
 
 -(void)segueToCamera {
     
-    //FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
     FRSCameraViewController *camVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
     UINavigationController *navigationController = [[UINavigationController alloc] init];
     navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
@@ -427,32 +446,6 @@
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
 }
 
-
-//-(void)segueToGallery:(NSString *)galleryID {
-//    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
-//        
-//        NSLog(@"GALLERY RESPONSE OBJECT: %@", responseObject);
-//        
-//        FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-//        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
-//        
-//        [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
-//        
-//        
-//        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:galleryToSave];
-//        vc.shouldHaveBackButton = YES;
-//        
-//        if (!self.isSegueingToGallery) {
-//            self.isSegueingToGallery = YES;
-//            [self.navigationController pushViewController:vc animated:YES];
-//        }
-//        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-//        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-//        [self hideTabBarAnimated:YES];
-//        
-//        NSLog(@"GALLERY OBJECT: %@", galleryToSave);
-//    }];
-//}
 
 -(void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];

@@ -10,6 +10,7 @@
 #import "FRSNavigationController.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSProfileViewController.h"
+#import "FRSStoryDetailViewController.h"
 
 @interface FRSBaseViewController ()
 
@@ -113,8 +114,6 @@
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
         
-        NSLog(@"GALLERY RESPONSE OBJECT: %@", responseObject);
-        
         FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
         
@@ -134,6 +133,38 @@
         
         NSLog(@"GALLERY OBJECT: %@", galleryToSave);
     }];
+}
+
+
+-(void)segueToStory:(NSString *)storyID {
+    
+    [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
+        
+        NSLog(@"STORY ID: %@", storyID);
+        NSLog(@"RESPONSE OBJ: %@", responseObject);
+        
+        
+        FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:[appDelegate managedObjectContext]];
+        
+        [story configureWithDictionary:responseObject];
+
+        [self.navigationController setNavigationBarHidden:YES animated:NO];
+        FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
+        detailView.navigationController = self.navigationController;
+        [self.navigationController pushViewController:detailView animated:YES];
+        
+    }];
+
+
+
+}
+
+-(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    detailView.story = story;
+    [detailView reloadData];
+    return detailView;
 }
 
 

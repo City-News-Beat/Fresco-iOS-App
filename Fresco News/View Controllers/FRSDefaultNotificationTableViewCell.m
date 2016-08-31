@@ -108,8 +108,10 @@
     
     [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
         
-        self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"caption"] ];
-        self.titleLabelTopConstraint.constant = 14; //centers label in a 64px cell
+        self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"title"]];
+        self.bodyLabel.text = [responseObject objectForKey:@"caption"];
+        self.bodyLabel.numberOfLines = 3;
+
         self.titleLabel.numberOfLines = 2;
         
         if([responseObject objectForKey:@"thumbnails"] != [NSNull null]){
@@ -149,6 +151,19 @@
     }];
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 -(IBAction)followTapped:(id)sender {
     if ([self.followButton.imageView.image isEqual:[UIImage imageNamed:@"account-check"]]) {
         [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
@@ -158,6 +173,8 @@
         self.followButton.tintColor = [UIColor frescoOrangeColor];
     }
 }
+
+
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

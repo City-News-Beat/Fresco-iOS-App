@@ -38,5 +38,6 @@
 /* DEEP LINKS */
 -(void)segueToGallery:(NSString *)galleryID;
 -(void)segueToUser:(NSString *)userID;
+-(void)segueToStory:(NSString *)storyID;
 
 @end

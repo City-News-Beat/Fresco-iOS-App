@@ -799,9 +799,9 @@
     }];
 }
 
--(void)getStoryWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)getStoryWithUID:(NSString *)story completion:(FRSAPIDefaultCompletionBlock)completion {
     
-    NSString *endpoint = [NSString stringWithFormat:@"story/%@", user];
+    NSString *endpoint = [NSString stringWithFormat:@"story/%@", story];
     
     [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
         if (error) {
