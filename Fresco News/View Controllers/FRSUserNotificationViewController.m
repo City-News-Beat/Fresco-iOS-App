@@ -150,7 +150,7 @@
             NSArray *users = [self.payload objectForKey:@"user-social-followed"];
             cell.count = users.count;
             
-            [cell configureUserNotificationWithID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0]];
+            [cell configureUserNotificationWithID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:1]];
             
             return cell;
         } break;
@@ -302,18 +302,27 @@
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate updateTabBarToUser];
     
-    if (indexPath.row == 0) {
-        
-        [self segueToUser:@"ewOo1Pr8KvlN"];
-    }
     
-    if (indexPath.row == 1) {
+    
+    
+    
+    switch (indexPath.row) {
+        case 0:
+            [self segueToUser:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:1]];
+            break;
         
-        [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
-        
-//        [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+        case 1:
+            [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+            break;
+            
+        default:
+            break;
     }
-//
+
+
+    
+    
+    
 //    if (indexPath.row == 2) {
 //        [self segueToDebitCard];
 //    }
