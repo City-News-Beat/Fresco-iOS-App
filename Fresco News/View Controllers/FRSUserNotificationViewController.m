@@ -40,7 +40,8 @@
         self.payload = [[NSDictionary alloc] init];
         NSArray *users = @[@"ewOo1Pr8KvlN", @"2vRW0Na8oEgQ", @"Ym4x8rK0Jjpd"];
         NSString *gallery = @"arYd0y5Q0Dp5";
-        self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery};
+        NSString *story = @"DJ6K3bAW1yGQ";
+        self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery, @"user-news-story": story};
     }
     
     return self;
@@ -127,7 +128,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 3;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -173,7 +174,7 @@
             
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
+            [cell configureFeaturedStoryCellWithStoryID:[self.payload objectForKey:@"user-news-story"]];
             
             return cell;
             

@@ -28,27 +28,17 @@
     [super prepareForReuse];
 }
 
-
-//-(void)configureCellWithType:(FRSNotificationType)notificationType objectID:(NSString *)objectID {
-//    //Sets up default state for cell
-//    switch (notificationType) {
-//        case FRSNotificationTypeFollow:
-//            [self configureUserNotificationWithID:objectID];
-//            break;
-//        case FRSNotificationTypeLike:
-//            break;
-//        default:
-//            break;
-//    }
-//}
-
--(void)configureDefaultAttributesForNotification:(FRSNotificationType)notificationType {
-    
+-(void)configureDefaultCell {
     self.image.backgroundColor = [UIColor frescoLightTextColor];
     self.image.layer.cornerRadius = 20;
     self.image.clipsToBounds = YES;
     self.followButton.alpha = 0;
     self.annotationView.layer.cornerRadius = 12;
+}
+
+-(void)configureDefaultAttributesForNotification:(FRSNotificationType)notificationType {
+    
+    [self configureDefaultCell];
     
     //Set bodyLabel based on notifcation type
     switch (notificationType) {
@@ -110,8 +100,23 @@
     }];
 }
 
+
 -(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID {
     
+    [self configureDefaultCell];
+    self.annotationView.alpha = 0;
+    
+    [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
+        
+        self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"caption"] ];
+        self.titleLabelTopConstraint.constant = 14; //centers label in a 64px cell
+        self.titleLabel.numberOfLines = 2;
+        
+        if([responseObject objectForKey:@"thumbnails"] != [NSNull null]){
+            NSURL *avatarURL = [NSURL URLWithString:[[[responseObject objectForKey:@"thumbnails"] objectAtIndex:0] objectForKey:@"image"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+    }];
 }
 
 
@@ -119,11 +124,8 @@
     
     [self configureDefaultAttributesForNotification:FRSNotificationTypeFollow];
     
-    
-    
+    self.followButton.alpha = 1;
     self.followButton.tintColor = [UIColor frescoMediumTextColor];
-    
-
     
     [[FRSAPIClient sharedClient] getUserWithUID:notificationID completion:^(id responseObject, NSError *error) {
         
@@ -134,7 +136,7 @@
             [self.image hnk_setImageFromURL:avatarURL];
         }
         
-        if ([responseObject objectForKey:@"following"]) {
+        if ([[responseObject objectForKey:@"following"] boolValue]) {
             [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
             self.followButton.tintColor = [UIColor frescoOrangeColor];
         } else {
@@ -144,77 +146,10 @@
         
         [self updateLabelsForCount];
         
-
     }];
-  
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--(void)configureCell {
-    
-    //Configure background color
-    if (self.backgroundViewColor == nil) {
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
-    }
-    
-    
-    //Configure labels and rounded image
-    self.titleLabel.numberOfLines = 0;
-    self.bodyLabel.numberOfLines  = 3;
-    self.image.backgroundColor = [UIColor frescoLightTextColor];
-    self.image.layer.cornerRadius = 20;
-    self.image.clipsToBounds = YES;
-    
-    
-    //Configure count annotation
-    self.annotationView.layer.cornerRadius = 12;
-    if (self.count <= 1) {
-        self.annotationView.alpha = 0;
-    } else if (self.count <= 9) {
-        self.titleLabel.text = [NSString stringWithFormat:@"%@ + %ld others", self.titleLabel.text, self.count];
-        self.annotationLabel.text = [NSString stringWithFormat:@"+%ld", self.count];
-    } else {
-        self.annotationLabel.text = @"+";
-    }
-    
-    
-    if (self.image.image == nil) {
-        self.image.alpha = 0;
-        self.annotationView.alpha = 0;
-        self.titleLabelLeftConstraint.constant = 8;
-        self.bodyLabelLeftConstraint.constant = -40;
-    }
-    
-    
-    //if cell.type == follower
-    //Configure follow button
-    //if following
-    //[self.followButton setImage:[UIImage imageNamed:@"already-following"] forState:UIControlStateNormal];
-    //self.followButton.tintColor = [UIColor frescoOrangeColor];
-    //else if not following
-    [self.followButton setImage:[UIImage imageNamed:@"add-follower"] forState:UIControlStateNormal];
-    //Button is set to system in IB to keep default fading behavior
-    //Alpha is set in the png, setting tint to black retains original alpha in png
-    self.followButton.tintColor = [UIColor blackColor];
 }
 
 -(IBAction)followTapped:(id)sender {
-
     if ([self.followButton.imageView.image isEqual:[UIImage imageNamed:@"account-check"]]) {
         [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
         self.followButton.tintColor = [UIColor frescoMediumTextColor];
@@ -223,8 +158,6 @@
         self.followButton.tintColor = [UIColor frescoOrangeColor];
     }
 }
-
-
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

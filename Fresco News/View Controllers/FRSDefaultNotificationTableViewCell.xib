@@ -128,6 +128,7 @@
                 <outlet property="line" destination="6rk-aZ-RSA" id="ds7-nk-IYT"/>
                 <outlet property="titleLabel" destination="zLd-w2-8NS" id="Zdk-GZ-d80"/>
                 <outlet property="titleLabelLeftConstraint" destination="lo8-Of-nMG" id="FQz-0n-fVt"/>
+                <outlet property="titleLabelTopConstraint" destination="5Vg-YF-2Y3" id="7qi-3M-Zcb"/>
             </connections>
             <point key="canvasLocation" x="410" y="286"/>
         </tableViewCell>

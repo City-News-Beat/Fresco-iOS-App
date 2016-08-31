@@ -799,6 +799,25 @@
     }];
 }
 
+-(void)getStoryWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"story/%@", user];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        if (error) {
+            completion(responseObject, error);
+            return;
+        }
+        
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(responseObject, error);
+        }
+        
+        // shouldn't happen
+        completion(responseObject, error);
+    }];
+}
+
 -(void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     
     NSString *endpoint = [NSString stringWithFormat:@"gallery/%@", gallery];

@@ -72,6 +72,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion;
 
 -(void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)getStoryWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 
 // check user
 -(void)getUserWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion;

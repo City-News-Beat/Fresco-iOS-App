@@ -38,6 +38,7 @@
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *followingSpinner;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *followerSpinner;
 @property (strong, nonatomic) FRSUser *currentUser;
+@property BOOL didLoadOnce;
 
 @end
 
@@ -57,9 +58,6 @@
     [self reloadData];
     
     self.scrollView.delegate = self;
-
-    return;
-    // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -193,11 +191,15 @@
 
 -(void)reloadFollowing{
     
-    [self configureSpinner];
+    if (!self.didLoadOnce) {
+        [self configureSpinner];
+    }
     
     [[FRSAPIClient sharedClient] getFollowingForUser:_representedUser completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", responseObject, error);
         
+        
+        self.didLoadOnce = YES;
         [self.followingSpinner removeFromSuperview];
         
         NSMutableArray *following = [[NSMutableArray alloc] init];
@@ -352,6 +354,8 @@
         [self.followingSpinner startAnimating];
         self.followingSpinner.hidden = false;
     }*/
+    
+
     [self reloadFollowing];
     [self reloadFollowers];
 }
