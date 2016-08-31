@@ -26,6 +26,7 @@
 @property (strong, nonatomic) NSDictionary *payload;
 
 @property BOOL isSegueingToGallery;
+@property BOOL isSegueingToStory;
 
 @end
 
@@ -65,6 +66,7 @@
     [super viewDidDisappear:animated];
     
     self.isSegueingToGallery = NO;
+    self.isSegueingToStory = NO;
 }
 
 -(void)saveLastOpenedDate {

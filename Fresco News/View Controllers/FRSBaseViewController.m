@@ -156,7 +156,6 @@
             self.isSegueingToStory = YES;
             [self.navigationController pushViewController:detailView animated:YES];
         }
-        
     }];
 }
 
