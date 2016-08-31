@@ -59,7 +59,7 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.searchTextField resignFirstResponder];
-     self.shouldUpdateOnReturn = NO;
+    self.shouldUpdateOnReturn = NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated {

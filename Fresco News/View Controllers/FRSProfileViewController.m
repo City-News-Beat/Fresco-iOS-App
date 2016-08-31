@@ -177,7 +177,7 @@
     [self removeStatusBarNotification];
     
     if (!self.didFollow) {
-        [self searchShouldRefresh:NO]; //Reset the bool. Used when the current user is browsing profiles in search
+        [self shouldRefresh:NO]; //Reset the bool. Used when the current user is browsing profiles in search, and when following/unfollowing in followersVC
     }
 }
 
@@ -980,7 +980,7 @@
 -(void)followUser {
     
     self.didFollow = YES;
-    [self searchShouldRefresh:YES];
+    [self shouldRefresh:YES];
     
     [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
         if (error) {
@@ -1012,7 +1012,7 @@
     }];
 }
 
--(void)searchShouldRefresh:(BOOL)refresh {
+-(void)shouldRefresh:(BOOL)refresh {
     
     if ([self.navigationController.viewControllers count] < 2) {
         return;
@@ -1020,14 +1020,20 @@
     
     UIViewController *previousController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
     FRSSearchViewController *searchVC = (FRSSearchViewController *)previousController;
+    FRSFollowersViewController *followersVC = (FRSFollowersViewController *)previousController;
     
     if (refresh) {
         if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
             searchVC.shouldUpdateOnReturn = YES;
+        } else if ([previousController isKindOfClass:[FRSFollowersViewController class]]) {
+            followersVC.shouldUpdateOnReturn = YES;
         }
+        
     } else {
         if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
             searchVC.shouldUpdateOnReturn = NO;
+        } else if ([previousController isKindOfClass:[FRSFollowersViewController class]]) {
+            followersVC.shouldUpdateOnReturn = NO;
         }
     }
 }

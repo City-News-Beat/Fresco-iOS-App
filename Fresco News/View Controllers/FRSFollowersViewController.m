@@ -68,8 +68,11 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.scrollView animated:NO];
     
-    if(self.selectedCell){
-        [self.selectedCell setSelected:false];
+
+    if (self.shouldUpdateOnReturn) {
+        [self reloadData];
+    } else {
+        self.shouldUpdateOnReturn = NO;
     }
 
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
@@ -89,6 +92,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated {
     [self removeStatusBarNotification];
+    self.shouldUpdateOnReturn = NO;
 }
 #pragma mark - Override Super
 
