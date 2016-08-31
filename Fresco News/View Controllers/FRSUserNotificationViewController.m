@@ -163,9 +163,20 @@
             NSArray *users = [self.payload objectForKey:@"user-social-followed"];
             cell.count = users.count;
             
-            [cell configureLikedGalleryNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0] galleryID:[self.payload objectForKey:@"user-social-liked"]];
+            [cell configureLikedContentNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0] galleryID:[self.payload objectForKey:@"user-social-liked"]];
         
             return cell;
+        } break;
+            
+            
+        case 2: {
+            
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            
+            return cell;
+            
         } break;
             
         default:
@@ -301,9 +312,6 @@
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate updateTabBarToUser];
-    
-    
-    
     
     
     switch (indexPath.row) {

@@ -192,8 +192,13 @@
 }
 
 -(void)reloadFollowing{
+    
+    [self configureSpinner];
+    
     [[FRSAPIClient sharedClient] getFollowingForUser:_representedUser completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", responseObject, error);
+        
+        [self.followingSpinner removeFromSuperview];
         
         NSMutableArray *following = [[NSMutableArray alloc] init];
         NSArray *users = (NSArray *)responseObject;
@@ -225,8 +230,9 @@
 
 -(void)reloadFollowers{
     [[FRSAPIClient sharedClient] getFollowersForUser:_representedUser completion:^(id responseObject, NSError *error) {
-        NSLog(@"%@ %@", responseObject, error);
-        
+
+        [self.followerSpinner removeFromSuperview];
+
         NSMutableArray *followers = [[NSMutableArray alloc] init];
         NSArray *users = (NSArray *)responseObject;
         

@@ -91,7 +91,7 @@
 }
 
 
--(void)configureLikedGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
+-(void)configureLikedContentNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
     
     [self configureDefaultAttributesForNotification:FRSNotificationTypeLike];
     self.followButton.alpha = 0;
@@ -108,8 +108,9 @@
         [self updateLabelsForCount];
         
     }];
-    
-    
+}
+
+-(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID {
     
 }
 
