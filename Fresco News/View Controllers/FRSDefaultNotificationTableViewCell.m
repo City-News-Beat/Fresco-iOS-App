@@ -81,7 +81,27 @@
 }
 
 
--(void)configureLikedContentNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
+-(void)configureUserRepostNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
+    
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeRepost];
+    self.followButton.alpha = 0;
+    self.annotationView.alpha = 0;
+    
+    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
+        self.titleLabel.text = [responseObject objectForKey:@"full_name"];
+        
+        if([responseObject objectForKey:@"avatar"] != [NSNull null]){
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+        
+        [self updateLabelsForCount];
+        
+    }];
+}
+
+
+-(void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
     
     [self configureDefaultAttributesForNotification:FRSNotificationTypeLike];
     self.followButton.alpha = 0;
@@ -101,35 +121,14 @@
 }
 
 
--(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID {
-    
-    [self configureDefaultCell];
-    self.annotationView.alpha = 0;
-    
-    [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
-        
-        self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"title"]];
-        self.bodyLabel.text = [responseObject objectForKey:@"caption"];
-        self.bodyLabel.numberOfLines = 3;
-
-        self.titleLabel.numberOfLines = 2;
-        
-        if([responseObject objectForKey:@"thumbnails"] != [NSNull null]){
-            NSURL *avatarURL = [NSURL URLWithString:[[[responseObject objectForKey:@"thumbnails"] objectAtIndex:0] objectForKey:@"image"]];
-            [self.image hnk_setImageFromURL:avatarURL];
-        }
-    }];
-}
-
-
--(void)configureUserNotificationWithID:(NSString *)notificationID {
+-(void)configureUserFollowNotificationWithID:(NSString *)userID {
     
     [self configureDefaultAttributesForNotification:FRSNotificationTypeFollow];
     
     self.followButton.alpha = 1;
     self.followButton.tintColor = [UIColor blackColor];
     
-    [[FRSAPIClient sharedClient] getUserWithUID:notificationID completion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
         
         self.titleLabel.text = [responseObject objectForKey:@"full_name"];
         
@@ -159,6 +158,29 @@
         [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
         self.followButton.tintColor = [UIColor frescoOrangeColor];
     }
+}
+
+
+
+
+-(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID {
+    
+    [self configureDefaultCell];
+    self.annotationView.alpha = 0;
+    
+    [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
+        
+        self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"title"]];
+        self.bodyLabel.text = [responseObject objectForKey:@"caption"];
+        self.bodyLabel.numberOfLines = 3;
+        
+        self.titleLabel.numberOfLines = 2;
+        
+        if([responseObject objectForKey:@"thumbnails"] != [NSNull null]){
+            NSURL *avatarURL = [NSURL URLWithString:[[[responseObject objectForKey:@"thumbnails"] objectAtIndex:0] objectForKey:@"image"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+    }];
 }
 
 

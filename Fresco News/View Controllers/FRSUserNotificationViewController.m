@@ -131,7 +131,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return 6;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -170,13 +170,11 @@
     switch (indexPath.row) {
         case 0: {
             NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
-            
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];            
             NSArray *users = [self.payload objectForKey:@"user-social-followed"];
             cell.count = users.count;
             
-            [cell configureUserNotificationWithID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:1]];
+            [cell configureUserFollowNotificationWithID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:1]];
             
             return cell;
         } break;
@@ -189,7 +187,7 @@
             NSArray *users = [self.payload objectForKey:@"user-social-followed"];
             cell.count = users.count;
             
-            [cell configureLikedContentNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0] galleryID:[self.payload objectForKey:@"user-social-liked"]];
+            [cell configureUserLikeNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0] galleryID:[self.payload objectForKey:@"user-social-liked"]];
         
             return cell;
         } break;
@@ -218,8 +216,18 @@
             [cell configureCameraCellWithAssignmentID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
             
             return cell;
+            
+        } case 5: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
+            cell.count = users.count;
+            
+            [cell configureUserRepostNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:2] galleryID:[self.payload objectForKey:@"user-social-liked"]];
+            return cell;
         }
             
+
         default:
             break;
     }
@@ -376,35 +384,13 @@
             [self segueToCameraWithAssignmentID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
             break;
         
+        case 5:
+            [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+            break;
+            
         default:
             break;
     }
-
-
-    
-    
-    
-//    if (indexPath.row == 2) {
-//        [self segueToDebitCard];
-//    }
-//    
-//    if (indexPath.row == 4) {
-//
-//        [self segueToCamera];
-//    }
-//    
-//    if (indexPath.row == 5) {
-//        
-//        [self segueToAssignmentWithID:@"xLJE0QzW1G5B"];
-//    }
-//    
-//    if (indexPath.row == 6) {
-//        [self segueToTaxInfo];
-//    }
-//    
-//    if (indexPath.row == 7) {
-//        [self segueToGallery];
-//    }
     
 }
 

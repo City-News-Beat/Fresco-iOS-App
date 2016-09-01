@@ -29,10 +29,11 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 
 -(void)configureCell;
 
--(void)configureUserNotificationWithID:(NSString *)notificationID;
--(void)configureLikedContentNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
+-(void)configureUserFollowNotificationWithID:(NSString *)userID;
+-(void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
 -(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID;
 -(void)configureAssignmentCellWithID:(NSString *)assignmentID;
+-(void)configureUserRepostNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;
