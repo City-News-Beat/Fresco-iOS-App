@@ -72,7 +72,7 @@
         if (self.count <= 1) {
             self.annotationView.alpha = 0;
         } else if (self.count <= 9) {
-            self.titleLabel.text = [NSString stringWithFormat:@"%@ + %ld others", self.titleLabel.text, self.count];
+            self.titleLabel.text = [NSString stringWithFormat:@"%@ + %ld others", self.titleLabel.text, self.count-1];
             self.annotationLabel.text = [NSString stringWithFormat:@"+%ld", self.count];
         } else {
             self.annotationLabel.text = @"+";

@@ -27,8 +27,6 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
     /* Promo */
 };
 
--(void)configureCell;
-
 -(void)configureUserFollowNotificationWithID:(NSString *)userID;
 -(void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
 -(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID;
