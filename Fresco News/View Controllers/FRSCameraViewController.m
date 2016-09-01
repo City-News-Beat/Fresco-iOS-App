@@ -140,7 +140,7 @@
     return self;
 }
 
--(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode selectedAssignment:(NSDictionary *)assignment{
+-(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode selectedAssignment:(NSDictionary *)assignment selectedGlobalAssignment:(NSDictionary *)globalAssignment {
     self = [super init];
     
     if (self){
@@ -150,6 +150,8 @@
         self.lastOrientation = UIDeviceOrientationPortrait;
         self.firstTime = YES;
         self.firstTimeAni = YES;
+        
+        self.preselectedGlobalAssignment = globalAssignment;
         self.preselectedAssignment = assignment;
     }
     
@@ -1812,6 +1814,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         }
         
         FRSFileViewController *fileView = [[FRSFileViewController alloc] initWithNibName:Nil bundle:Nil];
+        fileView.preselectedGlobalAssignment = self.preselectedGlobalAssignment;
         fileView.preselectedAssignment = self.preselectedAssignment;
         fileView.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         

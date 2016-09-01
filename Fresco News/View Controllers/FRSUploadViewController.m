@@ -894,9 +894,19 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.closestAssignmentIndex = closestIndex;
         
         //If there is a preselectedGlobalAssignment then change the index
-        if(self.preselectedAssignment){
+        if(self.preselectedGlobalAssignment){
+            
             for(int i = 0; i < self.globalAssignments.count; i++){
-                if([[self.globalAssignments objectAtIndex:i] isEqual:self.preselectedAssignment]){
+                if([[self.globalAssignments objectAtIndex:i] isEqual:self.preselectedGlobalAssignment]){
+                    self.closestAssignmentIndex = i;
+                }
+            }
+        }
+        
+        if (self.preselectedAssignment) {
+
+            for(int i = 0; i < self.assignments.count; i++){
+                if([[self.assignments objectAtIndex:i] isEqual:self.preselectedAssignment]){
                     self.closestAssignmentIndex = i;
                 }
             }
@@ -904,7 +914,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
-        if(self.preselectedAssignment){
+        if(self.preselectedGlobalAssignment){
             [self toggleGlobalAssignmentsDrawer];
         }
         [self configureTextView];
@@ -914,8 +924,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self.globalAssignmentsTableView reloadData];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
-            if(self.preselectedAssignment){
+            if(self.preselectedGlobalAssignment){
                 [self tableView:self.globalAssignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+            }
+            if(self.preselectedAssignment){
+                [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
             }
         });
     }];

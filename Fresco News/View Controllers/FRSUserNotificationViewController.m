@@ -131,7 +131,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 4;
+    return 5;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -152,7 +152,11 @@
             break;
         case 3:
             return 104;
-            
+            break;
+        case 4:
+            return 104;
+            break;
+        
         default:
             break;
     }
@@ -200,7 +204,6 @@
             
         } break;
             
-            
         case 3: {
             NSString *cellIdentifier = @"assignmentNotificationCell";
             FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -208,6 +211,14 @@
             
             return cell;
         } break;
+            
+        case 4: {
+            NSString *cellIdentifier = @"assignmentNotificationCell";
+            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            [cell configureCameraCellWithAssignmentID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
+            
+            return cell;
+        }
             
         default:
             break;
@@ -361,6 +372,10 @@
             [self segueToAssignmentWithID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
             break;
             
+        case 4:
+            [self segueToCameraWithAssignmentID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
+            break;
+        
         default:
             break;
     }
@@ -430,18 +445,6 @@
     
 }
 
--(void)segueToCamera {
-    
-    FRSCameraViewController *camVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
-    UINavigationController *navigationController = [[UINavigationController alloc] init];
-    navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-    [navigationController pushViewController:camVC animated:NO];
-    [navigationController setNavigationBarHidden:YES];
-    
-    [self presentViewController:navigationController animated:YES completion:nil];
-    
-    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
-}
 
 
 -(void)returnToProfile {

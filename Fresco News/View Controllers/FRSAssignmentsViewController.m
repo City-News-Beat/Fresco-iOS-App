@@ -111,9 +111,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self removeAssignmentsFromMap];
-    
+        
     self.isPresented = YES;
     
     CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;

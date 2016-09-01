@@ -53,6 +53,7 @@ static NSString *imageTile = @"ImageTile";
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
     self.uploadViewController = [[FRSUploadViewController alloc] init];
+    self.uploadViewController.preselectedGlobalAssignment = self.preselectedGlobalAssignment;
     self.uploadViewController.preselectedAssignment = self.preselectedAssignment;
     [self.uploadViewController view];
 }

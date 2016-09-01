@@ -24,6 +24,7 @@
 @property (strong, nonatomic) NSMutableArray *players;
 @property (strong, nonatomic) NSMutableArray *assignmentsArray;
 @property (strong, nonatomic) NSArray *globalAssignments;
+@property (strong, nonatomic) NSDictionary *preselectedGlobalAssignment;
 @property (strong, nonatomic) NSDictionary *preselectedAssignment;
 @property (strong, nonatomic) FRSUploadManager *uploadManager;
 @property (nonatomic, weak) NSArray *content;

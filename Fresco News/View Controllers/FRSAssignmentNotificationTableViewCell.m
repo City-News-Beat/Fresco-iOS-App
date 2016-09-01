@@ -12,7 +12,10 @@
 
 @interface FRSAssignmentNotificationTableViewCell ()
 
-@property (weak, nonatomic) IBOutlet UIView *line;
+@property (weak, nonatomic) IBOutlet UIView   *line;
+@property (weak, nonatomic) IBOutlet UILabel  *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel  *bodyLabel;
+@property (weak, nonatomic) IBOutlet UIButton *actionButton;
 
 @end
 
@@ -20,8 +23,7 @@
 
 -(void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
-    
+    self.actionButton.userInteractionEnabled = NO;
 }
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -32,11 +34,9 @@
     //Setting the background color overrides this
     self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
-
 -(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
     [super setHighlighted:highlighted animated:animated];
     [self.actionButton setHighlighted:highlighted];
-
     
     //UITableViewCell subviews' background colors turn to clearColor when selecting/highlighting.
     //Setting the background color overrides this
@@ -44,16 +44,8 @@
 }
 
 -(IBAction)didTapAssignmentButton:(id)sender {
-    
-    
+    //Does this button have an action? cc:imogen
 }
-
--(void)configureCell {
-    self.titleLabel.numberOfLines = 0;
-    self.bodyLabel.numberOfLines  = 3;
-    self.actionButton.tintColor = [UIColor blackColor];
-}
-
 
 -(void)configureAssignmentCellWithID:(NSString *)assignmentID {
     
@@ -63,8 +55,20 @@
     [self.actionButton setImage:[UIImage imageNamed:@"navigate-24"] forState:UIControlStateNormal];
     
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+                
+        self.titleLabel.text = [responseObject objectForKey:@"title"];
+        self.bodyLabel.text = [responseObject objectForKey:@"caption"];
         
-        NSLog(@"RESPONSE: %@", responseObject);
+    }];
+}
+
+-(void)configureCameraCellWithAssignmentID:(NSString *)assignmentID {
+    
+    self.titleLabel.numberOfLines = 0;
+    self.bodyLabel.numberOfLines  = 3;
+    self.actionButton.tintColor = [UIColor blackColor];
+    
+    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
         
         self.titleLabel.text = [responseObject objectForKey:@"title"];
         self.bodyLabel.text = [responseObject objectForKey:@"caption"];

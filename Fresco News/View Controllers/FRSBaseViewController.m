@@ -12,6 +12,7 @@
 #import "FRSProfileViewController.h"
 #import "FRSStoryDetailViewController.h"
 #import "FRSAssignmentsViewController.h"
+#import "FRSCameraViewController.h"
 
 @interface FRSBaseViewController ()
 
@@ -188,6 +189,25 @@
     
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
 }
+
+
+-(void)segueToCameraWithAssignmentID:(NSString *)assignmentID {
+    
+    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+        
+        NSDictionary *assDict = [[NSDictionary alloc] init];
+        assDict = responseObject; //lol
+        
+        FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assDict selectedGlobalAssignment:nil];
+        UINavigationController *navControl = [[UINavigationController alloc] init];
+        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+        [navControl pushViewController:cam animated:NO];
+        [navControl setNavigationBarHidden:YES];
+        
+        [self presentViewController:navControl animated:YES completion:nil];
+    }];
+}
+
 
 
 

@@ -115,7 +115,7 @@ self.tableView.frame = CGRectMake(0, -self.navigationController.navigationBar.fr
 
 -(void)openCameraWithAssignment:(NSDictionary *)assignment {
     // Open camera and attach assignment
-    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
+    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:nil selectedGlobalAssignment:assignment];
     UINavigationController *navControl = [[UINavigationController alloc] init];
     navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
     [navControl pushViewController:cam animated:NO];
