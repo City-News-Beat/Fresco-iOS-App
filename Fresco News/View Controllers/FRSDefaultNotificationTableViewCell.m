@@ -69,7 +69,7 @@
 
 
 -(void)configureUserMentionGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
-    [self configureDefaultAttributesForNotification:FRSNotificationTypeCommentMention];
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeGalleryMention];
     [self setUserImage:userID];
     self.followButton.alpha = 0;
     self.annotationView.alpha = 0;

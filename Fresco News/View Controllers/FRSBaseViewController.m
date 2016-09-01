@@ -209,6 +209,12 @@
 }
 
 
+-(void)segueHome {
+    self.tabBarController.selectedIndex = 0;
+    [self popViewController];
+}
+
+
 
 
 

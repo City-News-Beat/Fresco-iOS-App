@@ -12,6 +12,7 @@
 @interface FRSTextNotificationTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIView *line;
+@property (weak, nonatomic) IBOutlet UILabel *bodyLabel;
 
 @end
 
@@ -37,10 +38,10 @@
     self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
 
--(void)configureCell {
+-(void)configureTextCell:(NSString *)text {
     
+    self.bodyLabel.text = text;
     self.bodyLabel.numberOfLines = 0;
-    self.backgroundColor = [UIColor frescoBackgroundColorDark];
 }
 
 @end

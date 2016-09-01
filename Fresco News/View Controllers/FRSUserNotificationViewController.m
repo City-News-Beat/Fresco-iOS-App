@@ -43,7 +43,9 @@
         NSString *gallery = @"arYd0y5Q0Dp5";
         NSString *story = @"7mr93zRx3BlY";
         NSString *assignment = @"xLJE0QzW1G5B";
-        self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery, @"user-news-story": story, @"user-dispatch-new-assignment": assignment};
+        NSString *text = @"BREAKING: Bernie Sanders wins South Carolina Democratic primary, with an unheard of 130% of the popular vote";
+        
+        self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery, @"user-news-story": story, @"user-dispatch-new-assignment": assignment, @"user-news-custom-push": text};
     }
     
     return self;
@@ -131,7 +133,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 9;
+    return 10;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -155,6 +157,9 @@
             break;
         case 4:
             return 104;
+            break;
+        case 9:
+            return 84;
             break;
         
         default:
@@ -249,6 +254,13 @@
             [cell configureUserMentionGalleryNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0] galleryID:nil];
             return cell;
             
+        } case 9: {
+            NSString *cellIdentifier = @"textNotificationCell";
+            FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            [cell configureTextCell:[self.payload objectForKey:@"user-news-custom-push"]];
+            return cell;
+
         }
             
 
@@ -299,7 +311,7 @@
 //            
 //            [cell configureCell];
 //            return cell;
-//            
+//
 //        } break;
 //            
 //        case 4: {
@@ -422,6 +434,9 @@
         
         case 8:
             [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+            break;
+        case 9:
+            [self segueHome];
             break;
             
         default:

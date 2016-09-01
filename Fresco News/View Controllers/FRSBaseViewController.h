@@ -41,5 +41,6 @@
 -(void)segueToStory:(NSString *)storyID;
 -(void)segueToAssignmentWithID:(NSString *)assignmentID;
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID;
+-(void)segueHome;
 
 @end
