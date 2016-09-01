@@ -127,7 +127,7 @@
     [self configureDefaultAttributesForNotification:FRSNotificationTypeFollow];
     
     self.followButton.alpha = 1;
-    self.followButton.tintColor = [UIColor frescoMediumTextColor];
+    self.followButton.tintColor = [UIColor blackColor];
     
     [[FRSAPIClient sharedClient] getUserWithUID:notificationID completion:^(id responseObject, NSError *error) {
         
@@ -143,7 +143,7 @@
             self.followButton.tintColor = [UIColor frescoOrangeColor];
         } else {
             [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
-            self.followButton.tintColor = [UIColor frescoMediumTextColor];
+            self.followButton.tintColor = [UIColor blackColor];
         }
         
         [self updateLabelsForCount];
@@ -151,26 +151,10 @@
     }];
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -(IBAction)followTapped:(id)sender {
     if ([self.followButton.imageView.image isEqual:[UIImage imageNamed:@"account-check"]]) {
         [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
-        self.followButton.tintColor = [UIColor frescoMediumTextColor];
+        self.followButton.tintColor = [UIColor blackColor];
     } else if ([self.followButton.imageView.image isEqual: [UIImage imageNamed:@"account-add"]]) {
         [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
         self.followButton.tintColor = [UIColor frescoOrangeColor];

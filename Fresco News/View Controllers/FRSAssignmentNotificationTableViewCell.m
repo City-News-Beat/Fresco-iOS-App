@@ -8,6 +8,7 @@
 
 #import "FRSAssignmentNotificationTableViewCell.h"
 #import "FRSCameraViewController.h"
+#import "FRSAPIClient.h"
 
 @interface FRSAssignmentNotificationTableViewCell ()
 
@@ -59,6 +60,20 @@
     self.titleLabel.numberOfLines = 0;
     self.bodyLabel.numberOfLines  = 3;
     self.actionButton.tintColor = [UIColor blackColor];
+    [self.actionButton setImage:[UIImage imageNamed:@"navigate-24"] forState:UIControlStateNormal];
+    
+    
+    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+        
+        NSLog(@"RESPONSE: %@", responseObject);
+        
+        self.titleLabel.text = [responseObject objectForKey:@"title"];
+        self.bodyLabel.text = [responseObject objectForKey:@"caption"];
+        
+    }];
+    
+    
+
     
 }
 

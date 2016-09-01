@@ -92,9 +92,6 @@
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID {
     self = [super init];
     
-    
-    
-    
     return self;
 }
 
@@ -393,9 +390,24 @@
         
         self.currentAssignment = assignment;
         
+
+        
+    
+        
+        
+        
+        MKCoordinateRegion region = { {0.0, 0.0 }, { 0.0, 0.0 } };
+        region.center.latitude = [assignment.latitude doubleValue];
+        region.center.longitude = [assignment.longitude doubleValue];
+        region.span.longitudeDelta = 0.05f;
+        region.span.latitudeDelta = 0.05f;
+        [self.mapView setRegion:region animated:YES];
+        
+        
         CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake([assignment.latitude doubleValue], [assignment.longitude doubleValue]);
         newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
         [self.mapView setCenterCoordinate:newCenter animated:YES];
+        
         
         if ([self.mapView respondsToSelector:@selector(camera)]) {
             [self.mapView setShowsBuildings:NO];
@@ -409,6 +421,8 @@
         self.showsCard  = NO;
     }
 }
+
+
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
     [self updateAssignments];
@@ -767,6 +781,9 @@
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     
     
+    //Avoid any drawing above these
+    self.scrollView.layer.zPosition = 1;
+    self.assignmentBottomBar.layer.zPosition = 2;
 }
 
 -(void)configureAssignmentCard {

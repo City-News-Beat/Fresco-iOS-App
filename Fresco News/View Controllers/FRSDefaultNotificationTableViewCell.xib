@@ -78,6 +78,7 @@
                             <constraint firstAttribute="width" constant="24" id="76z-I7-6N8"/>
                             <constraint firstAttribute="height" constant="24" id="EdC-d4-CHG"/>
                         </constraints>
+                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <state key="normal" image="add-follower"/>
                         <connections>
                             <action selector="followTapped:" destination="X5g-tq-JNY" eventType="touchUpInside" id="FMZ-P4-xrs"/>

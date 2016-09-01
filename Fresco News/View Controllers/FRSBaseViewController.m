@@ -11,6 +11,7 @@
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSProfileViewController.h"
 #import "FRSStoryDetailViewController.h"
+#import "FRSAssignmentsViewController.h"
 
 @interface FRSBaseViewController ()
 
@@ -159,7 +160,9 @@
     }];
 }
 
+
 -(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    
     FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
     detailView.story = story;
     [detailView reloadData];
@@ -171,6 +174,19 @@
     
     FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUserID:userID];
     [self.navigationController pushViewController:profileVC animated:YES];
+}
+
+
+-(void)segueToAssignmentWithID:(NSString *)assignmentID {
+    
+    FRSNavigationController *navCont = (FRSNavigationController *)[self.tabBarController.viewControllers objectAtIndex:3];
+    FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
+    
+    assignmentsVC.hasDefault = YES;
+    assignmentsVC.defaultID = assignmentID;
+    self.tabBarController.selectedIndex = 3;
+    
+    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
 }
 
 

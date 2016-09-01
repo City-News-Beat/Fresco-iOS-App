@@ -131,7 +131,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return 4;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -150,6 +150,8 @@
         case 2:
             return 84;
             break;
+        case 3:
+            return 104;
             
         default:
             break;
@@ -200,10 +202,11 @@
             
             
         case 3: {
-            NSString *cellIdentifier = @"notificationCell";
+            NSString *cellIdentifier = @"assignmentNotificationCell";
             FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
-            [cell configureAssignmentCellWithID:@""];
+            [cell configureAssignmentCellWithID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
+    
             
             return cell;
 
@@ -357,6 +360,10 @@
             [self segueToStory:[self.payload objectForKey:@"user-news-story"]];
             break;
             
+        case 3:
+            [self segueToAssignmentWithID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
+            break;
+            
         default:
             break;
     }
@@ -402,27 +409,7 @@
     return size.height;
 }
 
-//-(void)segueToUser:(NSString *)userID {
-//    
-//    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUserID:userID];
-//    [self.navigationController pushViewController:profileVC animated:YES];
-//}
 
--(void)segueToAssignmentWithID:(NSString *)assignmentID {
-    
-    //    FRSAssignmentsViewController *assignmentsVC = [[FRSAssignmentsViewController alloc] initWithActiveAssignment:assignmentID];
-    //    [self.navigationController pushViewController:assignmentsVC animated:YES];
-    
-    FRSNavigationController *navCont = (FRSNavigationController *)[self.tabBarController.viewControllers objectAtIndex:3];
-    FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
-    
-    assignmentsVC.hasDefault = YES;
-    assignmentsVC.defaultID = assignmentID;
-    self.tabBarController.selectedIndex = 3;
-    
-    
-    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
-}
 
 -(void)segueToTaxInfo {
     

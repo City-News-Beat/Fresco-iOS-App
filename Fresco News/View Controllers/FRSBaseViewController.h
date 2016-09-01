@@ -39,5 +39,6 @@
 -(void)segueToGallery:(NSString *)galleryID;
 -(void)segueToUser:(NSString *)userID;
 -(void)segueToStory:(NSString *)storyID;
+-(void)segueToAssignmentWithID:(NSString *)assignmentID;
 
 @end
