@@ -27,6 +27,11 @@
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="editedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="externalAccountID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalAccountName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalSource" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="liked" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="likes" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -125,7 +130,7 @@
     <elements>
         <element name="FRSArticle" positionX="-614" positionY="-132" width="128" height="148"/>
         <element name="FRSAssignment" positionX="-819" positionY="45" width="128" height="208"/>
-        <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="313"/>
+        <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="390"/>
         <element name="FRSNotification" positionX="-839" positionY="-153" width="128" height="148"/>
         <element name="FRSPost" positionX="-36" positionY="9" width="128" height="253"/>
         <element name="FRSStory" positionX="-72" positionY="285" width="128" height="253"/>

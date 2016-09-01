@@ -33,6 +33,11 @@
 @dynamic articles;
 @dynamic isLiked;
 @dynamic numberOfLikes;
+@dynamic externalAccountID;
+@dynamic externalAccountName;
+@dynamic externalID;
+@dynamic externalSource;
+@dynamic externalURL;
 
 -(NSArray *)sorted {
     NSArray *sorted;
@@ -52,7 +57,27 @@
     if([dict valueForKey:@"owner"] != [NSNull null] && [[dict valueForKey:@"owner"] valueForKey:@"full_name"] != [NSNull null]){
         self.byline = dict[@"owner"][@"full_name"];
     }
-    NSLog(@"BYLINE: %@", self.byline);
+    NSLog(@"BYLINE: %@", self.byline);    
+    
+    if ([dict valueForKey:@"external_account_id"] != [NSNull null]) {
+        self.externalAccountID = [dict objectForKey:@"external_account_id"];
+    }
+    
+    if ([dict valueForKey:@"external_account_name"] != [NSNull null]) {
+        self.externalAccountName = [dict objectForKey:@"external_account_name"];
+    }
+    
+    if ([dict valueForKey:@"external_account_id"] != [NSNull null]) {
+        self.externalID = [dict objectForKey:@"external_account_id"];
+    }
+    
+    if ([dict valueForKey:@"external_source"] != [NSNull null]) {
+        self.externalSource = [dict objectForKey:@"external_source"];
+    }
+    
+    if ([dict valueForKey:@"external_url"] != [NSNull null]) {
+        self.externalURL = [dict objectForKey:@"external_url"];
+    }
     
     if (!self.posts || self.posts.count == 0) {
         [self addPostsWithArray:dict[@"posts"]];

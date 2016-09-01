@@ -654,6 +654,10 @@
         self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
     }
     
+    if (post.gallery.externalAccountName != nil) {
+        self.nameLabel.text = post.gallery.externalAccountName;
+    }
+    
     self.locationLabel.text = post.address;
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
     

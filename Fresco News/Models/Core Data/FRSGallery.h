@@ -42,6 +42,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<FRSStory *> *stories;
 @property (nullable, nonatomic, retain) NSSet<FRSArticle *> *articles;
 @property (nullable, nonatomic, retain) NSMutableDictionary *tags;
+@property (nullable, nonatomic, retain) NSString *externalAccountID;
+@property (nullable, nonatomic, retain) NSString *externalAccountName;
+@property (nullable, nonatomic, retain) NSString *externalID;
+@property (nullable, nonatomic, retain) NSString *externalSource;
+@property (nullable, nonatomic, retain) NSString *externalURL;
+
 @property (nonatomic, assign) BOOL isLiked;
 @property (nonatomic, assign) NSInteger numberOfLikes;
 @property (nonatomic) NSInteger generatedHeight;
