@@ -663,6 +663,7 @@
             
         } else {
             self.nameLabel.text = parent.externalAccountName;
+            
         }
         
     }
@@ -1045,13 +1046,20 @@
 -(void)segueToUserProfile:(FRSUser *)user {
     
     NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    
     if (page >= 0 && page < self.orderedPosts.count) {
         FRSPost *currentPost = self.orderedPosts[page];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:currentPost.creator];
-            [self.delegate.navigationController pushViewController:userViewController animated:YES];
-        });        
+        if ([self.gallery.externalSource isEqualToString:@"twitter"]) {
+            NSString *twitterString = [NSString stringWithFormat:@"twitter://user?screen_name=%@", self.gallery.externalAccountName];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:twitterString]];
+            
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:currentPost.creator];
+                [self.delegate.navigationController pushViewController:userViewController animated:YES];
+            });
+        }
     }
 }
 
