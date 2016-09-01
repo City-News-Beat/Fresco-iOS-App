@@ -131,7 +131,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 6;
+    return 9;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -225,6 +225,30 @@
             
             [cell configureUserRepostNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:2] galleryID:[self.payload objectForKey:@"user-social-liked"]];
             return cell;
+        } case 6: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
+            cell.count = users.count;
+            [cell configureUserCommentNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0] commentID:nil];
+            return cell;
+        
+        } case 7: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
+            cell.count = users.count;
+            [cell configureUserMentionCommentNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:1] commentID:nil];
+            return cell;
+            
+        } case 8: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
+            cell.count = users.count;
+            [cell configureUserMentionGalleryNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0] galleryID:nil];
+            return cell;
+            
         }
             
 
@@ -385,6 +409,18 @@
             break;
         
         case 5:
+            [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+            break;
+            
+        case 6:
+            [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+            break;
+            
+        case 7:
+            [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+            break;
+        
+        case 8:
             [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
             break;
             

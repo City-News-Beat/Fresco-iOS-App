@@ -21,105 +21,59 @@
 
 @implementation FRSDefaultNotificationTableViewCell
 
--(void)awakeFromNib {
-    [super awakeFromNib];
-}
--(void)prepareForReuse {
-    [super prepareForReuse];
-}
 
--(void)configureDefaultCell {
-    self.image.backgroundColor = [UIColor frescoLightTextColor];
-    self.image.layer.cornerRadius = 20;
-    self.image.clipsToBounds = YES;
-    self.followButton.alpha = 0;
-    self.annotationView.layer.cornerRadius = 12;
-}
-
--(void)configureDefaultAttributesForNotification:(FRSNotificationType)notificationType {
-    
-    [self configureDefaultCell];
-    
-    //Set bodyLabel based on notifcation type
-    switch (notificationType) {
-        case FRSNotificationTypeFollow:
-            self.bodyLabel.text = @"Followed you.";
-            break;
-        case FRSNotificationTypeLike:
-            self.bodyLabel.text = @"Liked your gallery.";
-            break;
-        case FRSNotificationTypeRepost:
-            self.bodyLabel.text = @"Reposted your gallery.";
-            break;
-        case FRSNotificationTypeComment:
-            self.bodyLabel.text = @"Commented on your gallery.";
-            break;
-            
-        default:
-            break;
-    }
-
-    if (self.count <= 1) {
-        self.annotationView.alpha = 0;
-        self.annotationLabel.alpha = 0;
-
-    }
-}
-
--(void)updateLabelsForCount {
-    if (self.count > 1) {
-        //Update labels based on count
-        if (self.count <= 1) {
-            self.annotationView.alpha = 0;
-        } else if (self.count <= 9) {
-            self.titleLabel.text = [NSString stringWithFormat:@"%@ + %ld others", self.titleLabel.text, self.count-1];
-            self.annotationLabel.text = [NSString stringWithFormat:@"+%ld", self.count];
-        } else {
-            self.annotationLabel.text = @"+";
+-(void)setUserImage:(NSString *)userID {
+    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
+        self.titleLabel.text = [responseObject objectForKey:@"full_name"];
+        
+        if([responseObject objectForKey:@"avatar"] != [NSNull null]){
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
+            [self.image hnk_setImageFromURL:avatarURL];
         }
-    }
+        
+        [self updateLabelsForCount];
+        
+    }];
 }
-
 
 -(void)configureUserRepostNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
     
     [self configureDefaultAttributesForNotification:FRSNotificationTypeRepost];
+    [self setUserImage:userID];
     self.followButton.alpha = 0;
     self.annotationView.alpha = 0;
-    
-    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
-        self.titleLabel.text = [responseObject objectForKey:@"full_name"];
-        
-        if([responseObject objectForKey:@"avatar"] != [NSNull null]){
-            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
-            [self.image hnk_setImageFromURL:avatarURL];
-        }
-        
-        [self updateLabelsForCount];
-        
-    }];
 }
-
 
 -(void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
     
     [self configureDefaultAttributesForNotification:FRSNotificationTypeLike];
+    [self setUserImage:userID];
     self.followButton.alpha = 0;
     self.annotationView.alpha = 0;
-    
-    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
-        self.titleLabel.text = [responseObject objectForKey:@"full_name"];
-        
-        if([responseObject objectForKey:@"avatar"] != [NSNull null]){
-            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
-            [self.image hnk_setImageFromURL:avatarURL];
-        }
-        
-        [self updateLabelsForCount];
-        
-    }];
 }
 
+-(void)configureUserCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID {
+    
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeComment];
+    [self setUserImage:userID];
+    self.followButton.alpha = 0;
+    self.annotationView.alpha = 0;
+}
+
+-(void)configureUserMentionCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID {
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeCommentMention];
+    [self setUserImage:userID];
+    self.followButton.alpha = 0;
+    self.annotationView.alpha = 0;
+}
+
+
+-(void)configureUserMentionGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeCommentMention];
+    [self setUserImage:userID];
+    self.followButton.alpha = 0;
+    self.annotationView.alpha = 0;
+}
 
 -(void)configureUserFollowNotificationWithID:(NSString *)userID {
     
@@ -160,9 +114,6 @@
     }
 }
 
-
-
-
 -(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID {
     
     [self configureDefaultCell];
@@ -185,6 +136,74 @@
 
 
 
+#pragma mark - Helpers
+-(void)configureDefaultCell {
+    self.image.backgroundColor = [UIColor frescoLightTextColor];
+    self.image.layer.cornerRadius = 20;
+    self.image.clipsToBounds = YES;
+    self.followButton.alpha = 0;
+    self.annotationView.layer.cornerRadius = 12;
+}
+
+-(void)configureDefaultAttributesForNotification:(FRSNotificationType)notificationType {
+    
+    [self configureDefaultCell];
+    
+    //Set bodyLabel based on notifcation type
+    switch (notificationType) {
+        case FRSNotificationTypeFollow:
+            self.bodyLabel.text = @"Followed you.";
+            break;
+        case FRSNotificationTypeLike:
+            self.bodyLabel.text = @"Liked your gallery.";
+            break;
+        case FRSNotificationTypeRepost:
+            self.bodyLabel.text = @"Reposted your gallery.";
+            break;
+        case FRSNotificationTypeComment:
+            self.bodyLabel.text = @"Commented on your gallery.";
+            break;
+        case FRSNotificationTypeGalleryMention:
+            self.bodyLabel.text = @"Mentioned you in a gallery.";
+            break;
+        case FRSNotificationTypeCommentMention:
+            self.bodyLabel.text = @"Mentioned you in a comment.";
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (self.count <= 1) {
+        self.annotationView.alpha = 0;
+        self.annotationLabel.alpha = 0;
+        
+    }
+}
+
+-(void)updateLabelsForCount {
+    if (self.count > 1) {
+        //Update labels based on count
+        if (self.count <= 1) {
+            self.annotationView.alpha = 0;
+        } else if (self.count <= 9) {
+            self.titleLabel.text = [NSString stringWithFormat:@"%@ + %ld others", self.titleLabel.text, self.count-1];
+            self.annotationLabel.text = [NSString stringWithFormat:@"+%ld", self.count];
+        } else {
+            self.annotationLabel.text = @"+";
+        }
+    }
+}
+
+#pragma mark - UITableViewCell
+
+-(void)awakeFromNib {
+    [super awakeFromNib];
+}
+-(void)prepareForReuse {
+    [super prepareForReuse];
+}
+
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     
@@ -202,8 +221,6 @@
     self.annotationView.backgroundColor = [UIColor whiteColor];
     self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
-
-
 
 
 
