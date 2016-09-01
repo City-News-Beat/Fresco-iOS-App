@@ -62,7 +62,6 @@
     self.actionButton.tintColor = [UIColor blackColor];
     [self.actionButton setImage:[UIImage imageNamed:@"navigate-24"] forState:UIControlStateNormal];
     
-    
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
         
         NSLog(@"RESPONSE: %@", responseObject);
@@ -71,10 +70,6 @@
         self.bodyLabel.text = [responseObject objectForKey:@"caption"];
         
     }];
-    
-    
-
-    
 }
 
 

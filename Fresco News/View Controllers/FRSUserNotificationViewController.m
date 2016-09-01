@@ -204,13 +204,10 @@
         case 3: {
             NSString *cellIdentifier = @"assignmentNotificationCell";
             FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
             [cell configureAssignmentCellWithID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
-    
             
             return cell;
-
-        }
+        } break;
             
         default:
             break;

@@ -112,6 +112,8 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self removeAssignmentsFromMap];
+    
     self.isPresented = YES;
     
     CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
@@ -354,6 +356,17 @@
     }
 }
 
+-(void)removeAssignmentsFromMap {
+    id userLocation = [self.mapView userLocation];
+    NSMutableArray *assignments = [[NSMutableArray alloc] initWithArray:[self.mapView annotations]];
+    if (userLocation != nil ) {
+        [assignments removeObject:userLocation]; // avoid removing user location off the map
+    }
+    
+    [self.mapView removeAnnotations:assignments];
+    assignments = nil;
+}
+
 -(void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index {
     
     FRSAssignmentAnnotation *ann = [[FRSAssignmentAnnotation alloc] initWithAssignment:assignment atIndex:index];
@@ -452,6 +465,7 @@
         
         if ([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"user-annotation"];
+            annotationView.userInteractionEnabled = NO;
         
             UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
             view.backgroundColor = [UIColor whiteColor];
@@ -575,10 +589,14 @@
 
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-
+    
     [self.mapView deselectAnnotation:view.annotation animated:NO];
 
     FRSAssignmentAnnotation *assAnn = (FRSAssignmentAnnotation *)view.annotation;
+    
+    if (assAnn.title == nil) { //Checks for user annotation
+        return;
+    }
     
     self.assignmentTitle = assAnn.title;
     self.assignmentCaption = assAnn.subtitle;
