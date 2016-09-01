@@ -36,11 +36,13 @@
 
 
 /* DEEP LINKS */
--(void)segueToGallery:(NSString *)galleryID;
 -(void)segueToUser:(NSString *)userID;
+-(void)segueToPost:(NSString *)postID;
 -(void)segueToStory:(NSString *)storyID;
+-(void)segueToGallery:(NSString *)galleryID;
 -(void)segueToAssignmentWithID:(NSString *)assignmentID;
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID;
 -(void)segueHome;
+-(void)segueToDebitCard;
 
 @end

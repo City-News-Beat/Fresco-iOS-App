@@ -13,6 +13,7 @@
 #import "FRSStoryDetailViewController.h"
 #import "FRSAssignmentsViewController.h"
 #import "FRSCameraViewController.h"
+#import "FRSDebitCardViewController.h"
 
 @interface FRSBaseViewController ()
 
@@ -177,6 +178,13 @@
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
+-(void)segueToPost:(NSString *)postID {
+    [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
+        
+        [self segueToGallery:[[responseObject objectForKey:@"parent"] objectForKey:@"id"]];
+        
+    }];
+}
 
 -(void)segueToAssignmentWithID:(NSString *)assignmentID {
     
@@ -212,6 +220,11 @@
 -(void)segueHome {
     self.tabBarController.selectedIndex = 0;
     [self popViewController];
+}
+
+-(void)segueToDebitCard {
+    FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
+    [self.navigationController pushViewController:debitCardVC animated:YES];
 }
 
 

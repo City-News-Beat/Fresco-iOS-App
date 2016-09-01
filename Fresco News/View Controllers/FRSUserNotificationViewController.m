@@ -43,9 +43,13 @@
         NSString *gallery = @"arYd0y5Q0Dp5";
         NSString *story = @"7mr93zRx3BlY";
         NSString *assignment = @"xLJE0QzW1G5B";
+        NSString *post = @"LJx3jeQg1kpN";
+        NSString *outlet = @"7ewm8YP3GL5x";
+        NSDictionary *paymentDictionary = @{@"outlet_id": outlet, @"post_ids": post};
+        
         NSString *text = @"BREAKING: Bernie Sanders wins South Carolina Democratic primary, with an unheard of 130% of the popular vote";
         
-        self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery, @"user-news-story": story, @"user-dispatch-new-assignment": assignment, @"user-news-custom-push": text};
+        self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery, @"user-news-story": story, @"user-dispatch-new-assignment": assignment, @"user-news-custom-push": text, @"user-dispatch-purchased" : paymentDictionary};
     }
     
     return self;
@@ -133,7 +137,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return 12;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -159,6 +163,12 @@
             return 104;
             break;
         case 9:
+            return 84;
+            break;
+        case 10:
+            return 104;
+            break;
+        case 11:
             return 84;
             break;
         
@@ -261,6 +271,18 @@
             [cell configureTextCell:[self.payload objectForKey:@"user-news-custom-push"]];
             return cell;
 
+        } case 10: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            [cell configurePhotoPurchasedWithPostID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"post_ids"] outletID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"outlet_id"] price:@"$20" paymentMethod:@"VISA (4452)"];
+            return cell;
+        } case 11: {
+            NSString *cellIdentifier = @"notificationCell";
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            
+            [cell configureVideoPurchasedWithPostID:/*[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"post_ids"] */ @"rX50krpn8oBj" outletID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"outlet_id"] price:@"$50" paymentMethod:@"VISA (4452)"];
+            return cell;
         }
             
 
@@ -394,6 +416,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    NSLog(@"INDEXPATH: %ld", (long)indexPath.row);
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate updateTabBarToUser];
@@ -435,8 +458,16 @@
         case 8:
             [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
             break;
+            
         case 9:
             [self segueHome];
+            break;
+            
+        case 10:
+            [self segueToDebitCard];
+            break;
+        case 11:
+            [self segueToPost:@"rX50krpn8oBj"];
             break;
             
         default:
@@ -471,13 +502,6 @@
     
     FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
     debitCardVC.shouldDisplayBankViewOnLoad = YES;
-    [self.navigationController pushViewController:debitCardVC animated:YES];
-    
-}
-
--(void)segueToDebitCard {
-    
-    FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
     [self.navigationController pushViewController:debitCardVC animated:YES];
     
 }

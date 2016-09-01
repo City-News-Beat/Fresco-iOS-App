@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
     /* Promo */
 };
 
+/* SOCIAL */
 -(void)configureUserFollowNotificationWithID:(NSString *)userID;
 -(void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
 -(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID;
@@ -37,6 +38,12 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 -(void)configureUserCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID;
 -(void)configureUserMentionCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID;
 -(void)configureUserMentionGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
+
+/* PAYMENT */
+-(void)configurePhotoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod;
+-(void)configureVideoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod;
+
+
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;

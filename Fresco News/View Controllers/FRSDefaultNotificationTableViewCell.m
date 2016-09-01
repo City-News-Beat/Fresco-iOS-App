@@ -75,6 +75,54 @@
     self.annotationView.alpha = 0;
 }
 
+-(void)configurePhotoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod {
+    self.titleLabel.text = @"Your photo was purchased!";
+    
+    [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
+        
+    }];
+    
+    [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
+        
+        if([responseObject objectForKey:@"image"] != [NSNull null]){
+            
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+    }];
+    
+    //if user has payment method
+    self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! We've sent %@ to your %@.", outletID, price, paymentMethod];
+    
+    //else if user does not have payment method
+    self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! Tap to add a card and we’ll send you %@!", outletID, price];
+}
+
+
+-(void)configureVideoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod {
+    self.titleLabel.text = @"Your video was purchased!";
+    
+    [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
+        
+    }];
+    
+    [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
+        
+        if([responseObject objectForKey:@"image"] != [NSNull null]){
+            
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+    }];
+    
+    //if user has payment method
+    self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your video! We've sent %@ to your %@.", outletID, price, paymentMethod];
+    
+    //else if user does not have payment method
+//    self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your video! Tap to add a card and we’ll send you %@!", outletID, price];
+}
+
+
 -(void)configureUserFollowNotificationWithID:(NSString *)userID {
     
     [self configureDefaultAttributesForNotification:FRSNotificationTypeFollow];

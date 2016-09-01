@@ -799,6 +799,46 @@
     }];
 }
 
+-(void)getPostWithID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"post/%@", post];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            completion(responseObject, error);
+            return;
+        }
+        
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(responseObject, error);
+        }
+        
+        // shouldn't happen
+        completion(responseObject, error);
+    }];
+}
+
+-(void)getOutletWithID:(NSString *)outlet completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"outlet/%@", outlet];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            completion(responseObject, error);
+            return;
+        }
+        
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(responseObject, error);
+        }
+        
+        // shouldn't happen
+        completion(responseObject, error);
+    }];
+}
+
 -(void)getStoryWithUID:(NSString *)story completion:(FRSAPIDefaultCompletionBlock)completion {
     
     NSString *endpoint = [NSString stringWithFormat:@"story/%@", story];
