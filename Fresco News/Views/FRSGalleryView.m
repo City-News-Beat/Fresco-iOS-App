@@ -648,14 +648,23 @@
     
     FRSPost *post = self.orderedPosts[self.adjustedPage];
     
+    FRSGallery *parent = post.gallery;
+    
     if(post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0){
         self.nameLabel.text = [NSString stringWithFormat:@"@%@",post.creator.username];
     }else{
         self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
     }
     
-    if (post.gallery.externalAccountName != nil) {
-        self.nameLabel.text = post.gallery.externalAccountName;
+    if (parent.externalAccountName != nil) {
+        
+        if ([parent.externalSource isEqualToString:@"twitter"]) {
+            self.nameLabel.text = [NSString stringWithFormat:@"@%@",parent.externalAccountName];
+            
+        } else {
+            self.nameLabel.text = parent.externalAccountName;
+        }
+        
     }
     
     self.locationLabel.text = post.address;
