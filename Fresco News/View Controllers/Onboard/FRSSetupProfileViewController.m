@@ -69,6 +69,16 @@
 
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if(_isEditingProfile){
+        [self.profileIV hnk_setImageFromURL:self.profileImageURL];
+    }else{
+        [self.profileIV addSubview:self.placeHolderUserIcon];
+    }
+}
+
 -(void)addNotifications{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -296,6 +306,7 @@
     self.cameraButton = [[UIButton alloc] initWithFrame:CGRectMake(x, self.profileShadow.frame.origin.y + self.profileShadow.frame.size.height + 22 , 128, 24)];
     [self.cameraButton setImage:[UIImage imageNamed:@"camera-icon-profile"] forState:UIControlStateNormal];
     [self.cameraButton setTitle:@"OPEN CAMERA" forState:UIControlStateNormal];
+    self.cameraButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
     [self.cameraButton addTarget:self action:@selector(presentCameraImagePicker) forControlEvents:UIControlEventTouchUpInside];
     [self.cameraButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.cameraButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
@@ -313,6 +324,7 @@
     self.photosButton = [[UIButton alloc] initWithFrame:CGRectMake(xOrigin, self.cameraButton.frame.origin.y, 128, 24)];
     [self.photosButton setImage:[UIImage imageNamed:@"photo-icon-profile"] forState:UIControlStateNormal];
     [self.photosButton setTitle:@"OPEN PHOTOS" forState:UIControlStateNormal];
+    self.photosButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
     [self.photosButton addTarget:self action:@selector(presentImagePickerController) forControlEvents:UIControlEventTouchUpInside];
     [self.photosButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.photosButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];

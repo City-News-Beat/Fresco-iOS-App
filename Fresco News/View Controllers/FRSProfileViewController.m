@@ -418,11 +418,17 @@
             self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
             self.followBarButtonItem.tintColor = [UIColor whiteColor];
             
-            if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
-                [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
-            } else {
-                [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
-            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                NSLog(@"FOLLOWING: %d", [[_representedUser valueForKey:@"following"] boolValue]);
+                
+                if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+                    [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+                } else {
+                    [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
+                }
+            });
             
             self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
         }
