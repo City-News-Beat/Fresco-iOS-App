@@ -518,7 +518,7 @@
             break;
             
         case 9:
-            [self segueHome];
+//            [self segueHome];
             break;
             
         case 10:

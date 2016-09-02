@@ -43,8 +43,29 @@
     self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
 
--(IBAction)didTapAssignmentButton:(id)sender {
-    //Does this button have an action? cc:imogen
+-(IBAction)g:(id)sender {
+
+    
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        
+        // Cancel button tappped do nothing.
+        
+    }]];
+    
+    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Open in Google Maps" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+        // take photo button tapped.
+        
+    }]];
+    
+    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Open in Apple Maps" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+        // choose photo button tapped.
+        
+    }]];
+
 }
 
 -(void)configureAssignmentCellWithID:(NSString *)assignmentID {
