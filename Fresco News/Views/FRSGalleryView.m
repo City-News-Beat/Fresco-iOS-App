@@ -1052,7 +1052,12 @@
         
         if ([self.gallery.externalSource isEqualToString:@"twitter"]) {
             NSString *twitterString = [NSString stringWithFormat:@"twitter://user?screen_name=%@", self.gallery.externalAccountName];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:twitterString]];
+            NSString *twitterLink = [NSString stringWithFormat:@"https://twitter.com/%@", self.gallery.externalAccountName];
+            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:twitterString]]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:twitterString]];
+            } else {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:twitterLink]];
+            }
             
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
