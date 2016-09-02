@@ -44,6 +44,8 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 -(void)configureVideoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod;
 
 
+-(void)configureCellForType:(NSString *)cellType userID:(NSString *)userID;
+
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;

@@ -670,7 +670,7 @@
         self.followingButton.tintColor = [UIColor frescoOrangeColor];
     } else {
         [self.followingButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
-        self.followingButton.tintColor = [UIColor frescoMediumTextColor];
+        self.followingButton.tintColor = [UIColor blackColor];
     }
 
     self.currentUserDict = userDict;
@@ -725,7 +725,7 @@
         }
         
         [self.followingButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
-        self.followingButton.tintColor = [UIColor frescoMediumTextColor];
+        self.followingButton.tintColor = [UIColor blackColor];
         self.following = NO;
     }];
 }

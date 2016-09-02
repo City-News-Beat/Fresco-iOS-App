@@ -21,6 +21,15 @@
 
 @implementation FRSDefaultNotificationTableViewCell
 
+-(void)configureCellForType:(NSString *)cellType userID:(NSString *)userID assignmentID:(NSString *)assignmentID postID:(NSString *)postID storyID:(NSString *)storyID galleryID:(NSString *)galleryID {
+    
+    if ([cellType isEqualToString:@"user-social-followed"]) {
+        [self configureUserFollowNotificationWithID:userID];
+    } else if ([cellType isEqualToString:@""]) {
+        return;
+    }
+}
+
 
 -(void)setUserImage:(NSString *)userID {
     [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
@@ -32,7 +41,6 @@
         }
         
         [self updateLabelsForCount];
-        
     }];
 }
 
@@ -133,7 +141,7 @@
     [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
         
         self.titleLabel.text = [responseObject objectForKey:@"full_name"];
-        
+         
         if([responseObject objectForKey:@"avatar"] != [NSNull null]){
             NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
             [self.image hnk_setImageFromURL:avatarURL];
@@ -248,6 +256,7 @@
 -(void)awakeFromNib {
     [super awakeFromNib];
 }
+
 -(void)prepareForReuse {
     [super prepareForReuse];
 }

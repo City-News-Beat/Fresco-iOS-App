@@ -49,7 +49,7 @@
         
         NSString *text = @"BREAKING: Bernie Sanders wins South Carolina Democratic primary, with an unheard of 130% of the popular vote";
         
-        self.payload = @{@"user-social-followed" : users, @"user-social-liked": gallery, @"user-news-story": story, @"user-dispatch-new-assignment": assignment, @"user-news-custom-push": text, @"user-dispatch-purchased" : paymentDictionary};
+        self.payload = @{followedNotification : users, likedNotification: gallery, userNewsStoryNotification : story, newAssignmentNotification : assignment, userNewsCustomNotification : text, purchasedContentNotification : paymentDictionary, repostedNotification : @"E5zM8Xpr8Rqa", commentedNotification : @"EB9a1eVR3AkZ"};
     }
     
     return self;
@@ -181,9 +181,15 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
+
+    
+//    NSString *cellKey = @""; //set from payload
     
     switch (indexPath.row) {
         case 0: {
+            
+//            cellKey = @"user-social-followed";
+            
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];            
             NSArray *users = [self.payload objectForKey:@"user-social-followed"];
@@ -194,11 +200,12 @@
             return cell;
         } break;
             
-            
         case 1: {
+            
+//            cellKey = @"user-social-liked";
+            
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
             NSArray *users = [self.payload objectForKey:@"user-social-followed"];
             cell.count = users.count;
             
@@ -207,8 +214,9 @@
             return cell;
         } break;
             
-            
         case 2: {
+            
+//            cellKey = @"user-news-story";
             
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -218,6 +226,9 @@
         } break;
             
         case 3: {
+            
+//            cellKey = @"user-dispatch-new-assignment";
+            
             NSString *cellIdentifier = @"assignmentNotificationCell";
             FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             [cell configureAssignmentCellWithID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
@@ -226,6 +237,9 @@
         } break;
             
         case 4: {
+            
+//            cellKey = @"user-dispatch-new-assignment";
+            
             NSString *cellIdentifier = @"assignmentNotificationCell";
             FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             [cell configureCameraCellWithAssignmentID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
@@ -233,6 +247,9 @@
             return cell;
             
         } case 5: {
+            
+//            cellKey = @"user-social-reposted";
+            
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             NSArray *users = [self.payload objectForKey:@"user-social-followed"];
@@ -240,7 +257,11 @@
             
             [cell configureUserRepostNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:2] galleryID:[self.payload objectForKey:@"user-social-liked"]];
             return cell;
+            
         } case 6: {
+            
+//            cellKey = @"user-social-commented";
+            
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             NSArray *users = [self.payload objectForKey:@"user-social-followed"];
@@ -249,6 +270,9 @@
             return cell;
         
         } case 7: {
+            
+//            cellKey = @"user-social-commented";
+            
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             NSArray *users = [self.payload objectForKey:@"user-social-followed"];
@@ -257,6 +281,9 @@
             return cell;
             
         } case 8: {
+            
+//            cellKey = @"user-social-commented";
+
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             NSArray *users = [self.payload objectForKey:@"user-social-followed"];
@@ -265,6 +292,9 @@
             return cell;
             
         } case 9: {
+            
+//            cellKey = @"user-news-custom-push";
+            
             NSString *cellIdentifier = @"textNotificationCell";
             FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
@@ -272,12 +302,18 @@
             return cell;
 
         } case 10: {
+            
+//            cellKey = @"user-dispatch-purchased";
+
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
             [cell configurePhotoPurchasedWithPostID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"post_ids"] outletID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"outlet_id"] price:@"$20" paymentMethod:@"VISA (4452)"];
             return cell;
         } case 11: {
+            
+//            cellKey = @"user-dispatch-purchased";
+            
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
@@ -289,6 +325,20 @@
         default:
             break;
     }
+    
+    
+    
+    
+    
+//    FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"notificationCell"];
+//    [cell configureCellForType:cellKey userID:[self.payload objectForKey:@"user-social-followed"]];
+//    return cell;
+    
+    
+    
+    
+    
+    
 
     
 //        } break;
@@ -407,7 +457,15 @@
 ////        cell.backgroundColor = [UIColor frescoBackgroundColorDark];
 ////    }
 //    
-//    
+//
+    
+    
+    
+    
+    
+    
+    
+    
     UITableViewCell *cell;
     return cell;
 }
