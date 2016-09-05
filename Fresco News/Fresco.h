@@ -179,7 +179,7 @@ typedef void(^FRSAPISuccessBlock)(BOOL sucess, NSError *error);
 typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error);
 
 
-/*
+/*FRS
     Notification types
  */
 

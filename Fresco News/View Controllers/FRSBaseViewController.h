@@ -36,13 +36,21 @@
 
 
 /* DEEP LINKS */
+-(void)segueToPhotosOfTheDay:(NSArray *)postIDs;
+-(void)segueToTodayInNews:(NSArray *)galleryIDs;
+-(void)segueToTaxInfo;
+-(void)segueToIDInfo;
+
+-(void)segueToGallery:(NSString *)galleryID;
+-(void)segueToStory:(NSString *)storyID;
+-(void)segueHome;
+
+
 -(void)segueToUser:(NSString *)userID;
 -(void)segueToPost:(NSString *)postID;
--(void)segueToStory:(NSString *)storyID;
--(void)segueToGallery:(NSString *)galleryID;
 -(void)segueToAssignmentWithID:(NSString *)assignmentID;
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID;
--(void)segueHome;
 -(void)segueToDebitCard;
+
 
 @end

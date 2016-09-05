@@ -39,17 +39,47 @@
         self.tabBarController.tabBarItem.title = @"";
         
         self.payload = [[NSDictionary alloc] init];
-        NSArray *users = @[@"ewOo1Pr8KvlN", @"2vRW0Na8oEgQ", @"Ym4x8rK0Jjpd"];
-        NSString *gallery = @"arYd0y5Q0Dp5";
-        NSString *story = @"7mr93zRx3BlY";
-        NSString *assignment = @"xLJE0QzW1G5B";
-        NSString *post = @"LJx3jeQg1kpN";
-        NSString *outlet = @"7ewm8YP3GL5x";
-        NSDictionary *paymentDictionary = @{@"outlet_id": outlet, @"post_ids": post};
         
-        NSString *text = @"BREAKING: Bernie Sanders wins South Carolina Democratic primary, with an unheard of 130% of the popular vote";
         
-        self.payload = @{followedNotification : users, likedNotification: gallery, userNewsStoryNotification : story, newAssignmentNotification : assignment, userNewsCustomNotification : text, purchasedContentNotification : paymentDictionary, repostedNotification : @"E5zM8Xpr8Rqa", commentedNotification : @"EB9a1eVR3AkZ"};
+        NSArray *post_ids    = @[@"LJx3jeQg1kpN", @"5xQ0WoLw0lX9", @"EL2Z3meP39jR", @"6DrY8KYM1KBP", @"Qz7J07vY8dDZ"];
+        NSArray *gallery_ids = @[@"YQVr1ElM05qP", @"dYOJ8vjz8ML4", @"YZb485DD3xoV", @"gBbY3oPB8PM6"];
+        NSString *gallery_id = @"arYd0y5Q0Dp5";
+        NSString *story_id   = @"7mr93zRx3BlY";
+        NSString *empty = @"";
+        NSArray *user_ids = @[@"ewOo1Pr8KvlN", @"2vRW0Na8oEgQ", @"Ym4x8rK0Jjpd"];
+
+        NSString *assignment_id = @"xLJE0QzW1G5B";
+
+        NSString *outlet_id = @"7ewm8YP3GL5x";
+        
+        NSString *body = @"BREAKING: Bernie Sanders wins South Carolina Democratic primary, with an unheard of 130% of the popular vote";
+
+
+        self.payload = @{
+                         
+                         photoOfDayNotification : post_ids,
+                         todayInNewsNotification : gallery_ids,
+                         userNewsGalleryNotification : gallery_id,
+                         userNewsStoryNotification : story_id,
+                         userNewsCustomNotification : body,
+                         
+                         followedNotification : user_ids,
+                         likedNotification : @[user_ids, gallery_id],
+                         repostedNotification : @[user_ids, gallery_id],
+                         commentedNotification : @[user_ids, gallery_id],
+                         
+                         newAssignmentNotification : assignment_id,
+                         
+                         purchasedContentNotification : @[outlet_id, post_ids],
+                         paymentExpiringNotification : empty,
+                         paymentSentNotification: empty,
+                         paymentDeclinedNotification : empty,
+                         taxInfoRequiredNotification : empty,
+                         taxInfoProcessedNotification : empty,
+                         taxInfoDeclinedNotification : empty,
+                         taxInfoProcessedNotification : empty,
+                         
+                         };
     }
     
     return self;
@@ -308,7 +338,8 @@
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
-            [cell configurePhotoPurchasedWithPostID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"post_ids"] outletID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"outlet_id"] price:@"$20" paymentMethod:@"VISA (4452)"];
+            
+//            [cell configurePhotoPurchasedWithPostID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"post_ids"] outletID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"outlet_id"] price:@"$20" paymentMethod:@"VISA (4452)"];
             return cell;
         } case 11: {
             
@@ -317,7 +348,7 @@
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
-            [cell configureVideoPurchasedWithPostID:/*[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"post_ids"] */ @"rX50krpn8oBj" outletID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"outlet_id"] price:@"$50" paymentMethod:@"VISA (4452)"];
+//            [cell configureVideoPurchasedWithPostID:/*[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"post_ids"] */ @"rX50krpn8oBj" outletID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"outlet_id"] price:@"$50" paymentMethod:@"VISA (4452)"];
             return cell;
         }
             
@@ -325,147 +356,7 @@
         default:
             break;
     }
-    
-    
-    
-    
-    
-//    FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"notificationCell"];
-//    [cell configureCellForType:cellKey userID:[self.payload objectForKey:@"user-social-followed"]];
-//    return cell;
-    
-    
-    
-    
-    
-    
 
-    
-//        } break;
-//
-//        case 1: {
-//            NSString *cellIdentifier = @"notificationCell";
-//            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//            
-//            cell.titleLabel.text = @"Today in News";
-//            cell.bodyLabel.text  = @"My money's in that office, right? If she start giving me some bullshit about it ain't there, and we got to go.";
-//            cell.followButton.alpha = 0;
-//            cell.image.image = [UIImage imageNamed:@"apple-story-2"];
-//            
-//            [cell configureCell];
-//            
-//            return cell;
-//            
-//        } break;
-//            
-//        case 2: {
-//            
-//            NSString *cellIdentifier = @"notificationCell";
-//            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//            
-//            cell.titleLabel.text = @"You have $20 expiring soon";
-//            cell.bodyLabel.text  = @"Add a card by Tuesday to get paid";
-//            cell.followButton.alpha = 0;
-//            
-//            [cell configureCell];
-//            
-//            return cell;
-//
-//            
-//        } break;
-//            
-//        case 3: {
-//            
-//            NSString *cellIdentifier = @"textNotificationCell";
-//            FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//            
-//            cell.bodyLabel.text  = @"BREAKING: Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? Do you see a little Asian child with a blank expression on his face sitting outside on a mechanical helicopter that shakes when you put quarters in it? No? Well, that's what you see at a toy store. And you must think you're in a toy store, because you're here shopping for an infant named Jeb.";
-//            
-//            [cell configureCell];
-//            return cell;
-//
-//        } break;
-//            
-//        case 4: {
-//            
-//            NSString *cellIdentifier = @"assignmentNotificationCell";
-//            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//            
-//            cell.titleLabel.text  = @"Assignment: Raining Figs Over Tennessee";
-//            cell.bodyLabel.text = @"Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun. This should eventually tuncate after going over three lines maybe let's try and see if it truncates.";
-//            cell.backgroundColor = [UIColor frescoBackgroundColorDark];
-//            
-//            [cell configureCell];
-//            return cell;
-//
-//        } break;
-//            
-//        case 5: {
-//           
-//            NSString *cellIdentifier = @"assignmentNotificationCell";
-//            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//            
-//            
-//            //Hard coded for now, response will return assignment data
-//            cell.titleLabel.text  = @"Severe weather in New York";
-//            cell.bodyLabel.text = @"Fresco News seeks photos and steady videos (must be 20 to 60 seconds) of severe thunderstorms in NYC. Capture content anywhere within the set radius. Take shots from a variety of angles, getting wide, medium, and tight shots.";
-//            cell.backgroundColor = [UIColor frescoBackgroundColorDark];
-//            [cell.actionButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
-//
-//            [cell configureCell];
-//            return cell;
-//            
-//        } break;
-//            
-//        case 6: {
-//            
-//            NSString *cellIdentifier = @"notificationCell";
-//            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//            
-//            cell.titleLabel.text = @"Tax information needed";
-//            cell.bodyLabel.text  = @"You’ve made over $2,000 on Fresco! Please add your tax info soon to continue receiving payments.";
-//            cell.followButton.alpha = 0;
-//            cell.count = 0;
-//            cell.image.image = nil;
-//            
-//            [cell configureCell];
-//            
-//            return cell;
-//            
-//        } break;
-//            
-//        case 7: {
-//            NSString *cellIdentifier = @"notificationCell";
-//            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-//            
-//            cell.titleLabel.text = @"Your photo was purchased!";
-//            cell.bodyLabel.text  = @"WFLA purchased your photo! We’ve sent $20 to your Visa (3189).";
-//            cell.followButton.alpha = 0;
-//            cell.count = 0;
-//            cell.image.image = [UIImage imageNamed:@"apple-story-1"];
-//            [cell configureCell];
-//            
-//            return cell;
-//        } break;
-//            
-//        default:
-//            break;
-//    }
-//    
-//    
-////    if (cell.isRead) {
-////        cell.backgroundColor = [UIColor frescoBackgroundColorDark];
-////    }
-//    
-//
-    
-    
-    
-    
-    
-    
-    
-    
     UITableViewCell *cell;
     return cell;
 }

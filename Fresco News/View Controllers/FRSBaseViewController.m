@@ -14,6 +14,8 @@
 #import "FRSAssignmentsViewController.h"
 #import "FRSCameraViewController.h"
 #import "FRSDebitCardViewController.h"
+#import "FRSTaxInformationViewController.h"
+#import "FRSIdentityViewController.h"
 
 @interface FRSBaseViewController ()
 
@@ -113,6 +115,14 @@
 }
 
 #pragma mark - Deep Links
+
+-(void)segueToPhotosOfTheDay:(NSArray *)postIDs {
+    
+}
+
+-(void)segueToTodayInNews:(NSArray *)galleryIDs {
+    
+}
 
 -(void)segueToGallery:(NSString *)galleryID {
     
@@ -227,6 +237,16 @@
     [self.navigationController pushViewController:debitCardVC animated:YES];
 }
 
+-(void)segueToTaxInfo {
+    FRSTaxInformationViewController *taxVC = [[FRSTaxInformationViewController alloc] init];
+    [self.navigationController pushViewController:taxVC animated:YES];
+}
+
+-(void)segueToIDInfo {
+    FRSIdentityViewController *identityVC = [[FRSIdentityViewController alloc] init];
+    [self.navigationController pushViewController:identityVC animated:YES];
+
+}
 
 
 
