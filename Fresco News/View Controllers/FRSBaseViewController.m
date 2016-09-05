@@ -118,6 +118,9 @@
 
 -(void)segueToPhotosOfTheDay:(NSArray *)postIDs {
     
+    
+    
+    
 }
 
 -(void)segueToTodayInNews:(NSArray *)galleryIDs {

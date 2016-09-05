@@ -333,22 +333,22 @@
 
         } case 10: {
             
-//            cellKey = @"user-dispatch-purchased";
-
+            //Photos of the Day
+            
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
             
-//            [cell configurePhotoPurchasedWithPostID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"post_ids"] outletID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"outlet_id"] price:@"$20" paymentMethod:@"VISA (4452)"];
+
             return cell;
         } case 11: {
             
-//            cellKey = @"user-dispatch-purchased";
+            //Today in News
             
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
-//            [cell configureVideoPurchasedWithPostID:/*[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"post_ids"] */ @"rX50krpn8oBj" outletID:[[self.payload objectForKey:@"user-dispatch-purchased"] objectForKey:@"outlet_id"] price:@"$50" paymentMethod:@"VISA (4452)"];
+
             return cell;
         }
             
@@ -413,10 +413,13 @@
             break;
             
         case 10:
-            [self segueToDebitCard];
+//            [self segueToDebitCard];
+            [self segueToPhotosOfTheDay:[self.payload objectForKey:photoOfDayNotification]];
+            
             break;
         case 11:
-            [self segueToPost:@"rX50krpn8oBj"];
+
+            [self segueToTodayInNews:[self.payload objectForKey:todayInNewsNotification]];
             break;
             
         default:
