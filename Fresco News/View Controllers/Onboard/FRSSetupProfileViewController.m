@@ -176,6 +176,9 @@
             profileController.editedProfile = true;
             //profileController.profileIV.image = self.profileIV.image;
             [[self navigationController] popToRootViewControllerAnimated:NO];
+            
+            [FRSAPIClient sharedClient].authenticatedUser.bio = self.bioTV.text;
+
         }else{
             [self.navigationController.view.layer addAnimation:transition forKey:nil];
             [[self navigationController] setNavigationBarHidden:YES];

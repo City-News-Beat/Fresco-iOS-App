@@ -640,10 +640,22 @@
     
     //    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     
-    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin-4, 65, 150, self.profileContainer.frame.size.width - (origin-4) - 16)];
     
-    //self.bioLabel.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
-    self.bioLabel.backgroundColor = [UIColor frescoOrangeColor];
+    
+    CGFloat width = 0;
+    if (IS_IPHONE_5) {
+        width = 176;
+    } else if (IS_IPHONE_6) {
+        width = 231;
+    } else { //6+
+        width = 270;
+    }
+    
+    
+    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 65, width, self.profileContainer.frame.size.width - (origin-4) - 16)];
+    
+    self.bioLabel.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
+    self.bioLabel.backgroundColor = [UIColor redColor];
     self.bioLabel.textColor = [UIColor whiteColor];
     self.bioLabel.font = [UIFont systemFontOfSize:15 weight:-300];
     //    [self.bioLabel sizeToFit];
@@ -1122,6 +1134,7 @@
 
         self.bioLabel.text = user.bio;
         NSLog(@"USER'S BIO: %@", user.bio);
+        
         [self.bioLabel sizeToFit];
         
         //[self.profileContainer setFrame:CGRectMake(self.profileContainer.frame.origin.x, self.profileContainer.frame.origin.y, self.profileContainer.frame.size.width,269.5 + self.bioLabel.frame.size.height)];
