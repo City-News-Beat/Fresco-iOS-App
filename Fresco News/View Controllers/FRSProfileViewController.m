@@ -170,6 +170,10 @@
     }else{
         self.editedProfile = false;
     }
+    
+    NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
+    self.bioLabel.frame = CGRectMake(origin-4, 65, 150, self.profileContainer.frame.size.width - (origin-4) - 16);
+    [self.bioLabel sizeToFit];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
