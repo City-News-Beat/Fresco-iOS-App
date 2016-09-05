@@ -100,9 +100,17 @@
         //Send image to backend and set the url to the avatar :)
         NSData *imageData = UIImageJPEGRepresentation(self.profileIV.image, 1.0);
         
+
         [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint withParameters:@{@"avatar":imageData} completion:^(id responseObject, NSError *error) {
             NSLog(@"Response Object: %@", responseObject);
             NSLog(@"Error: %@", error);
+            
+            if (!error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[FRSAPIClient sharedClient] authenticatedUser].profileImage = self.profileIV.image;
+                    [[FRSAPIClient sharedClient] authenticatedUser].profileImage = [responseObject valueForKey:@"avatar"];
+                });
+            }
         }];
         //profileInfo[@"avatar"] = [NSURL URLWithDataRepresentation:data relativeToURL:[[NSURL alloc] init]];
     }
@@ -229,6 +237,7 @@
     }}
 
 -(void)dismiss{
+    [self addUserProfile]; // Back button will auto save user changes (better ux) cc:imogen
     [self.navigationController popViewControllerAnimated:YES];
     [self.backTapButton removeFromSuperview];
 }
@@ -633,9 +642,12 @@
     }
     
     if (selectedImage){
-        self.profileIV.image = selectedImage;
-        self.doneButton.userInteractionEnabled = YES;
-        [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.profileIV.image = selectedImage;
+            self.doneButton.userInteractionEnabled = YES;
+            [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        });
+
     }
     
     [self dismissViewControllerAnimated:YES completion:^{

@@ -155,25 +155,25 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
-    
-    if(!self.editedProfile){
-        if (!_representedUser) {
-            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-            self.authenticatedProfile = TRUE;
-            [self configureWithUser:_representedUser];
-        }else{
-            [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
-                _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                [self configureWithUser:_representedUser];
-            }];
-        }
-    }else{
-        self.editedProfile = false;
-    }
-    
-    NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
-    self.bioLabel.frame = CGRectMake(origin-4, 65, 150, self.profileContainer.frame.size.width - (origin-4) - 16);
-    [self.bioLabel sizeToFit];
+//    
+//    if(!self.editedProfile){
+//        if (!_representedUser) {
+//            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+//            self.authenticatedProfile = TRUE;
+//            [self configureWithUser:_representedUser];
+//        }else{
+//            [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
+//                _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+//                [self configureWithUser:_representedUser];
+//                
+//                NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
+//                self.bioLabel.frame = CGRectMake(origin-4, 65, 150, self.profileContainer.frame.size.width - (origin-4) - 16);
+//                [self.bioLabel sizeToFit];
+//            }];
+//        }
+//    }else{
+//        self.editedProfile = false;
+//    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -418,23 +418,23 @@
         self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //?
     }else{
+        
         if(![self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]){
-            self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
+            
+            self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
             self.followBarButtonItem.tintColor = [UIColor whiteColor];
             
-            
             dispatch_async(dispatch_get_main_queue(), ^{
-                
-                NSLog(@"FOLLOWING: %d", [[_representedUser valueForKey:@"following"] boolValue]);
                 
                 if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
                     [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
                 } else {
                     [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
                 }
+                
+                self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
             });
             
-            self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
         }
         [self configureBackButtonAnimated:true];
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -1000,9 +1000,11 @@
         if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
             [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
             NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
+            
         } else {
             [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
             [self unfollowUser];
+            
         }
     }];
 }
@@ -1019,6 +1021,8 @@
             [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
         }
         NSLog(@"UNFOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
+        
+        
     }];
 }
 

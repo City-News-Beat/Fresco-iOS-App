@@ -1061,8 +1061,9 @@
             
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:currentPost.creator];
-                NSLog(@"CURRENTPOST.CREATOR.FOLLOWING = %@", currentPost.creator.following);
+                
+                FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
+                NSLog(@"CURRENTPOST.CREATOR.FOLLOWING = %@", (FRSUser *)currentPost.creator.following);
                 
                 [self.delegate.navigationController pushViewController:userViewController animated:YES];
             });

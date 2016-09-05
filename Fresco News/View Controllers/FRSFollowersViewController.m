@@ -364,6 +364,8 @@
 
 -(void)segueToUserProfile:(FRSUser *)user {
     FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:user];
+    NSLog(@"USER.FOLLOWING : %@", user.following);
+    
     [self.navigationController pushViewController:userViewController animated:YES];
 }
 
@@ -493,10 +495,13 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if(self.tableView == tableView){
-        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:self.followerArray[indexPath.row]];
+        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:((FRSUser *)self.followingArray[indexPath.row])];
         [self.navigationController pushViewController:controller animated:TRUE];
     } else {
-        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:self.followingArray[indexPath.row]];
+        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:((FRSUser *)self.followingArray[indexPath.row])];
+        
+        NSLog(@"FOLLOWING: %@", ((FRSUser *)self.followingArray[indexPath.row]).following);
+        
         [self.navigationController pushViewController:controller animated:TRUE];
     }
 }
