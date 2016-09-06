@@ -16,7 +16,10 @@
 
 @property (strong, nonatomic) UITableView *tableView;
 
-@property (strong, nonatomic) UIImageView *errorImageView;
+@property (strong, nonatomic) UIImageView *usernameErrorImageView;
+@property (strong, nonatomic) UIImageView *emailErrorImageView;
+@property (strong, nonatomic) UIImageView *passwordErrorImageView;
+
 
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *email;
@@ -24,9 +27,15 @@
 
 @property (strong, nonatomic) UIButton *rightAlignedButton;
 
+//Valid is a general check that checks character count, special characters, etc.
 @property BOOL usernameIsValid;
 @property BOOL emailIsValid;
 @property BOOL passwordIsValid;
+
+//Confirmed checks if the username/email match the strings on the API
+@property BOOL usernameIsConfirmed;
+@property BOOL emailIsConfirmed;
+@property BOOL passwordIsConfirmed;
 
 @end
 
@@ -55,6 +64,10 @@
     [self.tableView setSeparatorColor:[UIColor clearColor]];
 
     [self.view addSubview:self.tableView];
+    
+    self.usernameIsValid = NO;
+    self.emailIsValid = NO;
+    self.passwordIsValid = NO;
 }
 
 
@@ -118,6 +131,9 @@
             cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
             cell.textField.delegate = self;
+            
+            [self addErrorViewAtYPos:108 withTextField:cell.textField];
+
 
             break;
         case 2:
@@ -128,6 +144,8 @@
             cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
             cell.textField.delegate = self;
+            
+            [self addErrorViewAtYPos:153 withTextField:cell.textField];
 
             break;
         case 3:
@@ -136,6 +154,8 @@
             cell.textField.tag = 3;
             [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
             cell.textField.delegate = self;
+            
+            [self addErrorViewAtYPos:196 withTextField:cell.textField];
             
             break;
         case 4:
@@ -156,54 +176,134 @@
 
 -(void)disableAccount {
     
+    self.usernameIsConfirmed = NO;
+    self.emailIsConfirmed    = NO;
+    self.passwordIsConfirmed = NO;
+    
     //These checks should return when the API responds in the block below
     if (![[[FRSAPIClient sharedClient].authenticatedUser.username lowercaseString] isEqualToString:[self.username lowercaseString]]) {
-        [self addErrorViewAtYPos:108];
+        
+        self.usernameErrorImageView.alpha = 1;
+        self.usernameIsConfirmed = NO;
+
         [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.rightAlignedButton.userInteractionEnabled = NO;
+    } else {
+        self.usernameIsConfirmed = YES;
+
     }
     
     if (![[[FRSAPIClient sharedClient].authenticatedUser.email lowercaseString] isEqualToString:[self.email lowercaseString]]) {
-        [self addErrorViewAtYPos:153];
+        self.emailIsConfirmed = NO;
+
+        self.emailErrorImageView.alpha = 1;
+        
         [self.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.rightAlignedButton.userInteractionEnabled = NO;
+    } else {
+        self.emailIsConfirmed = YES;
+
     }
     
-    if (self.password) { //if responseCode == 403
-        [self addErrorViewAtYPos:196];
-    }
+    //    if (self.password) { //if responseCode == 403 || 401
+    //        self.passwordErrorImageView.alpha = 1;
+    //        self.passwordIsConfirmed = NO;
+    
+    //    } else {
+    //        self.passwordIsConfirmed = YES;
+    
+    //    }
 
+    
+    if (self.usernameIsConfirmed && self.emailIsConfirmed /* && self.passwordIsConfirmed */) {
+        [self logout];
+    }
     
     
     //Endpoint is not live, waiting on Mike
     [[FRSAPIClient sharedClient] disableAccountWithDigestion:@{@"password" : self.password} completion:^(id responseObject, NSError *error) {
         
-        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-        NSInteger responseCode = response.statusCode;
-        NSLog(@"ERROR: %ld", (long)responseCode);
+//        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+//        NSInteger responseCode = response.statusCode;
+//        NSLog(@"ERROR: %ld", (long)responseCode);
         
     }];
 }
 
 
+-(void)logout {
+    
+    [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
+    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+    
+    [SSKeychain deletePasswordForService:serviceName account:clientAuthorization];
+    
+    [NSUserDefaults resetStandardUserDefaults];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+    
+    [self popViewController];
+    
+    [self.tabBarController setSelectedIndex:0];
+}
+
 #pragma mark - Error
 
--(void)addErrorViewAtYPos:(CGFloat)yPos {
-    self.errorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
-    self.errorImageView.frame = CGRectMake(self.view.frame.size.width - 34, yPos, 24, 24);
-    self.errorImageView.alpha = 1; // 0 when animating
+-(void)addErrorViewAtYPos:(CGFloat)yPos withTextField:(UITextField *)textField {
     
-    [self.tableView addSubview:self.errorImageView];
+    if (textField.tag == 1) {
+        self.usernameErrorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.usernameErrorImageView.frame = CGRectMake(self.view.frame.size.width - 34, yPos, 24, 24);
+        self.usernameErrorImageView.alpha = 0; // 0 when animating
+        [self.tableView addSubview:self.usernameErrorImageView];
+        
+    } else if (textField.tag == 2) {
+        self.emailErrorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.emailErrorImageView.frame = CGRectMake(self.view.frame.size.width - 34, yPos, 24, 24);
+        self.emailErrorImageView.alpha = 0; // 0 when animating
+        [self.tableView addSubview:self.emailErrorImageView];
+        
+    } else if (textField.tag == 3) {
+        self.passwordErrorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.passwordErrorImageView.frame = CGRectMake(self.view.frame.size.width - 34, yPos, 24, 24);
+        self.passwordErrorImageView.alpha = 0; // 0 when animating
+        [self.tableView addSubview:self.passwordErrorImageView];
+        
+    }
 }
 
 
 #pragma mark - UITextField Deleagte
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField {
-//    textField.text = 0;
-//    self.errorImageView.alpha = 0;
-//    self.errorImageView = nil;
-//    [self.errorImageView removeFromSuperview];
+
+    if (textField.tag == 1) {
+        
+        if (self.usernameErrorImageView.alpha == 1) {
+            textField.text = @"";
+            self.usernameErrorImageView.alpha = 0;
+        }
+
+    } else if (textField.tag == 2) {
+
+        if (self.emailErrorImageView.alpha == 1) {
+            textField.text = @"";
+            self.emailErrorImageView.alpha = 0;
+        }
+        
+    } else if (textField.tag == 3) {
+        
+        textField.text = @"";
+        self.passwordErrorImageView.alpha = 0;
+
+    }
 }
 
 

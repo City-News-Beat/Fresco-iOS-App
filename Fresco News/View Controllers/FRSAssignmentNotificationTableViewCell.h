@@ -10,10 +10,7 @@
 
 @interface FRSAssignmentNotificationTableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel  *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel  *bodyLabel;
-@property (weak, nonatomic) IBOutlet UIButton *actionButton;
-
--(void)configureCell;
+-(void)configureAssignmentCellWithID:(NSString *)assignmentID;
+-(void)configureCameraCellWithAssignmentID:(NSString *)assignmentID;
 
 @end

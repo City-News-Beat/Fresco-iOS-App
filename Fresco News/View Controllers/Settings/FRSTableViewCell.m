@@ -60,9 +60,11 @@
 @property BOOL didToggleTwitter;
 @property BOOL didToggleFacebook;
 
-@property (strong, nonatomic) NSDictionary *currentUser;
+@property (strong, nonatomic) NSDictionary *currentUserDict;
 @property (strong, nonatomic) UIButton *followingButton;
 @property BOOL following;
+
+@property (strong, nonatomic) FRSUser *currentUser;
 
 @end
 
@@ -548,9 +550,7 @@
 }
 
 -(void)configureMapCell {
-    
-    
-    
+
 //    MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
 //    mapView.delegate = self;
 //    mapView.zoomEnabled =
@@ -583,6 +583,14 @@
 
 -(void)configureSearchSeeAllCellWithTitle:(NSString *)title {
     
+    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
+    [self addSubview:topLine];
+    
+    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 44, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    bottomLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00];
+    [self addSubview:bottomLine];
+    
     self.defaultTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, self.frame.size.height)];
     self.defaultTitleLabel.text = title;
     self.defaultTitleLabel.textAlignment = NSTextAlignmentCenter;
@@ -593,13 +601,22 @@
 }
 
 
--(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing user:(NSDictionary *)user {
+-(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing userDict:(NSDictionary *)userDict user:(FRSUser *)user {
+    
+    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
+    [self addSubview:topLine];
+    
+    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 56, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    bottomLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00];
+    [self addSubview:bottomLine];
     
     UIImageView *profileIV = [[UIImageView alloc] init];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
     profileIV.layer.cornerRadius = 16;
     profileIV.clipsToBounds = YES;
-    [profileIV hnk_setImageFromURL:profile];
+    
+    [profileIV hnk_setImageFromURL:(NSURL *)profile];
     
     profileIV.backgroundColor = [UIColor frescoLightTextColor];
     NSLog(@"profile image URL: %@", profile);
@@ -631,10 +648,14 @@
         usernameLabel.alpha = 0;
     }
     
-    CGSize nameLabelSize = [usernameLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont notaMediumWithSize:17]}];
-    if (nameLabelSize.width > usernameLabel.bounds.size.width) {
-
+    if ([nameLabel.text isEqualToString: @""]) {
+        usernameLabel.frame = CGRectMake(64 + nameLabel.frame.size.width, 23, self.frame.size.width - 64, 14);
     }
+    
+//    CGSize nameLabelSize = [usernameLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont notaMediumWithSize:17]}];
+//    if (nameLabelSize.width > usernameLabel.bounds.size.width) {
+//
+//    }
     
     [self addSubview:usernameLabel];
 
@@ -649,24 +670,29 @@
         self.followingButton.tintColor = [UIColor frescoOrangeColor];
     } else {
         [self.followingButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
-        self.followingButton.tintColor = [UIColor frescoMediumTextColor];
+        self.followingButton.tintColor = [UIColor blackColor];
     }
 
-    self.currentUser = user;
+    self.currentUserDict = userDict;
     self.following = isFollowing;
+    self.currentUser = user;
 
 }
 
 -(void)follow {
     //Used to pass in current user
-    [self follow:self.currentUser following:self.following];
+    [self follow:self.currentUserDict user:self.currentUser following:self.following];
 }
 
 
--(void)follow:(NSDictionary *)user following:(BOOL)following {
+-(void)follow:(NSDictionary *)userDict user:(FRSUser *)user following:(BOOL)following {
     
-    FRSUser *currentUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
-    [self.delegate reloadDataDelegate];
+    FRSUser *currentUser;
+    if (userDict) {
+         currentUser = [FRSUser nonSavedUserWithProperties:userDict context:[[FRSAPIClient sharedClient] managedObjectContext]];
+    } else {
+        currentUser = user;
+    }
 
     if (following) {
         NSLog(@"USER IS FOLLOWING, UNFOLLOW AND CHANGE ICON");
@@ -699,13 +725,21 @@
         }
         
         [self.followingButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
-        self.followingButton.tintColor = [UIColor frescoMediumTextColor];
+        self.followingButton.tintColor = [UIColor blackColor];
         self.following = NO;
     }];
 }
 
 
 -(void)configureSearchStoryCellWithStoryPhoto:(NSURL *)storyPhoto storyName:(NSString *)nameString {
+    
+    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
+    [self addSubview:topLine];
+    
+    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 56, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    bottomLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00];
+    [self addSubview:bottomLine];
     
     UIImageView *storyPreviewIV = [[UIImageView alloc] init];
     storyPreviewIV.frame = CGRectMake(16, 12, 32, 32);

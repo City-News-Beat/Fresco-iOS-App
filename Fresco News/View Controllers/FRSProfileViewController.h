@@ -23,13 +23,12 @@
 @property (nonatomic, retain) UIScrollView *tablePageScroller;
 @property (nonatomic, retain) UITableView *contentTable;
 -(instancetype)initWithUser:(FRSUser *)user;
--(instancetype)initWithUserName:(NSString *)userName;
+-(instancetype)initWithUserID:(NSString *)userName;
 
 -(void)loadAuthenticatedUser;
 -(FRSUser *)authenticatedUser;
 @property (nonatomic, retain) FRSUser *representedUser;
 @property BOOL authenticatedProfile;
--(instancetype)initWithDefaultUser;
 @property (strong, nonatomic) UILabel *bioLabel;
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *locationLabel;

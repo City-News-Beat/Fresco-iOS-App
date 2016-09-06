@@ -18,6 +18,7 @@
 //#import <MagicalRecord/MagicalRecord.h>
 #import "FRSAwkwardView.h"
 #import "DGElasticPullToRefresh.h"
+#import "FRSAlertView.h"
 
 
 
@@ -32,6 +33,11 @@
 @property BOOL userExtended;
 @property BOOL storyExtended;
 @property BOOL onlyDisplayGalleries;
+
+@property NSInteger usersDisplayed;
+@property NSInteger storiesDisplayed;
+
+@property (strong, nonatomic) FRSAlertView *alert;
 
 @end
 
@@ -52,13 +58,26 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
     [self.searchTextField resignFirstResponder];
+    self.shouldUpdateOnReturn = NO;
+}
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    if (self.shouldUpdateOnReturn) {
+        [self performSearchWithQuery:self.searchTextField.text];
+    } else {
+        self.shouldUpdateOnReturn = NO;
+    }
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
 }
 
 -(void)dismiss{
@@ -143,32 +162,32 @@
 
 -(void)showClearButton {
     
-    //Scale clearButton up with a little jiggle
-    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
-        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
+//    //Scale clearButton up with a little jiggle
+//    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
+//        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
+//    } completion:^(BOOL finished) {
+//        [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
             self.clearButton.transform = CGAffineTransformMakeScale(1, 1);
-        } completion:nil];
-    }];
+//        } completion:nil];
+//    }];
     
-    //Fade in clearButton over total duration of scale
-    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//    //Fade in clearButton over total duration of scale
+//    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.clearButton.alpha = 1;
-    } completion:nil];
+//    } completion:nil];
 }
 
 -(void)hideClearButton {
     
-    //Scale clearButton down with anticipation
-    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
-        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
+//    //Scale clearButton down with anticipation
+//    [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseIn animations:^{
+//        self.clearButton.transform = CGAffineTransformMakeScale(1.15, 1.15);
+//    } completion:^(BOOL finished) {
+//        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
             self.clearButton.transform = CGAffineTransformMakeScale(0.0001, 0.0001); //iOS does not scale to (0,0) for some reason :(
             self.clearButton.alpha = 0;
-        } completion:nil];
-    }];
+//        } completion:nil];
+//    }];
 }
 
 #pragma mark - UITextField Delegate
@@ -201,6 +220,9 @@
 }
 
 -(void)performSearchWithQuery:(NSString *)query {
+    
+    _storyExtended = NO;
+    _userExtended  = NO;
     
     if ([query isEqualToString:@""]) {
         return;
@@ -255,6 +277,11 @@
         userIndex    = 2;
         storyIndex   = 0;
         galleryIndex = 1;
+    } else if (self.users.count != 0 && self.stories.count == 0 && self.galleries.count == 0) { //Only users are returned
+        self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -56, 0);
+        userIndex    = 0;
+        storyIndex   = 1;
+        galleryIndex = 2;
     }
     
     //If no stories are returnd, swap the indicies of galleries and stories
@@ -262,6 +289,11 @@
         userIndex    = 0;
         storyIndex   = 2;
         galleryIndex = 1;
+    } else if (self.stories.count != 0 && self.users.count == 0 && self.galleries.count == 0) { //Only stories are returned
+        self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -56, 0);
+        userIndex    = 1;
+        storyIndex   = 0;
+        galleryIndex = 2;
     }
     
     //If users, stories, and galleries are returned
@@ -274,11 +306,25 @@
     //If users are returned with galleries
     if (self.users.count != 0 && self.galleries.count != 0 && self.stories.count == 0) {
         self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -67, 0);
+        userIndex    = 0;
+        storyIndex   = 2;
+        galleryIndex = 1;
     }
     
     //If stories are returned with galleries
-    if (self.stories.count != 0 && self.galleries.count != 0 && self.stories.count == 0) {
+    if (self.stories.count != 0 && self.galleries.count != 0 && self.users.count == 0) {
         self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -68, 0);
+        userIndex    = 2;
+        storyIndex   = 0;
+        galleryIndex = 1;
+    }
+    
+    //If users are returned with stories
+    if (self.stories.count != 0 && self.users.count != 0 && self.galleries.count == 0) {
+        self.tableView.contentInset = UIEdgeInsetsMake(-17, 0, -56, 0);
+        userIndex    = 0;
+        storyIndex   = 1;
+        galleryIndex = 2;
     }
 }
 
@@ -289,7 +335,16 @@
     });
 }
 -(void)searchError:(NSError *)error {
-    NSLog(@"SEARCH ERROR: %@", error);
+
+    if (error.code == -1009) {
+        NSLog(@"Unable to connect.");
+        self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+        [self.alert show];
+        return;
+    } else { //300, 400, 500 should return this alert
+        self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        [self.alert show];
+    }
 }
 
 -(void)configureNoResults {
@@ -309,6 +364,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.bounces = YES;
+    self.tableView.separatorColor = [UIColor clearColor];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.tableView];
@@ -327,17 +383,11 @@
     if (_galleries && ![_galleries isEqual:[NSNull null]]) {
         numberOfSections++;
     }
-    NSLog(@"number of sections: %d", numberOfSections);
+
     return numberOfSections;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    
-    NSLog(@"stories.count = %lu", self.stories.count);
-    NSLog(@"users.count = %lu", self.users.count);
-    NSLog(@"galleries.count = %lu", self.galleries.count);
-    
-    
     
     if (section == userIndex) {
         
@@ -383,7 +433,6 @@
         return 0; //Will never get called
     }
     if (section == galleryIndex) {
-        NSLog(@"GALLERIES.COUNT = %lu", (unsigned long)self.galleries.count);
         return self.galleries.count;
     }
     
@@ -404,25 +453,19 @@
         if (indexPath.row == 3 && !_storyExtended) {
             return 44;
         }
-        if (indexPath.row == 4) {
-            return 12;
-        }
+
         return 56;
     }
-    else if (indexPath.section == userIndex) {
+    
+    if (indexPath.section == userIndex) {
 
         if (_users.count <= 0) {
             return 0;
         }
-        if (indexPath.row == 3 && !_storyExtended) {
+        if (indexPath.row == 3 && !_userExtended) {
             return 44;
         }
-        if (indexPath.row == 4) {
-            return 12;
-        }
-        if (indexPath.row == 5) {
-            return 24;
-        }
+
         return 56;
     }
     else {
@@ -439,15 +482,15 @@
     return 0;
 }
 
--(void)pushStoryView:(NSString *)storyID {
+-(void)pushStoryView:(NSString *)storyID inRow:(NSInteger)row {
     NSManagedObjectContext *context = [[FRSAPIClient sharedClient] managedObjectContext];
     FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:context];
 
     story.uid = storyID;
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
     
-    if (self.stories[0][@"title"] && ![self.stories[0][@"title"] isEqual:[NSNull null]]) {
-        detailView.title = self.stories[0][@"title"];
+    if (self.stories[row][@"title"] && ![self.stories[row][@"title"] isEqual:[NSNull null]]) {
+        detailView.title = self.stories[row][@"title"];
     }
     detailView.navigationController = self.navigationController;
     [self.navigationController pushViewController:detailView animated:YES];
@@ -566,7 +609,7 @@
             username = user[@"username"];
         }
         
-        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] user:self.users[indexPath.row]];
+        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
         
         return cell;
     }
@@ -576,26 +619,30 @@
             return 0;
         }
         
-        if (indexPath.row == 3) {
+        if (indexPath.row == 3 && !_storyExtended) {
             [cell configureSearchSeeAllCellWithTitle:[NSString stringWithFormat:@"SEE ALL %lu STORIES", self.stories.count]];
             return cell;
         }
         
-        if (indexPath.row == self.stories.count + 1) {
+        if (indexPath.row == self.stories.count + 1 && !_storyExtended) {
             [cell configureEmptyCellSpace:NO];
             return cell;
         }
         
-        NSDictionary *story = self.stories[0];
+        NSDictionary *story = self.stories[indexPath.row];
         NSURL *photo;
         
         if ([story[@"thumbnails"] count] > 0) {
-            photo = [NSURL URLWithString:story[@"thumbnails"][0][@"image"]];
+            NSString *urlString = story[@"thumbnails"][0][@"image"];
+            if (urlString != nil) {
+                photo = [NSURL URLWithString:urlString];
+            }
         }
         
         NSString *title = @" ";
         if (story[@"title"] && ![story[@"title"] isEqual:[NSNull null]]) {
             title = story[@"title"];
+            NSLog(@"title = %@", title);
         }
         
         [cell configureSearchStoryCellWithStoryPhoto:photo storyName:title];
@@ -608,7 +655,7 @@
         if (!cell) {
             cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:galleryIdentifier];
         }
-        cell.delegate = self;
+//        cell.delegate = self;
         cell.navigationController = self.navigationController;
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -636,8 +683,8 @@
 }
 
 -(void)reloadDataDelegate {
-//    [self.tableView reloadData];
-
+    [self reloadData];
+    [self performSearchWithQuery:self.searchTextField.text];
 }
 
 -(void)showShareSheetWithContent:(NSArray *)content {
@@ -670,15 +717,35 @@
             return;
         }
         
+        if (indexPath.row == 3 && !_userExtended) { // see all users cell
+            _userExtended = YES;
+            [tableView reloadData];
+            
+            return;
+        }
+        
         NSDictionary *user = self.users[indexPath.row];
         FRSUser *userObject = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:userObject];
         [self.navigationController pushViewController:controller animated:TRUE];
+        
+//        self.shouldUpdateOnReturn = YES;
     }
     
     if (indexPath.section == storyIndex) {
+        
+        if (indexPath.row == 3 && !_storyExtended) { // see all stories cell
+            
+            _storyExtended = YES;
+            [tableView reloadData];
+            
+            return;
+        }
+        
         NSDictionary *story = self.stories[indexPath.row];
-        [self pushStoryView:story[@"id"]];
+        
+        [self pushStoryView:story[@"id"] inRow:indexPath.row];
+            NSLog(@"id: %@", story[@"id"]);
     }
 }
 

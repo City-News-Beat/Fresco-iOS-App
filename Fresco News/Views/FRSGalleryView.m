@@ -648,10 +648,24 @@
     
     FRSPost *post = self.orderedPosts[self.adjustedPage];
     
+    FRSGallery *parent = post.gallery;
+    
     if(post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0){
         self.nameLabel.text = [NSString stringWithFormat:@"@%@",post.creator.username];
     }else{
         self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
+    }
+    
+    if (parent.externalAccountName != nil) {
+        
+        if ([parent.externalSource isEqualToString:@"twitter"]) {
+            self.nameLabel.text = [NSString stringWithFormat:@"@%@",parent.externalAccountName];
+            
+        } else {
+            self.nameLabel.text = parent.externalAccountName;
+            
+        }
+        
     }
     
     self.locationLabel.text = post.address;
@@ -1032,13 +1046,28 @@
 -(void)segueToUserProfile:(FRSUser *)user {
     
     NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
+    
     if (page >= 0 && page < self.orderedPosts.count) {
         FRSPost *currentPost = self.orderedPosts[page];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:currentPost.creator];
-            [self.delegate.navigationController pushViewController:userViewController animated:YES];
-        });        
+        if ([self.gallery.externalSource isEqualToString:@"twitter"]) {
+            NSString *twitterString = [NSString stringWithFormat:@"twitter://user?screen_name=%@", self.gallery.externalAccountName];
+            NSString *twitterLink = [NSString stringWithFormat:@"https://twitter.com/%@", self.gallery.externalAccountName];
+            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:twitterString]]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:twitterString]];
+            } else {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:twitterLink]];
+            }
+            
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
+                NSLog(@"CURRENTPOST.CREATOR.FOLLOWING = %@", (FRSUser *)currentPost.creator.following);
+                
+                [self.delegate.navigationController pushViewController:userViewController animated:YES];
+            });
+        }
     }
 }
 

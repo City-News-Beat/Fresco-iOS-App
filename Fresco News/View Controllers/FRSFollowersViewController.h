@@ -11,4 +11,5 @@
 
 @interface FRSFollowersViewController : FRSScrollingViewController <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, weak) FRSUser *representedUser;
+@property BOOL shouldUpdateOnReturn;
 @end

@@ -31,6 +31,8 @@
 
 #import "FRSTabBarController.h"
 
+#import "FRSSearchViewController.h"
+
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
@@ -70,6 +72,9 @@
 @property (strong, nonatomic) UIBarButtonItem *followBarButtonItem;
 @property (strong, nonatomic) UIButton *followersButton;
 @property (strong, nonatomic) NSURL *profileImageURL;
+@property BOOL didFollow;
+
+@property (strong, nonatomic) UIImageView *placeholderUserIcon;
 
 @end
 
@@ -137,6 +142,7 @@
 
     [self showTabBarAnimated:YES];
     self.tableView.bounces = false;
+    self.didFollow = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -149,26 +155,34 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
-    
-    if(!self.editedProfile){
-        if (!_representedUser) {
-            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-            self.authenticatedProfile = TRUE;
-            [self configureWithUser:_representedUser];
-        }else{
-            [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
-                _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                [self configureWithUser:_representedUser];
-            }];
-        }
-    }else{
-        self.editedProfile = false;
-    }
+//    
+//    if(!self.editedProfile){
+//        if (!_representedUser) {
+//            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+//            self.authenticatedProfile = TRUE;
+//            [self configureWithUser:_representedUser];
+//        }else{
+//            [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
+//                _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+//                [self configureWithUser:_representedUser];
+//                
+//                NSInteger origin = self.profileBG.frame.origin.x + self.profileBG.frame.size.width + 16;
+//                self.bioLabel.frame = CGRectMake(origin-4, 65, 150, self.profileContainer.frame.size.width - (origin-4) - 16);
+//                [self.bioLabel sizeToFit];
+//            }];
+//        }
+//    }else{
+//        self.editedProfile = false;
+//    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self removeStatusBarNotification];
+    
+    if (!self.didFollow) {
+        [self shouldRefresh:NO]; //Reset the bool. Used when the current user is browsing profiles in search, and when following/unfollowing in followersVC
+    }
 }
 
 
@@ -181,6 +195,7 @@
 //    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 //    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
 //    frsTabBar.dot.alpha = 0;
+    
 }
 
 -(instancetype)initWithUser:(FRSUser *)user {
@@ -197,8 +212,7 @@
     return self;
 }
 
-
--(instancetype)initWithUserName:(NSString *)userName {
+-(instancetype)initWithUserID:(NSString *)userName {
     self = [super init];
     
     if (self) {
@@ -372,7 +386,7 @@
     
 }
 
-- (void)dealloc{
+-(void)dealloc{
     [self.tableView dg_removePullToRefresh];
 }
 
@@ -404,17 +418,23 @@
         self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //?
     }else{
+        
         if(![self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]){
-            self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow-white"] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
+            
+            self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
             self.followBarButtonItem.tintColor = [UIColor whiteColor];
             
-            if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
-                [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
-            } else {
-                [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+                    [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+                } else {
+                    [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
+                }
+                
+                self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
+            });
             
-            self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
         }
         [self configureBackButtonAnimated:true];
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -458,10 +478,19 @@
     
     self.profileIV = [[FRSBorderedImageView alloc] initWithFrame:CGRectMake(0, 0, self.profileBG.frame.size.width, self.profileBG.frame.size.height) borderColor:[UIColor whiteColor] borderWidth:4];
     self.profileIV.image = [UIImage imageNamed:@""];
+    self.profileIV.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.profileIV.contentMode = UIViewContentModeScaleAspectFill;
     self.profileIV.layer.cornerRadius = self.profileIV.frame.size.width/2;
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
+    
+    
+    self.placeholderUserIcon = [[UIImageView alloc] initWithFrame:CGRectMake(self.profileIV.frame.size.width/2 - 40/2, self.profileIV.frame.size.height/2 -40/2, 40, 40)];
+    self.placeholderUserIcon.image = [UIImage imageNamed:@"user-40"];
+    self.placeholderUserIcon.alpha = 0;
+    [self.profileIV addSubview:self.placeholderUserIcon];
+    
+    
     
     float paddingFromProfileIV = 20.0;
     float center = 50.0;
@@ -611,10 +640,22 @@
     
     //    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, self.locationLabel.frame.origin.y + self.locationLabel.frame.size.height + 6, self.nameLabel.frame.size.width, 0)];
     
-    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin-4, 65, 150, self.profileContainer.frame.size.width - (origin-4) - 16)];
     
-    //self.bioLabel.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
-    self.bioLabel.backgroundColor = [UIColor frescoOrangeColor];
+    
+    CGFloat width = 0;
+    if (IS_IPHONE_5) {
+        width = 176;
+    } else if (IS_IPHONE_6) {
+        width = 231;
+    } else { //6+
+        width = 270;
+    }
+    
+    
+    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 65, width, self.profileContainer.frame.size.width - (origin-4) - 16)];
+    
+    self.bioLabel.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
+    self.bioLabel.backgroundColor = [UIColor redColor];
     self.bioLabel.textColor = [UIColor whiteColor];
     self.bioLabel.font = [UIFont systemFontOfSize:15 weight:-300];
     //    [self.bioLabel sizeToFit];
@@ -959,6 +1000,10 @@
 }
 
 -(void)followUser {
+    
+    self.didFollow = YES;
+    [self shouldRefresh:YES];
+    
     [[FRSAPIClient sharedClient] followUser:self.representedUser completion:^(id responseObject, NSError *error) {
         if (error) {
             return;
@@ -967,9 +1012,11 @@
         if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
             [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
             NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
+            
         } else {
             [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
             [self unfollowUser];
+            
         }
     }];
 }
@@ -986,7 +1033,35 @@
             [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
         }
         NSLog(@"UNFOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
+        
+        
     }];
+}
+
+-(void)shouldRefresh:(BOOL)refresh {
+    
+    if ([self.navigationController.viewControllers count] < 2) {
+        return;
+    }
+    
+    UIViewController *previousController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
+    FRSSearchViewController *searchVC = (FRSSearchViewController *)previousController;
+    FRSFollowersViewController *followersVC = (FRSFollowersViewController *)previousController;
+    
+    if (refresh) {
+        if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
+            searchVC.shouldUpdateOnReturn = YES;
+        } else if ([previousController isKindOfClass:[FRSFollowersViewController class]]) {
+            followersVC.shouldUpdateOnReturn = YES;
+        }
+        
+    } else {
+        if ([previousController isKindOfClass:[FRSSearchViewController class]]) {
+            searchVC.shouldUpdateOnReturn = NO;
+        } else if ([previousController isKindOfClass:[FRSFollowersViewController class]]) {
+            followersVC.shouldUpdateOnReturn = NO;
+        }
+    }
 }
 
 -(void)showEditProfile {
@@ -1046,6 +1121,10 @@
         if(user.profileImage != [NSNull null]){
             self.profileImageURL = [NSURL URLWithString:user.profileImage];
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
+            
+            if (self.profileImageURL == nil) {
+                self.placeholderUserIcon.alpha = 1;
+            }
         }
         
         //self.locationLabel.text = user.
@@ -1055,6 +1134,7 @@
 
         self.bioLabel.text = user.bio;
         NSLog(@"USER'S BIO: %@", user.bio);
+        
         [self.bioLabel sizeToFit];
         
         //[self.profileContainer setFrame:CGRectMake(self.profileContainer.frame.origin.x, self.profileContainer.frame.origin.y, self.profileContainer.frame.size.width,269.5 + self.bioLabel.frame.size.height)];

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15F34" minimumToolsVersion="Xcode 7.0">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15G31" minimumToolsVersion="Xcode 7.0">
     <entity name="FRSArticle" representedClassName="FRSArticle" syncable="YES">
         <attribute name="articleStringURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
@@ -27,6 +27,11 @@
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="editedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="externalAccountID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalAccountName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalSource" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="externalURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="liked" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="likes" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -108,6 +113,7 @@
         <attribute name="followedCount" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="following" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="followingCount" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="isFollowing" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="isLoggedIn" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
@@ -124,11 +130,11 @@
     <elements>
         <element name="FRSArticle" positionX="-614" positionY="-132" width="128" height="148"/>
         <element name="FRSAssignment" positionX="-819" positionY="45" width="128" height="208"/>
-        <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="313"/>
+        <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="390"/>
         <element name="FRSNotification" positionX="-839" positionY="-153" width="128" height="148"/>
         <element name="FRSPost" positionX="-36" positionY="9" width="128" height="253"/>
         <element name="FRSStory" positionX="-72" positionY="285" width="128" height="253"/>
         <element name="FRSUpload" positionX="-990" positionY="-9" width="128" height="238"/>
-        <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="360"/>
+        <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="375"/>
     </elements>
 </model>

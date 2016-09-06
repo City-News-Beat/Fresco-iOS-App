@@ -83,7 +83,8 @@
 }
 
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self post:loginEndpoint withParameters:@{@"username":user, @"password":password} completion:^(id responseObject, NSError *error) {
+    
+    [self post:loginEndpoint withParameters:@{@"username":user, @"password":password, @"installation":[[FRSAPIClient sharedClient] currentInstallation]} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         NSLog(@"%@", responseObject);
         
@@ -349,7 +350,6 @@
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
        
-        NSLog(@"RESPONSE: %@", responseObject);
         NSLog(@"ERROR: %@", error);
 
     }];
@@ -783,6 +783,104 @@
 -(void)getUserWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     
     NSString *endpoint = [NSString stringWithFormat:@"user/%@", user];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        if (error) {
+            completion(responseObject, error);
+            return;
+        }
+        
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(responseObject, error);
+        }
+        
+        // shouldn't happen
+        completion(responseObject, error);
+    }];
+}
+
+-(void)getPostWithID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"post/%@", post];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            completion(responseObject, error);
+            return;
+        }
+        
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(responseObject, error);
+        }
+        
+        // shouldn't happen
+        completion(responseObject, error);
+    }];
+}
+
+-(void)getOutletWithID:(NSString *)outlet completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"outlet/%@", outlet];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            completion(responseObject, error);
+            return;
+        }
+        
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(responseObject, error);
+        }
+        
+        // shouldn't happen
+        completion(responseObject, error);
+    }];
+}
+
+-(void)getStoryWithUID:(NSString *)story completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"story/%@", story];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        if (error) {
+            completion(responseObject, error);
+            return;
+        }
+        
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(responseObject, error);
+        }
+        
+        // shouldn't happen
+        completion(responseObject, error);
+    }];
+}
+
+-(void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"gallery/%@", gallery];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        if (error) {
+            completion(responseObject, error);
+            return;
+        }
+        
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(responseObject, error);
+        }
+        
+        // shouldn't happen
+        completion(responseObject, error);
+    }];
+}
+
+
+-(void)getAssignmentWithUID:(NSString *)assignment completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:@"assignment/%@", assignment];
     
     [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
         if (error) {

@@ -92,9 +92,6 @@
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID {
     self = [super init];
     
-    
-    
-    
     return self;
 }
 
@@ -114,7 +111,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+        
     self.isPresented = YES;
     
     CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
@@ -207,6 +204,10 @@
         }
         
         self.globalAssignmentsArray = [globalAssignments copy];
+        
+        if (self.globalAssignmentsArray.count >= 1) {
+            [self showGlobalAssignmentsBar];
+        }
         
         for (NSDictionary *dict in assignments){
             
@@ -353,6 +354,17 @@
     }
 }
 
+-(void)removeAssignmentsFromMap {
+    id userLocation = [self.mapView userLocation];
+    NSMutableArray *assignments = [[NSMutableArray alloc] initWithArray:[self.mapView annotations]];
+    if (userLocation != nil ) {
+        [assignments removeObject:userLocation]; // avoid removing user location off the map
+    }
+    
+    [self.mapView removeAnnotations:assignments];
+    assignments = nil;
+}
+
 -(void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index {
     
     FRSAssignmentAnnotation *ann = [[FRSAssignmentAnnotation alloc] initWithAssignment:assignment atIndex:index];
@@ -389,9 +401,24 @@
         
         self.currentAssignment = assignment;
         
+
+        
+    
+        
+        
+        
+        MKCoordinateRegion region = { {0.0, 0.0 }, { 0.0, 0.0 } };
+        region.center.latitude = [assignment.latitude doubleValue];
+        region.center.longitude = [assignment.longitude doubleValue];
+        region.span.longitudeDelta = 0.05f;
+        region.span.latitudeDelta = 0.05f;
+        [self.mapView setRegion:region animated:YES];
+        
+        
         CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake([assignment.latitude doubleValue], [assignment.longitude doubleValue]);
         newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
         [self.mapView setCenterCoordinate:newCenter animated:YES];
+        
         
         if ([self.mapView respondsToSelector:@selector(camera)]) {
             [self.mapView setShowsBuildings:NO];
@@ -405,6 +432,8 @@
         self.showsCard  = NO;
     }
 }
+
+
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
     [self updateAssignments];
@@ -434,6 +463,7 @@
         
         if ([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"user-annotation"];
+            annotationView.userInteractionEnabled = NO;
         
             UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
             view.backgroundColor = [UIColor whiteColor];
@@ -557,10 +587,14 @@
 
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-
+    
     [self.mapView deselectAnnotation:view.annotation animated:NO];
 
     FRSAssignmentAnnotation *assAnn = (FRSAssignmentAnnotation *)view.annotation;
+    
+    if (assAnn.title == nil) { //Checks for user annotation
+        return;
+    }
     
     self.assignmentTitle = assAnn.title;
     self.assignmentCaption = assAnn.subtitle;
@@ -763,6 +797,9 @@
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     
     
+    //Avoid any drawing above these
+    self.scrollView.layer.zPosition = 1;
+    self.assignmentBottomBar.layer.zPosition = 2;
 }
 
 -(void)configureAssignmentCard {
@@ -979,10 +1016,6 @@
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(globalAssignmentsSegue)];
     [self.globalAssignmentsBottomContainer addGestureRecognizer:tap];
-    
-    if (self.globalAssignmentsArray.count >= 1) {
-        [self showGlobalAssignmentsBar];
-    }
     
 }
 

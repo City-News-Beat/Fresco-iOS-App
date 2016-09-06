@@ -45,6 +45,8 @@
         self.creator.username = dict[@"owner"][@"username"];
         self.creator.firstName = (dict[@"owner"][@"full_name"] != Nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]] && [[dict[@"owner"][@"full_name"] class] isSubclassOfClass:[NSString class]]) ? dict[@"owner"][@"full_name"] : @"";;
         self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
+        
+        self.creator.following = dict[@"owner"][@"following"];
     }
     
     if (dict[@"video"] != Nil && dict[@"stream"] != [NSNull null]) {
@@ -73,6 +75,7 @@
         self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
         
         self.creator.bio = (dict[@"owner"][@"bio"] != nil) ? dict[@"owner"][@"bio"] : @"";
+        self.creator.following = dict[@"owner"][@"following"];
     }
 
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
@@ -117,6 +120,9 @@
         self.creator.username = (dict[@"owner"][@"username"] != Nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ?dict[@"owner"][@"username"] : @"";
         self.creator.firstName = (dict[@"owner"][@"full_name"] != Nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]] && [[dict[@"owner"][@"full_name"] class] isSubclassOfClass:[NSString class]]) ? dict[@"owner"][@"full_name"] : @"";;
         self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
+        self.creator.following = dict[@"owner"][@"following"];
+        NSLog(@"FOLLOWING: %@", dict[@"owner"][@"following"]);
+        
     }
     
     if ([dict objectForKey:@"stream"] != [NSNull null]) {

@@ -20,7 +20,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="92.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="look at my notification" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EDm-cp-lUq">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EDm-cp-lUq">
                         <rect key="frame" x="16" y="10" width="248" height="22"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="22" id="Gne-rq-h2Q"/>
@@ -29,7 +29,7 @@
                         <color key="textColor" white="0.0" alpha="0.87" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="whoa dude" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="omR-AR-fQB">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="omR-AR-fQB">
                         <rect key="frame" x="16" y="33" width="248" height="48.5"/>
                         <color key="backgroundColor" red="1" green="0.0" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -37,7 +37,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1rG-eb-dcz">
-                        <rect key="frame" x="0.0" y="91" width="320" height="1"/>
+                        <rect key="frame" x="0.0" y="92.5" width="320" height="1"/>
                         <color key="backgroundColor" white="0.0" alpha="0.12" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="pho-QZ-bQt"/>
@@ -49,6 +49,7 @@
                             <constraint firstAttribute="height" constant="24" id="Frs-lm-ztx"/>
                             <constraint firstAttribute="width" constant="24" id="gbe-yb-ZFF"/>
                         </constraints>
+                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <state key="normal" image="shutter-24"/>
                         <connections>
                             <action selector="didTapAssignmentButton:" destination="RoZ-Sz-ikC" eventType="touchUpInside" id="2yk-tn-KbE"/>
@@ -64,7 +65,7 @@
                     <constraint firstAttribute="trailingMargin" secondItem="omR-AR-fQB" secondAttribute="trailing" constant="48" id="cCJ-0P-X6Z"/>
                     <constraint firstItem="EDm-cp-lUq" firstAttribute="top" secondItem="EMV-DO-Efv" secondAttribute="topMargin" constant="2" id="fnZ-81-ZEZ"/>
                     <constraint firstItem="omR-AR-fQB" firstAttribute="top" secondItem="EDm-cp-lUq" secondAttribute="bottom" constant="1" id="g0l-FV-Wpv"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="1rG-eb-dcz" secondAttribute="bottom" constant="-8" id="gwu-eq-7qa"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="1rG-eb-dcz" secondAttribute="bottom" constant="-9" id="gwu-eq-7qa"/>
                     <constraint firstAttribute="trailingMargin" secondItem="1rG-eb-dcz" secondAttribute="trailing" constant="-8" id="reV-pG-SAN"/>
                     <constraint firstItem="omR-AR-fQB" firstAttribute="leading" secondItem="EMV-DO-Efv" secondAttribute="leadingMargin" constant="8" id="rxf-IA-Dqt"/>
                     <constraint firstItem="bsF-Lw-6Fg" firstAttribute="centerY" secondItem="EMV-DO-Efv" secondAttribute="centerY" id="u70-PW-9lY"/>

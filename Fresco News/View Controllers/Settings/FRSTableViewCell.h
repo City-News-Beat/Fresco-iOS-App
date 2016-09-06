@@ -43,7 +43,7 @@
 
 -(void)configureSettingsHeaderCellWithTitle:(NSString *)title;
 -(void)configureSearchSeeAllCellWithTitle:(NSString *)title;
--(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing user:(NSDictionary *)user;
+-(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing userDict:(NSDictionary *)userDict user:(FRSUser *)user;
 -(void)configureSearchStoryCellWithStoryPhoto:(NSURL *)storyPhoto storyName:(NSString *)nameString;
 
 -(void)configureFindFriendsCell;

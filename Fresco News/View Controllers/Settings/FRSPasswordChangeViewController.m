@@ -220,7 +220,7 @@
             NSInteger responseCode = response.statusCode;
             NSLog(@"ERROR: %ld", (long)responseCode);
 
-            if (responseCode == 403) {
+            if (responseCode == 403 || responseCode == 401) {
                 if (!self.errorImageView) {
                     [self addErrorToView];
                     return;

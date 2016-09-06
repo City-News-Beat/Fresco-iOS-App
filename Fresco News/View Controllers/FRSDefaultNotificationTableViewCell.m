@@ -9,79 +9,256 @@
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSProfileViewController.h"
+#import "FRSAPIClient.h"
+#import <Haneke/Haneke.h>
 
 @interface FRSDefaultNotificationTableViewCell ()
+
+
 @property (weak, nonatomic) IBOutlet UIView *line;
+
 @end
 
 @implementation FRSDefaultNotificationTableViewCell
 
+-(void)configureCellForType:(NSString *)cellType userID:(NSString *)userID assignmentID:(NSString *)assignmentID postID:(NSString *)postID storyID:(NSString *)storyID galleryID:(NSString *)galleryID {
+    
+    if ([cellType isEqualToString:@"user-social-followed"]) {
+        [self configureUserFollowNotificationWithID:userID];
+    } else if ([cellType isEqualToString:@""]) {
+        return;
+    }
+}
+
+
+-(void)setUserImage:(NSString *)userID {
+    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
+        self.titleLabel.text = [responseObject objectForKey:@"full_name"];
+        
+        if([responseObject objectForKey:@"avatar"] != [NSNull null]){
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+        
+        [self updateLabelsForCount];
+    }];
+}
+
+-(void)configureUserRepostNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
+    
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeRepost];
+    [self setUserImage:userID];
+    self.followButton.alpha = 0;
+    self.annotationView.alpha = 0;
+}
+
+-(void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
+    
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeLike];
+    [self setUserImage:userID];
+    self.followButton.alpha = 0;
+    self.annotationView.alpha = 0;
+}
+
+-(void)configureUserCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID {
+    
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeComment];
+    [self setUserImage:userID];
+    self.followButton.alpha = 0;
+    self.annotationView.alpha = 0;
+}
+
+-(void)configureUserMentionCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID {
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeCommentMention];
+    [self setUserImage:userID];
+    self.followButton.alpha = 0;
+    self.annotationView.alpha = 0;
+}
+
+
+-(void)configureUserMentionGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeGalleryMention];
+    [self setUserImage:userID];
+    self.followButton.alpha = 0;
+    self.annotationView.alpha = 0;
+}
+
+-(void)configurePhotoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod {
+    self.titleLabel.text = @"Your photo was purchased!";
+    
+    [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
+        
+    }];
+    
+    [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
+        
+        if([responseObject objectForKey:@"image"] != [NSNull null]){
+            
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+    }];
+    
+    //if user has payment method
+    self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! We've sent %@ to your %@.", outletID, price, paymentMethod];
+    
+    //else if user does not have payment method
+    self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! Tap to add a card and we’ll send you %@!", outletID, price];
+}
+
+
+-(void)configureVideoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod {
+    self.titleLabel.text = @"Your video was purchased!";
+    
+    [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
+        
+    }];
+    
+    [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
+        
+        if([responseObject objectForKey:@"image"] != [NSNull null]){
+            
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+    }];
+    
+    //if user has payment method
+    self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your video! We've sent %@ to your %@.", outletID, price, paymentMethod];
+    
+    //else if user does not have payment method
+//    self.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your video! Tap to add a card and we’ll send you %@!", outletID, price];
+}
+
+
+-(void)configureUserFollowNotificationWithID:(NSString *)userID {
+    
+    [self configureDefaultAttributesForNotification:FRSNotificationTypeFollow];
+    
+    self.followButton.alpha = 1;
+    self.followButton.tintColor = [UIColor blackColor];
+    
+    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
+        
+        self.titleLabel.text = [responseObject objectForKey:@"full_name"];
+         
+        if([responseObject objectForKey:@"avatar"] != [NSNull null]){
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+        
+        if ([[responseObject objectForKey:@"following"] boolValue]) {
+            [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+            self.followButton.tintColor = [UIColor frescoOrangeColor];
+        } else {
+            [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+            self.followButton.tintColor = [UIColor blackColor];
+        }
+        
+        [self updateLabelsForCount];
+        
+    }];
+}
+
+-(IBAction)followTapped:(id)sender {
+    if ([self.followButton.imageView.image isEqual:[UIImage imageNamed:@"account-check"]]) {
+        [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+        self.followButton.tintColor = [UIColor blackColor];
+    } else if ([self.followButton.imageView.image isEqual: [UIImage imageNamed:@"account-add"]]) {
+        [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+        self.followButton.tintColor = [UIColor frescoOrangeColor];
+    }
+}
+
+-(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID {
+    
+    [self configureDefaultCell];
+    self.annotationView.alpha = 0;
+    
+    [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
+        
+        self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"title"]];
+        self.bodyLabel.text = [responseObject objectForKey:@"caption"];
+        self.bodyLabel.numberOfLines = 3;
+        
+        self.titleLabel.numberOfLines = 2;
+        
+        if([responseObject objectForKey:@"thumbnails"] != [NSNull null]){
+            NSURL *avatarURL = [NSURL URLWithString:[[[responseObject objectForKey:@"thumbnails"] objectAtIndex:0] objectForKey:@"image"]];
+            [self.image hnk_setImageFromURL:avatarURL];
+        }
+    }];
+}
+
+
+
+#pragma mark - Helpers
+-(void)configureDefaultCell {
+    self.image.backgroundColor = [UIColor frescoLightTextColor];
+    self.image.layer.cornerRadius = 20;
+    self.image.clipsToBounds = YES;
+    self.followButton.alpha = 0;
+    self.annotationView.layer.cornerRadius = 12;
+}
+
+-(void)configureDefaultAttributesForNotification:(FRSNotificationType)notificationType {
+    
+    [self configureDefaultCell];
+    
+    //Set bodyLabel based on notifcation type
+    switch (notificationType) {
+        case FRSNotificationTypeFollow:
+            self.bodyLabel.text = @"Followed you.";
+            break;
+        case FRSNotificationTypeLike:
+            self.bodyLabel.text = @"Liked your gallery.";
+            break;
+        case FRSNotificationTypeRepost:
+            self.bodyLabel.text = @"Reposted your gallery.";
+            break;
+        case FRSNotificationTypeComment:
+            self.bodyLabel.text = @"Commented on your gallery.";
+            break;
+        case FRSNotificationTypeGalleryMention:
+            self.bodyLabel.text = @"Mentioned you in a gallery.";
+            break;
+        case FRSNotificationTypeCommentMention:
+            self.bodyLabel.text = @"Mentioned you in a comment.";
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (self.count <= 1) {
+        self.annotationView.alpha = 0;
+        self.annotationLabel.alpha = 0;
+        
+    }
+}
+
+-(void)updateLabelsForCount {
+    if (self.count > 1) {
+        //Update labels based on count
+        if (self.count <= 1) {
+            self.annotationView.alpha = 0;
+        } else if (self.count <= 9) {
+            self.titleLabel.text = [NSString stringWithFormat:@"%@ + %ld others", self.titleLabel.text, self.count-1];
+            self.annotationLabel.text = [NSString stringWithFormat:@"+%ld", self.count];
+        } else {
+            self.annotationLabel.text = @"+";
+        }
+    }
+}
+
+#pragma mark - UITableViewCell
+
 -(void)awakeFromNib {
     [super awakeFromNib];
-
 }
 
 -(void)prepareForReuse {
     [super prepareForReuse];
-}
-
--(void)configureCell {
-    
-    //Configure background color
-    if (self.backgroundViewColor == nil) {
-        self.backgroundColor = [UIColor frescoBackgroundColorLight];
-    }
-    
-    
-    //Configure labels and rounded image
-    self.titleLabel.numberOfLines = 0;
-    self.bodyLabel.numberOfLines  = 3;
-    self.image.backgroundColor = [UIColor frescoLightTextColor];
-    self.image.layer.cornerRadius = 20;
-    self.image.clipsToBounds = YES;
-    
-    
-    //Configure count annotation
-    self.annotationView.layer.cornerRadius = 12;
-    if (self.count <= 1) {
-        self.annotationView.alpha = 0;
-    } else if (self.count <= 9) {
-        self.titleLabel.text = [NSString stringWithFormat:@"%@ + %ld others", self.titleLabel.text, self.count];
-        self.annotationLabel.text = [NSString stringWithFormat:@"+%ld", self.count];
-    } else {
-        self.annotationLabel.text = @"+";
-    }
-    
-    
-    if (self.image.image == nil) {
-        self.image.alpha = 0;
-        self.annotationView.alpha = 0;
-        self.titleLabelLeftConstraint.constant = 8;
-        self.bodyLabelLeftConstraint.constant = -40;
-    }
-    
-    
-    //if cell.type == follower
-    //Configure follow button
-    //if following
-    //[self.followButton setImage:[UIImage imageNamed:@"already-following"] forState:UIControlStateNormal];
-    //self.followButton.tintColor = [UIColor frescoOrangeColor];
-    //else if not following
-    [self.followButton setImage:[UIImage imageNamed:@"add-follower"] forState:UIControlStateNormal];
-    //Button is set to system in IB to keep default fading behavior
-    //Alpha is set in the png, setting tint to black retains original alpha in png
-    self.followButton.tintColor = [UIColor blackColor];
-}
-
--(IBAction)followTapped:(id)sender {
-
-    if ([self.followButton.imageView.image isEqual:[UIImage imageNamed:@"already-following"]]) {
-        [self.followButton setImage:[UIImage imageNamed:@"add-follower"] forState:UIControlStateNormal];
-        self.followButton.tintColor = [UIColor frescoOrangeColor];
-    } else if ([self.followButton.imageView.image isEqual: [UIImage imageNamed:@"add-follower"]]) {
-        [self.followButton setImage:[UIImage imageNamed:@"already-following"] forState:UIControlStateNormal];
-        self.followButton.tintColor = [UIColor blackColor];
-    }
 }
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -101,8 +278,6 @@
     self.annotationView.backgroundColor = [UIColor whiteColor];
     self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
-
-
 
 
 

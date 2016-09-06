@@ -22,7 +22,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uaI-Dl-sC2">
-                        <rect key="frame" x="0.0" y="102" width="320" height="1"/>
+                        <rect key="frame" x="0.0" y="102.5" width="320" height="1"/>
                         <color key="backgroundColor" white="0.0" alpha="0.12" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="VMQ-2f-4Ve"/>
@@ -34,7 +34,7 @@
                     <constraint firstItem="pi9-eJ-jqS" firstAttribute="leading" secondItem="Mf5-vc-qrp" secondAttribute="leadingMargin" constant="8" id="AV4-FH-I9U"/>
                     <constraint firstItem="pi9-eJ-jqS" firstAttribute="bottom" secondItem="Mf5-vc-qrp" secondAttribute="bottomMargin" id="s3B-bp-PgW"/>
                     <constraint firstAttribute="trailingMargin" secondItem="uaI-Dl-sC2" secondAttribute="trailing" constant="-8" id="sEE-Sc-k3H"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="uaI-Dl-sC2" secondAttribute="bottom" constant="-8.5" id="sjg-cp-2H9"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="uaI-Dl-sC2" secondAttribute="bottom" constant="-9" id="sjg-cp-2H9"/>
                     <constraint firstItem="uaI-Dl-sC2" firstAttribute="leading" secondItem="Mf5-vc-qrp" secondAttribute="leadingMargin" constant="-8" id="uAQ-Kw-eRw"/>
                     <constraint firstItem="pi9-eJ-jqS" firstAttribute="trailing" secondItem="Mf5-vc-qrp" secondAttribute="trailingMargin" id="ykk-4h-oSd"/>
                 </constraints>

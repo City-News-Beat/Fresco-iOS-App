@@ -69,6 +69,16 @@
 
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if(_isEditingProfile){
+        [self.profileIV hnk_setImageFromURL:self.profileImageURL];
+    }else{
+        [self.profileIV addSubview:self.placeHolderUserIcon];
+    }
+}
+
 -(void)addNotifications{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -90,9 +100,17 @@
         //Send image to backend and set the url to the avatar :)
         NSData *imageData = UIImageJPEGRepresentation(self.profileIV.image, 1.0);
         
+
         [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint withParameters:@{@"avatar":imageData} completion:^(id responseObject, NSError *error) {
             NSLog(@"Response Object: %@", responseObject);
             NSLog(@"Error: %@", error);
+            
+            if (!error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[FRSAPIClient sharedClient] authenticatedUser].profileImage = self.profileIV.image;
+                    [[FRSAPIClient sharedClient] authenticatedUser].profileImage = [responseObject valueForKey:@"avatar"];
+                });
+            }
         }];
         //profileInfo[@"avatar"] = [NSURL URLWithDataRepresentation:data relativeToURL:[[NSURL alloc] init]];
     }
@@ -158,6 +176,9 @@
             profileController.editedProfile = true;
             //profileController.profileIV.image = self.profileIV.image;
             [[self navigationController] popToRootViewControllerAnimated:NO];
+            
+            [FRSAPIClient sharedClient].authenticatedUser.bio = self.bioTV.text;
+
         }else{
             [self.navigationController.view.layer addAnimation:transition forKey:nil];
             [[self navigationController] setNavigationBarHidden:YES];
@@ -219,6 +240,7 @@
     }}
 
 -(void)dismiss{
+    [self addUserProfile]; // Back button will auto save user changes (better ux) cc:imogen
     [self.navigationController popViewControllerAnimated:YES];
     [self.backTapButton removeFromSuperview];
 }
@@ -296,6 +318,7 @@
     self.cameraButton = [[UIButton alloc] initWithFrame:CGRectMake(x, self.profileShadow.frame.origin.y + self.profileShadow.frame.size.height + 22 , 128, 24)];
     [self.cameraButton setImage:[UIImage imageNamed:@"camera-icon-profile"] forState:UIControlStateNormal];
     [self.cameraButton setTitle:@"OPEN CAMERA" forState:UIControlStateNormal];
+    self.cameraButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
     [self.cameraButton addTarget:self action:@selector(presentCameraImagePicker) forControlEvents:UIControlEventTouchUpInside];
     [self.cameraButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.cameraButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
@@ -313,6 +336,7 @@
     self.photosButton = [[UIButton alloc] initWithFrame:CGRectMake(xOrigin, self.cameraButton.frame.origin.y, 128, 24)];
     [self.photosButton setImage:[UIImage imageNamed:@"photo-icon-profile"] forState:UIControlStateNormal];
     [self.photosButton setTitle:@"OPEN PHOTOS" forState:UIControlStateNormal];
+    self.photosButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
     [self.photosButton addTarget:self action:@selector(presentImagePickerController) forControlEvents:UIControlEventTouchUpInside];
     [self.photosButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.photosButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
@@ -621,9 +645,12 @@
     }
     
     if (selectedImage){
-        self.profileIV.image = selectedImage;
-        self.doneButton.userInteractionEnabled = YES;
-        [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.profileIV.image = selectedImage;
+            self.doneButton.userInteractionEnabled = YES;
+            [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        });
+
     }
     
     [self dismissViewControllerAnimated:YES completion:^{
