@@ -822,18 +822,11 @@
                                  preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction *googleMaps = [UIAlertAction
-                         actionWithTitle:@"Google Maps"
+                         actionWithTitle:@"Open with Google Maps"
                          style:UIAlertActionStyleDefault
                          handler:^(UIAlertAction * action)
                          {
                              [view dismissViewControllerAnimated:YES completion:nil];
-                             
-                                 
-//                                 NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?center=%f,%f&zoom=17", self.assignmentLat, self.assignmentLong]];
-//                                 [[UIApplication sharedApplication] openURL:url];
-                             
-                             
-                             
                              
                              NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?q=%f,%f",self.assignmentLat, self.assignmentLong]];
                              if (![[UIApplication sharedApplication] canOpenURL:url]) {
@@ -848,7 +841,7 @@
                              
                          }];
     UIAlertAction *appleMaps = [UIAlertAction
-                             actionWithTitle:@"Apple Maps"
+                             actionWithTitle:@"Open with Apple Maps"
                              style:UIAlertActionStyleDefault
                              handler:^(UIAlertAction * action)
                              {
@@ -880,7 +873,6 @@
     [view addAction:cancel];
 
     [self presentViewController:view animated:YES completion:nil];
-    
     
 }
 
