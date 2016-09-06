@@ -128,21 +128,16 @@
 
     for (NSString *gallery in galleryIDs) {
         
-        
-        
         [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
-            NSLog(@"\n \n ID: %@ \n OBJECT: %@ \n \n", gallery, responseObject);
-//            [galleryArray addObject:gallery];
+            [galleryArray addObject:gallery];
         }];
         
+        
+        
+        
+        
+        
     }
-    
-    
-//    [self.navigationController setNavigationBarHidden:YES animated:NO];
-//    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] init];
-//    detailView.stories = galleryArray;
-//    detailView.navigationController = self.navigationController;
-//    [self.navigationController pushViewController:detailView animated:YES];
 }
 
 -(void)segueToGallery:(NSString *)galleryID {

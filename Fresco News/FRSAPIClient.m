@@ -872,12 +872,12 @@
         
         NSLog(@"responseObject: %@", responseObject);
         
-//        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-//            completion(responseObject, error);
-//        }
-//        
-//        // shouldn't happen
-//        completion(responseObject, error);
+        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+            completion(responseObject, error);
+        }
+        
+        // shouldn't happen
+        completion(responseObject, error);
     }];
 }
 

@@ -84,7 +84,8 @@
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
-
+@property CGFloat assignmentLat;
+@property CGFloat assignmentLong;
 @end
 
 @implementation FRSAssignmentsViewController
@@ -609,6 +610,9 @@
     [self animateAssignmentCard];
     [self snapToAnnotationView:view]; // Centers map with y offset
     
+    
+    self.assignmentLat = assAnn.coordinate.latitude;
+    self.assignmentLong = assAnn.coordinate.longitude;
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
@@ -683,14 +687,22 @@
     [self.assignmentBottomBar addSubview:bottomContainerLine];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectMake(self.view.frame.size.width -93-23 , 15, 100, 17);
+    button.frame = CGRectMake(self.view.frame.size.width -93-23 -24 -6 , 15, 100, 17);
     [button setTitle:@"OPEN CAMERA" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(acceptAssignment) forControlEvents:UIControlEventTouchUpInside];
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
-    
     [self.assignmentBottomBar addSubview:button];
+
+    
+    UIButton *navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    navigateButton.frame = CGRectMake(self.view.frame.size.width -24-16, 10, 24, 24);
+    [navigateButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
+    [navigateButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
+    navigateButton.tintColor = [UIColor blackColor];
+    [self.assignmentBottomBar addSubview:navigateButton];
+    
     
     self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
     [self.assignmentCard addSubview:self.assignmentTextView];
@@ -800,6 +812,76 @@
     //Avoid any drawing above these
     self.scrollView.layer.zPosition = 1;
     self.assignmentBottomBar.layer.zPosition = 2;
+}
+
+-(void)navigateToAssignment {
+    
+    UIAlertController * view=   [UIAlertController
+                                 alertControllerWithTitle:nil
+                                 message:nil
+                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *googleMaps = [UIAlertAction
+                         actionWithTitle:@"Google Maps"
+                         style:UIAlertActionStyleDefault
+                         handler:^(UIAlertAction * action)
+                         {
+                             [view dismissViewControllerAnimated:YES completion:nil];
+                             
+                                 
+//                                 NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?center=%f,%f&zoom=17", self.assignmentLat, self.assignmentLong]];
+//                                 [[UIApplication sharedApplication] openURL:url];
+                             
+                             
+                             
+                             
+                             NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?q=%f,%f",self.assignmentLat, self.assignmentLong]];
+                             if (![[UIApplication sharedApplication] canOpenURL:url]) {
+                                 NSLog(@"Google Maps app is not installed");
+
+                                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/?q=%f,%f", self.assignmentLat, self.assignmentLong]]];
+                             
+                             } else {
+                                 [[UIApplication sharedApplication] openURL:url];
+                             }
+                                 
+                             
+                         }];
+    UIAlertAction *appleMaps = [UIAlertAction
+                             actionWithTitle:@"Apple Maps"
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [view dismissViewControllerAnimated:YES completion:nil];
+                                 
+                                 CLLocationCoordinate2D endingCoord = CLLocationCoordinate2DMake(self.assignmentLat, self.assignmentLong);
+                                 MKPlacemark *endLocation = [[MKPlacemark alloc] initWithCoordinate:endingCoord addressDictionary:nil];
+                                 MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:endLocation];
+                                 
+                                 NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
+                                 [launchOptions setObject:MKLaunchOptionsDirectionsModeDriving forKey:MKLaunchOptionsDirectionsModeKey];
+                                 
+                                 [endingItem openInMapsWithLaunchOptions:launchOptions];
+                                 
+                             }];
+    
+    UIAlertAction *cancel = [UIAlertAction
+                                actionWithTitle:@"Cancel"
+                                style:UIAlertActionStyleCancel
+                                handler:^(UIAlertAction * action)
+                                {
+                                    [view dismissViewControllerAnimated:YES completion:nil];
+                                    
+                                }];
+    
+    
+    [view addAction:googleMaps];
+    [view addAction:appleMaps];
+    [view addAction:cancel];
+
+    [self presentViewController:view animated:YES completion:nil];
+    
+    
 }
 
 -(void)configureAssignmentCard {
