@@ -33,6 +33,13 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 }
 
+-(void)configureWithGalleryIDs:(NSArray *)galleries {
+    
+    
+    
+    
+}
+
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];

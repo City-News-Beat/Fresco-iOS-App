@@ -129,16 +129,29 @@
     for (NSString *gallery in galleryIDs) {
         
         [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
-            [galleryArray addObject:gallery];
+            [galleryArray addObject:responseObject];
+            
+            if (galleryArray.count == galleryIDs.count) {
+                FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
+                [detailVC configureWithGalleryIDs:galleryArray];
+                detailVC.navigationController = self.navigationController;
+                [self.navigationController pushViewController:detailVC animated:YES];
+            }
         }];
-        
-        
-        
-        
-        
-        
     }
 }
+
+//-(FRSStoryDetailViewController *)detailViewControllerWithGalleries:(FRSStory *)story {
+//    
+//    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+//    detailView.story = story;
+//    [detailView reloadData];
+//    return detailView;
+//}
+
+
+
+
 
 -(void)segueToGallery:(NSString *)galleryID {
     
