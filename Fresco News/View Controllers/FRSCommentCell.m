@@ -7,6 +7,7 @@
 //
 
 #import "FRSCommentCell.h"
+#import "UIColor+Fresco.h"
 
 @implementation FRSCommentCell
 
@@ -15,6 +16,7 @@
     // Initialization code
     self.profilePicture.layer.cornerRadius = 15;
     self.profilePicture.layer.masksToBounds = YES;
+    self.commentTextField.backgroundColor = [UIColor frescoDarkTextColor];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

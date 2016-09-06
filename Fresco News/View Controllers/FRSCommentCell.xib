@@ -23,8 +23,11 @@
                         </constraints>
                     </imageView>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2i5-gr-qVH" customClass="FRSTextView">
-                        <rect key="frame" x="53" y="10" width="255" height="96.5"/>
+                        <rect key="frame" x="53" y="3" width="255" height="110.5"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="110.5" id="7JJ-VE-HF9"/>
+                        </constraints>
                         <inset key="scrollIndicatorInsets" minX="15" minY="15" maxX="15" maxY="15"/>
                         <attributedString key="attributedText"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -36,9 +39,7 @@
                     <constraint firstItem="ffk-GZ-vjB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="Rb9-Cm-1z8"/>
                     <constraint firstAttribute="trailingMargin" secondItem="2i5-gr-qVH" secondAttribute="trailing" constant="4" id="TvZ-9R-CE3"/>
                     <constraint firstItem="2i5-gr-qVH" firstAttribute="leading" secondItem="ffk-GZ-vjB" secondAttribute="trailing" constant="8" id="Ura-RB-9o5"/>
-                    <constraint firstItem="2i5-gr-qVH" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="gBL-aE-I0Z"/>
-                    <constraint firstItem="2i5-gr-qVH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="gmf-YU-6dV"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="2i5-gr-qVH" secondAttribute="bottom" constant="3" id="lQZ-SO-wdX"/>
+                    <constraint firstItem="2i5-gr-qVH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-5" id="gmf-YU-6dV"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

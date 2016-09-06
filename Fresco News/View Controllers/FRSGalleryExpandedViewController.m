@@ -62,7 +62,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
         self.touchEnabled = NO;
-//        [self fetchCommentsWithID:gallery.uid];
+        [self fetchCommentsWithID:gallery.uid];
     }
     return self;
 }
@@ -199,14 +199,22 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
--(void)configureComments{
+-(void)configureComments {
     
     float height = 0;
     NSInteger index = 0;
     
     for (FRSComment *comment in _comments) {
-        FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-        float commentSize = cell.commentTextField.frame.size.height;
+        
+        CGRect labelRect = [comment.comment
+                            boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 60, INT_MAX)
+                            options:NSStringDrawingUsesLineFragmentOrigin
+                            attributes:@{
+                                         NSFontAttributeName : [UIFont systemFontOfSize:15]
+                                         }
+                            context:nil];
+        
+        float commentSize = labelRect.size.height;
         
         if (commentSize < 56) {
             height += 56;
@@ -214,6 +222,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         else {
             height += commentSize;
         }
+        
         
         index++;
     }
@@ -413,12 +422,20 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         if (indexPath.row < self.comments.count) {
             FRSComment *comment = _comments[indexPath.row];
 
-            if (comment.imageURL) {
-                [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL]];
-            }
-            else {
-                // default
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (comment.imageURL && ![comment.imageURL isEqualToString:@""]) {
+                    NSLog(@"%@", comment.imageURL);
+                    
+                    cell.backgroundColor = [UIColor clearColor];
+                    [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL]];
+                }
+                else {
+                    // default
+                    cell.backgroundColor = [UIColor frescoLightTextColor];
+                    cell.profilePicture.image = [UIImage imageNamed:@"user-24"];
+                }
+            });
+        
             cell.commentTextField.attributedText = comment.attributedString;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell.commentTextField frs_resize];
