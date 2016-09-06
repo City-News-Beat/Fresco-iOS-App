@@ -167,7 +167,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 12;
+    return 11;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -333,25 +333,16 @@
 
         } case 10: {
             
-            //Photos of the Day
+//            Today in News
             
             NSString *cellIdentifier = @"notificationCell";
             FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             
-            
-
-            return cell;
-        } case 11: {
-            
-            //Today in News
-            
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
+            [cell configureUserMentionGalleryNotificationWithUserID:nil galleryID:nil];
 
             return cell;
         }
-            
+    
 
         default:
             break;
@@ -373,39 +364,39 @@
     
     switch (indexPath.row) {
         case 0:
-            [self segueToUser:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:1]];
+            [self segueToUser:[[self.payload objectForKey:followedNotification] objectAtIndex:1]];
             break;
         
         case 1:
-            [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
             break;
             
         case 2:
-            [self segueToStory:[self.payload objectForKey:@"user-news-story"]];
+            [self segueToStory:[self.payload objectForKey:userNewsStoryNotification]];
             break;
             
         case 3:
-            [self segueToAssignmentWithID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
+            [self segueToAssignmentWithID:[self.payload objectForKey:newAssignmentNotification]];
             break;
             
         case 4:
-            [self segueToCameraWithAssignmentID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
+            [self segueToCameraWithAssignmentID:[self.payload objectForKey:newAssignmentNotification]];
             break;
         
         case 5:
-            [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
             break;
             
         case 6:
-            [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
             break;
             
         case 7:
-            [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
             break;
         
         case 8:
-            [self segueToGallery:[self.payload objectForKey:@"user-social-liked"]];
+            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
             break;
             
         case 9:
@@ -413,15 +404,9 @@
             break;
             
         case 10:
-//            [self segueToDebitCard];
-            [self segueToPhotosOfTheDay:[self.payload objectForKey:photoOfDayNotification]];
-            
-            break;
-        case 11:
-
             [self segueToTodayInNews:[self.payload objectForKey:todayInNewsNotification]];
             break;
-            
+
         default:
             break;
     }

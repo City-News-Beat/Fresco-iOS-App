@@ -117,14 +117,32 @@
 #pragma mark - Deep Links
 
 -(void)segueToPhotosOfTheDay:(NSArray *)postIDs {
-    
-    
-    
-    
+    //Not part of the initial 3.0 release
 }
 
 -(void)segueToTodayInNews:(NSArray *)galleryIDs {
     
+    NSLog(@"GALLERY IDS: %@", galleryIDs);
+    
+    NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
+
+    for (NSString *gallery in galleryIDs) {
+        
+        
+        
+        [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
+            NSLog(@"\n \n ID: %@ \n OBJECT: %@ \n \n", gallery, responseObject);
+//            [galleryArray addObject:gallery];
+        }];
+        
+    }
+    
+    
+//    [self.navigationController setNavigationBarHidden:YES animated:NO];
+//    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] init];
+//    detailView.stories = galleryArray;
+//    detailView.navigationController = self.navigationController;
+//    [self.navigationController pushViewController:detailView animated:YES];
 }
 
 -(void)segueToGallery:(NSString *)galleryID {
