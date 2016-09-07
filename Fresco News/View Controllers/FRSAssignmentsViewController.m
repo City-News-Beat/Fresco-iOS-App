@@ -828,6 +828,8 @@
                          {
                              [view dismissViewControllerAnimated:YES completion:nil];
                              
+                             //https://www.google.com/maps/dir/40.7155488,+-74.0207971/Flatiron+School,+11+Broadway+%23260,+New+York,+NY+10004/
+                             
                              NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?q=%f,%f",self.assignmentLat, self.assignmentLong]];
                              if (![[UIApplication sharedApplication] canOpenURL:url]) {
                                  NSLog(@"Google Maps app is not installed");

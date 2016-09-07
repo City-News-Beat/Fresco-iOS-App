@@ -861,7 +861,6 @@
 -(void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     
     
-    NSLog(@"gallery: %@", gallery);
     NSString *endpoint = [NSString stringWithFormat:@"gallery/%@", gallery];
     
     [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {

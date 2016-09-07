@@ -35,6 +35,11 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)configureWithGalleries:(NSArray *)galleries {
     
+    NSLog(@"ID 1: %@", [[galleries objectAtIndex:0] objectForKey:@"id"]);
+    NSLog(@"ID 2: %@", [[galleries objectAtIndex:1] objectForKey:@"id"]);
+    NSLog(@"ID 3: %@", [[galleries objectAtIndex:2] objectForKey:@"id"]);
+    NSLog(@"ID 4: %@", [[galleries objectAtIndex:3] objectForKey:@"id"]);
+
     self.stories = [[NSMutableArray alloc] init];
     
     FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
@@ -44,10 +49,11 @@ static NSString *galleryCell = @"GalleryCellReuse";
         FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
         [galleryObject configureWithDictionary:gallery context:delegate.managedObjectContext];
         [self.stories addObject:galleryObject];
-        
-
+            
         //Loop is finished
         if (galleriesArray.count == self.stories.count) {
+
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.galleriesTable reloadData];
                 [self.loadingView stopLoading];
@@ -55,8 +61,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
             });
         };
     }
-    
-
 }
 
 

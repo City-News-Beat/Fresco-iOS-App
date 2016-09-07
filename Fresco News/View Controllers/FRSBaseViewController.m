@@ -127,15 +127,25 @@
     NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
 
     for (NSString *gallery in galleryIDs) {
-        
+        NSLog(@"gallery = %@", gallery);
+
         [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
-            [galleryArray addObject:(FRSGallery *)responseObject];
+            
+            if (![galleryArray containsObject:responseObject]) {
+                [galleryArray addObject:(FRSGallery *)responseObject];
+            }
+            
+            NSLog(@"ID: %@", [responseObject objectForKey:@"id"]);
             
             if (galleryArray.count == galleryIDs.count) {
-                FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
-                [detailVC configureWithGalleries:galleryArray];
-                detailVC.navigationController = self.navigationController;
-                [self.navigationController pushViewController:detailVC animated:YES];
+                if (!self.isSegueingToStory) {
+                    self.isSegueingToStory = YES;
+                    FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
+                    [detailVC configureWithGalleries:galleryArray];
+                    detailVC.navigationController = self.navigationController;
+                    detailVC.title = @"TODAY IN NEWS";
+                    [self.navigationController pushViewController:detailVC animated:YES];
+                }
             }
         }];
     }
