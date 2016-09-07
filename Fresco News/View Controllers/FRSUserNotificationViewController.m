@@ -41,7 +41,6 @@
         
         self.payload = [[NSDictionary alloc] init];
         
-        
         NSArray *post_ids    = @[@"LJx3jeQg1kpN", @"5xQ0WoLw0lX9", @"EL2Z3meP39jR", @"6DrY8KYM1KBP", @"Qz7J07vY8dDZ"];
         NSArray *gallery_ids = @[@"YQVr1ElM05qP", @"dYOJ8vjz8ML4", @"YZb485DD3xoV", @"gBbY3oPB8PM6"];
         NSString *gallery_id = @"arYd0y5Q0Dp5";

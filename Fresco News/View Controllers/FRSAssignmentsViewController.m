@@ -817,7 +817,6 @@
 }
 
 -(void)navigateToAssignment {
-    
     FRSAlertView *alert = [[FRSAlertView alloc] init];
     alert.delegate = self;
     [alert navigateToAssignmentWithLatitude:self.assignmentLat longitude:self.assignmentLong];

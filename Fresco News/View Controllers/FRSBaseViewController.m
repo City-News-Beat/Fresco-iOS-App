@@ -32,19 +32,7 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-    
-    //    [self configureNavigationBar];
-    // Do any additional setup after loading the view.
 }
-
-//-(void)configureNavigationBar{
-//    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17]};
-//    self.navigationController.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-//
-//
-//
-////    [self configureBackButton];
-//}
 
 -(void)removeNavigationBarLine{
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
@@ -66,8 +54,6 @@
     if (!self.tabBarController.tabBar) return;
     
     NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height;
-    
-    
     
     if (self.tabBarController.tabBar.frame.origin.y == yOrigin) return;
     
@@ -122,20 +108,15 @@
 
 -(void)segueToTodayInNews:(NSArray *)galleryIDs {
     
-    NSLog(@"GALLERY IDS: %@", galleryIDs);
-    
     NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
 
     for (NSString *gallery in galleryIDs) {
-        NSLog(@"gallery = %@", gallery);
 
         [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
             
             if (![galleryArray containsObject:responseObject]) {
                 [galleryArray addObject:(FRSGallery *)responseObject];
             }
-            
-            NSLog(@"ID: %@", [responseObject objectForKey:@"id"]);
             
             if (galleryArray.count == galleryIDs.count) {
                 if (!self.isSegueingToStory) {
@@ -151,17 +132,6 @@
     }
 }
 
-//-(FRSStoryDetailViewController *)detailViewControllerWithGalleries:(FRSStory *)story {
-//    
-//    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
-//    detailView.story = story;
-//    [detailView reloadData];
-//    return detailView;
-//}
-
-
-
-
 
 -(void)segueToGallery:(NSString *)galleryID {
     
@@ -171,7 +141,6 @@
         FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
         
         [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
-        
         
         FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:galleryToSave];
         vc.shouldHaveBackButton = YES;
@@ -183,18 +152,12 @@
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
         [self hideTabBarAnimated:YES];
-        
-        NSLog(@"GALLERY OBJECT: %@", galleryToSave);
     }];
 }
-
 
 -(void)segueToStory:(NSString *)storyID {
     
     [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
-        
-        NSLog(@"STORY ID: %@", storyID);
-        NSLog(@"RESPONSE OBJ: %@", responseObject);
         
         FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:[appDelegate managedObjectContext]];
@@ -211,7 +174,6 @@
     }];
 }
 
-
 -(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
     
     FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
@@ -219,7 +181,6 @@
     [detailView reloadData];
     return detailView;
 }
-
 
 -(void)segueToUser:(NSString *)userID {
     
@@ -247,7 +208,6 @@
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
 }
 
-
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID {
     
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
@@ -264,7 +224,6 @@
         [self presentViewController:navControl animated:YES completion:nil];
     }];
 }
-
 
 -(void)segueHome {
     self.tabBarController.selectedIndex = 0;
