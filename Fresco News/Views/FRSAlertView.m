@@ -11,6 +11,7 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
+#import <MapKit/MapKit.h>
 
 #import <Contacts/Contacts.h>
 
@@ -440,6 +441,70 @@
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
         }
     }
+}
+
+-(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude {
+    
+    UIAlertController * view=   [UIAlertController
+                                 alertControllerWithTitle:nil
+                                 message:nil
+                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *googleMaps = [UIAlertAction
+                                 actionWithTitle:@"Open with Google Maps"
+                                 style:UIAlertActionStyleDefault
+                                 handler:^(UIAlertAction * action)
+                                 {
+                                     [view dismissViewControllerAnimated:YES completion:nil];
+                                     
+                                     //https://www.google.com/maps/dir/40.7155488,+-74.0207971/Flatiron+School,+11+Broadway+%23260,+New+York,+NY+10004/
+                                     
+                                     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?q=%f,%f",latitude,longitude]];
+                                     if (![[UIApplication sharedApplication] canOpenURL:url]) {
+                                         NSLog(@"Google Maps app is not installed");
+                                         
+                                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/?q=%f,%f", latitude, longitude]]];
+                                         
+                                     } else {
+                                         [[UIApplication sharedApplication] openURL:url];
+                                     }
+                                     
+                                     
+                                 }];
+    
+    UIAlertAction *appleMaps = [UIAlertAction
+                                actionWithTitle:@"Open with Apple Maps"
+                                style:UIAlertActionStyleDefault
+                                handler:^(UIAlertAction * action)
+                                {
+                                    [view dismissViewControllerAnimated:YES completion:nil];
+                                    
+                                    CLLocationCoordinate2D endingCoord = CLLocationCoordinate2DMake(latitude, longitude);
+                                    MKPlacemark *endLocation = [[MKPlacemark alloc] initWithCoordinate:endingCoord addressDictionary:nil];
+                                    MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:endLocation];
+                                    
+                                    NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
+                                    [launchOptions setObject:MKLaunchOptionsDirectionsModeDriving forKey:MKLaunchOptionsDirectionsModeKey];
+                                    
+                                    [endingItem openInMapsWithLaunchOptions:launchOptions];
+                                    
+                                }];
+    
+    UIAlertAction *cancel = [UIAlertAction
+                             actionWithTitle:@"Cancel"
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [view dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+    
+    
+    [view addAction:googleMaps];
+    [view addAction:appleMaps];
+    [view addAction:cancel];
+    
+    [(id)self.delegate presentViewController:view animated:YES completion:nil];
 }
 
 -(void)requestLocation {

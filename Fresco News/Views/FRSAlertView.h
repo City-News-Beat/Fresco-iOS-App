@@ -30,4 +30,6 @@
 -(instancetype)initNoConnectionAlert;
 -(instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton;
 
+-(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude;
+
 @end

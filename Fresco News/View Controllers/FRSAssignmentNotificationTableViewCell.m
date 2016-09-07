@@ -9,6 +9,7 @@
 #import "FRSAssignmentNotificationTableViewCell.h"
 #import "FRSCameraViewController.h"
 #import "FRSAPIClient.h"
+#import "FRSAlertView.h"
 
 @interface FRSAssignmentNotificationTableViewCell ()
 
@@ -17,55 +18,36 @@
 @property (weak, nonatomic) IBOutlet UILabel  *bodyLabel;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 
+@property CGFloat assignmentLat;
+@property CGFloat assignmentLong;
+
 @end
 
 @implementation FRSAssignmentNotificationTableViewCell
 
 -(void)awakeFromNib {
     [super awakeFromNib];
-    self.actionButton.userInteractionEnabled = NO;
 }
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-    [self.actionButton setSelected:selected];
 
     //UITableViewCell subviews' background colors turn to clearColor when selecting/highlighting.
     //Setting the background color overrides this
     self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
+
 -(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
     [super setHighlighted:highlighted animated:animated];
-    [self.actionButton setHighlighted:highlighted];
     
     //UITableViewCell subviews' background colors turn to clearColor when selecting/highlighting.
     //Setting the background color overrides this
     self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
 
--(IBAction)g:(id)sender {
-
+-(IBAction)secondaryAction:(id)sender {
     
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        
-        // Cancel button tappped do nothing.
-        
-    }]];
-    
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Open in Google Maps" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        
-        // take photo button tapped.
-        
-    }]];
-    
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"Open in Apple Maps" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        
-        // choose photo button tapped.
-        
-    }]];
-
+    [self.delegate navigateToAssignmentWithLatitude:self.assignmentLat longitude:self.assignmentLong];
 }
 
 -(void)configureAssignmentCellWithID:(NSString *)assignmentID {
@@ -79,7 +61,9 @@
                 
         self.titleLabel.text = [responseObject objectForKey:@"title"];
         self.bodyLabel.text = [responseObject objectForKey:@"caption"];
-        
+        self.assignmentLat = [[[[responseObject valueForKey:@"location"] valueForKey:@"coordinates"] objectAtIndex:0] intValue];
+        self.assignmentLong = [[[[responseObject valueForKey:@"location"] valueForKey:@"coordinates"] objectAtIndex:1] intValue];
+
     }];
 }
 

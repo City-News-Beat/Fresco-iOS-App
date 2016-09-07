@@ -27,6 +27,8 @@
 
 #import "Haneke.h"
 
+#import "FRSAlertView.h"
+
 @import MapKit;
 
 @interface FRSAssignmentsViewController () <MKMapViewDelegate>
@@ -816,66 +818,9 @@
 
 -(void)navigateToAssignment {
     
-    UIAlertController * view=   [UIAlertController
-                                 alertControllerWithTitle:nil
-                                 message:nil
-                                 preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    UIAlertAction *googleMaps = [UIAlertAction
-                         actionWithTitle:@"Open with Google Maps"
-                         style:UIAlertActionStyleDefault
-                         handler:^(UIAlertAction * action)
-                         {
-                             [view dismissViewControllerAnimated:YES completion:nil];
-                             
-                             //https://www.google.com/maps/dir/40.7155488,+-74.0207971/Flatiron+School,+11+Broadway+%23260,+New+York,+NY+10004/
-                             
-                             NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?q=%f,%f",self.assignmentLat, self.assignmentLong]];
-                             if (![[UIApplication sharedApplication] canOpenURL:url]) {
-                                 NSLog(@"Google Maps app is not installed");
-
-                                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/?q=%f,%f", self.assignmentLat, self.assignmentLong]]];
-                             
-                             } else {
-                                 [[UIApplication sharedApplication] openURL:url];
-                             }
-                                 
-                             
-                         }];
-    UIAlertAction *appleMaps = [UIAlertAction
-                             actionWithTitle:@"Open with Apple Maps"
-                             style:UIAlertActionStyleDefault
-                             handler:^(UIAlertAction * action)
-                             {
-                                 [view dismissViewControllerAnimated:YES completion:nil];
-                                 
-                                 CLLocationCoordinate2D endingCoord = CLLocationCoordinate2DMake(self.assignmentLat, self.assignmentLong);
-                                 MKPlacemark *endLocation = [[MKPlacemark alloc] initWithCoordinate:endingCoord addressDictionary:nil];
-                                 MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:endLocation];
-                                 
-                                 NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
-                                 [launchOptions setObject:MKLaunchOptionsDirectionsModeDriving forKey:MKLaunchOptionsDirectionsModeKey];
-                                 
-                                 [endingItem openInMapsWithLaunchOptions:launchOptions];
-                                 
-                             }];
-    
-    UIAlertAction *cancel = [UIAlertAction
-                                actionWithTitle:@"Cancel"
-                                style:UIAlertActionStyleCancel
-                                handler:^(UIAlertAction * action)
-                                {
-                                    [view dismissViewControllerAnimated:YES completion:nil];
-                                    
-                                }];
-    
-    
-    [view addAction:googleMaps];
-    [view addAction:appleMaps];
-    [view addAction:cancel];
-
-    [self presentViewController:view animated:YES completion:nil];
-    
+    FRSAlertView *alert = [[FRSAlertView alloc] init];
+    alert.delegate = self;
+    [alert navigateToAssignmentWithLatitude:self.assignmentLat longitude:self.assignmentLong];
 }
 
 -(void)configureAssignmentCard {

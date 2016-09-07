@@ -52,7 +52,7 @@
                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <state key="normal" image="shutter-24"/>
                         <connections>
-                            <action selector="didTapAssignmentButton:" destination="RoZ-Sz-ikC" eventType="touchUpInside" id="2yk-tn-KbE"/>
+                            <action selector="secondaryAction:" destination="RoZ-Sz-ikC" eventType="touchUpInside" id="bUd-D7-OIX"/>
                         </connections>
                     </button>
                 </subviews>

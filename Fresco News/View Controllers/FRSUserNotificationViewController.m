@@ -20,8 +20,9 @@
 #import "FRSAssignmentsViewController.h"
 #import "FRSTaxInformationViewController.h"
 #import "FRSGalleryExpandedViewController.h"
+#import "FRSAlertView.h"
 
-@interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate>
 
 @property (strong, nonatomic) NSDictionary *payload;
 
@@ -83,6 +84,12 @@
     }
     
     return self;
+}
+
+-(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude {
+    FRSAlertView *alert = [[FRSAlertView alloc] init];
+    alert.delegate = self;
+    [alert navigateToAssignmentWithLatitude:latitude longitude:longitude];
 }
 
 -(void)viewDidLoad {
@@ -261,6 +268,7 @@
             
             NSString *cellIdentifier = @"assignmentNotificationCell";
             FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            cell.delegate = self;
             [cell configureAssignmentCellWithID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
             
             return cell;
