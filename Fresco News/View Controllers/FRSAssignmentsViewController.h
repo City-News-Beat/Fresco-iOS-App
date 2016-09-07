@@ -23,6 +23,7 @@
 
 -(void)setInitialMapRegion;
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID;
+-(void)focusOnAssignment:(FRSAssignment *)assignment;
 
 @property (nonatomic) BOOL hasDefault;
 @property (nonatomic, retain) NSString *defaultID;

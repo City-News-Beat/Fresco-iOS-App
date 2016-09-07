@@ -205,7 +205,11 @@
     assignmentsVC.defaultID = assignmentID;
     self.tabBarController.selectedIndex = 3;
     
-    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+        
+        [assignmentsVC focusOnAssignment:(FRSAssignment *)responseObject];
+        [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+    }];
 }
 
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID {

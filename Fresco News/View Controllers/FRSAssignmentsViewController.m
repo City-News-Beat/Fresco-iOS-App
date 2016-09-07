@@ -357,6 +357,11 @@
     }
 }
 
+-(void)focusOnAssignment:(FRSAssignment *)assignment {
+    
+    [self setDefaultAssignment:assignment];
+}
+
 -(void)removeAssignmentsFromMap {
     id userLocation = [self.mapView userLocation];
     NSMutableArray *assignments = [[NSMutableArray alloc] initWithArray:[self.mapView annotations]];
@@ -387,6 +392,9 @@
 }
 
 -(void)setDefaultAssignment:(FRSAssignment *)assignment {
+    
+    NSLog(@"assignment.uid: %@", assignment.uid);
+    
     if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
         
         self.assignmentTitle = assignment.title;
@@ -403,12 +411,7 @@
         [self animateAssignmentCard];
         
         self.currentAssignment = assignment;
-        
-
-        
-    
-        
-        
+     
         
         MKCoordinateRegion region = { {0.0, 0.0 }, { 0.0, 0.0 } };
         region.center.latitude = [assignment.latitude doubleValue];
@@ -844,7 +847,6 @@
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
-    
 }
 
 -(void)dismissTap:(UITapGestureRecognizer *)sender {
