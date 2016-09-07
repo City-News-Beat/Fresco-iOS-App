@@ -29,7 +29,7 @@
 @synthesize galleryCount = _galleryCount;
 
 // Insert code here to add functionality to your managed object subclass
--(void)configureWithDictionary:(NSDictionary *)dict{
+-(void)configureWithDictionary:(NSDictionary *)dict {
     
     self.caption = dict[@"caption"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"created_at"] milliseconds:YES];
@@ -67,7 +67,7 @@
     }
 }
 
--(NSInteger)heightForStory{
+-(NSInteger)heightForStory {
     
     NSInteger imageViewHeight = IS_IPHONE_5 ? 192 : 240;
     
@@ -86,7 +86,7 @@
     return imageViewHeight;
 }
 
--(NSArray *)imagesURLsFromThumbnails:(NSArray *)thumbnails{
+-(NSArray *)imagesURLsFromThumbnails:(NSArray *)thumbnails {
     NSMutableArray *mArr = [NSMutableArray new];
     
     for (NSDictionary *thumb in thumbnails){
@@ -107,9 +107,9 @@
     [story configureWithDictionary:properties];
     return story;
 }
+
 -(NSDictionary *)jsonObject {
-    NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];
-    
+    NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];   
     
     return jsonObject;
 }
