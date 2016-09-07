@@ -78,7 +78,7 @@
     }
     
     [self registerForPushNotifications];
-    
+    [self startMixpanel];
     [[UINavigationBar appearance]setShadowImage:[[UIImage alloc] init]];
 
     
@@ -86,6 +86,10 @@
     
     
     return YES;
+}
+
+-(void)startMixpanel {
+    [Mixpanel sharedInstanceWithToken:mixPanelToken];
 }
 
 -(void)reloadUser {

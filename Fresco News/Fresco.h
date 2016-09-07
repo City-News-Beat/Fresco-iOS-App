@@ -21,6 +21,8 @@
 #define NSLog //
 #endif
 
+// mixpanel
+static NSString * const mixPanelToken = @"4a01dc9d6ffde669d683102db23c8bcd";
 // image CDN sizing
 static NSString * const thumbImageSize = @"150x";
 static NSString * const smallImageSize = @"320x";

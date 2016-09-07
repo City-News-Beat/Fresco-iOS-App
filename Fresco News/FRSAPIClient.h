@@ -15,6 +15,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "SSKeychain.h"
 #import <Photos/Photos.h>
+#import <Mixpanel/Mixpanel.h>
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
