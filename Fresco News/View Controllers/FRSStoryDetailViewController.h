@@ -27,6 +27,6 @@
 
 -(void)reloadData;
 -(void)scrollToGalleryIndex:(NSInteger)index;
--(void)configureWithGalleryIDs:(NSArray *)galleries;
+-(void)configureWithGalleries:(NSArray *)galleries;
 
 @end

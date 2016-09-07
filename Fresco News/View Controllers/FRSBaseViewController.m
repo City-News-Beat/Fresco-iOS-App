@@ -129,11 +129,11 @@
     for (NSString *gallery in galleryIDs) {
         
         [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
-            [galleryArray addObject:responseObject];
+            [galleryArray addObject:(FRSGallery *)responseObject];
             
             if (galleryArray.count == galleryIDs.count) {
                 FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
-                [detailVC configureWithGalleryIDs:galleryArray];
+                [detailVC configureWithGalleries:galleryArray];
                 detailVC.navigationController = self.navigationController;
                 [self.navigationController pushViewController:detailVC animated:YES];
             }

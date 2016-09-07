@@ -33,11 +33,30 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 }
 
--(void)configureWithGalleryIDs:(NSArray *)galleries {
+-(void)configureWithGalleries:(NSArray *)galleries {
     
+    self.stories = [[NSMutableArray alloc] init];
     
+    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSArray *galleriesArray = galleries;
     
+    for (NSDictionary *gallery in galleriesArray) {
+        FRSGallery *galleryObject = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:delegate.managedObjectContext];
+        [galleryObject configureWithDictionary:gallery context:delegate.managedObjectContext];
+        [self.stories addObject:galleryObject];
+        
+
+        //Loop is finished
+        if (galleriesArray.count == self.stories.count) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.galleriesTable reloadData];
+                [self.loadingView stopLoading];
+                [self.loadingView removeFromSuperview];
+            });
+        };
+    }
     
+
 }
 
 
