@@ -20,5 +20,6 @@
 
 -(void)configureAssignmentCellWithID:(NSString *)assignmentID;
 -(void)configureCameraCellWithAssignmentID:(NSString *)assignmentID;
+-(NSInteger)heightForCell;
 
 @end

@@ -352,6 +352,7 @@
         return [gallery heightForGallery];
     }
     
+    
     return 10;
 }
 

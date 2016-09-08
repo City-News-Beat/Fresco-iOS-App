@@ -16,6 +16,7 @@
 
 
 @property (weak, nonatomic) IBOutlet UIView *line;
+@property (nonatomic) NSInteger generatedHeight;
 
 @end
 
@@ -236,6 +237,58 @@
         
     }
 }
+
+
+-(NSInteger)heightForCell {
+    
+    if (_generatedHeight) {
+        return _generatedHeight;
+    }
+    
+    NSInteger height = 0;
+    
+    int topPadding   = 10;
+    int leftPadding  = 72;
+    int rightPadding = 16;
+    
+    self.titleLabel.font = [UIFont notaMediumWithSize:17];
+    self.titleLabel.numberOfLines = 1;
+    [self.titleLabel sizeToFit];
+    self.titleLabel.frame = CGRectMake(leftPadding, topPadding, self.frame.size.width -leftPadding -rightPadding, 22);
+
+    topPadding = 33;
+    self.bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.bodyLabel.numberOfLines = 3;
+    
+    
+    
+    
+    CGRect bodyRect = [self.bodyLabel.text
+                        boundingRectWithSize:CGSizeMake(self.frame.size.width-leftPadding-rightPadding, INT_MAX)
+                        options:NSStringDrawingUsesLineFragmentOrigin
+                        attributes:@{
+                                     NSFontAttributeName : [UIFont systemFontOfSize:15]
+                                     }
+                        context:nil];
+    
+    CGRect titleRect = [self.titleLabel.text
+                        boundingRectWithSize:self.titleLabel.frame.size
+                        options:NSStringDrawingUsesLineFragmentOrigin
+                        attributes:@{
+                                     NSFontAttributeName : [UIFont systemFontOfSize:15]
+                                     }
+                        context:nil];
+    
+    self.bodyLabel.frame = CGRectMake(leftPadding, topPadding, self.frame.size.width -leftPadding -rightPadding, bodyRect.size.height);
+    
+    height += titleRect.size.height;
+    height += bodyRect.size.height;
+    height += (11+10+1+15); //spacing
+
+    return height;
+}
+
+
 
 -(void)updateLabelsForCount {
     if (self.count > 1) {

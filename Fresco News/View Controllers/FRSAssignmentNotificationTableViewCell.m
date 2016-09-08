@@ -21,6 +21,9 @@
 @property CGFloat assignmentLat;
 @property CGFloat assignmentLong;
 
+@property (nonatomic) NSInteger generatedHeight;
+
+
 @end
 
 @implementation FRSAssignmentNotificationTableViewCell
@@ -81,6 +84,44 @@
     }];
 }
 
+
+-(NSInteger)heightForCell {
+    
+    if (_generatedHeight) {
+        return _generatedHeight;
+    }
+    
+    NSInteger height = 0;
+    
+    int topPadding   = 10;
+    int leftPadding  = 72;
+    int rightPadding = 16;
+    
+    self.titleLabel.font = [UIFont notaMediumWithSize:17];
+    self.titleLabel.numberOfLines = 2;
+    [self.titleLabel sizeToFit];
+    self.titleLabel.frame = CGRectMake(leftPadding, topPadding, self.frame.size.width -leftPadding -rightPadding, 22);
+    
+    topPadding = 33;
+    self.bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.bodyLabel.numberOfLines = 3;
+    
+    CGRect labelRect = [self.bodyLabel.text
+                        boundingRectWithSize:self.bodyLabel.frame.size
+                        options:NSStringDrawingUsesLineFragmentOrigin
+                        attributes:@{
+                                     NSFontAttributeName : [UIFont systemFontOfSize:15]
+                                     }
+                        context:nil];
+    
+    self.bodyLabel.frame = labelRect;
+    
+    height += self.titleLabel.frame.size.height;
+    height += self.bodyLabel.frame.size.height;
+    height += (11+10+1); //spacing
+    
+    return height;
+}
 
 
 @end

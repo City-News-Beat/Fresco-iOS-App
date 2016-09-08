@@ -45,7 +45,7 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 
 
 -(void)configureCellForType:(NSString *)cellType userID:(NSString *)userID;
-
+-(NSInteger)heightForCell;
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;

@@ -43,6 +43,9 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion;
 -(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
 
+// notifications
+-(void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
+
 // generic auth-ed call
 -(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -87,7 +90,6 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 -(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
-
 
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;

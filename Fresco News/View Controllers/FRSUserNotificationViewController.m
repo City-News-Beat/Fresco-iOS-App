@@ -85,6 +85,14 @@
     return self;
 }
 
+-(void)getNotifications {
+    
+    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
+        //self.payload = responseObject;
+    }];
+}
+
+
 -(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude {
     FRSAlertView *alert = [[FRSAlertView alloc] init];
     alert.delegate = self;
@@ -93,7 +101,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self getNotifications];
     [self configureUI];
     [self saveLastOpenedDate];
 }
@@ -163,9 +171,8 @@
 
 -(void)registerNibs {
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
-    
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"storyCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"textNotificationCell"];
-    
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"assignmentNotificationCell"];
 }
 
@@ -182,37 +189,21 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    switch (indexPath.row) {
-        case 0:
-            return 64;
-            break;
-        case 1:
-            return 64;
-            break;
-        case 2:
-            return 84;
-            break;
-        case 3:
-            return 104;
-            break;
-        case 4:
-            return 104;
-            break;
-        case 9:
-            return 84;
-            break;
-        case 10:
-            return 104;
-            break;
-        case 11:
-            return 84;
-            break;
-        
-        default:
-            break;
+    UITableViewCell *cell = [self tableView:_tableView cellForRowAtIndexPath:indexPath];
+    
+    if ([[cell class] isSubclassOfClass:[FRSDefaultNotificationTableViewCell class]]) {
+        FRSDefaultNotificationTableViewCell *defaultCell = (FRSDefaultNotificationTableViewCell *)cell;
+        return [defaultCell heightForCell];
     }
-
-    return 64;
+    
+    if ([[cell class] isSubclassOfClass:[FRSAssignmentNotificationTableViewCell class]]) {
+        FRSAssignmentNotificationTableViewCell *defaultCell = (FRSAssignmentNotificationTableViewCell *)cell;
+        return [defaultCell heightForCell];
+    }
+    
+    
+    
+    return 100;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -255,7 +246,7 @@
 //            cellKey = @"user-news-story";
             
             NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"storyCell"];
             [cell configureFeaturedStoryCellWithStoryID:[self.payload objectForKey:@"user-news-story"]];
             return cell;
             
@@ -362,61 +353,61 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    NSLog(@"INDEXPATH: %ld", (long)indexPath.row);
-    
-    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate updateTabBarToUser];
-    
-    
-    switch (indexPath.row) {
-        case 0:
-            [self segueToUser:[[self.payload objectForKey:followedNotification] objectAtIndex:1]];
-            break;
-        
-        case 1:
-            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
-            break;
-            
-        case 2:
-            [self segueToStory:[self.payload objectForKey:userNewsStoryNotification]];
-            break;
-            
-        case 3:
-            [self segueToAssignmentWithID:[self.payload objectForKey:newAssignmentNotification]];
-            break;
-            
-        case 4:
-            [self segueToCameraWithAssignmentID:[self.payload objectForKey:newAssignmentNotification]];
-            break;
-        
-        case 5:
-            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
-            break;
-            
-        case 6:
-            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
-            break;
-            
-        case 7:
-            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
-            break;
-        
-        case 8:
-            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
-            break;
-            
-        case 9:
-//            [self segueHome];
-            break;
-            
-        case 10:
-            [self segueToTodayInNews:[self.payload objectForKey:todayInNewsNotification]];
-            break;
 
-        default:
-            break;
-    }
+//    NSLog(@"INDEXPATH: %ld", (long)indexPath.row);
+//    
+//    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+//    [delegate updateTabBarToUser];
+//    
+//    
+//    switch (indexPath.row) {
+//        case 0:
+//            [self segueToUser:[[self.payload objectForKey:followedNotification] objectAtIndex:1]];
+//            break;
+//        
+//        case 1:
+//            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
+//            break;
+//            
+//        case 2:
+//            [self segueToStory:[self.payload objectForKey:userNewsStoryNotification]];
+//            break;
+//            
+//        case 3:
+//            [self segueToAssignmentWithID:[self.payload objectForKey:newAssignmentNotification]];
+//            break;
+//            
+//        case 4:
+//            [self segueToCameraWithAssignmentID:[self.payload objectForKey:newAssignmentNotification]];
+//            break;
+//        
+//        case 5:
+//            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
+//            break;
+//            
+//        case 6:
+//            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
+//            break;
+//            
+//        case 7:
+//            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
+//            break;
+//        
+//        case 8:
+//            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
+//            break;
+//            
+//        case 9:
+////            [self segueHome];
+//            break;
+//            
+//        case 10:
+//            [self segueToTodayInNews:[self.payload objectForKey:todayInNewsNotification]];
+//            break;
+//
+//        default:
+//            break;
+//    }
     
 }
 

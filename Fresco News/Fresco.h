@@ -53,6 +53,9 @@ static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 // search endpoint
 static NSString * const searchEndpoint = @"search";
 
+// notification endpoint
+static NSString * const notificationEndpoint = @"/v2/user/testnotifs";
+
 // content endpoints
 static NSString * const storiesEndpoint = @"story/recent";
 static NSString * const highlightsEndpoint = @"gallery/highlights";
