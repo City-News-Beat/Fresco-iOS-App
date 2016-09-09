@@ -237,6 +237,8 @@
 		D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4E76A2B1CB2B15D00AC7A45 /* FRSLoginViewController.xib */; };
 		D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E76A2F1CB423F600AC7A45 /* FRSTrimTool.m */; };
 		D4E9DDFB1D38028E00F450D4 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E9DDFA1D38028E00F450D4 /* FRSUploadManager.m */; };
+		D4EE64251D830DD60034B5EA /* FRSReadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4EE64231D830DD60034B5EA /* FRSReadMoreCell.m */; };
+		D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4EE64241D830DD60034B5EA /* FRSReadMoreCell.xib */; };
 		D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F91A481C8B51500078BF15 /* FRSAPIClient.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
 		E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */ = {isa = PBXBuildFile; fileRef = E70F4BDF1B9F920D00A765E0 /* WKImagePath.m */; };
@@ -700,6 +702,9 @@
 		D4E76A2F1CB423F600AC7A45 /* FRSTrimTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTrimTool.m; sourceTree = "<group>"; };
 		D4E9DDF91D38028E00F450D4 /* FRSUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadManager.h; sourceTree = "<group>"; };
 		D4E9DDFA1D38028E00F450D4 /* FRSUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadManager.m; sourceTree = "<group>"; };
+		D4EE64221D830DD60034B5EA /* FRSReadMoreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSReadMoreCell.h; sourceTree = "<group>"; };
+		D4EE64231D830DD60034B5EA /* FRSReadMoreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSReadMoreCell.m; sourceTree = "<group>"; };
+		D4EE64241D830DD60034B5EA /* FRSReadMoreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSReadMoreCell.xib; sourceTree = "<group>"; };
 		D4F91A461C8B508A0078BF15 /* Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fresco.h; sourceTree = "<group>"; };
 		D4F91A471C8B51500078BF15 /* FRSAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAPIClient.h; sourceTree = "<group>"; };
 		D4F91A481C8B51500078BF15 /* FRSAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAPIClient.m; sourceTree = "<group>"; };
@@ -1418,9 +1423,8 @@
 		D400FA5A1D6DF583008842E1 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				D400FA551D6DF57E008842E1 /* FRSCommentCell.h */,
-				D400FA561D6DF57E008842E1 /* FRSCommentCell.m */,
-				D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */,
+				D4EE64211D830DB50034B5EA /* Read More */,
+				D4EE64201D830DAE0034B5EA /* Comment */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -2210,6 +2214,26 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		D4EE64201D830DAE0034B5EA /* Comment */ = {
+			isa = PBXGroup;
+			children = (
+				D400FA551D6DF57E008842E1 /* FRSCommentCell.h */,
+				D400FA561D6DF57E008842E1 /* FRSCommentCell.m */,
+				D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */,
+			);
+			name = Comment;
+			sourceTree = "<group>";
+		};
+		D4EE64211D830DB50034B5EA /* Read More */ = {
+			isa = PBXGroup;
+			children = (
+				D4EE64221D830DD60034B5EA /* FRSReadMoreCell.h */,
+				D4EE64231D830DD60034B5EA /* FRSReadMoreCell.m */,
+				D4EE64241D830DD60034B5EA /* FRSReadMoreCell.xib */,
+			);
+			name = "Read More";
+			sourceTree = "<group>";
+		};
 		D4F91A451C8B50670078BF15 /* Fresco API */ = {
 			isa = PBXGroup;
 			children = (
@@ -2484,6 +2508,7 @@
 				075473571D19B5640020636E /* Info.plist in Resources */,
 				D4C217DF1D66E28E0076172D /* trash24K2@2x.png in Resources */,
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
+				D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */,
 				D48C72441D11D39F000677BF /* FRSBreakingCell.xib in Resources */,
 				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
 				D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */,
@@ -2634,6 +2659,7 @@
 				D453CC891CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m in Sources */,
 				07A30C001C50488800C536EB /* FRSEmailViewController.m in Sources */,
 				65201A311C3D7D6200B31089 /* FRSGalleryView.m in Sources */,
+				D4EE64251D830DD60034B5EA /* FRSReadMoreCell.m in Sources */,
 				65201A371C3D7D8200B31089 /* FRSScrollViewImageView.m in Sources */,
 				65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */,
 				07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */,
