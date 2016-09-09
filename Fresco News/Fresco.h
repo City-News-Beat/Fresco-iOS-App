@@ -22,7 +22,9 @@
 #endif
 
 // mixpanel
-static NSString * const mixPanelToken = @"4a01dc9d6ffde669d683102db23c8bcd";
+//static NSString * const mixPanelToken = @"4a01dc9d6ffde669d683102db23c8bcd";
+static NSString * const mixPanelToken = @"3db3c5a14458646497514603ea8d8b10";
+
 // image CDN sizing
 static NSString * const thumbImageSize = @"150x";
 static NSString * const smallImageSize = @"320x";

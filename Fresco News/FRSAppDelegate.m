@@ -39,6 +39,7 @@
         [self clearKeychain]; // clear tokens from past install
     }
     
+    [self startMixpanel];
     [self configureWindow];
     [self startFabric]; // crashlytics first yall
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
@@ -78,10 +79,8 @@
     }
     
     [self registerForPushNotifications];
-    [self startMixpanel];
     [[UINavigationBar appearance]setShadowImage:[[UIImage alloc] init]];
 
-    
 
     
     
@@ -90,6 +89,7 @@
 
 -(void)startMixpanel {
     [Mixpanel sharedInstanceWithToken:mixPanelToken];
+    [[Mixpanel sharedInstance] identify:[Mixpanel sharedInstance].distinctId];
 }
 
 -(void)reloadUser {

@@ -1161,6 +1161,9 @@
         _pastRegistration = registrationDigest;
         
         [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+//        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+//        [mixpanel createAlias:frescoID
+//                forDistinctID:mixpanel.distinctId];
         
     }];
 }
