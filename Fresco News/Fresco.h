@@ -214,6 +214,10 @@ static NSString * const taxInfoDeclinedNotification = @"user-payment-tax-info-de
 // Assignments
 static NSString * const newAssignmentNotification = @"user-dispatch-new-assignment";
 
+
+// comments
+static NSString * const paginateComments = @"gallery/%@/comments?limit=10&last=%@&direction=asc";
+
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]
