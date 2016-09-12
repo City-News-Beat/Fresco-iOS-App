@@ -427,7 +427,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                     NSLog(@"%@", comment.imageURL);
                     
                     cell.backgroundColor = [UIColor clearColor];
-                    [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL]];
+                    [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL] placeholder:Nil success:^(UIImage *image) {
+                       
+                        
+                    } failure:^(NSError *error) {
+                        
+                    }];
                 }
                 else {
                     // default
@@ -502,13 +507,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
     // comment text field comes up
+    UITextField *commentField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 55)];
+    
+    [self.view addSubview:commentField];
 }
 
 
 #pragma mark - 3D Touch
 
 -(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    
     [self register3DTouch];
 }
 
