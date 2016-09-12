@@ -12,7 +12,7 @@
 @interface FRSTextNotificationTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIView *line;
-@property (weak, nonatomic) IBOutlet UILabel *bodyLabel;
+@property (nonatomic) NSInteger generatedHeight;
 
 @end
 
@@ -38,10 +38,30 @@
     self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
 
--(void)configureTextCell:(NSString *)text {
+-(NSInteger)heightForCell {
     
-    self.bodyLabel.text = text;
-    self.bodyLabel.numberOfLines = 0;
+    if (_generatedHeight) {
+        return _generatedHeight;
+    }
+
+    _generatedHeight = 0;
+    
+    int topPadding   = 10;
+    int leftPadding  = 72;
+    int rightPadding = 16;
+    
+    self.label.numberOfLines = 0;
+    [self.label sizeToFit];
+    self.label.frame = CGRectMake(leftPadding, topPadding, self.frame.size.width -leftPadding -rightPadding, 22);
+    
+    topPadding = 33;
+    
+    [self.label sizeToFit];
+    
+    _generatedHeight += self.label.frame.size.height;
+    _generatedHeight += 8; //spacing
+    
+    return _generatedHeight;
 }
 
 @end

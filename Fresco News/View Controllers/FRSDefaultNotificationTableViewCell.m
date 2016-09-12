@@ -46,7 +46,7 @@
 
 -(void)configureUserRepostNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
     
-    [self configureDefaultAttributesForNotification:FRSNotificationTypeRepost];
+    [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeRepost];
     [self setUserImage:userID];
     self.followButton.alpha = 0;
     self.annotationView.alpha = 0;
@@ -54,7 +54,7 @@
 
 -(void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
     
-    [self configureDefaultAttributesForNotification:FRSNotificationTypeLike];
+    [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeLike];
     [self setUserImage:userID];
     self.followButton.alpha = 0;
     self.annotationView.alpha = 0;
@@ -62,14 +62,14 @@
 
 -(void)configureUserCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID {
     
-    [self configureDefaultAttributesForNotification:FRSNotificationTypeComment];
+    [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeComment];
     [self setUserImage:userID];
     self.followButton.alpha = 0;
     self.annotationView.alpha = 0;
 }
 
 -(void)configureUserMentionCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID {
-    [self configureDefaultAttributesForNotification:FRSNotificationTypeCommentMention];
+    [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeCommentMention];
     [self setUserImage:userID];
     self.followButton.alpha = 0;
     self.annotationView.alpha = 0;
@@ -77,7 +77,7 @@
 
 
 -(void)configureUserMentionGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
-    [self configureDefaultAttributesForNotification:FRSNotificationTypeGalleryMention];
+    [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeGalleryMention];
     [self setUserImage:userID];
     self.followButton.alpha = 0;
     self.annotationView.alpha = 0;
@@ -133,7 +133,7 @@
 
 -(void)configureUserFollowNotificationWithID:(NSString *)userID {
     
-    [self configureDefaultAttributesForNotification:FRSNotificationTypeFollow];
+    [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeFollow];
     
     self.followButton.alpha = 1;
     self.followButton.tintColor = [UIColor blackColor];
@@ -201,7 +201,7 @@
     self.annotationView.alpha = 0;
 }
 
--(void)configureDefaultAttributesForNotification:(FRSNotificationType)notificationType {
+-(void)configureDefaultCellWithAttributesForNotification:(FRSNotificationType)notificationType {
     
     [self configureDefaultCell];
     
@@ -233,7 +233,6 @@
     if (self.count <= 1) {
         self.annotationView.alpha = 0;
         self.annotationLabel.alpha = 0;
-        
     }
 }
 
@@ -293,6 +292,12 @@
 
 -(void)prepareForReuse {
     [super prepareForReuse];
+    self.titleLabel = nil;
+    self.bodyLabel = nil;
+    self.image = nil;
+    self.followButton = nil;
+    self.annotationView = nil;
+    self.annotationLabel = nil;
 }
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {

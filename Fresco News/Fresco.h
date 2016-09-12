@@ -186,6 +186,26 @@ typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error)
     Notification types
  */
 
+
+typedef NS_ENUM(NSUInteger, FRSNotificationType) {
+    
+    /* Social */
+    FRSNotificationTypeFollow,
+    FRSNotificationTypeLike,
+    FRSNotificationTypeRepost,
+    FRSNotificationTypeComment,
+    FRSNotificationTypeGalleryMention,
+    FRSNotificationTypeCommentMention
+    
+    /* News */
+    
+    /* Dispatch */
+    
+    /* Payment */
+    
+    /* Promo */
+};
+
 static NSString * const settingsKey = @"notification-type";
 
 // News

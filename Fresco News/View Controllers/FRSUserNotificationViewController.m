@@ -54,7 +54,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         NSString *gallery_id = @"arYd0y5Q0Dp5";
         NSString *story_id   = @"7mr93zRx3BlY";
         NSString *empty = @"";
-        NSArray *user_ids = @[@"ewOo1Pr8KvlN", @"2vRW0Na8oEgQ", @"Ym4x8rK0Jjpd"];
+        NSArray *user_ids = @[@"2vRW0Na8oEgQ", @"ewOo1Pr8KvlN", @"Ym4x8rK0Jjpd"];
 
         NSString *assignment_id = @"xLJE0QzW1G5B";
 
@@ -72,15 +72,15 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
                          userNewsCustomNotification : body,
                          
                          followedNotification : user_ids,
-                         likedNotification : @[user_ids, gallery_id],
-                         repostedNotification : @[user_ids, gallery_id],
-                         commentedNotification : @[user_ids, gallery_id],
+                         likedNotification : @{@"user_ids" : user_ids, @"gallery_id": gallery_id},
+                         repostedNotification : @{@"user_ids" : user_ids, @"gallery_id": gallery_id},
+                         commentedNotification : @{@"user_ids" : user_ids, @"gallery_id": gallery_id},
                          //mentionCommentNotification : @[], //cc: api
                          //mentionGalleryNotification : @[], //cc: api
                          
                          newAssignmentNotification : assignment_id,
                          
-                         purchasedContentNotification : @[outlet_id, post_ids],
+                         purchasedContentNotification : @{@"outlet_id" : outlet_id, @"post_ids" : post_ids},
                          paymentExpiringNotification : empty,
                          paymentSentNotification: empty,
                          paymentDeclinedNotification : empty,
@@ -202,6 +202,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     if ([[cell class] isSubclassOfClass:[FRSDefaultNotificationTableViewCell class]]) {
         FRSDefaultNotificationTableViewCell *defaultCell = (FRSDefaultNotificationTableViewCell *)cell;
+        
         return [defaultCell heightForCell];
     }
     
@@ -209,6 +210,12 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         FRSAssignmentNotificationTableViewCell *assignmentCell = (FRSAssignmentNotificationTableViewCell *)cell;
         
         return [assignmentCell heightForCell];
+    }
+    
+    if ([[cell class] isSubclassOfClass:[FRSTextNotificationTableViewCell class]]) {
+        FRSTextNotificationTableViewCell *textCell = (FRSTextNotificationTableViewCell *)cell;
+        
+        return [textCell heightForCell];
     }
     
     
@@ -238,24 +245,44 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     } else if ([currentKey isEqualToString:todayInNewsNotification]) {
         NSLog(@"TODAY IN NEWS");
         [self configureTodayInNews:defaultCell galleryIDs:[self.payload objectForKey:todayInNewsNotification]];
+        return defaultCell;
         
     } else if ([currentKey isEqualToString:userNewsGalleryNotification]) {
         NSLog(@"USER NEWS GALLERY");
+        [self configureGalleryCell:defaultCell galleryID:[self.payload objectForKey:userNewsGalleryNotification]];
+        return defaultCell;
+        
     } else if ([currentKey isEqualToString:userNewsStoryNotification]) {
         NSLog(@"USER NEWS STORY");
+        [self configureStoryCell:defaultCell storyID:[self.payload objectForKey:userNewsStoryNotification]];
+        return defaultCell;
+        
     } else if ([currentKey isEqualToString:userNewsCustomNotification]) {
         NSLog(@"USER NEWS CUSTOM");
-        
+        [self configureTextCell:textCell text:[self.payload objectForKey:userNewsCustomNotification]];
+        return textCell;
         
     /* SOCIAL */
     } else if ([currentKey isEqualToString:followedNotification]) {
         NSLog(@"FOLLOWED");
+        [self configureFollowCell:defaultCell userIDs:[self.payload objectForKey:followedNotification]];
+        return defaultCell;
+        
     } else if ([currentKey isEqualToString:likedNotification]) {
         NSLog(@"LIKED");
+        [self configureLikeCell:defaultCell userIDs:[[self.payload objectForKey:likedNotification] objectForKey:@"user_ids"] galleryID:[[self.payload objectForKey:likedNotification] objectForKey:@"gallery_id"]];
+        return defaultCell;
+
     } else if ([currentKey isEqualToString:repostedNotification]) {
         NSLog(@"REPOSTED");
+        [self configureRepostCell:defaultCell userIDs:[[self.payload objectForKey:repostedNotification] objectForKey:@"user_ids"] galleryID:[[self.payload objectForKey:repostedNotification] objectForKey:@"gallery_id"]];
+        return defaultCell;
+
     } else if ([currentKey isEqualToString:commentedNotification]) {
         NSLog(@"COMMENTED");
+        [self configureCommentCell:defaultCell userIDs:[[self.payload objectForKey:commentedNotification] objectForKey:@"user_ids"] galleryID:[[self.payload objectForKey:commentedNotification] objectForKey:@"gallery_id"]];
+        return defaultCell;
+
     }/* else if ([currentKey isEqualToString:mentionCommentNotification]) {
         NSLog(@"MENTION COMMENT");
     } else if ([currentKey isEqualToString:mentionGalleryNotification]) {
@@ -276,7 +303,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
         NSLog(@"PAYMENT EXPIRING");
-        
     } else if ([currentKey isEqualToString:paymentSentNotification]) {
         NSLog(@"PAYMENT SENT");
     } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
@@ -292,9 +318,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
         NSLog(@"TAX INFO PROCESSED");
     } else {
-        NSString *cellIdentifier = @"notificationCell";
-        FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        return cell;
+        return defaultCell;
     }
 
 
@@ -322,13 +346,54 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
         cell.bodyLabel.text = [responseObject objectForKey:@"caption"];
         
-        //hanake this shit
         NSURL *galleryURL = [NSURL URLWithString:[[[responseObject objectForKey:@"posts"] objectAtIndex:1] objectForKey:@"image"]];
         [cell.image hnk_setImageFromURL:galleryURL];
         
     }];
 }
 
+
+-(void)configureGalleryCell:(FRSDefaultNotificationTableViewCell *)cell galleryID:(NSString *)galleryID {
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = @"Featured Gallery";
+    cell.bodyLabel.text = @"\n";
+    cell.bodyLabel.numberOfLines = 3;
+    
+    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
+       
+        cell.bodyLabel.text = [responseObject objectForKey:@"caption"];
+        
+        NSURL *galleryURL = [NSURL URLWithString:[[[responseObject objectForKey:@"posts"] objectAtIndex:1] objectForKey:@"image"]];
+        [cell.image hnk_setImageFromURL:galleryURL];
+    }];
+}
+
+
+-(void)configureStoryCell:(FRSDefaultNotificationTableViewCell *)cell storyID:(NSString *)storyID {
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = @"\n";
+    cell.bodyLabel.text = @"\n";
+    
+    [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
+        
+        cell.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"title"]];
+        cell.bodyLabel.text = [responseObject objectForKey:@"caption"];
+        cell.bodyLabel.numberOfLines = 3;
+        cell.titleLabel.numberOfLines = 2;
+        
+        if([responseObject objectForKey:@"thumbnails"] != [NSNull null]){
+            NSURL *avatarURL = [NSURL URLWithString:[[[responseObject objectForKey:@"thumbnails"] objectAtIndex:0] objectForKey:@"image"]];
+            [cell.image hnk_setImageFromURL:avatarURL];
+        }
+    }];
+}
+
+-(void)configureTextCell:(FRSTextNotificationTableViewCell *)textCell text:(NSString *)text {
+    textCell.label.numberOfLines = 0;
+    textCell.label.text = text;
+}
 
 
 #pragma mark - Assignments
@@ -345,7 +410,66 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     }];
 }
 
+
 #pragma mark - Social
+
+-(void)configureFollowCell:(FRSDefaultNotificationTableViewCell *)cell userIDs:(NSArray *)userIDs {
+    [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeFollow];
+    cell.count = userIDs.count;
+    cell.followButton.alpha = 1;
+    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
+}
+
+-(void)configureLikeCell:(FRSDefaultNotificationTableViewCell *)cell userIDs:(NSArray *)userIDs galleryID:(NSString *)galleryID {
+    [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeLike];
+    cell.count = userIDs.count;
+    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
+}
+
+-(void)configureRepostCell:(FRSDefaultNotificationTableViewCell *)cell userIDs:(NSArray *)userIDs galleryID:(NSString *)galleryID {
+    [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeRepost];
+    cell.count = userIDs.count;
+    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
+}
+
+-(void)configureCommentCell:(FRSDefaultNotificationTableViewCell *)cell userIDs:(NSArray *)userIDs galleryID:(NSString *)galleryID {
+    [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeComment];
+    cell.count = userIDs.count;
+    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
+}
+
+
+-(void)configureUserAttributes:(FRSDefaultNotificationTableViewCell *)cell userID:(NSString *)userID {
+    
+    cell.titleLabel.text = @"\n";
+
+    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
+        
+        if (![[responseObject objectForKey:@"full_name"] isEqualToString:@""]) {
+            cell.titleLabel.text = [responseObject objectForKey:@"full_name"];
+        } else {
+            cell.titleLabel.text = [responseObject objectForKey:@"username"];
+        }
+        
+        if([responseObject objectForKey:@"avatar"] != [NSNull null]){
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
+            [cell.image hnk_setImageFromURL:avatarURL];
+        }
+        
+        if ([[responseObject objectForKey:@"following"] boolValue]) {
+            [cell.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+            cell.followButton.tintColor = [UIColor frescoOrangeColor];
+        } else {
+            [cell.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+            cell.followButton.tintColor = [UIColor blackColor];
+        }
+        
+        [cell updateLabelsForCount];
+    }];
+}
+
+
+#pragma mark - Payment
 
 -(void)configurePurchasedContentCell:(FRSDefaultNotificationTableViewCell *)cell outletID:(NSString *)outletID postID:(NSString *)postID hasPaymentInfo:(BOOL)paymentInfo {
     
@@ -364,7 +488,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         }
     }];
     
-    
     NSString *price = @"$$$";
     NSString *paymentMethod = @"TEST (5584)";
     
@@ -374,12 +497,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         cell.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! Tap to add a card and we’ll send you %@!", outletID, price];
     }
 }
-
-
-
-
-#pragma mark - Payment
-
 
 
 

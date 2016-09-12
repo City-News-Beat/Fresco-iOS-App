@@ -10,7 +10,7 @@
 
 @interface FRSTextNotificationTableViewCell : UITableViewCell
 
--(void)configureTextCell:(NSString *)text;
-
+-(NSInteger)heightForCell;
+@property (weak, nonatomic) IBOutlet UILabel *label;
 
 @end

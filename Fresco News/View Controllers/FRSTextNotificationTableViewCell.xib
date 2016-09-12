@@ -15,10 +15,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="102.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="hello friend." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pi9-eJ-jqS">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="test" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pi9-eJ-jqS">
                         <rect key="frame" x="16" y="8" width="296" height="86.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="calibratedWhite"/>
+                        <color key="textColor" white="0.0" alpha="0.87" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uaI-Dl-sC2">
@@ -40,7 +40,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="bodyLabel" destination="pi9-eJ-jqS" id="v3S-38-j4R"/>
+                <outlet property="label" destination="pi9-eJ-jqS" id="95B-iP-kwI"/>
                 <outlet property="line" destination="uaI-Dl-sC2" id="cuo-sr-DI0"/>
             </connections>
             <point key="canvasLocation" x="414" y="393.5"/>

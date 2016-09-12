@@ -10,25 +10,6 @@
 
 @interface FRSDefaultNotificationTableViewCell : UITableViewCell
 
-typedef NS_ENUM(NSUInteger, FRSNotificationType) {
-    
-    /* Social */
-    FRSNotificationTypeFollow,
-    FRSNotificationTypeLike,
-    FRSNotificationTypeRepost,
-    FRSNotificationTypeComment,
-    FRSNotificationTypeGalleryMention,
-    FRSNotificationTypeCommentMention
-    
-    /* News */
-    
-    /* Dispatch */
-    
-    /* Payment */
-    
-    /* Promo */
-};
-
 /* SOCIAL */
 -(void)configureUserFollowNotificationWithID:(NSString *)userID;
 -(void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
@@ -64,5 +45,7 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 
 /* HELPERS */
 -(void)configureDefaultCell;
+-(void)configureDefaultCellWithAttributesForNotification:(FRSNotificationType)notificationType;
+-(void)updateLabelsForCount;
 
 @end
