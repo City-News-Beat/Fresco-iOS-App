@@ -54,7 +54,7 @@
 static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 
--(instancetype)initWithGallery:(FRSGallery *)gallery{
+-(instancetype)initWithGallery:(FRSGallery *)gallery {
     self = [super init];
     if (self){
         self.gallery = gallery;
@@ -101,31 +101,32 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     // Do any additional setup after loading the view.
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     [self register3DTouch];
 }
 
--(void)viewDidAppear:(BOOL)animated{
+-(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     self.navigationItem.titleView = self.titleLabel;
 }
 
--(void)viewWillDisappear:(BOOL)animated{
+-(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     [self showTabBarAnimated:YES];
     self.navigationItem.titleView = self.titleLabel;
 }
 
--(void)popViewController{
+-(void)popViewController {
     [super popViewController];
     [self showTabBarAnimated:YES];
 }
 
--(void)configureNavigationBar{
+-(void)configureNavigationBar {
+    
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.text = @"GALLERY";
     self.titleLabel.textColor = [UIColor whiteColor];
@@ -347,7 +348,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
     }];
 }
-
 
 #pragma mark - UIScrollView Delegate
 
