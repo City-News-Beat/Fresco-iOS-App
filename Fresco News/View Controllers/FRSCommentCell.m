@@ -16,7 +16,7 @@
     // Initialization code
     self.profilePicture.layer.cornerRadius = 15;
     self.profilePicture.layer.masksToBounds = YES;
-    self.commentTextField.backgroundColor = [UIColor frescoDarkTextColor];
+    self.commentTextField.textColor = [UIColor frescoDarkTextColor];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
