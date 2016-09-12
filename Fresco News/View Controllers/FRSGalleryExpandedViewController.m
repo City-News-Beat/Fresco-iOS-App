@@ -466,7 +466,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.navigationItem.title = @"";
         [self.tabBarController.tabBar setHidden:YES];
         [self.navigationController pushViewController:viewController animated:YES];
-        
     }
     
     return NO;
@@ -494,12 +493,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - Action Bar Delegate and Methods
 
 -(NSString *)titleForActionButton{
-    if (self.addCommentState){
-        return @"ADD A COMMENT";
-    }
-    else {
-        return [NSString stringWithFormat:@"6 COMMENTS"];
-    }
+    return @"ADD A COMMENT";
 }
 
 -(UIColor *)colorForActionButton{
@@ -507,13 +501,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
-    if (self.addCommentState){
-        
-    }
-    else {
-        [self.scrollView setContentOffset:CGPointMake(0, [self toggleActionBarOffsetPoint]) animated:YES];
-        [self scrollViewDidScroll:self.scrollView];
-    }
+    // comment text field comes up
 }
 
 
