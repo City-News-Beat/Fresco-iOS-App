@@ -217,6 +217,7 @@ static NSString * const newAssignmentNotification = @"user-dispatch-new-assignme
 
 // comments
 static NSString * const paginateComments = @"gallery/%@/comments?limit=10&last=%@&direction=asc";
+static NSString * const getCommentEndpoint = @"gallery/%@/comment/%@";
 
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
