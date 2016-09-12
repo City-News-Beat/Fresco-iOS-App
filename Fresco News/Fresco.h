@@ -200,6 +200,8 @@ static NSString * const followedNotification = @"user-social-followed";
 static NSString * const likedNotification = @"user-social-liked";
 static NSString * const repostedNotification = @"user-social-reposted";
 static NSString * const commentedNotification = @"user-social-commented";
+static NSString * const mentionCommentNotification = @""; //cc: api
+static NSString * const mentionGalleryNotification = @""; //cc: api
 
 // Payment
 static NSString * const purchasedContentNotification = @"user-dispatch-purchased";

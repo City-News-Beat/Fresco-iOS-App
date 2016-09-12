@@ -8,30 +8,38 @@
 
 #import "FRSUserNotificationViewController.h"
 
+#import "FRSAppDelegate.h"
+#import "FRSTabBarController.h"
+
+#import "FRSAssignmentNotificationTableViewCell.h"
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "FRSTextNotificationTableViewCell.h"
-#import "FRSAssignmentNotificationTableViewCell.h"
-#import "FRSProfileViewController.h"
+
 #import "FRSCameraViewController.h"
-#import "FRSTabBarController.h"
-#import "FRSAppDelegate.h"
-#import "FRSAssignment.h"
+#import "FRSProfileViewController.h"
 #import "FRSDebitCardViewController.h"
 #import "FRSAssignmentsViewController.h"
 #import "FRSTaxInformationViewController.h"
 #import "FRSGalleryExpandedViewController.h"
+
+#import "FRSAssignment.h"
 #import "FRSAlertView.h"
+
+#import <Haneke/Haneke.h>
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate>
 
 @property (strong, nonatomic) NSDictionary *payload;
-
 @property BOOL isSegueingToGallery;
 @property BOOL isSegueingToStory;
 
 @end
 
 @implementation FRSUserNotificationViewController
+
+NSString * const TEXT_ID       = @"textNotificationCell";
+NSString * const DEFAULT_ID    = @"notificationCell";
+NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(instancetype)init {
     self = [super init];
@@ -57,7 +65,7 @@
 
         self.payload = @{
                          
-                         photoOfDayNotification : post_ids,
+                         //photoOfDayNotification : post_ids,
                          todayInNewsNotification : gallery_ids,
                          userNewsGalleryNotification : gallery_id,
                          userNewsStoryNotification : story_id,
@@ -67,6 +75,8 @@
                          likedNotification : @[user_ids, gallery_id],
                          repostedNotification : @[user_ids, gallery_id],
                          commentedNotification : @[user_ids, gallery_id],
+                         //mentionCommentNotification : @[], //cc: api
+                         //mentionGalleryNotification : @[], //cc: api
                          
                          newAssignmentNotification : assignment_id,
                          
@@ -171,7 +181,6 @@
 
 -(void)registerNibs {
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"storyCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"textNotificationCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"assignmentNotificationCell"];
 }
@@ -180,7 +189,7 @@
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 11;
+    return self.payload.count;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -197,8 +206,9 @@
     }
     
     if ([[cell class] isSubclassOfClass:[FRSAssignmentNotificationTableViewCell class]]) {
-        FRSAssignmentNotificationTableViewCell *defaultCell = (FRSAssignmentNotificationTableViewCell *)cell;
-        return [defaultCell heightForCell];
+        FRSAssignmentNotificationTableViewCell *assignmentCell = (FRSAssignmentNotificationTableViewCell *)cell;
+        
+        return [assignmentCell heightForCell];
     }
     
     
@@ -208,208 +218,170 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
+    
+    NSArray *keys = [self.payload allKeys];
+    NSString *currentKey = [keys objectAtIndex:indexPath.row];
+    
+    
+    FRSTextNotificationTableViewCell *textCell = [self.tableView dequeueReusableCellWithIdentifier:TEXT_ID];
+    FRSDefaultNotificationTableViewCell *defaultCell = [self.tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+    FRSAssignmentNotificationTableViewCell *assignmentCell = [self.tableView dequeueReusableCellWithIdentifier:ASSIGNMENT_ID];
+    
+    assignmentCell.delegate = self;
+    [defaultCell configureDefaultCell];
+
 
     
-//    NSString *cellKey = @""; //set from payload
-    
-    switch (indexPath.row) {
-        case 0: {
-            
-//            cellKey = @"user-social-followed";
-            
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];            
-            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
-            cell.count = users.count;
-            
-            [cell configureUserFollowNotificationWithID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:1]];
-            
-            return cell;
-        } break;
-            
-        case 1: {
-            
-//            cellKey = @"user-social-liked";
-            
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
-            cell.count = users.count;
-            
-            [cell configureUserLikeNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0] galleryID:[self.payload objectForKey:@"user-social-liked"]];
+    /* NEWS */
+    if ([currentKey isEqualToString:photoOfDayNotification]) {
+        NSLog(@"PHOTOS OF THE DAY");
+    } else if ([currentKey isEqualToString:todayInNewsNotification]) {
+        NSLog(@"TODAY IN NEWS");
+        [self configureTodayInNews:defaultCell galleryIDs:[self.payload objectForKey:todayInNewsNotification]];
         
-            return cell;
-        } break;
-            
-        case 2: {
-            
-//            cellKey = @"user-news-story";
-            
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"storyCell"];
-            [cell configureFeaturedStoryCellWithStoryID:[self.payload objectForKey:@"user-news-story"]];
-            return cell;
-            
-        } break;
-            
-        case 3: {
-            
-//            cellKey = @"user-dispatch-new-assignment";
-            
-            NSString *cellIdentifier = @"assignmentNotificationCell";
-            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            cell.delegate = self;
-            [cell configureAssignmentCellWithID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
-            
-            return cell;
-        } break;
-            
-        case 4: {
-            
-//            cellKey = @"user-dispatch-new-assignment";
-            
-            NSString *cellIdentifier = @"assignmentNotificationCell";
-            FRSAssignmentNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            [cell configureCameraCellWithAssignmentID:[self.payload objectForKey:@"user-dispatch-new-assignment"]];
-            
-            return cell;
-            
-        } case 5: {
-            
-//            cellKey = @"user-social-reposted";
-            
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
-            cell.count = users.count;
-            
-            [cell configureUserRepostNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:2] galleryID:[self.payload objectForKey:@"user-social-liked"]];
-            return cell;
-            
-        } case 6: {
-            
-//            cellKey = @"user-social-commented";
-            
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
-            cell.count = users.count;
-            [cell configureUserCommentNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0] commentID:nil];
-            return cell;
+    } else if ([currentKey isEqualToString:userNewsGalleryNotification]) {
+        NSLog(@"USER NEWS GALLERY");
+    } else if ([currentKey isEqualToString:userNewsStoryNotification]) {
+        NSLog(@"USER NEWS STORY");
+    } else if ([currentKey isEqualToString:userNewsCustomNotification]) {
+        NSLog(@"USER NEWS CUSTOM");
         
-        } case 7: {
-            
-//            cellKey = @"user-social-commented";
-            
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
-            cell.count = users.count;
-            [cell configureUserMentionCommentNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:1] commentID:nil];
-            return cell;
-            
-        } case 8: {
-            
-//            cellKey = @"user-social-commented";
-
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            NSArray *users = [self.payload objectForKey:@"user-social-followed"];
-            cell.count = users.count;
-            [cell configureUserMentionGalleryNotificationWithUserID:[[self.payload objectForKey:@"user-social-followed"] objectAtIndex:0] galleryID:nil];
-            return cell;
-            
-        } case 9: {
-            
-//            cellKey = @"user-news-custom-push";
-            
-            NSString *cellIdentifier = @"textNotificationCell";
-            FRSTextNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
-            [cell configureTextCell:[self.payload objectForKey:@"user-news-custom-push"]];
-            return cell;
-
-        } case 10: {
-            
-//            Today in News
-            
-            NSString *cellIdentifier = @"notificationCell";
-            FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-            
-            [cell configureUserMentionGalleryNotificationWithUserID:nil galleryID:nil];
-
-            return cell;
-        }
+        
+    /* SOCIAL */
+    } else if ([currentKey isEqualToString:followedNotification]) {
+        NSLog(@"FOLLOWED");
+    } else if ([currentKey isEqualToString:likedNotification]) {
+        NSLog(@"LIKED");
+    } else if ([currentKey isEqualToString:repostedNotification]) {
+        NSLog(@"REPOSTED");
+    } else if ([currentKey isEqualToString:commentedNotification]) {
+        NSLog(@"COMMENTED");
+    }/* else if ([currentKey isEqualToString:mentionCommentNotification]) {
+        NSLog(@"MENTION COMMENT");
+    } else if ([currentKey isEqualToString:mentionGalleryNotification]) {
+        NSLog(@"MENTION GALLERY");
+    }*/
     
-
-        default:
-            break;
+    /* ASSIGNMENT */
+    else if ([currentKey isEqualToString:newAssignmentNotification]) {
+        [self configureAssignmentCell:assignmentCell withID:[self.payload objectForKey:newAssignmentNotification]];
+        return assignmentCell;
+    }
+    
+    /* PAYMENT */
+    else if ([currentKey isEqualToString:purchasedContentNotification]) {
+        NSLog(@"PURCHASED CONTENT");
+        [self configurePurchasedContentCell:defaultCell outletID:[self.payload objectForKey:@"outlet_id"] postID:[self.payload objectForKey:@"post_id"] hasPaymentInfo:YES];
+        return defaultCell;
+        
+    } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
+        NSLog(@"PAYMENT EXPIRING");
+        
+    } else if ([currentKey isEqualToString:paymentSentNotification]) {
+        NSLog(@"PAYMENT SENT");
+    } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
+        NSLog(@"PAYMENT DECLINED");
+    } else if ([currentKey isEqualToString:taxInfoRequiredNotification]) {
+        NSLog(@"TAX INFO REQUIRED");
+        
+        
+    } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
+        NSLog(@"TAX INFO PROCESSING");
+    } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
+        NSLog(@"TAX INFO DECLINED");
+    } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
+        NSLog(@"TAX INFO PROCESSED");
+    } else {
+        NSString *cellIdentifier = @"notificationCell";
+        FRSDefaultNotificationTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        return cell;
     }
 
-    UITableViewCell *cell;
-    return cell;
+
+    return defaultCell;
 }
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-//    NSLog(@"INDEXPATH: %ld", (long)indexPath.row);
-//    
-//    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-//    [delegate updateTabBarToUser];
-//    
-//    
-//    switch (indexPath.row) {
-//        case 0:
-//            [self segueToUser:[[self.payload objectForKey:followedNotification] objectAtIndex:1]];
-//            break;
-//        
-//        case 1:
-//            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
-//            break;
-//            
-//        case 2:
-//            [self segueToStory:[self.payload objectForKey:userNewsStoryNotification]];
-//            break;
-//            
-//        case 3:
-//            [self segueToAssignmentWithID:[self.payload objectForKey:newAssignmentNotification]];
-//            break;
-//            
-//        case 4:
-//            [self segueToCameraWithAssignmentID:[self.payload objectForKey:newAssignmentNotification]];
-//            break;
-//        
-//        case 5:
-//            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
-//            break;
-//            
-//        case 6:
-//            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
-//            break;
-//            
-//        case 7:
-//            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
-//            break;
-//        
-//        case 8:
-//            [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
-//            break;
-//            
-//        case 9:
-////            [self segueHome];
-//            break;
-//            
-//        case 10:
-//            [self segueToTodayInNews:[self.payload objectForKey:todayInNewsNotification]];
-//            break;
-//
-//        default:
-//            break;
-//    }
-    
 }
+
+
+#pragma mark - Cell Configuration
+
+#pragma mark - News
+-(void)configureTodayInNews:(FRSDefaultNotificationTableViewCell *)cell galleryIDs:(NSArray*)galleryIDs {
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = @"Today in News";
+    cell.bodyLabel.numberOfLines = 3;
+    cell.bodyLabel.text = @"\n\n\n";
+    
+    [[FRSAPIClient sharedClient] getGalleryWithUID:[galleryIDs objectAtIndex:0] completion:^(id responseObject, NSError *error) {
+
+        cell.bodyLabel.text = [responseObject objectForKey:@"caption"];
+        
+        //hanake this shit
+        NSURL *galleryURL = [NSURL URLWithString:[[[responseObject objectForKey:@"posts"] objectAtIndex:1] objectForKey:@"image"]];
+        [cell.image hnk_setImageFromURL:galleryURL];
+        
+    }];
+}
+
+
+
+#pragma mark - Assignments
+-(void)configureAssignmentCell:(FRSAssignmentNotificationTableViewCell *)assignmentCell withID:(NSString *)assignmentID {
+    
+    assignmentCell.titleLabel.numberOfLines = 0;
+    assignmentCell.bodyLabel.numberOfLines  = 3;
+    assignmentCell.actionButton.tintColor = [UIColor blackColor];
+    
+    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+        
+        assignmentCell.titleLabel.text = [responseObject objectForKey:@"title"];
+        assignmentCell.bodyLabel.text = [responseObject objectForKey:@"caption"];
+    }];
+}
+
+#pragma mark - Social
+
+-(void)configurePurchasedContentCell:(FRSDefaultNotificationTableViewCell *)cell outletID:(NSString *)outletID postID:(NSString *)postID hasPaymentInfo:(BOOL)paymentInfo {
+    
+    cell.titleLabel.text = @"Your photo was purchased!";
+    cell.bodyLabel.numberOfLines = 3;
+    [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
+        
+    }];
+    
+    [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
+        
+        if([responseObject objectForKey:@"image"] != [NSNull null]){
+            
+            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
+            [cell.image hnk_setImageFromURL:avatarURL];
+        }
+    }];
+    
+    
+    NSString *price = @"$$$";
+    NSString *paymentMethod = @"TEST (5584)";
+    
+    if (paymentInfo) {
+        cell.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! We've sent %@ to your %@.", outletID, price, paymentMethod];
+    } else {
+        cell.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! Tap to add a card and we’ll send you %@!", outletID, price];
+    }
+}
+
+
+
+
+#pragma mark - Payment
+
+
+
 
 #pragma mark - Actions
 
@@ -423,8 +395,6 @@
     CGSize size = [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     return size.height;
 }
-
-
 
 -(void)segueToTaxInfo {
     
@@ -441,8 +411,6 @@
     
 }
 
-
-
 -(void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:NO];
@@ -450,13 +418,6 @@
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate updateTabBarToUser];
 }
-
-
-
-
-
-
-
 
 
 

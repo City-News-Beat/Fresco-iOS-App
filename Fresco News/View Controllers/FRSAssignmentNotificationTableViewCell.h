@@ -22,4 +22,8 @@
 -(void)configureCameraCellWithAssignmentID:(NSString *)assignmentID;
 -(NSInteger)heightForCell;
 
+@property (weak, nonatomic) IBOutlet UILabel  *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel  *bodyLabel;
+@property (weak, nonatomic) IBOutlet UIButton *actionButton;
+
 @end

@@ -61,4 +61,8 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 
 @property (nonatomic) NSInteger count;
 
+
+/* HELPERS */
+-(void)configureDefaultCell;
+
 @end

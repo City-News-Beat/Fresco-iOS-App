@@ -31,7 +31,6 @@
     }
 }
 
-
 -(void)setUserImage:(NSString *)userID {
     [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
         self.titleLabel.text = [responseObject objectForKey:@"full_name"];
@@ -181,7 +180,6 @@
         self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"title"]];
         self.bodyLabel.text = [responseObject objectForKey:@"caption"];
         self.bodyLabel.numberOfLines = 3;
-        
         self.titleLabel.numberOfLines = 2;
         
         if([responseObject objectForKey:@"thumbnails"] != [NSNull null]){
@@ -200,6 +198,7 @@
     self.image.clipsToBounds = YES;
     self.followButton.alpha = 0;
     self.annotationView.layer.cornerRadius = 12;
+    self.annotationView.alpha = 0;
 }
 
 -(void)configureDefaultAttributesForNotification:(FRSNotificationType)notificationType {
@@ -260,30 +259,12 @@
     self.bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.bodyLabel.numberOfLines = 3;
     
+    [self.bodyLabel sizeToFit];
+    [self.titleLabel sizeToFit];
     
-    
-    
-    CGRect bodyRect = [self.bodyLabel.text
-                        boundingRectWithSize:CGSizeMake(self.frame.size.width-leftPadding-rightPadding, INT_MAX)
-                        options:NSStringDrawingUsesLineFragmentOrigin
-                        attributes:@{
-                                     NSFontAttributeName : [UIFont systemFontOfSize:15]
-                                     }
-                        context:nil];
-    
-    CGRect titleRect = [self.titleLabel.text
-                        boundingRectWithSize:self.titleLabel.frame.size
-                        options:NSStringDrawingUsesLineFragmentOrigin
-                        attributes:@{
-                                     NSFontAttributeName : [UIFont systemFontOfSize:15]
-                                     }
-                        context:nil];
-    
-    self.bodyLabel.frame = CGRectMake(leftPadding, topPadding, self.frame.size.width -leftPadding -rightPadding, bodyRect.size.height);
-    
-    height += titleRect.size.height;
-    height += bodyRect.size.height;
-    height += (11+10+1+15); //spacing
+    height += self.bodyLabel.frame.size.height;
+    height += self.titleLabel.frame.size.height;
+    height += 8; //spacing
 
     return height;
 }

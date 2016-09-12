@@ -21,7 +21,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1x-3Q-zNg">
-                        <rect key="frame" x="72" y="33" width="224" height="41.5"/>
+                        <rect key="frame" x="72" y="30" width="224" height="0.0"/>
                         <color key="backgroundColor" red="1" green="0.0" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" white="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -36,7 +36,7 @@
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6rk-aZ-RSA">
-                        <rect key="frame" x="0.0" y="83.5" width="320" height="1"/>
+                        <rect key="frame" x="0.0" y="83" width="320" height="1"/>
                         <color key="backgroundColor" white="0.0" alpha="0.12" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="AuF-eV-LM6"/>
@@ -110,7 +110,7 @@
                     <constraint firstAttribute="bottomMargin" secondItem="J1x-3Q-zNg" secondAttribute="bottom" constant="1" id="IcT-ZI-E27"/>
                     <constraint firstItem="qHy-RB-rdD" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="24" id="NZR-q3-o1h"/>
                     <constraint firstItem="NU1-pp-tGP" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="4" id="QiP-yw-klP"/>
-                    <constraint firstItem="J1x-3Q-zNg" firstAttribute="top" secondItem="zLd-w2-8NS" secondAttribute="bottom" constant="4" id="RSx-xe-OUg"/>
+                    <constraint firstItem="J1x-3Q-zNg" firstAttribute="top" secondItem="zLd-w2-8NS" secondAttribute="bottom" constant="1" id="RSx-xe-OUg"/>
                     <constraint firstItem="qHy-RB-rdD" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="28" id="X4K-PZ-goQ"/>
                     <constraint firstItem="NU1-pp-tGP" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="8" id="aXg-4u-OZA"/>
                     <constraint firstAttribute="trailingMargin" secondItem="MrT-1n-09K" secondAttribute="trailing" constant="8" id="hFm-J0-G7I"/>
@@ -118,6 +118,11 @@
                     <constraint firstAttribute="trailingMargin" secondItem="zLd-w2-8NS" secondAttribute="trailing" constant="8" id="n9O-4t-Jo8"/>
                     <constraint firstItem="6rk-aZ-RSA" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="-8" id="zdQ-1f-Tcx"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="IcT-ZI-E27"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="annotationLabel" destination="2UI-JN-8if" id="J85-lS-I37"/>
