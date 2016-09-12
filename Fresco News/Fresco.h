@@ -75,6 +75,10 @@ static NSString * const loginEndpoint = @"auth/signin";
 static NSString * const signUpEndpoint = @"auth/register";
 static NSString * const socialLoginEndpoint = @"auth/signin/social";
 
+// comments
+static NSString * const paginateComments = @"gallery/%@/comments?limit=10&last=%@&direction=asc";
+static NSString * const getCommentEndpoint = @"gallery/%@/comment/%@";
+
 // user endpoints
 static NSString * const userEndpoint = @"user/";
 static NSString * const setAvatarEndpoint = @"user/avatar";
@@ -213,11 +217,6 @@ static NSString * const taxInfoDeclinedNotification = @"user-payment-tax-info-de
 
 // Assignments
 static NSString * const newAssignmentNotification = @"user-dispatch-new-assignment";
-
-
-// comments
-static NSString * const paginateComments = @"gallery/%@/comments?limit=10&last=%@&direction=asc";
-static NSString * const getCommentEndpoint = @"gallery/%@/comment/%@";
 
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
