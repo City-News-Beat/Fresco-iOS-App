@@ -172,7 +172,7 @@
 
 -(void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
     
-    [self get:notificationEndpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+    [self post:notificationEndpoint withParameters:@{} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }

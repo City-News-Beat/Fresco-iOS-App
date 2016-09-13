@@ -32,6 +32,9 @@
 @property (strong, nonatomic) NSDictionary *payload;
 @property BOOL isSegueingToGallery;
 @property BOOL isSegueingToStory;
+@property (strong, nonatomic) NSTimer *timer;
+
+@property (nonatomic) NSInteger loadedNotificationCount;
 
 @end
 
@@ -95,10 +98,25 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     return self;
 }
 
+-(void)checkNotifications {
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateInterface) userInfo:nil repeats:YES];
+}
+
+-(void)updateInterface {
+    
+    if (self.loadedNotificationCount == self.payload.count) {
+        [self.timer invalidate];
+        [self.tableView reloadData];
+    }
+}
+
+
 -(void)getNotifications {
     
     [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
-        //self.payload = responseObject;
+        
+        NSLog(@"responseObject: %@", responseObject);
+        
     }];
 }
 
@@ -112,6 +130,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self getNotifications];
+    [self checkNotifications];
+    
     [self configureUI];
     [self saveLastOpenedDate];
     
@@ -203,6 +223,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
+    
     UITableViewCell *cell = [self tableView:_tableView cellForRowAtIndexPath:indexPath];
     
     if ([[cell class] isSubclassOfClass:[FRSDefaultNotificationTableViewCell class]]) {
@@ -238,6 +259,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     FRSTextNotificationTableViewCell *textCell = [self.tableView dequeueReusableCellWithIdentifier:TEXT_ID];
     FRSDefaultNotificationTableViewCell *defaultCell = [self.tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
     FRSAssignmentNotificationTableViewCell *assignmentCell = [self.tableView dequeueReusableCellWithIdentifier:ASSIGNMENT_ID];
+    
     
     assignmentCell.delegate = self;
     [defaultCell configureDefaultCell];
@@ -336,6 +358,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return defaultCell;
     }
 
+        
 
     return defaultCell;
 }
@@ -425,7 +448,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = @"Today in News";
     cell.bodyLabel.numberOfLines = 3;
-    cell.bodyLabel.text = @"\n\n\n";
+//    cell.bodyLabel.text = @"\n\n\n";
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:[galleryIDs objectAtIndex:0] completion:^(id responseObject, NSError *error) {
 
@@ -433,6 +456,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
         NSURL *galleryURL = [NSURL URLWithString:[[[responseObject objectForKey:@"posts"] objectAtIndex:1] objectForKey:@"image"]];
         [cell.image hnk_setImageFromURL:galleryURL];
+        
+        self.loadedNotificationCount++;
         
     }];
 }
@@ -442,7 +467,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [cell configureDefaultCell];
     
     cell.titleLabel.text = @"Featured Gallery";
-    cell.bodyLabel.text = @"\n";
+//    cell.bodyLabel.text = @"\n";
     cell.bodyLabel.numberOfLines = 3;
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
@@ -451,6 +476,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
         NSURL *galleryURL = [NSURL URLWithString:[[[responseObject objectForKey:@"posts"] objectAtIndex:1] objectForKey:@"image"]];
         [cell.image hnk_setImageFromURL:galleryURL];
+        self.loadedNotificationCount++;
     }];
 }
 
@@ -458,8 +484,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)configureStoryCell:(FRSDefaultNotificationTableViewCell *)cell storyID:(NSString *)storyID {
     [cell configureDefaultCell];
     
-    cell.titleLabel.text = @"\n";
-    cell.bodyLabel.text = @"\n";
+//    cell.titleLabel.text = @"\n";
+//    cell.bodyLabel.text = @"\n";
     
     [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
         
@@ -472,6 +498,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
             NSURL *avatarURL = [NSURL URLWithString:[[[responseObject objectForKey:@"thumbnails"] objectAtIndex:0] objectForKey:@"image"]];
             [cell.image hnk_setImageFromURL:avatarURL];
         }
+        self.loadedNotificationCount++;
     }];
 }
 
@@ -492,6 +519,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
         assignmentCell.titleLabel.text = [responseObject objectForKey:@"title"];
         assignmentCell.bodyLabel.text = [responseObject objectForKey:@"caption"];
+        
+        self.loadedNotificationCount++;
     }];
 }
 
@@ -503,6 +532,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.count = userIDs.count;
     cell.followButton.alpha = 1;
     [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
+    
 }
 
 -(void)configureLikeCell:(FRSDefaultNotificationTableViewCell *)cell userIDs:(NSArray *)userIDs galleryID:(NSString *)galleryID {
@@ -526,7 +556,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configureUserAttributes:(FRSDefaultNotificationTableViewCell *)cell userID:(NSString *)userID {
     
-    cell.titleLabel.text = @"\n";
+//    cell.titleLabel.text = @"\n";
     cell.annotationView.alpha = 1;
     cell.annotationLabel.alpha = 1;
 
@@ -550,7 +580,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
             [cell.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
             cell.followButton.tintColor = [UIColor blackColor];
         }
-        
+
+        self.loadedNotificationCount++;
+
         [cell updateLabelsForCount];
     }];
 }
@@ -562,7 +594,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = @"Your photo was purchased!";
     cell.bodyLabel.numberOfLines = 3;
-    cell.bodyLabel.text = @"\n\n";
+//    cell.bodyLabel.text = @"\n\n";
 
     [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
         
@@ -575,20 +607,27 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         } else {
             cell.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! Tap to add a card and we’ll send you %@!", outletName, price];
         }
-    }];
-    
-    [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
         
-        if([responseObject objectForKey:@"image"] != [NSNull null]){
+        
+        
+        [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
             
-            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
-            [cell.image hnk_setImageFromURL:avatarURL];
-        }
+            if([responseObject objectForKey:@"image"] != [NSNull null]){
+                
+                NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
+                [cell.image hnk_setImageFromURL:avatarURL];
+            }
+            
+            self.loadedNotificationCount++;
+            
+        }];
     }];
+
 }
 
 -(void)configurePaymentExpiringCell:(FRSDefaultNotificationTableViewCell *)cell {
-
+    
+    [cell.image removeFromSuperview];
     cell.image = nil;
     [cell configureDefaultCell];
     
@@ -596,16 +635,19 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = [NSString stringWithFormat: @"You have %@ expiring soon", total];
     cell.bodyLabel.text = @"Add a payment method to get paid";
+    
+    self.loadedNotificationCount++;
 }
 
 -(void)configurePaymentSentCell:(FRSDefaultNotificationTableViewCell *)cell {
     
     [cell.image removeFromSuperview];
     cell.image = nil;
-    
     [cell configureDefaultCell];
     
-    cell.titleLabel.text = @"no spec";
+    cell.titleLabel.text = @"(null) sent to (null).";
+    
+    self.loadedNotificationCount++;
 }
 
 -(void)configurePaymentDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell {
@@ -616,6 +658,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = @"Our payment to (null) was declined";
     cell.bodyLabel.text = @"Please reenter your payment information";
+    
+    self.loadedNotificationCount++;
 }
 
 -(void)configureTaxInfoRequiredCell:(FRSDefaultNotificationTableViewCell *)cell {
@@ -627,6 +671,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = @"Tax information needed";
     cell.bodyLabel.text = @"You’ve made almost $2,000 on Fresco! Please add your tax info soon to continue receiving payments.";
+    
+    self.loadedNotificationCount++;
 }
 
 -(void)configureTaxInfoProcessedCell:(FRSDefaultNotificationTableViewCell *)cell {
@@ -636,6 +682,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [cell configureDefaultCell];
     
     cell.titleLabel.text = @"Your tax info was accepted!";
+    
+    self.loadedNotificationCount++;
 }
 
 -(void)configureTaxInfoDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell {
@@ -646,6 +694,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = @"Your tax information was declined";
     cell.bodyLabel.text = @"Please reenter your tax information";
+    
+    self.loadedNotificationCount++;
 }
 
 
