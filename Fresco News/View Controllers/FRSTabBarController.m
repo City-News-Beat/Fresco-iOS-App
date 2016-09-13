@@ -22,6 +22,9 @@
 @interface FRSTabBarController () <UITabBarControllerDelegate>
 
 @property (strong, nonatomic) UIView *cameraBackgroundView;
+@property CGFloat notificationDotXOffset;
+@property (strong, nonatomic) UIImage *bellImage;
+@property (strong, nonatomic) FRSUserNotificationViewController *userNotifVC;
 
 @end
 
@@ -66,7 +69,7 @@
     [[UITabBar appearance] setBackgroundColor:[UIColor frescoTabBarColor]];
 
     [self configureAppearance];
-    [self configureViewControllers];
+    [self configureViewControllersWithNotif:NO];
     
     [self configureTabBarItems];
     
@@ -110,7 +113,6 @@
     
     //Image insets are hard coded to follow the spec
     
-    CGFloat notificationDotXOffset;
     
     if (IS_IPHONE_6) {
         item0.imageInsets = UIEdgeInsetsMake(5, 6, -5, -6);
@@ -118,21 +120,21 @@
         item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
         item3.imageInsets = UIEdgeInsetsMake(5, 7, -5, -7);
         item4.imageInsets = UIEdgeInsetsMake(5, -6, -5, 6);
-        notificationDotXOffset = 30.5;
+        self.notificationDotXOffset = 30.5;
     } else if (IS_IPHONE_6_PLUS) {
         item0.imageInsets = UIEdgeInsetsMake(5, 7, -5, -7);
         item1.imageInsets = UIEdgeInsetsMake(5, -8, -5, 8);
         item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
         item3.imageInsets = UIEdgeInsetsMake(5, 8, -5, -8);
         item4.imageInsets = UIEdgeInsetsMake(5, -7, -5, 7);
-        notificationDotXOffset = 35;
+        self.notificationDotXOffset = 35;
     } else if (IS_IPHONE_5) {
         item0.imageInsets = UIEdgeInsetsMake(5, 5, -5, -5);
         item1.imageInsets = UIEdgeInsetsMake(5, -5, -5, 5);
         item2.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
         item3.imageInsets = UIEdgeInsetsMake(5, 5, -5, -5);
         item4.imageInsets = UIEdgeInsetsMake(5, -5, -5, 5);
-        notificationDotXOffset = 23;
+        self.notificationDotXOffset = 23;
     }
 
     //if (unreadNotificationCount >= 1) {
@@ -155,7 +157,7 @@
     //}
 }
 
--(void)configureViewControllers {
+-(void)configureViewControllersWithNotif:(BOOL)notif {
     UINavigationController *vc = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
     [vc pushViewController:[[FRSHomeViewController alloc] init] animated:NO];
     
@@ -167,10 +169,18 @@
     UINavigationController *vc3 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
     [vc3 pushViewController:[[FRSAssignmentsViewController alloc] init] animated:NO];
     
-    UINavigationController *vc4 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
-    [vc4 pushViewController:[[FRSProfileViewController alloc] initWithUser:[[FRSAPIClient sharedClient] authenticatedUser]] animated:NO];
     
-    self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
+
+    if (notif) {
+        UINavigationController *vc4 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
+        [vc4 pushViewController:[[FRSUserNotificationViewController alloc] init] animated:NO];
+        self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
+    } else {
+        UINavigationController *vc4 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
+        [vc4 pushViewController:[[FRSProfileViewController alloc] initWithUser:[[FRSAPIClient sharedClient] authenticatedUser]] animated:NO];
+        self.viewControllers = @[vc, vc1, vc2, vc3, vc4];
+    }
+    
 }
 
 -(void)configureIrisItem {
@@ -198,6 +208,32 @@
     self.dot.alpha = 0;
 }
 
+
+-(void)updateBellIcon:(BOOL)unread {
+    
+    UITabBarItem *item4 = [self.tabBar.items objectAtIndex:4];
+    self.bellImage = [[UIImage imageNamed:@"tab-bar-bell"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item4.image = self.bellImage;
+    item4.selectedImage = [[UIImage imageNamed:@"tab-bar-bell-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    item4.title = @"";
+    
+    if (unread) {
+        self.dot = [[UIView alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width - 9 - self.notificationDotXOffset, self.tabBar.frame.size.height - 9 - 10.5, 9, 9)]; //10.5 y value coming from spec, adding 2px to w/h for borderWidth
+        self.dot.layer.masksToBounds = YES;
+        self.dot.layer.cornerRadius = 9/2;
+        self.dot.backgroundColor = [UIColor frescoTabBarColor];
+        self.dot.layer.zPosition = 1;
+        self.dot.userInteractionEnabled = NO;
+        [self.tabBar addSubview:self.dot];
+        
+        UIView *yellowCircle = [[UIView alloc] initWithFrame:CGRectMake(2, 2, 7, 7)];
+        yellowCircle.backgroundColor = [UIColor frescoOrangeColor];
+        yellowCircle.layer.cornerRadius = 3.5;
+        [self.dot addSubview:yellowCircle];
+    }
+}
+
+
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     
     item.title = @"";
@@ -216,25 +252,35 @@
     
     if ([self.tabBar.items indexOfObject:item] == 4) {
         
-        if (![[FRSAPIClient sharedClient] isAuthenticated]) {
-            FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-            [self.navigationController pushViewController:onboardVC animated:NO];
+        
+        
+        if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
+
+        
+            
+            
+            
         } else {
             
-            
-            UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
-            FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
-            [profile loadAuthenticatedUser];
-            
-            
-//            if (userNotificationCount >= 1) {
-//                profile.shouldShowNotificationsOnLoad = YES;
-//            userNotificationCount resets once the vc is loaded
-//            else gets called when user tabs back on the tab bar
-//            } else {
-//                [self updateUserIcon];
-//            }
-            
+            if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+                FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
+                [self.navigationController pushViewController:onboardVC animated:NO];
+            } else {
+                
+                
+                UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
+                FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
+                [profile loadAuthenticatedUser];
+                
+                
+                //            if (userNotificationCount >= 1) {
+                //                profile.shouldShowNotificationsOnLoad = YES;
+                //            userNotificationCount resets once the vc is loaded
+                //            else gets called when user tabs back on the tab bar
+                //            } else {
+                //                [self updateUserIcon];
+                //            }
+            }
         }
     }
 }
@@ -293,6 +339,15 @@
             } break;
             
         case 4:{
+            
+            
+            
+            if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
+                
+//                [self configureViewControllersWithNotif:YES];
+                break;
+            }
+            
             
             if ([[FRSAPIClient sharedClient] isAuthenticated]) {
                 FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;

@@ -114,6 +114,11 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [self getNotifications];
     [self configureUI];
     [self saveLastOpenedDate];
+    
+    
+    FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
+    [tabBarController updateBellIcon:NO];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -298,25 +303,35 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     /* PAYMENT */
     else if ([currentKey isEqualToString:purchasedContentNotification]) {
         NSLog(@"PURCHASED CONTENT");
-        [self configurePurchasedContentCell:defaultCell outletID:[self.payload objectForKey:@"outlet_id"] postID:[self.payload objectForKey:@"post_id"] hasPaymentInfo:YES];
+
+        [self configurePurchasedContentCell:defaultCell outletID:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"outlet_id"] postID:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"post_id"] hasPaymentInfo:YES];
+        
         return defaultCell;
         
     } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
         NSLog(@"PAYMENT EXPIRING");
+        [self configurePaymentExpiringCell:defaultCell];
+        
     } else if ([currentKey isEqualToString:paymentSentNotification]) {
         NSLog(@"PAYMENT SENT");
+        [self configurePaymentSentCell:defaultCell];
+        
     } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
         NSLog(@"PAYMENT DECLINED");
+        [self configurePaymentDeclinedCell:defaultCell];
+        
     } else if ([currentKey isEqualToString:taxInfoRequiredNotification]) {
         NSLog(@"TAX INFO REQUIRED");
-        
+        [self configureTaxInfoRequiredCell:defaultCell];
         
     } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
         NSLog(@"TAX INFO PROCESSING");
+        [self configureTaxInfoProcessedCell:defaultCell];
+        
     } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
         NSLog(@"TAX INFO DECLINED");
-    } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
-        NSLog(@"TAX INFO PROCESSED");
+        [self configureTaxInfoDeclinedCell:defaultCell];
+        
     } else {
         return defaultCell;
     }
@@ -329,6 +344,76 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
+    NSArray *keys = [self.payload allKeys];
+    NSString *currentKey = [keys objectAtIndex:indexPath.row];
+    
+    /* NEWS */
+    if ([currentKey isEqualToString:photoOfDayNotification]) {
+
+    } else if ([currentKey isEqualToString:todayInNewsNotification]) {
+        [self segueToTodayInNews:[self.payload objectForKey:todayInNewsNotification]];
+        
+    } else if ([currentKey isEqualToString:userNewsGalleryNotification]) {
+        [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
+        
+    } else if ([currentKey isEqualToString:userNewsStoryNotification]) {
+        [self segueToStory:[self.payload objectForKey:userNewsStoryNotification]];
+
+    } else if ([currentKey isEqualToString:userNewsCustomNotification]) {
+        // Do nothing (for now)
+        
+    /* SOCIAL */
+    } else if ([currentKey isEqualToString:followedNotification]) {
+        [self segueToUser:[[self.payload objectForKey:followedNotification] objectAtIndex:0]];
+        
+    } else if ([currentKey isEqualToString:likedNotification]) {
+        [self segueToGallery:[[self.payload objectForKey:likedNotification] objectForKey:@"gallery_id"]];
+        
+    } else if ([currentKey isEqualToString:repostedNotification]) {
+        [self segueToGallery:[[self.payload objectForKey:repostedNotification] objectForKey:@"gallery_id"]];
+        
+    } else if ([currentKey isEqualToString:commentedNotification]) {
+        [self segueToGallery:[[self.payload objectForKey:commentedNotification] objectForKey:@"gallery_id"]];
+
+    }/* else if ([currentKey isEqualToString:mentionCommentNotification]) {
+      NSLog(@"MENTION COMMENT");
+      } else if ([currentKey isEqualToString:mentionGalleryNotification]) {
+      NSLog(@"MENTION GALLERY");
+      }*/
+    
+    /* ASSIGNMENT */
+    else if ([currentKey isEqualToString:newAssignmentNotification]) {
+        [self segueToAssignmentWithID:[self.payload objectForKey:newAssignmentNotification]];
+    }
+    
+    /* PAYMENT */
+    else if ([currentKey isEqualToString:purchasedContentNotification]) {
+        
+    } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
+        [self segueToDebitCard];
+        
+    } else if ([currentKey isEqualToString:paymentSentNotification]) {
+        
+        
+    } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
+        [self segueToDebitCard];
+
+    } else if ([currentKey isEqualToString:taxInfoRequiredNotification]) {
+        [self segueToTaxInfo];
+        
+    } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
+        // do nothing
+        
+    } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
+        [self segueToTaxInfo];
+    } else {
+
+    
+    }
+    
+    
+    
+    
 }
 
 
@@ -442,6 +527,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)configureUserAttributes:(FRSDefaultNotificationTableViewCell *)cell userID:(NSString *)userID {
     
     cell.titleLabel.text = @"\n";
+    cell.annotationView.alpha = 1;
+    cell.annotationLabel.alpha = 1;
 
     [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
         
@@ -475,8 +562,19 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = @"Your photo was purchased!";
     cell.bodyLabel.numberOfLines = 3;
+    cell.bodyLabel.text = @"\n\n";
+
     [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
         
+        NSString *outletName = @"(null)";
+        NSString *price = @"(null)";
+        NSString *paymentMethod = @"(null)";
+        
+        if (paymentInfo) {
+            cell.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! We've sent %@ to your %@.", outletName, price, paymentMethod];
+        } else {
+            cell.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! Tap to add a card and we’ll send you %@!", outletName, price];
+        }
     }];
     
     [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
@@ -487,17 +585,68 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
             [cell.image hnk_setImageFromURL:avatarURL];
         }
     }];
-    
-    NSString *price = @"$$$";
-    NSString *paymentMethod = @"TEST (5584)";
-    
-    if (paymentInfo) {
-        cell.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! We've sent %@ to your %@.", outletID, price, paymentMethod];
-    } else {
-        cell.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! Tap to add a card and we’ll send you %@!", outletID, price];
-    }
 }
 
+-(void)configurePaymentExpiringCell:(FRSDefaultNotificationTableViewCell *)cell {
+
+    cell.image = nil;
+    [cell configureDefaultCell];
+    
+    NSString *total = @"(null)";
+    
+    cell.titleLabel.text = [NSString stringWithFormat: @"You have %@ expiring soon", total];
+    cell.bodyLabel.text = @"Add a payment method to get paid";
+}
+
+-(void)configurePaymentSentCell:(FRSDefaultNotificationTableViewCell *)cell {
+    
+    [cell.image removeFromSuperview];
+    cell.image = nil;
+    
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = @"no spec";
+}
+
+-(void)configurePaymentDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell {
+    [cell.image removeFromSuperview];
+    cell.image = nil;
+    
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = @"Our payment to (null) was declined";
+    cell.bodyLabel.text = @"Please reenter your payment information";
+}
+
+-(void)configureTaxInfoRequiredCell:(FRSDefaultNotificationTableViewCell *)cell {
+    
+    [cell.image removeFromSuperview];
+    cell.image = nil;
+    
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = @"Tax information needed";
+    cell.bodyLabel.text = @"You’ve made almost $2,000 on Fresco! Please add your tax info soon to continue receiving payments.";
+}
+
+-(void)configureTaxInfoProcessedCell:(FRSDefaultNotificationTableViewCell *)cell {
+    [cell.image removeFromSuperview];
+    cell.image = nil;
+    
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = @"Your tax info was accepted!";
+}
+
+-(void)configureTaxInfoDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell {
+    [cell.image removeFromSuperview];
+    cell.image = nil;
+    
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = @"Your tax information was declined";
+    cell.bodyLabel.text = @"Please reenter your tax information";
+}
 
 
 #pragma mark - Actions
@@ -513,27 +662,12 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     return size.height;
 }
 
--(void)segueToTaxInfo {
-    
-    FRSTaxInformationViewController *taxInfoVC = [[FRSTaxInformationViewController alloc] init];
-    [self.navigationController pushViewController:taxInfoVC animated:YES];
-    
-}
-
--(void)segueToBankInfo {
-    
-    FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
-    debitCardVC.shouldDisplayBankViewOnLoad = YES;
-    [self.navigationController pushViewController:debitCardVC animated:YES];
-    
-}
-
 -(void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:NO];
     
-    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate updateTabBarToUser];
+    FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
+    [tabBarController updateUserIcon];
 }
 
 

@@ -26,7 +26,7 @@
 -(void)openUserID:(NSString *)userID;
 -(void)openGalleryIDS:(NSArray *)galleryIDS;
 -(void)openAssignmentID:(NSString *)assignmentID;
-
+-(void)updateBellIcon:(BOOL)unread;
 -(void)updateUserIcon;
 @property (strong, nonatomic) UIView *dot;
 

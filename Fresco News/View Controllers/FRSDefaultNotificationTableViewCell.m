@@ -199,6 +199,11 @@
     self.followButton.alpha = 0;
     self.annotationView.layer.cornerRadius = 12;
     self.annotationView.alpha = 0;
+    
+    if (self.image == nil) {
+        self.bodyLabel.transform = CGAffineTransformMakeTranslation(-56, 0);
+        self.titleLabel.transform = CGAffineTransformMakeTranslation(-56, 0);
+    }
 }
 
 -(void)configureDefaultCellWithAttributesForNotification:(FRSNotificationType)notificationType {
