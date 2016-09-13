@@ -205,28 +205,28 @@
 
     }
     
-    //    if (self.password) { //if responseCode == 403 || 401
-    //        self.passwordErrorImageView.alpha = 1;
-    //        self.passwordIsConfirmed = NO;
     
-    //    } else {
-    //        self.passwordIsConfirmed = YES;
-    
-    //    }
+
 
     
-    if (self.usernameIsConfirmed && self.emailIsConfirmed /* && self.passwordIsConfirmed */) {
-        [self logout];
-    }
     
-    
-    //Endpoint is not live, waiting on Mike
-    [[FRSAPIClient sharedClient] disableAccountWithDigestion:@{@"password" : self.password} completion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] disableAccountWithDigestion:@{@"password" : self.password, @"email": self.email, @"username": self.username} completion:^(id responseObject, NSError *error) {
         
-//        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-//        NSInteger responseCode = response.statusCode;
-//        NSLog(@"ERROR: %ld", (long)responseCode);
+        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+        NSInteger responseCode = response.statusCode;
+        NSLog(@"ERROR: %ld", (long)responseCode);
         
+        if (responseCode == 403 || responseCode == 401) {
+            self.passwordErrorImageView.alpha = 1;
+            self.passwordIsConfirmed = NO;
+            return;
+        } else {
+            self.passwordIsConfirmed = YES;
+            
+            if (self.usernameIsConfirmed && self.emailIsConfirmed && self.passwordIsConfirmed) {
+                [self logout];
+            }
+        }
     }];
 }
 
