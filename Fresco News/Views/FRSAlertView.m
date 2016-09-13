@@ -850,7 +850,7 @@
         }
         
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 35, [UIScreen mainScreen].bounds.size.width -80, 19)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 33, [UIScreen mainScreen].bounds.size.width -80, 19)];
         label.font = [UIFont notaBoldWithSize:17];
         label.textColor = [UIColor whiteColor];
         label.text = title;

@@ -216,6 +216,16 @@
         NSInteger responseCode = response.statusCode;
         NSLog(@"ERROR: %ld", (long)responseCode);
         
+        if (error.code == -1009) {
+            
+            NSLog(@"Unable to connect.");
+            FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+            [alert show];
+            
+            return;
+        }
+        
+        
         if (responseCode == 403 || responseCode == 401) {
             self.passwordErrorImageView.alpha = 1;
             self.passwordIsConfirmed = NO;
