@@ -12,7 +12,6 @@
 #import "FRSRequestSerializer.h"
 #import "FRSAppDelegate.h"
 #import "FRSOnboardingViewController.h"
-#import "AWFileHash.h"
 
 @implementation FRSAPIClient
 
@@ -323,16 +322,6 @@
         [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
     }
     
-    NSString *userID = responseObject[@"user"][@"id"];
-    
-    if (userID && ![userID isEqual:[NSNull null]]) {
-        Mixpanel *mixpanel = [Mixpanel sharedInstance];
-        [mixpanel createAlias:userID forDistinctID:mixpanel.distinctId];
-        [mixpanel identify:userID];
-    }
-    
-    [[Mixpanel sharedInstance] track:@"Login"];
-
     [self reevaluateAuthorization];
     [self updateLocalUser];
 }
@@ -348,6 +337,17 @@
         }
         
         // set up FRSUser object with this info, set authenticated to true
+        
+        NSString *userID = responseObject[@"id"];
+        NSLog(@"%@", userID);
+        
+        if (userID && ![userID isEqual:[NSNull null]]) {
+            Mixpanel *mixpanel = [Mixpanel sharedInstance];
+            [mixpanel createAlias:userID forDistinctID:mixpanel.distinctId];
+            [mixpanel identify:userID];
+        }
+        
+        [[Mixpanel sharedInstance] track:@"Login"];
     }];
 }
 
@@ -1254,7 +1254,7 @@
 }
 
 -(NSString *)md5:(PHAsset *)asset {
-    return [AWFileHash md5HashOfPHAsset:asset];
+    return @"";
 }
 
 -(NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {

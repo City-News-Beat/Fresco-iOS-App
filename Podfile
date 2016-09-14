@@ -23,8 +23,6 @@ target 'Fresco' do
 	pod 'FBSDKLoginKit'
 	pod 'FBSDKCoreKit'
 	pod 'FBSDKShareKit'
-	pod ‘AWSCore’
-	pod ‘AWSS3’
 	pod 'Haneke'
 	pod 'TwitterKit'
 	pod 'Fabric'

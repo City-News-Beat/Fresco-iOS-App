@@ -15,7 +15,6 @@
 #import "FRSImageViewCell.h"
 #import "FRSFileLoader.h"
 #import "FRSPlayer.h"
-#import "AWFileHash.h" // md5 etc.
 #import "FRSAPIClient.h"
 #import <Photos/Photos.h>
 #import "FRSUploadTask.h"
