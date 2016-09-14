@@ -23,7 +23,7 @@
         }
     }
     
-    if ([endpoint containsString:@"gallery/create"]) {
+    if ([endpoint containsString:@"gallery/submit"]) {
         [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
         [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:parameters options:0 error:Nil]];
     }

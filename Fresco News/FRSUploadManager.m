@@ -48,7 +48,7 @@
 -(void)startUploadProcess {
     toComplete = 0;
     isComplete = 0;
-    NSLog(@"CURR POST: %@", _posts);
+
     if (!_posts) {
         return;
     }
