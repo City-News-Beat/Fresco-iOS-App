@@ -422,6 +422,8 @@
         
         if(![self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]){
             
+            NSLog(@"REPRESENTEDUSER.FOLLOWING: %@", self.representedUser.following);
+            
             self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
             self.followBarButtonItem.tintColor = [UIColor whiteColor];
             

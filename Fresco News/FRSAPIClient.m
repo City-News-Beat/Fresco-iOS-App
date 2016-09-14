@@ -263,7 +263,7 @@
         currentInstallation[@"device_token"] = deviceToken;
     }
     else {
-        return Nil; // no installation without push info, apparently
+        return currentInstallation[@"device_token"] = [[FRSAPIClient sharedClient] randomString]; // no installation without push info, apparently
     }
     
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];

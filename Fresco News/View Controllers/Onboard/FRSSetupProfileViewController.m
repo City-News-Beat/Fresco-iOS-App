@@ -127,6 +127,7 @@
 
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:[self updateDigest] completion:^(id responseObject, NSError *error) {
+        
         if (error) {
             // show modal
             if (error.code/100 == 4) {
