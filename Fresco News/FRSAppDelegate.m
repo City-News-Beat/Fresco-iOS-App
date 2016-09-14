@@ -89,7 +89,13 @@
 
 -(void)startMixpanel {
     [Mixpanel sharedInstanceWithToken:mixPanelToken];
-    [[Mixpanel sharedInstance] identify:[Mixpanel sharedInstance].distinctId];
+    
+    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
+        [[Mixpanel sharedInstance] identify:[[FRSAPIClient sharedClient] authenticatedUser].uid];
+    }
+    else {
+        [[Mixpanel sharedInstance] identify:[Mixpanel sharedInstance].distinctId];
+    }
 }
 
 -(void)reloadUser {

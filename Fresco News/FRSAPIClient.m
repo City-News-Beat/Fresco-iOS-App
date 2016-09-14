@@ -142,10 +142,6 @@
             [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
             NSString *userID = responseObject[@"user"][@"id"];
             
-            if (userID && ![userID isEqual:[NSNull null]]) {
-                Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                [mixpanel createAlias:userID forDistinctID:mixpanel.distinctId];
-            }
         }
         
         completion(responseObject, error);
@@ -339,7 +335,6 @@
         // set up FRSUser object with this info, set authenticated to true
         
         NSString *userID = responseObject[@"id"];
-        NSLog(@"%@", userID);
         
         if (userID && ![userID isEqual:[NSNull null]]) {
             Mixpanel *mixpanel = [Mixpanel sharedInstance];
@@ -583,9 +578,11 @@
 -(void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     
     NSDictionary *params = [gallery jsonObject];
+    NSLog(@"CREATION: %@", params);
     
     [self post:createGalleryEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        NSLog(@"CREATION ERROR: %@", error);
     }];
 }
 
@@ -1282,8 +1279,6 @@
                 callback(digest, err);
             }];
         }
-        
-        digest[@"md5"] = [self md5:asset];
     }];
     
     return digest;
