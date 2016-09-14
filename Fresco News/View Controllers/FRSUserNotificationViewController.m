@@ -83,14 +83,14 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
                          
                          newAssignmentNotification : assignment_id,
                          
-                         purchasedContentNotification : @{@"outlet_id" : outlet_id, @"post_ids" : post_ids},
+                         purchasedContentNotification : @{@"outlet_id" : outlet_id, @"post_ids" : post_ids, @"has_card_": @TRUE},
                          paymentExpiringNotification : empty,
                          paymentSentNotification: empty,
                          paymentDeclinedNotification : empty,
                          taxInfoRequiredNotification : empty,
-                         taxInfoProcessedNotification : empty,
-                         taxInfoDeclinedNotification : empty,
-                         taxInfoProcessedNotification : empty,
+                         taxInfoProcessedNotification : @NO,
+                         taxInfoDeclinedNotification : @YES,
+                         taxInfoProcessedNotification : @YES,
                          
                          };
     }
@@ -106,7 +106,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     if (self.loadedNotificationCount == self.payload.count) {
         [self.timer invalidate];
-        [self.tableView reloadData];
     }
 }
 
@@ -326,7 +325,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     else if ([currentKey isEqualToString:purchasedContentNotification]) {
         NSLog(@"PURCHASED CONTENT");
 
-        [self configurePurchasedContentCell:defaultCell outletID:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"outlet_id"] postID:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"post_id"] hasPaymentInfo:YES];
+        [self configurePurchasedContentCell:defaultCell outletID:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"outlet_id"] postID:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"post_id"] hasPaymentInfo:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"has_card_"]];
         
         return defaultCell;
         
@@ -348,7 +347,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
         NSLog(@"TAX INFO PROCESSING");
-        [self configureTaxInfoProcessedCell:defaultCell];
+        [self configureTaxInfoProcessedCell:defaultCell processed:[[self.payload objectForKey:taxInfoProcessedNotification] objectForKey:@"" ]];
         
     } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
         NSLog(@"TAX INFO DECLINED");
@@ -675,13 +674,16 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     self.loadedNotificationCount++;
 }
 
--(void)configureTaxInfoProcessedCell:(FRSDefaultNotificationTableViewCell *)cell {
+-(void)configureTaxInfoProcessedCell:(FRSDefaultNotificationTableViewCell *)cell processed:(BOOL)processed{
     [cell.image removeFromSuperview];
     cell.image = nil;
     
     [cell configureDefaultCell];
-    
-    cell.titleLabel.text = @"Your tax info was accepted!";
+    if (processed) {
+        cell.titleLabel.text = @"Your tax info was accepted!";
+    } else {
+        [self configureTaxInfoDeclinedCell:cell];
+    }
     
     self.loadedNotificationCount++;
 }
