@@ -9,6 +9,7 @@
 #import "FRSSetupProfileViewController.h"
 #import "FRSBaseViewController.h"
 #import "FRSProfileViewController.h"
+#import "UITextView+Resize.h"
 
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
@@ -171,7 +172,9 @@
             FRSProfileViewController *profileController = (FRSProfileViewController *)[self.navigationController.viewControllers objectAtIndex: 0];
             profileController.nameLabel.text = self.nameTF.text;
             profileController.locationLabel.text = self.locationTF.text;
-            profileController.bioLabel.text = self.bioTV.text;
+            profileController.bioTextView.text = self.bioTV.text;
+            [profileController.bioTextView frs_setTextWithResize:self.bioTV.text];
+            [profileController resizeProfileContainer];
             [profileController.profileIV setImage:self.profileIV.image];
             profileController.editedProfile = true;
             //profileController.profileIV.image = self.profileIV.image;
@@ -404,7 +407,7 @@
 
 -(void)configureBioField{
     //64 is the nav bar, 44 is the bottom bar
-    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.view.frame.size.width, self.view.frame.size.height - self.y - 64)];
+    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, self.y, self.view.frame.size.width, self.view.frame.size.height - self.y - 64 -44)];
     backgroundView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:backgroundView];
 

@@ -19,6 +19,8 @@
     NSString *userId;
 }
 
+-(void)resizeProfileContainer;
+
 @property (nonatomic, weak) NSArray *currentFeed;
 @property (nonatomic, retain) UIScrollView *tablePageScroller;
 @property (nonatomic, retain) UITableView *contentTable;
@@ -29,7 +31,8 @@
 -(FRSUser *)authenticatedUser;
 @property (nonatomic, retain) FRSUser *representedUser;
 @property BOOL authenticatedProfile;
-@property (strong, nonatomic) UILabel *bioLabel;
+//@property (strong, nonatomic) UILabel *bioLabel;
+@property (strong, nonatomic) UITextView *bioTextView;
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *locationLabel;
 @property (strong, nonatomic) FRSBorderedImageView *profileIV;

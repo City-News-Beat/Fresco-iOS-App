@@ -32,6 +32,7 @@
 #import "FRSTabBarController.h"
 
 #import "FRSSearchViewController.h"
+#import "UITextView+Resize.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate>
 
@@ -465,6 +466,7 @@
 -(void)createProfileSection{
     self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 269.5)];
     self.profileContainer.backgroundColor = [UIColor frescoOrangeColor];
+    self.profileContainer.clipsToBounds = YES;
     
     [self configureProfileImage];
     [self configureLabels];
@@ -558,7 +560,6 @@
     self.profileMaskView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 96, 96)];
     self.profileMaskView.transform = CGAffineTransformMakeScale(0.00001, 0.00001);
     self.profileMaskView.layer.cornerRadius = 48;
-    self.profileMaskView.backgroundColor = [UIColor redColor];
     [self.view addSubview:self.profileMaskView];
     self.whiteOverlay.layer.mask = self.profileMaskView.layer;
     
@@ -652,14 +653,27 @@
     }
     
     
-    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 65, width, self.profileContainer.frame.size.width - (origin-4) - 16)];
     
-    self.bioLabel.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
-    self.bioLabel.backgroundColor = [UIColor redColor];
-    self.bioLabel.textColor = [UIColor whiteColor];
-    self.bioLabel.font = [UIFont systemFontOfSize:15 weight:-300];
-    //    [self.bioLabel sizeToFit];
-    [self.profileContainer addSubview:self.bioLabel];
+    
+    
+    self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(origin -4, 65, width, 200)];
+    [self.profileContainer addSubview:self.bioTextView];
+    [self.bioTextView setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightLight]];
+    self.bioTextView.backgroundColor = [UIColor clearColor];
+    self.bioTextView.userInteractionEnabled = NO;
+    self.bioTextView.textColor = [UIColor whiteColor];
+    
+    
+    
+    
+//    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 65, width, self.profileContainer.frame.size.width - (origin-4) - 16)];
+//    
+//    self.bioLabel.text = @""; //temp fix, need to make frame larger because of sizeToFit, disabling sizeToFit causes other issues.
+//    self.bioLabel.backgroundColor = [UIColor redColor];
+//    self.bioLabel.textColor = [UIColor whiteColor];
+//    self.bioLabel.font = [UIFont systemFontOfSize:15 weight:-300];
+//    //    [self.bioLabel sizeToFit];
+//    [self.profileContainer addSubview:self.bioLabel];
 
 }
 -(void)textViewDidEndEditing:(UITextView *)textView{
@@ -673,9 +687,20 @@
 
 -(void)resizeProfileContainer{
     
-    CGFloat height = MAX(self.bioLabel.frame.origin.y + self.bioLabel.frame.size.height + 6, 160);
+    CGFloat height = MAX(self.bioTextView.frame.origin.y + self.bioTextView.frame.size.height + 6, 160);
     
-    [self.profileContainer setSizeWithSize:CGSizeMake(self.profileContainer.frame.size.width, height)];
+    CGFloat maxHeight = 0;
+    if (IS_IPHONE_5) {
+        maxHeight = 304;
+    } else if ((IS_IPHONE_6) || (IS_IPHONE_6_PLUS)) {
+        maxHeight = 270;
+    }
+    
+    if (height >= maxHeight) {
+        [self.profileContainer setSizeWithSize:CGSizeMake(self.profileContainer.frame.size.width, maxHeight)];
+    } else {
+        [self.profileContainer setSizeWithSize:CGSizeMake(self.profileContainer.frame.size.width, height)];
+    }
     
     [self.sectionView setFrame:CGRectMake(0, self.profileContainer.frame.size.height, self.view.frame.size.width, 44)];
 }
@@ -1075,7 +1100,7 @@
     FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
     setupProfileVC.nameStr = self.nameLabel.text;
     setupProfileVC.locStr = self.locationLabel.text;
-    setupProfileVC.bioStr = self.bioLabel.text;
+    setupProfileVC.bioStr = self.bioTextView.text;
     setupProfileVC.profileImageURL = self.profileImageURL;
     setupProfileVC.isEditingProfile = true;
     [self.navigationController pushViewController:setupProfileVC animated:YES];
@@ -1128,14 +1153,21 @@
         }
         
         //self.locationLabel.text = user.
-        [self.bioLabel setNumberOfLines:0];
-        self.bioLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        self.bioLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
-
-        self.bioLabel.text = user.bio;
-        NSLog(@"USER'S BIO: %@", user.bio);
+//        [self.bioLabel setNumberOfLines:0];
+//        self.bioLabel.lineBreakMode = NSLineBreakByWordWrapping;
+//        self.bioLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
+//
+//        self.bioLabel.text = user.bio;
+//        NSLog(@"USER'S BIO: %@", user.bio);
+//        
+//        [self.bioLabel sizeToFit];
         
-        [self.bioLabel sizeToFit];
+        
+        self.bioTextView.text = user.bio;
+        [self.bioTextView frs_setTextWithResize:user.bio];
+
+        
+        
         
         //[self.profileContainer setFrame:CGRectMake(self.profileContainer.frame.origin.x, self.profileContainer.frame.origin.y, self.profileContainer.frame.size.width,269.5 + self.bioLabel.frame.size.height)];
         [self resizeProfileContainer];

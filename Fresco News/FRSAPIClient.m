@@ -190,7 +190,6 @@
         completion(responseObject, error);
         
     }];
-    
 }
 
 -(void)updateSettingsWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {

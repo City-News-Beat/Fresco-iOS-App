@@ -116,6 +116,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
         NSLog(@"responseObject: %@", responseObject);
         
+        
     }];
 }
 
@@ -347,7 +348,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
         NSLog(@"TAX INFO PROCESSING");
-        [self configureTaxInfoProcessedCell:defaultCell processed:[[self.payload objectForKey:taxInfoProcessedNotification] objectForKey:@"" ]];
+        [self configureTaxInfoProcessedCell:defaultCell processed:[self.payload objectForKey:taxInfoProcessedNotification]];
         
     } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
         NSLog(@"TAX INFO DECLINED");
