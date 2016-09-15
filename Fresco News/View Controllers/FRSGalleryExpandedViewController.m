@@ -434,16 +434,25 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         if (indexPath.row == 0) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
-                UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
-                [topButton setTitle:@"SEE ALL 6 COMMENTS" forState:UIControlStateNormal];
-                [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-                [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-                [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
-                [cell addSubview:topButton];
-            }
+            UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
+            [topButton setTitle:@"SEE ALL 6 COMMENTS" forState:UIControlStateNormal];
+            [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+            [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+            [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
+            [cell addSubview:topButton];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.backgroundColor = [UIColor frescoBackgroundColorLight];
             
+            if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+                [cell setSeparatorInset:UIEdgeInsetsZero];
+            }
+            if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+                [cell setPreservesSuperviewLayoutMargins:NO];
+            }
+            if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+                [cell setLayoutMargins:UIEdgeInsetsZero];
+            }
+
             return cell;
         }
         else {
