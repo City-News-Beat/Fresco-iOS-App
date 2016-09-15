@@ -21,11 +21,15 @@
 #import "FRSAssignmentsViewController.h"
 #import "FRSTaxInformationViewController.h"
 #import "FRSGalleryExpandedViewController.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 #import "FRSAssignment.h"
 #import "FRSAlertView.h"
 
 #import <Haneke/Haneke.h>
+
+#import "FRSAwkwardView.h"
+
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate>
 
@@ -35,6 +39,8 @@
 @property (strong, nonatomic) NSTimer *timer;
 
 @property (nonatomic) NSInteger loadedNotificationCount;
+
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *spinner;
 
 @end
 
@@ -98,6 +104,15 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     return self;
 }
 
+-(void)configureSpinner {
+    self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.spinner.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.spinner.tintColor = [UIColor frescoOrangeColor];
+    [self.spinner setPullProgress:90];
+    [self.spinner startAnimating];
+    [self.view addSubview:self.spinner];
+}
+
 -(void)checkNotifications {
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateInterface) userInfo:nil repeats:YES];
 }
@@ -114,9 +129,12 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
         
-        NSLog(@"responseObject: %@", responseObject);
+        self.payload = responseObject;
         
+        [self configureTableView];
+        [self registerNibs];
         
+        [self.spinner stopLoading];
     }];
 }
 
@@ -165,8 +183,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configureUI {
     [self configureNavigationBar];
-    [self configureTableView];
-    [self registerNibs];
+    [self configureSpinner];
 }
 
 -(void)configureNavigationBar {
@@ -202,6 +219,14 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     self.tableView.estimatedRowHeight = 100;
     
     [self.view addSubview:self.tableView];
+    
+    
+    
+    if (self.payload.count == 0) {
+
+        FRSAwkwardView *awkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -175/2, self.view.frame.size.height/2 -125/2 -64, 175, 125)];
+        [self.tableView addSubview:awkward];
+    }
 }
 
 -(void)registerNibs {

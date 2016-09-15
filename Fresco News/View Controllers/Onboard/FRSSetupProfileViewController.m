@@ -424,7 +424,7 @@
     if(_isEditingProfile && _bioStr != (id)[NSNull null] && _bioStr.length != 0){
         self.bioTV.text = _bioStr;
     }else{
-        self.bioTV.attributedText = [[NSAttributedString alloc] initWithString:@"Bio" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
+        self.bioTV.attributedText = [[NSAttributedString alloc] initWithString:@"" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     }
     
     [backgroundView addSubview:self.bioTV];
