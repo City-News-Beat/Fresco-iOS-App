@@ -154,9 +154,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [self saveLastOpenedDate];
     
     
-    FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
-    [tabBarController updateBellIcon:NO];
+//    FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
     
+    [(FRSTabBarController *)self.tabBarController updateBellIcon:NO];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -171,6 +171,14 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     self.isSegueingToGallery = NO;
     self.isSegueingToStory = NO;
+    
+    if (self.tabBarController) {
+        [(FRSTabBarController *)self.tabBarController updateUserIcon];
+    } else {
+        FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
+        [tabBarController updateUserIcon];
+    }
+    
 }
 
 -(void)saveLastOpenedDate {
@@ -743,9 +751,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:NO];
-    
-    FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
-    [tabBarController updateUserIcon];
 }
 
 

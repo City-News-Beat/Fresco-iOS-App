@@ -30,4 +30,6 @@
 -(void)updateUserIcon;
 @property (strong, nonatomic) UIView *dot;
 
+-(void)configureViewControllersWithNotif:(BOOL)notif;
+
 @end

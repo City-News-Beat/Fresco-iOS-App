@@ -39,6 +39,8 @@
 @property (strong, nonatomic) UIButton *backTapButton;
 @property (strong, nonatomic) UIButton *doneButton;
 
+@property (strong, nonatomic) UIImage *selectedImage;
+
 @end
 
 @implementation FRSSetupProfileViewController
@@ -75,6 +77,10 @@
     
     if(_isEditingProfile){
         [self.profileIV hnk_setImageFromURL:self.profileImageURL];
+        
+        if (self.selectedImage != nil) {
+            [self.profileIV setImage:self.selectedImage];
+        }
     }else{
         [self.profileIV addSubview:self.placeHolderUserIcon];
     }
@@ -640,6 +646,8 @@
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     
     UIImage *selectedImage;
+    self.selectedImage = selectedImage;
+    
     if ([info valueForKey:UIImagePickerControllerEditedImage]){
         selectedImage = [info valueForKey:UIImagePickerControllerEditedImage];
         self.placeHolderUserIcon.alpha = 0;

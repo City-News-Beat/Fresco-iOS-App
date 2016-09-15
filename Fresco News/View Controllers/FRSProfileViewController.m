@@ -1006,6 +1006,7 @@
 
 //Breaking this up into two methods because presentVC:animated: is being passed into the notification button's selector and defaulting to NO.
 -(void)showNotificationsAnimated {
+    
     FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
 
     [self.navigationController pushViewController:notifVC animated:NO];

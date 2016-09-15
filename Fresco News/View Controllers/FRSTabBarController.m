@@ -256,8 +256,6 @@
         
         if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
 
-        
-            
             
             
         } else {
@@ -344,7 +342,7 @@
             
             if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
                 
-//                [self configureViewControllersWithNotif:YES];
+                return NO;
                 break;
             }
             
