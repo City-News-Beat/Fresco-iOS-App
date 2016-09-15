@@ -401,6 +401,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     
     if (tableView == _commentTableView) {
+        
+        if (indexPath.row == 0) {
+            return 45;
+        }
+        
         if (indexPath.row < self.comments.count) {
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
             NSInteger height = cell.commentTextField.frame.size.height;
@@ -424,7 +429,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     else if (tableView == _commentTableView) {
         
         if (indexPath.row == 0 && self.comments.count != 0) {
-            
+            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
+                UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
+                [topButton setTitle:@"SEE ALL 6 COMMENTS" forState:UIControlStateNormal];
+                [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+                [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+                [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
+                [cell addSubview:topButton];
+                return cell;
+            }
         }
         else {
             FRSCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCommentIdentifier];
