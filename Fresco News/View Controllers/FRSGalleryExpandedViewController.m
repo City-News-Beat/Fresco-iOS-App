@@ -421,6 +421,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     return 0;
 }
 
+-(void)showAllComments {
+    
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (tableView == _articlesTV) {
         FRSArticlesTableViewCell *cell = [[FRSArticlesTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"article-cell" article:self.orderedArticles[indexPath.row]];
@@ -428,7 +432,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     else if (tableView == _commentTableView) {
         
-        if (indexPath.row == 0 && self.comments.count != 0) {
+        if (indexPath.row == 0) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
             if (!cell) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
@@ -438,12 +442,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
                 [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
                 [cell addSubview:topButton];
-                return cell;
             }
+            
+            return cell;
         }
         else {
             FRSCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCommentIdentifier];
-            if (indexPath.row < self.comments.count) {
+            if (indexPath.row < self.comments.count+1) {
                 FRSComment *comment = _comments[indexPath.row-1];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
