@@ -351,6 +351,50 @@
 -(void)handleRemotePush:(NSDictionary *)push {
     NSString *instruction = push[settingsKey];
     
+    // payment
+    if ([instruction isEqualToString:purchasedContentNotification]) {
+        
+    }
+    if ([instruction isEqualToString:paymentExpiringNotification]) {
+        
+    }
+    if ([instruction isEqualToString:paymentSentNotification]) {
+        
+    }
+    if ([instruction isEqualToString:taxInfoRequiredNotification]) {
+        
+    }
+    if ([instruction isEqualToString:taxInfoDeclinedNotification]) {
+        
+    }
+    if ([instruction isEqualToString:taxInfoProcessedNotification]) {
+        
+    }
+    if ([instruction isEqualToString:paymentDeclinedNotification]) {
+        
+    }
+    
+    // social
+    if ([instruction isEqualToString:followedNotification]) {
+        
+    }
+    if ([instruction isEqualToString:likedNotification]) {
+        
+    }
+    if ([instruction isEqualToString:repostedNotification]) {
+        
+    }
+    if ([instruction isEqualToString:commentedNotification]) {
+        
+    }
+    
+    // general
+    if ([instruction isEqualToString:photoOfDayNotification]) {
+        
+    }
+    if ([instruction isEqualToString:todayInNewsNotification]) {
+        
+    }
 }
 
 -(void)applicationDidEnterBackground:(UIApplication *)application{
