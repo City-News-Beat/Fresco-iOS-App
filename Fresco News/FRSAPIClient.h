@@ -43,7 +43,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion;
 -(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
-
+-(void)addComment:(NSString *)comment toGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 // generic auth-ed call
 -(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;

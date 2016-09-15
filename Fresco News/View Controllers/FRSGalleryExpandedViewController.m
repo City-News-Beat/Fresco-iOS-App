@@ -384,7 +384,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     if (tableView == _commentTableView) {
         
-        return self.comments.count;
+        if (self.comments.count == 0) {
+            return 0;
+        }
+        
+        return self.comments.count + 1;
     }
     
     return 0;
@@ -418,44 +422,50 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         return cell;
     }
     else if (tableView == _commentTableView) {
-        FRSCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCommentIdentifier];
-        if (indexPath.row < self.comments.count) {
-            FRSComment *comment = _comments[indexPath.row];
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (comment.imageURL && ![comment.imageURL isEqualToString:@""]) {
-                    NSLog(@"%@", comment.imageURL);
-                    
-                    cell.backgroundColor = [UIColor clearColor];
-                    [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL] placeholder:Nil success:^(UIImage *image) {
-                       
-                        
-                    } failure:^(NSError *error) {
-                        
-                    }];
-                }
-                else {
-                    // default
-                    cell.backgroundColor = [UIColor frescoLightTextColor];
-                    cell.profilePicture.image = [UIImage imageNamed:@"user-24"];
-                }
-            });
         
-            cell.commentTextField.attributedText = comment.attributedString;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell.commentTextField frs_resize];
-            cell.commentTextField.delegate = self;
+        if (indexPath.row == 0 && self.comments.count != 0) {
             
-            if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-                [cell setSeparatorInset:UIEdgeInsetsZero];
+        }
+        else {
+            FRSCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCommentIdentifier];
+            if (indexPath.row < self.comments.count) {
+                FRSComment *comment = _comments[indexPath.row-1];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (comment.imageURL && ![comment.imageURL isEqualToString:@""]) {
+                        NSLog(@"%@", comment.imageURL);
+                        
+                        cell.backgroundColor = [UIColor clearColor];
+                        [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL] placeholder:Nil success:^(UIImage *image) {
+                            
+                            
+                        } failure:^(NSError *error) {
+                            
+                        }];
+                    }
+                    else {
+                        // default
+                        cell.backgroundColor = [UIColor frescoLightTextColor];
+                        cell.profilePicture.image = [UIImage imageNamed:@"user-24"];
+                    }
+                });
+                
+                cell.commentTextField.attributedText = comment.attributedString;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [cell.commentTextField frs_resize];
+                cell.commentTextField.delegate = self;
+                
+                if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+                    [cell setSeparatorInset:UIEdgeInsetsZero];
+                }
+                if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+                    [cell setPreservesSuperviewLayoutMargins:NO];
+                }
+                if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+                    [cell setLayoutMargins:UIEdgeInsetsZero];
+                }
+                return cell;
             }
-            if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-                [cell setPreservesSuperviewLayoutMargins:NO];
-            }
-            if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-                [cell setLayoutMargins:UIEdgeInsetsZero];
-            }
-            return cell;
         }
     }
     
@@ -507,20 +517,36 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
     // comment text field comes up
-    commentField = [[UITextField alloc] initWithFrame:CGRectMake(-1, [UIScreen mainScreen].bounds.size.height, self.view.frame.size.width+2, 44)];
-    commentField.backgroundColor = [UIColor frescoBackgroundColorLight];
-    commentField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    commentField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Say something nice" attributes:@{ NSForegroundColorAttributeName : [UIColor frescoLightTextColor]}];
-    UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 16, 44)];
-    leftView.backgroundColor = [UIColor clearColor];
-    commentField.leftViewMode = UITextFieldViewModeAlways;
-    commentField.leftView = leftView;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeUp:) name:UIKeyboardWillShowNotification object:Nil];
-    
-    [self.view addSubview:commentField];
+    if (!commentField) {
+        commentField = [[UITextField alloc] initWithFrame:CGRectMake(-1, [UIScreen mainScreen].bounds.size.height, self.view.frame.size.width+2, 44)];
+        commentField.backgroundColor = [UIColor frescoBackgroundColorLight];
+        commentField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        commentField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Say something nice" attributes:@{ NSForegroundColorAttributeName : [UIColor frescoLightTextColor]}];
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 16, 44)];
+        leftView.backgroundColor = [UIColor clearColor];
+        commentField.leftViewMode = UITextFieldViewModeAlways;
+        commentField.leftView = leftView;
+        commentField.returnKeyType = UIReturnKeySend;
+        
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, commentField.frame.size.width, .5)];
+        line.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12];
+        [commentField addSubview:line];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeUp:) name:UIKeyboardWillShowNotification object:Nil];
+        
+        [self.view addSubview:commentField];
+        
+        [commentField addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventEditingDidEndOnExit];
+    }
     
     [commentField becomeFirstResponder];
+}
+
+-(void)sendComment {
+    if (!commentField.text) {
+        return;
+    }
 }
 
 -(void)changeUp:(NSNotification *)change {
