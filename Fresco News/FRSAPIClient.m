@@ -263,7 +263,9 @@
         currentInstallation[@"device_token"] = deviceToken;
     }
     else {
-        return currentInstallation[@"device_token"] = [[FRSAPIClient sharedClient] randomString]; // no installation without push info, apparently
+        
+        currentInstallation[@"device_token"] = [[FRSAPIClient sharedClient] random64CharacterString]; // no installation without push info, apparently
+
     }
     
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
@@ -325,6 +327,16 @@
     return randomString;
 }
 
+-(NSString *)random64CharacterString {
+    NSString *letters = @"abcdefABCDEF0123456789";
+    NSMutableString *randomString = [NSMutableString stringWithCapacity:64];
+    
+    for (int i=0; i<64; i++) {
+        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform([letters length])]];
+    }
+    
+    return randomString;
+}
 
 -(void)handleUserLogin:(id)responseObject {
     if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
