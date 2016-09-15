@@ -446,6 +446,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     /* PAYMENT */
     else if ([currentKey isEqualToString:purchasedContentNotification]) {
+        [self segueToPost:[[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"post_ids"] objectAtIndex:0]];
         
     } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
         [self segueToDebitCard];
