@@ -128,8 +128,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)getNotifications {
     
     [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
-        
-        self.payload = responseObject;
+                
+//        self.payload = responseObject;
         
         [self configureTableView];
         [self registerNibs];
@@ -151,6 +151,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [self checkNotifications];
     
     [self configureUI];
+    
+    
     [self saveLastOpenedDate];
     
     
