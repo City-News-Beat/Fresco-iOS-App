@@ -336,6 +336,8 @@
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"installation":installationDigest} completion:^(id responseObject, NSError *error) {
         NSLog(@"Updated user installation");
     }];
+    
+    [[Mixpanel sharedInstance] track:@"Notifications Enabled"];
 }
 
 -(void)handleLocationUpdate {

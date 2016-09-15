@@ -10,6 +10,9 @@
 @class FRSGallery;
 
 @interface FRSGalleryExpandedViewController : FRSScrollingViewController <UITextViewDelegate>
+{
+    UITextField *commentField;
+}
 @property BOOL isLoadingUser;
 -(instancetype)initWithGallery:(FRSGallery *)gallery;
 

@@ -12,7 +12,7 @@
 //#import "markdown_peg.h"
 #import "FRSAPIClient.h" // imports all extension classes needed (location, persistence, social, upload)
 #import "FRSStripe.h"
-
+#import <Mixpanel/Mixpanel.h>
 //libraries
 #import <AFNetworking/AFNetworking.h>
 

@@ -507,11 +507,36 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
     // comment text field comes up
-    UITextField *commentField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 55)];
+    commentField = [[UITextField alloc] initWithFrame:CGRectMake(-1, [UIScreen mainScreen].bounds.size.height, self.view.frame.size.width+2, 44)];
+    commentField.backgroundColor = [UIColor frescoBackgroundColorLight];
+    commentField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    commentField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Say something nice" attributes:@{ NSForegroundColorAttributeName : [UIColor frescoLightTextColor]}];
+    UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 16, 44)];
+    leftView.backgroundColor = [UIColor clearColor];
+    commentField.leftViewMode = UITextFieldViewModeAlways;
+    commentField.leftView = leftView;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeUp:) name:UIKeyboardWillShowNotification object:Nil];
     
     [self.view addSubview:commentField];
+    
+    [commentField becomeFirstResponder];
 }
 
+-(void)changeUp:(NSNotification *)change {
+
+    [UIView animateWithDuration:.2 animations:^{
+        NSDictionary *info = [change userInfo];
+        
+        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+        CGRect visibleRect = self.view.frame;
+        visibleRect.size.height -= keyboardSize.height;
+        
+        CGRect inputRect = commentField.frame;
+        inputRect.origin.y = self.view.frame.size.height - visibleRect.size.height + 67 + 60;
+        commentField.frame = inputRect;
+    }];
+}
 
 #pragma mark - 3D Touch
 

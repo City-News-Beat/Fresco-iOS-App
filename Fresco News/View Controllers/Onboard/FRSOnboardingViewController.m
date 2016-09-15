@@ -49,7 +49,7 @@
     
     [super viewDidLoad];
     [self configureUI];
-    
+    [[Mixpanel sharedInstance] track:@"Onboard Began"];
     [self animateFirstLaunch];
     
     //Make delegate
