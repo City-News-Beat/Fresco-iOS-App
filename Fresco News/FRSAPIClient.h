@@ -15,6 +15,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "SSKeychain.h"
 #import <Photos/Photos.h>
+#import <Mixpanel/Mixpanel.h>
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
@@ -46,6 +47,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 // notifications
 -(void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 
+-(void)addComment:(NSString *)comment toGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 // generic auth-ed call
 -(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;

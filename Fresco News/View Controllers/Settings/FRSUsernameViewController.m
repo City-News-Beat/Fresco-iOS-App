@@ -219,6 +219,7 @@
 -(void)saveUsername {
     
     [self.view endEditing:YES];
+    self.username = [self.username stringByReplacingOccurrencesOfString:@"@" withString:@""];
     
     NSDictionary *digestion = @{@"username" : self.username, @"verify_password" : self.password};
     

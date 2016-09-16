@@ -23,8 +23,6 @@ target 'Fresco' do
 	pod 'FBSDKLoginKit'
 	pod 'FBSDKCoreKit'
 	pod 'FBSDKShareKit'
-	pod ‘AWSCore’
-	pod ‘AWSS3’
 	pod 'Haneke'
 	pod 'TwitterKit'
 	pod 'Fabric'
@@ -32,6 +30,7 @@ target 'Fresco' do
 	pod 'TwitterCore'
 	pod 'Appsee'
 	pod 'Smooch'
+    pod 'Mixpanel'
 	pod 'CardIO'
 	pod 'Adjust', :git => 'git://github.com/adjust/ios_sdk.git', :tag => 'v4.5.0'
     pod 'AttributedMarkdown', :git => 'https://github.com/dreamwieber/AttributedMarkdown.git'

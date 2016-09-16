@@ -200,7 +200,7 @@
         [posts addObject:[post jsonObject]];
     }
     
-    jsonObject[@"posts"] = posts;
+    jsonObject[@"posts_new"] = posts;
     
     return jsonObject;
 }

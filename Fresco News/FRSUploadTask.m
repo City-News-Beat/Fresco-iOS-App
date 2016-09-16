@@ -106,7 +106,7 @@
 }
 
 -(NSString *)contentMD5 {
-    return [AWFileHash md5HashOfFileAtPath:_assetURL.absoluteString];
+    return @"";
 }
 
 -(id)serializedObjectFromResponse:(NSData *)response {

@@ -12,7 +12,6 @@
 #import "FRSRequestSerializer.h"
 #import "FRSAppDelegate.h"
 #import "FRSOnboardingViewController.h"
-#import "AWFileHash.h"
 
 @implementation FRSAPIClient
 
@@ -86,7 +85,6 @@
     
     [self post:loginEndpoint withParameters:@{@"username":user, @"password":password, @"installation":[[FRSAPIClient sharedClient] currentInstallation]} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        NSLog(@"%@", responseObject);
         
         if (!error) {
             [self handleUserLogin:responseObject];
@@ -101,7 +99,6 @@
     NSString *twitterAccessToken = session.authToken;
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
     NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
-    NSLog(@"%@", authDictionary);
     
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -117,7 +114,6 @@
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
     NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
-    NSLog(@"%@", authDictionary);
     
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error); // burden of error handling falls on sender
@@ -140,17 +136,14 @@
     // social_links
     // installation
     
-    
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         
         if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
             [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
-            
-            NSLog(@"DIGESTION: %@", digestion);
-            NSLog(@"RESPONSE: %@", responseObject);
-            NSLog(@"ERROR: %@", error);
+            NSString *userID = responseObject[@"user"][@"id"];
             
         }
+        
         completion(responseObject, error);
     }];
 }
@@ -372,6 +365,16 @@
         }
         
         // set up FRSUser object with this info, set authenticated to true
+        
+        NSString *userID = responseObject[@"id"];
+        
+        if (userID && ![userID isEqual:[NSNull null]]) {
+            Mixpanel *mixpanel = [Mixpanel sharedInstance];
+            [mixpanel createAlias:userID forDistinctID:mixpanel.distinctId];
+            [mixpanel identify:userID];
+        }
+        
+        [[Mixpanel sharedInstance] track:@"Login"];
     }];
 }
 
@@ -432,7 +435,6 @@
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        NSLog(@"BLECAHK%@", responseObject);
     }];
     
 }
@@ -608,9 +610,11 @@
 -(void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     
     NSDictionary *params = [gallery jsonObject];
+    NSLog(@"CREATION: %@", params);
     
     [self post:createGalleryEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
+        NSLog(@"CREATION ERROR: %@", error);
     }];
 }
 
@@ -1282,7 +1286,7 @@
 }
 
 -(NSString *)md5:(PHAsset *)asset {
-    return [AWFileHash md5HashOfPHAsset:asset];
+    return @"";
 }
 
 -(NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback {
@@ -1310,8 +1314,6 @@
                 callback(digest, err);
             }];
         }
-        
-        digest[@"md5"] = [self md5:asset];
     }];
     
     return digest;

@@ -7,7 +7,6 @@
 //
 
 #import "FRSMultipartTask.h"
-#import "NSData+NSHash.h" // md5 all requests
 
 @implementation FRSMultipartTask
 @synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections, destinationURLS = _destinationURLS, session = _session;
@@ -257,6 +256,6 @@
 }
 
 -(NSString *)contentMD5ForChunk:(NSData *)data {
-    return [AWFileHash md5HashOfData:data];
+    return @"";
 }
 @end

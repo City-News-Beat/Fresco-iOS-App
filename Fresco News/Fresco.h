@@ -12,7 +12,7 @@
 //#import "markdown_peg.h"
 #import "FRSAPIClient.h" // imports all extension classes needed (location, persistence, social, upload)
 #import "FRSStripe.h"
-
+#import <Mixpanel/Mixpanel.h>
 //libraries
 #import <AFNetworking/AFNetworking.h>
 
@@ -20,6 +20,10 @@
 #ifdef distribution 
 #define NSLog //
 #endif
+
+// mixpanel
+//static NSString * const mixPanelToken = @"4a01dc9d6ffde669d683102db23c8bcd";
+static NSString * const mixPanelToken = @"3db3c5a14458646497514603ea8d8b10";
 
 // image CDN sizing
 static NSString * const thumbImageSize = @"150x";
@@ -73,6 +77,10 @@ static NSString * const acceptAssignmentEndpoint = @"assignment/accept";
 static NSString * const loginEndpoint = @"auth/signin";
 static NSString * const signUpEndpoint = @"auth/register";
 static NSString * const socialLoginEndpoint = @"auth/signin/social";
+
+// comments
+static NSString * const paginateComments = @"gallery/%@/comments?limit=10&last=%@&direction=asc";
+static NSString * const getCommentEndpoint = @"gallery/%@/comment/%@";
 
 // user endpoints
 static NSString * const userEndpoint = @"user/";

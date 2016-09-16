@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <Photos/Photos.h>
-#import "AWFileHash.h"
 
 @protocol FRSUploadDelegate <NSObject>
 // mandatory, basic upload events

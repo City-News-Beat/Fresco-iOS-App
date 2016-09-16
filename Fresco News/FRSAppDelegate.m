@@ -39,6 +39,7 @@
         [self clearKeychain]; // clear tokens from past install
     }
     
+    [self startMixpanel];
     [self configureWindow];
     [self startFabric]; // crashlytics first yall
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
@@ -78,14 +79,23 @@
     }
     
     [self registerForPushNotifications];
-    
     [[UINavigationBar appearance]setShadowImage:[[UIImage alloc] init]];
 
-    
 
     
     
     return YES;
+}
+
+-(void)startMixpanel {
+    [Mixpanel sharedInstanceWithToken:mixPanelToken];
+    
+    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
+        [[Mixpanel sharedInstance] identify:[[FRSAPIClient sharedClient] authenticatedUser].uid];
+    }
+    else {
+        [[Mixpanel sharedInstance] identify:[Mixpanel sharedInstance].distinctId];
+    }
 }
 
 -(void)reloadUser {
@@ -326,6 +336,8 @@
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"installation":installationDigest} completion:^(id responseObject, NSError *error) {
         NSLog(@"Updated user installation");
     }];
+    
+    [[Mixpanel sharedInstance] track:@"Notifications Enabled"];
 }
 
 -(void)handleLocationUpdate {
@@ -339,6 +351,50 @@
 -(void)handleRemotePush:(NSDictionary *)push {
     NSString *instruction = push[settingsKey];
     
+    // payment
+    if ([instruction isEqualToString:purchasedContentNotification]) {
+        
+    }
+    if ([instruction isEqualToString:paymentExpiringNotification]) {
+        
+    }
+    if ([instruction isEqualToString:paymentSentNotification]) {
+        
+    }
+    if ([instruction isEqualToString:taxInfoRequiredNotification]) {
+        
+    }
+    if ([instruction isEqualToString:taxInfoDeclinedNotification]) {
+        
+    }
+    if ([instruction isEqualToString:taxInfoProcessedNotification]) {
+        
+    }
+    if ([instruction isEqualToString:paymentDeclinedNotification]) {
+        
+    }
+    
+    // social
+    if ([instruction isEqualToString:followedNotification]) {
+        
+    }
+    if ([instruction isEqualToString:likedNotification]) {
+        
+    }
+    if ([instruction isEqualToString:repostedNotification]) {
+        
+    }
+    if ([instruction isEqualToString:commentedNotification]) {
+        
+    }
+    
+    // general
+    if ([instruction isEqualToString:photoOfDayNotification]) {
+        
+    }
+    if ([instruction isEqualToString:todayInNewsNotification]) {
+        
+    }
 }
 
 -(void)applicationDidEnterBackground:(UIApplication *)application{

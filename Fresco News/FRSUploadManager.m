@@ -48,7 +48,7 @@
 -(void)startUploadProcess {
     toComplete = 0;
     isComplete = 0;
-    
+
     if (!_posts) {
         return;
     }
@@ -61,14 +61,14 @@
             
             NSMutableArray *urls = [[NSMutableArray alloc] init];
             
-            for (NSString *partURL in currentPost[@"urls"]) {
+            for (NSString *partURL in currentPost[@"upload_urls"]) {
                 [urls addObject:[NSURL URLWithString:partURL]];
             }
             
             [self addMultipartTaskForAsset:currentAsset urls:urls post:currentPost];
         }
         else {
-            [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"urls"][0]] post:currentPost];
+            [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"upload_urls"][0]] post:currentPost];
         }
     }
 }
@@ -134,7 +134,7 @@
                 [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
                     
                     NSLog(@"POST COMPLETED: %@", (error == Nil) ? @"TRUE" : @"FALSE");
-                        
+                    
                     if (!error) {
                         isComplete++;
                         [self next:task];
