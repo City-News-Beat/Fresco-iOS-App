@@ -644,6 +644,7 @@
     [self popViewController];
     
     [self.tabBarController setSelectedIndex:0];
+    [[Mixpanel sharedInstance] track:@"Logout"];
  }
 
 

@@ -773,6 +773,9 @@
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
+    
+    [[Mixpanel sharedInstance] track:@"Galleries opened from profile" properties:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+
 }
 
 -(void)readMoreStory:(NSIndexPath *)indexPath {

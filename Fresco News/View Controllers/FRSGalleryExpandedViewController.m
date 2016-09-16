@@ -20,6 +20,7 @@
 #import "PeekPopArticleViewController.h"
 #import "FRSComment.h"
 #import "Haneke.h"
+#import "Fresco.h"
 
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
@@ -58,7 +59,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self = [super init];
     if (self){
         self.gallery = gallery;
-//        self.orderedArticles = [self.gallery.articles allObjects];
+        //        self.orderedArticles = [self.gallery.articles allObjects];
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
         self.touchEnabled = NO;
@@ -84,7 +85,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         
         [self configureComments];
-
+        
     }];
 }
 
@@ -97,7 +98,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [super viewDidLoad];
     
     [self configureUI];
-    
+    [[Mixpanel sharedInstance] track:@"Galleries opened from highlights" properties:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     // Do any additional setup after loading the view.
 }
 
@@ -169,7 +170,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.scrollView addSubview:self.galleryView];
     
     
-//    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
+    //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
 }
 
 -(void)configureArticles{
@@ -270,7 +271,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.actionBar handleHeartAmount:[numLikes intValue]];
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
-
+    
     [self.view addSubview:self.actionBar];
     
     [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
@@ -284,7 +285,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[sharedContent] applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-
+    
+    [[Mixpanel sharedInstance] track:@"Galleries shared from highlights" properties:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
 }
 
 -(void)adjustScrollViewContentSize{
@@ -406,7 +408,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             return 45;
         }
         
-        if (indexPath.row < self.comments.count) {
+        if (indexPath.row < self.comments.count + 1) {
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
             NSInteger height = cell.commentTextField.frame.size.height;
             
@@ -452,7 +454,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
                 [cell setLayoutMargins:UIEdgeInsetsZero];
             }
-
+            
             return cell;
         }
         else {
@@ -576,10 +578,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (!commentField.text) {
         return;
     }
+    
+    [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        [commentField resignFirstResponder];
+        [UIView animateWithDuration:.2 animations:^{
+            commentField.frame = CGRectMake(-1, [UIScreen mainScreen].bounds.size.height, self.view.frame.size.width+2, 44);
+        } completion:^(BOOL finished) {
+            commentField.text = @"";
+        }];
+    }];
 }
 
 -(void)changeUp:(NSNotification *)change {
-
+    
     [UIView animateWithDuration:.2 animations:^{
         NSDictionary *info = [change userInfo];
         
@@ -612,7 +623,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     CGPoint cellPostion = [self.articlesTV convertPoint:location fromView:self.articlesTV];
     NSIndexPath *path = [self.articlesTV indexPathForRowAtPoint:cellPostion];
     [previewingContext setSourceRect:[self.articlesTV rectForRowAtIndexPath:path]];
-
+    
     PeekPopArticleViewController *vc = [[PeekPopArticleViewController alloc] init];
     UIView *contentView = vc.view;
     
@@ -622,7 +633,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     NSString *urlString = article.articleStringURL;
     [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
     vc.title = urlString;
-
+    
     return vc;
 }
 
