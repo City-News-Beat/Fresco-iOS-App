@@ -36,7 +36,6 @@
     NSMutableArray *dictionaryRepresentations;
     BOOL hasSnapped;
 }
-@property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) NSArray *assignments;
 
 @property (strong, nonatomic) NSArray *overlays;
@@ -359,7 +358,7 @@
 
 -(void)focusOnAssignment:(FRSAssignment *)assignment {
     
-    [self setDefaultAssignment:assignment];
+//    [self setDefaultAssignment:assignment];
 }
 
 -(void)removeAssignmentsFromMap {

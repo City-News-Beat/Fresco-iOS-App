@@ -205,8 +205,13 @@
     assignmentsVC.defaultID = assignmentID;
     self.tabBarController.selectedIndex = 3;
     
+    assignmentsVC.mapView = nil;
+    [assignmentsVC.mapView removeFromSuperview];
+    
+    [assignmentsVC mapView];
+    [assignmentsVC fetchLocalAssignments];
+    
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
-        
         [assignmentsVC focusOnAssignment:(FRSAssignment *)responseObject];
         [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
     }];
