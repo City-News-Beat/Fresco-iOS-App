@@ -375,7 +375,7 @@
             [mixpanel identify:userID];
         }
         
-        [[Mixpanel sharedInstance] track:@"Login"];
+        [[Mixpanel sharedInstance] track:@"Logins"];
     }];
 }
 
