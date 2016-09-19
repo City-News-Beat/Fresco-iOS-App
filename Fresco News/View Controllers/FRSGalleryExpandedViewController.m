@@ -606,7 +606,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         for (NSDictionary *comment in responseObject) {
             FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
-            [_comments addObject:commentObject];
+            [_comments insertObject:commentObject atIndex:0];
         }
         
         
