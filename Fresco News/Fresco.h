@@ -79,7 +79,7 @@ static NSString * const signUpEndpoint = @"auth/register";
 static NSString * const socialLoginEndpoint = @"auth/signin/social";
 
 // comments
-static NSString * const paginateComments = @"gallery/%@/comments?limit=10&last=%@&direction=asc";
+static NSString * const paginateComments = @"gallery/%@/comments?limit=10&last=%@&direction=desc";
 static NSString * const getCommentEndpoint = @"gallery/%@/comment/%@";
 
 // user endpoints
