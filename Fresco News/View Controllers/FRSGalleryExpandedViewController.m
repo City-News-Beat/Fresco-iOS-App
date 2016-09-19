@@ -520,7 +520,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)showAllComments {
-    
+    [self loadMoreComments];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -604,7 +604,43 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             return;
         }
         
+        for (NSDictionary *comment in responseObject) {
+            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
+            [_comments addObject:commentObject];
+        }
         
+        
+        float height = 0;
+        NSInteger index = 0;
+        
+        for (FRSComment *comment in _comments) {
+            
+            CGRect labelRect = [comment.comment
+                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 60, INT_MAX)
+                                options:NSStringDrawingUsesLineFragmentOrigin
+                                attributes:@{
+                                             NSFontAttributeName : [UIFont systemFontOfSize:15]
+                                             }
+                                context:nil];
+            
+            float commentSize = labelRect.size.height;
+            
+            if (commentSize < 56) {
+                height += 56;
+            }
+            else {
+                height += commentSize;
+            }
+            
+            
+            index++;
+        }
+        
+        height += 55;
+        
+        self.commentTableView.frame = CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height-6);
+        [self adjustScrollViewContentSize];
+        [self.commentTableView reloadData];
     }];
 }
 
