@@ -109,6 +109,7 @@ static NSString * const commentsEndpoint = @"gallery/%@/comments/";
 static NSString * const commentEndpoint = @"gallery/%@/comment/";
 static NSString * const galleryUnlikeEndpoint = @"gallery/%@/unlike";
 static NSString * const storyUnlikeEndpoint = @"story/%@/unlike";
+static NSString * const deleteCommentEndpoint = @"%@/comment/delete"; // comment_id -> comment
 
 // feeds
 static NSString * const likeFeed = @"feeds/%@/likes";

@@ -498,6 +498,16 @@
     }];
 }
 
+-(void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+
+    NSString *endpoint = [NSString stringWithFormat:deleteCommentEndpoint, gallery.uid];
+    NSDictionary *params = @{@"comment_id":commentID};
+    
+    [self post:endpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion {
     
     NSString *endpoint = [NSString stringWithFormat:storyGalleriesEndpoint, storyID];
