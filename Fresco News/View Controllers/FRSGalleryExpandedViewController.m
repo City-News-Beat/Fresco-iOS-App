@@ -289,6 +289,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)deleteAtIndexPath:(NSIndexPath *)indexPath {
     FRSComment *comment = self.comments[indexPath.row - 1];
     [[FRSAPIClient sharedClient] deleteComment:comment.uid fromGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        NSLog(@"%@", error);
         [self reloadComments];
     }];
 }
