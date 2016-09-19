@@ -12,6 +12,8 @@
 #import "FRSAssignment.h"
 #import "Fresco.h"
 
+@import MapKit;
+
 @interface FRSAssignmentsViewController : FRSBaseViewController <UIScrollViewDelegate>
 {
     __weak UIScrollView *currentScroller; // weak b/c we only want to hold reference when in view
@@ -24,8 +26,12 @@
 -(void)setInitialMapRegion;
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID;
 -(void)focusOnAssignment:(FRSAssignment *)assignment;
+-(void)configureMap;
+-(void)fetchLocalAssignments;
+
 
 @property (nonatomic) BOOL hasDefault;
 @property (nonatomic, retain) NSString *defaultID;
+@property (strong, nonatomic) MKMapView *mapView;
 
 @end
