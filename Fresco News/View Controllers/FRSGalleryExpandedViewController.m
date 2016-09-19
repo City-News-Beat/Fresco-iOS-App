@@ -527,12 +527,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                         NSLog(@"%@", comment.imageURL);
                         
                         cell.backgroundColor = [UIColor clearColor];
-                        [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL] placeholder:Nil success:^(UIImage *image) {
-                            
-                            
-                        } failure:^(NSError *error) {
-                            
-                        }];
+                        [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL]];
                     }
                     else {
                         // default
