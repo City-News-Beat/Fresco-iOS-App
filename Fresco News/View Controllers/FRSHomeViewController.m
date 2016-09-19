@@ -170,18 +170,9 @@
                 NSString *galleryID = gallery[@"id"];
                 NSInteger galleryIndex = [self galleryExists:galleryID];
                 
-                if (galleryIndex == -1) {
-                    FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-                    
-                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                    [self.dataSource insertObject:galleryToSave atIndex:index];
-                }
-                else {
-                    FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
-                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                }
+                FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
+                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
                 
                 index++;
             }
