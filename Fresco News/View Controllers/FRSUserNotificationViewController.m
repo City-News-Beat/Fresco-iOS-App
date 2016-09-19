@@ -293,25 +293,31 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         Ight so this setup is a tad bit f**ked up. Will need to re-write large portion of this. Good reminder of a situation in which you should trash whats there and start from scratch (if this was started off a dan base)
      */
     
+//
+//    FRSDefaultNotificationTableViewCell *defaultCell = [self.tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+//    
+//    if (!defaultCell) {
+//        defaultCell = [[FRSDefaultNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DEFAULT_ID];
+////        [defaultCell configureDefaultCell];
+//    }
+//    
+//    FRSAssignmentNotificationTableViewCell *assignmentCell = [self.tableView dequeueReusableCellWithIdentifier:ASSIGNMENT_ID];
+//    if (!assignmentCell) {
+//        assignmentCell = [[FRSAssignmentNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ASSIGNMENT_ID];
+//        assignmentCell.delegate = self;
+//    }
+//    
+//    FRSTextNotificationTableViewCell *textCell = [self.tableView dequeueReusableCellWithIdentifier:TEXT_ID];
+//    if (!textCell) {
+//        textCell = [[FRSTextNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TEXT_ID];
+//    }
     
-    FRSDefaultNotificationTableViewCell *defaultCell = [self.tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
     
-    if (!defaultCell) {
-        defaultCell = [[FRSDefaultNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DEFAULT_ID];
-//        [defaultCell configureDefaultCell];
-    }
+    FRSDefaultNotificationTableViewCell *defaultCell = [[FRSDefaultNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DEFAULT_ID];
     
-    FRSAssignmentNotificationTableViewCell *assignmentCell = [self.tableView dequeueReusableCellWithIdentifier:ASSIGNMENT_ID];
-    if (!assignmentCell) {
-        assignmentCell = [[FRSAssignmentNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ASSIGNMENT_ID];
-        assignmentCell.delegate = self;
-    }
+    FRSAssignmentNotificationTableViewCell *assignmentCell = [[FRSAssignmentNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ASSIGNMENT_ID];
     
-    FRSTextNotificationTableViewCell *textCell = [self.tableView dequeueReusableCellWithIdentifier:TEXT_ID];
-    if (!textCell) {
-        textCell = [[FRSTextNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TEXT_ID];
-    }
-    
+    FRSTextNotificationTableViewCell *textCell = [[FRSTextNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TEXT_ID];
     
     NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
     NSLog(@"%@", [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"]);
@@ -369,6 +375,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     /* ASSIGNMENT */
     else if ([currentKey isEqualToString:newAssignmentNotification]) {
         [self configureAssignmentCell:assignmentCell withID:[self.payload objectForKey:newAssignmentNotification]];
+        assignmentCell.delegate = self;
         return assignmentCell;
     }
     
