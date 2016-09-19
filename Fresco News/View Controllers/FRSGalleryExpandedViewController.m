@@ -268,7 +268,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    [self deleteAtIndexPath:indexPath];
 }
 
 // activity_duration
@@ -284,17 +284,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     
     return NO;
-}
-
--(NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"Delete"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
-        [self deleteAtIndexPath:indexPath];
-    }];
-    
-    deleteAction.backgroundColor = [UIColor redColor];
-    return @[deleteAction];
-    
 }
 
 -(void)deleteAtIndexPath:(NSIndexPath *)indexPath {
