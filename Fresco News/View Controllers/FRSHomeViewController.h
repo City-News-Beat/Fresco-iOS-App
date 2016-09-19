@@ -25,6 +25,9 @@
     FRSSplitTableView *tableScroller;
     FRSFollowingController *followingController;
     UITableView *followTable;
+    NSDate *entry;
+    NSDate *exit;
+    NSInteger numberRead;
 }
 @property BOOL loadNoMore;
 -(void)loadData;

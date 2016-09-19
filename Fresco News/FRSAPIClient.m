@@ -1138,10 +1138,11 @@
 }
 
 -(void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
-//    if ([self checkAuthAndPresentOnboard]) {
-//        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-//        return;
-//    }
+   
+    if ([self checkAuthAndPresentOnboard]) {
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
+        return;
+    }
     
     NSString *endpoint = [NSString stringWithFormat:commentEndpoint, galleryID];
     NSDictionary *parameters = @{@"comment":comment};

@@ -287,6 +287,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     [super viewDidAppear:animated];
     
+    entry = [NSDate date];
     [self fadeInPreview];
     
 }
@@ -295,6 +296,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     [super viewDidDisappear:animated];
     
+    if (entry) {
+        exit = [NSDate date];
+        
+        NSInteger secondsInCamera = [exit timeIntervalSinceDate:entry];
+        [[Mixpanel sharedInstance] track:@"Camera session" properties:@{activityDuration:@(secondsInCamera)}];
+    }
     [self.locationManager stopMonitoringSignificantLocationChanges];
     
     [self.sessionManager clearCaptureSession];

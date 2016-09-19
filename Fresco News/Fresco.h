@@ -137,6 +137,11 @@ static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
 
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
 
+
+// mixpanel
+
+static NSString * const activityDuration = @"activity_duration";
+
 // user - data
 static NSInteger const maxUsernameChars = 20;
 static NSInteger const maxNameChars = 40;

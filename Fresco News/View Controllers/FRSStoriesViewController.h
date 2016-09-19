@@ -14,6 +14,9 @@
 @interface FRSStoriesViewController : FRSScrollingViewController
 {
     BOOL firstOpen;
+    NSDate *entry;
+    NSDate *exit;
+    NSInteger numberRead;
 }
 @property BOOL loadNoMore;
 -(void)reloadData;

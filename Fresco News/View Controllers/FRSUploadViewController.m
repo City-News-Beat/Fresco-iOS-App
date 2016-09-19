@@ -1000,6 +1000,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSLog(@"Post anonymously");
     }
     else {
+        [[Mixpanel sharedInstance] track:@"Submissions"];
+        [[Mixpanel sharedInstance] track:@"Submission items in gallery" properties:@{@"count":@(self.content.count)}];
+        
         [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
     }
 }

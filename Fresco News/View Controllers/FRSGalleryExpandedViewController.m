@@ -201,6 +201,40 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+// activity_duration
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    if (tableView == _commentTableView) {
+        
+        if (indexPath.row < self.comments.count && indexPath.row != 0) {
+            FRSComment *comment = [self.comments objectAtIndex:indexPath.row-1];
+            if (comment.isDeletable) {
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+-(NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"Delete"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        [self deleteAtIndexPath:indexPath];
+    }];
+    
+    deleteAction.backgroundColor = [UIColor redColor];
+    return @[deleteAction];
+    
+}
+
+-(void)deleteAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
 -(void)configureComments {
     
     float height = 0;
@@ -228,6 +262,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         index++;
     }
+    
+    height += 55;
     
     self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height-6)];
     self.commentTableView.delegate = self;
@@ -420,7 +456,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
     }
     
-    return 0;
+    return 56;
 }
 
 -(void)showAllComments {
@@ -437,7 +473,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         if (indexPath.row == 0) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
             UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
-            [topButton setTitle:@"SEE ALL 6 COMMENTS" forState:UIControlStateNormal];
+            [topButton setTitle:[NSString stringWithFormat:@"SEE ALL %lu COMMENTS", _comments.count] forState:UIControlStateNormal];
             [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
             [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];

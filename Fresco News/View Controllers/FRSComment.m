@@ -26,7 +26,13 @@
     _comment = dictionary[@"comment"];
     _user = [FRSUser nonSavedUserWithProperties:dictionary[@"user"] context:[delegate managedObjectContext]];
     
-    NSLog(@"%@", _user);
+    if ([_user.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        _isDeletable = TRUE;
+    }
+    else {
+        _isDeletable = FALSE;
+    }
+    
     _entities = dictionary[@"entities"];
     _imageURL = dictionary[@"user"][@"avatar"];
     _updatedAt = dictionary[@"updated_at"];
