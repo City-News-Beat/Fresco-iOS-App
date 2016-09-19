@@ -258,6 +258,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
+    return 75;
     
     UITableViewCell *cell = [self tableView:_tableView cellForRowAtIndexPath:indexPath];
     
@@ -291,9 +292,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     NSString *currentKey = [keys objectAtIndex:indexPath.row];
     
     
-    FRSTextNotificationTableViewCell *textCell = [self.tableView dequeueReusableCellWithIdentifier:TEXT_ID];
-    FRSDefaultNotificationTableViewCell *defaultCell = [self.tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
-    FRSAssignmentNotificationTableViewCell *assignmentCell = [self.tableView dequeueReusableCellWithIdentifier:ASSIGNMENT_ID];
+    FRSTextNotificationTableViewCell *textCell = [self.tableView dequeueReusableCellWithIdentifier:TEXT_ID forIndexPath:indexPath];
+    FRSDefaultNotificationTableViewCell *defaultCell = [self.tableView dequeueReusableCellWithIdentifier:DEFAULT_ID forIndexPath:indexPath];
+    FRSAssignmentNotificationTableViewCell *assignmentCell = [self.tableView dequeueReusableCellWithIdentifier:ASSIGNMENT_ID forIndexPath:indexPath];
     
     
     assignmentCell.delegate = self;
