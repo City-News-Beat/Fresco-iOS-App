@@ -7,7 +7,7 @@
 //
 
 #import "FRSAVSessionManager.h"
-
+#import "Fresco.h"
 
 @interface FRSAVSessionManager()
 
@@ -47,15 +47,20 @@
  */
 
 -(FRSAVAuthStatus)authStatus{
+    
     switch ( [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] )
     {
         case AVAuthorizationStatusAuthorized:
+            [FRSTracker track:@"Permissions camera enables"];
+            [FRSTracker track:@"Permissions microphone enables"];
             return FRSAVStatusAuthorized;
             break;
         case AVAuthorizationStatusNotDetermined:
             return FRSAVStatusNotDetermined;
             break;
         case AVAuthorizationStatusDenied:
+            [FRSTracker track:@"Permissions camera disables"];
+            [FRSTracker track:@"Permissions microphone disables"];
             return FRSAVStatusDenied;
             break;
         default:

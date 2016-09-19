@@ -137,6 +137,17 @@
     
     if (firstSetup) {
         [self trackAsActive]; // first initialization, we have foreground (unless the construct of spacetime has changed)
+        
+        if (![[NSUserDefaults standardUserDefaults] objectForKey:@"first-location-fail"]) {
+            [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-location-fail"];
+            
+            if ([CLLocationManager locationServicesEnabled]){
+                
+                if ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusDenied){
+                    [FRSTracker track:@"Permissions location disables"];
+                }
+            }
+        }
     }
 }
 
@@ -208,6 +219,11 @@
  Handle a location update from the location manager
  */
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"first-location"]) {
+        [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-location"];
+        [FRSTracker track:@"Permissions location enables"];
+    }
     
     if ([locations count] == 0) {
         return;
