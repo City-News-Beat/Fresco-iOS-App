@@ -88,6 +88,8 @@ static NSString * const setAvatarEndpoint = @"user/avatar";
 static NSString * const updateUserEndpoint = @"user/update";
 static NSString * const authenticatedUserEndpoint = @"user/me";
 static NSString * const addSocialEndpoint = @"social/connect/";
+static NSString * const deleteSocialEndpoint = @"social/disconnect/";
+
 static NSString * const disableAccountEndpoint = @"user/disable/";
 
 // gallery creation

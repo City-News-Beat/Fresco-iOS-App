@@ -369,6 +369,10 @@
         
         NSString *userID = responseObject[@"id"];
         
+        if (userID != Nil && ![userID isEqual:[NSNull null]]) {
+            [[Mixpanel sharedInstance] registerSuperProperties:@{@"fresco_id": userID}];
+        }
+        
         if (userID && ![userID isEqual:[NSNull null]]) {
             Mixpanel *mixpanel = [Mixpanel sharedInstance];
             [mixpanel createAlias:userID forDistinctID:mixpanel.distinctId];
@@ -377,6 +381,10 @@
         
         [[Mixpanel sharedInstance] track:@"Logins"];
     }];
+}
+
+-(void)disconnectPlatform:(NSString *)platform completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:deleteSocialEndpoint withParameters:@{@"platform":platform} completion:completion];
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
