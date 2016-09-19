@@ -505,10 +505,15 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     if ([currentKey isEqualToString:photoOfDayNotification]) {
 
     } else if ([currentKey isEqualToString:todayInNewsNotification]) {
-        [self segueToTodayInNews:[self.payload objectForKey:todayInNewsNotification]];
+        
+        NSArray *galleryIDs = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_ids"];
+        
+        if (galleryIDs) {
+            [self segueToTodayInNews:galleryIDs];
+        }
         
     } else if ([currentKey isEqualToString:userNewsGalleryNotification]) {
-        [self segueToGallery:[self.payload objectForKey:userNewsGalleryNotification]];
+        [self segueToGallery:[self.feed objectAtIndex:indexPath.row]];
         
     } else if ([currentKey isEqualToString:userNewsStoryNotification]) {
         [self segueToStory:[self.payload objectForKey:userNewsStoryNotification]];
@@ -518,7 +523,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     /* SOCIAL */
     } else if ([currentKey isEqualToString:followedNotification]) {
-        [self segueToUser:[[self.payload objectForKey:followedNotification] objectAtIndex:0]];
+        
+        NSString *userID = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"user_id"];
+        [self segueToUser:userID];
         
     } else if ([currentKey isEqualToString:likedNotification]) {
         [self segueToGallery:[[self.payload objectForKey:likedNotification] objectForKey:@"gallery_id"]];
@@ -537,7 +544,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     /* ASSIGNMENT */
     else if ([currentKey isEqualToString:newAssignmentNotification]) {
-        [self segueToAssignmentWithID:[self.payload objectForKey:newAssignmentNotification]];
+        
+        NSString *assignmentID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"assignment_id"];
+        [self segueToAssignmentWithID:assignmentID];
     }
     
     /* PAYMENT */
