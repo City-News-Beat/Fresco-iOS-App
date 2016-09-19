@@ -597,6 +597,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)loadMoreComments {
     FRSComment *comment = self.comments[0];
     NSString *lastID = comment.uid;
+    
+    [[FRSAPIClient sharedClient] fetchMoreComments:self.gallery last:lastID completion:^(id responseObject, NSError *error) {
+        if (!responseObject || error) {
+            
+            return;
+        }
+        
+        
+    }];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
