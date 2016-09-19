@@ -114,6 +114,7 @@
         switch (status) {
             case PHAuthorizationStatusAuthorized:
                 [self getAssets];
+                [FRSTracker track:@"Permissions photos enables"];
                 break;
             case PHAuthorizationStatusRestricted:
                 [self getAssets];
@@ -122,6 +123,7 @@
                 if (_delegate) { // non-optional not checking for conformity
                     [_delegate applicationNotAuthorized]; // can't re-ask, need to go into settings
                 }
+                [FRSTracker track:@"Permissions photos disables"];
                 break;
             default:
                 break;

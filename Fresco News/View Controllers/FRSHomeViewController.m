@@ -157,7 +157,6 @@
 }
 
 -(void)reloadData {
-    NSLog(@"awdawd");
     [self.followingTable reloadFollowing];
     
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {

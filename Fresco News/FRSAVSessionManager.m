@@ -7,7 +7,7 @@
 //
 
 #import "FRSAVSessionManager.h"
-
+#import "Fresco.h"
 
 @interface FRSAVSessionManager()
 
@@ -47,16 +47,28 @@
  */
 
 -(FRSAVAuthStatus)authStatus{
+    
     switch ( [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo] )
     {
         case AVAuthorizationStatusAuthorized:
+            if (![[NSUserDefaults standardUserDefaults] objectForKey:@"first-camera"]) {
+                [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-camera"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                [FRSTracker track:@"Permissions camera enables"];
+                [FRSTracker track:@"Permissions microphone enables"];
+            }
             return FRSAVStatusAuthorized;
             break;
         case AVAuthorizationStatusNotDetermined:
             return FRSAVStatusNotDetermined;
             break;
         case AVAuthorizationStatusDenied:
-            return FRSAVStatusDenied;
+            if (![[NSUserDefaults standardUserDefaults] objectForKey:@"first-camera-disabled"]) {
+                [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-camera-disabled"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                [FRSTracker track:@"Permissions camera disables"];
+                [FRSTracker track:@"Permissions microphone disables"];
+            }            return FRSAVStatusDenied;
             break;
         default:
             return FRSAVStatusDenied;

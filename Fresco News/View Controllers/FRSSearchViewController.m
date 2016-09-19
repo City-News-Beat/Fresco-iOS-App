@@ -56,6 +56,10 @@
     [self.searchTextField becomeFirstResponder];
 }
 
+-(void)search:(NSString *)string {
+    defaultSearch = string;
+}
+
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.searchTextField resignFirstResponder];
@@ -69,6 +73,10 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    if (defaultSearch) {
+        self.searchTextField.text = defaultSearch;
+    }
+    
     if (self.shouldUpdateOnReturn) {
         [self performSearchWithQuery:self.searchTextField.text];
     } else {
@@ -78,6 +86,10 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
+    if (defaultSearch) {
+        [self performSearchWithQuery:defaultSearch];
+    }
 }
 
 -(void)dismiss{
