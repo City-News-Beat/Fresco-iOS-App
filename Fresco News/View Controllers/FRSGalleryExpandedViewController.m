@@ -660,9 +660,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         FRSSearchViewController *controller = [[FRSSearchViewController alloc] init];
         [controller search:search];
         self.navigationItem.title = @"";
-        [self.tabBarController.tabBar setHidden:YES];
+       // [self.tabBarController.tabBar setHidden:YES];
         [self.navigationController pushViewController:controller animated:YES];
-        
     }
     
     return NO;
