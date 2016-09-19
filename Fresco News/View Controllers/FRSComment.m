@@ -26,7 +26,9 @@
     _comment = dictionary[@"comment"];
     _user = [FRSUser nonSavedUserWithProperties:dictionary[@"user"] context:[delegate managedObjectContext]];
     
-    if ([_user.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+    NSLog(@"SASS: %@", dictionary);
+    
+    if ([dictionary[@"user"][@"id"] isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
         _isDeletable = TRUE;
     }
     else {
