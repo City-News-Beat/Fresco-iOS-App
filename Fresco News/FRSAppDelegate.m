@@ -435,7 +435,6 @@
     NSArray *versionComps = [versionString componentsSeparatedByString:@"."];
     NSInteger firstVersionNum = [[versionComps firstObject] integerValue];
     
-    
     /*
         Focus on this -- pull old persistance (however its managed) into new magical record / core data layer
      */
