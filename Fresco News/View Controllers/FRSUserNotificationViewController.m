@@ -34,6 +34,7 @@
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate>
 
 @property (strong, nonatomic) NSDictionary *payload;
+@property (strong, nonatomic) NSArray *feed;
 @property BOOL isSegueingToGallery;
 @property BOOL isSegueingToStory;
 @property (strong, nonatomic) NSTimer *timer;
@@ -128,8 +129,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)getNotifications {
     
     [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
-                
-//        self.payload = responseObject;
+
+        self.feed = [responseObject objectForKey:@"feed"];
         
         [self configureTableView];
         [self registerNibs];

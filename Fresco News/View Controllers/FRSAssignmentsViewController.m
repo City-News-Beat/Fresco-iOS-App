@@ -393,11 +393,7 @@
 }
 
 -(void)setDefaultAssignment:(FRSAssignment *)assignment {
-    
-    NSLog(@"assignment : %@", assignment);
-    NSLog(@"assignment.uid : %@", assignment.uid);
-    NSLog(@"hasDefault : %d", self.hasDefault);
-    NSLog(@"self.defaultID : %@", self.defaultID);
+
         
     if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
         
@@ -428,7 +424,6 @@
         CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake([assignment.latitude doubleValue], [assignment.longitude doubleValue]);
         newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
         [self.mapView setCenterCoordinate:newCenter animated:YES];
-        
         
 //        if ([self.mapView respondsToSelector:@selector(camera)]) {
 //            [self.mapView setShowsBuildings:NO];
@@ -533,7 +528,6 @@
             annotationView.enabled = YES;
             annotationView.frame = CGRectMake(0, 0, 75, 75);
         }
-        
     }
     
     return annotationView;

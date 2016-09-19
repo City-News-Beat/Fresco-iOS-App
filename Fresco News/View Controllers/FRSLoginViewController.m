@@ -520,47 +520,48 @@
 
 -(void)textFieldDidChange:(UITextField *)textField {
     
-    if ((self.userField.text && self.userField.text.length > 0) && (self.passwordField.text && self.passwordField.text.length >= 8)) {
-        
-        if ([self validEmail:self.userField.text] || [self isValidUsername:self.userField.text]) {
-            
-            self.loginButton.enabled = YES;
-            
-            [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                [self.loginButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-            } completion:nil];
-            
-        } else {
-            
-            [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-            } completion:nil];
-        }
-        
-    } else if (self.passwordField.text && self.passwordField.text.length < 8) {
-        
-        self.loginButton.enabled = NO;
-        
-        [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        } completion:nil];
-    }
+    self.loginButton.enabled = YES; //FOR TESTING
     
-    if ([self.userField.text isEqualToString:@""]) {
-        [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        } completion:nil];
-    }
-    
-    if (self.passwordField.editing && ![self.passwordField.text isEqualToString:@""]) { //check whitespace?
-        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.passwordHelpButton.alpha = 1;
-        } completion:nil];
-    } else {
-        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.passwordHelpButton.alpha = 0;
-        } completion:nil];
-    }
+//    if ((self.userField.text && self.userField.text.length > 0) && (self.passwordField.text && self.passwordField.text.length >= 8)) {
+//        
+//        if ([self validEmail:self.userField.text] || [self isValidUsername:self.userField.text]) {
+//            
+//            self.loginButton.enabled = YES;
+//            
+//            [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
+//                [self.loginButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+//            } completion:nil];
+//            
+//        } else {
+//            
+//            [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
+//                [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+//            } completion:nil];
+//        }
+//        
+//    } else if (self.passwordField.text && self.passwordField.text.length < 8) { //SHOULD BE 8, BROUGHT DOWN TO 4 TO TEST MAURICES PASSWORD
+//        self.loginButton.enabled = NO;
+//        
+//        [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
+//            [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+//        } completion:nil];
+//    }
+//    
+//    if ([self.userField.text isEqualToString:@""]) {
+//        [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
+//            [self.loginButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+//        } completion:nil];
+//    }
+//    
+//    if (self.passwordField.editing && ![self.passwordField.text isEqualToString:@""]) { //check whitespace?
+//        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//            self.passwordHelpButton.alpha = 1;
+//        } completion:nil];
+//    } else {
+//        [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//            self.passwordHelpButton.alpha = 0;
+//        } completion:nil];
+//    }
 }
 
 
