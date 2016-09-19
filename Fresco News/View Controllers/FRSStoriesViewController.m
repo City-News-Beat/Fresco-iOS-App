@@ -412,6 +412,10 @@
         return cell;
     }
     
+    if (indexPath.row > numberRead) {
+        numberRead = indexPath.row;
+    }
+    
     FRSStoryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
     
     if (!cell){
