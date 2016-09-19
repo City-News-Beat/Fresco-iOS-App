@@ -21,6 +21,7 @@
 #import "FRSComment.h"
 #import "Haneke.h"
 #import "Fresco.h"
+#import "FRSSearchViewController.h"
 
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
@@ -653,6 +654,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.navigationItem.title = @"";
         [self.tabBarController.tabBar setHidden:YES];
         [self.navigationController pushViewController:viewController animated:YES];
+    }
+    else if ([URL.absoluteString containsString:@"tag"]) {
+        NSString *search = [URL.absoluteString stringByReplacingOccurrencesOfString:@"tag://" withString:@""];
+        FRSSearchViewController *controller = [[FRSSearchViewController alloc] init];
+        [controller search:search];
+        self.navigationItem.title = @"";
+        [self.tabBarController.tabBar setHidden:YES];
+        [self.navigationController pushViewController:controller animated:YES];
     }
     
     return NO;

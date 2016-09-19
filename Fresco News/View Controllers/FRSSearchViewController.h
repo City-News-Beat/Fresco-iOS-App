@@ -18,10 +18,13 @@
     NSInteger userIndex;
     NSInteger storyIndex;
     NSInteger galleryIndex;
+    
+    NSString *defaultSearch;
 }
 @property (nonatomic, retain) NSArray *users;
 @property (nonatomic, retain) NSArray *stories;
 @property (nonatomic, retain) NSArray *galleries;
 @property (nonatomic, retain) NSArray *defaultData;
 @property BOOL shouldUpdateOnReturn;
+-(void)search:(NSString *)string;
 @end
