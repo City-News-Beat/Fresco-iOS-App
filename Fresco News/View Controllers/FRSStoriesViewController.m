@@ -113,6 +113,8 @@
     }
     
     self.tableView.frame = CGRectMake(0, -64-44-20, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height+20);
+    entry = [NSDate date];
+    numberRead = 0;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -127,6 +129,13 @@
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
+    if (entry) {
+        exit = [NSDate date];
+        NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
+        [[Mixpanel sharedInstance] track:@"Stories session" properties:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
+    }
+
     [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 

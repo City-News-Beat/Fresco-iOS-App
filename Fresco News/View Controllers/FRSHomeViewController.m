@@ -138,7 +138,7 @@
     if (entry) {
         exit = [NSDate date];
         NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
-        [[Mixpanel sharedInstance] track:@"Stories session" properties:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
+        [[Mixpanel sharedInstance] track:@"Highlights session" properties:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
     }
     
     [self removeStatusBarNotification];

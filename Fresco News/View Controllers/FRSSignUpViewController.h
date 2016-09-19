@@ -22,4 +22,5 @@
 @property BOOL isAlreadyRegistered;
 @property (nonatomic, retain) NSDictionary *pastRegistration;
 @property (nonatomic) BOOL isPresented;
+@property (nonatomic) BOOL firstSlide;
 @end
