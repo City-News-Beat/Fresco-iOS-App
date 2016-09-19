@@ -337,7 +337,7 @@
         NSLog(@"Updated user installation");
     }];
     
-    [[Mixpanel sharedInstance] track:@"Notifications Enabled"];
+    [FRSTracker track:@"Notifications Enabled"];
 }
 
 -(void)handleLocationUpdate {

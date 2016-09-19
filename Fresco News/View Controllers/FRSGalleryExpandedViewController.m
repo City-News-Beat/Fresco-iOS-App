@@ -102,7 +102,56 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         
         [self configureComments];
+    }];
+}
+
+-(void)reload {
+    
+    [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:self.gallery.uid completion:^(id responseObject, NSError *error) {
+        if (error || !responseObject) {
+            [self commentError:error];
+            return;
+        }
         
+        _comments = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *comment in responseObject) {
+            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
+            [_comments addObject:commentObject];
+        }
+        
+        
+        float height = 0;
+        NSInteger index = 0;
+        
+        for (FRSComment *comment in _comments) {
+            
+            CGRect labelRect = [comment.comment
+                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 60, INT_MAX)
+                                options:NSStringDrawingUsesLineFragmentOrigin
+                                attributes:@{
+                                             NSFontAttributeName : [UIFont systemFontOfSize:15]
+                                             }
+                                context:nil];
+            
+            float commentSize = labelRect.size.height;
+            
+            if (commentSize < 56) {
+                height += 56;
+            }
+            else {
+                height += commentSize;
+            }
+            
+            
+            index++;
+        }
+        
+        height += 55;
+        
+        self.commentTableView.frame = CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height-6);
+        [self adjustScrollViewContentSize];
+        [self.commentTableView reloadData];
     }];
 }
 
@@ -115,7 +164,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [super viewDidLoad];
     
     [self configureUI];
-    [[Mixpanel sharedInstance] track:@"Galleries opened from highlights" properties:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
+    [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     // Do any additional setup after loading the view.
 }
 
@@ -226,7 +275,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if (tableView == _commentTableView) {
         
-        if (indexPath.row < self.comments.count && indexPath.row != 0) {
+        if (indexPath.row < self.comments.count+1 && indexPath.row != 0) {
             FRSComment *comment = [self.comments objectAtIndex:indexPath.row-1];
             if (comment.isDeletable) {
                 return YES;
@@ -346,7 +395,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[sharedContent] applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
     
-    [[Mixpanel sharedInstance] track:@"Galleries shared from highlights" properties:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
+    [FRSTracker track:@"Galleries shared from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
 }
 
 -(void)adjustScrollViewContentSize{
@@ -636,7 +685,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.gallery completion:^(id responseObject, NSError *error) {
         [commentField resignFirstResponder];
-        [UIView animateWithDuration:.2 animations:^{
+        [self reload];
+        [UIView animateWithDuration:.15 animations:^{
             commentField.frame = CGRectMake(-1, [UIScreen mainScreen].bounds.size.height, self.view.frame.size.width+2, 44);
         } completion:^(BOOL finished) {
             commentField.text = @"";

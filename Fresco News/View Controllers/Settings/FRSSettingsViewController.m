@@ -650,7 +650,7 @@
     [self popViewController];
     
     [self.tabBarController setSelectedIndex:0];
-    [[Mixpanel sharedInstance] track:@"Logouts"];
+    [FRSTracker track:@"Logouts"];
  }
 
 

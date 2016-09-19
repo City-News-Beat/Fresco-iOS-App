@@ -15,7 +15,7 @@
 #import <Mixpanel/Mixpanel.h>
 //libraries
 #import <AFNetworking/AFNetworking.h>
-
+#import "FRSTracker.h"
 // #define distribution TRUE // disable logging
 #ifdef distribution 
 #define NSLog //

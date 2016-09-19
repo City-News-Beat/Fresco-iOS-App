@@ -39,6 +39,8 @@
     _imageURL = dictionary[@"user"][@"avatar"];
     _updatedAt = dictionary[@"updated_at"];
     _createdAt = dictionary[@"created_at"];
+    _uid = dictionary[@"id"];
+    
     [self createAttributedText];
 }
 

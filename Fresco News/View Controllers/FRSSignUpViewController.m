@@ -461,7 +461,7 @@
     
     if (!_firstSlide) {
         _firstSlide = TRUE;
-        [[Mixpanel sharedInstance] track:@"Signup radius changes"];
+        [FRSTracker track:@"Signup radius changes"];
     }
     
     self.miles = slider.value * 50;

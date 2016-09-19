@@ -774,7 +774,7 @@
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
     
-    [[Mixpanel sharedInstance] track:@"Galleries opened from profile" properties:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:@"Galleries opened from profile" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
 
 }
 

@@ -12,6 +12,7 @@
 #import "FRSRequestSerializer.h"
 #import "FRSAppDelegate.h"
 #import "FRSOnboardingViewController.h"
+#import "FRSTracker.h"
 
 @implementation FRSAPIClient
 
@@ -379,7 +380,7 @@
             [mixpanel identify:userID];
         }
         
-        [[Mixpanel sharedInstance] track:@"Logins"];
+        [FRSTracker track:@"Logins"];
     }];
 }
 

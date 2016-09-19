@@ -133,7 +133,7 @@
     if (entry) {
         exit = [NSDate date];
         NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
-        [[Mixpanel sharedInstance] track:@"Stories session" properties:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
+        [FRSTracker track:@"Stories session" parameters:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
     }
 
     [self.navigationController setNavigationBarHidden:NO animated:NO];

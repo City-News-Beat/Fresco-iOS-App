@@ -190,6 +190,7 @@
 		D46D35631D8F8B5100E38FAA /* trash24W.png in Resources */ = {isa = PBXBuildFile; fileRef = D46D35601D8F8B5100E38FAA /* trash24W.png */; };
 		D46D35641D8F8B5100E38FAA /* trash24W@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D46D35611D8F8B5100E38FAA /* trash24W@2x.png */; };
 		D46D35651D8F8B5100E38FAA /* trash24W@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D46D35621D8F8B5100E38FAA /* trash24W@3x.png */; };
+		D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D46D35681D9036E700E38FAA /* FRSTracker.m */; };
 		D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */; };
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
@@ -634,6 +635,8 @@
 		D46D35601D8F8B5100E38FAA /* trash24W.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trash24W.png; sourceTree = "<group>"; };
 		D46D35611D8F8B5100E38FAA /* trash24W@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash24W@2x.png"; sourceTree = "<group>"; };
 		D46D35621D8F8B5100E38FAA /* trash24W@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash24W@3x.png"; sourceTree = "<group>"; };
+		D46D35671D9036E700E38FAA /* FRSTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTracker.h; sourceTree = "<group>"; };
+		D46D35681D9036E700E38FAA /* FRSTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTracker.m; sourceTree = "<group>"; };
 		D46E9C3B1D41BDD500A39398 /* FRSUpload+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSUpload+CoreDataProperties.h"; sourceTree = "<group>"; };
 		D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FRSUpload+CoreDataProperties.m"; sourceTree = "<group>"; };
 		D47999671C96AA1700B46D01 /* FRSLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLocator.h; sourceTree = "<group>"; };
@@ -1930,6 +1933,15 @@
 			name = MagicalRecord;
 			sourceTree = "<group>";
 		};
+		D46D35661D9036C400E38FAA /* Tracking */ = {
+			isa = PBXGroup;
+			children = (
+				D46D35671D9036E700E38FAA /* FRSTracker.h */,
+				D46D35681D9036E700E38FAA /* FRSTracker.m */,
+			);
+			name = Tracking;
+			sourceTree = "<group>";
+		};
 		D47999631C96A8FD00B46D01 /* Location */ = {
 			isa = PBXGroup;
 			children = (
@@ -2239,6 +2251,7 @@
 				D43C7FF41C8F588C00A7A7A7 /* Defaults */,
 				D47999631C96A8FD00B46D01 /* Location */,
 				D41365B41CA33347004FE848 /* Settings */,
+				D46D35661D9036C400E38FAA /* Tracking */,
 				D48C72251D0B3D5C000677BF /* FRSDevice.h */,
 				D48C72261D0B3D5C000677BF /* FRSDevice.m */,
 			);
@@ -2656,6 +2669,7 @@
 				D4EE64251D830DD60034B5EA /* FRSReadMoreCell.m in Sources */,
 				65201A371C3D7D8200B31089 /* FRSScrollViewImageView.m in Sources */,
 				65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */,
+				D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */,
 				07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */,
 				D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */,
 				65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */,

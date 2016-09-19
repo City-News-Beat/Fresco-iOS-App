@@ -240,7 +240,7 @@
     
     if ([self.tabBar.items indexOfObject:item] == 2) {
         
-        [[Mixpanel sharedInstance] track:@"Camera Opened"];
+        [FRSTracker track:@"Camera Opened"];
         
         FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
         UINavigationController *navControl = [[UINavigationController alloc] init];

@@ -300,7 +300,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         exit = [NSDate date];
         
         NSInteger secondsInCamera = [exit timeIntervalSinceDate:entry];
-        [[Mixpanel sharedInstance] track:@"Camera session" properties:@{activityDuration:@(secondsInCamera)}];
+        [FRSTracker track:@"Camera session" parameters:@{activityDuration:@(secondsInCamera)}];
     }
     [self.locationManager stopMonitoringSignificantLocationChanges];
     
