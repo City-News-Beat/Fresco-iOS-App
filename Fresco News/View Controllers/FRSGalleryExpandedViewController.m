@@ -656,7 +656,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         [self.navigationController pushViewController:viewController animated:YES];
     }
     else if ([URL.absoluteString containsString:@"tag"]) {
-        NSString *search = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
+        NSString *search = [URL.absoluteString stringByReplacingOccurrencesOfString:@"tag://" withString:@""];
         FRSSearchViewController *controller = [[FRSSearchViewController alloc] init];
         [controller search:search];
         self.navigationItem.title = @"";
