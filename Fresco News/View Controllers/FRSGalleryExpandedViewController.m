@@ -294,9 +294,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
--(void)reloadComments {
-    
-}
 
 -(void)configureComments {
     
