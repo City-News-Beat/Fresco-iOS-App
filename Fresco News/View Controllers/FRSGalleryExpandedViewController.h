@@ -13,6 +13,7 @@
 {
     UITextField *commentField;
     NSString *last;
+    UIButton *topButton;
 }
 @property BOOL isLoadingUser;
 -(instancetype)initWithGallery:(FRSGallery *)gallery;

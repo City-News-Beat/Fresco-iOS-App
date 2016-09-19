@@ -533,8 +533,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         if (indexPath.row == 0) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
-            UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
-            [topButton setTitle:[NSString stringWithFormat:@"SEE ALL %lu COMMENTS", _comments.count] forState:UIControlStateNormal];
+            topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
+            [topButton setTitle:[NSString stringWithFormat:@"%lu MORE COMMENTS", [[self.gallery valueForKey:@"comments"] integerValue] - _comments.count] forState:UIControlStateNormal];
             [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
             [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
