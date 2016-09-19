@@ -140,6 +140,7 @@
         
         if (![[NSUserDefaults standardUserDefaults] objectForKey:@"first-location-fail"]) {
             [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-location-fail"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             
             if ([CLLocationManager locationServicesEnabled]){
                 
@@ -222,6 +223,8 @@
     
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"first-location"]) {
         [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-location"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
         [FRSTracker track:@"Permissions location enables"];
     }
     
