@@ -267,6 +267,9 @@
         
         if (self.users.count == 0 && self.galleries.count == 0 && self.stories.count == 0) {
             [self configureNoResults];
+        } else {
+            self.awkwardView.alpha = 0;
+            [self.awkwardView removeFromSuperview];
         }
     }];
 }
