@@ -359,6 +359,8 @@
 -(void)focusOnAssignment:(FRSAssignment *)assignment {
     
     [self setDefaultAssignment:assignment];
+    
+
 }
 
 -(void)removeAssignmentsFromMap {
@@ -391,14 +393,9 @@
 }
 
 -(void)setDefaultAssignment:(FRSAssignment *)assignment {
-    
-    NSLog(@"assignment : %@", assignment);
-    NSLog(@"assignment.uid : %@", [assignment valueForKey:@"id"]);
-    NSLog(@"hasDefault : %d", self.hasDefault);
-    NSLog(@"self.defaultID : %@", self.defaultID);
-    
+
         
-    if (self.hasDefault && [[assignment valueForKey:@"id"] isEqualToString:self.defaultID]) {
+    if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
         
         self.assignmentTitle = assignment.title;
         self.assignmentCaption = assignment.caption;
@@ -428,13 +425,13 @@
         newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
         [self.mapView setCenterCoordinate:newCenter animated:YES];
         
-        
-        if ([self.mapView respondsToSelector:@selector(camera)]) {
-            [self.mapView setShowsBuildings:NO];
-            MKMapCamera *newCamera = [[self.mapView camera] copy];
-            [newCamera setHeading:0];
-            [self.mapView setCamera:newCamera animated:YES];
-        }
+//        if ([self.mapView respondsToSelector:@selector(camera)]) {
+//            [self.mapView setShowsBuildings:NO];
+//            MKMapCamera *newCamera = [[self.mapView camera] copy];
+//            [newCamera setHeading:0];
+//            [newCamera setCenterCoordinate:newCenter];
+//            [self.mapView setCamera:newCamera animated:YES];
+//        }
         
         self.hasDefault = NO;
         self.defaultID  = nil;
@@ -531,7 +528,6 @@
             annotationView.enabled = YES;
             annotationView.frame = CGRectMake(0, 0, 75, 75);
         }
-        
     }
     
     return annotationView;

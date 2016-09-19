@@ -203,13 +203,22 @@
     
     assignmentsVC.hasDefault = YES;
     assignmentsVC.defaultID = assignmentID;
-    self.tabBarController.selectedIndex = 3;
+    [self.tabBarController setSelectedIndex:3];
     
-    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
-        [assignmentsVC focusOnAssignment:(FRSAssignment *)responseObject];
-        [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
-    }];
+    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+
+    if (assignmentsVC.mapView) {
+        [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+
+            FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
+            [assignment configureWithDictionary:responseObject];
+            [assignmentsVC focusOnAssignment:assignment];
+            
+        }];
+    }
 }
+
 
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID {
     

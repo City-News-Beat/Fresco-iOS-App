@@ -169,18 +169,16 @@
     
     [self get:notificationEndpoint withParameters:@{} completion:^(id responseObject, NSError *error) {
         
-        NSArray *feed = [responseObject objectForKey:@"feed"];
-                
-        NSMutableArray *notificationIDs = [[NSMutableArray alloc] init];
-        
-        for (int i=0; i<feed.count; i++) {
-            [notificationIDs addObject:[[[responseObject objectForKey:@"feed"] objectAtIndex:i] objectForKey:@"id"]];
-        }
+//        NSArray *feed = [responseObject objectForKey:@"feed"];
+//        NSMutableArray *notificationIDs = [[NSMutableArray alloc] init];
+//        
+        completion(responseObject, error);
 
-        [self post:@"user/notifications/see" withParameters:@{@"notification_ids": notificationIDs} completion:^(id responseObject, NSError *error) {
-            completion(responseObject, error);
-            
-        }];
+//        for (int i=0; i<feed.count; i++) {
+//            [notificationIDs addObject:[[[responseObject objectForKey:@"feed"] objectAtIndex:i] objectForKey:@"id"]];
+//        }
+//        [self post:@"user/notifications/see" withParameters:@{@"notification_ids": notificationIDs} completion:^(id responseObject, NSError *error) {
+//        }];
     }];
 }
 
