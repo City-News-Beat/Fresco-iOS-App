@@ -169,9 +169,9 @@
     
     [self get:notificationEndpoint withParameters:@{} completion:^(id responseObject, NSError *error) {
         
-        NSArray *feed = [responseObject objectForKey:@"feed"];
-                
-        NSMutableArray *notificationIDs = [[NSMutableArray alloc] init];
+//        NSArray *feed = [responseObject objectForKey:@"feed"];
+//        NSMutableArray *notificationIDs = [[NSMutableArray alloc] init];
+//        
         completion(responseObject, error);
 
 //        for (int i=0; i<feed.count; i++) {

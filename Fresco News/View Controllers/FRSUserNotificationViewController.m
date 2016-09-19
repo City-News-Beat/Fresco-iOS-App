@@ -129,7 +129,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)getNotifications {
     
     [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
-
+        
         self.feed = [responseObject objectForKey:@"feed"];
         
         [self configureTableView];
@@ -227,13 +227,15 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     [self.view addSubview:self.tableView];
     
-    
-    
-    if (self.payload.count == 0) {
-
+    if (self.feed.count == 0) {
         FRSAwkwardView *awkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -175/2, self.view.frame.size.height/2 -125/2 -64, 175, 125)];
         [self.tableView addSubview:awkward];
     }
+    
+//    if (self.payload.count == 0) {
+//        FRSAwkwardView *awkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -175/2, self.view.frame.size.height/2 -125/2 -64, 175, 125)];
+//        [self.tableView addSubview:awkward];
+//    }
 }
 
 -(void)registerNibs {
@@ -246,7 +248,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 #pragma mark - UITableView
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.payload.count;
+    return self.feed.count;
+//    return self.payload.count;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -254,7 +257,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     
     UITableViewCell *cell = [self tableView:_tableView cellForRowAtIndexPath:indexPath];
     
@@ -284,8 +286,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     
-    NSArray *keys = [self.payload allKeys];
-    NSString *currentKey = [keys objectAtIndex:indexPath.row];
+//    NSArray *keys = [self.payload allKeys];
+//    NSString *currentKey = [keys objectAtIndex:indexPath.row];
     
     /*
         Ight so this setup is a tad bit f**ked up. Will need to re-write large portion of this. Good reminder of a situation in which you should trash whats there and start from scratch (if this was started off a dan base)
@@ -296,7 +298,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     if (!defaultCell) {
         defaultCell = [[FRSDefaultNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DEFAULT_ID];
-        [defaultCell configureDefaultCell];
+//        [defaultCell configureDefaultCell];
     }
     
     FRSAssignmentNotificationTableViewCell *assignmentCell = [self.tableView dequeueReusableCellWithIdentifier:ASSIGNMENT_ID];
@@ -311,8 +313,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     }
     
     
+    NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
+    NSLog(@"%@", [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"]);
     
-
     /* NEWS */
     if ([currentKey isEqualToString:photoOfDayNotification]) {
         NSLog(@"PHOTOS OF THE DAY");
@@ -412,8 +415,12 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    NSArray *keys = [self.payload allKeys];
-    NSString *currentKey = [keys objectAtIndex:indexPath.row];
+//    NSArray *keys = [self.payload allKeys];
+//    NSString *currentKey = [keys objectAtIndex:indexPath.row];
+    
+    NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
+    NSLog(@"%@", [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"]);
+    
     
     /* NEWS */
     if ([currentKey isEqualToString:photoOfDayNotification]) {
