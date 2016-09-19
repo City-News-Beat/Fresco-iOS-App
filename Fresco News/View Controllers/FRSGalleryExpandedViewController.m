@@ -559,7 +559,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 FRSComment *comment = _comments[indexPath.row-1];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if (comment.imageURL && ![comment.imageURL isEqualToString:@""]) {
+                    if (comment.imageURL && ![comment.imageURL isEqual:[NSNull null]] && ![comment.imageURL isEqualToString:@""]) {
                         NSLog(@"%@", comment.imageURL);
                         
                         cell.backgroundColor = [UIColor clearColor];
@@ -592,6 +592,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     
     return Nil;
+}
+
+-(void)loadMoreComments {
+    FRSComment *comment = self.comments[0];
+    NSString *lastID = comment.uid;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
