@@ -79,7 +79,7 @@ static NSString * const signUpEndpoint = @"auth/register";
 static NSString * const socialLoginEndpoint = @"auth/signin/social";
 
 // comments
-static NSString * const paginateComments = @"gallery/%@/comments?limit=10&last=%@&direction=desc";
+static NSString * const paginateComments = @"gallery/%@/comments?limit=10&last=%@";
 static NSString * const getCommentEndpoint = @"gallery/%@/comment/%@";
 
 // user endpoints
@@ -107,7 +107,7 @@ static NSString * const followUserEndpoint = @"user/%@/follow";
 static NSString * const unfollowUserEndpoint = @"user/%@/unfollow";
 static NSString * const followersEndpoint = @"user/%@/followers";
 static NSString * const followingEndpoint = @"user/%@/following";
-static NSString * const commentsEndpoint = @"gallery/%@/comments?limit=10&direction=asc";
+static NSString * const commentsEndpoint = @"gallery/%@/comments?limit=10";
 static NSString * const commentEndpoint = @"gallery/%@/comment/";
 static NSString * const galleryUnlikeEndpoint = @"gallery/%@/unlike";
 static NSString * const storyUnlikeEndpoint = @"story/%@/unlike";

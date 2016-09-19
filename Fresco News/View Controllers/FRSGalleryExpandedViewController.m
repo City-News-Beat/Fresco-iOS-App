@@ -95,9 +95,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
         
         _comments = [[NSMutableArray alloc] init];
-        
-        for (NSDictionary *comment in responseObject) {
-            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
+        NSArray *response = (NSArray *)responseObject;
+        for (NSInteger i = response.count-1; i >= 0; i--) {
+            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:response[i]];
             [_comments addObject:commentObject];
         }
         
@@ -656,12 +656,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         [self.navigationController pushViewController:viewController animated:YES];
     }
     else if ([URL.absoluteString containsString:@"tag"]) {
-        NSString *search = [URL.absoluteString stringByReplacingOccurrencesOfString:@"tag://" withString:@""];
+        NSString *search = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
         FRSSearchViewController *controller = [[FRSSearchViewController alloc] init];
         [controller search:search];
         self.navigationItem.title = @"";
-       //[self.tabBarController.tabBar setHidden:YES];
+        [self.tabBarController.tabBar setHidden:YES];
         [self.navigationController pushViewController:controller animated:YES];
+        
     }
     
     return NO;
