@@ -629,7 +629,7 @@
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
     
     [SSKeychain deletePasswordForService:serviceName account:clientAuthorization];
-
+    
     [NSUserDefaults resetStandardUserDefaults];
     
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
@@ -640,10 +640,17 @@
     
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
-
+ 
+    NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+    for (NSString *key in [defaultsDictionary allKeys]) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     [self popViewController];
     
     [self.tabBarController setSelectedIndex:0];
+    [FRSTracker track:@"Logouts"];
  }
 
 

@@ -24,6 +24,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     NSTimer *wobble;
     NSTimer *pan;
     UILabel *title;
+    
+    NSDate *entry;
+    NSDate *exit;
 }
 
 @property (nonatomic) BOOL isPresented;

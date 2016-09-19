@@ -12,6 +12,7 @@
 #import "FRSRequestSerializer.h"
 #import "FRSAppDelegate.h"
 #import "FRSOnboardingViewController.h"
+#import "FRSTracker.h"
 
 @implementation FRSAPIClient
 
@@ -369,14 +370,22 @@
         
         NSString *userID = responseObject[@"id"];
         
+        if (userID != Nil && ![userID isEqual:[NSNull null]]) {
+            [[Mixpanel sharedInstance] registerSuperProperties:@{@"fresco_id": userID}];
+        }
+        
         if (userID && ![userID isEqual:[NSNull null]]) {
             Mixpanel *mixpanel = [Mixpanel sharedInstance];
             [mixpanel createAlias:userID forDistinctID:mixpanel.distinctId];
             [mixpanel identify:userID];
         }
         
-        [[Mixpanel sharedInstance] track:@"Login"];
+        [FRSTracker track:@"Logins"];
     }];
+}
+
+-(void)disconnectPlatform:(NSString *)platform completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:deleteSocialEndpoint withParameters:@{@"platform":platform} completion:completion];
 }
 
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -494,6 +503,16 @@
     }
     
     [self get:highlightsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+
+    NSString *endpoint = [NSString stringWithFormat:deleteCommentEndpoint, gallery.uid];
+    NSDictionary *params = @{@"comment_id":commentID};
+    
+    [self post:endpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
@@ -1138,10 +1157,11 @@
 }
 
 -(void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
-//    if ([self checkAuthAndPresentOnboard]) {
-//        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-//        return;
-//    }
+   
+    if ([self checkAuthAndPresentOnboard]) {
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
+        return;
+    }
     
     NSString *endpoint = [NSString stringWithFormat:commentEndpoint, galleryID];
     NSDictionary *parameters = @{@"comment":comment};

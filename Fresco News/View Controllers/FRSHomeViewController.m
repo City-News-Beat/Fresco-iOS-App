@@ -117,6 +117,9 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     [self.tabBarController.tabBar setHidden:FALSE];
     [self.appDelegate reloadUser];
+    
+    entry = [NSDate date];
+    numberRead = 0;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -130,6 +133,14 @@
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    if (entry) {
+        exit = [NSDate date];
+        NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
+        [FRSTracker track:@"Highlights session" parameters:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
+    }
+    
     [self removeStatusBarNotification];
     [self pausePlayers];
 }
@@ -159,18 +170,9 @@
                 NSString *galleryID = gallery[@"id"];
                 NSInteger galleryIndex = [self galleryExists:galleryID];
                 
-                if (galleryIndex == -1) {
-                    FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-                    
-                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                    [self.dataSource insertObject:galleryToSave atIndex:index];
-                }
-                else {
-                    FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
-                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                }
+                FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
+                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
                 
                 index++;
             }
@@ -647,7 +649,13 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSGalleryCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    
     if (tableView == self.tableView) {
+        
+        if (indexPath.row > numberRead) {
+            numberRead = indexPath.row;
+        }
+        
         if (indexPath.row == self.dataSource.count-4) {
             if (!isLoading && !_loadNoMore) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{

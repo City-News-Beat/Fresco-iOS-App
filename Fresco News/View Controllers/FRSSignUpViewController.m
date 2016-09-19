@@ -459,6 +459,11 @@
 
 -(void)sliderValueChanged:(UISlider *)slider {
     
+    if (!_firstSlide) {
+        _firstSlide = TRUE;
+        [FRSTracker track:@"Signup radius changes"];
+    }
+    
     self.miles = slider.value * 50;
     
     if (slider.value == 0) {

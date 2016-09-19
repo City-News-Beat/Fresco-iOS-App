@@ -188,6 +188,10 @@
         self.alert.delegate = self;
         [self.alert show];
         
+        [[FRSAPIClient sharedClient] disconnectPlatform:@"twitter" completion:^(id responseObject, NSError *error) {
+            NSLog(@"Disconnect TW: %@", error);
+        }];
+        
     } else {
 //        self.twitterSwitch.userInteractionEnabled = NO;
 //        self.userInteractionEnabled = NO;
@@ -233,6 +237,10 @@
         self.alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT FACEBOOK?" message:@"You’ll be unable to use your Facebook account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
         self.alert.delegate = self;
         [self.alert show];
+        
+        [[FRSAPIClient sharedClient] disconnectPlatform:@"facebook" completion:^(id responseObject, NSError *error) {
+            NSLog(@"Disconnect FB: %@", error);
+        }];
 
     } else {
         

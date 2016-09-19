@@ -20,6 +20,7 @@
 #import "PeekPopArticleViewController.h"
 #import "FRSComment.h"
 #import "Haneke.h"
+#import "Fresco.h"
 
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
@@ -58,7 +59,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self = [super init];
     if (self){
         self.gallery = gallery;
-//        self.orderedArticles = [self.gallery.articles allObjects];
+        //        self.orderedArticles = [self.gallery.articles allObjects];
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
         self.touchEnabled = NO;
@@ -67,6 +68,23 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     return self;
 }
 
+-(instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID {
+    self = [super init];
+    if (self){
+        self.gallery = gallery;
+        //        self.orderedArticles = [self.gallery.articles allObjects];
+        self.hiddenTabBar = YES;
+        self.actionBarVisible = YES;
+        self.touchEnabled = NO;
+        //[self fetchCommentsWithID:gallery.uid];
+        [self setupDeepLinkedComment:commentID];
+    }
+    return self;
+}
+         
+-(void)setupDeepLinkedComment:(NSString *)commentID {
+    
+}
 
 -(void)fetchCommentsWithID:(NSString  *)galleryID {
     [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID completion:^(id responseObject, NSError *error) {
@@ -84,7 +102,56 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         
         [self configureComments];
+    }];
+}
 
+-(void)reload {
+    
+    [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:self.gallery.uid completion:^(id responseObject, NSError *error) {
+        if (error || !responseObject) {
+            [self commentError:error];
+            return;
+        }
+        
+        _comments = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *comment in responseObject) {
+            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
+            [_comments addObject:commentObject];
+        }
+        
+        
+        float height = 0;
+        NSInteger index = 0;
+        
+        for (FRSComment *comment in _comments) {
+            
+            CGRect labelRect = [comment.comment
+                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 60, INT_MAX)
+                                options:NSStringDrawingUsesLineFragmentOrigin
+                                attributes:@{
+                                             NSFontAttributeName : [UIFont systemFontOfSize:15]
+                                             }
+                                context:nil];
+            
+            float commentSize = labelRect.size.height;
+            
+            if (commentSize < 56) {
+                height += 56;
+            }
+            else {
+                height += commentSize;
+            }
+            
+            
+            index++;
+        }
+        
+        height += 55;
+        
+        self.commentTableView.frame = CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height-6);
+        [self adjustScrollViewContentSize];
+        [self.commentTableView reloadData];
     }];
 }
 
@@ -97,7 +164,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [super viewDidLoad];
     
     [self configureUI];
-    
+    [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     // Do any additional setup after loading the view.
 }
 
@@ -169,7 +236,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.scrollView addSubview:self.galleryView];
     
     
-//    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
+    //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
 }
 
 -(void)configureArticles{
@@ -200,6 +267,47 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
+// activity_duration
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    if (tableView == _commentTableView) {
+        
+        if (indexPath.row < self.comments.count+1 && indexPath.row != 0) {
+            FRSComment *comment = [self.comments objectAtIndex:indexPath.row-1];
+            if (comment.isDeletable) {
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+-(NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"Delete"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        [self deleteAtIndexPath:indexPath];
+    }];
+    
+    deleteAction.backgroundColor = [UIColor redColor];
+    return @[deleteAction];
+    
+}
+
+-(void)deleteAtIndexPath:(NSIndexPath *)indexPath {
+    FRSComment *comment = self.comments[indexPath.row - 1];
+    [[FRSAPIClient sharedClient] deleteComment:comment.uid fromGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        [self reloadComments];
+    }];
+}
+
+-(void)reloadComments {
+    
+}
+
 -(void)configureComments {
     
     float height = 0;
@@ -227,6 +335,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         index++;
     }
+    
+    height += 55;
     
     self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height-6)];
     self.commentTableView.delegate = self;
@@ -270,7 +380,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.actionBar handleHeartAmount:[numLikes intValue]];
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
-
+    
     [self.view addSubview:self.actionBar];
     
     [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
@@ -284,7 +394,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[sharedContent] applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-
+    
+    [FRSTracker track:@"Galleries shared from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
 }
 
 -(void)adjustScrollViewContentSize{
@@ -406,7 +517,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             return 45;
         }
         
-        if (indexPath.row < self.comments.count) {
+        if (indexPath.row < self.comments.count + 1) {
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
             NSInteger height = cell.commentTextField.frame.size.height;
             
@@ -418,7 +529,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
     }
     
-    return 0;
+    return 56;
 }
 
 -(void)showAllComments {
@@ -435,7 +546,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         if (indexPath.row == 0) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
             UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
-            [topButton setTitle:@"SEE ALL 6 COMMENTS" forState:UIControlStateNormal];
+            [topButton setTitle:[NSString stringWithFormat:@"SEE ALL %lu COMMENTS", _comments.count] forState:UIControlStateNormal];
             [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
             [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
@@ -452,7 +563,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
                 [cell setLayoutMargins:UIEdgeInsetsZero];
             }
-
+            
             return cell;
         }
         else {
@@ -465,12 +576,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                         NSLog(@"%@", comment.imageURL);
                         
                         cell.backgroundColor = [UIColor clearColor];
-                        [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL] placeholder:Nil success:^(UIImage *image) {
-                            
-                            
-                        } failure:^(NSError *error) {
-                            
-                        }];
+                        [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL]];
                     }
                     else {
                         // default
@@ -576,10 +682,20 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (!commentField.text) {
         return;
     }
+    
+    [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        [commentField resignFirstResponder];
+        [self reload];
+        [UIView animateWithDuration:.15 animations:^{
+            commentField.frame = CGRectMake(-1, [UIScreen mainScreen].bounds.size.height, self.view.frame.size.width+2, 44);
+        } completion:^(BOOL finished) {
+            commentField.text = @"";
+        }];
+    }];
 }
 
 -(void)changeUp:(NSNotification *)change {
-
+    
     [UIView animateWithDuration:.2 animations:^{
         NSDictionary *info = [change userInfo];
         
@@ -612,7 +728,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     CGPoint cellPostion = [self.articlesTV convertPoint:location fromView:self.articlesTV];
     NSIndexPath *path = [self.articlesTV indexPathForRowAtPoint:cellPostion];
     [previewingContext setSourceRect:[self.articlesTV rectForRowAtIndexPath:path]];
-
+    
     PeekPopArticleViewController *vc = [[PeekPopArticleViewController alloc] init];
     UIView *contentView = vc.view;
     
@@ -622,7 +738,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     NSString *urlString = article.articleStringURL;
     [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
     vc.title = urlString;
-
+    
     return vc;
 }
 

@@ -15,7 +15,7 @@
 #import <Mixpanel/Mixpanel.h>
 //libraries
 #import <AFNetworking/AFNetworking.h>
-
+#import "FRSTracker.h"
 // #define distribution TRUE // disable logging
 #ifdef distribution 
 #define NSLog //
@@ -88,6 +88,8 @@ static NSString * const setAvatarEndpoint = @"user/avatar";
 static NSString * const updateUserEndpoint = @"user/update";
 static NSString * const authenticatedUserEndpoint = @"user/me";
 static NSString * const addSocialEndpoint = @"social/connect/";
+static NSString * const deleteSocialEndpoint = @"social/disconnect/";
+
 static NSString * const disableAccountEndpoint = @"user/disable/";
 
 // gallery creation
@@ -109,6 +111,7 @@ static NSString * const commentsEndpoint = @"gallery/%@/comments/";
 static NSString * const commentEndpoint = @"gallery/%@/comment/";
 static NSString * const galleryUnlikeEndpoint = @"gallery/%@/unlike";
 static NSString * const storyUnlikeEndpoint = @"story/%@/unlike";
+static NSString * const deleteCommentEndpoint = @"%@/comment/delete"; // comment_id -> comment
 
 // feeds
 static NSString * const likeFeed = @"feeds/%@/likes";
@@ -136,6 +139,11 @@ static NSString * const makePaymentActiveEndpoint = @"user/payment/%@/update/";
 static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
 
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
+
+
+// mixpanel
+
+static NSString * const activityDuration = @"activity_duration";
 
 // user - data
 static NSInteger const maxUsernameChars = 20;

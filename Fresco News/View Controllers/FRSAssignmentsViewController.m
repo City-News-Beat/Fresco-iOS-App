@@ -391,9 +391,7 @@
 }
 
 -(void)setDefaultAssignment:(FRSAssignment *)assignment {
-    
-    NSLog(@"assignment.uid: %@", assignment.uid);
-    
+        
     if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
         
         self.assignmentTitle = assignment.title;

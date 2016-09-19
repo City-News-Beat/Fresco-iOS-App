@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSString *uid;
 @property (nonatomic, strong) NSArray *entities;
 @property (nonnull, strong) NSString *imageURL;
+@property (nonatomic) BOOL isDeletable;
 @property (nonatomic, strong) NSMutableAttributedString *attributedString;
 -(instancetype)initWithDictionary:(NSDictionary *)commentDictionary;
 -(NSInteger)calculateHeightForCell:(FRSCommentCell *)cell;

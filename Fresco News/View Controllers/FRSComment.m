@@ -26,11 +26,21 @@
     _comment = dictionary[@"comment"];
     _user = [FRSUser nonSavedUserWithProperties:dictionary[@"user"] context:[delegate managedObjectContext]];
     
-    NSLog(@"%@", _user);
+    NSLog(@"SASS: %@", dictionary);
+    
+    if ([dictionary[@"user"][@"id"] isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        _isDeletable = TRUE;
+    }
+    else {
+        _isDeletable = FALSE;
+    }
+    
     _entities = dictionary[@"entities"];
     _imageURL = dictionary[@"user"][@"avatar"];
     _updatedAt = dictionary[@"updated_at"];
     _createdAt = dictionary[@"created_at"];
+    _uid = dictionary[@"id"];
+    
     [self createAttributedText];
 }
 

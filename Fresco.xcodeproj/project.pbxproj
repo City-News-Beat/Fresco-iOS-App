@@ -187,6 +187,10 @@
 		D453CC891CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC721CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m */; };
 		D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC761CCA80850091A004 /* NSPersistentStore+MagicalRecord.m */; };
 		D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC781CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m */; };
+		D46D35631D8F8B5100E38FAA /* trash24W.png in Resources */ = {isa = PBXBuildFile; fileRef = D46D35601D8F8B5100E38FAA /* trash24W.png */; };
+		D46D35641D8F8B5100E38FAA /* trash24W@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D46D35611D8F8B5100E38FAA /* trash24W@2x.png */; };
+		D46D35651D8F8B5100E38FAA /* trash24W@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D46D35621D8F8B5100E38FAA /* trash24W@3x.png */; };
+		D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D46D35681D9036E700E38FAA /* FRSTracker.m */; };
 		D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */; };
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
@@ -628,6 +632,11 @@
 		D453CC761CCA80850091A004 /* NSPersistentStore+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStore+MagicalRecord.m"; sourceTree = "<group>"; };
 		D453CC771CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStoreCoordinator+MagicalRecord.h"; sourceTree = "<group>"; };
 		D453CC781CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStoreCoordinator+MagicalRecord.m"; sourceTree = "<group>"; };
+		D46D35601D8F8B5100E38FAA /* trash24W.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trash24W.png; sourceTree = "<group>"; };
+		D46D35611D8F8B5100E38FAA /* trash24W@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash24W@2x.png"; sourceTree = "<group>"; };
+		D46D35621D8F8B5100E38FAA /* trash24W@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash24W@3x.png"; sourceTree = "<group>"; };
+		D46D35671D9036E700E38FAA /* FRSTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTracker.h; sourceTree = "<group>"; };
+		D46D35681D9036E700E38FAA /* FRSTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTracker.m; sourceTree = "<group>"; };
 		D46E9C3B1D41BDD500A39398 /* FRSUpload+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSUpload+CoreDataProperties.h"; sourceTree = "<group>"; };
 		D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FRSUpload+CoreDataProperties.m"; sourceTree = "<group>"; };
 		D47999671C96AA1700B46D01 /* FRSLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLocator.h; sourceTree = "<group>"; };
@@ -996,6 +1005,9 @@
 				420DC7151ADB875000157762 /* Resources */,
 				1EDA44B31AA4CCC70082E08D /* Supporting Files */,
 				65F237B81C24B21F002182DE /* Images_3.xcassets */,
+				D46D35601D8F8B5100E38FAA /* trash24W.png */,
+				D46D35611D8F8B5100E38FAA /* trash24W@2x.png */,
+				D46D35621D8F8B5100E38FAA /* trash24W@3x.png */,
 				D4C217DB1D66E28E0076172D /* trash24K2.png */,
 				D4C217DC1D66E28E0076172D /* trash24K2@2x.png */,
 				D4C217DD1D66E28E0076172D /* trash24K2@3x.png */,
@@ -1921,6 +1933,15 @@
 			name = MagicalRecord;
 			sourceTree = "<group>";
 		};
+		D46D35661D9036C400E38FAA /* Tracking */ = {
+			isa = PBXGroup;
+			children = (
+				D46D35671D9036E700E38FAA /* FRSTracker.h */,
+				D46D35681D9036E700E38FAA /* FRSTracker.m */,
+			);
+			name = Tracking;
+			sourceTree = "<group>";
+		};
 		D47999631C96A8FD00B46D01 /* Location */ = {
 			isa = PBXGroup;
 			children = (
@@ -2230,6 +2251,7 @@
 				D43C7FF41C8F588C00A7A7A7 /* Defaults */,
 				D47999631C96A8FD00B46D01 /* Location */,
 				D41365B41CA33347004FE848 /* Settings */,
+				D46D35661D9036C400E38FAA /* Tracking */,
 				D48C72251D0B3D5C000677BF /* FRSDevice.h */,
 				D48C72261D0B3D5C000677BF /* FRSDevice.m */,
 			);
@@ -2476,6 +2498,7 @@
 				D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */,
 				D4BE3E321D17D6760039394C /* FRSCarouselCell.xib in Resources */,
 				D4DBF1931CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png in Resources */,
+				D46D35631D8F8B5100E38FAA /* trash24W.png in Resources */,
 				65F237B91C24B21F002182DE /* Images_3.xcassets in Resources */,
 				D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */,
 				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
@@ -2498,11 +2521,13 @@
 				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
 				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
 				D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */,
+				D46D35641D8F8B5100E38FAA /* trash24W@2x.png in Resources */,
 				D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
 				D48C723E1D11D352000677BF /* FRSUserCell.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
 				07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */,
+				D46D35651D8F8B5100E38FAA /* trash24W@3x.png in Resources */,
 				0767A5611D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib in Resources */,
 				076F4DA01D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib in Resources */,
 				D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */,
@@ -2644,6 +2669,7 @@
 				D4EE64251D830DD60034B5EA /* FRSReadMoreCell.m in Sources */,
 				65201A371C3D7D8200B31089 /* FRSScrollViewImageView.m in Sources */,
 				65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */,
+				D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */,
 				07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */,
 				D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */,
 				65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */,

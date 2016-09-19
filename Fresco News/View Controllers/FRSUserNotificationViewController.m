@@ -290,6 +290,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     NSArray *keys = [self.payload allKeys];
     NSString *currentKey = [keys objectAtIndex:indexPath.row];
     
+    /*
+        Ight so this setup is a tad bit f**ked up. Will need to re-write large portion of this. Good reminder of a situation in which you should trash whats there and start from scratch (if this was started off a dan base)
+     */
     
     FRSTextNotificationTableViewCell *textCell = [self.tableView dequeueReusableCellWithIdentifier:TEXT_ID];
     FRSDefaultNotificationTableViewCell *defaultCell = [self.tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
@@ -299,8 +302,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     assignmentCell.delegate = self;
     [defaultCell configureDefaultCell];
 
-
-    
     /* NEWS */
     if ([currentKey isEqualToString:photoOfDayNotification]) {
         NSLog(@"PHOTOS OF THE DAY");

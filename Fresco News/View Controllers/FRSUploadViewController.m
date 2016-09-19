@@ -1000,6 +1000,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSLog(@"Post anonymously");
     }
     else {
+        [FRSTracker track:@"Submissions"];
+        [FRSTracker track:@"Submission items in gallery" parameters:@{@"count":@(self.content.count)}];
+        
         [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
     }
 }
