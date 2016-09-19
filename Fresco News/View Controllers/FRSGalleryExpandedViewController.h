@@ -15,5 +15,6 @@
 }
 @property BOOL isLoadingUser;
 -(instancetype)initWithGallery:(FRSGallery *)gallery;
+-(instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID;
 
 @end

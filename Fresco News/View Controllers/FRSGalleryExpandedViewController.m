@@ -68,6 +68,23 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     return self;
 }
 
+-(instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID {
+    self = [super init];
+    if (self){
+        self.gallery = gallery;
+        //        self.orderedArticles = [self.gallery.articles allObjects];
+        self.hiddenTabBar = YES;
+        self.actionBarVisible = YES;
+        self.touchEnabled = NO;
+        //[self fetchCommentsWithID:gallery.uid];
+        [self setupDeepLinkedComment:commentID];
+    }
+    return self;
+}
+         
+-(void)setupDeepLinkedComment:(NSString *)commentID {
+    
+}
 
 -(void)fetchCommentsWithID:(NSString  *)galleryID {
     [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID completion:^(id responseObject, NSError *error) {
