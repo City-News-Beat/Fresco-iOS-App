@@ -358,7 +358,7 @@
 
 -(void)focusOnAssignment:(FRSAssignment *)assignment {
     
-//    [self setDefaultAssignment:assignment];
+    [self setDefaultAssignment:assignment];
 }
 
 -(void)removeAssignmentsFromMap {
@@ -391,8 +391,14 @@
 }
 
 -(void)setDefaultAssignment:(FRSAssignment *)assignment {
+    
+    NSLog(@"assignment : %@", assignment);
+    NSLog(@"assignment.uid : %@", [assignment valueForKey:@"id"]);
+    NSLog(@"hasDefault : %d", self.hasDefault);
+    NSLog(@"self.defaultID : %@", self.defaultID);
+    
         
-    if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
+    if (self.hasDefault && [[assignment valueForKey:@"id"] isEqualToString:self.defaultID]) {
         
         self.assignmentTitle = assignment.title;
         self.assignmentCaption = assignment.caption;
@@ -877,6 +883,7 @@
 //    if (self.defaultID) {
 //        yValue = -157;
 //    }
+    
     [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseOut animations:^{
         
         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -93);

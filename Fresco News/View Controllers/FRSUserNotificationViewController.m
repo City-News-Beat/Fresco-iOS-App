@@ -152,11 +152,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     [self configureUI];
     
-    
     [self saveLastOpenedDate];
-    
-    
-//    FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
     
     [(FRSTabBarController *)self.tabBarController updateBellIcon:NO];
 }
@@ -294,13 +290,27 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         Ight so this setup is a tad bit f**ked up. Will need to re-write large portion of this. Good reminder of a situation in which you should trash whats there and start from scratch (if this was started off a dan base)
      */
     
-    FRSTextNotificationTableViewCell *textCell = [self.tableView dequeueReusableCellWithIdentifier:TEXT_ID];
+    
     FRSDefaultNotificationTableViewCell *defaultCell = [self.tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+    
+    if (!defaultCell) {
+        defaultCell = [[FRSDefaultNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DEFAULT_ID];
+        [defaultCell configureDefaultCell];
+    }
+    
     FRSAssignmentNotificationTableViewCell *assignmentCell = [self.tableView dequeueReusableCellWithIdentifier:ASSIGNMENT_ID];
+    if (!assignmentCell) {
+        assignmentCell = [[FRSAssignmentNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ASSIGNMENT_ID];
+        assignmentCell.delegate = self;
+    }
+    
+    FRSTextNotificationTableViewCell *textCell = [self.tableView dequeueReusableCellWithIdentifier:TEXT_ID];
+    if (!textCell) {
+        textCell = [[FRSTextNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TEXT_ID];
+    }
     
     
-    assignmentCell.delegate = self;
-    [defaultCell configureDefaultCell];
+    
 
     /* NEWS */
     if ([currentKey isEqualToString:photoOfDayNotification]) {
@@ -393,8 +403,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     } else {
         return defaultCell;
     }
-
-        
 
     return defaultCell;
 }

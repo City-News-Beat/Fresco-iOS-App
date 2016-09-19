@@ -205,12 +205,6 @@
     assignmentsVC.defaultID = assignmentID;
     self.tabBarController.selectedIndex = 3;
     
-    assignmentsVC.mapView = nil;
-    [assignmentsVC.mapView removeFromSuperview];
-    
-    [assignmentsVC mapView];
-    [assignmentsVC fetchLocalAssignments];
-    
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
         [assignmentsVC focusOnAssignment:(FRSAssignment *)responseObject];
         [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
@@ -222,7 +216,7 @@
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
         
         NSDictionary *assDict = [[NSDictionary alloc] init];
-        assDict = responseObject; //lol
+        assDict = responseObject;
         
         FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assDict selectedGlobalAssignment:nil];
         UINavigationController *navControl = [[UINavigationController alloc] init];
