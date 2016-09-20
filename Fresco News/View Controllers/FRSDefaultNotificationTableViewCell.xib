@@ -110,7 +110,7 @@
                     <constraint firstItem="6rk-aZ-RSA" firstAttribute="top" secondItem="J1x-3Q-zNg" secondAttribute="bottom" constant="16" id="bgc-pl-1YN"/>
                     <constraint firstAttribute="trailingMargin" secondItem="MrT-1n-09K" secondAttribute="trailing" constant="8" id="hFm-J0-G7I"/>
                     <constraint firstItem="zLd-w2-8NS" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="64" id="lo8-Of-nMG"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="zLd-w2-8NS" secondAttribute="trailing" constant="8" id="n9O-4t-Jo8"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="zLd-w2-8NS" secondAttribute="trailing" constant="32" id="n9O-4t-Jo8"/>
                     <constraint firstItem="6rk-aZ-RSA" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="-8" id="zdQ-1f-Tcx"/>
                 </constraints>
                 <variation key="default">
