@@ -31,7 +31,7 @@
 #import "FRSAwkwardView.h"
 
 
-@interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate, FRSAlertViewDelegate>
+@interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate, FRSAlertViewDelegate, FRSDefaultNotificationCellDelegate>
 
 @property (strong, nonatomic) NSDictionary *payload;
 @property (strong, nonatomic) NSArray *feed;
@@ -308,6 +308,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         NSLog(@"FOLLOWED");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureFollowCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
+        defaultCell.delegate = self;
+        defaultCell.indexPath = indexPath;
         return defaultCell;
         
     } else if ([currentKey isEqualToString:likedNotification]) {
@@ -797,9 +799,63 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [self.navigationController popViewControllerAnimated:NO];
 }
 
+#pragma mark - FRSDelegates
 
-#pragma mark - FRSAlertView Delegate
 
+/* Gets called when the user taps on the right aligned button on default notification cells */
+-(void)customButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *notification = [self.feed objectAtIndex:indexPath.row];
+    
+    if ([[notification objectForKey:@"type"] isEqualToString:followedNotification]) {
+        
+        [self followUserFromID:[notification objectForKey:@"user_id"]];
+        
+    }
+    NSLog(@"%@", [self.feed objectAtIndex:indexPath.row]);
+    
+}
+
+-(void)followUserFromID:(NSString *)userID {
+
+    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
+        
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        FRSUser *currentUser = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
+        
+        if ([[responseObject valueForKey:@"following"] boolValue]) {
+            [self unfollowUser:currentUser];
+        } else {
+            [self followUser:currentUser];
+        }
+    }];
+}
+
+
+
+-(void)followUser:(FRSUser *)user {
+    [[FRSAPIClient sharedClient] followUser:user completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            
+            return;
+        }
+    }];
+}
+
+-(void)unfollowUser:(FRSUser *)user {
+    [[FRSAPIClient sharedClient] unfollowUser:user completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            
+            return;
+        }
+    }];
+}
+
+
+
+
+/* Gets called when the user taps on the right aligned button on assignment notification cells */
 -(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude {
     FRSAlertView *alert = [[FRSAlertView alloc] init];
     alert.delegate = self;

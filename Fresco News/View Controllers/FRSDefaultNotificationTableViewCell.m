@@ -24,7 +24,7 @@
 
 -(void)configureCellForType:(NSString *)cellType userID:(NSString *)userID assignmentID:(NSString *)assignmentID postID:(NSString *)postID storyID:(NSString *)storyID galleryID:(NSString *)galleryID {
     
-    if ([cellType isEqualToString:@"user-social-followed"]) {
+    if ([cellType isEqualToString:followedNotification]) {
         [self configureUserFollowNotificationWithID:userID];
     } else if ([cellType isEqualToString:@""]) {
         return;
@@ -160,16 +160,6 @@
     }];
 }
 
--(IBAction)followTapped:(id)sender {
-    if ([self.followButton.imageView.image isEqual:[UIImage imageNamed:@"account-check"]]) {
-        [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
-        self.followButton.tintColor = [UIColor blackColor];
-    } else if ([self.followButton.imageView.image isEqual: [UIImage imageNamed:@"account-add"]]) {
-        [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
-        self.followButton.tintColor = [UIColor frescoOrangeColor];
-    }
-}
-
 -(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID {
     
     [self configureDefaultCell];
@@ -241,6 +231,18 @@
     }
 }
 
+-(IBAction)followTapped:(id)sender {
+    
+    if ([self.followButton.imageView.image isEqual:[UIImage imageNamed:@"account-check"]]) {
+        [self.followButton setImage:[UIImage imageNamed:@"add-follower"] forState:UIControlStateNormal];
+        self.followButton.tintColor = [UIColor blackColor];
+    } else if ([self.followButton.imageView.image isEqual: [UIImage imageNamed:@"add-follower"]]) {
+        [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+        self.followButton.tintColor = [UIColor frescoOrangeColor];
+    }
+    
+    [self.delegate customButtonTappedForRowWithIndexPath:self.indexPath];
+}
 
 -(NSInteger)heightForCell {
     
@@ -295,6 +297,9 @@
 
 -(void)awakeFromNib {
     [super awakeFromNib];
+    //UIImage *indicatorImage = [UIImage imageNamed:@"account-check"];
+    //self.accessoryType = UITableViewCellAccessoryDetailButton;
+    //self.accessoryView = [[UIImageView alloc] initWithImage:indicatorImage];
 }
 
 -(void)prepareForReuse {

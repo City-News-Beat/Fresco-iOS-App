@@ -8,7 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol FRSDefaultNotificationCellDelegate <NSObject>
+
+-(void)customButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
 @interface FRSDefaultNotificationTableViewCell : UITableViewCell
+
+@property (nonatomic, retain) id<FRSDefaultNotificationCellDelegate> delegate;
+@property (nonatomic, strong) NSIndexPath *indexPath;
 
 /* SOCIAL */
 -(void)configureUserFollowNotificationWithID:(NSString *)userID;
