@@ -270,9 +270,6 @@
     height += self.titleLabel.frame.size.height;
     height += 8; //spacing
 
-//    if (height < 65) {
-//        return 65;
-//    }
     
     return height;
 }

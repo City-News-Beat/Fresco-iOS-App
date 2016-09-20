@@ -53,207 +53,94 @@ NSString * const TEXT_ID       = @"textNotificationCell";
 NSString * const DEFAULT_ID    = @"notificationCell";
 NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
--(instancetype)init {
-    self = [super init];
-    
-    if (self) {
-        self.tabBarController.tabBarItem.title = @"";
-        
-        self.payload = [[NSDictionary alloc] init];
-        
-        NSArray *post_ids    = @[@"LJx3jeQg1kpN", @"5xQ0WoLw0lX9", @"EL2Z3meP39jR", @"6DrY8KYM1KBP", @"Qz7J07vY8dDZ"];
-        NSArray *gallery_ids = @[@"YQVr1ElM05qP", @"dYOJ8vjz8ML4", @"YZb485DD3xoV", @"gBbY3oPB8PM6"];
-        NSString *gallery_id = @"arYd0y5Q0Dp5";
-        NSString *story_id   = @"7mr93zRx3BlY";
-        NSString *empty = @"";
-        NSArray *user_ids = @[@"2vRW0Na8oEgQ", @"ewOo1Pr8KvlN", @"Ym4x8rK0Jjpd"];
+//-(instancetype)init {
+//    self = [super init];
+//    
+//    if (self) {
+//        self.tabBarController.tabBarItem.title = @"";
+//        
+//        self.payload = [[NSDictionary alloc] init];
+//        
+//        NSArray *post_ids    = @[@"LJx3jeQg1kpN", @"5xQ0WoLw0lX9", @"EL2Z3meP39jR", @"6DrY8KYM1KBP", @"Qz7J07vY8dDZ"];
+//        NSArray *gallery_ids = @[@"YQVr1ElM05qP", @"dYOJ8vjz8ML4", @"YZb485DD3xoV", @"gBbY3oPB8PM6"];
+//        NSString *gallery_id = @"arYd0y5Q0Dp5";
+//        NSString *story_id   = @"7mr93zRx3BlY";
+//        NSString *empty = @"";
+//        NSArray *user_ids = @[@"2vRW0Na8oEgQ", @"ewOo1Pr8KvlN", @"Ym4x8rK0Jjpd"];
+//
+//        NSString *assignment_id = @"xLJE0QzW1G5B";
+//
+//        NSString *outlet_id = @"7ewm8YP3GL5x";
+//        
+//        NSString *body = @"BREAKING: Bernie Sanders wins South Carolina Democratic primary, with an unheard of 130% of the popular vote";
+//
+//
+//        self.payload = @{
+//                         
+//                         //photoOfDayNotification : post_ids,
+//                         todayInNewsNotification : gallery_ids,
+//                         userNewsGalleryNotification : gallery_id,
+//                         userNewsStoryNotification : story_id,
+//                         userNewsCustomNotification : body,
+//                         
+//                         followedNotification : user_ids,
+//                         likedNotification : @{@"user_ids" : user_ids, @"gallery_id": gallery_id},
+//                         repostedNotification : @{@"user_ids" : user_ids, @"gallery_id": gallery_id},
+//                         commentedNotification : @{@"user_ids" : user_ids, @"gallery_id": gallery_id},
+//                         //mentionCommentNotification : @[], //cc: api
+//                         //mentionGalleryNotification : @[], //cc: api
+//                         
+//                         newAssignmentNotification : assignment_id,
+//                         
+//                         purchasedContentNotification : @{@"outlet_id" : outlet_id, @"post_ids" : post_ids, @"has_card_": @TRUE},
+//                         paymentExpiringNotification : empty,
+//                         paymentSentNotification: empty,
+//                         paymentDeclinedNotification : empty,
+//                         taxInfoRequiredNotification : empty,
+//                         taxInfoProcessedNotification : @NO,
+//                         taxInfoDeclinedNotification : @YES,
+//                         taxInfoProcessedNotification : @YES,
+//                         
+//                         };
+//    }
+//    
+//    return self;
+//}
 
-        NSString *assignment_id = @"xLJE0QzW1G5B";
-
-        NSString *outlet_id = @"7ewm8YP3GL5x";
-        
-        NSString *body = @"BREAKING: Bernie Sanders wins South Carolina Democratic primary, with an unheard of 130% of the popular vote";
-
-
-        self.payload = @{
-                         
-                         //photoOfDayNotification : post_ids,
-                         todayInNewsNotification : gallery_ids,
-                         userNewsGalleryNotification : gallery_id,
-                         userNewsStoryNotification : story_id,
-                         userNewsCustomNotification : body,
-                         
-                         followedNotification : user_ids,
-                         likedNotification : @{@"user_ids" : user_ids, @"gallery_id": gallery_id},
-                         repostedNotification : @{@"user_ids" : user_ids, @"gallery_id": gallery_id},
-                         commentedNotification : @{@"user_ids" : user_ids, @"gallery_id": gallery_id},
-                         //mentionCommentNotification : @[], //cc: api
-                         //mentionGalleryNotification : @[], //cc: api
-                         
-                         newAssignmentNotification : assignment_id,
-                         
-                         purchasedContentNotification : @{@"outlet_id" : outlet_id, @"post_ids" : post_ids, @"has_card_": @TRUE},
-                         paymentExpiringNotification : empty,
-                         paymentSentNotification: empty,
-                         paymentDeclinedNotification : empty,
-                         taxInfoRequiredNotification : empty,
-                         taxInfoProcessedNotification : @NO,
-                         taxInfoDeclinedNotification : @YES,
-                         taxInfoProcessedNotification : @YES,
-                         
-                         };
-    }
-    
-    return self;
-}
-
--(void)configureSpinner {
-    self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    self.spinner.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
-    self.spinner.tintColor = [UIColor frescoOrangeColor];
-    [self.spinner setPullProgress:90];
-    [self.spinner startAnimating];
-    [self.view addSubview:self.spinner];
-}
-
--(void)checkNotifications {
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateInterface) userInfo:nil repeats:YES];
-}
-
--(void)updateInterface {
-    
-    if (self.loadedNotificationCount == self.payload.count) {
-        [self.timer invalidate];
-    }
-}
-
-
--(void)getNotifications {
-    
-    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
-        
-        self.feed = [responseObject objectForKey:@"feed"];
-        
-        [self configureTableView];
-        [self registerNibs];
-        
-        [self.spinner stopLoading];
-        
-        for (NSDictionary *notification in self.feed) {
-            if ([notification[@"type"] isEqualToString:todayInNewsNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:photoOfDayNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:userNewsStoryNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:userNewsGalleryNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:userNewsCustomNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:followedNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:likedNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:repostedNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:commentedNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:mentionCommentNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:mentionGalleryNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:newAssignmentNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:purchasedContentNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:paymentExpiringNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:paymentSentNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:paymentDeclinedNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:taxInfoRequiredNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:taxInfoProcessedNotification]) {
-                
-            }
-            else if ([notification[@"type"] isEqualToString:taxInfoDeclinedNotification]) {
-                [_loadedNotifications addObject:notification];
-                if (_loadedNotifications.count == self.feed.count) {
-                    [self displayContent];
-                }
-            }
-        }
-    }];
-}
-
--(void)displayContent {
-    
-}
-
-
--(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude {
-    FRSAlertView *alert = [[FRSAlertView alloc] init];
-    alert.delegate = self;
-    [alert navigateToAssignmentWithLatitude:latitude longitude:longitude];
-}
 
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self getNotifications];
-    [self checkNotifications];
-    
     [self configureUI];
-    
-    [self saveLastOpenedDate];
-    
     self.loadedNotifications = [[NSMutableArray alloc] init];
-    
     [(FRSTabBarController *)self.tabBarController updateBellIcon:NO];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.navigationItem.title = @"ACTIVITY";
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    
     self.isSegueingToGallery = NO;
     self.isSegueingToStory = NO;
-    
     if (self.tabBarController) {
         [(FRSTabBarController *)self.tabBarController updateUserIcon];
     } else {
         FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
         [tabBarController updateUserIcon];
     }
-    
 }
 
--(void)saveLastOpenedDate {
-    NSDate *today = [NSDate date];
-    [[NSUserDefaults standardUserDefaults] setObject:today forKey:@"notification-date"];
+-(void)getNotifications {
+    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
+        self.feed = [responseObject objectForKey:@"feed"];
+        [self configureTableView];
+        [self registerNibs];
+        [self.spinner stopLoading];
+    }];
 }
 
 
@@ -278,6 +165,15 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [self.navigationItem setHidesBackButton:YES animated:NO];
 }
 
+-(void)configureSpinner {
+    self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.spinner.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.spinner.tintColor = [UIColor frescoOrangeColor];
+    [self.spinner setPullProgress:90];
+    [self.spinner startAnimating];
+    [self.view addSubview:self.spinner];
+}
+
 -(void)configureTableView {
     self.automaticallyAdjustsScrollViewInsets = NO;
     
@@ -292,22 +188,16 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.separatorColor = [UIColor clearColor];
-
-//    self.automaticallyAdjustsScrollViewInsets = NO;
-//    self.tableView.rowHeight = UITableViewAutomaticDimension;
-//    self.tableView.estimatedRowHeight = 100;
     
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 200;
+
     [self.view addSubview:self.tableView];
     
     if (self.feed.count == 0) {
         FRSAwkwardView *awkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -175/2, self.view.frame.size.height/2 -125/2 -64, 175, 125)];
         [self.tableView addSubview:awkward];
     }
-    
-//    if (self.payload.count == 0) {
-//        FRSAwkwardView *awkward = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -175/2, self.view.frame.size.height/2 -125/2 -64, 175, 125)];
-//        [self.tableView addSubview:awkward];
-//    }
 }
 
 -(void)registerNibs {
@@ -321,49 +211,39 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.feed.count;
-//    return self.payload.count;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UITableViewCell *cell = [self tableView:_tableView cellForRowAtIndexPath:indexPath];
-    
-    if ([[cell class] isSubclassOfClass:[FRSDefaultNotificationTableViewCell class]]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = (FRSDefaultNotificationTableViewCell *)cell;
-        
-        return [defaultCell heightForCell];
-    }
-    
-    if ([[cell class] isSubclassOfClass:[FRSAssignmentNotificationTableViewCell class]]) {
-        FRSAssignmentNotificationTableViewCell *assignmentCell = (FRSAssignmentNotificationTableViewCell *)cell;
-        
-        return [assignmentCell heightForCell];
-    }
-    
-    if ([[cell class] isSubclassOfClass:[FRSTextNotificationTableViewCell class]]) {
-        FRSTextNotificationTableViewCell *textCell = (FRSTextNotificationTableViewCell *)cell;
-        
-        return [textCell heightForCell];
-    }
-    
-    
-    return 100;
-}
+//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    
+//    UITableViewCell *cell = [self tableView:_tableView cellForRowAtIndexPath:indexPath];
+//    
+//    if ([[cell class] isSubclassOfClass:[FRSDefaultNotificationTableViewCell class]]) {
+//        FRSDefaultNotificationTableViewCell *defaultCell = (FRSDefaultNotificationTableViewCell *)cell;
+//        
+//        return [defaultCell heightForCell];
+//    }
+//    
+//    if ([[cell class] isSubclassOfClass:[FRSAssignmentNotificationTableViewCell class]]) {
+//        FRSAssignmentNotificationTableViewCell *assignmentCell = (FRSAssignmentNotificationTableViewCell *)cell;
+//        
+//        return [assignmentCell heightForCell];
+//    }
+//    
+//    if ([[cell class] isSubclassOfClass:[FRSTextNotificationTableViewCell class]]) {
+//        FRSTextNotificationTableViewCell *textCell = (FRSTextNotificationTableViewCell *)cell;
+//        
+//        return [textCell heightForCell];
+//    }
+//    
+//    
+//    return 100;
+//}
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    
-//    NSArray *keys = [self.payload allKeys];
-//    NSString *currentKey = [keys objectAtIndex:indexPath.row];
-    
-    /*
-        Ight so this setup is a tad bit f**ked up. Will need to re-write large portion of this. Good reminder of a situation in which you should trash whats there and start from scratch (if this was started off a dan base)
-     */
-    
 
     FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
 
@@ -383,14 +263,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         textCell = [[FRSTextNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TEXT_ID];
     }
     
-//    FRSDefaultNotificationTableViewCell *defaultCell = [[FRSDefaultNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DEFAULT_ID];
-//    FRSAssignmentNotificationTableViewCell *assignmentCell = [[FRSAssignmentNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ASSIGNMENT_ID];
-//    FRSTextNotificationTableViewCell *textCell = [[FRSTextNotificationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TEXT_ID];
-    
     NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
     NSLog(@"%@", [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"]);
-    
-    
+
     /* NEWS */
     if ([currentKey isEqualToString:photoOfDayNotification]) {
         NSLog(@"PHOTOS OF THE DAY");
@@ -493,13 +368,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-//    NSArray *keys = [self.payload allKeys];
-//    NSString *currentKey = [keys objectAtIndex:indexPath.row];
     
     NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
     NSLog(@"%@", [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"]);
-    
     
     /* NEWS */
     if ([currentKey isEqualToString:photoOfDayNotification]) {
@@ -558,7 +429,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     } else if ([currentKey isEqualToString:paymentSentNotification]) {
         
-        
     } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
         [self segueToDebitCard];
 
@@ -574,10 +444,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
     
     }
-    
-    
-    
-    
 }
 
 
@@ -676,7 +542,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeFollow];
     
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
-    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    
+//    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
     
 //    cell.count = userIDs.count;
 //    cell.followButton.alpha = 1;
