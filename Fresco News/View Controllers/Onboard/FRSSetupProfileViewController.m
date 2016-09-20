@@ -443,7 +443,7 @@
     if(_isEditingProfile && _bioStr != (id)[NSNull null] && _bioStr.length != 0){
         self.bioTV.text = _bioStr;
     }else{
-        self.bioTV.attributedText = [[NSAttributedString alloc] initWithString:@"" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
+        self.bioTV.attributedText = [[NSAttributedString alloc] initWithString:@"Bio" attributes:@{NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1]}];
     }
     
     [backgroundView addSubview:self.bioTV];
@@ -537,7 +537,7 @@
             [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         }
     }
-    [textField setText:[textField.text stringByReplacingOccurrencesOfString:@"arthur" withString:@"💩🎉"]];
+    [textField setText:[textField.text stringByReplacingOccurrencesOfString:@"arthurdearaujo" withString:@"💩🎉"]];
     
     return YES;
 }
@@ -549,7 +549,7 @@
     }else if(textField == self.locationTF){
         [_bioTV becomeFirstResponder];
     }
-    [textField setText:[textField.text stringByReplacingOccurrencesOfString:@"arthur" withString:@"💩🎉"]];
+    [textField setText:[textField.text stringByReplacingOccurrencesOfString:@"arthurdearaujo" withString:@"💩🎉"]];
     
     return YES;
 }
@@ -559,7 +559,7 @@
     if (!self.dismissGR){
         self.dismissGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     }
-    [textField setText:[textField.text stringByReplacingOccurrencesOfString:@"arthur" withString:@"💩🎉"]];
+    [textField setText:[textField.text stringByReplacingOccurrencesOfString:@"arthurdearaujo" withString:@"💩🎉"]];
     
     [self.view addGestureRecognizer:self.dismissGR];
 }
@@ -588,7 +588,7 @@
         self.doneButton.userInteractionEnabled = YES;
         [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     }
-    [textView setText:[textView.text stringByReplacingOccurrencesOfString:@"arthur" withString:@"💩🎉"]];
+    [textView setText:[textView.text stringByReplacingOccurrencesOfString:@"arthurdearaujo" withString:@"💩🎉"]];
 }
 
 -(void)textViewDidEndEditing:(UITextView *)textView{
@@ -619,7 +619,7 @@
         point = CGPointMake(0, self.topContainer.frame.size.height / 2 + 44);
     }
     else {
-        point = CGPointMake(0, self.topContainer.frame.size.height / 2 + 44 * 2);
+        point = CGPointMake(0, self.topContainer.frame.size.height / 2 + 44 * 2 -22);
     }
     
     [UIView animateWithDuration:0.15 animations:^{
@@ -635,7 +635,6 @@
         }];
     }
     self.bottomBar.transform = CGAffineTransformMakeTranslation(0, 0);
-
 }
 
 -(void)dismissKeyboard{
