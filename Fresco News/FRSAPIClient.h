@@ -31,6 +31,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 @end
 
 @interface FRSAPIClient : NSObject
+
 @property (nonatomic, retain) AFHTTPRequestOperationManager *requestManager;
 @property BOOL managerAuthenticated;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;

@@ -95,9 +95,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
         
         _comments = [[NSMutableArray alloc] init];
-        
-        for (NSDictionary *comment in responseObject) {
-            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
+        NSArray *response = (NSArray *)responseObject;
+        for (NSInteger i = response.count-1; i >= 0; i--) {
+            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:response[i]];
             [_comments addObject:commentObject];
         }
         
@@ -533,8 +533,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         if (indexPath.row == 0) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
-            UIButton *topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
-            [topButton setTitle:[NSString stringWithFormat:@"SEE ALL %lu COMMENTS", _comments.count] forState:UIControlStateNormal];
+            topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
+            [topButton setTitle:[NSString stringWithFormat:@"%lu MORE COMMENTS", [[self.gallery valueForKey:@"comments"] integerValue] - _comments.count] forState:UIControlStateNormal];
             [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
             [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
@@ -660,7 +660,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         FRSSearchViewController *controller = [[FRSSearchViewController alloc] init];
         [controller search:search];
         self.navigationItem.title = @"";
-        [self.tabBarController.tabBar setHidden:YES];
+       // [self.tabBarController.tabBar setHidden:YES];
         [self.navigationController pushViewController:controller animated:YES];
     }
     
