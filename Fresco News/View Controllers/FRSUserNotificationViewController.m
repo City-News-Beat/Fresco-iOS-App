@@ -23,12 +23,12 @@
 #import "FRSGalleryExpandedViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 
+#import "FRSAwkwardView.h"
 #import "FRSAssignment.h"
 #import "FRSAlertView.h"
 
 #import <Haneke/Haneke.h>
 
-#import "FRSAwkwardView.h"
 
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate, FRSAlertViewDelegate, FRSDefaultNotificationCellDelegate>
@@ -210,58 +210,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
-
-
-
-/* HIDE ALL SEEN NOTIFICATIONS */
-
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//
-//    NSString *type = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
-//    BOOL seen      = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"seen"] boolValue];
-//    BOOL hasCard   = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"has_card_"] boolValue];
-//    
-//    BOOL shouldHide; //Hides the cell from view by setting its height to zero
-//    
-//    if ([type isEqualToString:newAssignmentNotification] && seen) {
-//        shouldHide = YES;
-//    } else if ([type isEqualToString:purchasedContentNotification] && seen && !hasCard) {
-//        shouldHide = YES;
-//    } else if ([type isEqualToString:paymentExpiringNotification] && seen) {
-//        shouldHide = YES;
-//    } else if ([type isEqualToString:paymentDeclinedNotification] && seen) {
-//        shouldHide = YES;
-//    } else if ([type isEqualToString:taxInfoRequiredNotification] && seen) {
-//        shouldHide = YES;
-//    } else if ([type isEqualToString:taxInfoDeclinedNotification] && seen) {
-//        shouldHide = YES;
-//    } else {
-//        shouldHide = NO;
-//    }
-//
-//    if (shouldHide) {
-//        return 0;
-//    } else {
-//        UITableViewCell *cell = [self tableView:_tableView cellForRowAtIndexPath:indexPath];
-//
-//        if ([[cell class] isSubclassOfClass:[FRSDefaultNotificationTableViewCell class]]) {
-//            FRSDefaultNotificationTableViewCell *defaultCell = (FRSDefaultNotificationTableViewCell *)cell;
-//            return [defaultCell heightForCell];
-//        }
-//        
-//        if ([[cell class] isSubclassOfClass:[FRSAssignmentNotificationTableViewCell class]]) {
-//            FRSAssignmentNotificationTableViewCell *assignmentCell = (FRSAssignmentNotificationTableViewCell *)cell;
-//            return [assignmentCell heightForCell];
-//        }
-//        
-//        if ([[cell class] isSubclassOfClass:[FRSTextNotificationTableViewCell class]]) {
-//            FRSTextNotificationTableViewCell *textCell = (FRSTextNotificationTableViewCell *)cell;
-//            return [textCell heightForCell];
-//        }
-//    }
-//    
-//    return 0; //Won't ever get called
-//}
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -613,20 +561,11 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 #pragma mark - Assignments
 -(void)configureAssignmentCell:(FRSAssignmentNotificationTableViewCell *)assignmentCell dictionary:(NSDictionary *)dictionary {
-    
     assignmentCell.titleLabel.numberOfLines = 0;
     assignmentCell.bodyLabel.numberOfLines  = 3;
     assignmentCell.actionButton.tintColor = [UIColor blackColor];
-    
     assignmentCell.titleLabel.text = [dictionary objectForKey:@"title"];
     assignmentCell.bodyLabel.text = [dictionary objectForKey:@"body"];
-//    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
-//        
-//        assignmentCell.titleLabel.text = [responseObject objectForKey:@"title"];
-//        assignmentCell.bodyLabel.text = [responseObject objectForKey:@"caption"];
-//        
-//        self.loadedNotificationCount++;
-//    }];
 }
 
 
@@ -634,12 +573,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configureFollowCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeFollow];
-    
     cell.titleLabel.numberOfLines = 2;
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
-    
     NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
-    
     cell.count = userIDs.count;
     cell.followButton.alpha = 1;
 }
@@ -801,42 +737,30 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 #pragma mark - FRSDelegates
 
-
 /* Gets called when the user taps on the right aligned button on default notification cells */
 -(void)customButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *notification = [self.feed objectAtIndex:indexPath.row];
     
     if ([[notification objectForKey:@"type"] isEqualToString:followedNotification]) {
-        
-        [self followUserFromID:[notification objectForKey:@"user_id"]];
-        
-    }
-    NSLog(@"%@", [self.feed objectAtIndex:indexPath.row]);
-    
-}
-
--(void)followUserFromID:(NSString *)userID {
-
-    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
-        
-        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-        FRSUser *currentUser = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
-        
-        if ([[responseObject valueForKey:@"following"] boolValue]) {
-            [self unfollowUser:currentUser];
-        } else {
-            [self followUser:currentUser];
+        if ([notification objectForKey:@"user_id"]) {
+            [[FRSAPIClient sharedClient] getUserWithUID:[notification objectForKey:@"user_id"] completion:^(id responseObject, NSError *error) {
+                FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                FRSUser *currentUser = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
+                if ([[responseObject valueForKey:@"following"] boolValue]) {
+                    [self unfollowUser:currentUser];
+                } else {
+                    [self followUser:currentUser];
+                }
+            }];
         }
-    }];
+    }
 }
-
-
 
 -(void)followUser:(FRSUser *)user {
     [[FRSAPIClient sharedClient] followUser:user completion:^(id responseObject, NSError *error) {
         
         if (error) {
-            
+            // Follow button image automatically changes on tap in the cell to avoid making the user wait for API response, update here if failuer.
             return;
         }
     }];
@@ -846,16 +770,13 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [[FRSAPIClient sharedClient] unfollowUser:user completion:^(id responseObject, NSError *error) {
         
         if (error) {
-            
+            // Follow button image automatically changes on tap in the cell to avoid making the user wait for API response, update here if failuer.
             return;
         }
     }];
 }
 
-
-
-
-/* Gets called when the user taps on the right aligned button on assignment notification cells */
+// Gets called when the user taps on the right aligned button on assignment notification cells
 -(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude {
     FRSAlertView *alert = [[FRSAlertView alloc] init];
     alert.delegate = self;
