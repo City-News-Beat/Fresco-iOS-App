@@ -69,8 +69,7 @@
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MrT-1n-09K">
                         <constraints>
-                            <constraint firstAttribute="width" constant="24" id="76z-I7-6N8"/>
-                            <constraint firstAttribute="height" constant="24" id="EdC-d4-CHG"/>
+                            <constraint firstAttribute="width" constant="54" id="76z-I7-6N8"/>
                         </constraints>
                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <state key="normal" image="add-follower"/>
@@ -94,12 +93,13 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="MrT-1n-09K" firstAttribute="centerY" secondItem="cK0-vG-kkY" secondAttribute="centerY" id="3dM-qd-rCG"/>
                     <constraint firstItem="J1x-3Q-zNg" firstAttribute="leading" secondItem="NU1-pp-tGP" secondAttribute="trailing" constant="16" id="43c-cl-t6L"/>
                     <constraint firstAttribute="trailingMargin" secondItem="6rk-aZ-RSA" secondAttribute="trailing" constant="-8" id="5Kq-9u-QG7"/>
                     <constraint firstItem="zLd-w2-8NS" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="4" id="5Vg-YF-2Y3"/>
                     <constraint firstAttribute="bottomMargin" secondItem="6rk-aZ-RSA" secondAttribute="bottom" constant="-9" id="6Dg-C5-afl"/>
+                    <constraint firstItem="6rk-aZ-RSA" firstAttribute="top" secondItem="MrT-1n-09K" secondAttribute="bottom" id="9NA-1I-8Rz"/>
                     <constraint firstAttribute="trailingMargin" secondItem="J1x-3Q-zNg" secondAttribute="trailing" constant="16" id="9Um-Wa-n3g"/>
+                    <constraint firstItem="MrT-1n-09K" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="-8" id="ENi-Lv-5aM"/>
                     <constraint firstAttribute="bottomMargin" secondItem="J1x-3Q-zNg" secondAttribute="bottom" constant="1" id="IcT-ZI-E27"/>
                     <constraint firstItem="qHy-RB-rdD" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="24" id="NZR-q3-o1h"/>
                     <constraint firstItem="NU1-pp-tGP" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="4" id="QiP-yw-klP"/>
@@ -107,7 +107,7 @@
                     <constraint firstItem="qHy-RB-rdD" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="28" id="X4K-PZ-goQ"/>
                     <constraint firstItem="NU1-pp-tGP" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="8" id="aXg-4u-OZA"/>
                     <constraint firstItem="6rk-aZ-RSA" firstAttribute="top" secondItem="J1x-3Q-zNg" secondAttribute="bottom" constant="16" id="bgc-pl-1YN"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="MrT-1n-09K" secondAttribute="trailing" constant="8" id="hFm-J0-G7I"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="MrT-1n-09K" secondAttribute="trailing" constant="-8" id="hFm-J0-G7I"/>
                     <constraint firstItem="zLd-w2-8NS" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="64" id="lo8-Of-nMG"/>
                     <constraint firstAttribute="trailingMargin" secondItem="zLd-w2-8NS" secondAttribute="trailing" constant="32" id="n9O-4t-Jo8"/>
                     <constraint firstItem="6rk-aZ-RSA" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="-8" id="zdQ-1f-Tcx"/>
