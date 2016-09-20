@@ -260,6 +260,7 @@
     self.titleLabel.frame = CGRectMake(leftPadding, topPadding, self.frame.size.width -leftPadding -rightPadding, 22);
 
     topPadding = 33;
+    self.bodyLabel.frame = CGRectMake(leftPadding, topPadding, self.frame.size.width - leftPadding -rightPadding, 60);
     self.bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.bodyLabel.numberOfLines = 3;
     

@@ -31,17 +31,12 @@
 #import "FRSAwkwardView.h"
 
 
-@interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate>
+@interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate, FRSAlertViewDelegate>
 
 @property (strong, nonatomic) NSDictionary *payload;
 @property (strong, nonatomic) NSArray *feed;
 @property BOOL isSegueingToGallery;
 @property BOOL isSegueingToStory;
-@property (strong, nonatomic) NSTimer *timer;
-
-@property (nonatomic) NSInteger loadedNotificationCount;
-
-@property (strong, nonatomic) NSMutableArray *loadedNotifications;
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *spinner;
 
@@ -112,7 +107,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [super viewDidLoad];
     [self getNotifications];
     [self configureUI];
-    self.loadedNotifications = [[NSMutableArray alloc] init];
     [(FRSTabBarController *)self.tabBarController updateBellIcon:NO];
 }
 
@@ -222,23 +216,55 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 /* HIDE ALL SEEN NOTIFICATIONS */
 
 //-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    if ([[[self.feed objectAtIndex:indexPath.row] objectForKey:@"seen"] boolValue]) {
+//
+//    NSString *type = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
+//    BOOL seen      = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"seen"] boolValue];
+//    BOOL hasCard   = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"has_card_"] boolValue];
+//    
+//    BOOL shouldHide; //Hides the cell from view by setting its height to zero
+//    
+//    if ([type isEqualToString:newAssignmentNotification] && seen) {
+//        shouldHide = YES;
+//    } else if ([type isEqualToString:purchasedContentNotification] && seen && !hasCard) {
+//        shouldHide = YES;
+//    } else if ([type isEqualToString:paymentExpiringNotification] && seen) {
+//        shouldHide = YES;
+//    } else if ([type isEqualToString:paymentDeclinedNotification] && seen) {
+//        shouldHide = YES;
+//    } else if ([type isEqualToString:taxInfoRequiredNotification] && seen) {
+//        shouldHide = YES;
+//    } else if ([type isEqualToString:taxInfoDeclinedNotification] && seen) {
+//        shouldHide = YES;
+//    } else {
+//        shouldHide = NO;
+//    }
+//
+//    if (shouldHide) {
 //        return 0;
 //    } else {
-//        UITableViewCell *cell =(UITableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-//        return cell.frame.size.height;
+//        UITableViewCell *cell = [self tableView:_tableView cellForRowAtIndexPath:indexPath];
+//
+//        if ([[cell class] isSubclassOfClass:[FRSDefaultNotificationTableViewCell class]]) {
+//            FRSDefaultNotificationTableViewCell *defaultCell = (FRSDefaultNotificationTableViewCell *)cell;
+//            return [defaultCell heightForCell];
+//        }
+//        
+//        if ([[cell class] isSubclassOfClass:[FRSAssignmentNotificationTableViewCell class]]) {
+//            FRSAssignmentNotificationTableViewCell *assignmentCell = (FRSAssignmentNotificationTableViewCell *)cell;
+//            return [assignmentCell heightForCell];
+//        }
+//        
+//        if ([[cell class] isSubclassOfClass:[FRSTextNotificationTableViewCell class]]) {
+//            FRSTextNotificationTableViewCell *textCell = (FRSTextNotificationTableViewCell *)cell;
+//            return [textCell heightForCell];
+//        }
 //    }
+//    
+//    return 0; //Won't ever get called
 //}
-
--(BOOL)seen:(NSIndexPath *)indexPath {
-
-    return [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"seen"] boolValue];
-}
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-//    FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
-    
     FRSAssignmentNotificationTableViewCell *assignmentCell = [tableView dequeueReusableCellWithIdentifier:ASSIGNMENT_ID];
     assignmentCell.delegate = self;
     
@@ -312,7 +338,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     else if ([currentKey isEqualToString:newAssignmentNotification]) {
         [self configureAssignmentCell:assignmentCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         assignmentCell.delegate = self;
-        
         if ([self seen:indexPath]) {
             assignmentCell.backgroundColor = [UIColor frescoBackgroundColorDark];
         }
@@ -324,38 +349,43 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         NSLog(@"PURCHASED CONTENT");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configurePurchasedContentCell:defaultCell outletID:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"outlet_id"] postID:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"post_id"] hasPaymentInfo:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"has_card_"]];
-        
         return defaultCell;
         
     } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
         NSLog(@"PAYMENT EXPIRING");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configurePaymentExpiringCell:defaultCell];
+        return defaultCell;
         
     } else if ([currentKey isEqualToString:paymentSentNotification]) {
         NSLog(@"PAYMENT SENT");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configurePaymentSentCell:defaultCell];
+        return defaultCell;
         
     } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
         NSLog(@"PAYMENT DECLINED");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configurePaymentDeclinedCell:defaultCell];
+        return defaultCell;
         
     } else if ([currentKey isEqualToString:taxInfoRequiredNotification]) {
         NSLog(@"TAX INFO REQUIRED");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureTaxInfoRequiredCell:defaultCell];
+        return defaultCell;
         
     } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
         NSLog(@"TAX INFO PROCESSING");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureTaxInfoProcessedCell:defaultCell processed:[self.payload objectForKey:taxInfoProcessedNotification]];
+        return defaultCell;
         
     } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
         NSLog(@"TAX INFO DECLINED");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureTaxInfoDeclinedCell:defaultCell];
+        return defaultCell;
         
     } else {
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
@@ -364,6 +394,72 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
     FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
     return defaultCell;
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([self shouldHideCellAtIndexPath:indexPath]) {
+        
+        //Delete from API   cc: mike
+    }
+    
+    if ([self hasSeenCellAtIndexPath:indexPath]) {
+        cell.backgroundColor = [UIColor frescoBackgroundColorDark];
+    }
+}
+
+-(BOOL)shouldHideCellAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *type = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
+    BOOL seen      = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"seen"] boolValue];
+    BOOL hasCard   = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"has_card_"] boolValue];
+    
+    BOOL shouldHide; //Hides the cell from view by setting its height to zero
+    
+    if ([type isEqualToString:newAssignmentNotification] && seen) {
+        shouldHide = YES;
+    } else if ([type isEqualToString:purchasedContentNotification] && seen && !hasCard) {
+        shouldHide = YES;
+    } else if ([type isEqualToString:paymentExpiringNotification] && seen) {
+        shouldHide = YES;
+    } else if ([type isEqualToString:paymentDeclinedNotification] && seen) {
+        shouldHide = YES;
+    } else if ([type isEqualToString:taxInfoRequiredNotification] && seen) {
+        shouldHide = YES;
+    } else if ([type isEqualToString:taxInfoDeclinedNotification] && seen) {
+        shouldHide = YES;
+    } else {
+        shouldHide = NO;
+    }
+    
+    return shouldHide;
+}
+
+-(BOOL)hasSeenCellAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *type = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
+    BOOL hasSeen   = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"seen"] boolValue];
+    
+    if ([type isEqualToString:newAssignmentNotification] && hasSeen) {
+        hasSeen = YES;
+    } else if ([type isEqualToString:purchasedContentNotification] && hasSeen) {
+        hasSeen = YES;
+    } else if ([type isEqualToString:paymentExpiringNotification] && hasSeen) {
+        hasSeen = YES;
+    } else if ([type isEqualToString:paymentDeclinedNotification] && hasSeen) {
+        hasSeen = YES;
+    } else if ([type isEqualToString:taxInfoRequiredNotification] && hasSeen) {
+        hasSeen = YES;
+    } else if ([type isEqualToString:taxInfoDeclinedNotification] && hasSeen) {
+        hasSeen = YES;
+    } else {
+        hasSeen = NO;
+    }
+    
+    return hasSeen;
+}
+
+-(BOOL)seen:(NSIndexPath *)indexPath {
+    
+    return [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"seen"] boolValue];
 }
 
 
@@ -478,7 +574,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [cell configureDefaultCell];
     
     cell.titleLabel.text = @"Featured Gallery";
-//    cell.bodyLabel.text = @"\n";
     cell.bodyLabel.numberOfLines = 3;
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
@@ -487,16 +582,12 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
         NSURL *galleryURL = [NSURL URLWithString:[[[responseObject objectForKey:@"posts"] objectAtIndex:1] objectForKey:@"image"]];
         [cell.image hnk_setImageFromURL:galleryURL];
-        self.loadedNotificationCount++;
     }];
 }
 
 
 -(void)configureStoryCell:(FRSDefaultNotificationTableViewCell *)cell storyID:(NSString *)storyID {
     [cell configureDefaultCell];
-    
-//    cell.titleLabel.text = @"\n";
-//    cell.bodyLabel.text = @"\n";
     
     [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
         
@@ -509,7 +600,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
             NSURL *avatarURL = [NSURL URLWithString:[[[responseObject objectForKey:@"thumbnails"] objectAtIndex:0] objectForKey:@"image"]];
             [cell.image hnk_setImageFromURL:avatarURL];
         }
-        self.loadedNotificationCount++;
     }];
 }
 
@@ -550,8 +640,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.count = userIDs.count;
     cell.followButton.alpha = 1;
-//    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
-    
 }
 
 -(void)configureLikeCell:(FRSDefaultNotificationTableViewCell *)cell userIDs:(NSArray *)userIDs galleryID:(NSString *)galleryID {
@@ -575,7 +663,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configureUserAttributes:(FRSDefaultNotificationTableViewCell *)cell userID:(NSString *)userID {
     
-//    cell.titleLabel.text = @"\n";
     cell.annotationView.alpha = 1;
     cell.annotationLabel.alpha = 1;
 
@@ -600,7 +687,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
             cell.followButton.tintColor = [UIColor blackColor];
         }
 
-        self.loadedNotificationCount++;
 
         [cell updateLabelsForCount];
     }];
@@ -613,7 +699,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = @"Your photo was purchased!";
     cell.bodyLabel.numberOfLines = 3;
-//    cell.bodyLabel.text = @"\n\n";
 
     [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
         
@@ -627,21 +712,13 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
             cell.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! Tap to add a card and we’ll send you %@!", outletName, price];
         }
         
-        
-        
         [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
-            
             if([responseObject objectForKey:@"image"] != [NSNull null]){
-                
                 NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
                 [cell.image hnk_setImageFromURL:avatarURL];
             }
-            
-            self.loadedNotificationCount++;
-            
         }];
     }];
-
 }
 
 -(void)configurePaymentExpiringCell:(FRSDefaultNotificationTableViewCell *)cell {
@@ -654,8 +731,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = [NSString stringWithFormat: @"You have %@ expiring soon", total];
     cell.bodyLabel.text = @"Add a payment method to get paid";
-    
-    self.loadedNotificationCount++;
 }
 
 -(void)configurePaymentSentCell:(FRSDefaultNotificationTableViewCell *)cell {
@@ -665,8 +740,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [cell configureDefaultCell];
     
     cell.titleLabel.text = @"(null) sent to (null).";
-    
-    self.loadedNotificationCount++;
 }
 
 -(void)configurePaymentDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell {
@@ -677,8 +750,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = @"Our payment to (null) was declined";
     cell.bodyLabel.text = @"Please reenter your payment information";
-    
-    self.loadedNotificationCount++;
 }
 
 -(void)configureTaxInfoRequiredCell:(FRSDefaultNotificationTableViewCell *)cell {
@@ -690,8 +761,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = @"Tax information needed";
     cell.bodyLabel.text = @"You’ve made almost $2,000 on Fresco! Please add your tax info soon to continue receiving payments.";
-    
-    self.loadedNotificationCount++;
 }
 
 -(void)configureTaxInfoProcessedCell:(FRSDefaultNotificationTableViewCell *)cell processed:(BOOL)processed{
@@ -704,8 +773,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     } else {
         [self configureTaxInfoDeclinedCell:cell];
     }
-    
-    self.loadedNotificationCount++;
 }
 
 -(void)configureTaxInfoDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell {
@@ -716,8 +783,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = @"Your tax information was declined";
     cell.bodyLabel.text = @"Please reenter your tax information";
-    
-    self.loadedNotificationCount++;
 }
 
 
@@ -727,17 +792,11 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [self.navigationController popViewControllerAnimated:NO];
 }
 
--(CGFloat)calculateHeightForConfiguredSizingCell:(UITableViewCell *)sizingCell {
-    [sizingCell layoutIfNeeded];
-    
-    CGSize size = [sizingCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-    return size.height;
-}
-
 -(void)returnToProfile {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:NO];
 }
+
 
 #pragma mark - FRSAlertView Delegate
 

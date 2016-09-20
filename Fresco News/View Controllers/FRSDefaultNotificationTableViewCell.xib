@@ -100,7 +100,6 @@
                     <constraint firstItem="6rk-aZ-RSA" firstAttribute="top" secondItem="MrT-1n-09K" secondAttribute="bottom" id="9NA-1I-8Rz"/>
                     <constraint firstAttribute="trailingMargin" secondItem="J1x-3Q-zNg" secondAttribute="trailing" constant="16" id="9Um-Wa-n3g"/>
                     <constraint firstItem="MrT-1n-09K" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="-8" id="ENi-Lv-5aM"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="J1x-3Q-zNg" secondAttribute="bottom" constant="1" id="IcT-ZI-E27"/>
                     <constraint firstItem="qHy-RB-rdD" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="24" id="NZR-q3-o1h"/>
                     <constraint firstItem="NU1-pp-tGP" firstAttribute="top" secondItem="cK0-vG-kkY" secondAttribute="topMargin" constant="4" id="QiP-yw-klP"/>
                     <constraint firstItem="J1x-3Q-zNg" firstAttribute="top" secondItem="zLd-w2-8NS" secondAttribute="bottom" constant="1" id="RSx-xe-OUg"/>
@@ -112,11 +111,6 @@
                     <constraint firstAttribute="trailingMargin" secondItem="zLd-w2-8NS" secondAttribute="trailing" constant="32" id="n9O-4t-Jo8"/>
                     <constraint firstItem="6rk-aZ-RSA" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="-8" id="zdQ-1f-Tcx"/>
                 </constraints>
-                <variation key="default">
-                    <mask key="constraints">
-                        <exclude reference="IcT-ZI-E27"/>
-                    </mask>
-                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="annotationLabel" destination="2UI-JN-8if" id="J85-lS-I37"/>
