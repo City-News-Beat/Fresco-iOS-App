@@ -15,6 +15,7 @@
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
 #import <Haneke/Haneke.h>
+#import "FRSAlertView.h"
 
 @interface FRSSetupProfileViewController () <UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate>
 
@@ -128,13 +129,25 @@
 -(void)addUserProfile {
     
     if (self.nameTF.text == nil) {
+        
         return;
     }
 
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:[self updateDigest] completion:^(id responseObject, NSError *error) {
         
+        if (error.code == -1009) {
+            NSLog(@"Unable to connect.");
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                [alert show];
+            return;
+        }
+        
         if (error) {
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [alert show];
+            
             // show modal
             if (error.code/100 == 4) {
                 // we fucked up
