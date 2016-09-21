@@ -286,7 +286,7 @@
     
     [self popViewController];
     
-    [self.tabBarController setSelectedIndex:0];
+    [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
     [FRSTracker track:@"Logouts"];
 }
 
