@@ -13,6 +13,7 @@
 #import "FRSAppDelegate.h"
 #import "FRSOnboardingViewController.h"
 #import "FRSTracker.h"
+#import "FRSTabBarController.h"
 
 @implementation FRSAPIClient
 
@@ -1253,8 +1254,7 @@
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
         
         id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
-        UITabBarController *tabBar = [appDelegate tabBar];
-        
+        FRSTabBarController *tabBar = (FRSTabBarController *) [appDelegate tabBar];
         UINavigationController *navigationController = tabBar.navigationController;
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
         [navigationController pushViewController:onboardVC animated:NO];

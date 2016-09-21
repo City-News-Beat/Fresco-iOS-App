@@ -2933,7 +2933,7 @@
 					"$(ProjectDir)/**",
 				);
 				INFOPLIST_FILE = "Fresco News/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2975,7 +2975,7 @@
 					"$(ProjectDir)/**",
 				);
 				INFOPLIST_FILE = "Fresco News/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3102,7 +3102,7 @@
 					"$(ProjectDir)/**",
 				);
 				INFOPLIST_FILE = "Fresco News/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco.dev;
 				PRODUCT_NAME = VPN;

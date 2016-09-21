@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -12,27 +12,25 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="103"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ve8-Rj-XBt" id="Mf5-vc-qrp">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="102.5"/>
+                <frame key="frameInset" width="320" height="102"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="test" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pi9-eJ-jqS">
-                        <rect key="frame" x="16" y="8" width="296" height="86.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pi9-eJ-jqS">
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" white="0.0" alpha="0.87" colorSpace="calibratedWhite"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uaI-Dl-sC2">
-                        <rect key="frame" x="0.0" y="102.5" width="320" height="1"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.12" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="VMQ-2f-4Ve"/>
                         </constraints>
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="pi9-eJ-jqS" firstAttribute="top" secondItem="Mf5-vc-qrp" secondAttribute="topMargin" id="2Xl-CI-2qF"/>
+                    <constraint firstItem="pi9-eJ-jqS" firstAttribute="top" secondItem="Mf5-vc-qrp" secondAttribute="topMargin" constant="11" id="2Xl-CI-2qF"/>
                     <constraint firstItem="pi9-eJ-jqS" firstAttribute="leading" secondItem="Mf5-vc-qrp" secondAttribute="leadingMargin" constant="8" id="AV4-FH-I9U"/>
-                    <constraint firstItem="pi9-eJ-jqS" firstAttribute="bottom" secondItem="Mf5-vc-qrp" secondAttribute="bottomMargin" id="s3B-bp-PgW"/>
+                    <constraint firstItem="pi9-eJ-jqS" firstAttribute="bottom" secondItem="Mf5-vc-qrp" secondAttribute="bottomMargin" constant="-11" id="s3B-bp-PgW"/>
                     <constraint firstAttribute="trailingMargin" secondItem="uaI-Dl-sC2" secondAttribute="trailing" constant="-8" id="sEE-Sc-k3H"/>
                     <constraint firstAttribute="bottomMargin" secondItem="uaI-Dl-sC2" secondAttribute="bottom" constant="-9" id="sjg-cp-2H9"/>
                     <constraint firstItem="uaI-Dl-sC2" firstAttribute="leading" secondItem="Mf5-vc-qrp" secondAttribute="leadingMargin" constant="-8" id="uAQ-Kw-eRw"/>
