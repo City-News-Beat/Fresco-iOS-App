@@ -258,6 +258,37 @@
 
 }
 
+#pragma mark - Logout
+
+-(void)logout {
+    
+    [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
+    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+    
+    [SSKeychain deletePasswordForService:serviceName account:clientAuthorization];
+    
+    [NSUserDefaults resetStandardUserDefaults];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+    
+    NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+    for (NSString *key in [defaultsDictionary allKeys]) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self popViewController];
+    
+    [self.tabBarController setSelectedIndex:0];
+    [FRSTracker track:@"Logouts"];
+}
 
 
 

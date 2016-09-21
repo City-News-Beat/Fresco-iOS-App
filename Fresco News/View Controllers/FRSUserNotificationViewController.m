@@ -131,6 +131,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)getNotifications {
     [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
         self.feed = [responseObject objectForKey:@"feed"];
+        
         [self configureTableView];
         [self registerNibs];
         [self.spinner stopLoading];
@@ -217,16 +218,16 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     assignmentCell.delegate = self;
     
     FRSTextNotificationTableViewCell *textCell = [tableView dequeueReusableCellWithIdentifier:TEXT_ID];
+    FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+
 
     NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
-    NSLog(@"%@", [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"]);
 
     /* NEWS */
     if ([currentKey isEqualToString:photoOfDayNotification]) {
         NSLog(@"PHOTOS OF THE DAY");
     } else if ([currentKey isEqualToString:todayInNewsNotification]) {
         NSLog(@"TODAY IN NEWS");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureTodayInNews:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         
         if ([self seen:indexPath]) {
@@ -236,46 +237,61 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     } else if ([currentKey isEqualToString:userNewsGalleryNotification]) {
         NSLog(@"USER NEWS GALLERY");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
-        [self configureGalleryCell:defaultCell galleryID:[self.payload objectForKey:userNewsGalleryNotification]];
+        [self configureGalleryCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
         
     } else if ([currentKey isEqualToString:userNewsStoryNotification]) {
         NSLog(@"USER NEWS STORY");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureStoryCell:defaultCell storyID:[self.payload objectForKey:userNewsStoryNotification]];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
         
     } else if ([currentKey isEqualToString:userNewsCustomNotification]) {
         NSLog(@"USER NEWS CUSTOM");
-        [self configureTextCell:textCell text:[self.payload objectForKey:userNewsCustomNotification]];
+        [self configureTextCell:textCell dictionary:[self.feed objectAtIndex:indexPath.row]];
+        if ([self seen:indexPath]) {
+            textCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return textCell;
         
     /* SOCIAL */
     } else if ([currentKey isEqualToString:followedNotification]) {
         NSLog(@"FOLLOWED");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureFollowCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         defaultCell.delegate = self;
         defaultCell.indexPath = indexPath;
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
         
     } else if ([currentKey isEqualToString:likedNotification]) {
         NSLog(@"LIKED");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureLikeCell:defaultCell userIDs:[[self.payload objectForKey:likedNotification] objectForKey:@"user_ids"] galleryID:[[self.payload objectForKey:likedNotification] objectForKey:@"gallery_id"]];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
 
     } else if ([currentKey isEqualToString:repostedNotification]) {
         NSLog(@"REPOSTED");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureRepostCell:defaultCell userIDs:[[self.payload objectForKey:repostedNotification] objectForKey:@"user_ids"] galleryID:[[self.payload objectForKey:repostedNotification] objectForKey:@"gallery_id"]];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
 
     } else if ([currentKey isEqualToString:commentedNotification]) {
         NSLog(@"COMMENTED");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureCommentCell:defaultCell userIDs:[[self.payload objectForKey:commentedNotification] objectForKey:@"user_ids"] galleryID:[[self.payload objectForKey:commentedNotification] objectForKey:@"gallery_id"]];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
 
     }/* else if ([currentKey isEqualToString:mentionCommentNotification]) {
@@ -291,58 +307,75 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         if ([self seen:indexPath]) {
             assignmentCell.backgroundColor = [UIColor frescoBackgroundColorDark];
         }
+
         return assignmentCell;
     }
     
     /* PAYMENT */
     else if ([currentKey isEqualToString:purchasedContentNotification]) {
         NSLog(@"PURCHASED CONTENT");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configurePurchasedContentCell:defaultCell outletID:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"outlet_id"] postID:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"post_id"] hasPaymentInfo:[[self.payload objectForKey:purchasedContentNotification] objectForKey:@"has_card_"]];
         return defaultCell;
         
     } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
         NSLog(@"PAYMENT EXPIRING");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configurePaymentExpiringCell:defaultCell];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
         
     } else if ([currentKey isEqualToString:paymentSentNotification]) {
         NSLog(@"PAYMENT SENT");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configurePaymentSentCell:defaultCell];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
         
     } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
         NSLog(@"PAYMENT DECLINED");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configurePaymentDeclinedCell:defaultCell];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
         
     } else if ([currentKey isEqualToString:taxInfoRequiredNotification]) {
         NSLog(@"TAX INFO REQUIRED");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureTaxInfoRequiredCell:defaultCell];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
         
     } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
         NSLog(@"TAX INFO PROCESSING");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureTaxInfoProcessedCell:defaultCell processed:[self.payload objectForKey:taxInfoProcessedNotification]];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
         
     } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
         NSLog(@"TAX INFO DECLINED");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         [self configureTaxInfoDeclinedCell:defaultCell];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
         
     } else {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        if ([self seen:indexPath]) {
+            defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+        }
         return defaultCell;
     }
 
-    FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+    
+    if ([self seen:indexPath]) {
+        defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
+    }
     return defaultCell;
 }
 
@@ -520,19 +553,20 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 
--(void)configureGalleryCell:(FRSDefaultNotificationTableViewCell *)cell galleryID:(NSString *)galleryID {
+-(void)configureGalleryCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell configureDefaultCell];
     
     cell.titleLabel.text = @"Featured Gallery";
-    cell.bodyLabel.numberOfLines = 3;
+    cell.bodyLabel.text = dictionary [@"body"];
+
     
-    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
-       
-        cell.bodyLabel.text = [responseObject objectForKey:@"caption"];
-        
-        NSURL *galleryURL = [NSURL URLWithString:[[[responseObject objectForKey:@"posts"] objectAtIndex:1] objectForKey:@"image"]];
-        [cell.image hnk_setImageFromURL:galleryURL];
-    }];
+//    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
+//       
+//        cell.bodyLabel.text = [responseObject objectForKey:@"caption"];
+//        
+//        NSURL *galleryURL = [NSURL URLWithString:[[[responseObject objectForKey:@"posts"] objectAtIndex:1] objectForKey:@"image"]];
+//        [cell.image hnk_setImageFromURL:galleryURL];
+//    }];
 }
 
 
@@ -553,9 +587,11 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     }];
 }
 
--(void)configureTextCell:(FRSTextNotificationTableViewCell *)textCell text:(NSString *)text {
+-(void)configureTextCell:(FRSTextNotificationTableViewCell *)textCell dictionary:(NSDictionary *)dictionary {
+    
     textCell.label.numberOfLines = 0;
-    textCell.label.text = text;
+    textCell.textLabel.text = [dictionary objectForKey:@"body"];
+
 }
 
 
