@@ -11,11 +11,12 @@
 @protocol FRSAlertViewDelegate <NSObject>
 
 -(void)didPressButtonAtIndex:(NSInteger)index;
+-(void)logoutAlertAction;
 
 @end
 
 
-@interface FRSAlertView : UIView
+@interface FRSAlertView : UIView <UIScrollViewDelegate>
 
 @property (weak, nonatomic) NSObject <FRSAlertViewDelegate> *delegate;
 

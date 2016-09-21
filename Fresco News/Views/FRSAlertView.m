@@ -52,11 +52,12 @@
 
 @property (strong, nonatomic) UIButton *expandTOSButton;
 @property (strong, nonatomic) UITextView *TOSTextView;
+@property (strong, nonatomic) UIView *topLine;
 
 @end
 
 
-@implementation FRSAlertView
+@implementation FRSAlertView 
 
 -(instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate {
     self = [super init];
@@ -883,7 +884,12 @@
     
     if (self) {
         
+        if (![FRSAPIClient sharedClient].authenticatedUser) {
+            return nil;
+        }
+        
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
+        self.alpha = 0;
         
         [self configureDarkOverlay];
         
@@ -898,6 +904,21 @@
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
         
+        [[FRSAPIClient sharedClient] getTermsWithCompletion:^(id responseObject, NSError *error) {
+            
+            if (error || !responseObject) {
+                return;
+            }
+            
+            NSString *TOS = responseObject[@"terms"];
+            TOS = [TOS stringByReplacingOccurrencesOfString:@"�" withString:@"\""];
+            
+            self.TOSTextView.text = TOS;
+            
+            [self addShadowAndClip];
+            [self animateIn];
+        }];
+        
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS"];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:2];
@@ -909,7 +930,8 @@
         self.TOSTextView.attributedText = attributedString;
         self.TOSTextView.textAlignment = NSTextAlignmentLeft;
         self.TOSTextView.backgroundColor = [UIColor clearColor];
-        self.TOSTextView.userInteractionEnabled = NO;
+        self.TOSTextView.editable = NO;
+        self.TOSTextView.delegate = self;
         [self addSubview:self.TOSTextView];
         
         self.expandTOSButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -923,6 +945,11 @@
         self.actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height -43.5, ALERT_WIDTH, 0.5)];
         self.actionLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:self.actionLine];
+        
+        self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 44, self.frame.size.width, 0.5)];
+        self.topLine.alpha = 0;
+        self.topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+        [self addSubview:self.topLine];
         
         /* Left Action */
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -941,21 +968,21 @@
         [self.cancelButton setTitle:@"ACCEPT" forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self.cancelButton sizeToFit];
-        [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, 49, 44)];
+        [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 16, self.cancelButton.frame.origin.y, 49, 44)];
         [self addSubview:self.cancelButton];
         
         self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 408/2, ALERT_WIDTH, 408);
         self.actionLine.frame = CGRectMake(0, self.frame.size.height -43.5, ALERT_WIDTH, 0.5);
-
-        [self addShadowAndClip];
-        [self animateIn];
+        
+//        [self addShadowAndClip];
+        //[self animateIn];
     }
     return self;
 }
 
 -(void)expandTOS {
     
-    
+//    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
     if ((IS_STANDARD_IPHONE_6_PLUS) || (IS_STANDARD_IPHONE_6)) {
         self.titleLabel.text = @"UPDATED TERMS OF SERVICE";
     }
@@ -969,26 +996,42 @@
         self.titleLabel.text = @"UPDATED TERMS";
     }
     
-    
-    
     self.expandTOSButton.frame = CGRectMake(self.frame.size.width -24 -12, 10, 24, 24);
     self.titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, 44);
-    self.TOSTextView.frame = CGRectMake((self.frame.size.width - (self.frame.size.width - 32))/2, 44, (self.frame.size.width - 32), 320);
+    self.TOSTextView.frame = CGRectMake((self.frame.size.width - (self.frame.size.width - 32))/2, 44, (self.frame.size.width - 32), self.frame.size.height -88);
     self.actionButton.frame = CGRectMake(14, self.frame.size.height -44, 54, 44);
     self.cancelButton.frame = CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width-16, self.actionButton.frame.origin.y, self.cancelButton.frame.size.width, 44);
     self.actionLine.frame = CGRectMake(0, self.frame.size.height -43.5, self.frame.size.width, 0.5);
-
+    self.topLine.frame = CGRectMake(0, 44, self.frame.size.width, 0.5);
+//    } completion:nil];
 
 }
 
 -(void)acceptTapped {
     
-    [self dismiss];
+    [[FRSAPIClient sharedClient] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
+        if (!error) {
+            [self dismiss];
+        }
+        else {
+            // show error dialog or some shit idc
+        }
+    }];
 }
 
 -(void)logoutTapped {
-    
-    
+    [self.delegate logoutAlertAction];
+    [self dismiss];
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView == self.TOSTextView) {
+        if (scrollView.contentOffset.y >= 5) {
+            self.topLine.alpha = 1;
+        } else {
+            self.topLine.alpha = 0;
+        }
+    }
 }
 
 

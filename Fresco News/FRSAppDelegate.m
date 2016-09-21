@@ -25,6 +25,7 @@
 #import "SSKeychain.h"
 #import "FRSUser.h"
 #import "FRSNavigationBar.h"
+#import "FRSHomeViewController.h"
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -153,6 +154,13 @@
         }
         
         [[self managedObjectContext] save:Nil];
+        
+        if ([responseObject[@"terms"][@"valid"] boolValue] == FALSE) {
+            UITabBarController *tabBar = (UITabBarController *)self.tabBarController;
+            UINavigationController *nav = [tabBar.viewControllers firstObject];
+            FRSHomeViewController *homeViewController = [nav.viewControllers firstObject];
+            [homeViewController presentTOS];
+        }
     }];
 }
 

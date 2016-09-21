@@ -84,12 +84,16 @@
     
     [self displayPreviousTab];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        FRSAlertView *alert = [[FRSAlertView alloc] initTOS];
-        [alert show];
-    });
+}
 
-    
+-(void)presentTOS {
+    FRSAlertView *alert = [[FRSAlertView alloc] initTOS];
+    alert.delegate = self;
+    [alert show];
+}
+
+-(void)logoutAlertAction {
+    [self logout];
 }
 
 -(BOOL)shouldHaveTextLimit {
