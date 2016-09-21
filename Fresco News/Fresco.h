@@ -50,7 +50,7 @@ static NSString * const serviceName = @"frescoNewsService3";
 static NSString * const FRSUploadNotification = @"FRSUploadUpdateNotification";
 
 // base URLS
-static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
+static NSString * const baseURL = @"https://merge.dev.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 
@@ -181,6 +181,10 @@ static NSString * const highlightCellIdentifier = @"HighlightCell";
 static NSString * const storyCellIdentifier = @"StoryCell";
 static NSString * const settingsCellIdentifier = @"SettingsCell";
 static NSString * const galleryCellIdentifier = @"gallery-cell";
+
+// TOS
+static NSString * const getTermsEndpoint = @"terms";
+static NSString * const acceptTermsEndpoint = @"terms/accept";
 
 #define USER_NAME @"username"
 #define PASS_WORD @"password"

@@ -136,4 +136,8 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(NSString *)md5:(PHAsset *)asset;
 -(NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
 -(void)getAssignmentsWithinRadius:(float)radius ofLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
+
+// terms
+-(void)getTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 @end
