@@ -18,6 +18,7 @@
 #import "FRSGalleryCell.h"
 #import "FRSTrimTool.h"
 #import "FRSAwkwardView.h"
+#import "FRSAlertView.h"
 
 /* Core Data */
 #import "MagicalRecord.h"
@@ -83,8 +84,12 @@
     
     [self displayPreviousTab];
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        FRSAlertView *alert = [[FRSAlertView alloc] initTOS];
+        [alert show];
+    });
+
     
-//    [self segueToGallery:@"arYd0y5Q0Dp5"];
 }
 
 -(BOOL)shouldHaveTextLimit {

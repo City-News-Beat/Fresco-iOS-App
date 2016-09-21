@@ -29,6 +29,7 @@
 -(instancetype)initSignUpAlert;
 -(instancetype)initNoConnectionAlert;
 -(instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton;
+-(instancetype)initTOS;
 
 -(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude;
 

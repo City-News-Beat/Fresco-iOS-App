@@ -31,6 +31,8 @@
 @property (strong, nonatomic) UIButton *cancelButton;
 @property (strong, nonatomic) UIButton *actionButton;
 
+@property (strong, nonatomic) UIView *actionLine;
+
 @property CGFloat height;
 
 
@@ -48,6 +50,8 @@
 @property (strong, nonatomic) UIButton *permissionsDoneButton;
 @property (strong, nonatomic) UIButton *permissionsLaterButton;
 
+@property (strong, nonatomic) UIButton *expandTOSButton;
+@property (strong, nonatomic) UITextView *TOSTextView;
 
 @end
 
@@ -872,6 +876,136 @@
     }
     return self;
 }
+
+
+-(instancetype)initTOS {
+    self = [super init];
+    
+    if (self) {
+        
+        self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
+        
+        [self configureDarkOverlay];
+        
+        /* Alert Box */
+        self.backgroundColor = [UIColor frescoBackgroundColorLight];
+        
+        /* Title Label */
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
+        [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
+        self.titleLabel.text = @"UPDATED TERMS";
+        self.titleLabel.alpha = .87;
+        [self addSubview:self.titleLabel];
+        
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS"];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setLineSpacing:2];
+        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [@"TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS" length])];
+        
+        self.TOSTextView = [[UITextView alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 320)];
+        self.TOSTextView.textColor = [UIColor frescoLightTextColor];
+        self.TOSTextView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        self.TOSTextView.attributedText = attributedString;
+        self.TOSTextView.textAlignment = NSTextAlignmentLeft;
+        self.TOSTextView.backgroundColor = [UIColor clearColor];
+        self.TOSTextView.userInteractionEnabled = NO;
+        [self addSubview:self.TOSTextView];
+        
+        self.expandTOSButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.expandTOSButton.tintColor = [UIColor blackColor];
+        self.expandTOSButton.frame = CGRectMake(self.frame.size.width -24 -12, 10, 24, 24);
+        [self.expandTOSButton setImage:[UIImage imageNamed:@"arrow-expand"] forState:UIControlStateNormal];
+        [self.expandTOSButton addTarget:self action:@selector(expandTOS) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.expandTOSButton];
+        
+        /* Action Shadow */
+        self.actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height -43.5, ALERT_WIDTH, 0.5)];
+        self.actionLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+        [self addSubview:self.actionLine];
+        
+        /* Left Action */
+        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.actionButton addTarget:self action:@selector(logoutTapped) forControlEvents:UIControlEventTouchUpInside];
+        self.actionButton.frame = CGRectMake(14, self.TOSTextView.frame.origin.y + self.TOSTextView.frame.size.height, 54, 44);
+        [self.actionButton setTitleColor:[UIColor frescoRedHeartColor] forState:UIControlStateNormal];
+        [self.actionButton setTitle:@"LOG OUT" forState:UIControlStateNormal];
+        [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        [self addSubview:self.actionButton];
+        
+        /* Right Action */
+        self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 0, 44);
+        [self.cancelButton addTarget:self action:@selector(acceptTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        [self.cancelButton setTitle:@"ACCEPT" forState:UIControlStateNormal];
+        [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        [self.cancelButton sizeToFit];
+        [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, 49, 44)];
+        [self addSubview:self.cancelButton];
+        
+        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 408/2, ALERT_WIDTH, 408);
+        self.actionLine.frame = CGRectMake(0, self.frame.size.height -43.5, ALERT_WIDTH, 0.5);
+
+        [self addShadowAndClip];
+        [self animateIn];
+    }
+    return self;
+}
+
+-(void)expandTOS {
+    
+    
+    if ((IS_STANDARD_IPHONE_6_PLUS) || (IS_STANDARD_IPHONE_6)) {
+        self.titleLabel.text = @"UPDATED TERMS OF SERVICE";
+    }
+    
+    if (self.frame.size.width == ALERT_WIDTH) {
+        self.frame = CGRectMake(16, 20, [UIScreen mainScreen].bounds.size.width -32, [UIScreen mainScreen].bounds.size.height -40);
+        [self.expandTOSButton setImage:[UIImage imageNamed:@"arrow-compress"] forState:UIControlStateNormal];
+    } else {
+        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 408/2, ALERT_WIDTH, 408);
+        [self.expandTOSButton setImage:[UIImage imageNamed:@"arrow-expand"] forState:UIControlStateNormal];
+        self.titleLabel.text = @"UPDATED TERMS";
+    }
+    
+    
+    
+    self.expandTOSButton.frame = CGRectMake(self.frame.size.width -24 -12, 10, 24, 24);
+    self.titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, 44);
+    self.TOSTextView.frame = CGRectMake((self.frame.size.width - (self.frame.size.width - 32))/2, 44, (self.frame.size.width - 32), 320);
+    self.actionButton.frame = CGRectMake(14, self.frame.size.height -44, 54, 44);
+    self.cancelButton.frame = CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width-16, self.actionButton.frame.origin.y, self.cancelButton.frame.size.width, 44);
+    self.actionLine.frame = CGRectMake(0, self.frame.size.height -43.5, self.frame.size.width, 0.5);
+
+
+}
+
+-(void)acceptTapped {
+    
+    [self dismiss];
+}
+
+-(void)logoutTapped {
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @end
