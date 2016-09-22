@@ -58,6 +58,10 @@
         user.profileImage = properties[@"avatar"];
     }
     
+    if (properties[@"due_by"] && ![properties[@"due_by"] isEqual:[NSNull null]]) {
+        user.dueBy = properties[@"due_by"];
+    }
+    
     return user;
 }
 
