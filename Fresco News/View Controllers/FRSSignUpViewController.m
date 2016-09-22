@@ -58,6 +58,8 @@
 @property BOOL locationEnabled;
 @property (nonatomic) CGFloat miles;
 @property (strong, nonatomic) UIView *TOSContainerView;
+@property (strong, nonatomic) UIButton *TOSCheckBoxButton;
+@property BOOL TOSAccepted;
 
 @end
 
@@ -355,12 +357,67 @@
 
 -(void)configureTOS {
     
-    self.TOSContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentsCard.frame.origin.y + self.assignmentsCard.frame.size.height + 12, self.view.frame.size.width, 44)];
-    self.TOSContainerView.backgroundColor = [UIColor redColor];
-    
     self.y += 44+12; // cc: dan
-    
+    self.TOSContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentsCard.frame.origin.y + self.assignmentsCard.frame.size.height + 12, self.view.frame.size.width, 44)];
     [self.scrollView addSubview:self.TOSContainerView];
+
+    self.TOSCheckBoxButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+    self.TOSCheckBoxButton.backgroundColor = [UIColor redColor];
+    self.TOSCheckBoxButton.frame = CGRectMake(16, 10, 24, 24);
+    [self.TOSCheckBoxButton addTarget:self action:@selector(acceptTOS) forControlEvents:UIControlEventTouchUpInside];
+    [self.TOSContainerView addSubview:self.TOSCheckBoxButton];
+    
+    UILabel *agreeLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 11, 215, 20)];
+    agreeLabel.textColor = [UIColor frescoDarkTextColor];
+    agreeLabel.text = @"I agree to the";
+    agreeLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    [self.TOSContainerView addSubview:agreeLabel];
+    
+    UIButton *safariButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [safariButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+    safariButton.frame = CGRectMake(147, 11, 120, 20);
+    safariButton.tintColor = [UIColor frescoDarkTextColor];
+    [safariButton setTitle:@"terms of service" forState:UIControlStateNormal];
+    safariButton.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];
+    [safariButton addTarget:self action:@selector(openSafari) forControlEvents:UIControlEventTouchUpInside];
+    [self.TOSContainerView addSubview:safariButton];
+}
+
+-(void)openSafari {
+    NSURL *termsURL = [NSURL URLWithString:@"https://fresconews.com/terms"];
+    [[UIApplication sharedApplication] openURL:termsURL];
+}
+
+-(void)acceptTOS {
+    
+
+    if (!self.TOSAccepted) {
+        self.TOSAccepted = YES;
+        [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        self.TOSCheckBoxButton.backgroundColor = [UIColor greenColor];
+    } else {
+        self.TOSAccepted = NO;
+        [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        self.TOSCheckBoxButton.backgroundColor = [UIColor redColor];
+    }
+    
+    
+
+        //NEED BEARER TOKEN TO ACCEPT, DO THIS WHEN IT'S CREATED
+//    [[FRSAPIClient sharedClient] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
+//        if (error) {
+//            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+//            [alert show];
+//            
+//            return;
+//        } else {
+//            
+//            //change image on button, and allow account creation (bool)
+//            [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+//            self.TOSCheckBoxButton.backgroundColor = [UIColor greenColor];
+//        }
+//    }];
 }
 
 -(void)configureMapView {
@@ -960,7 +1017,6 @@
         
         if (self.emailError) {
             
-            
             self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height +44);
             
             [UIView animateWithDuration:0.3 delay:0.15 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -1149,14 +1205,7 @@
                 return;
             }
         }];
-        
-        
-        
-        
-        
-        
-        
-        
+
         return;
     }
     
