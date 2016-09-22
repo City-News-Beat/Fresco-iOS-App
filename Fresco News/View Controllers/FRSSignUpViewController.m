@@ -391,6 +391,7 @@
 
 -(void)acceptTOS {
     
+    
 
     if (!self.TOSAccepted) {
         self.TOSAccepted = YES;
@@ -402,7 +403,8 @@
         self.TOSCheckBoxButton.backgroundColor = [UIColor redColor];
     }
     
-    
+    [self checkCreateAccountButtonState];
+
 
         //NEED BEARER TOKEN TO ACCEPT, DO THIS WHEN IT'S CREATED
 //    [[FRSAPIClient sharedClient] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
@@ -789,7 +791,7 @@
     
     if (([self.usernameTF.text length] > 0) && ([self.emailTF.text length] > 0) && ([self.passwordTF.text length] >0)) {
         
-        if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text] && (!self.emailTaken) && (!self.usernameTaken)) {
+        if ([self isValidUsername:[self.usernameTF.text substringFromIndex:1]] && [self isValidEmail:self.emailTF.text] && [self isValidPassword:self.passwordTF.text] && (!self.emailTaken) && (!self.usernameTaken) && (self.TOSAccepted)) {
             controlState = UIControlStateHighlighted;
         } else {
             controlState = UIControlStateNormal;
