@@ -313,7 +313,7 @@
 }
 
 
--(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle {
+-(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle rightAlignedTitleColor:(UIColor *)color {
     
     self.defaultTitleLabel  = [[UILabel alloc] initWithFrame:CGRectMake(self.leftPadding, 0, [UIScreen mainScreen].bounds.size.width - (self.rightPadding + self.leftPadding) - 10, self.frame.size.height)];
     self.defaultTitleLabel.text = title;
@@ -325,7 +325,7 @@
     self.rightAlignedDefaultTitleLabel.textAlignment = NSTextAlignmentRight;
     self.rightAlignedDefaultTitleLabel.text = secondTitle;
     self.rightAlignedDefaultTitleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    self.rightAlignedDefaultTitleLabel.textColor = [UIColor frescoMediumTextColor];
+    self.rightAlignedDefaultTitleLabel.textColor = color;
     [self addSubview:self.rightAlignedDefaultTitleLabel];
     
     if (yes){

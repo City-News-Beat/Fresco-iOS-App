@@ -164,9 +164,9 @@
                     //Make custom editible cell
                     
                     if ([self.businessType  isEqual: @"Individual/Sole Proprietorship"]) {
-                        [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:@"Individual"];
+                        [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:@"Individual" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     } else {
-                        [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:self.businessType];
+                        [cell configureDefaultCellWithTitle:@"Business type" andCarret:YES andRightAlignedTitle:self.businessType rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
 
                     break;

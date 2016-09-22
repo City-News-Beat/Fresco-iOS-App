@@ -251,10 +251,10 @@
                     [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSAPIClient sharedClient] authenticatedUser].username]];
                     break;
                 case 1:
-                    [cell configureDefaultCellWithTitle:[[FRSAPIClient sharedClient] authenticatedUser].email andCarret:YES andRightAlignedTitle:@""];
+                    [cell configureDefaultCellWithTitle:[[FRSAPIClient sharedClient] authenticatedUser].email andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     break;
                 case 2:
-                    [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES andRightAlignedTitle:@""];
+                    [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     break;
                 default:
                     break;
@@ -287,23 +287,27 @@
                     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
                         NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
                         CGFloat milesFloat = [miles floatValue];
-                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%.0f mi", milesFloat]];
+                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%.0f mi", milesFloat] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     } else {
-                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@""];
+                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
                 break;
                 case 2: {
                     NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
                     
-                    
-                    [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @""];
+                    if ([card isEqualToString:@""]) {
+                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:@"hey friend" rightAlignedTitleColor:[UIColor frescoBlueColor]];
+                    } else {
+                        
+                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    }
                 }
                 break;
                 case 3:
-                    [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:@""];
+                    [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoBlueColor]];
                     break;
                 case 4:
-                    [cell configureDefaultCellWithTitle:@"ID info" andCarret:YES andRightAlignedTitle:@""];
+                    [cell configureDefaultCellWithTitle:@"ID info" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoBlueColor]];
                     break;
                 default:
                     break;
@@ -346,7 +350,7 @@
             [cell configureEmptyCellSpace:NO];
             break;
         case 6:
-            [cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil];
+            [cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
             //[cell configureDefaultCellWithTitle:@"Promo codes" andCarret:YES andRightAlignedTitle:@""];
             break;
             
@@ -368,10 +372,10 @@
                     [cell configureLogOut];
                     break;
                 case 1:
-                    [cell configureDefaultCellWithTitle:@"Ask us anything" andCarret:YES andRightAlignedTitle:@""];
+                    [cell configureDefaultCellWithTitle:@"Ask us anything" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     break;
                 case 2:
-                    [cell configureDefaultCellWithTitle:@"Disable my account" andCarret:YES andRightAlignedTitle:@""];
+                    [cell configureDefaultCellWithTitle:@"Disable my account" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     break;
             }
             break;

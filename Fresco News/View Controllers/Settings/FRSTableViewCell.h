@@ -19,7 +19,7 @@
 
 @property (weak, nonatomic) NSObject <FRSTableViewCellDelegate> *delegate;
 
--(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle;
+-(void)configureDefaultCellWithTitle:(NSString *)title andCarret:(BOOL)yes andRightAlignedTitle:(NSString *)secondTitle rightAlignedTitleColor:(UIColor *)color;
 
 -(void)configureCellWithUsername:(NSString *)username;
 
