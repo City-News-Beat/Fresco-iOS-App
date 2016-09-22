@@ -919,15 +919,15 @@
             [self animateIn];
         }];
         
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS"];
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        [paragraphStyle setLineSpacing:2];
-        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [@"TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS TOS" length])];
+//        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:TOS];
+//        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+//        [paragraphStyle setLineSpacing:2];
+//        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [TOS length])];
         
         self.TOSTextView = [[UITextView alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 320)];
-        self.TOSTextView.textColor = [UIColor frescoLightTextColor];
+        self.TOSTextView.textColor = [UIColor frescoMediumTextColor];
         self.TOSTextView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-        self.TOSTextView.attributedText = attributedString;
+//        self.TOSTextView.attributedText = attributedString;
         self.TOSTextView.textAlignment = NSTextAlignmentLeft;
         self.TOSTextView.backgroundColor = [UIColor clearColor];
         self.TOSTextView.editable = NO;

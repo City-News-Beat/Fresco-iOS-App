@@ -56,6 +56,7 @@
 @property (nonatomic) bool isInFollowers;
 
 @property (strong, nonatomic) UIView *sudoNavBar;
+@property (strong, nonatomic) FRSAlertView *TOSAlert;
 
 @end
 
@@ -87,13 +88,19 @@
 }
 
 -(void)presentTOS {
-    FRSAlertView *alert = [[FRSAlertView alloc] initTOS];
-    alert.delegate = self;
-    [alert show];
+    
+    if (self.TOSAlert) {
+        return;
+    }
+    
+    self.TOSAlert = [[FRSAlertView alloc] initTOS];
+    self.TOSAlert.delegate = self;
+    [self.TOSAlert show];
 }
 
 -(void)logoutAlertAction {
     [self logout];
+    self.TOSAlert = nil;
 }
 
 -(BOOL)shouldHaveTextLimit {

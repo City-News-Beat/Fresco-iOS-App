@@ -68,6 +68,7 @@
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    self.backTapButton = nil;
 }
 
 -(void)viewWillAppear:(BOOL)animated {

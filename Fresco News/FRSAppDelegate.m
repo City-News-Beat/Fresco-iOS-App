@@ -153,14 +153,15 @@
             [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
         }
         
-        [[self managedObjectContext] save:Nil];
-        
         if ([responseObject[@"terms"][@"valid"] boolValue] == FALSE) {
             UITabBarController *tabBar = (UITabBarController *)self.tabBarController;
             UINavigationController *nav = [tabBar.viewControllers firstObject];
             FRSHomeViewController *homeViewController = [nav.viewControllers firstObject];
             [homeViewController presentTOS];
         }
+        
+        [[self managedObjectContext] save:Nil];
+
     }];
 }
 

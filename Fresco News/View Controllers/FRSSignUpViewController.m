@@ -57,6 +57,7 @@
 @property (nonatomic) NSInteger height;
 @property BOOL locationEnabled;
 @property (nonatomic) CGFloat miles;
+@property (strong, nonatomic) UIView *TOSContainerView;
 
 @end
 
@@ -204,6 +205,7 @@
     [self configureNotificationSection];
     [self configureMapView];
     [self configureSliderSection];
+    [self configureTOS];
 //    [self configurePromoSection];
     [self adjustScrollViewContentSize];
     [self configureBottomBar];
@@ -349,6 +351,16 @@
     [self.assignmentsCard addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
     
     [self.assignmentsCard addSubview:[UIView lineAtPoint:CGPointMake(0, 61.5)]];
+}
+
+-(void)configureTOS {
+    
+    self.TOSContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentsCard.frame.origin.y + self.assignmentsCard.frame.size.height + 12, self.view.frame.size.width, 44)];
+    self.TOSContainerView.backgroundColor = [UIColor redColor];
+    
+    self.y += 44+12; // cc: dan
+    
+    [self.scrollView addSubview:self.TOSContainerView];
 }
 
 -(void)configureMapView {
@@ -973,6 +985,10 @@
                 self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height +self.sliderContainer.frame.size.height +44);
             } completion:nil];
             
+            [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height +self.sliderContainer.frame.size.height +44); //+promoContainer.frame.size.height, when we add promo
+            } completion:nil];
+            
         } else {
             
             //Unregister notifications
@@ -990,6 +1006,10 @@
             
             [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height +self.sliderContainer.frame.size.height);
+            } completion:nil];
+            
+            [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height +self.sliderContainer.frame.size.height); //+promoContainer.frame.size.height, when we add promo
             } completion:nil];
         }
 
@@ -1020,9 +1040,15 @@
             [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
             } completion:nil];
+            [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, 0);
+            } completion:nil];
         } else {
             [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
                 self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 44);
+            } completion:nil];
+            [UIView animateWithDuration:0.3 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, 44); //+44 when we add promo
             } completion:nil];
         }
         
