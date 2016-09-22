@@ -303,18 +303,27 @@
                     NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
                     
                     if (card == nil) {
+                        
+                       NSString *dueBy = [[FRSAPIClient sharedClient] authenticatedUser].dueBy;
+                        
                         [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:@"Add by September 14" rightAlignedTitleColor:[UIColor frescoBlueColor]];
                     } else {
                         [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
                 }
                 break;
-                case 3:
+                case 3: {
+                    
+                    NSString *dueBy = [[FRSAPIClient sharedClient] authenticatedUser].dueBy;
+                    
                     [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:@"Add by August 7" rightAlignedTitleColor:[UIColor frescoBlueColor]];
                     break;
-                case 4:
+                } case 4: {
+
+                    NSString *dueBy = [[FRSAPIClient sharedClient] authenticatedUser].dueBy;
+
                     [cell configureDefaultCellWithTitle:@"ID info" andCarret:YES andRightAlignedTitle:@"Add by September 14" rightAlignedTitleColor:[UIColor frescoBlueColor]];
-                    break;
+                } break;
                 default:
                     break;
             }

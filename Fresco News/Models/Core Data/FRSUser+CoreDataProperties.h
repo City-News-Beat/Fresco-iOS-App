@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSSet<FRSStory *> *stories;
 @property (nullable, nonatomic, retain) NSString *address;
 @property (nullable, nonatomic, retain) NSString *dueBy;
+@property (nullable, nonatomic, retain) NSString *disabledReason;
+@property (nullable, nonatomic, retain) NSArray *fieldsNeeded;
 
 @end
 

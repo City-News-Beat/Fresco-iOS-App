@@ -62,6 +62,14 @@
         user.dueBy = properties[@"due_by"];
     }
     
+    if (properties[@"fields_needed"] && ![properties[@"fields_needed"] isEqual:[NSNull null]]) {
+        user.fieldsNeeded = properties[@"fields_needed"];
+    }
+    
+    if (properties[@"disabled_reason"] && ![properties[@"disabled_reason"] isEqual:[NSNull null]]) {
+        user.disabledReason = properties[@"disabled_reason"];
+    }
+    
     return user;
 }
 
