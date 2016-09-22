@@ -293,13 +293,20 @@
                     }
                 break;
                 case 2: {
-//                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
-//                    
-//                    if ([card isEqualToString:@""]) {
+                    
+                    /* 
+                     NOTE:
+                     Days of the month should truncate on iPhone 5/s resolutions.
+                     (ex) September -> Sept
+                     */
+                    
+                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
+                    
+                    if (card == nil) {
                         [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:@"Add by September 14" rightAlignedTitleColor:[UIColor frescoBlueColor]];
-//                    } else {
-//                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
-//                    }
+                    } else {
+                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    }
                 }
                 break;
                 case 3:

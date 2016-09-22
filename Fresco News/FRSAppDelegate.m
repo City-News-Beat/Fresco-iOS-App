@@ -153,6 +153,10 @@
             [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
         }
         
+        if (responseObject[@"due_by"] != Nil && ![responseObject[@"due_by"] isEqual:[NSNull null]]) {
+            [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
+        }
+        
         if ([responseObject[@"terms"][@"valid"] boolValue] == FALSE) {
             UITabBarController *tabBar = (UITabBarController *)self.tabBarController;
             UINavigationController *nav = [tabBar.viewControllers firstObject];
