@@ -1039,6 +1039,109 @@
 
 
 
+-(instancetype)initNewStuff {
+    
+    self = [super init];
+    if (self){
+                
+        self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
+        
+        [self configureDarkOverlay];
+        
+        /* Alert Box */
+        self.backgroundColor = [UIColor frescoBackgroundColorLight];
+        
+        /* Title Label */
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
+        [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
+        self.titleLabel.text = @"NEW STUFF!";
+        self.titleLabel.alpha = .87;
+        [self addSubview:self.titleLabel];
+        
+        /* Body Label */
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 0)];
+        self.messageLabel.alpha = .54;
+        self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.messageLabel.numberOfLines = 0;
+        
+
+        self.messageLabel.text = [NSString stringWithFormat:@"We’ve added a ton of new\nfeatures for Fresco 3.0. You can now %@, %@, and %@ on galleries, %@ your friends and favorite photographers, and see more about assignments.\n\nTo start, we’ll need you to choose a username. You’ll be able to change it later on.", @"like", @"repost", @"comment", @"follow"];
+        
+        NSRange range1 = [self.messageLabel.text rangeOfString:@"like"];
+        NSRange range2 = [self.messageLabel.text rangeOfString:@"repost"];
+        NSRange range3 = [self.messageLabel.text rangeOfString:@"comment"];
+        NSRange range4 = [self.messageLabel.text rangeOfString:@"follow"];
+
+        NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:self.messageLabel.text];
+        
+        [attributedText setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]}
+                                range:range1];
+        [attributedText setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]}
+                                range:range2];
+        [attributedText setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]}
+                                range:range3];
+        [attributedText setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]}
+                                range:range4];
+        
+        
+        
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:attributedText.string];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setLineSpacing:2];
+        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [attributedText.string length])];
+        
+        
+        self.messageLabel.attributedText = attributedText;
+
+        self.messageLabel.textAlignment = NSTextAlignmentCenter;
+        [self.messageLabel sizeToFit];
+        self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
+        [self addSubview:self.messageLabel];
+        
+        /* Action Shadow */
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 336, ALERT_WIDTH, 0.5)];
+        line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+        [self addSubview:line];
+        
+        /* Left Action */
+        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.actionButton addTarget:self action:@selector(logoutTapped) forControlEvents:UIControlEventTouchUpInside];
+        self.actionButton.frame = CGRectMake(16, 337, 54, 44);
+        [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+        [self.actionButton setTitle:@"LOG OUT" forState:UIControlStateNormal];
+        [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        [self addSubview:self.actionButton];
+        
+        /* Right Action */
+        self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 37, 44);
+        [self.cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        [self.cancelButton setTitle:@"DONE" forState:UIControlStateNormal];
+        [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        [self.cancelButton sizeToFit];
+        [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
+        [self addSubview:self.cancelButton];
+        
+
+        
+        self.height = 380;
+        
+        NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width  - ALERT_WIDTH)/2;
+        NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height)/2;
+        
+        self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
+        
+        [self addShadowAndClip];
+        
+        [self animateIn];
+        
+    }
+    return self;
+    
+}
 
 
 

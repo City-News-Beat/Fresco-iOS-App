@@ -31,6 +31,7 @@
 -(instancetype)initNoConnectionAlert;
 -(instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton;
 -(instancetype)initTOS;
+-(instancetype)initNewStuff;
 
 -(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude;
 

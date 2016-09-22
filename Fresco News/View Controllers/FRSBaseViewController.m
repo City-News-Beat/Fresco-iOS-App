@@ -251,7 +251,6 @@
         //Else, needs to input SSN
         [self segueToIDInfo];
     }
-
 }
 
 -(void)segueToTaxInfo {

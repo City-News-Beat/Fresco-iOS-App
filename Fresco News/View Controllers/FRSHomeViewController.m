@@ -57,6 +57,7 @@
 
 @property (strong, nonatomic) UIView *sudoNavBar;
 @property (strong, nonatomic) FRSAlertView *TOSAlert;
+@property (strong, nonatomic) FRSAlertView *migrationAlert;
 
 @end
 
@@ -84,7 +85,18 @@
     self.isInFollowers = true;
     
     [self displayPreviousTab];
+
+}
+
+-(void)presentNewStuff {
     
+    if (self.migrationAlert) {
+        return;
+    }
+    
+    self.migrationAlert = [[FRSAlertView alloc] initNewStuff];
+    self.migrationAlert.delegate = self;
+    [self.migrationAlert show];
 }
 
 -(void)presentTOS {
@@ -101,6 +113,7 @@
 -(void)logoutAlertAction {
     [self logout];
     self.TOSAlert = nil;
+    self.migrationAlert = nil;
 }
 
 -(BOOL)shouldHaveTextLimit {
