@@ -391,8 +391,8 @@
 
 -(void)acceptTOS {
     
+    //We need the bearer token to accept TOS, actual accepting happens when the user creates their account.
     
-
     if (!self.TOSAccepted) {
         self.TOSAccepted = YES;
         [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
@@ -404,22 +404,6 @@
     }
     
     [self checkCreateAccountButtonState];
-
-
-        //NEED BEARER TOKEN TO ACCEPT, DO THIS WHEN IT'S CREATED
-//    [[FRSAPIClient sharedClient] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
-//        if (error) {
-//            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-//            [alert show];
-//            
-//            return;
-//        } else {
-//            
-//            //change image on button, and allow account creation (bool)
-//            [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-//            self.TOSCheckBoxButton.backgroundColor = [UIColor greenColor];
-//        }
-//    }];
 }
 
 -(void)configureMapView {
@@ -1156,6 +1140,8 @@
         if (![_pastRegistration[@"email"] isEqualToString:self.emailTF.text]) {
             
         }
+        
+        
         
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             

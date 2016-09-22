@@ -1377,8 +1377,7 @@
     [self get:getTermsEndpoint withParameters:Nil completion:completion];
 }
 -(void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
-    
-    [self post:acceptTermsEndpoint withParameters:@{@"Bearer" : [self authenticationToken]} completion:completion];
+    [self post:acceptTermsEndpoint withParameters:Nil completion:completion];
 }
 
 @end
