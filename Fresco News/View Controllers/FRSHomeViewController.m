@@ -86,6 +86,7 @@
     
     [self displayPreviousTab];
 
+    [self presentNewStuff];
 }
 
 -(void)presentNewStuff {
