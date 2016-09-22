@@ -53,9 +53,7 @@
     else {
         [user setValue:@(FALSE) forKey:@"following"];
     }
-    
-    
-    
+        
     if (properties[@"avatar"] && ![properties[@"avatar"] isEqual:[NSNull null]]) {
         user.profileImage = properties[@"avatar"];
     }
@@ -104,7 +102,6 @@
     else {
         [user setValue:@(FALSE) forKey:@"following"];
     }
-    
     
     if (properties[@"avatar"] && ![properties[@"avatar"] isEqual:[NSNull null]]) {
         user.profileImage = properties[@"avatar"];

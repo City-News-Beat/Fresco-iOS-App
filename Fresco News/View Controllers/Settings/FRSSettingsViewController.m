@@ -293,21 +293,20 @@
                     }
                 break;
                 case 2: {
-                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
-                    
-                    if ([card isEqualToString:@""]) {
-                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:@"hey friend" rightAlignedTitleColor:[UIColor frescoBlueColor]];
-                    } else {
-                        
-                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
-                    }
+//                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
+//                    
+//                    if ([card isEqualToString:@""]) {
+                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:@"Add by September 14" rightAlignedTitleColor:[UIColor frescoBlueColor]];
+//                    } else {
+//                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//                    }
                 }
                 break;
                 case 3:
-                    [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoBlueColor]];
+                    [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:@"Add by August 7" rightAlignedTitleColor:[UIColor frescoBlueColor]];
                     break;
                 case 4:
-                    [cell configureDefaultCellWithTitle:@"ID info" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoBlueColor]];
+                    [cell configureDefaultCellWithTitle:@"ID info" andCarret:YES andRightAlignedTitle:@"Add by September 14" rightAlignedTitleColor:[UIColor frescoBlueColor]];
                     break;
                 default:
                     break;
