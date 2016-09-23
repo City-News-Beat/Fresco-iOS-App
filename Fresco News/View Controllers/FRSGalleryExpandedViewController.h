@@ -14,6 +14,7 @@
     UITextField *commentField;
     NSString *last;
     UIButton *topButton;
+    BOOL showsMoreButton;
 }
 @property BOOL isLoadingUser;
 -(instancetype)initWithGallery:(FRSGallery *)gallery;

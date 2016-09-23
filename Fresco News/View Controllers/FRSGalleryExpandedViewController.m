@@ -101,6 +101,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [_comments addObject:commentObject];
         }
         
+        if ([_comments count] < 10) {
+            showsMoreButton = FALSE;
+        }
+        
         
         [self configureComments];
     }];
@@ -608,11 +612,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             return;
         }
         
+        int count = 0;
+        
         for (NSDictionary *comment in responseObject) {
             FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
             [_comments insertObject:commentObject atIndex:0];
+            count++;
         }
         
+        if (count < 10) {
+            showsMoreButton = FALSE;
+        }
         
         float height = 0;
         NSInteger index = 0;
