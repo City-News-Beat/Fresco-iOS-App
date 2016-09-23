@@ -95,6 +95,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [FRSTracker track:@"Onboarding reads"];
     
     if (!_hasShown) {
         //        [self.usernameTF becomeFirstResponder];

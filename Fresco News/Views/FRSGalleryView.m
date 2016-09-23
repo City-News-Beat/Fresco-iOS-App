@@ -650,13 +650,16 @@
     
     FRSGallery *parent = post.gallery;
     
-    if(post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0){
+    if((post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) && ![post.creator.username isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.username class] isSubclassOfClass:[NSString class]]){
         self.nameLabel.text = [NSString stringWithFormat:@"@%@",post.creator.username];
-    }else{
+    }else if (![post.creator.firstName isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.firstName class] isSubclassOfClass:[NSString class]]){
         self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
     }
+    else {
+        self.nameLabel.text = @"";
+    }
     
-    if (parent.externalAccountName != nil) {
+    if (parent.externalAccountName != nil && ![parent.externalAccountName isEqual:[NSNull null]]) {
         
         if ([parent.externalSource isEqualToString:@"twitter"]) {
             self.nameLabel.text = [NSString stringWithFormat:@"@%@",parent.externalAccountName];

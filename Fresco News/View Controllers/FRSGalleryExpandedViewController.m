@@ -101,6 +101,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [_comments addObject:commentObject];
         }
         
+        if ([_comments count] < 10) {
+            showsMoreButton = FALSE;
+        }
+        else {
+            showsMoreButton = TRUE;
+        }
         
         [self configureComments];
     }];
@@ -116,11 +122,18 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         _comments = [[NSMutableArray alloc] init];
         
-        for (NSDictionary *comment in responseObject) {
-            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
+        NSArray *response = (NSArray *)responseObject;
+        for (NSInteger i = response.count-1; i >= 0; i--) {
+            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:response[i]];
             [_comments addObject:commentObject];
         }
         
+        if (response.count < 10) {
+            showsMoreButton = FALSE;
+        }
+        else {
+            showsMoreButton = TRUE;
+        }
         
         float height = 0;
         NSInteger index = 0;
@@ -163,7 +176,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardFrameDidChange:)
+                                                 name:UIKeyboardDidChangeFrameNotification object:nil];
+
     [self configureUI];
     [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     // Do any additional setup after loading the view.
@@ -276,8 +292,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if (tableView == _commentTableView) {
         
-        if (indexPath.row < self.comments.count+1 && indexPath.row != 0) {
+        if (showsMoreButton && indexPath.row < self.comments.count+1 && indexPath.row != 0) {
             FRSComment *comment = [self.comments objectAtIndex:indexPath.row-1];
+            if (comment.isDeletable) {
+                return YES;
+            }
+        }
+        else if (!showsMoreButton && indexPath.row < self.comments.count) {
+            FRSComment *comment = [self.comments objectAtIndex:indexPath.row];
             if (comment.isDeletable) {
                 return YES;
             }
@@ -487,7 +509,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             return 0;
         }
         
-        return self.comments.count + 1;
+        return (showsMoreButton) ? self.comments.count + 1 : self.comments.count;
     }
     
     return 0;
@@ -501,11 +523,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     if (tableView == _commentTableView) {
         
-        if (indexPath.row == 0) {
+        if (indexPath.row == 0 && showsMoreButton) {
             return 45;
         }
         
-        if (indexPath.row < self.comments.count + 1) {
+        if (indexPath.row < self.comments.count + showsMoreButton) {
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
             NSInteger height = cell.commentTextField.frame.size.height;
             
@@ -531,10 +553,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     else if (tableView == _commentTableView) {
         
-        if (indexPath.row == 0) {
+        if (indexPath.row == 0 && showsMoreButton) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
             topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
-            [topButton setTitle:[NSString stringWithFormat:@"%lu MORE COMMENTS", [[self.gallery valueForKey:@"comments"] integerValue] - _comments.count] forState:UIControlStateNormal];
+            [topButton setTitle:[NSString stringWithFormat:@"%lu MORE COMMENTS", [[self.gallery valueForKey:@"comments"] intValue] - _comments.count] forState:UIControlStateNormal];
             [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
             [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
@@ -556,8 +578,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
         else {
             FRSCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCommentIdentifier];
-            if (indexPath.row < self.comments.count+1) {
-                FRSComment *comment = _comments[indexPath.row-1];
+            if (indexPath.row < self.comments.count+showsMoreButton) {
+                FRSComment *comment = _comments[indexPath.row-showsMoreButton];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (comment.imageURL && ![comment.imageURL isEqual:[NSNull null]] && ![comment.imageURL isEqualToString:@""]) {
@@ -605,11 +627,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             return;
         }
         
+        int count = 0;
+        
         for (NSDictionary *comment in responseObject) {
             FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
             [_comments insertObject:commentObject atIndex:0];
+            count++;
         }
         
+        if (count < 10) {
+            showsMoreButton = FALSE;
+        }
         
         float height = 0;
         NSInteger index = 0;
@@ -745,7 +773,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [UIView animateWithDuration:.2 animations:^{
         NSDictionary *info = [change userInfo];
         
-        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
         CGRect visibleRect = self.view.frame;
         visibleRect.size.height -= keyboardSize.height;
         
@@ -753,6 +781,25 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         inputRect.origin.y = self.view.frame.size.height - visibleRect.size.height + 67 + 60;
         commentField.frame = inputRect;
     }];
+}
+
+-(void)keyboardFrameDidChange:(NSNotification*)notification{
+//    NSDictionary* info = [notification userInfo];
+//    
+//    [UIView animateWithDuration:.2 animations:^{
+//        
+//        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+//        CGRect visibleRect = self.view.frame;
+//        visibleRect.size.height -= keyboardSize.height;
+//        
+//        CGRect inputRect = commentField.frame;
+//        inputRect.origin.y = self.view.frame.size.height - visibleRect.size.height + 67 + 60;
+//        commentField.frame = inputRect;
+//    }];
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - 3D Touch

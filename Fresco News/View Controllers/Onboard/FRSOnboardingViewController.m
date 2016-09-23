@@ -242,6 +242,8 @@
 
 -(void)dismiss {
     
+    [FRSTracker track:@"Onboarding reads"];
+    
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     CABasicAnimation *translate = [CABasicAnimation animationWithKeyPath:@"position.y"];
@@ -268,9 +270,6 @@
     
     [self dismissViewControllerAnimated:NO completion:nil];
 }
-
-
-
 
 #pragma mark - Transition Animations
 

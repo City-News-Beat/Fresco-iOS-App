@@ -16,7 +16,7 @@
 #import "FRSTabBarController.h"
 
 @implementation FRSAPIClient
-
+@synthesize socialUsed = _socialUsed, passwordUsed = _passwordUsed;
 /*
  Singleton
  */
@@ -43,6 +43,35 @@
     }
     
     return self;
+}
+
+-(void)setPasswordUsed:(NSString *)passwordUsed {
+    _passwordUsed = passwordUsed;
+}
+
+-(void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSMutableDictionary *mutableDigestion = [digestion mutableCopy];
+    
+    if (self.passwordUsed) {
+        [mutableDigestion setObject:self.passwordUsed forKey:@"verify_password"];
+    }
+    else if (self.socialUsed) {
+        [mutableDigestion addEntriesFromDictionary:self.socialUsed];
+    }
+    
+    [self updateUserWithDigestion:mutableDigestion completion:completion];
+}
+
+-(NSString *)passwordUsed {
+    return _passwordUsed;
+}
+
+-(NSDictionary *)socialUsed {
+    return _socialUsed;
+}
+
+-(void)setSocialUsed:(NSDictionary *)socialUsed {
+    _socialUsed = socialUsed;
 }
 
 -(void)handleError:(NSError *)error {
@@ -85,6 +114,7 @@
 }
 
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
+    self.passwordUsed = password;
     
     [self post:loginEndpoint withParameters:@{@"username":user, @"password":password, @"installation":[[FRSAPIClient sharedClient] currentInstallation]} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -102,6 +132,7 @@
     NSString *twitterAccessToken = session.authToken;
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
     NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
+    self.socialUsed = authDictionary;
     
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -117,6 +148,7 @@
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
     NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
+    self.socialUsed = authDictionary;
     
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error); // burden of error handling falls on sender
@@ -138,6 +170,8 @@
     // twitter_handle
     // social_links
     // installation
+    
+    self.passwordUsed = digestion[@"password"];
     
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         
@@ -244,6 +278,7 @@
         if (twitterSession.authToken && twitterSession.authTokenSecret) {
             NSDictionary *twitterDigestion = @{@"token":twitterSession.authToken, @"secret": twitterSession.authTokenSecret};
             [socialDigestion setObject:twitterDigestion forKey:@"twitter"];
+            [FRSTracker track:@"Signups with Twitter"];
         }
     }
     
@@ -252,6 +287,7 @@
         if (facebookToken.tokenString) {
             NSDictionary *facebookDigestion = @{@"token":facebookToken.tokenString};
             [socialDigestion setObject:facebookDigestion forKey:@"facebook"];
+            [FRSTracker track:@"Signups with Facebook"];
         }
     }
     

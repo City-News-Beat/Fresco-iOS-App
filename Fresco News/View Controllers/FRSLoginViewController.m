@@ -129,6 +129,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [FRSTracker track:@"Onboarding reads"];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
     if (!self.didAnimate) {

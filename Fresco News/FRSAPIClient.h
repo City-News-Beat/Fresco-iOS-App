@@ -35,6 +35,8 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 @property (nonatomic, retain) AFHTTPRequestOperationManager *requestManager;
 @property BOOL managerAuthenticated;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
+@property (nonatomic, retain) NSString *passwordUsed;
+@property (nonatomic, retain) NSDictionary *socialUsed;
 +(instancetype)sharedClient;
 -(NSManagedObjectContext *)managedObjectContext;
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
@@ -47,6 +49,8 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
 // notifications
 -(void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
+
+-(void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
 
 -(void)addComment:(NSString *)comment toGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 // generic auth-ed call
