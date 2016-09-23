@@ -163,7 +163,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardFrameDidChange:)
+                                                 name:UIKeyboardDidChangeFrameNotification object:nil];
+
     [self configureUI];
     [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     // Do any additional setup after loading the view.
@@ -753,6 +756,25 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         inputRect.origin.y = self.view.frame.size.height - visibleRect.size.height + 67 + 60;
         commentField.frame = inputRect;
     }];
+}
+
+-(void)keyboardFrameDidChange:(NSNotification*)notification{
+//    NSDictionary* info = [notification userInfo];
+//    
+//    [UIView animateWithDuration:.2 animations:^{
+//        
+//        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+//        CGRect visibleRect = self.view.frame;
+//        visibleRect.size.height -= keyboardSize.height;
+//        
+//        CGRect inputRect = commentField.frame;
+//        inputRect.origin.y = self.view.frame.size.height - visibleRect.size.height + 67 + 60;
+//        commentField.frame = inputRect;
+//    }];
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - 3D Touch
