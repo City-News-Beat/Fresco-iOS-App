@@ -366,47 +366,74 @@
     
     // payment
     if ([instruction isEqualToString:purchasedContentNotification]) {
+        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         
+        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [self segueToGallery:gallery];
+        }
     }
     if ([instruction isEqualToString:paymentExpiringNotification]) {
-        
+        [self segueToDebitCard];
     }
     if ([instruction isEqualToString:paymentSentNotification]) {
-        
+        [self segueToDebitCard];
     }
     if ([instruction isEqualToString:taxInfoRequiredNotification]) {
-        
+        [self segueToTaxInfo];
     }
     if ([instruction isEqualToString:taxInfoDeclinedNotification]) {
-        
+        [self segueToTaxInfo];
     }
     if ([instruction isEqualToString:taxInfoProcessedNotification]) {
-        
+        [self segueToTaxInfo];
     }
     if ([instruction isEqualToString:paymentDeclinedNotification]) {
-        
+        [self segueToDebitCard];
     }
     
     // social
     if ([instruction isEqualToString:followedNotification]) {
-        
+        NSString *user = [[push objectForKey:@"meta"] objectForKey:@"user_id"];
+        [self segueToUser:user];
     }
     if ([instruction isEqualToString:likedNotification]) {
+        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         
+        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [self segueToGallery:gallery];
+        }
+        else {
+            NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
+            if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
+                [self segueToStory:story];
+            }
+        }
     }
     if ([instruction isEqualToString:repostedNotification]) {
+        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         
+        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [self segueToGallery:gallery];
+        }
+        else {
+            NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
+            if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
+                [self segueToStory:story];
+            }
+        }
     }
     if ([instruction isEqualToString:commentedNotification]) {
-        
+        // COMMENT DEEP LINK: WIP
     }
     
     // general
     if ([instruction isEqualToString:photoOfDayNotification]) {
-        
+        // non existent!
     }
     if ([instruction isEqualToString:todayInNewsNotification]) {
-        
+        NSArray *galleryIDs = [[push objectForKey:@"meta"] objectForKey:@"gallery_ids"];
+        [self segueToTodayInNews:galleryIDs];
+
     }
 }
 
