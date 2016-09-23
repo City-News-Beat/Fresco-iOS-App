@@ -15,6 +15,7 @@
 #import "FRSAppDelegate.h"
 
 @implementation FRSUser
+@synthesize dueBy = _dueBy;
 
 // Insert code here to add functionality to your managed object subclass
 

@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface FRSUser : NSManagedObject<FRSManagedObject>
 
 // Insert code here to declare functionality of your managed object subclass
-
+@property (nullable, nonatomic, retain) NSString *dueBy;
 +(FRSUser *)loggedInUser;
 +(instancetype)nonSavedUserWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context;
 -(NSDictionary *)jsonObject;

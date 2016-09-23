@@ -244,13 +244,13 @@
 
 -(void)segueToDebitCard {
     
-    if ([[[FRSAPIClient sharedClient] authenticatedUser].fieldsNeeded containsObject:@"bank_account"]) {
+//    if ([[[FRSAPIClient sharedClient] authenticatedUser].fieldsNeeded containsObject:@"bank_account"]) {
         FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
         [self.navigationController pushViewController:debitCardVC animated:YES];
-    } else {
-        //Else, needs to input SSN
-        [self segueToIDInfo];
-    }
+//    } else {
+//        //Else, needs to input SSN
+//        [self segueToIDInfo];
+//    }
 }
 
 -(void)segueToTaxInfo {

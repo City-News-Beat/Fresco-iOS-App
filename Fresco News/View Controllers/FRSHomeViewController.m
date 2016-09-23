@@ -112,7 +112,7 @@
 }
 
 -(void)logoutAlertAction {
-    [self logout];
+    //[self logout];
     self.TOSAlert = nil;
     self.migrationAlert = nil;
 }

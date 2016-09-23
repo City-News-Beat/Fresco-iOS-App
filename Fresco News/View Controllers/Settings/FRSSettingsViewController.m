@@ -39,6 +39,8 @@
 
 #import "SSKeychain.h"
 
+#import "NSDate+ISO.h"
+
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource, FRSAlertViewDelegate>
 
@@ -293,21 +295,21 @@
                     }
                 break;
                 case 2: {
-                    
-                    /* 
-                     NOTE:
-                     Days of the month should truncate on iPhone 5/s resolutions.
-                     (ex) September -> Sept
-                     */
-                    
-                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
-                    
-                    if (card == nil) {
+
+                    NSString *dueBy = [[FRSAPIClient sharedClient] authenticatedUser].dueBy;
+                    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+                    dateFormat.dateStyle = NSDateFormatterMediumStyle;
+                    NSDate *date = [dateFormat dateFromString:dueBy];
+                    NSString *dateString = [NSString stringWithFormat:@"Add by %@", date];
+
+                    if (dueBy != nil) {
                         
-                       NSString *dueBy = [[FRSAPIClient sharedClient] authenticatedUser].dueBy;
-                        
-                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:@"Add by September 14" rightAlignedTitleColor:[UIColor frescoBlueColor]];
+                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
+
                     } else {
+                        
+                        NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
                         [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
                 }
@@ -315,15 +317,43 @@
                 case 3: {
                     
                     NSString *dueBy = [[FRSAPIClient sharedClient] authenticatedUser].dueBy;
+                    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+                    dateFormat.dateStyle = NSDateFormatterMediumStyle;
+                    NSDate *date = [dateFormat dateFromString:dueBy];
+                    NSString *dateString = [NSString stringWithFormat:@"Add by %@", date];
                     
-                    [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:@"Add by August 7" rightAlignedTitleColor:[UIColor frescoBlueColor]];
+                    if (dueBy != nil) {
+                        
+                        [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
+                        
+                    } else {
+                        
+                        [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:@""rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    }
+                    
+                    
                     break;
                 } case 4: {
 
                     NSString *dueBy = [[FRSAPIClient sharedClient] authenticatedUser].dueBy;
-
-                    [cell configureDefaultCellWithTitle:@"ID info" andCarret:YES andRightAlignedTitle:@"Add by September 14" rightAlignedTitleColor:[UIColor frescoBlueColor]];
-                } break;
+                    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+                    dateFormat.dateStyle = NSDateFormatterMediumStyle;
+                    NSDate *date = [dateFormat dateFromString:dueBy];
+                    NSString *dateString = [NSString stringWithFormat:@"Add by %@", date];
+                    
+                    if (dueBy != nil) {
+                        
+                        [cell configureDefaultCellWithTitle:@"ID info" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
+                        
+                    } else {
+                        
+                        [cell configureDefaultCellWithTitle:@"ID info" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    }
+                    
+                    
+            } break;
                 default:
                     break;
             }
