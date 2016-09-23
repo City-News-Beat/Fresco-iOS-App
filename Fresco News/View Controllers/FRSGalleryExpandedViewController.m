@@ -745,7 +745,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [UIView animateWithDuration:.2 animations:^{
         NSDictionary *info = [change userInfo];
         
-        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+        CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
         CGRect visibleRect = self.view.frame;
         visibleRect.size.height -= keyboardSize.height;
         
