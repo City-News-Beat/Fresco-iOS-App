@@ -49,6 +49,10 @@
     _passwordUsed = passwordUsed;
 }
 
+-(void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
+
 -(NSString *)passwordUsed {
     NSString *oldPassword = _passwordUsed;
     _passwordUsed = Nil;
