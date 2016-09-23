@@ -85,19 +85,17 @@
     self.isInFollowers = true;
     
     [self displayPreviousTab];
-
-    [self presentNewStuff];
 }
 
 -(void)presentNewStuff {
     
-    if (self.migrationAlert) {
-        return;
-    }
-    
-    self.migrationAlert = [[FRSAlertView alloc] initNewStuff];
-    self.migrationAlert.delegate = self;
-    [self.migrationAlert show];
+//    if (self.migrationAlert) {
+//        return;
+//    }
+//    
+//    self.migrationAlert = [[FRSAlertView alloc] initNewStuff];
+//    self.migrationAlert.delegate = self;
+//    [self.migrationAlert show];
 }
 
 -(void)presentTOS {
@@ -112,7 +110,7 @@
 }
 
 -(void)logoutAlertAction {
-    //[self logout];
+    [self logout];
     self.TOSAlert = nil;
     self.migrationAlert = nil;
 }
@@ -150,6 +148,8 @@
     
     entry = [NSDate date];
     numberRead = 0;
+    
+
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -159,6 +159,15 @@
     
     if (hasLoadedOnce) {
         [self reloadData];
+    }
+    
+    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
+        
+        NSLog(@"%@", [[FRSAPIClient sharedClient] authenticatedUser].username);
+        
+        if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
+            [self presentNewStuff];
+        }
     }
 }
 

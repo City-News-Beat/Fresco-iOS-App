@@ -54,6 +54,15 @@
 @property (strong, nonatomic) UITextView *TOSTextView;
 @property (strong, nonatomic) UIView *topLine;
 
+@property (nonatomic) BOOL usernameTaken;
+@property (nonatomic) BOOL emailTaken;
+@property (strong, nonatomic) NSTimer *usernameTimer;
+
+@property (strong, nonatomic) UITextField *usernameTextField;
+@property (strong, nonatomic) UITextField *emailTextField;
+
+@property (strong, nonatomic) UIImageView *usernameCheckIV;
+
 @end
 
 
@@ -1117,7 +1126,7 @@
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 37, 44);
-        [self.cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton addTarget:self action:@selector(updateUserInfo) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         [self.cancelButton setTitle:@"DONE" forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
@@ -1128,30 +1137,40 @@
         UIView *usernameContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 248, self.frame.size.width, 44)];
         [self addSubview:usernameContainer];
         
+        UIView *usernameTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
+        usernameTopLine.backgroundColor = [UIColor frescoShadowColor];
+        [usernameContainer addSubview:usernameTopLine];
+        
         UIView *emailContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 292, self.frame.size.width, 44)];
         [self addSubview:emailContainer];
         
-        UITextField *usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
-        usernameTextField.tag = 1;
-        usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        usernameTextField.placeholder = @"@username";
-        usernameTextField.tintColor = [UIColor frescoBlueColor];
-        usernameTextField.delegate = self;
-        usernameTextField.textColor = [UIColor frescoDarkTextColor];
-        [usernameContainer addSubview:usernameTextField];
+        UIView *emailTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
+        emailTopLine.backgroundColor = [UIColor frescoShadowColor];
+        [emailContainer addSubview:emailTopLine];
         
-        UITextField *emailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
-        emailTextField.tag = 2;
-        emailTextField.placeholder = @"Email address";
-        emailTextField.tintColor = [UIColor frescoBlueColor];
-        emailTextField.delegate = self;
-        emailTextField.textColor = [UIColor frescoDarkTextColor];
-        [emailContainer addSubview:emailTextField];
+        self.usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+        self.usernameTextField.tag = 1;
+        self.usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        self.usernameTextField.placeholder = @"@username";
+        self.usernameTextField.tintColor = [UIColor frescoBlueColor];
+        self.usernameTextField.delegate = self;
+        self.usernameTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        self.usernameTextField.textColor = [UIColor frescoDarkTextColor];
+        [usernameContainer addSubview:self.usernameTextField];
+        
+        self.emailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+        self.emailTextField.tag = 2;
+        self.emailTextField.placeholder = @"Email address";
+        self.emailTextField.tintColor = [UIColor frescoBlueColor];
+        self.emailTextField.delegate = self;
+        self.emailTextField.keyboardType = UIKeyboardTypeEmailAddress;
+        self.emailTextField.textColor = [UIColor frescoDarkTextColor];
+        self.emailTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        [emailContainer addSubview:self.emailTextField];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
-        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:tap];
-        
-        
+        [self addGestureRecognizer:tap];
+
         self.height = 380;
         
         NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width  - ALERT_WIDTH)/2;
@@ -1198,12 +1217,15 @@
     if (textField.tag == 1) {
         
         if ([string containsString:@" "]) {
-            return FALSE;
-        }
-        
-        if (textField.text.length == 1 && [string isEqualToString:@""]) {//When detect backspace when have one character.
             return NO;
         }
+        
+        if (textField.text.length == 1 && [string isEqualToString:@""]) {
+            return NO;
+        }
+        
+        NSUInteger newLength = [textField.text length] + [string length] - range.length;
+        return newLength <= 20;
     }
     
     return YES;
@@ -1215,8 +1237,185 @@
 }
 
 
+-(void)updateUserInfo {
+
+    [self dismiss];
+    
+    
+}
 
 
+
+//-(void)usernameTimerFired {
+//    
+//    // Check for emoji and error
+//    if ([self stringContainsEmoji:[self.usernameTextField.text substringFromIndex:1]]){
+//        [self animateUsernameCheckImageView:self.usernameTextField animateIn:YES success:NO];
+//        return;
+//    }
+//    
+//    if (self.usernameTextField.isEditing && (![self stringContainsEmoji:[self.usernameTextField.text substringFromIndex:1]])) {
+//        
+//        if ((![[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""])) {
+//            
+//            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTextField.text substringFromIndex:1] completion:^(id responseObject, NSError *error) {
+//                
+//                //Return if no internet
+//                if (error.code == -1009) {
+//                    
+//                    return;
+//                }
+//                
+//                
+//                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+//                NSInteger responseCode = response.statusCode;
+//                NSLog(@"ERROR: %ld", (long)responseCode);
+//                
+//                if (responseCode == 404) { //
+//                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+//                    self.usernameTaken = NO;
+//                    [self stopUsernameTimer];
+//                    [self checkCreateAccountButtonState];
+//                    return;
+//                } else {
+//                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+//                    self.usernameTaken = YES;
+//                    [self stopUsernameTimer];
+//                    [self checkCreateAccountButtonState];
+//                }
+//            }];
+//        }
+//    }
+//}
+
+//-(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
+//
+//    if(success) {
+//        self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
+//    } else {
+//        self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
+//    }
+//    
+//    if (animateIn) {
+//        if (self.usernameCheckIV.alpha == 0) {
+//            
+//            self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+//            self.usernameCheckIV.alpha = 0;
+//            self.usernameCheckIV.alpha = 1;
+//            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
+//            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
+//        }
+//    } else {
+//        
+//        self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.1, 1.1);
+//        self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+//        self.usernameCheckIV.alpha = 0;
+//    }
+//}
+
+//-(void)startUsernameTimer {
+//    if (!self.usernameTimer) {
+//        self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(usernameTimerFired) userInfo:nil repeats:YES];
+//    }
+//}
+
+//-(void)stopUsernameTimer {
+//    if ([self.usernameTimer isValid]) {
+//        [self.usernameTimer invalidate];
+//    }
+//    
+//    self.usernameTimer = nil;
+//}
+
+//-(BOOL)stringContainsEmoji:(NSString *)string {
+//    __block BOOL returnValue = NO;
+//    [string enumerateSubstringsInRange:NSMakeRange(0, [string length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:
+//     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+//         
+//         const unichar hs = [substring characterAtIndex:0];
+//         // surrogate pair
+//         if (0xd800 <= hs && hs <= 0xdbff) {
+//             if (substring.length > 1) {
+//                 const unichar ls = [substring characterAtIndex:1];
+//                 const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+//                 if (0x1d000 <= uc && uc <= 0x1f77f) {
+//                     returnValue = YES;
+//                 }
+//             }
+//         } else if (substring.length > 1) {
+//             const unichar ls = [substring characterAtIndex:1];
+//             if (ls == 0x20e3) {
+//                 returnValue = YES;
+//             }
+//             
+//         } else {
+//             // non surrogate
+//             if (0x2100 <= hs && hs <= 0x27ff) {
+//                 returnValue = YES;
+//             } else if (0x2B05 <= hs && hs <= 0x2b07) {
+//                 returnValue = YES;
+//             } else if (0x2934 <= hs && hs <= 0x2935) {
+//                 returnValue = YES;
+//             } else if (0x3297 <= hs && hs <= 0x3299) {
+//                 returnValue = YES;
+//             } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
+//                 returnValue = YES;
+//             }
+//         }
+//     }];
+//    
+//    return returnValue;
+//}
+//
+//-(void)checkCreateAccountButtonState {
+//    UIControlState controlState;
+//    
+//    if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
+//        
+//        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
+//            controlState = UIControlStateHighlighted;
+//        } else {
+//            controlState = UIControlStateNormal;
+//        }
+//        
+//        [self toggleCreateAccountButtonTitleColorToState:controlState];
+//    }
+//}
+
+//-(BOOL)isValidUsername:(NSString *)username {
+//    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
+//    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
+//    return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
+//}
+//
+//-(BOOL)isValidEmail:(NSString *)emailString {
+//    
+//    if([emailString length] == 0) {
+//        return NO;
+//    }
+//    
+//    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+//    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
+//    NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
+//    
+//    if (regExMatches == 0) {
+//        return NO;
+//    } else {
+//        return YES;
+//    }
+//}
+//
+//-(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState {
+//    if (controlState == UIControlStateNormal){
+//        [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+//        self.cancelButton.enabled = NO;
+//    } else {
+//        [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+//        [self.cancelButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
+//        self.cancelButton.enabled = YES;
+//    }
+//    
+//}
 
 
 

@@ -157,7 +157,7 @@
             [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
         }
         
-        if ([responseObject[@"terms"][@"valid"] boolValue] == FALSE) {
+        if ([responseObject[@"terms"][@"valid"] boolValue] == FALSE) { /* */
             UITabBarController *tabBar = (UITabBarController *)self.tabBarController;
             UINavigationController *nav = [tabBar.viewControllers firstObject];
             FRSHomeViewController *homeViewController = [nav.viewControllers firstObject];
@@ -165,7 +165,6 @@
         }
         
         [[self managedObjectContext] save:Nil];
-
     }];
 }
 

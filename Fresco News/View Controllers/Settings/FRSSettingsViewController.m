@@ -309,7 +309,6 @@
 
                     } else {
                         
-                        
                         NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
                         [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
@@ -332,7 +331,6 @@
                         
                         [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:@""rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
-                    
                     
                     break;
                 } case 4: {
