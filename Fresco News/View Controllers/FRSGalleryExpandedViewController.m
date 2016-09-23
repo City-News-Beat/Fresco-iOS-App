@@ -104,7 +104,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         if ([_comments count] < 10) {
             showsMoreButton = FALSE;
         }
-        
+        else {
+            showsMoreButton = TRUE;
+        }
         
         [self configureComments];
     }];
@@ -283,8 +285,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if (tableView == _commentTableView) {
         
-        if (indexPath.row < self.comments.count+1 && indexPath.row != 0) {
+        if (showsMoreButton && indexPath.row < self.comments.count+1 && indexPath.row != 0) {
             FRSComment *comment = [self.comments objectAtIndex:indexPath.row-1];
+            if (comment.isDeletable) {
+                return YES;
+            }
+        }
+        else if (!showsMoreButton && indexPath.row < self.comments.count) {
+            FRSComment *comment = [self.comments objectAtIndex:indexPath.row];
             if (comment.isDeletable) {
                 return YES;
             }
@@ -494,7 +502,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             return 0;
         }
         
-        return self.comments.count + 1;
+        return (showsMoreButton) ? self.comments.count + 1 : self.comments.count;
     }
     
     return 0;
@@ -508,11 +516,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     if (tableView == _commentTableView) {
         
-        if (indexPath.row == 0) {
+        if (indexPath.row == 0 && showsMoreButton) {
             return 45;
         }
         
-        if (indexPath.row < self.comments.count + 1) {
+        if (indexPath.row < self.comments.count + showsMoreButton) {
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
             NSInteger height = cell.commentTextField.frame.size.height;
             
@@ -538,7 +546,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     else if (tableView == _commentTableView) {
         
-        if (indexPath.row == 0) {
+        if (indexPath.row == 0 && showsMoreButton) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
             topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
             [topButton setTitle:[NSString stringWithFormat:@"%lu MORE COMMENTS", [[self.gallery valueForKey:@"comments"] integerValue] - _comments.count] forState:UIControlStateNormal];
@@ -563,8 +571,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
         else {
             FRSCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCommentIdentifier];
-            if (indexPath.row < self.comments.count+1) {
-                FRSComment *comment = _comments[indexPath.row-1];
+            if (indexPath.row < self.comments.count+showsMoreButton) {
+                FRSComment *comment = _comments[indexPath.row-showsMoreButton];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (comment.imageURL && ![comment.imageURL isEqual:[NSNull null]] && ![comment.imageURL isEqualToString:@""]) {
