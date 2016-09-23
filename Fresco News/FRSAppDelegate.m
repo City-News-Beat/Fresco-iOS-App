@@ -25,6 +25,13 @@
 #import "SSKeychain.h"
 #import "FRSUser.h"
 #import "FRSNavigationBar.h"
+#import "FRSStoryDetailViewController.h"
+#import "FRSGalleryExpandedViewController.h"
+#import "FRSNavigationController.h"
+#import "FRSAssignmentsViewController.h"
+#import "FRSDebitCardViewController.h"
+#import "FRSTaxInformationViewController.h"
+#import "FRSIdentityViewController.h"
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -535,6 +542,179 @@
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(nonnull NSString *)identifier completionHandler:(nonnull void (^)())completionHandler {
     // pass responsibility onto FRSFileUploadManager (will trigger completion handler when done with work needed)
    // [[FRSFileUploadManager sharedUploader] handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
+}
+
+
+// DEEP LINKING
+-(void)segueToPhotosOfTheDay:(NSArray *)postIDs {
+    //Not part of the initial 3.0 release
+}
+
+-(void)segueToTodayInNews:(NSArray *)galleryIDs {
+    __block BOOL isSegueingToStory;
+
+    NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
+    
+    for (NSString *gallery in galleryIDs) {
+        
+        [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
+            UITabBarController *tab = (UITabBarController *)self.tabBarController;
+            
+            if (![galleryArray containsObject:responseObject]) {
+                [galleryArray addObject:(FRSGallery *)responseObject];
+            }
+            
+            if (galleryArray.count == galleryIDs.count) {
+                if (!isSegueingToStory) {
+                    isSegueingToStory = YES;
+                    FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
+                    [detailVC configureWithGalleries:galleryArray];
+                    detailVC.navigationController = tab.navigationController;
+                    detailVC.title = @"TODAY IN NEWS";
+                    [tab.navigationController pushViewController:detailVC animated:YES];
+                }
+            }
+        }];
+    }
+}
+
+
+-(void)segueToGallery:(NSString *)galleryID {
+    UITabBarController *tab = (UITabBarController *)self.tabBarController;
+    __block BOOL isSegueingToGallery;
+
+    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
+        
+        FRSAppDelegate *appDelegate = self;
+        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
+        
+        [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
+        
+        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:galleryToSave];
+        vc.shouldHaveBackButton = YES;
+        
+        if (!isSegueingToGallery) {
+            isSegueingToGallery = YES;
+            [tab.navigationController pushViewController:vc animated:YES];
+        }
+        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    }];
+}
+
+-(void)segueToStory:(NSString *)storyID {
+    UITabBarController *tab = (UITabBarController *)self.tabBarController;
+    __block BOOL isSegueingToStory;
+
+    [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
+        
+        FRSAppDelegate *appDelegate = self;
+        FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:[appDelegate managedObjectContext]];
+        
+        [story configureWithDictionary:responseObject];
+        
+        FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
+        detailView.navigationController = tab.navigationController;
+        
+        if (isSegueingToStory) {
+            isSegueingToStory = YES;
+            [tab.navigationController pushViewController:detailView animated:YES];
+        }
+    }];
+}
+
+-(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
+    FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    detailView.story = story;
+    [detailView reloadData];
+    return detailView;
+}
+
+-(void)segueToUser:(NSString *)userID {
+    UITabBarController *tab = (UITabBarController *)self.tabBarController;
+
+    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUserID:userID];
+    [tab.navigationController pushViewController:profileVC animated:YES];
+}
+
+-(void)segueToPost:(NSString *)postID {
+
+    [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
+        
+        [self segueToGallery:[[responseObject objectForKey:@"parent"] objectForKey:@"id"]];
+        
+    }];
+}
+
+-(void)segueToAssignmentWithID:(NSString *)assignmentID {
+    UITabBarController *tab = (UITabBarController *)self.tabBarController;
+
+    FRSNavigationController *navCont = (FRSNavigationController *)[tab.viewControllers objectAtIndex:3];
+    FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
+    
+    assignmentsVC.hasDefault = YES;
+    assignmentsVC.defaultID = assignmentID;
+    [self.tabBarController setSelectedIndex:3];
+    
+    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+    
+    if (assignmentsVC.mapView) {
+        [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+            
+            FRSAppDelegate *appDelegate = self;
+            FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
+            [assignment configureWithDictionary:responseObject];
+            [assignmentsVC focusOnAssignment:assignment];
+            
+        }];
+    }
+}
+
+
+-(void)segueToCameraWithAssignmentID:(NSString *)assignmentID {
+    UITabBarController *tab = (UITabBarController *)self.tabBarController;
+
+    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+        
+        NSDictionary *assDict = [[NSDictionary alloc] init];
+        assDict = responseObject;
+        
+        FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assDict selectedGlobalAssignment:nil];
+        UINavigationController *navControl = [[UINavigationController alloc] init];
+        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+        [navControl pushViewController:cam animated:NO];
+        [navControl setNavigationBarHidden:YES];
+        
+        [tab presentViewController:navControl animated:YES completion:nil];
+    }];
+}
+
+-(void)segueHome {
+    UITabBarController *tab = (UITabBarController *)self.tabBarController;
+    tab.selectedIndex = 0;
+    [tab.navigationController popViewControllerAnimated:TRUE];
+}
+
+-(void)segueToDebitCard {
+    UITabBarController *tab = (UITabBarController *)self.tabBarController;
+
+    FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
+    [tab.navigationController pushViewController:debitCardVC animated:YES];
+}
+
+-(void)segueToTaxInfo {
+    UITabBarController *tab = (UITabBarController *)self.tabBarController;
+
+    FRSTaxInformationViewController *taxVC = [[FRSTaxInformationViewController alloc] init];
+    [tab.navigationController pushViewController:taxVC animated:YES];
+}
+
+-(void)segueToIDInfo {
+    UITabBarController *tab = (UITabBarController *)self.tabBarController;
+
+    FRSIdentityViewController *identityVC = [[FRSIdentityViewController alloc] init];
+    [tab.navigationController pushViewController:identityVC animated:YES];
+    
 }
 
 @end
