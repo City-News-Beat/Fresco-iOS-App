@@ -122,11 +122,18 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         _comments = [[NSMutableArray alloc] init];
         
-        for (NSDictionary *comment in responseObject) {
-            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:comment];
+        NSArray *response = (NSArray *)responseObject;
+        for (NSInteger i = response.count-1; i >= 0; i--) {
+            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:response[i]];
             [_comments addObject:commentObject];
         }
         
+        if (response.count < 10) {
+            showsMoreButton = FALSE;
+        }
+        else {
+            showsMoreButton = TRUE;
+        }
         
         float height = 0;
         NSInteger index = 0;
