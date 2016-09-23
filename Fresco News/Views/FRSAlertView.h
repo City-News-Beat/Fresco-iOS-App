@@ -16,7 +16,7 @@
 @end
 
 
-@interface FRSAlertView : UIView <UIScrollViewDelegate>
+@interface FRSAlertView : UIView <UIScrollViewDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) NSObject <FRSAlertViewDelegate> *delegate;
 

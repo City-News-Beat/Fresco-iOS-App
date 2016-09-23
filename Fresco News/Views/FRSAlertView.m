@@ -1125,7 +1125,32 @@
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
         [self addSubview:self.cancelButton];
         
-
+        UIView *usernameContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 248, self.frame.size.width, 44)];
+        [self addSubview:usernameContainer];
+        
+        UIView *emailContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 292, self.frame.size.width, 44)];
+        [self addSubview:emailContainer];
+        
+        UITextField *usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+        usernameTextField.tag = 1;
+        usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        usernameTextField.placeholder = @"@username";
+        usernameTextField.tintColor = [UIColor frescoBlueColor];
+        usernameTextField.delegate = self;
+        usernameTextField.textColor = [UIColor frescoDarkTextColor];
+        [usernameContainer addSubview:usernameTextField];
+        
+        UITextField *emailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+        emailTextField.tag = 2;
+        emailTextField.placeholder = @"Email address";
+        emailTextField.tintColor = [UIColor frescoBlueColor];
+        emailTextField.delegate = self;
+        emailTextField.textColor = [UIColor frescoDarkTextColor];
+        [emailContainer addSubview:emailTextField];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
+        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:tap];
+        
         
         self.height = 380;
         
@@ -1144,10 +1169,50 @@
 }
 
 
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.transform = CGAffineTransformMakeTranslation(0, -80);
+        
+    } completion:nil];
+    
+    if (textField.tag == 1) {
+        if ([textField.text isEqualToString:@""]){
+            textField.text = @"@";
+        }
+    }
+}
 
+-(void)textFieldDidEndEditing:(UITextField *)textField   {
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        self.transform = CGAffineTransformMakeTranslation(0, 0);
+        
+    } completion:nil];
+}
 
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (textField.tag == 1) {
+        
+        if ([string containsString:@" "]) {
+            return FALSE;
+        }
+        
+        if (textField.text.length == 1 && [string isEqualToString:@""]) {//When detect backspace when have one character.
+            return NO;
+        }
+    }
+    
+    return YES;
+}
 
-
+-(void)tap {
+    [self resignFirstResponder];
+    [self endEditing:YES];
+}
 
 
 
