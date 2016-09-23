@@ -464,7 +464,7 @@
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
-    
+    [FRSTracker track:@"Permissions notification disables"];
 }
 
 #pragma mark - App Path
