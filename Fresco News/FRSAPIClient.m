@@ -50,19 +50,24 @@
 }
 
 -(void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSMutableDictionary *mutableDigestion = [digestion mutableCopy];
     
+    if (self.passwordUsed) {
+        [mutableDigestion setObject:self.passwordUsed forKey:@"verify_password"];
+    }
+    else if (self.socialUsed) {
+        [mutableDigestion addEntriesFromDictionary:self.socialUsed];
+    }
+    
+    [self updateUserWithDigestion:mutableDigestion completion:completion];
 }
 
 -(NSString *)passwordUsed {
-    NSString *oldPassword = _passwordUsed;
-    _passwordUsed = Nil;
-    return oldPassword;
+    return _passwordUsed;
 }
 
 -(NSDictionary *)socialUsed {
-    NSDictionary *oldSocial = _socialUsed;
-    _socialUsed = Nil;
-    return oldSocial;
+    return _socialUsed;
 }
 
 -(void)setSocialUsed:(NSDictionary *)socialUsed {
