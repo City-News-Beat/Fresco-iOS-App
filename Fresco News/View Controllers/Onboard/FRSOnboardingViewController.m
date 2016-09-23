@@ -271,9 +271,6 @@
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
-
-
-
 #pragma mark - Transition Animations
 
 -(void)animateFirstLaunch {

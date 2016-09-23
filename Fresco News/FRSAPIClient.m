@@ -16,7 +16,7 @@
 #import "FRSTabBarController.h"
 
 @implementation FRSAPIClient
-
+@synthesize socialUsed = _socialUsed, passwordUsed = _passwordUsed;
 /*
  Singleton
  */
@@ -43,6 +43,26 @@
     }
     
     return self;
+}
+
+-(void)setPasswordUsed:(NSString *)passwordUsed {
+    _passwordUsed = passwordUsed;
+}
+
+-(NSString *)passwordUsed {
+    NSString *oldPassword = _passwordUsed;
+    _passwordUsed = Nil;
+    return oldPassword;
+}
+
+-(NSDictionary *)socialUsed {
+    NSDictionary *oldSocial = _socialUsed;
+    _socialUsed = Nil;
+    return oldSocial;
+}
+
+-(void)setSocialUsed:(NSDictionary *)socialUsed {
+    _socialUsed = socialUsed;
 }
 
 -(void)handleError:(NSError *)error {
@@ -244,6 +264,7 @@
         if (twitterSession.authToken && twitterSession.authTokenSecret) {
             NSDictionary *twitterDigestion = @{@"token":twitterSession.authToken, @"secret": twitterSession.authTokenSecret};
             [socialDigestion setObject:twitterDigestion forKey:@"twitter"];
+            [FRSTracker track:@"Signups with Twitter"];
         }
     }
     
@@ -252,6 +273,7 @@
         if (facebookToken.tokenString) {
             NSDictionary *facebookDigestion = @{@"token":facebookToken.tokenString};
             [socialDigestion setObject:facebookDigestion forKey:@"facebook"];
+            [FRSTracker track:@"Signups with Facebook"];
         }
     }
     
