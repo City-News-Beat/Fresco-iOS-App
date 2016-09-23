@@ -114,6 +114,7 @@
 }
 
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
+    self.passwordUsed = password;
     
     [self post:loginEndpoint withParameters:@{@"username":user, @"password":password, @"installation":[[FRSAPIClient sharedClient] currentInstallation]} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -131,6 +132,7 @@
     NSString *twitterAccessToken = session.authToken;
     NSString *twitterAccessTokenSecret = session.authTokenSecret;
     NSDictionary *authDictionary = @{@"platform" : @"twitter", @"token" : twitterAccessToken, @"secret" : twitterAccessTokenSecret};
+    self.socialUsed = authDictionary;
     
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -146,6 +148,7 @@
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *facebookAccessToken = token.tokenString;
     NSDictionary *authDictionary = @{@"platform" : @"facebook", @"token" : facebookAccessToken};
+    self.socialUsed = authDictionary;
     
     [self post:socialLoginEndpoint withParameters:authDictionary completion:^(id responseObject, NSError *error) {
         completion(responseObject, error); // burden of error handling falls on sender
@@ -167,6 +170,8 @@
     // twitter_handle
     // social_links
     // installation
+    
+    self.passwordUsed = digestion[@"password"];
     
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         
