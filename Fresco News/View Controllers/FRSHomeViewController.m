@@ -160,15 +160,15 @@
         [self reloadData];
     }
     
-    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-                
-        NSLog(@"USER: %@", [[FRSAPIClient sharedClient] passwordUsed]);
-        
-        if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
-            //need to check if coming from social
-            [self presentNewStuff];
-        }
-    }
+//    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
+//                
+//        NSLog(@"USER: %@", [[FRSAPIClient sharedClient] passwordUsed]);
+//        
+//        if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
+//            //need to check if coming from social
+//            [self presentNewStuff];
+//        }
+//    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
