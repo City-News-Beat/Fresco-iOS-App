@@ -216,6 +216,9 @@
                 [tabBarVC setSelectedIndex:0];
                 [self stopSpinner:self.loadingView onButton:self.loginButton];
                 [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
+                
+                FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:NO];
+                [alert show];
             }];
 
         }
