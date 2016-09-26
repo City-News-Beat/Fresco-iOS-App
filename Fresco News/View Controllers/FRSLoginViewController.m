@@ -213,9 +213,11 @@
         if (error.code == 0) {
             FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
             [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
+                [tabBarVC setSelectedIndex:0];
                 [self stopSpinner:self.loadingView onButton:self.loginButton];
                 [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
             }];
+
         }
         
         if (error.code == -1009) {

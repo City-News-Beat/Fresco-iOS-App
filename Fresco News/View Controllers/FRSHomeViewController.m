@@ -87,13 +87,13 @@
     [self displayPreviousTab];
 }
 
--(void)presentNewStuff {
+-(void)presentNewStuffWithPassword:(BOOL)password {
     
     if (self.migrationAlert) {
         return;
     }
     
-    self.migrationAlert = [[FRSAlertView alloc] initNewStuffWithPasswordField:YES];
+    self.migrationAlert = [[FRSAlertView alloc] initNewStuffWithPasswordField:password];
     self.migrationAlert.delegate = self;
     [self.migrationAlert show];
 }
@@ -160,15 +160,20 @@
         [self reloadData];
     }
     
-//    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-//                
-//        NSLog(@"USER: %@", [[FRSAPIClient sharedClient] passwordUsed]);
-//        
-//        if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
-//            //need to check if coming from social
-//            [self presentNewStuff];
-//        }
-//    }
+    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
+                
+        NSLog(@"PASSWORD: %@", [[FRSAPIClient sharedClient] passwordUsed]);
+
+        if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
+
+            
+            if ([[FRSAPIClient sharedClient] passwordUsed]) {
+                [self presentNewStuffWithPassword:NO];
+            } else {
+                [self presentNewStuffWithPassword:YES];
+            }
+        }
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
