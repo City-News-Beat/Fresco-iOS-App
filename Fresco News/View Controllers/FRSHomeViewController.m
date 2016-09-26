@@ -93,7 +93,7 @@
         return;
     }
     
-    self.migrationAlert = [[FRSAlertView alloc] initNewStuffWithPasswordField:NO];
+    self.migrationAlert = [[FRSAlertView alloc] initNewStuffWithPasswordField:YES];
     self.migrationAlert.delegate = self;
     [self.migrationAlert show];
 }
@@ -163,7 +163,7 @@
     
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
         
-        NSLog(@"%@", [[FRSAPIClient sharedClient] authenticatedUser].username);
+        NSLog(@"USER: %@", [[FRSAPIClient sharedClient] authenticatedUser]);
         
         if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
             //need to check if coming from social

@@ -64,6 +64,7 @@
 
 @property (strong, nonatomic) UIImageView *usernameCheckIV;
 @property (strong, nonatomic) UILabel *usernameTakenLabel;
+@property BOOL migrationAlertShouldShowPassword;
 
 @end
 
@@ -1132,6 +1133,7 @@
         [self.cancelButton addTarget:self action:@selector(updateUserInfo) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         [self.cancelButton setTitle:@"DONE" forState:UIControlStateNormal];
+        self.cancelButton.enabled = NO;
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
@@ -1185,6 +1187,8 @@
         
         if (password) {
             
+            self.migrationAlertShouldShowPassword = YES;
+            
             UIView *passwordContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 292+44, self.frame.size.width, 44)];
             [self addSubview:passwordContainer];
             
@@ -1233,7 +1237,11 @@
     
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
-        self.transform = CGAffineTransformMakeTranslation(0, -80);
+        if (self.migrationAlertShouldShowPassword) {
+            self.transform = CGAffineTransformMakeTranslation(0, -100);
+        } else {
+            self.transform = CGAffineTransformMakeTranslation(0, -80);
+        }
         
     } completion:nil];
     

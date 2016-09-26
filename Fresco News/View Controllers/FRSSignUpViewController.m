@@ -1233,8 +1233,7 @@
 //        Mixpanel *mixpanel = [Mixpanel sharedInstance];
 //        [mixpanel createAlias:frescoID
 //                forDistinctID:mixpanel.distinctId];
-        
-    }];
+            }];
 }
 
 -(void)checkEmail {
