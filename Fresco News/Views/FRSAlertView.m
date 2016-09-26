@@ -1221,7 +1221,7 @@
         }
 
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
-        [self addGestureRecognizer:tap];
+        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:tap];
 
         self.height += 380;
         
