@@ -1120,7 +1120,7 @@
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(logoutTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(16, 337, 54, 44);
-        [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+        [self.actionButton setTitleColor:[UIColor frescoRedHeartColor] forState:UIControlStateNormal];
         [self.actionButton setTitle:@"LOG OUT" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
@@ -1170,8 +1170,18 @@
         self.emailTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         [emailContainer addSubview:self.emailTextField];
         
+        self.usernameCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.usernameCheckIV.frame = CGRectMake(usernameContainer.frame.size.width -24 -6, 10, 24, 24);
+        self.usernameCheckIV.alpha = 1;
+        [usernameContainer addSubview:self.usernameCheckIV];
+        
+        UILabel *takenLabel = [[UILabel alloc] initWithFrame:CGRectMake(-44 -6, 5, 44, 17)];
+        takenLabel.text = @"TAKEN";
+        takenLabel.textColor = [UIColor frescoRedHeartColor];
+        takenLabel.font = [UIFont notaBoldWithSize:15];
+        [self.usernameCheckIV addSubview:takenLabel];
+        
         if (password) {
-            
             
             UIView *passwordContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 292+44, self.frame.size.width, 44)];
             [self addSubview:passwordContainer];
