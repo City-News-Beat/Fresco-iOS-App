@@ -60,6 +60,7 @@
 
 @property (strong, nonatomic) UITextField *usernameTextField;
 @property (strong, nonatomic) UITextField *emailTextField;
+@property (strong, nonatomic) UITextField *passwordTextField;
 
 @property (strong, nonatomic) UIImageView *usernameCheckIV;
 
@@ -1048,11 +1049,12 @@
 
 
 
--(instancetype)initNewStuff {
+-(instancetype)initNewStuffWithPasswordField:(BOOL)password {
     
     self = [super init];
     if (self){
-                
+        
+        self.height = 0;
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
         
         [self configureDarkOverlay];
@@ -1168,14 +1170,41 @@
         self.emailTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         [emailContainer addSubview:self.emailTextField];
         
+        if (password) {
+            
+            
+            UIView *passwordContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 292+44, self.frame.size.width, 44)];
+            [self addSubview:passwordContainer];
+            
+            UIView *passwordTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
+            passwordTopLine.backgroundColor = [UIColor frescoShadowColor];
+            [passwordContainer addSubview:passwordTopLine];
+            
+            self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+            self.passwordTextField.tag = 3;
+            self.passwordTextField.placeholder = @"Password";
+            self.passwordTextField.tintColor = [UIColor frescoBlueColor];
+            self.passwordTextField.delegate = self;
+            self.passwordTextField.keyboardType = UIKeyboardTypeDefault;
+            self.passwordTextField.secureTextEntry = YES;
+            self.passwordTextField.textColor = [UIColor frescoDarkTextColor];
+            self.passwordTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+            [passwordContainer addSubview:self.passwordTextField];
+            
+            self.height += 44;
+        }
+
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
         [self addGestureRecognizer:tap];
 
-        self.height = 380;
+        self.height += 380;
         
         NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width  - ALERT_WIDTH)/2;
         NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height)/2;
         
+        self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, self.height - 44, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
+        self.actionButton.frame = CGRectMake(self.actionButton.frame.origin.x, self.height - 44, self.actionButton.frame.size.width, self.actionButton.frame.size.height);
+        line.frame = CGRectMake(line.frame.origin.x, self.height - 44, line.frame.size.width, line.frame.size.height);
         self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
         
         [self addShadowAndClip];

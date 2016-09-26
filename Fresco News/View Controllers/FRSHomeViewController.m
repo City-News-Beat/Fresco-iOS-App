@@ -93,7 +93,7 @@
         return;
     }
     
-    self.migrationAlert = [[FRSAlertView alloc] initNewStuff];
+    self.migrationAlert = [[FRSAlertView alloc] initNewStuffWithPasswordField:NO];
     self.migrationAlert.delegate = self;
     [self.migrationAlert show];
 }
@@ -166,6 +166,7 @@
         NSLog(@"%@", [[FRSAPIClient sharedClient] authenticatedUser].username);
         
         if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
+            //need to check if coming from social
             [self presentNewStuff];
         }
     }
