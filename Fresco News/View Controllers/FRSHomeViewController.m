@@ -162,8 +162,8 @@
     }
     
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-        
-        NSLog(@"USER: %@", [[FRSAPIClient sharedClient] authenticatedUser]);
+                
+        NSLog(@"USER: %@", [[FRSAPIClient sharedClient] passwordUsed]);
         
         if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
             //need to check if coming from social

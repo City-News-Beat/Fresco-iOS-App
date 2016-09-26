@@ -101,10 +101,7 @@
     
     [self.view addGestureRecognizer:tap];
     
-    /*
-     OMAR THIS IS WHAT CONSTRAINTS ARE FOR, SO U DONT NEED RANDOM NUMBERS
-     */
-    
+
     if (IS_IPHONE_5) {
         self.socialTopConstraint.constant = 104;
     } else if (IS_IPHONE_6) {
@@ -191,14 +188,20 @@
     username = [username stringByReplacingOccurrencesOfString:@"@" withString:@""];
     NSString *password = _passwordField.text;
     
-    if ([password isEqualToString:@""] || [username isEqualToString:@""] || (![self isValidUsername:username] && ![self validEmail:username])) {
+    if ([password isEqualToString:@""] || [username isEqualToString:@""] || ((![self isValidUsername:username]) && (![self validEmail:_userField.text]))) {
         // error out
-        
+        [self presentInvalidInfo];
         return;
     }
     
     
     [self startSpinner:self.loadingView onButton:self.loginButton];
+    
+    
+    //checks if username is a username, if not it's an email.
+    if (![self isValidUsername:username]) {
+        username = _userField.text;
+    }
     
     
     [[FRSAPIClient sharedClient] signIn:username password:password completion:^(id responseObject, NSError *error) {
@@ -209,6 +212,7 @@
             FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
             [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
                 [self stopSpinner:self.loadingView onButton:self.loginButton];
+                [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
             }];
         }
         
@@ -320,6 +324,10 @@
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
             [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
             
+//            NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
+//            
+//            [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
+            
             self.didAuthenticateSocial = YES;
             [self popToOrigin];
         }
@@ -382,6 +390,8 @@
         if (authenticated) {
 
             NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
+            
+//            [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
             
             [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
