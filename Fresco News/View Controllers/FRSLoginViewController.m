@@ -185,7 +185,12 @@
     
     //Animate transition
     NSString *username = _userField.text;
-    username = [username stringByReplacingOccurrencesOfString:@"@" withString:@""];
+//    username = [username stringByReplacingOccurrencesOfString:@"@" withString:@""];
+    
+    if ([[username substringToIndex:1] isEqualToString:@"@"]) {
+        username = [username substringFromIndex:1];
+    }
+    
     NSString *password = _passwordField.text;
     
     if ([password isEqualToString:@""] || [username isEqualToString:@""] || ((![self isValidUsername:username]) && (![self validEmail:_userField.text]))) {
@@ -194,15 +199,12 @@
         return;
     }
     
-    
     [self startSpinner:self.loadingView onButton:self.loginButton];
-    
     
     //checks if username is a username, if not it's an email.
     if (![self isValidUsername:username]) {
         username = _userField.text;
     }
-    
     
     [[FRSAPIClient sharedClient] signIn:username password:password completion:^(id responseObject, NSError *error) {
         

@@ -148,7 +148,6 @@
     
     entry = [NSDate date];
     numberRead = 0;
-    
 
 }
 
