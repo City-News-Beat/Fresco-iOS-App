@@ -68,6 +68,8 @@
 
 @property (strong, nonatomic) UIImageView *emailCheckIV;
 
+@property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardTap;
+
 @end
 
 
@@ -1036,6 +1038,7 @@
 
 -(void)logoutTapped {
     [self.delegate logoutAlertAction];
+    [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     [self dismiss];
 }
 
@@ -1220,8 +1223,8 @@
             self.height += 44;
         }
 
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
-        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:tap];
+        self.dismissKeyboardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
+        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.dismissKeyboardTap];
 
         self.height += 380;
         
@@ -1335,7 +1338,7 @@
 
     [self checkEmail];
     
-    
+    [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     
 //    [self dismiss];
 }
