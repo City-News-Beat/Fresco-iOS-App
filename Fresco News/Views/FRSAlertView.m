@@ -66,6 +66,8 @@
 @property (strong, nonatomic) UILabel *usernameTakenLabel;
 @property BOOL migrationAlertShouldShowPassword;
 
+@property (strong, nonatomic) UIImageView *emailCheckIV;
+
 @end
 
 
@@ -1154,6 +1156,7 @@
         [emailContainer addSubview:emailTopLine];
         
         self.usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+        [self.usernameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         self.usernameTextField.tag = 1;
         self.usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.usernameTextField.placeholder = @"@username";
@@ -1164,6 +1167,7 @@
         [usernameContainer addSubview:self.usernameTextField];
         
         self.emailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+        [self.emailTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         self.emailTextField.tag = 2;
         self.emailTextField.placeholder = @"Email address";
         self.emailTextField.tintColor = [UIColor frescoBlueColor];
@@ -1172,6 +1176,11 @@
         self.emailTextField.textColor = [UIColor frescoDarkTextColor];
         self.emailTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         [emailContainer addSubview:self.emailTextField];
+        
+        self.emailCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.emailCheckIV.frame = CGRectMake(emailContainer.frame.size.width -24 -6, 10, 24, 24);
+        self.emailCheckIV.alpha = 0;
+        [emailContainer addSubview:self.emailCheckIV];
         
         self.usernameCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
         self.usernameCheckIV.frame = CGRectMake(usernameContainer.frame.size.width -24 -6, 10, 24, 24);
@@ -1197,6 +1206,7 @@
             [passwordContainer addSubview:passwordTopLine];
             
             self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+            [self.passwordTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             self.passwordTextField.tag = 3;
             self.passwordTextField.placeholder = @"Password";
             self.passwordTextField.tintColor = [UIColor frescoBlueColor];
@@ -1245,6 +1255,10 @@
         
     } completion:nil];
     
+    if (self.emailTextField.isEditing) {
+        self.emailCheckIV.alpha = 0;
+    }
+    
     if (textField.tag == 1) {
         [self startUsernameTimer];
         if ([textField.text isEqualToString:@""]){
@@ -1262,6 +1276,11 @@
         }
     }
     
+    
+    if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
+        [self checkEmail];
+    }
+    
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.transform = CGAffineTransformMakeTranslation(0, 0);
@@ -1269,12 +1288,14 @@
     } completion:nil];
 }
 
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    
-    if ((self.emailTextField.isEditing) && ([self isValidEmail:self.emailTextField.text])) {
+-(void)textFieldDidChange:(UITextField *)textField {
+    if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
         [self checkEmail];
     }
+}
+
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
     
     if (self.usernameTextField.isEditing) {
         [self startUsernameTimer];
@@ -1312,7 +1333,11 @@
 
 -(void)updateUserInfo {
 
-    [self dismiss];
+    [self checkEmail];
+    
+    
+    
+//    [self dismiss];
 }
 
 
@@ -1322,15 +1347,25 @@
         
         if (!error) {
             self.emailTaken = YES;
-            //[self shouldShowEmailDialogue:YES];
-            //[self presentInvalidEmail];
+            [self shouldShowEmailError:YES];
         } else {
             self.emailTaken = NO;
-            //[self shouldShowEmailDialogue:NO];
+            [self shouldShowEmailError:NO];
         }
         
         [self checkCreateAccountButtonState];
     }];
+}
+
+-(void)shouldShowEmailError:(BOOL)error {
+    
+    NSLog(@"EMAIL ERROR: %d", error);
+    
+    if (error) {
+        self.emailCheckIV.alpha = 1;
+    } else {
+        self.emailCheckIV.alpha = 0;
+    }
 }
 
 -(void)startUsernameTimer {
