@@ -1205,6 +1205,12 @@
 
 -(void)textFieldDidEndEditing:(UITextField *)textField   {
     
+    if (textField == self.usernameTextField) {
+        if ([textField.text isEqualToString:@"@"]) {
+            textField.text = @"";
+        }
+    }
+    
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.transform = CGAffineTransformMakeTranslation(0, 0);

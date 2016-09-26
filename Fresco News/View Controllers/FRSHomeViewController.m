@@ -89,13 +89,13 @@
 
 -(void)presentNewStuff {
     
-//    if (self.migrationAlert) {
-//        return;
-//    }
-//    
-//    self.migrationAlert = [[FRSAlertView alloc] initNewStuff];
-//    self.migrationAlert.delegate = self;
-//    [self.migrationAlert show];
+    if (self.migrationAlert) {
+        return;
+    }
+    
+    self.migrationAlert = [[FRSAlertView alloc] initNewStuff];
+    self.migrationAlert.delegate = self;
+    [self.migrationAlert show];
 }
 
 -(void)presentTOS {
