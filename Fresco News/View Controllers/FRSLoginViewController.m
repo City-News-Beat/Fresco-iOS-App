@@ -224,12 +224,7 @@
                 if ([self validEmail:username]) {
                     [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
                 }
-                
-                if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
-                    FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:NO];
-                    alert.delegate = self;
-                    [alert show];
-                }
+                [self displayMigrationAlert];
             }];
         }
         
@@ -336,11 +331,10 @@
     
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         
-        
-        
         if (error.code == 1125) { //user needs a password
             //set needs password to TRUE
 
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needs-password"];
         }
         
         
@@ -355,6 +349,7 @@
             /*  */
             
             self.didAuthenticateSocial = YES;
+            [self displayMigrationAlert];
             [self popToOrigin];
             
             return;
@@ -404,6 +399,14 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
+-(void)displayMigrationAlert {
+    if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
+        alert.delegate = self;
+        [alert show];
+    }
+}
+
 -(IBAction)facebook:(id)sender {
     
     self.facebookButton.hidden = true;
@@ -417,7 +420,7 @@
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         
         if (error.code == 1125) {//User needs a password
-            
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needs-password"];
         }
         
         if (authenticated) {
@@ -441,6 +444,9 @@
                 }];
             }];
 
+            
+            [self displayMigrationAlert];
+            
             self.didAuthenticateSocial = YES;
             NSLog(@"Popped");
             [self popToOrigin];

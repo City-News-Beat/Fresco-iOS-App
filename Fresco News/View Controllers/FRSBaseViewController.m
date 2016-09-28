@@ -268,7 +268,9 @@
 
 -(void)logoutWithPop:(BOOL)pop {
     
-    [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
+    if ([[FRSAPIClient sharedClient] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
+        [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSAPIClient sharedClient] authenticatedUser]];
+    }
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
     
     [SSKeychain deletePasswordForService:serviceName account:clientAuthorization];

@@ -27,7 +27,7 @@
 #import "FRSGallery+CoreDataProperties.h"
 #import "FRSFollowingTable.h"
 
-@interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 {
     BOOL isLoading;
     NSInteger lastOffset;
@@ -85,6 +85,14 @@
     self.isInFollowers = true;
     
     [self displayPreviousTab];
+    
+    
+    //Unable to logout using delegate method because that gets called in LoginVC
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
+}
+
+-(void)logoutNotification {
+    [self logoutWithPop:NO];
 }
 
 -(void)presentNewStuffWithPassword:(BOOL)password {
@@ -109,11 +117,6 @@
     [self.TOSAlert show];
 }
 
--(void)logoutAlertAction {
-    [self logoutWithPop:YES];
-    self.TOSAlert = nil;
-    self.migrationAlert = nil;
-}
 
 -(BOOL)shouldHaveTextLimit {
     return YES;
@@ -159,18 +162,15 @@
     if (hasLoadedOnce) {
         [self reloadData];
     }
-    
-    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-        
-        if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
-            
-            if ([[FRSAPIClient sharedClient] passwordUsed]) {
-                [self presentNewStuffWithPassword:NO];
-            } else {
-                [self presentNewStuffWithPassword:YES];
-            }
-        }
+}
+
+-(void)logoutAlertAction {
+    if ([[FRSAPIClient sharedClient] authenticatedUser].username) {
+        return;
     }
+    [self logoutWithPop:YES];
+    self.TOSAlert = nil;
+    self.migrationAlert = nil;
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -195,6 +195,13 @@
 
 -(void)addNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
+    
+    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
+        if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
+
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutAlertAction) name:UIApplicationWillTerminateNotification object:nil];
+        }
+    }
 }
 
 -(void)reloadData {

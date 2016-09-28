@@ -1037,6 +1037,7 @@
 
 -(void)logoutTapped {
     [self.delegate logoutAlertAction];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"logout_notification" object:nil];
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     [self dismiss];
 }
@@ -1364,6 +1365,17 @@
         [digestion setObject:password forKey:@"verify_password"];
     }
     
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]) {
+        
+        [digestion setObject:password forKey:@"password"];
+        [digestion removeObjectForKey:@"verify_password"];
+    }
+    
+    
+    
+    
     [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
         
         if (error) {
@@ -1555,15 +1567,28 @@
 -(void)checkCreateAccountButtonState {
     UIControlState controlState;
     
-    if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
-        
-        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
-            controlState = UIControlStateHighlighted;
-        } else {
-            controlState = UIControlStateNormal;
+
+    if (self.passwordTextField) {
+        if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
+            
+            if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken) && (!self.usernameTaken)) {
+                controlState = UIControlStateHighlighted;
+            } else {
+                controlState = UIControlStateNormal;
+            }
+            [self toggleCreateAccountButtonTitleColorToState:controlState];
         }
+    } else {
         
-        [self toggleCreateAccountButtonTitleColorToState:controlState];
+        if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
+            
+            if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
+                controlState = UIControlStateHighlighted;
+            } else {
+                controlState = UIControlStateNormal;
+            }
+            [self toggleCreateAccountButtonTitleColorToState:controlState];
+        }
     }
 }
 
