@@ -266,7 +266,7 @@
 
 #pragma mark - Logout
 
--(void)logout {
+-(void)logoutWithPop:(BOOL)pop {
     
     [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
@@ -290,7 +290,9 @@
     }
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [self popViewController];
+    if (pop) {
+        [self popViewController];
+    }
     
     [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
     [FRSTracker track:@"Logouts"];

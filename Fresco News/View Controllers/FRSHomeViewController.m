@@ -110,7 +110,7 @@
 }
 
 -(void)logoutAlertAction {
-    [self logout];
+    [self logoutWithPop:YES];
     self.TOSAlert = nil;
     self.migrationAlert = nil;
 }
@@ -161,11 +161,8 @@
     }
     
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-                
-        NSLog(@"PASSWORD: %@", [[FRSAPIClient sharedClient] passwordUsed]);
-
+        
         if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
-
             
             if ([[FRSAPIClient sharedClient] passwordUsed]) {
                 [self presentNewStuffWithPassword:NO];

@@ -1020,7 +1020,6 @@
     self.actionLine.frame = CGRectMake(0, self.frame.size.height -43.5, self.frame.size.width, 0.5);
     self.topLine.frame = CGRectMake(0, 44, self.frame.size.width, 0.5);
 //    } completion:nil];
-
 }
 
 -(void)acceptTapped {
@@ -1051,10 +1050,6 @@
         }
     }
 }
-
-
-
-
 
 -(instancetype)initNewStuffWithPasswordField:(BOOL)password {
     
@@ -1179,6 +1174,17 @@
         self.emailTextField.textColor = [UIColor frescoDarkTextColor];
         self.emailTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         [emailContainer addSubview:self.emailTextField];
+        
+        
+        NSLog(@"email: %@", [[FRSAPIClient sharedClient] authenticatedUser].email);
+        
+        if ([[FRSAPIClient sharedClient] authenticatedUser].email) {
+            self.emailTextField.text = [[FRSAPIClient sharedClient] authenticatedUser].email;
+            self.emailTextField.userInteractionEnabled = NO;
+        } else if ([[FRSAPIClient sharedClient] emailUsed]) {
+            self.emailTextField.text = [[FRSAPIClient sharedClient] emailUsed];
+            self.emailTextField.userInteractionEnabled = NO;
+        }
         
         self.emailCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
         self.emailCheckIV.frame = CGRectMake(emailContainer.frame.size.width -24 -6, 10, 24, 24);
@@ -1340,7 +1346,24 @@
     
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     
-//    [self dismiss];
+    NSDictionary *digestion = [[NSDictionary alloc] init];
+    
+    if ([[FRSAPIClient sharedClient] passwordUsed]) {
+        digestion = @{@"username" : self.usernameTextField.text, @"email" : self.emailTextField.text};
+    } else {
+        digestion = @{@"username" : self.usernameTextField.text, @"email" : self.emailTextField.text, @"verify_password" : self.passwordTextField.text};
+    }
+    
+    [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
+        
+        if (responseObject) {
+            
+            [self dismiss];
+            
+        } else {
+            //handle error
+        }
+    }];
 }
 
 
@@ -1361,9 +1384,6 @@
 }
 
 -(void)shouldShowEmailError:(BOOL)error {
-    
-    NSLog(@"EMAIL ERROR: %d", error);
-    
     if (error) {
         self.emailCheckIV.alpha = 1;
     } else {
@@ -1373,7 +1393,6 @@
 
 -(void)startUsernameTimer {
     if (!self.usernameTimer) {
-        NSLog(@"TIMER STARTED");
         self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(usernameTimerFired) userInfo:nil repeats:YES];
     }
 }
@@ -1381,16 +1400,13 @@
 
 -(void)stopUsernameTimer {
     if ([self.usernameTimer isValid]) {
-        NSLog(@"TIMER ENDED");
         [self.usernameTimer invalidate];
     }
-    
     self.usernameTimer = nil;
 }
 
 
 -(void)usernameTimerFired {
-    NSLog(@"TIMER FIRED");
     
     if ([self.usernameTextField.text isEqualToString:@""]) {
         self.usernameCheckIV.alpha = 0;
@@ -1438,9 +1454,8 @@
     }
 }
 
--(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
 
-    NSLog(@"TIMER SHOW: %d", success);
+-(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
     
     if(success) {
         self.usernameCheckIV.image = [UIImage imageNamed:@""];

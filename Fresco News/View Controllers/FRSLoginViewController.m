@@ -22,7 +22,7 @@
 //Alert View
 #import "FRSAlertView.h"
 
-@interface FRSLoginViewController () <UITextFieldDelegate>
+@interface FRSLoginViewController () <UITextFieldDelegate, FRSAlertViewDelegate>
 
 @property (nonatomic) BOOL didAnimate;
 @property (nonatomic) BOOL didTransform;
@@ -179,6 +179,10 @@
 
 #pragma mark - Actions
 
+-(void)logoutAlertAction {
+    [self logoutWithPop:NO];
+}
+
 -(IBAction)login:(id)sender {
     
     [self dismissKeyboard];
@@ -217,7 +221,12 @@
                 [self stopSpinner:self.loadingView onButton:self.loginButton];
                 [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
                 
+                if ([self validEmail:username]) {
+                    [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
+                }
+                
                 FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:NO];
+                alert.delegate = self;
                 [alert show];
             }];
 
@@ -331,9 +340,10 @@
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
             [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
             
-//            NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
-//            
-//            [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
+            /*  */
+            NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:session facebook:nil];
+            [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
+            /*  */
             
             self.didAuthenticateSocial = YES;
             [self popToOrigin];

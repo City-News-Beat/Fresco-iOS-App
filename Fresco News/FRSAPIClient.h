@@ -37,6 +37,8 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 @property (nonatomic, retain) NSString *passwordUsed;
 @property (nonatomic, retain) NSDictionary *socialUsed;
+@property (nonatomic, retain) NSString *emailUsed;
+
 +(instancetype)sharedClient;
 -(NSManagedObjectContext *)managedObjectContext;
 -(void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
