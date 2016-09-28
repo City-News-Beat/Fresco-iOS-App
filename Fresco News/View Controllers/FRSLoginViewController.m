@@ -225,11 +225,12 @@
                     [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
                 }
                 
-                FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:NO];
-                alert.delegate = self;
-                [alert show];
+                if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
+                    FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:NO];
+                    alert.delegate = self;
+                    [alert show];
+                }
             }];
-
         }
         
         if (error.code == -1009) {
@@ -335,6 +336,14 @@
     
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         
+        
+        
+        if (error.code == 1125) { //user needs a password
+            //set needs password to TRUE
+
+        }
+        
+        
         if (authenticated) {
             
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
@@ -347,6 +356,8 @@
             
             self.didAuthenticateSocial = YES;
             [self popToOrigin];
+            
+            return;
         }
         
         
@@ -404,11 +415,21 @@
     [spinner  setFrame:CGRectMake(self.facebookButton.frame.origin.x, self.facebookButton.frame.origin.y, self.facebookButton.frame.size.width, self.facebookButton.frame.size.width)];
     
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        
+        if (error.code == 1125) {//User needs a password
+            
+        }
+        
         if (authenticated) {
-
+            
             NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
             
-//            [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
+            /*  */
+            [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
+            /*  */
+            
+            
+            
             
             [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
@@ -423,6 +444,11 @@
             self.didAuthenticateSocial = YES;
             NSLog(@"Popped");
             [self popToOrigin];
+            
+            [spinner stopLoading];
+            [spinner removeFromSuperview];
+            self.facebookButton.hidden = false;
+            return;
         } else {
             NSLog(@"Else");
         }

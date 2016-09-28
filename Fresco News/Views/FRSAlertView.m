@@ -1175,9 +1175,6 @@
         self.emailTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         [emailContainer addSubview:self.emailTextField];
         
-        
-        NSLog(@"email: %@", [[FRSAPIClient sharedClient] authenticatedUser].email);
-        
         if ([[FRSAPIClient sharedClient] authenticatedUser].email) {
             self.emailTextField.text = [[FRSAPIClient sharedClient] authenticatedUser].email;
             self.emailTextField.userInteractionEnabled = NO;
@@ -1285,7 +1282,6 @@
         }
     }
     
-    
     if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
         [self checkEmail];
     }
@@ -1300,6 +1296,12 @@
 -(void)textFieldDidChange:(UITextField *)textField {
     if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
         [self checkEmail];
+    }
+    
+    if (textField == self.usernameTextField) {
+        if ([textField.text isEqualToString:@"@"]) {
+            [self checkCreateAccountButtonState];
+        }
     }
 }
 
@@ -1346,28 +1348,50 @@
     
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     
-    NSDictionary *digestion = [[NSDictionary alloc] init];
+    NSMutableDictionary *digestion = [[NSMutableDictionary alloc] init];
+    
+    
+    NSString *username = [self.usernameTextField.text stringByReplacingOccurrencesOfString:@"@" withString:@""];
+    NSString *email = self.emailTextField.text;
+    NSString *password = self.passwordTextField.text;
+    
+    [digestion setObject:username forKey:@"username"];
+    [digestion setObject:email forKey:@"email"];
     
     if ([[FRSAPIClient sharedClient] passwordUsed]) {
-        digestion = @{@"username" : self.usernameTextField.text, @"email" : self.emailTextField.text};
+        [digestion setObject:[[FRSAPIClient sharedClient] passwordUsed] forKey:@"verify_password"];
     } else {
-        digestion = @{@"username" : self.usernameTextField.text, @"email" : self.emailTextField.text, @"verify_password" : self.passwordTextField.text};
+        [digestion setObject:password forKey:@"verify_password"];
     }
     
     [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
         
+        if (error) {
+            //handle error
+            return;
+        }
+        
         if (responseObject) {
             
-            [self dismiss];
+            FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+            userToUpdate.username = username;
+            userToUpdate.email = self.emailTextField.text;
+            userToUpdate.password = self.passwordTextField.text;
+            [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
             
-        } else {
-            //handle error
+            [self dismiss];
         }
     }];
 }
 
 
 -(void)checkEmail {
+    
+    
+    //Prepopulated from login
+    if (!self.emailTextField.userInteractionEnabled) {
+        return;
+    }
     
     [[FRSAPIClient sharedClient] checkEmail:self.emailTextField.text completion:^(id responseObject, NSError *error) {
         

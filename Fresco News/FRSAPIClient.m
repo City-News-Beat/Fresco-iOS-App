@@ -63,6 +63,8 @@
         [mutableDigestion addEntriesFromDictionary:self.socialUsed];
     }
     
+    NSLog(@"DIGESTION: %@", mutableDigestion);
+    
     [self updateUserWithDigestion:mutableDigestion completion:completion];
 }
 
