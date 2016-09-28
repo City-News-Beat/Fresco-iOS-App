@@ -1567,7 +1567,6 @@
 -(void)checkCreateAccountButtonState {
     UIControlState controlState;
     
-
     if (self.passwordTextField) {
         if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
             

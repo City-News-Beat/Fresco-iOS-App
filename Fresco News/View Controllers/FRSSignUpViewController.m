@@ -362,9 +362,8 @@
     self.TOSContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentsCard.frame.origin.y + self.assignmentsCard.frame.size.height + 12, self.view.frame.size.width, 44)];
     [self.scrollView addSubview:self.TOSContainerView];
 
-    self.TOSCheckBoxButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-    self.TOSCheckBoxButton.backgroundColor = [UIColor redColor];
+    self.TOSCheckBoxButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@"check-disabled"] forState:UIControlStateNormal];
     self.TOSCheckBoxButton.frame = CGRectMake(16, 10, 24, 24);
     [self.TOSCheckBoxButton addTarget:self action:@selector(acceptTOS) forControlEvents:UIControlEventTouchUpInside];
     [self.TOSContainerView addSubview:self.TOSCheckBoxButton];
@@ -392,16 +391,16 @@
 
 -(void)acceptTOS {
     
-    //We need the bearer token to accept TOS, actual accepting happens when the user creates their account.
+    //We need the bearer token to accept TOS, actual accepting happens on the API when the user creates their account.
     
     if (!self.TOSAccepted) {
         self.TOSAccepted = YES;
         [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-        self.TOSCheckBoxButton.backgroundColor = [UIColor greenColor];
+        [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@"check-enabled"] forState:UIControlStateNormal];
     } else {
         self.TOSAccepted = NO;
         [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-        self.TOSCheckBoxButton.backgroundColor = [UIColor redColor];
+        [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@"check-disabled"] forState:UIControlStateNormal];
     }
     
     [self checkCreateAccountButtonState];
