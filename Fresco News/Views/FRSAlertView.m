@@ -60,8 +60,15 @@
 
 @property (strong, nonatomic) UITextField *usernameTextField;
 @property (strong, nonatomic) UITextField *emailTextField;
+@property (strong, nonatomic) UITextField *passwordTextField;
 
 @property (strong, nonatomic) UIImageView *usernameCheckIV;
+@property (strong, nonatomic) UILabel *usernameTakenLabel;
+@property BOOL migrationAlertShouldShowPassword;
+
+@property (strong, nonatomic) UIImageView *emailCheckIV;
+
+@property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardTap;
 
 @end
 
@@ -1031,6 +1038,7 @@
 
 -(void)logoutTapped {
     [self.delegate logoutAlertAction];
+    [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     [self dismiss];
 }
 
@@ -1048,11 +1056,12 @@
 
 
 
--(instancetype)initNewStuff {
+-(instancetype)initNewStuffWithPasswordField:(BOOL)password {
     
     self = [super init];
     if (self){
-                
+        
+        self.height = 0;
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
         
         [self configureDarkOverlay];
@@ -1118,7 +1127,7 @@
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(logoutTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(16, 337, 54, 44);
-        [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+        [self.actionButton setTitleColor:[UIColor frescoRedHeartColor] forState:UIControlStateNormal];
         [self.actionButton setTitle:@"LOG OUT" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
@@ -1129,6 +1138,7 @@
         [self.cancelButton addTarget:self action:@selector(updateUserInfo) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         [self.cancelButton setTitle:@"DONE" forState:UIControlStateNormal];
+        self.cancelButton.enabled = NO;
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
@@ -1149,6 +1159,7 @@
         [emailContainer addSubview:emailTopLine];
         
         self.usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+        [self.usernameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         self.usernameTextField.tag = 1;
         self.usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.usernameTextField.placeholder = @"@username";
@@ -1159,6 +1170,7 @@
         [usernameContainer addSubview:self.usernameTextField];
         
         self.emailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+        [self.emailTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         self.emailTextField.tag = 2;
         self.emailTextField.placeholder = @"Email address";
         self.emailTextField.tintColor = [UIColor frescoBlueColor];
@@ -1168,14 +1180,60 @@
         self.emailTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         [emailContainer addSubview:self.emailTextField];
         
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
-        [self addGestureRecognizer:tap];
+        self.emailCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.emailCheckIV.frame = CGRectMake(emailContainer.frame.size.width -24 -6, 10, 24, 24);
+        self.emailCheckIV.alpha = 0;
+        [emailContainer addSubview:self.emailCheckIV];
+        
+        self.usernameCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
+        self.usernameCheckIV.frame = CGRectMake(usernameContainer.frame.size.width -24 -6, 10, 24, 24);
+        self.usernameCheckIV.alpha = 0;
+        [usernameContainer addSubview:self.usernameCheckIV];
+        
+        self.usernameTakenLabel = [[UILabel alloc] initWithFrame:CGRectMake(-44 -6, 5, 44, 17)];
+        self.usernameTakenLabel.text = @"TAKEN";
+        self.usernameTakenLabel.alpha = 0;
+        self.usernameTakenLabel.textColor = [UIColor frescoRedHeartColor];
+        self.usernameTakenLabel.font = [UIFont notaBoldWithSize:15];
+        [self.usernameCheckIV addSubview:self.usernameTakenLabel];
+        
+        if (password) {
+            
+            self.migrationAlertShouldShowPassword = YES;
+            
+            UIView *passwordContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 292+44, self.frame.size.width, 44)];
+            [self addSubview:passwordContainer];
+            
+            UIView *passwordTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
+            passwordTopLine.backgroundColor = [UIColor frescoShadowColor];
+            [passwordContainer addSubview:passwordTopLine];
+            
+            self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+            [self.passwordTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            self.passwordTextField.tag = 3;
+            self.passwordTextField.placeholder = @"Password";
+            self.passwordTextField.tintColor = [UIColor frescoBlueColor];
+            self.passwordTextField.delegate = self;
+            self.passwordTextField.keyboardType = UIKeyboardTypeDefault;
+            self.passwordTextField.secureTextEntry = YES;
+            self.passwordTextField.textColor = [UIColor frescoDarkTextColor];
+            self.passwordTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+            [passwordContainer addSubview:self.passwordTextField];
+            
+            self.height += 44;
+        }
 
-        self.height = 380;
+        self.dismissKeyboardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
+        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.dismissKeyboardTap];
+
+        self.height += 380;
         
         NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width  - ALERT_WIDTH)/2;
         NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height)/2;
         
+        self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, self.height - 44, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
+        self.actionButton.frame = CGRectMake(self.actionButton.frame.origin.x, self.height - 44, self.actionButton.frame.size.width, self.actionButton.frame.size.height);
+        line.frame = CGRectMake(line.frame.origin.x, self.height - 44, line.frame.size.width, line.frame.size.height);
         self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
         
         [self addShadowAndClip];
@@ -1192,11 +1250,20 @@
     
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
-        self.transform = CGAffineTransformMakeTranslation(0, -80);
+        if (self.migrationAlertShouldShowPassword) {
+            self.transform = CGAffineTransformMakeTranslation(0, -100);
+        } else {
+            self.transform = CGAffineTransformMakeTranslation(0, -80);
+        }
         
     } completion:nil];
     
+    if (self.emailTextField.isEditing) {
+        self.emailCheckIV.alpha = 0;
+    }
+    
     if (textField.tag == 1) {
+        [self startUsernameTimer];
         if ([textField.text isEqualToString:@""]){
             textField.text = @"@";
         }
@@ -1205,6 +1272,18 @@
 
 -(void)textFieldDidEndEditing:(UITextField *)textField   {
     
+    if (textField == self.usernameTextField) {
+        
+        if ([textField.text isEqualToString:@"@"]) {
+            textField.text = @"";
+        }
+    }
+    
+    
+    if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
+        [self checkEmail];
+    }
+    
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         
         self.transform = CGAffineTransformMakeTranslation(0, 0);
@@ -1212,7 +1291,25 @@
     } completion:nil];
 }
 
+-(void)textFieldDidChange:(UITextField *)textField {
+    if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
+        [self checkEmail];
+    }
+}
+
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    
+    if (self.usernameTextField.isEditing) {
+        [self startUsernameTimer];
+        
+        if ([[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""]){
+            [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:NO success:NO];
+        }
+    }
+    
+    [self checkCreateAccountButtonState];
+    
     
     if (textField.tag == 1) {
         
@@ -1239,183 +1336,232 @@
 
 -(void)updateUserInfo {
 
-    [self dismiss];
+    [self checkEmail];
     
+    [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     
+//    [self dismiss];
 }
 
 
+-(void)checkEmail {
+    
+    [[FRSAPIClient sharedClient] checkEmail:self.emailTextField.text completion:^(id responseObject, NSError *error) {
+        
+        if (!error) {
+            self.emailTaken = YES;
+            [self shouldShowEmailError:YES];
+        } else {
+            self.emailTaken = NO;
+            [self shouldShowEmailError:NO];
+        }
+        
+        [self checkCreateAccountButtonState];
+    }];
+}
 
-//-(void)usernameTimerFired {
-//    
-//    // Check for emoji and error
-//    if ([self stringContainsEmoji:[self.usernameTextField.text substringFromIndex:1]]){
-//        [self animateUsernameCheckImageView:self.usernameTextField animateIn:YES success:NO];
-//        return;
-//    }
-//    
-//    if (self.usernameTextField.isEditing && (![self stringContainsEmoji:[self.usernameTextField.text substringFromIndex:1]])) {
-//        
-//        if ((![[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""])) {
-//            
-//            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTextField.text substringFromIndex:1] completion:^(id responseObject, NSError *error) {
-//                
-//                //Return if no internet
-//                if (error.code == -1009) {
-//                    
-//                    return;
-//                }
-//                
-//                
-//                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-//                NSInteger responseCode = response.statusCode;
-//                NSLog(@"ERROR: %ld", (long)responseCode);
-//                
-//                if (responseCode == 404) { //
-//                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-//                    self.usernameTaken = NO;
-//                    [self stopUsernameTimer];
-//                    [self checkCreateAccountButtonState];
-//                    return;
-//                } else {
-//                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-//                    self.usernameTaken = YES;
-//                    [self stopUsernameTimer];
-//                    [self checkCreateAccountButtonState];
-//                }
-//            }];
-//        }
-//    }
-//}
+-(void)shouldShowEmailError:(BOOL)error {
+    
+    NSLog(@"EMAIL ERROR: %d", error);
+    
+    if (error) {
+        self.emailCheckIV.alpha = 1;
+    } else {
+        self.emailCheckIV.alpha = 0;
+    }
+}
 
-//-(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
-//
-//    if(success) {
-//        self.usernameCheckIV.image = [UIImage imageNamed:@"check-green"];
-//    } else {
-//        self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
-//    }
-//    
-//    if (animateIn) {
-//        if (self.usernameCheckIV.alpha == 0) {
-//            
-//            self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
-//            self.usernameCheckIV.alpha = 0;
-//            self.usernameCheckIV.alpha = 1;
-//            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
-//            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
-//        }
-//    } else {
-//        
-//        self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.1, 1.1);
-//        self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
-//        self.usernameCheckIV.alpha = 0;
-//    }
-//}
+-(void)startUsernameTimer {
+    if (!self.usernameTimer) {
+        NSLog(@"TIMER STARTED");
+        self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(usernameTimerFired) userInfo:nil repeats:YES];
+    }
+}
 
-//-(void)startUsernameTimer {
-//    if (!self.usernameTimer) {
-//        self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(usernameTimerFired) userInfo:nil repeats:YES];
-//    }
-//}
 
-//-(void)stopUsernameTimer {
-//    if ([self.usernameTimer isValid]) {
-//        [self.usernameTimer invalidate];
-//    }
-//    
-//    self.usernameTimer = nil;
-//}
+-(void)stopUsernameTimer {
+    if ([self.usernameTimer isValid]) {
+        NSLog(@"TIMER ENDED");
+        [self.usernameTimer invalidate];
+    }
+    
+    self.usernameTimer = nil;
+}
 
-//-(BOOL)stringContainsEmoji:(NSString *)string {
-//    __block BOOL returnValue = NO;
-//    [string enumerateSubstringsInRange:NSMakeRange(0, [string length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:
-//     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-//         
-//         const unichar hs = [substring characterAtIndex:0];
-//         // surrogate pair
-//         if (0xd800 <= hs && hs <= 0xdbff) {
-//             if (substring.length > 1) {
-//                 const unichar ls = [substring characterAtIndex:1];
-//                 const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
-//                 if (0x1d000 <= uc && uc <= 0x1f77f) {
-//                     returnValue = YES;
-//                 }
-//             }
-//         } else if (substring.length > 1) {
-//             const unichar ls = [substring characterAtIndex:1];
-//             if (ls == 0x20e3) {
-//                 returnValue = YES;
-//             }
-//             
-//         } else {
-//             // non surrogate
-//             if (0x2100 <= hs && hs <= 0x27ff) {
-//                 returnValue = YES;
-//             } else if (0x2B05 <= hs && hs <= 0x2b07) {
-//                 returnValue = YES;
-//             } else if (0x2934 <= hs && hs <= 0x2935) {
-//                 returnValue = YES;
-//             } else if (0x3297 <= hs && hs <= 0x3299) {
-//                 returnValue = YES;
-//             } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
-//                 returnValue = YES;
-//             }
-//         }
-//     }];
-//    
-//    return returnValue;
-//}
-//
-//-(void)checkCreateAccountButtonState {
-//    UIControlState controlState;
-//    
-//    if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
-//        
-//        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
-//            controlState = UIControlStateHighlighted;
-//        } else {
-//            controlState = UIControlStateNormal;
-//        }
-//        
-//        [self toggleCreateAccountButtonTitleColorToState:controlState];
-//    }
-//}
 
-//-(BOOL)isValidUsername:(NSString *)username {
-//    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
-//    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
-//    return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
-//}
-//
-//-(BOOL)isValidEmail:(NSString *)emailString {
-//    
-//    if([emailString length] == 0) {
-//        return NO;
-//    }
-//    
-//    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
-//    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
-//    NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
-//    
-//    if (regExMatches == 0) {
-//        return NO;
-//    } else {
-//        return YES;
-//    }
-//}
-//
-//-(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState {
-//    if (controlState == UIControlStateNormal){
-//        [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-//        self.cancelButton.enabled = NO;
-//    } else {
-//        [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-//        [self.cancelButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
-//        self.cancelButton.enabled = YES;
-//    }
-//    
-//}
+-(void)usernameTimerFired {
+    NSLog(@"TIMER FIRED");
+    
+    if ([self.usernameTextField.text isEqualToString:@""]) {
+        self.usernameCheckIV.alpha = 0;
+        self.usernameTakenLabel.alpha = 0;
+        [self stopUsernameTimer];
+        return;
+    }
+    
+    // Check for emoji and error
+    if ([self stringContainsEmoji:[self.usernameTextField.text substringFromIndex:1]]){
+        [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+        return;
+    }
+    
+    if (self.usernameTextField.isEditing && (![self stringContainsEmoji:[self.usernameTextField.text substringFromIndex:1]])) {
+        
+        if ((![[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""])) {
+            
+            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTextField.text substringFromIndex:1] completion:^(id responseObject, NSError *error) {
+                
+                //Return if no internet
+                if (error.code == -1009) {
+                    
+                    return;
+                }
+                
+                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                NSInteger responseCode = response.statusCode;
+                NSLog(@"TIMER CODE: %ld", responseCode);
+                
+                if (responseCode == 404) { //
+                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                    self.usernameTaken = NO;
+                    [self stopUsernameTimer];
+                    [self checkCreateAccountButtonState];
+                    return;
+                } else {
+                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                    self.usernameTaken = YES;
+                    [self stopUsernameTimer];
+                    [self checkCreateAccountButtonState];
+                }
+            }];
+        }
+    }
+}
+
+-(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
+
+    NSLog(@"TIMER SHOW: %d", success);
+    
+    if(success) {
+        self.usernameCheckIV.image = [UIImage imageNamed:@""];
+        self.usernameTakenLabel.alpha = 0;
+    } else {
+        self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
+        self.usernameTakenLabel.alpha = 1;
+    }
+    
+    if (animateIn) {
+        if (self.usernameCheckIV.alpha == 0) {
+            
+            self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+            self.usernameCheckIV.alpha = 0;
+            self.usernameCheckIV.alpha = 1;
+            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.05, 1.05);
+            self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
+        }
+    } else {
+        
+        self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.1, 1.1);
+        self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
+        self.usernameCheckIV.alpha = 0;
+    }
+}
+
+
+-(BOOL)stringContainsEmoji:(NSString *)string {
+    
+    if ([string isEqualToString:@""]) {
+        return NO;
+    }
+    
+    __block BOOL returnValue = NO;
+    [string enumerateSubstringsInRange:NSMakeRange(0, [string length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:
+     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+         
+         const unichar hs = [substring characterAtIndex:0];
+         // surrogate pair
+         if (0xd800 <= hs && hs <= 0xdbff) {
+             if (substring.length > 1) {
+                 const unichar ls = [substring characterAtIndex:1];
+                 const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+                 if (0x1d000 <= uc && uc <= 0x1f77f) {
+                     returnValue = YES;
+                 }
+             }
+         } else if (substring.length > 1) {
+             const unichar ls = [substring characterAtIndex:1];
+             if (ls == 0x20e3) {
+                 returnValue = YES;
+             }
+             
+         } else {
+             // non surrogate
+             if (0x2100 <= hs && hs <= 0x27ff) {
+                 returnValue = YES;
+             } else if (0x2B05 <= hs && hs <= 0x2b07) {
+                 returnValue = YES;
+             } else if (0x2934 <= hs && hs <= 0x2935) {
+                 returnValue = YES;
+             } else if (0x3297 <= hs && hs <= 0x3299) {
+                 returnValue = YES;
+             } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
+                 returnValue = YES;
+             }
+         }
+     }];
+    
+    return returnValue;
+}
+
+-(void)checkCreateAccountButtonState {
+    UIControlState controlState;
+    
+    if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
+        
+        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
+            controlState = UIControlStateHighlighted;
+        } else {
+            controlState = UIControlStateNormal;
+        }
+        
+        [self toggleCreateAccountButtonTitleColorToState:controlState];
+    }
+}
+
+-(BOOL)isValidUsername:(NSString *)username {
+    NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
+    NSCharacterSet *disallowedSet = [allowedSet invertedSet];
+    return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
+}
+
+-(BOOL)isValidEmail:(NSString *)emailString {
+    
+    if([emailString length] == 0) {
+        return NO;
+    }
+    
+    NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
+    
+    if (regExMatches == 0) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+-(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState {
+    if (controlState == UIControlStateNormal){
+        [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cancelButton.enabled = NO;
+    } else {
+        [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        [self.cancelButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
+        self.cancelButton.enabled = YES;
+    }
+    
+}
 
 
 

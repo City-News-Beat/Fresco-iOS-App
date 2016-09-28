@@ -87,15 +87,15 @@
     [self displayPreviousTab];
 }
 
--(void)presentNewStuff {
+-(void)presentNewStuffWithPassword:(BOOL)password {
     
-//    if (self.migrationAlert) {
-//        return;
-//    }
-//    
-//    self.migrationAlert = [[FRSAlertView alloc] initNewStuff];
-//    self.migrationAlert.delegate = self;
-//    [self.migrationAlert show];
+    if (self.migrationAlert) {
+        return;
+    }
+    
+    self.migrationAlert = [[FRSAlertView alloc] initNewStuffWithPasswordField:password];
+    self.migrationAlert.delegate = self;
+    [self.migrationAlert show];
 }
 
 -(void)presentTOS {
@@ -148,7 +148,6 @@
     
     entry = [NSDate date];
     numberRead = 0;
-    
 
 }
 
@@ -162,11 +161,17 @@
     }
     
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-        
-        NSLog(@"%@", [[FRSAPIClient sharedClient] authenticatedUser].username);
-        
+                
+        NSLog(@"PASSWORD: %@", [[FRSAPIClient sharedClient] passwordUsed]);
+
         if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
-            [self presentNewStuff];
+
+            
+            if ([[FRSAPIClient sharedClient] passwordUsed]) {
+                [self presentNewStuffWithPassword:NO];
+            } else {
+                [self presentNewStuffWithPassword:YES];
+            }
         }
     }
 }
