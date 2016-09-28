@@ -1022,6 +1022,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         // upload
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
+        
+        if (selectedRow < self.assignmentsArray.count) {
+            gallery[@"assignment_id"] = self.assignmentsArray[selectedRow][@"id"];
+            NSLog(@"attaching assignment: %@", gallery[@"assignment_id"]);
+        }
+        
         gallery[@"posts_new"] = current;
         gallery[@"caption"] = self.captionTextView.text;
         
