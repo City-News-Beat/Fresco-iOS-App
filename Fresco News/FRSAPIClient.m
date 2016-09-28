@@ -1309,7 +1309,7 @@
          if(placemarks && placemarks.count > 0) {
              CLPlacemark *placemark= [placemarks objectAtIndex:0];
              
-             address = [NSString stringWithFormat:@"%@,%@", [placemark locality], [placemark administrativeArea]];
+             address = [NSString stringWithFormat:@"%@, %@", [placemark locality], [placemark administrativeArea]];
              
              NSLog(@"Found address: %@",address);
              completion(address, Nil);

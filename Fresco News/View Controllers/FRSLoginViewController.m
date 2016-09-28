@@ -188,10 +188,14 @@
     
     //Animate transition
     NSString *username = _userField.text;
-    username = [username stringByReplacingOccurrencesOfString:@"@" withString:@""];
+    //username = [username stringByReplacingOccurrencesOfString:@"@" withString:@""];
+    if ([[username substringToIndex:1] isEqualToString:@"@"]) {
+        username = [username substringFromIndex:1];
+    }
+    
     NSString *password = _passwordField.text;
     
-    if ([password isEqualToString:@""] || [username isEqualToString:@""] || (![self isValidUsername:username] && ![self validEmail:username])) {
+    if ([password isEqualToString:@""] || [username isEqualToString:@""]) {
         // error out
         
         return;
