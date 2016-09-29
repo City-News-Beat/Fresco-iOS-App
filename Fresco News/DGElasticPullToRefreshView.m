@@ -323,32 +323,45 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
     [scrollView dg_removeObserver:self forKeyPath:keyPathForContentOffset];
     [scrollView dg_removeObserver:self forKeyPath:keyPathForContentInset];
 
-    [UIView animateWithDuration:duration
-        delay:0.0
-        usingSpringWithDamping:self.animationVelocity
-        initialSpringVelocity:0.0
-        options:0
-        animations:^{
-            [self.cControlPointView setCenterY:centerY];
-            [self.l1ControlPointView setCenterY:centerY];
-            [self.l2ControlPointView setCenterY:centerY];
-            [self.l3ControlPointView setCenterY:centerY];
-            [self.r1ControlPointView setCenterY:centerY];
-            [self.r2ControlPointView setCenterY:centerY];
-            [self.r3ControlPointView setCenterY:centerY];
-
+    
+    
+    
+    
+    [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        [self.cControlPointView setCenterY:centerY];
+        [self.l1ControlPointView setCenterY:centerY];
+        [self.l2ControlPointView setCenterY:centerY];
+        [self.l3ControlPointView setCenterY:centerY];
+        [self.r1ControlPointView setCenterY:centerY];
+        [self.r2ControlPointView setCenterY:centerY];
+        [self.r3ControlPointView setCenterY:centerY];
+        
+    } completion:^(BOOL finished) {
+        [self stopDisplayLink];
+        [self resetScrollViewContentInset:YES animated:NO completion:nil];
+        UIScrollView* strongScrollView = [self scrollView];
+        if (strongScrollView) {
+            [strongScrollView dg_addObserver:self forKeyPath:keyPathForContentOffset];
+            strongScrollView.scrollEnabled = YES;
         }
-        completion:^(BOOL finished) {
-            [self stopDisplayLink];
-            [self resetScrollViewContentInset:YES animated:NO completion:nil];
-            UIScrollView* strongScrollView = [self scrollView];
-            if (strongScrollView) {
-                [strongScrollView dg_addObserver:self forKeyPath:keyPathForContentOffset];
-                strongScrollView.scrollEnabled = YES;
-            }
-
-            self.state = DGElasticPullToRefreshStateLoading;
-        }];
+        
+        self.state = DGElasticPullToRefreshStateLoading;
+    }];
+    
+    
+//    [UIView animateWithDuration:duration
+//        delay:0.0
+//        usingSpringWithDamping:self.animationVelocity
+//        initialSpringVelocity:0.0
+//        options:0
+//        animations:^{
+//
+//
+//        }
+//        completion:^(BOOL finished) {
+//
+//        }];
     self.bounceAnimationHelperView.center = CGPointMake(0, self.originalContentInsetTop + [self currentHeight]);
     [UIView animateWithDuration:duration * 0.4 animations:^{
         CGFloat contentInsetTop = self.originalContentInsetTop;

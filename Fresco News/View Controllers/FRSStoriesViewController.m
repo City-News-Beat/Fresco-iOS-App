@@ -176,6 +176,14 @@
 //    [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
 //}
 
+
+-(void)configurePull {
+    
+    NSLog(@"self.tableview.contentOffset.y = %f", self.tableView.contentOffset.y);
+
+}
+
+
 -(void)reloadData {
     [[FRSAPIClient new] fetchStoriesWithLimit:self.stories.count lastStoryID:Nil completion:^(NSArray *stories, NSError *error) {
         
