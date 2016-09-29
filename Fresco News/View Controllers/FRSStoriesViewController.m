@@ -73,7 +73,7 @@
 -(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
-//    [self configurePullToRefresh];
+    [self configurePullToRefresh];
 //    [self configureSpinner];
     [self configureNavigationBar];
 }
@@ -158,31 +158,23 @@
     [self.navigationItem.titleView addSubview:label];
 }
 
-//-(void)configurePullToRefresh {
-//    [super removeNavigationBarLine];
-//    
-//    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-//    loadingView.tintColor = [UIColor whiteColor];
-//    
-//    __weak typeof(self) weakSelf = self;
-//    
-//    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [weakSelf reloadData];
-//        });
-//    } loadingView:loadingView];
-//    
-//    [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
-//    [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
-//}
-
-
--(void)configurePull {
+-(void)configurePullToRefresh {
+    [super removeNavigationBarLine];
     
-    NSLog(@"self.tableview.contentOffset.y = %f", self.tableView.contentOffset.y);
-
+    DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    loadingView.tintColor = [UIColor frescoBlueColor];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf reloadData];
+        });
+    } loadingView:loadingView];
+    
+    [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
+    [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
 }
-
 
 -(void)reloadData {
     [[FRSAPIClient new] fetchStoriesWithLimit:self.stories.count lastStoryID:Nil completion:^(NSArray *stories, NSError *error) {
