@@ -137,10 +137,10 @@
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
 
     
-    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
-    [self.backTapButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+//    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
+//    [self.backTapButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 //    self.backTapButton.backgroundColor = [UIColor blueColor];
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
+//    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
     
 //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
 //    [view addGestureRecognizer:tap];

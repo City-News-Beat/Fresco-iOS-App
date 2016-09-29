@@ -70,9 +70,9 @@ static NSString *imageTile = @"ImageTile";
         [nextButton setTintColor:[UIColor frescoBlueColor]];
     }
     
-    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
-    [self.backTapButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
+//    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
+//    [self.backTapButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+//    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
     
     //self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
     //Navigation bar color is not Fresco Yellow. Not sure where it's set
