@@ -465,7 +465,7 @@
 }
 
 -(void)createProfileSection{
-    self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 269.5)];
+    self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 0)];
     self.profileContainer.backgroundColor = [UIColor frescoOrangeColor];
     self.profileContainer.clipsToBounds = YES;
     
@@ -1175,13 +1175,25 @@
         
         
         self.bioTextView.text = user.bio;
+        
         [self.bioTextView frs_setTextWithResize:user.bio];
+
+
 
         
         
         
         //[self.profileContainer setFrame:CGRectMake(self.profileContainer.frame.origin.x, self.profileContainer.frame.origin.y, self.profileContainer.frame.size.width,269.5 + self.bioLabel.frame.size.height)];
-        [self resizeProfileContainer];
+        
+        
+        if (_authenticatedProfile) {
+            [self resizeProfileContainer];
+        } else {
+            [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                [self resizeProfileContainer];
+            } completion:nil];
+        }
+
         //[self.bioLabel setFrame:CGRectMake(self.bioLabel.frame.origin.x, self.bioLabel.frame.origin.y, self.bioLabel.frame.size.width, lineHeight * self.bioLabel.numberOfLines)];
         
         self.nameLabel.text = user.firstName;
