@@ -503,15 +503,15 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
         __weak typeof (self)wself = self;
         
         if (self.state == DGElasticPullToRefreshStateAnimatingToStopped) {
-            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.loadingView.alpha = 0;
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                    
-                    self.loadingView.alpha = 1;
-                    
-                } completion:nil];
-            }];
+//            [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//                self.loadingView.alpha = 0;
+//            } completion:^(BOOL finished) {
+//                [UIView animateWithDuration:0 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//                    
+//                    self.loadingView.alpha = 1;
+//                    
+//                } completion:nil];
+//            }];
         }
         
         [wself resetScrollViewContentInset:YES animated:YES completion:^{
