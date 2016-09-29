@@ -190,7 +190,7 @@
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
     [self configureDataSource];
-    [self configurePullToRefresh];
+//    [self configurePullToRefresh];
 }
 
 -(void)addNotificationObservers {
@@ -311,19 +311,19 @@
     [self.view addSubview:self.loadingView];
 }
 
--(void)configurePullToRefresh {
-    loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    loadingView.tintColor = [UIColor whiteColor];
-    
-    __weak typeof(self) weakSelf = self;
-    
-    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-        [weakSelf reloadData];
-    } loadingView:loadingView];
-    
-    [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
-    [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
-}
+//-(void)configurePullToRefresh {
+//    loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+//    loadingView.tintColor = [UIColor whiteColor];
+//    
+//    __weak typeof(self) weakSelf = self;
+//    
+//    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
+//        [weakSelf reloadData];
+//    } loadingView:loadingView];
+//    
+//    [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+//    [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+//}
 
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -820,17 +820,17 @@
             [self.tableView dg_stopLoading];
             [self.followingTable dg_stopLoading];
 
-            [self.tableView dg_removePullToRefresh];
-            loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-            loadingView.tintColor = [UIColor whiteColor];
-
-            __weak typeof(self) weakSelf = self;
-            [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-                [weakSelf reloadData];
-            } loadingView:loadingView];
+//            [self.tableView dg_removePullToRefresh];
+//            loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+//            loadingView.tintColor = [UIColor whiteColor];
+//
+//            __weak typeof(self) weakSelf = self;
+//            [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
+//                [weakSelf reloadData];
+//            } loadingView:loadingView];
             
-            [self.followingTable dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
-            [self.followingTable dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+//            [self.followingTable dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+//            [self.followingTable dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
         }
         
         if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
@@ -847,13 +847,13 @@
             loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
             loadingView.tintColor = [UIColor whiteColor];
 
-            __weak typeof(self) weakSelf = self;
-            [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-                [weakSelf reloadData];
-            } loadingView:loadingView];
+//            __weak typeof(self) weakSelf = self;
+//            [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
+//                [weakSelf reloadData];
+//            } loadingView:loadingView];
             
-            [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
-            [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+//            [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+//            [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
         }else if(self.pageScroller.contentOffset.x == self.tableView.frame.size.width){
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldDisplayFollowing"];
             self.isInHighlights = false;
