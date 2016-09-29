@@ -170,10 +170,14 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [weakSelf reloadData];
         });
-    } loadingView:loadingView];
+    } loadingView:loadingView yPos:0];
     
     [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 127.5, self.view.frame.size.width, 0.5)];
+    line.backgroundColor = [UIColor frescoShadowColor];
+    [self.tableView addSubview:line];
 }
 
 -(void)reloadData {

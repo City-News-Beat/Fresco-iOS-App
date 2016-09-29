@@ -46,7 +46,8 @@ static NSString* pullToRefreshViewKey = @"pullToRefreshView";
                              loadingViewSize:(CGFloat)loadingViewSize
                                     velocity:(CGFloat)velocity
                                actionHandler:(void (^)())actionHandler
-                                 loadingView:(DGElasticPullToRefreshLoadingView *)loadingView{
+                                 loadingView:(DGElasticPullToRefreshLoadingView *)loadingView
+                                        yPos:(CGFloat)yPos {
     
     self.multipleTouchEnabled = NO;
     self.panGestureRecognizer.maximumNumberOfTouches = 1;
@@ -60,6 +61,7 @@ static NSString* pullToRefreshViewKey = @"pullToRefreshView";
     pullToRefreshView.actionHandler = actionHandler;
     pullToRefreshView.loadingView = loadingView;
     pullToRefreshView.animationVelocity = velocity;
+    pullToRefreshView.yPos = yPos;
     [self addSubview:pullToRefreshView];
     
     pullToRefreshView.observing = YES;
@@ -69,7 +71,7 @@ static NSString* pullToRefreshViewKey = @"pullToRefreshView";
 - (void)dg_addPullToRefreshWithActionHandler:(void (^)())actionHandler
                                  loadingView:(DGElasticPullToRefreshLoadingView*)loadingView
 {
-    [self dg_addPullToRefreshWithWaveMaxHeight:70.0 minOffsetToPull:95.0 loadingContentInset:50.0 loadingViewSize:20.0 velocity:3.4 actionHandler:actionHandler loadingView:loadingView];
+    [self dg_addPullToRefreshWithWaveMaxHeight:70.0 minOffsetToPull:95.0 loadingContentInset:50.0 loadingViewSize:20.0 velocity:3.4 actionHandler:actionHandler loadingView:loadingView yPos:0];
 }
 - (void)dg_removePullToRefresh
 {

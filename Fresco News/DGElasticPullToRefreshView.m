@@ -363,7 +363,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
 //
 //        }];
     self.bounceAnimationHelperView.center = CGPointMake(0, self.originalContentInsetTop + [self currentHeight]);
-    [UIView animateWithDuration:duration * 0.4 animations:^{
+    [UIView animateWithDuration:duration*0.5 animations:^{
         CGFloat contentInsetTop = self.originalContentInsetTop;
         self.bounceAnimationHelperView.center = CGPointMake(0, contentInsetTop + self.loadingContentInset);
 
@@ -394,7 +394,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
 
         height = scrollView.contentInset.top - self.originalContentInsetTop;
 
-        self.frame = CGRectMake(0, -height - 1.0 +128, width, height);
+        self.frame = CGRectMake(0, -height - 1.0 +128 + self.yPos, width, height);
 //        self.frame = CGRectMake(0, -height - 1.0, width, height);
 
     }
@@ -437,7 +437,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
         CGFloat width = scrollView.bounds.size.width;
         CGFloat height = [self currentHeight];
 
-        self.frame = CGRectMake(0, -height +128, width, height);
+        self.frame = CGRectMake(0, -height +128 +self.yPos, width, height);
 //        self.frame = CGRectMake(0, -height, width, height);
 
         if (self.state == DGElasticPullToRefreshStateLoading || self.state == DGElasticPullToRefreshStateAnimatingToStopped) {

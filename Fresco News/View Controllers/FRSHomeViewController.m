@@ -319,10 +319,14 @@
     
     [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
         [weakSelf reloadData];
-    } loadingView:loadingView];
+    } loadingView:loadingView yPos:0];
     
     [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 127.5, self.view.frame.size.width, 0.5)];
+    line.backgroundColor = [UIColor frescoShadowColor];
+    [self.tableView addSubview:line];
 }
 
 
@@ -416,6 +420,7 @@
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.bounces = YES;
     self.pageScroller.delegate = self;
+    
     [self.view addSubview:self.pageScroller];
 }
 
@@ -817,17 +822,17 @@
             
             //[self showNavBarForScrollView:self.scrollView animated:NO];
             //self.navigationItem.titleView.alpha = 1;
-//            [self.tableView dg_stopLoading];
-//            [self.followingTable dg_stopLoading];
-//
-//            [self.tableView dg_removePullToRefresh];
+            [self.tableView dg_stopLoading];
+            [self.followingTable dg_stopLoading];
+
+            [self.tableView dg_removePullToRefresh];
             loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
             loadingView.tintColor = [UIColor frescoBlueColor];
 
             __weak typeof(self) weakSelf = self;
             [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
                 [weakSelf reloadData];
-            } loadingView:loadingView];
+            } loadingView:loadingView yPos:0];
             
             [self.followingTable dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
             [self.followingTable dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
@@ -839,10 +844,10 @@
             self.isInFollowers = false;
             self.followingTabButton.alpha = 0.7;
             self.highlightTabButton.alpha = 1;
-//            [self.tableView dg_stopLoading];
-//            [self.followingTable dg_stopLoading];
+            [self.tableView dg_stopLoading];
+            [self.followingTable dg_stopLoading];
 
-//            [self.followingTable dg_removePullToRefresh];
+            [self.followingTable dg_removePullToRefresh];
             
             loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
             loadingView.tintColor = [UIColor frescoBlueColor];
@@ -850,7 +855,7 @@
             __weak typeof(self) weakSelf = self;
             [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
                 [weakSelf reloadData];
-            } loadingView:loadingView];
+            } loadingView:loadingView yPos:0];
             
             [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
             [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
