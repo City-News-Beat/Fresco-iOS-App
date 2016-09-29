@@ -109,23 +109,21 @@
     [self.followingTable addSubview:self.followingSpinner];
 }
 
-//-(void)configurePullToRefresh {
-//        self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-//    self.loadingView.tintColor = [UIColor whiteColor];
-//    
-//    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-//    self.loadingView.tintColor = [UIColor whiteColor];
-//    
-//    [self.tableView dg_stopLoading];
-//    [self.followingTable dg_stopLoading];
-//    
-//    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-//        [self reloadData];
-//    } loadingView:self.loadingView];
-//    
-//    [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
-//    [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
-//}
+-(void)configurePullToRefresh {
+    
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.tintColor = [UIColor frescoBlueColor];
+    
+    [self.tableView dg_stopLoading];
+    [self.followingTable dg_stopLoading];
+    
+    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
+        [self reloadData];
+    } loadingView:self.loadingView yPos:0];
+    
+    [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
+    [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+}
 
 -(void)configureNavigationBar{
 //    [super configureNavigationBar];
@@ -184,8 +182,8 @@
  }
 
 -(void)dealloc{
-//    [self.tableView dg_removePullToRefresh];
-//    [self.followingTable dg_removePullToRefresh];
+    [self.tableView dg_removePullToRefresh];
+    [self.followingTable dg_removePullToRefresh];
 //[self release];
 }
 
@@ -424,7 +422,7 @@
     return 125;
 }
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//    [self configurePullToRefresh];
+    [self configurePullToRefresh]; //?
 
     UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 125)];
     //header.backgroundColor = [UIColor redColor];
@@ -534,16 +532,16 @@
             self.navigationItem.titleView.alpha = 1;
             [self.followingTable dg_stopLoading];
             
-//            [self.tableView dg_removePullToRefresh];
-//            self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-//            self.loadingView.tintColor = [UIColor whiteColor];
-//            
-//            [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-//                [self reloadData];
-//            } loadingView:self.loadingView];
-//            
-//            [self.followingTable dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
-//            [self.followingTable dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+            [self.tableView dg_removePullToRefresh];
+            self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+            self.loadingView.tintColor = [UIColor frescoBlueColor];
+            
+            [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
+                [self reloadData];
+            } loadingView:self.loadingView yPos:0];
+            
+            [self.followingTable dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
+            [self.followingTable dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
         }
         
         if (self.pageScroller.contentOffset.x == 0) { // User is in left tab (highlights)
@@ -551,18 +549,17 @@
             self.followersTabButton.alpha = 1;
             [self.tableView dg_stopLoading];
             [self.followingTable dg_stopLoading];
+            [self.followingTable dg_removePullToRefresh];
             
-//            [self.followingTable dg_removePullToRefresh];
-//            
-//            self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-//            self.loadingView.tintColor = [UIColor whiteColor];
-//            
-//            [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
-//                [self reloadData];
-//            } loadingView:self.loadingView];
-//            
-//            [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
-//            [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+            self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+            self.loadingView.tintColor = [UIColor frescoBlueColor];
+            
+            [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
+                [self reloadData];
+            } loadingView:self.loadingView yPos:0];
+            
+            [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
+            [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
         }
         
     }else {
