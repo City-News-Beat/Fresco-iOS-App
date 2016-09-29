@@ -686,6 +686,7 @@
     }
 }
 
+
 -(void)resizeProfileContainer{
     
     CGFloat height = MAX(self.bioTextView.frame.origin.y + self.bioTextView.frame.size.height + 6, 160);
