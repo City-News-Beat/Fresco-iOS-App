@@ -315,7 +315,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
 
     [self resetScrollViewContentInset:NO animated:NO completion:nil];
 
-    CGFloat centerY = self.loadingContentInset +1;
+    CGFloat centerY = self.loadingContentInset;
     CGFloat duration = 0.9;
 
     scrollView.scrollEnabled = NO;
@@ -394,7 +394,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
 
         height = scrollView.contentInset.top - self.originalContentInsetTop;
 
-        self.frame = CGRectMake(0, -height - 1.0 +128 + self.yPos, width, height);
+        self.frame = CGRectMake(0, -height +128 + self.yPos, width, height);
 //        self.frame = CGRectMake(0, -height - 1.0, width, height);
 
     }

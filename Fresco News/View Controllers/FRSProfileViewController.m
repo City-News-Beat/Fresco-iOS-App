@@ -372,7 +372,6 @@
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     loadingView.tintColor = [UIColor whiteColor];
 //    self.tableView.backgroundColor = [UIColor frescoOrangeColor];
-    self.view.backgroundColor = [UIColor redColor];
     __weak typeof(self) weakSelf = self;
     
     [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
