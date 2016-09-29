@@ -379,7 +379,7 @@
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.bounces = YES;
+    self.tableView.bounces = NO;
     self.tableView.separatorColor = [UIColor clearColor];
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -767,8 +767,10 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    [self.searchTextField resignFirstResponder];
 //    [super scrollViewDidScroll:scrollView];
+    [self.searchTextField resignFirstResponder];
+    
+    
 }
 
 #pragma mark - dealloc
