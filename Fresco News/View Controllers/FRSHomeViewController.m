@@ -96,16 +96,16 @@
     [self logoutWithPop:NO];
 }
 
--(void)presentNewStuffWithPassword:(BOOL)password {
-    
-    if (self.migrationAlert) {
-        return;
-    }
-    
-    self.migrationAlert = [[FRSAlertView alloc] initNewStuffWithPasswordField:password];
-    self.migrationAlert.delegate = self;
-    [self.migrationAlert show];
-}
+//-(void)presentNewStuffWithPassword:(BOOL)password {
+//    
+//    if (self.migrationAlert) {
+//        return;
+//    }
+//    
+//    self.migrationAlert = [[FRSAlertView alloc] initNewStuffWithPasswordField:password];
+//    self.migrationAlert.delegate = self;
+//    [self.migrationAlert show];
+//}
 
 -(void)presentTOS {
     
@@ -211,7 +211,7 @@
 
 -(void)userDidLogin {
     
-    if (![[[FRSAPIClient sharedClient] authenticatedUser] username]) {
+    if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
         FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
         alert.delegate = self;
         [alert show];
