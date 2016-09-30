@@ -84,7 +84,31 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
          
 -(void)setupDeepLinkedComment:(NSString *)commentID {
+    NSString *format = @"gallery/%@/comments?last=%@&dir=disc";
+    NSString *endpoint = [NSString stringWithFormat:format, self.gallery.uid, commentID];
     
+    [[FRSAPIClient sharedClient] get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        if (error || !responseObject) {
+            [self commentError:error];
+            return;
+        }
+        
+        _comments = [[NSMutableArray alloc] init];
+        NSArray *response = (NSArray *)responseObject;
+        for (NSInteger i = response.count-1; i >= 0; i--) {
+            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:response[i]];
+            [_comments addObject:commentObject];
+        }
+        
+        if ([_comments count] < 10) {
+            showsMoreButton = FALSE;
+        }
+        else {
+            showsMoreButton = TRUE;
+        }
+        
+        [self configureComments];
+    }];
 }
 
 -(void)fetchCommentsWithID:(NSString  *)galleryID {
