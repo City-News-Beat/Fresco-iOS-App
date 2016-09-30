@@ -619,7 +619,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 
-
 }
 
 -(void)configureCommentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -634,8 +633,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configurePurchasedContentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     
-    cell.titleLabel.text = @"Your photo was purchased!"; //api?
-    cell.bodyLabel.numberOfLines = 3;
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 -(void)configurePaymentExpiringCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -686,6 +685,10 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.image = nil;
     
     [cell configureDefaultCell];
+    
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    
 //    if (processed) {
 //        cell.titleLabel.text = @"Your tax info was accepted!";
 //    } else {

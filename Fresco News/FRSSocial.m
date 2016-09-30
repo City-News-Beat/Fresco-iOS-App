@@ -18,11 +18,21 @@
         
         if (session) {
             [[FRSAPIClient sharedClient] signInWithTwitter:session completion:^(id responseObject, NSError *error) {
+                
+                if (responseObject) {
+                    
+                    NSLog(@"RESPONSE: %d", [[responseObject objectForKey:@"valid_password"] boolValue]);
+                    
+                    if ([[responseObject objectForKey:@"valid_password"] boolValue]) {
+                        completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], session, Nil);
+                        return;
+                    }
+                    completion(TRUE, error, session, Nil);
+                    return;
+                }
+                
                 if (error) {
                     completion(FALSE, error, session, Nil);
-                }
-                else {
-                    completion(TRUE, error, session, Nil);
                 }
             }];
             
@@ -48,6 +58,14 @@
                         
                     }
                     else {
+                        
+                        NSLog(@"RESPONSE: %d", [[responseObject objectForKey:@"valid_password"] boolValue]);
+                        
+                        if ( [[responseObject objectForKey:@"valid_password"] boolValue]) {
+                            completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], Nil, [FBSDKAccessToken currentAccessToken]);
+                            return;
+                        }
+                        
                         completion(TRUE, Nil, Nil, [FBSDKAccessToken currentAccessToken]);
                         
                     }

@@ -27,7 +27,7 @@
 #import "FRSGallery+CoreDataProperties.h"
 #import "FRSFollowingTable.h"
 
-@interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 {
     BOOL isLoading;
     NSInteger lastOffset;
@@ -85,6 +85,14 @@
     self.isInFollowers = true;
     
     [self displayPreviousTab];
+    
+    
+    //Unable to logout using delegate method because that gets called in LoginVC
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
+}
+
+-(void)logoutNotification {
+    [self logoutWithPop:NO];
 }
 
 -(void)presentNewStuffWithPassword:(BOOL)password {
@@ -109,11 +117,6 @@
     [self.TOSAlert show];
 }
 
--(void)logoutAlertAction {
-    [self logout];
-    self.TOSAlert = nil;
-    self.migrationAlert = nil;
-}
 
 -(BOOL)shouldHaveTextLimit {
     return YES;
@@ -159,21 +162,15 @@
     if (hasLoadedOnce) {
         [self reloadData];
     }
-    
-    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-                
-        NSLog(@"PASSWORD: %@", [[FRSAPIClient sharedClient] passwordUsed]);
+}
 
-        if ([[FRSAPIClient sharedClient] authenticatedUser].username == nil) {
-
-            
-            if ([[FRSAPIClient sharedClient] passwordUsed]) {
-                [self presentNewStuffWithPassword:NO];
-            } else {
-                [self presentNewStuffWithPassword:YES];
-            }
-        }
+-(void)logoutAlertAction {
+    if ([[FRSAPIClient sharedClient] authenticatedUser].username) {
+        return;
     }
+    [self logoutWithPop:YES];
+    self.TOSAlert = nil;
+    self.migrationAlert = nil;
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -198,6 +195,13 @@
 
 -(void)addNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
+    
+    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
+        if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
+
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutAlertAction) name:UIApplicationWillTerminateNotification object:nil];
+        }
+    }
 }
 
 -(void)reloadData {
@@ -309,16 +313,20 @@
 
 -(void)configurePullToRefresh {
     loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    loadingView.tintColor = [UIColor whiteColor];
+    loadingView.tintColor = [UIColor frescoBlueColor];
     
     __weak typeof(self) weakSelf = self;
     
-    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
+    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
         [weakSelf reloadData];
-    } loadingView:loadingView];
+    } loadingView:loadingView yPos:0];
     
-    [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+    [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 127.5, self.view.frame.size.width, 0.5)];
+    line.backgroundColor = [UIColor frescoShadowColor];
+    [self.tableView addSubview:line];
 }
 
 
@@ -412,6 +420,7 @@
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.bounces = YES;
     self.pageScroller.delegate = self;
+    
     [self.view addSubview:self.pageScroller];
 }
 
@@ -818,14 +827,14 @@
 
             [self.tableView dg_removePullToRefresh];
             loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-            loadingView.tintColor = [UIColor whiteColor];
+            loadingView.tintColor = [UIColor frescoBlueColor];
 
             __weak typeof(self) weakSelf = self;
-            [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
+            [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
                 [weakSelf reloadData];
-            } loadingView:loadingView];
+            } loadingView:loadingView yPos:0];
             
-            [self.followingTable dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+            [self.followingTable dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
             [self.followingTable dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
         }
         
@@ -841,14 +850,14 @@
             [self.followingTable dg_removePullToRefresh];
             
             loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-            loadingView.tintColor = [UIColor whiteColor];
+            loadingView.tintColor = [UIColor frescoBlueColor];
 
             __weak typeof(self) weakSelf = self;
-            [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
+            [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
                 [weakSelf reloadData];
-            } loadingView:loadingView];
+            } loadingView:loadingView yPos:0];
             
-            [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+            [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
             [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
         }else if(self.pageScroller.contentOffset.x == self.tableView.frame.size.width){
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldDisplayFollowing"];

@@ -49,8 +49,8 @@ SOFTWARE.
                              loadingViewSize:(CGFloat)loadingViewSize
                                     velocity:(CGFloat)velocity
                                actionHandler:(void (^)())actionHandler
-                                 loadingView:(DGElasticPullToRefreshLoadingView *)loadingView;
-
+                                 loadingView:(DGElasticPullToRefreshLoadingView *)loadingView
+                                        yPos:(CGFloat)yPos;
 
 - (void)dg_removePullToRefresh;
 - (void)dg_setPullToRefreshBackgroundColor:(UIColor*)color;

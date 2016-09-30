@@ -162,18 +162,22 @@
     [super removeNavigationBarLine];
     
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    loadingView.tintColor = [UIColor whiteColor];
+    loadingView.tintColor = [UIColor frescoBlueColor];
     
     __weak typeof(self) weakSelf = self;
     
-    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:70 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:.34 actionHandler:^{
+    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [weakSelf reloadData];
         });
-    } loadingView:loadingView];
+    } loadingView:loadingView yPos:0];
     
-    [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
+    [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 127.5, self.view.frame.size.width, 0.5)];
+    line.backgroundColor = [UIColor frescoShadowColor];
+    [self.tableView addSubview:line];
 }
 
 -(void)reloadData {

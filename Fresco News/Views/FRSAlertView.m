@@ -1020,7 +1020,6 @@
     self.actionLine.frame = CGRectMake(0, self.frame.size.height -43.5, self.frame.size.width, 0.5);
     self.topLine.frame = CGRectMake(0, 44, self.frame.size.width, 0.5);
 //    } completion:nil];
-
 }
 
 -(void)acceptTapped {
@@ -1038,6 +1037,7 @@
 
 -(void)logoutTapped {
     [self.delegate logoutAlertAction];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"logout_notification" object:nil];
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     [self dismiss];
 }
@@ -1051,10 +1051,6 @@
         }
     }
 }
-
-
-
-
 
 -(instancetype)initNewStuffWithPasswordField:(BOOL)password {
     
@@ -1180,6 +1176,14 @@
         self.emailTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         [emailContainer addSubview:self.emailTextField];
         
+        if ([[FRSAPIClient sharedClient] authenticatedUser].email) {
+            self.emailTextField.text = [[FRSAPIClient sharedClient] authenticatedUser].email;
+            self.emailTextField.userInteractionEnabled = NO;
+        } else if ([[FRSAPIClient sharedClient] emailUsed]) {
+            self.emailTextField.text = [[FRSAPIClient sharedClient] emailUsed];
+            self.emailTextField.userInteractionEnabled = NO;
+        }
+        
         self.emailCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
         self.emailCheckIV.frame = CGRectMake(emailContainer.frame.size.width -24 -6, 10, 24, 24);
         self.emailCheckIV.alpha = 0;
@@ -1279,7 +1283,6 @@
         }
     }
     
-    
     if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
         [self checkEmail];
     }
@@ -1294,6 +1297,12 @@
 -(void)textFieldDidChange:(UITextField *)textField {
     if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
         [self checkEmail];
+    }
+    
+    if (textField == self.usernameTextField) {
+        if ([textField.text isEqualToString:@"@"]) {
+            [self checkCreateAccountButtonState];
+        }
     }
 }
 
@@ -1340,11 +1349,58 @@
     
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     
-//    [self dismiss];
+    NSMutableDictionary *digestion = [[NSMutableDictionary alloc] init];
+    
+    
+    NSString *username = [self.usernameTextField.text stringByReplacingOccurrencesOfString:@"@" withString:@""];
+    NSString *email = self.emailTextField.text;
+    NSString *password = self.passwordTextField.text;
+    
+    [digestion setObject:username forKey:@"username"];
+    [digestion setObject:email forKey:@"email"];
+    
+    if ([[FRSAPIClient sharedClient] passwordUsed]) {
+        [digestion setObject:[[FRSAPIClient sharedClient] passwordUsed] forKey:@"verify_password"];
+    } else {
+        [digestion setObject:password forKey:@"verify_password"];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]) {
+        
+        [digestion setObject:password forKey:@"password"];
+        [digestion removeObjectForKey:@"verify_password"];
+    }
+    
+    
+    
+    
+    [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [alert show];
+            
+            return;
+        }
+        
+        if (responseObject) {
+
+            [self dismiss];
+        }
+    }];
 }
 
 
 -(void)checkEmail {
+    
+    
+    //Prepopulated from login
+    if (!self.emailTextField.userInteractionEnabled) {
+        return;
+    }
     
     [[FRSAPIClient sharedClient] checkEmail:self.emailTextField.text completion:^(id responseObject, NSError *error) {
         
@@ -1361,9 +1417,6 @@
 }
 
 -(void)shouldShowEmailError:(BOOL)error {
-    
-    NSLog(@"EMAIL ERROR: %d", error);
-    
     if (error) {
         self.emailCheckIV.alpha = 1;
     } else {
@@ -1373,7 +1426,6 @@
 
 -(void)startUsernameTimer {
     if (!self.usernameTimer) {
-        NSLog(@"TIMER STARTED");
         self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(usernameTimerFired) userInfo:nil repeats:YES];
     }
 }
@@ -1381,16 +1433,13 @@
 
 -(void)stopUsernameTimer {
     if ([self.usernameTimer isValid]) {
-        NSLog(@"TIMER ENDED");
         [self.usernameTimer invalidate];
     }
-    
     self.usernameTimer = nil;
 }
 
 
 -(void)usernameTimerFired {
-    NSLog(@"TIMER FIRED");
     
     if ([self.usernameTextField.text isEqualToString:@""]) {
         self.usernameCheckIV.alpha = 0;
@@ -1438,9 +1487,8 @@
     }
 }
 
--(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
 
-    NSLog(@"TIMER SHOW: %d", success);
+-(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
     
     if(success) {
         self.usernameCheckIV.image = [UIImage imageNamed:@""];
@@ -1516,15 +1564,27 @@
 -(void)checkCreateAccountButtonState {
     UIControlState controlState;
     
-    if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
-        
-        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
-            controlState = UIControlStateHighlighted;
-        } else {
-            controlState = UIControlStateNormal;
+    if (self.passwordTextField) {
+        if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
+            
+            if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken) && (!self.usernameTaken)) {
+                controlState = UIControlStateHighlighted;
+            } else {
+                controlState = UIControlStateNormal;
+            }
+            [self toggleCreateAccountButtonTitleColorToState:controlState];
         }
+    } else {
         
-        [self toggleCreateAccountButtonTitleColorToState:controlState];
+        if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
+            
+            if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
+                controlState = UIControlStateHighlighted;
+            } else {
+                controlState = UIControlStateNormal;
+            }
+            [self toggleCreateAccountButtonTitleColorToState:controlState];
+        }
     }
 }
 

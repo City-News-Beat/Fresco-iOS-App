@@ -315,7 +315,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
 
     [self resetScrollViewContentInset:NO animated:NO completion:nil];
 
-    CGFloat centerY = self.loadingContentInset +1;
+    CGFloat centerY = self.loadingContentInset;
     CGFloat duration = 0.9;
 
     scrollView.scrollEnabled = NO;
@@ -323,34 +323,47 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
     [scrollView dg_removeObserver:self forKeyPath:keyPathForContentOffset];
     [scrollView dg_removeObserver:self forKeyPath:keyPathForContentInset];
 
-    [UIView animateWithDuration:duration
-        delay:0.0
-        usingSpringWithDamping:self.animationVelocity
-        initialSpringVelocity:0.0
-        options:0
-        animations:^{
-            [self.cControlPointView setCenterY:centerY];
-            [self.l1ControlPointView setCenterY:centerY];
-            [self.l2ControlPointView setCenterY:centerY];
-            [self.l3ControlPointView setCenterY:centerY];
-            [self.r1ControlPointView setCenterY:centerY];
-            [self.r2ControlPointView setCenterY:centerY];
-            [self.r3ControlPointView setCenterY:centerY];
-
+    
+    
+    
+    
+    [UIView animateWithDuration:0.4 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
+        [self.cControlPointView setCenterY:centerY];
+        [self.l1ControlPointView setCenterY:centerY];
+        [self.l2ControlPointView setCenterY:centerY];
+        [self.l3ControlPointView setCenterY:centerY];
+        [self.r1ControlPointView setCenterY:centerY];
+        [self.r2ControlPointView setCenterY:centerY];
+        [self.r3ControlPointView setCenterY:centerY];
+        
+    } completion:^(BOOL finished) {
+        [self stopDisplayLink];
+        [self resetScrollViewContentInset:YES animated:NO completion:nil];
+        UIScrollView* strongScrollView = [self scrollView];
+        if (strongScrollView) {
+            [strongScrollView dg_addObserver:self forKeyPath:keyPathForContentOffset];
+            strongScrollView.scrollEnabled = YES;
         }
-        completion:^(BOOL finished) {
-            [self stopDisplayLink];
-            [self resetScrollViewContentInset:YES animated:NO completion:nil];
-            UIScrollView* strongScrollView = [self scrollView];
-            if (strongScrollView) {
-                [strongScrollView dg_addObserver:self forKeyPath:keyPathForContentOffset];
-                strongScrollView.scrollEnabled = YES;
-            }
-
-            self.state = DGElasticPullToRefreshStateLoading;
-        }];
+        
+        self.state = DGElasticPullToRefreshStateLoading;
+    }];
+    
+    
+//    [UIView animateWithDuration:duration
+//        delay:0.0
+//        usingSpringWithDamping:self.animationVelocity
+//        initialSpringVelocity:0.0
+//        options:0
+//        animations:^{
+//
+//
+//        }
+//        completion:^(BOOL finished) {
+//
+//        }];
     self.bounceAnimationHelperView.center = CGPointMake(0, self.originalContentInsetTop + [self currentHeight]);
-    [UIView animateWithDuration:duration * 0.4 animations:^{
+    [UIView animateWithDuration:duration*0.5 animations:^{
         CGFloat contentInsetTop = self.originalContentInsetTop;
         self.bounceAnimationHelperView.center = CGPointMake(0, contentInsetTop + self.loadingContentInset);
 
@@ -381,7 +394,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
 
         height = scrollView.contentInset.top - self.originalContentInsetTop;
 
-        self.frame = CGRectMake(0, -height - 1.0 +128, width, height);
+        self.frame = CGRectMake(0, -height +128 + self.yPos, width, height);
 //        self.frame = CGRectMake(0, -height - 1.0, width, height);
 
     }
@@ -424,7 +437,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
         CGFloat width = scrollView.bounds.size.width;
         CGFloat height = [self currentHeight];
 
-        self.frame = CGRectMake(0, -height +128, width, height);
+        self.frame = CGRectMake(0, -height +128 +self.yPos, width, height);
 //        self.frame = CGRectMake(0, -height, width, height);
 
         if (self.state == DGElasticPullToRefreshStateLoading || self.state == DGElasticPullToRefreshStateAnimatingToStopped) {
@@ -490,15 +503,15 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
         __weak typeof (self)wself = self;
         
         if (self.state == DGElasticPullToRefreshStateAnimatingToStopped) {
-            [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.loadingView.alpha = 0;
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.2 delay:0.2 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-                    
-                    self.loadingView.alpha = 1;
-                    
-                } completion:nil];
-            }];
+//            [UIView animateWithDuration:0.1 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//                self.loadingView.alpha = 0;
+//            } completion:^(BOOL finished) {
+//                [UIView animateWithDuration:0 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//                    
+//                    self.loadingView.alpha = 1;
+//                    
+//                } completion:nil];
+//            }];
         }
         
         [wself resetScrollViewContentInset:YES animated:YES completion:^{
