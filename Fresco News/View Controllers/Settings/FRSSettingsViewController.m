@@ -666,7 +666,7 @@
     if (index == 0) {
         NSLog(@"index 0");
     } else if (index == 1) {
-        [self logout];
+        [self logoutWithPop:YES];
     }
 }
 

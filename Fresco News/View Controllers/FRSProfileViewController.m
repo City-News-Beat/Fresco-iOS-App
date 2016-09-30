@@ -142,7 +142,7 @@
     }
 
     [self showTabBarAnimated:YES];
-    self.tableView.bounces = false;
+//    self.tableView.bounces = false;
     self.didFollow = NO;
 }
 
@@ -261,7 +261,6 @@
 }
 -(void)setupUI {
     
-    
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
     
@@ -357,33 +356,32 @@
 
 #pragma mark - UI Elements
 -(void)configureUI{
-    self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     
     [self configureNavigationBar];
     //    [self configureTableView];
-    //    [self configurePullToRefresh];
+    [self configurePullToRefresh];
     [self configureProfileSocialOverlay];
 }
 
 -(void)configurePullToRefresh {
-    
+
     [super removeNavigationBarLine];
     
     DGElasticPullToRefreshLoadingViewCircle* loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     loadingView.tintColor = [UIColor whiteColor];
-    self.tableView.backgroundColor = [UIColor frescoOrangeColor];
-    
     __weak typeof(self) weakSelf = self;
     
-    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:2 actionHandler:^{
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.tableView dg_stopLoading];
-        });
-    } loadingView:loadingView];
+    [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
+        
+        [weakSelf fetchGalleries];
+        [weakSelf.tableView dg_stopLoading];
+
+    } loadingView:loadingView yPos:-64];
     
     
     [self.tableView dg_setPullToRefreshFillColor:[UIColor frescoOrangeColor]];
-    [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
+    [self.tableView dg_setPullToRefreshBackgroundColor:[UIColor frescoOrangeColor]];
     
 }
 
@@ -466,7 +464,7 @@
 }
 
 -(void)createProfileSection{
-    self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 269.5)];
+    self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 0)];
     self.profileContainer.backgroundColor = [UIColor frescoOrangeColor];
     self.profileContainer.clipsToBounds = YES;
     
@@ -686,6 +684,7 @@
         [textView resignFirstResponder];
     }
 }
+
 
 -(void)resizeProfileContainer{
     
@@ -981,8 +980,8 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [super scrollViewDidScroll:scrollView];
     //Bounce only at the bottom of the tableview
-    scrollView.bounces = (scrollView.contentOffset.y > 10);
-    
+//    scrollView.bounces = (scrollView.contentOffset.y > 10);
+
     CGRect newFrame = self.sectionView.frame;
     
     newFrame.origin.y = (self.navBarYValue/self.navBarHeight)*(self.sectionView.frame.size.height)-self.sectionView.frame.size.height;
@@ -991,7 +990,7 @@
     if(newFrame.origin.y > 0){
         newFrame.origin.y = 0;
     }
-    
+
     //If it goes over the profile height, attach it to the bot of the profile container view
     CGPoint localPoint = newFrame.origin;
     CGPoint basePoint = [self.view convertPoint:localPoint toView:self.tableView];
@@ -1000,6 +999,12 @@
     }
     
     [self.sectionView setFrame:newFrame];
+    
+    if (scrollView.contentOffset.y > self.view.frame.size.height) {
+        scrollView.bounces = NO;
+    } else {
+        scrollView.bounces = YES;
+    }
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
@@ -1170,13 +1175,25 @@
         
         
         self.bioTextView.text = user.bio;
+        
         [self.bioTextView frs_setTextWithResize:user.bio];
+
+
 
         
         
         
         //[self.profileContainer setFrame:CGRectMake(self.profileContainer.frame.origin.x, self.profileContainer.frame.origin.y, self.profileContainer.frame.size.width,269.5 + self.bioLabel.frame.size.height)];
-        [self resizeProfileContainer];
+        
+        
+        if (_authenticatedProfile) {
+            [self resizeProfileContainer];
+        } else {
+            [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+                [self resizeProfileContainer];
+            } completion:nil];
+        }
+
         //[self.bioLabel setFrame:CGRectMake(self.bioLabel.frame.origin.x, self.bioLabel.frame.origin.y, self.bioLabel.frame.size.width, lineHeight * self.bioLabel.numberOfLines)];
         
         self.nameLabel.text = user.firstName;

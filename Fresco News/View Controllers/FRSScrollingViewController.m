@@ -296,19 +296,19 @@
         
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.navigationController.navigationBar.frame = toFrame;
-            //scrollView.frame = scrollViewFrame;
+            scrollView.frame = scrollViewFrame;
             self.navigationItem.titleView.alpha = 1.0;
             
             
-            //Need to check if back button already exists to avoid weird scrolling bug
+            Need to check if back button already exists to avoid weird scrolling bug
             if (self.shouldHaveBackButton){
                 [super configureBackButtonAnimated:YES];
             }
             
-//            if (self.shouldHaveBackButton && !self.scrollDirectionChanged){
-//                self.scrollDirectionChanged = FALSE;
-//                [super configureBackButtonAnimated:YES];
-//            }
+            if (self.shouldHaveBackButton && !self.scrollDirectionChanged){
+                self.scrollDirectionChanged = FALSE;
+                [super configureBackButtonAnimated:YES];
+            }
             
         } completion:^(BOOL finished) {
             if (finished)
@@ -316,7 +316,7 @@
         }];
     }
     else {
-        //scrollView.frame = scrollViewFrame;
+        scrollView.frame = scrollViewFrame;
         self.navigationController.navigationBar.frame = toFrame;
         if (self.shouldHaveBackButton && self.backButtonHidden){
             [super configureBackButtonAnimated:NO];

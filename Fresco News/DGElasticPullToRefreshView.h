@@ -48,6 +48,7 @@ typedef NS_ENUM(NSInteger, DGElasticPullToRefreshState) {
 @property (nonatomic, assign) CGFloat loadingContentInset;
 @property (nonatomic, assign) CGFloat loadingViewSize;
 @property (nonatomic, assign) CGFloat animationVelocity;
+@property (nonatomic, assign) CGFloat yPos;
 
 - (UIScrollView*)scrollView;
 - (void)disassociateDisplayLink;

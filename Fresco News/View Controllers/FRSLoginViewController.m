@@ -22,7 +22,7 @@
 //Alert View
 #import "FRSAlertView.h"
 
-@interface FRSLoginViewController () <UITextFieldDelegate>
+@interface FRSLoginViewController () <UITextFieldDelegate, FRSAlertViewDelegate>
 
 @property (nonatomic) BOOL didAnimate;
 @property (nonatomic) BOOL didTransform;
@@ -179,6 +179,10 @@
 
 #pragma mark - Actions
 
+-(void)logoutAlertAction {
+    [self logoutWithPop:NO];
+}
+
 -(IBAction)login:(id)sender {
     
     [self dismissKeyboard];
@@ -218,10 +222,11 @@
                 [self stopSpinner:self.loadingView onButton:self.loginButton];
                 [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
                 
-                FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:NO];
-                [alert show];
+                if ([self validEmail:username]) {
+                    [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
+                }
+                [self displayMigrationAlert];
             }];
-
         }
         
         if (error.code == -1009) {
@@ -327,17 +332,28 @@
     
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         
+        if (error.code == 1125) { //user needs a password
+            //set needs password to TRUE
+
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needs-password"];
+        }
+        
+        
         if (authenticated) {
             
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
             [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
             
-//            NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
-//            
-//            [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
+            /*  */
+            NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:session facebook:nil];
+           // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
+            /*  */
             
             self.didAuthenticateSocial = YES;
+            [self displayMigrationAlert];
             [self popToOrigin];
+            
+            return;
         }
         
         
@@ -384,6 +400,14 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
+-(void)displayMigrationAlert {
+    if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
+        alert.delegate = self;
+        [alert show];
+    }
+}
+
 -(IBAction)facebook:(id)sender {
     
     self.facebookButton.hidden = true;
@@ -395,11 +419,21 @@
     [spinner  setFrame:CGRectMake(self.facebookButton.frame.origin.x, self.facebookButton.frame.origin.y, self.facebookButton.frame.size.width, self.facebookButton.frame.size.width)];
     
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        
+        if (error.code == 1125) {//User needs a password
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needs-password"];
+        }
+        
         if (authenticated) {
-
+            
             NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
             
-//            [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
+            /*  */
+           // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
+            /*  */
+            
+            
+            
             
             [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
@@ -411,9 +445,17 @@
                 }];
             }];
 
+            
+            [self displayMigrationAlert];
+            
             self.didAuthenticateSocial = YES;
             NSLog(@"Popped");
             [self popToOrigin];
+            
+            [spinner stopLoading];
+            [spinner removeFromSuperview];
+            self.facebookButton.hidden = false;
+            return;
         } else {
             NSLog(@"Else");
         }

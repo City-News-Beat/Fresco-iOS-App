@@ -34,7 +34,7 @@
 
 -(void)shouldShowStatusBar:(BOOL)statusBar animated:(BOOL)animated;
 
--(void)logout;
+-(void)logoutWithPop:(BOOL)pop;
 
 /* DEEP LINKS */
 -(void)segueToPhotosOfTheDay:(NSArray *)postIDs;

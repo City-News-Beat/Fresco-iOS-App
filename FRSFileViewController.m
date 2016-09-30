@@ -70,14 +70,29 @@ static NSString *imageTile = @"ImageTile";
         [nextButton setTintColor:[UIColor frescoBlueColor]];
     }
     
-    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
-    [self.backTapButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
+    
+    UIImage *backButtonImage = [UIImage imageNamed:@"back-arrow-light"];
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+    [container addSubview:backButton];
+    
+    backButton.tintColor = [UIColor whiteColor];
+    backButton.frame = CGRectMake(-15, -12, 48, 48);
+    backButton.imageView.frame = CGRectMake(-12, 0, 48, 48); //this doesnt change anything
+    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setImage:backButtonImage forState:UIControlStateNormal];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:container];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
+
+    
+//    self.backTapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, 44, 44)];
+//    [self.backTapButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+//    [[[UIApplication sharedApplication] keyWindow] addSubview:self.backTapButton];
     
     //self.navigationController.navigationBar.backgroundColor = [UIColor redColor];
     //Navigation bar color is not Fresco Yellow. Not sure where it's set
     
-    self.backTapButton.userInteractionEnabled = YES;
+//    self.backTapButton.userInteractionEnabled = YES;
 }
 
 -(void)viewWillDisappear:(BOOL)animated {

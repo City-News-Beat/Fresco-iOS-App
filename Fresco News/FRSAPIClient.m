@@ -16,7 +16,7 @@
 #import "FRSTabBarController.h"
 
 @implementation FRSAPIClient
-@synthesize socialUsed = _socialUsed, passwordUsed = _passwordUsed;
+@synthesize socialUsed = _socialUsed, passwordUsed = _passwordUsed, emailUsed = _emailUsed;
 /*
  Singleton
  */
@@ -49,6 +49,10 @@
     _passwordUsed = passwordUsed;
 }
 
+-(void)setEmailUsed:(NSString *)emailUsed {
+    _emailUsed = emailUsed;
+}
+
 -(void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     NSMutableDictionary *mutableDigestion = [digestion mutableCopy];
     
@@ -59,6 +63,8 @@
         [mutableDigestion addEntriesFromDictionary:self.socialUsed];
     }
     
+    NSLog(@"DIGESTION: %@", mutableDigestion);
+    
     [self updateUserWithDigestion:mutableDigestion completion:completion];
 }
 
@@ -66,11 +72,17 @@
     return _passwordUsed;
 }
 
+-(NSString *)emailUsed {
+    return _emailUsed;
+}
+
 -(NSDictionary *)socialUsed {
     return _socialUsed;
 }
 
 -(void)setSocialUsed:(NSDictionary *)socialUsed {
+    NSLog(@"SOCIAL USED: %@", socialUsed);
+    
     _socialUsed = socialUsed;
 }
 
@@ -228,7 +240,9 @@
     
     [self post:updateUserEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        
+        NSLog(@"DIGESTION: %@", digestion);
+        NSLog(@"RESPONSE: %@", responseObject);
+        NSLog(@"ERROR: %@", error);
     }];
 }
 
