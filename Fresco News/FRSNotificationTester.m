@@ -52,44 +52,44 @@
 +(void)createAssignmentNotification {
     NSDictionary *notification = @{@"user-dispatch-new-assignment":@{@"assignment_id":@"J6K3beMr1yGQ"}};
     [[FRSAPIClient sharedClient] post:@"user/testnotif" withParameters:notification completion:^(id responseObject, NSError *error) {
-        
+        NSLog(@"%@ %@", responseObject, error);
     }];
 }
 
 +(void)createFollowNotification {
     NSDictionary *notification = @{@"user-social-followed":@{@"other_user_ids":@[@"7ewm8YP3GL5x"]}};
     [[FRSAPIClient sharedClient] post:@"user/testnotif" withParameters:notification completion:^(id responseObject, NSError *error) {
-        
+        NSLog(@"%@ %@", responseObject, error);
     }];
 }
 
 +(void)createRepostNotification {
     NSDictionary *notification = @{@"user-social-reposted":@{@"other_user_ids":@[@"7ewm8YP3GL5x"], @"gallery_id":@"5xQ0Woz6x0lX"}};
     [[FRSAPIClient sharedClient] post:@"user/testnotif" withParameters:notification completion:^(id responseObject, NSError *error) {
-        
+        NSLog(@"%@ %@", responseObject, error);
     }];
 }
 
 +(void)createCommentNotification {
     NSDictionary *notification = @{@"user-social-commented":@{@"other_user_ids":@[@"7ewm8YP3GL5x"], @"gallery_id":@"5xQ0Woz6x0lX", @"comment_ids":@[@"EXVk1adr0Bwy"]}};
     [[FRSAPIClient sharedClient] post:@"user/testnotif" withParameters:notification completion:^(id responseObject, NSError *error) {
-        
+        NSLog(@"%@ %@", responseObject, error);
     }];
 }
 
 +(void)createLikeNotification {
     NSDictionary *notification = @{@"user-social-liked":@{@"other_user_ids":@[@"7ewm8YP3GL5x"], @"gallery_id":@"5xQ0Woz6x0lX"}};
     [[FRSAPIClient sharedClient] post:@"user/testnotif" withParameters:notification completion:^(id responseObject, NSError *error) {
-        
+        NSLog(@"%@ %@", responseObject, error);
     }];
 }
 
 +(void)createGalleryNotification {
-    
+    //user-news-gallery
 }
 
 +(void)createStoryNotification {
-    
+    //user-news-story
 }
 
 +(void)createMoneySentNotification {
