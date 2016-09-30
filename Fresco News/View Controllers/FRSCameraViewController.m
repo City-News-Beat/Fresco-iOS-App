@@ -264,9 +264,15 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
-    [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    @try {
+        [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
+        [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    }
+    @catch (NSException *e) {
+        
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
