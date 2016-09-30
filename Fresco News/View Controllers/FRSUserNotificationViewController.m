@@ -609,17 +609,24 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     //cell.count = userIDs.count; //pull from api
     //user image
     
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    
 }
 
 -(void)configureRepostCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeRepost];
 //    cell.count = userIDs.count;
 //    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 -(void)configureCommentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
 //    cell.count = userIDs.count;
 //    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 
@@ -659,8 +666,11 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configurePurchasedContentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     
-    cell.titleLabel.text = @"Your photo was purchased!"; //api?
-    cell.bodyLabel.numberOfLines = 3;
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    
+//    cell.titleLabel.text = @"Your photo was purchased!"; //api?
+//    cell.bodyLabel.numberOfLines = 3;
 
 //    [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
 //        
@@ -730,6 +740,10 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.image = nil;
     
     [cell configureDefaultCell];
+    
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    
 //    if (processed) {
 //        cell.titleLabel.text = @"Your tax info was accepted!";
 //    } else {

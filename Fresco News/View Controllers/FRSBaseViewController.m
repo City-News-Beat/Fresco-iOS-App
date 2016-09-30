@@ -292,6 +292,9 @@
     }
     [[NSUserDefaults standardUserDefaults] synchronize];
     
+    [[FRSAPIClient sharedClient] setPasswordUsed:nil];
+    [[FRSAPIClient sharedClient] setEmailUsed:nil];
+
     if (pop) {
         [self popViewController];
     }
