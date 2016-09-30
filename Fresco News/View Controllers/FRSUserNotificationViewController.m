@@ -608,10 +608,15 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeLike];
     //cell.count = userIDs.count; //pull from api
     //user image
+<<<<<<< HEAD
     
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
     
+=======
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+>>>>>>> 3.0-phil
 }
 
 -(void)configureRepostCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -620,6 +625,11 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 //    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 3.0-phil
 }
 
 -(void)configureCommentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -630,42 +640,11 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 
-//-(void)configureUserAttributes:(FRSDefaultNotificationTableViewCell *)cell userID:(NSString *)userID {
-//    
-//    cell.annotationView.alpha = 1;
-//    cell.annotationLabel.alpha = 1;
-//
-//    [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
-//        
-//        if (![[responseObject objectForKey:@"full_name"] isEqualToString:@""]) {
-//            cell.titleLabel.text = [responseObject objectForKey:@"full_name"];
-//        } else {
-//            cell.titleLabel.text = [responseObject objectForKey:@"username"];
-//        }
-//        
-//        if([responseObject objectForKey:@"avatar"] != [NSNull null]){
-//            NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
-//            [cell.image hnk_setImageFromURL:avatarURL];
-//        }
-//        
-//        if ([[responseObject objectForKey:@"following"] boolValue]) {
-//            [cell.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
-//            cell.followButton.tintColor = [UIColor frescoOrangeColor];
-//        } else {
-//            [cell.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
-//            cell.followButton.tintColor = [UIColor blackColor];
-//        }
-//
-//
-//        [cell updateLabelsForCount];
-//    }];
-//}
-
-
 #pragma mark - Payment
 
 -(void)configurePurchasedContentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     
+<<<<<<< HEAD
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
     
@@ -691,6 +670,10 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 //            }
 //        }];
 //    }];
+=======
+    cell.titleLabel.text = @"Your photo was purchased!"; //api?
+    cell.bodyLabel.numberOfLines = 3;
+>>>>>>> 3.0-phil
 }
 
 -(void)configurePaymentExpiringCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -711,7 +694,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.image = nil;
     [cell configureDefaultCell];
     
-    cell.titleLabel.text = @"(null) sent to (null).";
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 -(void)configurePaymentDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -720,8 +704,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     [cell configureDefaultCell];
     
-    cell.titleLabel.text = @"Our payment to (null) was declined";
-    cell.bodyLabel.text = @"Please reenter your payment information";
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 -(void)configureTaxInfoRequiredCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary{
@@ -731,8 +715,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     [cell configureDefaultCell];
     
-    cell.titleLabel.text = @"Tax information needed";
-    cell.bodyLabel.text = @"You’ve made almost $2,000 on Fresco! Please add your tax info soon to continue receiving payments.";
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 -(void)configureTaxInfoProcessedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -759,9 +743,12 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+<<<<<<< HEAD
     
 //    cell.titleLabel.text = @"Your tax information was declined";
 //    cell.bodyLabel.text = @"Please reenter your tax information";
+=======
+>>>>>>> 3.0-phil
 }
 
 

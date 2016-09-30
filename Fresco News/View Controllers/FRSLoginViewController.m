@@ -216,6 +216,7 @@
         [self stopSpinner:self.loadingView onButton:self.loginButton];
         
         if (error.code == 0) {
+            return;
             FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
             [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
                 [tabBarVC setSelectedIndex:0];

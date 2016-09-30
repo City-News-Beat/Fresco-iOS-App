@@ -322,7 +322,7 @@ static NSString *imageTile = @"ImageTile";
     }
     else {
         
-        if ([selectedAssets count] == 10) {
+        if ([selectedAssets count] == 8) {
             //should tell user why they can't select anymore cc:imogen
             return;
         }
