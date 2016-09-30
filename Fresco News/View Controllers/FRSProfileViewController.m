@@ -1189,7 +1189,7 @@
         if (_authenticatedProfile) {
             [self resizeProfileContainer];
         } else {
-            [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            [UIView animateWithDuration:0.15 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
                 [self resizeProfileContainer];
             } completion:nil];
         }

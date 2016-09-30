@@ -1388,11 +1388,11 @@
         
         if (responseObject) {
             
-            FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
-            userToUpdate.username = username;
-            userToUpdate.email = self.emailTextField.text;
-            userToUpdate.password = self.passwordTextField.text;
-            [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+//            FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+//            userToUpdate.username = username;
+//            userToUpdate.email = self.emailTextField.text;
+//            userToUpdate.password = self.passwordTextField.text;
+//            [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
             
             [self dismiss];
         }
