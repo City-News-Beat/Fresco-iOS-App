@@ -608,15 +608,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeLike];
     //cell.count = userIDs.count; //pull from api
     //user image
-<<<<<<< HEAD
-    
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-    
-=======
-    cell.titleLabel.text = [dictionary objectForKey:@"title"];
-    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
->>>>>>> 3.0-phil
 }
 
 -(void)configureRepostCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -625,11 +618,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 //    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 3.0-phil
 }
 
 -(void)configureCommentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -644,36 +633,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configurePurchasedContentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     
-<<<<<<< HEAD
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-    
-//    cell.titleLabel.text = @"Your photo was purchased!"; //api?
-//    cell.bodyLabel.numberOfLines = 3;
-
-//    [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
-//        
-//        NSString *outletName = @"(null)";
-//        NSString *price = @"(null)";
-//        NSString *paymentMethod = @"(null)";
-//        
-//        if (paymentInfo) {
-//            cell.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! We've sent %@ to your %@.", outletName, price, paymentMethod];
-//        } else {
-//            cell.bodyLabel.text = [NSString stringWithFormat:@"%@ purchased your photo! Tap to add a card and we’ll send you %@!", outletName, price];
-//        }
-//        
-//        [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
-//            if([responseObject objectForKey:@"image"] != [NSNull null]){
-//                NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"image"]];
-//                [cell.image hnk_setImageFromURL:avatarURL];
-//            }
-//        }];
-//    }];
-=======
-    cell.titleLabel.text = @"Your photo was purchased!"; //api?
-    cell.bodyLabel.numberOfLines = 3;
->>>>>>> 3.0-phil
 }
 
 -(void)configurePaymentExpiringCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -743,12 +704,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-<<<<<<< HEAD
-    
-//    cell.titleLabel.text = @"Your tax information was declined";
-//    cell.bodyLabel.text = @"Please reenter your tax information";
-=======
->>>>>>> 3.0-phil
 }
 
 
