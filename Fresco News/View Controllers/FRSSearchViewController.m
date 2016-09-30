@@ -770,7 +770,6 @@
 //    [super scrollViewDidScroll:scrollView];
     [self.searchTextField resignFirstResponder];
     
-    
 }
 
 #pragma mark - dealloc

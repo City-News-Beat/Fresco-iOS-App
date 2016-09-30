@@ -12,6 +12,7 @@
 /* View Controllers */
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSSearchViewController.h"
+#import "FRSLoginViewController.h"
 
 /* UI */
 #import "DGElasticPullToRefresh.h"
@@ -164,6 +165,8 @@
     }
 }
 
+
+
 -(void)logoutAlertAction {
     if ([[FRSAPIClient sharedClient] authenticatedUser].username) {
         return;
@@ -196,6 +199,8 @@
 -(void)addNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLogin) name:@"user-did-login" object:nil];
+    
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
         if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
 
@@ -203,6 +208,16 @@
         }
     }
 }
+
+-(void)userDidLogin {
+    
+    if (![[[FRSAPIClient sharedClient] authenticatedUser] username]) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
+        alert.delegate = self;
+        [alert show];
+    }
+}
+
 
 -(void)reloadData {
     [self.followingTable reloadFollowing];

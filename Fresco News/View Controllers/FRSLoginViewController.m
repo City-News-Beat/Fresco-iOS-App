@@ -224,7 +224,12 @@
                 if ([self validEmail:username]) {
                     [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
                 }
-                [self displayMigrationAlert];
+                
+                
+                
+//                if (<#condition#>) {
+//                    [self displayMigrationAlert];
+//                }
             }];
         }
         
@@ -349,7 +354,11 @@
             /*  */
             
             self.didAuthenticateSocial = YES;
-            [self displayMigrationAlert];
+            
+//            if (<#condition#>) {
+//                [self displayMigrationAlert];
+//            }
+            
             [self popToOrigin];
             
             return;
@@ -383,7 +392,7 @@
 }
 
 -(void)popToOrigin {
-    
+        
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
     
@@ -395,17 +404,25 @@
         [self.navigationController popToViewController:[viewControllers objectAtIndex:2] animated:YES];
     }
     
+    [self postLoginNotification];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
--(void)displayMigrationAlert {
-    if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
-        alert.delegate = self;
-        [alert show];
-    }
+-(void)postLoginNotification {
+    // temp fix
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"user-did-login" object:nil];
+    });
 }
+
+//-(void)displayMigrationAlert {
+//    if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
+//        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
+//        alert.delegate = self;
+//        [alert show];
+//    }
+//}
 
 -(IBAction)facebook:(id)sender {
     
@@ -444,8 +461,11 @@
                 }];
             }];
 
+//            if (<#condition#>) {
+//                [self displayMigrationAlert];
+//            }
             
-            [self displayMigrationAlert];
+            
             
             self.didAuthenticateSocial = YES;
             NSLog(@"Popped");
