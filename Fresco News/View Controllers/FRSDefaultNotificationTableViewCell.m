@@ -191,7 +191,7 @@
     self.annotationView.alpha = 0;
     
     if (self.image == nil) {
-        self.bodyLabel.transform = CGAffineTransformMakeTranslation(-56, 0);
+        self.bodyLabel.transform = CGAffineTransformMakeTranslation(-145, 0);
         self.titleLabel.transform = CGAffineTransformMakeTranslation(-56, 0);
     }
 }

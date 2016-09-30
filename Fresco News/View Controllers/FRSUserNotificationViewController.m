@@ -757,8 +757,11 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     [cell configureDefaultCell];
     
-    cell.titleLabel.text = @"Your tax information was declined";
-    cell.bodyLabel.text = @"Please reenter your tax information";
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    
+//    cell.titleLabel.text = @"Your tax information was declined";
+//    cell.bodyLabel.text = @"Please reenter your tax information";
 }
 
 
