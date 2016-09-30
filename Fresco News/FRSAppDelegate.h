@@ -24,6 +24,7 @@
 #import <TwitterKit/TwitterKit.h>
 #import <Crashlytics/Crashlytics.h>
 #import <Smooch/Smooch.h>
+#import "FRSNotificationTester.h"
 
 @interface FRSAppDelegate : UIResponder <UIApplicationDelegate>
 
