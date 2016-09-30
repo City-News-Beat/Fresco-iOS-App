@@ -345,7 +345,7 @@
             
             /*  */
             NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:session facebook:nil];
-            [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
+           // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
             /*  */
             
             self.didAuthenticateSocial = YES;
@@ -428,7 +428,7 @@
             NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
             
             /*  */
-            [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
+           // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
             /*  */
             
             

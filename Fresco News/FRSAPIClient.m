@@ -81,6 +81,8 @@
 }
 
 -(void)setSocialUsed:(NSDictionary *)socialUsed {
+    NSLog(@"SOCIAL USED: %@", socialUsed);
+    
     _socialUsed = socialUsed;
 }
 
@@ -238,7 +240,9 @@
     
     [self post:updateUserEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        
+        NSLog(@"DIGESTION: %@", digestion);
+        NSLog(@"RESPONSE: %@", responseObject);
+        NSLog(@"ERROR: %@", error);
     }];
 }
 
