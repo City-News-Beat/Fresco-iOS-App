@@ -1388,6 +1388,11 @@
         
         if (responseObject) {
 
+            [[FRSAPIClient sharedClient] authenticatedUser].username = self.usernameTextField.text;
+            if (self.emailTextField.alpha == 1) {
+                [[FRSAPIClient sharedClient] authenticatedUser].email = self.emailTextField.text;
+            }
+            
             [self dismiss];
         }
     }];
