@@ -1176,12 +1176,12 @@
         self.emailTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         [emailContainer addSubview:self.emailTextField];
         
-        if ([[FRSAPIClient sharedClient] authenticatedUser].email) {
-            self.emailTextField.text = [[FRSAPIClient sharedClient] authenticatedUser].email;
-            self.emailTextField.userInteractionEnabled = NO;
-        } else if ([[FRSAPIClient sharedClient] emailUsed]) {
-            self.emailTextField.text = [[FRSAPIClient sharedClient] emailUsed];
-            self.emailTextField.userInteractionEnabled = NO;
+        
+        if ([[FRSAPIClient sharedClient] authenticatedUser].email || [[FRSAPIClient sharedClient] emailUsed]) {
+            
+            emailContainer.alpha = 0;
+            self.height -= 44;
+            
         }
         
         self.emailCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];

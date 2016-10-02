@@ -215,22 +215,24 @@
         [self stopSpinner:self.loadingView onButton:self.loginButton];
         
         if (error.code == 0) {
-            FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
-            [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
-                [tabBarVC setSelectedIndex:0];
+            
+            [self popToOrigin];
+            
+//            FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
+//            [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
+//                [tabBarVC setSelectedIndex:0];
+            
+            
                 [self stopSpinner:self.loadingView onButton:self.loginButton];
                 [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
-                
+            
                 if ([self validEmail:username]) {
                     [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
                 }
-                
-                
-                
-//                if (<#condition#>) {
-//                    [self displayMigrationAlert];
-//                }
-            }];
+
+            
+            
+//            }];
         }
         
         if (error.code == -1009) {
@@ -447,9 +449,7 @@
             /*  */
            // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
             /*  */
-            
-            
-            
+                        
             
             [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];

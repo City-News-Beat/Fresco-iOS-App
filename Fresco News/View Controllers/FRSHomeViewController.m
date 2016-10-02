@@ -210,8 +210,18 @@
 }
 
 -(void)userDidLogin {
+
+    
+    /* DEBUG */
+//    [[FRSAPIClient sharedClient] authenticatedUser].username = nil;
+//    [[FRSAPIClient sharedClient] authenticatedUser].email = nil;
+//    [[FRSAPIClient sharedClient] authenticatedUser].password = nil;
+//    [FRSAPIClient sharedClient].passwordUsed = nil;
+//    [FRSAPIClient sharedClient].emailUsed = nil;
+
     
     if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
+        
         FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
         alert.delegate = self;
         [alert show];
