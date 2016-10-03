@@ -128,8 +128,8 @@
     
     /* DEBUG */
 //    self.userIsBlocked   = YES;
-//    self.userIsSuspended = YES;
-    self.userIsDisabled  = YES;
+    self.userIsSuspended = YES;
+//    self.userIsDisabled  = YES;
     
     
     [self setupUI];
@@ -279,7 +279,6 @@
         return;
     }
     
-    
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
     
@@ -304,14 +303,89 @@
 
 
 -(void)configureBlockedUser {
+    self.tableView.scrollEnabled = NO;
+
     
 }
 
 -(void)configureSuspendedUser {
+    self.tableView.scrollEnabled = NO;
+
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 220-64)];
+    container.backgroundColor = [UIColor frescoOrangeColor];
+    [self.view addSubview:container];
+    
+    self.profileBG = [[UIView alloc] initWithFrame:CGRectMake(container.frame.size.width/2 - 96/2, 12, 96, 96)];
+    [self.profileContainer addSubview:self.profileBG];
+    [self.profileBG addShadowWithColor:[UIColor frescoShadowColor] radius:3 offset:CGSizeMake(0, 2)];
+    
+    self.profileIV = [[FRSBorderedImageView alloc] initWithFrame:CGRectMake(0, 0, self.profileBG.frame.size.width, self.profileBG.frame.size.height) borderColor:[UIColor whiteColor] borderWidth:4];
+    self.profileIV.image = [UIImage imageNamed:@""];
+    self.profileIV.backgroundColor = [UIColor frescoBackgroundColorLight];
+    self.profileIV.contentMode = UIViewContentModeScaleAspectFill;
+    self.profileIV.layer.cornerRadius = self.profileIV.frame.size.width/2;
+    self.profileIV.clipsToBounds = YES;
+    [self.profileBG addSubview:self.profileIV];
+    
+    self.placeholderUserIcon = [[UIImageView alloc] initWithFrame:CGRectMake(self.profileIV.frame.size.width/2 - 40/2, self.profileIV.frame.size.height/2 -40/2, 40, 40)];
+    self.placeholderUserIcon.image = [UIImage imageNamed:@"user-40"];
+    self.placeholderUserIcon.alpha = 0;
+    [self.profileIV addSubview:self.placeholderUserIcon];
+    
+    [container addSubview:self.profileBG];
+    
+    float paddingFromProfileIV = 12.0;
+    float center = self.view.frame.size.width/2;
+    float titleInset = 5.0;
+    float characterLength = 4.25;
+    
+    self.followersButton = [[UIButton alloc] init];
+    [self.followersButton setImage:[UIImage imageNamed:@"followers-icon"] forState:UIControlStateNormal];
+    [self.followersButton setTitle:@"0" forState:UIControlStateNormal];
+    [self.followersButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    self.followersButton.titleEdgeInsets = UIEdgeInsetsMake(0.0f, titleInset, 0.0f, 0.0f);
+    [self.followersButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    [self.profileContainer addSubview:self.followersButton];
+    //Make the center of the button to be the same center as the profile bg with title length versatility
+    float titleLength = self.followersButton.currentTitle.length * characterLength;
+    [self.followersButton setFrame:CGRectMake(center - titleInset - titleLength*2, (self.profileBG.frame.size.height) + paddingFromProfileIV, 100, 50)];
+    
+    [self.followersButton addTarget:self action:@selector(showFollowers) forControlEvents:UIControlEventTouchUpInside];
+
+    [container addSubview:self.followersButton];
+    
+    
+    
+    
+    
+    
+    UIView *suspendedContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height+container.frame.size.height)/2 -125, 207, 125)];
+    [self.view addSubview:suspendedContainer];
+    
+    UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"suspended"]];
+    frog.frame = CGRectMake(suspendedContainer.frame.size.width/2 -56/2, 0, 56, 56);
+    [suspendedContainer addSubview:frog];
+    
+    UILabel *awkwardLabel = [[UILabel alloc] initWithFrame:CGRectMake(suspendedContainer.frame.size.width/2 -165/2, 72, 165, 33)];
+    awkwardLabel.text = @"Suspended 🙅";
+    awkwardLabel.font = [UIFont karminaBoldWithSize:28];
+    awkwardLabel.textColor = [UIColor frescoDarkTextColor];
+    [suspendedContainer addSubview:awkwardLabel];
+    
+    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(suspendedContainer.frame.size.width/2 - 288/2, 106, 288, 20)];
+    bodyLabel.text = @"This user is in time-out for a while.";
+    bodyLabel.textAlignment = NSTextAlignmentCenter;
+    bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    bodyLabel.textColor = [UIColor frescoMediumTextColor];
+    [suspendedContainer addSubview:bodyLabel];
+    
+    
+    
     
 }
 
 -(void)configureDisabledUser {
+    self.tableView.scrollEnabled = NO;
     
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, self.view.frame.size.height/2 -125/2 -64, 207, 125)];
     [self.view addSubview:container];
@@ -484,7 +558,7 @@
                     [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
                 }
                 
-                if (!self.userIsDisabled) {
+                if (!self.userIsDisabled || !self.userIsSuspended) {
                     self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
                 }
             });
