@@ -125,6 +125,13 @@
         }];
      }
     
+    
+    /* DEBUG */
+//    self.userIsBlocked   = YES;
+//    self.userIsSuspended = YES;
+    self.userIsDisabled  = YES;
+    
+    
     [self setupUI];
     [self configureUI];
     [self fetchGalleries];
@@ -261,6 +268,18 @@
 }
 -(void)setupUI {
     
+    if (self.userIsBlocked) {
+        [self configureBlockedUser];
+        return;
+    } else if (self.userIsSuspended) {
+        [self configureSuspendedUser];
+        return;
+    } else if (self.userIsDisabled) {
+        [self configureDisabledUser];
+        return;
+    }
+    
+    
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
     
@@ -281,6 +300,38 @@
     
     [super removeNavigationBarLine];
     [self configureSectionView];
+}
+
+
+-(void)configureBlockedUser {
+    
+}
+
+-(void)configureSuspendedUser {
+    
+}
+
+-(void)configureDisabledUser {
+    
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, self.view.frame.size.height/2 -125/2 -64, 207, 125)];
+    [self.view addSubview:container];
+
+    UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"frog"]];
+    frog.frame = CGRectMake(container.frame.size.width/2 -72/2, 0, 72, 72);
+    [container addSubview:frog];
+    
+    UILabel *awkwardLabel = [[UILabel alloc] initWithFrame:CGRectMake(container.frame.size.width/2 -121/2, 72, 121, 33)];
+    awkwardLabel.text = @"Awkward.";
+    awkwardLabel.font = [UIFont karminaBoldWithSize:28];
+    awkwardLabel.textColor = [UIColor frescoDarkTextColor];
+    [container addSubview:awkwardLabel];
+    
+    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(container.frame.size.width/2 - 207/2, 106, 207, 20)];
+    bodyLabel.text = @"This user’s profile is disabled.";
+    bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    bodyLabel.textColor = [UIColor frescoMediumTextColor];
+    [container addSubview:bodyLabel];
+    
 }
 
 
@@ -433,7 +484,9 @@
                     [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
                 }
                 
-                self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
+                if (!self.userIsDisabled) {
+                    self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
+                }
             });
             
         }
