@@ -846,7 +846,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0){
-        return self.profileContainer.frame.size.height;
+        return self.profileContainer.frame.size.height +64;
     }
     else {
         if (!self.currentFeed.count) return 60;
