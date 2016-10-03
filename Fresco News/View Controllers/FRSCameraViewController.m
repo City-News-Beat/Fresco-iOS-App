@@ -262,6 +262,19 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self fetchGalleryAssetsInBackgroundWithCompletion:Nil];
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    @try {
+        [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
+        [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    }
+    @catch (NSException *e) {
+        
+    }
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
@@ -1670,6 +1683,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)dealloc{
+    return;
     [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
     [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];

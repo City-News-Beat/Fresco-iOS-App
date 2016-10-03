@@ -191,13 +191,14 @@
     NSString *username = _userField.text;
 //    username = [username stringByReplacingOccurrencesOfString:@"@" withString:@""];
     
+    //username = [username stringByReplacingOccurrencesOfString:@"@" withString:@""];
     if ([[username substringToIndex:1] isEqualToString:@"@"]) {
         username = [username substringFromIndex:1];
     }
     
     NSString *password = _passwordField.text;
     
-    if ([password isEqualToString:@""] || [username isEqualToString:@""] || ((![self isValidUsername:username]) && (![self validEmail:_userField.text]))) {
+    if ([password isEqualToString:@""] || [username isEqualToString:@""]) {
         // error out
         [self presentInvalidInfo];
         return;
@@ -217,22 +218,15 @@
         if (error.code == 0) {
             
             [self popToOrigin];
-            
-//            FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
-//            [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
-//                [tabBarVC setSelectedIndex:0];
-            
-            
+
                 [self stopSpinner:self.loadingView onButton:self.loginButton];
                 [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
             
                 if ([self validEmail:username]) {
                     [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
                 }
+            return;
 
-            
-            
-//            }];
         }
         
         if (error.code == -1009) {

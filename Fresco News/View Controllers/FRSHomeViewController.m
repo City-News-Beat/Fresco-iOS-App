@@ -96,16 +96,16 @@
     [self logoutWithPop:NO];
 }
 
-//-(void)presentNewStuffWithPassword:(BOOL)password {
-//    
-//    if (self.migrationAlert) {
-//        return;
-//    }
-//    
-//    self.migrationAlert = [[FRSAlertView alloc] initNewStuffWithPasswordField:password];
-//    self.migrationAlert.delegate = self;
-//    [self.migrationAlert show];
-//}
+-(void)presentNewStuffWithPassword:(BOOL)password {
+    return;
+    if (self.migrationAlert) {
+        return;
+    }
+    
+    self.migrationAlert = [[FRSAlertView alloc] initNewStuffWithPasswordField:password];
+    self.migrationAlert.delegate = self;
+    [self.migrationAlert show];
+}
 
 -(void)presentTOS {
     
