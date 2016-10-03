@@ -142,6 +142,48 @@
     }
 }
 
+-(void)presentSheet {
+    UIAlertController * view=   [UIAlertController
+                                 alertControllerWithTitle:nil
+                                 message:nil
+                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *one = [UIAlertAction
+                                 actionWithTitle:@"Report"
+                                 style:UIAlertActionStyleDefault
+                                 handler:^(UIAlertAction * action)
+                                 {
+                                     [view dismissViewControllerAnimated:YES completion:nil];
+                                     
+                                 }];
+    
+    UIAlertAction *two = [UIAlertAction
+                                actionWithTitle:@"Unblock"
+                                style:UIAlertActionStyleDefault
+                                handler:^(UIAlertAction * action)
+                                {
+                                    [view dismissViewControllerAnimated:YES completion:nil];
+
+                                }];
+
+    
+    UIAlertAction *cancel = [UIAlertAction
+                             actionWithTitle:@"Cancel"
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [view dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+    
+    
+    [view addAction:one];
+    [view addAction:two];
+    [view addAction:cancel];
+    
+    [self presentViewController:view animated:YES completion:nil];
+}
+
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     if (isLoadingUser) {
@@ -586,6 +628,12 @@
                 
                 if (!self.userIsDisabled || !self.userIsSuspended) {
                     self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
+                }
+                
+                if (self.userIsBlocked) {
+                    [self.followBarButtonItem setImage:[UIImage imageNamed:@"dots"]];
+                    [self.followBarButtonItem setAction:@selector(presentSheet)];
+                    [self.followBarButtonItem setTarget:self];
                 }
             });
             
