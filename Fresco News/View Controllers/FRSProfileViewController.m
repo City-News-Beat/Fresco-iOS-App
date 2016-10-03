@@ -127,8 +127,8 @@
     
     
     /* DEBUG */
-//    self.userIsBlocked   = YES;
-    self.userIsSuspended = YES;
+    self.userIsBlocked   = YES;
+//    self.userIsSuspended = YES;
 //    self.userIsDisabled  = YES;
     
     
@@ -269,7 +269,7 @@
 -(void)setupUI {
     
     if (self.userIsBlocked) {
-        [self configureBlockedUser];
+        [self configureBlockedUserWithButton:YES];
         return;
     } else if (self.userIsSuspended) {
         [self configureSuspendedUser];
@@ -302,9 +302,43 @@
 }
 
 
--(void)configureBlockedUser {
+-(void)configureBlockedUserWithButton:(BOOL)button {
     self.tableView.scrollEnabled = NO;
-
+    
+    [self createProfileSection];
+    self.profileContainer.frame = CGRectMake(0, self.profileContainer.frame.origin.y -64, self.profileContainer.frame.size.width, self.profileContainer.frame.size.height);
+    [self.view addSubview:self.profileContainer];
+    
+    
+    UIView *blockedContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height+self.profileContainer.frame.size.height)/2 -181, 207, 181)];
+    [self.view addSubview:blockedContainer];
+    
+    UIImageView *blocked = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"blocked"]];
+    blocked.frame = CGRectMake(blockedContainer.frame.size.width/2 -56/2, 0, 56, 56);
+    [blockedContainer addSubview:blocked];
+    
+    UILabel *awkwardLabel = [[UILabel alloc] initWithFrame:CGRectMake(blockedContainer.frame.size.width/2 -129/2, 72, 129, 33)];
+    awkwardLabel.text = @"Blocked 🙅";
+    awkwardLabel.font = [UIFont karminaBoldWithSize:28];
+    awkwardLabel.textColor = [UIColor frescoDarkTextColor];
+    [blockedContainer addSubview:awkwardLabel];
+    
+    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(blockedContainer.frame.size.width/2 - 208/2, 106, 208, 40)];
+    bodyLabel.text = @"You can’t see each other’s\ngalleries or comments.";
+    bodyLabel.textAlignment = NSTextAlignmentCenter;
+    bodyLabel.numberOfLines = 2;
+    bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    bodyLabel.textColor = [UIColor frescoMediumTextColor];
+    [blockedContainer addSubview:bodyLabel];
+    
+    if (button) {
+        UIButton *unblockButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        unblockButton.frame = CGRectMake(blockedContainer.frame.size.width/2 -94/2, blocked.frame.size.height+awkwardLabel.frame.size.height+bodyLabel.frame.size.height +15, 94, 44);
+        [unblockButton setTitle:@"UNBLOCK" forState:UIControlStateNormal];
+        [unblockButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+        unblockButton.tintColor = [UIColor frescoBlueColor];
+        [blockedContainer addSubview:unblockButton];
+    }
     
 }
 
@@ -354,11 +388,6 @@
 
     [container addSubview:self.followersButton];
     
-    
-    
-    
-    
-    
     UIView *suspendedContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height+container.frame.size.height)/2 -125, 207, 125)];
     [self.view addSubview:suspendedContainer];
     
@@ -378,9 +407,6 @@
     bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     bodyLabel.textColor = [UIColor frescoMediumTextColor];
     [suspendedContainer addSubview:bodyLabel];
-    
-    
-    
     
 }
 
