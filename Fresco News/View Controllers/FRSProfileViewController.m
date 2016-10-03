@@ -17,6 +17,8 @@
 
 #import "FRSUser.h"
 
+#import "FRSAlertView.h"
+
 #import "FRSAppDelegate.h"
 #import "FRSAPIClient.h"
 #import "FRSStoryCell.h"
@@ -34,7 +36,7 @@
 #import "FRSSearchViewController.h"
 #import "UITextView+Resize.h"
 
-@interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate>
+@interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate, FRSAlertViewDelegate>
 
 //@property (strong, nonatomic) UIScrollView *scrollView;
 
@@ -126,10 +128,37 @@
      }
     
     
+    
+    
+    
+    
     /* DEBUG */
 //    self.userIsBlocked   = YES;
 //    self.userIsSuspended = YES;
 //    self.userIsDisabled  = YES;
+    
+    
+    /* REPORT SUCCESS ALERT */
+    
+//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block @%@ as well?", _representedUser.username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+//    [alert show];
+    
+    
+    
+    /* BLOCK SUCCESS ALERT */
+    
+//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+//    [alert show];
+    
+    
+    
+    
+    /* SUSPENDED ALERT */
+    
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message: [NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+    [alert show];
+    
+    
     
     
     [self setupUI];
@@ -142,11 +171,20 @@
     }
 }
 
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    
+}
+
 -(void)presentSheet {
     
     UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction *follow = [UIAlertAction actionWithTitle:@"Follow" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    UIAlertAction *unfollow = [UIAlertAction actionWithTitle:@"Unfollow" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];

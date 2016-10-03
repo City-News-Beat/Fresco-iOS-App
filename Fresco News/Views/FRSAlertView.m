@@ -132,7 +132,8 @@
             /* Left Action */
             self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
             [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
-            self.actionButton.frame = CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 85, 44);
+            self.actionButton.frame = CGRectMake(16, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 15, 121, 44);
+            self.actionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
             [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
             [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
@@ -1627,6 +1628,27 @@
     }
     
 }
+
+
+
+#pragma mark - Moderation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

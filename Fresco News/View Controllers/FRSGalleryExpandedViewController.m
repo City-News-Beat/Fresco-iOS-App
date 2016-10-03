@@ -245,6 +245,53 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     self.navigationItem.titleView = self.titleLabel;
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    
+    
+    
+//    UIBarButtonItem *square = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"square"] style:UIBarButtonItemStylePlain target:self action:@selector(expandGallery)];
+    UIBarButtonItem *dots = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
+
+//    dots.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
+    
+//    square.tintColor = [UIColor whiteColor];
+    dots.tintColor = [UIColor whiteColor];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    
+    self.navigationItem.rightBarButtonItems = @[dots];
+
+}
+
+-(void)presentSheet {
+    
+    UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    
+    UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block @USER"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    UIAlertAction *reportGallery = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report this gallery"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    UIAlertAction *report = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report @USER"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+        
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    [view addAction:reportGallery];
+    [view addAction:report];
+    [view addAction:block];
+    [view addAction:cancel];
+    
+    [self presentViewController:view animated:YES completion:nil];
 }
 
 -(void)configureUI{
