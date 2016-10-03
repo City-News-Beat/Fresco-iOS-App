@@ -127,7 +127,7 @@
     
     
     /* DEBUG */
-    self.userIsBlocked   = YES;
+//    self.userIsBlocked   = YES;
 //    self.userIsSuspended = YES;
 //    self.userIsDisabled  = YES;
     
@@ -143,43 +143,45 @@
 }
 
 -(void)presentSheet {
-    UIAlertController * view=   [UIAlertController
-                                 alertControllerWithTitle:nil
-                                 message:nil
-                                 preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *one = [UIAlertAction
-                                 actionWithTitle:@"Report"
-                                 style:UIAlertActionStyleDefault
-                                 handler:^(UIAlertAction * action)
-                                 {
-                                     [view dismissViewControllerAnimated:YES completion:nil];
-                                     
-                                 }];
+    UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *two = [UIAlertAction
-                                actionWithTitle:@"Unblock"
-                                style:UIAlertActionStyleDefault
-                                handler:^(UIAlertAction * action)
-                                {
-                                    [view dismissViewControllerAnimated:YES completion:nil];
-
-                                }];
-
+    UIAlertAction *follow = [UIAlertAction actionWithTitle:@"Follow" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
     
-    UIAlertAction *cancel = [UIAlertAction
-                             actionWithTitle:@"Cancel"
-                             style:UIAlertActionStyleCancel
-                             handler:^(UIAlertAction * action)
-                             {
-                                 [view dismissViewControllerAnimated:YES completion:nil];
-                                 
-                             }];
+    UIAlertAction *block = [UIAlertAction actionWithTitle:@"Block" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    UIAlertAction *sunblock = [UIAlertAction actionWithTitle:@"Unblock" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+        
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
     
     
-    [view addAction:one];
-    [view addAction:two];
-    [view addAction:cancel];
+    if (self.userIsBlocked) {
+        [view addAction:report];
+        [view addAction:sunblock];
+        [view addAction:cancel];
+    } else {
+        [view addAction:follow];
+        [view addAction:report];
+        [view addAction:block];
+        [view addAction:cancel];
+    }
     
     [self presentViewController:view animated:YES completion:nil];
 }
@@ -627,7 +629,16 @@
                 }
                 
                 if (!self.userIsDisabled || !self.userIsSuspended) {
-                    self.navigationItem.rightBarButtonItem = self.followBarButtonItem;
+                    
+                    UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
+                    dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
+                    
+                    dotIcon.tintColor = [UIColor whiteColor];
+                    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+                    
+                    self.navigationItem.rightBarButtonItems = @[self.followBarButtonItem, dotIcon];
+                    
+                    
                 }
                 
                 if (self.userIsBlocked) {
