@@ -150,13 +150,12 @@
 //    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
 //    [alert show];
     
-    
-    
+
     
     /* SUSPENDED ALERT */
-    
-    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message: [NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-    [alert show];
+
+//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message: [NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+//    [alert show];
     
     
     
@@ -201,6 +200,9 @@
     
     UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
+        FRSAlertView *alert = [[FRSAlertView alloc] initUserReportWithUsername:_representedUser.username delegate:self];
+        [alert show];
+        
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
     
@@ -208,14 +210,14 @@
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
-    
+
     
     if (self.userIsBlocked) {
         [view addAction:report];
         [view addAction:sunblock];
         [view addAction:cancel];
     } else {
-        [view addAction:follow];
+        [view addAction:follow]; //note: if following display unfollow
         [view addAction:report];
         [view addAction:block];
         [view addAction:cancel];

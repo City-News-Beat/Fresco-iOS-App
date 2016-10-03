@@ -1633,7 +1633,81 @@
 
 #pragma mark - Moderation
 
+-(instancetype)initUserReportWithUsername:(NSString *)username delegate:(id)delegate {
+    self = [super init];
+    delegate = self.delegate;
 
+    if (self) {
+        
+        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 -ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 356/2, ALERT_WIDTH, 356);
+        
+        [self configureDarkOverlay];
+        
+        /* Alert Box */
+        self.backgroundColor = [UIColor frescoBackgroundColorLight];
+        
+        /* Title Label */
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
+        [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
+        self.titleLabel.text = [NSString stringWithFormat:@"REPORT @%@", [username uppercaseString]];
+        self.titleLabel.alpha = .87;
+        [self addSubview:self.titleLabel];
+        
+        /* Body Label */
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 0)];
+        self.messageLabel.alpha = .54;
+        self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.messageLabel.numberOfLines = 0;
+        
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"What is this user doing?"];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setLineSpacing:2];
+        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [@"What is this user doing?" length])];
+        
+        self.messageLabel.attributedText = attributedString ;
+        self.messageLabel.textAlignment = NSTextAlignmentCenter;
+        [self.messageLabel sizeToFit];
+        self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
+        [self addSubview:self.messageLabel];
+        
+        /* Shadows */
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
+        line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+        [self addSubview:line];
+        
+        UIView *actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height -44, ALERT_WIDTH, 0.5)];
+        actionLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+        [self addSubview:actionLine];
+        
+        
+        /* Left Action */
+        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
+        self.actionButton.frame = CGRectMake(16, self.frame.size.height -44, 121, 44);
+        self.actionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+        [self.actionButton setTitle:@"CANCEL" forState:UIControlStateNormal];
+        [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        [self addSubview:self.actionButton];
+        
+        /* Right Action */
+        self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
+        [self.cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        [self.cancelButton setTitle:@"SEND REPORT" forState:UIControlStateNormal];
+        [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        [self.cancelButton sizeToFit];
+        [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
+        [self addSubview:self.cancelButton];
+        
+        [self addShadowAndClip];
+        [self animateIn];
+    }
+    return self;
+}
 
 
 
