@@ -23,7 +23,6 @@
 #import "Fresco.h"
 #import "FRSSearchViewController.h"
 
-#define TOP_PAD 46
 #define CELL_HEIGHT 62
 
 @interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate>
@@ -36,6 +35,9 @@
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 
+@property (strong, nonatomic) UILabel *commentLabel;
+
+@property (strong, nonatomic) UILabel *articlesLabel;
 @property (strong, nonatomic) UITableView *articlesTV;
 
 @property (strong, nonatomic) NSArray *orderedArticles;
@@ -137,7 +139,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)reload {
-    
     [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:self.gallery.uid completion:^(id responseObject, NSError *error) {
         if (error || !responseObject) {
             [self commentError:error];
@@ -187,7 +188,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         height += 55;
         
-        self.commentTableView.frame = CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height-6);
+        self.commentTableView.frame = CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height, self.view.frame.size.width, height);
         [self adjustScrollViewContentSize];
         [self.commentTableView reloadData];
     }];
@@ -276,8 +277,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 500) gallery:self.gallery delegate:self];
     [self.scrollView addSubview:self.galleryView];
     
-    
-    //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
+//    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
 }
 
 -(void)configureArticles{
@@ -286,7 +286,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         return;
     }
     
-    self.articlesTV = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + TOP_PAD, self.view.frame.size.width, CELL_HEIGHT * self.orderedArticles.count)];
+    if (self.orderedArticles.count > 0) {
+        self.articlesLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height, self.view.frame.size.width, 48)];
+        self.articlesLabel.text = @"ARTICLES";
+        self.articlesLabel.textColor = [UIColor frescoMediumTextColor];
+        self.articlesLabel.font = [UIFont notaBoldWithSize:15];
+        [self.articlesLabel setOriginWithPoint:CGPointMake(16, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + 6)];
+        [self.scrollView addSubview:self.articlesLabel];
+    }
+    
+    self.articlesTV = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesLabel.frame.size.height, self.view.frame.size.width, CELL_HEIGHT * self.orderedArticles.count)];
     self.articlesTV.delegate = self;
     self.articlesTV.dataSource = self;
     self.articlesTV.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -294,17 +303,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.articlesTV.scrollEnabled = NO;
     [self.scrollView addSubview:self.articlesTV];
     
-    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.articlesTV.frame.origin.y - 0.5)]];
-    
-    
     if (self.orderedArticles.count > 0) {
-        UILabel *articlesLabel = [[UILabel alloc] init];
-        articlesLabel.text = @"ARTICLES";
-        articlesLabel.textColor = [UIColor frescoMediumTextColor];
-        articlesLabel.font = [UIFont notaBoldWithSize:15];
-        [articlesLabel sizeToFit];
-        [articlesLabel setOriginWithPoint:CGPointMake(16, self.articlesTV.frame.origin.y - 5 - articlesLabel.frame.size.height)];
-        [self.scrollView addSubview:articlesLabel];
+        [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.articlesTV.frame.origin.y - 0.5)]];
     }
 }
 
@@ -341,9 +341,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
-
 -(void)configureComments {
-    
     float height = 0;
     NSInteger index = 0;
     
@@ -372,7 +370,20 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     height += 55;
     
-    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height-6)];
+    CGFloat labelOriginY = self.galleryView.frame.origin.y + self.galleryView.frame.size.height;
+    if (self.comments.count > 0) {
+        if (self.orderedArticles.count > 0) {
+            labelOriginY += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
+        }
+        self.commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelOriginY, self.view.frame.size.width, 48)];
+        self.commentLabel.text = @"COMMENTS";
+        self.commentLabel.textColor = [UIColor frescoMediumTextColor];
+        self.commentLabel.font = [UIFont notaBoldWithSize:15];
+        [self.commentLabel setOriginWithPoint:CGPointMake(16, labelOriginY + 6)];
+        [self.scrollView addSubview:self.commentLabel];
+    }
+    
+    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
     self.commentTableView.delegate = self;
     self.commentTableView.dataSource = self;
     self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -380,19 +391,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.commentTableView.scrollEnabled = NO;
     [self.scrollView addSubview:self.commentTableView];
     self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.commentTableView.frame.origin.y - 0.5)]];
     self.commentTableView.backgroundColor = [UIColor clearColor];
     self.commentTableView.backgroundView.backgroundColor = [UIColor clearColor];
     [self.commentTableView registerNib:[UINib nibWithNibName:@"FRSCommentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:reusableCommentIdentifier];
     
     if (self.comments.count > 0) {
-        UILabel *articlesLabel = [[UILabel alloc] init];
-        articlesLabel.text = @"COMMENTS";
-        articlesLabel.textColor = [UIColor frescoMediumTextColor];
-        articlesLabel.font = [UIFont notaBoldWithSize:15];
-        [articlesLabel sizeToFit];
-        [articlesLabel setOriginWithPoint:CGPointMake(16, self.commentTableView.frame.origin.y - 5 - articlesLabel.frame.size.height)];
-        [self.scrollView addSubview:articlesLabel];
+        [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.commentTableView.frame.origin.y - 0.5)]];
     }
     
     [self adjustScrollViewContentSize];
@@ -433,7 +437,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)adjustScrollViewContentSize{
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryView.frame.size.height + self.articlesTV.frame.size.height + self.commentTableView.frame.size.height + TOP_PAD * 2 + 50 + TOP_PAD);
+    CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + 16;
+    if (self.comments.count > 0) {
+        height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height;
+    }
+    if (self.orderedArticles.count > 0) {
+        height += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
+    }
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, height);
 }
 
 
@@ -511,7 +522,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(NSInteger)toggleActionBarOffsetPoint{
-    return self.galleryView.frame.size.height + TOP_PAD + (self.gallery.articles.count * CELL_HEIGHT);
+    return self.galleryView.frame.size.height + (self.gallery.articles.count * CELL_HEIGHT);
 }
 
 #pragma mark - Articles Table View DataSource Delegate
@@ -691,7 +702,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         height += 55;
         
-        self.commentTableView.frame = CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height + TOP_PAD + TOP_PAD, self.view.frame.size.width, height-6);
+        self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
         [self adjustScrollViewContentSize];
         [self.commentTableView reloadData];
     }];
