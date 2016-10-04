@@ -79,6 +79,9 @@
 
 @property (strong, nonatomic) UIImageView *placeholderUserIcon;
 
+@property (strong, nonatomic) FRSAlertView *reportUserAlertView;
+
+
 @end
 
 @implementation FRSProfileViewController
@@ -171,7 +174,18 @@
 }
 
 -(void)didPressButtonAtIndex:(NSInteger)index {
-    
+
+    if (self.reportUserAlertView) {
+        if (index != 1) {
+            //UNDO BLOCK (API)
+        }
+    }
+}
+
+-(void)reportUserAlertAction {
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+    [alert show];
+
 }
 
 -(void)presentSheet {
@@ -200,8 +214,9 @@
     
     UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
-        FRSAlertView *alert = [[FRSAlertView alloc] initUserReportWithUsername:_representedUser.username delegate:self];
-        [alert show];
+        self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:_representedUser.username delegate:self];
+        self.reportUserAlertView.delegate = self;
+        [self.reportUserAlertView show];
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];

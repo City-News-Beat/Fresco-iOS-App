@@ -1704,7 +1704,7 @@
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
-        [self.cancelButton addTarget:self action:@selector(sendReport) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton addTarget:self action:@selector(reportUser) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         [self.cancelButton setTitle:@"SEND REPORT" forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
@@ -1791,7 +1791,7 @@
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
-        [self.cancelButton addTarget:self action:@selector(sendReport) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton addTarget:self action:@selector(reportGallery) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         [self.cancelButton setTitle:@"SEND REPORT" forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
@@ -1917,20 +1917,14 @@
 }
 
 
--(void)sendReport {
+-(void)reportGallery {
     [self dismiss];
-
     [self.delegate reportGalleryAlertAction];
 }
 
-
-
-
-
-
-
-
-
-
+-(void)reportUser {
+    [self dismiss];
+    [self.delegate reportUserAlertAction];
+}
 
 @end
