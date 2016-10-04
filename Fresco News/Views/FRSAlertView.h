@@ -12,7 +12,9 @@
 
 -(void)didPressButtonAtIndex:(NSInteger)index;
 -(void)logoutAlertAction;
--(void)reportAlertAction;
+-(void)reportGalleryAlertAction;
+-(void)reportUserAlertAction;
+-(void)blockUserAlertAction;
 
 @end
 

@@ -1919,10 +1919,10 @@
 
 -(void)sendReport {
     [self dismiss];
-    
-    
-    
+
+    [self.delegate reportGalleryAlertAction];
 }
+
 
 
 

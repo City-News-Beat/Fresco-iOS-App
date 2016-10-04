@@ -28,7 +28,7 @@
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate>
 
 @property (strong, nonatomic) FRSGallery *gallery;
 
@@ -50,6 +50,8 @@
 
 @property (nonatomic, retain) NSMutableArray *comments;
 @property (nonatomic, retain) UITableView *commentTableView;
+
+@property (strong, nonatomic) FRSAlertView *galleryReportAlertView;
 
 @end
 
@@ -275,8 +277,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     UIAlertAction *reportGallery = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report this gallery"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
-        FRSAlertView *alert = [[FRSAlertView alloc] initGalleryReportDelegate:self];
-        [alert show];
+        self.galleryReportAlertView = [[FRSAlertView alloc] initGalleryReportDelegate:self];
+        self.galleryReportAlertView.delegate = self;
+        [self.galleryReportAlertView show];
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -917,6 +920,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if ([[UIApplication sharedApplication] canOpenURL:url]) {
         [[UIApplication sharedApplication] openURL:url];
     }
+}
+
+
+#pragma mark - FRSAlertViewDelegate
+
+-(void)reportGalleryAlertAction {
+    
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message:@"Thanks for helping make Fresco a better community!" actionTitle:@"YOU’RE WELCOME" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+    [alert show];
+
 }
 
 
