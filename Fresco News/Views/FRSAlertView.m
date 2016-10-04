@@ -1705,9 +1705,10 @@
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
         [self.cancelButton addTarget:self action:@selector(sendReport) forControlEvents:UIControlEventTouchUpInside];
-        [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         [self.cancelButton setTitle:@"SEND REPORT" forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        self.cancelButton.userInteractionEnabled = NO;
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
         [self addSubview:self.cancelButton];
@@ -1762,7 +1763,6 @@
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 44, ALERT_WIDTH, 0.5)];
     line.backgroundColor = [UIColor frescoShadowColor];
     [button addSubview:line];
-    
 }
 
 -(void)textViewDidBeginEditing:(UITextView *)textView {
@@ -1783,19 +1783,18 @@
 
 -(void)didTapOptionOne {
     [self toggleImageView:self.moderationIVOne];
-
 }
-
 
 -(void)didTapOptionTwo {
     [self toggleImageView:self.moderationIVTwo];
-    
 }
-
 
 -(void)didTapOptionThree {
     [self toggleImageView:self.moderationIVThree];
+}
 
+-(void)didTapOptionFour {
+    [self toggleImageView:self.moderationIVFour];
 }
 
 
@@ -1804,6 +1803,14 @@
         imageView.image = [UIImage imageNamed:@"check-box-circle-filled"];
     } else {
         imageView.image = [UIImage imageNamed:@"check-box-circle-outline"];
+    }
+    
+    if ([self.moderationIVOne.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]] || [self.moderationIVTwo.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]] || [self.moderationIVThree.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]] || [self.moderationIVFour.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]]) {
+        [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.cancelButton.userInteractionEnabled = YES;
+    } else {
+        [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.cancelButton.userInteractionEnabled = NO;
     }
 }
 
