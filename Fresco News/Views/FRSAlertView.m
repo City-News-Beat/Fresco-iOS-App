@@ -1721,20 +1721,7 @@
         [self createSelectableButtonWithTitle:@"Posting spam" imageView:self.moderationIVTwo yPos:120 action:@selector(didTapOptionTwo)];
         [self createSelectableButtonWithTitle:@"Posting stolen content" imageView:self.moderationIVThree yPos:164 action:@selector(didTapOptionThree)];
 
-        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(16, 219, self.frame.size.width -32, 93)];
-        textView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-        textView.backgroundColor = [UIColor clearColor];
-        textView.delegate = self;
-        [self addSubview:textView];
-        
-        self.textViewPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 32, 17)];
-        self.textViewPlaceholderLabel.text = @"Please share more details";
-        self.textViewPlaceholderLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-        self.textViewPlaceholderLabel.textColor = [UIColor frescoLightTextColor];
-        [textView addSubview:self.textViewPlaceholderLabel];
-        
-        self.dismissKeyboardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
-        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.dismissKeyboardTap];
+        [self addTextView];
         
         [self addShadowAndClip];
         [self animateIn];
@@ -1742,6 +1729,27 @@
     return self;
 }
 
+
+-(void)addTextView {
+    
+    int textViewHeight = 93;
+    int padding = 44;
+    
+    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(16, self.frame.size.height -textViewHeight -padding, self.frame.size.width -32, textViewHeight)];
+    textView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    textView.backgroundColor = [UIColor clearColor];
+    textView.delegate = self;
+    [self addSubview:textView];
+    
+    self.textViewPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 32, 17)];
+    self.textViewPlaceholderLabel.text = @"Please share more details";
+    self.textViewPlaceholderLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.textViewPlaceholderLabel.textColor = [UIColor frescoLightTextColor];
+    [textView addSubview:self.textViewPlaceholderLabel];
+    
+    self.dismissKeyboardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
+    [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.dismissKeyboardTap];
+}
 
 
 -(void)createSelectableButtonWithTitle:(NSString *)title imageView:(UIImageView *)imageView yPos:(CGFloat)yPos action:(SEL)action {
