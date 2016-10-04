@@ -18,7 +18,7 @@
 #define ALERT_WIDTH 270
 #define MESSAGE_WIDTH 238
 
-@interface FRSAlertView ()
+@interface FRSAlertView () <UITextViewDelegate>
 
 
 /* Reusable Alert Properties */
@@ -69,6 +69,13 @@
 @property (strong, nonatomic) UIImageView *emailCheckIV;
 
 @property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardTap;
+
+@property (strong, nonatomic) UIImageView *moderationIVOne;
+@property (strong, nonatomic) UIImageView *moderationIVTwo;
+@property (strong, nonatomic) UIImageView *moderationIVThree;
+@property (strong, nonatomic) UIImageView *moderationIVFour;
+
+@property (strong, nonatomic) UILabel *textViewPlaceholderLabel;
 
 @end
 
@@ -847,6 +854,8 @@
 -(void)dismiss {
     [self animateOut];
     
+    [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
+
 //    if (self.delegate) {
 //        [self.delegate didPressButtonAtIndex:1];
 //    }
@@ -1695,13 +1704,36 @@
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
-        [self.cancelButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton addTarget:self action:@selector(sendReport) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         [self.cancelButton setTitle:@"SEND REPORT" forState:UIControlStateNormal];
         [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
         [self addSubview:self.cancelButton];
+        
+        self.moderationIVOne   = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+        self.moderationIVTwo   = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+        self.moderationIVThree = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+
+        [self createSelectableButtonWithTitle:@"Being abusive" imageView:self.moderationIVOne yPos:76 action:@selector(didTapOptionOne)];
+        [self createSelectableButtonWithTitle:@"Posting spam" imageView:self.moderationIVTwo yPos:120 action:@selector(didTapOptionTwo)];
+        [self createSelectableButtonWithTitle:@"Posting stolen content" imageView:self.moderationIVThree yPos:164 action:@selector(didTapOptionThree)];
+
+        UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(16, 219, self.frame.size.width -32, 93)];
+        textView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        textView.backgroundColor = [UIColor clearColor];
+        textView.delegate = self;
+        [self addSubview:textView];
+        
+        self.textViewPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 32, 17)];
+        self.textViewPlaceholderLabel.text = @"What's happening?";
+        self.textViewPlaceholderLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        self.textViewPlaceholderLabel.textColor = [UIColor frescoLightTextColor];
+        [textView addSubview:self.textViewPlaceholderLabel];
+        
+        self.dismissKeyboardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
+        [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.dismissKeyboardTap];
         
         [self addShadowAndClip];
         [self animateIn];
@@ -1711,11 +1743,75 @@
 
 
 
+-(void)createSelectableButtonWithTitle:(NSString *)title imageView:(UIImageView *)imageView yPos:(CGFloat)yPos action:(SEL)action {
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.frame = CGRectMake(0, yPos, self.frame.size.width, 44);
+    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:button];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 12, 200, 20)];
+    titleLabel.text = title;
+    titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    titleLabel.textColor = [UIColor frescoDarkTextColor];
+    [button addSubview:titleLabel];
+    
+    imageView.frame = CGRectMake(self.frame.size.width -26-16, 10, 24, 24);
+    [button addSubview:imageView];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 44, ALERT_WIDTH, 0.5)];
+    line.backgroundColor = [UIColor frescoShadowColor];
+    [button addSubview:line];
+    
+}
+
+-(void)textViewDidBeginEditing:(UITextView *)textView {
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.textViewPlaceholderLabel.alpha = 0;
+        self.transform = CGAffineTransformMakeTranslation(0, -120);
+    } completion:nil];
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textView {
+    if ([textView.text isEqualToString:@""]) {
+        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.textViewPlaceholderLabel.alpha = 1;
+            self.transform = CGAffineTransformMakeTranslation(0, 0);
+        } completion:nil];
+    }
+}
+
+-(void)didTapOptionOne {
+    [self toggleImageView:self.moderationIVOne];
+
+}
 
 
+-(void)didTapOptionTwo {
+    [self toggleImageView:self.moderationIVTwo];
+    
+}
 
 
+-(void)didTapOptionThree {
+    [self toggleImageView:self.moderationIVThree];
 
+}
+
+
+-(void)toggleImageView:(UIImageView *)imageView {
+    if ([imageView.image isEqual:[UIImage imageNamed:@"check-box-circle-outline"]]) {
+        imageView.image = [UIImage imageNamed:@"check-box-circle-filled"];
+    } else {
+        imageView.image = [UIImage imageNamed:@"check-box-circle-outline"];
+    }
+}
+
+
+-(void)sendReport {
+    [self dismiss];
+    
+}
 
 
 
