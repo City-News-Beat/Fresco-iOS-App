@@ -1729,6 +1729,95 @@
     return self;
 }
 
+-(instancetype)initGalleryReportDelegate:(id)delegate {
+    self = [super init];
+    delegate = self.delegate;
+    
+    if (self) {
+        
+        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 -ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 356/2, ALERT_WIDTH, 400);
+        
+        [self configureDarkOverlay];
+        
+        /* Alert Box */
+        self.backgroundColor = [UIColor frescoBackgroundColorLight];
+        
+        /* Title Label */
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
+        [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
+        self.titleLabel.text = @"REPORT GALLERY";
+        self.titleLabel.alpha = .87;
+        [self addSubview:self.titleLabel];
+        
+        /* Body Label */
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 0)];
+        self.messageLabel.alpha = .54;
+        self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.messageLabel.numberOfLines = 0;
+        
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"What’s wrong with this gallery?"];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setLineSpacing:2];
+        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [@"What’s wrong with this gallery?" length])];
+        
+        self.messageLabel.attributedText = attributedString ;
+        self.messageLabel.textAlignment = NSTextAlignmentCenter;
+        [self.messageLabel sizeToFit];
+        self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
+        [self addSubview:self.messageLabel];
+        
+        /* Shadows */
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
+        line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+        [self addSubview:line];
+        
+        UIView *actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height -44, ALERT_WIDTH, 0.5)];
+        actionLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
+        [self addSubview:actionLine];
+        
+        
+        /* Left Action */
+        self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
+        self.actionButton.frame = CGRectMake(16, self.frame.size.height -44, 121, 44);
+        self.actionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+        [self.actionButton setTitle:@"CANCEL" forState:UIControlStateNormal];
+        [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        [self addSubview:self.actionButton];
+        
+        /* Right Action */
+        self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
+        [self.cancelButton addTarget:self action:@selector(sendReport) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        [self.cancelButton setTitle:@"SEND REPORT" forState:UIControlStateNormal];
+        [self.cancelButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+        self.cancelButton.userInteractionEnabled = NO;
+        [self.cancelButton sizeToFit];
+        [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
+        [self addSubview:self.cancelButton];
+        
+        self.moderationIVOne   = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+        self.moderationIVTwo   = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+        self.moderationIVThree = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+        self.moderationIVFour = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+
+        [self createSelectableButtonWithTitle:@"It’s abusive" imageView:self.moderationIVOne yPos:76 action:@selector(didTapOptionOne)];
+        [self createSelectableButtonWithTitle:@"It’s spam" imageView:self.moderationIVTwo yPos:120 action:@selector(didTapOptionTwo)];
+        [self createSelectableButtonWithTitle:@"It includes stolen content" imageView:self.moderationIVThree yPos:164 action:@selector(didTapOptionThree)];
+        [self createSelectableButtonWithTitle:@"It includes graphic content" imageView:self.moderationIVFour yPos:208 action:@selector(didTapOptionFour)];
+        
+        [self addTextView];
+        
+        [self addShadowAndClip];
+        [self animateIn];
+    }
+    return self;
+}
+
 
 -(void)addTextView {
     
@@ -1739,6 +1828,7 @@
     textView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     textView.backgroundColor = [UIColor clearColor];
     textView.delegate = self;
+    textView.tintColor = [UIColor frescoBlueColor];
     [self addSubview:textView];
     
     self.textViewPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 32, 17)];
@@ -1776,7 +1866,11 @@
 -(void)textViewDidBeginEditing:(UITextView *)textView {
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.textViewPlaceholderLabel.alpha = 0;
-        self.transform = CGAffineTransformMakeTranslation(0, -120);
+        if (IS_IPHONE_6) {
+            self.transform = CGAffineTransformMakeTranslation(0, -150);
+        } else if (IS_IPHONE_5) {
+            self.transform = CGAffineTransformMakeTranslation(0, -200);
+        }
     } completion:nil];
 }
 

@@ -22,6 +22,8 @@
 #import "Haneke.h"
 #import "Fresco.h"
 #import "FRSSearchViewController.h"
+#import "FRSAlertView.h"
+
 
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
@@ -272,6 +274,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
     
     UIAlertAction *reportGallery = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report this gallery"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        FRSAlertView *alert = [[FRSAlertView alloc] initGalleryReportDelegate:self];
+        [alert show];
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
