@@ -276,6 +276,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block @%@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
+        
+        
+        
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
     
