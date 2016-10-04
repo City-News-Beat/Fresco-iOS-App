@@ -1728,7 +1728,7 @@
         [self addSubview:textView];
         
         self.textViewPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 32, 17)];
-        self.textViewPlaceholderLabel.text = @"What's happening?";
+        self.textViewPlaceholderLabel.text = @"Please share more details";
         self.textViewPlaceholderLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         self.textViewPlaceholderLabel.textColor = [UIColor frescoLightTextColor];
         [textView addSubview:self.textViewPlaceholderLabel];
