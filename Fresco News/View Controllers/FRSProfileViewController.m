@@ -161,8 +161,7 @@
 //    [alert show];
     
     
-    
-    
+
     [self setupUI];
     [self configureUI];
     [self fetchGalleries];
@@ -176,14 +175,20 @@
 -(void)didPressButtonAtIndex:(NSInteger)index {
 
     if (self.reportUserAlertView) {
-        if (index != 1) {
-            //UNDO BLOCK (API)
+        self.reportUserAlertView = nil;
+        if (index == 1) {
+
+            //BLOCK ON API, IF SUCCESS PRESENT ALERT
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [alert show];
         }
     }
 }
 
 -(void)reportUserAlertAction {
-    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+    
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block @%@ as well?", _representedUser.username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
     [alert show];
 
 }

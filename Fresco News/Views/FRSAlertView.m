@@ -854,8 +854,11 @@
 -(void)dismiss {
     [self animateOut];
     
+    
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
+    [self removeFromSuperview];
 
+    
 //    if (self.delegate) {
 //        [self.delegate didPressButtonAtIndex:1];
 //    }

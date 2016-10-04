@@ -52,6 +52,8 @@
 @property (nonatomic, retain) UITableView *commentTableView;
 
 @property (strong, nonatomic) FRSAlertView *galleryReportAlertView;
+@property (strong, nonatomic) FRSAlertView *userReportAlertView;
+
 
 @end
 
@@ -267,10 +269,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)presentSheet {
     
+    NSString *username = @"USERNAME";
+    
     UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     
-    UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block @USER"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block @%@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -284,7 +288,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
     
-    UIAlertAction *report = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report @USER"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *report = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report @%@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        self.userReportAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
+        self.userReportAlertView.delegate = self;
+        [self.userReportAlertView show];
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -300,6 +308,29 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [view addAction:cancel];
     
     [self presentViewController:view animated:YES completion:nil];
+}
+
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    if (self.userReportAlertView) {
+        self.userReportAlertView = nil;
+        if (index == 1) {
+            
+            //BLOCK ON API, IF SUCCESS PRESENT ALERT
+            
+            NSString *username = @"USERNAME";
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [alert show];
+        }
+    }
+}
+
+-(void)reportUserAlertAction {
+    
+    NSString *username = @"USERNAME";
+    
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block @%@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+    [alert show];
 }
 
 -(void)configureUI{
