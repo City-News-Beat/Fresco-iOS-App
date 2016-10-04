@@ -276,7 +276,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block @%@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
-        
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
         
         
         [view dismissViewControllerAnimated:YES completion:nil];
