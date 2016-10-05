@@ -45,6 +45,7 @@
     [self createAttributedText];
 }
 
+
 -(void)createAttributedText {
     _attributedString = [[NSMutableAttributedString alloc] initWithString:_comment];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];

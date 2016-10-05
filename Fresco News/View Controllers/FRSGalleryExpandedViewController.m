@@ -27,6 +27,7 @@
 #import "MGSwipeTableCell.h"
 
 
+
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
 
@@ -55,6 +56,8 @@
 
 @property (strong, nonatomic) FRSAlertView *galleryReportAlertView;
 @property (strong, nonatomic) FRSAlertView *userReportAlertView;
+
+@property (strong, nonatomic) FRSAlertView *reportUserAlertView;
 
 
 @end
@@ -324,6 +327,47 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self presentViewController:view animated:YES completion:nil];
 }
 
+
+-(void)presentFlagCommentSheet {
+
+    UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    NSString *username = @"USERNAME";
+
+
+    UIAlertAction *block = [UIAlertAction actionWithTitle:@"Block" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+
+        //IF SUCCESS, PRESENT ALERT
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+
+
+    UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+
+        self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:username delegate:self];
+        self.reportUserAlertView.delegate = self;
+        [self.reportUserAlertView show];
+
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+
+    [view addAction:report];
+    [view addAction:block];
+    [view addAction:cancel];
+
+    [self presentViewController:view animated:YES completion:nil];
+}
+
+
+
 -(void)didPressButtonAtIndex:(NSInteger)index {
     if (self.userReportAlertView) {
         self.userReportAlertView = nil;
@@ -416,19 +460,25 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     if (comment.isDeletable && comment.isReportable) {
         if (index == 0) {
-            NSLog(@"DELETE");
+
+            [self deleteAtIndexPath:[self.commentTableView indexPathForCell:cell]];
+        
         } else if (index == 1) {
             NSLog(@"REPORT");
+            [self presentFlagCommentSheet];
+            
         }
     
     } else if (comment.isDeletable && !comment.isReportable) {
         if (index == 0) {
-            NSLog(@"DELETE");
+            [self deleteAtIndexPath:[self.commentTableView indexPathForCell:cell]];
         }
         
     } else if (!comment.isDeletable && comment.isReportable) {
         if (index == 0) {
             NSLog(@"REPORT");
+            
+            [self presentFlagCommentSheet];
         }
         
     } else if (!comment.isDeletable && !comment.isReportable) {
@@ -440,6 +490,47 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     return YES;
 }
+
+
+//-(void)presentSheet {
+//
+//    UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+//
+//
+//    UIAlertAction *block = [UIAlertAction actionWithTitle:@"Block" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+//
+////        //IF SUCCESS, PRESENT ALERT
+////        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+////        [alert show];
+//
+//        [view dismissViewControllerAnimated:YES completion:nil];
+//    }];
+//
+//
+//    UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+//
+////        self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:_representedUser.username delegate:self];
+////        self.reportUserAlertView.delegate = self;
+////        [self.reportUserAlertView show];
+//
+//        [view dismissViewControllerAnimated:YES completion:nil];
+//    }];
+//
+//    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+//
+//        [view dismissViewControllerAnimated:YES completion:nil];
+//    }];
+//
+//    [view addAction:report];
+//    [view addAction:block];
+//    [view addAction:cancel];
+//
+//    [self presentViewController:view animated:YES completion:nil];
+//}
+
+
+
+
 //-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 //    [self deleteAtIndexPath:indexPath];
 //}
@@ -466,7 +557,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 //}
 
 -(void)deleteAtIndexPath:(NSIndexPath *)indexPath {
-    FRSComment *comment = self.comments[indexPath.row - 1];
+    FRSComment *comment = self.comments[indexPath.row - showsMoreButton];
     [[FRSAPIClient sharedClient] deleteComment:comment.uid fromGallery:self.gallery completion:^(id responseObject, NSError *error) {
         NSLog(@"%@", error);
         [self reload];

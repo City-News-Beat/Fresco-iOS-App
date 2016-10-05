@@ -10,7 +10,9 @@
 #import "FRSUser.h"
 #import "FRSCommentCell.h"
 
+
 @interface FRSComment : NSObject
+
 @property (nonatomic, weak) FRSUser *user;
 @property (nonatomic, weak) NSString *comment;
 @property (nonatomic, strong) NSDate *createdAt;
