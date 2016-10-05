@@ -199,10 +199,14 @@
     
     UIAlertAction *follow = [UIAlertAction actionWithTitle:@"Follow" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
+        [self followUser];
+        
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
     
     UIAlertAction *unfollow = [UIAlertAction actionWithTitle:@"Unfollow" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        [self unfollowUser];
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -241,7 +245,13 @@
         [view addAction:sunblock];
         [view addAction:cancel];
     } else {
-        [view addAction:follow]; //note: if following display unfollow
+        
+        if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
+            [view addAction:unfollow];
+        } else {
+            [view addAction:follow];
+        }
+        
         [view addAction:report];
         [view addAction:block];
         [view addAction:cancel];

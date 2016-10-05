@@ -258,7 +258,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     
     
-    
     /* NOTE: Gallery creator is nil, need to setup in FRSGallery */
     
 //    if (self.gallery.creator) {
