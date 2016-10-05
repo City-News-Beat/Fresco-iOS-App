@@ -335,7 +335,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     NSString *username = @"USERNAME";
 
 
-    UIAlertAction *block = [UIAlertAction actionWithTitle:@"Block" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block @%@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
 
         //IF SUCCESS, PRESENT ALERT
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
@@ -345,7 +345,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 
 
-    UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *report = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report @%@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
 
         self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:username delegate:self];
         self.reportUserAlertView.delegate = self;
