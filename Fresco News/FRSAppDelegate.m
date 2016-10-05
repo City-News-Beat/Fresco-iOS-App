@@ -220,7 +220,6 @@
     [Fabric with:@[[Twitter class], [Crashlytics class]]];
     
     [[FRSAPIClient sharedClient] searchWithQuery:@"bernie" completion:^(id responseObject, NSError *error) {
-        NSLog(@"RESP: %@ ERR: %@", responseObject, error);
     }];
     
     [Smooch initWithSettings:[SKTSettings settingsWithAppToken:@"bmk6otjwgrb5wyaiohse0qbr0"]];
