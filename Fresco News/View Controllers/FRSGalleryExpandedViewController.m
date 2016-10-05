@@ -30,7 +30,7 @@
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, MGSwipeTableCellDelegate>
 
 @property (strong, nonatomic) FRSGallery *gallery;
 
@@ -408,30 +408,62 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
--(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self deleteAtIndexPath:indexPath];
-}
 
-// activity_duration
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    if (tableView == _commentTableView) {
+-(BOOL)swipeTableCell:(MGSwipeTableCell *)cell tappedButtonAtIndex:(NSInteger)index direction:(MGSwipeDirection)direction fromExpansion:(BOOL)fromExpansion {
+    
+    
+    FRSComment *comment = [self.comments objectAtIndex:[self.commentTableView indexPathForCell:cell].row];
+    
+    if (comment.isDeletable && comment.isReportable) {
+        if (index == 0) {
+            NSLog(@"DELETE");
+        } else if (index == 1) {
+            NSLog(@"REPORT");
+        }
+    
+    } else if (comment.isDeletable && !comment.isReportable) {
+        if (index == 0) {
+            NSLog(@"DELETE");
+        }
         
-        if (showsMoreButton && indexPath.row < self.comments.count+1 && indexPath.row != 0) {
-            FRSComment *comment = [self.comments objectAtIndex:indexPath.row-1];
-            if (comment.isDeletable) {
-                return YES;
-            }
+    } else if (!comment.isDeletable && comment.isReportable) {
+        if (index == 0) {
+            NSLog(@"REPORT");
         }
-        else if (!showsMoreButton && indexPath.row < self.comments.count) {
-            FRSComment *comment = [self.comments objectAtIndex:indexPath.row];
-            if (comment.isDeletable) {
-                return YES;
-            }
-        }
+        
+    } else if (!comment.isDeletable && !comment.isReportable) {
+        // will never get called
     }
     
-    return NO;
+    
+    
+    
+    return YES;
 }
+//-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    [self deleteAtIndexPath:indexPath];
+//}
+
+// activity_duration
+//-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+//    if (tableView == _commentTableView) {
+//        
+//        if (showsMoreButton && indexPath.row < self.comments.count+1 && indexPath.row != 0) {
+//            FRSComment *comment = [self.comments objectAtIndex:indexPath.row-1];
+//            if (comment.isDeletable) {
+//                return YES;
+//            }
+//        }
+//        else if (!showsMoreButton && indexPath.row < self.comments.count) {
+//            FRSComment *comment = [self.comments objectAtIndex:indexPath.row];
+//            if (comment.isDeletable) {
+//                return YES;
+//            }
+//        }
+//    }
+//    
+//    return NO;
+//}
 
 -(void)deleteAtIndexPath:(NSIndexPath *)indexPath {
     FRSComment *comment = self.comments[indexPath.row - 1];
@@ -705,6 +737,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
         else {
             FRSCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:reusableCommentIdentifier];
+            cell.delegate = self;
             if (indexPath.row < self.comments.count+showsMoreButton) {
                 FRSComment *comment = _comments[indexPath.row-showsMoreButton];
                 
@@ -739,12 +772,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 
                 //flag-light, cc:imogen
                 
-                if (comment.isDeletable) {
-                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"cellphone"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
-                } else {
-                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"cellphone"] backgroundColor:[UIColor frescoBlueColor]]];
-                }
                 
+                
+                
+                if (comment.isDeletable && !comment.isReportable) {
+                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
+                }else if (comment.isReportable && !comment.isDeletable) {
+                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"cellphone"] backgroundColor:[UIColor frescoBlueColor]]];
+                } else if (comment.isDeletable && comment.isReportable) {
+                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"cellphone"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
+                }
                 
                 
                 cell.rightSwipeSettings.transition = MGSwipeTransitionDrag;

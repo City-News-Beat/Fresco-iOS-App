@@ -33,6 +33,7 @@
     }
     else {
         _isDeletable = FALSE;
+        _isReportable = TRUE;
     }
     
     _entities = dictionary[@"entities"];
