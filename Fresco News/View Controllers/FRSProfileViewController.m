@@ -215,7 +215,7 @@
         
         //IF SUCCESS, PRESENT ALERT
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-        [alert show];
+        [alert show];        
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
