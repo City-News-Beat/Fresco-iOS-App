@@ -272,7 +272,7 @@
     if (_managedObjectContext != nil) {
         return _managedObjectContext;
     }
-    
+        
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (!coordinator) {
         return nil;

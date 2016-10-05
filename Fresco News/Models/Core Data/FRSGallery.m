@@ -57,7 +57,15 @@
     if([dict valueForKey:@"owner"] != [NSNull null] && [[dict valueForKey:@"owner"] valueForKey:@"full_name"] != [NSNull null]){
         self.byline = dict[@"owner"][@"full_name"];
     }
-    NSLog(@"BYLINE: %@", self.byline);    
+    NSLog(@"BYLINE: %@", self.byline);
+
+//    if ([dict valueForKey:@"curator"] != [NSNull null]) {
+//        self.creator = [FRSUser MR_createEntity];
+//        self.creator.uid = (dict[@"curator"][@"id"] != nil) ? dict[@"curator"][@"id"] : @"";
+//        self.creator.username = (dict[@"curator"][@"username"] != nil) ? dict[@"curator"][@"username"] : @"";
+//        self.creator.username = (dict[@"curator"][@"full_name"] != nil) ? dict[@"curator"][@"full_name"] : @"";
+//        //blocked
+//    }
     
     if ([dict valueForKey:@"external_account_id"] != [NSNull null]) {
         self.externalAccountID = [dict objectForKey:@"external_account_id"];
@@ -106,7 +114,8 @@
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
     FRSGallery *gallery = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:context];
     gallery.currentContext = context;
-    [gallery configureWithDictionary:properties];
+//    [gallery configureWithDictionary:properties context:context];
+
     return gallery;
 }
 
@@ -115,6 +124,17 @@
     _currentContext = context;
     save = TRUE;
     [self configureWithDictionary:dict];
+    
+//    self.creator = [FRSUser MR_createEntityInContext:context];
+//    
+//    if ([dict valueForKey:@"curator"] != [NSNull null]) {
+//        self.creator = [FRSUser MR_createEntity];
+//        self.creator.uid = (dict[@"curator"][@"id"] != nil) ? dict[@"curator"][@"id"] : @"";
+//        self.creator.username = (dict[@"curator"][@"username"] != nil) ? dict[@"curator"][@"username"] : @"";
+//        self.creator.username = (dict[@"curator"][@"full_name"] != nil) ? dict[@"curator"][@"full_name"] : @"";
+//        //blocked
+//    }
+
 }
 
 -(void)addPostsWithArray:(NSArray *)posts{

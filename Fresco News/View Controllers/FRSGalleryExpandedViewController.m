@@ -255,15 +255,24 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     
 //    UIBarButtonItem *square = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"square"] style:UIBarButtonItemStylePlain target:self action:@selector(expandGallery)];
-    UIBarButtonItem *dots = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
-
-//    dots.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
     
-//    square.tintColor = [UIColor whiteColor];
-    dots.tintColor = [UIColor whiteColor];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     
-    self.navigationItem.rightBarButtonItems = @[dots];
+    
+    
+    /* NOTE: Gallery creator is nil, need to setup in FRSGallery */
+    
+//    if (self.gallery.creator) {
+    
+        UIBarButtonItem *dots = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
+        
+        //    dots.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
+        
+        //    square.tintColor = [UIColor whiteColor];
+        dots.tintColor = [UIColor whiteColor];
+        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+        
+        self.navigationItem.rightBarButtonItems = @[dots];
+//    }
 
 }
 
