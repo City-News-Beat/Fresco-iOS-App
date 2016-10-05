@@ -24,6 +24,8 @@
 #import "FRSSearchViewController.h"
 #import "FRSAlertView.h"
 
+#import "MGSwipeTableCell.h"
+
 
 #define TOP_PAD 46
 #define CELL_HEIGHT 62
@@ -676,6 +678,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     else if (tableView == _commentTableView) {
         
         if (indexPath.row == 0 && showsMoreButton) {
+            
+            
+            
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
             topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
             [topButton setTitle:[NSString stringWithFormat:@"%lu MORE COMMENTS", [[self.gallery valueForKey:@"comments"] intValue] - _comments.count] forState:UIControlStateNormal];
@@ -731,6 +736,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
                     [cell setLayoutMargins:UIEdgeInsetsZero];
                 }
+                
+                //flag-light, cc:imogen
+                
+                if (comment.isDeletable) {
+                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"cellphone"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
+                } else {
+                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"cellphone"] backgroundColor:[UIColor frescoBlueColor]]];
+                }
+                
+                
+                
+                cell.rightSwipeSettings.transition = MGSwipeTransitionDrag;
+                
                 return cell;
             }
         }
