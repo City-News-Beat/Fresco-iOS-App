@@ -362,7 +362,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [alert show];
                 
-                [self fetchCommentsWithID:self.gallery.uid];
+                //[self fetchCommentsWithID:self.gallery.uid];
                 
                 
             } else {
