@@ -81,7 +81,6 @@
 
 @property (strong, nonatomic) FRSAlertView *reportUserAlertView;
 
-
 @end
 
 @implementation FRSProfileViewController

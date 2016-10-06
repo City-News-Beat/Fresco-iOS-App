@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSString *uid;
 @property (nonatomic, strong) NSArray *entities;
 @property (nonnull, strong) NSString *imageURL;
+@property (nonnull, strong) NSDictionary *userDictionary;
 @property (nonatomic) BOOL isDeletable;
 @property (nonatomic) BOOL isReportable;
 @property (nonatomic, strong) NSMutableAttributedString *attributedString;

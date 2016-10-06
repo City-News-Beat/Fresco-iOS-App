@@ -28,6 +28,8 @@
     
     NSLog(@"SASS: %@", dictionary);
     
+    self.userDictionary = dictionary[@"user"];
+    
     if ([dictionary[@"user"][@"id"] isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
         _isDeletable = TRUE;
     }

@@ -267,7 +267,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
 //    if (self.gallery.creator) {
     
-        UIBarButtonItem *dots = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
+        UIBarButtonItem *dots = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentReportGallerySheet)];
         
         //    dots.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
         
@@ -280,9 +280,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 }
 
--(void)presentSheet {
+-(void)presentReportGallerySheet {
     
     NSString *username = @"USERNAME";
+    
+    
     
     UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
@@ -328,14 +330,28 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 
--(void)presentFlagCommentSheet {
+-(void)presentFlagCommentSheet:(FRSComment *)comment {
 
     UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    NSString *username = @"USERNAME";
+    
+    
+    
+    NSLog(@"userDictionary: %@", comment.userDictionary);
+    
+    NSString *username;
+
+    if (comment.userDictionary[@"username"] != [NSNull null] && (![comment.userDictionary[@"username"] isEqualToString:@"<null>"])) {
+        username = [NSString stringWithFormat:@"@%@", comment.userDictionary[@"username"]];
+    } else if (comment.userDictionary[@"full_name"] != [NSNull null] && (![comment.userDictionary[@"full_name"] isEqualToString:@"<null>"])) {
+        username = comment.userDictionary[@"full_name"];
+    } else {
+        username = @"user";
+    }
 
 
-    UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block @%@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+
+    UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
 
         //IF SUCCESS, PRESENT ALERT
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
@@ -345,7 +361,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 
 
-    UIAlertAction *report = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report @%@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *report = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
 
         self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:username delegate:self];
         self.reportUserAlertView.delegate = self;
@@ -460,12 +476,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     if (comment.isDeletable && comment.isReportable) {
         if (index == 0) {
-
             [self deleteAtIndexPath:[self.commentTableView indexPathForCell:cell]];
-        
         } else if (index == 1) {
-            NSLog(@"REPORT");
-            [self presentFlagCommentSheet];
+            [self presentFlagCommentSheet:comment];
             
         }
     
@@ -476,85 +489,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
     } else if (!comment.isDeletable && comment.isReportable) {
         if (index == 0) {
-            NSLog(@"REPORT");
-            
-            [self presentFlagCommentSheet];
+            [self presentFlagCommentSheet:comment];
         }
         
     } else if (!comment.isDeletable && !comment.isReportable) {
         // will never get called
     }
-    
-    
-    
-    
+
     return YES;
 }
 
-
-//-(void)presentSheet {
-//
-//    UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-//
-//
-//    UIAlertAction *block = [UIAlertAction actionWithTitle:@"Block" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-//
-////        //IF SUCCESS, PRESENT ALERT
-////        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-////        [alert show];
-//
-//        [view dismissViewControllerAnimated:YES completion:nil];
-//    }];
-//
-//
-//    UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-//
-////        self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:_representedUser.username delegate:self];
-////        self.reportUserAlertView.delegate = self;
-////        [self.reportUserAlertView show];
-//
-//        [view dismissViewControllerAnimated:YES completion:nil];
-//    }];
-//
-//    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
-//
-//        [view dismissViewControllerAnimated:YES completion:nil];
-//    }];
-//
-//    [view addAction:report];
-//    [view addAction:block];
-//    [view addAction:cancel];
-//
-//    [self presentViewController:view animated:YES completion:nil];
-//}
-
-
-
-
-//-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-//    [self deleteAtIndexPath:indexPath];
-//}
-
-// activity_duration
-//-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-//    if (tableView == _commentTableView) {
-//        
-//        if (showsMoreButton && indexPath.row < self.comments.count+1 && indexPath.row != 0) {
-//            FRSComment *comment = [self.comments objectAtIndex:indexPath.row-1];
-//            if (comment.isDeletable) {
-//                return YES;
-//            }
-//        }
-//        else if (!showsMoreButton && indexPath.row < self.comments.count) {
-//            FRSComment *comment = [self.comments objectAtIndex:indexPath.row];
-//            if (comment.isDeletable) {
-//                return YES;
-//            }
-//        }
-//    }
-//    
-//    return NO;
-//}
 
 -(void)deleteAtIndexPath:(NSIndexPath *)indexPath {
     FRSComment *comment = self.comments[indexPath.row - showsMoreButton];
@@ -869,9 +813,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 if (comment.isDeletable && !comment.isReportable) {
                     cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
                 }else if (comment.isReportable && !comment.isDeletable) {
-                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"cellphone"] backgroundColor:[UIColor frescoBlueColor]]];
+                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"radius-small"] backgroundColor:[UIColor frescoBlueColor]]];
                 } else if (comment.isDeletable && comment.isReportable) {
-                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"cellphone"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
+                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"radius-small"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
                 }
                 
                 
