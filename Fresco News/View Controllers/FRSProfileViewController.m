@@ -1522,7 +1522,18 @@
     [[FRSAPIClient sharedClient] blockUser:user.uid withCompletion:^(id responseObject, NSError *error) {
         
         if (responseObject) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", user.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+
+            NSString *username;
+            
+            if ([_representedUser.username class] != [NSNull null] && (![_representedUser.username isEqualToString:@""])) {
+                username = [NSString stringWithFormat:@"@%@", _representedUser.username];
+            } else if ([_representedUser.firstName class] != [NSNull null] && (![_representedUser.firstName isEqualToString:@"<null>"])) {
+                username = _representedUser.firstName;
+            } else {
+                username = @"them";
+            }
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             self.didDisplayBlock = YES;
             [alert show];
         } else {
@@ -1534,6 +1545,7 @@
 }
 
 -(void)unblockUser:(FRSUser *)user {
+    
     [[FRSAPIClient sharedClient] unblockUser:user.uid withCompletion:^(id responseObject, NSError *error) {
         if (responseObject) {
         } else {

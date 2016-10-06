@@ -357,7 +357,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     } else if (comment.userDictionary[@"full_name"] != [NSNull null] && (![comment.userDictionary[@"full_name"] isEqualToString:@"<null>"])) {
         username = comment.userDictionary[@"full_name"];
     } else {
-        username = @"user";
+        username = @"them";
     }
 
 
@@ -1130,12 +1130,32 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 
-#pragma mark - Navigation
+#pragma mark - Moderation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)blockUser:(NSDictionary *)userDictionary{
+    
+    [[FRSAPIClient sharedClient] blockUser:userDictionary[@"id"] withCompletion:^(id responseObject, NSError *error) {
+        
+        if (responseObject) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from %@ anymore.", userDictionary[@"username"]] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            self.didDisplayBlock = YES;
+            [alert show];
+            
+        } else {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [alert show];
+        }
+    }];
+}
+
+-(void)unblockUser:(NSString *)userID {
+    [[FRSAPIClient sharedClient] unblockUser:userID withCompletion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [alert show];
+        }
+    }];
 }
 
 
