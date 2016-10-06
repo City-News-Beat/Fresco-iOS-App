@@ -81,6 +81,9 @@
 
 @property (strong, nonatomic) FRSAlertView *reportUserAlertView;
 
+@property BOOL didDisplayReport;
+@property BOOL didDisplayBlock;
+
 @end
 
 @implementation FRSProfileViewController
@@ -134,6 +137,8 @@
     
     
     
+    
+    
     /* DEBUG */
 //    self.userIsBlocked   = YES;
 //    self.userIsSuspended = YES;
@@ -173,14 +178,17 @@
 
 -(void)didPressButtonAtIndex:(NSInteger)index {
 
-    if (self.reportUserAlertView) {
+    if (self.didDisplayReport) {
+        self.didDisplayReport = NO;
         self.reportUserAlertView = nil;
         if (index == 1) {
-
-            //BLOCK ON API, IF SUCCESS PRESENT ALERT
-            
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-            [alert show];
+            [self blockUser:_representedUser];
+        }
+        
+    } else if (self.didDisplayBlock) {
+        self.didDisplayBlock = NO;
+        if (index == 0) {
+            [self unblockUser:_representedUser];
         }
     }
 }
@@ -197,29 +205,24 @@
     UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction *follow = [UIAlertAction actionWithTitle:@"Follow" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        
         [self followUser];
-        
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
     
     UIAlertAction *unfollow = [UIAlertAction actionWithTitle:@"Unfollow" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        
         [self unfollowUser];
-        
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
     
     UIAlertAction *block = [UIAlertAction actionWithTitle:@"Block" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        
-        //IF SUCCESS, PRESENT ALERT
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-        [alert show];        
-        
+        [self blockUser:_representedUser];
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
     
     UIAlertAction *sunblock = [UIAlertAction actionWithTitle:@"Unblock" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        [self unblockUser:_representedUser];
+        
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -227,6 +230,7 @@
     UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
         self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:_representedUser.username delegate:self];
+        self.didDisplayReport = YES;
         self.reportUserAlertView.delegate = self;
         [self.reportUserAlertView show];
         
@@ -1511,5 +1515,32 @@
     });
 }
 
+
+#pragma mark - Moderation
+
+-(void)blockUser:(FRSUser *)user {
+    [[FRSAPIClient sharedClient] blockUser:user.uid withCompletion:^(id responseObject, NSError *error) {
+        
+        if (responseObject) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", user.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            self.didDisplayBlock = YES;
+            [alert show];
+        } else {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [alert show];
+        }
+        
+    }];
+}
+
+-(void)unblockUser:(FRSUser *)user {
+    [[FRSAPIClient sharedClient] unblockUser:user.uid withCompletion:^(id responseObject, NSError *error) {
+        if (responseObject) {
+        } else {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [alert show];
+        }
+    }];
+}
 
 @end
