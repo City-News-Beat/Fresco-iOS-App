@@ -144,6 +144,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
         
         [self configureComments];
+        
     }];
 }
 
@@ -357,8 +358,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         [[FRSAPIClient sharedClient] blockUser:comment.userDictionary[@"id"] withCompletion:^(id responseObject, NSError *error) {
            
             if (responseObject) {
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [alert show];
+                
+                [self fetchCommentsWithID:self.gallery.uid];
+                
+                
             } else {
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                 [alert show];
@@ -403,7 +409,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [view addAction:report];
 
     
-    NSLog(@"BLOCKED: %d", [comment.userDictionary[@"blocked"] boolValue]);
     
     if (![comment.userDictionary[@"blocked"] boolValue]) {
         [view addAction:block];
@@ -510,8 +515,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(BOOL)swipeTableCell:(MGSwipeTableCell *)cell tappedButtonAtIndex:(NSInteger)index direction:(MGSwipeDirection)direction fromExpansion:(BOOL)fromExpansion {
     
     
-    FRSComment *comment = [self.comments objectAtIndex:[self.commentTableView indexPathForCell:cell].row];
-    
+    FRSComment *comment = [self.comments objectAtIndex:[self.commentTableView indexPathForCell:cell].row - showsMoreButton];
+
     if (comment.isDeletable && comment.isReportable) {
         if (index == 0) {
             [self deleteAtIndexPath:[self.commentTableView indexPathForCell:cell]];
