@@ -135,6 +135,12 @@ static NSString * const getPaymentsEndpoint = @"user/payment";
 static NSString * const deletePaymentEndpoint = @"user/payment/%@/delete";
 static NSString * const makePaymentActiveEndpoint = @"user/payment/%@/update/";
 
+// moderation
+static NSString * const blockUserEndpoint = @"user/%@/block";
+static NSString * const unblockUserEndpoint = @"user/%@/unblock";
+static NSString * const reportUserEndpoint = @"user/%@/report";
+
+
 // legacy user defaults
 static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
 

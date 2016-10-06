@@ -1429,4 +1429,22 @@
     [self post:acceptTermsEndpoint withParameters:Nil completion:completion];
 }
 
+-(void)blockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:blockUserEndpoint, userID];
+    
+    [self post:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)unblockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    NSString *endpoint = [NSString stringWithFormat:unblockUserEndpoint, userID];
+    
+    [self post:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 @end

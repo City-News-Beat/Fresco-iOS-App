@@ -290,6 +290,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     
     UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block @%@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+
         
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         [alert show];
@@ -352,14 +353,36 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 
     UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-
-        //IF SUCCESS, PRESENT ALERT
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-        [alert show];
+        
+        [[FRSAPIClient sharedClient] blockUser:comment.userDictionary[@"id"] withCompletion:^(id responseObject, NSError *error) {
+           
+            if (responseObject) {
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                [alert show];
+            } else {
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                [alert show];
+            }
+        }];
 
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
+    
+    
+    UIAlertAction *unblock = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Unblock %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        [[FRSAPIClient sharedClient] unblockUser:comment.userDictionary[@"id"] withCompletion:^(id responseObject, NSError *error) {
+            
+            if (responseObject) {
 
+            } else {
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                [alert show];
+            }
+        }];
+        
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
 
     UIAlertAction *report = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
 
@@ -374,9 +397,24 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
-
+   
+ 
+    
     [view addAction:report];
-    [view addAction:block];
+
+    
+    NSLog(@"BLOCKED: %d", [comment.userDictionary[@"blocked"] boolValue]);
+    
+    if (![comment.userDictionary[@"blocked"] boolValue]) {
+        [view addAction:block];
+    } else {
+        [view addAction:unblock];
+    }
+        
+
+    
+    
+    
     [view addAction:cancel];
 
     [self presentViewController:view animated:YES completion:nil];
@@ -745,8 +783,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     else if (tableView == _commentTableView) {
         
         if (indexPath.row == 0 && showsMoreButton) {
-            
-            
             
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
             topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
