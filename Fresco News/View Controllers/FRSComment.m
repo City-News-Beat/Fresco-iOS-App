@@ -26,7 +26,6 @@
     _comment = dictionary[@"comment"];
     _user = [FRSUser nonSavedUserWithProperties:dictionary[@"user"] context:[delegate managedObjectContext]];
     
-    NSLog(@"SASS: %@", dictionary);
     
     self.userDictionary = dictionary[@"user"];
     

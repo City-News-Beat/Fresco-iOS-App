@@ -47,8 +47,8 @@
 
     return sorted;
 }
+
 -(void)configureWithDictionary:(NSDictionary *)dict{
-    NSLog(@"THE DIC: %@", dict);
     self.tags = [[NSMutableDictionary alloc] init];
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
