@@ -1066,7 +1066,7 @@
 }
 
 -(instancetype)initNewStuffWithPasswordField:(BOOL)password {
-    
+    return Nil;
     self = [super init];
     if (self){
         

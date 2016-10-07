@@ -165,6 +165,13 @@
             [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
         }
         
+        if (responseObject[@"identity"][@"first_name"] != Nil && ![responseObject[@"identity"][@"first_name"] isEqual:[NSNull null]]) {
+            [authenticatedUser setValue:responseObject[@"identity"][@"first_name"] forKey:@"stripeFirst"];
+        }
+        if (responseObject[@"identity"][@"last_name"] != Nil && ![responseObject[@"identity"][@"last_name"] isEqual:[NSNull null]]) {
+            [authenticatedUser setValue:responseObject[@"identity"][@"last_name"] forKey:@"stripeLast"];
+        }
+        
         if ([responseObject[@"terms"][@"valid"] boolValue] == FALSE) { /* */
             UITabBarController *tabBar = (UITabBarController *)self.tabBarController;
             UINavigationController *nav = [tabBar.viewControllers firstObject];
@@ -226,7 +233,7 @@
         }
         
         NSArray *fieldsNeeded = identity[@"fields_needed"];
-        authenticatedUser.fieldsNeeded = fieldsNeeded;
+        [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
         [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
         [[self managedObjectContext] save:Nil];
     }];
