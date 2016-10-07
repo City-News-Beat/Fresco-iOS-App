@@ -1038,6 +1038,7 @@
 -(void)acceptTapped {
     
     [[FRSAPIClient sharedClient] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
+        
         if (!error) {
             [self dismiss];
         }

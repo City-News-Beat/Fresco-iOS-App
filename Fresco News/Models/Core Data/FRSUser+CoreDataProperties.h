@@ -35,6 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *address;
 @property (nullable, nonatomic, retain) NSString *disabledReason;
 @property (nullable, nonatomic, retain) NSArray *fieldsNeeded;
+@property (nonatomic) BOOL blocked;
+@property (nonatomic) BOOL blocking;
+
 
 @end
 

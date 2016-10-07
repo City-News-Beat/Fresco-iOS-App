@@ -129,15 +129,13 @@
         [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
             _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
             [self configureWithUser:_representedUser];
+            
+            
+                    
         }];
      }
     
-    
-    
-    
-    
-    
-    
+
     
     /* DEBUG */
 //    self.userIsBlocked   = YES;
@@ -1467,9 +1465,8 @@
         
         [self.bioTextView frs_setTextWithResize:user.bio];
 
-
-
         
+        self.userIsBlocked = user.blocking;
         
         
         //[self.profileContainer setFrame:CGRectMake(self.profileContainer.frame.origin.x, self.profileContainer.frame.origin.y, self.profileContainer.frame.size.width,269.5 + self.bioLabel.frame.size.height)];
@@ -1527,7 +1524,7 @@
             
             if ([_representedUser.username class] != [NSNull null] && (![_representedUser.username isEqualToString:@""])) {
                 username = [NSString stringWithFormat:@"@%@", _representedUser.username];
-            } else if ([_representedUser.firstName class] != [NSNull null] && (![_representedUser.firstName isEqualToString:@"<null>"])) {
+            } else if ([_representedUser.firstName class] != [NSNull null] && (![_representedUser.firstName isEqualToString:@""])) {
                 username = _representedUser.firstName;
             } else {
                 username = @"them";

@@ -31,5 +31,8 @@
 @dynamic posts;
 @dynamic stories;
 @dynamic address;
+@dynamic blocked;
+@dynamic blocking;
+
 
 @end
