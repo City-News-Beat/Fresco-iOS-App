@@ -58,6 +58,9 @@
     [super viewDidLoad];
     
     [self configureTableView];
+    
+    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    NSLog(@"FIELDS NEEDED: %@", currentUser.fieldsNeeded);
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -133,6 +136,14 @@
 
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    int sectionTwo = 4;
+    
+    if (currentUser.fieldsNeeded.count == 0) {
+        sectionTwo = 4;
+    }
+    
     switch (section) {
         case 0:
             return 3;
@@ -141,7 +152,7 @@
             return 1;
             break;
         case 2:
-            return 4;
+            return sectionTwo;
             break;
         case 3:
             return 1;

@@ -202,6 +202,18 @@ typedef void(^FRSAPISuccessBlock)(BOOL sucess, NSError *error);
 typedef void(^FRSAPIArrayResponseBlock)(NSArray *responseObject, NSError *error);
 
 
+// fields needed
+static NSString * const lineOneField = @"legal_entity.address.line1";
+static NSString * const cityField = @"legal_entity.address.city";
+static NSString * const postalCodeField = @"legal_entity.address.postal_code";
+static NSString * const stateField = @"legal_entity.address.state";
+static NSString * const birthDayField = @"legal_entity.dob.day";
+static NSString * const birthMonthField = @"legal_entity.dob.month";
+static NSString * const birthYearField = @"legal_entity.dob.year";
+static NSString * const ssnField = @"legal_entity.ssn_last_4";
+static NSString * const firstNameField = @"legal_entity.first_name";
+static NSString * const lastNameField = @"legal_entity.last_name";
+
 /*FRS
     Notification types
  */

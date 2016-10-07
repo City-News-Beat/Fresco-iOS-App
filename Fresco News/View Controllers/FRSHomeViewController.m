@@ -218,6 +218,10 @@
                 NSString *galleryID = gallery[@"id"];
                 NSInteger galleryIndex = [self galleryExists:galleryID];
                 
+                if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
+                    continue;
+                }
+                
                 FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
                 [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
                 [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
