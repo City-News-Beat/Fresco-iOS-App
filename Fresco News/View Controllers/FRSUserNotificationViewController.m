@@ -558,7 +558,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.bodyLabel.text = dictionary[@"body"];
     
     if ([self hasImage:dictionary]) {
-        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
     }
 }
 
@@ -570,7 +570,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.bodyLabel.text = dictionary[@"body"];
 
     if ([self hasImage:dictionary]) {
-        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
     }
 }
 
@@ -584,7 +584,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.bodyLabel.text = dictionary[@"body"];
 
     if ([self hasImage:dictionary]) {
-        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
     }
 }
 
@@ -617,7 +617,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.followButton.alpha = 1;
     
     if ([self hasImage:dictionary]) {
-        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
     }
 }
 
@@ -629,7 +629,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
     
     if ([self hasImage:dictionary]) {
-        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
     }
 }
 
@@ -637,7 +637,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     if ([self hasImage:dictionary]) {
         [cell configureImageCell];
-        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
     }
     else {
         [cell configureDefaultCell];
@@ -656,7 +656,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     if ([self hasImage:dictionary]) {
         [cell configureImageCell];
-        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
     }
     else {
         [cell configureDefaultCell];
@@ -667,7 +667,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 -(BOOL)hasImage:(NSDictionary *)dictionary {
-    if (dictionary[@"image"] != Nil && ![dictionary[@"image"] isEqual:[NSNull null]] && [[dictionary[@"image"] class] isSubclassOfClass:[NSString class]]) {
+    if (dictionary[@"meta"][@"image"] != Nil && ![dictionary[@"meta"][@"image"] isEqual:[NSNull null]] && [[dictionary[@"meta"][@"image"] class] isSubclassOfClass:[NSString class]]) {
         return TRUE;
     }
     

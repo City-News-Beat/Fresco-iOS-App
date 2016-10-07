@@ -128,6 +128,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
     
     switch (indexPath.section) {
         case 0:
@@ -159,6 +160,16 @@
                     [picker1 setDatePickerMode:UIDatePickerModeDate];
                     picker1.backgroundColor = [UIColor whiteColor];
                     [picker1 addTarget:self action:@selector(startDateSelected:) forControlEvents:UIControlEventValueChanged];
+                    
+                    if ([authenticatedUser valueForKey:@"dob_day"] && [authenticatedUser valueForKey:@"dob_month"] && [authenticatedUser valueForKey:@"dob_year"]) {
+                        int day = [[authenticatedUser valueForKey:@"dob_day"] intValue];
+                        int month = [[authenticatedUser valueForKey:@"dob_month"] intValue];
+                        int year = [[authenticatedUser valueForKey:@"dob_year"] intValue];
+                        
+                        NSString *birthday = [NSString stringWithFormat:@"%d/%d/%d", day, month, year];
+                        _dateField.text = birthday;
+                    }
+                    
                     _dateField.inputView = picker1;
                     [_dateField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
                     break;
@@ -176,6 +187,11 @@
                     [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     _addressField = cell.textField;
+                    
+                    if ([authenticatedUser valueForKey:@"address_line1"]) {
+                        _addressField.text = [authenticatedUser valueForKey:@"address_line1"];
+                    }
+                    
                     _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
                     [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
                     break;
@@ -196,6 +212,19 @@
                     _stateField = cell.secondaryField;
                     _cityField.autocapitalizationType = UITextAutocapitalizationTypeWords;
                     _zipField = cell.tertiaryField;
+                    
+                    if ([authenticatedUser valueForKey:@"address_city"]) {
+                        _cityField.text = [authenticatedUser valueForKey:@"address_city"];
+                    }
+                    
+                    if ([authenticatedUser valueForKey:@"address_state"]) {
+                        _stateField.text = [authenticatedUser valueForKey:@"address_state"];
+                    }
+                    
+                    if ([authenticatedUser valueForKey:@"address_zip"]) {
+                        _zipField.text = [authenticatedUser valueForKey:@"address_zip"];
+                    }
+                    
                     [_zipField setKeyboardType:UIKeyboardTypeNumberPad];
                     [_cityField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
                     [_stateField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -232,8 +261,6 @@
                     self.saveIDInfoButton = cell.rightAlignedButton;
                     [self.saveIDInfoButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
                     break;
-                    
-                    
                 default:
                     break;
             }
@@ -276,7 +303,7 @@
     
     self.savingInfo = true;
     [[FRSAPIClient sharedClient] updateUserWithDigestion:payload completion:^(id responseObject, NSError *error) {
-        NSLog(@"%@ %@", error, responseObject);
+        NSLog(@"IDENTITY: %@ %@", error, responseObject);
         if(error){
             //Failiure popup
             self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
