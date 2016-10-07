@@ -75,12 +75,11 @@
 
 static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
-
 -(instancetype)initWithGallery:(FRSGallery *)gallery {
     self = [super init];
     if (self){
         self.gallery = gallery;
-        //        self.orderedArticles = [self.gallery.articles allObjects];
+        self.orderedArticles = [self.gallery.articles allObjects];
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
         self.touchEnabled = NO;
