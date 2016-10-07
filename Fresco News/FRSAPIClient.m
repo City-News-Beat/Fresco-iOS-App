@@ -336,7 +336,6 @@
     else {
         
         currentInstallation[@"device_token"] = [[FRSAPIClient sharedClient] random64CharacterString]; // no installation without push info, apparently
-
     }
     
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
@@ -1445,6 +1444,21 @@
     [self post:acceptTermsEndpoint withParameters:Nil completion:completion];
 }
 
+-(void)blockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:blockUserEndpoint, userID];
+    
+    [self post:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)unblockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:unblockUserEndpoint, userID];
+    
+    [self post:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
 -(void)reportUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *format = @"user/%@/report";
     NSString *endpoint = [NSString stringWithFormat:format, user.uid];
@@ -1459,17 +1473,6 @@
 
 }
 
--(void)blockUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *format = @"user/%@/block";
-    NSString *endpoint = [NSString stringWithFormat:format, user.uid];
-    [self post:endpoint withParameters:Nil completion:completion];
-}
-
--(void)unblockUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *format = @"user/%@/unblock";
-    NSString *endpoint = [NSString stringWithFormat:format, user.uid];
-    [self post:endpoint withParameters:Nil completion:completion];
-}
 
 -(void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion {
     [self get:@"user/blocked" withParameters:Nil completion:completion];

@@ -150,10 +150,11 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)getTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 
+// moderation
+-(void)blockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unblockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)reportUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)reportGallery:(FRSGallery *)gallery params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
--(void)blockUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
--(void)unblockUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion;
 
 @end
