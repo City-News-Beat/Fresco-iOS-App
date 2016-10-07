@@ -31,6 +31,12 @@
 @dynamic posts;
 @dynamic stories;
 @dynamic address;
+<<<<<<< HEAD
 @dynamic fieldsNeeded;
+=======
+@dynamic blocked;
+@dynamic blocking;
+
+>>>>>>> 3.0-omar
 
 @end

@@ -1038,6 +1038,7 @@
 -(void)acceptTapped {
     
     [[FRSAPIClient sharedClient] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
+        
         if (!error) {
             [self dismiss];
         }
@@ -1662,7 +1663,7 @@
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
-        self.titleLabel.text = [NSString stringWithFormat:@"REPORT @%@", [username uppercaseString]];
+        self.titleLabel.text = [NSString stringWithFormat:@"REPORT %@", [username uppercaseString]];
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
         
@@ -1904,6 +1905,8 @@
 
 
 -(void)toggleImageView:(UIImageView *)imageView {
+    [self untoggleRadioButtons];
+    
     if ([imageView.image isEqual:[UIImage imageNamed:@"check-box-circle-outline"]]) {
         imageView.image = [UIImage imageNamed:@"check-box-circle-filled"];
     } else {
@@ -1917,6 +1920,15 @@
         [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.cancelButton.userInteractionEnabled = NO;
     }
+}
+
+-(void)untoggleRadioButtons {
+    
+    self.moderationIVOne.image = [UIImage imageNamed:@"check-box-circle-outline"];
+    self.moderationIVTwo.image = [UIImage imageNamed:@"check-box-circle-outline"];
+    self.moderationIVThree.image = [UIImage imageNamed:@"check-box-circle-outline"];
+    self.moderationIVFour.image = [UIImage imageNamed:@"check-box-circle-outline"];
+
 }
 
 
