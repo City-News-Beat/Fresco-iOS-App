@@ -109,6 +109,7 @@
         <attribute name="address_line1" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="address_line2" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="address_state" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="address_zip" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="associatedPromoCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="avatar" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="bio" optional="YES" attributeType="String" syncable="YES"/>
@@ -144,6 +145,6 @@
         <element name="FRSPost" positionX="-36" positionY="9" width="128" height="253"/>
         <element name="FRSStory" positionX="-72" positionY="285" width="128" height="253"/>
         <element name="FRSUpload" positionX="-990" positionY="-9" width="128" height="238"/>
-        <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="495"/>
+        <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="510"/>
     </elements>
 </model>

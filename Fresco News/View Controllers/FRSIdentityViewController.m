@@ -161,7 +161,7 @@
                     picker1.backgroundColor = [UIColor whiteColor];
                     [picker1 addTarget:self action:@selector(startDateSelected:) forControlEvents:UIControlEventValueChanged];
                     
-                    if ([authenticatedUser valueForKey:@"dob_day"] && [authenticatedUser valueForKey:@"dob_month"] && [authenticatedUser valueForKey:@"dob_year"]) {
+                    if ([[authenticatedUser valueForKey:@"dob_day"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_month"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_year"] intValue] != 0) {
                         int day = [[authenticatedUser valueForKey:@"dob_day"] intValue];
                         int month = [[authenticatedUser valueForKey:@"dob_month"] intValue];
                         int year = [[authenticatedUser valueForKey:@"dob_year"] intValue];
@@ -190,6 +190,7 @@
                     
                     if ([authenticatedUser valueForKey:@"address_line1"]) {
                         _addressField.text = [authenticatedUser valueForKey:@"address_line1"];
+                        _addressField.enabled = FALSE;
                     }
                     
                     _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
