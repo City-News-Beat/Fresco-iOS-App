@@ -173,11 +173,60 @@
         }
         
         NSDictionary *identity = responseObject[@"identity"];
+        
+        NSString *birthDay = identity[@"dob_day"];
+        NSString *birthMonth = identity[@"dob_month"];
+        NSString *birthYear = identity[@"dob_year"];
+        NSString *addressLineOne = identity[@"address_line1"];
+        NSString *addressLineTwo = identity[@"address_line2"];
+        NSString *addressZip = identity[@"address_zip"];
+        NSString *addressCity = identity[@"address_city"];
+        NSString *addressState = identity[@"address_state"];
+        
+        if ([self isValue:birthDay]) {
+            [authenticatedUser setValue:birthDay forKey:@"dob_day"];
+        }
+        if ([self isValue:birthMonth]) {
+            [authenticatedUser setValue:birthMonth forKey:@"dob_month"];
+
+        }
+        if ([self isValue:birthYear]) {
+            [authenticatedUser setValue:birthYear forKey:@"dob_year"];
+
+        }
+        if ([self isValue:addressLineOne]) {
+            [authenticatedUser setValue:addressLineOne forKey:@"address_line1"];
+
+        }
+        if ([self isValue:addressLineTwo]) {
+            [authenticatedUser setValue:addressLineTwo forKey:@"address_line2"];
+
+        }
+        if ([self isValue:addressZip]) {
+            [authenticatedUser setValue:addressZip forKey:@"address_zip"];
+
+        }
+        if ([self isValue:addressCity]) {
+            [authenticatedUser setValue:addressCity forKey:@"address_city"];
+
+        }
+        if ([self isValue:addressState]) {
+            [authenticatedUser setValue:addressState forKey:@"address_state"];
+        }
+        
         NSArray *fieldsNeeded = identity[@"fields_needed"];
         authenticatedUser.fieldsNeeded = fieldsNeeded;
                 
         [[self managedObjectContext] save:Nil];
     }];
+}
+
+-(BOOL)isValue:(id)value {
+    if (value != Nil && ![value isEqual:[NSNull null]]) {
+        return TRUE;
+    }
+    
+    return FALSE;
 }
 
 
