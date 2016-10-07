@@ -495,7 +495,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     /* SOCIAL */
     } else if ([currentKey isEqualToString:followedNotification]) {
         
-        NSString *userID = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"user_id"];
+        NSString *userID = [[[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"user_ids"] firstObject];
         [self segueToUser:userID];
         
     } else if ([currentKey isEqualToString:likedNotification]) {
