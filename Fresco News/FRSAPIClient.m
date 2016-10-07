@@ -265,10 +265,6 @@
 
 -(FRSUser *)authenticatedUser {
     
-    if (_authenticatedUser) {
-        return _authenticatedUser;
-    }
-    
     // predicate searching for users in store w/ loggedIn as TRUE/1
     NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"isLoggedIn", @(TRUE)];
     NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUser"];
