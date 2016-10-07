@@ -193,7 +193,17 @@
 
 -(void)reportUserAlertAction {
     
-    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block @%@ as well?", _representedUser.username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+    
+    NSString *username = @"";
+    
+    
+    if (([_representedUser.username class] != [NSNull null]) && (![_representedUser.username isEqualToString:@""])) {
+        username = [NSString stringWithFormat:@"@%@", _representedUser.username];
+    } else if (([_representedUser.firstName class] != [NSNull null]) && (![_representedUser.firstName isEqualToString:@""])) {
+        username = _representedUser.firstName;
+    }
+    
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
     [alert show];
 
 }
@@ -227,7 +237,19 @@
     
     UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
-        self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:_representedUser.username delegate:self];
+
+        
+        if (([_representedUser.username class] != [NSNull null]) && (![_representedUser.username isEqualToString:@""])) {
+            self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"@%@", _representedUser.username] delegate:self];
+        } else if (([_representedUser.firstName class] != [NSNull null]) && (![_representedUser.firstName isEqualToString:@""])) {
+            self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", _representedUser.firstName] delegate:self];
+        } else {
+            self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:@"" delegate:self];
+        }
+
+        
+        
+        
         self.didDisplayReport = YES;
         self.reportUserAlertView.delegate = self;
         [self.reportUserAlertView show];
