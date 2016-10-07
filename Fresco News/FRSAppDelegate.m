@@ -172,6 +172,9 @@
             [homeViewController presentTOS];
         }
         
+        NSDictionary *identity = responseObject[@"identity"];
+        NSArray *fieldsNeeded = identity[@"fields_needed"];
+                
         [[self managedObjectContext] save:Nil];
     }];
 }
