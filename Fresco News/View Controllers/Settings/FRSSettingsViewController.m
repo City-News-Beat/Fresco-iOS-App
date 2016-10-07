@@ -335,12 +335,16 @@
                     NSString *dateString = [NSString stringWithFormat:@"Add by %@", date];
                     
                     if (dueBy != nil) {
-                        
+            
                         [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
                         
                     } else {
-                        
-                        [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:@""rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                        if ([[FRSAPIClient sharedClient] authenticatedUser].fieldsNeeded.count == 0) {
+                            [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:@"Verified" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                        }
+                        else {
+                            [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:@""rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                        }
                     }
                     
                     break;
