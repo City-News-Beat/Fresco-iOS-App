@@ -161,7 +161,7 @@
             [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
         }
         
-        if (responseObject[@"due_by"] != Nil && ![responseObject[@"due_by"] isEqual:[NSNull null]]) {
+        if (responseObject[@"identity"][@"due_by"] != Nil && ![responseObject[@"identity"][@"due_by"] isEqual:[NSNull null]]) {
             [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
         }
         
