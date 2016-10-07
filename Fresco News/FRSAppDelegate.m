@@ -22,7 +22,7 @@
 #import "FRSAPIClient.h"
 #import "VideoTrimmerViewController.h"
 #import "Fresco.h"
-#import "SSKeychain.h"
+#import "SAMKeychain.h"
 #import "FRSUser.h"
 #import "FRSNavigationBar.h"
 #import "FRSHomeViewController.h"
@@ -87,7 +87,7 @@
     }
     
     [self registerForPushNotifications];
-    [[UINavigationBar appearance]setShadowImage:[[UIImage alloc] init]];
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
     //[FRSNotificationTester createAllNotifications];
 
@@ -172,19 +172,22 @@
             [homeViewController presentTOS];
         }
         
+        NSDictionary *identity = responseObject[@"identity"];
+        NSArray *fieldsNeeded = identity[@"fields_needed"];
+                
         [[self managedObjectContext] save:Nil];
     }];
 }
 
 
 -(void)clearKeychain {
-    SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
+    SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
     
     NSArray *accounts = [query fetchAll:nil];
     
     for (id account in accounts) {
         
-        SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
+        SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
         
         query.service = serviceName;
         query.account = [account valueForKey:@"acct"];

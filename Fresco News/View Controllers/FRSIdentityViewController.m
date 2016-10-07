@@ -62,7 +62,7 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 3;
+    return 5;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -77,7 +77,12 @@
             break;
             
         case 2:
-            return 4;
+            return 3;
+            break;
+        case 3:
+            return 1;
+        case 4:
+            return 2;
             break;
         default:
             break;
@@ -93,7 +98,9 @@
         case 1:
             return 12;
             break;
-            
+        case 3:
+            return 12;
+            break;
         default:
             return 44;
             break;
@@ -207,7 +214,31 @@
                     break;
             }
             break;
-            
+        case 3:
+            [cell configureEmptyCellSpace:NO];
+            break;
+        case 4:
+            switch (indexPath.row) {
+                case 0:
+                    [cell configureEditableCellWithDefaultText:@"Social Security number" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypePhonePad];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//                    _addressField = cell.textField;
+//                    _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+//                    [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+                    break;
+                case 1:
+                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    self.saveIDInfoButton = cell.rightAlignedButton;
+                    [self.saveIDInfoButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
+                    break;
+                    
+                    
+                default:
+                    break;
+            }
+            break;
+
         default:
             break;
     }

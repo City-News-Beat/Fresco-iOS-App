@@ -196,6 +196,10 @@
     }
 }
 
+-(void)configureImageCell {
+    
+}
+
 -(void)configureDefaultCellWithAttributesForNotification:(FRSNotificationType)notificationType {
     
     [self configureDefaultCell];

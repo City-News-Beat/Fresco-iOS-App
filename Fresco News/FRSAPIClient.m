@@ -16,7 +16,7 @@
 #import "FRSTabBarController.h"
 
 @implementation FRSAPIClient
-@synthesize socialUsed = _socialUsed, passwordUsed = _passwordUsed, emailUsed = _emailUsed;
+@synthesize socialUsed = _socialUsed, passwordUsed = _passwordUsed, emailUsed = _emailUsed, authenticatedUser = _authenticatedUser;
 /*
  Singleton
  */
@@ -256,6 +256,10 @@
 
 -(FRSUser *)authenticatedUser {
     
+    if (_authenticatedUser) {
+        return _authenticatedUser;
+    }
+    
     // predicate searching for users in store w/ loggedIn as TRUE/1
     NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"isLoggedIn", @(TRUE)];
     NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUser"];
@@ -278,7 +282,9 @@
 
     }
     
-    return [authenticatedUsers firstObject];
+    _authenticatedUser = [authenticatedUsers firstObject];
+    
+    return _authenticatedUser;
 }
 
 
@@ -768,29 +774,29 @@
 
 -(NSString *)authenticationToken {
     
-    NSArray *allAccounts = [SSKeychain accountsForService:serviceName];
+    NSArray *allAccounts = [SAMKeychain accountsForService:serviceName];
     
     if ([allAccounts count] == 0) {
         return Nil;
     }
     
     NSDictionary *credentialsDictionary = [allAccounts firstObject];
-    NSString *accountName = credentialsDictionary[kSSKeychainAccountKey];
+    NSString *accountName = credentialsDictionary[kSAMKeychainAccountKey];
     
-    return [SSKeychain passwordForService:serviceName account:accountName];
+    return [SAMKeychain passwordForService:serviceName account:accountName];
 }
 
 -(void)saveToken:(NSString *)token forUser:(NSString *)userName {
-    [SSKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:userName];
+    [SAMKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:userName];
 }
 
 -(NSString *)tokenForUser:(NSString *)userName {
-    return [SSKeychain passwordForService:serviceName account:userName];
+    return [SAMKeychain passwordForService:serviceName account:userName];
 }
 
 -(BOOL)isAuthenticated {
     
-    if ([[SSKeychain accountsForService:serviceName] count] > 0) {
+    if ([[SAMKeychain accountsForService:serviceName] count] > 0) {
         return TRUE;
     }
     
@@ -1428,6 +1434,36 @@
 }
 -(void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:acceptTermsEndpoint withParameters:Nil completion:completion];
+}
+
+-(void)reportUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *format = @"user/%@/report";
+    NSString *endpoint = [NSString stringWithFormat:format, user.uid];
+    [self post:endpoint withParameters:params completion:completion];
+
+}
+
+-(void)reportGallery:(FRSGallery *)gallery params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *format = @"gallery/%@/report";
+    NSString *endpoint = [NSString stringWithFormat:format, gallery.uid];
+    [self post:endpoint withParameters:params completion:completion];
+
+}
+
+-(void)blockUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *format = @"user/%@/block";
+    NSString *endpoint = [NSString stringWithFormat:format, user.uid];
+    [self post:endpoint withParameters:Nil completion:completion];
+}
+
+-(void)unblockUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *format = @"user/%@/unblock";
+    NSString *endpoint = [NSString stringWithFormat:format, user.uid];
+    [self post:endpoint withParameters:Nil completion:completion];
+}
+
+-(void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion {
+    [self get:@"user/blocked" withParameters:Nil completion:completion];
 }
 
 @end

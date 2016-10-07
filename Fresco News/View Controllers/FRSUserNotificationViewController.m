@@ -395,6 +395,10 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     return defaultCell;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 75;
+}
+
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([self shouldHideCellAtIndexPath:indexPath]) {
@@ -553,6 +557,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.titleLabel.text = dictionary[@"title"];
     cell.bodyLabel.text = dictionary[@"body"];
     
+    if ([self hasImage:dictionary]) {
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+    }
 }
 
 
@@ -562,6 +569,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.titleLabel.text = @"Featured Gallery";
     cell.bodyLabel.text = dictionary[@"body"];
 
+    if ([self hasImage:dictionary]) {
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+    }
 }
 
 
@@ -573,6 +583,9 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.titleLabel.text = [NSString stringWithFormat:@"Featured Story:%@", storyTitle];
     cell.bodyLabel.text = dictionary[@"body"];
 
+    if ([self hasImage:dictionary]) {
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+    }
 }
 
 -(void)configureTextCell:(FRSTextNotificationTableViewCell *)textCell dictionary:(NSDictionary *)dictionary {
@@ -602,6 +615,10 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
     cell.count = userIDs.count;
     cell.followButton.alpha = 1;
+    
+    if ([self hasImage:dictionary]) {
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+    }
 }
 
 -(void)configureLikeCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
@@ -610,24 +627,52 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     //user image
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    
+    if ([self hasImage:dictionary]) {
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+    }
 }
 
 -(void)configureRepostCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
+    
+    if ([self hasImage:dictionary]) {
+        [cell configureImageCell];
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+    }
+    else {
+        [cell configureDefaultCell];
+    }
+    
     [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeRepost];
 //    cell.count = userIDs.count;
 //    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-
 }
 
 -(void)configureCommentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
 //    cell.count = userIDs.count;
 //    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
+    
+    if ([self hasImage:dictionary]) {
+        [cell configureImageCell];
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"image"]]];
+    }
+    else {
+        [cell configureDefaultCell];
+    }
+    
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
+-(BOOL)hasImage:(NSDictionary *)dictionary {
+    if (dictionary[@"image"] != Nil && ![dictionary[@"image"] isEqual:[NSNull null]] && [[dictionary[@"image"] class] isSubclassOfClass:[NSString class]]) {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
 
 #pragma mark - Payment
 
