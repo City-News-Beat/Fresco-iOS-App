@@ -183,40 +183,51 @@
         NSString *addressCity = identity[@"address_city"];
         NSString *addressState = identity[@"address_state"];
         
+        BOOL hasSavedFields = FALSE;
+        
         if ([self isValue:birthDay]) {
             [authenticatedUser setValue:birthDay forKey:@"dob_day"];
+            hasSavedFields = TRUE;
         }
         if ([self isValue:birthMonth]) {
             [authenticatedUser setValue:birthMonth forKey:@"dob_month"];
+            hasSavedFields = TRUE;
 
         }
         if ([self isValue:birthYear]) {
             [authenticatedUser setValue:birthYear forKey:@"dob_year"];
+            hasSavedFields = TRUE;
 
         }
         if ([self isValue:addressLineOne]) {
             [authenticatedUser setValue:addressLineOne forKey:@"address_line1"];
+            hasSavedFields = TRUE;
 
         }
         if ([self isValue:addressLineTwo]) {
             [authenticatedUser setValue:addressLineTwo forKey:@"address_line2"];
+            hasSavedFields = TRUE;
 
         }
         if ([self isValue:addressZip]) {
             [authenticatedUser setValue:addressZip forKey:@"address_zip"];
+            hasSavedFields = TRUE;
 
         }
         if ([self isValue:addressCity]) {
             [authenticatedUser setValue:addressCity forKey:@"address_city"];
+            hasSavedFields = TRUE;
 
         }
         if ([self isValue:addressState]) {
             [authenticatedUser setValue:addressState forKey:@"address_state"];
+            hasSavedFields = TRUE;
+
         }
         
         NSArray *fieldsNeeded = identity[@"fields_needed"];
         authenticatedUser.fieldsNeeded = fieldsNeeded;
-                
+        [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
         [[self managedObjectContext] save:Nil];
     }];
 }
