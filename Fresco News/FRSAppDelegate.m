@@ -174,6 +174,7 @@
         
         NSDictionary *identity = responseObject[@"identity"];
         NSArray *fieldsNeeded = identity[@"fields_needed"];
+        authenticatedUser.fieldsNeeded = fieldsNeeded;
                 
         [[self managedObjectContext] save:Nil];
     }];
