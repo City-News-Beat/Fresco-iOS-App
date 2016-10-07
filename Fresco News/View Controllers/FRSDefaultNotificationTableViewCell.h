@@ -56,5 +56,5 @@
 -(void)configureDefaultCell;
 -(void)configureDefaultCellWithAttributesForNotification:(FRSNotificationType)notificationType;
 -(void)updateLabelsForCount;
-
+-(void)configureImageCell;
 @end

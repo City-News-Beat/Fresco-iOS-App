@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Insert code here to declare functionality of your managed object subclass
 @property (nullable, nonatomic, retain) NSString *dueBy;
+@property (nonatomic, retain) NSArray *requiredFields;
 +(FRSUser *)loggedInUser;
 +(instancetype)nonSavedUserWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context;
 -(NSDictionary *)jsonObject;

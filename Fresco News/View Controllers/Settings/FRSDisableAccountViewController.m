@@ -246,7 +246,7 @@
     [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
     
-    [SSKeychain deletePasswordForService:serviceName account:clientAuthorization];
+    [SAMKeychain deletePasswordForService:serviceName account:clientAuthorization];
     
     [NSUserDefaults resetStandardUserDefaults];
     

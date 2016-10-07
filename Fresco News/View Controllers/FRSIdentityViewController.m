@@ -62,7 +62,7 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 3;
+    return 5;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -77,7 +77,12 @@
             break;
             
         case 2:
-            return 4;
+            return 3;
+            break;
+        case 3:
+            return 1;
+        case 4:
+            return 2;
             break;
         default:
             break;
@@ -93,7 +98,9 @@
         case 1:
             return 12;
             break;
-            
+        case 3:
+            return 12;
+            break;
         default:
             return 44;
             break;
@@ -121,6 +128,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
     
     switch (indexPath.section) {
         case 0:
@@ -152,6 +160,16 @@
                     [picker1 setDatePickerMode:UIDatePickerModeDate];
                     picker1.backgroundColor = [UIColor whiteColor];
                     [picker1 addTarget:self action:@selector(startDateSelected:) forControlEvents:UIControlEventValueChanged];
+                    
+                    if ([[authenticatedUser valueForKey:@"dob_day"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_month"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_year"] intValue] != 0) {
+                        int day = [[authenticatedUser valueForKey:@"dob_day"] intValue];
+                        int month = [[authenticatedUser valueForKey:@"dob_month"] intValue];
+                        int year = [[authenticatedUser valueForKey:@"dob_year"] intValue];
+                        
+                        NSString *birthday = [NSString stringWithFormat:@"%d/%d/%d", day, month, year];
+                        _dateField.text = birthday;
+                    }
+                    
                     _dateField.inputView = picker1;
                     [_dateField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
                     break;
@@ -169,6 +187,12 @@
                     [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     _addressField = cell.textField;
+                    
+                    if ([authenticatedUser valueForKey:@"address_line1"]) {
+                        _addressField.text = [authenticatedUser valueForKey:@"address_line1"];
+                        _addressField.enabled = FALSE;
+                    }
+                    
                     _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
                     [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
                     break;
@@ -189,6 +213,19 @@
                     _stateField = cell.secondaryField;
                     _cityField.autocapitalizationType = UITextAutocapitalizationTypeWords;
                     _zipField = cell.tertiaryField;
+                    
+                    if ([authenticatedUser valueForKey:@"address_city"]) {
+                        _cityField.text = [authenticatedUser valueForKey:@"address_city"];
+                    }
+                    
+                    if ([authenticatedUser valueForKey:@"address_state"]) {
+                        _stateField.text = [authenticatedUser valueForKey:@"address_state"];
+                    }
+                    
+                    if ([authenticatedUser valueForKey:@"address_zip"]) {
+                        _zipField.text = [authenticatedUser valueForKey:@"address_zip"];
+                    }
+                    
                     [_zipField setKeyboardType:UIKeyboardTypeNumberPad];
                     [_cityField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
                     [_stateField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -207,7 +244,29 @@
                     break;
             }
             break;
-            
+        case 3:
+            [cell configureEmptyCellSpace:NO];
+            break;
+        case 4:
+            switch (indexPath.row) {
+                case 0:
+                    [cell configureEditableCellWithDefaultText:@"Social Security number" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypePhonePad];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//                    _addressField = cell.textField;
+//                    _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+//                    [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+                    break;
+                case 1:
+                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    self.saveIDInfoButton = cell.rightAlignedButton;
+                    [self.saveIDInfoButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
+                    break;
+                default:
+                    break;
+            }
+            break;
+
         default:
             break;
     }
@@ -233,19 +292,17 @@
 }
 
 -(void)saveIDInfo{
-    NSString *country = @"US";//TODO BEWARE THIS IS HARDCODED!!!
+   // NSString *country = @"US";//TODO BEWARE THIS IS HARDCODED!!!
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM/dd/yyyy"];
     NSDate *birthDate = [formatter dateFromString:_dateField.text];
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:birthDate];
     
-    NSDictionary *addressInfo = @{@"line1":_addressField.text,@"line2":_unitField.text,@"city":_cityField.text,@"state":_stateField.text,@"postal_code":_zipField.text,@"country":country};
-    NSDictionary *dobInfo = @{@"day":[NSNumber numberWithInteger:[components day]],@"month":[NSNumber numberWithInteger:[components month]],@"year":[NSNumber numberWithInteger:[components year]]};
-    NSDictionary *payload = @{@"address":addressInfo, @"dob":dobInfo, @"first_name":_firstNameField.text, @"last_name":_lastNameField.text};
+    NSDictionary *addressInfo = @{@"address_line1":_addressField.text,@"address_line2":_unitField.text,@"address_city":_cityField.text,@"address_state":_stateField.text,@"address_zip":_zipField.text,@"dob_day":[NSNumber numberWithInteger:[components day]],@"dob_month":[NSNumber numberWithInteger:[components month]],@"dob_year":[NSNumber numberWithInteger:[components year]], @"first_name":_firstNameField.text, @"last_name":_lastNameField.text};
     
     self.savingInfo = true;
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:payload completion:^(id responseObject, NSError *error) {
-        NSLog(@"%@ %@", error, responseObject);
+    [[FRSAPIClient sharedClient] updateIdentityWithDigestion:addressInfo completion:^(id responseObject, NSError *error) {
+        NSLog(@"IDENTITY: %@ %@", error, responseObject);
         if(error){
             //Failiure popup
             self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];

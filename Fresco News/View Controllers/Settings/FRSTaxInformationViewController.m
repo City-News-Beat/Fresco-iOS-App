@@ -102,7 +102,7 @@
     
     switch (section) {
         case 0:
-            return 3;
+            return 2;
             break;
             
         case 1:
@@ -160,7 +160,7 @@
             
             switch (indexPath.row) {
                     
-                case 0:
+                case 9999:
                     //Make custom editible cell
                     
                     if ([self.businessType  isEqual: @"Individual/Sole Proprietorship"]) {
@@ -171,12 +171,12 @@
 
                     break;
                     
-                case 1:
+                case 0:
                     [cell configureEditableCellWithDefaultText:@"Name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                     
-                case 2:
+                case 1:
                     [cell configureEditableCellWithDefaultText:@"Tax ID # (SSN or EIN)" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeNumberPad];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
@@ -232,7 +232,7 @@
     switch (indexPath.section) {
         case 0:
             switch (indexPath.row) {
-                case 0:
+                case 999:
                 {
                     FRSBusinessTypeViewController *businessType = [[FRSBusinessTypeViewController alloc] init];
                     [self.navigationController pushViewController:businessType animated:YES];

@@ -37,7 +37,7 @@
 #import "FRSAPIClient.h"
 #import "FRSSocial.h"
 
-#import "SSKeychain.h"
+#import "SAMKeychain.h"
 
 #import "NSDate+ISO.h"
 
@@ -58,6 +58,9 @@
     [super viewDidLoad];
     
     [self configureTableView];
+    
+    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    NSLog(@"FIELDS NEEDED: %@", currentUser.fieldsNeeded);
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -133,6 +136,14 @@
 
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    int sectionTwo = 4;
+    
+    if (currentUser.fieldsNeeded.count == 0) {
+        sectionTwo = 4;
+    }
+    
     switch (section) {
         case 0:
             return 3;
@@ -141,7 +152,7 @@
             return 1;
             break;
         case 2:
-            return 5;
+            return sectionTwo;
             break;
         case 3:
             return 1;
@@ -324,34 +335,20 @@
                     NSString *dateString = [NSString stringWithFormat:@"Add by %@", date];
                     
                     if (dueBy != nil) {
-                        
-                        [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
+            
+                        [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
                         
                     } else {
-                        
-                        [cell configureDefaultCellWithTitle:@"Tax info" andCarret:YES andRightAlignedTitle:@""rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                        if ([[FRSAPIClient sharedClient] authenticatedUser].fieldsNeeded.count == 0) {
+                            [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:@"Verified" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                        }
+                        else {
+                            [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:@""rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                        }
                     }
                     
                     break;
-                } case 4: {
-
-                    NSString *dueBy = [[FRSAPIClient sharedClient] authenticatedUser].dueBy;
-                    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-                    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-                    dateFormat.dateStyle = NSDateFormatterMediumStyle;
-                    NSDate *date = [dateFormat dateFromString:dueBy];
-                    NSString *dateString = [NSString stringWithFormat:@"Add by %@", date];
-                    
-                    if (dueBy != nil) {
-                        
-                        [cell configureDefaultCellWithTitle:@"ID info" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
-                        
-                    } else {
-                        
-                        [cell configureDefaultCellWithTitle:@"ID info" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
-                    }
-                    
-            } break;
+                }
                 default:
                     break;
             }
@@ -483,11 +480,12 @@
                     break;
                 case 3:
                 {
-                    FRSTaxInformationViewController *tax = [[FRSTaxInformationViewController alloc] init];
-                    [self.navigationController pushViewController:tax animated:YES];
+                    FRSIdentityViewController *identity = [[FRSIdentityViewController alloc] init];
+                    [self.navigationController pushViewController:identity animated:YES];
                     self.navigationItem.title = @"";
                 }
                     break;
+                    
                 case 4:
                 {
                     FRSIdentityViewController *identity = [[FRSIdentityViewController alloc] init];

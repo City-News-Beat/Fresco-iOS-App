@@ -13,7 +13,7 @@
 #import "FRSSocial.h"
 #import "FRSJSONResponseSerializer.h"
 #import <AFNetworking/AFNetworking.h>
-#import "SSKeychain.h"
+#import "SAMKeychain.h"
 #import <Photos/Photos.h>
 #import <Mixpanel/Mixpanel.h>
 
@@ -38,6 +38,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 @property (nonatomic, retain) NSString *passwordUsed;
 @property (nonatomic, retain) NSDictionary *socialUsed;
 @property (nonatomic, retain) NSString *emailUsed;
+@property (nonatomic, retain) FRSUser *authenticatedUser;
 
 +(instancetype)sharedClient;
 -(NSManagedObjectContext *)managedObjectContext;
@@ -69,6 +70,8 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)updateIdentityWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
+
 //registration
 -(void)registerWithUserDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion; // leaves burdon of constructing dict obj to sender (will have method for that)
 -(void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -147,8 +150,16 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)getTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 
+<<<<<<< HEAD
 // moderation
 -(void)blockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)unblockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
+=======
+-(void)reportUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)reportGallery:(FRSGallery *)gallery params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)blockUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unblockUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion;
+>>>>>>> 3.0-phil
 
 @end

@@ -31,5 +31,6 @@
 @dynamic posts;
 @dynamic stories;
 @dynamic address;
+@dynamic fieldsNeeded;
 
 @end
