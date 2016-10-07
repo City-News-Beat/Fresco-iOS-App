@@ -22,15 +22,12 @@
 #import "Haneke.h"
 #import "Fresco.h"
 #import "FRSSearchViewController.h"
-<<<<<<< HEAD
 #import "FRSOnboardingViewController.h"
-=======
 #import "FRSAlertView.h"
 
 #import "MGSwipeTableCell.h"
 
 
->>>>>>> 3.0-phil
 
 #define TOP_NAV_BAR_HEIGHT 64
 #define GALLERY_BOTTOM_PADDING 16
@@ -1122,13 +1119,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 
-<<<<<<< HEAD
 -(void)dismissKeyboard {
     if (commentField.isEditing) {
         [commentField resignFirstResponder];
         [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
     }
-=======
+}
 #pragma mark - FRSAlertViewDelegate
 
 -(void)reportGalleryAlertAction {
@@ -1165,7 +1161,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [alert show];
         }
     }];
->>>>>>> 3.0-phil
 }
 
 
