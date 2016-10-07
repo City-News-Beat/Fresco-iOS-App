@@ -292,18 +292,16 @@
 }
 
 -(void)saveIDInfo{
-    NSString *country = @"US";//TODO BEWARE THIS IS HARDCODED!!!
+   // NSString *country = @"US";//TODO BEWARE THIS IS HARDCODED!!!
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM/dd/yyyy"];
     NSDate *birthDate = [formatter dateFromString:_dateField.text];
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:birthDate];
     
-    NSDictionary *addressInfo = @{@"line1":_addressField.text,@"line2":_unitField.text,@"city":_cityField.text,@"state":_stateField.text,@"postal_code":_zipField.text,@"country":country};
-    NSDictionary *dobInfo = @{@"day":[NSNumber numberWithInteger:[components day]],@"month":[NSNumber numberWithInteger:[components month]],@"year":[NSNumber numberWithInteger:[components year]]};
-    NSDictionary *payload = @{@"address":addressInfo, @"dob":dobInfo, @"first_name":_firstNameField.text, @"last_name":_lastNameField.text};
+    NSDictionary *addressInfo = @{@"address_line1":_addressField.text,@"address_line2":_unitField.text,@"address_city":_cityField.text,@"address_state":_stateField.text,@"address_zip":_zipField.text,@"dob_day":[NSNumber numberWithInteger:[components day]],@"dob_month":[NSNumber numberWithInteger:[components month]],@"dob_year":[NSNumber numberWithInteger:[components year]], @"first_name":_firstNameField.text, @"last_name":_lastNameField.text};
     
     self.savingInfo = true;
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:payload completion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] updateIdentityWithDigestion:addressInfo completion:^(id responseObject, NSError *error) {
         NSLog(@"IDENTITY: %@ %@", error, responseObject);
         if(error){
             //Failiure popup

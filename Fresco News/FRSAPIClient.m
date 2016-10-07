@@ -246,6 +246,15 @@
     }];
 }
 
+-(void)updateIdentityWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:@"user/identity/update" withParameters:digestion completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+        NSLog(@"DIGESTION: %@", digestion);
+        NSLog(@"RESPONSE: %@", responseObject);
+        NSLog(@"ERROR: %@", error);
+    }];
+}
+
 -(void)updateSettingsWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:settingsUpdateEndpoint withParameters:digestion completion:completion];
 }
