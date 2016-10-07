@@ -141,6 +141,8 @@
 		D400FA681D6E13FA008842E1 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */; };
 		D400FA6B1D6E1A9E008842E1 /* FRSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */; };
 		D406C4091D9F0D9F00133788 /* FRSNotificationTester.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C4081D9F0D9F00133788 /* FRSNotificationTester.m */; };
+		D406C40E1DA2D2F300133788 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C40B1DA2D2F300133788 /* SAMKeychain.m */; };
+		D406C40F1DA2D2F300133788 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C40D1DA2D2F300133788 /* SAMKeychainQuery.m */; };
 		D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */; };
 		D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3D01CDE1EAE00E39701 /* Reachability.m */; };
 		D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */; };
@@ -209,8 +211,6 @@
 		D48C72431D11D39F000677BF /* FRSBreakingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72411D11D39F000677BF /* FRSBreakingCell.m */; };
 		D48C72441D11D39F000677BF /* FRSBreakingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48C72421D11D39F000677BF /* FRSBreakingCell.xib */; };
 		D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = D49B1D991C99EB1E00735846 /* UITextView+Resize.m */; };
-		D4A7D8A01CCA7D4E002C6EA3 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89D1CCA7D4E002C6EA3 /* SSKeychain.m */; };
-		D4A7D8A11CCA7D4E002C6EA3 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */; };
 		D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EEA1CF8B50400A33FAB /* FRSRequestSerializer.m */; };
 		D4AF8EEF1CFDFED100A33FAB /* FRSFeedTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EEE1CFDFED100A33FAB /* FRSFeedTable.m */; };
 		D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EF21CFF656100A33FAB /* FRSNavigationBar.m */; };
@@ -545,6 +545,10 @@
 		D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTextView.m; sourceTree = "<group>"; };
 		D406C4071D9F0D9F00133788 /* FRSNotificationTester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationTester.h; sourceTree = "<group>"; };
 		D406C4081D9F0D9F00133788 /* FRSNotificationTester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNotificationTester.m; sourceTree = "<group>"; };
+		D406C40A1DA2D2F300133788 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
+		D406C40B1DA2D2F300133788 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
+		D406C40C1DA2D2F300133788 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
+		D406C40D1DA2D2F300133788 /* SAMKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychainQuery.m; sourceTree = "<group>"; };
 		D40BD3CC1CDE076000E39701 /* FRSGalleryTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryTable.h; sourceTree = "<group>"; };
 		D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryTable.m; sourceTree = "<group>"; };
 		D40BD3CF1CDE1EAE00E39701 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -669,10 +673,6 @@
 		D48C72421D11D39F000677BF /* FRSBreakingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSBreakingCell.xib; sourceTree = "<group>"; };
 		D49B1D981C99EB1E00735846 /* UITextView+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Resize.h"; sourceTree = "<group>"; };
 		D49B1D991C99EB1E00735846 /* UITextView+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Resize.m"; sourceTree = "<group>"; };
-		D4A7D89C1CCA7D4E002C6EA3 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
-		D4A7D89D1CCA7D4E002C6EA3 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
-		D4A7D89E1CCA7D4E002C6EA3 /* SSKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychainQuery.h; sourceTree = "<group>"; };
-		D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
 		D4AF8EE91CF8B50400A33FAB /* FRSRequestSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSRequestSerializer.h; sourceTree = "<group>"; };
 		D4AF8EEA1CF8B50400A33FAB /* FRSRequestSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSRequestSerializer.m; sourceTree = "<group>"; };
 		D4AF8EED1CFDFED100A33FAB /* FRSFeedTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFeedTable.h; sourceTree = "<group>"; };
@@ -2081,10 +2081,10 @@
 		D4A7D8A21CCA7E47002C6EA3 /* Keychain */ = {
 			isa = PBXGroup;
 			children = (
-				D4A7D89C1CCA7D4E002C6EA3 /* SSKeychain.h */,
-				D4A7D89D1CCA7D4E002C6EA3 /* SSKeychain.m */,
-				D4A7D89E1CCA7D4E002C6EA3 /* SSKeychainQuery.h */,
-				D4A7D89F1CCA7D4E002C6EA3 /* SSKeychainQuery.m */,
+				D406C40A1DA2D2F300133788 /* SAMKeychain.h */,
+				D406C40B1DA2D2F300133788 /* SAMKeychain.m */,
+				D406C40C1DA2D2F300133788 /* SAMKeychainQuery.h */,
+				D406C40D1DA2D2F300133788 /* SAMKeychainQuery.m */,
 				D40FA3191CAAFB2100A4FE47 /* FRSUserDefaults.h */,
 				D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */,
 			);
@@ -2633,6 +2633,7 @@
 				078CEB1B1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m in Sources */,
 				07E9366D1CB4534B00D3CC39 /* VideoTrimmerViewController.m in Sources */,
 				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
+				D406C40E1DA2D2F300133788 /* SAMKeychain.m in Sources */,
 				1EA27AA81AF147C4003137CE /* MKMapView+Helpers.m in Sources */,
 				D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
 				D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */,
@@ -2675,6 +2676,7 @@
 				65201A371C3D7D8200B31089 /* FRSScrollViewImageView.m in Sources */,
 				65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */,
 				D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */,
+				D406C40F1DA2D2F300133788 /* SAMKeychainQuery.m in Sources */,
 				07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */,
 				D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */,
 				65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */,
@@ -2699,7 +2701,6 @@
 				07A30C031C50488800C536EB /* FRSRadiusViewController.m in Sources */,
 				65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */,
 				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
-				D4A7D8A11CCA7D4E002C6EA3 /* SSKeychainQuery.m in Sources */,
 				077FBC3A1CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m in Sources */,
 				65DC9BF41C485B7F001F450A /* FRSGallery+CoreDataProperties.m in Sources */,
 				0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */,
@@ -2722,7 +2723,6 @@
 				075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */,
 				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,
 				07B6FB551D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m in Sources */,
-				D4A7D8A01CCA7D4E002C6EA3 /* SSKeychain.m in Sources */,
 				D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */,
 				0767A55F1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m in Sources */,
 				D453CC7E1CCA80850091A004 /* MagicalRecord+ShorthandMethods.m in Sources */,

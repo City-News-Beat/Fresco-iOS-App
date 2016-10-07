@@ -12,6 +12,7 @@
 /* View Controllers */
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSSearchViewController.h"
+#import "FRSLoginViewController.h"
 
 /* UI */
 #import "DGElasticPullToRefresh.h"
@@ -96,6 +97,7 @@
 }
 
 -(void)presentNewStuffWithPassword:(BOOL)password {
+    
     return;
     if (self.migrationAlert) {
         return;
@@ -164,6 +166,8 @@
     }
 }
 
+
+
 -(void)logoutAlertAction {
     if ([[FRSAPIClient sharedClient] authenticatedUser].username) {
         return;
@@ -196,6 +200,8 @@
 -(void)addNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLogin) name:@"user-did-login" object:nil];
+    
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
         if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
 
@@ -203,6 +209,26 @@
         }
     }
 }
+
+-(void)userDidLogin {
+
+    
+    /* DEBUG */
+//    [[FRSAPIClient sharedClient] authenticatedUser].username = nil;
+//    [[FRSAPIClient sharedClient] authenticatedUser].email = nil;
+//    [[FRSAPIClient sharedClient] authenticatedUser].password = nil;
+//    [FRSAPIClient sharedClient].passwordUsed = nil;
+//    [FRSAPIClient sharedClient].emailUsed = nil;
+
+    
+    if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
+        
+        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
+        alert.delegate = self;
+        [alert show];
+    }
+}
+
 
 -(void)reloadData {
     [self.followingTable reloadFollowing];
@@ -216,6 +242,10 @@
             for (NSDictionary *gallery in galleries) {
                 NSString *galleryID = gallery[@"id"];
                 NSInteger galleryIndex = [self galleryExists:galleryID];
+                
+                if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
+                    continue;
+                }
                 
                 FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
                 [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];

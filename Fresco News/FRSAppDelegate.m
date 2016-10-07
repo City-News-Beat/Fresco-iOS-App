@@ -22,7 +22,7 @@
 #import "FRSAPIClient.h"
 #import "VideoTrimmerViewController.h"
 #import "Fresco.h"
-#import "SSKeychain.h"
+#import "SAMKeychain.h"
 #import "FRSUser.h"
 #import "FRSNavigationBar.h"
 #import "FRSHomeViewController.h"
@@ -87,9 +87,9 @@
     }
     
     [self registerForPushNotifications];
-    [[UINavigationBar appearance]setShadowImage:[[UIImage alloc] init]];
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
-    //[FRSNotificationTester createAllNotifications];
+//    [FRSNotificationTester createAllNotifications];
 
     
     
@@ -161,7 +161,7 @@
             [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
         }
         
-        if (responseObject[@"due_by"] != Nil && ![responseObject[@"due_by"] isEqual:[NSNull null]]) {
+        if (responseObject[@"identity"][@"due_by"] != Nil && ![responseObject[@"identity"][@"due_by"] isEqual:[NSNull null]]) {
             [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
         }
         
@@ -172,19 +172,72 @@
             [homeViewController presentTOS];
         }
         
+        NSDictionary *identity = responseObject[@"identity"];
+        
+        NSString *birthDay = identity[@"dob_day"];
+        NSString *birthMonth = identity[@"dob_month"];
+        NSString *birthYear = identity[@"dob_year"];
+        NSString *addressLineOne = identity[@"address_line1"];
+        NSString *addressLineTwo = identity[@"address_line2"];
+        NSString *addressZip = identity[@"address_zip"];
+        NSString *addressCity = identity[@"address_city"];
+        NSString *addressState = identity[@"address_state"];
+        
+        if ([self isValue:birthDay]) {
+            [authenticatedUser setValue:birthDay forKey:@"dob_day"];
+        }
+        if ([self isValue:birthMonth]) {
+            [authenticatedUser setValue:birthMonth forKey:@"dob_month"];
+
+        }
+        if ([self isValue:birthYear]) {
+            [authenticatedUser setValue:birthYear forKey:@"dob_year"];
+
+        }
+        if ([self isValue:addressLineOne]) {
+            [authenticatedUser setValue:addressLineOne forKey:@"address_line1"];
+
+        }
+        if ([self isValue:addressLineTwo]) {
+            [authenticatedUser setValue:addressLineTwo forKey:@"address_line2"];
+
+        }
+        if ([self isValue:addressZip]) {
+            [authenticatedUser setValue:addressZip forKey:@"address_zip"];
+
+        }
+        if ([self isValue:addressCity]) {
+            [authenticatedUser setValue:addressCity forKey:@"address_city"];
+
+        }
+        if ([self isValue:addressState]) {
+            [authenticatedUser setValue:addressState forKey:@"address_state"];
+        }
+        
+        NSArray *fieldsNeeded = identity[@"fields_needed"];
+        authenticatedUser.fieldsNeeded = fieldsNeeded;
+                
         [[self managedObjectContext] save:Nil];
     }];
 }
 
+-(BOOL)isValue:(id)value {
+    if (value != Nil && ![value isEqual:[NSNull null]]) {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
 
 -(void)clearKeychain {
-    SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
+    SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
     
     NSArray *accounts = [query fetchAll:nil];
     
     for (id account in accounts) {
         
-        SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
+        SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
         
         query.service = serviceName;
         query.account = [account valueForKey:@"acct"];
@@ -272,7 +325,7 @@
     if (_managedObjectContext != nil) {
         return _managedObjectContext;
     }
-    
+        
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (!coordinator) {
         return nil;

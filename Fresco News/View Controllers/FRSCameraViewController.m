@@ -170,7 +170,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [super viewDidLoad];
     
     [self configureUI];
-    
+    [self updatePreviewButtonWithImage:Nil];
     [self setAppropriateIconsForCaptureState];
     [self adjustFramesForCaptureState];
     [self rotateAppForOrientation:self.lastOrientation];

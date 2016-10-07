@@ -11,7 +11,7 @@
 #import "FRSScrollingViewController.h"
 #import "FRSNavigationController.h"
 
-@interface FRSSearchViewController : FRSBaseViewController <UITextFieldDelegate>
+@interface FRSSearchViewController : FRSScrollingViewController <UITextFieldDelegate>
 {
     BOOL isInDefault;
     

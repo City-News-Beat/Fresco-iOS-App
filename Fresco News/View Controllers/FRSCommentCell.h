@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MGSwipeTableCell.h"
 
-@interface FRSCommentCell : UITableViewCell
+@interface FRSCommentCell : MGSwipeTableCell
 @property (nonatomic, retain) IBOutlet UIImageView *profilePicture;
 @property (nonatomic, retain) IBOutlet UITextView *commentTextField;
 @end

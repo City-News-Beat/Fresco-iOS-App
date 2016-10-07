@@ -26,11 +26,19 @@
     _comment = dictionary[@"comment"];
     _user = [FRSUser nonSavedUserWithProperties:dictionary[@"user"] context:[delegate managedObjectContext]];
     
+<<<<<<< HEAD
+=======
+    NSLog(@"SASS: %@", dictionary);
+    
+    self.userDictionary = dictionary[@"user"];
+    
+>>>>>>> 3.0-phil
     if ([dictionary[@"user"][@"id"] isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
         _isDeletable = TRUE;
     }
     else {
         _isDeletable = FALSE;
+        _isReportable = TRUE;
     }
     
     _entities = dictionary[@"entities"];
@@ -41,6 +49,7 @@
     
     [self createAttributedText];
 }
+
 
 -(void)createAttributedText {
     _attributedString = [[NSMutableAttributedString alloc] initWithString:_comment];

@@ -21,6 +21,10 @@
 
 -(void)resizeProfileContainer;
 
+@property BOOL userIsBlocked;
+@property BOOL userIsSuspended;
+@property BOOL userIsDisabled;
+
 @property (nonatomic, weak) NSArray *currentFeed;
 @property (nonatomic, retain) UIScrollView *tablePageScroller;
 @property (nonatomic, retain) UITableView *contentTable;

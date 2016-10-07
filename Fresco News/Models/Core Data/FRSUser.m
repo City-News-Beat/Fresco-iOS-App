@@ -15,7 +15,7 @@
 #import "FRSAppDelegate.h"
 
 @implementation FRSUser
-@synthesize dueBy = _dueBy;
+@synthesize dueBy = _dueBy, requiredFields = _requiredFields;
 
 // Insert code here to add functionality to your managed object subclass
 
@@ -25,7 +25,7 @@
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {
-    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     FRSUser *user = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:delegate.managedObjectContext];
     user.uid = properties[@"id"];

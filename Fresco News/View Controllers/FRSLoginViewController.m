@@ -216,18 +216,17 @@
         [self stopSpinner:self.loadingView onButton:self.loginButton];
         
         if (error.code == 0) {
-            return;
-            FRSTabBarController *tabBarVC = [[FRSTabBarController alloc] init];
-            [self pushViewControllerWithCompletion:tabBarVC animated:NO completion:^{
-                [tabBarVC setSelectedIndex:0];
+            
+            [self popToOrigin];
+
                 [self stopSpinner:self.loadingView onButton:self.loginButton];
                 [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
-                
+            
                 if ([self validEmail:username]) {
                     [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
                 }
-                [self displayMigrationAlert];
-            }];
+            return;
+
         }
         
         if (error.code == -1009) {
@@ -351,7 +350,11 @@
             /*  */
             
             self.didAuthenticateSocial = YES;
-            [self displayMigrationAlert];
+            
+//            if (<#condition#>) {
+//                [self displayMigrationAlert];
+//            }
+            
             [self popToOrigin];
             
             return;
@@ -385,7 +388,7 @@
 }
 
 -(void)popToOrigin {
-    
+        
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
     
@@ -397,17 +400,36 @@
         [self.navigationController popToViewController:[viewControllers objectAtIndex:2] animated:YES];
     }
     
+    [self postLoginNotification];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
+-(void)postLoginNotification {
+    // temp fix
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"user-did-login" object:nil];
+    });
+    
+}
 -(void)displayMigrationAlert {
+    
+    return;
+    
     if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
         FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
         alert.delegate = self;
         [alert show];
     }
 }
+
+//-(void)displayMigrationAlert {
+//    if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
+//        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
+//        alert.delegate = self;
+//        [alert show];
+//    }
+//}
 
 -(IBAction)facebook:(id)sender {
     
@@ -432,9 +454,7 @@
             /*  */
            // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
             /*  */
-            
-            
-            
+                        
             
             [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
@@ -446,8 +466,11 @@
                 }];
             }];
 
+//            if (<#condition#>) {
+//                [self displayMigrationAlert];
+//            }
             
-            [self displayMigrationAlert];
+            
             
             self.didAuthenticateSocial = YES;
             NSLog(@"Popped");
