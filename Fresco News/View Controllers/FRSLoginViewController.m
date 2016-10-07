@@ -405,13 +405,13 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
-<<<<<<< HEAD
 -(void)postLoginNotification {
     // temp fix
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:@"user-did-login" object:nil];
     });
-=======
+    
+}
 -(void)displayMigrationAlert {
     
     return;
@@ -421,7 +421,6 @@
         alert.delegate = self;
         [alert show];
     }
->>>>>>> 3.0-phil
 }
 
 //-(void)displayMigrationAlert {
