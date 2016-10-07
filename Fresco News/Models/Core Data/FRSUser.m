@@ -36,6 +36,10 @@
     
     user.email = (properties[@"email"] != nil) ? properties[@"email"] : @"";
     
+    if (properties[@"external_account_name"] != Nil && ![properties[@"external_account_name"] isEqual:[NSNull null]]) {
+        [user setValue:properties[@"external_account_name"] forKey:@"external_name"];
+    }
+    
     if (properties[@"location"] != Nil && ![properties[@"location"] isEqual:[NSNull null]]) {
         [user setValue:properties[@"location"] forKey:@"location"];
         NSLog(@"USER LOC: %@",properties[@"location"]);
