@@ -180,13 +180,13 @@
         self.didDisplayReport = NO;
         self.reportUserAlertView = nil;
         if (index == 1) {
-            [self blockUser:_representedUser];
+            [self blockuserAction];
         }
         
     } else if (self.didDisplayBlock) {
         self.didDisplayBlock = NO;
         if (index == 0) {
-            [self unblockUser:_representedUser];
+            [self unblockUserAction];
         }
     }
 }
@@ -223,22 +223,17 @@
     }];
     
     UIAlertAction *block = [UIAlertAction actionWithTitle:@"Block" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        [self blockUser:_representedUser];
+        [self blockuserAction];
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
     
     UIAlertAction *sunblock = [UIAlertAction actionWithTitle:@"Unblock" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        
-        [self unblockUser:_representedUser];
-        
-        
+        [self unblockUserAction];
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
     
     UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        
 
-        
         if (([_representedUser.username class] != [NSNull null]) && (![_representedUser.username isEqualToString:@""])) {
             self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"@%@", _representedUser.username] delegate:self];
         } else if (([_representedUser.firstName class] != [NSNull null]) && (![_representedUser.firstName isEqualToString:@""])) {
@@ -1573,5 +1568,28 @@
         }
     }];
 }
+
+
+
+
+-(void)blockuserAction {
+    [self blockUser:_representedUser];
+    
+}
+
+
+-(void)unblockUserAction {
+    [self unblockUser:_representedUser];
+    
+}
+
+
+
+
+
+
+
+
+
 
 @end
