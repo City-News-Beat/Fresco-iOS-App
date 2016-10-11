@@ -244,11 +244,9 @@
             NSArray *fieldsNeeded = identity[@"fields_needed"];
             [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
             [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
-        }
-
-        
             
-        [[self managedObjectContext] save:Nil];
+            [[self managedObjectContext] save:Nil];
+        }
     }];
 }
 

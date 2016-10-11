@@ -445,11 +445,12 @@
     if (self.blockedContainer) {
         return;
     }
-
-    self.profileContainer.frame = CGRectMake(0, self.profileContainer.frame.origin.y -64, self.profileContainer.frame.size.width, self.profileContainer.frame.size.height);
-    [self.view addSubview:self.profileContainer];
+    self.tableView.scrollEnabled = NO;
     
-    self.placeholderUserIcon.alpha = 1;
+    self.userIsBlocked = YES;
+
+//    self.profileContainer.frame = CGRectMake(0, self.profileContainer.frame.origin.y -64, self.profileContainer.frame.size.width, self.profileContainer.frame.size.height);
+//    [self.view addSubview:self.profileContainer];
     
     self.blockedContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height-self.profileContainer.frame.size.height)/2 +181/2, 207, 181)];
     [self.view addSubview:self.blockedContainer];
@@ -476,14 +477,16 @@
         UIButton *unblockButton = [UIButton buttonWithType:UIButtonTypeSystem];
         unblockButton.frame = CGRectMake(self.blockedContainer.frame.size.width/2 -94/2, blocked.frame.size.height+awkwardLabel.frame.size.height+bodyLabel.frame.size.height +15, 94, 44);
         [unblockButton setTitle:@"UNBLOCK" forState:UIControlStateNormal];
+        [unblockButton addTarget:self action:@selector(unblockUserAction) forControlEvents:UIControlEventTouchUpInside];
         [unblockButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
         unblockButton.tintColor = [UIColor frescoBlueColor];
         [self.blockedContainer addSubview:unblockButton];
     }
-    
 }
 
 -(void)configureSuspendedUser {
+    
+    self.tableView.scrollEnabled = NO;
 
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 220-64)];
     container.backgroundColor = [UIColor frescoOrangeColor];
@@ -551,6 +554,8 @@
 }
 
 -(void)configureDisabledUser {
+    
+    self.tableView.scrollEnabled = NO;
     
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, self.view.frame.size.height/2 -125/2 -64, 207, 125)];
     [self.view addSubview:container];
@@ -1574,6 +1579,32 @@
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             self.didDisplayBlock = YES;
             [alert show];
+            
+            
+            //////
+            [self configureBlockedUserWithButton:YES];
+            self.blockedContainer.alpha = 1;
+            
+            self.likes = nil;
+            self.galleries = nil;
+            [self.tableView reloadData];
+            
+            if (!self.profileIV.image) {
+                self.placeholderUserIcon.alpha = 1;
+            }
+            
+            self.userIsBlocked = YES;
+            self.tableView.scrollEnabled = NO;
+
+            
+            UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
+            dotIcon.tintColor = [UIColor whiteColor];
+            
+            self.navigationItem.rightBarButtonItems = @[dotIcon];
+            
+            
+            /////
+            
         } else {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
@@ -1586,6 +1617,33 @@
     
     [[FRSAPIClient sharedClient] unblockUser:user.uid withCompletion:^(id responseObject, NSError *error) {
         if (responseObject) {
+            
+            /////
+            
+            self.tableView.scrollEnabled = YES;
+
+            [self configureWithUser:_representedUser];
+            [self fetchGalleries];
+            
+            self.tableView.alpha = 1;
+            if (self.profileImageURL) {
+                self.placeholderUserIcon.alpha = 0;
+            }
+            self.blockedContainer.alpha = 0;
+            self.userIsBlocked = NO;
+            
+            
+            UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
+            dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
+            
+            dotIcon.tintColor = [UIColor whiteColor];
+            self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+            
+            self.navigationItem.rightBarButtonItems = @[self.followBarButtonItem, dotIcon];
+            
+            
+            ////
+            
         } else {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
@@ -1598,19 +1656,13 @@
 
 -(void)blockuserAction {
     [self blockUser:_representedUser];
-    
-    [self configureBlockedUserWithButton:YES];
-    self.tableView.alpha = 0;
-    self.placeholderUserIcon.alpha = 1;
-    
+
 }
 
 
 -(void)unblockUserAction {
     [self unblockUser:_representedUser];
     
-    self.tableView.alpha = 1;
-    self.placeholderUserIcon.alpha = 0;
 }
 
 
