@@ -762,14 +762,17 @@
                 
                 if (!self.userIsDisabled || !self.userIsSuspended) {
                     
-                    UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
-                    dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
-                    
-                    dotIcon.tintColor = [UIColor whiteColor];
-                    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-                    
-                    self.navigationItem.rightBarButtonItems = @[self.followBarButtonItem, dotIcon];
-                    
+                    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+                        UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
+                        dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
+                        
+                        dotIcon.tintColor = [UIColor whiteColor];
+                        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+                        
+                        self.navigationItem.rightBarButtonItems = @[self.followBarButtonItem, dotIcon];
+                    } else {
+                        self.navigationItem.rightBarButtonItems = @[self.followBarButtonItem];
+                    }
                     
                 }
                 
