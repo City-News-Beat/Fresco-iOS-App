@@ -901,20 +901,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
                     [cell setLayoutMargins:UIEdgeInsetsZero];
                 }
-                
-                //flag-light, cc:imogen
-                
-                
-                
-                
+
                 if (comment.isDeletable && !comment.isReportable) {
                     cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
                 }else if (comment.isReportable && !comment.isDeletable) {
-                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"radius-small"] backgroundColor:[UIColor frescoBlueColor]]];
+                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"flag-light"] backgroundColor:[UIColor frescoBlueColor]]];
                 } else if (comment.isDeletable && comment.isReportable) {
-                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"radius-small"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
+                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"flag-light"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
                 }
-                
                 
                 cell.rightSwipeSettings.transition = MGSwipeTransitionDrag;
                 
