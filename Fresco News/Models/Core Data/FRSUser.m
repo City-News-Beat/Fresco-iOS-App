@@ -134,7 +134,7 @@
     
     
     if (properties[@"blocked"] && ![properties[@"blocked"] isEqual:[NSNull null]]) {
-//        user.blocked = [properties[@"blocked"] boolValue];
+        user.blocked = [properties[@"blocked"] boolValue];
 //        NSLog(@"USER.BLOCKED: %d", user.blocked);
         
         NSLog(@"PROPERTIES[@BLOCKED]: %@", properties[@"blocked"]);
@@ -142,7 +142,7 @@
     }
     
     if (properties[@"blocking"] && ![properties[@"blocking"] isEqual:[NSNull null]]) {
-//        user.blocking = [properties[@"blocking"] boolValue];
+        user.blocking = [properties[@"blocking"] boolValue];
 //        NSLog(@"USER.BLOCKING: %d", user.blocking);
         
         NSLog(@"PROPERTIES[@BLOCKING]: %@", properties[@"blocking"]);

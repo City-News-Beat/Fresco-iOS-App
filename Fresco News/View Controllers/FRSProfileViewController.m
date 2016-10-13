@@ -1342,11 +1342,11 @@
     
     [self.sectionView setFrame:newFrame];
     
-    if (scrollView.contentOffset.y > self.view.frame.size.height) {
-        scrollView.bounces = NO;
-    } else {
-        scrollView.bounces = YES;
-    }
+    //if (scrollView.contentOffset.y > self.view.frame.size.height) {
+    //    scrollView.bounces = NO;
+    //} else {
+    //    scrollView.bounces = YES;
+    //}
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
