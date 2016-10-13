@@ -91,7 +91,7 @@
 
 //    [FRSNotificationTester createAllNotifications];
 
-    
+    [self segueToGallery:@"KRq3BX2bw0eV"];
     
     return YES;
 }

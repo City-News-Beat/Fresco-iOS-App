@@ -557,6 +557,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
         // do nothing
+        [self segueToTaxInfo];
         
     } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
         [self segueToTaxInfo];
