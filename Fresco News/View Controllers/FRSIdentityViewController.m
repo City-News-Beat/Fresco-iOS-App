@@ -141,6 +141,14 @@
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     _firstNameField = cell.textField;
                     [_firstNameField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+                    
+                    if ([authenticatedUser valueForKey:@"stripeFirst"]) {
+                        _firstNameField.text = [authenticatedUser valueForKey:@"stripeFirst"];
+                        _firstNameField.enabled = FALSE;
+                        _firstNameField.textColor = [UIColor frescoLightTextColor];
+
+                    }
+
                     break;
                     
                 case 1:
@@ -149,6 +157,13 @@
                     _lastNameField = cell.textField;
                     _lastNameField.autocapitalizationType = UITextAutocapitalizationTypeWords;
                     [_lastNameField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+                    
+                    if ([authenticatedUser valueForKey:@"stripeLast"]) {
+                        _lastNameField.text = [authenticatedUser valueForKey:@"stripeLast"];
+                        _lastNameField.enabled = FALSE;
+                        _lastNameField.textColor = [UIColor frescoLightTextColor];
+                    }
+                    
                     break;
                     
                 case 2:
@@ -156,6 +171,7 @@
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     _dateField = cell.textField;
                     _dateField.secureTextEntry = FALSE;
+                    
                     UIDatePicker *picker1   = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 210, 320, 216)];
                     [picker1 setDatePickerMode:UIDatePickerModeDate];
                     picker1.backgroundColor = [UIColor whiteColor];
@@ -167,7 +183,9 @@
                         int year = [[authenticatedUser valueForKey:@"dob_year"] intValue];
                         
                         NSString *birthday = [NSString stringWithFormat:@"%d/%d/%d", day, month, year];
+                        _dateField.enabled = FALSE;
                         _dateField.text = birthday;
+                        _dateField.textColor = [UIColor frescoLightTextColor];
                     }
                     
                     _dateField.inputView = picker1;
@@ -191,6 +209,7 @@
                     if ([authenticatedUser valueForKey:@"address_line1"]) {
                         _addressField.text = [authenticatedUser valueForKey:@"address_line1"];
                         _addressField.enabled = FALSE;
+                        _addressField.textColor = [UIColor frescoLightTextColor];
                     }
                     
                     _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
@@ -216,14 +235,24 @@
                     
                     if ([authenticatedUser valueForKey:@"address_city"]) {
                         _cityField.text = [authenticatedUser valueForKey:@"address_city"];
+                        _cityField.enabled = FALSE;
+                        _cityField.textColor = [UIColor frescoLightTextColor];
+
+                        
                     }
                     
                     if ([authenticatedUser valueForKey:@"address_state"]) {
                         _stateField.text = [authenticatedUser valueForKey:@"address_state"];
+                        _stateField.enabled = FALSE;
+                        _stateField.textColor = [UIColor frescoLightTextColor];
+
                     }
                     
                     if ([authenticatedUser valueForKey:@"address_zip"]) {
                         _zipField.text = [authenticatedUser valueForKey:@"address_zip"];
+                        _zipField.enabled = FALSE;
+                        _zipField.textColor = [UIColor frescoLightTextColor];
+
                     }
                     
                     [_zipField setKeyboardType:UIKeyboardTypeNumberPad];

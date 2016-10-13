@@ -75,12 +75,11 @@
 
 static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
-
 -(instancetype)initWithGallery:(FRSGallery *)gallery {
     self = [super init];
     if (self){
         self.gallery = gallery;
-        //        self.orderedArticles = [self.gallery.articles allObjects];
+        self.orderedArticles = [self.gallery.articles allObjects];
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
         self.touchEnabled = NO;
@@ -296,8 +295,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     
-    UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block @%@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
 
+        NSLog(@"POSTS: %@", self.gallery.posts);
+        
+        
         
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         self.didDisplayBlock = YES;

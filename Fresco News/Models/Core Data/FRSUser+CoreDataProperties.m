@@ -32,5 +32,8 @@
 @dynamic stories;
 @dynamic address;
 @dynamic fieldsNeeded;
+@dynamic blocked;
+@dynamic blocking;
+
 
 @end
