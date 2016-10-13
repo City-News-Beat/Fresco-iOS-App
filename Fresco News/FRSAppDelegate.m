@@ -90,14 +90,9 @@
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
 //    [FRSNotificationTester createAllNotifications];
-<<<<<<< HEAD
     
 
     [self startNotificationTimer];
-=======
-
-    [self segueToGallery:@"KRq3BX2bw0eV"];
->>>>>>> 3.0-phil
     
     return YES;
 }
