@@ -660,7 +660,23 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     //user image
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
+    cell.count = userIDs.count;
     
+    if (userIDs.count > 1) {
+        cell.followButton.alpha = 1;
+    }
+    else {
+        cell.followButton.alpha = 0;
+    }
+    
+    if (userIDs.count > 1) {
+        cell.followButton.alpha = 1;
+    }
+    else {
+        cell.followButton.alpha = 0;
+    }
+
     if ([self hasImage:dictionary]) {
         [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
     }
@@ -676,6 +692,15 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         [cell configureDefaultCell];
     }
     
+    NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
+    cell.count = userIDs.count;
+    
+    if (userIDs.count > 1) {
+        cell.followButton.alpha = 1;
+    }
+    else {
+        cell.followButton.alpha = 0;
+    }
     [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeRepost];
 //    cell.count = userIDs.count;
 //    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
@@ -695,6 +720,17 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         [cell configureDefaultCell];
     }
     
+    
+    NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
+    cell.count = userIDs.count;
+    
+    if (userIDs.count > 1) {
+        cell.followButton.alpha = 1;
+    }
+    else {
+        cell.followButton.alpha = 0;
+    }
+
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
     cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
