@@ -587,6 +587,7 @@
         if (responseObject) {
             FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
             if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
+                
                 [tbc updateBellIcon:YES];
             } else {
                 [tbc updateUserIcon];
