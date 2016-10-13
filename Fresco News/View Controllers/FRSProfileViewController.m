@@ -205,9 +205,23 @@
         username = _representedUser.firstName;
     }
     
-    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-    [alert show];
-
+    
+    
+    
+    
+    [[FRSAPIClient sharedClient] reportUser:_representedUser params:@{@"reason" : @"spam", @"message" : @""} completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [alert show];
+            return;
+        }
+        
+        if (responseObject) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [alert show];
+        }
+    }];
 }
 
 -(void)presentSheet {
@@ -243,9 +257,6 @@
         } else {
             self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:@"" delegate:self];
         }
-
-        
-        
         
         self.didDisplayReport = YES;
         self.reportUserAlertView.delegate = self;
