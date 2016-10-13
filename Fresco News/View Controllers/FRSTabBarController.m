@@ -202,7 +202,6 @@
     item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     self.dot.alpha = 0;
-    [self.dot removeFromSuperview];
     
     //FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
     //frsTabBar.dot.alpha = 0;
@@ -258,11 +257,13 @@
     }
     
     if ([self.tabBar.items indexOfObject:item] == 4) {
+        
         if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
-            UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
+            
+            /* UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
             FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
             profile.shouldShowNotificationsOnLoad = YES;
-            [profile loadAuthenticatedUser];
+            [profile loadAuthenticatedUser]; */
             
         } else {
             

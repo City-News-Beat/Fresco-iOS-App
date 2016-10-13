@@ -1592,25 +1592,17 @@
             //////
             [self configureBlockedUserWithButton:YES];
             self.blockedContainer.alpha = 1;
-            
             self.likes = nil;
             self.galleries = nil;
             [self.tableView reloadData];
-            
             if (!self.profileIV.image) {
                 self.placeholderUserIcon.alpha = 1;
             }
-            
             self.userIsBlocked = YES;
             self.tableView.scrollEnabled = NO;
-
-            
             UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
             dotIcon.tintColor = [UIColor whiteColor];
-            
             self.navigationItem.rightBarButtonItems = @[dotIcon];
-            
-            
             /////
             
         } else {
@@ -1629,27 +1621,20 @@
         if (responseObject) {
             
             /////
-            
             self.userIsBlocked = NO;
-
             self.tableView.scrollEnabled = YES;
-
             [self configureWithUser:_representedUser];
-            
             [self fetchGalleries];
-    
             self.tableView.alpha = 1;
             if (self.profileImageURL) {
                 self.placeholderUserIcon.alpha = 0;
             }
             self.blockedContainer.alpha = 0;
-            
             UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
             dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
             dotIcon.tintColor = [UIColor whiteColor];
             self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
             self.navigationItem.rightBarButtonItems = @[self.followBarButtonItem, dotIcon];
-            
             ////
             
         } else {
