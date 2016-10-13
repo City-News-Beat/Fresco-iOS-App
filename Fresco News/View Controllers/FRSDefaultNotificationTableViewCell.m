@@ -233,6 +233,10 @@
         self.annotationView.alpha = 0;
         self.annotationLabel.alpha = 0;
     }
+    else {
+        self.annotationView.alpha = 1;
+        self.annotationLabel.alpha = 1;
+    }
 }
 
 -(IBAction)followTapped:(id)sender {

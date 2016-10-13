@@ -42,8 +42,24 @@
 }
 
 
--(void)viewWillAppear:(BOOL)animated{    [self.navigationItem setTitle:@"IDENTIFICATION"];
+-(void)viewWillAppear:(BOOL)animated{
+    [self.navigationItem setTitle:@"IDENTIFICATION"];
     [self.tableView reloadData];
+    
+    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    NSArray *fieldsNeeded = currentUser.fieldsNeeded;
+    
+    for (NSString *neededField in fieldsNeeded) {
+        if ([self rowForField:neededField] > 0) {
+            
+        }
+    }
+}
+
+-(NSInteger)rowForField:(NSString *)field {
+    
+    
+    return -1;
 }
 
 -(void)configureTableView{

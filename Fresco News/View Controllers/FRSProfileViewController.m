@@ -1518,7 +1518,7 @@
         [self.bioTextView frs_setTextWithResize:user.bio];
 
         
-        self.userIsBlocked = user.blocking;
+//        self.userIsBlocked = user.blocking;
         
         
         //[self.profileContainer setFrame:CGRectMake(self.profileContainer.frame.origin.x, self.profileContainer.frame.origin.y, self.profileContainer.frame.size.width,269.5 + self.bioLabel.frame.size.height)];
