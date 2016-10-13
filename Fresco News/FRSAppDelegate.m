@@ -90,8 +90,9 @@
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
 //    [FRSNotificationTester createAllNotifications];
+    
 
-    [self segueToGallery:@"KRq3BX2bw0eV"];
+    [self startNotificationTimer];
     
     return YES;
 }
@@ -174,16 +175,6 @@
             [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
         }
         
-        if (responseObject[@"identity"][@"due_by"] != Nil && ![responseObject[@"identity"][@"due_by"] isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
-        }
-        
-        if (responseObject[@"identity"][@"first_name"] != Nil && ![responseObject[@"identity"][@"first_name"] isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:responseObject[@"identity"][@"first_name"] forKey:@"stripeFirst"];
-        }
-        if (responseObject[@"identity"][@"last_name"] != Nil && ![responseObject[@"identity"][@"last_name"] isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:responseObject[@"identity"][@"last_name"] forKey:@"stripeLast"];
-        }
         
         if ([responseObject[@"terms"][@"valid"] boolValue] == FALSE) { /* */
             UITabBarController *tabBar = (UITabBarController *)self.tabBarController;
@@ -192,63 +183,84 @@
             [homeViewController presentTOS];
         }
         
-        NSDictionary *identity = responseObject[@"identity"];
-        
-        NSString *birthDay = identity[@"dob_day"];
-        NSString *birthMonth = identity[@"dob_month"];
-        NSString *birthYear = identity[@"dob_year"];
-        NSString *addressLineOne = identity[@"address_line1"];
-        NSString *addressLineTwo = identity[@"address_line2"];
-        NSString *addressZip = identity[@"address_zip"];
-        NSString *addressCity = identity[@"address_city"];
-        NSString *addressState = identity[@"address_state"];
-        
-        BOOL hasSavedFields = FALSE;
-        
-        if ([self isValue:birthDay]) {
-            [authenticatedUser setValue:birthDay forKey:@"dob_day"];
-            hasSavedFields = TRUE;
+        if (![responseObject[@"identity"] isKindOfClass:[[NSNull null] class]]) {
+            
+            if (responseObject[@"identity"][@"due_by"] != Nil && ![responseObject[@"identity"][@"due_by"] isEqual:[NSNull null]]) {
+                [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
+            }
+            
+            if (responseObject[@"identity"][@"first_name"] != Nil && ![responseObject[@"identity"][@"first_name"] isEqual:[NSNull null]]) {
+                [authenticatedUser setValue:responseObject[@"identity"][@"first_name"] forKey:@"stripeFirst"];
+            }
+            if (responseObject[@"identity"][@"last_name"] != Nil && ![responseObject[@"identity"][@"last_name"] isEqual:[NSNull null]]) {
+                [authenticatedUser setValue:responseObject[@"identity"][@"last_name"] forKey:@"stripeLast"];
+            }
+            
+            
+            
+            NSDictionary *identity = responseObject[@"identity"];
+            
+            NSString *birthDay = identity[@"dob_day"];
+            NSString *birthMonth = identity[@"dob_month"];
+            NSString *birthYear = identity[@"dob_year"];
+            NSString *addressLineOne = identity[@"address_line1"];
+            NSString *addressLineTwo = identity[@"address_line2"];
+            NSString *addressZip = identity[@"address_zip"];
+            NSString *addressCity = identity[@"address_city"];
+            NSString *addressState = identity[@"address_state"];
+            
+            
+            
+            BOOL hasSavedFields = FALSE;
+            
+            if ([self isValue:birthDay]) {
+                [authenticatedUser setValue:birthDay forKey:@"dob_day"];
+                hasSavedFields = TRUE;
+            }
+            if ([self isValue:birthMonth]) {
+                [authenticatedUser setValue:birthMonth forKey:@"dob_month"];
+                hasSavedFields = TRUE;
+                
+            }
+            if ([self isValue:birthYear]) {
+                [authenticatedUser setValue:birthYear forKey:@"dob_year"];
+                hasSavedFields = TRUE;
+                
+            }
+            if ([self isValue:addressLineOne]) {
+                [authenticatedUser setValue:addressLineOne forKey:@"address_line1"];
+                hasSavedFields = TRUE;
+                
+            }
+            if ([self isValue:addressLineTwo]) {
+                [authenticatedUser setValue:addressLineTwo forKey:@"address_line2"];
+                hasSavedFields = TRUE;
+                
+            }
+            
+            
+            if ([self isValue:addressZip]) {
+                [authenticatedUser setValue:addressZip forKey:@"address_zip"];
+                hasSavedFields = TRUE;
+                
+            }
+            if ([self isValue:addressCity]) {
+                [authenticatedUser setValue:addressCity forKey:@"address_city"];
+                hasSavedFields = TRUE;
+                
+            }
+            if ([self isValue:addressState]) {
+                [authenticatedUser setValue:addressState forKey:@"address_state"];
+                hasSavedFields = TRUE;
+                
+            }
+            
+            NSArray *fieldsNeeded = identity[@"fields_needed"];
+            [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
+            [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
+            
+            [[self managedObjectContext] save:Nil];
         }
-        if ([self isValue:birthMonth]) {
-            [authenticatedUser setValue:birthMonth forKey:@"dob_month"];
-            hasSavedFields = TRUE;
-
-        }
-        if ([self isValue:birthYear]) {
-            [authenticatedUser setValue:birthYear forKey:@"dob_year"];
-            hasSavedFields = TRUE;
-
-        }
-        if ([self isValue:addressLineOne]) {
-            [authenticatedUser setValue:addressLineOne forKey:@"address_line1"];
-            hasSavedFields = TRUE;
-
-        }
-        if ([self isValue:addressLineTwo]) {
-            [authenticatedUser setValue:addressLineTwo forKey:@"address_line2"];
-            hasSavedFields = TRUE;
-
-        }
-        if ([self isValue:addressZip]) {
-            [authenticatedUser setValue:addressZip forKey:@"address_zip"];
-            hasSavedFields = TRUE;
-
-        }
-        if ([self isValue:addressCity]) {
-            [authenticatedUser setValue:addressCity forKey:@"address_city"];
-            hasSavedFields = TRUE;
-
-        }
-        if ([self isValue:addressState]) {
-            [authenticatedUser setValue:addressState forKey:@"address_state"];
-            hasSavedFields = TRUE;
-
-        }
-        
-        NSArray *fieldsNeeded = identity[@"fields_needed"];
-        [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
-        [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
-        [[self managedObjectContext] save:Nil];
     }];
 }
 
@@ -572,14 +584,41 @@
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     
-    FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
-    [tabBarController updateBellIcon:YES];
+    //untested, unable to receive remote notifs atm
+    FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
+    [tbc updateBellIcon:YES];
     
     completionHandler(TRUE);
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
     [FRSTracker track:@"Permissions notification disables"];
+}
+
+-(void)startNotificationTimer {
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
+}
+
+-(void)checkNotifications {
+    
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        return;
+    }
+    
+    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
+        if (error) {
+            //soft fail
+            return;
+        }
+        if (responseObject) {
+            FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
+            if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
+                [tbc updateBellIcon:YES];
+            } else {
+                [tbc updateUserIcon];
+            }
+        }
+    }];
 }
 
 #pragma mark - App Path

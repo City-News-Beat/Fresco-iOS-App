@@ -84,6 +84,8 @@
 @property BOOL didDisplayReport;
 @property BOOL didDisplayBlock;
 
+@property (strong, nonatomic) UIView *blockedContainer;
+
 @end
 
 @implementation FRSProfileViewController
@@ -180,13 +182,13 @@
         self.didDisplayReport = NO;
         self.reportUserAlertView = nil;
         if (index == 1) {
-            [self blockUser:_representedUser];
+            [self blockuserAction];
         }
         
     } else if (self.didDisplayBlock) {
         self.didDisplayBlock = NO;
         if (index == 0) {
-            [self unblockUser:_representedUser];
+            [self unblockUserAction];
         }
     }
 }
@@ -223,22 +225,17 @@
     }];
     
     UIAlertAction *block = [UIAlertAction actionWithTitle:@"Block" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        [self blockUser:_representedUser];
+        [self blockuserAction];
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
     
     UIAlertAction *sunblock = [UIAlertAction actionWithTitle:@"Unblock" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        
-        [self unblockUser:_representedUser];
-        
-        
+        [self unblockUserAction];
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
     
     UIAlertAction *report = [UIAlertAction actionWithTitle:@"Report" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        
 
-        
         if (([_representedUser.username class] != [NSNull null]) && (![_representedUser.username isEqualToString:@""])) {
             self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"@%@", _representedUser.username] delegate:self];
         } else if (([_representedUser.firstName class] != [NSNull null]) && (![_representedUser.firstName isEqualToString:@""])) {
@@ -303,6 +300,9 @@
 
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
+    
+    
+    
     
 //    
 //    if(!self.editedProfile){
@@ -409,16 +409,16 @@
 }
 -(void)setupUI {
     
-    if (self.userIsBlocked) {
-        [self configureBlockedUserWithButton:YES];
-        return;
-    } else if (self.userIsSuspended) {
-        [self configureSuspendedUser];
-        return;
-    } else if (self.userIsDisabled) {
-        [self configureDisabledUser];
-        return;
-    }
+//    if (self.userIsBlocked) {
+//        [self configureBlockedUserWithButton:YES];
+//        return;
+//    } else if (self.userIsSuspended) {
+//        [self configureSuspendedUser];
+//        return;
+//    } else if (self.userIsDisabled) {
+//        [self configureDisabledUser];
+//        return;
+//    }
     
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
@@ -444,46 +444,51 @@
 
 
 -(void)configureBlockedUserWithButton:(BOOL)button {
+    
+    if (self.blockedContainer) {
+        return;
+    }
     self.tableView.scrollEnabled = NO;
     
-    [self createProfileSection];
-    self.profileContainer.frame = CGRectMake(0, self.profileContainer.frame.origin.y -64, self.profileContainer.frame.size.width, self.profileContainer.frame.size.height);
-    [self.view addSubview:self.profileContainer];
+    self.userIsBlocked = YES;
+
+//    self.profileContainer.frame = CGRectMake(0, self.profileContainer.frame.origin.y -64, self.profileContainer.frame.size.width, self.profileContainer.frame.size.height);
+//    [self.view addSubview:self.profileContainer];
     
-    
-    UIView *blockedContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height+self.profileContainer.frame.size.height)/2 -181, 207, 181)];
-    [self.view addSubview:blockedContainer];
+    self.blockedContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height-self.profileContainer.frame.size.height)/2 +181/2, 207, 181)];
+    [self.view addSubview:self.blockedContainer];
     
     UIImageView *blocked = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"blocked"]];
-    blocked.frame = CGRectMake(blockedContainer.frame.size.width/2 -56/2, 0, 56, 56);
-    [blockedContainer addSubview:blocked];
+    blocked.frame = CGRectMake(self.blockedContainer.frame.size.width/2 -56/2, 0, 56, 56);
+    [self.blockedContainer addSubview:blocked];
     
-    UILabel *awkwardLabel = [[UILabel alloc] initWithFrame:CGRectMake(blockedContainer.frame.size.width/2 -129/2, 72, 129, 33)];
+    UILabel *awkwardLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.blockedContainer.frame.size.width/2 -129/2, 72, 129, 33)];
     awkwardLabel.text = @"Blocked 🙅";
     awkwardLabel.font = [UIFont karminaBoldWithSize:28];
     awkwardLabel.textColor = [UIColor frescoDarkTextColor];
-    [blockedContainer addSubview:awkwardLabel];
+    [self.blockedContainer addSubview:awkwardLabel];
     
-    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(blockedContainer.frame.size.width/2 - 208/2, 106, 208, 40)];
+    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.blockedContainer.frame.size.width/2 - 208/2, 106, 208, 40)];
     bodyLabel.text = @"You can’t see each other’s\ngalleries or comments.";
     bodyLabel.textAlignment = NSTextAlignmentCenter;
     bodyLabel.numberOfLines = 2;
     bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     bodyLabel.textColor = [UIColor frescoMediumTextColor];
-    [blockedContainer addSubview:bodyLabel];
+    [self.blockedContainer addSubview:bodyLabel];
     
     if (button) {
         UIButton *unblockButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        unblockButton.frame = CGRectMake(blockedContainer.frame.size.width/2 -94/2, blocked.frame.size.height+awkwardLabel.frame.size.height+bodyLabel.frame.size.height +15, 94, 44);
+        unblockButton.frame = CGRectMake(self.blockedContainer.frame.size.width/2 -94/2, blocked.frame.size.height+awkwardLabel.frame.size.height+bodyLabel.frame.size.height +15, 94, 44);
         [unblockButton setTitle:@"UNBLOCK" forState:UIControlStateNormal];
+        [unblockButton addTarget:self action:@selector(unblockUserAction) forControlEvents:UIControlEventTouchUpInside];
         [unblockButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
         unblockButton.tintColor = [UIColor frescoBlueColor];
-        [blockedContainer addSubview:unblockButton];
+        [self.blockedContainer addSubview:unblockButton];
     }
-    
 }
 
 -(void)configureSuspendedUser {
+    
     self.tableView.scrollEnabled = NO;
 
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 220-64)];
@@ -552,6 +557,7 @@
 }
 
 -(void)configureDisabledUser {
+    
     self.tableView.scrollEnabled = NO;
     
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, self.view.frame.size.height/2 -125/2 -64, 207, 125)];
@@ -578,7 +584,7 @@
 
 -(void)configureSpinner {
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, (self.view.frame.size.height-self.profileContainer.frame.size.height)/2 +20/2, 20, 20);
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
@@ -603,12 +609,35 @@
     }
 
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
+        
+        [self.loadingView stopLoading];
+        [self.loadingView removeFromSuperview];
+        
+        if (self.userIsBlocked) {
+            [self configureBlockedUserWithButton:YES];
+            return;
+        }
+//        else if (self.userIsSuspended) {
+//            [self configureSuspendedUser];
+//            return;
+//        } else if (self.userIsDisabled) {
+//            [self configureDisabledUser];
+//            return;
+//        }
+        
+        
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
         [self.tableView reloadData];
         
         if (reload) {
             self.currentFeed = self.galleries;
             [self.tableView reloadData];
+            
+            if (self.galleries.count <= 0) {
+                [self displayAwkwardView:true feedTable:true];
+            } else {
+                [self displayAwkwardView:false feedTable:true];
+            }
         }
     }];
     
@@ -629,6 +658,12 @@
         if (reload) {
             self.currentFeed = self.likes;
             [self.tableView reloadData];
+        
+            if (self.likes.count <= 0) {
+                [self displayAwkwardView:true feedTable:false];
+            } else {
+                [self displayAwkwardView:false feedTable:false];
+            }
         }
     }];
 }
@@ -962,17 +997,12 @@
     }
     
     
-    
-    
-    
-    self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(origin -4, 65, width, 200)];
+    self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(origin -4, 65, width, 1)];
     [self.profileContainer addSubview:self.bioTextView];
     [self.bioTextView setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightLight]];
     self.bioTextView.backgroundColor = [UIColor clearColor];
     self.bioTextView.userInteractionEnabled = NO;
     self.bioTextView.textColor = [UIColor whiteColor];
-    
-    
     
     
 //    self.bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin, 65, width, self.profileContainer.frame.size.width - (origin-4) - 16)];
@@ -1119,20 +1149,20 @@
             self.currentFeed = self.galleries;
         }
 
-        //Awkward View
-        if(tableView == self.tableView){
-            if(self.currentFeed.count == 0){
-                [self displayAwkwardView:true feedTable:false];
-            }else{
-                [self displayAwkwardView:false feedTable:false];
-            }
-        }else if(tableView == self.contentTable){
-            if(self.currentFeed.count == 0){
-                [self displayAwkwardView:true feedTable:true];
-            }else{
-                [self displayAwkwardView:false feedTable:true];
-            }
-        }
+//        //Awkward View
+//        if(tableView == self.tableView){
+//            if(self.currentFeed.count == 0){
+//                [self displayAwkwardView:true feedTable:false];
+//            }else{
+//                [self displayAwkwardView:false feedTable:false];
+//            }
+//        }else if(tableView == self.contentTable){
+//            if(self.currentFeed.count == 0){
+//                [self displayAwkwardView:true feedTable:true];
+//            }else{
+//                [self displayAwkwardView:false feedTable:true];
+//            }
+//        }
         
         if(self.currentFeed.count == 0){
             return 1;
@@ -1185,7 +1215,7 @@
             CGRect newFrame = tableView.frame;
             newFrame.size.height = 40;
             newFrame.origin.y = tableView.frame.size.height/6;
-            [cell.contentView addSubview:[[FRSAwkwardView alloc] initWithFrame:newFrame]];
+//            [cell.contentView addSubview:[[FRSAwkwardView alloc] initWithFrame:newFrame]];
             [cell.contentView setBackgroundColor:[UIColor frescoBackgroundColorDark]];
             [cell setBackgroundColor:[UIColor frescoBackgroundColorDark]];
         }else if ([[[self.currentFeed objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
@@ -1529,8 +1559,7 @@
         }
         //  self.locationLabel.text = user.address; //user.address does not exiset yet
         
-        [self.loadingView stopLoading];
-        [self.loadingView removeFromSuperview];
+        
     });
 }
 
@@ -1555,6 +1584,32 @@
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             self.didDisplayBlock = YES;
             [alert show];
+            
+            
+            //////
+            [self configureBlockedUserWithButton:YES];
+            self.blockedContainer.alpha = 1;
+            
+            self.likes = nil;
+            self.galleries = nil;
+            [self.tableView reloadData];
+            
+            if (!self.profileIV.image) {
+                self.placeholderUserIcon.alpha = 1;
+            }
+            
+            self.userIsBlocked = YES;
+            self.tableView.scrollEnabled = NO;
+
+            
+            UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
+            dotIcon.tintColor = [UIColor whiteColor];
+            
+            self.navigationItem.rightBarButtonItems = @[dotIcon];
+            
+            
+            /////
+            
         } else {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
@@ -1565,13 +1620,63 @@
 
 -(void)unblockUser:(FRSUser *)user {
     
+    [self configureSpinner];
+    
     [[FRSAPIClient sharedClient] unblockUser:user.uid withCompletion:^(id responseObject, NSError *error) {
         if (responseObject) {
+            
+            /////
+            
+            self.userIsBlocked = NO;
+
+            self.tableView.scrollEnabled = YES;
+
+            [self configureWithUser:_representedUser];
+            
+            [self fetchGalleries];
+    
+            self.tableView.alpha = 1;
+            if (self.profileImageURL) {
+                self.placeholderUserIcon.alpha = 0;
+            }
+            self.blockedContainer.alpha = 0;
+            
+            UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
+            dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
+            dotIcon.tintColor = [UIColor whiteColor];
+            self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+            self.navigationItem.rightBarButtonItems = @[self.followBarButtonItem, dotIcon];
+            
+            ////
+            
         } else {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
         }
     }];
 }
+
+
+
+
+-(void)blockuserAction {
+    [self blockUser:_representedUser];
+
+}
+
+
+-(void)unblockUserAction {
+    [self unblockUser:_representedUser];
+    
+}
+
+
+
+
+
+
+
+
+
 
 @end
