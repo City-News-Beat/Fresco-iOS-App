@@ -37,6 +37,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSArray *fieldsNeeded;
 @property (nonatomic) BOOL blocked;
 @property (nonatomic) BOOL blocking;
+@property (nonatomic) BOOL disabled;
+@property (nonatomic) BOOL suspended;
+
+
 
 
 @end
