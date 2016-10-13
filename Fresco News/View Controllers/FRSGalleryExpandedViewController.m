@@ -443,9 +443,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.userReportAlertView = nil;
         if (index == 1) {
             
-            //BLOCK ON API, IF SUCCESS PRESENT ALERT
+            NSString *username = @"";
             
-            NSString *username = @"USERNAME";
+            if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
+                username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
+            } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
+                username = self.currentCommentUserDictionary[@"full_name"];
+            } else {
+                username = @"them";
+            }
             
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             [alert show];
@@ -468,10 +474,30 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)reportUserAlertAction {
     
-    NSString *username = @"USERNAME";
+    NSString *username = @"";
     
-    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block @%@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-    [alert show];
+    if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
+        username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
+    } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
+        username = self.currentCommentUserDictionary[@"full_name"];
+    } else {
+        username = @"them";
+    }
+    
+    //reason and message should be passed in from alertview via delegate yo
+    [[FRSAPIClient sharedClient] reportUser:self.currentCommentUserDictionary[@"id"] params:@{@"reason" : @"spam", @"message" : @"wow cool"} completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [alert show];
+            return;
+        }
+        
+        if (responseObject) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [alert show];
+        }
+    }];
 }
 
 -(void)configureUI{

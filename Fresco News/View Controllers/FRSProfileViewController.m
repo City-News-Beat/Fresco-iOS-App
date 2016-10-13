@@ -209,7 +209,7 @@
     
     
     
-    [[FRSAPIClient sharedClient] reportUser:_representedUser params:@{@"reason" : @"spam", @"message" : @""} completion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] reportUser:_representedUser.uid params:@{@"reason" : @"spam", @"message" : @"hello friend"} completion:^(id responseObject, NSError *error) {
         
         if (error) {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
