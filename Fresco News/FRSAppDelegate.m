@@ -580,9 +580,11 @@
             return;
         }
         if (responseObject) {
-            if ([[responseObject objectForKey:@"unseen_count"] integerValue] < 0) {
-                FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
+            FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
+            if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
                 [tbc updateBellIcon:YES];
+            } else {
+                [tbc updateUserIcon];
             }
         }
     }];
