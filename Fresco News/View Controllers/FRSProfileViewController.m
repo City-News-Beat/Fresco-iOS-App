@@ -301,6 +301,9 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
+    
+    
+    
 //    
 //    if(!self.editedProfile){
 //        if (!_representedUser) {
@@ -581,7 +584,7 @@
 
 -(void)configureSpinner {
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
+    self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, (self.view.frame.size.height-self.profileContainer.frame.size.height)/2 +20/2, 20, 20);
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
@@ -606,6 +609,9 @@
     }
 
     [[FRSAPIClient sharedClient] fetchGalleriesForUser:self.representedUser completion:^(id responseObject, NSError *error) {
+        
+        [self.loadingView stopLoading];
+        [self.loadingView removeFromSuperview];
         
         if (_representedUser.blocking) {
             [self configureBlockedUserWithButton:YES];
@@ -1553,8 +1559,7 @@
         }
         //  self.locationLabel.text = user.address; //user.address does not exiset yet
         
-        [self.loadingView stopLoading];
-        [self.loadingView removeFromSuperview];
+        
     });
 }
 
@@ -1623,8 +1628,9 @@
             self.tableView.scrollEnabled = YES;
 
             [self configureWithUser:_representedUser];
-            [self fetchGalleries];
             
+            [self fetchGalleries];
+    
             self.tableView.alpha = 1;
             if (self.profileImageURL) {
                 self.placeholderUserIcon.alpha = 0;
@@ -1632,15 +1638,11 @@
             self.blockedContainer.alpha = 0;
             self.userIsBlocked = NO;
             
-            
             UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
             dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
-            
             dotIcon.tintColor = [UIColor whiteColor];
             self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-            
             self.navigationItem.rightBarButtonItems = @[self.followBarButtonItem, dotIcon];
-            
             
             ////
             
