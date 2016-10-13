@@ -574,6 +574,11 @@
 }
 
 -(void)checkNotifications {
+    
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        return;
+    }
+    
     [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
         if (error) {
             //soft fail

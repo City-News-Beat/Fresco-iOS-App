@@ -613,7 +613,7 @@
         [self.loadingView stopLoading];
         [self.loadingView removeFromSuperview];
         
-        if (_representedUser.blocking) {
+        if (self.userIsBlocked) {
             [self configureBlockedUserWithButton:YES];
             return;
         }
@@ -1620,11 +1620,15 @@
 
 -(void)unblockUser:(FRSUser *)user {
     
+    [self configureSpinner];
+    
     [[FRSAPIClient sharedClient] unblockUser:user.uid withCompletion:^(id responseObject, NSError *error) {
         if (responseObject) {
             
             /////
             
+            self.userIsBlocked = NO;
+
             self.tableView.scrollEnabled = YES;
 
             [self configureWithUser:_representedUser];
@@ -1636,7 +1640,6 @@
                 self.placeholderUserIcon.alpha = 0;
             }
             self.blockedContainer.alpha = 0;
-            self.userIsBlocked = NO;
             
             UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
             dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
