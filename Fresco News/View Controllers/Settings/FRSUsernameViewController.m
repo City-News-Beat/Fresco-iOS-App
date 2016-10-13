@@ -228,6 +228,10 @@
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         [delegate reloadUser];
         
+        if (!error) {
+            [self popViewController];
+            return;
+        }
         
         if (error.code == -1009) {
             NSLog(@"Unable to connect.");
@@ -252,9 +256,7 @@
             [self.alert show];
         }
         
-        if (!error) {
-            [self popViewController];
-        }
+
     }];
     
     FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
