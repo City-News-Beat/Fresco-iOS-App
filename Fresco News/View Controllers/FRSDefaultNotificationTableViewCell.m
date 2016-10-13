@@ -204,34 +204,13 @@
     
     [self configureDefaultCell];
     
-    //Set bodyLabel based on notifcation type
-    switch (notificationType) {
-        case FRSNotificationTypeFollow:
-            self.bodyLabel.text = @"Followed you.";
-            break;
-        case FRSNotificationTypeLike:
-            self.bodyLabel.text = @"Liked your gallery.";
-            break;
-        case FRSNotificationTypeRepost:
-            self.bodyLabel.text = @"Reposted your gallery.";
-            break;
-        case FRSNotificationTypeComment:
-            self.bodyLabel.text = @"Commented on your gallery.";
-            break;
-        case FRSNotificationTypeGalleryMention:
-            self.bodyLabel.text = @"Mentioned you in a gallery.";
-            break;
-        case FRSNotificationTypeCommentMention:
-            self.bodyLabel.text = @"Mentioned you in a comment.";
-            break;
-            
-        default:
-            break;
-    }
-    
     if (self.count <= 1) {
         self.annotationView.alpha = 0;
         self.annotationLabel.alpha = 0;
+    }
+    else {
+        self.annotationView.alpha = 1;
+        self.annotationLabel.alpha = 1;
     }
 }
 
