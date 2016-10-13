@@ -236,6 +236,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.commentTableView.frame = CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height, self.view.frame.size.width, height);
         [self adjustScrollViewContentSize];
         [self.commentTableView reloadData];
+        self.commentTableView.hidden = self.comments.count == 0;
     }];
 }
 
@@ -535,6 +536,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.articlesTV.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.articlesTV.backgroundColor = [UIColor whiteColor];
     self.articlesTV.scrollEnabled = NO;
+    self.articlesTV.hidden = self.orderedArticles.count == 0;
     [self.scrollView addSubview:self.articlesTV];
     
     if (self.orderedArticles.count > 0) {
@@ -634,6 +636,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.commentTableView.backgroundColor = [UIColor clearColor];
     self.commentTableView.backgroundView.backgroundColor = [UIColor clearColor];
     [self.commentTableView registerNib:[UINib nibWithNibName:@"FRSCommentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:reusableCommentIdentifier];
+    self.commentTableView.hidden = self.comments.count == 0;
     
     if (self.comments.count > 0) {
         [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.commentTableView.frame.origin.y - 0.5)]];
@@ -662,7 +665,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     [self.view addSubview:self.actionBar];
     
-    [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
+//    [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
 }
 
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
@@ -951,11 +954,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
         [self adjustScrollViewContentSize];
         [self.commentTableView reloadData];
+        self.commentTableView.hidden = self.comments.count == 0;
     }];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
-    
     if ([URL.absoluteString containsString:@"name"]) {
         NSString *user = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
         NSLog(@"USER: %@", user);
@@ -1055,7 +1058,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [commentField resignFirstResponder];
             [self reload];
             [UIView animateWithDuration:.15 animations:^{
-            commentField.frame = CGRectMake(-1, [UIScreen mainScreen].bounds.size.height, self.view.frame.size.width+2, 44);
+            commentField.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height, self.view.frame.size.width, 44);
+            self.commentTableView.hidden = self.comments.count == 0;
         } completion:^(BOOL finished) {
             commentField.text = @"";
         }];
