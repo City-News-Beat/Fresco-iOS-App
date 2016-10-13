@@ -90,8 +90,9 @@
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
 //    [FRSNotificationTester createAllNotifications];
-
     
+
+    [self startNotificationTimer];
     
     return YES;
 }
@@ -557,14 +558,34 @@
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     
-    FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
-    [tabBarController updateBellIcon:YES];
+    //untested, unable to receive remote notifs atm
+    FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
+    [tbc updateBellIcon:YES];
     
     completionHandler(TRUE);
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
     [FRSTracker track:@"Permissions notification disables"];
+}
+
+-(void)startNotificationTimer {
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
+}
+
+-(void)checkNotifications {
+    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
+        if (error) {
+            //soft fail
+            return;
+        }
+        if (responseObject) {
+            if ([[responseObject objectForKey:@"unseen_count"] integerValue] < 0) {
+                FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
+                [tbc updateBellIcon:YES];
+            }
+        }
+    }];
 }
 
 #pragma mark - App Path
