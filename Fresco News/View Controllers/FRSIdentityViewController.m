@@ -147,8 +147,11 @@
     switch (section) {
         case 0:
             if (showsNameArea) {
-                if (showsAddressArea || showsSocialSecurityArea) {
+                if (showsAddressArea) {
                     return 3;
+                }
+                else if (showsSocialSecurityArea) {
+                    return 2;
                 }
                 else {
                     sectionWithSendButton = (int)section;
@@ -174,9 +177,18 @@
             break;
             
         case 2:
-            if (showsAddressArea) {
+            if (showsAddressArea && showsNameArea) {
                 if (showsSocialSecurityArea) {
                     return 3;
+                }
+                else {
+                    sectionWithSendButton = (int)section;
+                    return 4;
+                }
+            }
+            else if (!showsNameArea) {
+                if (showsSocialSecurityArea) {
+                    return 2;
                 }
                 else {
                     sectionWithSendButton = (int)section;
@@ -429,7 +441,7 @@
             break;
             
         case 2:
-            if (showsAddressArea)  {
+            if (showsAddressArea && showsNameArea)  {
                 [self configureAddressCell:cell forIndexPath:indexPath];
             }
             else if (showsSocialSecurityArea) {
