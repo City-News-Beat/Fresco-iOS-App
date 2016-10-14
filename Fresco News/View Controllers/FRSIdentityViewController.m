@@ -43,6 +43,9 @@
 
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self configureSpinner];
+    
     [self.navigationItem setTitle:@"IDENTIFICATION"];
     [self.tableView reloadData];
     
@@ -115,12 +118,6 @@
     [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     [spinner removeFromSuperview];
     [spinner startAnimating];
-}
-
--(NSInteger)rowForField:(NSString *)field {
-    
-    
-    return -1;
 }
 
 -(void)configureTableView{
@@ -474,6 +471,7 @@
 
 -(void)textFieldDidChange:(UITextField *)textField{
     BOOL enableSaveButton = true;
+    
     NSArray *mandatoryTextFieldArray = [[NSArray alloc] initWithObjects:_firstNameField,_lastNameField, _addressField, _cityField, _stateField, _zipField, _dateField, nil];
     for(UITextField *textField in mandatoryTextFieldArray){
         if(textField.text.length == 0 || [textField.text isEqualToString:textField.placeholder]){
@@ -546,6 +544,10 @@
             [self.navigationController popViewControllerAnimated:YES];
         }
         self.savingInfo = false;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self stopSpinner:self.loadingView onButton:self.saveIDInfoButton];
+        });
     }];
 }
 
