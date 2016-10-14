@@ -254,7 +254,7 @@
 }
 
 -(void)segueToTaxInfo {
-    FRSTaxInformationViewController *taxVC = [[FRSTaxInformationViewController alloc] init];
+    FRSTaxInformationViewController *taxVC = [[FRSIdentityViewController alloc] init];
     [self.navigationController pushViewController:taxVC animated:YES];
 }
 

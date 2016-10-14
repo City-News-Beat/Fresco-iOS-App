@@ -114,6 +114,19 @@
     }
 }
 
+-(void)markAsRead:(NSString *)notificationID {
+    NSDictionary *params = @{@"notification_ids":@[notificationID]};
+    [[FRSAPIClient sharedClient] post:@"user/notifications/see" withParameters:params completion:^(id responseObject, NSError *error) {
+        BOOL success = FALSE;
+        
+        if (!error && responseObject) {
+            success = TRUE;
+        }
+        
+        NSLog(@"MARK AS READ SUCCESS: %d", success);
+    }];
+}
+
 -(void)reloadUser {
     [[FRSAPIClient sharedClient] refreshCurrentUser:^(id responseObject, NSError *error) {
         // check against existing user
@@ -464,6 +477,11 @@
 
 -(void)handleRemotePush:(NSDictionary *)push {
     NSString *instruction = push[settingsKey];
+    NSString *notificationID = push[@"id"];
+    
+    if (notificationID && ![notificationID isEqual:[NSNull null]]) {
+        [self markAsRead:notificationID];
+    }
     
     // payment
     if ([instruction isEqualToString:purchasedContentNotification]) {
@@ -494,24 +512,24 @@
     
     // social
     if ([instruction isEqualToString:followedNotification]) {
-        NSString *user = [[push objectForKey:@"meta"] objectForKey:@"user_id"];
+        NSString *user = [[[push objectForKey:@"meta"] objectForKey:@"user_ids"] firstObject];
         [self segueToUser:user];
     }
     if ([instruction isEqualToString:likedNotification]) {
-        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
+        NSString *gallery = [[[push objectForKey:@"meta"] objectForKey:@"gallery_ids"] firstObject];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [self segueToGallery:gallery];
         }
         else {
-            NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
+            NSString *story = [[[push objectForKey:@"meta"] objectForKey:@"story_ids"] firstObject];
             if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
                 [self segueToStory:story];
             }
         }
     }
     if ([instruction isEqualToString:repostedNotification]) {
-        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
+        NSString *gallery = [[[push objectForKey:@"meta"] objectForKey:@"gallery_ids"] firstObject];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [self segueToGallery:gallery];
@@ -524,12 +542,20 @@
         }
     }
     if ([instruction isEqualToString:commentedNotification]) {
-        // COMMENT DEEP LINK: WIP
+        NSString *gallery = [[[push objectForKey:@"meta"] objectForKey:@"gallery_ids"] firstObject];
+        
+        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [self segueToGallery:gallery];
+        }
     }
     
     // general
     if ([instruction isEqualToString:photoOfDayNotification]) {
-        // non existent!
+        NSString *gallery = [[[push objectForKey:@"meta"] objectForKey:@"gallery_ids"] firstObject];
+        
+        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [self segueToGallery:gallery];
+        }
     }
     if ([instruction isEqualToString:todayInNewsNotification]) {
         NSArray *galleryIDs = [[push objectForKey:@"meta"] objectForKey:@"gallery_ids"];
@@ -538,7 +564,7 @@
     }
 }
 
--(void)applicationDidEnterBackground:(UIApplication *)application{
+-(void)applicationDidEnterBackground:(UIApplication *)application {
     
 }
 
