@@ -18,7 +18,7 @@
     // Initialization code
     self.profilePicture.layer.cornerRadius = 15;
     self.profilePicture.layer.masksToBounds = YES;
-    self.commentTextField.textColor = [UIColor frescoDarkTextColor];
+    self.commentTextView.textColor = [UIColor frescoDarkTextColor];
 }
 
 -(void)configureCell:(FRSComment *)comment delegate:(id<UITextViewDelegate>)delegate {
@@ -38,10 +38,10 @@
         }
     });
     
-    self.commentTextField.attributedText = comment.attributedString;
+    self.commentTextView.attributedText = comment.attributedString;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    [self.commentTextField frs_resize];
-    self.commentTextField.delegate = delegate;
+    [self.commentTextView frs_resize];
+    self.commentTextView.delegate = delegate;
     
     if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
         [self setSeparatorInset:UIEdgeInsetsZero];
