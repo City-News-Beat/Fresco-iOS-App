@@ -1889,18 +1889,22 @@
 
 -(void)didTapOptionOne {
     [self toggleImageView:self.moderationIVOne];
+    [self.delegate didPressRadioButtonAtIndex:0];
 }
 
 -(void)didTapOptionTwo {
     [self toggleImageView:self.moderationIVTwo];
+    [self.delegate didPressRadioButtonAtIndex:1];
 }
 
 -(void)didTapOptionThree {
     [self toggleImageView:self.moderationIVThree];
+    [self.delegate didPressRadioButtonAtIndex:2];
 }
 
 -(void)didTapOptionFour {
     [self toggleImageView:self.moderationIVFour];
+    [self.delegate didPressRadioButtonAtIndex:3];
 }
 
 

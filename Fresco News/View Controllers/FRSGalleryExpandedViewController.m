@@ -61,6 +61,7 @@
 @property (strong, nonatomic) FRSAlertView *userReportAlertView;
 
 @property (strong, nonatomic) FRSAlertView *reportUserAlertView;
+@property (strong, nonatomic) NSString *reportReasonString;
 
 
 @property BOOL didDisplayReport;
@@ -435,43 +436,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 
-
--(void)didPressButtonAtIndex:(NSInteger)index {
-    
-    if (self.didDisplayReport) {
-        self.didDisplayReport = NO;
-        self.userReportAlertView = nil;
-        if (index == 1) {
-            
-            NSString *username = @"";
-            
-            if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
-                username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
-            } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
-                username = self.currentCommentUserDictionary[@"full_name"];
-            } else {
-                username = @"them";
-            }
-            
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-            [alert show];
-        }
-    } else if (self.didDisplayBlock) {
-        self.didDisplayBlock = NO;
-        
-        if (index == 0) {
-
-            [[FRSAPIClient sharedClient] unblockUser:self.currentCommentUserDictionary[@"id"] withCompletion:^(id responseObject, NSError *error) {
-                
-                if (error) {
-                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                    [alert show];
-                }
-            }];
-       }
-    }
-}
-
 -(void)reportUserAlertAction {
     
     NSString *username = @"";
@@ -484,20 +448,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         username = @"them";
     }
     
-    //reason and message should be passed in from alertview via delegate yo
-    [[FRSAPIClient sharedClient] reportUser:self.currentCommentUserDictionary[@"id"] params:@{@"reason" : @"spam", @"message" : @"wow cool"} completion:^(id responseObject, NSError *error) {
-        
-        if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
-            return;
-        }
-        
-        if (responseObject) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-            [alert show];
-        }
-    }];
+    [self reportUser:self.currentCommentUserDictionary[@"id"]];
 }
 
 -(void)configureUI{
@@ -1150,12 +1101,66 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - FRSAlertViewDelegate
 
 -(void)reportGalleryAlertAction {
-    
     FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message:@"Thanks for helping make Fresco a better community!" actionTitle:@"YOU’RE WELCOME" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
     [alert show];
-
 }
 
+
+-(void)didPressRadioButtonAtIndex:(NSInteger)index {
+    NSLog(@"index: %ld", index);
+    
+    if (self.reportUserAlertView) {
+        switch (index) {
+            case 0:
+                self.reportReasonString = @"abuse";
+                break;
+            case 1:
+                self.reportReasonString = @"spam";
+                break;
+            case 2:
+                self.reportReasonString = @"stolen";
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    
+    if (self.didDisplayReport) {
+        self.didDisplayReport = NO;
+        self.userReportAlertView = nil;
+        if (index == 1) {
+            
+            NSString *username = @"";
+            
+            if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
+                username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
+            } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
+                username = self.currentCommentUserDictionary[@"full_name"];
+            } else {
+                username = @"them";
+            }
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [alert show];
+        }
+    } else if (self.didDisplayBlock) {
+        self.didDisplayBlock = NO;
+        
+        if (index == 0) {
+            
+            [[FRSAPIClient sharedClient] unblockUser:self.currentCommentUserDictionary[@"id"] withCompletion:^(id responseObject, NSError *error) {
+                
+                if (error) {
+                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                    [alert show];
+                }
+            }];
+        }
+    }
+}
 
 #pragma mark - Moderation
 
@@ -1184,6 +1189,32 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
     }];
 }
+
+-(void)reportUser:(NSString *)userID {
+    [[FRSAPIClient sharedClient] reportUser:self.currentCommentUserDictionary[@"id"] params:@{@"reason" : self.reportReasonString, @"message" : @"wow cool"} completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [alert show];
+            return;
+        }
+        
+        if (responseObject) {
+            
+            NSString *username = @"";
+            if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
+                username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
+            } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
+                username = self.currentCommentUserDictionary[@"full_name"];
+            } else {
+                username = @"them";
+            }
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [alert show];
+        }
+    }];
+}
+
 
 
 @end

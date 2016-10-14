@@ -89,10 +89,10 @@
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
-//    [FRSNotificationTester createAllNotifications];
     
 
-    [self startNotificationTimer];
+    //[self startNotificationTimer];
+    
     
     return YES;
 }

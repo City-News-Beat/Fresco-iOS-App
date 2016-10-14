@@ -135,18 +135,18 @@
     
     if (properties[@"blocked"] && ![properties[@"blocked"] isEqual:[NSNull null]]) {
         user.blocked = [properties[@"blocked"] boolValue];
-//        NSLog(@"USER.BLOCKED: %d", user.blocked);
-        
-        NSLog(@"PROPERTIES[@BLOCKED]: %@", properties[@"blocked"]);
-        
     }
     
     if (properties[@"blocking"] && ![properties[@"blocking"] isEqual:[NSNull null]]) {
         user.blocking = [properties[@"blocking"] boolValue];
-//        NSLog(@"USER.BLOCKING: %d", user.blocking);
-        
-        NSLog(@"PROPERTIES[@BLOCKING]: %@", properties[@"blocking"]);
-        
+    }
+    
+    if (properties[@"suspended"] && ![properties[@"suspended"] isEqual:[NSNull null]]) {
+        user.suspended = [properties[@"suspended"] boolValue];
+    }
+    
+    if (properties[@"disabled"] && ![properties[@"disabled"] isEqual:[NSNull null]]) {
+        user.disabled = [properties[@"disabled"] boolValue];
     }
     
 

@@ -15,6 +15,7 @@
 -(void)reportGalleryAlertAction;
 -(void)reportUserAlertAction;
 -(void)blockUserAlertAction;
+-(void)didPressRadioButtonAtIndex:(NSInteger)index;
 
 @end
 

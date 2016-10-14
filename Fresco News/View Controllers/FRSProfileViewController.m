@@ -206,9 +206,6 @@
     }
     
     
-    
-    
-    
     [[FRSAPIClient sharedClient] reportUser:_representedUser.uid params:@{@"reason" : @"spam", @"message" : @"hello friend"} completion:^(id responseObject, NSError *error) {
         
         if (error) {
@@ -700,6 +697,17 @@
     //    [self configureTableView];
     [self configurePullToRefresh];
     [self configureProfileSocialOverlay];
+    //[self configureFrogs]; broken (wip)
+}
+
+-(void)configureFrogs {
+    
+    NSInteger navigationBarHeight = 64;
+    NSInteger profileContainerTabBarHeight = 44;
+ 
+    self.feedAwkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, self.profileContainer.frame.size.height + profileContainerTabBarHeight + navigationBarHeight, self.view.frame.size.width, self.view.frame.size.height)];
+    [self.tableView addSubview:self.feedAwkwardView];
+    
 }
 
 -(void)configurePullToRefresh {
