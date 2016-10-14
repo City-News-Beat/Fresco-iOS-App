@@ -61,10 +61,10 @@
         }
     }
     
-    if ([currentUser valueForKey:@"stripeFirst"] || [currentUser valueForKey:@"dob_month"]) {
+    if (([currentUser valueForKey:@"stripeFirst"] && ![[currentUser valueForKey:@"stripeFirst"] isEqual:[NSNull null]]) || ([currentUser valueForKey:@"dob_month"]  && ![[currentUser valueForKey:@"dob_month"] isEqual:[NSNull null]])) {
         showsNameArea = TRUE;
     }
-    if ([currentUser valueForKey:@"address_line1"]) {
+    if (([currentUser valueForKey:@"address_line1"] && ![[currentUser valueForKey:@"address_line1"] isEqual:[NSNull null]])) {
         showsAddressArea = TRUE;
     }
 }
