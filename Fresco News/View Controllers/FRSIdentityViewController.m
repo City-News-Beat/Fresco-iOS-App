@@ -50,11 +50,46 @@
     NSArray *fieldsNeeded = currentUser.fieldsNeeded;
     
     for (NSString *neededField in fieldsNeeded) {
-        if ([self rowForField:neededField] > 0) {
-            
+        if ([self isNameArea:neededField]) {
+            showsNameArea = TRUE;
+        }
+        if ([self isAddressArea:neededField]) {
+            showsAddressArea = TRUE;
+        }
+        if ([self isSSNArea:neededField]) {
+            showsSocialSecurityArea = TRUE;
         }
     }
 }
+            
+-(BOOL)isNameArea:(NSString *)field {
+    if ([field isEqualToString:@"first_name"] || [field isEqualToString:@"last_name"] ||  [field isEqualToString:@"dob_month"] ||  [field isEqualToString:@"dob_day"] ||  [field isEqualToString:@"dob_year"]) {
+     
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+-(BOOL)isAddressArea:(NSString *)field {
+    if ([field isEqualToString:@"address_line1"] || [field isEqualToString:@"address_line2"] ||  [field isEqualToString:@"address_city"] ||  [field isEqualToString:@"address_state"] ||  [field isEqualToString:@"address_zip"]) {
+        
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+
+-(BOOL)isSSNArea:(NSString *)field {
+    if ([field isEqualToString:@"ssn"]) {
+        
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
 
 -(void)configureSpinner {
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
@@ -97,14 +132,34 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 5;
+    return ((showsAddressArea + showsNameArea + showsSocialSecurityArea) * 2) - 1; // adds seperator sections in between
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
     switch (section) {
         case 0:
-            return 3;
+            if (showsNameArea) {
+                if (showsAddressArea || showsSocialSecurityArea) {
+                    return 3;
+                }
+                else {
+                    sectionWithSendButton = (int)section;
+                    return 4;
+                }
+            }
+            else if (showsAddressArea) {
+                if (showsSocialSecurityArea) {
+                    return 3;
+                }
+                else {
+                    sectionWithSendButton = (int)section;
+                    return 4;
+                }
+            }
+            else if (showsSocialSecurityArea) {
+                return 2;
+            }
             break;
             
         case 1:
@@ -112,7 +167,19 @@
             break;
             
         case 2:
-            return 3;
+            if (showsAddressArea) {
+                if (showsSocialSecurityArea) {
+                    return 3;
+                }
+                else {
+                    sectionWithSendButton = (int)section;
+                    return 4;
+                }
+            }
+            else if (showsSocialSecurityArea) {
+                sectionWithSendButton = (int)section;
+                return 2;
+            }
             break;
         case 3:
             return 1;
