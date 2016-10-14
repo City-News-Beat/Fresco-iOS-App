@@ -498,7 +498,6 @@
     } else {
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:((FRSUser *)self.followingArray[indexPath.row])];
                                                                                                         //should be followersArray
-        
         NSLog(@"FOLLOWING: %@", ((FRSUser *)self.followingArray[indexPath.row]).following);
         
         [self.navigationController pushViewController:controller animated:TRUE];
