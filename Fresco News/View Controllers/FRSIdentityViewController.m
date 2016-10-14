@@ -138,8 +138,14 @@
     [self.view addSubview:self.tableView];
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return ((showsAddressArea + showsNameArea + showsSocialSecurityArea) * 2) - 1; // adds seperator sections in between
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    int numSections = ((showsAddressArea + showsNameArea + showsSocialSecurityArea) * 2) - 1;
+    
+    if (numSections < 0) {
+        numSections = 0;
+    }
+    
+    return numSections; // adds seperator sections in between
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
