@@ -132,7 +132,6 @@
         user.profileImage = properties[@"avatar"];
     }
     
-    
     if (properties[@"blocked"] && ![properties[@"blocked"] isEqual:[NSNull null]]) {
         user.blocked = [properties[@"blocked"] boolValue];
     }
@@ -150,7 +149,6 @@
     if (properties[@"disabled"] && ![properties[@"disabled"] isEqual:[NSNull null]]) {
         user.disabled = [properties[@"disabled"] boolValue];
     }
-    
 
     return user;
 }
