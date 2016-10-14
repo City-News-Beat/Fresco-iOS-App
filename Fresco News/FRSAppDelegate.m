@@ -72,14 +72,17 @@
         
         return YES; // no other stuff going on (no quick action handling, etc)
     }
+    NSLog(@"OPTIONS %@", launchOptions);
     
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         [self handleLocationUpdate];
     }
     if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
+        NSLog(@"HANDLE PUSH (LOCAL)");
         [self handleLocalPush];
     }
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        NSLog(@"HANDLE PUSH (REMOTE)");
         [self handleRemotePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
@@ -476,9 +479,16 @@
 }
 
 -(void)handleRemotePush:(NSDictionary *)push {
+    UIViewController *viewController = [[UIViewController alloc] init];
+    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 300, 900)];
+    [viewController.view addSubview:textView];
+    
     NSString *instruction = push[settingsKey];
     NSString *notificationID = push[@"id"];
+    NSLog(@"PUSH %@", push);
+    textView.text = push.description;
     
+    self.window.rootViewController = viewController;
     if (notificationID && ![notificationID isEqual:[NSNull null]]) {
         [self markAsRead:notificationID];
     }
@@ -583,16 +593,25 @@
 #pragma mark - Push Notifications
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
-    
+    NSLog(@"NOTIF: %@", userInfo);
+
     //untested, unable to receive remote notifs atm
     FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
     [tbc updateBellIcon:YES];
-    
     completionHandler(TRUE);
+}
+
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo {
+    NSLog(@"NOTIF: %@", userInfo);
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
     [FRSTracker track:@"Permissions notification disables"];
+}
+
+-(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    NSLog(@"NOTIF LOCAL: %@", notification);
+
 }
 
 -(void)startNotificationTimer {
