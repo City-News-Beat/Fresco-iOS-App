@@ -139,6 +139,11 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    if (!showsAddressArea && !showsNameArea && !showsSocialSecurityArea) {
+        return 0;
+    }
+    
     int numSections = ((showsAddressArea + showsNameArea + showsSocialSecurityArea) * 2) - 1;
     
     if (numSections < 0) {
