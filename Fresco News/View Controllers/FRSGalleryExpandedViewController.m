@@ -446,6 +446,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         if (index == 0) {
             [self sendComment];
         }
+        else if (index == 1) {
+            [commentField resignFirstResponder];
+            [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
+            [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+        }
     }
 }
 
@@ -647,8 +652,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.actionBar handleRepostAmount:[numReposts intValue]];
     
     [self.view addSubview:self.actionBar];
-    
-//    [self.actionBar addSubview:[UIView lineAtPoint:CGPointMake(0, -0.5)]];
 }
 
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
@@ -989,24 +992,24 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.gallery completion:^(id responseObject, NSError *error) {
             [UIView animateWithDuration:.15 animations:^{
-                [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
-                [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
-                [commentField resignFirstResponder];
-                
                 if (error) {
                     NSString *message = [NSString stringWithFormat:@"\"@%@\"", commentField.text];
                     self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"COMMENT FAILED" message:message actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                     [self.errorAlertView show];
                 }
                 else {
+                    [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
+                    [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+                    [commentField resignFirstResponder];
+
                     self.totalCommentCount++;
                     self.commentTableView.hidden = NO;
                     [self reload];
                     CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
                     [self.scrollView setContentOffset:bottomOffset animated:YES];
+                    commentField.text = @"";
                 }
             } completion:^(BOOL finished) {
-                commentField.text = @"";
             }];
     }];
 }
@@ -1117,6 +1120,5 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
     }];
 }
-
 
 @end
