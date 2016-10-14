@@ -587,7 +587,13 @@
     
     self.tableView.scrollEnabled = NO;
     
-    self.disabledContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height-self.profileContainer.frame.size.height)/2 +125/2, 207, 125)];
+    self.profileContainer.alpha = 0;
+    self.sectionView.alpha = 0;
+    self.tableView.alpha = 0;
+    self.navigationItem.rightBarButtonItems = nil;
+
+    
+    self.disabledContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, self.view.frame.size.height/2 -125/2 -64, 207, 125)];
     [self.view addSubview:self.disabledContainer];
 
     UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"frog"]];
@@ -1555,7 +1561,7 @@
         
         //debug
         //self.userIsSuspended = YES;
-        self.userIsDisabled = YES;
+        //self.userIsDisabled = YES;
         //debug
         
         
