@@ -56,6 +56,25 @@
     }
 }
 
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+}
+
+-(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    spinner.frame = CGRectMake(button.frame.size.width - 20 -16, button.frame.size.height/2 -10, 20, 20);
+    [spinner startAnimating];
+    [button addSubview:spinner];
+}
+
+-(void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    [spinner removeFromSuperview];
+    [spinner startAnimating];
+}
+
 -(NSInteger)rowForField:(NSString *)field {
     
     
@@ -338,12 +357,46 @@
 
 -(void)saveIDInfo{
    // NSString *country = @"US";//TODO BEWARE THIS IS HARDCODED!!!
+    
+    [self startSpinner:self.loadingView onButton:self.saveIDInfoButton];
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM/dd/yyyy"];
     NSDate *birthDate = [formatter dateFromString:_dateField.text];
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:birthDate];
     
-    NSDictionary *addressInfo = @{@"address_line1":_addressField.text,@"address_line2":_unitField.text,@"address_city":_cityField.text,@"address_state":_stateField.text,@"address_zip":_zipField.text,@"dob_day":[NSNumber numberWithInteger:[components day]],@"dob_month":[NSNumber numberWithInteger:[components month]],@"dob_year":[NSNumber numberWithInteger:[components year]], @"first_name":_firstNameField.text, @"last_name":_lastNameField.text};
+    NSMutableDictionary *addressInfo = [[NSMutableDictionary alloc] init];
+    
+    if (_addressField.enabled && ![_addressField.text isEqualToString:@""]) {
+        [addressInfo setObject:_addressField.text forKey:@"address_line1"];
+    }
+    if (_unitField.enabled && ![_unitField.text isEqualToString:@""]) {
+        [addressInfo setObject:_unitField.text forKey:@"address_line2"];
+    }
+    if (_cityField.enabled && ![_cityField.text isEqualToString:@""]) {
+        [addressInfo setObject:_cityField.text forKey:@"address_city"];
+    }
+    if (_stateField.enabled && ![_stateField.text isEqualToString:@""]) {
+        [addressInfo setObject:_stateField.text forKey:@"address_state"];
+
+    }
+    if (_zipField.enabled && ![_zipField.text isEqualToString:@""]) {
+        [addressInfo setObject:_zipField.text forKey:@"address_zip"];
+
+    }
+    if (_dateField.enabled && ![_dateField.text isEqualToString:@""]) {
+        [addressInfo setObject:[NSNumber numberWithInteger:[components day]] forKey:@"dob_day"];
+        [addressInfo setObject:[NSNumber numberWithInteger:[components month]] forKey:@"dob_month"];
+        [addressInfo setObject:[NSNumber numberWithInteger:[components year]] forKey:@"dob_year"];
+    }
+    if (_firstNameField.enabled && ![_firstNameField.text isEqualToString:@""]) {
+        [addressInfo setObject:_firstNameField.text forKey:@"first_name"];
+
+    }
+    if (_lastNameField.enabled && ![_lastNameField.text isEqualToString:@""]) {
+        [addressInfo setObject:_lastNameField.text forKey:@"last_name"];
+
+    }
     
     self.savingInfo = true;
     [[FRSAPIClient sharedClient] updateIdentityWithDigestion:addressInfo completion:^(id responseObject, NSError *error) {

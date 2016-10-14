@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 @interface FRSIdentityViewController : FRSBaseViewController <UITextFieldDelegate>
-
+@property (nonatomic, strong) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @end
