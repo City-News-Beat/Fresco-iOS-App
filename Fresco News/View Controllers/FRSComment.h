@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "FRSUser.h"
-#import "FRSCommentCell.h"
 
 
 @interface FRSComment : NSObject
@@ -25,5 +24,4 @@
 @property (nonatomic) BOOL isReportable;
 @property (nonatomic, strong) NSMutableAttributedString *attributedString;
 -(instancetype)initWithDictionary:(NSDictionary *)commentDictionary;
--(NSInteger)calculateHeightForCell:(FRSCommentCell *)cell;
 @end

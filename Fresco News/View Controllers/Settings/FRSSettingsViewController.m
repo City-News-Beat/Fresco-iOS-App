@@ -337,14 +337,14 @@
                     
                     if (dueBy != nil) {
             
-                        [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
+                        [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
                         
                     } else {
                         if ([[FRSAPIClient sharedClient] authenticatedUser].fieldsNeeded.count == 0) {
-                            [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:@"Verified" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                            [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:@"Verified" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                         }
                         else {
-                            [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:@""rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                            [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:@""rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                         }
                     }
                     
