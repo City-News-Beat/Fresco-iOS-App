@@ -60,6 +60,13 @@
             showsSocialSecurityArea = TRUE;
         }
     }
+    
+    if ([currentUser valueForKey:@"stripeFirst"] || [currentUser valueForKey:@"dob_month"]) {
+        showsNameArea = TRUE;
+    }
+    if ([currentUser valueForKey:@"address_line1"]) {
+        showsAddressArea = TRUE;
+    }
 }
             
 -(BOOL)isNameArea:(NSString *)field {
