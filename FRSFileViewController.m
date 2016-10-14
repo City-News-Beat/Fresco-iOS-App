@@ -220,6 +220,23 @@ static NSString *imageTile = @"ImageTile";
 }
 
 -(void)next:(id)sender {
+    
+    int numberOfVideos = 0;
+    int numberOfPhotos = 0;
+    
+    for (PHAsset *asset in selectedAssets) {
+        if (asset.mediaType == PHAssetMediaTypeImage) {
+            numberOfPhotos++;
+        }
+        else if (asset.mediaType == PHAssetMediaTypeVideo) {
+            numberOfVideos++;
+        }
+        
+    }
+    
+    [FRSTracker track:@"Submission videos in gallery" parameters:@{@"count":@(numberOfVideos)}];
+    [FRSTracker track:@"Submission photos in gallery" parameters:@{@"count":@(numberOfPhotos)}];
+    
     self.uploadViewController.content = nil;
     self.uploadViewController.players = nil;
     self.uploadViewController.content = selectedAssets;
