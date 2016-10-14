@@ -607,7 +607,7 @@
     
 //    self.loginButton.enabled = YES; //FOR TESTING
     
-    if ((self.userField.text && self.userField.text.length > 0) && (self.passwordField.text && self.passwordField.text.length >= 8)) {
+    if ((self.userField.text && self.userField.text.length > 0) && (self.passwordField.text && self.passwordField.text.length >= 1)) {
         
         if ([self validEmail:self.userField.text] || [self isValidUsername:self.userField.text]) {
             
@@ -624,7 +624,7 @@
             } completion:nil];
         }
         
-    } else if (self.passwordField.text && self.passwordField.text.length < 8) { //SHOULD BE 8, BROUGHT DOWN TO 4 TO TEST MAURICES PASSWORD
+    } else if (self.passwordField.text && self.passwordField.text.length < 1) { //SHOULD BE 8, BROUGHT DOWN TO 4 TO TEST MAURICES PASSWORD
         self.loginButton.enabled = NO;
         
         [UIView transitionWithView:self.loginButton  duration:0.2 options: UIViewAnimationOptionTransitionCrossDissolve animations:^{
