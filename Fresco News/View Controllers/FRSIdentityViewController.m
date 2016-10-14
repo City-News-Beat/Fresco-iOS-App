@@ -70,6 +70,12 @@
     if (([currentUser valueForKey:@"address_line1"] && ![[currentUser valueForKey:@"address_line1"] isEqual:[NSNull null]])) {
         showsAddressArea = TRUE;
     }
+    
+    
+    // manual override of sections ( for demo )
+    showsNameArea = FALSE;
+    showsAddressArea = TRUE;
+    showsSocialSecurityArea = FALSE;
 }
             
 -(BOOL)isNameArea:(NSString *)field {

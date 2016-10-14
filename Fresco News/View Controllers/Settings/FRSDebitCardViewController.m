@@ -351,8 +351,6 @@
         NSLog(@"CVV: %@", securityCodeTextField);
     }
 
-    
-    
     if ((cardNumberTextField.text.length == 16) && (securityCodeTextField.text.length >=3)) {
         [self.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.rightAlignedButton.userInteractionEnabled = YES;
