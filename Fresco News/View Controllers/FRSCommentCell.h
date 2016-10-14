@@ -8,8 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import "MGSwipeTableCell.h"
+#import "FRSComment.h"
+
+@protocol FRSCommentCellDelegate <NSObject>
+
+-(void)didPressProfilePictureWithUserId:(NSString *)uid;
+
+@end
 
 @interface FRSCommentCell : MGSwipeTableCell
 @property (nonatomic, retain) IBOutlet UIImageView *profilePicture;
 @property (nonatomic, retain) IBOutlet UITextView *commentTextField;
+
+@property (weak, nonatomic) NSObject<FRSCommentCellDelegate> *cellDelegate;
+
+@property (nonatomic, strong) FRSComment *comment;
+
+- (void)configureCell:(FRSComment *)comment delegate:(id<UITextViewDelegate>)delegate;
 @end

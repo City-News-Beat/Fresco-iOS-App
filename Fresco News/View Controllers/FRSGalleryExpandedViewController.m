@@ -26,14 +26,13 @@
 #import "FRSAlertView.h"
 
 #import "MGSwipeTableCell.h"
-
-
+#import "FRSCommentCell.h"
 
 #define TOP_NAV_BAR_HEIGHT 64
 #define GALLERY_BOTTOM_PADDING 16
 #define CELL_HEIGHT 62
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, MGSwipeTableCellDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, MGSwipeTableCellDelegate, FRSCommentCellDelegate>
 
 @property (strong, nonatomic) FRSGallery *gallery;
 
@@ -284,19 +283,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)presentReportGallerySheet {
-    
     NSString *username = @"USERNAME";
     
-    
-    
     UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
     
     UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
 
         NSLog(@"POSTS: %@", self.gallery.posts);
-        
-        
         
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         self.didDisplayBlock = YES;
@@ -340,12 +333,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 
 -(void)presentFlagCommentSheet:(FRSComment *)comment {
-
     UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    
     self.currentCommentUserDictionary = comment.userDictionary;
-    
     
     NSLog(@"userDictionary: %@", comment.userDictionary);
     
@@ -358,8 +348,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     } else {
         username = @"them";
     }
-
-
 
     UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
@@ -410,29 +398,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
-   
- 
-    
+
     [view addAction:report];
 
-    
-    
     if (![comment.userDictionary[@"blocked"] boolValue]) {
         [view addAction:block];
     } else {
         [view addAction:unblock];
     }
-        
 
-    
-    
-    
     [view addAction:cancel];
 
     [self presentViewController:view animated:YES completion:nil];
 }
-
-
 
 -(void)didPressButtonAtIndex:(NSInteger)index {
     
@@ -545,8 +523,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 
 -(BOOL)swipeTableCell:(MGSwipeTableCell *)cell tappedButtonAtIndex:(NSInteger)index direction:(MGSwipeDirection)direction fromExpansion:(BOOL)fromExpansion {
-    
-    
     FRSComment *comment = [self.comments objectAtIndex:[self.commentTableView indexPathForCell:cell].row - showsMoreButton];
 
     if (comment.isDeletable && comment.isReportable) {
@@ -763,7 +739,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (tableView == _articlesTV) {
-        
         return self.orderedArticles.count;
     }
     
@@ -846,52 +821,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             cell.delegate = self;
             if (indexPath.row < self.comments.count+showsMoreButton) {
                 FRSComment *comment = _comments[indexPath.row-showsMoreButton];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (comment.imageURL && ![comment.imageURL isEqual:[NSNull null]] && ![comment.imageURL isEqualToString:@""]) {
-                        NSLog(@"%@", comment.imageURL);
-                        
-                        cell.backgroundColor = [UIColor clearColor];
-                        [cell.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL]];
-                    }
-                    else {
-                        // default
-                        cell.backgroundColor = [UIColor frescoLightTextColor];
-                        cell.profilePicture.image = [UIImage imageNamed:@"user-24"];
-                    }
-                });
-                
-                cell.commentTextField.attributedText = comment.attributedString;
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                [cell.commentTextField frs_resize];
-                cell.commentTextField.delegate = self;
-                
-                if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-                    [cell setSeparatorInset:UIEdgeInsetsZero];
-                }
-                if ([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-                    [cell setPreservesSuperviewLayoutMargins:NO];
-                }
-                if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-                    [cell setLayoutMargins:UIEdgeInsetsZero];
-                }
-                
-                //flag-light, cc:imogen
-                
-                
-                
-                
-                if (comment.isDeletable && !comment.isReportable) {
-                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
-                }else if (comment.isReportable && !comment.isDeletable) {
-                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"radius-small"] backgroundColor:[UIColor frescoBlueColor]]];
-                } else if (comment.isDeletable && comment.isReportable) {
-                    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"radius-small"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
-                }
-                
-                
-                cell.rightSwipeSettings.transition = MGSwipeTransitionDrag;
-                
+                cell.cellDelegate = self;
+                [cell configureCell:comment delegate:self];
                 return cell;
             }
         }
@@ -1135,6 +1066,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 }
 
+#pragma mark - FRSCommentCellDelegate
+
+- (void)didPressProfilePictureWithUserId:(NSString *)userId {
+    FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUserID:userId];
+    [self.navigationController pushViewController:controller animated:TRUE];
+}
 
 #pragma mark - Moderation
 

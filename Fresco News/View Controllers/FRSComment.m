@@ -79,15 +79,4 @@
     [_attributedString endEditing];
 }
 
--(NSInteger)calculateHeightForCell:(FRSCommentCell *)cell {
-    CGRect labelRect = [self.comment
-                        boundingRectWithSize:cell.commentTextField.frame.size
-                        options:NSStringDrawingUsesLineFragmentOrigin
-                        attributes:@{
-                                     NSFontAttributeName : [UIFont systemFontOfSize:15]
-                                     }
-                        context:nil];
-    
-    return labelRect.size.height;
-}
 @end
