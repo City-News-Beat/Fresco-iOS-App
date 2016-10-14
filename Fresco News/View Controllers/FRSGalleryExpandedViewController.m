@@ -60,8 +60,11 @@
 @property (strong, nonatomic) FRSAlertView *userReportAlertView;
 
 @property (strong, nonatomic) FRSAlertView *reportUserAlertView;
+<<<<<<< HEAD
 @property (strong, nonatomic) NSString *reportReasonString;
 
+=======
+>>>>>>> 3.0-phil
 @property (strong, nonatomic) FRSAlertView *errorAlertView;
 
 @property BOOL didDisplayReport;
@@ -419,6 +422,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self presentViewController:view animated:YES completion:nil];
 }
 
+<<<<<<< HEAD
 //-(void)didPressButtonAtIndex:(NSInteger)index {
 //    if (self.didDisplayReport) {
 //        self.didDisplayReport = NO;
@@ -455,6 +459,44 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 //        }
 //    }
 //}
+=======
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    if (self.didDisplayReport) {
+        self.didDisplayReport = NO;
+        self.userReportAlertView = nil;
+        if (index == 1) {
+            
+            //BLOCK ON API, IF SUCCESS PRESENT ALERT
+            
+            NSString *username = @"USERNAME";
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [alert show];
+        }
+    } else if (self.didDisplayBlock) {
+        self.didDisplayBlock = NO;
+        
+        if (index == 0) {
+            [[FRSAPIClient sharedClient] unblockUser:self.currentCommentUserDictionary[@"id"] withCompletion:^(id responseObject, NSError *error) {
+                if (error) {
+                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                    [alert show];
+                }
+            }];
+       }
+    }
+    else if (self.errorAlertView) {
+        if (index == 0) {
+            [self sendComment];
+        }
+        else if (index == 1) {
+            [commentField resignFirstResponder];
+            [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
+            [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+        }
+    }
+}
+>>>>>>> 3.0-phil
 
 -(void)reportUserAlertAction {
     
@@ -841,6 +883,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             cell.delegate = self;
             if (indexPath.row < self.comments.count+showsMoreButton) {
                 FRSComment *comment = _comments[indexPath.row-showsMoreButton];
+<<<<<<< HEAD
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (comment.imageURL && ![comment.imageURL isEqual:[NSNull null]] && ![comment.imageURL isEqualToString:@""]) {
@@ -881,6 +924,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 
                 cell.rightSwipeSettings.transition = MGSwipeTransitionDrag;
                 
+=======
+>>>>>>> 3.0-phil
                 cell.cellDelegate = self;
                 [cell configureCell:comment delegate:self];
                 return cell;
@@ -1190,6 +1235,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
+<<<<<<< HEAD
+=======
+#pragma mark - FRSCommentCellDelegate
+
+>>>>>>> 3.0-phil
 - (void)didPressProfilePictureWithUserId:(NSString *)userId {
     FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUserID:userId];
     [self.navigationController pushViewController:controller animated:TRUE];
@@ -1223,6 +1273,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
+<<<<<<< HEAD
 -(void)reportUser:(NSString *)userID {
     [[FRSAPIClient sharedClient] reportUser:userID params:@{@"reason" : self.reportReasonString, @"message" : @"wow cool"} completion:^(id responseObject, NSError *error) {
         
@@ -1248,4 +1299,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
+=======
+>>>>>>> 3.0-phil
 @end
