@@ -422,7 +422,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self presentViewController:view animated:YES completion:nil];
 }
 
-<<<<<<< HEAD
 //-(void)didPressButtonAtIndex:(NSInteger)index {
 //    if (self.didDisplayReport) {
 //        self.didDisplayReport = NO;
@@ -459,7 +458,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 //        }
 //    }
 //}
-=======
 -(void)didPressButtonAtIndex:(NSInteger)index {
     if (self.didDisplayReport) {
         self.didDisplayReport = NO;
@@ -496,7 +494,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
     }
 }
->>>>>>> 3.0-phil
 
 -(void)reportUserAlertAction {
     
