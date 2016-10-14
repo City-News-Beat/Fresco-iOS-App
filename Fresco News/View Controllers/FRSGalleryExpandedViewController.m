@@ -430,9 +430,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.didDisplayBlock = NO;
         
         if (index == 0) {
-
             [[FRSAPIClient sharedClient] unblockUser:self.currentCommentUserDictionary[@"id"] withCompletion:^(id responseObject, NSError *error) {
-                
                 if (error) {
                     FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
                     [alert show];
@@ -530,7 +528,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [self deleteAtIndexPath:[self.commentTableView indexPathForCell:cell]];
         } else if (index == 1) {
             [self presentFlagCommentSheet:comment];
-            
         }
     
     } else if (comment.isDeletable && !comment.isReportable) {
@@ -549,7 +546,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     return YES;
 }
-
 
 -(void)deleteAtIndexPath:(NSIndexPath *)indexPath {
     FRSComment *comment = self.comments[indexPath.row - showsMoreButton];
@@ -982,9 +978,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     
     [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        [commentField resignFirstResponder];
         [UIView animateWithDuration:.15 animations:^{
-            commentField.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height, self.view.frame.size.width, 44);
+            [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
+            [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+            [commentField resignFirstResponder];
             [self reload];
             self.commentTableView.hidden = NO;
         } completion:^(BOOL finished) {
@@ -996,13 +993,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)changeUp:(NSNotification *)change {
-    
     [UIView animateWithDuration:.2 animations:^{
         NSDictionary *info = [change userInfo];
         
         CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-        CGFloat originY = self.view.frame.size.height - keyboardSize.height - commentField.frame.size.height;
+        CGFloat originY = self.view.frame.size.height - commentField.frame.size.height;
         [commentField setFrame:CGRectMake(0, originY , commentField.frame.size.width, commentField.frame.size.height)];
+        [self.view setFrame:CGRectMake(0, self.view.frame.origin.y - keyboardSize.height, self.view.frame.size.width, self.view.frame.size.height)];
     }];
 }
 
@@ -1055,6 +1052,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (commentField.isEditing) {
         [commentField resignFirstResponder];
         [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
+        [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
     }
 }
 #pragma mark - FRSAlertViewDelegate
