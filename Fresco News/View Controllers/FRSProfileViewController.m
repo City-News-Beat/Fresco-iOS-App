@@ -1567,6 +1567,8 @@
         //debug
         
         
+        
+        
         if (_authenticatedProfile) {
             [self resizeProfileContainer];
         } else {
@@ -1690,14 +1692,10 @@
     }];
 }
 
-
-
-
 -(void)blockuserAction {
     [self blockUser:_representedUser];
 
 }
-
 
 -(void)unblockUserAction {
     [self unblockUser:_representedUser];
