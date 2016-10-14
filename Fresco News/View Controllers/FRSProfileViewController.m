@@ -85,6 +85,8 @@
 @property BOOL didDisplayBlock;
 
 @property (strong, nonatomic) UIView *blockedContainer;
+@property (strong, nonatomic) UIView *suspendedContainer;
+@property (strong, nonatomic) UIView *disabledContainer;
 
 @end
 
@@ -151,19 +153,16 @@
 //    [alert show];
     
     
-    
     /* BLOCK SUCCESS ALERT */
     
 //    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
 //    [alert show];
     
-
     
     /* SUSPENDED ALERT */
 
 //    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message: [NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
 //    [alert show];
-    
     
 
     [self setupUI];
@@ -497,6 +496,10 @@
 
 -(void)configureSuspendedUser {
     
+    if (self.suspendedContainer) {
+        return;
+    }
+    
     self.tableView.scrollEnabled = NO;
 
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 220-64)];
@@ -514,6 +517,15 @@
     self.profileIV.layer.cornerRadius = self.profileIV.frame.size.width/2;
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
+    
+    if(_representedUser.profileImage != [NSNull null]){
+        self.profileImageURL = [NSURL URLWithString:_representedUser.profileImage];
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:_representedUser.profileImage]];
+        
+        if (self.profileImageURL == nil) {
+            self.placeholderUserIcon.alpha = 1;
+        }
+    }
     
     self.placeholderUserIcon = [[UIImageView alloc] initWithFrame:CGRectMake(self.profileIV.frame.size.width/2 - 40/2, self.profileIV.frame.size.height/2 -40/2, 40, 40)];
     self.placeholderUserIcon.image = [UIImage imageNamed:@"user-40"];
@@ -542,50 +554,57 @@
 
     [container addSubview:self.followersButton];
     
-    UIView *suspendedContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height+container.frame.size.height)/2 -125, 207, 125)];
-    [self.view addSubview:suspendedContainer];
+    self.suspendedContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height-self.profileContainer.frame.size.height)/2 +125/2, 207, 125)];
+    [self.view addSubview:self.suspendedContainer];
     
     UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"suspended"]];
-    frog.frame = CGRectMake(suspendedContainer.frame.size.width/2 -56/2, 0, 56, 56);
-    [suspendedContainer addSubview:frog];
+    frog.frame = CGRectMake(self.suspendedContainer.frame.size.width/2 -56/2, 0, 56, 56);
+    [self.suspendedContainer addSubview:frog];
     
-    UILabel *awkwardLabel = [[UILabel alloc] initWithFrame:CGRectMake(suspendedContainer.frame.size.width/2 -165/2, 72, 165, 33)];
+    UILabel *awkwardLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.suspendedContainer.frame.size.width/2 -165/2, 72, 165, 33)];
     awkwardLabel.text = @"Suspended 🙅";
     awkwardLabel.font = [UIFont karminaBoldWithSize:28];
     awkwardLabel.textColor = [UIColor frescoDarkTextColor];
-    [suspendedContainer addSubview:awkwardLabel];
+    [self.suspendedContainer addSubview:awkwardLabel];
     
-    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(suspendedContainer.frame.size.width/2 - 288/2, 106, 288, 20)];
+    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.suspendedContainer.frame.size.width/2 - 288/2, 106, 288, 20)];
     bodyLabel.text = @"This user is in time-out for a while.";
     bodyLabel.textAlignment = NSTextAlignmentCenter;
     bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     bodyLabel.textColor = [UIColor frescoMediumTextColor];
-    [suspendedContainer addSubview:bodyLabel];
+    [self.suspendedContainer addSubview:bodyLabel];
     
+    
+    self.navigationItem.rightBarButtonItems = nil;
+    self.sectionView.alpha = 0;
 }
 
 -(void)configureDisabledUser {
     
+    if (self.disabledContainer) {
+        return;
+    }
+    
     self.tableView.scrollEnabled = NO;
     
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, self.view.frame.size.height/2 -125/2 -64, 207, 125)];
-    [self.view addSubview:container];
+    self.disabledContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height-self.profileContainer.frame.size.height)/2 +125/2, 207, 125)];
+    [self.view addSubview:self.disabledContainer];
 
     UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"frog"]];
-    frog.frame = CGRectMake(container.frame.size.width/2 -72/2, 0, 72, 72);
-    [container addSubview:frog];
+    frog.frame = CGRectMake(self.disabledContainer.frame.size.width/2 -72/2, 0, 72, 72);
+    [self.disabledContainer addSubview:frog];
     
-    UILabel *awkwardLabel = [[UILabel alloc] initWithFrame:CGRectMake(container.frame.size.width/2 -121/2, 72, 121, 33)];
+    UILabel *awkwardLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.disabledContainer.frame.size.width/2 -121/2, 72, 121, 33)];
     awkwardLabel.text = @"Awkward.";
     awkwardLabel.font = [UIFont karminaBoldWithSize:28];
     awkwardLabel.textColor = [UIColor frescoDarkTextColor];
-    [container addSubview:awkwardLabel];
+    [self.disabledContainer addSubview:awkwardLabel];
     
-    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(container.frame.size.width/2 - 207/2, 106, 207, 20)];
+    UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.disabledContainer.frame.size.width/2 - 207/2, 106, 207, 20)];
     bodyLabel.text = @"This user’s profile is disabled.";
     bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     bodyLabel.textColor = [UIColor frescoMediumTextColor];
-    [container addSubview:bodyLabel];
+    [self.disabledContainer addSubview:bodyLabel];
     
 }
 
@@ -625,13 +644,13 @@
             [self configureBlockedUserWithButton:YES];
             return;
         }
-//        else if (self.userIsSuspended) {
-//            [self configureSuspendedUser];
-//            return;
-//        } else if (self.userIsDisabled) {
-//            [self configureDisabledUser];
-//            return;
-//        }
+        else if (self.userIsSuspended) {
+            [self configureSuspendedUser];
+            return;
+        } else if (self.userIsDisabled) {
+            [self configureDisabledUser];
+            return;
+        }
         
         
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
@@ -1068,6 +1087,7 @@
 }
 
 -(void)configureSectionView{
+    
     self.sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.profileContainer.frame.size.height, self.view.frame.size.width, 44)];
     self.sectionView.backgroundColor = [UIColor frescoOrangeColor];
     
@@ -1524,26 +1544,19 @@
             }
         }
         
-        //self.locationLabel.text = user.
-//        [self.bioLabel setNumberOfLines:0];
-//        self.bioLabel.lineBreakMode = NSLineBreakByWordWrapping;
-//        self.bioLabel.baselineAdjustment = UIBaselineAdjustmentAlignBaselines;
-//
-//        self.bioLabel.text = user.bio;
-//        NSLog(@"USER'S BIO: %@", user.bio);
-//        
-//        [self.bioLabel sizeToFit];
-        
-        
         self.bioTextView.text = user.bio;
         
         [self.bioTextView frs_setTextWithResize:user.bio];
-
         
-//        self.userIsBlocked = user.blocking;
+        self.userIsBlocked = user.blocking;
+        self.userIsSuspended = user.suspended;
+        self.userIsDisabled = user.disabled;
         
         
-        //[self.profileContainer setFrame:CGRectMake(self.profileContainer.frame.origin.x, self.profileContainer.frame.origin.y, self.profileContainer.frame.size.width,269.5 + self.bioLabel.frame.size.height)];
+        //debug
+        //self.userIsSuspended = YES;
+        self.userIsDisabled = YES;
+        //debug
         
         
         if (_authenticatedProfile) {
@@ -1554,19 +1567,10 @@
             } completion:nil];
         }
 
-        //[self.bioLabel setFrame:CGRectMake(self.bioLabel.frame.origin.x, self.bioLabel.frame.origin.y, self.bioLabel.frame.size.width, lineHeight * self.bioLabel.numberOfLines)];
         
         self.nameLabel.text = user.firstName;
-        
-        NSLog(@"FOLLOWERS: %@",[user valueForKey:@"followedCount"]);
-        
         [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followedCount"]] forState:UIControlStateNormal];
-        
-        NSLog(@"%@", user);
         self.locationLabel.text = [user valueForKey:@"location"];
-        //self.bioLabel.text = user.bio;
-        //[self.bioLabel sizeToFit];
-        
         self.usernameLabel.text = user.username;
         titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
         
@@ -1579,9 +1583,6 @@
                 titleLabel.text = @"";
             }
         }
-        //  self.locationLabel.text = user.address; //user.address does not exiset yet
-        
-        
     });
 }
 
