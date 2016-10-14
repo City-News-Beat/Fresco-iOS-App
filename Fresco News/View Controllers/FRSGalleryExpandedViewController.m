@@ -232,7 +232,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         height += 55;
         
-        self.commentTableView.frame = CGRectMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height + self.articlesTV.frame.size.height, self.view.frame.size.width, height);
+        self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
         [self adjustScrollViewContentSize];
         [self.commentTableView reloadData];
         self.commentTableView.hidden = self.comments.count == 0;
@@ -240,10 +240,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)commentError:(NSError *)error {
-    
 }
-
-
 
 -(void)popViewController {
     [super popViewController];
@@ -998,15 +995,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self adjustScrollViewContentSize];
 }
 
-
 #pragma mark - Action Bar Delegate and Methods
 
--(NSString *)titleForActionButton{
+-(NSString *)titleForActionButton {
     CGRect visibleRect;
     visibleRect.origin = self.scrollView.contentOffset;
     visibleRect.size = self.scrollView.bounds.size;
-    
-    NSLog(@"Y : %f", visibleRect.origin.y + visibleRect.size.height - self.actionBar.frame.size.height);
     
     NSInteger offset = visibleRect.origin.y + visibleRect.size.height + TOP_NAV_BAR_HEIGHT - GALLERY_BOTTOM_PADDING - self.actionBar.frame.size.height;
     
@@ -1018,7 +1012,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     return @"ADD A COMMENT";
 }
 
--(UIColor *)colorForActionButton{
+-(UIColor *)colorForActionButton {
     return [UIColor frescoBlueColor];
 }
 
@@ -1057,14 +1051,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     
     [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            [commentField resignFirstResponder];
-            [self reload];
-            [UIView animateWithDuration:.15 animations:^{
+        [commentField resignFirstResponder];
+        [UIView animateWithDuration:.15 animations:^{
             commentField.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height, self.view.frame.size.width, 44);
-            self.commentTableView.hidden = self.comments.count == 0;
+            [self reload];
+            self.commentTableView.hidden = NO;
         } completion:^(BOOL finished) {
             commentField.text = @"";
         }];
+        
     }];
 
 }
