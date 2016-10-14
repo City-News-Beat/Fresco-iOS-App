@@ -535,18 +535,19 @@
     self.savingInfo = true;
     [[FRSAPIClient sharedClient] updateIdentityWithDigestion:addressInfo completion:^(id responseObject, NSError *error) {
         NSLog(@"IDENTITY: %@ %@", error, responseObject);
-        if(error){
-            //Failiure popup
-            self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [self.alert show];
-        }
-        else {
-            [self.navigationController popViewControllerAnimated:YES];
-        }
         self.savingInfo = false;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self stopSpinner:self.loadingView onButton:self.saveIDInfoButton];
+            
+            if(error){
+                //Failiure popup
+                self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                [self.alert show];
+            }
+            else {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
         });
     }];
 }
