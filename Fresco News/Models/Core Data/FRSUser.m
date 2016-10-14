@@ -132,23 +132,23 @@
         user.profileImage = properties[@"avatar"];
     }
     
-    
     if (properties[@"blocked"] && ![properties[@"blocked"] isEqual:[NSNull null]]) {
-//        user.blocked = [properties[@"blocked"] boolValue];
-//        NSLog(@"USER.BLOCKED: %d", user.blocked);
-        
-        NSLog(@"PROPERTIES[@BLOCKED]: %@", properties[@"blocked"]);
-        
+        user.blocked = [properties[@"blocked"] boolValue];
     }
     
     if (properties[@"blocking"] && ![properties[@"blocking"] isEqual:[NSNull null]]) {
-//        user.blocking = [properties[@"blocking"] boolValue];
-//        NSLog(@"USER.BLOCKING: %d", user.blocking);
-        
-        NSLog(@"PROPERTIES[@BLOCKING]: %@", properties[@"blocking"]);
-        
+        user.blocking = [properties[@"blocking"] boolValue];
     }
     
+    if (properties[@"suspended_until"] && ![properties[@"suspended_until"] isEqual:[NSNull null]]) {
+        user.suspended = YES;
+    } else {
+        user.suspended = NO;
+    }
+    
+    if (properties[@"disabled"] && ![properties[@"disabled"] isEqual:[NSNull null]]) {
+        user.disabled = [properties[@"disabled"] boolValue];
+    }
 
     return user;
 }

@@ -1835,7 +1835,7 @@
     textView.tintColor = [UIColor frescoBlueColor];
     [self addSubview:textView];
     
-    self.textViewPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 32, 17)];
+    self.textViewPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, 6, self.frame.size.width - 32, 17)];
     self.textViewPlaceholderLabel.text = @"Please share more details";
     self.textViewPlaceholderLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.textViewPlaceholderLabel.textColor = [UIColor frescoLightTextColor];
@@ -1874,6 +1874,8 @@
             self.transform = CGAffineTransformMakeTranslation(0, -150);
         } else if (IS_IPHONE_5) {
             self.transform = CGAffineTransformMakeTranslation(0, -200);
+        } else if (IS_IPHONE_6_PLUS) {
+            self.transform = CGAffineTransformMakeTranslation(0, -100);
         }
     } completion:nil];
 }
@@ -1889,18 +1891,22 @@
 
 -(void)didTapOptionOne {
     [self toggleImageView:self.moderationIVOne];
+    [self.delegate didPressRadioButtonAtIndex:0];
 }
 
 -(void)didTapOptionTwo {
     [self toggleImageView:self.moderationIVTwo];
+    [self.delegate didPressRadioButtonAtIndex:1];
 }
 
 -(void)didTapOptionThree {
     [self toggleImageView:self.moderationIVThree];
+    [self.delegate didPressRadioButtonAtIndex:2];
 }
 
 -(void)didTapOptionFour {
     [self toggleImageView:self.moderationIVFour];
+    [self.delegate didPressRadioButtonAtIndex:3];
 }
 
 
@@ -1923,14 +1929,11 @@
 }
 
 -(void)untoggleRadioButtons {
-    
     self.moderationIVOne.image = [UIImage imageNamed:@"check-box-circle-outline"];
     self.moderationIVTwo.image = [UIImage imageNamed:@"check-box-circle-outline"];
     self.moderationIVThree.image = [UIImage imageNamed:@"check-box-circle-outline"];
     self.moderationIVFour.image = [UIImage imageNamed:@"check-box-circle-outline"];
-
 }
-
 
 -(void)reportGallery {
     [self dismiss];

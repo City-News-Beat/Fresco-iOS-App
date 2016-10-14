@@ -92,10 +92,10 @@
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
-//    [FRSNotificationTester createAllNotifications];
     
 
-    [self startNotificationTimer];
+    //[self startNotificationTimer];
+    
     
     return YES;
 }
@@ -632,6 +632,7 @@
         if (responseObject) {
             FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
             if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
+                
                 [tbc updateBellIcon:YES];
             } else {
                 [tbc updateUserIcon];

@@ -124,6 +124,7 @@
     self.tableView.bounces = YES;
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.tableView];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self configureKenny];
 }
 
@@ -131,7 +132,7 @@
 #pragma mark - UITableViewDelegate
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 10;
+    return 9;
 }
 
 
