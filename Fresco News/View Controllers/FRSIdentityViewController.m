@@ -229,72 +229,192 @@
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)configureAddressCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
     
+    switch (indexPath.row) {
+        case 0:
+            [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            _addressField = cell.textField;
+            
+            if ([authenticatedUser valueForKey:@"address_line1"]) {
+                _addressField.text = [authenticatedUser valueForKey:@"address_line1"];
+                _addressField.enabled = FALSE;
+                _addressField.textColor = [UIColor frescoLightTextColor];
+            }
+            
+            _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+            [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            break;
+            
+        case 1:
+            [cell configureEditableCellWithDefaultText:@"Unit # (optional)" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            _unitField = cell.textField;
+            [_unitField setKeyboardType:UIKeyboardTypeNumberPad];
+            [_unitField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            break;
+            
+        case 2:
+            [cell configureEditableCellWithDefaultTextWithMultipleFields:@[@"City", @"State", @"ZIP"] withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            _cityField = cell.textField;
+            _cityField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+            _stateField = cell.secondaryField;
+            _cityField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+            _zipField = cell.tertiaryField;
+            
+            if ([authenticatedUser valueForKey:@"address_city"]) {
+                _cityField.text = [authenticatedUser valueForKey:@"address_city"];
+                _cityField.enabled = FALSE;
+                _cityField.textColor = [UIColor frescoLightTextColor];
+                
+                
+            }
+            
+            if ([authenticatedUser valueForKey:@"address_state"]) {
+                _stateField.text = [authenticatedUser valueForKey:@"address_state"];
+                _stateField.enabled = FALSE;
+                _stateField.textColor = [UIColor frescoLightTextColor];
+                
+            }
+            
+            if ([authenticatedUser valueForKey:@"address_zip"]) {
+                _zipField.text = [authenticatedUser valueForKey:@"address_zip"];
+                _zipField.enabled = FALSE;
+                _zipField.textColor = [UIColor frescoLightTextColor];
+                
+            }
+            
+            [_zipField setKeyboardType:UIKeyboardTypeNumberPad];
+            [_cityField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            [_stateField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            [_zipField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            break;
+        case 4:
+            [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.saveIDInfoButton = cell.rightAlignedButton;
+            [self.saveIDInfoButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
+            break;
+            
+        case 3:
+            [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.saveIDInfoButton = cell.rightAlignedButton;
+            [self.saveIDInfoButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
+            break;
+            
+            
+        default:
+            break;
+    }
+}
+
+-(void)configureNameCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
+    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+
+    switch (indexPath.row) {
+            
+        case 0:
+            //Make custom editible cell
+            [cell configureEditableCellWithDefaultText:@"First name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            _firstNameField = cell.textField;
+            [_firstNameField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            
+            if ([authenticatedUser valueForKey:@"stripeFirst"]) {
+                _firstNameField.text = [authenticatedUser valueForKey:@"stripeFirst"];
+                _firstNameField.enabled = FALSE;
+                _firstNameField.textColor = [UIColor frescoLightTextColor];
+            }
+            
+            break;
+            
+        case 1:
+            [cell configureEditableCellWithDefaultText:@"Last name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            _lastNameField = cell.textField;
+            _lastNameField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+            [_lastNameField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            
+            if ([authenticatedUser valueForKey:@"stripeLast"]) {
+                _lastNameField.text = [authenticatedUser valueForKey:@"stripeLast"];
+                _lastNameField.enabled = FALSE;
+                _lastNameField.textColor = [UIColor frescoLightTextColor];
+            }
+            
+            break;
+        case 3:
+            [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.saveIDInfoButton = cell.rightAlignedButton;
+            [self.saveIDInfoButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
+            break;
+        case 2:
+            [cell configureEditableCellWithDefaultText:@"Date of birth" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeNumberPad];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            _dateField = cell.textField;
+            _dateField.secureTextEntry = FALSE;
+            
+            UIDatePicker *picker1   = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 210, 320, 216)];
+            [picker1 setDatePickerMode:UIDatePickerModeDate];
+            picker1.backgroundColor = [UIColor whiteColor];
+            [picker1 addTarget:self action:@selector(startDateSelected:) forControlEvents:UIControlEventValueChanged];
+            
+            if ([[authenticatedUser valueForKey:@"dob_day"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_month"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_year"] intValue] != 0) {
+                int day = [[authenticatedUser valueForKey:@"dob_day"] intValue];
+                int month = [[authenticatedUser valueForKey:@"dob_month"] intValue];
+                int year = [[authenticatedUser valueForKey:@"dob_year"] intValue];
+                
+                NSString *birthday = [NSString stringWithFormat:@"%d/%d/%d", day, month, year];
+                _dateField.enabled = FALSE;
+                _dateField.text = birthday;
+                _dateField.textColor = [UIColor frescoLightTextColor];
+            }
+            
+            _dateField.inputView = picker1;
+            [_dateField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            break;
+    }
+
+}
+
+-(void)configureSSNCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
+    switch (indexPath.row) {
+        case 0:
+            [cell configureEditableCellWithDefaultText:@"Social Security number" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypePhonePad];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            //                    _addressField = cell.textField;
+            //                    _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+            //                    [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            break;
+        case 1:
+            [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.saveIDInfoButton = cell.rightAlignedButton;
+            [self.saveIDInfoButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
+            break;
+        default:
+            break;
+    }
+
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.section) {
         case 0:
-            
-            switch (indexPath.row) {
-                    
-                case 0:
-                    //Make custom editible cell
-                    [cell configureEditableCellWithDefaultText:@"First name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    _firstNameField = cell.textField;
-                    [_firstNameField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-                    
-                    if ([authenticatedUser valueForKey:@"stripeFirst"]) {
-                        _firstNameField.text = [authenticatedUser valueForKey:@"stripeFirst"];
-                        _firstNameField.enabled = FALSE;
-                        _firstNameField.textColor = [UIColor frescoLightTextColor];
-
-                    }
-
-                    break;
-                    
-                case 1:
-                    [cell configureEditableCellWithDefaultText:@"Last name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    _lastNameField = cell.textField;
-                    _lastNameField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-                    [_lastNameField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-                    
-                    if ([authenticatedUser valueForKey:@"stripeLast"]) {
-                        _lastNameField.text = [authenticatedUser valueForKey:@"stripeLast"];
-                        _lastNameField.enabled = FALSE;
-                        _lastNameField.textColor = [UIColor frescoLightTextColor];
-                    }
-                    
-                    break;
-                    
-                case 2:
-                    [cell configureEditableCellWithDefaultText:@"Date of birth" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeNumberPad];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    _dateField = cell.textField;
-                    _dateField.secureTextEntry = FALSE;
-                    
-                    UIDatePicker *picker1   = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 210, 320, 216)];
-                    [picker1 setDatePickerMode:UIDatePickerModeDate];
-                    picker1.backgroundColor = [UIColor whiteColor];
-                    [picker1 addTarget:self action:@selector(startDateSelected:) forControlEvents:UIControlEventValueChanged];
-                    
-                    if ([[authenticatedUser valueForKey:@"dob_day"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_month"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_year"] intValue] != 0) {
-                        int day = [[authenticatedUser valueForKey:@"dob_day"] intValue];
-                        int month = [[authenticatedUser valueForKey:@"dob_month"] intValue];
-                        int year = [[authenticatedUser valueForKey:@"dob_year"] intValue];
-                        
-                        NSString *birthday = [NSString stringWithFormat:@"%d/%d/%d", day, month, year];
-                        _dateField.enabled = FALSE;
-                        _dateField.text = birthday;
-                        _dateField.textColor = [UIColor frescoLightTextColor];
-                    }
-                    
-                    _dateField.inputView = picker1;
-                    [_dateField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-                    break;
+            if (showsNameArea) {
+                [self configureNameCell:cell forIndexPath:indexPath];
             }
-            break;
+            else if (showsAddressArea)  {
+                [self configureAddressCell:cell forIndexPath:indexPath];
+            }
+            else if (showsSocialSecurityArea) {
+                [self configureSSNCell:cell forIndexPath:indexPath];
+            }
+        break;
             
         case 1:
             
@@ -302,100 +422,19 @@
             break;
             
         case 2:
-            switch (indexPath.row) {
-                case 0:
-                    [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    _addressField = cell.textField;
-                    
-                    if ([authenticatedUser valueForKey:@"address_line1"]) {
-                        _addressField.text = [authenticatedUser valueForKey:@"address_line1"];
-                        _addressField.enabled = FALSE;
-                        _addressField.textColor = [UIColor frescoLightTextColor];
-                    }
-                    
-                    _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-                    [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-                    break;
-                    
-                case 1:
-                    [cell configureEditableCellWithDefaultText:@"Unit # (optional)" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    _unitField = cell.textField;
-                    [_unitField setKeyboardType:UIKeyboardTypeNumberPad];
-                    [_unitField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-                    break;
-                    
-                case 2:
-                    [cell configureEditableCellWithDefaultTextWithMultipleFields:@[@"City", @"State", @"ZIP"] withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    _cityField = cell.textField;
-                    _cityField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-                    _stateField = cell.secondaryField;
-                    _cityField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-                    _zipField = cell.tertiaryField;
-                    
-                    if ([authenticatedUser valueForKey:@"address_city"]) {
-                        _cityField.text = [authenticatedUser valueForKey:@"address_city"];
-                        _cityField.enabled = FALSE;
-                        _cityField.textColor = [UIColor frescoLightTextColor];
-
-                        
-                    }
-                    
-                    if ([authenticatedUser valueForKey:@"address_state"]) {
-                        _stateField.text = [authenticatedUser valueForKey:@"address_state"];
-                        _stateField.enabled = FALSE;
-                        _stateField.textColor = [UIColor frescoLightTextColor];
-
-                    }
-                    
-                    if ([authenticatedUser valueForKey:@"address_zip"]) {
-                        _zipField.text = [authenticatedUser valueForKey:@"address_zip"];
-                        _zipField.enabled = FALSE;
-                        _zipField.textColor = [UIColor frescoLightTextColor];
-
-                    }
-                    
-                    [_zipField setKeyboardType:UIKeyboardTypeNumberPad];
-                    [_cityField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-                    [_stateField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-                    [_zipField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-                    break;
-                    
-                case 3:
-                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    self.saveIDInfoButton = cell.rightAlignedButton;
-                    [self.saveIDInfoButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
-                    break;
-                    
-                    
-                default:
-                    break;
+            if (showsAddressArea)  {
+                [self configureAddressCell:cell forIndexPath:indexPath];
             }
-            break;
+            else if (showsSocialSecurityArea) {
+                [self configureSSNCell:cell forIndexPath:indexPath];
+            }
+
+        break;
         case 3:
             [cell configureEmptyCellSpace:NO];
             break;
         case 4:
-            switch (indexPath.row) {
-                case 0:
-                    [cell configureEditableCellWithDefaultText:@"Social Security number" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypePhonePad];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//                    _addressField = cell.textField;
-//                    _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-//                    [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-                    break;
-                case 1:
-                    [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                    self.saveIDInfoButton = cell.rightAlignedButton;
-                    [self.saveIDInfoButton addTarget:self action:@selector(saveIDInfo) forControlEvents:UIControlEventTouchUpInside];
-                    break;
-                default:
-                    break;
-            }
+            [self configureSSNCell:cell forIndexPath:indexPath];
             break;
 
         default:
