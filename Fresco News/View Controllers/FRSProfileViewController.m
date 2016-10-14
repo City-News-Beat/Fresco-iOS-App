@@ -88,6 +88,8 @@
 @property (strong, nonatomic) UIView *suspendedContainer;
 @property (strong, nonatomic) UIView *disabledContainer;
 
+@property (strong, nonatomic) NSString *reportUserReasonString;
+
 @end
 
 @implementation FRSProfileViewController
@@ -1595,6 +1597,24 @@
 
 #pragma mark - Moderation
 
+-(void)didPressRadioButtonAtIndex:(NSInteger)index {
+    if (self.reportUserAlertView) {
+        switch (index) {
+            case 0:
+                self.reportUserReasonString = @"abuse";
+                break;
+            case 1:
+                self.reportUserReasonString = @"spam";
+                break;
+            case 2:
+                self.reportUserReasonString = @"stolen";
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 -(void)blockUser:(FRSUser *)user {
     [[FRSAPIClient sharedClient] blockUser:user.uid withCompletion:^(id responseObject, NSError *error) {
         
@@ -1684,6 +1704,30 @@
     
 }
 
+-(void)reportUser:(NSString *)userID {
+    [[FRSAPIClient sharedClient] reportUser:userID params:@{@"reason" : self.reportUserReasonString, @"message" : @"wow cool"} completion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+            [alert show];
+            return;
+        }
+        
+        if (responseObject) {
+            
+            NSString *username = @"";
+            if (![_representedUser.username isEqual:[NSNull null]] && (![_representedUser.username isEqualToString:@"<null>"])) {
+                username = [NSString stringWithFormat:@"@%@", _representedUser.username];
+            } else if (![_representedUser.firstName isEqual: [NSNull null]] && (![_representedUser.firstName isEqualToString:@"<null>"])) {
+                username = _representedUser.firstName;
+            } else {
+                username = @"them";
+            }
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [alert show];
+        }
+    }];
+}
 
 
 
