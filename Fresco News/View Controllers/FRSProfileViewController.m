@@ -207,19 +207,8 @@
     }
     
     
-    [[FRSAPIClient sharedClient] reportUser:_representedUser.uid params:@{@"reason" : @"spam", @"message" : @"hello friend"} completion:^(id responseObject, NSError *error) {
-        
-        if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
-            return;
-        }
-        
-        if (responseObject) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-            [alert show];
-        }
-    }];
+    [self reportUser:_representedUser.uid];
+
 }
 
 -(void)presentSheet {
@@ -1572,7 +1561,6 @@
         self.userIsSuspended = user.suspended;
         self.userIsDisabled  = user.disabled;
         
-        
         if (_authenticatedProfile) {
             [self resizeProfileContainer];
         } else {
@@ -1581,7 +1569,6 @@
             } completion:nil];
         }
 
-        
         self.nameLabel.text = user.firstName;
         [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followedCount"]] forState:UIControlStateNormal];
         self.locationLabel.text = [user valueForKey:@"location"];
@@ -1604,20 +1591,21 @@
 #pragma mark - Moderation
 
 -(void)didPressRadioButtonAtIndex:(NSInteger)index {
-    if (self.reportUserAlertView) {
-        switch (index) {
-            case 0:
-                self.reportUserReasonString = @"abuse";
-                break;
-            case 1:
-                self.reportUserReasonString = @"spam";
-                break;
-            case 2:
-                self.reportUserReasonString = @"stolen";
-                break;
-            default:
-                break;
-        }
+    switch (index) {
+        case 0:
+            self.reportUserReasonString = @"abuse";
+            break;
+        case 1:
+            self.reportUserReasonString = @"spam";
+            break;
+        case 2:
+            self.reportUserReasonString = @"stolen";
+            break;
+        case 3:
+            self.reportUserReasonString = @"graphic";
+            break;
+        default:
+            break;
     }
 }
 
@@ -1707,7 +1695,9 @@
 }
 
 -(void)reportUser:(NSString *)userID {
-    [[FRSAPIClient sharedClient] reportUser:userID params:@{@"reason" : self.reportUserReasonString, @"message" : @"wow cool"} completion:^(id responseObject, NSError *error) {
+    
+    
+    [[FRSAPIClient sharedClient] reportUser:userID params:@{@"reason" : self.reportUserReasonString, @"message" : self.reportUserAlertView.textView.text} completion:^(id responseObject, NSError *error) {
         
         if (error) {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
