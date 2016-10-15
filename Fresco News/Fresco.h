@@ -23,7 +23,7 @@
 
 // mixpanel
 //static NSString * const mixPanelToken = @"4a01dc9d6ffde669d683102db23c8bcd";
-static NSString * const mixPanelToken = @"3db3c5a14458646497514603ea8d8b10";
+static NSString * const mixPanelToken = @"5201079ebeb0955e2a4f7c547520016d";
 
 // image CDN sizing
 static NSString * const thumbImageSize = @"150x";
@@ -258,8 +258,8 @@ static NSString * const followedNotification = @"user-social-followed";
 static NSString * const likedNotification = @"user-social-liked";
 static NSString * const repostedNotification = @"user-social-reposted";
 static NSString * const commentedNotification = @"user-social-commented";
-static NSString * const mentionCommentNotification = @""; //cc: api
-static NSString * const mentionGalleryNotification = @""; //cc: api
+static NSString * const mentionCommentNotification = @"user-social-mentioned-comment"; //cc: api
+static NSString * const mentionGalleryNotification = @"user-social-mentioned-gallery"; //cc: api
 
 // Payment
 static NSString * const purchasedContentNotification = @"user-dispatch-purchased";
