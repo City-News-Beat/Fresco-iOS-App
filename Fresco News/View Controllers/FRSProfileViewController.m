@@ -484,6 +484,8 @@
     bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     bodyLabel.textColor = [UIColor frescoMediumTextColor];
     [self.blockedContainer addSubview:bodyLabel];
+
+    self.navigationItem.rightBarButtonItems = nil;
     
     if (button) {
         UIButton *unblockButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -673,10 +675,12 @@
             self.currentFeed = self.galleries;
             [self.tableView reloadData];
             
+            
             if (self.galleries.count <= 0) {
-                [self displayAwkwardView:true feedTable:true];
+                [self configureFrogForFeed:self.tableView];
+                self.feedAwkwardView.alpha = 1;
             } else {
-                [self displayAwkwardView:false feedTable:true];
+                self.feedAwkwardView.alpha = 0;
             }
         }
     }];
@@ -700,25 +704,13 @@
             [self.tableView reloadData];
         
             if (self.likes.count <= 0) {
-                [self displayAwkwardView:true feedTable:false];
+                [self configureFrogForFeed:self.tableView];
+                self.feedAwkwardView.alpha = 1;
             } else {
-                [self displayAwkwardView:false feedTable:false];
+                self.feedAwkwardView.alpha = 0;
             }
         }
     }];
-}
-
--(void)displayAwkwardView: (BOOL)show feedTable:(BOOL)feed{
-    
-    if (isLoadingUser) {
-        return;
-    }
-    
-    if(feed){
-        self.feedAwkwardView.hidden = !show;
-    }else{
-        self.likesAwkwardView.hidden = !show;
-    }
 }
 
 #pragma mark - UI Elements
@@ -729,17 +721,18 @@
     //    [self configureTableView];
     [self configurePullToRefresh];
     [self configureProfileSocialOverlay];
-    //[self configureFrogs]; broken (wip)
 }
 
--(void)configureFrogs {
+-(void)configureFrogForFeed:(UITableView *)feed {
     
-    NSInteger navigationBarHeight = 64;
+    if (self.feedAwkwardView) {
+        return;
+    }
+    
     NSInteger profileContainerTabBarHeight = 44;
  
-    self.feedAwkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, self.profileContainer.frame.size.height + profileContainerTabBarHeight + navigationBarHeight, self.view.frame.size.width, self.view.frame.size.height)];
-    [self.tableView addSubview:self.feedAwkwardView];
-    
+    self.feedAwkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, ((self.profileContainer.frame.size.height + profileContainerTabBarHeight) + (self.view.frame.size.height))/2, self.view.frame.size.width, self.view.frame.size.height)];
+    [feed addSubview:self.feedAwkwardView];
 }
 
 -(void)configurePullToRefresh {
@@ -1127,6 +1120,12 @@
     self.feedButton.alpha = 1.0;
     self.likesButton.alpha = 0.7;
     
+    if (self.galleries.count == 0 || (!self.galleries)) {
+        [self configureFrogForFeed:self.tableView];
+        self.feedAwkwardView.alpha = 1;
+    } else {
+        self.feedAwkwardView.alpha = 0;
+    }
     
     if (self.currentFeed != self.galleries) {
         self.currentFeed = self.galleries;
@@ -1140,6 +1139,13 @@
     
     self.likesButton.alpha = 1.0;
     self.feedButton.alpha = 0.7;
+    
+    if (self.likes.count == 0 || (!self.likes)) {
+        [self configureFrogForFeed:self.tableView];
+        self.feedAwkwardView.alpha = 1;
+    } else {
+        self.feedAwkwardView.alpha = 0;
+    }
     
     if (self.currentFeed != self.likes) {
         self.currentFeed = self.likes;
