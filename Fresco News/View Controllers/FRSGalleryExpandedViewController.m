@@ -1171,7 +1171,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 
 -(void)didPressRadioButtonAtIndex:(NSInteger)index {
-    NSLog(@"index: %ld", index);
     
     if (self.reportUserAlertView) {
         switch (index) {

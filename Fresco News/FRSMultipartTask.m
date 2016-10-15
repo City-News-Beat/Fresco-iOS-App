@@ -67,6 +67,10 @@
         NSLog(@"ERROR: ALREADY EXHAUSTED DATA");
     }
     
+    if (!dataInputStream) {
+        dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
+    }
+    
     hasRan = TRUE;
     
     [dataInputStream open];
@@ -110,6 +114,7 @@
             [self startChunkUpload];
             needsData = FALSE;
             [dataInputStream close];
+            dataInputStream = Nil;
             NSLog(@"LAST CHUNK");
         }
 
@@ -174,6 +179,7 @@
             
             if (openConnections == 0 && needsData == FALSE) {
                 NSLog(@"UPLOAD COMPLETE");
+                dataInputStream = Nil;
                 
                 for (int i = 0; i < self.destinationURLS.count; i++) {
                     NSString *eTag = tags[@(i)];
