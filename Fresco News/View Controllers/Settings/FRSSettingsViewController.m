@@ -262,7 +262,13 @@
         case 0:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSAPIClient sharedClient] authenticatedUser].username]];
+                    
+                    if ([[FRSAPIClient sharedClient] authenticatedUser].username && ![[[FRSAPIClient sharedClient] authenticatedUser].username isEqual:[NSNull null]]) {
+                        [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSAPIClient sharedClient] authenticatedUser].username]];
+                    }
+                    else {
+                        [cell configureCellWithUsername:@"Username"];
+                    }
                     break;
                 case 1:
                     [cell configureDefaultCellWithTitle:[[FRSAPIClient sharedClient] authenticatedUser].email andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];

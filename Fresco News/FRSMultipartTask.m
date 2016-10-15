@@ -127,6 +127,7 @@
     openConnections++;
     totalConnections++;
     int connect = (int)totalConnections;
+    
     if (!urlToUploadTo) {
         return; // error
     }
