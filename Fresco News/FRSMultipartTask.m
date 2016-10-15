@@ -15,10 +15,11 @@
     
     // save meta-data & callbacks, prepare to be called upon to start
     self.assetURL = asset;
+    
     self.destinationURLS = destinations;
     self.progressBlock = progress;
     self.completionBlock = completion;
-    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
+    dataInputStream = [[NSInputStream alloc] initWithData:[NSData dataWithContentsOfURL:asset]];
     tags = [[NSMutableDictionary alloc] init];
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
@@ -67,10 +68,6 @@
         NSLog(@"ERROR: ALREADY EXHAUSTED DATA");
     }
     
-    if (!dataInputStream) {
-        dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
-    }
-    
     hasRan = TRUE;
     
     [dataInputStream open];
@@ -108,6 +105,8 @@
                 break;
             }
         }
+        
+        NSLog(@"ERROR: %@", [dataInputStream streamError]);
         
         // last chunk, less than 5mb, streaming process ends here
         if (ranOnce && !triggeredUpload) {
@@ -179,6 +178,11 @@
             
             if (openConnections == 0 && needsData == FALSE) {
                 NSLog(@"UPLOAD COMPLETE");
+                
+                if (dataInputStream) {
+                    [dataInputStream close];
+                }
+                
                 dataInputStream = Nil;
                 
                 for (int i = 0; i < self.destinationURLS.count; i++) {
