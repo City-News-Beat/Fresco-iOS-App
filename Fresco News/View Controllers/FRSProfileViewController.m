@@ -144,7 +144,7 @@
 
     
     /* DEBUG */
-//    self.userIsBlocked   = YES;
+//    self.userIsBlocking   = YES;
 //    self.userIsSuspended = YES;
 //    self.userIsDisabled  = YES;
     
@@ -269,7 +269,7 @@
     }];
 
     
-    if (self.userIsBlocked) {
+    if (self.userIsBlocking) {
         [view addAction:report];
         [view addAction:sunblock];
         [view addAction:cancel];
@@ -418,7 +418,7 @@
 }
 -(void)setupUI {
     
-//    if (self.userIsBlocked) {
+//    if (self.userIsBlocking) {
 //        [self configureBlockedUserWithButton:YES];
 //        return;
 //    } else if (self.userIsSuspended) {
@@ -459,7 +459,7 @@
     }
     self.tableView.scrollEnabled = NO;
     
-    self.userIsBlocked = YES;
+    self.userIsBlocking = YES;
 
 //    self.profileContainer.frame = CGRectMake(0, self.profileContainer.frame.origin.y -64, self.profileContainer.frame.size.width, self.profileContainer.frame.size.height);
 //    [self.view addSubview:self.profileContainer];
@@ -649,6 +649,11 @@
         [self.loadingView removeFromSuperview];
         
         if (self.userIsBlocked) {
+            [self configureBlockedUserWithButton:NO];
+            return;
+        }
+        
+        if (self.userIsBlocking) {
             [self configureBlockedUserWithButton:YES];
             return;
         }
@@ -822,7 +827,7 @@
                     
                 }
                 
-                if (self.userIsBlocked) {
+                if (self.userIsBlocking) {
                     [self.followBarButtonItem setImage:[UIImage imageNamed:@"dots"]];
                     [self.followBarButtonItem setAction:@selector(presentSheet)];
                     [self.followBarButtonItem setTarget:self];
@@ -1556,17 +1561,10 @@
         
         [self.bioTextView frs_setTextWithResize:user.bio];
         
-        self.userIsBlocked = user.blocking;
+        self.userIsBlocking  = user.blocking;
+        self.userIsBlocked   = user.blocked;
         self.userIsSuspended = user.suspended;
-        self.userIsDisabled = user.disabled;
-        
-        
-        //debug
-        //self.userIsSuspended = YES;
-        //self.userIsDisabled = YES;
-        //debug
-        
-        
+        self.userIsDisabled  = user.disabled;
         
         
         if (_authenticatedProfile) {
@@ -1646,7 +1644,7 @@
             if (!self.profileIV.image) {
                 self.placeholderUserIcon.alpha = 1;
             }
-            self.userIsBlocked = YES;
+            self.userIsBlocking = YES;
             self.tableView.scrollEnabled = NO;
             UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
             dotIcon.tintColor = [UIColor whiteColor];
@@ -1669,7 +1667,7 @@
         if (responseObject) {
             
             /////
-            self.userIsBlocked = NO;
+            self.userIsBlocking = NO;
             self.tableView.scrollEnabled = YES;
             [self configureWithUser:_representedUser];
             [self fetchGalleries];

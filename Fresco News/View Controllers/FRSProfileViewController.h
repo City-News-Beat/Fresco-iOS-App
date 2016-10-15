@@ -21,6 +21,7 @@
 
 -(void)resizeProfileContainer;
 
+@property BOOL userIsBlocking;
 @property BOOL userIsBlocked;
 @property BOOL userIsSuspended;
 @property BOOL userIsDisabled;
