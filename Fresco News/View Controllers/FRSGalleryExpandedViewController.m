@@ -436,21 +436,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 
--(void)reportUserAlertAction {
-    
-    NSString *username = @"";
-    
-    if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
-        username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
-    } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
-        username = self.currentCommentUserDictionary[@"full_name"];
-    } else {
-        username = @"them";
-    }
-    
-    [self reportUser:self.currentCommentUserDictionary[@"id"]];
-}
-
 -(void)configureUI{
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -1105,6 +1090,20 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [alert show];
 }
 
+-(void)reportUserAlertAction {
+    
+    NSString *username = @"";
+    
+    if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
+        username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
+    } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
+        username = self.currentCommentUserDictionary[@"full_name"];
+    } else {
+        username = @"them";
+    }
+    
+    [self reportUser:self.currentCommentUserDictionary[@"id"]];
+}
 
 -(void)didPressRadioButtonAtIndex:(NSInteger)index {
     NSLog(@"index: %ld", index);
@@ -1161,6 +1160,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
     }
 }
+
 
 #pragma mark - Moderation
 

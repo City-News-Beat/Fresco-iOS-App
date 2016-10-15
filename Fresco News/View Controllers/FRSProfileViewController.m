@@ -143,6 +143,8 @@
     
 
     
+    
+    
     /* DEBUG */
 //    self.userIsBlocking   = YES;
 //    self.userIsSuspended = YES;
@@ -494,6 +496,7 @@
     }
     
     self.tableView.scrollEnabled = NO;
+    self.tableView.alpha = 0;
 
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 220-64)];
     container.backgroundColor = [UIColor frescoOrangeColor];
