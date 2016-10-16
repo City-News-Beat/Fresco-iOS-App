@@ -16,6 +16,8 @@
 #import "SAMKeychain.h"
 #import <Photos/Photos.h>
 #import <Mixpanel/Mixpanel.h>
+#import "FRSAlertView.h"
+#import "UIColor+Fresco.h"
 
 typedef void(^FRSAPIDefaultCompletionBlock)(id responseObject, NSError *error);
 typedef void(^FRSAPIBooleanCompletionBlock)(BOOL response, NSError *error);
@@ -30,7 +32,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)registerForPushNotifications;
 @end
 
-@interface FRSAPIClient : NSObject
+@interface FRSAPIClient : NSObject <FRSAlertViewDelegate>
 
 @property (nonatomic, retain) AFHTTPRequestOperationManager *requestManager;
 @property BOOL managerAuthenticated;
@@ -39,6 +41,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 @property (nonatomic, retain) NSDictionary *socialUsed;
 @property (nonatomic, retain) NSString *emailUsed;
 @property (nonatomic, retain) FRSUser *authenticatedUser;
+@property (strong, nonatomic) FRSAlertView *suspendedAlert;
 
 +(instancetype)sharedClient;
 -(NSManagedObjectContext *)managedObjectContext;

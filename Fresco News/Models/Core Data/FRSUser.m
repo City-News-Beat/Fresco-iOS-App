@@ -83,6 +83,16 @@
         user.blocking = [properties[@"blocking"] boolValue];
     }
     
+    if (properties[@"suspended_until"] && ![properties[@"suspended_until"] isEqual:[NSNull null]]) {
+        user.suspended = YES;
+    } else {
+        user.suspended = NO;
+    }
+    
+    if (properties[@"disabled"] && ![properties[@"disabled"] isEqual:[NSNull null]]) {
+        user.disabled = [properties[@"disabled"] boolValue];
+    }
+    
     return user;
 }
 

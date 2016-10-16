@@ -77,25 +77,6 @@
     [self.tableView reloadData];
 }
 
--(void)smooch {
-    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
-    
-    if (currentUser.firstName) {
-        [SKTUser currentUser].firstName = currentUser.firstName;
-    }
-    
-    if (currentUser.email) {
-        [SKTUser currentUser].email = currentUser.email;
-    }
-    
-    if (currentUser.uid) {
-        [[SKTUser currentUser] addProperties:@{ @"Fresco ID" : currentUser.uid }];
-    }
-    
-    [Smooch show];
-
-}
-
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
@@ -560,7 +541,7 @@
                     
                 } break;
                 case 1:
-                    [self smooch];
+                    [self presentSmooch];
                     break;
                 case 2:{
 //                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];

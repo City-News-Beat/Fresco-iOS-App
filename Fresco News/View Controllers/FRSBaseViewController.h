@@ -15,8 +15,9 @@
 #import "UILabel+Custom.h"
 
 #import "FRSNavigationController.h"
+#import "FRSAlertView.h"
 
-@interface FRSBaseViewController : UIViewController
+@interface FRSBaseViewController : UIViewController <FRSAlertViewDelegate>
 
 @property (nonatomic) BOOL hiddenTabBar;
 @property (nonatomic) BOOL actionBarVisible;
@@ -49,6 +50,12 @@
 -(void)segueToAssignmentWithID:(NSString *)assignmentID;
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID;
 -(void)segueToDebitCard;
+
+/* MODERATION */
+-(void)checkSuspended;
+
+/* SMOOCH */
+-(void)presentSmooch;
 
 
 @end
