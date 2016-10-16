@@ -66,6 +66,7 @@
 @property BOOL didDisplayReport;
 @property BOOL didDisplayBlock;
 @property int totalCommentCount;
+@property BOOL didBlockUser;
 
 @property (strong, nonatomic) NSDictionary *currentCommentUserDictionary;
 
@@ -296,10 +297,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
 
         NSLog(@"POSTS: %@", self.gallery.posts);
+        [self blockUser:self.gallery.creator];
         
-        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-        self.didDisplayBlock = YES;
-        [alert show];
+        [view dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    UIAlertAction *unblock = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Unblock %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        
+        NSLog(@"POSTS: %@", self.gallery.posts);
+        [self unblockUser:self.gallery.uid];
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -329,9 +335,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
     
     [view addAction:reportGallery];
+    
+    
+
+    
     if (![[[self.gallery creator] uid] isEqualToString:@""]) {
         [view addAction:report];
-        [view addAction:block];
+        if ([[[FRSAPIClient sharedClient] authenticatedUser] blocking] || self.didBlockUser) {
+            [view addAction:unblock];
+        } else {
+            [view addAction:block];
+        }
     }
     [view addAction:cancel];
     
@@ -1140,15 +1154,25 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             
             NSString *username = @"";
             
-            if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
-                username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
-            } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
-                username = self.currentCommentUserDictionary[@"full_name"];
+            if (self.currentCommentUserDictionary) {
+                if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
+                    username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
+                } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
+                    username = self.currentCommentUserDictionary[@"full_name"];
+                } else {
+                    username = @"them";
+                }
             } else {
-                username = @"them";
+                if ([self.gallery.creator.username class] != [NSNull null] && (![self.gallery.creator.username isEqualToString:@"<null>"])) {
+                    username = [NSString stringWithFormat:@"@%@", self.gallery.creator.username];
+                } else if ([self.gallery.creator.firstName class] != [NSNull null] && (![self.gallery.creator.firstName isEqualToString:@"<null>"])) {
+                    username = self.gallery.creator.firstName;
+                } else {
+                    username = @"them";
+                }
             }
             
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from %@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             [alert show];
         }
     } else if (self.didDisplayBlock) {
@@ -1178,14 +1202,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 #pragma mark - Moderation
 
--(void)blockUser:(NSDictionary *)userDictionary{
+-(void)blockUser:(FRSUser *)user{
     
-    [[FRSAPIClient sharedClient] blockUser:userDictionary[@"id"] withCompletion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] blockUser:user.uid withCompletion:^(id responseObject, NSError *error) {
         
         if (responseObject) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from %@ anymore.", userDictionary[@"username"]] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from %@ anymore.", user.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             self.didDisplayBlock = YES;
             [alert show];
+            self.didBlockUser = YES;
             
         } else {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
@@ -1196,6 +1221,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)unblockUser:(NSString *)userID {
     [[FRSAPIClient sharedClient] unblockUser:userID withCompletion:^(id responseObject, NSError *error) {
+        
+        if (responseObject) {
+            self.didBlockUser = NO;
+        }
         
         if (error) {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
