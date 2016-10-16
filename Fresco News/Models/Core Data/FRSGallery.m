@@ -27,7 +27,6 @@
 @dynamic tags;
 @dynamic uid;
 @dynamic visibility;
-@dynamic creator;
 @dynamic posts;
 @dynamic stories;
 @dynamic articles;
@@ -116,6 +115,7 @@
     gallery.currentContext = context;
 //    [gallery configureWithDictionary:properties context:context];
 
+    
     return gallery;
 }
 
@@ -125,15 +125,15 @@
     save = TRUE;
     [self configureWithDictionary:dict];
     
-//    self.creator = [FRSUser MR_createEntityInContext:context];
-//    
-//    if ([dict valueForKey:@"curator"] != [NSNull null]) {
-//        self.creator = [FRSUser MR_createEntity];
-//        self.creator.uid = (dict[@"curator"][@"id"] != nil) ? dict[@"curator"][@"id"] : @"";
-//        self.creator.username = (dict[@"curator"][@"username"] != nil) ? dict[@"curator"][@"username"] : @"";
-//        self.creator.username = (dict[@"curator"][@"full_name"] != nil) ? dict[@"curator"][@"full_name"] : @"";
-//        //blocked
-//    }
+    self.creator = [FRSUser MR_createEntityInContext:context];
+    
+    if ([dict valueForKey:@"curator"] != [NSNull null]) {
+        self.creator = [FRSUser MR_createEntity];
+        self.creator.uid = (dict[@"curator"][@"id"] != nil) ? dict[@"curator"][@"id"] : @"";
+        self.creator.username = (dict[@"curator"][@"username"] != nil) ? dict[@"curator"][@"username"] : @"";
+        self.creator.username = (dict[@"curator"][@"full_name"] != nil) ? dict[@"curator"][@"full_name"] : @"";
+        //blocked
+    }
 
 }
 
