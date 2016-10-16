@@ -1168,41 +1168,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 
-//-(void)didPressButtonAtIndex:(NSInteger)index {
-//    
-//    if (self.didDisplayReport) {
-//        self.didDisplayReport = NO;
-//        self.userReportAlertView = nil;
-//        if (index == 1) {
-//            
-//            NSString *username = @"";
-//            
-//            if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
-//                username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
-//            } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
-//                username = self.currentCommentUserDictionary[@"full_name"];
-//            } else {
-//                username = @"them";
-//            }
-//            
-//            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-//            [alert show];
-//        }
-//    } else if (self.didDisplayBlock) {
-//        self.didDisplayBlock = NO;
-//        
-//        if (index == 0) {
-//            
-//            [[FRSAPIClient sharedClient] unblockUser:self.currentCommentUserDictionary[@"id"] withCompletion:^(id responseObject, NSError *error) {
-//                
-//                if (error) {
-//                    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-//                    [alert show];
-//                }
-//            }];
-//        }
-//    }
-//}
 
 #pragma mark - FRSCommentCellDelegate
 
