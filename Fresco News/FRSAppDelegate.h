@@ -38,4 +38,5 @@
 -(UITabBarController *)tabBar;
 -(BOOL)isFirstRun;
 -(void)updateTabBarToUser;
+-(void)clearKeychain;
 @end

@@ -414,8 +414,6 @@
 }
 -(void)displayMigrationAlert {
     
-    return;
-    
     if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
         FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
         alert.delegate = self;

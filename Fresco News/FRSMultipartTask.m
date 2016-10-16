@@ -15,10 +15,11 @@
     
     // save meta-data & callbacks, prepare to be called upon to start
     self.assetURL = asset;
+    
     self.destinationURLS = destinations;
     self.progressBlock = progress;
     self.completionBlock = completion;
-    dataInputStream = [[NSInputStream alloc] initWithURL:self.assetURL];
+    dataInputStream = [[NSInputStream alloc] initWithData:[NSData dataWithContentsOfURL:asset]];
     tags = [[NSMutableDictionary alloc] init];
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
@@ -105,11 +106,14 @@
             }
         }
         
+        NSLog(@"ERROR: %@", [dataInputStream streamError]);
+        
         // last chunk, less than 5mb, streaming process ends here
         if (ranOnce && !triggeredUpload) {
             [self startChunkUpload];
             needsData = FALSE;
             [dataInputStream close];
+            dataInputStream = Nil;
             NSLog(@"LAST CHUNK");
         }
 
@@ -123,6 +127,7 @@
     openConnections++;
     totalConnections++;
     int connect = (int)totalConnections;
+    
     if (!urlToUploadTo) {
         return; // error
     }
@@ -174,6 +179,12 @@
             
             if (openConnections == 0 && needsData == FALSE) {
                 NSLog(@"UPLOAD COMPLETE");
+                
+                if (dataInputStream) {
+                    [dataInputStream close];
+                }
+                
+                dataInputStream = Nil;
                 
                 for (int i = 0; i < self.destinationURLS.count; i++) {
                     NSString *eTag = tags[@(i)];

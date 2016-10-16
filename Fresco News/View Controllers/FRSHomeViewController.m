@@ -70,7 +70,7 @@
     
     reloadedFrom = [[NSMutableArray alloc] init];
     if (!self.appDelegate) {
-        self.appDelegate = [[UIApplication sharedApplication] delegate];
+        self.appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     }
     self.temp = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
 
@@ -99,7 +99,6 @@
 
 -(void)presentNewStuffWithPassword:(BOOL)password {
     
-    return;
     if (self.migrationAlert) {
         return;
     }

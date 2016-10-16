@@ -83,6 +83,10 @@ static NSString *addPaymentCell = @"addPaymentCell";
 -(void)deletePayment:(NSIndexPath *)path {
     NSDictionary *pay = self.payments[path.row];
     NSLog(@"%@", pay);
+    
+    [[FRSAPIClient sharedClient] deletePayment:pay[@"id"] completion:^(id responseObject, NSError *error) {
+        [self reloadPayments];
+    }];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -161,6 +165,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
     }
     
     [[FRSAPIClient sharedClient] deletePayment:payment[@"id"] completion:^(id responseObject, NSError *error) {
+        NSLog(@"%@", responseObject);
         if (!error) {
             [self reloadPayments];
         }

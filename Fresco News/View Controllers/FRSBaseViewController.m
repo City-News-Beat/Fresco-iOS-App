@@ -16,6 +16,7 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSBaseViewController ()
 
@@ -275,7 +276,10 @@
     }
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
     
-    [SAMKeychain deletePasswordForService:serviceName account:clientAuthorization];
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate clearKeychain];
+    
+    //[SAMKeychain deletePasswordForService:serviceName account:clientAuthorization];
     
     [NSUserDefaults resetStandardUserDefaults];
     

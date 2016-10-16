@@ -11,8 +11,12 @@
 
 #import "FRSGallery.h"
 #import "FRSArticle.h"
+#import "FRSUser.h"
 
 NS_ASSUME_NONNULL_BEGIN
+@interface FRSGallery (CoreDataProperties)
 
+@property (nullable, nonatomic, retain) FRSUser *creator;
+@end
 
 NS_ASSUME_NONNULL_END
