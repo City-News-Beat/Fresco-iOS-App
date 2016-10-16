@@ -1346,6 +1346,7 @@
     }
     [Smooch show];
 }
+
 -(void)checkSuspended {
     
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -1511,16 +1512,13 @@
     NSString *format = @"user/%@/report";
     NSString *endpoint = [NSString stringWithFormat:format, userID];
     [self post:endpoint withParameters:params completion:completion];
-
 }
 
 -(void)reportGallery:(FRSGallery *)gallery params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *format = @"gallery/%@/report";
     NSString *endpoint = [NSString stringWithFormat:format, gallery.uid];
     [self post:endpoint withParameters:params completion:completion];
-
 }
-
 
 -(void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion {
     [self get:@"user/blocked" withParameters:Nil completion:completion];
