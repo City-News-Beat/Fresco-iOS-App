@@ -98,7 +98,6 @@
 
 -(void)presentNewStuffWithPassword:(BOOL)password {
     
-    return;
     if (self.migrationAlert) {
         return;
     }
