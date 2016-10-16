@@ -114,7 +114,9 @@
         switch (status) {
             case PHAuthorizationStatusAuthorized:
                 [self getAssets];
-                [FRSTracker track:@"Permissions photos enables"];
+                if (!wasPreviouslyAuthorized) {
+                    [FRSTracker track:@"Permissions photos enables"];
+                }
                 break;
             case PHAuthorizationStatusRestricted:
                 [self getAssets];
@@ -123,7 +125,11 @@
                 if (_delegate) { // non-optional not checking for conformity
                     [_delegate applicationNotAuthorized]; // can't re-ask, need to go into settings
                 }
-                [FRSTracker track:@"Permissions photos disables"];
+                
+                if (wasPreviouslyAuthorized) {
+                    [FRSTracker track:@"Permissions photos disables"];
+                }
+                
                 break;
             default:
                 break;
@@ -148,6 +154,8 @@
         default:
             break;
     }
+    
+    wasPreviouslyAuthorized = authorized;
 
     return authorized;
 }
@@ -157,6 +165,7 @@
     if (!assetLoader) {
         assetLoader = [[PHCachingImageManager alloc] init];
     }
+    
     
     [assetLoader requestImageDataForAsset:phAsset options:Nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
         NSError *error;
@@ -180,7 +189,6 @@
                 
                 callback(result, Nil, phAsset.mediaType, error);
             }];
-            
         }];
 }
 

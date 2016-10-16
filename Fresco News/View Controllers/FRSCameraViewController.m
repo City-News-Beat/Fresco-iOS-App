@@ -1683,10 +1683,15 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)dealloc{
-    return;
-    [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
-    [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    @try {
+        [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
+        [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    }
+    @catch(NSException *e) {
+        
+    }
 }
 
 
