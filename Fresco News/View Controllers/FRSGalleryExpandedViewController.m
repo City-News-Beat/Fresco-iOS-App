@@ -57,8 +57,6 @@
 @property (nonatomic, retain) UITableView *commentTableView;
 
 @property (strong, nonatomic) FRSAlertView *galleryReportAlertView;
-@property (strong, nonatomic) FRSAlertView *userReportAlertView;
-
 @property (strong, nonatomic) FRSAlertView *reportUserAlertView;
 
 @property (strong, nonatomic) NSString *reportReasonString;
@@ -318,10 +316,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     UIAlertAction *report = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
-        self.userReportAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
-        self.userReportAlertView.delegate = self;
+        self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
+        self.reportUserAlertView.delegate = self;
         self.didDisplayReport = YES;
-        [self.userReportAlertView show];
+        [self.reportUserAlertView show];
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -394,10 +392,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     UIAlertAction *report = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
 
-        self.userReportAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
-        self.userReportAlertView.delegate = self;
+        self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
+        self.reportUserAlertView.delegate = self;
         self.didDisplayReport = YES;
-        [self.userReportAlertView show];
+        [self.reportUserAlertView show];
 
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -456,7 +454,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 //        }
 //    }
 //}
--(void)didPressButtonAtIndex:(NSInteger)index {
+/*-(void)didPressButtonAtIndex:(NSInteger)index {
     if (self.didDisplayReport) {
         self.didDisplayReport = NO;
         self.userReportAlertView = nil;
@@ -491,7 +489,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
         }
     }
-}
+}*/
 
 -(void)configureUI{
     
@@ -1194,7 +1192,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     if (self.didDisplayReport) {
         self.didDisplayReport = NO;
-        self.userReportAlertView = nil;
+        self.reportUserAlertView = nil;
         if (index == 1) {
             
             NSString *username = @"";
@@ -1263,6 +1261,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)reportUser:(NSString *)userID {
+    
     [[FRSAPIClient sharedClient] reportUser:userID params:@{@"reason" : self.reportReasonString, @"message" : self.reportUserAlertView.textView.text} completion:^(id responseObject, NSError *error) {
         
         if (error) {
