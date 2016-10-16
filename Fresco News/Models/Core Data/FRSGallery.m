@@ -128,9 +128,9 @@
     self.creator = [FRSUser MR_createEntityInContext:context];
     
     if ([dict valueForKey:@"owner"] != [NSNull null]) {
-        self.creator.uid = (dict[@"owner"][@"id"] != nil && ![dict[@"owner"][@"id"] isEqual:[NSNull null]]) ? dict[@"curator"][@"id"] : @"";
-        self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"curator"][@"username"] : @"";
-        self.creator.username = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"curator"][@"full_name"] : @"";
+        self.creator.uid = (dict[@"owner"][@"id"] != nil && ![dict[@"owner"][@"id"] isEqual:[NSNull null]]) ? dict[@"owner"][@"id"] : @"";
+        self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
+        self.creator.username = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
         //blocked
     }
 
