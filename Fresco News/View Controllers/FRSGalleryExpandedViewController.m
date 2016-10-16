@@ -289,7 +289,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)presentReportGallerySheet {
-    NSString *username = @"USERNAME";
+    NSString *username = self.gallery.creator.username;
     
     UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
@@ -300,7 +300,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         self.didDisplayBlock = YES;
         [alert show];
-        
         
         [view dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -330,8 +329,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
     
     [view addAction:reportGallery];
-    [view addAction:report];
-    [view addAction:block];
+    if (![[[self.gallery creator] uid] isEqualToString:@""]) {
+        [view addAction:report];
+        [view addAction:block];
+    }
     [view addAction:cancel];
     
     [self presentViewController:view animated:YES completion:nil];
