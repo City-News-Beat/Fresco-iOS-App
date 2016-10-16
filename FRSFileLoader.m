@@ -77,19 +77,26 @@
     NSDate *today = [NSDate date];
     NSDate *yesterday = [today dateByAddingTimeInterval:-86400];
     NSPredicate *dayPredicate = [NSPredicate predicateWithFormat: @"creationDate >= %@", yesterday];
-    options.predicate = dayPredicate;
-    
+   // options.predicate = dayPredicate;
+    int i = 0;
     
     for (PHAssetCollection *collection in currentCollection) {
         
         // fetch assets based on the sort and date restrictions we set up
         PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:options];
-        
+        i = 0;
         // add each asset to our file list
         for (PHAsset *asset in assets) {
+            
+            if (i > 10) {
+                break;
+            }
+            
             if (asset.location) {
                 [allAssets addObject:asset];
             }
+        
+            i++;
         }
     }
     
