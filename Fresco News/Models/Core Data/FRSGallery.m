@@ -127,10 +127,10 @@
     
     self.creator = [FRSUser MR_createEntityInContext:context];
     
-    if ([dict valueForKey:@"curator"] != [NSNull null]) {
-        self.creator.uid = (dict[@"curator"][@"id"] != nil) ? dict[@"curator"][@"id"] : @"";
-        self.creator.username = (dict[@"curator"][@"username"] != nil) ? dict[@"curator"][@"username"] : @"";
-        self.creator.username = (dict[@"curator"][@"full_name"] != nil) ? dict[@"curator"][@"full_name"] : @"";
+    if ([dict valueForKey:@"owner"] != [NSNull null]) {
+        self.creator.uid = (dict[@"owner"][@"id"] != nil && ![dict[@"owner"][@"id"] isEqual:[NSNull null]]) ? dict[@"curator"][@"id"] : @"";
+        self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"curator"][@"username"] : @"";
+        self.creator.username = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"curator"][@"full_name"] : @"";
         //blocked
     }
 
