@@ -128,7 +128,6 @@
     self.creator = [FRSUser MR_createEntityInContext:context];
     
     if ([dict valueForKey:@"curator"] != [NSNull null]) {
-        self.creator = [FRSUser MR_createEntity];
         self.creator.uid = (dict[@"curator"][@"id"] != nil) ? dict[@"curator"][@"id"] : @"";
         self.creator.username = (dict[@"curator"][@"username"] != nil) ? dict[@"curator"][@"username"] : @"";
         self.creator.username = (dict[@"curator"][@"full_name"] != nil) ? dict[@"curator"][@"full_name"] : @"";
