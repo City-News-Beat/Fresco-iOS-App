@@ -275,7 +275,6 @@
     return FALSE;
 }
 
-
 -(void)clearKeychain {
     SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
     

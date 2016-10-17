@@ -258,7 +258,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.scrollView addSubview:self.pageControl];
 }
 
-
 #pragma mark - Navigation Bar
 
 -(void)configureNavigationBar {
@@ -831,7 +830,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
 }
 
-
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
     
     if (self.isFetching) return;
@@ -948,9 +946,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     return returnValue;
 }
 
-
 -(void)cacheAssignments {
-    
 }
 
 #pragma mark - Actions
@@ -974,7 +970,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
     //Next button action
 -(void)send {
-
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
         
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
@@ -983,18 +978,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
         
     [self dismissKeyboard];
-    
 
     if (self.postToFacebook) {
         [self facebook:self.captionTextView.text];
 
     }
     
-    
     if (self.postToTwitter) {
         [self tweet:@"test"]; //does not work, fix before release
     }
-    
     
     if (self.postAnon) {
         NSLog(@"Post anonymously");
@@ -1035,8 +1027,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
             gallery[@"outlet_id"] = selectedOutlet;
         }
         
-        
-        
         NSLog(@"CREATING: %@", gallery);
         
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
@@ -1063,9 +1053,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)tweet:(NSString *)string {
-    
     //DOES NOT TWEET
-
     NSString *userID = [Twitter sharedInstance].sessionStore.session.userID;
     TWTRAPIClient *client = [[TWTRAPIClient alloc] initWithUserID:userID];
 
@@ -1095,11 +1083,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
 }
 
-
-
-
 -(void)facebook:(NSString *)text {
-
     if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
         [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters: @{ @"message" : text} HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
         }];
@@ -1113,11 +1097,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
 }
 
-
 -(void)square {
     
 }
-
 
 /* Bottom Bar */
     //Post to Facebook
@@ -1198,7 +1180,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - NSNotification Center
 
 -(void)dealloc {
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -1217,19 +1198,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 
 -(void)receiveNotifications:(NSNotification *)notification {
-    
     NSString *notif = [notification name];
     
     if ([notif isEqualToString:@"twitter-tapped-filevc"]) {
-        
         [self updateStateForButton:self.twitterButton];
-        
     } else if ([notif isEqualToString:@"facebook-tapped-filevc"]) {
-        
         [self updateStateForButton:self.facebookButton];
-        
     } else if ([notif isEqualToString:@"anon-tapped-filevc"]) {
-        
         [self updateStateForButton:self.anonButton];
     }
 }
