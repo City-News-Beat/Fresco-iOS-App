@@ -237,7 +237,6 @@
             NSString *link = [[FRSAPIClient sharedClient].authenticatedUser valueForKey:@"profileImage"];
             NSURL *url = [NSURL URLWithString:link];
             [imageView hnk_setImageFromURL:url];
-            imageView.backgroundColor = [UIColor redColor];
             
         } else {
             imageView.backgroundColor = [UIColor frescoBlueColor];

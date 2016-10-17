@@ -52,15 +52,15 @@
     if ([self respondsToSelector:@selector(setLayoutMargins:)]) {
         [self setLayoutMargins:UIEdgeInsetsZero];
     }
-    
-    //flag-light, cc:imogen
-    
+        
     if (comment.isDeletable && !comment.isReportable) {
         self.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
     }else if (comment.isReportable && !comment.isDeletable) {
-        self.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"radius-small"] backgroundColor:[UIColor frescoBlueColor]]];
+        if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+            self.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"flag-light"] backgroundColor:[UIColor frescoBlueColor]]];
+        }
     } else if (comment.isDeletable && comment.isReportable) {
-        self.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"radius-small"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
+        self.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"flag-light"] backgroundColor:[UIColor frescoBlueColor]], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
     }
     
     self.rightSwipeSettings.transition = MGSwipeTransitionDrag;

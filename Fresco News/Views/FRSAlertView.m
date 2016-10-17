@@ -1828,18 +1828,18 @@
     int textViewHeight = 93;
     int padding = 44;
     
-    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(16, self.frame.size.height -textViewHeight -padding, self.frame.size.width -32, textViewHeight)];
-    textView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    textView.backgroundColor = [UIColor clearColor];
-    textView.delegate = self;
-    textView.tintColor = [UIColor frescoBlueColor];
-    [self addSubview:textView];
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(16, self.frame.size.height -textViewHeight -padding, self.frame.size.width -32, textViewHeight)];
+    self.textView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.textView.backgroundColor = [UIColor clearColor];
+    self.textView.delegate = self;
+    self.textView.tintColor = [UIColor frescoBlueColor];
+    [self addSubview:self.textView];
     
     self.textViewPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, 6, self.frame.size.width - 32, 17)];
     self.textViewPlaceholderLabel.text = @"Please share more details";
     self.textViewPlaceholderLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.textViewPlaceholderLabel.textColor = [UIColor frescoLightTextColor];
-    [textView addSubview:self.textViewPlaceholderLabel];
+    [self.textView addSubview:self.textViewPlaceholderLabel];
     
     self.dismissKeyboardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
     [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.dismissKeyboardTap];

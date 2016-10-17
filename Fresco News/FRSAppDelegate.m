@@ -186,6 +186,24 @@
             [homeViewController presentTOS];
         }
         
+        if (responseObject[@"blocked"] && ![responseObject[@"blocked"] isEqual:[NSNull null]]) {
+            authenticatedUser.blocked = [responseObject[@"blocked"] boolValue];
+        }
+        
+        if (responseObject[@"blocking"] && ![responseObject[@"blocking"] isEqual:[NSNull null]]) {
+            authenticatedUser.blocking = [responseObject[@"blocking"] boolValue];
+        }
+        
+        if (responseObject[@"suspended_until"] && ![responseObject[@"suspended_until"] isEqual:[NSNull null]]) {
+            authenticatedUser.suspended = YES;
+        } else {
+            authenticatedUser.suspended = NO;
+        }
+        
+        if (responseObject[@"disabled"] && ![responseObject[@"disabled"] isEqual:[NSNull null]]) {
+            authenticatedUser.disabled = [responseObject[@"disabled"] boolValue];
+        }
+        
         if (![responseObject[@"identity"] isKindOfClass:[[NSNull null] class]]) {
             
             if (responseObject[@"identity"][@"due_by"] != Nil && ![responseObject[@"identity"][@"due_by"] isEqual:[NSNull null]]) {
