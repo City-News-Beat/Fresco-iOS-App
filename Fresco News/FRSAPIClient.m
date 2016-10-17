@@ -426,11 +426,18 @@
         // set up FRSUser object with this info, set authenticated to true
         
         NSString *userID = responseObject[@"id"];
+        NSString *email = responseObject[@"email"];
+        NSString *name = responseObject[@"full_name"];
         
         if (userID != Nil && ![userID isEqual:[NSNull null]]) {
             [[Mixpanel sharedInstance] registerSuperProperties:@{@"fresco_id": userID}];
         }
-        
+        if (email != Nil && ![email isEqual:[NSNull null]]) {
+            [[Mixpanel sharedInstance] registerSuperProperties:@{@"email": email}];
+        }
+        if (name != Nil && ![name isEqual:[NSNull null]]) {
+            [[Mixpanel sharedInstance] registerSuperProperties:@{@"name": name}];
+        }
         if (userID && ![userID isEqual:[NSNull null]]) {
             Mixpanel *mixpanel = [Mixpanel sharedInstance];
             [mixpanel createAlias:userID forDistinctID:mixpanel.distinctId];
