@@ -141,34 +141,6 @@
         }];
      }
     
-
-    
-    
-    
-    /* DEBUG */
-//    self.userIsBlocking   = YES;
-//    self.userIsSuspended = YES;
-//    self.userIsDisabled  = YES;
-    
-    
-    /* REPORT SUCCESS ALERT */
-    
-//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block @%@ as well?", _representedUser.username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-//    [alert show];
-    
-    
-    /* BLOCK SUCCESS ALERT */
-    
-//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-//    [alert show];
-    
-    
-    /* SUSPENDED ALERT */
-
-//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message: [NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-//    [alert show];
-    
-
     [self setupUI];
     [self configureUI];
     [self fetchGalleries];
@@ -409,17 +381,6 @@
 }
 -(void)setupUI {
     
-//    if (self.userIsBlocking) {
-//        [self configureBlockedUserWithButton:YES];
-//        return;
-//    } else if (self.userIsSuspended) {
-//        [self configureSuspendedUser];
-//        return;
-//    } else if (self.userIsDisabled) {
-//        [self configureDisabledUser];
-//        return;
-//    }
-    
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
     
@@ -451,9 +412,6 @@
     self.tableView.scrollEnabled = NO;
     
     self.userIsBlocking = YES;
-
-//    self.profileContainer.frame = CGRectMake(0, self.profileContainer.frame.origin.y -64, self.profileContainer.frame.size.width, self.profileContainer.frame.size.height);
-//    [self.view addSubview:self.profileContainer];
     
     self.blockedContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height-self.profileContainer.frame.size.height)/2 +181/2, 207, 181)];
     [self.view addSubview:self.blockedContainer];
