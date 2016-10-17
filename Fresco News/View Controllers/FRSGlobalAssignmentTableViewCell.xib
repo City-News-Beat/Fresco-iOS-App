@@ -24,7 +24,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="484"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kOB-pj-B9r" id="jpu-6w-YYc">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="483.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="483"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Viral cronut letterpress put a bird on it, ugh blog quinoa" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I0N-DT-wge">

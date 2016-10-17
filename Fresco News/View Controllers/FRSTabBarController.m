@@ -265,6 +265,8 @@
             profile.shouldShowNotificationsOnLoad = YES;
             [profile loadAuthenticatedUser]; */
             
+            
+            
         } else {
             
             if (![[FRSAPIClient sharedClient] isAuthenticated]) {
@@ -275,15 +277,6 @@
                 UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
                 FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
                 [profile loadAuthenticatedUser];
-                
-                
-                //            if (userNotificationCount >= 1) {
-                //                profile.shouldShowNotificationsOnLoad = YES;
-                //            userNotificationCount resets once the vc is loaded
-                //            else gets called when user tabs back on the tab bar
-                //            } else {
-                //                [self updateUserIcon];
-                //            }
             }
         }
     }
