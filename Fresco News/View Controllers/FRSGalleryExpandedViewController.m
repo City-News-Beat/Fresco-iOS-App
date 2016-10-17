@@ -67,6 +67,8 @@
 @property BOOL didDisplayBlock;
 @property int totalCommentCount;
 @property BOOL didBlockUser;
+@property BOOL isReportingComment;
+
 
 @property (strong, nonatomic) NSDictionary *currentCommentUserDictionary;
 
@@ -402,6 +404,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     UIAlertAction *report = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Report %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
 
+        self.isReportingComment = YES;
         self.reportUserAlertView = [[FRSAlertView alloc] initUserReportWithUsername:[NSString stringWithFormat:@"%@", username] delegate:self];
         self.reportUserAlertView.delegate = self;
         self.didDisplayReport = YES;
@@ -1115,7 +1118,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         username = @"them";
     }
     
-    [self reportUser:self.gallery.creator.uid];
+    if (self.isReportingComment) {
+        [self reportUser:self.currentCommentUserDictionary[@"id"]];
+    } else {
+        [self reportUser:self.gallery.creator.uid];
+    }
 }
 
 -(void)didPressRadioButtonAtIndex:(NSInteger)index {
@@ -1240,16 +1247,31 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         if (responseObject) {
             
+            
             NSString *username = @"";
-            if ([self.gallery.creator.username class] != [NSNull null] && (![self.gallery.creator.username isEqualToString:@"<null>"])) {
-                username = [NSString stringWithFormat:@"@%@", self.gallery.creator.username];
-            } else if ([self.gallery.creator.firstName class] != [NSNull null] && (![self.gallery.creator.firstName isEqualToString:@"<null>"])) {
-                username = self.gallery.creator.firstName;
+
+            if (self.isReportingComment) {
+                if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
+                    username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
+                } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
+                    username = self.currentCommentUserDictionary[@"full_name"];
+                } else {
+                    username = @"them";
+                }
             } else {
-                username = @"them";
+                if ([self.gallery.creator.username class] != [NSNull null] && (![self.gallery.creator.username isEqualToString:@"<null>"])) {
+                    username = [NSString stringWithFormat:@"@%@", self.gallery.creator.username];
+                } else if ([self.gallery.creator.firstName class] != [NSNull null] && (![self.gallery.creator.firstName isEqualToString:@"<null>"])) {
+                    username = self.gallery.creator.firstName;
+                } else {
+                    username = @"them";
+                }
             }
+            
+
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             [alert show];
+            self.isReportingComment = NO;
         }
     }];
 }
