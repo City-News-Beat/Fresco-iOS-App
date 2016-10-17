@@ -37,7 +37,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) id relatedStories;
 @property (nullable, nonatomic, retain) NSString *uid;
 @property (nullable, nonatomic, retain) NSString *visibility;
-@property (nullable, nonatomic, retain) FRSUser *creator;
 @property (nullable, nonatomic, retain) NSSet<FRSPost *> *posts;
 @property (nullable, nonatomic, retain) NSSet<FRSStory *> *stories;
 @property (nullable, nonatomic, retain) NSSet<FRSArticle *> *articles;

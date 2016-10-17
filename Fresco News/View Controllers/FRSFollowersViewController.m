@@ -493,12 +493,11 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if(self.tableView == tableView){
-        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:((FRSUser *)self.followingArray[indexPath.row])];
+        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:((FRSUser *)self.followerArray[indexPath.row])];
         [self.navigationController pushViewController:controller animated:TRUE];
     } else {
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:((FRSUser *)self.followingArray[indexPath.row])];
                                                                                                         //should be followersArray
-        
         NSLog(@"FOLLOWING: %@", ((FRSUser *)self.followingArray[indexPath.row]).following);
         
         [self.navigationController pushViewController:controller animated:TRUE];

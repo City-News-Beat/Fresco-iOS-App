@@ -168,8 +168,6 @@
     vc2.view.backgroundColor = [UIColor blackColor];
     UINavigationController *vc3 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
     [vc3 pushViewController:[[FRSAssignmentsViewController alloc] init] animated:NO];
-    
-    
 
     if (notif) {
         UINavigationController *vc4 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
@@ -203,9 +201,11 @@
     UITabBarItem *item4 = [self.tabBar.items objectAtIndex:4];
     item4.image = [[UIImage imageNamed:@"tab-bar-profile"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     item4.selectedImage = [[UIImage imageNamed:@"tab-bar-profile-sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
-    frsTabBar.dot.alpha = 0;
     self.dot.alpha = 0;
+    
+    //FRSTabBarController *frsTabBar = (FRSTabBarController *)self.tabBarController;
+    //frsTabBar.dot.alpha = 0;
+    //[frsTabBar.dot removeFromSuperview];
 }
 
 
@@ -218,18 +218,21 @@
     item4.title = @"";
     
     if (unread) {
-        self.dot = [[UIView alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width - 9 - self.notificationDotXOffset, self.tabBar.frame.size.height - 9 - 10.5, 9, 9)]; //10.5 y value coming from spec, adding 2px to w/h for borderWidth
-        self.dot.layer.masksToBounds = YES;
-        self.dot.layer.cornerRadius = 9/2;
-        self.dot.backgroundColor = [UIColor frescoTabBarColor];
-        self.dot.layer.zPosition = 1;
-        self.dot.userInteractionEnabled = NO;
-        [self.tabBar addSubview:self.dot];
-        
-        UIView *yellowCircle = [[UIView alloc] initWithFrame:CGRectMake(2, 2, 7, 7)];
-        yellowCircle.backgroundColor = [UIColor frescoOrangeColor];
-        yellowCircle.layer.cornerRadius = 3.5;
-        [self.dot addSubview:yellowCircle];
+        if (!self.dot) {
+            self.dot = [[UIView alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width - 9 - self.notificationDotXOffset, self.tabBar.frame.size.height - 9 - 10.5, 9, 9)]; //10.5 y value coming from spec, adding 2px to w/h for borderWidth
+            self.dot.layer.masksToBounds = YES;
+            self.dot.layer.cornerRadius = 9/2;
+            self.dot.backgroundColor = [UIColor frescoTabBarColor];
+            self.dot.layer.zPosition = 1;
+            self.dot.userInteractionEnabled = NO;
+            [self.tabBar addSubview:self.dot];
+            
+            UIView *yellowCircle = [[UIView alloc] initWithFrame:CGRectMake(2, 2, 7, 7)];
+            yellowCircle.backgroundColor = [UIColor frescoOrangeColor];
+            yellowCircle.layer.cornerRadius = 3.5;
+            [self.dot addSubview:yellowCircle];
+        }
+        self.dot.alpha = 1;
     }
 }
 
@@ -255,11 +258,12 @@
     
     if ([self.tabBar.items indexOfObject:item] == 4) {
         
-        
-        
         if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
-
             
+            /* UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
+            FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
+            profile.shouldShowNotificationsOnLoad = YES;
+            [profile loadAuthenticatedUser]; */
             
         } else {
             
@@ -267,7 +271,6 @@
                 FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
                 [self.navigationController pushViewController:onboardVC animated:NO];
             } else {
-                
                 
                 UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
                 FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
@@ -340,12 +343,13 @@
             } break;
             
         case 4:{
-            
-            
-            
+                        
             if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
                 
-                return NO;
+                FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
+                [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:NO];
+                [profileVC showNotificationsNotAnimated];
+                
                 break;
             }
             

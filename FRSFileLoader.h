@@ -31,6 +31,8 @@ typedef void (^DataCallback)(UIImage *image, AVAsset *video, PHAssetMediaType me
     NSRange currentRange;
     NSMutableArray *allAssets;
     PHCachingImageManager *assetLoader;
+    
+    BOOL wasPreviouslyAuthorized;
 
 }
 -(id)initWithDelegate:(id<FRSFileLoaderDelegate>)del;

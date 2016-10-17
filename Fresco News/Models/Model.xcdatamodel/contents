@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="16A323" minimumToolsVersion="Xcode 7.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11538.1" systemVersion="15G31" minimumToolsVersion="Xcode 7.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="FRSArticle" representedClassName="FRSArticle" syncable="YES">
         <attribute name="articleStringURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -116,6 +116,7 @@
         <attribute name="blocked" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="blocking" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="creditCardDigits" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="disabled" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="dob_day" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="dob_month" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="dob_year" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -138,6 +139,7 @@
         <attribute name="ssn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="stripeFirst" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="stripeLast" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="suspended" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="galleries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSGallery" inverseName="creator" inverseEntity="FRSGallery" syncable="YES"/>
@@ -152,6 +154,6 @@
         <element name="FRSPost" positionX="-36" positionY="9" width="128" height="253"/>
         <element name="FRSStory" positionX="-72" positionY="285" width="128" height="253"/>
         <element name="FRSUpload" positionX="-990" positionY="-9" width="128" height="238"/>
-        <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="615"/>
+        <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="645"/>
     </elements>
 </model>

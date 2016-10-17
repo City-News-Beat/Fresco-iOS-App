@@ -32,9 +32,11 @@
     
     if (active) {
         self.selectionCircle.image = [UIImage imageNamed:@"check-box-circle-filled"];
+        self.deletionButton.hidden = TRUE;
     }
     else {
         self.selectionCircle.image = [UIImage imageNamed:@"check-box-circle-outline"];
+        self.deletionButton.hidden = FALSE;
     }
 }
 @end

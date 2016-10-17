@@ -11,8 +11,9 @@
 #import "FRSGalleryView.h"
 #import "FRSSplitTableView.h"
 #import "FRSFollowingController.h"
+#import "FRSAlertView.h"
 
-@interface FRSHomeViewController : FRSScrollingViewController <FRSGalleryViewDelegate>
+@interface FRSHomeViewController : FRSScrollingViewController <FRSGalleryViewDelegate, FRSAlertViewDelegate>
 {
     BOOL delayClear;
     BOOL needsUpdate;

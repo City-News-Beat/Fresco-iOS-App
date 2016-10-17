@@ -34,6 +34,8 @@
 @dynamic fieldsNeeded;
 @dynamic blocked;
 @dynamic blocking;
+@dynamic disabled;
+@dynamic suspended;
 
 
 @end

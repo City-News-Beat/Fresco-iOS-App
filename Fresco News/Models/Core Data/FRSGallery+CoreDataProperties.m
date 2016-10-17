@@ -12,5 +12,5 @@
 #import "FRSGallery+CoreDataProperties.h"
 
 @implementation FRSGallery (CoreDataProperties)
-
+@dynamic creator;
 @end

@@ -1455,9 +1455,9 @@
         completion(responseObject, error);
     }];
 }
--(void)reportUser:(FRSUser *)user params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)reportUser:(NSString *)userID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *format = @"user/%@/report";
-    NSString *endpoint = [NSString stringWithFormat:format, user.uid];
+    NSString *endpoint = [NSString stringWithFormat:format, userID];
     [self post:endpoint withParameters:params completion:completion];
 
 }

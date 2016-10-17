@@ -42,5 +42,6 @@
 @property (strong, nonatomic) FRSBorderedImageView *profileIV;
 @property BOOL editedProfile;
 @property BOOL shouldShowNotificationsOnLoad;
+-(void)showNotificationsNotAnimated;
 
 @end

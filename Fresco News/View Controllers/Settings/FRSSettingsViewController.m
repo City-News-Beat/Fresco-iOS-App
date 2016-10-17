@@ -124,6 +124,7 @@
     self.tableView.bounces = YES;
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.view addSubview:self.tableView];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self configureKenny];
 }
 
@@ -131,7 +132,7 @@
 #pragma mark - UITableViewDelegate
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 10;
+    return 9;
 }
 
 
@@ -261,10 +262,22 @@
         case 0:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSAPIClient sharedClient] authenticatedUser].username]];
+                    
+                    if ([[FRSAPIClient sharedClient] authenticatedUser].username && ![[[FRSAPIClient sharedClient] authenticatedUser].username isEqual:[NSNull null]]) {
+                        [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSAPIClient sharedClient] authenticatedUser].username]];
+                    }
+                    else {
+                        [cell configureCellWithUsername:@"Username"];
+                    }
                     break;
                 case 1:
-                    [cell configureDefaultCellWithTitle:[[FRSAPIClient sharedClient] authenticatedUser].email andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    if ([[FRSAPIClient sharedClient] authenticatedUser].email && ![[[FRSAPIClient sharedClient] authenticatedUser].email isEqual:[NSNull null]]) {
+                        [cell configureDefaultCellWithTitle:[[FRSAPIClient sharedClient] authenticatedUser].email andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    }
+                    else {
+                        [cell configureDefaultCellWithTitle:@"Email" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    }
+
                     break;
                 case 2:
                     [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
@@ -336,14 +349,14 @@
                     
                     if (dueBy != nil) {
             
-                        [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
+                        [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
                         
                     } else {
                         if ([[FRSAPIClient sharedClient] authenticatedUser].fieldsNeeded.count == 0) {
-                            [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:@"Verified" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                            [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:@"Verified" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                         }
                         else {
-                            [cell configureDefaultCellWithTitle:@"Identification" andCarret:YES andRightAlignedTitle:@""rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                            [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:@""rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                         }
                     }
                     
