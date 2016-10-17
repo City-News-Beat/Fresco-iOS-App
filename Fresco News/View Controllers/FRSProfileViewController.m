@@ -624,7 +624,7 @@
             [self configureBlockedUserWithButton:YES];
             return;
         }
-        else if (self.userIsSuspended || _representedUser.suspended) {
+        else if ((self.userIsSuspended || _representedUser.suspended) && ![_representedUser.uid isEqual:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
             [self configureSuspendedUser];
             return;
         } else if (self.userIsDisabled || _representedUser.disabled) {

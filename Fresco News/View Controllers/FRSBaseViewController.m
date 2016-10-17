@@ -16,6 +16,7 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
+#import "FRSTabBarController.h"
 #import "FRSAppDelegate.h"
 
 @interface FRSBaseViewController ()
@@ -307,7 +308,9 @@
     
     [[FRSAPIClient sharedClient] setPasswordUsed:nil];
     [[FRSAPIClient sharedClient] setEmailUsed:nil];
-
+    
+    //don't forget to change bell icon to user icon
+    
     if (pop) {
         [self popViewController];
     }
