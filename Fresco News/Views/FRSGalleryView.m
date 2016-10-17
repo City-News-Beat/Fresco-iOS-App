@@ -148,8 +148,9 @@
     
     if (firstPost.creator.profileImage != Nil && ![firstPost.creator.profileImage isEqual:[NSNull null]] && [[firstPost.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![firstPost.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:firstPost.creator.profileImage].absoluteString.length > 1) {
         //NSLog(@"aaAvatar: %@",firstPost.creator.profileImage);
+        NSString *smallAvatar = [firstPost.creator.profileImage stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
 
-        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:firstPost.creator.profileImage]];
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
     else {
@@ -623,7 +624,9 @@
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         dispatch_async(dispatch_get_main_queue(), ^{
             //Set user image
-            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+            NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
+            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
+
             //NSLog(@"wwAvatar: %@",post.creator.profileImage);
 
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
@@ -692,9 +695,8 @@
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-            //NSLog(@"kkAvatar: %@",post.creator.profileImage);
-
+            NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
+            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
             [photoTap setNumberOfTapsRequired:1];
             [self.profileIV setUserInteractionEnabled:YES];

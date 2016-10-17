@@ -29,7 +29,8 @@
             NSLog(@"%@", comment.imageURL);
             
             self.backgroundColor = [UIColor clearColor];
-            [self.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL]];
+            NSString *smallAvatar = [comment.imageURL stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
+            [self.profilePicture hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
         }
         else {
             // default
