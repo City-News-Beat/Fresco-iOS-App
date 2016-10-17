@@ -296,7 +296,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     UIAlertAction *block = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Block %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
 
-        NSLog(@"POSTS: %@", self.gallery.posts);
         [self blockUser:self.gallery.creator];
         
         [view dismissViewControllerAnimated:YES completion:nil];
@@ -304,7 +303,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     UIAlertAction *unblock = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Unblock %@", username] style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         
-        NSLog(@"POSTS: %@", self.gallery.posts);
         [self unblockUser:self.gallery.uid];
         
         [view dismissViewControllerAnimated:YES completion:nil];
@@ -335,9 +333,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
     
     [view addAction:reportGallery];
-    
-    
-
     
     if (![[[self.gallery creator] uid] isEqualToString:@""]) {
         [view addAction:report];

@@ -495,6 +495,8 @@
         return;
     }
     
+
+    
     self.tableView.scrollEnabled = NO;
     self.tableView.alpha = 0;
 
@@ -514,12 +516,14 @@
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
     
-    if(_representedUser.profileImage != [NSNull null]){
+    if (_representedUser.profileImage != [NSNull null]){
         self.profileImageURL = [NSURL URLWithString:_representedUser.profileImage];
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:_representedUser.profileImage]];
         
-        if (self.profileImageURL == nil) {
-            self.placeholderUserIcon.alpha = 1;
+        if (!_representedUser.profileImage) {
+            self.placeholderUserIcon = [[UIImageView alloc] initWithFrame:CGRectMake(self.profileIV.frame.size.width/2 - 40/2, self.profileIV.frame.size.height/2 -40/2, 40, 40)];
+            self.placeholderUserIcon.image = [UIImage imageNamed:@"user-40"];
+            [self.profileIV addSubview:self.placeholderUserIcon];
         }
     }
     
@@ -647,14 +651,14 @@
             return;
         }
         
-        if (self.userIsBlocking) {
+        if (self.userIsBlocking || _representedUser.blocking) {
             [self configureBlockedUserWithButton:YES];
             return;
         }
-        else if (self.userIsSuspended) {
+        else if (self.userIsSuspended || _representedUser.suspended) {
             [self configureSuspendedUser];
             return;
-        } else if (self.userIsDisabled) {
+        } else if (self.userIsDisabled || _representedUser.disabled) {
             [self configureDisabledUser];
             return;
         }
