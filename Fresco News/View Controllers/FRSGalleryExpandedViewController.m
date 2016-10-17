@@ -90,6 +90,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.actionBarVisible = YES;
         self.touchEnabled = NO;
         [self fetchCommentsWithID:gallery.uid];
+
     }
     return self;
 }
@@ -294,7 +295,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)presentReportGallerySheet {
-    NSString *username = self.gallery.creator.username;
+    
+    NSString *username = @"user";
+
+    if (self.gallery.creator.username) {
+        username = self.gallery.creator.username;
+    } else if (self.gallery.creator.firstName) {
+        username = self.gallery.creator.firstName;
+    } else if (self.gallery.byline) {
+        username = self.gallery.byline;
+    }
     
     UIAlertController *view = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
