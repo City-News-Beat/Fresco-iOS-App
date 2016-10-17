@@ -1164,32 +1164,9 @@
                 return;
             }
 
-            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-            NSInteger responseCode = response.statusCode;
-            NSLog(@"ERROR: %ld", (long)responseCode);
-            
-            if (responseCode >= 400 && responseCode < 500) {
-                // 400 level, client
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                [alert show];
+            if (error && !responseObject) {
+                [self presentGenericError];
                 [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-
-                return;
-            }
-            else if (responseCode >= 500 && responseCode < 600) {
-                // 500 level, server
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                [alert show];
-                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-
-                return;
-            }
-            else if (responseCode >= 300 && responseCode < 400) {
-                // 300  level, unauthorized
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                [alert show];
-                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-
                 return;
             }
         }];
@@ -1214,10 +1191,8 @@
         
         
         if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            [self presentGenericError];
             [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-
         }
         
         

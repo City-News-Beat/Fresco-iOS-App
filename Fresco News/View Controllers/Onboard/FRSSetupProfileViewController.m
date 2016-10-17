@@ -145,21 +145,7 @@
         
         if (error) {
             
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
-            
-            // show modal
-            if (error.code/100 == 4) {
-                // we fucked up
-            }
-            else if (error.code/100 == 5) {
-                // they fucked up
-            }
-            else if (error.code/100 == 3) {
-                // auth fucked up
-            }
-            //NSLog(@"RESPONSE:%@ ", responseObject);
-            NSLog(@"ERROR!:%@ ", error);
+            [self presentGenericError];
             
             return;
         }

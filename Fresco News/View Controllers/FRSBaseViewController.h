@@ -51,6 +51,9 @@
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID;
 -(void)segueToDebitCard;
 
+/* ERRORS */
+-(void)presentGenericError;
+
 /* MODERATION */
 -(void)checkSuspended;
 

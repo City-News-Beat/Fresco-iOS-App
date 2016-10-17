@@ -267,6 +267,13 @@
 
 }
 
+#pragma mark - Errors
+
+-(void)presentGenericError {
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+    [alert show];
+}
+
 #pragma mark - Logout
 
 -(void)logoutWithPop:(BOOL)pop {

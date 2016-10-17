@@ -391,8 +391,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 self.isBlockingFromComment = YES;
                 
             } else {
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                [alert show];
+                [self presentGenericError];
             }
         }];
 
@@ -407,8 +406,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             if (responseObject) {
 
             } else {
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                [alert show];
+                [self presentGenericError];
             }
         }];
         
@@ -1106,8 +1104,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[FRSAPIClient sharedClient] reportGallery:self.gallery params:@{@"reason" : self.reportReasonString, @"message" : self.galleryReportAlertView.textView.text} completion:^(id responseObject, NSError *error) {
        
         if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            [self presentGenericError];
             return;
         }
         
@@ -1230,8 +1227,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             self.isBlockingFromComment = NO;
             
         } else {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            [self presentGenericError];
         }
     }];
 }
@@ -1244,8 +1240,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
         
         if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            [self presentGenericError];
         }
     }];
 }
@@ -1255,8 +1250,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[FRSAPIClient sharedClient] reportUser:userID params:@{@"reason" : self.reportReasonString, @"message" : self.reportUserAlertView.textView.text} completion:^(id responseObject, NSError *error) {
         
         if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            [self presentGenericError];
             return;
         }
         

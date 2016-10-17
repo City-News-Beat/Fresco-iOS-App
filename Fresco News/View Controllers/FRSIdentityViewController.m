@@ -547,9 +547,7 @@
             [self stopSpinner:self.loadingView onButton:self.saveIDInfoButton];
             
             if(error){
-                //Failiure popup
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                [self.alert show];
+                [self presentGenericError];
             }
             else {
                 [self.navigationController popViewControllerAnimated:YES];
