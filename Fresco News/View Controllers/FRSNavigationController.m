@@ -94,4 +94,8 @@
     [super didReceiveMemoryWarning];
 }
 
+-(void)updateUserIcon {
+    
+}
+
 @end
