@@ -273,10 +273,20 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
+    FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
+    
+    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
+        
+        if ([[responseObject objectForKey:@"unseen_count"] integerValue] <= 0) {
+            [tabBarController updateUserIcon];
+        } else {
+            [tabBarController updateBellIcon:NO];
+        }
+    }];
+
     
     
-    
-//    
+//
 //    if(!self.editedProfile){
 //        if (!_representedUser) {
 //            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
