@@ -616,6 +616,7 @@
         
         if (self.userIsBlocked) {
             [self configureBlockedUserWithButton:NO];
+            self.likesButton.userInteractionEnabled = NO;
             return;
         }
         
