@@ -493,7 +493,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)toggleGlobalAssignmentsDrawer {
-    
+
     if (self.globalAssignmentsEnabled) {
         self.globalAssignmentsEnabled = NO;
         [self hideAndRemoveGlobalAssignments];
@@ -601,11 +601,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         }
     } else if (tableView == self.globalAssignmentsTableView) {
         
-        
-        
-        
-        
-        
+
         
         if (indexPath.row < _globalAssignments.count + numberOfOutlets) {
             if (_showingOutlets) {
@@ -634,10 +630,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             return cell;
         }
-        
-        
-        
-        
         
         
         //FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.globalAssignments objectAtIndex:indexPath.row]];
@@ -669,25 +661,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    NSLog(@"CELL FOR ROW AT INDEX: %@", cell.assignment);
-
     BOOL cellIsOutlet = cell.isAnOutlet;
     BOOL prevCellIsOutlet = self.prevCell.isAnOutlet;
-    /*
-    if(!cellIsOutlet && self.prevCell.outlets.count <= 1){
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }else if(!cellIsOutlet && !prevCellIsOutlet){
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }*/
-
-    ;
-    if(cell == nil){
-        NSLog(@"THE CELL IS NIL");
-    }
-    
-    //    if (_showingOutlets) {
-    //        [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedRow inSection:0]];
-    //    }
     
     if(cellIsOutlet && !cell.isSelectedOutlet){
         [self resetOtherOutlets];
@@ -706,8 +681,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
         
         selectedRow = indexPath.row;
         
-        NSLog(@"Rows: %lu", tableView.indexPathsForVisibleRows.count);
-         
         //Checks if the current cell has more than one outlet
         if (cell.outlets.count > 1 && tableView != self.globalAssignmentsTableView && !_showingOutlets) {
             self.numberOfRowsInAssignmentTableView += cell.outlets.count;
@@ -723,7 +696,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             for(int i = 1; i <= cell.outlets.count; i++){
                 [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+i inSection:0]];
-                NSLog(@"Inserting Row at IndexPath.row = %ld", indexPath.row+i);
             }
             
             [CATransaction begin];
@@ -745,21 +717,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             return; //Return to avoid removing cells twice
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         //Checks if the current cell has more than one outlet
         if (cell.outlets.count > 1 && tableView != self.assignmentsTableView && !_showingOutlets) {
             self.numberOfRowsInGlobalAssignmentTableView += cell.outlets.count;
@@ -775,7 +733,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             for(int i = 1; i <= cell.outlets.count; i++){
                 [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+i inSection:0]];
-                NSLog(@"Inserting Row at IndexPath.row = %ld", indexPath.row+i);
             }
             
             [CATransaction begin];
@@ -797,22 +754,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             return; //Return to avoid removing cells twice
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
-        //Removes previously added outlet cells when the user selects a cell that does not contain outlets
-        //Ex: User selects cell with outlets, user selects "No assignment"
+    
+    //Removes previously added outlet cells when the user selects a cell that does not contain outlets
+    //Ex: User selects cell with outlets, user selects "No assignment"
+    if (tableView == self.assignmentsTableView) {
         if ((self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1 && self.prevCell != nil && !cellIsOutlet && !prevCellIsOutlet) && self.prevCell != cell) {
             self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count; //Add one for "No assignment cell"
             NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
@@ -821,7 +767,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
             }
             self.showingOutlets = false;
             [self resetOtherOutlets];
-
+            
             _prevCell.isSelectedAssignment = false;
             [CATransaction begin];
             [self.assignmentsTableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
@@ -831,10 +777,27 @@ static NSString * const cellIdentifier = @"assignment-cell";
                 // animation has finished
             }];
             [CATransaction commit];
-    }
-    
-    if (tableView == self.globalAssignmentsTableView) {
-        
+        }
+    } else if (tableView == self.globalAssignmentsTableView) {
+        if ((self.numberOfRowsInGlobalAssignmentTableView > self.globalAssignments.count && self.prevCell != nil && !cellIsOutlet && !prevCellIsOutlet) && self.prevCell != cell) {
+            self.numberOfRowsInGlobalAssignmentTableView = self.globalAssignments.count;
+            NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+            for(int i = 1; i <= self.prevCell.outlets.count; i++){
+                [indexPaths addObject:[NSIndexPath indexPathForRow:[self.globalAssignmentsTableView indexPathForCell:self.prevCell].row+i inSection:0]];
+            }
+            self.showingOutlets = false;
+            [self resetOtherOutlets];
+            
+            _prevCell.isSelectedAssignment = false;
+            [CATransaction begin];
+            [self.globalAssignmentsTableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+            
+            [CATransaction setCompletionBlock:^{
+                [self resetFrames:true];
+                // animation has finished
+            }];
+            [CATransaction commit];
+        }
     }
 }
 
