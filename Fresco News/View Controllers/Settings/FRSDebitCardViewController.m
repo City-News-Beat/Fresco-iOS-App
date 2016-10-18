@@ -258,18 +258,39 @@
 }
 
 -(void)saveBankInfo {
-    
+    [Stripe setDefaultPublishableKey:stripeTest];
+
     NSLog(@"SAVING BANK INFO");
     
     NSString *bankAccountNumber = _accountNumberField.text;
     NSString *routingNumber = _routingNumberField.text;
     
-    STPBankAccountParams *params = [FRSStripe bankAccountWithNumber:bankAccountNumber routing:routingNumber name:Nil ssn:Nil type:FRSBankAccountTypeIndividual];
+    STPBankAccountParams *bankParams = [[STPBankAccountParams alloc] init];
+    bankParams.accountNumber = bankAccountNumber;
+    bankParams.routingNumber = routingNumber;
+    bankParams.currency = @"USD";
+    bankParams.accountHolderType = STPBankAccountHolderTypeIndividual;
+    bankParams.country = @"US";
+    bankParams.accountHolderName = @"Philip Bernstein";
     
-    NSLog(@"PARAMS: %@", params);
+    NSLog(@"PARAMS: %@", bankParams);
     
-    [FRSStripe createTokenWithBank:params completion:^(STPToken *stripeToken, NSError *error) {
-        NSLog(@"%@ %@", stripeToken, error);
+    [[STPAPIClient sharedClient] createTokenWithBankAccount:bankParams completion:^(STPToken * _Nullable token, NSError * _Nullable error) {
+        NSLog(@"STP: %@ %@", token, error);
+        // created token
+        if (error || !token) {
+            // failed
+        }
+        [[FRSAPIClient sharedClient] createPaymentWithToken:token completion:^(id responseObject, NSError *error) {
+            NSLog(@"API: %@ %@", responseObject, error);
+            
+            if (error) {
+                // failed
+            }
+            else {
+                // succeeded
+            }
+        }];
     }];
 }
 
