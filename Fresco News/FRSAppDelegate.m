@@ -567,6 +567,20 @@
         NSString *user = [[push objectForKey:@"user_ids"] firstObject];
         [self segueToUser:user];
     }
+    if ([instruction isEqualToString:@"user-news-gallery"]) {
+        NSString *gallery = [push  objectForKey:@"gallery_id"];
+        
+        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [self segueToGallery:gallery];
+        }
+    }
+    if ([instruction isEqualToString:@"user-news-story"]) {
+        NSString *story = [push  objectForKey:@"story_id"];
+        
+        if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
+            [self segueToStory:story];
+        }
+    }
     if ([instruction isEqualToString:@"user-social-gallery-liked"]) {
         NSString *gallery = [push  objectForKey:@"gallery_id"];
         
@@ -613,8 +627,14 @@
         NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
         [self segueToTodayInNews:galleryIDs];
     }
+    if ([instruction isEqualToString:restartUploadNotification]) {
+        [self restartUpload];
+    }
 }
 
+-(void)restartUpload {
+    
+}
 -(void)applicationDidEnterBackground:(UIApplication *)application {
     
 }

@@ -1324,7 +1324,18 @@
         FRSTabBarController *tabBar = (FRSTabBarController *) [appDelegate tabBar];
         UINavigationController *navigationController = tabBar.navigationController;
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-        [navigationController pushViewController:onboardVC animated:NO];
+        UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+        
+        if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+            [navController pushViewController:onboardVC animated:FALSE];
+        }
+        else {
+            UITabBarController *tab = (UITabBarController *)navController;
+            tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+            tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+            [tab presentViewController:onboardVC animated:YES completion:Nil];
+        }
+
         return TRUE;
     }
     

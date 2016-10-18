@@ -25,6 +25,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 @protocol FRSApp
 -(UITabBarController *)tabBar;
+@property (nonatomic, retain) UIWindow *window;
 @end
 
 @protocol FRSFileUploaderObjectContext <NSObject>
