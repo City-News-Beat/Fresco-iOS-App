@@ -620,25 +620,17 @@
 
 #pragma mark - Push Notifications
 
--(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
-    NSLog(@"NOTIF: %@", userInfo);
-
-    //untested, unable to receive remote notifs atm
-    FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
-    [tbc updateBellIcon:YES];
-    completionHandler(TRUE);
-    
-    if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
-    {
-        [self handleRemotePush:userInfo];
-    }
-}
-
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo {
-    if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
-    {
-        [self handleRemotePush:userInfo];
-    }
+    UIViewController *viewController = [[UIViewController alloc] init];
+    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 300, 900)];
+    [viewController.view addSubview:textView];
+    
+    self.window.rootViewController = viewController;
+    textView.text = userInfo.description;
+
+    [self handleRemotePush:userInfo];
+    
+    NSLog(@"%@",userInfo);
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
