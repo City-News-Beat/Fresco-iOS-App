@@ -99,7 +99,11 @@
         if (self.outlets.count > 1 && ![[self.assignment objectForKey:@"location"] isEqual:[NSNull null]]) {
             self.selectionImageView.image = [UIImage imageNamed:@"question"];
         }else if([[self.assignment objectForKey:@"location"] isEqual:[NSNull null]] && ![self.titleLabel.text isEqualToString:@"No assignment"]){
-            self.selectionImageView.image = [UIImage imageNamed:@"question"];
+            if (self.outlets.count > 1) {
+                self.selectionImageView.image = [UIImage imageNamed:@"question"];
+            } else {
+                self.selectionImageView.image = [UIImage imageNamed:@"check-box-circle-filled"];
+            }
         }
         
         self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightMedium];

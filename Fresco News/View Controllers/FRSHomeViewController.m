@@ -214,7 +214,7 @@
 
     
     /* DEBUG */
-   [[FRSAPIClient sharedClient] authenticatedUser].username = nil;
+   //[[FRSAPIClient sharedClient] authenticatedUser].username = nil;
 //    [[FRSAPIClient sharedClient] authenticatedUser].email = nil;
 //    [[FRSAPIClient sharedClient] authenticatedUser].password = nil;
 //    [FRSAPIClient sharedClient].passwordUsed = nil;
@@ -227,14 +227,7 @@
         alert.delegate = self;
         [alert show];
     }
-    
-    
-    
-    
-    
-    
-    
-    
+  
     
     //if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
     

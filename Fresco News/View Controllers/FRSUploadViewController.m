@@ -725,6 +725,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
                 // animation has finished
             }];
             [CATransaction commit];
+    }
+    
+    if (tableView == self.globalAssignmentsTableView) {
         
     }
 }
