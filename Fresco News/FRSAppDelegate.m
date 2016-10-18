@@ -515,6 +515,7 @@
     
     //
    // self.window.rootViewController = viewController;
+    textView.text = push.description;
     
     if (notificationID && ![notificationID isEqual:[NSNull null]]) {
         [self markAsRead:notificationID];
@@ -522,7 +523,7 @@
     
     // payment
     if ([instruction isEqualToString:purchasedContentNotification]) {
-        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
+        NSString *gallery = [push objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [self segueToGallery:gallery];
@@ -549,17 +550,17 @@
     
     // social
     if ([instruction isEqualToString:followedNotification]) {
-        NSString *user = [[[push objectForKey:@"meta"] objectForKey:@"user_ids"] firstObject];
+        NSString *user = [[push objectForKey:@"user_ids"] firstObject];
         [self segueToUser:user];
     }
-    if ([instruction isEqualToString:likedNotification]) {
-        NSString *gallery = [[push  objectForKey:@"gallery_ids"] firstObject];
+    if ([instruction isEqualToString:@"user-social-gallery-liked"]) {
+        NSString *gallery = [push  objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [self segueToGallery:gallery];
         }
         else {
-            NSString *story = [[push objectForKey:@"story_ids"] firstObject];
+            NSString *story = [push objectForKey:@"story_id"];
             if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
                 [self segueToStory:story];
             }
@@ -626,6 +627,11 @@
     FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
     [tbc updateBellIcon:YES];
     completionHandler(TRUE);
+    
+    if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
+    {
+        [self handleRemotePush:userInfo];
+    }
 }
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo {
@@ -808,8 +814,15 @@
 
 
 -(void)segueToGallery:(NSString *)galleryID {
-
+    __block BOOL isPushingGallery = FALSE;
+    
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
+        
+        if (isPushingGallery) {
+            return;
+        }
+        
+        isPushingGallery = TRUE;
         
         FRSAppDelegate *appDelegate = self;
         FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
