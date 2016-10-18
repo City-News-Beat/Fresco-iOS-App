@@ -1195,7 +1195,7 @@
             
             emailContainer.alpha = 0;
             self.height -= 44;
-            
+
         }
         
         self.emailCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
@@ -1239,6 +1239,11 @@
             [passwordContainer addSubview:self.passwordTextField];
             
             self.height += 44;
+            
+            
+            if (emailContainer.alpha == 0) {
+                passwordContainer.transform = CGAffineTransformMakeTranslation(0, -44);
+            }
         }
 
         self.dismissKeyboardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
