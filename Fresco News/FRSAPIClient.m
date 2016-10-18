@@ -1322,7 +1322,6 @@
         
         id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
         FRSTabBarController *tabBar = (FRSTabBarController *) [appDelegate tabBar];
-        UINavigationController *navigationController = tabBar.navigationController;
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
         UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
         
