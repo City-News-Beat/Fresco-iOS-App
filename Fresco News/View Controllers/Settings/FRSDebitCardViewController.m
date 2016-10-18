@@ -417,7 +417,7 @@
     
     [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
         
-        if (error) {
+        if (error || !stripeToken) {
             self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             [self.alertView show];
             return;
