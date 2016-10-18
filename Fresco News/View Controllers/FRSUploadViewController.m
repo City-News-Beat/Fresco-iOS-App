@@ -117,6 +117,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self dismissKeyboard];
+    [self resetOtherCells];
+    [self resetOtherOutlets];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {

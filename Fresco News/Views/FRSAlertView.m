@@ -1192,13 +1192,18 @@
         [emailContainer addSubview:self.emailTextField];
         
         
-        if ([[FRSAPIClient sharedClient] authenticatedUser].email || [[FRSAPIClient sharedClient] emailUsed]) {
-            
+        if (![[[FRSAPIClient sharedClient] authenticatedUser].email isEqual:[NSNull null]] || ![[[FRSAPIClient sharedClient] emailUsed] isEqual:[NSNull null]]) {
             emailContainer.alpha = 0;
             self.height -= 44;
             self.emailTextField = nil;
             [self.emailTextField removeFromSuperview];
-
+        }
+        
+        if (![[[FRSAPIClient sharedClient] authenticatedUser].username isEqual:[NSNull null]]) {
+            usernameContainer.alpha = 0;
+            self.height -= 44;
+            self.usernameTextField = nil;
+            [self.usernameTextField removeFromSuperview];
         }
         
         self.emailCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
@@ -1218,11 +1223,15 @@
         self.usernameTakenLabel.font = [UIFont notaBoldWithSize:15];
         [self.usernameCheckIV addSubview:self.usernameTakenLabel];
         
+        
+        UIView *passwordContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-44, self.frame.size.width, 44)];
+
         if (password) {
             
             self.migrationAlertShouldShowPassword = YES;
             
-            UIView *passwordContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 292+44, self.frame.size.width, 44)];
+            self.height += 44;
+            
             [self addSubview:passwordContainer];
             
             UIView *passwordTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
@@ -1240,9 +1249,6 @@
             self.passwordTextField.textColor = [UIColor frescoDarkTextColor];
             self.passwordTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
             [passwordContainer addSubview:self.passwordTextField];
-            
-            self.height += 44;
-            
             
             if (emailContainer.alpha == 0) {
                 passwordContainer.transform = CGAffineTransformMakeTranslation(0, -44);
@@ -1265,6 +1271,9 @@
         [self addShadowAndClip];
         
         [self animateIn];
+        
+        //Need to set after frame is set to place password field at the end
+        passwordContainer.frame = CGRectMake(0, self.frame.size.height-88, self.frame.size.width, 44);
         
     }
     return self;
