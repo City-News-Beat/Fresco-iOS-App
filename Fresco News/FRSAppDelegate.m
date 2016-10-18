@@ -447,20 +447,30 @@
 // when the app isn't open
 -(void)handleColdQuickAction:(UIApplicationShortcutItem *)shortcutItem {
     
-    if (!self.tabBarController) { // sry we kinda need that
-        return;
-    }
+    FRSTabBarController *tab = (FRSTabBarController *)self.window.rootViewController;
     
-    [self.tabBarController respondToQuickAction:shortcutItem.type]; // tab bar can handle change
+    if ([[tab class] isSubclassOfClass:[UITabBarController class]]) {
+        [tab respondToQuickAction:shortcutItem.type]; // tab bar can handle change
+    }
+    else {
+        UINavigationController *nav = (UINavigationController *)tab;
+        tab = (FRSTabBarController *)[[nav viewControllers] firstObject];
+        [tab respondToQuickAction:shortcutItem.type];
+    }
 }
 
 - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
     
-    if (!self.tabBarController) { // sry we kinda need that pal
-        return;
-    }
+    FRSTabBarController *tab = (FRSTabBarController *)self.window.rootViewController;
     
-    [self.tabBarController respondToQuickAction:shortcutItem.type]; // tab bar can handle change
+    if ([[tab class] isSubclassOfClass:[UITabBarController class]]) {
+        [tab respondToQuickAction:shortcutItem.type]; // tab bar can handle change
+    }
+    else {
+        UINavigationController *nav = (UINavigationController *)tab;
+        tab = (FRSTabBarController *)[[nav viewControllers] firstObject];
+        [tab respondToQuickAction:shortcutItem.type];
+    }
 }
 
 -(void)registerForPushNotifications {
