@@ -509,12 +509,13 @@
     UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 300, 900)];
     [viewController.view addSubview:textView];
     
-    NSString *instruction = push[settingsKey];
+    NSString *instruction = push[@"type"];
     NSString *notificationID = push[@"id"];
     NSLog(@"PUSH %@", push);
-    textView.text = push.description;
     
+    //
     self.window.rootViewController = viewController;
+    
     if (notificationID && ![notificationID isEqual:[NSNull null]]) {
         [self markAsRead:notificationID];
     }
@@ -552,20 +553,20 @@
         [self segueToUser:user];
     }
     if ([instruction isEqualToString:likedNotification]) {
-        NSString *gallery = [[[push objectForKey:@"meta"] objectForKey:@"gallery_ids"] firstObject];
+        NSString *gallery = [[push  objectForKey:@"gallery_ids"] firstObject];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [self segueToGallery:gallery];
         }
         else {
-            NSString *story = [[[push objectForKey:@"meta"] objectForKey:@"story_ids"] firstObject];
+            NSString *story = [[push objectForKey:@"story_ids"] firstObject];
             if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
                 [self segueToStory:story];
             }
         }
     }
     if ([instruction isEqualToString:repostedNotification]) {
-        NSString *gallery = [[[push objectForKey:@"meta"] objectForKey:@"gallery_ids"] firstObject];
+        NSString *gallery = [[push objectForKey:@"gallery_ids"] firstObject];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [self segueToGallery:gallery];
@@ -578,7 +579,7 @@
         }
     }
     if ([instruction isEqualToString:commentedNotification]) {
-        NSString *gallery = [[[push objectForKey:@"meta"] objectForKey:@"gallery_ids"] firstObject];
+        NSString *gallery = [[push objectForKey:@"gallery_ids"] firstObject];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [self segueToGallery:gallery];
@@ -587,14 +588,14 @@
     
     // general
     if ([instruction isEqualToString:photoOfDayNotification]) {
-        NSString *gallery = [[[push objectForKey:@"meta"] objectForKey:@"gallery_ids"] firstObject];
+        NSString *gallery = [[push objectForKey:@"gallery_ids"] firstObject];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [self segueToGallery:gallery];
         }
     }
     if ([instruction isEqualToString:todayInNewsNotification]) {
-        NSArray *galleryIDs = [[push objectForKey:@"meta"] objectForKey:@"gallery_ids"];
+        NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
         [self segueToTodayInNews:galleryIDs];
 
     }
