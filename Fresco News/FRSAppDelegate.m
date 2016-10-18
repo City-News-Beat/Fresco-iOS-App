@@ -610,7 +610,7 @@
 }
 
 -(void)applicationDidBecomeActive:(UIApplication *)application{
-    
+    [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application{
