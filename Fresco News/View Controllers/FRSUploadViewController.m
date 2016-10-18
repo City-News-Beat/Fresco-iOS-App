@@ -19,6 +19,7 @@
 #import <Photos/Photos.h>
 #import "FRSUploadTask.h"
 #import "FRSMultipartTask.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 @interface FRSUploadViewController () {
     NSMutableArray *dictionaryRepresentations;
@@ -55,6 +56,7 @@
 @property (strong, nonatomic) UIImageView *globalAssignmentsCaret;
 @property (nonatomic) NSInteger numberOfRowsInAssignmentTableView;
 @property (nonatomic) NSInteger numberOfRowsInGlobalAssignmentTableView;
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *spinner;
 
 @property (strong, nonatomic) UIButton *sendButton;
 @property BOOL showingOutlets;
@@ -99,10 +101,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
     //self.numberOfRowsInGlobalAssignmentTableView = self.globalAssignments.count + numberOfOutlets;
     
     [self resetFrames:false];
+
     
+    self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     
     if (!self.assignmentsTableView) {
-        self.sendButton.backgroundColor = [UIColor redColor];
+        self.spinner.frame = CGRectMake(self.view.frame.size.width/2 -20/2, (self.view.frame.size.height + self.galleryCollectionViewHeight)/2 -64 +20/2, 20, 20);
+        self.spinner.tintColor = [UIColor frescoOrangeColor];
+        [self.spinner setPullProgress:90];
+        [self.spinner startAnimating];
+        [self.view addSubview:self.spinner];
     }
 }
 
@@ -945,7 +953,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.globalAssignments = global;
         self.numberOfRowsInGlobalAssignmentTableView = _globalAssignments.count;
 
-        self.sendButton.backgroundColor = [UIColor clearColor];
+
+        [self.spinner stopLoading];
+        [self.spinner removeFromSuperview];
+        
         /*
         NSLog(@"Response Object: %@", responseObject);
         NSLog(@"Assignments: %@", nearBy);
