@@ -1373,7 +1373,7 @@
     
     NSMutableDictionary *digestion = [[NSMutableDictionary alloc] init];
     
-g    NSString *username = [self.usernameTextField.text stringByReplacingOccurrencesOfString:@"@" withString:@""];
+    NSString *username = [self.usernameTextField.text stringByReplacingOccurrencesOfString:@"@" withString:@""];
     NSString *email = self.emailTextField.text;
     NSString *password = self.passwordTextField.text;
     
