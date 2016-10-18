@@ -99,6 +99,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
     //self.numberOfRowsInGlobalAssignmentTableView = self.globalAssignments.count + numberOfOutlets;
     
     [self resetFrames:false];
+    
+    
+    if (!self.assignmentsTableView) {
+        self.sendButton.backgroundColor = [UIColor redColor];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -940,6 +945,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.globalAssignments = global;
         self.numberOfRowsInGlobalAssignmentTableView = _globalAssignments.count;
 
+        self.sendButton.backgroundColor = [UIColor clearColor];
         /*
         NSLog(@"Response Object: %@", responseObject);
         NSLog(@"Assignments: %@", nearBy);
