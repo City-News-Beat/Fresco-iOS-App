@@ -281,7 +281,7 @@
         if (error || !token) {
             // failed
         }
-        [[FRSAPIClient sharedClient] createPaymentWithToken:token completion:^(id responseObject, NSError *error) {
+        [[FRSAPIClient sharedClient] createPaymentWithToken:token.tokenId completion:^(id responseObject, NSError *error) {
             NSLog(@"API: %@ %@", responseObject, error);
             
             if (error) {
