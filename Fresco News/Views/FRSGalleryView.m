@@ -245,8 +245,11 @@
         
         if (error) {
             [actionBar handleRepostState:!state];
-            [actionBar handleRepostAmount:repostCount];
         }
+        else {
+            [actionBar handleRepostState:state];
+        }
+        [actionBar handleRepostAmount:repostCount];
     }];
 }
 
