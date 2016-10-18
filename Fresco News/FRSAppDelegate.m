@@ -567,7 +567,7 @@
         }
     }
     if ([instruction isEqualToString:repostedNotification]) {
-        NSString *gallery = [[push objectForKey:@"gallery_ids"] firstObject];
+        NSString *gallery = [push objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [self segueToGallery:gallery];
@@ -580,7 +580,7 @@
         }
     }
     if ([instruction isEqualToString:commentedNotification]) {
-        NSString *gallery = [[push objectForKey:@"gallery_ids"] firstObject];
+        NSString *gallery = [push objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [self segueToGallery:gallery];
@@ -589,7 +589,7 @@
     
     // general
     if ([instruction isEqualToString:photoOfDayNotification]) {
-        NSString *gallery = [[push objectForKey:@"gallery_ids"] firstObject];
+        NSString *gallery = [push objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [self segueToGallery:gallery];
@@ -598,7 +598,6 @@
     if ([instruction isEqualToString:todayInNewsNotification]) {
         NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
         [self segueToTodayInNews:galleryIDs];
-
     }
 }
 
