@@ -635,7 +635,10 @@
 }
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo {
-    NSLog(@"NOTIF: %@", userInfo);
+    if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
+    {
+        [self handleRemotePush:userInfo];
+    }
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
@@ -643,12 +646,14 @@
 }
 
 -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    NSLog(@"NOTIF LOCAL: %@", notification);
-
+    if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
+    {
+        [self handleRemotePush:notification.userInfo];
+    }
 }
 
 -(void)startNotificationTimer {
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
+    notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
 }
 
 -(void)checkNotifications {
