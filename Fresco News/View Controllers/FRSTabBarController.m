@@ -66,6 +66,7 @@
         navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
         [navControl pushViewController:cam animated:NO];
         [navControl setNavigationBarHidden:YES];
+        
         [self presentViewController:navControl animated:YES completion:^{
 
         }];
