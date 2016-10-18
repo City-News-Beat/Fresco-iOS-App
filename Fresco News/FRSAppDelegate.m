@@ -620,18 +620,17 @@
 
 #pragma mark - Push Notifications
 
--(void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo {
-    UIViewController *viewController = [[UIViewController alloc] init];
-    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 300, 900)];
-    [viewController.view addSubview:textView];
-    
-    self.window.rootViewController = viewController;
-    textView.text = userInfo.description;
-
-    [self handleRemotePush:userInfo];
-    
-    NSLog(@"%@",userInfo);
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
+{
+    if(application.applicationState == UIApplicationStateInactive) {
+        
+        //Handle the push notification
+        [self handleRemotePush:userInfo];
+        
+        handler(UIBackgroundFetchResultNewData);
+    }
 }
+
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
     [FRSTracker track:@"Permissions notification disables"];
@@ -862,7 +861,19 @@
         
         if (isSegueingToStory) {
             isSegueingToStory = YES;
-            [tab.navigationController pushViewController:detailView animated:YES];
+            UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+            
+            if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                [navController pushViewController:detailView animated:TRUE];
+            }
+            else {
+                UITabBarController *tab = (UITabBarController *)navController;
+                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                
+                navController = (UINavigationController *)[[tab viewControllers] firstObject];
+                [navController pushViewController:detailView animated:TRUE];
+            }
         }
     }];
 }
@@ -875,10 +886,21 @@
 }
 
 -(void)segueToUser:(NSString *)userID {
-    UITabBarController *tab = (UITabBarController *)self.tabBarController;
 
     FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUserID:userID];
-    [tab.navigationController pushViewController:profileVC animated:YES];
+    UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+    
+    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+        [navController pushViewController:profileVC animated:TRUE];
+    }
+    else {
+        UITabBarController *tab = (UITabBarController *)navController;
+        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        
+        navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        [navController pushViewController:profileVC animated:TRUE];
+    }
 }
 
 -(void)segueToPost:(NSString *)postID {
@@ -910,13 +932,26 @@
             [assignment configureWithDictionary:responseObject];
             [assignmentsVC focusOnAssignment:assignment];
             
+            UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+            
+            if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                [navController pushViewController:assignmentsVC animated:TRUE];
+            }
+            else {
+                UITabBarController *tab = (UITabBarController *)navController;
+                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                
+                navController = (UINavigationController *)[[tab viewControllers] firstObject];
+                [navController pushViewController:assignmentsVC animated:TRUE];
+            }
+
         }];
     }
 }
 
 
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID {
-    UITabBarController *tab = (UITabBarController *)self.tabBarController;
 
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
         
@@ -929,7 +964,19 @@
         [navControl pushViewController:cam animated:NO];
         [navControl setNavigationBarHidden:YES];
         
-        [tab presentViewController:navControl animated:YES completion:nil];
+        UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+        
+        if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+            [navController presentViewController:navControl animated:YES completion:Nil];
+        }
+        else {
+            UITabBarController *tab = (UITabBarController *)navController;
+            tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+            tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+            
+            navController = (UINavigationController *)[[tab viewControllers] firstObject];
+            [navController presentViewController:navControl animated:YES completion:Nil];
+        }
     }];
 }
 
@@ -943,22 +990,54 @@
     UITabBarController *tab = (UITabBarController *)self.tabBarController;
 
     FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
-    [tab.navigationController pushViewController:debitCardVC animated:YES];
+    UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+    
+    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+        [navController pushViewController:debitCardVC animated:TRUE];
+    }
+    else {
+        UITabBarController *tab = (UITabBarController *)navController;
+        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        
+        navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        [navController pushViewController:debitCardVC animated:TRUE];
+    }
 }
 
 -(void)segueToTaxInfo {
-    UITabBarController *tab = (UITabBarController *)self.tabBarController;
 
-    FRSTaxInformationViewController *taxVC = [[FRSTaxInformationViewController alloc] init];
-    [tab.navigationController pushViewController:taxVC animated:YES];
+    FRSIdentityViewController *taxVC = [[FRSIdentityViewController alloc] init];
+    UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+    
+    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+        [navController pushViewController:taxVC animated:TRUE];
+    }
+    else {
+        UITabBarController *tab = (UITabBarController *)navController;
+        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        
+        navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        [navController pushViewController:taxVC animated:TRUE];
+    }
 }
 
 -(void)segueToIDInfo {
-    UITabBarController *tab = (UITabBarController *)self.tabBarController;
-
-    FRSIdentityViewController *identityVC = [[FRSIdentityViewController alloc] init];
-    [tab.navigationController pushViewController:identityVC animated:YES];
+    FRSIdentityViewController *taxVC = [[FRSIdentityViewController alloc] init];
+    UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
     
+    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+        [navController pushViewController:taxVC animated:TRUE];
+    }
+    else {
+        UITabBarController *tab = (UITabBarController *)navController;
+        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        
+        navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        [navController pushViewController:taxVC animated:TRUE];
+    }
 }
 
 @end
