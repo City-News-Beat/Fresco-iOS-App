@@ -1594,15 +1594,28 @@
             [self toggleCreateAccountButtonTitleColorToState:controlState];
         }
     } else {
-        
-        if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
-            
-            if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
-                controlState = UIControlStateHighlighted;
+        if (self.emailTextField != nil) {
+            if (([self.usernameTextField.text length] > 0)) {
+                
+                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken)) {
+                    controlState = UIControlStateHighlighted;
+                } else {
+                    controlState = UIControlStateNormal;
+                }
+                [self toggleCreateAccountButtonTitleColorToState:controlState];
             } else {
-                controlState = UIControlStateNormal;
+                [self toggleCreateAccountButtonTitleColorToState:UIControlStateNormal];
             }
-            [self toggleCreateAccountButtonTitleColorToState:controlState];
+        } else {
+            if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
+                
+                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
+                    controlState = UIControlStateHighlighted;
+                } else {
+                    controlState = UIControlStateNormal;
+                }
+                [self toggleCreateAccountButtonTitleColorToState:controlState];
+            }
         }
     }
 }
