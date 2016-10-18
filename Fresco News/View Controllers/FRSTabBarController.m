@@ -45,11 +45,31 @@
     }
     else if ([quickAction isEqualToString:takePhotoAction]) {
         // open camera, switch to photo
-        [self setSelectedIndex:2];
+        [FRSTracker track:@"Camera Opened"];
+        
+        FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+        UINavigationController *navControl = [[UINavigationController alloc] init];
+        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+        [navControl pushViewController:cam animated:NO];
+        [navControl setNavigationBarHidden:YES];
+        [self presentViewController:navControl animated:YES completion:^{
+
+        }];
+
     }
     else if ([quickAction isEqualToString:takeVideoAction]) {
         // just open camera
-        [self setSelectedIndex:2];
+        [FRSTracker track:@"Camera Opened"];
+        
+        FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+        UINavigationController *navControl = [[UINavigationController alloc] init];
+        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+        [navControl pushViewController:cam animated:NO];
+        [navControl setNavigationBarHidden:YES];
+        [self presentViewController:navControl animated:YES completion:^{
+
+        }];
+
     }
 }
 
