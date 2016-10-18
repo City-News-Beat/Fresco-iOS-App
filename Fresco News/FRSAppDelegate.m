@@ -514,7 +514,7 @@
     NSLog(@"PUSH %@", push);
     
     //
-    self.window.rootViewController = viewController;
+   // self.window.rootViewController = viewController;
     
     if (notificationID && ![notificationID isEqual:[NSNull null]]) {
         [self markAsRead:notificationID];
@@ -808,8 +808,6 @@
 
 
 -(void)segueToGallery:(NSString *)galleryID {
-    UITabBarController *tab = (UITabBarController *)self.tabBarController;
-    __block BOOL isSegueingToGallery;
 
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
         
@@ -821,12 +819,20 @@
         FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:galleryToSave];
         vc.shouldHaveBackButton = YES;
         
-        if (!isSegueingToGallery) {
-            isSegueingToGallery = YES;
-            [tab.navigationController pushViewController:vc animated:YES];
+        
+        UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+        
+        if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+            [navController pushViewController:vc animated:TRUE];
         }
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        else {
+            UITabBarController *tab = (UITabBarController *)navController;
+            tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+            tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+            
+            navController = (UINavigationController *)[[tab viewControllers] firstObject];
+            [navController pushViewController:vc animated:TRUE];
+        }
     }];
 }
 
