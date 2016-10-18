@@ -391,7 +391,8 @@
 
 
 -(void)saveCard {
-    
+    [Stripe setDefaultPublishableKey:stripeTest];
+
     NSArray *components = [expirationDateTextField.text componentsSeparatedByString:@"/"];
     NSArray *expiration;
     
