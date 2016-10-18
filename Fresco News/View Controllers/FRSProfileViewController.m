@@ -1370,6 +1370,26 @@
     //} else {
     //    scrollView.bounces = YES;
     //}
+
+    NSArray *visibleCells = [self.tableView visibleCells];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        BOOL taken = FALSE;
+        
+        for (FRSGalleryCell *cell in visibleCells) {
+            if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
+                    if (!taken) {
+                        [cell play];
+                        taken = TRUE;
+                    }
+                    else {
+                        [cell pause];
+                    }
+                }
+            }
+        }
+    });
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
