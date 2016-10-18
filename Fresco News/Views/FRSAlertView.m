@@ -1195,6 +1195,8 @@
             
             emailContainer.alpha = 0;
             self.height -= 44;
+            self.emailTextField = nil;
+            [self.emailTextField removeFromSuperview];
 
         }
         
@@ -1375,8 +1377,14 @@
     NSString *email = self.emailTextField.text;
     NSString *password = self.passwordTextField.text;
     
-    [digestion setObject:username forKey:@"username"];
-    [digestion setObject:email forKey:@"email"];
+    
+    if (email != nil) {
+        [digestion setObject:email forKey:@"email"];
+    }
+    
+    if (username != nil) {
+        [digestion setObject:username forKey:@"username"];
+    }
     
     if ([[FRSAPIClient sharedClient] passwordUsed]) {
         [digestion setObject:[[FRSAPIClient sharedClient] passwordUsed] forKey:@"verify_password"];
@@ -1589,17 +1597,45 @@
     UIControlState controlState;
     
     if (self.passwordTextField) {
-        if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
-            
-            if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken) && (!self.usernameTaken)) {
-                controlState = UIControlStateHighlighted;
-            } else {
-                controlState = UIControlStateNormal;
+        if (self.emailTextField != nil) {
+            if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
+                
+                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken) && (!self.usernameTaken)) {
+                    controlState = UIControlStateHighlighted;
+                } else {
+                    controlState = UIControlStateNormal;
+                }
+                [self toggleCreateAccountButtonTitleColorToState:controlState];
             }
-            [self toggleCreateAccountButtonTitleColorToState:controlState];
+        } else {
+            
+            if (([self.usernameTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
+                
+                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken) && (!self.usernameTaken)) {
+                    controlState = UIControlStateHighlighted;
+                } else {
+                    controlState = UIControlStateNormal;
+                }
+                [self toggleCreateAccountButtonTitleColorToState:controlState];
+            }
         }
+
     } else {
         if (self.emailTextField != nil) {
+            
+            
+            if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
+                
+                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
+                    controlState = UIControlStateHighlighted;
+                } else {
+                    controlState = UIControlStateNormal;
+                }
+                [self toggleCreateAccountButtonTitleColorToState:controlState];
+            }
+            
+
+        } else {
             if (([self.usernameTextField.text length] > 0)) {
                 
                 if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken)) {
@@ -1610,16 +1646,6 @@
                 [self toggleCreateAccountButtonTitleColorToState:controlState];
             } else {
                 [self toggleCreateAccountButtonTitleColorToState:UIControlStateNormal];
-            }
-        } else {
-            if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
-                
-                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
-                    controlState = UIControlStateHighlighted;
-                } else {
-                    controlState = UIControlStateNormal;
-                }
-                [self toggleCreateAccountButtonTitleColorToState:controlState];
             }
         }
     }
