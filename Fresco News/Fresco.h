@@ -255,7 +255,7 @@ static NSString * const userNewsCustomNotification = @"user-news-custom-push";
 
 // Social
 static NSString * const followedNotification = @"user-social-followed";
-static NSString * const likedNotification = @"user-social-liked";
+static NSString * const likedNotification = @"user-social-gallery-liked";
 static NSString * const repostedNotification = @"user-social-reposted";
 static NSString * const commentedNotification = @"user-social-commented";
 static NSString * const mentionCommentNotification = @"user-social-mentioned-comment"; //cc: api
