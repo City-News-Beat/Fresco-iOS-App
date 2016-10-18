@@ -245,30 +245,8 @@
             return;
         }
         
-        if (responseCode >= 400 && responseCode < 500) {
-            // 400 level, client
-            if (!self.alert) {
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                [self.alert show];
-            }
-
-            return;
-        }
-        else if (responseCode >= 500 && responseCode < 600) {
-            // 500 level, server
-            if (!self.alert) {
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                [self.alert show];
-            }
-            return;
-        }
-        else if (responseCode >= 300 && responseCode < 400) {
-            // 300  level, unauthorized
-            if (!self.alert) {
-                self.alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-                [self.alert show];
-            }
-            return;
+        if (error) {
+            [self presentGenericError];
         }
     }];
 }

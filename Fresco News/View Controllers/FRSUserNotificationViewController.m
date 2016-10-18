@@ -120,12 +120,12 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [super viewDidDisappear:animated];
     self.isSegueingToGallery = NO;
     self.isSegueingToStory = NO;
-    if (self.tabBarController) {
+    /*if (self.tabBarController) {
         [(FRSTabBarController *)self.tabBarController updateUserIcon];
     } else {
         FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
         [tabBarController updateUserIcon];
-    }
+    }*/
 }
 
 -(void)getNotifications {

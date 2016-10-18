@@ -141,34 +141,6 @@
         }];
      }
     
-
-    
-    
-    
-    /* DEBUG */
-//    self.userIsBlocking   = YES;
-//    self.userIsSuspended = YES;
-//    self.userIsDisabled  = YES;
-    
-    
-    /* REPORT SUCCESS ALERT */
-    
-//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block @%@ as well?", _representedUser.username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-//    [alert show];
-    
-    
-    /* BLOCK SUCCESS ALERT */
-    
-//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-//    [alert show];
-    
-    
-    /* SUSPENDED ALERT */
-
-//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message: [NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-//    [alert show];
-    
-
     [self setupUI];
     [self configureUI];
     [self fetchGalleries];
@@ -301,10 +273,20 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
+    FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
+    
+    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
+        
+        if ([[responseObject objectForKey:@"unseen_count"] integerValue] <= 0) {
+            [tabBarController updateUserIcon];
+        } else {
+            [tabBarController updateBellIcon:NO];
+        }
+    }];
+
     
     
-    
-//    
+//
 //    if(!self.editedProfile){
 //        if (!_representedUser) {
 //            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
@@ -409,17 +391,6 @@
 }
 -(void)setupUI {
     
-//    if (self.userIsBlocking) {
-//        [self configureBlockedUserWithButton:YES];
-//        return;
-//    } else if (self.userIsSuspended) {
-//        [self configureSuspendedUser];
-//        return;
-//    } else if (self.userIsDisabled) {
-//        [self configureDisabledUser];
-//        return;
-//    }
-    
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
     
@@ -451,9 +422,6 @@
     self.tableView.scrollEnabled = NO;
     
     self.userIsBlocking = YES;
-
-//    self.profileContainer.frame = CGRectMake(0, self.profileContainer.frame.origin.y -64, self.profileContainer.frame.size.width, self.profileContainer.frame.size.height);
-//    [self.view addSubview:self.profileContainer];
     
     self.blockedContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height-self.profileContainer.frame.size.height)/2 +181/2, 207, 181)];
     [self.view addSubview:self.blockedContainer];
@@ -495,6 +463,8 @@
         return;
     }
     
+
+    
     self.tableView.scrollEnabled = NO;
     self.tableView.alpha = 0;
 
@@ -514,12 +484,14 @@
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
     
-    if(_representedUser.profileImage != [NSNull null]){
+    if (_representedUser.profileImage != [NSNull null]){
         self.profileImageURL = [NSURL URLWithString:_representedUser.profileImage];
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:_representedUser.profileImage]];
         
-        if (self.profileImageURL == nil) {
-            self.placeholderUserIcon.alpha = 1;
+        if (!_representedUser.profileImage) {
+            self.placeholderUserIcon = [[UIImageView alloc] initWithFrame:CGRectMake(self.profileIV.frame.size.width/2 - 40/2, self.profileIV.frame.size.height/2 -40/2, 40, 40)];
+            self.placeholderUserIcon.image = [UIImage imageNamed:@"user-40"];
+            [self.profileIV addSubview:self.placeholderUserIcon];
         }
     }
     
@@ -644,17 +616,18 @@
         
         if (self.userIsBlocked) {
             [self configureBlockedUserWithButton:NO];
+            self.likesButton.userInteractionEnabled = NO;
             return;
         }
         
-        if (self.userIsBlocking) {
+        if (self.userIsBlocking || _representedUser.blocking) {
             [self configureBlockedUserWithButton:YES];
             return;
         }
-        else if (self.userIsSuspended) {
+        else if ((self.userIsSuspended || _representedUser.suspended) && ![_representedUser.uid isEqual:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
             [self configureSuspendedUser];
             return;
-        } else if (self.userIsDisabled) {
+        } else if (self.userIsDisabled || _representedUser.disabled) {
             [self configureDisabledUser];
             return;
         }
@@ -1657,8 +1630,7 @@
             /////
             
         } else {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            [self presentGenericError];
         }
         
     }];
@@ -1689,8 +1661,7 @@
             ////
             
         } else {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            [self presentGenericError];
         }
     }];
 }
@@ -1711,8 +1682,7 @@
     [[FRSAPIClient sharedClient] reportUser:userID params:@{@"reason" : self.reportUserReasonString, @"message" : self.reportUserAlertView.textView.text} completion:^(id responseObject, NSError *error) {
         
         if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            [self presentGenericError];
             return;
         }
         

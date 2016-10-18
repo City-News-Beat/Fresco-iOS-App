@@ -16,6 +16,7 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
+#import "FRSTabBarController.h"
 #import "FRSAppDelegate.h"
 
 @interface FRSBaseViewController ()
@@ -267,6 +268,13 @@
 
 }
 
+#pragma mark - Errors
+
+-(void)presentGenericError {
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+    [alert show];
+}
+
 #pragma mark - Logout
 
 -(void)logoutWithPop:(BOOL)pop {
@@ -300,7 +308,9 @@
     
     [[FRSAPIClient sharedClient] setPasswordUsed:nil];
     [[FRSAPIClient sharedClient] setEmailUsed:nil];
-
+    
+    //don't forget to change bell icon to user icon
+    
     if (pop) {
         [self popViewController];
     }

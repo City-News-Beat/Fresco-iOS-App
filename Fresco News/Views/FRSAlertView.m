@@ -1881,12 +1881,12 @@
 }
 
 -(void)textViewDidEndEditing:(UITextView *)textView {
-    if ([textView.text isEqualToString:@""]) {
-        [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        if ([textView.text isEqualToString:@""]) {
             self.textViewPlaceholderLabel.alpha = 1;
-            self.transform = CGAffineTransformMakeTranslation(0, 0);
-        } completion:nil];
-    }
+        }
+        self.transform = CGAffineTransformMakeTranslation(0, 0);
+    } completion:nil];
 }
 
 -(void)didTapOptionOne {
