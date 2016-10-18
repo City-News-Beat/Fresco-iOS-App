@@ -11,6 +11,7 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <MapKit/MapKit.h>
 
 #import <Contacts/Contacts.h>
@@ -1401,9 +1402,21 @@
     }
     
     
+    DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    
+    [self.cancelButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    spinner.frame = CGRectMake(self.cancelButton.frame.size.width - 20 -16, self.cancelButton.frame.size.height/2 -10, 20, 20);
+    spinner.tintColor = [UIColor frescoOrangeColor];
+    [spinner setPullProgress:90];
+    [spinner startAnimating];
+    [self.cancelButton addSubview:spinner];
     
     
     [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
+        
+        [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
         
         if (error) {
 
