@@ -210,12 +210,17 @@
         if (self.globalAssignmentsArray.count >= 1) {
             [self showGlobalAssignmentsBar];
         }
+        FRSAssignment *defaultAssignment;
         
         for (NSDictionary *dict in assignments){
             
             FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
             [assignmentToAdd configureWithDictionary:dict];
             NSString *uid = assignmentToAdd.uid;
+            
+            if ([uid isEqualToString:self.defaultID]) {
+                defaultAssignment = assignmentToAdd;
+            }
             
             if ([self assignmentExists:uid]) {
                 continue;
@@ -243,6 +248,10 @@
         [self configureAnnotationsForMap];
         [delegate.managedObjectContext save:Nil];
         [delegate saveContext];
+        
+        if (self.defaultID && defaultAssignment) {
+            [self focusOnAssignment:defaultAssignment];
+        }
     }];
 }
 
