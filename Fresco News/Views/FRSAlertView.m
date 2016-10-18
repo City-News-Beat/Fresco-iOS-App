@@ -1373,8 +1373,7 @@
     
     NSMutableDictionary *digestion = [[NSMutableDictionary alloc] init];
     
-    
-    NSString *username = [self.usernameTextField.text stringByReplacingOccurrencesOfString:@"@" withString:@""];
+g    NSString *username = [self.usernameTextField.text stringByReplacingOccurrencesOfString:@"@" withString:@""];
     NSString *email = self.emailTextField.text;
     NSString *password = self.passwordTextField.text;
     
@@ -1401,7 +1400,6 @@
         [digestion removeObjectForKey:@"verify_password"];
     }
     
-    
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     
     [self.cancelButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
@@ -1411,12 +1409,7 @@
     [spinner startAnimating];
     [self.cancelButton addSubview:spinner];
     
-    
     [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
-        
-        [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        [spinner stopLoading];
-        [spinner removeFromSuperview];
         
         if (error) {
 
@@ -1434,6 +1427,12 @@
             }
             
             [self dismiss];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [spinner stopLoading];
+                [spinner removeFromSuperview];
+                [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+            });
         }
     }];
 }
