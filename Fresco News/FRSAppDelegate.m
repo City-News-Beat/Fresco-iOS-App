@@ -455,7 +455,9 @@
     else {
         UINavigationController *nav = (UINavigationController *)tab;
         tab = (FRSTabBarController *)[[nav viewControllers] firstObject];
-        [tab respondToQuickAction:shortcutItem.type];
+        if ([[tab class] isSubclassOfClass:[UITabBarController class]]) {
+            [tab respondToQuickAction:shortcutItem.type];
+        }
     }
 }
 
@@ -469,7 +471,9 @@
     else {
         UINavigationController *nav = (UINavigationController *)tab;
         tab = (FRSTabBarController *)[[nav viewControllers] firstObject];
-        [tab respondToQuickAction:shortcutItem.type];
+        if ([[tab class] isSubclassOfClass:[UITabBarController class]]) {
+            [tab respondToQuickAction:shortcutItem.type];
+        }
     }
 }
 
