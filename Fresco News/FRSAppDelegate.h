@@ -27,7 +27,9 @@
 #import "FRSNotificationTester.h"
 
 @interface FRSAppDelegate : UIResponder <UIApplicationDelegate>
-
+{
+    NSTimer *notificationTimer;
+}
 @property (strong, nonatomic) UIWindow *window;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

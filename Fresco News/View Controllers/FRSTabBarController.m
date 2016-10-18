@@ -45,17 +45,37 @@
     }
     else if ([quickAction isEqualToString:takePhotoAction]) {
         // open camera, switch to photo
-        [self setSelectedIndex:2];
+        [FRSTracker track:@"Camera Opened"];
+        
+        FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+        UINavigationController *navControl = [[UINavigationController alloc] init];
+        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+        [navControl pushViewController:cam animated:NO];
+        [navControl setNavigationBarHidden:YES];
+        [self presentViewController:navControl animated:YES completion:^{
+
+        }];
+
     }
     else if ([quickAction isEqualToString:takeVideoAction]) {
         // just open camera
-        [self setSelectedIndex:2];
+        [FRSTracker track:@"Camera Opened"];
+        
+        FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+        UINavigationController *navControl = [[UINavigationController alloc] init];
+        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+        [navControl pushViewController:cam animated:NO];
+        [navControl setNavigationBarHidden:YES];
+        
+        [self presentViewController:navControl animated:YES completion:^{
+
+        }];
+
     }
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
 }
 
 - (void)viewDidLoad {
@@ -260,10 +280,11 @@
         
         if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
             
-            /* UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
+            UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
             FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
-            profile.shouldShowNotificationsOnLoad = YES;
+            /*profile.shouldShowNotificationsOnLoad = YES;
             [profile loadAuthenticatedUser]; */
+            [profile showNotificationsNotAnimated];
             
         } else {
             
@@ -275,15 +296,6 @@
                 UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
                 FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
                 [profile loadAuthenticatedUser];
-                
-                
-                //            if (userNotificationCount >= 1) {
-                //                profile.shouldShowNotificationsOnLoad = YES;
-                //            userNotificationCount resets once the vc is loaded
-                //            else gets called when user tabs back on the tab bar
-                //            } else {
-                //                [self updateUserIcon];
-                //            }
             }
         }
     }
@@ -344,17 +356,7 @@
             
         case 4:{
                         
-            if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
-                
-                FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
-                [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:NO];
-                [profileVC showNotificationsNotAnimated];
-                
-                break;
-            }
-            
-            
-            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+           if ([[FRSAPIClient sharedClient] isAuthenticated]) {
                 FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
                 [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:NO];
             } else {

@@ -141,32 +141,6 @@
         }];
      }
     
-
-    
-    /* DEBUG */
-//    self.userIsBlocked   = YES;
-//    self.userIsSuspended = YES;
-//    self.userIsDisabled  = YES;
-    
-    
-    /* REPORT SUCCESS ALERT */
-    
-//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block @%@ as well?", _representedUser.username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-//    [alert show];
-    
-    
-    /* BLOCK SUCCESS ALERT */
-    
-//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"BLOCKED" message: [NSString stringWithFormat:@"You won’t see posts from @%@ anymore.", _representedUser.username] actionTitle:@"UNDO" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-//    [alert show];
-    
-    
-    /* SUSPENDED ALERT */
-
-//    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message: [NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-//    [alert show];
-    
-
     [self setupUI];
     [self configureUI];
     [self fetchGalleries];
@@ -207,19 +181,8 @@
     }
     
     
-    [[FRSAPIClient sharedClient] reportUser:_representedUser.uid params:@{@"reason" : @"spam", @"message" : @"hello friend"} completion:^(id responseObject, NSError *error) {
-        
-        if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
-            return;
-        }
-        
-        if (responseObject) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"REPORT SENT" message: [NSString stringWithFormat:@"Thanks for helping make Fresco a better community! Would you like to block %@ as well?", username] actionTitle:@"CLOSE" cancelTitle:@"BLOCK USER" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-            [alert show];
-        }
-    }];
+    [self reportUser:_representedUser.uid];
+
 }
 
 -(void)presentSheet {
@@ -269,7 +232,7 @@
     }];
 
     
-    if (self.userIsBlocked) {
+    if (self.userIsBlocking) {
         [view addAction:report];
         [view addAction:sunblock];
         [view addAction:cancel];
@@ -310,10 +273,20 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.tableView animated:NO];
     
+    FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
+    
+    [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
+        
+        if ([[responseObject objectForKey:@"unseen_count"] integerValue] <= 0) {
+            [tabBarController updateUserIcon];
+        } else {
+            [tabBarController updateBellIcon:NO];
+        }
+    }];
+
     
     
-    
-//    
+//
 //    if(!self.editedProfile){
 //        if (!_representedUser) {
 //            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
@@ -418,17 +391,6 @@
 }
 -(void)setupUI {
     
-//    if (self.userIsBlocked) {
-//        [self configureBlockedUserWithButton:YES];
-//        return;
-//    } else if (self.userIsSuspended) {
-//        [self configureSuspendedUser];
-//        return;
-//    } else if (self.userIsDisabled) {
-//        [self configureDisabledUser];
-//        return;
-//    }
-    
     self.presentingUser = YES;
     [self configureBackButtonAnimated:YES];
     
@@ -459,10 +421,7 @@
     }
     self.tableView.scrollEnabled = NO;
     
-    self.userIsBlocked = YES;
-
-//    self.profileContainer.frame = CGRectMake(0, self.profileContainer.frame.origin.y -64, self.profileContainer.frame.size.width, self.profileContainer.frame.size.height);
-//    [self.view addSubview:self.profileContainer];
+    self.userIsBlocking = YES;
     
     self.blockedContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -207/2, (self.view.frame.size.height-self.profileContainer.frame.size.height)/2 +181/2, 207, 181)];
     [self.view addSubview:self.blockedContainer];
@@ -484,6 +443,8 @@
     bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     bodyLabel.textColor = [UIColor frescoMediumTextColor];
     [self.blockedContainer addSubview:bodyLabel];
+
+    self.navigationItem.rightBarButtonItems = nil;
     
     if (button) {
         UIButton *unblockButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -502,7 +463,10 @@
         return;
     }
     
+
+    
     self.tableView.scrollEnabled = NO;
+    self.tableView.alpha = 0;
 
     UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 220-64)];
     container.backgroundColor = [UIColor frescoOrangeColor];
@@ -520,12 +484,14 @@
     self.profileIV.clipsToBounds = YES;
     [self.profileBG addSubview:self.profileIV];
     
-    if(_representedUser.profileImage != [NSNull null]){
+    if (_representedUser.profileImage != [NSNull null]){
         self.profileImageURL = [NSURL URLWithString:_representedUser.profileImage];
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:_representedUser.profileImage]];
         
-        if (self.profileImageURL == nil) {
-            self.placeholderUserIcon.alpha = 1;
+        if (!_representedUser.profileImage) {
+            self.placeholderUserIcon = [[UIImageView alloc] initWithFrame:CGRectMake(self.profileIV.frame.size.width/2 - 40/2, self.profileIV.frame.size.height/2 -40/2, 40, 40)];
+            self.placeholderUserIcon.image = [UIImage imageNamed:@"user-40"];
+            [self.profileIV addSubview:self.placeholderUserIcon];
         }
     }
     
@@ -649,13 +615,19 @@
         [self.loadingView removeFromSuperview];
         
         if (self.userIsBlocked) {
+            [self configureBlockedUserWithButton:NO];
+            self.likesButton.userInteractionEnabled = NO;
+            return;
+        }
+        
+        if (self.userIsBlocking || _representedUser.blocking) {
             [self configureBlockedUserWithButton:YES];
             return;
         }
-        else if (self.userIsSuspended) {
+        else if ((self.userIsSuspended || _representedUser.suspended) && ![_representedUser.uid isEqual:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
             [self configureSuspendedUser];
             return;
-        } else if (self.userIsDisabled) {
+        } else if (self.userIsDisabled || _representedUser.disabled) {
             [self configureDisabledUser];
             return;
         }
@@ -668,10 +640,12 @@
             self.currentFeed = self.galleries;
             [self.tableView reloadData];
             
+            
             if (self.galleries.count <= 0) {
-                [self displayAwkwardView:true feedTable:true];
+                [self configureFrogForFeed:self.tableView];
+                self.feedAwkwardView.alpha = 1;
             } else {
-                [self displayAwkwardView:false feedTable:true];
+                self.feedAwkwardView.alpha = 0;
             }
         }
     }];
@@ -695,25 +669,13 @@
             [self.tableView reloadData];
         
             if (self.likes.count <= 0) {
-                [self displayAwkwardView:true feedTable:false];
+                [self configureFrogForFeed:self.tableView];
+                self.feedAwkwardView.alpha = 1;
             } else {
-                [self displayAwkwardView:false feedTable:false];
+                self.feedAwkwardView.alpha = 0;
             }
         }
     }];
-}
-
--(void)displayAwkwardView: (BOOL)show feedTable:(BOOL)feed{
-    
-    if (isLoadingUser) {
-        return;
-    }
-    
-    if(feed){
-        self.feedAwkwardView.hidden = !show;
-    }else{
-        self.likesAwkwardView.hidden = !show;
-    }
 }
 
 #pragma mark - UI Elements
@@ -724,17 +686,18 @@
     //    [self configureTableView];
     [self configurePullToRefresh];
     [self configureProfileSocialOverlay];
-    //[self configureFrogs]; broken (wip)
 }
 
--(void)configureFrogs {
+-(void)configureFrogForFeed:(UITableView *)feed {
     
-    NSInteger navigationBarHeight = 64;
+    if (self.feedAwkwardView) {
+        return;
+    }
+    
     NSInteger profileContainerTabBarHeight = 44;
  
-    self.feedAwkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, self.profileContainer.frame.size.height + profileContainerTabBarHeight + navigationBarHeight, self.view.frame.size.width, self.view.frame.size.height)];
-    [self.tableView addSubview:self.feedAwkwardView];
-    
+    self.feedAwkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, ((self.profileContainer.frame.size.height + profileContainerTabBarHeight) + (self.view.frame.size.height))/2, self.view.frame.size.width, self.view.frame.size.height)];
+    [feed addSubview:self.feedAwkwardView];
 }
 
 -(void)configurePullToRefresh {
@@ -822,7 +785,7 @@
                     
                 }
                 
-                if (self.userIsBlocked) {
+                if (self.userIsBlocking) {
                     [self.followBarButtonItem setImage:[UIImage imageNamed:@"dots"]];
                     [self.followBarButtonItem setAction:@selector(presentSheet)];
                     [self.followBarButtonItem setTarget:self];
@@ -1122,6 +1085,12 @@
     self.feedButton.alpha = 1.0;
     self.likesButton.alpha = 0.7;
     
+    if (self.galleries.count == 0 || (!self.galleries)) {
+        [self configureFrogForFeed:self.tableView];
+        self.feedAwkwardView.alpha = 1;
+    } else {
+        self.feedAwkwardView.alpha = 0;
+    }
     
     if (self.currentFeed != self.galleries) {
         self.currentFeed = self.galleries;
@@ -1135,6 +1104,13 @@
     
     self.likesButton.alpha = 1.0;
     self.feedButton.alpha = 0.7;
+    
+    if (self.likes.count == 0 || (!self.likes)) {
+        [self configureFrogForFeed:self.tableView];
+        self.feedAwkwardView.alpha = 1;
+    } else {
+        self.feedAwkwardView.alpha = 0;
+    }
     
     if (self.currentFeed != self.likes) {
         self.currentFeed = self.likes;
@@ -1557,18 +1533,10 @@
         
         [self.bioTextView frs_setTextWithResize:user.bio];
         
-        self.userIsBlocked = user.blocking;
+        self.userIsBlocking  = user.blocking;
+        self.userIsBlocked   = user.blocked;
         self.userIsSuspended = user.suspended;
-        self.userIsDisabled = user.disabled;
-        
-        
-        //debug
-        //self.userIsSuspended = YES;
-        //self.userIsDisabled = YES;
-        //debug
-        
-        
-        
+        self.userIsDisabled  = user.disabled;
         
         if (_authenticatedProfile) {
             [self resizeProfileContainer];
@@ -1585,7 +1553,6 @@
         }
 
 
-        
         self.nameLabel.text = user.firstName;
         [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followedCount"]] forState:UIControlStateNormal];
         self.locationLabel.text = [user valueForKey:@"location"];
@@ -1608,20 +1575,21 @@
 #pragma mark - Moderation
 
 -(void)didPressRadioButtonAtIndex:(NSInteger)index {
-    if (self.reportUserAlertView) {
-        switch (index) {
-            case 0:
-                self.reportUserReasonString = @"abuse";
-                break;
-            case 1:
-                self.reportUserReasonString = @"spam";
-                break;
-            case 2:
-                self.reportUserReasonString = @"stolen";
-                break;
-            default:
-                break;
-        }
+    switch (index) {
+        case 0:
+            self.reportUserReasonString = @"abuse";
+            break;
+        case 1:
+            self.reportUserReasonString = @"spam";
+            break;
+        case 2:
+            self.reportUserReasonString = @"stolen";
+            break;
+        case 3:
+            self.reportUserReasonString = @"graphic";
+            break;
+        default:
+            break;
     }
 }
 
@@ -1654,7 +1622,7 @@
             if (!self.profileIV.image) {
                 self.placeholderUserIcon.alpha = 1;
             }
-            self.userIsBlocked = YES;
+            self.userIsBlocking = YES;
             self.tableView.scrollEnabled = NO;
             UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
             dotIcon.tintColor = [UIColor whiteColor];
@@ -1662,8 +1630,7 @@
             /////
             
         } else {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            [self presentGenericError];
         }
         
     }];
@@ -1677,7 +1644,7 @@
         if (responseObject) {
             
             /////
-            self.userIsBlocked = NO;
+            self.userIsBlocking = NO;
             self.tableView.scrollEnabled = YES;
             [self configureWithUser:_representedUser];
             [self fetchGalleries];
@@ -1694,8 +1661,7 @@
             ////
             
         } else {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            [self presentGenericError];
         }
     }];
 }
@@ -1711,11 +1677,12 @@
 }
 
 -(void)reportUser:(NSString *)userID {
-    [[FRSAPIClient sharedClient] reportUser:userID params:@{@"reason" : self.reportUserReasonString, @"message" : @"wow cool"} completion:^(id responseObject, NSError *error) {
+    
+    
+    [[FRSAPIClient sharedClient] reportUser:userID params:@{@"reason" : self.reportUserReasonString, @"message" : self.reportUserAlertView.textView.text} completion:^(id responseObject, NSError *error) {
         
         if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
+            [self presentGenericError];
             return;
         }
         

@@ -120,12 +120,12 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [super viewDidDisappear:animated];
     self.isSegueingToGallery = NO;
     self.isSegueingToStory = NO;
-    if (self.tabBarController) {
+    /*if (self.tabBarController) {
         [(FRSTabBarController *)self.tabBarController updateUserIcon];
     } else {
         FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
         [tabBarController updateUserIcon];
-    }
+    }*/
 }
 
 -(void)getNotifications {
@@ -135,6 +135,14 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         [self configureTableView];
         [self registerNibs];
         [self.spinner stopLoading];
+        
+        NSMutableArray *toMarkAsRead = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *notif in self.feed) {
+            [toMarkAsRead addObject:notif[@"id"]];
+        }
+        
+        [self markAllAsRead:toMarkAsRead];
     }];
 }
 
@@ -615,6 +623,19 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 }
 
+-(void)markAllAsRead:(NSArray *)notificationIDS {
+    NSDictionary *params = @{@"notification_ids":notificationIDS};
+    [[FRSAPIClient sharedClient] post:@"user/notifications/see" withParameters:params completion:^(id responseObject, NSError *error) {
+        BOOL success = FALSE;
+        
+        if (!error && responseObject) {
+            success = TRUE;
+        }
+        
+        NSLog(@"MARK AS READ SUCCESS: %d", success);
+    }];
+}
+
 -(void)markAsRead:(NSString *)notificationID {
     NSDictionary *params = @{@"notification_ids":@[notificationID]};
     [[FRSAPIClient sharedClient] post:@"user/notifications/see" withParameters:params completion:^(id responseObject, NSError *error) {
@@ -627,7 +648,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         NSLog(@"MARK AS READ SUCCESS: %d", success);
     }];
 }
-
 
 #pragma mark - Assignments
 -(void)configureAssignmentCell:(FRSAssignmentNotificationTableViewCell *)assignmentCell dictionary:(NSDictionary *)dictionary {

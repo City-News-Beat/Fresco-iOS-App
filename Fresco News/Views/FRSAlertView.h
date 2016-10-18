@@ -41,4 +41,6 @@
 
 -(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude;
 
+@property (strong, nonatomic) UITextView *textView;
+
 @end

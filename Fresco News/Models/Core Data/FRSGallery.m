@@ -55,6 +55,10 @@
     self.caption = dict[@"caption"];
     if([dict valueForKey:@"owner"] != [NSNull null] && [[dict valueForKey:@"owner"] valueForKey:@"full_name"] != [NSNull null]){
         self.byline = dict[@"owner"][@"full_name"];
+        self.creator.uid = (dict[@"owner"][@"id"] != nil && ![dict[@"owner"][@"id"] isEqual:[NSNull null]]) ? dict[@"owner"][@"id"] : @"";
+        self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
+        self.creator.username = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
+        //blocked
     }
     NSLog(@"BYLINE: %@", self.byline);
 

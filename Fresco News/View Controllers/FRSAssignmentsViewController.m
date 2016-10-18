@@ -725,7 +725,7 @@
     [self.assignmentBottomBar addSubview:photoImageView];
     
     self.photoCashLabel = [[UILabel alloc] initWithFrame:CGRectMake(46, 15, 23, 17)];
-    self.photoCashLabel.text = @"$10";
+    self.photoCashLabel.text = @"$20";
     self.photoCashLabel.textColor = [UIColor frescoMediumTextColor];
     self.photoCashLabel.textAlignment = NSTextAlignmentCenter;
     self.photoCashLabel.font = [UIFont notaBoldWithSize:15];

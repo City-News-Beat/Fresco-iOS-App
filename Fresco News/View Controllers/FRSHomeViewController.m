@@ -86,7 +86,8 @@
     self.isInFollowers = true;
     
     [self displayPreviousTab];
-    
+
+    [self checkSuspended];
     
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
@@ -97,6 +98,7 @@
 }
 
 -(void)presentNewStuffWithPassword:(BOOL)password {
+    return;
     
     if (self.migrationAlert) {
         return;

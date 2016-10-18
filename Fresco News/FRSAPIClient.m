@@ -426,11 +426,18 @@
         // set up FRSUser object with this info, set authenticated to true
         
         NSString *userID = responseObject[@"id"];
+        NSString *email = responseObject[@"email"];
+        NSString *name = responseObject[@"full_name"];
         
         if (userID != Nil && ![userID isEqual:[NSNull null]]) {
             [[Mixpanel sharedInstance] registerSuperProperties:@{@"fresco_id": userID}];
         }
-        
+        if (email != Nil && ![email isEqual:[NSNull null]]) {
+            [[Mixpanel sharedInstance] registerSuperProperties:@{@"email": email}];
+        }
+        if (name != Nil && ![name isEqual:[NSNull null]]) {
+            [[Mixpanel sharedInstance] registerSuperProperties:@{@"name": name}];
+        }
         if (userID && ![userID isEqual:[NSNull null]]) {
             Mixpanel *mixpanel = [Mixpanel sharedInstance];
             [mixpanel createAlias:userID forDistinctID:mixpanel.distinctId];
@@ -1315,14 +1322,77 @@
         
         id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
         FRSTabBarController *tabBar = (FRSTabBarController *) [appDelegate tabBar];
-        UINavigationController *navigationController = tabBar.navigationController;
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-        [navigationController pushViewController:onboardVC animated:NO];
+        UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+        
+        if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+            [navController pushViewController:onboardVC animated:FALSE];
+        }
+        else {
+            UITabBarController *tab = (UITabBarController *)navController;
+            tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+            tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+            [tab presentViewController:onboardVC animated:YES completion:Nil];
+        }
+
+        return TRUE;
+    }
+    
+    if ([[FRSAPIClient sharedClient] authenticatedUser].suspended) {
+        [self checkSuspended];
         return TRUE;
     }
     
     return FALSE;
 }
+
+
+
+/// not ideal
+#pragma mark - Smooch
+-(void)presentSmooch {
+    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    if (currentUser.firstName) {
+        [SKTUser currentUser].firstName = currentUser.firstName;
+    }
+    if (currentUser.email) {
+        [SKTUser currentUser].email = currentUser.email;
+    }
+    if (currentUser.uid) {
+        [[SKTUser currentUser] addProperties:@{ @"Fresco ID" : currentUser.uid }];
+    }
+    [Smooch show];
+}
+
+-(void)checkSuspended {
+    
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate reloadUser];
+    
+    if ([[FRSAPIClient sharedClient] authenticatedUser].suspended) {
+        self.suspendedAlert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message: [NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [self.suspendedAlert show];
+    }
+}
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    
+    if (self.suspendedAlert) {
+        switch (index) {
+            case 0:
+                [self presentSmooch];
+                break;
+                
+            case 1:
+                
+                break;
+            default:
+                break;
+        }
+    }
+}
+/// not ideal
+
+
 
 -(void)fetchAddressFromLocation:(CLLocation *)location completion:(FRSAPIDefaultCompletionBlock)completion {
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
@@ -1459,16 +1529,13 @@
     NSString *format = @"user/%@/report";
     NSString *endpoint = [NSString stringWithFormat:format, userID];
     [self post:endpoint withParameters:params completion:completion];
-
 }
 
 -(void)reportGallery:(FRSGallery *)gallery params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *format = @"gallery/%@/report";
     NSString *endpoint = [NSString stringWithFormat:format, gallery.uid];
     [self post:endpoint withParameters:params completion:completion];
-
 }
-
 
 -(void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion {
     [self get:@"user/blocked" withParameters:Nil completion:completion];
