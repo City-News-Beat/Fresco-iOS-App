@@ -35,6 +35,20 @@
     }
     
     for (FRSUpload *upload in uploads) {
+        
+        NSTimeInterval sinceStart = [upload.creationDate timeIntervalSinceNow];
+        sinceStart *= -1;
+        
+        if (sinceStart >= (24 * 60 * 60)) {
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            
+            [delegate.managedObjectContext performBlock:^{
+                upload.completed = @(TRUE);
+                [delegate saveContext];
+            }];
+            continue;
+        }
+        
         [self.managedUploads addObject:upload];
             NSArray *urls = upload.destinationURLS;
 
