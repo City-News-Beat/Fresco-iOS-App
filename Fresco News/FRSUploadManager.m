@@ -14,10 +14,10 @@
 #import "FRSAppDelegate.h"
 
 @implementation FRSUploadManager
-@synthesize isRunning = _isRunning;
+@synthesize isRunning = _isRunning, managedUploads = _managedUploads;
 
 -(void)checkAndStart {
-    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"completed", @(TRUE)];
+    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"completed", @(FALSE)];
     NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
     signedInRequest.predicate = signedInPredicate;
     
@@ -87,6 +87,8 @@
     _tasks = [[NSMutableArray alloc] init];
     _currentTasks = [[NSMutableArray alloc] init];
     _etags = [[NSMutableArray alloc] init];
+    _managedUploads = [[NSMutableArray alloc] init];
+    
     weakSelf = self;
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
@@ -184,6 +186,20 @@
         NSLog(@"progress %lf",progress);  //never gets called
     };
     
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    FRSUpload *upload = [FRSUpload MR_createEntityInContext:delegate.managedObjectContext];
+    NSMutableArray *urlStrings = [[NSMutableArray alloc] init];
+    for (NSURL *url in urls) {
+        [urlStrings addObject:url.absoluteString];
+    }
+    
+    upload.destinationURLS = urlStrings;
+    upload.resourceURL = asset.localIdentifier;
+    upload.creationDate = [NSDate date];
+    
+    [delegate.managedObjectContext performBlock:^{
+        [delegate saveContext];
+    }];
     
     [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset* avasset, AVAudioMix* audioMix, NSDictionary* info){
         AVURLAsset* myAsset = (AVURLAsset*)avasset;

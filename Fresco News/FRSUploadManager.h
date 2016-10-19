@@ -35,6 +35,7 @@ static int const maxConcurrent = 5;
 @property (nonatomic, retain) NSArray *assets;
 @property (nonatomic, retain) NSArray *posts;
 @property (nonatomic) BOOL isRunning;
+@property (nonatomic, retain) NSMutableArray *managedUploads;
 @property unsigned long long contentSize;
 -(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post;
 -(void)addMultipartTaskForAsset:(PHAsset *)asset urls:(NSArray *)urls post:(NSDictionary *)post;

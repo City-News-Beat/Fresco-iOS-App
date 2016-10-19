@@ -183,6 +183,7 @@
             [self error:error];
             return;
         }
+        
         FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:[appDelegate managedObjectContext]];
         
