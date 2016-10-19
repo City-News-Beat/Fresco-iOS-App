@@ -1038,7 +1038,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         NSLog(@"%@ %@", responseObject, error);
             [UIView animateWithDuration:.15 animations:^{
                 if (error) {
-                    NSString *message = [NSString stringWithFormat:@"\"@%@\"", commentField.text];
+                    NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
                     self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"COMMENT FAILED" message:message actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                     [self.errorAlertView show];
                 }
