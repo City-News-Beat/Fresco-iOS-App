@@ -991,9 +991,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
     
     
-    if (self.postToTwitter) {
-        [self tweet:@"test"]; //does not work, fix before release
-    }
+//    if (self.postToTwitter) {
+//        [self tweet:@"test"]; //does not work, fix before release
+//    }
     
     
     if (self.postAnon) {
@@ -1002,8 +1002,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         [FRSTracker track:@"Submissions"];
         [FRSTracker track:@"Submission items in gallery" parameters:@{@"count":@(self.content.count)}];
-        
+        [self dismissViewControllerAnimated:YES completion:nil];
+
         [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
+        
     }
 }
 
@@ -1059,7 +1061,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         NSLog(@"NO UPLOAD: ALREADY STARTED");
     }
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)tweet:(NSString *)string {
