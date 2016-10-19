@@ -253,7 +253,7 @@
                         [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSAPIClient sharedClient] authenticatedUser].username]];
                     }
                     else {
-                        [cell configureCellWithUsername:@"Username"];
+                        [cell configureCellWithUsername:@"@username"];
                     }
                     break;
                 case 1:

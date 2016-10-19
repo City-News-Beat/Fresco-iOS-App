@@ -1178,6 +1178,7 @@
         self.usernameTextField.delegate = self;
         self.usernameTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         self.usernameTextField.textColor = [UIColor frescoDarkTextColor];
+        self.usernameTextField.autocorrectionType = UITextAutocorrectionTypeNo;
         [usernameContainer addSubview:self.usernameTextField];
         
         self.emailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
@@ -1188,6 +1189,7 @@
         self.emailTextField.delegate = self;
         self.emailTextField.keyboardType = UIKeyboardTypeEmailAddress;
         self.emailTextField.textColor = [UIColor frescoDarkTextColor];
+        self.emailTextField.autocorrectionType = UITextAutocorrectionTypeNo;
         self.emailTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         [emailContainer addSubview:self.emailTextField];
         
@@ -1199,7 +1201,7 @@
             [self.emailTextField removeFromSuperview];
         }
         
-        if (![[[FRSAPIClient sharedClient] authenticatedUser].username isEqual:[NSNull null]]) {
+        if ([[[FRSAPIClient sharedClient] authenticatedUser].username isEqual:[NSNull null]]) {
             usernameContainer.alpha = 0;
             self.height -= 44;
             self.usernameTextField = nil;
@@ -1413,21 +1415,20 @@
     
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     
-    [self.cancelButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
-    spinner.frame = CGRectMake(self.cancelButton.frame.size.width - 20 -16, self.cancelButton.frame.size.height/2 -10, 20, 20);
+    self.cancelButton.alpha = 0;
+    spinner.frame = CGRectMake(self.frame.size.width -20-10, self.frame.size.height -20-10, 20, 20);
     spinner.tintColor = [UIColor frescoOrangeColor];
     [spinner setPullProgress:90];
     [spinner startAnimating];
-    [self.cancelButton addSubview:spinner];
+    [self addSubview:spinner];
     
     [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
         
+        spinner.alpha = 0;
+        [spinner stopLoading];
+        [spinner removeFromSuperview];
+        self.cancelButton.alpha = 1;
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [spinner stopLoading];
-            [spinner removeFromSuperview];
-            [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        });
         
         if (error) {
 
@@ -1448,8 +1449,7 @@
             }
 
             [self dismiss];
-            //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
-            
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
         }
     }];
 }
