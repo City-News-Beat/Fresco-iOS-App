@@ -292,12 +292,10 @@
             [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
             
             
-            @try {
-                [[self managedObjectContext] save:Nil];
-            }
-            @catch (NSException *e) {
-                
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self saveContext];
+            });
+          
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
