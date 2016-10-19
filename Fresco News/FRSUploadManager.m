@@ -150,6 +150,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
 
     weakSelf = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSDismissUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        didFinish = TRUE;
+        isRunning = FALSE;
+        [self markAsComplete];
+    }];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
         
@@ -342,8 +347,6 @@
                             [task stop];
                         }
                         
-                        [self markAsComplete];
-
                         _currentTasks = [[NSMutableArray alloc] init];
                     }
                 }];
@@ -351,8 +354,6 @@
             else {
                     isRunning = FALSE;
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
-                    [self markAsComplete];
-
             }
         }];
         
@@ -411,7 +412,6 @@
                             }
                             
                             _currentTasks = [[NSMutableArray alloc] init];
-                            [self markAsComplete];
                         }
                     }];
                 }
@@ -420,7 +420,6 @@
                 NSLog(@"%@", error);
                 isRunning = FALSE;
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
-                [self markAsComplete];
             }
         }];
         
