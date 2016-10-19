@@ -300,7 +300,7 @@
                     UITabBarController *tab = (UITabBarController *)navController;
                     tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
                     tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-                    UINavigationController *onboardNav = [[UINavigationController alloc] init];
+                    UINavigationController *onboardNav = [[FRSNavigationController alloc] init];
                     [onboardNav pushViewController:onboardVC animated:NO];
                     [tab presentViewController:onboardNav animated:YES completion:Nil];
                 }
