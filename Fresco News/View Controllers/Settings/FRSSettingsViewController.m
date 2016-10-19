@@ -75,6 +75,8 @@
 
     [self.navigationItem setTitle:@"SETTINGS"];
     [self.tableView reloadData];
+    
+    [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] reloadUser];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
