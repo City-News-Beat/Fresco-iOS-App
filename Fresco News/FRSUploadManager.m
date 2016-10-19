@@ -162,6 +162,8 @@
             [delegate.managedObjectContext performBlock:^{
                 [delegate saveContext];
             }];
+            
+            [self.managedUploads addObject:upload];
 
         }
         else {
@@ -182,6 +184,8 @@
             [delegate.managedObjectContext performBlock:^{
                 [delegate saveContext];
             }];
+            
+            [self.managedUploads addObject:upload];
         }
     }
 }
