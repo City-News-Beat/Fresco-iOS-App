@@ -24,7 +24,6 @@
 @property (strong, nonatomic) UIView *cameraBackgroundView;
 @property CGFloat notificationDotXOffset;
 @property (strong, nonatomic) UIImage *bellImage;
-@property (strong, nonatomic) FRSUserNotificationViewController *userNotifVC;
 
 @end
 
@@ -258,7 +257,6 @@
 
 
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    
     item.title = @"";
     
     if ([self.tabBar.items indexOfObject:item] == 2) {
@@ -277,22 +275,20 @@
     }
     
     if ([self.tabBar.items indexOfObject:item] == 4) {
-        
         if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
-            
-            UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
+            UINavigationController *profileNav = (UINavigationController *)self.viewControllers[self.viewControllers.count - 1];
+        
             FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
-            /*profile.shouldShowNotificationsOnLoad = YES;
-            [profile loadAuthenticatedUser]; */
+                /*profile.shouldShowNotificationsOnLoad = YES;
+                 [profile loadAuthenticatedUser]; */
             [profile showNotificationsNotAnimated];
-            
+
+            [self updateUserIcon];
         } else {
-            
             if (![[FRSAPIClient sharedClient] isAuthenticated]) {
                 FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
                 [self.navigationController pushViewController:onboardVC animated:NO];
             } else {
-                
                 UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
                 FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
                 [profile loadAuthenticatedUser];
@@ -363,6 +359,9 @@
                 return NO;
             }
             
+            if (self.lastActiveIndex != 4) {
+                break;
+            }
             //if (userNotificationCount >= 1) {
 //            FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
 //            [self.navigationController pushViewController:notificationVC animated:NO];
@@ -371,9 +370,7 @@
             
             //}
 
-            if (self.lastActiveIndex != 4) {
-                break;
-            }
+           
 
             
         } break;

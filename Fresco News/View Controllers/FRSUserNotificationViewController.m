@@ -107,7 +107,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [super viewDidLoad];
     [self getNotifications];
     [self configureUI];
-    [(FRSTabBarController *)self.tabBarController updateBellIcon:NO];
+//    [(FRSTabBarController *)self.tabBarController updateBellIcon:NO];
 }
 
 -(void)viewWillAppear:(BOOL)animated {

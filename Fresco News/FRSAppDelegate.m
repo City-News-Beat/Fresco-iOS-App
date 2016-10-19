@@ -60,6 +60,7 @@
         self.window.rootViewController = self.tabBarController;
         [self createItemsWithIcons];
         [self reloadUser];
+        [self startNotificationTimer];
     }
     else {
         
@@ -92,9 +93,6 @@
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
-    
-
-    //[self startNotificationTimer];
     
     
     return YES;
@@ -676,7 +674,16 @@
 }
 
 -(void)startNotificationTimer {
-    notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
+    if (!notificationTimer) {
+        notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
+    }
+}
+
+-(void)stopNotificationTimer {
+    if (notificationTimer) {
+        [notificationTimer invalidate];
+        notificationTimer = nil;
+    }
 }
 
 -(void)checkNotifications {
@@ -691,12 +698,13 @@
             return;
         }
         if (responseObject) {
-            FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
-            if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
-                
-                [tbc updateBellIcon:YES];
-            } else {
-                [tbc updateUserIcon];
+            FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
+            if ([tbc isKindOfClass:[FRSTabBarController class]]) {
+                if ([[responseObject objectForKey:@"unseen_count"] integerValue] == 0) {
+                    [tbc updateBellIcon:YES];
+                } else {
+                    [tbc updateUserIcon];
+                }
             }
         }
     }];
@@ -724,10 +732,7 @@
     else { //We will eventually need this if our high level verison numbers increment, but for now, it will never get called.
         
     }
-    
-    
 }
-
 
 #pragma mark - Config
 
