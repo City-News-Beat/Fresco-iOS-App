@@ -89,10 +89,14 @@
     for (FRSUploadTask *task in _currentTasks) {
         [task stop];
     }
+    
+    for (FRSUploadTask *task in _tasks) {
+        [task stop];
+    }
 
     UNMutableNotificationContent *objNotificationContent = [[UNMutableNotificationContent alloc] init];
-    objNotificationContent.title = [NSString localizedUserNotificationStringForKey:@"Notification!" arguments:nil];
-    objNotificationContent.body = [NSString localizedUserNotificationStringForKey:@"This is local notification message!"
+    objNotificationContent.title = [NSString localizedUserNotificationStringForKey:@"Come back and finish your upload!" arguments:nil];
+    objNotificationContent.body = [NSString localizedUserNotificationStringForKey:@"Wait, we're almost done! Come back to Fresco to finish uploading your gallery."
                                                                         arguments:nil];
     objNotificationContent.sound = [UNNotificationSound defaultSound];
     objNotificationContent.userInfo = @{@"type":@"trigger-upload-notification"};
