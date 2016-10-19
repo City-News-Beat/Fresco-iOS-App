@@ -33,20 +33,18 @@
     
     for (FRSUpload *upload in uploads) {
         for (int i = 0; i < _posts.count; i++) {
-            PHAsset *currentAsset = _assets[i];
-            NSDictionary *currentPost = _posts[i];
-            
-            if (currentAsset.mediaType == PHAssetMediaTypeVideo) {
+            NSArray *urls = upload.destinationURLS;
+
+            if (urls.count > 1) {
                 
-                NSArray *urls = upload.destinationURLS;
                 NSString *resourceURL = upload.resourceURL;
                 
                 PHFetchResult* assets =[PHAsset fetchAssetsWithLocalIdentifiers:@[resourceURL] options:nil];
 
-                [self addMultipartTaskForAsset:currentAsset urls:urls post:currentPost];
+               // [self addMultipartTaskForAsset:currentAsset urls:urls post:currentPost];
             }
             else {
-                [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"upload_urls"][0]] post:currentPost];
+               // [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"upload_urls"][0]] post:currentPost];
             }
         }
     }
