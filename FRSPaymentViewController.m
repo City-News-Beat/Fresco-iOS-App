@@ -103,7 +103,10 @@ static NSString *addPaymentCell = @"addPaymentCell";
         
         NSDictionary *payment = [self.payments objectAtIndex:indexPath.row];
         NSString *paymentID = payment[@"id"];
-        
+        NSString *digits = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
+        [[[FRSAPIClient sharedClient] authenticatedUser] setValue:digits forKey:@"creditCardDigits"];
+        [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
+
         [[FRSAPIClient sharedClient] makePaymentActive:paymentID completion:^(id responseObject, NSError *error) {
             if (!error) {
                 [self resetOtherPayments:paymentID];
