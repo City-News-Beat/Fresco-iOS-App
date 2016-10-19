@@ -31,7 +31,7 @@
 @property (strong, nonatomic) UILabel *invalidUserLabel;
 @property (nonatomic) BOOL didAuthenticateSocial;
 @property (strong, nonatomic) FRSAlertView *alert;
-
+@property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
 @end
 
 @implementation FRSLoginViewController
@@ -110,7 +110,7 @@
         self.socialTopConstraint.constant = 128;
     }
     
-    
+    self.fbLoginManager = [[FBSDKLoginManager alloc] init];
 }
 
 
@@ -485,7 +485,7 @@
         [spinner stopLoading];
         [spinner removeFromSuperview];
         self.facebookButton.hidden = false;
-    } parent:self];
+    } parent:self manager:self.fbLoginManager];
 }
 
 

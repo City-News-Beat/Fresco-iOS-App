@@ -89,7 +89,7 @@
 @property (strong, nonatomic) UIView *disabledContainer;
 
 @property (strong, nonatomic) NSString *reportUserReasonString;
-
+@property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
 @end
 
 @implementation FRSProfileViewController
@@ -149,6 +149,8 @@
     if (self.shouldShowNotificationsOnLoad) {
         [self showNotificationsNotAnimated];
     }
+    
+     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
 }
 
 -(void)didPressButtonAtIndex:(NSInteger)index {
@@ -1525,7 +1527,7 @@
 -(void)facebookTapped {
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         
-    } parent:self]; // presenting view controller
+    } parent:self manager:self.fbLoginManager]; // presenting view controller
     
 }
 
