@@ -302,8 +302,13 @@
                 }
             } else {
                 UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
-                FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
-                [profile loadAuthenticatedUser];
+                if (profileNav.viewControllers.count == 2) {
+                    [profileNav popViewControllerAnimated:YES];
+                }
+                else {
+                    FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
+                    [profile loadAuthenticatedUser];
+                }
             }
         }
     }
@@ -363,8 +368,10 @@
             } break;
             
         case 4:{
-                        
-           if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+            if (self.lastActiveIndex == 4) {
+                return NO;
+            }
+            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
                 FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
                 [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:NO];
             } else {
