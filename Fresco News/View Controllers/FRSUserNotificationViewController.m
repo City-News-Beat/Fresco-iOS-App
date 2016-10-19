@@ -290,7 +290,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     else if ([currentKey isEqualToString:purchasedContentNotification]) {
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
         NSLog(@"PURCHASED CONTENT");
-        [self configurePurchasedContentCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
+        [self configureGalleryCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         return defaultCell;
         
     } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
