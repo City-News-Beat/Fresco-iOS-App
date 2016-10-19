@@ -511,8 +511,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void (^)())completionHandler
 {
     NSLog( @"Handle push from background or closed" );
+    [self handleRemotePush:response.notification.request.content.userInfo];
     // if you set a member variable in didReceiveRemoteNotification, you will know if this is from closed or background
-}  
+}
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
