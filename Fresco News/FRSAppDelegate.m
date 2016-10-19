@@ -607,6 +607,20 @@
             }
         }
     }
+    if ([instruction isEqualToString:galleryApprovedNotification]) {
+        NSString *gallery = [push objectForKey:@"gallery_id"];
+        
+        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [self segueToGallery:gallery];
+        }
+        else {
+            NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
+            if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
+                [self segueToStory:story];
+            }
+        }
+    }
+
     if ([instruction isEqualToString:commentedNotification]) {
         NSString *gallery = [push objectForKey:@"gallery_id"];
         
