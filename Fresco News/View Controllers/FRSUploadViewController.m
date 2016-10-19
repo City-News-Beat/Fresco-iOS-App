@@ -616,8 +616,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
         }
     } else if (tableView == self.globalAssignmentsTableView) {
         
-
-        
         if (indexPath.row < _globalAssignments.count + numberOfOutlets) {
             if (_showingOutlets) {
                 if (indexPath.row > selectedRow && indexPath.row <= selectedRow + numberOfOutlets) {

@@ -227,7 +227,7 @@
         return;
     }
 
-    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
+    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
         
         if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
             
