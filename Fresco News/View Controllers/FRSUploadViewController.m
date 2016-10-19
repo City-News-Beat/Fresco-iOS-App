@@ -325,12 +325,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.view addSubview:backButton];
     
     /* Configure squareButton */
-    UIButton *squareButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    /*UIButton *squareButton = [UIButton buttonWithType:UIButtonTypeSystem];
     squareButton.frame = CGRectMake(self.navigationBarView.frame.size.width-12-24, 30, 24, 24);
     [squareButton setImage:[UIImage imageNamed:@"square"] forState:UIControlStateNormal];
     [squareButton setTintColor:[UIColor whiteColor]];
     [squareButton addTarget:self action:@selector(square) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:squareButton];
+    [self.view addSubview:squareButton];*/
     
     /* Configure titleLabel */
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -66/2, 35, 66, 19)];
