@@ -153,12 +153,16 @@ static NSString * const cellIdentifier = @"assignment-cell";
     spinner.frame = CGRectMake(button.frame.size.width - 20 -16, button.frame.size.height/2 -10, 20, 20);
     [spinner startAnimating];
     [button addSubview:spinner];
+    
+    button.enabled = FALSE;
 }
 
 -(void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
     [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     [spinner removeFromSuperview];
     [spinner startAnimating];
+    
+    button.enabled = TRUE;
 }
 
 -(void)resetFrames: (BOOL)animate {
