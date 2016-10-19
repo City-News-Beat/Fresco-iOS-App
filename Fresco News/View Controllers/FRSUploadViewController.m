@@ -954,28 +954,23 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - Assignments
 
 -(void)configureAssignments {
-    NSMutableArray *locations = [[NSMutableArray alloc] init];
-    
-    for (PHAsset *asset in self.content) {
-        [locations addObject:asset.location];
-    }
-    [self fetchAssignmentsNearLocations:locations radius:50];
+    [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
 }
 
--(void)fetchAssignmentsNearLocations:(NSArray *)locations radius:(NSInteger)radii {
+-(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
     
     if (self.isFetching) return;
     
     self.isFetching = YES;
     
-    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:100 ofLocation:locations withCompletion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
         
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
         
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-        self.assignmentsArray = [[NSMutableArray alloc] init];
-        self.assignmentsArray  = [assignments mutableCopy];
+       // self.assignmentsArray = [[NSMutableArray alloc] init];
+      //  self.assignmentsArray  = [assignments mutableCopy];
         self.globalAssignments = [globalAssignments copy];
         
         self.isFetching = NO;
@@ -989,8 +984,34 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [delegate saveContext];
         NSMutableArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
+        self.assignmentsArray = [[NSMutableArray alloc] init];
+        for (NSDictionary *assignment in nearBy) {
+            NSLog(@"NEAR BY: %@", assignment);
+            NSArray *coords = assignment[@"location"][@"coordinates"];
+            CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:0] floatValue] longitude:[[coords objectAtIndex:1] floatValue]];
+            float radius = [assignment[@"radius"] floatValue];
+            
+            BOOL shouldAdd = FALSE;
+            
+            for (PHAsset *asset in self.content) {
+                CLLocation *location = asset.location;
+                CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
+                float miles = distanceFromAssignment / 1609.34;
+                if (miles < radius) {
+                    shouldAdd = TRUE;
+                }
+                //1609.34
+            }
+            
+            if (shouldAdd) {
+                [self.assignmentsArray addObject:assignment];
+            }
+            
+           // CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
+
+        }
         
-        self.assignmentsArray = nearBy;
+      //  self.assignmentsArray = nearBy;
         self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
         NSLog(@"ASSIGNMENT ARRAY COUNT: %lu", (unsigned long)self.assignmentsArray.count);
         
