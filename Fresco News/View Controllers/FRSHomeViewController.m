@@ -220,19 +220,23 @@
 //    [FRSAPIClient sharedClient].passwordUsed = nil;
 //    [FRSAPIClient sharedClient].emailUsed = nil;
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"userIsMigrating"]) {
-        [self logoutWithPop:NO];
-        return;
-    }
-
-    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
-        if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
-            alert.delegate = self;
-            [alert show];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userIsMigrating"];
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    [delegate reloadUser:^(id responseObject, NSError *error) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"userIsMigrating"]) {
+            [self logoutWithPop:NO];
+            return;
         }
-    }
+        
+        if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+            if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
+                FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
+                alert.delegate = self;
+                [alert show];
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userIsMigrating"];
+            }
+        }
+    }];
 }
 
 
