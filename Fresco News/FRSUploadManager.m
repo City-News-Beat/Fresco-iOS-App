@@ -12,6 +12,7 @@
 #import "MagicalRecord.h"
 #import "FRSUpload+CoreDataProperties.h"
 #import "FRSAppDelegate.h"
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
 @synthesize isRunning = _isRunning, managedUploads = _managedUploads;
@@ -82,16 +83,19 @@
 }
 
 -(void)appWillResignActive {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
-    isRunning = FALSE;
-    _tasks = [[NSMutableArray alloc] init];
     
-    for (FRSUploadTask *task in _currentTasks) {
-        [task stop];
+    if (didFinish) {
+        return;
     }
-    
-    for (FRSUploadTask *task in _tasks) {
-        [task stop];
+        
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) == FALSE) {
+        UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+        localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:3];
+        localNotification.alertBody = @"Wait, we're almost done! Come back to Fresco to finish uploading your gallery.";
+        localNotification.timeZone = [NSTimeZone defaultTimeZone];
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+
+        return;
     }
 
     UNMutableNotificationContent *objNotificationContent = [[UNMutableNotificationContent alloc] init];
