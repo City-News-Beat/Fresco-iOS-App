@@ -1221,6 +1221,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSLog(@"NO UPLOAD: ALREADY STARTED");
     }
     
+    [self.carouselCell pausePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

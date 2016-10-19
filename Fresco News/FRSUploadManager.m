@@ -81,6 +81,41 @@
         }
 }
 
+-(void)appWillResignActive {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+    isRunning = FALSE;
+    _tasks = [[NSMutableArray alloc] init];
+    
+    for (FRSUploadTask *task in _currentTasks) {
+        [task stop];
+    }
+
+    UNMutableNotificationContent *objNotificationContent = [[UNMutableNotificationContent alloc] init];
+    objNotificationContent.title = [NSString localizedUserNotificationStringForKey:@"Notification!" arguments:nil];
+    objNotificationContent.body = [NSString localizedUserNotificationStringForKey:@"This is local notification message!"
+                                                                        arguments:nil];
+    objNotificationContent.sound = [UNNotificationSound defaultSound];
+    objNotificationContent.userInfo = @{@"type":@"trigger-upload-notification"};
+    
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[NSDate date]];
+    components.second += 3;
+    UNCalendarNotificationTrigger *trigger = [UNCalendarNotificationTrigger
+                                              triggerWithDateMatchingComponents:components repeats:FALSE];
+
+
+    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"com.fresconews.Fresco"
+                                                                          content:objNotificationContent trigger:trigger];
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+        if (!error) {
+            NSLog(@"Local Notification succeeded");
+        }
+        else {
+            NSLog(@"Local Notification failed");
+        }
+    }];
+}
+
 -(void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -90,7 +125,8 @@
     _currentTasks = [[NSMutableArray alloc] init];
     _etags = [[NSMutableArray alloc] init];
     _managedUploads = [[NSMutableArray alloc] init];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
+
     weakSelf = self;
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
