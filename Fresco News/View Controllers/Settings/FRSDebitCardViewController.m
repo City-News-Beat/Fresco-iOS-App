@@ -444,7 +444,7 @@
             return NO;
         }
         
-        if (![textField.text isEqualToString:@""]) {
+        if (![textField.text isEqualToString:@""] && textField.text != Nil) {
             NSString *proposedNewString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
             if (proposedNewString.length == 2) {
                 proposedNewString = [proposedNewString stringByAppendingString:@"/"];
