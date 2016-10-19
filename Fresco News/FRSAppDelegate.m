@@ -291,7 +291,13 @@
             [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
             [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
             
-            [[self managedObjectContext] save:Nil];
+            
+            @try {
+                [[self managedObjectContext] save:Nil];
+            }
+            @catch (NSException *e) {
+                
+            }
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
