@@ -53,7 +53,7 @@
                 }];
                 
                 if (asset) {
-                    [self addMultipartTaskForAsset:asset urls:dest post:Nil];
+                    [self addMultipartTaskForAsset:asset urls:dest post:@{@"key":upload.key, @"uploadId":upload.uploadID}];
                 }
                 else {
                     continue;
@@ -71,7 +71,7 @@
                 
                 if (asset) {
                     if (urls[0]) {
-                        [self addTaskForImageAsset:asset url:[NSURL URLWithString:urls[0]] post:Nil];
+                        [self addTaskForImageAsset:asset url:[NSURL URLWithString:urls[0]] post:@{@"key":upload.key, @"uploadId":upload.uploadID}];
                     }
                 }
                 else {
@@ -158,6 +158,8 @@
             upload.resourceURL = currentAsset.localIdentifier;
             upload.creationDate = [NSDate date];
             upload.completed = @(FALSE);
+            upload.key = currentPost[@"key"];
+            upload.uploadID = currentPost[@"uploadId"];
             
             [delegate.managedObjectContext performBlock:^{
                 [delegate saveContext];
@@ -181,7 +183,9 @@
             upload.resourceURL = currentAsset.localIdentifier;
             upload.creationDate = [NSDate date];
             upload.completed = @(FALSE);
-            
+            upload.key = currentPost[@"key"];
+            upload.uploadID = currentPost[@"uploadId"];
+
             [delegate.managedObjectContext performBlock:^{
                 [delegate saveContext];
             }];
