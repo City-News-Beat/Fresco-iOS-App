@@ -275,20 +275,37 @@
     
     NSLog(@"PARAMS: %@", bankParams);
     
+    if (!bankParams) {
+        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [self.alertView show];
+        
+        return;
+    }
+    
     [[STPAPIClient sharedClient] createTokenWithBankAccount:bankParams completion:^(STPToken * _Nullable token, NSError * _Nullable error) {
         NSLog(@"STP: %@ %@", token, error);
         // created token
         if (error || !token) {
             // failed
+            self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [self.alertView show];
+
+            return;
         }
         [[FRSAPIClient sharedClient] createPaymentWithToken:token.tokenId completion:^(id responseObject, NSError *error) {
             NSLog(@"API: %@ %@", responseObject, error);
             
             if (error) {
                 // failed
+                self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                [self.alertView show];
+
             }
             else {
                 // succeeded
+                [[[FRSAPIClient sharedClient] authenticatedUser] setValue:@"BANK ACC" forKey:@"creditCardBrand"];
+                [[[FRSAPIClient sharedClient] authenticatedUser] setValue:@"" forKey:@"creditCardDigits"];
+                [self.navigationController popViewControllerAnimated:YES];
             }
         }];
     }];
