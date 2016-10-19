@@ -443,6 +443,13 @@
         if (range.location > 4) {
             return NO;
         }
+        
+        NSString *proposedNewString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
+        if (proposedNewString.length == 2) {
+            proposedNewString = [proposedNewString stringByAppendingString:@"/"];
+            textField.text = proposedNewString;
+            return FALSE;
+        }
     }
     
     if (textField == securityCodeTextField) {
