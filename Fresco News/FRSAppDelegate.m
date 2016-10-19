@@ -294,7 +294,10 @@
             [[self managedObjectContext] save:Nil];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                completion(Nil,Nil);
+                
+                if (completion) {
+                    completion(Nil,Nil);
+                }
             });
         }
     }];
