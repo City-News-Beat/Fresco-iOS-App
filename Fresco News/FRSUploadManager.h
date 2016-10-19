@@ -27,12 +27,14 @@ static int const maxConcurrent = 5;
     BOOL didFinish;
 }
 -(instancetype)initWithGallery:(NSDictionary *)gallery assets:(NSArray *)assets;
+-(void)checkAndStart;
 @property (nonatomic, retain) NSMutableArray *tasks;
 @property (nonatomic, retain) NSMutableArray *currentTasks;
 @property (nonatomic, retain) NSMutableArray *etags;
 @property (nonatomic, retain) NSDictionary *gallery;
 @property (nonatomic, retain) NSArray *assets;
 @property (nonatomic, retain) NSArray *posts;
+@property (nonatomic) BOOL isRunning;
 @property unsigned long long contentSize;
 -(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post;
 -(void)addMultipartTaskForAsset:(PHAsset *)asset urls:(NSArray *)urls post:(NSDictionary *)post;

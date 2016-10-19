@@ -1040,8 +1040,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
             gallery[@"outlet_id"] = selectedOutlet;
         }
         
-        
-        
         NSLog(@"CREATING: %@", gallery);
         
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
