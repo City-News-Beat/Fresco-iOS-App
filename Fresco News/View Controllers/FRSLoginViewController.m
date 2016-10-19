@@ -379,6 +379,7 @@
     }
     else {
         [self.navigationController popToRootViewControllerAnimated:YES];
+        [self dismissViewControllerAnimated:YES completion:Nil];
     }
     
     [self postLoginNotification];
