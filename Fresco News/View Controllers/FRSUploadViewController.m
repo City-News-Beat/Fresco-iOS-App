@@ -1002,10 +1002,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         [FRSTracker track:@"Submissions"];
         [FRSTracker track:@"Submission items in gallery" parameters:@{@"count":@(self.content.count)}];
-        [self dismissViewControllerAnimated:YES completion:nil];
-
-        [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
         
+        [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
     }
 }
 
@@ -1018,6 +1016,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             [posts removeObject:firstAsset];
             [current addObject:responseObject];
+            
+            if (error) {
+                [self creationError:error];
+            }
+            
             [self getPostData:posts current:current];
         }];
     }
@@ -1048,9 +1051,25 @@ static NSString * const cellIdentifier = @"assignment-cell";
             }
             else {
                 NSLog(@"Gallery creation error... (%@)", error);
+                [self creationError:error];
             }
         }];
     }
+}
+
+-(void)creationError:(NSError *)error {
+    if (error.code == -1009) {
+        [self connectionError:error];
+        return;
+    }
+    
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY ERROR" message:@"We encountered an issue creating your gallery. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+    [alert show];
+}
+
+-(void)connectionError:(NSError *)error {
+    FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
+    [alert show];
 }
 
 -(void)moveToUpload:(NSDictionary *)postData {
@@ -1061,6 +1080,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         NSLog(@"NO UPLOAD: ALREADY STARTED");
     }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)tweet:(NSString *)string {
