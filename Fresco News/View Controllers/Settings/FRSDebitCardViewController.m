@@ -445,6 +445,12 @@
         }
     }
     
+    if (textField == securityCodeTextField) {
+        if (range.location > 3) {
+            return NO;
+        }
+    }
+    
     NSLog(@"INTERACTION ENABLED: %d", self.saveBankButton.userInteractionEnabled);
     
     
