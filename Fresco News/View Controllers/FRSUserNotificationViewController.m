@@ -188,7 +188,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
                     [toRead addObject:notif[@"id"]];
                 }
                 
-                [self markAllAsRead:toRead];
+                [self markAllAsRead:self.feed];
             }
             
             [self.tableView reloadData];
@@ -595,54 +595,47 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 #pragma mark - News
 -(void)configureTodayInNews:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary*)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell configureDefaultCell];
-        
-        cell.titleLabel.text = dictionary[@"title"];
-        cell.bodyLabel.text = dictionary[@"body"];
-        
-        if ([self hasImage:dictionary]) {
-            [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
-        }
-
-    });
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = dictionary[@"title"];
+    cell.bodyLabel.text = dictionary[@"body"];
+    
+    if ([self hasImage:dictionary]) {
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
+    }
 }
 
 
 -(void)configureGalleryCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell configureDefaultCell];
-        
-        cell.titleLabel.text = dictionary[@"title"];
-        cell.bodyLabel.text = dictionary[@"body"];
-        
-        if ([self hasImage:dictionary]) {
-            [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
-        }
-    });
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = dictionary[@"title"];
+    cell.bodyLabel.text = dictionary[@"body"];
+
+    if ([self hasImage:dictionary]) {
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
+    }
 }
 
 
 -(void)configureStoryCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell configureDefaultCell];
-        
-        NSString *storyTitle = @"(null)"; //pass in from api
-        
-        cell.titleLabel.text = [NSString stringWithFormat:@"Featured Story:%@", storyTitle];
-        cell.bodyLabel.text = dictionary[@"body"];
-        
-        if ([self hasImage:dictionary]) {
-            [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
-        }
-    });
+    [cell configureDefaultCell];
+    
+    NSString *storyTitle = @"(null)"; //pass in from api
+    
+    cell.titleLabel.text = [NSString stringWithFormat:@"Featured Story:%@", storyTitle];
+    cell.bodyLabel.text = dictionary[@"body"];
+
+    if ([self hasImage:dictionary]) {
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
+    }
 }
 
 -(void)configureTextCell:(FRSTextNotificationTableViewCell *)textCell dictionary:(NSDictionary *)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        textCell.label.numberOfLines = 0;
-        textCell.textLabel.text = [dictionary objectForKey:@"body"];
-    });
+    
+    textCell.label.numberOfLines = 0;
+    textCell.textLabel.text = [dictionary objectForKey:@"body"];
+
 }
 
 -(void)markAllAsRead:(NSArray *)notificationIDS {
@@ -673,120 +666,109 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 #pragma mark - Assignments
 -(void)configureAssignmentCell:(FRSAssignmentNotificationTableViewCell *)assignmentCell dictionary:(NSDictionary *)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        assignmentCell.titleLabel.numberOfLines = 0;
-        assignmentCell.bodyLabel.numberOfLines  = 3;
-        assignmentCell.actionButton.tintColor = [UIColor blackColor];
-        assignmentCell.titleLabel.text = [dictionary objectForKey:@"title"];
-        assignmentCell.bodyLabel.text = [dictionary objectForKey:@"body"];
-    });
+    assignmentCell.titleLabel.numberOfLines = 0;
+    assignmentCell.bodyLabel.numberOfLines  = 3;
+    assignmentCell.actionButton.tintColor = [UIColor blackColor];
+    assignmentCell.titleLabel.text = [dictionary objectForKey:@"title"];
+    assignmentCell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 
 #pragma mark - Social
 
 -(void)configureFollowCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeFollow];
-        cell.titleLabel.numberOfLines = 2;
-        cell.titleLabel.text = [dictionary objectForKey:@"title"];
-        NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
-        cell.count = userIDs.count;
-        cell.followButton.alpha = 1;
-        
-        if ([self hasImage:dictionary]) {
-            [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
-        }
-    });
+    [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeFollow];
+    cell.titleLabel.numberOfLines = 2;
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
+    cell.count = userIDs.count;
+    cell.followButton.alpha = 1;
+    
+    if ([self hasImage:dictionary]) {
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
+    }
 }
 
 -(void)configureLikeCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
+    [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeLike];
+    //cell.count = userIDs.count; //pull from api
+    //user image
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
+    cell.count = userIDs.count;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeLike];
-        //cell.count = userIDs.count; //pull from api
-        //user image
-        cell.titleLabel.text = [dictionary objectForKey:@"title"];
-        cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-        NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
-        cell.count = userIDs.count;
-        
-        if (userIDs.count > 1) {
-            cell.followButton.alpha = 1;
-        }
-        else {
-            cell.followButton.alpha = 0;
-        }
-        
-        if (userIDs.count > 1) {
-            cell.followButton.alpha = 1;
-        }
-        else {
-            cell.followButton.alpha = 0;
-        }
-        
-        if ([self hasImage:dictionary]) {
-            [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
-        }
-    });
+    if (userIDs.count > 1) {
+        cell.followButton.alpha = 1;
+    }
+    else {
+        cell.followButton.alpha = 0;
+    }
+    
+    if (userIDs.count > 1) {
+        cell.followButton.alpha = 1;
+    }
+    else {
+        cell.followButton.alpha = 0;
+    }
+
+    if ([self hasImage:dictionary]) {
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
+    }
 }
 
 -(void)configureRepostCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self hasImage:dictionary]) {
-            [cell configureImageCell];
-            [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
-        }
-        else {
-            [cell configureDefaultCell];
-        }
-        
-        NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
-        cell.count = userIDs.count;
-        
-        if (userIDs.count > 1) {
-            cell.followButton.alpha = 1;
-        }
-        else {
-            cell.followButton.alpha = 0;
-        }
-        [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeRepost];
-        //    cell.count = userIDs.count;
-        //    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
-        cell.titleLabel.text = [dictionary objectForKey:@"title"];
-        cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-        
-    });
-   
+    
+    if ([self hasImage:dictionary]) {
+        [cell configureImageCell];
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
+    }
+    else {
+        [cell configureDefaultCell];
+    }
+    
+    NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
+    cell.count = userIDs.count;
+    
+    if (userIDs.count > 1) {
+        cell.followButton.alpha = 1;
+    }
+    else {
+        cell.followButton.alpha = 0;
+    }
+    [cell configureDefaultCellWithAttributesForNotification:FRSNotificationTypeRepost];
+//    cell.count = userIDs.count;
+//    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 -(void)configureCommentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
 //    cell.count = userIDs.count;
 //    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self hasImage:dictionary]) {
-            [cell configureDefaultCell];
-            [cell configureImageCell];
-            [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
-        }
-        else {
-            [cell configureDefaultCell];
-        }
-        
-        
-        NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
-        cell.count = userIDs.count;
-        
-        if (userIDs.count > 1) {
-            cell.followButton.alpha = 1;
-        }
-        else {
-            cell.followButton.alpha = 0;
-        }
-        
-        cell.titleLabel.text = [dictionary objectForKey:@"title"];
-        cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-    });
+    
+    if ([self hasImage:dictionary]) {
+        [cell configureDefaultCell];
+        [cell configureImageCell];
+        [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
+    }
+    else {
+        [cell configureDefaultCell];
+    }
+    
+    
+    NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
+    cell.count = userIDs.count;
+    
+    if (userIDs.count > 1) {
+        cell.followButton.alpha = 1;
+    }
+    else {
+        cell.followButton.alpha = 0;
+    }
+
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 -(BOOL)hasImage:(NSDictionary *)dictionary {
@@ -800,15 +782,15 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 #pragma mark - Payment
 
 -(void)configurePurchasedContentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        cell.titleLabel.text = [dictionary objectForKey:@"title"];
-        cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-    });
+    
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 -(void)configurePaymentExpiringCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     
     [cell.image removeFromSuperview];
+    cell.image = nil;
     [cell configureDefaultCell];
     
     NSString *total = @"(null)";
@@ -818,46 +800,44 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 -(void)configurePaymentSentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell.image removeFromSuperview];
-        [cell configureDefaultCell];
-        
-        cell.titleLabel.text = [dictionary objectForKey:@"title"];
-        cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-    });
+    
+    [cell.image removeFromSuperview];
+    cell.image = nil;
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 -(void)configurePaymentDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell.image removeFromSuperview];
-        
-        [cell configureDefaultCell];
-        
-        cell.titleLabel.text = [dictionary objectForKey:@"title"];
-        cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-    });
+    [cell.image removeFromSuperview];
+    cell.image = nil;
+    
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 -(void)configureTaxInfoRequiredCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell.image removeFromSuperview];
-        
-        [cell configureDefaultCell];
-        
-        cell.titleLabel.text = [dictionary objectForKey:@"title"];
-        cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-    });
+    
+    [cell.image removeFromSuperview];
+    cell.image = nil;
+    
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
 }
 
 -(void)configureTaxInfoProcessedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell.image removeFromSuperview];
-        
-        [cell configureDefaultCell];
-        
-        cell.titleLabel.text = [dictionary objectForKey:@"title"];
-        cell.bodyLabel.text = [dictionary objectForKey:@"body"];
-    });
+    [cell.image removeFromSuperview];
+    cell.image = nil;
+    
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
     
 //    if (processed) {
 //        cell.titleLabel.text = @"Your tax info was accepted!";
@@ -867,14 +847,13 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 -(void)configureTaxInfoDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell.image removeFromSuperview];
-        
-        [cell configureDefaultCell];
-        
-        cell.titleLabel.text = [dictionary objectForKey:@"title"];
-        cell.bodyLabel.text = @"Your tax info was declined.";
-    });
+    [cell.image removeFromSuperview];
+    cell.image = nil;
+    
+    [cell configureDefaultCell];
+    
+    cell.titleLabel.text = [dictionary objectForKey:@"title"];
+    cell.bodyLabel.text = @"Your tax info was declined.";
 }
 
 
