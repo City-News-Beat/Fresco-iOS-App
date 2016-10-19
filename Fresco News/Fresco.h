@@ -274,7 +274,7 @@ static NSString * const taxInfoDeclinedNotification = @"user-payment-tax-info-de
 
 // Assignments
 static NSString * const newAssignmentNotification = @"user-dispatch-new-assignment";
-
+static NSString * const galleryApprovedNotification = @"user-dispatch-content-verified";
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]

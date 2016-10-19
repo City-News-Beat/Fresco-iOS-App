@@ -1011,6 +1011,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         return;
     }
     [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.gallery completion:^(id responseObject, NSError *error) {
+        NSLog(@"%@ %@", responseObject, error);
             [UIView animateWithDuration:.15 animations:^{
                 if (error) {
                     NSString *message = [NSString stringWithFormat:@"\"@%@\"", commentField.text];
