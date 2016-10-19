@@ -140,7 +140,7 @@
     }];
 }
 
--(void)reloadUser {
+-(void)reloadUser:(FRSAPIDefaultCompletionBlock)completion {
     [[FRSAPIClient sharedClient] refreshCurrentUser:^(id responseObject, NSError *error) {
         // check against existing user
         if (error || responseObject[@"error"]) {
@@ -157,7 +157,7 @@
         
         // update user
         authenticatedUser.uid = responseObject[@"id"];
-//        authenticatedUser.email = responseObject[@"email"];
+        //        authenticatedUser.email = responseObject[@"email"];
         
         if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
             authenticatedUser.firstName = responseObject[@"full_name"];
@@ -291,8 +291,13 @@
             [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
             
             [[self managedObjectContext] save:Nil];
+            completion(Nil,Nil);
         }
     }];
+}
+
+-(void)reloadUser {
+    [self reloadUser:Nil];
 }
 
 -(BOOL)isValue:(id)value {

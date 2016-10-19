@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FRSAppDelegate.h"
 #import "FRSLocator.h"
 #import "FRSUser.h"
 #import "FRSSocial.h"

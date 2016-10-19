@@ -20,6 +20,7 @@
 #import "FRSUploadTask.h"
 #import "FRSMultipartTask.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSUploadViewController () {
     NSMutableArray *dictionaryRepresentations;

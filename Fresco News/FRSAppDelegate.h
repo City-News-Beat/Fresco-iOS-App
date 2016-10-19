@@ -26,6 +26,7 @@
 #import <Smooch/Smooch.h>
 #import "FRSNotificationTester.h"
 #import <UserNotifications/UserNotifications.h>
+#import "FRSAPIClient.h"
 
 @interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate>
 {
@@ -37,6 +38,7 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain) id tabBarController;
 -(void)reloadUser;
+-(void)reloadUser:(FRSAPIDefaultCompletionBlock)completion;
 -(void)saveContext;
 -(UITabBarController *)tabBar;
 -(BOOL)isFirstRun;

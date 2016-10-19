@@ -9,6 +9,7 @@
 #import "FRSPaymentViewController.h"
 #import "FRSDebitCardViewController.h"
 #import "FRSPaymentCell.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSPaymentViewController ()
 @end

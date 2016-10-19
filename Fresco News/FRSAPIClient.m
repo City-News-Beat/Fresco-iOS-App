@@ -14,6 +14,7 @@
 #import "FRSOnboardingViewController.h"
 #import "FRSTracker.h"
 #import "FRSTabBarController.h"
+#import "FRSAppDelegate.h"
 
 @implementation FRSAPIClient
 @synthesize socialUsed = _socialUsed, passwordUsed = _passwordUsed, emailUsed = _emailUsed, authenticatedUser = _authenticatedUser;

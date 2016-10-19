@@ -16,6 +16,7 @@
 /* UI Subclasses */
 #import "FRSTableViewCell.h"
 #import "FRSAlertView.h"
+#import "FRSAppDelegate.h"
 
 /* View Controllers */
 #import "FRSUsernameViewController.h"
@@ -76,7 +77,9 @@
     [self.navigationItem setTitle:@"SETTINGS"];
     [self.tableView reloadData];
     
-    [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] reloadUser];
+    [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] reloadUser:^(id responseObject, NSError *error) {
+        [self.tableView reloadData];
+    }];
 }
 
 -(void)viewDidAppear:(BOOL)animated{

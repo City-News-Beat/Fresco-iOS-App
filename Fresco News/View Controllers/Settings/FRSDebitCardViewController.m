@@ -14,6 +14,7 @@
 #import "FRSStripe.h"
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSDebitCardViewController()
 

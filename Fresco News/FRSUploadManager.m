@@ -11,6 +11,7 @@
 #import "Fresco.h"
 #import "MagicalRecord.h"
 #import "FRSUpload+CoreDataProperties.h"
+#import "FRSAppDelegate.h"
 
 @implementation FRSUploadManager
 @synthesize isRunning = _isRunning;
