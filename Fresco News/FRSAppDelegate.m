@@ -803,7 +803,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         if (responseObject) {
             FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
             if ([tbc isKindOfClass:[FRSTabBarController class]]) {
-                if ([[responseObject objectForKey:@"unseen_count"] integerValue] == 0) {
+                if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
                     [tbc updateBellIcon:YES];
                 } else {
                     [tbc updateUserIcon];
