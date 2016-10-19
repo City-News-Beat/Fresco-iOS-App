@@ -264,6 +264,13 @@
                         [self next:task];
                     }
                     else {
+                        if (!_posts) {
+                            isComplete++;
+                            [self next:task];
+                            return;
+                        }
+
+
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                         isRunning = FALSE;
                         _tasks = [[NSMutableArray alloc] init];
@@ -279,15 +286,10 @@
                 }];
             }
             else {
-                if (!_posts) {
                     isRunning = FALSE;
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                     [self markAsComplete];
-                }
-                else {
-                    isComplete++;
-                    [self next:task];
-                }
+
             }
         }];
         
@@ -331,6 +333,12 @@
                             [self next:task];
                         }
                         else {
+                            if (!_posts) {
+                                isComplete++;
+                                [self next:task];
+                                return;
+                            }
+                            
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                             isRunning = FALSE;
                             _tasks = [[NSMutableArray alloc] init];
@@ -347,16 +355,9 @@
             }
             else {
                 NSLog(@"%@", error);
-                if (!_posts) {
-                    isRunning = FALSE;
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
-                    [self markAsComplete];
-                }
-                else {
-                    isComplete++;
-                    [self next:task];
-                }
-
+                isRunning = FALSE;
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                [self markAsComplete];
             }
         }];
         
