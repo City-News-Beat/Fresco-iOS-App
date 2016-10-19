@@ -386,7 +386,7 @@ static NSString *imageTile = @"ImageTile";
 
 -(void)applicationNotAuthorized {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Camera Roll" message:@"Sadly, you chose not to let us see your photos. To use the app, go to settings, privacy, and allow Phresco to see what's poppin'!" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Camera Roll" message:@"Sadly, you chose not to let us see your photos. To use the app, go to settings, privacy, and allow Fresco to see what's poppin'!" preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *ok = [UIAlertAction
                              actionWithTitle:@"OK"

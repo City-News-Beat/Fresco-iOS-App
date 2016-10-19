@@ -64,7 +64,7 @@
     
     // sorry we can only trim videos....
     if (asset.mediaType != PHAssetMediaTypeVideo) {
-        completion(Nil, url, [NSError errorWithDomain:@"com.fresco.phresco" code:501 userInfo:@{@"message":@"not a video dummy"}]);
+        completion(Nil, url, [NSError errorWithDomain:@"com.fresconews.Fresco" code:501 userInfo:@{@"message":@"not a video dummy"}]);
         return;
     }
     
