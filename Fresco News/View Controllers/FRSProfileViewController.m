@@ -261,6 +261,9 @@
     [self showTabBarAnimated:YES];
 //    self.tableView.bounces = false;
     self.didFollow = NO;
+    if (_representedUser.profileImage) {
+        self.placeholderUserIcon.alpha = 0;
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -283,8 +286,6 @@
             [tabBarController updateBellIcon:NO];
         }
     }];
-
-    
     
 //
 //    if(!self.editedProfile){

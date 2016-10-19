@@ -393,14 +393,14 @@
     });
     
 }
--(void)displayMigrationAlert {
+/*-(void)displayMigrationAlert {
     
     if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
         FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
         alert.delegate = self;
         [alert show];
     }
-}
+}*/
 
 //-(void)displayMigrationAlert {
 //    if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
@@ -454,7 +454,7 @@
             self.didAuthenticateSocial = YES;
             NSLog(@"Popped");
             [self popToOrigin];
-            
+
             [spinner stopLoading];
             [spinner removeFromSuperview];
             self.facebookButton.hidden = false;

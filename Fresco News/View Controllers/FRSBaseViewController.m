@@ -283,6 +283,7 @@
     if ([[FRSAPIClient sharedClient] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
         [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSAPIClient sharedClient] authenticatedUser]];
     }
+    
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -290,16 +291,14 @@
     
     //[SAMKeychain deletePasswordForService:serviceName account:clientAuthorization];
     
-    [NSUserDefaults resetStandardUserDefaults];
-    
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
-    
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-    
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
+    [NSUserDefaults resetStandardUserDefaults];
     
     NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
     for (NSString *key in [defaultsDictionary allKeys]) {
@@ -310,7 +309,8 @@
     [[FRSAPIClient sharedClient] setPasswordUsed:nil];
     [[FRSAPIClient sharedClient] setEmailUsed:nil];
     
-    //don't forget to change bell icon to user icon
+    FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
+    [tabBarController updateUserIcon];
     
     if (pop) {
         [self popViewController];

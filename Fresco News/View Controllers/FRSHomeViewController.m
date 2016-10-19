@@ -91,6 +91,8 @@
     
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
+    
+    [self presentMigrationAlert];
 }
 
 -(void)logoutNotification {
@@ -98,7 +100,6 @@
 }
 
 -(void)presentNewStuffWithPassword:(BOOL)password {
-    return;
     
     if (self.migrationAlert) {
         return;
@@ -201,7 +202,7 @@
 -(void)addNotificationObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLogin) name:@"user-did-login" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentMigrationAlert) name:@"user-did-login" object:nil];
     
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
         if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
@@ -211,22 +212,30 @@
     }
 }
 
--(void)userDidLogin {
+-(void)presentMigrationAlert {
 
     
     /* DEBUG */
-//    [[FRSAPIClient sharedClient] authenticatedUser].username = nil;
+//[[FRSAPIClient sharedClient] authenticatedUser].username = nil;
 //    [[FRSAPIClient sharedClient] authenticatedUser].email = nil;
 //    [[FRSAPIClient sharedClient] authenticatedUser].password = nil;
 //    [FRSAPIClient sharedClient].passwordUsed = nil;
 //    [FRSAPIClient sharedClient].emailUsed = nil;
-
     
-    if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"userIsMigrating"]) {
+        [self logoutWithPop:NO];
+        return;
+    }
+
+    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
         
-        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
-        alert.delegate = self;
-        [alert show];
+        if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
+            
+            FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
+            alert.delegate = self;
+            [alert show];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userIsMigrating"];
+        }
     }
 }
 

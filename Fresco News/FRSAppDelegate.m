@@ -729,7 +729,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
 }
 -(void)applicationDidEnterBackground:(UIApplication *)application {
-    
+
 }
 
 -(void)applicationWillResignActive:(UIApplication *)application{
