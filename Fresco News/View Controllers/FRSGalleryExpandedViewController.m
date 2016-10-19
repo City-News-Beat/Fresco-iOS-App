@@ -83,12 +83,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)focusOnPost:(NSString *)postID {
     self.defaultPostID = postID;
-    NSInteger indexOfPost = [self.galleryView.orderedPosts indexOfObject:postID];
-    
-    if (indexOfPost > 0) {
-        UIScrollView *focusViewScroller = self.galleryView.scrollView;
-        [focusViewScroller setContentOffset:CGPointMake(self.view.frame.size.width * indexOfPost, 0) animated:YES];
-    }
 }
 
 -(instancetype)initWithGallery:(FRSGallery *)gallery {
@@ -198,6 +192,24 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         [self configureComments];
         
     }];
+}
+
+-(void)focus {
+    NSArray *posts = [[self.gallery.posts allObjects] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
+    int indexOfPost = -1;
+    for (int i = 0; i < posts.count; i++) {
+        if ([[(FRSPost *)posts[i] uid] isEqualToString:self.defaultPostID]) {
+            indexOfPost = i;
+            NSLog(@"POST FOUND: %@ %d", [(FRSPost *)posts[i] uid], indexOfPost);
+            break;
+        }
+    }
+    
+    if (indexOfPost > 0) {
+        UIScrollView *focusViewScroller = self.galleryView.scrollView;
+        [focusViewScroller setContentOffset:CGPointMake(self.view.frame.size.width * indexOfPost, 0) animated:YES];
+    }
+
 }
 
 -(void)reload {
@@ -468,6 +480,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
+    [self focus];
 }
 
 
