@@ -34,6 +34,7 @@
     }
     
     for (FRSUpload *upload in uploads) {
+        [self.managedUploads addObject:upload];
             NSArray *urls = upload.destinationURLS;
 
             if (urls.count > 1) {
@@ -270,9 +271,16 @@
                 }];
             }
             else {
-                isRunning = FALSE;
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
-                [self markAsComplete];
+                if (!self.managedUploads) {
+                    isRunning = FALSE;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                    [self markAsComplete];
+                }
+                else {
+                    isComplete++;
+                    [self next:task];
+                }
+               
             }
         }];
         
@@ -331,9 +339,15 @@
             }
             else {
                 NSLog(@"%@", error);
-                isRunning = FALSE;
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
-                [self markAsComplete];
+                if (!self.managedUploads) {
+                    isRunning = FALSE;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                    [self markAsComplete];
+                }
+                else {
+                    isComplete++;
+                    [self next:task];
+                }
             }
         }];
         
