@@ -667,6 +667,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
 {
+
     if(application.applicationState == UIApplicationStateInactive) {
         
         //Handle the push notification
@@ -674,6 +675,10 @@
         
         handler(UIBackgroundFetchResultNewData);
     }
+}
+
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo {
+    [@[] objectAtIndex:2];
 }
 
 
