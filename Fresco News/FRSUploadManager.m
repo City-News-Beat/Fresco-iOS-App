@@ -161,7 +161,8 @@
 -(void)startUploadProcess {
     
     if (!_posts) {
-        
+        self.managedUploads = [[NSMutableArray alloc] init];
+        [self checkAndStart];
         
         return;
     }

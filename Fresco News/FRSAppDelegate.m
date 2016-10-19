@@ -450,6 +450,8 @@
     return _tabBarController;
 }
 
+
+
 -(void)startAuthentication {
     _tabBarController = [[FRSTabBarController alloc] init];
     
@@ -763,6 +765,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 -(void)applicationDidBecomeActive:(UIApplication *)application{
     [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSResetUpload" object:nil userInfo:@{@"type":@"reset"}];
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application{
