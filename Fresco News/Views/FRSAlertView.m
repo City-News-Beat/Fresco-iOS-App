@@ -1262,13 +1262,55 @@
         [self addShadowAndClip];
         
         [self animateIn];
+
         
-        //Need to set after frame is set to place password field at the end
+        //Only updating username
+        if (!self.passwordTextField && !self.emailTextField && self.usernameTextField) {
+            usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+        }
+        
+        //Only updaing email
+        if (!self.passwordTextField && self.emailTextField && !self.usernameTextField) {
+            emailContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+        }
+        
+        //Only updating password
+        if (self.passwordTextField && !self.emailTextField && !self.usernameTextField) {
+            passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+        }
+        
+        //Updating password and username
+        if (self.passwordTextField && !self.emailTextField && self.usernameTextField) {
+            usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
+            passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+        }
+        
+        //Updating password and email
+        if (self.passwordTextField && self.emailTextField && !self.usernameTextField) {
+            emailContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
+            passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+        }
+
+        //Updating username and email
+        if (!self.passwordTextField && self.emailTextField && self.usernameTextField) {
+            usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
+            emailContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+        }
+        
+        //Updaing username, email, and password
+        if (self.passwordTextField && self.emailTextField && self.usernameTextField) {
+            usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*4, self.frame.size.width, 44);
+            emailContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
+            passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+        }
+        
+        
+        /*//Need to set after frame is set to place password field at the end
         passwordContainer.frame = CGRectMake(0, self.frame.size.height-88, self.frame.size.width, 44);
         
         if (self.emailTextField != nil && (self.passwordTextField != nil || self.usernameTextField != nil)) {
             emailContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
-        }
+        }*/
     }
     return self;
     
@@ -1657,16 +1699,6 @@
     //Updating password and email
     if (self.passwordTextField && self.emailTextField && !self.usernameTextField) {
         if ([self.passwordTextField.text length] >= 6 && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken)) {
-            controlState = UIControlStateHighlighted;
-        } else {
-            controlState = UIControlStateNormal;
-        }
-        [self toggleCreateAccountButtonTitleColorToState:controlState];
-    }
-    
-    //Updating username and password
-    if (self.passwordTextField && !self.emailTextField && self.usernameTextField) {
-        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken) && [self.passwordTextField.text length] >= 6) {
             controlState = UIControlStateHighlighted;
         } else {
             controlState = UIControlStateNormal;
