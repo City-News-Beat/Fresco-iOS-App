@@ -212,9 +212,7 @@
     }
 }
 
--(void)presentMigrationAlert {
-
-    
+-(void)presentMigrationAlert {    
     /* DEBUG */
 //    [[FRSAPIClient sharedClient] authenticatedUser].username = nil;
 //    [[FRSAPIClient sharedClient] authenticatedUser].email = nil;
