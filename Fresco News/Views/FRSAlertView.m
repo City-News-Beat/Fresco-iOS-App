@@ -1454,7 +1454,8 @@
     [self addSubview:spinner];
     
     [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
-        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
+
         spinner.alpha = 0;
         [spinner stopLoading];
         [spinner removeFromSuperview];
@@ -1480,7 +1481,6 @@
             }
 
             [self dismiss];
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
         }
     }];
 }
