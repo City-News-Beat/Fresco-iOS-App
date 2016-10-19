@@ -120,7 +120,7 @@
 
 -(void)startUploadProcess {
     
-    if (self.managedUploads) {
+    if (!_posts) {
         
         
         return;
@@ -163,7 +163,8 @@
                 [delegate saveContext];
             }];
             
-            [self.managedUploads addObject:upload];
+        [self.managedUploads addObject:upload];
+
 
         }
         else {
@@ -186,6 +187,7 @@
             }];
             
             [self.managedUploads addObject:upload];
+
         }
     }
 }
@@ -239,7 +241,9 @@
         NSNumber *size;
         [myAsset.URL getResourceValue:&size forKey:NSURLFileSizeKey error:nil];
 
-        _contentSize += [size unsignedLongLongValue];
+        if (!_posts) {
+            _contentSize += [size unsignedLongLongValue];
+        }
         
         FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
         
@@ -275,7 +279,7 @@
                 }];
             }
             else {
-                if (!self.managedUploads) {
+                if (!_posts) {
                     isRunning = FALSE;
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                     [self markAsComplete];
@@ -284,7 +288,6 @@
                     isComplete++;
                     [self next:task];
                 }
-               
             }
         }];
         
@@ -295,8 +298,9 @@
 -(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post {
     toComplete++;
     [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-        
-        _contentSize += [imageData length];
+        if (!_posts) {
+            _contentSize += [imageData length];
+        }
 
         FRSUploadTask *task = [[FRSUploadTask alloc] init];
 
@@ -343,7 +347,7 @@
             }
             else {
                 NSLog(@"%@", error);
-                if (!self.managedUploads) {
+                if (!_posts) {
                     isRunning = FALSE;
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                     [self markAsComplete];
@@ -352,6 +356,7 @@
                     isComplete++;
                     [self next:task];
                 }
+
             }
         }];
         
