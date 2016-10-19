@@ -38,6 +38,9 @@
     NSArray *uploads = [context executeFetchRequest:signedInRequest error:&fetchError];
     NSLog(@"UPLOADS: %@", uploads);
     
+    if (uploads.count == 0) {
+        didFinish = TRUE;
+    }
 
     
     for (FRSUpload *upload in uploads) {
