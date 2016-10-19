@@ -1625,81 +1625,84 @@
 -(void)checkCreateAccountButtonState {
     UIControlState controlState;
     
-    //Only updating password
-    if (self.passwordTextField && !self.emailTextField && !self.usernameTextField) {
-        if (self.emailTextField == nil && self.usernameTextField == nil) {
-            if ( ([self.passwordTextField.text length] > 0)) {
-                
-                if ([self.passwordTextField.text length] >= 6) {
-                    controlState = UIControlStateHighlighted;
-                } else {
-                    controlState = UIControlStateNormal;
-                }
-                [self toggleCreateAccountButtonTitleColorToState:controlState];
-            }
-        } else if (self.emailTextField != nil) {
-            if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
-                
-                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken) && (!self.usernameTaken)) {
-                    controlState = UIControlStateHighlighted;
-                } else {
-                    controlState = UIControlStateNormal;
-                }
-                [self toggleCreateAccountButtonTitleColorToState:controlState];
-            }
+    //Only updating username
+    if (!self.passwordTextField && !self.emailTextField && self.usernameTextField) {
+        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken)) {
+            controlState = UIControlStateHighlighted;
         } else {
-            
-            if (([self.usernameTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
-                
-                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken) && (!self.usernameTaken)) {
-                    controlState = UIControlStateHighlighted;
-                } else {
-                    controlState = UIControlStateNormal;
-                }
-                [self toggleCreateAccountButtonTitleColorToState:controlState];
-            }
+            controlState = UIControlStateNormal;
         }
-
-    } else {
-        if (self.emailTextField != nil) {
-            
-            
-            if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
-                
-                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
-                    controlState = UIControlStateHighlighted;
-                } else {
-                    controlState = UIControlStateNormal;
-                }
-                [self toggleCreateAccountButtonTitleColorToState:controlState];
-            }
-            
-
-        } else {
-            if (([self.usernameTextField.text length] > 0)) {
-                
-                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken)) {
-                    controlState = UIControlStateHighlighted;
-                } else {
-                    controlState = UIControlStateNormal;
-                }
-                [self toggleCreateAccountButtonTitleColorToState:controlState];
-            } else {
-                [self toggleCreateAccountButtonTitleColorToState:UIControlStateNormal];
-            }
-        }
+        [self toggleCreateAccountButtonTitleColorToState:controlState];
     }
     
-    //Only updating email and password
-    if (([self.passwordTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
-        if (([self.emailTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
-            if ( [self isValidEmail:self.emailTextField.text] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken)) {
-                controlState = UIControlStateHighlighted;
-            } else {
-                controlState = UIControlStateNormal;
-            }
-            [self toggleCreateAccountButtonTitleColorToState:controlState];
+    //Only updaing email
+    if (!self.passwordTextField && self.emailTextField && !self.usernameTextField) {
+        if ([self isValidEmail:self.emailTextField.text] && (!self.emailTaken)) {
+            controlState = UIControlStateHighlighted;
+        } else {
+            controlState = UIControlStateNormal;
         }
+        [self toggleCreateAccountButtonTitleColorToState:controlState];
+    }
+    
+    //Only updating password
+    if (self.passwordTextField && !self.emailTextField && !self.usernameTextField) {
+        if ([self.passwordTextField.text length] >= 6) {
+            controlState = UIControlStateHighlighted;
+        } else {
+            controlState = UIControlStateNormal;
+        }
+        [self toggleCreateAccountButtonTitleColorToState:controlState];
+    }
+    
+    //Updating password and username
+    if (self.passwordTextField && !self.emailTextField && self.usernameTextField) {
+        if ([self.passwordTextField.text length] >= 6 && [self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken)) {
+            controlState = UIControlStateHighlighted;
+        } else {
+            controlState = UIControlStateNormal;
+        }
+        [self toggleCreateAccountButtonTitleColorToState:controlState];
+    }
+    
+    //Updating password and email
+    if (self.passwordTextField && self.emailTextField && !self.usernameTextField) {
+        if ([self.passwordTextField.text length] >= 6 && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken)) {
+            controlState = UIControlStateHighlighted;
+        } else {
+            controlState = UIControlStateNormal;
+        }
+        [self toggleCreateAccountButtonTitleColorToState:controlState];
+    }
+    
+    //Updating username and password
+    if (self.passwordTextField && !self.emailTextField && self.usernameTextField) {
+        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken) && [self.passwordTextField.text length] >= 6) {
+            controlState = UIControlStateHighlighted;
+        } else {
+            controlState = UIControlStateNormal;
+        }
+        [self toggleCreateAccountButtonTitleColorToState:controlState];
+    }
+    
+    //Updating username and email
+    if (!self.passwordTextField && self.emailTextField && self.usernameTextField) {
+        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken) && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken)) {
+            controlState = UIControlStateHighlighted;
+        } else {
+            controlState = UIControlStateNormal;
+        }
+        [self toggleCreateAccountButtonTitleColorToState:controlState];
+    }
+    
+    //Updaing username, email, and password
+    if (self.passwordTextField && self.emailTextField && self.usernameTextField) {
+        if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken) && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && [self.passwordTextField.text length] >= 6) {
+            controlState = UIControlStateHighlighted;
+        } else {
+            controlState = UIControlStateNormal;
+        }
+        [self toggleCreateAccountButtonTitleColorToState:controlState];
     }
 }
 
