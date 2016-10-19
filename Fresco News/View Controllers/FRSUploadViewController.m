@@ -954,26 +954,30 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - Assignments
 
 -(void)configureAssignments {
-    [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
+    NSMutableArray *locations = [[NSMutableArray alloc] init];
+    
+    for (PHAsset *asset in self.content) {
+        [locations addObject:asset.location];
+    }
+    [self fetchAssignmentsNearLocations:locations radius:50];
 }
 
--(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
+-(void)fetchAssignmentsNearLocations:(NSArray *)locations radius:(NSInteger)radii {
     
     if (self.isFetching) return;
     
     self.isFetching = YES;
     
-    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:100 ofLocation:locations withCompletion:^(id responseObject, NSError *error) {
         
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
         
-        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         self.assignmentsArray = [[NSMutableArray alloc] init];
         self.assignmentsArray  = [assignments mutableCopy];
         self.globalAssignments = [globalAssignments copy];
         
-        //NSLog(@"%@ %@ %@", _assignmentsArray, _globalAssignments, error);
         self.isFetching = NO;
         
         if (!notFirstFetch) {

@@ -366,22 +366,22 @@ static NSString *imageTile = @"ImageTile";
         [locations addObject:asset.location];
     }
     
-    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:100 ofLocations:locations withCompletion:^(id responseObject, NSError *error) {
-        
-        NSLog(@"LOCATIONS ARRAY: %@", locations);
-        NSLog(@"FILTERED ASSIGNMENTS: %@", [responseObject objectForKey:@"nearby"]);
-        NSLog(@"ERROR: %@", error);
-        
-        if (!self.uploadViewController.assignmentsArray) {
-            self.uploadViewController.assignmentsArray = [[NSMutableArray alloc] init];
-        }
-        
-        self.uploadViewController.assignmentsArray = [responseObject objectForKey:@"nearby"];
-        self.uploadViewController.globalAssignments = [responseObject objectForKey:@"global"];
-        NSLog(@"NEAR BY: %@", self.uploadViewController.assignmentsArray);
-        NSLog(@"GLOBAL: %@", self.uploadViewController.globalAssignments);
-
-    }];
+//    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:100 ofLocations:locations withCompletion:^(id responseObject, NSError *error) {
+//        
+//        NSLog(@"LOCATIONS ARRAY: %@", locations);
+//        NSLog(@"FILTERED ASSIGNMENTS: %@", [responseObject objectForKey:@"nearby"]);
+//        NSLog(@"ERROR: %@", error);
+//        
+//        if (!self.uploadViewController.assignmentsArray) {
+//            self.uploadViewController.assignmentsArray = [[NSMutableArray alloc] init];
+//        }
+//        
+//        self.uploadViewController.assignmentsArray = [responseObject objectForKey:@"nearby"];
+//        self.uploadViewController.globalAssignments = [responseObject objectForKey:@"global"];
+//        NSLog(@"NEAR BY: %@", self.uploadViewController.assignmentsArray);
+//        NSLog(@"GLOBAL: %@", self.uploadViewController.globalAssignments);
+//
+//    }];
 }
 
 -(void)applicationNotAuthorized {
