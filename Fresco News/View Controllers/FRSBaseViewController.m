@@ -284,7 +284,9 @@
         [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSAPIClient sharedClient] authenticatedUser]];
     }
     
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
+    });
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate clearKeychain];
