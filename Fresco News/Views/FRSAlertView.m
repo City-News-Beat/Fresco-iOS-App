@@ -1072,6 +1072,8 @@
     self = [super init];
     if (self){
         
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userIsMigrating"];
+        
         self.height = 0;
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
         
@@ -1444,6 +1446,7 @@
             
             [self dismiss];
             
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
         }
     }];
 }
