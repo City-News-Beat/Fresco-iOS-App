@@ -27,6 +27,7 @@
     BOOL notFirstFetch;
 }
 
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) UIView *navigationBarView;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UITableView *assignmentsTableView;
@@ -139,6 +140,25 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureNavigationBar];
     [self configureAssignments]; //Tableview configures are called here
     [self configureBottomBar];
+}
+
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+}
+
+-(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    spinner.frame = CGRectMake(button.frame.size.width - 20 -16, button.frame.size.height/2 -10, 20, 20);
+    [spinner startAnimating];
+    [button addSubview:spinner];
+}
+
+-(void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    [spinner removeFromSuperview];
+    [spinner startAnimating];
 }
 
 -(void)resetFrames: (BOOL)animate {
@@ -1074,6 +1094,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self.navigationController pushViewController:onboardVC animated:NO];
         return;
     }
+    
+    if (!self.loadingView) {
+        [self configureSpinner];
+    }
+    
+    [self startSpinner:self.loadingView onButton:self.sendButton];
         
     [self dismissKeyboard];
     
@@ -1112,6 +1138,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             if (error) {
                 [self creationError:error];
+                [self stopSpinner:self.loadingView onButton:self.sendButton];
+                return;
             }
             
             [self getPostData:posts current:current];
@@ -1143,6 +1171,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
             else {
                 NSLog(@"Gallery creation error... (%@)", error);
                 [self creationError:error];
+                [self stopSpinner:self.loadingView onButton:self.sendButton];
+                return;
             }
         }];
     }
