@@ -141,6 +141,7 @@
 }
 
 -(void)reloadUser:(FRSAPIDefaultCompletionBlock)completion {
+
     [[FRSAPIClient sharedClient] refreshCurrentUser:^(id responseObject, NSError *error) {
         // check against existing user
         if (error || responseObject[@"error"]) {
@@ -291,7 +292,10 @@
             [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
             
             [[self managedObjectContext] save:Nil];
-            completion(Nil,Nil);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(Nil,Nil);
+            });
         }
     }];
 }
