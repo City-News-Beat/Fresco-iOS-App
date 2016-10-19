@@ -226,7 +226,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     }
     
     NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
-
+    NSLog(@"KEY: %@", currentKey);
+    
     /* NEWS */
     if ([currentKey isEqualToString:photoOfDayNotification]) {
         NSLog(@"PHOTOS OF THE DAY");
