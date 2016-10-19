@@ -55,8 +55,6 @@
     
     [_attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, _comment.length)];
     [_attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, _comment.length)];
-
-    return;
     
     for (NSDictionary *attribute in _entities) {
         if ([attribute[@"entity_type"] isEqualToString:@"user"]) {
