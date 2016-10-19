@@ -70,7 +70,7 @@
 @property BOOL didBlockUser;
 @property BOOL isReportingComment;
 @property BOOL isBlockingFromComment;
-
+@property NSString *defaultPostID;
 
 @property (strong, nonatomic) NSDictionary *currentCommentUserDictionary;
 
@@ -80,6 +80,16 @@
 @implementation FRSGalleryExpandedViewController
 
 static NSString *reusableCommentIdentifier = @"commentIdentifier";
+
+-(void)focusOnPost:(NSString *)postID {
+    self.defaultPostID = postID;
+    NSInteger indexOfPost = [self.galleryView.orderedPosts indexOfObject:postID];
+    
+    if (indexOfPost > 0) {
+        UIScrollView *focusViewScroller = self.galleryView.scrollView;
+        [focusViewScroller setContentOffset:CGPointMake(self.view.frame.size.width * indexOfPost, 0) animated:YES];
+    }
+}
 
 -(instancetype)initWithGallery:(FRSGallery *)gallery {
     self = [super init];

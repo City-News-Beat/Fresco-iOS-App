@@ -17,6 +17,8 @@
     BOOL showsMoreButton;
 }
 @property BOOL isLoadingUser;
+
+-(void)focusOnPost:(NSString *)postID;
 -(instancetype)initWithGallery:(FRSGallery *)gallery;
 -(instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID;
 

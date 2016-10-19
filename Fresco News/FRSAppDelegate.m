@@ -525,9 +525,7 @@
     
     NSString *instruction = push[@"type"];
     NSString *notificationID = push[@"id"];
-    NSLog(@"PUSH %@", push);
     
-    //
    // self.window.rootViewController = viewController;
     textView.text = push.description;
     
