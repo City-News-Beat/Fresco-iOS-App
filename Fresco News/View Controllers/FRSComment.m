@@ -70,7 +70,7 @@
             NSInteger startIndex = [attribute[@"start_index"] integerValue];
             NSInteger endIndex = [attribute[@"end_index"] integerValue];
             
-            [_attributedString addAttribute: NSLinkAttributeName value:[@"tag://" stringByAppendingString:name] range:NSMakeRange(startIndex, endIndex-startIndex+2)];
+            [_attributedString addAttribute: NSLinkAttributeName value:[@"tag://" stringByAppendingString:name] range:NSMakeRange(startIndex, endIndex-startIndex+1)];
         }
     }
     
