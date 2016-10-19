@@ -289,8 +289,21 @@
         } else {
             
             if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+                id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
                 FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-                [self.navigationController pushViewController:onboardVC animated:NO];
+                UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+                
+                if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                    [navController pushViewController:onboardVC animated:FALSE];
+                }
+                else {
+                    UITabBarController *tab = (UITabBarController *)navController;
+                    tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                    tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                    UINavigationController *onboardNav = [[UINavigationController alloc] init];
+                    [onboardNav pushViewController:onboardVC animated:NO];
+                    [tab presentViewController:onboardNav animated:YES completion:Nil];
+                }
             } else {
                 
                 UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
