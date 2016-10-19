@@ -479,15 +479,40 @@
 
 -(void)registerForPushNotifications {
     
-    UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge |
-                                                             UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
+//    UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge |
+//                                                             UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
+//    
+//    UIUserNotificationSettings *mySettings =
+//    [UIUserNotificationSettings settingsForTypes:types categories:nil];
+//    
+//    [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+//    [[UIApplication sharedApplication] registerForRemoteNotifications];
     
-    UIUserNotificationSettings *mySettings =
-    [UIUserNotificationSettings settingsForTypes:types categories:nil];
-    
-    [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    center.delegate = self;
+    [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error)
+     {
+         if( !error )
+         {
+             [[UIApplication sharedApplication] registerForRemoteNotifications]; // required to get the app to do anything at all about push notifications
+             NSLog( @"Push registration success." );
+         }
+         else
+         {
+             NSLog( @"Push registration FAILED" );
+             NSLog( @"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription );
+             NSLog( @"SUGGESTIONS: %@ - %@", error.localizedRecoveryOptions, error.localizedRecoverySuggestion );
+         }  
+     }];
 }
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void (^)())completionHandler
+{
+    NSLog( @"Handle push from background or closed" );
+    // if you set a member variable in didReceiveRemoteNotification, you will know if this is from closed or background
+}  
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
