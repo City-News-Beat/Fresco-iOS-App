@@ -271,7 +271,6 @@
     bankParams.currency = @"USD";
     bankParams.accountHolderType = STPBankAccountHolderTypeIndividual;
     bankParams.country = @"US";
-    bankParams.accountHolderName = @"Philip Bernstein";
     
     NSLog(@"PARAMS: %@", bankParams);
     
@@ -303,8 +302,7 @@
             }
             else {
                 // succeeded
-                [[[FRSAPIClient sharedClient] authenticatedUser] setValue:@"BANK ACC" forKey:@"creditCardBrand"];
-                [[[FRSAPIClient sharedClient] authenticatedUser] setValue:@"" forKey:@"creditCardDigits"];
+                [[[FRSAPIClient sharedClient] authenticatedUser] setValue:@"BANK ACC" forKey:@"creditCardDigits"];
                 [self.navigationController popViewControllerAnimated:YES];
             }
         }];
