@@ -11,6 +11,7 @@
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <MapKit/MapKit.h>
 
 #import <Contacts/Contacts.h>
@@ -1190,11 +1191,18 @@
         [emailContainer addSubview:self.emailTextField];
         
         
-        if ([[FRSAPIClient sharedClient] authenticatedUser].email || [[FRSAPIClient sharedClient] emailUsed]) {
-            
+        if (![[[FRSAPIClient sharedClient] authenticatedUser].email isEqual:[NSNull null]] || ![[[FRSAPIClient sharedClient] emailUsed] isEqual:[NSNull null]]) {
             emailContainer.alpha = 0;
             self.height -= 44;
-            
+            self.emailTextField = nil;
+            [self.emailTextField removeFromSuperview];
+        }
+        
+        if (![[[FRSAPIClient sharedClient] authenticatedUser].username isEqual:[NSNull null]]) {
+            usernameContainer.alpha = 0;
+            self.height -= 44;
+            self.usernameTextField = nil;
+            [self.usernameTextField removeFromSuperview];
         }
         
         self.emailCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
@@ -1214,11 +1222,15 @@
         self.usernameTakenLabel.font = [UIFont notaBoldWithSize:15];
         [self.usernameCheckIV addSubview:self.usernameTakenLabel];
         
+        
+        UIView *passwordContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-44, self.frame.size.width, 44)];
+
         if (password) {
             
             self.migrationAlertShouldShowPassword = YES;
             
-            UIView *passwordContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 292+44, self.frame.size.width, 44)];
+            self.height += 44;
+            
             [self addSubview:passwordContainer];
             
             UIView *passwordTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
@@ -1237,7 +1249,9 @@
             self.passwordTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
             [passwordContainer addSubview:self.passwordTextField];
             
-            self.height += 44;
+            if (emailContainer.alpha == 0) {
+                passwordContainer.transform = CGAffineTransformMakeTranslation(0, -44);
+            }
         }
 
         self.dismissKeyboardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
@@ -1256,6 +1270,9 @@
         [self addShadowAndClip];
         
         [self animateIn];
+        
+        //Need to set after frame is set to place password field at the end
+        passwordContainer.frame = CGRectMake(0, self.frame.size.height-88, self.frame.size.width, 44);
         
     }
     return self;
@@ -1364,13 +1381,18 @@
     
     NSMutableDictionary *digestion = [[NSMutableDictionary alloc] init];
     
-    
     NSString *username = [self.usernameTextField.text stringByReplacingOccurrencesOfString:@"@" withString:@""];
     NSString *email = self.emailTextField.text;
     NSString *password = self.passwordTextField.text;
     
-    [digestion setObject:username forKey:@"username"];
-    [digestion setObject:email forKey:@"email"];
+    
+    if (email != nil) {
+        [digestion setObject:email forKey:@"email"];
+    }
+    
+    if (username != nil) {
+        [digestion setObject:username forKey:@"username"];
+    }
     
     if ([[FRSAPIClient sharedClient] passwordUsed]) {
         [digestion setObject:[[FRSAPIClient sharedClient] passwordUsed] forKey:@"verify_password"];
@@ -1386,7 +1408,23 @@
         [digestion removeObjectForKey:@"verify_password"];
     }
     
+    DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    
+    [self.cancelButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    spinner.frame = CGRectMake(self.cancelButton.frame.size.width - 20 -16, self.cancelButton.frame.size.height/2 -10, 20, 20);
+    spinner.tintColor = [UIColor frescoOrangeColor];
+    [spinner setPullProgress:90];
+    [spinner startAnimating];
+    [self.cancelButton addSubview:spinner];
+    
     [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [spinner stopLoading];
+            [spinner removeFromSuperview];
+            [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        });
+
         if (error) {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
@@ -1396,12 +1434,17 @@
         
         if (responseObject) {
 
-            [[FRSAPIClient sharedClient] authenticatedUser].username = self.usernameTextField.text;
-            if (self.emailTextField.alpha == 1) {
-                [[FRSAPIClient sharedClient] authenticatedUser].email = self.emailTextField.text;
+            if ([self.usernameTextField isEqual:[NSNull null]] || ![self.usernameTextField.text isEqualToString:@""]) {
+                [[FRSAPIClient sharedClient] authenticatedUser].username = [self.usernameTextField.text substringFromIndex:1];
             }
             
+            if ([self.emailTextField isEqual:[NSNull null]] || ![self.emailTextField.text isEqualToString:@""]) {
+                [[FRSAPIClient sharedClient] authenticatedUser].email = self.emailTextField.text;
+            }
+
             [self dismiss];
+            //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
+            
         }
     }];
 }
@@ -1577,26 +1620,67 @@
 -(void)checkCreateAccountButtonState {
     UIControlState controlState;
     
-    if (self.passwordTextField) {
-        if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
-            
-            if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken) && (!self.usernameTaken)) {
-                controlState = UIControlStateHighlighted;
-            } else {
-                controlState = UIControlStateNormal;
+    if (self.passwordTextField && !self.emailTextField && !self.usernameTextField) {
+        if (self.emailTextField == nil && self.usernameTextField == nil) {
+            if ( ([self.passwordTextField.text length] > 0)) {
+                
+                if ([self.passwordTextField.text length] >= 6) {
+                    controlState = UIControlStateHighlighted;
+                } else {
+                    controlState = UIControlStateNormal;
+                }
+                [self toggleCreateAccountButtonTitleColorToState:controlState];
             }
-            [self toggleCreateAccountButtonTitleColorToState:controlState];
+        } else if (self.emailTextField != nil) {
+            if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
+                
+                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken) && (!self.usernameTaken)) {
+                    controlState = UIControlStateHighlighted;
+                } else {
+                    controlState = UIControlStateNormal;
+                }
+                [self toggleCreateAccountButtonTitleColorToState:controlState];
+            }
+        } else {
+            
+            if (([self.usernameTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
+                
+                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken) && (!self.usernameTaken)) {
+                    controlState = UIControlStateHighlighted;
+                } else {
+                    controlState = UIControlStateNormal;
+                }
+                [self toggleCreateAccountButtonTitleColorToState:controlState];
+            }
         }
+
     } else {
-        
-        if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
+        if (self.emailTextField != nil) {
             
-            if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
-                controlState = UIControlStateHighlighted;
-            } else {
-                controlState = UIControlStateNormal;
+            
+            if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
+                
+                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && (!self.usernameTaken)) {
+                    controlState = UIControlStateHighlighted;
+                } else {
+                    controlState = UIControlStateNormal;
+                }
+                [self toggleCreateAccountButtonTitleColorToState:controlState];
             }
-            [self toggleCreateAccountButtonTitleColorToState:controlState];
+            
+
+        } else {
+            if (([self.usernameTextField.text length] > 0)) {
+                
+                if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken)) {
+                    controlState = UIControlStateHighlighted;
+                } else {
+                    controlState = UIControlStateNormal;
+                }
+                [self toggleCreateAccountButtonTitleColorToState:controlState];
+            } else {
+                [self toggleCreateAccountButtonTitleColorToState:UIControlStateNormal];
+            }
         }
     }
 }

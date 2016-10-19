@@ -10,6 +10,10 @@
 #import "FRSBaseViewController.h"
 
 @interface FRSUserNotificationViewController : FRSBaseViewController
+{
+    BOOL loadingMoreNotifications;
+    BOOL reachedBottom;
+}
 
 @property (strong, nonatomic) UITableView *tableView;
 

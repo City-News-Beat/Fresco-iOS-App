@@ -14,10 +14,14 @@
 #import "FRSStripe.h"
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
+#import "FRSAppDelegate.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 @interface FRSDebitCardViewController()
 
 @property (strong, nonatomic) UITableView *tableView;
+
+@property (strong,nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
 @property (strong, nonatomic) UITapGestureRecognizer *dismissKeyboardGestureRecognizer;
 
@@ -115,6 +119,7 @@
     expirationDateTextField.tintColor = [UIColor frescoBlueColor];
     expirationDateTextField.delegate = self;
     [expirationDateTextField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+    
     [container addSubview:expirationDateTextField];
     
     expirationDateTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
@@ -258,18 +263,66 @@
 }
 
 -(void)saveBankInfo {
+    [Stripe setDefaultPublishableKey:stripeTest];
+
+    if (!self.loadingView){
+        [self configureSpinner];
+    }
+    
+    [self startSpinner:self.loadingView onButton:self.saveBankButton];
     
     NSLog(@"SAVING BANK INFO");
     
     NSString *bankAccountNumber = _accountNumberField.text;
     NSString *routingNumber = _routingNumberField.text;
     
-    STPBankAccountParams *params = [FRSStripe bankAccountWithNumber:bankAccountNumber routing:routingNumber name:Nil ssn:Nil type:FRSBankAccountTypeIndividual];
+    STPBankAccountParams *bankParams = [[STPBankAccountParams alloc] init];
+    bankParams.accountNumber = bankAccountNumber;
+    bankParams.routingNumber = routingNumber;
+    bankParams.currency = @"USD";
+    bankParams.accountHolderType = STPBankAccountHolderTypeIndividual;
+    bankParams.country = @"US";
     
-    NSLog(@"PARAMS: %@", params);
+    NSLog(@"PARAMS: %@", bankParams);
     
-    [FRSStripe createTokenWithBank:params completion:^(STPToken *stripeToken, NSError *error) {
-        NSLog(@"%@ %@", stripeToken, error);
+    if (!bankParams) {
+        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [self.alertView show];
+        [self stopSpinner:self.loadingView onButton:self.saveBankButton];
+        return;
+    }
+    
+    [[STPAPIClient sharedClient] createTokenWithBankAccount:bankParams completion:^(STPToken * _Nullable token, NSError * _Nullable error) {
+        NSLog(@"STP: %@ %@", token, error);
+        // created token
+        if (error || !token) {
+            // failed
+            self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [self.alertView show];
+            [self stopSpinner:self.loadingView onButton:self.saveBankButton];
+
+            return;
+        }
+        [[FRSAPIClient sharedClient] createPaymentWithToken:token.tokenId completion:^(id responseObject, NSError *error) {
+            NSLog(@"API: %@ %@", responseObject, error);
+            
+            if (error) {
+                // failed
+                self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                [self.alertView show];
+            }
+            else {
+                // succeeded
+                NSString *brand = [responseObject objectForKey:@"brand"];
+                NSString *last4 = [responseObject objectForKey:@"last4"];
+                NSString *creditCard = [NSString stringWithFormat:@"%@ %@", brand, last4];
+
+                [[[FRSAPIClient sharedClient] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
+                [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            [self stopSpinner:self.loadingView onButton:self.saveBankButton];
+        }];
     }];
 }
 
@@ -320,6 +373,24 @@
     }
 }
 
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+}
+
+-(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    spinner.frame = CGRectMake(button.frame.size.width - 20 -16, button.frame.size.height/2 -10, 20, 20);
+    [spinner startAnimating];
+    [button addSubview:spinner];
+}
+
+-(void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+    [spinner removeFromSuperview];
+    [spinner startAnimating];
+}
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
     
     if (textField == _routingNumberField || textField == _accountNumberField) {
@@ -362,6 +433,46 @@
         self.saveBankButton.enabled = TRUE;
     }
     
+    if (textField == cardNumberTextField) {
+        if (range.location > 18) {
+            return NO;
+        }
+    }
+    
+    if (textField == expirationDateTextField) {
+        if (range.location > 4) {
+            return NO;
+        }
+        
+        if (![textField.text isEqualToString:@""] && textField.text != Nil && string) {
+            NSString *proposedNewString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
+            if (proposedNewString.length == 2 && textField.text.length <= 2) {
+                proposedNewString = [proposedNewString stringByAppendingString:@"/"];
+                textField.text = proposedNewString;
+                return FALSE;
+            }
+        }
+    }
+    
+    if (textField == securityCodeTextField) {
+        if (range.location > 3) {
+            return NO;
+        }
+    }
+    
+    if (textField == _accountNumberField) {
+        if (range.location > 16) {
+            return NO;
+        }
+    }
+    
+    if (textField == _routingNumberField) {
+        if (range.location > 8) {
+            return NO;
+        }
+    }
+    
+    
     NSLog(@"INTERACTION ENABLED: %d", self.saveBankButton.userInteractionEnabled);
     
     
@@ -371,6 +482,14 @@
 
 -(void)saveCard {
     
+    if (!self.loadingView) {
+        [self configureSpinner];
+    }
+    
+    [self startSpinner:self.loadingView onButton:self.rightAlignedButton];
+    
+    [Stripe setDefaultPublishableKey:stripeTest];
+
     NSArray *components = [expirationDateTextField.text componentsSeparatedByString:@"/"];
     NSArray *expiration;
     
@@ -380,7 +499,7 @@
     else {
         self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         [self.alertView show];
-
+        [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
         return;
     }
     
@@ -389,18 +508,27 @@
     if (!params) {
         self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please check your card information and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         [self.alertView show];
-
+        [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
+        return;
     }
     
     NSLog(@"CARD PARAMS: %@", params);
     
     [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
+        
+        if (error || !stripeToken) {
+            self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [self.alertView show];
+            [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
+            return;
+        }
+        
         NSLog(@"TOKEN: %@ \n TOKEN_ERROR:%@", stripeToken, error);
         [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId completion:^(id responseObject, NSError *error) {
             //
             NSLog(@"RESP: %@ \n ERR:%@", responseObject, error);
             if (error) {
-                self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"We were unable to save your debit card information at this time. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.alertView show];
             }
             else if (responseObject) {
@@ -416,6 +544,8 @@
                     self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"The card you entered was invalid. Please try again." actionTitle:@"TRY AGAIN" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                     [self.alertView show];
                 }
+                
+                [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
             }
         }];
     }];

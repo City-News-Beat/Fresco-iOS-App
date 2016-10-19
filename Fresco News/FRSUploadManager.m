@@ -9,8 +9,74 @@
 #import "FRSUploadManager.h"
 #import "FRSAPIClient.h"
 #import "Fresco.h"
+#import "MagicalRecord.h"
+#import "FRSUpload+CoreDataProperties.h"
+#import "FRSAppDelegate.h"
 
 @implementation FRSUploadManager
+@synthesize isRunning = _isRunning, managedUploads = _managedUploads;
+
+-(void)checkAndStart {
+    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"completed", @(FALSE)];
+    NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
+    signedInRequest.predicate = signedInPredicate;
+    
+    // get context from app deleegate (hate this dependency but no need to re-write rn to move up)
+    NSManagedObjectContext *context = [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext]; // temp (replace with internal or above method
+    
+    // no need to sort response, because theoretically there is 1
+    NSError *fetchError;
+    NSArray *uploads = [context executeFetchRequest:signedInRequest error:&fetchError];
+    NSLog(@"UPLOADS: %@", uploads);
+    
+    if ([uploads count] > 0) {
+        _isRunning = TRUE;
+    }
+    
+    for (FRSUpload *upload in uploads) {
+            NSArray *urls = upload.destinationURLS;
+
+            if (urls.count > 1) {
+                
+                NSString *resourceURL = upload.resourceURL;
+                NSMutableArray *dest = [[NSMutableArray alloc] init];
+                
+                for (NSString *partURL in urls) {
+                    [dest addObject:[NSURL URLWithString:partURL]];
+                }
+                
+                PHFetchResult* assets =[PHAsset fetchAssetsWithLocalIdentifiers:@[resourceURL] options:nil];
+                __block PHAsset *asset;
+                [assets enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    asset = obj;
+                }];
+                
+                if (asset) {
+                    [self addMultipartTaskForAsset:asset urls:dest post:Nil];
+                }
+                else {
+                    continue;
+                }
+            }
+            else {
+                
+                NSString *resourceURL = upload.resourceURL;
+                
+                PHFetchResult* assets =[PHAsset fetchAssetsWithLocalIdentifiers:@[resourceURL] options:nil];
+                __block PHAsset *asset;
+                [assets enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    asset = obj;
+                }];
+                
+                if (asset) {
+                    [self addTaskForImageAsset:asset url:[NSURL URLWithString:urls[0]] post:Nil];
+                }
+                else {
+                    continue;
+                }
+            }
+        }
+}
 
 -(void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -20,6 +86,8 @@
     _tasks = [[NSMutableArray alloc] init];
     _currentTasks = [[NSMutableArray alloc] init];
     _etags = [[NSMutableArray alloc] init];
+    _managedUploads = [[NSMutableArray alloc] init];
+    
     weakSelf = self;
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
@@ -117,9 +185,28 @@
         NSLog(@"progress %lf",progress);  //never gets called
     };
     
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    FRSUpload *upload = [FRSUpload MR_createEntityInContext:delegate.managedObjectContext];
+    NSMutableArray *urlStrings = [[NSMutableArray alloc] init];
+    for (NSURL *url in urls) {
+        [urlStrings addObject:url.absoluteString];
+    }
+    
+    upload.destinationURLS = urlStrings;
+    upload.resourceURL = asset.localIdentifier;
+    upload.creationDate = [NSDate date];
+    upload.completed = @(FALSE);
+    
+    [delegate.managedObjectContext performBlock:^{
+        [delegate saveContext];
+    }];
     
     [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset* avasset, AVAudioMix* audioMix, NSDictionary* info){
         AVURLAsset* myAsset = (AVURLAsset*)avasset;
+        NSNumber *size;
+        [myAsset.URL getResourceValue:&size forKey:NSURLFileSizeKey error:nil];
+
+        _contentSize += [size unsignedLongLongValue];
         
         FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
         
@@ -166,6 +253,8 @@
     toComplete++;
     [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
         
+        _contentSize += [imageData length];
+
         FRSUploadTask *task = [[FRSUploadTask alloc] init];
         
         [task createUploadFromData:imageData destination:url progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {

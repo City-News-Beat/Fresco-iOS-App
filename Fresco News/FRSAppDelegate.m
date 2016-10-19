@@ -33,6 +33,8 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
+#import "FRSUploadManager.h"
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -93,7 +95,15 @@
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
+    FRSUploadManager *manager = [[FRSUploadManager alloc] init];
+    [manager checkAndStart];
     
+    if (!manager.isRunning) {
+        manager = Nil;
+    }
+    else {
+        
+    }
     
     return YES;
 }
@@ -128,7 +138,8 @@
     }];
 }
 
--(void)reloadUser {
+-(void)reloadUser:(FRSAPIDefaultCompletionBlock)completion {
+
     [[FRSAPIClient sharedClient] refreshCurrentUser:^(id responseObject, NSError *error) {
         // check against existing user
         if (error || responseObject[@"error"]) {
@@ -145,7 +156,7 @@
         
         // update user
         authenticatedUser.uid = responseObject[@"id"];
-//        authenticatedUser.email = responseObject[@"email"];
+        //        authenticatedUser.email = responseObject[@"email"];
         
         if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
             authenticatedUser.firstName = responseObject[@"full_name"];
@@ -278,9 +289,24 @@
             [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
             [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
             
-            [[self managedObjectContext] save:Nil];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self saveContext];
+            });
+          
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if (completion) {
+                    completion(Nil,Nil);
+                }
+            });
         }
     }];
+}
+
+-(void)reloadUser {
+    [self reloadUser:Nil];
 }
 
 -(BOOL)isValue:(id)value {
@@ -476,14 +502,94 @@
 
 -(void)registerForPushNotifications {
     
-    UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge |
-                                                             UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
+//    UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge |
+//                                                             UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
+//    
+//    UIUserNotificationSettings *mySettings =
+//    [UIUserNotificationSettings settingsForTypes:types categories:nil];
+//    
+//    [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+//    [[UIApplication sharedApplication] registerForRemoteNotifications];
     
-    UIUserNotificationSettings *mySettings =
-    [UIUserNotificationSettings settingsForTypes:types categories:nil];
+    if( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) == FALSE)
+    {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound |    UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+        
+        //if( option != nil )
+        //{
+        //    NSLog( @"registerForPushWithOptions:" );
+        //}
+    }
+    else
+    {
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        center.delegate = self;
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error)
+         {
+             if( !error )
+             {
+                 [[UIApplication sharedApplication] registerForRemoteNotifications];  // required to get the app to do anything at all about push notifications
+                 NSLog( @"Push registration success." );
+             }
+             else
+             {
+                 NSLog( @"Push registration FAILED" );
+                 NSLog( @"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription );
+                 NSLog( @"SUGGESTIONS: %@ - %@", error.localizedRecoveryOptions, error.localizedRecoverySuggestion );  
+             }  
+         }];  
+    }
+}
+
+-(void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void(^)(UIBackgroundFetchResult))completionHandler
+{
+    // iOS 10 will handle notifications through other methods
     
-    [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    if( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) )
+    {
+        NSLog( @"iOS version >= 10. Let NotificationCenter handle this one." );
+        // set a member variable to tell the new delegate that this is background
+        return;
+    }
+    NSLog( @"HANDLE PUSH, didReceiveRemoteNotification: %@", userInfo );
+    
+    // custom code to handle notification content
+    if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
+    {
+        [self handleRemotePush:userInfo];
+    }
+    
+    if( [UIApplication sharedApplication].applicationState == UIApplicationStateInactive )
+    {
+        NSLog( @"INACTIVE" );
+        completionHandler( UIBackgroundFetchResultNewData );
+    }
+    else if( [UIApplication sharedApplication].applicationState == UIApplicationStateBackground )
+    {
+        NSLog( @"BACKGROUND" );
+        completionHandler( UIBackgroundFetchResultNewData );
+    }
+    else
+    {
+        NSLog( @"FOREGROUND" );
+        completionHandler( UIBackgroundFetchResultNewData );
+    }
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo  
+{  
+    [self application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:^(UIBackgroundFetchResult result) {
+        // nothing
+    }];  
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void (^)())completionHandler
+{
+    NSLog( @"Handle push from background or closed" );
+    [self handleRemotePush:response.notification.request.content.userInfo];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -522,9 +628,7 @@
     
     NSString *instruction = push[@"type"];
     NSString *notificationID = push[@"id"];
-    NSLog(@"PUSH %@", push);
     
-    //
    // self.window.rootViewController = viewController;
     textView.text = push.description;
     
@@ -604,6 +708,20 @@
             }
         }
     }
+    if ([instruction isEqualToString:galleryApprovedNotification]) {
+        NSString *gallery = [push objectForKey:@"gallery_id"];
+        
+        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [self segueToGallery:gallery];
+        }
+        else {
+            NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
+            if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
+                [self segueToStory:story];
+            }
+        }
+    }
+
     if ([instruction isEqualToString:commentedNotification]) {
         NSString *gallery = [push objectForKey:@"gallery_id"];
         
@@ -633,7 +751,7 @@
     
 }
 -(void)applicationDidEnterBackground:(UIApplication *)application {
-    
+
 }
 
 -(void)applicationWillResignActive:(UIApplication *)application{
@@ -650,28 +768,13 @@
 
 #pragma mark - Push Notifications
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
-{
-    if(application.applicationState == UIApplicationStateInactive) {
-        
-        //Handle the push notification
-        [self handleRemotePush:userInfo];
-        
-        handler(UIBackgroundFetchResultNewData);
-    }
-}
 
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
     [FRSTracker track:@"Permissions notification disables"];
 }
 
--(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
-    {
-        [self handleRemotePush:notification.userInfo];
-    }
-}
+
 
 -(void)startNotificationTimer {
     if (!notificationTimer) {
@@ -844,13 +947,31 @@
         }];
     }
 }
+-(void)error:(NSError *)error {
+    if (!error) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+    else if (error.code == -1009) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"CONNECTION ERROR" message:@"Unable to connect to the internet. Please check your connection and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+    else {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+}
 
 
 -(void)segueToGallery:(NSString *)galleryID {
     __block BOOL isPushingGallery = FALSE;
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
-        
+        if (error || !responseObject) {
+            [self error:error];
+            return;
+        }
+
         if (isPushingGallery) {
             return;
         }

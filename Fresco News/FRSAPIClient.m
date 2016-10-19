@@ -14,6 +14,7 @@
 #import "FRSOnboardingViewController.h"
 #import "FRSTracker.h"
 #import "FRSTabBarController.h"
+#import "FRSAppDelegate.h"
 
 @implementation FRSAPIClient
 @synthesize socialUsed = _socialUsed, passwordUsed = _passwordUsed, emailUsed = _emailUsed, authenticatedUser = _authenticatedUser;
@@ -227,6 +228,27 @@
 //        [self post:@"user/notifications/see" withParameters:@{@"notification_ids": notificationIDs} completion:^(id responseObject, NSError *error) {
 //        }];
     }];
+}
+
+-(void)getNotificationsWithLast:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
+    if (!last) {
+        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:Nil]);
+    }
+    
+    [self get:notificationEndpoint withParameters:@{@"last":last} completion:^(id responseObject, NSError *error) {
+        
+        //        NSArray *feed = [responseObject objectForKey:@"feed"];
+        //        NSMutableArray *notificationIDs = [[NSMutableArray alloc] init];
+        //
+        completion(responseObject, error);
+        
+        //        for (int i=0; i<feed.count; i++) {
+        //            [notificationIDs addObject:[[[responseObject objectForKey:@"feed"] objectAtIndex:i] objectForKey:@"id"]];
+        //        }
+        //        [self post:@"user/notifications/see" withParameters:@{@"notification_ids": notificationIDs} completion:^(id responseObject, NSError *error) {
+        //        }];
+    }];
+
 }
 
 -(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -1332,7 +1354,9 @@
             UITabBarController *tab = (UITabBarController *)navController;
             tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
             tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-            [tab presentViewController:onboardVC animated:YES completion:Nil];
+            UINavigationController *onboardNav = [[UINavigationController alloc] init];
+            [onboardNav pushViewController:onboardVC animated:NO];
+            [tab presentViewController:onboardNav animated:YES completion:Nil];
         }
 
         return TRUE;

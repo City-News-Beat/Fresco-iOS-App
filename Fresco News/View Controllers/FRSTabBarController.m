@@ -276,8 +276,7 @@
     
     if ([self.tabBar.items indexOfObject:item] == 4) {
         if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
-            UINavigationController *profileNav = (UINavigationController *)self.viewControllers[self.viewControllers.count - 1];
-        
+            UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
             FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
                 /*profile.shouldShowNotificationsOnLoad = YES;
                  [profile loadAuthenticatedUser]; */
@@ -286,8 +285,21 @@
             [self updateUserIcon];
         } else {
             if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+                id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
                 FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-                [self.navigationController pushViewController:onboardVC animated:NO];
+                UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+                
+                if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                    [navController pushViewController:onboardVC animated:FALSE];
+                }
+                else {
+                    UITabBarController *tab = (UITabBarController *)navController;
+                    tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                    tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                    UINavigationController *onboardNav = [[FRSNavigationController alloc] init];
+                    [onboardNav pushViewController:onboardVC animated:NO];
+                    [tab presentViewController:onboardNav animated:YES completion:Nil];
+                }
             } else {
                 UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
                 FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];

@@ -140,7 +140,10 @@
 -(void)segueToGallery:(NSString *)galleryID {
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
-        
+        if (error || !responseObject) {
+            [self error:error];
+            return;
+        }
         FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
         
@@ -158,10 +161,28 @@
         [self hideTabBarAnimated:YES];
     }];
 }
+-(void)error:(NSError *)error {
+    if (!error) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+    else if (error.code == -1009) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"CONNECTION ERROR" message:@"Unable to connect to the internet. Please check your connection and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+    else {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+}
 
 -(void)segueToStory:(NSString *)storyID {
     
     [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
+        if (error || !responseObject) {
+            [self error:error];
+            return;
+        }
         
         FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:[appDelegate managedObjectContext]];
@@ -194,7 +215,11 @@
 
 -(void)segueToPost:(NSString *)postID {
     [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
-        
+        if (error || !responseObject) {
+            [self error:error];
+            return;
+        }
+
         [self segueToGallery:[[responseObject objectForKey:@"parent"] objectForKey:@"id"]];
         
     }];
@@ -278,11 +303,15 @@
 #pragma mark - Logout
 
 -(void)logoutWithPop:(BOOL)pop {
-    
+    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+
     if ([[FRSAPIClient sharedClient] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
         [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSAPIClient sharedClient] authenticatedUser]];
     }
-    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
+    });
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate clearKeychain];
@@ -290,16 +319,14 @@
     
     //[SAMKeychain deletePasswordForService:serviceName account:clientAuthorization];
     
-    [NSUserDefaults resetStandardUserDefaults];
-    
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
-    
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-    
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
+    [NSUserDefaults resetStandardUserDefaults];
     
     NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
     for (NSString *key in [defaultsDictionary allKeys]) {
@@ -310,7 +337,8 @@
     [[FRSAPIClient sharedClient] setPasswordUsed:nil];
     [[FRSAPIClient sharedClient] setEmailUsed:nil];
     
-    //don't forget to change bell icon to user icon
+    FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
+    [tabBarController updateUserIcon];
     
     if (pop) {
         [self popViewController];

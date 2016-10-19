@@ -70,7 +70,7 @@
 @property BOOL didBlockUser;
 @property BOOL isReportingComment;
 @property BOOL isBlockingFromComment;
-
+@property NSString *defaultPostID;
 
 @property (strong, nonatomic) NSDictionary *currentCommentUserDictionary;
 
@@ -80,6 +80,10 @@
 @implementation FRSGalleryExpandedViewController
 
 static NSString *reusableCommentIdentifier = @"commentIdentifier";
+
+-(void)focusOnPost:(NSString *)postID {
+    self.defaultPostID = postID;
+}
 
 -(instancetype)initWithGallery:(FRSGallery *)gallery {
     self = [super init];
@@ -188,6 +192,24 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         [self configureComments];
         
     }];
+}
+
+-(void)focus {
+    NSArray *posts = self.galleryView.orderedPosts; //[[self.gallery.posts allObjects] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
+    int indexOfPost = -1;
+    for (int i = 0; i < posts.count; i++) {
+        if ([[(FRSPost *)posts[i] uid] isEqualToString:self.defaultPostID]) {
+            indexOfPost = i;
+            NSLog(@"POST FOUND: %@ %d", [(FRSPost *)posts[i] uid], indexOfPost);
+            break;
+        }
+    }
+    
+    if (indexOfPost > 0) {
+        UIScrollView *focusViewScroller = self.galleryView.scrollView;
+        [focusViewScroller setContentOffset:CGPointMake(self.view.frame.size.width * indexOfPost, 0) animated:YES];
+    }
+
 }
 
 -(void)reload {
@@ -478,6 +500,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     
     [self.galleryView addGestureRecognizer:tap];
+    [self focus];
+
 //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
 }
 
@@ -969,27 +993,26 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         return;
     }
     [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        [commentField resignFirstResponder];
-            [UIView animateWithDuration:.15 animations:^{
-                if (error) {
-                    NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
-                    self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"COMMENT FAILED" message:message actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                    [self.errorAlertView show];
-                }
-                else {
-                    [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
-                    [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+        NSLog(@"%@ %@", responseObject, error);
+        [UIView animateWithDuration:.15 animations:^{
+            if (error) {
+                NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
+                self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"COMMENT FAILED" message:message actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                [self.errorAlertView show];
+            }
+            else {
+                [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
+                [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
 
-                    self.totalCommentCount++;
-                    self.commentTableView.hidden = NO;
-                    [self reload];
-                    CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
-                    [self.scrollView setContentOffset:bottomOffset animated:YES];
-                    commentField.text = @"";
-                }
-                
-            } completion:^(BOOL finished) {
-            }];
+                self.totalCommentCount++;
+                self.commentTableView.hidden = NO;
+                [self reload];
+                CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+                [self.scrollView setContentOffset:bottomOffset animated:YES];
+                commentField.text = @"";
+            }
+        } completion:^(BOOL finished) {
+        }];
     }];
 }
 

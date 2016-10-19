@@ -15,7 +15,6 @@
 @property CMTime currentTime;
 @property (strong, nonatomic) UIButton *backTapButton;
 @property (strong, nonatomic) FRSUploadViewController *uploadViewController;
-
 @end
 
 @implementation FRSFileViewController
