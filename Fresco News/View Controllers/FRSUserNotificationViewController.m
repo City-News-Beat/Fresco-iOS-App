@@ -184,6 +184,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
             }
             
             [self.tableView reloadData];
+            [self markAllAsRead:self.feed];
             loadingMoreNotifications = FALSE;
         }];
     }
