@@ -224,7 +224,6 @@
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"userIsMigrating"]) {
         [self logoutWithPop:NO];
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
         return;
     }
 
@@ -232,21 +231,12 @@
         
         if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
             
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userIsMigrating"];
-            
             FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
             alert.delegate = self;
             [alert show];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userIsMigrating"];
         }
     }
-
-    
-    //if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
-    
-    //    FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
-    //    alert.delegate = self;
-    //    [alert show];
-    //}
 }
 
 
