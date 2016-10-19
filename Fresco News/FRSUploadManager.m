@@ -34,7 +34,6 @@
     }
     
     for (FRSUpload *upload in uploads) {
-        for (int i = 0; i < _posts.count; i++) {
             NSArray *urls = upload.destinationURLS;
 
             if (urls.count > 1) {
@@ -77,7 +76,6 @@
                 }
             }
         }
-    }
 }
 
 -(void)dealloc {
@@ -205,6 +203,10 @@
     
     [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset* avasset, AVAudioMix* audioMix, NSDictionary* info){
         AVURLAsset* myAsset = (AVURLAsset*)avasset;
+        NSNumber *size;
+        [myAsset.URL getResourceValue:&size forKey:NSURLFileSizeKey error:nil];
+
+        _contentSize += [size unsignedLongLongValue];
         
         FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
         
@@ -251,6 +253,8 @@
     toComplete++;
     [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
         
+        _contentSize += [imageData length];
+
         FRSUploadTask *task = [[FRSUploadTask alloc] init];
         
         [task createUploadFromData:imageData destination:url progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {

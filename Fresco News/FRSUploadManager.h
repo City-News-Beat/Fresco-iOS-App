@@ -25,6 +25,7 @@ static int const maxConcurrent = 5;
     BOOL currentIndex;
     BOOL isRunning;
     BOOL didFinish;
+    unsigned long long totalSize;
 }
 -(instancetype)initWithGallery:(NSDictionary *)gallery assets:(NSArray *)assets;
 -(void)checkAndStart;
