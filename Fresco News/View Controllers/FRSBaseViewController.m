@@ -282,6 +282,7 @@
     if ([[FRSAPIClient sharedClient] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
         [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSAPIClient sharedClient] authenticatedUser]];
     }
+    
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -307,7 +308,8 @@
     [[FRSAPIClient sharedClient] setPasswordUsed:nil];
     [[FRSAPIClient sharedClient] setEmailUsed:nil];
     
-    //don't forget to change bell icon to user icon
+    FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
+    [tabBarController updateUserIcon];
     
     if (pop) {
         [self popViewController];

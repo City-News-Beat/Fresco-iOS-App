@@ -593,7 +593,7 @@
 }
 
 -(void)applicationDidEnterBackground:(UIApplication *)application {
-    
+
 }
 
 -(void)applicationWillResignActive:(UIApplication *)application{

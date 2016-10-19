@@ -216,15 +216,23 @@
 
     
     /* DEBUG */
-   //[[FRSAPIClient sharedClient] authenticatedUser].username = nil;
+//[[FRSAPIClient sharedClient] authenticatedUser].username = nil;
 //    [[FRSAPIClient sharedClient] authenticatedUser].email = nil;
 //    [[FRSAPIClient sharedClient] authenticatedUser].password = nil;
 //    [FRSAPIClient sharedClient].passwordUsed = nil;
 //    [FRSAPIClient sharedClient].emailUsed = nil;
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"userIsMigrating"]) {
+        [self logoutWithPop:NO];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
+        return;
+    }
 
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
         
-        if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email]) || ([[NSUserDefaults standardUserDefaults] boolForKey:@"userIsMigrating"])) {
+        if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
+            
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userIsMigrating"];
             
             FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
             alert.delegate = self;

@@ -1072,8 +1072,6 @@
     self = [super init];
     if (self){
         
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userIsMigrating"];
-        
         self.height = 0;
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
         
@@ -1439,14 +1437,17 @@
         
         if (responseObject) {
 
-            [[FRSAPIClient sharedClient] authenticatedUser].username = self.usernameTextField.text;
-            if (self.emailTextField.alpha == 1) {
-                [[FRSAPIClient sharedClient] authenticatedUser].email = self.emailTextField.text;
+            if ([self.usernameTextField isEqual:[NSNull null]] || ![self.usernameTextField.text isEqualToString:@""]) {
+                [[FRSAPIClient sharedClient] authenticatedUser].username = [self.usernameTextField.text substringFromIndex:1];
             }
             
+            if ([self.emailTextField isEqual:[NSNull null]] || ![self.emailTextField.text isEqualToString:@""]) {
+                [[FRSAPIClient sharedClient] authenticatedUser].email = self.emailTextField.text;
+            }
+
             [self dismiss];
+            //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
             
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
         }
     }];
 }
@@ -1622,8 +1623,18 @@
 -(void)checkCreateAccountButtonState {
     UIControlState controlState;
     
-    if (self.passwordTextField) {
-        if (self.emailTextField != nil) {
+    if (self.passwordTextField && !self.emailTextField && !self.usernameTextField) {
+        if (self.emailTextField == nil && self.usernameTextField == nil) {
+            if ( ([self.passwordTextField.text length] > 0)) {
+                
+                if ([self.passwordTextField.text length] >= 6) {
+                    controlState = UIControlStateHighlighted;
+                } else {
+                    controlState = UIControlStateNormal;
+                }
+                [self toggleCreateAccountButtonTitleColorToState:controlState];
+            }
+        } else if (self.emailTextField != nil) {
             if (([self.usernameTextField.text length] > 0) && ([self.emailTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
                 
                 if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && [self isValidEmail:self.emailTextField.text] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken) && (!self.usernameTaken)) {

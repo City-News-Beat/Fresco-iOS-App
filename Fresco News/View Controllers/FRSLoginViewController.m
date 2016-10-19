@@ -451,7 +451,7 @@
             self.didAuthenticateSocial = YES;
             NSLog(@"Popped");
             [self popToOrigin];
-            
+
             [spinner stopLoading];
             [spinner removeFromSuperview];
             self.facebookButton.hidden = false;
