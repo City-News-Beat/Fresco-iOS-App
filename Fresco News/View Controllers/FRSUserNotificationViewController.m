@@ -740,6 +740,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 //    [self configureUserAttributes:cell userID:[userIDs objectAtIndex:0]];
     
     if ([self hasImage:dictionary]) {
+        [cell configureDefaultCell];
         [cell configureImageCell];
         [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
     }
