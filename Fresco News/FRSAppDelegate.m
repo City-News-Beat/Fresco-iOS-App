@@ -59,7 +59,10 @@
     
     if ([[FRSAPIClient sharedClient] isAuthenticated]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
-        self.window.rootViewController = self.tabBarController;
+        FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
+        [mainNav pushViewController:self.tabBarController animated:FALSE];
+
+        self.window.rootViewController = mainNav;
         [self createItemsWithIcons];
         [self reloadUser];
         [self startNotificationTimer];
