@@ -27,7 +27,8 @@
     // no need to sort response, because theoretically there is 1
     NSError *fetchError;
     NSArray *uploads = [context executeFetchRequest:signedInRequest error:&fetchError];
-
+    NSLog(@"UPLOADS: %@", uploads);
+    
     if ([uploads count] > 0) {
         _isRunning = TRUE;
     }
@@ -196,6 +197,7 @@
     upload.destinationURLS = urlStrings;
     upload.resourceURL = asset.localIdentifier;
     upload.creationDate = [NSDate date];
+    upload.completed = @(FALSE);
     
     [delegate.managedObjectContext performBlock:^{
         [delegate saveContext];
