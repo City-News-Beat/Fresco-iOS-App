@@ -119,6 +119,7 @@
     expirationDateTextField.tintColor = [UIColor frescoBlueColor];
     expirationDateTextField.delegate = self;
     [expirationDateTextField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+    
     [container addSubview:expirationDateTextField];
     
     expirationDateTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
@@ -430,6 +431,18 @@
         [self.saveBankButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.saveBankButton.userInteractionEnabled = YES;
         self.saveBankButton.enabled = TRUE;
+    }
+    
+    if (textField == cardNumberTextField) {
+        if (range.location > 18) {
+            return NO;
+        }
+    }
+    
+    if (textField == expirationDateTextField) {
+        if (range.location > 4) {
+            return NO;
+        }
     }
     
     NSLog(@"INTERACTION ENABLED: %d", self.saveBankButton.userInteractionEnabled);
