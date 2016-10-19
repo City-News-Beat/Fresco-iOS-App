@@ -56,6 +56,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
 // notifications
 -(void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)getNotificationsWithLast:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
 
 -(void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
 

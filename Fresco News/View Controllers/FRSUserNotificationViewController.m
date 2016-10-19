@@ -165,8 +165,35 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     return 1;
 }
 
+-(void)loadMore {
+    if (!loadingMoreNotifications && !reachedBottom) {
+        loadingMoreNotifications = TRUE;
+        NSString *lastNotifID = [[self.feed lastObject] objectForKey:@"id"];
+        
+        [[FRSAPIClient sharedClient] getNotificationsWithLast:lastNotifID completion:^(id responseObject, NSError *error) {
+            if (!error) {
+                NSMutableArray *feed = [self.feed mutableCopy];
+                NSArray *notifications = responseObject[@"feed"];
+                
+                if (!notifications || notifications.count == 0) {
+                    reachedBottom = TRUE;
+                }
+                
+                [feed addObjectsFromArray:notifications];
+                self.feed = feed;
+            }
+            
+            [self.tableView reloadData];
+            loadingMoreNotifications = FALSE;
+        }];
+    }
+}
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
+    if (indexPath.row >= self.feed.count-2) {
+        [self loadMore];
+    }
+    
     NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
 
     /* NEWS */
