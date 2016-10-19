@@ -347,6 +347,8 @@
                             [task stop];
                         }
                         
+                        [self markAsComplete];
+
                         _currentTasks = [[NSMutableArray alloc] init];
                     }
                 }];
@@ -354,6 +356,8 @@
             else {
                     isRunning = FALSE;
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                    [self markAsComplete];
+
             }
         }];
         
@@ -412,6 +416,7 @@
                             }
                             
                             _currentTasks = [[NSMutableArray alloc] init];
+                            [self markAsComplete];
                         }
                     }];
                 }
@@ -420,6 +425,7 @@
                 NSLog(@"%@", error);
                 isRunning = FALSE;
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                [self markAsComplete];
             }
         }];
         
