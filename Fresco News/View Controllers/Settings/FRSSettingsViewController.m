@@ -123,7 +123,7 @@
     int sectionTwo = 4;
     
     if (currentUser.fieldsNeeded.count == 0) {
-        sectionTwo = 4;
+        sectionTwo = 3;
     }
     
     switch (section) {

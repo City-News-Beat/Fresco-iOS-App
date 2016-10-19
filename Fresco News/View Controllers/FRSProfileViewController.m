@@ -1434,6 +1434,7 @@
         } else {
             [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
         }
+        
         NSLog(@"UNFOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
         
         
@@ -1545,6 +1546,13 @@
                 [self resizeProfileContainer];
             } completion:nil];
         }
+        
+        if ([[user valueForKey:@"following"] boolValue] == TRUE) {
+            [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
+        } else {
+            [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
+        }
+
 
         self.nameLabel.text = user.firstName;
         [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followedCount"]] forState:UIControlStateNormal];
