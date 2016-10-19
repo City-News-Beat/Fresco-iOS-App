@@ -244,34 +244,32 @@
     [self.followingTable reloadFollowing];
     
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            NSInteger index = 0;
-            
-            for (NSDictionary *gallery in galleries) {
-                NSString *galleryID = gallery[@"id"];
-                NSInteger galleryIndex = [self galleryExists:galleryID];
+            [self.appDelegate.managedObjectContext performBlock:^{
+                NSInteger index = 0;
                 
-                if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
-                    continue;
+                for (NSDictionary *gallery in galleries) {
+                    NSString *galleryID = gallery[@"id"];
+                    NSInteger galleryIndex = [self galleryExists:galleryID];
+                    
+                    if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
+                        continue;
+                    }
+                    
+                    FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
+                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                    
+                    index++;
                 }
                 
-                FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
-                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-                [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                
-                index++;
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
-                isLoading = FALSE;
-                [self.tableView dg_stopLoading];
-                [self.followingTable dg_stopLoading];
-            });
-        });
-    }];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.tableView reloadData];
+                    isLoading = FALSE;
+                    [self.tableView dg_stopLoading];
+                    [self.followingTable dg_stopLoading];
+                });
+            }];
+        }];
 }
 
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -507,29 +505,32 @@
 }
 
 -(void)cacheLocalData:(NSArray *)localData {
-    
-    self.dataSource = [[NSMutableArray alloc] init];
-    self.highlights = [[NSMutableArray alloc] init];
-
-    NSInteger localIndex = 0;
-    for (NSDictionary *gallery in localData) {
-        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+    [self.appDelegate.managedObjectContext performBlock:^{
+        self.dataSource = [[NSMutableArray alloc] init];
+        self.highlights = [[NSMutableArray alloc] init];
         
-        [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-        [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
-        [self.dataSource addObject:galleryToSave];
-        [self.highlights addObject:galleryToSave];
-        localIndex++;
-    }
-    
-    [self.appDelegate.managedObjectContext save:Nil];
-    [self.appDelegate saveContext];
-    
-    [self.tableView reloadData];
-    
-    for (FRSGallery *gallery in self.cachedData) {
-        [self.appDelegate.managedObjectContext deleteObject:gallery];
-    }
+        NSInteger localIndex = 0;
+        for (NSDictionary *gallery in localData) {
+            FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+            
+            [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+            [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
+            [self.dataSource addObject:galleryToSave];
+            [self.highlights addObject:galleryToSave];
+            localIndex++;
+        }
+        
+        [self.appDelegate.managedObjectContext save:Nil];
+        [self.appDelegate saveContext];
+        
+        [self.tableView reloadData];
+        
+        for (FRSGallery *gallery in self.cachedData) {
+            [self.appDelegate.managedObjectContext deleteObject:gallery];
+        }
+        
+        [self.appDelegate saveContext];
+    }];
 }
 
 -(void)reloadFromLocal {

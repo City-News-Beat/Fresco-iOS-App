@@ -149,9 +149,32 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 -(void)registerNibs {
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"notificationCell"];
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"textNotificationCell"];
-    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"assignmentNotificationCell"];
+    // default
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:likedNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:repostedNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:followedNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:commentedNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:mentionCommentNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:galleryApprovedNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:purchasedContentNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:taxInfoDeclinedNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:taxInfoRequiredNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:taxInfoProcessedNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userNewsGalleryNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userNewsStoryNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:paymentExpiringNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:paymentSentNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:mentionGalleryNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:todayInNewsNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:photoOfDayNotification];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSDefaultNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:paymentDeclinedNotification];
+
+
+    // text
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSTextNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:userNewsCustomNotification];
+    
+    // assignment
+    [self.tableView registerNib:[UINib nibWithNibName:@"FRSAssignmentNotificationTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:newAssignmentNotification];
 }
 
 
@@ -209,7 +232,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         NSLog(@"PHOTOS OF THE DAY");
         
     } else if ([currentKey isEqualToString:todayInNewsNotification]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
 
         [self configureTodayInNews:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         
@@ -218,10 +241,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         }
         return defaultCell;
         
-        
-        
     } else if ([currentKey isEqualToString:userNewsGalleryNotification]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
 
         [self configureGalleryCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         
@@ -233,7 +254,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
         
     } else if ([currentKey isEqualToString:userNewsStoryNotification]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
 
         [self configureStoryCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         
@@ -243,7 +264,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return defaultCell;
         
     } else if ([currentKey isEqualToString:userNewsCustomNotification]) {
-        FRSTextNotificationTableViewCell *textCell = [tableView dequeueReusableCellWithIdentifier:TEXT_ID];
+        FRSTextNotificationTableViewCell *textCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
 
         [self configureTextCell:textCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         
@@ -256,7 +277,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     /* SOCIAL */
     } else if ([currentKey isEqualToString:followedNotification]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
 
         [self configureFollowCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         defaultCell.delegate = self;
@@ -269,7 +290,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
         
     } else if ([currentKey isEqualToString:likedNotification]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
 
         [self configureLikeCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
@@ -278,7 +299,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return defaultCell;
         
     } else if ([currentKey isEqualToString:repostedNotification]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
 
         [self configureRepostCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
@@ -287,7 +308,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return defaultCell;
     }
     else if ([currentKey isEqualToString:galleryApprovedNotification]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         
         [self configureGalleryCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         
@@ -298,7 +319,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return defaultCell;
 
     } else if ([currentKey isEqualToString:commentedNotification] || [currentKey isEqualToString:mentionCommentNotification] || [currentKey isEqualToString:mentionGalleryNotification]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         NSLog(@"COMMENTED");
         [self configureCommentCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
@@ -309,7 +330,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     }
     /* ASSIGNMENT */
     else if ([currentKey isEqualToString:newAssignmentNotification]) {
-        FRSAssignmentNotificationTableViewCell *assignmentCell = [tableView dequeueReusableCellWithIdentifier:ASSIGNMENT_ID];
+        FRSAssignmentNotificationTableViewCell *assignmentCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         assignmentCell.delegate = self;
 
         [self configureAssignmentCell:assignmentCell dictionary:[self.feed objectAtIndex:indexPath.row]];
@@ -323,13 +344,13 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     /* PAYMENT */
     else if ([currentKey isEqualToString:purchasedContentNotification]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         NSLog(@"PURCHASED CONTENT");
         [self configureGalleryCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         return defaultCell;
         
     } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         NSLog(@"PAYMENT EXPIRING");
         [self configurePaymentExpiringCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
@@ -338,7 +359,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return defaultCell;
         
     } else if ([currentKey isEqualToString:paymentSentNotification]) {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         NSLog(@"PAYMENT SENT");
         [self configurePaymentSentCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
@@ -348,7 +369,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
         NSLog(@"PAYMENT DECLINED");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         [self configurePaymentDeclinedCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
             defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -357,7 +378,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     } else if ([currentKey isEqualToString:taxInfoRequiredNotification]) {
         NSLog(@"TAX INFO REQUIRED");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         [self configureTaxInfoRequiredCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
             defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -366,7 +387,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
         NSLog(@"TAX INFO PROCESSING");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         [self configureTaxInfoProcessedCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
             defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -375,7 +396,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
         NSLog(@"TAX INFO DECLINED");
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         [self configureTaxInfoDeclinedCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
             defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -383,14 +404,14 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return defaultCell;
         
     } else {
-        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+        FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         if ([self seen:indexPath]) {
             defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
         }
         return defaultCell;
     }
 
-    FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:DEFAULT_ID];
+    FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
 
     if ([self seen:indexPath]) {
         defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -565,9 +586,28 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     }
 }
+-(void)error:(NSError *)error {
+    if (!error) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+    else if (error.code == -1009) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"CONNECTION ERROR" message:@"Unable to connect to the internet. Please check your connection and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+    else {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+}
 
 -(void)segueToPost:(NSString *)postID inGallery:(NSString *)gallery {
     [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
+        
+        if (error || !responseObject) {
+            [self error:error];
+            return;
+        }
         
         FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];

@@ -21,5 +21,8 @@
 @dynamic resourceURL;
 @dynamic etags;
 @dynamic destinationURLS;
+@dynamic uploadID;
+@dynamic key;
+
 
 @end

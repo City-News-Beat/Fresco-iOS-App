@@ -11,12 +11,13 @@
 #import "Fresco.h"
 #import "MagicalRecord.h"
 #import "FRSUpload+CoreDataProperties.h"
+#import "FRSAppDelegate.h"
 
 @implementation FRSUploadManager
-@synthesize isRunning = _isRunning;
+@synthesize isRunning = _isRunning, managedUploads = _managedUploads;
 
 -(void)checkAndStart {
-    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"completed", @(TRUE)];
+    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"completed", @(FALSE)];
     NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
     signedInRequest.predicate = signedInPredicate;
     
@@ -26,28 +27,58 @@
     // no need to sort response, because theoretically there is 1
     NSError *fetchError;
     NSArray *uploads = [context executeFetchRequest:signedInRequest error:&fetchError];
-
+    NSLog(@"UPLOADS: %@", uploads);
+    
     if ([uploads count] > 0) {
         _isRunning = TRUE;
     }
     
     for (FRSUpload *upload in uploads) {
-        for (int i = 0; i < _posts.count; i++) {
+        [self.managedUploads addObject:upload];
             NSArray *urls = upload.destinationURLS;
 
             if (urls.count > 1) {
                 
                 NSString *resourceURL = upload.resourceURL;
+                NSMutableArray *dest = [[NSMutableArray alloc] init];
+                
+                for (NSString *partURL in urls) {
+                    [dest addObject:[NSURL URLWithString:partURL]];
+                }
                 
                 PHFetchResult* assets =[PHAsset fetchAssetsWithLocalIdentifiers:@[resourceURL] options:nil];
-
-               // [self addMultipartTaskForAsset:currentAsset urls:urls post:currentPost];
+                __block PHAsset *asset;
+                [assets enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    asset = obj;
+                }];
+                
+                if (asset) {
+                    [self addMultipartTaskForAsset:asset urls:dest post:@{@"key":upload.key, @"uploadId":upload.uploadID}];
+                }
+                else {
+                    continue;
+                }
             }
             else {
-               // [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"upload_urls"][0]] post:currentPost];
+                
+                NSString *resourceURL = upload.resourceURL;
+                
+                PHFetchResult* assets =[PHAsset fetchAssetsWithLocalIdentifiers:@[resourceURL] options:nil];
+                __block PHAsset *asset;
+                [assets enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    asset = obj;
+                }];
+                
+                if (asset) {
+                    if (urls[0]) {
+                        [self addTaskForImageAsset:asset url:[NSURL URLWithString:urls[0]] post:@{@"key":upload.key, @"uploadId":upload.uploadID}];
+                    }
+                }
+                else {
+                    continue;
+                }
             }
         }
-    }
 }
 
 -(void)dealloc {
@@ -58,6 +89,8 @@
     _tasks = [[NSMutableArray alloc] init];
     _currentTasks = [[NSMutableArray alloc] init];
     _etags = [[NSMutableArray alloc] init];
+    _managedUploads = [[NSMutableArray alloc] init];
+    
     weakSelf = self;
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
@@ -66,6 +99,8 @@
             return;
         }
         
+        [self markAsInComplete];
+
         totalBytesSent = 0;
         _tasks = [[NSMutableArray alloc] init];
         _currentTasks = [[NSMutableArray alloc] init];
@@ -84,6 +119,13 @@
 }
 
 -(void)startUploadProcess {
+    
+    if (!_posts) {
+        
+        
+        return;
+    }
+    
     toComplete = 0;
     isComplete = 0;
 
@@ -104,9 +146,52 @@
             }
             
             [self addMultipartTaskForAsset:currentAsset urls:urls post:currentPost];
+            
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            FRSUpload *upload = [FRSUpload MR_createEntityInContext:delegate.managedObjectContext];
+            NSMutableArray *urlStrings = [[NSMutableArray alloc] init];
+            for (NSURL *url in urls) {
+                [urlStrings addObject:url.absoluteString];
+            }
+            
+            upload.destinationURLS = urlStrings;
+            upload.resourceURL = currentAsset.localIdentifier;
+            upload.creationDate = [NSDate date];
+            upload.completed = @(FALSE);
+            upload.key = currentPost[@"key"];
+            upload.uploadID = currentPost[@"uploadId"];
+            
+            [delegate.managedObjectContext performBlock:^{
+                [delegate saveContext];
+            }];
+            
+        [self.managedUploads addObject:upload];
+
+
         }
         else {
             [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"upload_urls"][0]] post:currentPost];
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            FRSUpload *upload = [FRSUpload MR_createEntityInContext:delegate.managedObjectContext];
+            NSMutableArray *urlStrings = [[NSMutableArray alloc] init];;
+            
+            if (currentPost[@"upload_urls"][0]) {
+                [urlStrings addObject:currentPost[@"upload_urls"][0]];
+            }
+            
+            upload.destinationURLS = urlStrings;
+            upload.resourceURL = currentAsset.localIdentifier;
+            upload.creationDate = [NSDate date];
+            upload.completed = @(FALSE);
+            upload.key = currentPost[@"key"];
+            upload.uploadID = currentPost[@"uploadId"];
+
+            [delegate.managedObjectContext performBlock:^{
+                [delegate saveContext];
+            }];
+            
+            [self.managedUploads addObject:upload];
+
         }
     }
 }
@@ -155,9 +240,14 @@
         NSLog(@"progress %lf",progress);  //never gets called
     };
     
-    
     [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset* avasset, AVAudioMix* audioMix, NSDictionary* info){
         AVURLAsset* myAsset = (AVURLAsset*)avasset;
+        NSNumber *size;
+        [myAsset.URL getResourceValue:&size forKey:NSURLFileSizeKey error:nil];
+
+        if (!_posts) {
+            _contentSize += [size unsignedLongLongValue];
+        }
         
         FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
         
@@ -178,6 +268,13 @@
                         [self next:task];
                     }
                     else {
+                        if (!_posts) {
+                            isComplete++;
+                            [self next:task];
+                            return;
+                        }
+
+
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                         isRunning = FALSE;
                         _tasks = [[NSMutableArray alloc] init];
@@ -186,13 +283,17 @@
                             [task stop];
                         }
                         
+                        [self markAsComplete];
+
                         _currentTasks = [[NSMutableArray alloc] init];
                     }
                 }];
             }
             else {
-                isRunning = FALSE;
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                    isRunning = FALSE;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                    [self markAsComplete];
+
             }
         }];
         
@@ -203,9 +304,12 @@
 -(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post {
     toComplete++;
     [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-        
+        if (!_posts) {
+            _contentSize += [imageData length];
+        }
+
         FRSUploadTask *task = [[FRSUploadTask alloc] init];
-        
+
         [task createUploadFromData:imageData destination:url progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
             [self uploadedData:bytesSent];
         } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
@@ -215,6 +319,13 @@
                     NSString *eTag = headers[@"Etag"];
                     
                     NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
+                    
+                    if (!eTag || !post[@"uploadId"] || !post[@"key"] || !post[@"post_id"]) {
+                        isComplete++;
+                        [self next:task];
+                        return;
+                    }
+                    
                     postCompletionDigest[@"eTags"] = @[eTag];
                     postCompletionDigest[@"uploadId"] = post[@"uploadId"];
                     postCompletionDigest[@"key"] = post[@"key"];
@@ -226,6 +337,12 @@
                             [self next:task];
                         }
                         else {
+                            if (!_posts) {
+                                isComplete++;
+                                [self next:task];
+                                return;
+                            }
+                            
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                             isRunning = FALSE;
                             _tasks = [[NSMutableArray alloc] init];
@@ -235,6 +352,7 @@
                             }
                             
                             _currentTasks = [[NSMutableArray alloc] init];
+                            [self markAsComplete];
                         }
                     }];
                 }
@@ -243,11 +361,36 @@
                 NSLog(@"%@", error);
                 isRunning = FALSE;
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
+                [self markAsComplete];
             }
         }];
         
         [self addTask:task];
     }];
+}
+
+-(void)markAsComplete {
+    FRSAppDelegate *delegate = (FRSAppDelegate *) [[UIApplication sharedApplication] delegate];
+    
+    [delegate.managedObjectContext performBlock:^{
+        for (FRSUpload *upload in self.managedUploads) {
+            upload.completed = @(TRUE);
+        }
+        [delegate saveContext];
+    }];
+    
+}
+
+-(void)markAsInComplete {
+    FRSAppDelegate *delegate = (FRSAppDelegate *) [[UIApplication sharedApplication] delegate];
+    
+    [delegate.managedObjectContext performBlock:^{
+        for (FRSUpload *upload in self.managedUploads) {
+            upload.completed = @(FALSE);
+        }
+        [delegate saveContext];
+    }];
+    
 }
 
 -(void)pause {
@@ -274,6 +417,7 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
             NSLog(@"GALLERY CREATION COMPLETE");
             [[NSNotificationCenter defaultCenter] removeObserver:self];
+            [self markAsComplete];
         }
     }
 }

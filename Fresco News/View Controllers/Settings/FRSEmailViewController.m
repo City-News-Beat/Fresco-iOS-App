@@ -10,6 +10,7 @@
 #import "FRSTableViewCell.h"
 #import "UIColor+Fresco.h"
 #import "FRSAPIClient.h"
+#import "FRSAppDelegate.h"
 
 @interface FRSEmailViewController()
 

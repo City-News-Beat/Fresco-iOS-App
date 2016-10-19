@@ -34,6 +34,7 @@
 #import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
+#import "FRSUploadManager.h"
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -96,7 +97,15 @@
     
 
     //[self startNotificationTimer];
+    FRSUploadManager *manager = [[FRSUploadManager alloc] init];
+    [manager checkAndStart];
     
+    if (!manager.isRunning) {
+        manager = Nil;
+    }
+    else {
+        
+    }
     
     return YES;
 }
@@ -131,7 +140,8 @@
     }];
 }
 
--(void)reloadUser {
+-(void)reloadUser:(FRSAPIDefaultCompletionBlock)completion {
+
     [[FRSAPIClient sharedClient] refreshCurrentUser:^(id responseObject, NSError *error) {
         // check against existing user
         if (error || responseObject[@"error"]) {
@@ -148,7 +158,7 @@
         
         // update user
         authenticatedUser.uid = responseObject[@"id"];
-//        authenticatedUser.email = responseObject[@"email"];
+        //        authenticatedUser.email = responseObject[@"email"];
         
         if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
             authenticatedUser.firstName = responseObject[@"full_name"];
@@ -281,9 +291,24 @@
             [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
             [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
             
-            [[self managedObjectContext] save:Nil];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self saveContext];
+            });
+          
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if (completion) {
+                    completion(Nil,Nil);
+                }
+            });
         }
     }];
+}
+
+-(void)reloadUser {
+    [self reloadUser:Nil];
 }
 
 -(BOOL)isValue:(id)value {
@@ -918,13 +943,31 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }];
     }
 }
+-(void)error:(NSError *)error {
+    if (!error) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+    else if (error.code == -1009) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"CONNECTION ERROR" message:@"Unable to connect to the internet. Please check your connection and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+    else {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+}
 
 
 -(void)segueToGallery:(NSString *)galleryID {
     __block BOOL isPushingGallery = FALSE;
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
-        
+        if (error || !responseObject) {
+            [self error:error];
+            return;
+        }
+
         if (isPushingGallery) {
             return;
         }
