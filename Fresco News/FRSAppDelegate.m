@@ -33,6 +33,7 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -488,22 +489,77 @@
 //    [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
 //    [[UIApplication sharedApplication] registerForRemoteNotifications];
     
-    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-    center.delegate = self;
-    [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error)
-     {
-         if( !error )
+    if( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) == FALSE)
+    {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound |    UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+        
+        //if( option != nil )
+        //{
+        //    NSLog( @"registerForPushWithOptions:" );
+        //}
+    }
+    else
+    {
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        center.delegate = self;
+        [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error)
          {
-             [[UIApplication sharedApplication] registerForRemoteNotifications]; // required to get the app to do anything at all about push notifications
-             NSLog( @"Push registration success." );
-         }
-         else
-         {
-             NSLog( @"Push registration FAILED" );
-             NSLog( @"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription );
-             NSLog( @"SUGGESTIONS: %@ - %@", error.localizedRecoveryOptions, error.localizedRecoverySuggestion );
-         }  
-     }];
+             if( !error )
+             {
+                 [[UIApplication sharedApplication] registerForRemoteNotifications];  // required to get the app to do anything at all about push notifications
+                 NSLog( @"Push registration success." );
+             }
+             else
+             {
+                 NSLog( @"Push registration FAILED" );
+                 NSLog( @"ERROR: %@ - %@", error.localizedFailureReason, error.localizedDescription );
+                 NSLog( @"SUGGESTIONS: %@ - %@", error.localizedRecoveryOptions, error.localizedRecoverySuggestion );  
+             }  
+         }];  
+    }
+}
+
+-(void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void(^)(UIBackgroundFetchResult))completionHandler
+{
+    // iOS 10 will handle notifications through other methods
+    
+    if( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) )
+    {
+        NSLog( @"iOS version >= 10. Let NotificationCenter handle this one." );
+        // set a member variable to tell the new delegate that this is background
+        return;
+    }
+    NSLog( @"HANDLE PUSH, didReceiveRemoteNotification: %@", userInfo );
+    
+    // custom code to handle notification content
+    if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
+    {
+        [self handleRemotePush:userInfo];
+    }
+    
+    if( [UIApplication sharedApplication].applicationState == UIApplicationStateInactive )
+    {
+        NSLog( @"INACTIVE" );
+        completionHandler( UIBackgroundFetchResultNewData );
+    }
+    else if( [UIApplication sharedApplication].applicationState == UIApplicationStateBackground )
+    {
+        NSLog( @"BACKGROUND" );
+        completionHandler( UIBackgroundFetchResultNewData );
+    }
+    else
+    {
+        NSLog( @"FOREGROUND" );
+        completionHandler( UIBackgroundFetchResultNewData );
+    }
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo  
+{  
+    [self application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:^(UIBackgroundFetchResult result) {
+        // nothing
+    }];  
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
@@ -690,33 +746,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 #pragma mark - Push Notifications
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))handler
-{
-
-    if(application.applicationState == UIApplicationStateInactive) {
-        
-        //Handle the push notification
-        [self handleRemotePush:userInfo];
-        
-        handler(UIBackgroundFetchResultNewData);
-    }
-}
-
--(void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo {
-    [@[] objectAtIndex:2];
-}
 
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
     [FRSTracker track:@"Permissions notification disables"];
 }
 
--(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
-    {
-        [self handleRemotePush:notification.userInfo];
-    }
-}
+
 
 -(void)startNotificationTimer {
     notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
