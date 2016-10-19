@@ -306,22 +306,12 @@
                 break;
                 case 2: {
 
-                    NSString *dueBy = [[FRSAPIClient sharedClient] authenticatedUser].dueBy;
-                    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-                    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-                    dateFormat.dateStyle = NSDateFormatterMediumStyle;
-                    NSDate *date = [dateFormat dateFromString:dueBy];
-                    NSString *dateString = [NSString stringWithFormat:@"Add by %@", date];
-
-                    if (dueBy != nil) {
-                        
-                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
-
-                    } else {
-                        
-                        NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
-                        [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
+                    if (!card) {
+                        card = @"";
                     }
+                    
+                    [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                 }
                 break;
                 case 3: {

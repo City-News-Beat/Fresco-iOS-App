@@ -263,7 +263,7 @@
 }
 
 -(void)saveBankInfo {
-    [Stripe setDefaultPublishableKey:stripeTest];
+    [Stripe setDefaultPublishableKey:stripeLive];
 
     if (!self.loadingView){
         [self configureSpinner];
