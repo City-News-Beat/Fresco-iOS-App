@@ -181,10 +181,17 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
                 
                 [feed addObjectsFromArray:notifications];
                 self.feed = feed;
+                
+                NSMutableArray *toRead = [[NSMutableArray alloc] init];
+                
+                for (NSDictionary *notif in notifications) {
+                    [toRead addObject:notif[@"id"]];
+                }
+                
+                [self markAllAsRead:toRead];
             }
             
             [self.tableView reloadData];
-            [self markAllAsRead:self.feed];
             loadingMoreNotifications = FALSE;
         }];
     }
