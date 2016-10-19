@@ -135,7 +135,7 @@
     
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeFollow];
     
-    self.followButton.alpha = 1;
+    self.followButton.alpha = 0;
     self.followButton.tintColor = [UIColor blackColor];
     
     [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
