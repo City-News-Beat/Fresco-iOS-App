@@ -94,7 +94,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-    
+    [self configureAssignments]; //Tableview configures are called here
+
     [self.galleryCollectionView reloadData];
     [self configurePageController];
     
@@ -143,7 +144,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureGalleryCollectionView];
     [self configurePageController];
     [self configureNavigationBar];
-    [self configureAssignments]; //Tableview configures are called here
     [self configureBottomBar];
 }
 
@@ -988,7 +988,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         for (NSDictionary *assignment in nearBy) {
             NSLog(@"NEAR BY: %@", assignment);
             NSArray *coords = assignment[@"location"][@"coordinates"];
-            CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:0] floatValue] longitude:[[coords objectAtIndex:1] floatValue]];
+            CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
             float radius = [assignment[@"radius"] floatValue];
             
             BOOL shouldAdd = FALSE;
