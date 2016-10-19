@@ -30,9 +30,7 @@
     NSArray *uploads = [context executeFetchRequest:signedInRequest error:&fetchError];
     NSLog(@"UPLOADS: %@", uploads);
     
-    if ([uploads count] > 0) {
-        _isRunning = TRUE;
-    }
+
     
     for (FRSUpload *upload in uploads) {
         
@@ -50,6 +48,7 @@
         }
         
         [self.managedUploads addObject:upload];
+        _isRunning = TRUE;
             NSArray *urls = upload.destinationURLS;
 
             if (urls.count > 1) {
@@ -86,6 +85,7 @@
                 
                 if (asset) {
                     if (urls[0]) {
+                        _isRunning = TRUE;
                         [self addTaskForImageAsset:asset url:[NSURL URLWithString:urls[0]] post:@{@"key":upload.key, @"uploadId":upload.uploadID}];
                     }
                 }
