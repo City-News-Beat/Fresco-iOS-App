@@ -451,6 +451,19 @@
         }
     }
     
+    if (textField == _accountNumberField) {
+        if (range.location > 16) {
+            return NO;
+        }
+    }
+    
+    if (textField == _routingNumberField) {
+        if (range.location > 8) {
+            return NO;
+        }
+    }
+    
+    
     NSLog(@"INTERACTION ENABLED: %d", self.saveBankButton.userInteractionEnabled);
     
     
