@@ -38,12 +38,42 @@
             if (urls.count > 1) {
                 
                 NSString *resourceURL = upload.resourceURL;
+                NSMutableArray *dest = [[NSMutableArray alloc] init];
+                
+                for (NSString *partURL in urls) {
+                    [dest addObject:[NSURL URLWithString:partURL]];
+                }
                 
                 PHFetchResult* assets =[PHAsset fetchAssetsWithLocalIdentifiers:@[resourceURL] options:nil];
-
-               // [self addMultipartTaskForAsset:currentAsset urls:urls post:currentPost];
+                __block PHAsset *asset;
+                [assets enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    asset = obj;
+                }];
+                
+                if (asset) {
+                    [self addMultipartTaskForAsset:asset urls:dest post:Nil];
+                }
+                else {
+                    continue;
+                }
             }
             else {
+                
+                NSString *resourceURL = upload.resourceURL;
+                
+                PHFetchResult* assets =[PHAsset fetchAssetsWithLocalIdentifiers:@[resourceURL] options:nil];
+                __block PHAsset *asset;
+                [assets enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    asset = obj;
+                }];
+                
+                if (asset) {
+                    [self addTaskForImageAsset:asset url:[NSURL URLWithString:urls[0]] post:Nil];
+                }
+                else {
+                    continue;
+                }
+
                // [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"upload_urls"][0]] post:currentPost];
             }
         }
