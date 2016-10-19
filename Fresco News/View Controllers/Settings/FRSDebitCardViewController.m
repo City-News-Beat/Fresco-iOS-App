@@ -302,7 +302,11 @@
             }
             else {
                 // succeeded
-                [[[FRSAPIClient sharedClient] authenticatedUser] setValue:@"BANK ACC" forKey:@"creditCardDigits"];
+                NSString *brand = [responseObject objectForKey:@"brand"];
+                NSString *last4 = [responseObject objectForKey:@"last4"];
+                NSString *creditCard = [NSString stringWithFormat:@"%@ %@", brand, last4];
+
+                [[[FRSAPIClient sharedClient] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
                 [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
                 [self.navigationController popViewControllerAnimated:YES];
             }
