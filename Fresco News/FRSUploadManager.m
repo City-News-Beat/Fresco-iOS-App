@@ -73,8 +73,6 @@
                 else {
                     continue;
                 }
-
-               // [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"upload_urls"][0]] post:currentPost];
             }
         }
     }
