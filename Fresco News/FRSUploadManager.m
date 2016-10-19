@@ -18,6 +18,14 @@
 @synthesize isRunning = _isRunning, managedUploads = _managedUploads;
 
 -(void)checkAndStart {
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        didFinish = TRUE;
+        isRunning = FALSE;
+        return;
+    }
+    
     NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"completed", @(FALSE)];
     NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
     signedInRequest.predicate = signedInPredicate;
@@ -38,7 +46,6 @@
         sinceStart *= -1;
         
         if (sinceStart >= (24 * 60 * 60)) {
-            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             
             [delegate.managedObjectContext performBlock:^{
                 upload.completed = @(TRUE);
