@@ -44,4 +44,6 @@
 -(BOOL)isFirstRun;
 -(void)updateTabBarToUser;
 -(void)clearKeychain;
+-(void)startNotificationTimer;
+-(void)stopNotificationTimer;
 @end

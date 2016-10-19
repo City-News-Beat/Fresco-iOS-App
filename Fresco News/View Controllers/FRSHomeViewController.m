@@ -152,10 +152,9 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     [self.tabBarController.tabBar setHidden:FALSE];
     [self.appDelegate reloadUser];
-    
+    [self.appDelegate startNotificationTimer];
     entry = [NSDate date];
     numberRead = 0;
-
 }
 
 -(void)viewDidAppear:(BOOL)animated {

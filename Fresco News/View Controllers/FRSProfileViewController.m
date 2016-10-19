@@ -89,7 +89,7 @@
 @property (strong, nonatomic) UIView *disabledContainer;
 
 @property (strong, nonatomic) NSString *reportUserReasonString;
-
+@property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
 @end
 
 @implementation FRSProfileViewController
@@ -149,6 +149,8 @@
     if (self.shouldShowNotificationsOnLoad) {
         [self showNotificationsNotAnimated];
     }
+    
+     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
 }
 
 -(void)didPressButtonAtIndex:(NSInteger)index {
@@ -1371,6 +1373,26 @@
     //} else {
     //    scrollView.bounces = YES;
     //}
+
+    NSArray *visibleCells = [self.tableView visibleCells];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        BOOL taken = FALSE;
+        
+        for (FRSGalleryCell *cell in visibleCells) {
+            if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
+                    if (!taken) {
+                        [cell play];
+                        taken = TRUE;
+                    }
+                    else {
+                        [cell pause];
+                    }
+                }
+            }
+        }
+    });
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
@@ -1378,18 +1400,13 @@
 
 #pragma mark - Navigation
 
-//Breaking this up into two methods because presentVC:animated: is being passed into the notification button's selector and defaulting to NO.
 -(void)showNotificationsAnimated {
-    
     FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
-
-    [self.navigationController pushViewController:notifVC animated:NO];
+    [self.navigationController pushViewController:notifVC animated:YES];
 }
 
-//Breaking this up into two methods because presentVC:animated: is being passed into the notification button's selector and defaulting to NO.
 -(void)showNotificationsNotAnimated {
     FRSUserNotificationViewController *notifVC = [[FRSUserNotificationViewController alloc] init];
-    
     [self.navigationController pushViewController:notifVC animated:NO];
 }
 
@@ -1510,7 +1527,7 @@
 -(void)facebookTapped {
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
         
-    } parent:self]; // presenting view controller
+    } parent:self manager:self.fbLoginManager]; // presenting view controller
     
 }
 

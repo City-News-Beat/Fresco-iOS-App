@@ -62,6 +62,7 @@
         self.window.rootViewController = self.tabBarController;
         [self createItemsWithIcons];
         [self reloadUser];
+        [self startNotificationTimer];
     }
     else {
         
@@ -94,9 +95,6 @@
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
-    
-
-    //[self startNotificationTimer];
     FRSUploadManager *manager = [[FRSUploadManager alloc] init];
     [manager checkAndStart];
     
@@ -318,7 +316,6 @@
     
     return FALSE;
 }
-
 
 -(void)clearKeychain {
     SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
@@ -783,7 +780,16 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 
 -(void)startNotificationTimer {
-    notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
+    if (!notificationTimer) {
+        notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
+    }
+}
+
+-(void)stopNotificationTimer {
+    if (notificationTimer) {
+        [notificationTimer invalidate];
+        notificationTimer = nil;
+    }
 }
 
 -(void)checkNotifications {
@@ -798,12 +804,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             return;
         }
         if (responseObject) {
-            FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
-            if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
-                
-                [tbc updateBellIcon:YES];
-            } else {
-                [tbc updateUserIcon];
+            FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
+            if ([tbc isKindOfClass:[FRSTabBarController class]]) {
+                if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
+                    [tbc updateBellIcon:YES];
+                } else {
+                    [tbc updateUserIcon];
+                }
             }
         }
     }];
@@ -831,10 +838,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     else { //We will eventually need this if our high level verison numbers increment, but for now, it will never get called.
         
     }
-    
-    
 }
-
 
 #pragma mark - Config
 

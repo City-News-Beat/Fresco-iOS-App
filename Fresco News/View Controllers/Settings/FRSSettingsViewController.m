@@ -646,7 +646,6 @@
     
 }
 
-
 #pragma mark - FRSAlertView Delegate
 -(void)didPressButtonAtIndex:(NSInteger)index {
     //for logout alert
@@ -671,9 +670,6 @@
         }
     }
 }
-
-
-
 
 @end
 
