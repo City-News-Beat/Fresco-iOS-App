@@ -229,6 +229,27 @@
     }];
 }
 
+-(void)getNotificationsWithLast:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
+    if (!last) {
+        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:Nil]);
+    }
+    
+    [self get:notificationEndpoint withParameters:@{@"last":last} completion:^(id responseObject, NSError *error) {
+        
+        //        NSArray *feed = [responseObject objectForKey:@"feed"];
+        //        NSMutableArray *notificationIDs = [[NSMutableArray alloc] init];
+        //
+        completion(responseObject, error);
+        
+        //        for (int i=0; i<feed.count; i++) {
+        //            [notificationIDs addObject:[[[responseObject objectForKey:@"feed"] objectAtIndex:i] objectForKey:@"id"]];
+        //        }
+        //        [self post:@"user/notifications/see" withParameters:@{@"notification_ids": notificationIDs} completion:^(id responseObject, NSError *error) {
+        //        }];
+    }];
+
+}
+
 -(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     
     // ** WARNING ** Don't update users info just to update it, update it only if new (i.e. changing email to identical email has resulted in issues with api v1)
@@ -1322,9 +1343,21 @@
         
         id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
         FRSTabBarController *tabBar = (FRSTabBarController *) [appDelegate tabBar];
-        UINavigationController *navigationController = tabBar.navigationController;
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-        [navigationController pushViewController:onboardVC animated:NO];
+        UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+        
+        if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+            [navController pushViewController:onboardVC animated:FALSE];
+        }
+        else {
+            UITabBarController *tab = (UITabBarController *)navController;
+            tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+            tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+            UINavigationController *onboardNav = [[UINavigationController alloc] init];
+            [onboardNav pushViewController:onboardVC animated:NO];
+            [tab presentViewController:onboardNav animated:YES completion:Nil];
+        }
+
         return TRUE;
     }
     

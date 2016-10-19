@@ -245,6 +245,8 @@ typedef NS_ENUM(NSUInteger, FRSNotificationType) {
 };
 
 static NSString * const settingsKey = @"notification-type";
+// Upload - local
+static NSString * const restartUploadNotification = @"user-local-upload";
 
 // News
 static NSString * const photoOfDayNotification = @"user-news-photos-of-day";
@@ -272,7 +274,7 @@ static NSString * const taxInfoDeclinedNotification = @"user-payment-tax-info-de
 
 // Assignments
 static NSString * const newAssignmentNotification = @"user-dispatch-new-assignment";
-
+static NSString * const galleryApprovedNotification = @"user-dispatch-content-verified";
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]

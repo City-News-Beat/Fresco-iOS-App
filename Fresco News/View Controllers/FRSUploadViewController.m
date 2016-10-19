@@ -1083,9 +1083,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
     
     
-    if (self.postToTwitter) {
-        [self tweet:@"test"]; //does not work, fix before release
-    }
+//    if (self.postToTwitter) {
+//        [self tweet:@"test"]; //does not work, fix before release
+//    }
     
     
     if (self.postAnon) {
@@ -1108,6 +1108,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
             
             [posts removeObject:firstAsset];
             [current addObject:responseObject];
+            
+            if (error) {
+                [self creationError:error];
+            }
+            
             [self getPostData:posts current:current];
         }];
     }
@@ -1127,8 +1132,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
             gallery[@"outlet_id"] = selectedOutlet;
         }
         
-        
-        
         NSLog(@"CREATING: %@", gallery);
         
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
@@ -1138,9 +1141,25 @@ static NSString * const cellIdentifier = @"assignment-cell";
             }
             else {
                 NSLog(@"Gallery creation error... (%@)", error);
+                [self creationError:error];
             }
         }];
     }
+}
+
+-(void)creationError:(NSError *)error {
+    if (error.code == -1009) {
+        [self connectionError:error];
+        return;
+    }
+    
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY ERROR" message:@"We encountered an issue creating your gallery. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+    [alert show];
+}
+
+-(void)connectionError:(NSError *)error {
+    FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
+    [alert show];
 }
 
 -(void)moveToUpload:(NSDictionary *)postData {
@@ -1151,6 +1170,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         NSLog(@"NO UPLOAD: ALREADY STARTED");
     }
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

@@ -258,18 +258,39 @@
 }
 
 -(void)saveBankInfo {
-    
+    [Stripe setDefaultPublishableKey:stripeTest];
+
     NSLog(@"SAVING BANK INFO");
     
     NSString *bankAccountNumber = _accountNumberField.text;
     NSString *routingNumber = _routingNumberField.text;
     
-    STPBankAccountParams *params = [FRSStripe bankAccountWithNumber:bankAccountNumber routing:routingNumber name:Nil ssn:Nil type:FRSBankAccountTypeIndividual];
+    STPBankAccountParams *bankParams = [[STPBankAccountParams alloc] init];
+    bankParams.accountNumber = bankAccountNumber;
+    bankParams.routingNumber = routingNumber;
+    bankParams.currency = @"USD";
+    bankParams.accountHolderType = STPBankAccountHolderTypeIndividual;
+    bankParams.country = @"US";
+    bankParams.accountHolderName = @"Philip Bernstein";
     
-    NSLog(@"PARAMS: %@", params);
+    NSLog(@"PARAMS: %@", bankParams);
     
-    [FRSStripe createTokenWithBank:params completion:^(STPToken *stripeToken, NSError *error) {
-        NSLog(@"%@ %@", stripeToken, error);
+    [[STPAPIClient sharedClient] createTokenWithBankAccount:bankParams completion:^(STPToken * _Nullable token, NSError * _Nullable error) {
+        NSLog(@"STP: %@ %@", token, error);
+        // created token
+        if (error || !token) {
+            // failed
+        }
+        [[FRSAPIClient sharedClient] createPaymentWithToken:token.tokenId completion:^(id responseObject, NSError *error) {
+            NSLog(@"API: %@ %@", responseObject, error);
+            
+            if (error) {
+                // failed
+            }
+            else {
+                // succeeded
+            }
+        }];
     }];
 }
 
@@ -370,7 +391,8 @@
 
 
 -(void)saveCard {
-    
+    [Stripe setDefaultPublishableKey:stripeTest];
+
     NSArray *components = [expirationDateTextField.text componentsSeparatedByString:@"/"];
     NSArray *expiration;
     
@@ -395,12 +417,19 @@
     NSLog(@"CARD PARAMS: %@", params);
     
     [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
+        
+        if (error || !stripeToken) {
+            self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [self.alertView show];
+            return;
+        }
+        
         NSLog(@"TOKEN: %@ \n TOKEN_ERROR:%@", stripeToken, error);
         [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId completion:^(id responseObject, NSError *error) {
             //
             NSLog(@"RESP: %@ \n ERR:%@", responseObject, error);
             if (error) {
-                self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"We were unable to save your debit card information at this time. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.alertView show];
             }
             else if (responseObject) {

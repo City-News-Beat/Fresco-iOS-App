@@ -9,8 +9,46 @@
 #import "FRSUploadManager.h"
 #import "FRSAPIClient.h"
 #import "Fresco.h"
+#import "MagicalRecord.h"
+#import "FRSUpload+CoreDataProperties.h"
 
 @implementation FRSUploadManager
+@synthesize isRunning = _isRunning;
+
+-(void)checkAndStart {
+    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"completed", @(TRUE)];
+    NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
+    signedInRequest.predicate = signedInPredicate;
+    
+    // get context from app deleegate (hate this dependency but no need to re-write rn to move up)
+    NSManagedObjectContext *context = [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext]; // temp (replace with internal or above method
+    
+    // no need to sort response, because theoretically there is 1
+    NSError *fetchError;
+    NSArray *uploads = [context executeFetchRequest:signedInRequest error:&fetchError];
+
+    if ([uploads count] > 0) {
+        _isRunning = TRUE;
+    }
+    
+    for (FRSUpload *upload in uploads) {
+        for (int i = 0; i < _posts.count; i++) {
+            NSArray *urls = upload.destinationURLS;
+
+            if (urls.count > 1) {
+                
+                NSString *resourceURL = upload.resourceURL;
+                
+                PHFetchResult* assets =[PHAsset fetchAssetsWithLocalIdentifiers:@[resourceURL] options:nil];
+
+               // [self addMultipartTaskForAsset:currentAsset urls:urls post:currentPost];
+            }
+            else {
+               // [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"upload_urls"][0]] post:currentPost];
+            }
+        }
+    }
+}
 
 -(void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

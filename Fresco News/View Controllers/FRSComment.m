@@ -55,8 +55,6 @@
     
     [_attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, _comment.length)];
     [_attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, _comment.length)];
-
-    return;
     
     for (NSDictionary *attribute in _entities) {
         if ([attribute[@"entity_type"] isEqualToString:@"user"]) {
@@ -72,7 +70,7 @@
             NSInteger startIndex = [attribute[@"start_index"] integerValue];
             NSInteger endIndex = [attribute[@"end_index"] integerValue];
             
-            [_attributedString addAttribute: NSLinkAttributeName value:[@"tag://" stringByAppendingString:name] range:NSMakeRange(startIndex, endIndex-startIndex+2)];
+            [_attributedString addAttribute: NSLinkAttributeName value:[@"tag://" stringByAppendingString:name] range:NSMakeRange(startIndex, endIndex-startIndex+1)];
         }
     }
     

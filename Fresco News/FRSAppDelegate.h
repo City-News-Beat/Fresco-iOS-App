@@ -25,9 +25,12 @@
 #import <Crashlytics/Crashlytics.h>
 #import <Smooch/Smooch.h>
 #import "FRSNotificationTester.h"
+#import <UserNotifications/UserNotifications.h>
 
-@interface FRSAppDelegate : UIResponder <UIApplicationDelegate>
-
+@interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate>
+{
+    NSTimer *notificationTimer;
+}
 @property (strong, nonatomic) UIWindow *window;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

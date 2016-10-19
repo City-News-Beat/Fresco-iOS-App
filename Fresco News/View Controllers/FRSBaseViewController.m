@@ -278,7 +278,8 @@
 #pragma mark - Logout
 
 -(void)logoutWithPop:(BOOL)pop {
-    
+    [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
+
     if ([[FRSAPIClient sharedClient] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
         [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSAPIClient sharedClient] authenticatedUser]];
     }

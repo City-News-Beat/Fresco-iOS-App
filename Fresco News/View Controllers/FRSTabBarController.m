@@ -45,17 +45,37 @@
     }
     else if ([quickAction isEqualToString:takePhotoAction]) {
         // open camera, switch to photo
-        [self setSelectedIndex:2];
+        [FRSTracker track:@"Camera Opened"];
+        
+        FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+        UINavigationController *navControl = [[UINavigationController alloc] init];
+        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+        [navControl pushViewController:cam animated:NO];
+        [navControl setNavigationBarHidden:YES];
+        [self presentViewController:navControl animated:YES completion:^{
+
+        }];
+
     }
     else if ([quickAction isEqualToString:takeVideoAction]) {
         // just open camera
-        [self setSelectedIndex:2];
+        [FRSTracker track:@"Camera Opened"];
+        
+        FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+        UINavigationController *navControl = [[UINavigationController alloc] init];
+        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+        [navControl pushViewController:cam animated:NO];
+        [navControl setNavigationBarHidden:YES];
+        
+        [self presentViewController:navControl animated:YES completion:^{
+
+        }];
+
     }
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
 }
 
 - (void)viewDidLoad {
@@ -269,8 +289,21 @@
         } else {
             
             if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+                id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
                 FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-                [self.navigationController pushViewController:onboardVC animated:NO];
+                UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+                
+                if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                    [navController pushViewController:onboardVC animated:FALSE];
+                }
+                else {
+                    UITabBarController *tab = (UITabBarController *)navController;
+                    tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                    tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                    UINavigationController *onboardNav = [[UINavigationController alloc] init];
+                    [onboardNav pushViewController:onboardVC animated:NO];
+                    [tab presentViewController:onboardNav animated:YES completion:Nil];
+                }
             } else {
                 
                 UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
