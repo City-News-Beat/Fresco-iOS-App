@@ -195,7 +195,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)focus {
-    NSArray *posts = [[self.gallery.posts allObjects] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
+    NSArray *posts = self.galleryView.orderedPosts; //[[self.gallery.posts allObjects] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
     int indexOfPost = -1;
     for (int i = 0; i < posts.count; i++) {
         if ([[(FRSPost *)posts[i] uid] isEqualToString:self.defaultPostID]) {
