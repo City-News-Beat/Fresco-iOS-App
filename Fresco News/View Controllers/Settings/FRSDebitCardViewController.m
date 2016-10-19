@@ -303,6 +303,7 @@
             else {
                 // succeeded
                 [[[FRSAPIClient sharedClient] authenticatedUser] setValue:@"BANK ACC" forKey:@"creditCardDigits"];
+                [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
                 [self.navigationController popViewControllerAnimated:YES];
             }
         }];
