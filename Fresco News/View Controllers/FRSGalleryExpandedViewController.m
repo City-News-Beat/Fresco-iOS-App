@@ -480,7 +480,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
-    [self focus];
 }
 
 
@@ -504,6 +503,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     
     [self.galleryView addGestureRecognizer:tap];
+    [self focus];
+
 //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
 }
 
