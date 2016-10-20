@@ -993,7 +993,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (!commentField.text || commentField.text.length == 0) {
         return;
     }
-    [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.gallery completion:^(id responseObject, NSError *error) {
+    
+    [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.galleryView.gallery completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", responseObject, error);
         [UIView animateWithDuration:.15 animations:^{
             if (error) {
