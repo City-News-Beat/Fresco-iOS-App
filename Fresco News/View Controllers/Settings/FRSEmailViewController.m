@@ -126,6 +126,10 @@
 
 -(void)saveEmail {
     
+    if (!self.emailIsValid || !self.passwordIsValid) {
+        return;
+    }
+    
     [self.view endEditing:YES];
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"email":self.email, @"verify_password" : self.password} completion:^(id responseObject, NSError *error) {
@@ -241,6 +245,11 @@
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
 
     if (textField.isSecureTextEntry) {
+        
+        if (!self.passwordIsValid || !self.emailIsValid) {
+            return NO;
+        }
+        
         [textField resignFirstResponder];
         [self saveEmail];
     }
@@ -271,7 +280,7 @@
 
 -(BOOL)isValidPassword:(NSString *)password {
     
-    if (password.length < 8) {
+    if (password.length < 1) {
         return NO;
     }
     return YES;

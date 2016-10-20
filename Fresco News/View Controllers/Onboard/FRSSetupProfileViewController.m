@@ -73,9 +73,16 @@
 
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+
+}
+
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+
     if(_isEditingProfile){
         [self.profileIV hnk_setImageFromURL:self.profileImageURL];
         

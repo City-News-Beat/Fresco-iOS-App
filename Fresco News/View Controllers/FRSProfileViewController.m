@@ -1398,6 +1398,9 @@
                         [cell pause];
                     }
                 }
+                else {
+                    [cell pause];
+                }
             }
         }
     });
