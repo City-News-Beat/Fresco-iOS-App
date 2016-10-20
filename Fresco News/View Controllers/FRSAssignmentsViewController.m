@@ -738,7 +738,7 @@
     [self.assignmentBottomBar addSubview:navigateButton];
     
     self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16, 44)];
-    [self.assignmentOutletLabel setFont:[UIFont systemFontOfSize:17]];
+    [self.assignmentOutletLabel setFont:[UIFont boldSystemFontOfSize:17]];
     self.assignmentOutletLabel.textColor = [UIColor frescoDarkTextColor];
     self.assignmentOutletLabel.userInteractionEnabled = NO;
     self.assignmentOutletLabel.backgroundColor = [UIColor clearColor];
@@ -746,7 +746,7 @@
     [self.assignmentCard addSubview:self.assignmentOutletLabel];
     
     
-    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(13, self.assignmentOutletLabel.frame.size.height, self.view.frame.size.width - 16, 220)];
+    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(13, self.assignmentOutletLabel.frame.size.height - 3, self.view.frame.size.width - 16, 220)];
     [self.assignmentCard addSubview:self.assignmentTextView];
     [self.assignmentTextView setFont:[UIFont systemFontOfSize:15]];
     self.assignmentTextView.textColor = [UIColor frescoDarkTextColor];
@@ -848,7 +848,7 @@
     
     
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
-    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
+    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding + 25), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     
     
     //Avoid any drawing above these
