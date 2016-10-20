@@ -748,7 +748,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     if ([instruction isEqualToString:todayInNewsNotification]) {
         NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
-        [self segueToTodayInNews:galleryIDs];
+        [self segueToTodayInNews:galleryIDs title:push[@"aps"][@"alert"][@"title"]];
     }
     if ([instruction isEqualToString:restartUploadNotification]) {
         [self restartUpload];
@@ -933,13 +933,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     //Not part of the initial 3.0 release
 }
 
--(void)segueToTodayInNews:(NSArray *)galleryIDs {
+-(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
     __block BOOL isSegueingToStory;
 
-    if ([galleryIDs count] == 1) {
-        [self segueToGallery:[galleryIDs firstObject]];
-        return;
-    }
     NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
     NSString *gallery = @"";
     
@@ -952,13 +948,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
         NSLog(@"TODAY: %@", responseObject);
-
+        if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
+            responseObject = @[responseObject];
+        }
             UITabBarController *tab = (UITabBarController *)self.tabBarController;
             
             FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
             [detailVC configureWithGalleries:responseObject];
             detailVC.navigationController = tab.navigationController;
-            detailVC.title = @"TODAY IN NEWS";
+            detailVC.title = (title) ? [title uppercaseString] : @"TODAY IN NEWS";
             UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
                     
             if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
