@@ -48,6 +48,8 @@
 
 @property (strong, nonatomic) FRSLocationManager *locationManager;
 
+@property (strong, nonatomic) NSArray *outlets;
+
 @property (strong, nonatomic) UIScrollView *scrollView;
 
 @property (strong, nonatomic) UIView *dismissView;
@@ -609,6 +611,21 @@
     self.assignmentCaption = assAnn.subtitle;
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
     
+    NSInteger index = assAnn.assignmentIndex;
+    NSArray *outlets = [(FRSAssignment *)[self.assignments objectAtIndex:index] outlets];
+    NSLog(@"OUTLETS: %@", outlets);
+    
+    if (outlets.count == 1) {
+        NSDictionary *outlet = [outlets firstObject];
+        
+        if (outlet[@"title"] && ![outlet[@"title"] isEqual:[NSNull null]]) {
+            self.assignmentOutlet = outlet[@"title"];
+        }
+    }
+    else if (outlets.count > 1) {
+        self.assignmentOutlet = [NSString stringWithFormat:@"%lu active news outlets", self.outlets.count];
+    }
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterFullStyle];
     NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
@@ -638,6 +655,7 @@
 }
 
 -(void)createAssignmentView{
+    
     self.showsCard = TRUE;
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.multipleTouchEnabled = NO;
@@ -840,6 +858,7 @@
     if (_scrollView) {
         self.assignmentTitleLabel.text = self.assignmentTitle;
         self.assignmentTextView.text = self.assignmentCaption;
+        self.assignmentOutletLabel.text = self.assignmentOutlet;
 
     } else {
         [self createAssignmentView];
