@@ -933,6 +933,10 @@
                     }
                 }
             }
+            
+            if (!taken) {
+                lastIndexPath = Nil;
+            }
         });
     }
     
