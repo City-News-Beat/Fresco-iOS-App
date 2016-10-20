@@ -1131,7 +1131,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
                 tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
                 
-                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:2] viewControllers] firstObject];
+                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
                 
                 assignmentsVC.hasDefault = YES;
                 assignmentsVC.defaultID = assignmentID;
@@ -1142,14 +1142,14 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 [assignmentsVC focusOnAssignment:assignment];
                 
                 navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
-                [tab setSelectedIndex:2];
+                [tab setSelectedIndex:3];
             }
             else {
                 UITabBarController *tab = (UITabBarController *)navController;
                 tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
                 tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
                 
-                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:2] viewControllers] firstObject];
+                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
                 
                 assignmentsVC.hasDefault = YES;
                 assignmentsVC.defaultID = assignmentID;
@@ -1160,7 +1160,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 [assignmentsVC focusOnAssignment:assignment];
                 
                 navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
-                [tab setSelectedIndex:2];
+                [tab setSelectedIndex:3];
             }
             
         }];
