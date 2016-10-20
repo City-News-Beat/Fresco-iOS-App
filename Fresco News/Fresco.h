@@ -23,7 +23,7 @@
 
 // mixpanel
 //static NSString * const mixPanelToken = @"4a01dc9d6ffde669d683102db23c8bcd";
-static NSString * const mixPanelToken = @"5201079ebeb0955e2a4f7c547520016d";
+static NSString * const mixPanelToken = @"0e6b9d8ade7a9f56bf6ddae4b0374148";
 
 // image CDN sizing
 static NSString * const thumbImageSize = @"150x";
