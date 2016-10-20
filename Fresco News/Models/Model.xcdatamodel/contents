@@ -18,6 +18,7 @@
         <attribute name="expirationDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="outlets" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="radius" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
@@ -150,7 +151,7 @@
     </entity>
     <elements>
         <element name="FRSArticle" positionX="-614" positionY="-132" width="128" height="148"/>
-        <element name="FRSAssignment" positionX="-819" positionY="45" width="128" height="208"/>
+        <element name="FRSAssignment" positionX="-819" positionY="45" width="128" height="225"/>
         <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="405"/>
         <element name="FRSNotification" positionX="-839" positionY="-153" width="128" height="148"/>
         <element name="FRSPost" positionX="-36" positionY="9" width="128" height="253"/>

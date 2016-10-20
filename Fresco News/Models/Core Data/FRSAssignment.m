@@ -53,6 +53,10 @@
     self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"starts_at"]];
     self.expirationDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"ends_at"]];
     self.caption = dictionary[@"caption"];
+    
+    if (dictionary[@"outlets"]) {
+        self.outlets = dictionary[@"outlets"];
+    }
 }
 
 @end
