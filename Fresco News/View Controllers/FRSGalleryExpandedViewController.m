@@ -496,10 +496,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
-                                   action:@selector(dismissKeyboard)];
+                                   action:@selector(dismissKeyboard:)];
     
     
-   // [self.galleryView addGestureRecognizer:tap];
+    [self.galleryView addGestureRecognizer:tap];
     [self focus];
 
 //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
