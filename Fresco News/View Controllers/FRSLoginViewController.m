@@ -52,9 +52,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:userIsMigrated];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
+    
     [self configureSpinner];
     
     self.didAnimate = NO;
@@ -219,14 +217,17 @@
         
         if (error.code == 0) {
             
-            [self popToOrigin];
-
-                [self stopSpinner:self.loadingView onButton:self.loginButton];
-                [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            [delegate saveUserFields:responseObject];
             
-                if ([self validEmail:username]) {
-                    [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
-                }
+            [self popToOrigin];
+            
+            [self stopSpinner:self.loadingView onButton:self.loginButton];
+            [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
+            
+            if ([self validEmail:username]) {
+                [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
+            }
             return;
 
         }
@@ -299,6 +300,29 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
 }
 
+//This response object comes back from login
+-(void)setMigrateState:(NSDictionary *)responseObject {
+    BOOL shouldSync = false;
+    
+    if(responseObject != nil && ![responseObject valueForKey:@"valid_password"]) {
+        shouldSync = true;
+        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"needs-password"];
+        [[NSUserDefaults standardUserDefaults] setBool:true forKey:userNeedsToMigrate];
+        [[NSUserDefaults standardUserDefaults] setBool:false forKey:userHasFinishedMigrating];
+
+    } else if(![[[FRSAPIClient sharedClient] authenticatedUser] username] || ![[[FRSAPIClient sharedClient] authenticatedUser] email]){
+        shouldSync = true;
+        [[NSUserDefaults standardUserDefaults] setBool:true forKey:userNeedsToMigrate];
+        [[NSUserDefaults standardUserDefaults] setBool:false forKey:userHasFinishedMigrating];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:false forKey:userNeedsToMigrate];
+    }
+    
+    if(shouldSync) {
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
 -(IBAction)twitter:(id)sender {
     
     self.twitterButton.hidden = true;
@@ -310,20 +334,19 @@
     [spinner  setFrame:CGRectMake(self.twitterButton.frame.origin.x, self.twitterButton.frame.origin.y, self.twitterButton.frame.size.width, self.twitterButton.frame.size.width)];
     //NSLog(@"%f x %f", self.twitterButton.frame.size.width,self.twitterButton.frame.size.width-2);
     
-    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
-        
-        if (error.code == 1125) { //user needs a password
-            //set needs password to TRUE
+    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
 
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needs-password"];
-        }
-        
-        
         if (authenticated) {
             
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
             [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needs-password"];
             
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            [delegate saveUserFields:responseObject];
+            [self setMigrateState:responseObject];
+            
+
             /*  */
             NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:session facebook:nil];
            // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
@@ -369,8 +392,8 @@
 
 -(void)popToOrigin {
         
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate reloadUser];
+    //FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    //[appDelegate reloadUser];
     
     NSArray *viewControllers = [self.navigationController viewControllers];    
     
@@ -384,7 +407,7 @@
         [self dismissViewControllerAnimated:YES completion:Nil];
     }
     
-    [self postLoginNotification];
+    //[self postLoginNotification];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
@@ -423,11 +446,7 @@
     [self.facebookButton.superview addSubview:spinner];
     [spinner  setFrame:CGRectMake(self.facebookButton.frame.origin.x, self.facebookButton.frame.origin.y, self.facebookButton.frame.size.width, self.facebookButton.frame.size.width)];
     
-    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
-        
-        if (error.code == 1125) {//User needs a password
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needs-password"];
-        }
+    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
         
         if (authenticated) {
             
@@ -436,7 +455,10 @@
             /*  */
            // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
             /*  */
-                        
+            
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            [delegate saveUserFields:responseObject];
+            [self setMigrateState:responseObject];
             
             [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];

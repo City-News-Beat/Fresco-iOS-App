@@ -91,8 +91,6 @@
     
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
-    
-    [self presentMigrationAlert];
 }
 
 -(void)logoutNotification {
@@ -155,7 +153,8 @@
     
     entry = [NSDate date];
     numberRead = 0;
-
+    
+    [self presentMigrationAlert];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -222,22 +221,26 @@
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    [delegate reloadUser:^(id responseObject, NSError *error) {
-        if ([[[NSUserDefaults standardUserDefaults] valueForKey:userIsMigrated] boolValue]) {
-            [self logoutWithPop:NO];
-            return;
-        }
+    
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] != nil
+        && ![[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]
+        && ![[[NSUserDefaults standardUserDefaults] valueForKey:userHasFinishedMigrating] boolValue]) {
         
-        if ([[FRSAPIClient sharedClient] isAuthenticated]) {
-            if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
-                FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
-                alert.delegate = self;
-                [alert show];
-                [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:userIsMigrated];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            }
-        }
-    }];
+        [self logoutWithPop:NO];
+        
+        return;
+        
+    } else {
+        
+    }
+    
+    if ([[FRSAPIClient sharedClient] isAuthenticated] && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
+        alert.delegate = self;
+        [alert show];
+        //[[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:userIsMigrated];
+        //[[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 
 

@@ -16,7 +16,7 @@
 #import "FRSAPIClient.h"
 
 @interface FRSSocial : NSObject
-typedef void (^LoginCompletionBlock)(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token);
+typedef void (^LoginCompletionBlock)(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user);
 
 // login methods communicate with both the social outlet, and the API
 +(void)loginWithTwitter:(LoginCompletionBlock)completion;

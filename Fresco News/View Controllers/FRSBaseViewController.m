@@ -324,7 +324,8 @@
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
-    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:userIsMigrated];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userHasFinishedMigrating];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [NSUserDefaults resetStandardUserDefaults];
     

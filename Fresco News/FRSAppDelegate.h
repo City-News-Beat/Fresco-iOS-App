@@ -44,4 +44,6 @@
 -(BOOL)isFirstRun;
 -(void)updateTabBarToUser;
 -(void)clearKeychain;
+
+-(void)saveUserFields:(NSDictionary *)responseObject;
 @end

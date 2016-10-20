@@ -69,8 +69,6 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
-    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:userIsMigrated];
-    [[NSUserDefaults standardUserDefaults] synchronize];
 
     
     //[self addNotifications];
@@ -1272,7 +1270,7 @@
     
     _twitterButton.enabled = FALSE; // prevent double tapping
     
-    [FRSSocial registerWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+    [FRSSocial registerWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user) {
         _twitterButton.enabled = TRUE;
         
         [spinner stopLoading];

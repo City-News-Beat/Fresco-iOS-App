@@ -1443,7 +1443,8 @@
     [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
         
         if (responseObject && !error) {
-            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:userIsMigrated];
+            [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
+            [[NSUserDefaults standardUserDefaults] setBool:true forKey:userHasFinishedMigrating];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
 
