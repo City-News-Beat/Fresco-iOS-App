@@ -904,11 +904,15 @@
     
     for (NSDictionary *outlet in self.outlets) {
         
+        if (self.outletImagesViews.count >= 3) {
+            return;
+        }
+        
         if (outlet[@"avatar"] && ![outlet[@"avatar"] isEqual:[NSNull null]]) {
-            int xOffset = (int)self.outletImagesViews.count * (int)32 + 13;
+            int xOffset = (int)self.outletImagesViews.count * (int)34 + 13;
             int width = 28;
             int height = 28;
-            int y = self.assignmentOutletLabel.frame.origin.y;
+            int y = self.assignmentOutletLabel.frame.origin.y + 6;
             
             CGRect imageFrame = CGRectMake(xOffset, y, width, height);
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
@@ -921,7 +925,10 @@
             [imageView hnk_setImageFromURL:[NSURL URLWithString:outlet[@"avatar"]]];
         }
         
-        int xOffset = (int)self.outletImagesViews.count * (int)32 + 13 + 10;
+        int xOffset = (int)self.outletImagesViews.count * (int)34 + 13 + (5 * (self.outletImagesViews.count >0));
+        CGRect frame = self.assignmentOutletLabel.frame;
+        frame.origin.x = xOffset;
+        self.assignmentOutletLabel.frame = frame;
     }
 }
 
