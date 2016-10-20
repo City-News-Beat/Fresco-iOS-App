@@ -758,6 +758,7 @@
         
         self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //?
+        
     }else{
         
         if(![self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]){
@@ -1537,6 +1538,10 @@
 #pragma mark - User
 
 -(void)configureWithUser:(FRSUser *)user {
+    
+    if (!user.uid || [user.uid isEqual:[NSNull null]]) {
+        return;
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];

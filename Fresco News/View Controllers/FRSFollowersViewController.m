@@ -362,8 +362,6 @@
 
 -(void)segueToUserProfile:(FRSUser *)user {
     FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:user];
-    NSLog(@"USER.FOLLOWING : %@", user.following);
-    
     [self.navigationController pushViewController:userViewController animated:YES];
 }
 
