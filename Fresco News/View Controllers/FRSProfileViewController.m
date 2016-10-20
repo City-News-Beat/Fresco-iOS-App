@@ -639,6 +639,7 @@
         
         
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
+        
         [self.tableView reloadData];
         
         if (reload) {
