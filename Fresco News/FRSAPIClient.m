@@ -198,6 +198,40 @@
     }];
 }
 
+-(void)linkTwitter:(NSString *)token secret:(NSString *)secret completion:(FRSAPIDefaultCompletionBlock)completion {
+    if (token && secret) {
+        [self post:addSocialEndpoint withParameters:@{@"platform":@"twitter", @"token":token, @"secret":secret} completion:^(id responseObject, NSError *error) {
+            completion(responseObject, error);
+        }];
+    }
+    else {
+        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:@{@"message":@"Incorrect Twitter credentials"}]);
+    }
+}
+
+-(void)linkFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
+    if (token) {
+        [self post:addSocialEndpoint withParameters:@{@"platform":@"facebook", @"token":token} completion:^(id responseObject, NSError *error) {
+            completion(responseObject, error);
+        }];
+    }
+    else {
+        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:@{@"message":@"Incorrect Twitter credentials"}]);
+    }
+}
+
+-(void)unlinkFacebook:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:deleteSocialEndpoint withParameters:@{@"platform":@"facebook"} completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)unlinkTwitter:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:deleteSocialEndpoint withParameters:@{@"platform":@"twitter"} completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 -(void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion {
     [self check:email completion:completion];
 }

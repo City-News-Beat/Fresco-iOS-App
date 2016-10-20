@@ -1141,8 +1141,6 @@
             
         }
         
-        
-        
         [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
             
             
@@ -1179,6 +1177,9 @@
         
         NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
         NSLog(@"%@", errorMessage);
+
+        
+        
         
         if (error.code == -1009) {
             
@@ -1191,6 +1192,28 @@
         
         
         if (error) {
+            
+            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+            NSInteger responseCode = response.statusCode;
+            
+            if (responseCode == 412) {
+                [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+                [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+
+                
+                NSString* ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                NSError *jsonError;
+                
+                NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
+                NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
+                
+            
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                [alert show];
+                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+                return;
+            }
+            
             [self presentGenericError];
             [self stopSpinner:self.loadingView onButton:self.createAccountButton];
         }
@@ -1209,6 +1232,26 @@
 //                forDistinctID:mixpanel.distinctId];
             }];
 }
+
+-(NSString *)stringFromHexString:(NSString *)hexString {
+    
+    // The hex codes should all be two characters.
+    if (([hexString length] % 2) != 0)
+        return nil;
+    
+    NSMutableString *string = [NSMutableString string];
+    
+    for (NSInteger i = 0; i < [hexString length]; i += 2) {
+        
+        NSString *hex = [hexString substringWithRange:NSMakeRange(i, 2)];
+        NSInteger decimalValue = 0;
+        sscanf([hex UTF8String], "%x", &decimalValue);
+        [string appendFormat:@"%c", decimalValue];
+    }
+    
+    return string;
+}
+
 
 -(void)checkEmail {
     NSLog(@"EMAIL: %@", self.emailTF.text);
@@ -1341,6 +1384,7 @@
     }
     
     _facebookButton.enabled = FALSE; // prevent double tapping
+    
 
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     
@@ -1352,37 +1396,32 @@
         [spinner removeFromSuperview];
         
         if (error) {
-            //handle errors
+
             [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
         }
         
         if (result && !error) {
-            
             [_facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateNormal];
+            
+            //Save token to controller state
+            _facebookToken = result.token;
             
             NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
             
-            [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
+            //Make request for facebook user's profile meta
+            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"name"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                if (!error) {
+                    [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
+                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                }
                 
-                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"name"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                    if (!error) {
-                        [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
-                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
-                    }
-                    
-                    if (error.code == -1009) {
-                        FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                        [alert show];
-                        [spinner stopLoading];
-                        [spinner removeFromSuperview];
-                        return;
-                    }
-                    
-                    
-                    
-                    
-                }];
-                
+                if (error.code == -1009) {
+                    FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                    [alert show];
+                    [spinner stopLoading];
+                    [spinner removeFromSuperview];
+                    return;
+                }
             }];
         }
         
@@ -1392,7 +1431,6 @@
         [spinner stopLoading];
         [spinner removeFromSuperview];
         self.facebookButton.hidden = false;
-        
     }];
 }
 
