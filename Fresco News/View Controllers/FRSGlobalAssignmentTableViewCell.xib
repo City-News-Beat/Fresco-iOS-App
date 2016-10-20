@@ -45,7 +45,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
-                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newspaper16W" highlightedImage="newspaper16W" translatesAutoresizingMaskIntoConstraints="NO" id="shN-a1-et2">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newspaper16W" highlightedImage="newspaper16W" translatesAutoresizingMaskIntoConstraints="NO" id="shN-a1-et2">
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25954198473282442" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="uFO-Ta-aNy"/>
@@ -57,15 +57,31 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newspaper16W" highlightedImage="newspaper16W" translatesAutoresizingMaskIntoConstraints="NO" id="YD4-x8-E5X">
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25954198473282442" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="24" id="bKG-fS-dvX"/>
+                                    <constraint firstAttribute="height" constant="24" id="mwM-4N-iIb"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="12"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="80" id="2cn-0f-IR7"/>
+                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="104" id="2cn-0f-IR7"/>
                             <constraint firstAttribute="bottom" secondItem="bab-rs-J40" secondAttribute="bottom" id="BSa-Rz-28Z"/>
+                            <constraint firstItem="YD4-x8-E5X" firstAttribute="leading" secondItem="shN-a1-et2" secondAttribute="trailing" constant="8" id="IqC-BX-FXS"/>
                             <constraint firstItem="shN-a1-et2" firstAttribute="leading" relation="lessThanOrEqual" secondItem="bab-rs-J40" secondAttribute="trailing" constant="8" id="LXS-Lj-JmN"/>
+                            <constraint firstAttribute="bottom" secondItem="shN-a1-et2" secondAttribute="bottom" id="Mo6-iz-xlL"/>
                             <constraint firstItem="shN-a1-et2" firstAttribute="top" secondItem="qJb-dQ-ifY" secondAttribute="top" id="bNT-xi-aUE"/>
-                            <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="shN-a1-et2" secondAttribute="trailing" constant="16" id="jYH-mG-AIO"/>
+                            <constraint firstAttribute="trailing" secondItem="YD4-x8-E5X" secondAttribute="trailing" constant="16" id="eMC-T7-raf"/>
+                            <constraint firstAttribute="bottom" secondItem="YD4-x8-E5X" secondAttribute="bottom" id="fRQ-6a-wCQ"/>
                             <constraint firstItem="bab-rs-J40" firstAttribute="leading" secondItem="qJb-dQ-ifY" secondAttribute="leading" id="jzf-iO-RB6"/>
+                            <constraint firstItem="YD4-x8-E5X" firstAttribute="top" secondItem="qJb-dQ-ifY" secondAttribute="top" id="kk9-1S-Gec"/>
                             <constraint firstItem="bab-rs-J40" firstAttribute="top" secondItem="qJb-dQ-ifY" secondAttribute="top" id="vys-nq-LWI"/>
                         </constraints>
                     </view>
@@ -202,6 +218,7 @@
                 <outlet property="openCameraButton" destination="EOj-1T-883" id="zzC-dc-qU6"/>
                 <outlet property="outletIcon1ImageView" destination="bab-rs-J40" id="HO7-89-fJJ"/>
                 <outlet property="outletIcon2ImageView" destination="shN-a1-et2" id="WRX-Mq-Nsh"/>
+                <outlet property="outletIcon3ImageView" destination="YD4-x8-E5X" id="5sp-8x-goL"/>
                 <outlet property="outletIconsView" destination="qJb-dQ-ifY" id="gtT-GC-aYq"/>
                 <outlet property="outletWidthConstraint" destination="2cn-0f-IR7" id="qA1-cn-CGd"/>
                 <outlet property="photoPriceLabel" destination="0kd-in-cRr" id="XZM-9i-CxS"/>

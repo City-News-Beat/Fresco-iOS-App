@@ -20,6 +20,7 @@
     __weak IBOutlet UIView *outletIconsView;
     __weak IBOutlet UIImageView *outletIcon1ImageView;
     __weak IBOutlet UIImageView *outletIcon2ImageView;
+    __weak IBOutlet UIImageView *outletIcon3ImageView;
     __weak IBOutlet UILabel *expirationLabel;
     __weak IBOutlet UILabel *photoPriceLabel;
     __weak IBOutlet UILabel *videoPriceLabel;
@@ -74,12 +75,12 @@
             [outletImageUrls addObject:[NSURL URLWithString:(NSString *)[outlet objectForKey:@"avatar"]]];
         }
     }
-    [outletImageUrls addObject:[NSURL URLWithString:@"http://a2.mzstatic.com/au/r30/Purple69/v4/6c/11/b3/6c11b323-e8a7-b722-133a-0f26e108824a/icon175x175.png"]];
+
     outletWidthConstraint.constant = 0;
     if (outletImageUrls.count >= 1) {
         NSURL *url = outletImageUrls[0];
         [outletIcon1ImageView hnk_setImageFromURL:url];
-        outletWidthConstraint.constant += 24 + 16;
+        outletWidthConstraint.constant += 24 + 16; // +16 because of the trailing space
     }
     else {
         [outletIcon1ImageView setHidden:YES];
@@ -87,10 +88,18 @@
     if (outletImageUrls.count >= 2) {
         NSURL *url = outletImageUrls[1];
         [outletIcon2ImageView hnk_setImageFromURL:url];
-        outletWidthConstraint.constant += 24 + 8;
+        outletWidthConstraint.constant += 24 + 8; // +8 becasue of the space between the 2 icons
     }
     else {
         [outletIcon2ImageView setHidden:YES];
+    }
+    if (outletImageUrls.count >= 3) {
+        NSURL *url = outletImageUrls[2];
+        [outletIcon3ImageView hnk_setImageFromURL:url];
+        outletWidthConstraint.constant += 24 + 8; // +8 becasue of the space between the 2 icons
+    }
+    else {
+        [outletIcon3ImageView setHidden:YES];
     }
     
     if (outletArray.count > 1) {
