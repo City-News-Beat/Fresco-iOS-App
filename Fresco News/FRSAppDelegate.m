@@ -65,9 +65,15 @@
     
     if ([[FRSAPIClient sharedClient] isAuthenticated]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
-        self.window.rootViewController = self.tabBarController;
+        FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
+        
+        [mainNav pushViewController:self.tabBarController animated:FALSE];
+        [mainNav setNavigationBarHidden:YES];
+
+        self.window.rootViewController = mainNav;
         [self createItemsWithIcons];
         [self reloadUser];
+        [self startNotificationTimer];
     }
     else {
         
@@ -101,9 +107,6 @@
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
-    
-
-    //[self startNotificationTimer];
     FRSUploadManager *manager = [[FRSUploadManager alloc] init];
     [manager checkAndStart];
     
@@ -157,9 +160,15 @@
             return;
         }
         
+<<<<<<< HEAD
         [self.managedObjectContext performBlock:^{
             [self saveUserFields:responseObject];
         }];
+=======
+        [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+        
+        FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+>>>>>>> 3.0-phil
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -332,7 +341,6 @@
     return FALSE;
 }
 
-
 -(void)clearKeychain {
     SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
     
@@ -462,6 +470,8 @@
 -(UITabBarController *)tabBar {
     return _tabBarController;
 }
+
+
 
 -(void)startAuthentication {
     _tabBarController = [[FRSTabBarController alloc] init];
@@ -644,7 +654,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     NSString *instruction = push[@"type"];
     NSString *notificationID = push[@"id"];
-    
+    NSLog(@"INSTRUCTION: %@", push);
    // self.window.rootViewController = viewController;
     textView.text = push.description;
     
@@ -653,6 +663,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     
     // payment
+    if ([instruction isEqualToString:newAssignmentNotification]) {
+        NSString *assignment = [push objectForKey:@"assignment_id"];
+        
+        if (assignment && ![assignment isEqual:[NSNull null]] && [[assignment class] isSubclassOfClass:[NSString class]]) {
+            [self segueToAssignmentWithID:assignment];
+        }
+        
+        return;
+    }
     if ([instruction isEqualToString:purchasedContentNotification]) {
         NSString *gallery = [push objectForKey:@"gallery_id"];
         
@@ -685,11 +704,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [self segueToUser:user];
     }
     if ([instruction isEqualToString:@"user-news-gallery"]) {
-        NSString *gallery = [push  objectForKey:@"gallery_id"];
-        
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-            [self segueToGallery:gallery];
-        }
+        NSLog(@"TODAY IN NEWS");
+        NSString *galleryID = [push objectForKey:@"gallery_id"];
+        [self segueToGallery:galleryID];
+
     }
     if ([instruction isEqualToString:@"user-news-story"]) {
         NSString *story = [push  objectForKey:@"story_id"];
@@ -756,7 +774,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     if ([instruction isEqualToString:todayInNewsNotification]) {
         NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
-        [self segueToTodayInNews:galleryIDs];
+        [self segueToTodayInNews:galleryIDs title:push[@"aps"][@"alert"][@"title"]];
     }
     if ([instruction isEqualToString:restartUploadNotification]) {
         [self restartUpload];
@@ -775,7 +793,12 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 -(void)applicationDidBecomeActive:(UIApplication *)application{
-    [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    
+    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSResetUpload" object:nil userInfo:@{@"type":@"reset"}];
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application{
@@ -793,7 +816,16 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 
 -(void)startNotificationTimer {
-    notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
+    if (!notificationTimer) {
+        notificationTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(checkNotifications) userInfo:nil repeats:YES];
+    }
+}
+
+-(void)stopNotificationTimer {
+    if (notificationTimer) {
+        [notificationTimer invalidate];
+        notificationTimer = nil;
+    }
 }
 
 -(void)checkNotifications {
@@ -808,12 +840,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             return;
         }
         if (responseObject) {
-            FRSTabBarController *tbc = (FRSTabBarController *)self.window.rootViewController;
-            if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
-                
-                [tbc updateBellIcon:YES];
-            } else {
-                [tbc updateUserIcon];
+            FRSTabBarController *tbc = (FRSTabBarController *)self.tabBarController;
+            if ([tbc isKindOfClass:[FRSTabBarController class]]) {
+                if ([[responseObject objectForKey:@"unseen_count"] integerValue] > 0) {
+                    [tbc updateBellIcon:YES];
+                } else {
+                    [tbc updateUserIcon];
+                }
             }
         }
     }];
@@ -841,10 +874,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     else { //We will eventually need this if our high level verison numbers increment, but for now, it will never get called.
         
     }
-    
-    
 }
-
 
 #pragma mark - Config
 
@@ -929,32 +959,42 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     //Not part of the initial 3.0 release
 }
 
--(void)segueToTodayInNews:(NSArray *)galleryIDs {
-    __block BOOL isSegueingToStory;
+-(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
 
-    NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
+    NSString *gallery = @"";
     
-    for (NSString *gallery in galleryIDs) {
-        
-        [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
+    for (int i = 0; i < galleryIDs.count - 1; i++) {
+        gallery = [gallery stringByAppendingString:galleryIDs[i]];
+        gallery = [gallery stringByAppendingString:@","];
+    }
+    
+    gallery = [gallery stringByAppendingString:[galleryIDs lastObject]];
+    
+    [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
+        NSLog(@"TODAY: %@", responseObject);
+        if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
+            responseObject = @[responseObject];
+        }
             UITabBarController *tab = (UITabBarController *)self.tabBarController;
             
-            if (![galleryArray containsObject:responseObject]) {
-                [galleryArray addObject:(FRSGallery *)responseObject];
+            FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
+            [detailVC configureWithGalleries:responseObject];
+            detailVC.navigationController = tab.navigationController;
+            detailVC.title = (title) ? [title uppercaseString] : @"TODAY IN NEWS";
+            UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+                    
+            if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                [navController pushViewController:detailVC animated:TRUE];
             }
-            
-            if (galleryArray.count == galleryIDs.count) {
-                if (!isSegueingToStory) {
-                    isSegueingToStory = YES;
-                    FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
-                    [detailVC configureWithGalleries:galleryArray];
-                    detailVC.navigationController = tab.navigationController;
-                    detailVC.title = @"TODAY IN NEWS";
-                    [tab.navigationController pushViewController:detailVC animated:YES];
-                }
+            else {
+                UITabBarController *tab = (UITabBarController *)navController;
+                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                    
+                navController = (UINavigationController *)[[tab viewControllers] firstObject];
+                [navController pushViewController:detailVC animated:TRUE];
             }
-        }];
-    }
+    }];
 }
 -(void)error:(NSError *)error {
     if (!error) {
@@ -1000,6 +1040,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         
         if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
             [navController pushViewController:vc animated:TRUE];
+            [navController setNavigationBarHidden:NO];
+
         }
         else {
             UITabBarController *tab = (UITabBarController *)navController;
@@ -1008,6 +1050,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             
             navController = (UINavigationController *)[[tab viewControllers] firstObject];
             [navController pushViewController:vc animated:TRUE];
+            [navController setNavigationBarHidden:NO];
         }
     }];
 }
@@ -1083,38 +1126,61 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     UITabBarController *tab = (UITabBarController *)self.tabBarController;
 
     FRSNavigationController *navCont = (FRSNavigationController *)[tab.viewControllers objectAtIndex:3];
-    FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
-    
-    assignmentsVC.hasDefault = YES;
-    assignmentsVC.defaultID = assignmentID;
     [self.tabBarController setSelectedIndex:3];
     
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+    __block BOOL ranOnce = FALSE;
     
-    if (assignmentsVC.mapView) {
         [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+            if (ranOnce) {
+                return;
+            }
             
+            ranOnce = TRUE;
             FRSAppDelegate *appDelegate = self;
             FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
-            [assignment configureWithDictionary:responseObject];
-            [assignmentsVC focusOnAssignment:assignment];
+            
             
             UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
             
             if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-                [navController pushViewController:assignmentsVC animated:TRUE];
+                UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
+                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                
+                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
+                
+                assignmentsVC.hasDefault = YES;
+                assignmentsVC.defaultID = assignmentID;
+                
+                [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
+                
+                [assignment configureWithDictionary:responseObject];
+                [assignmentsVC focusOnAssignment:assignment];
+                
+                navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
+                [tab setSelectedIndex:3];
             }
             else {
                 UITabBarController *tab = (UITabBarController *)navController;
                 tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
                 tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
                 
-                navController = (UINavigationController *)[[tab viewControllers] firstObject];
-                [navController pushViewController:assignmentsVC animated:TRUE];
+                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
+                
+                assignmentsVC.hasDefault = YES;
+                assignmentsVC.defaultID = assignmentID;
+                
+                [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
+                
+                [assignment configureWithDictionary:responseObject];
+                [assignmentsVC focusOnAssignment:assignment];
+                
+                navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
+                [tab setSelectedIndex:3];
             }
-
+            
         }];
-    }
 }
 
 
@@ -1146,7 +1212,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
     }];
 }
-
+-(void)popViewController {
+    
+}
 -(void)segueHome {
     UITabBarController *tab = (UITabBarController *)self.tabBarController;
     tab.selectedIndex = 0;

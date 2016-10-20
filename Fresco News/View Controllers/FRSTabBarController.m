@@ -24,7 +24,6 @@
 @property (strong, nonatomic) UIView *cameraBackgroundView;
 @property CGFloat notificationDotXOffset;
 @property (strong, nonatomic) UIImage *bellImage;
-@property (strong, nonatomic) FRSUserNotificationViewController *userNotifVC;
 
 @end
 
@@ -258,7 +257,6 @@
 
 
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    
     item.title = @"";
     
     if ([self.tabBar.items indexOfObject:item] == 2) {
@@ -277,17 +275,15 @@
     }
     
     if ([self.tabBar.items indexOfObject:item] == 4) {
-        
         if ([[self.tabBar.items objectAtIndex:4].image isEqual:self.bellImage]) {
-            
             UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
             FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
-            /*profile.shouldShowNotificationsOnLoad = YES;
-            [profile loadAuthenticatedUser]; */
+                /*profile.shouldShowNotificationsOnLoad = YES;
+                 [profile loadAuthenticatedUser]; */
             [profile showNotificationsNotAnimated];
-            
+
+            [self updateUserIcon];
         } else {
-            
             if (![[FRSAPIClient sharedClient] isAuthenticated]) {
                 id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
                 FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
@@ -305,10 +301,14 @@
                     [tab presentViewController:onboardNav animated:YES completion:Nil];
                 }
             } else {
-                
                 UINavigationController *profileNav = (UINavigationController *)self.viewControllers[[self.tabBar.items indexOfObject:item]];
-                FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
-                [profile loadAuthenticatedUser];
+                if (profileNav.viewControllers.count == 2) {
+                    [profileNav popViewControllerAnimated:YES];
+                }
+                else {
+                    FRSProfileViewController *profile = (FRSProfileViewController *)[[profileNav viewControllers] firstObject];
+                    [profile loadAuthenticatedUser];
+                }
             }
         }
     }
@@ -368,14 +368,19 @@
             } break;
             
         case 4:{
-                        
-           if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+            if (self.lastActiveIndex == 4) {
+                return NO;
+            }
+            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
                 FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
                 [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:NO];
             } else {
                 return NO;
             }
             
+            if (self.lastActiveIndex != 4) {
+                break;
+            }
             //if (userNotificationCount >= 1) {
 //            FRSUserNotificationViewController *notificationVC = [[FRSUserNotificationViewController alloc] init];
 //            [self.navigationController pushViewController:notificationVC animated:NO];
@@ -384,9 +389,7 @@
             
             //}
 
-            if (self.lastActiveIndex != 4) {
-                break;
-            }
+           
 
             
         } break;

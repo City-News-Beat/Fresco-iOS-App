@@ -94,7 +94,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-    
+    [self configureAssignments]; //Tableview configures are called here
+
     [self.galleryCollectionView reloadData];
     [self configurePageController];
     
@@ -143,7 +144,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureGalleryCollectionView];
     [self configurePageController];
     [self configureNavigationBar];
-    [self configureAssignments]; //Tableview configures are called here
     [self configureBottomBar];
 }
 
@@ -304,7 +304,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [self.scrollView addSubview:self.pageControl];
 }
-
 
 #pragma mark - Navigation Bar
 
@@ -620,8 +619,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
                     
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
-                    NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
-                    cell.representedOutletID = [outlet objectForKey:@"id"];
+                    //NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
+                    //cell.representedOutletID = [outlet objectForKey:@"id"];
                     
                     //[self resetFrames:true];
                     return cell;
@@ -652,8 +651,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
                     
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
-                    NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
-                    cell.representedOutletID = [outlet objectForKey:@"id"];
+                    //NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
+                    //cell.representedOutletID = [outlet objectForKey:@"id"];
                     
                     //[self resetFrames:true];
                     return cell;
@@ -711,14 +710,21 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self resetOtherOutlets];
         cell.isSelectedOutlet = YES;
         selectedOutlet = cell.representedOutletID;
+        
+        NSLog(@"SELECTED OUTLET: %@", selectedOutlet);
     }else if (!cell.isSelectedAssignment && !cellIsOutlet){
         [self resetOtherCells];
         [self resetOtherOutlets];
         cell.isSelectedAssignment = YES;
         
-        if (self.selectedAssignment != nil && tableView == self.assignmentsTableView) {
-            self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
-        }else if(self.selectedAssignment != nil && tableView == self.globalAssignmentsTableView){
+        if (tableView == self.assignmentsTableView) {
+            if (indexPath.row < self.assignmentsArray.count) {
+                self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
+            }
+            else {
+                self.selectedAssignment = Nil;
+            }
+        }else if(tableView == self.globalAssignmentsTableView){
             self.selectedAssignment = [self.globalAssignments objectAtIndex:indexPath.row];
         }
         
@@ -758,6 +764,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     outletCell.isAnOutlet = true;
                     NSDictionary *outletDic = [cell.outlets objectAtIndex:i];
                     [outletCell.titleLabel setText:outletDic[@"title"]];
+                    outletCell.representedOutletID = outletDic[@"id"];
                 }
                 [self tableView:tableView willSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
                 [self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
@@ -801,6 +808,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     outletCell.isAnOutlet = true;
                     NSDictionary *outletDic = [cell.outlets objectAtIndex:i];
                     [outletCell.titleLabel setText:outletDic[@"title"]];
+                    outletCell.representedOutletID = outletDic[@"id"];
                 }
                 [self tableView:tableView willSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
                 [self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
@@ -958,7 +966,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
 }
 
-
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
     
     if (self.isFetching) return;
@@ -970,12 +977,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
         
-        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-        self.assignmentsArray = [[NSMutableArray alloc] init];
-        self.assignmentsArray  = [assignments mutableCopy];
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+       // self.assignmentsArray = [[NSMutableArray alloc] init];
+      //  self.assignmentsArray  = [assignments mutableCopy];
         self.globalAssignments = [globalAssignments copy];
         
-        //NSLog(@"%@ %@ %@", _assignmentsArray, _globalAssignments, error);
         self.isFetching = NO;
         
         if (!notFirstFetch) {
@@ -987,8 +993,34 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [delegate saveContext];
         NSMutableArray *nearBy = responseObject[@"nearby"];
         NSArray *global = responseObject[@"global"];
+        self.assignmentsArray = [[NSMutableArray alloc] init];
+        for (NSDictionary *assignment in nearBy) {
+            NSLog(@"NEAR BY: %@", assignment);
+            NSArray *coords = assignment[@"location"][@"coordinates"];
+            CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
+            float radius = [assignment[@"radius"] floatValue];
+            
+            BOOL shouldAdd = FALSE;
+            
+            for (PHAsset *asset in self.content) {
+                CLLocation *location = asset.location;
+                CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
+                float miles = distanceFromAssignment / 1609.34;
+                if (miles < radius) {
+                    shouldAdd = TRUE;
+                }
+                //1609.34
+            }
+            
+            if (shouldAdd) {
+                [self.assignmentsArray addObject:assignment];
+            }
+            
+           // CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
+
+        }
         
-        self.assignmentsArray = nearBy;
+      //  self.assignmentsArray = nearBy;
         self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
         NSLog(@"ASSIGNMENT ARRAY COUNT: %lu", (unsigned long)self.assignmentsArray.count);
         
@@ -1080,9 +1112,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     return returnValue;
 }
 
-
 -(void)cacheAssignments {
-    
 }
 
 #pragma mark - Actions
@@ -1106,7 +1136,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
     //Next button action
 -(void)send {
-
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
         
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
@@ -1121,18 +1150,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self startSpinner:self.loadingView onButton:self.sendButton];
         
     [self dismissKeyboard];
-    
 
     if (self.postToFacebook) {
         [self facebook:self.captionTextView.text];
 
     }
     
-    
 //    if (self.postToTwitter) {
 //        [self tweet:@"test"]; //does not work, fix before release
 //    }
-    
     
     if (self.postAnon) {
         NSLog(@"Post anonymously");
@@ -1168,7 +1194,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         // upload
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
         
-        if (selectedRow < self.assignmentsArray.count) {
+        if (self.selectedAssignment) {
+            gallery[@"assignment_id"] = [(NSDictionary *)self.selectedAssignment objectForKey:@"id"];
+            NSLog(@"attaching assignment: %@", gallery[@"assignment_id"]);
+        }
+        else if (selectedRow < self.assignmentsArray.count) {
             gallery[@"assignment_id"] = self.assignmentsArray[selectedRow][@"id"];
             NSLog(@"attaching assignment: %@", gallery[@"assignment_id"]);
         }
@@ -1221,13 +1251,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSLog(@"NO UPLOAD: ALREADY STARTED");
     }
     
+    [self.carouselCell pausePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)tweet:(NSString *)string {
-    
     //DOES NOT TWEET
-
     NSString *userID = [Twitter sharedInstance].sessionStore.session.userID;
     TWTRAPIClient *client = [[TWTRAPIClient alloc] initWithUserID:userID];
 
@@ -1257,11 +1286,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
 }
 
-
-
-
 -(void)facebook:(NSString *)text {
-
     if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
         [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters: @{ @"message" : text} HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
         }];
@@ -1275,11 +1300,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
 }
 
-
 -(void)square {
     
 }
-
 
 /* Bottom Bar */
     //Post to Facebook
@@ -1360,7 +1383,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
 #pragma mark - NSNotification Center
 
 -(void)dealloc {
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -1379,19 +1401,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 
 -(void)receiveNotifications:(NSNotification *)notification {
-    
     NSString *notif = [notification name];
     
     if ([notif isEqualToString:@"twitter-tapped-filevc"]) {
-        
         [self updateStateForButton:self.twitterButton];
-        
     } else if ([notif isEqualToString:@"facebook-tapped-filevc"]) {
-        
         [self updateStateForButton:self.facebookButton];
-        
     } else if ([notif isEqualToString:@"anon-tapped-filevc"]) {
-        
         [self updateStateForButton:self.anonButton];
     }
 }

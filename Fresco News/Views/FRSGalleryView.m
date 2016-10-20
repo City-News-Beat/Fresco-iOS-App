@@ -148,8 +148,9 @@
     
     if (firstPost.creator.profileImage != Nil && ![firstPost.creator.profileImage isEqual:[NSNull null]] && [[firstPost.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![firstPost.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:firstPost.creator.profileImage].absoluteString.length > 1) {
         //NSLog(@"aaAvatar: %@",firstPost.creator.profileImage);
+        NSString *smallAvatar = [firstPost.creator.profileImage stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
 
-        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:firstPost.creator.profileImage]];
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
     }
     else {
@@ -244,8 +245,11 @@
         
         if (error) {
             [actionBar handleRepostState:!state];
-            [actionBar handleRepostAmount:repostCount];
         }
+        else {
+            [actionBar handleRepostState:state];
+        }
+        [actionBar handleRepostAmount:repostCount];
     }];
 }
 
@@ -339,8 +343,10 @@
                     // set up FRSPlayer
                     // add AVPlayerLayer
                     NSLog(@"TOP LEVEL PLAYER");
-                    [self.players addObject:[self setupPlayerForPost:post]];
-                    [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.players addObject:[self setupPlayerForPost:post]];
+                        [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                    });
                     [self configureMuteIcon];
                 }
                 else {
@@ -374,29 +380,28 @@
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
     FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
-
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-        videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(playerItemDidReachEnd:)
-                                                     name:AVPlayerItemDidPlayToEndTimeNotification
-                                                   object:[videoPlayer currentItem]];
-        
-        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
-        
-        playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
-        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
-        
-        UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
-        container.backgroundColor = [UIColor clearColor];
-        
-        videoPlayer.container = container;
-        playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
-       
         dispatch_async(dispatch_get_main_queue(), ^{
+            AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+            videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+            
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(playerItemDidReachEnd:)
+                                                         name:AVPlayerItemDidPlayToEndTimeNotification
+                                                       object:[videoPlayer currentItem]];
+            
+            NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+            
+            playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
+            playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+            
+            UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
+            container.backgroundColor = [UIColor clearColor];
+            
+            videoPlayer.container = container;
+            playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
+            
             [container.layer insertSublayer:playerLayer atIndex:1000];
             [self.scrollView addSubview:container];
             [self.scrollView bringSubviewToFront:container];
@@ -623,7 +628,9 @@
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         dispatch_async(dispatch_get_main_queue(), ^{
             //Set user image
-            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
+            NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
+            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
+
             //NSLog(@"wwAvatar: %@",post.creator.profileImage);
 
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
@@ -661,8 +668,12 @@
     
     if (parent.externalAccountName != nil && ![parent.externalAccountName isEqual:[NSNull null]]) {
         
-        if ([parent.externalSource isEqualToString:@"twitter"]) {
-            self.nameLabel.text = [NSString stringWithFormat:@"@%@",parent.externalAccountName];
+        if ([parent.externalSource isEqualToString:@"twitter"] ) {
+            NSString *toSet = [NSString stringWithFormat:@"@%@",parent.externalAccountName];
+            
+            if (![toSet isEqualToString:@"@"]) {
+                self.nameLabel.text = toSet;
+            }
             
         } else {
             self.nameLabel.text = parent.externalAccountName;
@@ -692,9 +703,8 @@
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:post.creator.profileImage]];
-            //NSLog(@"kkAvatar: %@",post.creator.profileImage);
-
+            NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
+            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
             [photoTap setNumberOfTapsRequired:1];
             [self.profileIV setUserInteractionEnabled:YES];
@@ -904,9 +914,13 @@
     }
     
     if (self.imageViews.count > page+1 && self.orderedPosts.count > page+1) {
+        
         UIImageView *nextImage = self.imageViews[page+1];
         FRSPost *nextPost = self.orderedPosts[page+1];
-        [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
+        
+        if (nextPost.videoUrl == Nil) {
+            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
+        }
     }
     
     self.adjustedPage = page;

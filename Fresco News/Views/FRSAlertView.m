@@ -1037,7 +1037,6 @@
 }
 
 -(void)acceptTapped {
-    
     [[FRSAPIClient sharedClient] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
         
         if (!error) {
@@ -1454,6 +1453,7 @@
     
     [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
         
+<<<<<<< HEAD
         if (responseObject && !error) {
             [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
             [[NSUserDefaults standardUserDefaults] setBool:true forKey:userHasFinishedMigrating];
@@ -1467,7 +1467,15 @@
         
         
         if (error) {
+=======
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [spinner stopLoading];
+            [spinner removeFromSuperview];
+            [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        });
+>>>>>>> 3.0-phil
 
+        if (error) {
             FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
             [alert show];
             

@@ -206,7 +206,7 @@
 }
 
 -(void)check:(NSString *)check completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *checkEndpoint = [userEndpoint stringByAppendingString:check];
+    NSString *checkEndpoint = [userEndpoint stringByAppendingString:[check stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
     
     [self get:checkEndpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -1013,9 +1013,9 @@
         
         NSLog(@"responseObject: %@", responseObject);
         
-        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-            completion(responseObject, error);
-        }
+//        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+//            completion(responseObject, error);
+//        }
         
         // shouldn't happen
         completion(responseObject, error);
@@ -1318,10 +1318,11 @@
     
     if ([objectType isEqualToString:galleryObjectType]) {
         NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSGallery" inManagedObjectContext:[self managedObjectContext]];
+        
         FRSGallery *gallery = (FRSGallery *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
         gallery.currentContext = [self managedObjectContext];
         [gallery configureWithDictionary:dictionary];
-                return gallery;
+        return gallery;
     }
     else if ([objectType isEqualToString:storyObjectType]) {
         NSEntityDescription *storyEntity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:[self managedObjectContext]];
