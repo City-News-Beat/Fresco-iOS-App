@@ -428,7 +428,7 @@
 
 -(void)handleUserLogin:(id)responseObject {
     if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
-        [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
+        [self saveToken:[responseObject objectForKey:@"token"] forUser:serviceName];
     }
     
     [self reevaluateAuthorization];
