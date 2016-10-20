@@ -340,19 +340,20 @@
 }
 
 -(void)clearKeychain {
-    SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
     
-    NSArray *accounts = [query fetchAll:nil];
-    
-    for (id account in accounts) {
-        
-        SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
-        
-        query.service = serviceName;
-        query.account = [account valueForKey:@"acct"];
-        
-        [query deleteItem:nil];
-    }
+//    SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
+//    
+//    NSArray *accounts = [query fetchAll:nil];
+//    
+//    for (id account in accounts) {
+//        
+//        SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
+//        
+//        query.service = serviceName;
+//        query.account = [account valueForKey:@"acct"];
+//        
+//        [query deleteItem:nil];
+//    }
 }
 
 -(BOOL)isFirstRun {
