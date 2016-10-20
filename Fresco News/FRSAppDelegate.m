@@ -949,7 +949,19 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                     [detailVC configureWithGalleries:galleryArray];
                     detailVC.navigationController = tab.navigationController;
                     detailVC.title = @"TODAY IN NEWS";
-                    [tab.navigationController pushViewController:detailVC animated:YES];
+                    UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+                    
+                    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                        [navController pushViewController:detailVC animated:TRUE];
+                    }
+                    else {
+                        UITabBarController *tab = (UITabBarController *)navController;
+                        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                        
+                        navController = (UINavigationController *)[[tab viewControllers] firstObject];
+                        [navController pushViewController:detailVC animated:TRUE];
+                    }
                 }
             }
         }];

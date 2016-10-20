@@ -452,8 +452,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     height += titleLabel.frame.size.height;
     height += 25; //spacing
     
-    NSLog(@"HEIGHT: %lu", height);
-    
     if (height < 75) {
         return 75;
     }
