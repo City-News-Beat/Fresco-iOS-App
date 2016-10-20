@@ -430,7 +430,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     int rightPadding = 16;
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.font = [UIFont notaMediumWithSize:17];
-    titleLabel.numberOfLines = 1;
+    titleLabel.numberOfLines = 0;
     titleLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width -leftPadding -rightPadding, 22);
     titleLabel.text = notif[@"title"];
     [titleLabel sizeToFit];
@@ -441,14 +441,16 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     bodyLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width - leftPadding -rightPadding, 60);
     bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     bodyLabel.text = notif[@"body"];
-    bodyLabel.numberOfLines = 3;
-        
+    bodyLabel.numberOfLines = 0;
+    bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+
+    
     [bodyLabel sizeToFit];
     [titleLabel sizeToFit];
         
     height += bodyLabel.frame.size.height;
     height += titleLabel.frame.size.height;
-    height += 40; //spacing
+    height += 15; //spacing
     
     NSLog(@"HEIGHT: %lu", height);
     
