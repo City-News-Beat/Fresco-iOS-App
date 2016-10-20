@@ -60,7 +60,7 @@
     if (self.passwordUsed) {
         [mutableDigestion setObject:self.passwordUsed forKey:@"verify_password"];
     }
-    else if (self.socialUsed) {
+    else if (self.socialUsed && !self.passwordUsed) {
         [mutableDigestion addEntriesFromDictionary:self.socialUsed];
     }
     
@@ -184,7 +184,12 @@
     // social_links
     // installation
     
-    self.passwordUsed = digestion[@"password"];
+    if (digestion[@"password"]) {
+        self.passwordUsed = digestion[@"password"];
+    }
+    else {
+        self.socialUsed = digestion[@"social_links"];
+    }
     
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         
