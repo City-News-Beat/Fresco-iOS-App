@@ -879,7 +879,7 @@
 
 -(BOOL)isAuthenticated {
     
-    if ([[SAMKeychain allAccounts] count]) {
+    if ([[SAMKeychain accountsForService:serviceName] count] > 0) {
         return TRUE;
     }
     
