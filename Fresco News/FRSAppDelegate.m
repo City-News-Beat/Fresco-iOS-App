@@ -178,6 +178,21 @@
     }];
 }
 
+-(void)createUser {
+    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    
+    if (!authenticatedUser) {
+        authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
+    }
+    
+    authenticatedUser.isLoggedIn = @(TRUE);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self saveContext];
+    });
+
+}
+
 -(void)saveUserFields:(NSDictionary *)responseObject {
     FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
     

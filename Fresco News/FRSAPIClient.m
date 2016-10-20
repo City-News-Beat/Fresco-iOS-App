@@ -193,13 +193,9 @@
     
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         
-        if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
-           // [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
-            [self handleUserLogin:responseObject];
-
-            NSString *userID = responseObject[@"user"][@"id"];
-            
-        }
+            if (responseObject)  {
+                [self handleUserLogin:responseObject];
+            }
         
         completion(responseObject, error);
     }];
@@ -468,16 +464,15 @@
 }
 
 -(void)handleUserLogin:(id)responseObject {
-    if ([responseObject objectForKey:@"token"]) {
+    if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
         [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
     }
     
-    FRSUser *authenticatedUser = [self authenticatedUser];
+   // FRSUser *authenticatedUser = [self authenticatedUser];
     
-    if (!authenticatedUser) {
-        authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
-    }
     
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate createUser];
     [self reevaluateAuthorization];
     [self updateLocalUser];
 }

@@ -40,6 +40,7 @@
 -(void)reloadUser;
 -(void)reloadUser:(FRSAPIDefaultCompletionBlock)completion;
 -(void)saveContext;
+-(void)createUser;
 -(UITabBarController *)tabBar;
 -(BOOL)isFirstRun;
 -(void)updateTabBarToUser;
