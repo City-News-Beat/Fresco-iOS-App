@@ -633,6 +633,9 @@
     else if (outlets.count > 1) {
         self.assignmentOutlet = [NSString stringWithFormat:@"%d active news outlets", (int)self.outlets.count];
     }
+    else if (outlets.count == 0) {
+        self.assignmentOutlet = @"No active news outlets";
+    }
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterFullStyle];
