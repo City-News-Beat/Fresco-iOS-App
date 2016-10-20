@@ -428,7 +428,7 @@
 
 -(void)handleUserLogin:(id)responseObject {
     if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
-        [self saveToken:[responseObject objectForKey:@"token"] forUser:serviceName];
+        [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
     }
     
     [self reevaluateAuthorization];
@@ -829,7 +829,7 @@
 
 -(BOOL)isAuthenticated {
     
-    if ([[SAMKeychain accountsForService:serviceName] count] > 0) {
+    if ([[SAMKeychain allAccounts] count] > 0) {
         return TRUE;
     }
     
