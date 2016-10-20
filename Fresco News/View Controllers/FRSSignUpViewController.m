@@ -76,6 +76,8 @@
     self.notificationsEnabled = NO;
     self.emailError = NO;
     
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated {
