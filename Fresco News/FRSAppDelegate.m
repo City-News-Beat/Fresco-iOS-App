@@ -160,15 +160,13 @@
             return;
         }
         
-<<<<<<< HEAD
         [self.managedObjectContext performBlock:^{
             [self saveUserFields:responseObject];
         }];
-=======
+        
         [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
         
         FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
->>>>>>> 3.0-phil
         
         dispatch_async(dispatch_get_main_queue(), ^{
             

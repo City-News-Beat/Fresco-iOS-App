@@ -221,17 +221,14 @@
             [delegate saveUserFields:responseObject];
             
             [self popToOrigin];
-<<<<<<< HEAD
             
             [self stopSpinner:self.loadingView onButton:self.loginButton];
             if (self.passwordField.text != nil && ![self.passwordField.text isEqualToString:@""]) {
                 [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
             }
-=======
 
             [self stopSpinner:self.loadingView onButton:self.loginButton];
             [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
->>>>>>> 3.0-phil
             
             if ([self validEmail:username]) {
                 [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
@@ -401,14 +398,11 @@
 
 -(void)popToOrigin {
         
-<<<<<<< HEAD
     //FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     //[appDelegate reloadUser];
-=======
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
     [appDelegate registerForPushNotifications];
->>>>>>> 3.0-phil
     
     NSArray *viewControllers = [self.navigationController viewControllers];    
     

@@ -1533,14 +1533,9 @@
 }
 
 -(void)facebookTapped {
-    /*[FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, id responseObject) {
         
-<<<<<<< HEAD
-    } parent:self]; // presenting view controller*/
-=======
-    } parent:self manager:self.fbLoginManager]; // presenting view controller
->>>>>>> 3.0-phil
-    
+    } parent:self manager:self.fbLoginManager]; // presenting view controller    
 }
 
 #pragma mark - User

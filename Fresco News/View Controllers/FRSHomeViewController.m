@@ -155,11 +155,8 @@
     [self.appDelegate startNotificationTimer];
     entry = [NSDate date];
     numberRead = 0;
-<<<<<<< HEAD
     
     [self presentMigrationAlert];
-=======
->>>>>>> 3.0-phil
 }
 
 -(void)viewDidAppear:(BOOL)animated {
