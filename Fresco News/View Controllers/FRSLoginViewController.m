@@ -223,7 +223,9 @@
             [self popToOrigin];
             
             [self stopSpinner:self.loadingView onButton:self.loginButton];
-            [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
+            if (self.passwordField.text != nil && ![self.passwordField.text isEqualToString:@""]) {
+                [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
+            }
             
             if ([self validEmail:username]) {
                 [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
@@ -304,7 +306,7 @@
 -(void)setMigrateState:(NSDictionary *)responseObject {
     BOOL shouldSync = false;
     
-    if(responseObject != nil && ![responseObject valueForKey:@"valid_password"]) {
+    if(responseObject != nil && ![[responseObject valueForKey:@"valid_password"] boolValue]) {
         shouldSync = true;
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"needs-password"];
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:userNeedsToMigrate];
@@ -315,6 +317,7 @@
         [[NSUserDefaults standardUserDefaults] setBool:true forKey:userNeedsToMigrate];
         [[NSUserDefaults standardUserDefaults] setBool:false forKey:userHasFinishedMigrating];
     } else {
+        shouldSync = true;
         [[NSUserDefaults standardUserDefaults] setBool:false forKey:userNeedsToMigrate];
     }
     
@@ -340,10 +343,10 @@
             
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
             [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"needs-password"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-            [delegate saveUserFields:responseObject];
+            [delegate saveUserFields:responseObject[@"user"]];
             [self setMigrateState:responseObject];
             
 
@@ -457,7 +460,7 @@
             /*  */
             
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-            [delegate saveUserFields:responseObject];
+            [delegate saveUserFields:responseObject[@"user"]];
             [self setMigrateState:responseObject];
             
             [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {

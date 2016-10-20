@@ -1074,6 +1074,7 @@
         
         BOOL userHasEmail;
         BOOL userHasUsername;
+        BOOL userHasPassword = !password;
         
         if ([[[[FRSAPIClient sharedClient] authenticatedUser] username] isEqual:[NSNull null]] || [[[[FRSAPIClient sharedClient] authenticatedUser] username] isEqualToString:@""] || ![[[FRSAPIClient sharedClient] authenticatedUser] username]) {
             userHasUsername = NO;
@@ -1216,7 +1217,7 @@
         }
 
         UIView *passwordContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-44, self.frame.size.width, 44)];
-        if (password) {
+        if (!userHasPassword) {
             self.migrationAlertShouldShowPassword = YES;
             self.height += 44;
             [self addSubview:passwordContainer];
@@ -1228,7 +1229,11 @@
             self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
             [self.passwordTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             self.passwordTextField.tag = 3;
-            self.passwordTextField.placeholder = @"Password";
+            if ([[FRSAPIClient sharedClient] socialUsed]) {
+                self.passwordTextField.placeholder = @"Set a New Password";
+            } else {
+                self.passwordTextField.placeholder = @"Confirm Password";
+            }
             self.passwordTextField.tintColor = [UIColor frescoBlueColor];
             self.passwordTextField.delegate = self;
             self.passwordTextField.keyboardType = UIKeyboardTypeDefault;
@@ -1244,7 +1249,8 @@
 
         self.dismissKeyboardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
         [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.dismissKeyboardTap];
-
+        
+        
         self.height += 380;
         
         NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width  - ALERT_WIDTH)/2;
@@ -1259,45 +1265,51 @@
         
         [self animateIn];
 
-        
         //Only updating username
-        if (!self.passwordTextField && !self.emailTextField && self.usernameTextField) {
+        if (userHasPassword && userHasEmail && !userHasUsername) {
             usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            return self;
         }
         
         //Only updaing email
-        if (!self.passwordTextField && self.emailTextField && !self.usernameTextField) {
+        if (userHasPassword && !userHasEmail && userHasUsername) {
             emailContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            return self;
         }
         
         //Only updating password
-        if (self.passwordTextField && !self.emailTextField && !self.usernameTextField) {
+        if (!userHasPassword && userHasEmail && userHasUsername) {
             passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            return self;
         }
         
         //Updating password and username
-        if (self.passwordTextField && !self.emailTextField && self.usernameTextField) {
+        if (!userHasPassword && userHasEmail && !userHasUsername) {
             usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
             passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            return self;
         }
         
         //Updating password and email
-        if (self.passwordTextField && self.emailTextField && !self.usernameTextField) {
+        if (!userHasPassword && !userHasEmail && userHasUsername) {
             emailContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
             passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            return self;
         }
 
         //Updating username and email
-        if (!self.passwordTextField && self.emailTextField && self.usernameTextField) {
+        if (userHasPassword && !userHasEmail && !userHasUsername) {
             usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
             emailContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            return self;
         }
         
         //Updaing username, email, and password
-        if (self.passwordTextField && self.emailTextField && self.usernameTextField) {
+        if (!userHasPassword && !userHasEmail && !userHasUsername) {
             usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*4, self.frame.size.width, 44);
             emailContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
             passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            return self;
         }
     }
     return self;
@@ -1419,7 +1431,7 @@
     
     if ([[FRSAPIClient sharedClient] passwordUsed]) {
         [digestion setObject:[[FRSAPIClient sharedClient] passwordUsed] forKey:@"verify_password"];
-    } else {
+    } else if (password){
         [digestion setObject:password forKey:@"verify_password"];
     }
     

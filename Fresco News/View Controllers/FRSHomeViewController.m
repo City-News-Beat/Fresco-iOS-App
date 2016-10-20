@@ -224,8 +224,9 @@
     
     if ([[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] != nil
         && ![[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]
-        && ![[[NSUserDefaults standardUserDefaults] valueForKey:userHasFinishedMigrating] boolValue]) {
-        
+        && ![[[NSUserDefaults standardUserDefaults] valueForKey:userHasFinishedMigrating] boolValue]
+        && [[NSUserDefaults standardUserDefaults] valueForKey:userHasFinishedMigrating] != nil) {
+
         [self logoutWithPop:NO];
         
         return;
@@ -235,7 +236,7 @@
     }
     
     if ([[FRSAPIClient sharedClient] isAuthenticated] && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
+        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[[NSUserDefaults standardUserDefaults] valueForKey:@"needs-password"] boolValue]];
         alert.delegate = self;
         [alert show];
         //[[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:userIsMigrated];
