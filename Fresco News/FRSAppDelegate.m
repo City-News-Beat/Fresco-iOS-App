@@ -1109,16 +1109,11 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     UITabBarController *tab = (UITabBarController *)self.tabBarController;
 
     FRSNavigationController *navCont = (FRSNavigationController *)[tab.viewControllers objectAtIndex:3];
-    FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
-    
-    assignmentsVC.hasDefault = YES;
-    assignmentsVC.defaultID = assignmentID;
     [self.tabBarController setSelectedIndex:3];
     
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
     __block BOOL ranOnce = FALSE;
     
-    if (assignmentsVC.mapView) {
         [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
             if (ranOnce) {
                 return;
@@ -1127,27 +1122,48 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             ranOnce = TRUE;
             FRSAppDelegate *appDelegate = self;
             FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
-            [assignment configureWithDictionary:responseObject];
-            [assignmentsVC focusOnAssignment:assignment];
+            
             
             UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
             
             if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-                [navController pushViewController:assignmentsVC animated:TRUE];
+                UITabBarController *tab = (UITabBarController *)navController;
+                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                
+                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:2] viewControllers] firstObject];
+                
+                assignmentsVC.hasDefault = YES;
+                assignmentsVC.defaultID = assignmentID;
+                
+                [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
+                
+                [assignment configureWithDictionary:responseObject];
+                [assignmentsVC focusOnAssignment:assignment];
+                
+                navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
+                [tab setSelectedIndex:2];
             }
             else {
                 UITabBarController *tab = (UITabBarController *)navController;
                 tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
                 tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
                 
-                navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
-                [navController pushViewController:assignmentsVC animated:TRUE];
-                [tab.tabBarController setSelectedIndex:2];
+                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:2] viewControllers] firstObject];
+                
+                assignmentsVC.hasDefault = YES;
+                assignmentsVC.defaultID = assignmentID;
+                
+                [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
+                
+                [assignment configureWithDictionary:responseObject];
+                [assignmentsVC focusOnAssignment:assignment];
+                
+                navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
+                [tab setSelectedIndex:2];
             }
             
-            [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
         }];
-    }
 }
 
 
