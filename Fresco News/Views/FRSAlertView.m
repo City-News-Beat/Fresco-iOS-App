@@ -1438,7 +1438,6 @@
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]) {
-        
         [digestion setObject:password forKey:@"password"];
     }
     
