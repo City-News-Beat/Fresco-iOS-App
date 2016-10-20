@@ -360,6 +360,7 @@
         
         [self.assignmentIDs addObject:assignment.uid];
         [self addAssignmentAnnotation:assignment index:count];
+        
         count++;
     }
 }
@@ -393,6 +394,7 @@
     CLLocationDistance distance = [assignment.radius floatValue] * 1609.34;
     FRSMapCircle *circle = [FRSMapCircle circleWithCenterCoordinate:coord radius:distance];
     circle.circleType = FRSMapCircleTypeAssignment;
+    ann.outlets = assignment.outlets;
     
     [self.mapView addOverlay:circle];
     [self.mapView addAnnotation:ann];
@@ -612,14 +614,8 @@
     self.assignmentCaption = assAnn.subtitle;
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
     
-    NSInteger index = assAnn.assignmentIndex;
-    NSArray *outlets;
-    
-    if ([self.assignments count] > index) {
-        outlets = [(FRSAssignment *)[self.assignments objectAtIndex:index] outlets];
-        self.outlets = outlets;
-        NSLog(@"OUTLETS: %@", outlets);
-    }
+    self.outlets = assAnn.outlets;
+    NSArray *outlets = self.outlets;
     
     if (outlets.count == 1) {
         NSDictionary *outlet = [outlets firstObject];
@@ -925,7 +921,7 @@
             [imageView hnk_setImageFromURL:[NSURL URLWithString:outlet[@"avatar"]]];
         }
         
-        int xOffset = (int)self.outletImagesViews.count * (int)34 + 13 + (5 * (self.outletImagesViews.count >0));
+        int xOffset = (int)self.outletImagesViews.count * (int)34 + 13 + (3 * (self.outletImagesViews.count >0));
         CGRect frame = self.assignmentOutletLabel.frame;
         frame.origin.x = xOffset;
         self.assignmentOutletLabel.frame = frame;
