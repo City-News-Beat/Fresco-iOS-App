@@ -472,14 +472,13 @@
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
-    MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:@"assignment-annotation"];
-
-    if (!annotationView) {
-        
-        if ([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"user-annotation"];
+    if ([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) {
+        static NSString *annotationIdentifer = @"user-annotation";
+        MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifer];
+        if (annotationView == nil) {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifer];
             annotationView.userInteractionEnabled = NO;
-        
+            
             UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
             view.backgroundColor = [UIColor whiteColor];
             
@@ -506,12 +505,21 @@
                 NSURL *url = [NSURL URLWithString:link];
                 [imageView hnk_setImageFromURL:url];
                 imageView.backgroundColor = [UIColor frescoBlueColor];
-            } else {
+            }
+            else {
                 imageView.backgroundColor = [UIColor frescoBlueColor];
             }
-            
-        } else {
-            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"assignment-annotation"];
+        }
+        else {
+            annotationView.annotation = annotation;
+        }
+        return annotationView;
+
+    } else {
+        static NSString *annotationIdentifer = @"assignment-annotation";
+        MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifer];
+        if (annotationView == nil) {
+            annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifer];
             UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
             container.backgroundColor = [UIColor clearColor];
             
@@ -537,9 +545,14 @@
             annotationView.enabled = YES;
             annotationView.frame = CGRectMake(0, 0, 75, 75);
         }
+        else {
+            annotationView.annotation = annotation;
+        }
+        return annotationView;
+
     }
-    
-    return annotationView;
+
+    return nil;
 }
 
 
