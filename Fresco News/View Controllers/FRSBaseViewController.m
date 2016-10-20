@@ -308,10 +308,13 @@
     if ([[FRSAPIClient sharedClient] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
         [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSAPIClient sharedClient] authenticatedUser]];
     }
-    
+    [[FRSAPIClient sharedClient] logout];
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
     });
+    [[FRSAPIClient sharedClient] logout];
+    
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate clearKeychain];
@@ -325,7 +328,9 @@
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userHasFinishedMigrating];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [NSUserDefaults resetStandardUserDefaults];
     
     NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];

@@ -133,6 +133,10 @@
         [self configureWithUser:_representedUser];
     }else{
         [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
+            if (error || !responseObject) {
+                return;
+            }
+            
             _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
             [self configureWithUser:_representedUser];
             
@@ -270,6 +274,8 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.tabBarController.navigationController setNavigationBarHidden:YES];
+
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     if (isLoadingUser) {
         return;
@@ -637,6 +643,7 @@
         
         
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE];
+        
         [self.tableView reloadData];
         
         if (reload) {
@@ -755,6 +762,7 @@
         
         self.navigationItem.rightBarButtonItems = @[gearItem, editItem];
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor]; //?
+        
     }else{
         
         if(![self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]){
@@ -1519,16 +1527,15 @@
 #pragma mark - Social Overlay Actions
 
 -(void)twitterTapped{
-    [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+    /*[FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user) {
         
-    }];
+    }];*/
 }
 
 -(void)facebookTapped {
-    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+    [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, id responseObject) {
         
-    } parent:self manager:self.fbLoginManager]; // presenting view controller
-    
+    } parent:self manager:self.fbLoginManager]; // presenting view controller    
 }
 
 #pragma mark - User

@@ -324,12 +324,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.view addSubview:backButton];
     
     /* Configure squareButton */
-    UIButton *squareButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    /*UIButton *squareButton = [UIButton buttonWithType:UIButtonTypeSystem];
     squareButton.frame = CGRectMake(self.navigationBarView.frame.size.width-12-24, 30, 24, 24);
     [squareButton setImage:[UIImage imageNamed:@"square"] forState:UIControlStateNormal];
     [squareButton setTintColor:[UIColor whiteColor]];
     [squareButton addTarget:self action:@selector(square) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:squareButton];
+    [self.view addSubview:squareButton];*/
     
     /* Configure titleLabel */
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -66/2, 35, 66, 19)];
@@ -619,8 +619,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
                     
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
-                    NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
-                    cell.representedOutletID = [outlet objectForKey:@"id"];
+                    //NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
+                    //cell.representedOutletID = [outlet objectForKey:@"id"];
                     
                     //[self resetFrames:true];
                     return cell;
@@ -651,8 +651,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
                     
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
-                    NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
-                    cell.representedOutletID = [outlet objectForKey:@"id"];
+                    //NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
+                    //cell.representedOutletID = [outlet objectForKey:@"id"];
                     
                     //[self resetFrames:true];
                     return cell;
@@ -710,14 +710,21 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self resetOtherOutlets];
         cell.isSelectedOutlet = YES;
         selectedOutlet = cell.representedOutletID;
+        
+        NSLog(@"SELECTED OUTLET: %@", selectedOutlet);
     }else if (!cell.isSelectedAssignment && !cellIsOutlet){
         [self resetOtherCells];
         [self resetOtherOutlets];
         cell.isSelectedAssignment = YES;
         
-        if (self.selectedAssignment != nil && tableView == self.assignmentsTableView) {
-            self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
-        }else if(self.selectedAssignment != nil && tableView == self.globalAssignmentsTableView){
+        if (tableView == self.assignmentsTableView) {
+            if (indexPath.row < self.assignmentsArray.count) {
+                self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
+            }
+            else {
+                self.selectedAssignment = Nil;
+            }
+        }else if(tableView == self.globalAssignmentsTableView){
             self.selectedAssignment = [self.globalAssignments objectAtIndex:indexPath.row];
         }
         
@@ -757,6 +764,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     outletCell.isAnOutlet = true;
                     NSDictionary *outletDic = [cell.outlets objectAtIndex:i];
                     [outletCell.titleLabel setText:outletDic[@"title"]];
+                    outletCell.representedOutletID = outletDic[@"id"];
                 }
                 [self tableView:tableView willSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
                 [self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
@@ -800,6 +808,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     outletCell.isAnOutlet = true;
                     NSDictionary *outletDic = [cell.outlets objectAtIndex:i];
                     [outletCell.titleLabel setText:outletDic[@"title"]];
+                    outletCell.representedOutletID = outletDic[@"id"];
                 }
                 [self tableView:tableView willSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
                 [self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
@@ -1185,7 +1194,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
         // upload
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
         
-        if (selectedRow < self.assignmentsArray.count) {
+        if (self.selectedAssignment) {
+            gallery[@"assignment_id"] = [(NSDictionary *)self.selectedAssignment objectForKey:@"id"];
+            NSLog(@"attaching assignment: %@", gallery[@"assignment_id"]);
+        }
+        else if (selectedRow < self.assignmentsArray.count) {
             gallery[@"assignment_id"] = self.assignmentsArray[selectedRow][@"id"];
             NSLog(@"attaching assignment: %@", gallery[@"assignment_id"]);
         }

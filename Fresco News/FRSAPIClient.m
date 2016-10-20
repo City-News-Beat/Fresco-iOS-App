@@ -60,7 +60,7 @@
     if (self.passwordUsed) {
         [mutableDigestion setObject:self.passwordUsed forKey:@"verify_password"];
     }
-    else if (self.socialUsed) {
+    else if (self.socialUsed && !self.passwordUsed) {
         [mutableDigestion addEntriesFromDictionary:self.socialUsed];
     }
     
@@ -184,7 +184,12 @@
     // social_links
     // installation
     
-    self.passwordUsed = digestion[@"password"];
+    if (digestion[@"password"]) {
+        self.passwordUsed = digestion[@"password"];
+    }
+    else {
+        self.socialUsed = digestion[@"social_links"];
+    }
     
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         
@@ -198,6 +203,40 @@
     }];
 }
 
+-(void)linkTwitter:(NSString *)token secret:(NSString *)secret completion:(FRSAPIDefaultCompletionBlock)completion {
+    if (token && secret) {
+        [self post:addSocialEndpoint withParameters:@{@"platform":@"twitter", @"token":token, @"secret":secret} completion:^(id responseObject, NSError *error) {
+            completion(responseObject, error);
+        }];
+    }
+    else {
+        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:@{@"message":@"Incorrect Twitter credentials"}]);
+    }
+}
+
+-(void)linkFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
+    if (token) {
+        [self post:addSocialEndpoint withParameters:@{@"platform":@"facebook", @"token":token} completion:^(id responseObject, NSError *error) {
+            completion(responseObject, error);
+        }];
+    }
+    else {
+        completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:@{@"message":@"Incorrect Twitter credentials"}]);
+    }
+}
+
+-(void)unlinkFacebook:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:deleteSocialEndpoint withParameters:@{@"platform":@"facebook"} completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)unlinkTwitter:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:deleteSocialEndpoint withParameters:@{@"platform":@"twitter"} completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 -(void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion {
     [self check:email completion:completion];
 }
@@ -206,7 +245,7 @@
 }
 
 -(void)check:(NSString *)check completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *checkEndpoint = [userEndpoint stringByAppendingString:check];
+    NSString *checkEndpoint = [userEndpoint stringByAppendingString:[check stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
     
     [self get:checkEndpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -813,10 +852,21 @@
         return Nil;
     }
     
+    
     NSDictionary *credentialsDictionary = [allAccounts firstObject];
     NSString *accountName = credentialsDictionary[kSAMKeychainAccountKey];
     
     return [SAMKeychain passwordForService:serviceName account:accountName];
+}
+
+-(void)logout {
+    NSArray *allAccounts = [SAMKeychain allAccounts];
+    
+    for (NSDictionary *account in allAccounts) {
+        NSString *accountName = account[kSAMKeychainAccountKey];
+        [SAMKeychain deletePasswordForService:serviceName account:accountName];
+    }
+
 }
 
 -(void)saveToken:(NSString *)token forUser:(NSString *)userName {
@@ -1013,9 +1063,9 @@
         
         NSLog(@"responseObject: %@", responseObject);
         
-        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-            completion(responseObject, error);
-        }
+//        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+//            completion(responseObject, error);
+//        }
         
         // shouldn't happen
         completion(responseObject, error);
@@ -1241,13 +1291,13 @@
     }];
 }
 
--(void)addComment:(NSString *)comment toGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)addComment:(NSString *)comment toGallery:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
 //    if ([self checkAuthAndPresentOnboard]) {
 //        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
 //        return;
 //    }
     
-    [self addComment:comment toGalleryID:gallery.uid completion:completion];
+    [self addComment:comment toGalleryID:gallery completion:completion];
 }
 
 -(void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -1318,10 +1368,11 @@
     
     if ([objectType isEqualToString:galleryObjectType]) {
         NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSGallery" inManagedObjectContext:[self managedObjectContext]];
+        
         FRSGallery *gallery = (FRSGallery *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
         gallery.currentContext = [self managedObjectContext];
         [gallery configureWithDictionary:dictionary];
-                return gallery;
+        return gallery;
     }
     else if ([objectType isEqualToString:storyObjectType]) {
         NSEntityDescription *storyEntity = [NSEntityDescription entityForName:@"FRSStory" inManagedObjectContext:[self managedObjectContext]];

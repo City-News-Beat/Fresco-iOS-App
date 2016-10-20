@@ -50,7 +50,7 @@ static NSString * const serviceName = @"frescoNewsService3";
 static NSString * const FRSUploadNotification = @"FRSUploadUpdateNotification";
 
 // base URLS
-static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
+static NSString * const baseURL = @"https://api.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 
@@ -77,6 +77,8 @@ static NSString * const acceptAssignmentEndpoint = @"assignment/accept";
 static NSString * const loginEndpoint = @"auth/signin";
 static NSString * const signUpEndpoint = @"auth/register";
 static NSString * const socialLoginEndpoint = @"auth/signin/social";
+static NSString * const userNeedsToMigrate = @"userNeedsToMigrate";
+static NSString * const userHasFinishedMigrating = @"userHasFinishedMigrating";
 
 // comments
 static NSString * const paginateComments = @"gallery/%@/comments?limit=10&last=%@";
@@ -87,8 +89,8 @@ static NSString * const userEndpoint = @"user/";
 static NSString * const setAvatarEndpoint = @"user/avatar";
 static NSString * const updateUserEndpoint = @"user/update";
 static NSString * const authenticatedUserEndpoint = @"user/me";
-static NSString * const addSocialEndpoint = @"social/connect/";
-static NSString * const deleteSocialEndpoint = @"social/disconnect/";
+static NSString * const addSocialEndpoint = @"user/social/connect/";
+static NSString * const deleteSocialEndpoint = @"user/social/disconnect/";
 
 static NSString * const disableAccountEndpoint = @"user/disable/";
 

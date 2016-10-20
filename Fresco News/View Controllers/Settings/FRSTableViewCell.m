@@ -188,7 +188,7 @@
         self.alert.delegate = self;
         [self.alert show];
         
-        [[FRSAPIClient sharedClient] disconnectPlatform:@"twitter" completion:^(id responseObject, NSError *error) {
+        [[FRSAPIClient sharedClient] unlinkTwitter:^(id responseObject, NSError *error) {
             NSLog(@"Disconnect TW: %@", error);
         }];
         
@@ -197,7 +197,7 @@
 //        self.userInteractionEnabled = NO;
 //        self.twitterIV.alpha = 0;
 //        [self configureSpinner];
-        [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user) {
 //            [self.loadingView stopLoading];
 //            [self.loadingView removeFromSuperview];
             self.twitterSwitch.userInteractionEnabled = YES;
@@ -205,15 +205,42 @@
             
             if (session) {
                 
-                [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"twitter_handle" : session.userName} completion:^(id responseObject, NSError *error) {
+                [[FRSAPIClient sharedClient] linkTwitter:session.authToken secret:session.authTokenSecret completion:^(id responseObject, NSError *error) {
+                    if (responseObject && !error) {
+                        self.twitterHandle = session.userName;
+                        [self.twitterSwitch setOn:YES animated:YES];
+                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+                        self.socialTitleLabel.text = self.twitterHandle;
+                        [[NSUserDefaults standardUserDefaults] setValue:self.twitterHandle forKey:@"twitter-handle"];
+                    }
+                    else {
+                        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                        NSInteger responseCode = response.statusCode;
+                        
+                        if (responseCode == 412) {
+                            [self.twitterSwitch setOn:FALSE animated:YES];
+                            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"twitter-connected"];
+
+                            NSString* ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                            NSError *jsonError;
+                            
+                            NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
+                            NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
+                            
+                            
+                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                            [alert show];
+                            return;
+                        }
+                        else {
+                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                            [alert show];
+                            return;
+                        }
+
+                    }
                 }];
                 
-                
-                self.twitterHandle = session.userName;
-                [self.twitterSwitch setOn:YES animated:YES];
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-                self.socialTitleLabel.text = self.twitterHandle;
-                [[NSUserDefaults standardUserDefaults] setValue:self.twitterHandle forKey:@"twitter-handle"];
             } else if (error) {
                 FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
                 [alert show];
@@ -238,7 +265,7 @@
         self.alert.delegate = self;
         [self.alert show];
         
-        [[FRSAPIClient sharedClient] disconnectPlatform:@"facebook" completion:^(id responseObject, NSError *error) {
+        [[FRSAPIClient sharedClient] unlinkFacebook:^(id responseObject, NSError *error) {
             NSLog(@"Disconnect FB: %@", error);
         }];
 
@@ -254,21 +281,46 @@
             }
             
             if (result && !error) {
-                NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
                 
-                [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest completion:^(id responseObject, NSError *error) {
+                [[FRSAPIClient sharedClient] linkFacebook:[FBSDKAccessToken currentAccessToken].tokenString completion:^(id responseObject, NSError *error) {
                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
                     [self.facebookSwitch setOn:YES animated:YES];
                     self.facebookSwitch.alpha = 0;
                     
-                    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"name"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                        if (!error) {
-                            self.facebookName = [result valueForKey:@"name"];
-                            self.socialTitleLabel.text = self.facebookName;
-                            [[NSUserDefaults standardUserDefaults] setObject:self.facebookName forKey:@"facebook-name"];
+                    if (responseObject && !error) {
+                        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"name"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                            if (!error) {
+                                self.facebookName = [result valueForKey:@"name"];
+                                self.socialTitleLabel.text = self.facebookName;
+                                [[NSUserDefaults standardUserDefaults] setObject:self.facebookName forKey:@"facebook-name"];
+                            }
+                        }];
+                    }
+                    else if (error) {
+                        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                        NSInteger responseCode = response.statusCode;
+                        
+                        if (responseCode == 412) {
+                            [self.facebookSwitch setOn:FALSE animated:YES];
+                            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"facebook-connected"];
+                            
+                            NSString* ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                            NSError *jsonError;
+                            
+                            NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
+                            NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
+                            
+                            
+                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                            [alert show];
+                            return;
                         }
-                    }];
-                    
+                        else {
+                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Facebook. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                            [alert show];
+                            return;
+                        }
+                    }
                 }];
             }
         }];
@@ -644,7 +696,7 @@
     [self addSubview:nameLabel];
     
     UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64 + 8 + nameLabel.frame.size.width, 23, self.frame.size.width - 64, 14)];
-    usernameLabel.text = (username && ![username isEqual:[NSNull null]]) ? [@"@" stringByAppendingString:username] : @"";
+    usernameLabel.text = (username && ![username isEqual:[NSNull null]] && ![username isEqualToString:@""]) ? [@"@" stringByAppendingString:username] : @"";
     usernameLabel.font = [UIFont notaRegularWithSize:12];
     usernameLabel.textColor = [UIColor frescoMediumTextColor];
     [usernameLabel sizeToFit];

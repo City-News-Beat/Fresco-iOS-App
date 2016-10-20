@@ -57,6 +57,12 @@
     
     [self configureCoreDataStack];
     
+    //Migration checks
+    if([[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] != nil && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]){
+        [[NSUserDefaults standardUserDefaults] setBool:false forKey:userNeedsToMigrate];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
     if ([[FRSAPIClient sharedClient] isAuthenticated]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
         FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
@@ -80,6 +86,7 @@
         
         return YES; // no other stuff going on (no quick action handling, etc)
     }
+    
     NSLog(@"OPTIONS %@", launchOptions);
     
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
@@ -153,161 +160,171 @@
             return;
         }
         
+        [self.managedObjectContext performBlock:^{
+            [self saveUserFields:responseObject];
+        }];
+        
+        [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+        
         FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         
-        if (!authenticatedUser) {
-            authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
-        }
-        
-        // update user
-        authenticatedUser.uid = responseObject[@"id"];
-        //        authenticatedUser.email = responseObject[@"email"];
-        
-        if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
-            authenticatedUser.firstName = responseObject[@"full_name"];
-        }
-        if (responseObject[@"username"] && ![responseObject[@"username"] isEqual:[NSNull null]]) {
-            authenticatedUser.username = responseObject[@"username"];
-        }
-        if (![responseObject[@"bio"] isEqual:[NSNull null]]) {
-            authenticatedUser.bio = responseObject[@"bio"];
-        }
-        if (![responseObject[@"email"] isEqual:[NSNull null]]) {
-            authenticatedUser.email = responseObject[@"email"];
-        }
-        authenticatedUser.isLoggedIn = @(TRUE);
-        if (![responseObject[@"avatar"] isEqual:[NSNull null]]) {
-            authenticatedUser.profileImage = responseObject[@"avatar"];
-        }
-        
-        if (responseObject[@"location"] != Nil && ![responseObject[@"location"] isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:responseObject[@"location"] forKey:@"location"];
-        }
-        
-        if (responseObject[@"followed_count"] != Nil && ![responseObject[@"followed_count"] isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:responseObject[@"followed_count"] forKey:@"followedCount"];
-        }
-        
-        if (responseObject[@"following_count"] != Nil && ![responseObject[@"following_count"] isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
-        }
-        
-        
-        if ([responseObject[@"terms"][@"valid"] boolValue] == FALSE) { /* */
-            UITabBarController *tabBar = (UITabBarController *)self.tabBarController;
-            UINavigationController *nav = [tabBar.viewControllers firstObject];
-            FRSHomeViewController *homeViewController = [nav.viewControllers firstObject];
-            [homeViewController presentTOS];
-        }
-        
-        if (responseObject[@"blocked"] && ![responseObject[@"blocked"] isEqual:[NSNull null]]) {
-            authenticatedUser.blocked = [responseObject[@"blocked"] boolValue];
-        }
-        
-        if (responseObject[@"blocking"] && ![responseObject[@"blocking"] isEqual:[NSNull null]]) {
-            authenticatedUser.blocking = [responseObject[@"blocking"] boolValue];
-        }
-        
-        if (responseObject[@"suspended_until"] && ![responseObject[@"suspended_until"] isEqual:[NSNull null]]) {
-            authenticatedUser.suspended = YES;
-        } else {
-            authenticatedUser.suspended = NO;
-        }
-        
-        if (responseObject[@"disabled"] && ![responseObject[@"disabled"] isEqual:[NSNull null]]) {
-            authenticatedUser.disabled = [responseObject[@"disabled"] boolValue];
-        }
-        
-        if (![responseObject[@"identity"] isKindOfClass:[[NSNull null] class]]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
             
-            if (responseObject[@"identity"][@"due_by"] != Nil && ![responseObject[@"identity"][@"due_by"] isEqual:[NSNull null]]) {
-                [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
+            if (completion) {
+                completion(Nil,Nil);
             }
-            
-            if (responseObject[@"identity"][@"first_name"] != Nil && ![responseObject[@"identity"][@"first_name"] isEqual:[NSNull null]]) {
-                [authenticatedUser setValue:responseObject[@"identity"][@"first_name"] forKey:@"stripeFirst"];
-            }
-            if (responseObject[@"identity"][@"last_name"] != Nil && ![responseObject[@"identity"][@"last_name"] isEqual:[NSNull null]]) {
-                [authenticatedUser setValue:responseObject[@"identity"][@"last_name"] forKey:@"stripeLast"];
-            }
-            
-            
-            
-            NSDictionary *identity = responseObject[@"identity"];
-            
-            NSString *birthDay = identity[@"dob_day"];
-            NSString *birthMonth = identity[@"dob_month"];
-            NSString *birthYear = identity[@"dob_year"];
-            NSString *addressLineOne = identity[@"address_line1"];
-            NSString *addressLineTwo = identity[@"address_line2"];
-            NSString *addressZip = identity[@"address_zip"];
-            NSString *addressCity = identity[@"address_city"];
-            NSString *addressState = identity[@"address_state"];
-            
-            
-            
-            BOOL hasSavedFields = FALSE;
-            
-            if ([self isValue:birthDay]) {
-                [authenticatedUser setValue:birthDay forKey:@"dob_day"];
-                hasSavedFields = TRUE;
-            }
-            if ([self isValue:birthMonth]) {
-                [authenticatedUser setValue:birthMonth forKey:@"dob_month"];
-                hasSavedFields = TRUE;
-                
-            }
-            if ([self isValue:birthYear]) {
-                [authenticatedUser setValue:birthYear forKey:@"dob_year"];
-                hasSavedFields = TRUE;
-                
-            }
-            if ([self isValue:addressLineOne]) {
-                [authenticatedUser setValue:addressLineOne forKey:@"address_line1"];
-                hasSavedFields = TRUE;
-                
-            }
-            if ([self isValue:addressLineTwo]) {
-                [authenticatedUser setValue:addressLineTwo forKey:@"address_line2"];
-                hasSavedFields = TRUE;
-                
-            }
-            
-            
-            if ([self isValue:addressZip]) {
-                [authenticatedUser setValue:addressZip forKey:@"address_zip"];
-                hasSavedFields = TRUE;
-                
-            }
-            if ([self isValue:addressCity]) {
-                [authenticatedUser setValue:addressCity forKey:@"address_city"];
-                hasSavedFields = TRUE;
-                
-            }
-            if ([self isValue:addressState]) {
-                [authenticatedUser setValue:addressState forKey:@"address_state"];
-                hasSavedFields = TRUE;
-                
-            }
-            
-            NSArray *fieldsNeeded = identity[@"fields_needed"];
-            [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
-            [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
-            
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self saveContext];
-            });
-          
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                if (completion) {
-                    completion(Nil,Nil);
-                }
-            });
-        }
+        });
+        
     }];
+}
+
+-(void)saveUserFields:(NSDictionary *)responseObject {
+    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    
+    if (!authenticatedUser) {
+        authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
+    }
+    
+    // update user
+    authenticatedUser.uid = responseObject[@"id"];
+    //        authenticatedUser.email = responseObject[@"email"];
+    
+    if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
+        authenticatedUser.firstName = responseObject[@"full_name"];
+    }
+    if (responseObject[@"username"] && ![responseObject[@"username"] isEqual:[NSNull null]]) {
+        authenticatedUser.username = responseObject[@"username"];
+    }
+    if (![responseObject[@"bio"] isEqual:[NSNull null]]) {
+        authenticatedUser.bio = responseObject[@"bio"];
+    }
+    if (![responseObject[@"email"] isEqual:[NSNull null]]) {
+        authenticatedUser.email = responseObject[@"email"];
+    }
+    authenticatedUser.isLoggedIn = @(TRUE);
+    if (![responseObject[@"avatar"] isEqual:[NSNull null]]) {
+        authenticatedUser.profileImage = responseObject[@"avatar"];
+    }
+    
+    if (responseObject[@"location"] != Nil && ![responseObject[@"location"] isEqual:[NSNull null]]) {
+        [authenticatedUser setValue:responseObject[@"location"] forKey:@"location"];
+    }
+    
+    if (responseObject[@"followed_count"] != Nil && ![responseObject[@"followed_count"] isEqual:[NSNull null]]) {
+        [authenticatedUser setValue:responseObject[@"followed_count"] forKey:@"followedCount"];
+    }
+    
+    if (responseObject[@"following_count"] != Nil && ![responseObject[@"following_count"] isEqual:[NSNull null]]) {
+        [authenticatedUser setValue:responseObject[@"following_count"] forKey:@"followingCount"];
+    }
+    
+    
+    if ([responseObject[@"terms"][@"valid"] boolValue] == FALSE) { /* */
+        UITabBarController *tabBar = (UITabBarController *)self.tabBarController;
+        UINavigationController *nav = [tabBar.viewControllers firstObject];
+        FRSHomeViewController *homeViewController = [nav.viewControllers firstObject];
+        [homeViewController presentTOS];
+    }
+    
+    if (responseObject[@"blocked"] && ![responseObject[@"blocked"] isEqual:[NSNull null]]) {
+        authenticatedUser.blocked = [responseObject[@"blocked"] boolValue];
+    }
+    
+    if (responseObject[@"blocking"] && ![responseObject[@"blocking"] isEqual:[NSNull null]]) {
+        authenticatedUser.blocking = [responseObject[@"blocking"] boolValue];
+    }
+    
+    if (responseObject[@"suspended_until"] && ![responseObject[@"suspended_until"] isEqual:[NSNull null]]) {
+        authenticatedUser.suspended = YES;
+    } else {
+        authenticatedUser.suspended = NO;
+    }
+    
+    if (responseObject[@"disabled"] && ![responseObject[@"disabled"] isEqual:[NSNull null]]) {
+        authenticatedUser.disabled = [responseObject[@"disabled"] boolValue];
+    }
+    
+    if (![responseObject[@"identity"] isKindOfClass:[[NSNull null] class]]) {
+        
+        if (responseObject[@"identity"][@"due_by"] != Nil && ![responseObject[@"identity"][@"due_by"] isEqual:[NSNull null]]) {
+            [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
+        }
+        
+        if (responseObject[@"identity"][@"first_name"] != Nil && ![responseObject[@"identity"][@"first_name"] isEqual:[NSNull null]]) {
+            [authenticatedUser setValue:responseObject[@"identity"][@"first_name"] forKey:@"stripeFirst"];
+        }
+        if (responseObject[@"identity"][@"last_name"] != Nil && ![responseObject[@"identity"][@"last_name"] isEqual:[NSNull null]]) {
+            [authenticatedUser setValue:responseObject[@"identity"][@"last_name"] forKey:@"stripeLast"];
+        }
+        
+        
+        
+        NSDictionary *identity = responseObject[@"identity"];
+        
+        NSString *birthDay = identity[@"dob_day"];
+        NSString *birthMonth = identity[@"dob_month"];
+        NSString *birthYear = identity[@"dob_year"];
+        NSString *addressLineOne = identity[@"address_line1"];
+        NSString *addressLineTwo = identity[@"address_line2"];
+        NSString *addressZip = identity[@"address_zip"];
+        NSString *addressCity = identity[@"address_city"];
+        NSString *addressState = identity[@"address_state"];
+        
+        
+        
+        BOOL hasSavedFields = FALSE;
+        
+        if ([self isValue:birthDay]) {
+            [authenticatedUser setValue:birthDay forKey:@"dob_day"];
+            hasSavedFields = TRUE;
+        }
+        if ([self isValue:birthMonth]) {
+            [authenticatedUser setValue:birthMonth forKey:@"dob_month"];
+            hasSavedFields = TRUE;
+            
+        }
+        if ([self isValue:birthYear]) {
+            [authenticatedUser setValue:birthYear forKey:@"dob_year"];
+            hasSavedFields = TRUE;
+            
+        }
+        if ([self isValue:addressLineOne]) {
+            [authenticatedUser setValue:addressLineOne forKey:@"address_line1"];
+            hasSavedFields = TRUE;
+            
+        }
+        if ([self isValue:addressLineTwo]) {
+            [authenticatedUser setValue:addressLineTwo forKey:@"address_line2"];
+            hasSavedFields = TRUE;
+            
+        }
+        
+        
+        if ([self isValue:addressZip]) {
+            [authenticatedUser setValue:addressZip forKey:@"address_zip"];
+            hasSavedFields = TRUE;
+            
+        }
+        if ([self isValue:addressCity]) {
+            [authenticatedUser setValue:addressCity forKey:@"address_city"];
+            hasSavedFields = TRUE;
+            
+        }
+        if ([self isValue:addressState]) {
+            [authenticatedUser setValue:addressState forKey:@"address_state"];
+            hasSavedFields = TRUE;
+            
+        }
+        
+        NSArray *fieldsNeeded = identity[@"fields_needed"];
+        [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
+        [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self saveContext];
+        });
+    }
 }
 
 -(void)reloadUser {
@@ -323,19 +340,20 @@
 }
 
 -(void)clearKeychain {
-    SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
     
-    NSArray *accounts = [query fetchAll:nil];
-    
-    for (id account in accounts) {
-        
-        SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
-        
-        query.service = serviceName;
-        query.account = [account valueForKey:@"acct"];
-        
-        [query deleteItem:nil];
-    }
+//    SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
+//    
+//    NSArray *accounts = [query fetchAll:nil];
+//    
+//    for (id account in accounts) {
+//        
+//        SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
+//        
+//        query.service = serviceName;
+//        query.account = [account valueForKey:@"acct"];
+//        
+//        [query deleteItem:nil];
+//    }
 }
 
 -(BOOL)isFirstRun {
@@ -635,7 +653,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     NSString *instruction = push[@"type"];
     NSString *notificationID = push[@"id"];
-    
+    NSLog(@"INSTRUCTION: %@", push);
    // self.window.rootViewController = viewController;
     textView.text = push.description;
     
@@ -644,11 +662,25 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     
     // payment
-    if ([instruction isEqualToString:purchasedContentNotification]) {
-        NSString *gallery = [push objectForKey:@"gallery_id"];
+    if ([instruction isEqualToString:newAssignmentNotification]) {
+        NSString *assignment = [push objectForKey:@"assignment_id"];
         
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-            [self segueToGallery:gallery];
+        if (assignment && ![assignment isEqual:[NSNull null]] && [[assignment class] isSubclassOfClass:[NSString class]]) {
+            [self segueToAssignmentWithID:assignment];
+        }
+        
+        return;
+    }
+    if ([instruction isEqualToString:purchasedContentNotification]) {
+        if ([[push valueForKey:@"has_payment"] boolValue]) {
+            NSString *gallery = [push objectForKey:@"gallery_id"];
+            
+            if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+                [self segueToGallery:gallery];
+            }
+        }
+        else {
+            [self segueToDebitCard];
         }
     }
     if ([instruction isEqualToString:paymentExpiringNotification]) {
@@ -676,11 +708,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [self segueToUser:user];
     }
     if ([instruction isEqualToString:@"user-news-gallery"]) {
-        NSString *gallery = [push  objectForKey:@"gallery_id"];
-        
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-            [self segueToGallery:gallery];
-        }
+        NSLog(@"TODAY IN NEWS");
+        NSString *galleryID = [push objectForKey:@"gallery_id"];
+        [self segueToGallery:galleryID];
+
     }
     if ([instruction isEqualToString:@"user-news-story"]) {
         NSString *story = [push  objectForKey:@"story_id"];
@@ -747,7 +778,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     if ([instruction isEqualToString:todayInNewsNotification]) {
         NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
-        [self segueToTodayInNews:galleryIDs];
+        [self segueToTodayInNews:galleryIDs title:push[@"aps"][@"alert"][@"title"]];
     }
     if ([instruction isEqualToString:restartUploadNotification]) {
         [self restartUpload];
@@ -766,7 +797,11 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 -(void)applicationDidBecomeActive:(UIApplication *)application{
-    [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    
+    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    }
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSResetUpload" object:nil userInfo:@{@"type":@"reset"}];
 }
 
@@ -928,32 +963,42 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     //Not part of the initial 3.0 release
 }
 
--(void)segueToTodayInNews:(NSArray *)galleryIDs {
-    __block BOOL isSegueingToStory;
+-(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
 
-    NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
+    NSString *gallery = @"";
     
-    for (NSString *gallery in galleryIDs) {
-        
-        [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
+    for (int i = 0; i < galleryIDs.count - 1; i++) {
+        gallery = [gallery stringByAppendingString:galleryIDs[i]];
+        gallery = [gallery stringByAppendingString:@","];
+    }
+    
+    gallery = [gallery stringByAppendingString:[galleryIDs lastObject]];
+    
+    [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
+        NSLog(@"TODAY: %@", responseObject);
+        if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
+            responseObject = @[responseObject];
+        }
             UITabBarController *tab = (UITabBarController *)self.tabBarController;
             
-            if (![galleryArray containsObject:responseObject]) {
-                [galleryArray addObject:(FRSGallery *)responseObject];
+            FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
+            [detailVC configureWithGalleries:responseObject];
+            detailVC.navigationController = tab.navigationController;
+            detailVC.title = (title) ? [title uppercaseString] : @"TODAY IN NEWS";
+            UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+                    
+            if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                [navController pushViewController:detailVC animated:TRUE];
             }
-            
-            if (galleryArray.count == galleryIDs.count) {
-                if (!isSegueingToStory) {
-                    isSegueingToStory = YES;
-                    FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
-                    [detailVC configureWithGalleries:galleryArray];
-                    detailVC.navigationController = tab.navigationController;
-                    detailVC.title = @"TODAY IN NEWS";
-                    [tab.navigationController pushViewController:detailVC animated:YES];
-                }
+            else {
+                UITabBarController *tab = (UITabBarController *)navController;
+                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                    
+                navController = (UINavigationController *)[[tab viewControllers] firstObject];
+                [navController pushViewController:detailVC animated:TRUE];
             }
-        }];
-    }
+    }];
 }
 -(void)error:(NSError *)error {
     if (!error) {
@@ -999,6 +1044,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         
         if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
             [navController pushViewController:vc animated:TRUE];
+            [navController setNavigationBarHidden:NO];
+
         }
         else {
             UITabBarController *tab = (UITabBarController *)navController;
@@ -1007,6 +1054,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             
             navController = (UINavigationController *)[[tab viewControllers] firstObject];
             [navController pushViewController:vc animated:TRUE];
+            [navController setNavigationBarHidden:NO];
         }
     }];
 }
@@ -1082,38 +1130,61 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     UITabBarController *tab = (UITabBarController *)self.tabBarController;
 
     FRSNavigationController *navCont = (FRSNavigationController *)[tab.viewControllers objectAtIndex:3];
-    FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
-    
-    assignmentsVC.hasDefault = YES;
-    assignmentsVC.defaultID = assignmentID;
     [self.tabBarController setSelectedIndex:3];
     
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+    __block BOOL ranOnce = FALSE;
     
-    if (assignmentsVC.mapView) {
         [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+            if (ranOnce) {
+                return;
+            }
             
+            ranOnce = TRUE;
             FRSAppDelegate *appDelegate = self;
             FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
-            [assignment configureWithDictionary:responseObject];
-            [assignmentsVC focusOnAssignment:assignment];
+            
             
             UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
             
             if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-                [navController pushViewController:assignmentsVC animated:TRUE];
+                UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
+                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                
+                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
+                
+                assignmentsVC.hasDefault = YES;
+                assignmentsVC.defaultID = assignmentID;
+                
+                [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
+                
+                [assignment configureWithDictionary:responseObject];
+                [assignmentsVC focusOnAssignment:assignment];
+                
+                navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
+                [tab setSelectedIndex:3];
             }
             else {
                 UITabBarController *tab = (UITabBarController *)navController;
                 tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
                 tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
                 
-                navController = (UINavigationController *)[[tab viewControllers] firstObject];
-                [navController pushViewController:assignmentsVC animated:TRUE];
+                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
+                
+                assignmentsVC.hasDefault = YES;
+                assignmentsVC.defaultID = assignmentID;
+                
+                [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
+                
+                [assignment configureWithDictionary:responseObject];
+                [assignmentsVC focusOnAssignment:assignment];
+                
+                navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
+                [tab setSelectedIndex:3];
             }
-
+            
         }];
-    }
 }
 
 
@@ -1145,7 +1216,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
     }];
 }
-
+-(void)popViewController {
+    
+}
 -(void)segueHome {
     UITabBarController *tab = (UITabBarController *)self.tabBarController;
     tab.selectedIndex = 0;
@@ -1160,6 +1233,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
         [navController pushViewController:debitCardVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
@@ -1168,6 +1242,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
         [navController pushViewController:debitCardVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
+
     }
 }
 
@@ -1195,6 +1271,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
         [navController pushViewController:taxVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
@@ -1203,6 +1280,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
         [navController pushViewController:taxVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
     }
 }
 

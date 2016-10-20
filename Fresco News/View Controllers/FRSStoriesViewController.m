@@ -98,6 +98,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.tabBarController.navigationController setNavigationBarHidden:YES];
 
     self.navigationItem.titleView.alpha = 1;
     

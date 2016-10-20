@@ -59,7 +59,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 -(void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
 
--(void)addComment:(NSString *)comment toGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)addComment:(NSString *)comment toGallery:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 // generic auth-ed call
 -(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -149,11 +149,11 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(NSString *)md5:(PHAsset *)asset;
 -(NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;
 -(void)getAssignmentsWithinRadius:(float)radius ofLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
-
+-(void)handleUserLogin:(id)responseObject;
 // terms
 -(void)getTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-
+-(void)logout;
 // moderation
 -(void)blockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)unblockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
@@ -161,4 +161,8 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)reportGallery:(FRSGallery *)gallery params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion;
 
+-(void)linkTwitter:(NSString *)token secret:(NSString *)secret completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)linkFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unlinkFacebook:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unlinkTwitter:(FRSAPIDefaultCompletionBlock)completion;
 @end
