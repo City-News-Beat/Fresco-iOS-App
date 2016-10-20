@@ -1241,13 +1241,13 @@
     }];
 }
 
--(void)addComment:(NSString *)comment toGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)addComment:(NSString *)comment toGallery:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
 //    if ([self checkAuthAndPresentOnboard]) {
 //        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
 //        return;
 //    }
     
-    [self addComment:comment toGalleryID:gallery.uid completion:completion];
+    [self addComment:comment toGalleryID:gallery completion:completion];
 }
 
 -(void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
