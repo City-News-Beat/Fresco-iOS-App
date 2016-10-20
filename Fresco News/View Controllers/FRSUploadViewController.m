@@ -651,8 +651,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
                     
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
-                    NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
-                    cell.representedOutletID = [outlet objectForKey:@"id"];
+                    //NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
+                    //cell.representedOutletID = [outlet objectForKey:@"id"];
                     
                     //[self resetFrames:true];
                     return cell;
@@ -764,6 +764,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     outletCell.isAnOutlet = true;
                     NSDictionary *outletDic = [cell.outlets objectAtIndex:i];
                     [outletCell.titleLabel setText:outletDic[@"title"]];
+                    outletCell.representedOutletID = outletDic[@"id"];
                 }
                 [self tableView:tableView willSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
                 [self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
@@ -807,6 +808,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     outletCell.isAnOutlet = true;
                     NSDictionary *outletDic = [cell.outlets objectAtIndex:i];
                     [outletCell.titleLabel setText:outletDic[@"title"]];
+                    outletCell.representedOutletID = outletDic[@"id"];
                 }
                 [self tableView:tableView willSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
                 [self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
