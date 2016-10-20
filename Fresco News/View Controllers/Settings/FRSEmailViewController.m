@@ -271,7 +271,7 @@
 
 -(BOOL)isValidPassword:(NSString *)password {
     
-    if (password.length < 8) {
+    if (password.length < 1) {
         return NO;
     }
     return YES;
