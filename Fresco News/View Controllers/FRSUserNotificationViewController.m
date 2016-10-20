@@ -421,7 +421,38 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 75;
+    
+
+    NSInteger height = 0;
+        
+    int topPadding   = 10;
+    int leftPadding  = 72;
+    int rightPadding = 16;
+    UILabel *titleLabel = [[UILabel alloc] init];
+    titleLabel.font = [UIFont notaMediumWithSize:17];
+    titleLabel.numberOfLines = 1;
+    titleLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width -leftPadding -rightPadding, 22);
+    [titleLabel sizeToFit];
+    
+    UILabel *bodyLabel = [[UILabel alloc] init];
+
+    topPadding = 33;
+    bodyLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width - leftPadding -rightPadding, 60);
+    bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    bodyLabel.numberOfLines = 3;
+        
+    [bodyLabel sizeToFit];
+    [titleLabel sizeToFit];
+        
+    height += bodyLabel.frame.size.height;
+    height += titleLabel.frame.size.height;
+    height += 8; //spacing
+    
+    if (height < 75) {
+        return 75;
+    }
+        
+        return height;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
