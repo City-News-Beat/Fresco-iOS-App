@@ -369,6 +369,7 @@
         
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
+    [appDelegate registerForPushNotifications];
     
     NSArray *viewControllers = [self.navigationController viewControllers];    
     

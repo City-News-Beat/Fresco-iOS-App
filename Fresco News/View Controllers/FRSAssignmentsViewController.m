@@ -113,7 +113,8 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-        
+    [self.tabBarController.navigationController setNavigationBarHidden:YES];
+
     self.isPresented = YES;
     
     CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;

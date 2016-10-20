@@ -46,4 +46,5 @@
 -(void)clearKeychain;
 -(void)startNotificationTimer;
 -(void)stopNotificationTimer;
+-(void)registerForPushNotifications;
 @end

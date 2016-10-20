@@ -1689,6 +1689,9 @@
     
     FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
     [self.navigationController pushViewController:setupProfileVC animated:YES];
+    id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
+    [delegate registerForPushNotifications];
+
 }
 
 -(void)segueToLogin {

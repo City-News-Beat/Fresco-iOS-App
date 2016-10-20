@@ -635,7 +635,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     NSString *instruction = push[@"type"];
     NSString *notificationID = push[@"id"];
-    NSLog(@"INSTRUCTION: %@", instruction);
+    NSLog(@"INSTRUCTION: %@", push);
    // self.window.rootViewController = viewController;
     textView.text = push.description;
     
@@ -745,12 +745,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
     }
     if ([instruction isEqualToString:todayInNewsNotification]) {
-        NSLog(@"TODAY IN NEWS");
-
         NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
-        for (NSString *gallery in galleryIDs) {
-            [self segueToGallery:gallery];
-        }
+        [self segueToTodayInNews:galleryIDs];
     }
     if ([instruction isEqualToString:restartUploadNotification]) {
         [self restartUpload];
@@ -1014,6 +1010,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         
         if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
             [navController pushViewController:vc animated:TRUE];
+            [navController setNavigationBarHidden:NO];
+
         }
         else {
             UITabBarController *tab = (UITabBarController *)navController;
@@ -1022,6 +1020,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             
             navController = (UINavigationController *)[[tab viewControllers] firstObject];
             [navController pushViewController:vc animated:TRUE];
+            [navController setNavigationBarHidden:NO];
         }
     }];
 }
