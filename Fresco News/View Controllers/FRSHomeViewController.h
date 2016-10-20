@@ -29,6 +29,7 @@
     NSDate *entry;
     NSDate *exit;
     NSInteger numberRead;
+    NSIndexPath *lastIndexPath;
 }
 @property BOOL loadNoMore;
 -(void)loadData;

@@ -920,8 +920,13 @@
                 if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
                     
                     if (!taken) {
-                        [cell play];
-                        taken = TRUE;
+                        NSIndexPath *path = [self.tableView indexPathForCell:cell];
+                        
+                        if (path != lastIndexPath) {
+                            lastIndexPath = path;
+                            [cell play];
+                            taken = TRUE;
+                        }
                     }
                     else {
                         [cell pause];
