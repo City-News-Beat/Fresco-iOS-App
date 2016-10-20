@@ -214,8 +214,30 @@
                         [[NSUserDefaults standardUserDefaults] setValue:self.twitterHandle forKey:@"twitter-handle"];
                     }
                     else {
-                        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                        [alert show];
+                        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                        NSInteger responseCode = response.statusCode;
+                        
+                        if (responseCode == 412) {
+                            [self.twitterSwitch setOn:FALSE animated:YES];
+                            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"twitter-connected"];
+
+                            NSString* ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                            NSError *jsonError;
+                            
+                            NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
+                            NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
+                            
+                            
+                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                            [alert show];
+                            return;
+                        }
+                        else {
+                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Twitter. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                            [alert show];
+                            return;
+                        }
+
                     }
                 }];
                 
@@ -275,8 +297,29 @@
                         }];
                     }
                     else if (error) {
-                        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Unable to connect Facebook. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                        [alert show];
+                        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                        NSInteger responseCode = response.statusCode;
+                        
+                        if (responseCode == 412) {
+                            [self.facebookSwitch setOn:FALSE animated:YES];
+                            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"facebook-connected"];
+                            
+                            NSString* ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                            NSError *jsonError;
+                            
+                            NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
+                            NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
+                            
+                            
+                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                            [alert show];
+                            return;
+                        }
+                        else {
+                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Facebook. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                            [alert show];
+                            return;
+                        }
                     }
                 }];
             }

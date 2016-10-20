@@ -519,7 +519,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     NSLog(@"%@", [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"]);
     
     NSString *notificationID = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"id"];
-    
+    NSDictionary *push = [self.feed objectAtIndex:indexPath.row];
     if (notificationID && ![notificationID isEqual:[NSNull null]]) {
         [self markAsRead:notificationID];
     }
@@ -596,9 +596,15 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     /* PAYMENT */
     else if ([currentKey isEqualToString:purchasedContentNotification]) {
-        NSString *postID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"post_id"];
-        NSString *galleryID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
-        [self segueToPost:postID inGallery:galleryID];
+        if ([[[push valueForKey:@"meta"] valueForKey:@"has_payment"] boolValue]) {
+            NSString *postID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"post_id"];
+            NSString *galleryID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
+            [self segueToPost:postID inGallery:galleryID];
+        }
+        else {
+            [self segueToDebitCard];
+        }
+
         
     } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
         [self segueToDebitCard];
@@ -662,7 +668,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
         [self hideTabBarAnimated:YES];
     }];
-
 }
 -(void)segueToComment:(NSString *)commentID inGallery:(NSString *)gallery {
     

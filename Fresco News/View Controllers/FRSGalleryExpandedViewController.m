@@ -34,7 +34,6 @@
 
 @interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, MGSwipeTableCellDelegate, FRSCommentCellDelegate, UITextFieldDelegate>
 
-@property (strong, nonatomic) FRSGallery *gallery;
 
 @property (strong, nonatomic) FRSGalleryView *galleryView;
 @property (strong, nonatomic) FRSCommentsView *commentsView;
@@ -62,7 +61,7 @@
 @property (strong, nonatomic) NSString *reportReasonString;
 
 @property (strong, nonatomic) FRSAlertView *errorAlertView;
-
+@property (strong, nonatomic) NSString *galleryID;
 @property int totalCommentCount;
 
 @property BOOL didDisplayReport;
@@ -89,6 +88,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self = [super init];
     if (self){
         self.gallery = gallery;
+        
+        if (gallery.uid) {
+            self.galleryID = gallery.uid;
+        }
+        
         self.orderedArticles = [self.gallery.articles allObjects];
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
@@ -809,7 +813,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
             topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
-            [topButton setTitle:[NSString stringWithFormat:@"%lu MORE COMMENTS", self.totalCommentCount - _comments.count] forState:UIControlStateNormal];
+            int total = (int)self.totalCommentCount - (int)_comments.count;
+            if (total < 0) {
+                total = 0;
+            }
+            [topButton setTitle:[NSString stringWithFormat:@"%d MORE COMMENTS", total] forState:UIControlStateNormal];
             [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
             [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
@@ -993,15 +1001,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (!commentField.text || commentField.text.length == 0) {
         return;
     }
-    [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.gallery completion:^(id responseObject, NSError *error) {
+    
+    [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.galleryID completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", responseObject, error);
         [UIView animateWithDuration:.15 animations:^{
             if (error) {
                 NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
-                self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"COMMENT FAILED" message:message actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"COMMENT FAILED" message:message actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.errorAlertView show];
             }
             else {
+                self.totalCommentCount++;
                 [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
                 [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
 
@@ -1011,6 +1021,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
                 [self.scrollView setContentOffset:bottomOffset animated:YES];
                 commentField.text = @"";
+                [self dismissKeyboard:Nil];
             }
         } completion:^(BOOL finished) {
         }];

@@ -56,13 +56,16 @@
                         
                     }
                     else {
-                        
+                        [[FRSAPIClient sharedClient] handleUserLogin:responseObject];
+                
+
                         NSLog(@"RESPONSE: %d", [[responseObject objectForKey:@"valid_password"] boolValue]);
                         
                         /*if ( [[responseObject objectForKey:@"valid_password"] boolValue]) {
                             completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], Nil, [FBSDKAccessToken currentAccessToken], responseObject);
                             return;
                         }*/
+                        
                         
                         completion(TRUE, Nil, Nil, [FBSDKAccessToken currentAccessToken], responseObject);
                         

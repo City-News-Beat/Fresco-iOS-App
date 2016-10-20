@@ -340,19 +340,20 @@
 }
 
 -(void)clearKeychain {
-    SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
     
-    NSArray *accounts = [query fetchAll:nil];
-    
-    for (id account in accounts) {
-        
-        SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
-        
-        query.service = serviceName;
-        query.account = [account valueForKey:@"acct"];
-        
-        [query deleteItem:nil];
-    }
+//    SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
+//    
+//    NSArray *accounts = [query fetchAll:nil];
+//    
+//    for (id account in accounts) {
+//        
+//        SAMKeychainQuery *query = [[SAMKeychainQuery alloc] init];
+//        
+//        query.service = serviceName;
+//        query.account = [account valueForKey:@"acct"];
+//        
+//        [query deleteItem:nil];
+//    }
 }
 
 -(BOOL)isFirstRun {
@@ -671,10 +672,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         return;
     }
     if ([instruction isEqualToString:purchasedContentNotification]) {
-        NSString *gallery = [push objectForKey:@"gallery_id"];
-        
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-            [self segueToGallery:gallery];
+        if ([[push valueForKey:@"has_payment"] boolValue]) {
+            NSString *gallery = [push objectForKey:@"gallery_id"];
+            
+            if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+                [self segueToGallery:gallery];
+            }
+        }
+        else {
+            [self segueToDebitCard];
         }
     }
     if ([instruction isEqualToString:paymentExpiringNotification]) {
@@ -1227,6 +1233,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
         [navController pushViewController:debitCardVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
@@ -1235,6 +1242,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
         [navController pushViewController:debitCardVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
+
     }
 }
 
@@ -1262,6 +1271,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
         [navController pushViewController:taxVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
@@ -1270,6 +1280,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
         [navController pushViewController:taxVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
     }
 }
 

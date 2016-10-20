@@ -60,7 +60,7 @@
     if (self.passwordUsed) {
         [mutableDigestion setObject:self.passwordUsed forKey:@"verify_password"];
     }
-    else if (self.socialUsed) {
+    else if (self.socialUsed && !self.passwordUsed) {
         [mutableDigestion addEntriesFromDictionary:self.socialUsed];
     }
     
@@ -184,7 +184,12 @@
     // social_links
     // installation
     
-    self.passwordUsed = digestion[@"password"];
+    if (digestion[@"password"]) {
+        self.passwordUsed = digestion[@"password"];
+    }
+    else {
+        self.socialUsed = digestion[@"social_links"];
+    }
     
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         
@@ -847,10 +852,21 @@
         return Nil;
     }
     
+    
     NSDictionary *credentialsDictionary = [allAccounts firstObject];
     NSString *accountName = credentialsDictionary[kSAMKeychainAccountKey];
     
     return [SAMKeychain passwordForService:serviceName account:accountName];
+}
+
+-(void)logout {
+    NSArray *allAccounts = [SAMKeychain allAccounts];
+    
+    for (NSDictionary *account in allAccounts) {
+        NSString *accountName = account[kSAMKeychainAccountKey];
+        [SAMKeychain deletePasswordForService:serviceName account:accountName];
+    }
+
 }
 
 -(void)saveToken:(NSString *)token forUser:(NSString *)userName {
@@ -863,7 +879,7 @@
 
 -(BOOL)isAuthenticated {
     
-    if ([[SAMKeychain accountsForService:serviceName] count] > 0) {
+    if ([[SAMKeychain allAccounts] count] > 0 && [self authenticatedUser]) {
         return TRUE;
     }
     
@@ -1275,13 +1291,13 @@
     }];
 }
 
--(void)addComment:(NSString *)comment toGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)addComment:(NSString *)comment toGallery:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
 //    if ([self checkAuthAndPresentOnboard]) {
 //        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
 //        return;
 //    }
     
-    [self addComment:comment toGalleryID:gallery.uid completion:completion];
+    [self addComment:comment toGalleryID:gallery completion:completion];
 }
 
 -(void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
