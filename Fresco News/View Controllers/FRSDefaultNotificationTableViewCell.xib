@@ -20,7 +20,7 @@
                 <frame key="frameInset" width="320" height="83"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1x-3Q-zNg">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1x-3Q-zNg">
                         <color key="backgroundColor" red="0.98039215686274506" green="0.11764705882352941" blue="0.30196078431372547" alpha="0.0" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
@@ -105,7 +105,7 @@
                     <constraint firstItem="J1x-3Q-zNg" firstAttribute="top" secondItem="zLd-w2-8NS" secondAttribute="bottom" constant="1" id="RSx-xe-OUg"/>
                     <constraint firstItem="qHy-RB-rdD" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="28" id="X4K-PZ-goQ"/>
                     <constraint firstItem="NU1-pp-tGP" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="8" id="aXg-4u-OZA"/>
-                    <constraint firstItem="6rk-aZ-RSA" firstAttribute="top" secondItem="J1x-3Q-zNg" secondAttribute="bottom" constant="16" id="bgc-pl-1YN"/>
+                    <constraint firstItem="6rk-aZ-RSA" firstAttribute="top" secondItem="J1x-3Q-zNg" secondAttribute="bottom" constant="8" id="bgc-pl-1YN"/>
                     <constraint firstAttribute="trailingMargin" secondItem="MrT-1n-09K" secondAttribute="trailing" constant="-8" id="hFm-J0-G7I"/>
                     <constraint firstItem="zLd-w2-8NS" firstAttribute="leading" secondItem="cK0-vG-kkY" secondAttribute="leadingMargin" constant="64" id="lo8-Of-nMG"/>
                     <constraint firstAttribute="trailingMargin" secondItem="zLd-w2-8NS" secondAttribute="trailing" constant="32" id="n9O-4t-Jo8"/>
