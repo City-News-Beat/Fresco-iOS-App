@@ -1007,6 +1007,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 [self.errorAlertView show];
             }
             else {
+                self.totalCommentCount++;
                 [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
                 [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
 
