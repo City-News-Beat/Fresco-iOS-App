@@ -11,13 +11,16 @@
 #import <Haneke/Haneke.h>
 #import "FRSGlobalAssignmentsTableViewController.h"
 
-@implementation GlobalAssignmentsTableViewCell{
-    __weak IBOutlet NSLayoutConstraint *heigtConstraint;
+@implementation GlobalAssignmentsTableViewCell {
+    __strong IBOutlet NSLayoutConstraint *outletWidthConstraint;
     __weak IBOutlet UILabel *titleLabel;
     __weak IBOutlet UILabel *activeOutletsLabel;
     
     __weak IBOutlet UILabel *assignmentDescriptionLabel;
     __weak IBOutlet UIView *outletIconsView;
+    __weak IBOutlet UIImageView *outletIcon1ImageView;
+    __weak IBOutlet UIImageView *outletIcon2ImageView;
+    __weak IBOutlet UIImageView *outletIcon3ImageView;
     __weak IBOutlet UILabel *expirationLabel;
     __weak IBOutlet UILabel *photoPriceLabel;
     __weak IBOutlet UILabel *videoPriceLabel;
@@ -66,57 +69,46 @@
     [assignmentDescriptionLabel setText:(NSString *)[self.assignment objectForKey:@"caption"]];
     [self configureExpirationDateWithString:dateInString];
     NSArray *outletArray = (NSArray *)[self.assignment objectForKey:@"outlets"];
-    [self configureOutletImagesWithOutletArray:outletArray];
-    if(outletArray.count > 1){
-        [activeOutletsLabel setText:[NSString stringWithFormat:@"%lu active news outlets", (unsigned long)outletArray.count]];
-    }else if(outletArray.count == 1){
-        [activeOutletsLabel setText:[NSString stringWithFormat:@"%lu active news outlet", (unsigned long)outletArray.count]];
-    }
-}
-
--(void)configureOutletImagesWithOutletArray:(NSArray *)outletArray{
     NSMutableArray *outletImageUrls = [[NSMutableArray alloc] init];
-    
-    
-    for(NSDictionary *outlet in outletArray){
+    for (NSDictionary *outlet in outletArray){
         if([outlet objectForKey:@"avatar"] != [NSNull null]){
             [outletImageUrls addObject:[NSURL URLWithString:(NSString *)[outlet objectForKey:@"avatar"]]];
         }
     }
+
+    outletWidthConstraint.constant = 0;
+    if (outletImageUrls.count >= 1) {
+        NSURL *url = outletImageUrls[0];
+        [outletIcon1ImageView hnk_setImageFromURL:url];
+        outletWidthConstraint.constant += 24 + 16; // +16 because of the trailing space
+    }
+    else {
+        [outletIcon1ImageView setHidden:YES];
+    }
+    if (outletImageUrls.count >= 2) {
+        NSURL *url = outletImageUrls[1];
+        [outletIcon2ImageView hnk_setImageFromURL:url];
+        outletWidthConstraint.constant += 24 + 8; // +8 becasue of the space between the 2 icons
+    }
+    else {
+        [outletIcon2ImageView setHidden:YES];
+    }
+    if (outletImageUrls.count >= 3) {
+        NSURL *url = outletImageUrls[2];
+        [outletIcon3ImageView hnk_setImageFromURL:url];
+        outletWidthConstraint.constant += 24 + 8; // +8 becasue of the space between the 2 icons
+    }
+    else {
+        [outletIcon3ImageView setHidden:YES];
+    }
     
-    if(outletImageUrls.count != 0){
-        UIImageView *defaultImageView = (UIImageView *)[outletIconsView.subviews objectAtIndex:0];
-        UIImageView *defaultIVCopy = [self copyImageView:defaultImageView];
-        int i = 0;
-        for(i = 0; i < outletImageUrls.count; i++){
-            NSURL *imageUrl = [outletImageUrls objectAtIndex:i];
-            if(i == 0){
-                defaultImageView.contentMode = UIViewContentModeScaleAspectFit;
-                [defaultImageView hnk_setImageFromURL:imageUrl];
-            }else{
-                UIImageView *imageView = [self copyImageView:defaultIVCopy];
-                CGRect newFrame = imageView.frame;
-                newFrame.origin.x+=8*i;
-                [imageView setFrame:newFrame];
-                defaultImageView.contentMode = UIViewContentModeScaleAspectFit;
-                
-                [imageView hnk_setImageFromURL:imageUrl];
-            }
-        }
-        //If any outlets don't have an avatar, add in the default avatar
-        if(outletArray.count - outletImageUrls.count > 0){
-            for(i = i; i < outletImageUrls.count; i++){
-                UIImageView *imageView = [self copyImageView:defaultIVCopy];
-                CGRect newFrame = imageView.frame;
-                newFrame.origin.x+=8*i;
-                [imageView setFrame:newFrame];
-            }
-        }
-    }else{
-        //TODO
-        //This happens when they don't have an avatar for the outlet
+    if (outletArray.count > 1) {
+        [activeOutletsLabel setText:[NSString stringWithFormat:@"%lu active news outlets", (unsigned long)outletArray.count]];
+    } else if (outletArray.count == 1) {
+        [activeOutletsLabel setText:[NSString stringWithFormat:@"%lu active news outlet", (unsigned long)outletArray.count]];
     }
 }
+
 
 -(UIImageView *)copyImageView:(UIImageView *)imageView{
     UIImageView *newImageView = [[UIImageView alloc] initWithImage:imageView.image];
