@@ -301,8 +301,8 @@
                         NSInteger responseCode = response.statusCode;
                         
                         if (responseCode == 412) {
-                            [self.twitterSwitch setOn:FALSE animated:YES];
-                            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"twitter-connected"];
+                            [self.facebookSwitch setOn:FALSE animated:YES];
+                            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"facebook-connected"];
                             
                             NSString* ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
                             NSError *jsonError;
