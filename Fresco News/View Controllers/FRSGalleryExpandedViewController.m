@@ -475,7 +475,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
-                                   action:@selector(dismissKeyboard)];
+                                   action:@selector(dismissKeyboard:)];
     [self.view addGestureRecognizer:tap];
 }
 
@@ -499,7 +499,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                    action:@selector(dismissKeyboard)];
     
     
-    [self.galleryView addGestureRecognizer:tap];
+   // [self.galleryView addGestureRecognizer:tap];
     [self focus];
 
 //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
@@ -1072,11 +1072,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 
--(void)dismissKeyboard {
+-(void)dismissKeyboard:(UITapGestureRecognizer *)tap {
+    [self.galleryView playerTap:tap];
     if (commentField.isEditing) {
         [commentField resignFirstResponder];
         [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
         [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+    }
+    else {
+        
     }
 }
 #pragma mark - FRSAlertViewDelegate

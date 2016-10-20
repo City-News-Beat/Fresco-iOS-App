@@ -69,6 +69,7 @@
 
 @property (nonatomic, retain) NSMutableArray *players;
 
+-(void)playerTap:(UITapGestureRecognizer *)tap;
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate;
 -(void)loadGallery:(FRSGallery *)gallery;
 -(void)play;
