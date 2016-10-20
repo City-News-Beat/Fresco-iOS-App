@@ -1437,11 +1437,9 @@
     
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
     
-   // if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]) {
-        
-       // [digestion setObject:password forKey:@"password"];
-     //   [digestion removeObjectForKey:@"verify_password"];
-   // }
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]) {
+        [digestion setObject:password forKey:@"password"];
+    }
     
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     
