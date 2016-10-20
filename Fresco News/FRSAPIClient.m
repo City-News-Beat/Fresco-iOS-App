@@ -813,10 +813,21 @@
         return Nil;
     }
     
+    
     NSDictionary *credentialsDictionary = [allAccounts firstObject];
     NSString *accountName = credentialsDictionary[kSAMKeychainAccountKey];
     
     return [SAMKeychain passwordForService:serviceName account:accountName];
+}
+
+-(void)logout {
+    NSArray *allAccounts = [SAMKeychain allAccounts];
+    
+    for (NSDictionary *account in allAccounts) {
+        NSString *accountName = account[kSAMKeychainAccountKey];
+        [SAMKeychain deletePasswordForService:serviceName account:accountName];
+    }
+
 }
 
 -(void)saveToken:(NSString *)token forUser:(NSString *)userName {

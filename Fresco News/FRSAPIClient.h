@@ -153,7 +153,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 // terms
 -(void)getTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-
+-(void)logout;
 // moderation
 -(void)blockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)unblockUser:(NSString*)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
