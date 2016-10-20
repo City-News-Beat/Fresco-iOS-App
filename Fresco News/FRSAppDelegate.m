@@ -1127,7 +1127,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
             
             if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-                UITabBarController *tab = (UITabBarController *)navController;
+                UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
                 tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
                 tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
                 
