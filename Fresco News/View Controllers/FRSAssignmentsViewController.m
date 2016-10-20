@@ -612,8 +612,13 @@
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
     
     NSInteger index = assAnn.assignmentIndex;
-    NSArray *outlets = [(FRSAssignment *)[self.assignments objectAtIndex:index] outlets];
-    NSLog(@"OUTLETS: %@", outlets);
+    NSArray *outlets;
+    
+    if ([self.assignments count] > index) {
+        outlets = [(FRSAssignment *)[self.assignments objectAtIndex:index] outlets];
+        NSLog(@"OUTLETS: %@", outlets);
+
+    }
     
     if (outlets.count == 1) {
         NSDictionary *outlet = [outlets firstObject];
@@ -741,7 +746,7 @@
     [self.assignmentCard addSubview:self.assignmentOutletLabel];
     
     
-    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, self.assignmentOutletLabel.frame.size.height, self.view.frame.size.width - 16, 220)];
+    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(13, self.assignmentOutletLabel.frame.size.height, self.view.frame.size.width - 16, 220)];
     [self.assignmentCard addSubview:self.assignmentTextView];
     [self.assignmentTextView setFont:[UIFont systemFontOfSize:15]];
     self.assignmentTextView.textColor = [UIColor frescoDarkTextColor];
@@ -879,7 +884,7 @@
     
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
-    self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24 + 50, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
+    self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24 + 20, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
 }
 
 -(void)dismissTap:(UITapGestureRecognizer *)sender {
