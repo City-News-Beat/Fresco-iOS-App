@@ -667,8 +667,12 @@
     
     if (parent.externalAccountName != nil && ![parent.externalAccountName isEqual:[NSNull null]]) {
         
-        if ([parent.externalSource isEqualToString:@"twitter"]) {
-            self.nameLabel.text = [NSString stringWithFormat:@"@%@",parent.externalAccountName];
+        if ([parent.externalSource isEqualToString:@"twitter"] ) {
+            NSString *toSet = [NSString stringWithFormat:@"@%@",parent.externalAccountName];
+            
+            if (![toSet isEqualToString:@"@"]) {
+                self.nameLabel.text = toSet;
+            }
             
         } else {
             self.nameLabel.text = parent.externalAccountName;
