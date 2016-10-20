@@ -1116,10 +1116,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [self.tabBarController setSelectedIndex:3];
     
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+    __block BOOL ranOnce = FALSE;
     
     if (assignmentsVC.mapView) {
         [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
+            if (ranOnce) {
+                return;
+            }
             
+            ranOnce = TRUE;
             FRSAppDelegate *appDelegate = self;
             FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
             [assignment configureWithDictionary:responseObject];
@@ -1139,7 +1144,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 [navController pushViewController:assignmentsVC animated:TRUE];
                 [tab.tabBarController setSelectedIndex:2];
             }
-
+            
+            [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
         }];
     }
 }
