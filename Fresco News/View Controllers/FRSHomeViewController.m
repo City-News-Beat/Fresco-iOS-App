@@ -780,6 +780,7 @@
 -(void)galleryClicked:(FRSGallery *)gallery {
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
+    vc.gallery = gallery;
     vc.shouldHaveBackButton = YES;
     [super showNavBarForScrollView:self.tableView animated:NO];
     
@@ -798,6 +799,7 @@
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
+    vc.gallery = gallery;
     [super showNavBarForScrollView:self.tableView animated:NO];
     
     self.navigationItem.title = @"";

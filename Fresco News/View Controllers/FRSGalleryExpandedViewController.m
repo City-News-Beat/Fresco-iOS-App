@@ -34,7 +34,6 @@
 
 @interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, MGSwipeTableCellDelegate, FRSCommentCellDelegate, UITextFieldDelegate>
 
-@property (strong, nonatomic) FRSGallery *gallery;
 
 @property (strong, nonatomic) FRSGalleryView *galleryView;
 @property (strong, nonatomic) FRSCommentsView *commentsView;
