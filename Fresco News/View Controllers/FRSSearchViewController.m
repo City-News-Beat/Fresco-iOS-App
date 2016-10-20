@@ -36,7 +36,7 @@
 
 @property NSInteger usersDisplayed;
 @property NSInteger storiesDisplayed;
-
+@property (nonatomic, retain) NSDate *currentQuery;
 @property (strong, nonatomic) FRSAlertView *alert;
 
 @end
@@ -246,8 +246,16 @@
     self.galleries = @[];
     self.stories = @[];
     [self reloadData];
+    __block NSDate *date = [NSDate date];
+    
+    self.currentQuery = date;
     
     [[FRSAPIClient sharedClient] searchWithQuery:query completion:^(id responseObject, NSError *error) {
+        
+        if (date != self.currentQuery) {
+            return;
+        }
+        
         [self removeSpinner];
         if (error || !responseObject) {
             [self searchError:error];
