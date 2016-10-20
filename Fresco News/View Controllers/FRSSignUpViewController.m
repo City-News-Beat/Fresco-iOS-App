@@ -79,6 +79,12 @@
     
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+    }
+    
+    self.setupProfileVC = [[FRSSetupProfileViewController alloc] init];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -1107,7 +1113,7 @@
 }
 
 -(void)createAccount {
-    
+
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
     
     [self dismissKeyboard];
@@ -1308,8 +1314,17 @@
         if (session) {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
             [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
-        }
+            //self.setupProfileVC.nameStr = session
+            TWTRAPIClient *apiClient = [[TWTRAPIClient alloc] initWithUserID:[session userID]];
+            
+            [apiClient loadUserWithID:[session userID] completion:^(TWTRUser * _Nullable user, NSError * _Nullable error) {
+                if (user.name) {
+                    self.setupProfileVC.nameStr = user.name;
+                }
+            }];
 
+            
+        }
         
         if (error) {
             
@@ -1341,6 +1356,7 @@
         _twitterSession = session;
     }];
 }
+
 
 -(void)facebookTapped {
 
@@ -1394,7 +1410,7 @@
             NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
             
             //Make request for facebook user's profile meta
-            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"picture, name, email"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"picture.width(300).height(300), name, email"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                 if (!error) {
                     [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
@@ -1408,6 +1424,10 @@
                         self.setupProfileVC.nameStr = result[@"name"];
                     }
                     
+                    if (result[@"picture"][@"data"][@"url"]) {
+                       // self.setupProfileVC.fbPhotoURL = result[@"picture"][@"data"][@"url"];
+                        
+                    }
                 }
                 
                 if (error.code == -1009) {
@@ -1722,7 +1742,6 @@
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
     
-    self.setupProfileVC = [[FRSSetupProfileViewController alloc] init];
     [self.navigationController pushViewController:self.setupProfileVC animated:YES];
     id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
     [delegate registerForPushNotifications];

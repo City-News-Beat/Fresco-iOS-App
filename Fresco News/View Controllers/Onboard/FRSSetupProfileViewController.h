@@ -14,6 +14,7 @@
 
 @property (nonatomic) NSString *nameStr;
 @property (nonatomic) NSString *locStr;
+@property (nonatomic) NSString *fbPhotoURL;
 @property (nonatomic) NSString *bioStr;
 @property (strong, nonatomic) NSURL *profileImageURL;
 
