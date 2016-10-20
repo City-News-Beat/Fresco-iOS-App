@@ -671,10 +671,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         return;
     }
     if ([instruction isEqualToString:purchasedContentNotification]) {
-        NSString *gallery = [push objectForKey:@"gallery_id"];
-        
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-            [self segueToGallery:gallery];
+        if ([[push valueForKey:@"has_payment"] boolValue]) {
+            NSString *gallery = [push objectForKey:@"gallery_id"];
+            
+            if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+                [self segueToGallery:gallery];
+            }
+        }
+        else {
+            [self segueToDebitCard];
         }
     }
     if ([instruction isEqualToString:paymentExpiringNotification]) {
