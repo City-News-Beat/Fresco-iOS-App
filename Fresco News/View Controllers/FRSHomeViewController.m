@@ -223,7 +223,7 @@
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     [delegate reloadUser:^(id responseObject, NSError *error) {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"userIsMigrating"]) {
+        if ([[[NSUserDefaults standardUserDefaults] valueForKey:userIsMigrated] boolValue]) {
             [self logoutWithPop:NO];
             return;
         }
@@ -233,7 +233,7 @@
                 FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
                 alert.delegate = self;
                 [alert show];
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userIsMigrating"];
+                [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:userIsMigrated];
                 [[NSUserDefaults standardUserDefaults] synchronize];
             }
         }

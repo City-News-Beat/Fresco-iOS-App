@@ -52,7 +52,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"userIsMigrating"];
+    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:userIsMigrated];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     [self configureSpinner];

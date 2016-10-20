@@ -77,6 +77,7 @@ static NSString * const acceptAssignmentEndpoint = @"assignment/accept";
 static NSString * const loginEndpoint = @"auth/signin";
 static NSString * const signUpEndpoint = @"auth/register";
 static NSString * const socialLoginEndpoint = @"auth/signin/social";
+static NSString * const userIsMigrated = @"userIsMigrated";
 
 // comments
 static NSString * const paginateComments = @"gallery/%@/comments?limit=10&last=%@";

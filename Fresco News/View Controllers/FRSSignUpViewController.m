@@ -69,7 +69,7 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
-    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"userIsMigrating"];
+    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:userIsMigrated];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     
