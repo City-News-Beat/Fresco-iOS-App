@@ -157,7 +157,8 @@
     self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     
 //    if (self.outlets.count > 1) {
-        self.titleLabel.text = [outlet objectForKey:@"title"];
+    self.titleLabel.text = [outlet objectForKey:@"title"];
+    self.representedOutletID = [outlet objectForKey:@"id"];
 //    }
 }
 

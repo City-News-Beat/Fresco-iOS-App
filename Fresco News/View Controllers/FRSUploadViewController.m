@@ -619,8 +619,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
                     
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
-                    NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
-                    cell.representedOutletID = [outlet objectForKey:@"id"];
+                    //NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
+                    //cell.representedOutletID = [outlet objectForKey:@"id"];
                     
                     //[self resetFrames:true];
                     return cell;
@@ -710,6 +710,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self resetOtherOutlets];
         cell.isSelectedOutlet = YES;
         selectedOutlet = cell.representedOutletID;
+        
+        NSLog(@"SELECTED OUTLET: %@", selectedOutlet);
     }else if (!cell.isSelectedAssignment && !cellIsOutlet){
         [self resetOtherCells];
         [self resetOtherOutlets];
