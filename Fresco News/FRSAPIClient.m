@@ -1275,10 +1275,6 @@
         for (NSString *key in keys) {
             id valueForKey = [self objectFromDictionary:[response objectForKey:key] context:managedObjectContext];
             
-            if (valueForKey == Nil) {
-                continue;
-            }
-            
             if (valueForKey == [response objectForKey:key]) {
                 return response; // non parse
             }
@@ -1304,10 +1300,6 @@
                 return response;
             }
             
-            if (originalResponse == Nil) {
-                continue;
-            }
-            
             [responseObjects addObject:[self objectFromDictionary:responseObject context:managedObjectContext]];
         }
 
@@ -1326,10 +1318,6 @@
     
     if ([objectType isEqualToString:galleryObjectType]) {
         NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSGallery" inManagedObjectContext:[self managedObjectContext]];
-        
-        if ([[dictionary objectForKey:@"status"] intValue] == 0) {
-            return Nil;
-        }
         
         FRSGallery *gallery = (FRSGallery *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
         gallery.currentContext = [self managedObjectContext];
