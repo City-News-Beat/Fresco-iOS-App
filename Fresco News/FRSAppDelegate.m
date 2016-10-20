@@ -59,7 +59,12 @@
     
     if ([[FRSAPIClient sharedClient] isAuthenticated]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
-        self.window.rootViewController = self.tabBarController;
+        FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
+        
+        [mainNav pushViewController:self.tabBarController animated:FALSE];
+        [mainNav setNavigationBarHidden:YES];
+
+        self.window.rootViewController = mainNav;
         [self createItemsWithIcons];
         [self reloadUser];
         [self startNotificationTimer];
@@ -447,6 +452,8 @@
     return _tabBarController;
 }
 
+
+
 -(void)startAuthentication {
     _tabBarController = [[FRSTabBarController alloc] init];
     
@@ -760,6 +767,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 -(void)applicationDidBecomeActive:(UIApplication *)application{
     [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSResetUpload" object:nil userInfo:@{@"type":@"reset"}];
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application{

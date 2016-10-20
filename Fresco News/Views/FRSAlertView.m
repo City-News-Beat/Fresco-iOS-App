@@ -1161,7 +1161,7 @@
         usernameTopLine.backgroundColor = [UIColor frescoShadowColor];
         [usernameContainer addSubview:usernameTopLine];
         
-        UIView *emailContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 292, self.frame.size.width, 44)];
+        UIView *emailContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44)];
         [self addSubview:emailContainer];
         
         UIView *emailTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
@@ -1191,7 +1191,7 @@
         [emailContainer addSubview:self.emailTextField];
         
         
-        if (![[[FRSAPIClient sharedClient] authenticatedUser].email isEqual:[NSNull null]] || ![[[FRSAPIClient sharedClient] emailUsed] isEqual:[NSNull null]]) {
+        if ([[[FRSAPIClient sharedClient] authenticatedUser].email isEqual:[NSNull null]] || [[[FRSAPIClient sharedClient] emailUsed] isEqual:[NSNull null]]) {
             emailContainer.alpha = 0;
             self.height -= 44;
             self.emailTextField = nil;
@@ -1274,6 +1274,9 @@
         //Need to set after frame is set to place password field at the end
         passwordContainer.frame = CGRectMake(0, self.frame.size.height-88, self.frame.size.width, 44);
         
+        if (self.emailTextField != nil && (self.passwordTextField != nil || self.usernameTextField != nil)) {
+            emailContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
+        }
     }
     return self;
     
@@ -1337,7 +1340,6 @@
 }
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
     
     if (self.usernameTextField.isEditing) {
         [self startUsernameTimer];
@@ -1620,6 +1622,7 @@
 -(void)checkCreateAccountButtonState {
     UIControlState controlState;
     
+    //Only updating password
     if (self.passwordTextField && !self.emailTextField && !self.usernameTextField) {
         if (self.emailTextField == nil && self.usernameTextField == nil) {
             if ( ([self.passwordTextField.text length] > 0)) {
@@ -1681,6 +1684,18 @@
             } else {
                 [self toggleCreateAccountButtonTitleColorToState:UIControlStateNormal];
             }
+        }
+    }
+    
+    //Only updating email and password
+    if (([self.passwordTextField.text length] > 0) && ([self.emailTextField.text length] > 0)) {
+        if (([self.emailTextField.text length] > 0) && ([self.passwordTextField.text length] > 0)) {
+            if ( [self isValidEmail:self.emailTextField.text] && ([self.passwordTextField.text length] >= 6) && (!self.emailTaken)) {
+                controlState = UIControlStateHighlighted;
+            } else {
+                controlState = UIControlStateNormal;
+            }
+            [self toggleCreateAccountButtonTitleColorToState:controlState];
         }
     }
 }

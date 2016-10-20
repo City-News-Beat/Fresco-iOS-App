@@ -41,8 +41,14 @@
         }
     }
     
-    self.address = dictionary[@"address"];
-    self.radius = dictionary[@"radius"];
+    if (dictionary[@"address"] && ![dictionary[@"address"] isEqual:[NSNull null]]) {
+        self.address = dictionary[@"address"];
+    }
+    
+    
+    if (dictionary[@"radius"] && ![dictionary[@"radius"] isEqual:[NSNull null]]) {
+        self.radius = dictionary[@"radius"];
+    }
     
     self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"starts_at"]];
     self.expirationDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"ends_at"]];
