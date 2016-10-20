@@ -161,4 +161,8 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)reportGallery:(FRSGallery *)gallery params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion;
 
+-(void)linkTwitter:(NSString *)token secret:(NSString *)secret completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)linkFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unlinkFacebook:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unlinkTwitter:(FRSAPIDefaultCompletionBlock)completion;
 @end
