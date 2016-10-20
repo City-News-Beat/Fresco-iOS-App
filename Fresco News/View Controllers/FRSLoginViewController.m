@@ -111,6 +111,8 @@
     }
     
     self.fbLoginManager = [[FBSDKLoginManager alloc] init];
+    
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 }
 
 

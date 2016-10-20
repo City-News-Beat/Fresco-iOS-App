@@ -130,6 +130,9 @@
         //profileInfo[@"avatar"] = [NSURL URLWithDataRepresentation:data relativeToURL:[[NSURL alloc] init]];
     }
     
+    
+    
+    
     return profileInfo;
 }
 
@@ -313,6 +316,7 @@
     
     if(_isEditingProfile){
         [self.profileIV hnk_setImageFromURL:self.profileImageURL];
+        self.placeHolderUserIcon.alpha = 0;
     }else{
         [self.profileIV addSubview:self.placeHolderUserIcon];
     }
@@ -323,6 +327,15 @@
     ring.layer.cornerRadius = height/2;
     [ring addBorderWithWidth:8 color:[UIColor whiteColor]];
     [self.scrollView addSubview:ring];
+    
+    /*if (self.fbPhotoURL) {
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:self.fbPhotoURL] placeholder:nil success:^(UIImage *image) {
+            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:self.fbPhotoURL] placeholder:nil];
+            self.profileIV.backgroundColor = [UIColor clearColor];
+        } failure:^(NSError *error) {
+            [self.profileIV addSubview:self.placeHolderUserIcon];
+        }];
+    }*/
 }
 
 -(void)configureCameraButton{
@@ -363,6 +376,15 @@
     [self configureNameField];
     [self configureLocationField];
     [self configureBioField];
+    
+    
+    if (_nameStr) {
+        self.nameTF.text = _nameStr;
+    }
+    
+    if (_locStr) {
+        self.locationTF.text = _locStr;
+    }
 }
 
 -(void)configureNameField{
@@ -458,6 +480,11 @@
     [self.doneButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self.bottomBar addSubview:self.doneButton];
     [self.doneButton addTarget:self action:@selector(addUserProfile) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (self.nameTF.text != nil) {
+        [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.doneButton.userInteractionEnabled = YES;
+    }
     
 //    [self constrainSubview:bottomBar ToBottomOfParentView:self.view WithHeight:44];
 }

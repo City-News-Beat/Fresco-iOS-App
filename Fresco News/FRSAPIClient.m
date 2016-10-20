@@ -194,7 +194,9 @@
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         
         if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
-            [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
+           // [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
+            [self handleUserLogin:responseObject];
+
             NSString *userID = responseObject[@"user"][@"id"];
             
         }
@@ -466,8 +468,14 @@
 }
 
 -(void)handleUserLogin:(id)responseObject {
-    if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
+    if ([responseObject objectForKey:@"token"]) {
         [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
+    }
+    
+    FRSUser *authenticatedUser = [self authenticatedUser];
+    
+    if (!authenticatedUser) {
+        authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
     }
     
     [self reevaluateAuthorization];

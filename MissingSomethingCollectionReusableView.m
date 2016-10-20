@@ -8,6 +8,7 @@
 
 #import "MissingSomethingCollectionReusableView.h"
 #import "UIColor+Fresco.h"
+#import <Smooch/Smooch.h>
 
 @interface MissingSomethingCollectionReusableView ()
 @property (weak, nonatomic) IBOutlet UITextView *textView;
@@ -30,8 +31,24 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }
 - (IBAction)pressedChatWithUs:(id)sender {
-    NSLog(@"Pressed 'Chat with us'");
+    [self presentSmooch];
+
 }
+
+-(void)presentSmooch {
+    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    if (currentUser.firstName) {
+        [SKTUser currentUser].firstName = currentUser.firstName;
+    }
+    if (currentUser.email) {
+        [SKTUser currentUser].email = currentUser.email;
+    }
+    if (currentUser.uid) {
+        [[SKTUser currentUser] addProperties:@{ @"Fresco ID" : currentUser.uid }];
+    }
+    [Smooch show];
+}
+
 
 -(void)setup {
     if (!self.isSetup) {
@@ -97,12 +114,22 @@
         
         self.missingSomethingMainText.attributedText = attributedText;
 
-        self.settingsTopConstraint.constant = 73;
-        self.settingsRightConstraint.constant = -43;
-        self.chatWithTopConstraint.constant = 15;
-        self.chatWithRightConstraint.constant = 110;
-        [super removeConstraint:self.chatWithLeftConstraint];
-        self.questionLeftConstraint.constant = 50;
+        self.textView.allowsEditingTextAttributes = false;
+        if(IS_STANDARD_IPHONE_6_PLUS){
+            self.settingsRightConstraint.constant = -48;
+            self.settingsTopConstraint.constant = 50.5;
+        }else if(IS_IPHONE_5){
+            self.settingsTopConstraint.constant = 67.5;
+            self.settingsRightConstraint.constant = -10;
+            self.chatWithTopConstraint.constant = 10;
+            self.chatWithRightConstraint.constant = 110;
+            [super removeConstraint:self.chatWithLeftConstraint];
+            self.questionLeftConstraint.constant = 50;
+        }
+        
+        else if (IS_STANDARD_IPHONE_6) {
+            self.settingsTopConstraint.constant = 50;
+        }
     }
     [self.superview setBackgroundColor:[UIColor whiteColor]];
 

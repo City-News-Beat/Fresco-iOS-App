@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11535.1" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11523"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="karmina-bold.otf">
+        <array key="karmina-bold.otf">
             <string>Karmina-Bold</string>
-        </mutableArray>
+        </array>
     </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -27,22 +29,22 @@
                         <fragment>
                             <string key="content">We can only verify photos and videos from the past 24 hours, taken with location data. If nothing is showing up, make sure Location is enabled in</string>
                             <attributes>
-                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="15" name="SFUIText-Light"/>
+                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" metaFont="system" size="15"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" minimumLineHeight="20" maximumLineHeight="20" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                             </attributes>
                         </fragment>
                         <fragment content="S ettings   ">
                             <attributes>
-                                <color key="NSColor" red="0.99999600648880005" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="15" name="SFUIText-Light"/>
+                                <color key="NSColor" red="0.99999600648880005" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" metaFont="system" size="15"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" minimumLineHeight="20" maximumLineHeight="20" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                             </attributes>
                         </fragment>
                         <fragment content="for next time.">
                             <attributes>
-                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="15" name="SFUIText-Light"/>
+                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" metaFont="system" size="15"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" minimumLineHeight="20" maximumLineHeight="20" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
                             </attributes>
                         </fragment>
@@ -59,7 +61,7 @@
                         <constraint firstAttribute="width" constant="320" id="V2n-Un-O0c"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="Karmina-Bold" family="Karmina" pointSize="28"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lR9-T7-zEL">
@@ -69,7 +71,7 @@
                     </accessibility>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                     <state key="normal" title="Settings">
-                        <color key="titleColor" red="0.22733291983604431" green="0.23324847221374512" blue="0.2333749532699585" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.22733291983604431" green="0.23324847221374512" blue="0.2333749532699585" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
                         <action selector="pressedSettings:" destination="aCh-Sb-31u" eventType="touchUpInside" id="SkF-j3-IbV"/>
@@ -77,15 +79,15 @@
                 </button>
                 <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lca-Wh-NsH">
                     <rect key="frame" x="16" y="146" width="568" height="80"/>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="80" id="dOT-JJ-hL8"/>
                     </constraints>
                     <attributedString key="attributedText">
                         <fragment content="Have something we can’t miss? ">
                             <attributes>
-                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="15" name="SFUIText-Light"/>
+                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" metaFont="system" size="15"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" lineSpacing="1.2" defaultTabInterval="28" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
                                     <tabStops/>
                                 </paragraphStyle>
@@ -93,8 +95,8 @@
                         </fragment>
                         <fragment content="Chat with uss.">
                             <attributes>
-                                <color key="NSColor" red="0.98343342542648315" green="0.96348267793655396" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="15" name="SFUIText-Light"/>
+                                <color key="NSColor" red="0.98343342542648315" green="0.96348267793655396" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" metaFont="system" size="15"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" lineSpacing="1.2" defaultTabInterval="28" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
                                     <tabStops/>
                                 </paragraphStyle>
@@ -104,17 +106,17 @@
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3fF-hp-x1c">
-                    <rect key="frame" x="357" y="147" width="227" height="30"/>
+                    <rect key="frame" x="359" y="148" width="225" height="30"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                     <state key="normal" title="Chat with us.">
-                        <color key="titleColor" red="0.22733291983604431" green="0.23324847221374512" blue="0.2333749532699585" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.22733291983604431" green="0.23324847221374512" blue="0.2333749532699585" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <connections>
                         <action selector="pressedChatWithUs:" destination="aCh-Sb-31u" eventType="touchUpInside" id="hNx-es-Zlx"/>
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="lca-Wh-NsH" secondAttribute="trailing" constant="16" id="2gt-qV-2if"/>
                 <constraint firstItem="lR9-T7-zEL" firstAttribute="top" secondItem="mc4-1b-s15" secondAttribute="bottom" constant="52" id="8sp-OX-Ib0"/>
@@ -123,8 +125,8 @@
                 <constraint firstAttribute="trailing" secondItem="iiK-hu-wdc" secondAttribute="trailing" constant="17" id="CZf-3i-oTf"/>
                 <constraint firstItem="lR9-T7-zEL" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" constant="-10" id="HmV-DR-90r"/>
                 <constraint firstItem="lca-Wh-NsH" firstAttribute="centerX" secondItem="aCh-Sb-31u" secondAttribute="centerX" id="Ird-e9-SxX"/>
-                <constraint firstItem="3fF-hp-x1c" firstAttribute="top" secondItem="iiK-hu-wdc" secondAttribute="bottom" constant="-3" id="Otj-qO-ktp"/>
-                <constraint firstItem="3fF-hp-x1c" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="centerX" constant="57" id="PIu-Tz-YWf"/>
+                <constraint firstItem="3fF-hp-x1c" firstAttribute="top" secondItem="iiK-hu-wdc" secondAttribute="bottom" constant="-2.5" id="Otj-qO-ktp"/>
+                <constraint firstItem="3fF-hp-x1c" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="centerX" constant="59" id="PIu-Tz-YWf"/>
                 <constraint firstItem="mc4-1b-s15" firstAttribute="top" secondItem="aCh-Sb-31u" secondAttribute="top" constant="48" id="VPH-Zk-DlY"/>
                 <constraint firstAttribute="trailing" secondItem="3fF-hp-x1c" secondAttribute="trailing" constant="16" id="b4a-5U-zqH"/>
                 <constraint firstItem="lca-Wh-NsH" firstAttribute="leading" secondItem="aCh-Sb-31u" secondAttribute="leading" constant="16" id="ee7-U9-COT"/>

@@ -60,6 +60,7 @@
 @property (strong, nonatomic) UIView *TOSContainerView;
 @property (strong, nonatomic) UIButton *TOSCheckBoxButton;
 @property BOOL TOSAccepted;
+@property (strong, nonatomic) FRSSetupProfileViewController *setupProfileVC;
 
 @end
 
@@ -76,6 +77,14 @@
     self.notificationsEnabled = NO;
     self.emailError = NO;
     
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+    }
+    
+    self.setupProfileVC = [[FRSSetupProfileViewController alloc] init];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -1104,7 +1113,7 @@
 }
 
 -(void)createAccount {
-    
+
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
     
     [self dismissKeyboard];
@@ -1233,25 +1242,6 @@
             }];
 }
 
--(NSString *)stringFromHexString:(NSString *)hexString {
-    
-    // The hex codes should all be two characters.
-    if (([hexString length] % 2) != 0)
-        return nil;
-    
-    NSMutableString *string = [NSMutableString string];
-    
-    for (NSInteger i = 0; i < [hexString length]; i += 2) {
-        
-        NSString *hex = [hexString substringWithRange:NSMakeRange(i, 2)];
-        NSInteger decimalValue = 0;
-        sscanf([hex UTF8String], "%x", &decimalValue);
-        [string appendFormat:@"%c", decimalValue];
-    }
-    
-    return string;
-}
-
 
 -(void)checkEmail {
     NSLog(@"EMAIL: %@", self.emailTF.text);
@@ -1261,6 +1251,7 @@
             self.emailTaken = YES;
             [self shouldShowEmailDialogue:YES];
             [self presentInvalidEmail];
+            
         } else {
             self.emailTaken = NO;
             [self shouldShowEmailDialogue:NO];
@@ -1323,8 +1314,17 @@
         if (session) {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
             [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
-        }
+            //self.setupProfileVC.nameStr = session
+            TWTRAPIClient *apiClient = [[TWTRAPIClient alloc] initWithUserID:[session userID]];
+            
+            [apiClient loadUserWithID:[session userID] completion:^(TWTRUser * _Nullable user, NSError * _Nullable error) {
+                if (user.name) {
+                    self.setupProfileVC.nameStr = user.name;
+                }
+            }];
 
+            
+        }
         
         if (error) {
             
@@ -1356,6 +1356,7 @@
         _twitterSession = session;
     }];
 }
+
 
 -(void)facebookTapped {
 
@@ -1409,10 +1410,24 @@
             NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
             
             //Make request for facebook user's profile meta
-            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"name"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"picture.width(300).height(300), name, email"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                 if (!error) {
                     [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"name"] forKey:@"facebook-name"];
                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                    
+                    if (result[@"email"]) {
+                        self.emailTF.text = result[@"email"];
+                        [self checkEmail];
+                    }
+                    
+                    if (result[@"name"]) {
+                        self.setupProfileVC.nameStr = result[@"name"];
+                    }
+                    
+                    if (result[@"picture"][@"data"][@"url"]) {
+                       // self.setupProfileVC.fbPhotoURL = result[@"picture"][@"data"][@"url"];
+                        
+                    }
                 }
                 
                 if (error.code == -1009) {
@@ -1705,6 +1720,7 @@
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
             self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 44);
+            self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, 44);
         }
         
     } else {
@@ -1717,6 +1733,7 @@
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
             self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
+            self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, 0);
         }
     }
 }
@@ -1725,8 +1742,7 @@
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
     
-    FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
-    [self.navigationController pushViewController:setupProfileVC animated:YES];
+    [self.navigationController pushViewController:self.setupProfileVC animated:YES];
     id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
     [delegate registerForPushNotifications];
 
