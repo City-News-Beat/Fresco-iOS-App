@@ -149,8 +149,10 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     [self.tabBarController.tabBar setHidden:FALSE];
-    [self.appDelegate reloadUser];
     
+    [self.tabBarController.navigationController setNavigationBarHidden:YES];
+    [self.appDelegate reloadUser];
+    [self.appDelegate startNotificationTimer];
     entry = [NSDate date];
     numberRead = 0;
     
@@ -921,13 +923,22 @@
                 if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
                     
                     if (!taken) {
-                        [cell play];
-                        taken = TRUE;
+                        NSIndexPath *path = [self.tableView indexPathForCell:cell];
+                        
+                        if (path != lastIndexPath) {
+                            lastIndexPath = path;
+                            [cell play];
+                            taken = TRUE;
+                        }
                     }
                     else {
                         [cell pause];
                     }
                 }
+            }
+            
+            if (!taken) {
+                lastIndexPath = Nil;
             }
         });
     }

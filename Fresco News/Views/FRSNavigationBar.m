@@ -70,9 +70,9 @@
                 navFrame.size.width = self.frame.size.width * percentage;
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [UIView animateWithDuration:.05 animations:^{
+                   // [UIView animateWithDuration:.05 animations:^{
                         _progressView.frame = navFrame;
-                    }];
+                   // }];
                 });
             });
             

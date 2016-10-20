@@ -12,11 +12,20 @@
 #import "MagicalRecord.h"
 #import "FRSUpload+CoreDataProperties.h"
 #import "FRSAppDelegate.h"
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
 @synthesize isRunning = _isRunning, managedUploads = _managedUploads;
 
 -(void)checkAndStart {
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        didFinish = TRUE;
+        isRunning = FALSE;
+        return;
+    }
+    
     NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"completed", @(FALSE)];
     NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
     signedInRequest.predicate = signedInPredicate;
@@ -29,12 +38,27 @@
     NSArray *uploads = [context executeFetchRequest:signedInRequest error:&fetchError];
     NSLog(@"UPLOADS: %@", uploads);
     
-    if ([uploads count] > 0) {
-        _isRunning = TRUE;
+    if (uploads.count == 0) {
+        didFinish = TRUE;
     }
+
     
     for (FRSUpload *upload in uploads) {
+        
+        NSTimeInterval sinceStart = [upload.creationDate timeIntervalSinceNow];
+        sinceStart *= -1;
+        
+        if (sinceStart >= (24 * 60 * 60)) {
+            
+            [delegate.managedObjectContext performBlock:^{
+                upload.completed = @(TRUE);
+                [delegate saveContext];
+            }];
+            continue;
+        }
+        
         [self.managedUploads addObject:upload];
+        _isRunning = TRUE;
             NSArray *urls = upload.destinationURLS;
 
             if (urls.count > 1) {
@@ -71,6 +95,7 @@
                 
                 if (asset) {
                     if (urls[0]) {
+                        _isRunning = TRUE;
                         [self addTaskForImageAsset:asset url:[NSURL URLWithString:urls[0]] post:@{@"key":upload.key, @"uploadId":upload.uploadID}];
                     }
                 }
@@ -79,6 +104,48 @@
                 }
             }
         }
+}
+
+-(void)appWillResignActive {
+    
+    if (didFinish) {
+        return;
+    }
+        
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) == FALSE) {
+        UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+        localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:3];
+        localNotification.alertBody = @"Wait, we're almost done! Come back to Fresco to finish uploading your gallery.";
+        localNotification.timeZone = [NSTimeZone defaultTimeZone];
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+
+        return;
+    }
+
+    UNMutableNotificationContent *objNotificationContent = [[UNMutableNotificationContent alloc] init];
+    objNotificationContent.title = [NSString localizedUserNotificationStringForKey:@"Come back and finish your upload!" arguments:nil];
+    objNotificationContent.body = [NSString localizedUserNotificationStringForKey:@"Wait, we're almost done! Come back to Fresco to finish uploading your gallery."
+                                                                        arguments:nil];
+    objNotificationContent.sound = [UNNotificationSound defaultSound];
+    objNotificationContent.userInfo = @{@"type":@"trigger-upload-notification"};
+    
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[NSDate date]];
+    components.second += 3;
+    UNCalendarNotificationTrigger *trigger = [UNCalendarNotificationTrigger
+                                              triggerWithDateMatchingComponents:components repeats:FALSE];
+
+
+    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"com.fresconews.Fresco"
+                                                                          content:objNotificationContent trigger:trigger];
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+        if (!error) {
+            NSLog(@"Local Notification succeeded");
+        }
+        else {
+            NSLog(@"Local Notification failed");
+        }
+    }];
 }
 
 -(void)dealloc {
@@ -90,8 +157,14 @@
     _currentTasks = [[NSMutableArray alloc] init];
     _etags = [[NSMutableArray alloc] init];
     _managedUploads = [[NSMutableArray alloc] init];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
+
     weakSelf = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSDismissUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        didFinish = TRUE;
+        isRunning = FALSE;
+        [self markAsComplete];
+    }];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
         
@@ -121,7 +194,8 @@
 -(void)startUploadProcess {
     
     if (!_posts) {
-        
+        self.managedUploads = [[NSMutableArray alloc] init];
+        [self checkAndStart];
         
         return;
     }
@@ -303,6 +377,7 @@
 
 -(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post {
     toComplete++;
+    
     [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
         if (!_posts) {
             _contentSize += [imageData length];

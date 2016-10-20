@@ -19,9 +19,12 @@
 }
 
 +(NSString *)dateStringGalleryFormatFromDate:(NSDate *)date{
+    NSTimeInterval secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
+    NSDate *correctDate = [date dateByAddingTimeInterval:secondsFromGMT];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"hh:mm a";
-    return [formatter stringFromDate:date];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    [formatter setDateFormat:@"hh:mm a"];
+    return [formatter stringFromDate:correctDate];
 }
 
 //temp method

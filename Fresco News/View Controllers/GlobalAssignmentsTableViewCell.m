@@ -12,7 +12,7 @@
 #import "FRSGlobalAssignmentsTableViewController.h"
 
 @implementation GlobalAssignmentsTableViewCell{
-    
+    __weak IBOutlet NSLayoutConstraint *heigtConstraint;
     __weak IBOutlet UILabel *titleLabel;
     __weak IBOutlet UILabel *activeOutletsLabel;
     
@@ -24,7 +24,12 @@
     __weak IBOutlet UIButton *openCameraButton;
 }
 
-
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    [assignmentDescriptionLabel setNeedsLayout];
+    [assignmentDescriptionLabel layoutIfNeeded];
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -44,19 +49,7 @@
 }
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSDictionary *)assignment {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    
-    if (self) {
-//        self.backgroundColor = [UIColor clearColor];
-//        self.assignment = assignment;
-//        NSString *dateInString = (NSString *)[self.assignment objectForKey:@"ends_at"];
-//        NSLog(@"Date %@", dateInString);
-//        
-//        [assignmentDescriptionLabel setText:(NSString *)[self.assignment objectForKey:@"caption"]];
-        //        [self configureExpirationDateWithString:dateInString];
-        //        [self configureOutletImagesWithOutletArray: (NSArray *)[self.assignment objectForKey:@"outlets"]];
-    }
-    return self;
+    return [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 }
 
 
@@ -71,7 +64,6 @@
     
     [titleLabel setText:(NSString *)[self.assignment objectForKey:@"title"]];
     [assignmentDescriptionLabel setText:(NSString *)[self.assignment objectForKey:@"caption"]];
-    [assignmentDescriptionLabel sizeToFit];
     [self configureExpirationDateWithString:dateInString];
     NSArray *outletArray = (NSArray *)[self.assignment objectForKey:@"outlets"];
     [self configureOutletImagesWithOutletArray:outletArray];
@@ -80,15 +72,6 @@
     }else if(outletArray.count == 1){
         [activeOutletsLabel setText:[NSString stringWithFormat:@"%lu active news outlet", (unsigned long)outletArray.count]];
     }
-    //Set the frame to resize the entire cell in the tableview
-    CGRect newFrame = self.frame;
-    int botPaddingInZeplin = 12 - 8;//-8 because interface padding
-    newFrame.size.height = openCameraButton.frame.origin.x+botPaddingInZeplin;
-    [self setFrame:newFrame];
-    
-    //Add lines
-    [self addSubview:[UIView lineAtPoint:CGPointMake(0, 0.5)]];
-    [self addSubview:[UIView lineAtPoint:CGPointMake(0, self.frame.size.height-0.5)]];
 }
 
 -(void)configureOutletImagesWithOutletArray:(NSArray *)outletArray{

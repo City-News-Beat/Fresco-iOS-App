@@ -52,7 +52,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [super viewDidLoad];
     [self getNotifications];
     [self configureUI];
-    [(FRSTabBarController *)self.tabBarController updateBellIcon:NO];
+//    [(FRSTabBarController *)self.tabBarController updateBellIcon:NO];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -421,7 +421,42 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 75;
+    NSDictionary *notif = [self.feed objectAtIndex:indexPath.row];
+
+    NSInteger height = 0;
+        
+    int topPadding   = 10;
+    int leftPadding  = 72;
+    int rightPadding = 16;
+    UILabel *titleLabel = [[UILabel alloc] init];
+    titleLabel.font = [UIFont notaMediumWithSize:17];
+    titleLabel.numberOfLines = 0;
+    titleLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width -leftPadding -rightPadding, 22);
+    titleLabel.text = notif[@"title"];
+    [titleLabel sizeToFit];
+    
+    UILabel *bodyLabel = [[UILabel alloc] init];
+
+    topPadding = 33;
+    bodyLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width - leftPadding -rightPadding, 60);
+    bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    bodyLabel.text = notif[@"body"];
+    bodyLabel.numberOfLines = 0;
+    bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+
+    
+    [bodyLabel sizeToFit];
+    [titleLabel sizeToFit];
+        
+    height += bodyLabel.frame.size.height;
+    height += titleLabel.frame.size.height;
+    height += 25; //spacing
+    
+    if (height < 75) {
+        return 75;
+    }
+        
+        return height;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -707,8 +742,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 #pragma mark - Assignments
 -(void)configureAssignmentCell:(FRSAssignmentNotificationTableViewCell *)assignmentCell dictionary:(NSDictionary *)dictionary {
-    assignmentCell.titleLabel.numberOfLines = 0;
-    assignmentCell.bodyLabel.numberOfLines  = 3;
     assignmentCell.actionButton.tintColor = [UIColor blackColor];
     assignmentCell.titleLabel.text = [dictionary objectForKey:@"title"];
     assignmentCell.bodyLabel.text = [dictionary objectForKey:@"body"];
@@ -724,6 +757,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
     cell.count = userIDs.count;
     cell.followButton.alpha = 1;
+    cell.followButton.alpha = 0;
+    [cell.followButton removeFromSuperview];
     
     if ([self hasImage:dictionary]) {
         [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
@@ -831,7 +866,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)configurePaymentExpiringCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     
     [cell.image removeFromSuperview];
-    cell.image = nil;
     [cell configureDefaultCell];
     
     NSString *total = @"(null)";
@@ -843,7 +877,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)configurePaymentSentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     
     [cell.image removeFromSuperview];
-    cell.image = nil;
     [cell configureDefaultCell];
     
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
@@ -852,7 +885,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configurePaymentDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell.image removeFromSuperview];
-    cell.image = nil;
     
     [cell configureDefaultCell];
     
@@ -863,7 +895,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)configureTaxInfoRequiredCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary{
     
     [cell.image removeFromSuperview];
-    cell.image = nil;
     
     [cell configureDefaultCell];
     
@@ -873,7 +904,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configureTaxInfoProcessedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell.image removeFromSuperview];
-    cell.image = nil;
     
     [cell configureDefaultCell];
     
@@ -889,7 +919,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configureTaxInfoDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell.image removeFromSuperview];
-    cell.image = nil;
     
     [cell configureDefaultCell];
     

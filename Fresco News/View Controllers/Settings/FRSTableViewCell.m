@@ -653,7 +653,7 @@
     [self addSubview:nameLabel];
     
     UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64 + 8 + nameLabel.frame.size.width, 23, self.frame.size.width - 64, 14)];
-    usernameLabel.text = (username && ![username isEqual:[NSNull null]]) ? [@"@" stringByAppendingString:username] : @"";
+    usernameLabel.text = (username && ![username isEqual:[NSNull null]] && ![username isEqualToString:@""]) ? [@"@" stringByAppendingString:username] : @"";
     usernameLabel.font = [UIFont notaRegularWithSize:12];
     usernameLabel.textColor = [UIColor frescoMediumTextColor];
     [usernameLabel sizeToFit];

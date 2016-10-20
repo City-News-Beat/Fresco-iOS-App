@@ -147,7 +147,6 @@
 }
 
 -(void)configureOutletCellWithOutlet:(NSDictionary *)outlet {
-    
     self.selectionImageView.frame = CGRectMake(self.frame.size.width - 16 - 24, 10, 24, 24);
     self.titleLabel.frame = CGRectMake(32, 12, self.frame.size.width - 32 - 24 - 16, 20);
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
@@ -157,7 +156,9 @@
     self.titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     
 //    if (self.outlets.count > 1) {
-        self.titleLabel.text = [outlet objectForKey:@"title"];
+    self.titleLabel.text = [outlet objectForKey:@"title"];
+    NSLog(@"OUTLET: %@", outlet);
+    //self.representedOutletID = [outlet objectForKey:@"id"];
 //    }
 }
 

@@ -31,7 +31,7 @@
 @property (strong, nonatomic) UILabel *invalidUserLabel;
 @property (nonatomic) BOOL didAuthenticateSocial;
 @property (strong, nonatomic) FRSAlertView *alert;
-
+@property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
 @end
 
 @implementation FRSLoginViewController
@@ -110,7 +110,7 @@
         self.socialTopConstraint.constant = 128;
     }
     
-    
+    self.fbLoginManager = [[FBSDKLoginManager alloc] init];
 }
 
 
@@ -226,12 +226,14 @@
             if (self.passwordField.text != nil && ![self.passwordField.text isEqualToString:@""]) {
                 [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
             }
+
+            [self stopSpinner:self.loadingView onButton:self.loginButton];
+            [[FRSAPIClient sharedClient] setPasswordUsed:self.passwordField.text];
             
             if ([self validEmail:username]) {
                 [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
             }
             return;
-
         }
         
         if (error.code == -1009) {
@@ -298,7 +300,8 @@
     transition.type = kCATransitionFade;
     transition.subtype = kCATransitionFromTop;
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
-    [[self navigationController] popViewControllerAnimated:NO];
+//    [[self navigationController] popViewControllerAnimated:NO];
+    [self popToOrigin];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
 }
 
@@ -397,6 +400,9 @@
         
     //FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     //[appDelegate reloadUser];
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate reloadUser];
+    [appDelegate registerForPushNotifications];
     
     NSArray *viewControllers = [self.navigationController viewControllers];    
     
@@ -512,7 +518,7 @@
         [spinner stopLoading];
         [spinner removeFromSuperview];
         self.facebookButton.hidden = false;
-    } parent:self];
+    } parent:self manager:self.fbLoginManager];
 }
 
 

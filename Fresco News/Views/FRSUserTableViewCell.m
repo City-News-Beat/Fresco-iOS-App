@@ -96,7 +96,8 @@
     self.profileIV.layer.cornerRadius = 32/2;
     
     if(user.profileImage){
-        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:user.profileImage]];
+        NSString *smallAvatar = [user.profileImage stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
+        [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
     }else{
         self.profileIV.image = [UIImage imageNamed:@"kobe"];
     }

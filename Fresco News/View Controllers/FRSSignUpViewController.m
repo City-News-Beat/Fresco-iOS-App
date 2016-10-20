@@ -1254,9 +1254,9 @@
 
 
 -(void)checkEmail {
-    
+    NSLog(@"EMAIL: %@", self.emailTF.text);
+
     [[FRSAPIClient sharedClient] checkEmail:self.emailTF.text completion:^(id responseObject, NSError *error) {
-        
         if (!error) {
             self.emailTaken = YES;
             [self shouldShowEmailDialogue:YES];
@@ -1727,6 +1727,9 @@
     
     FRSSetupProfileViewController *setupProfileVC = [[FRSSetupProfileViewController alloc] init];
     [self.navigationController pushViewController:setupProfileVC animated:YES];
+    id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
+    [delegate registerForPushNotifications];
+
 }
 
 -(void)segueToLogin {

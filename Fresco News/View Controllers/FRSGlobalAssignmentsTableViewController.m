@@ -23,7 +23,6 @@
     
     [self configureNavigationBar];
     [self configureTableView];
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -37,7 +36,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-
 #pragma mark - UI Configuration
 
 -(void)configureNavigationBar {
@@ -48,7 +46,10 @@
 -(void)configureTableView {
     [super configureTableView];
     
-self.tableView.frame = CGRectMake(0, -self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height-self.tabBarController.tabBar.frame.size.height);// - self.navigationController.navigationBar.frame.size.height);
+    
+    // -10 because navbar is about 44 and status bar is about 22 and extra fake space between cell is 12, so 44-22-12=10
+    self.tableView.frame = CGRectMake(0, -self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.tabBarController.tabBar.frame.size.height - 10);
+    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.showsVerticalScrollIndicator = NO;
@@ -58,6 +59,9 @@ self.tableView.frame = CGRectMake(0, -self.navigationController.navigationBar.fr
     [self.view addSubview:self.tableView];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSGlobalAssignmentTableViewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"global-assignment-cell"];
+    
+    self.tableView.estimatedRowHeight = 50;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -68,13 +72,7 @@ self.tableView.frame = CGRectMake(0, -self.navigationController.navigationBar.fr
     return self.assignments.count;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    return [self tableView:tableView cellForRowAtIndexPath:indexPath].frame.size.height+12;
-}
-
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-
     return 44;
 }
 
@@ -124,51 +122,6 @@ self.tableView.frame = CGRectMake(0, -self.navigationController.navigationBar.fr
     [self presentViewController:navControl animated:YES completion:^{
 
     }];
-
-//    FRSCameraViewController *cameraVC = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assignment];
-//    [self.navigationController pushViewController:cameraVC animated:true];
-//    [self hideTabBarAnimated:true];
 }
-
-//-(void)tableView:(UITableView *)tableView willDisplayCell:(GlobalAssignmentsTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-//    
-//    cell.backgroundColor = [UIColor redColor];
-//    
-//}
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 
 @end

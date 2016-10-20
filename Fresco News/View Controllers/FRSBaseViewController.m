@@ -315,6 +315,7 @@
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate clearKeychain];
+    [delegate stopNotificationTimer];
     
     //[SAMKeychain deletePasswordForService:serviceName account:clientAuthorization];
     
@@ -346,6 +347,8 @@
     }
     
     [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
+    FRSTabBarController *tab = (FRSTabBarController *)self.tabBarController;
+    [tab updateUserIcon];
     [FRSTracker track:@"Logouts"];
 }
 

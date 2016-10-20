@@ -38,14 +38,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)configureWithGalleries:(NSArray *)galleries {
     
-    NSLog(@"ID 1: %@", [[galleries objectAtIndex:0] objectForKey:@"id"]);
-    NSLog(@"ID 2: %@", [[galleries objectAtIndex:1] objectForKey:@"id"]);
-    NSLog(@"ID 3: %@", [[galleries objectAtIndex:2] objectForKey:@"id"]);
-    NSLog(@"ID 4: %@", [[galleries objectAtIndex:3] objectForKey:@"id"]);
-
     self.stories = [[NSMutableArray alloc] init];
     
-    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     NSArray *galleriesArray = galleries;
     
     for (NSDictionary *gallery in galleriesArray) {

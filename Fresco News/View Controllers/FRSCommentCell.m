@@ -18,7 +18,7 @@
     // Initialization code
     self.profilePicture.layer.cornerRadius = 15;
     self.profilePicture.layer.masksToBounds = YES;
-    self.commentTextField.textColor = [UIColor frescoDarkTextColor];
+    self.commentTextView.textColor = [UIColor frescoDarkTextColor];
 }
 
 -(void)configureCell:(FRSComment *)comment delegate:(id<UITextViewDelegate>)delegate {
@@ -29,7 +29,8 @@
             NSLog(@"%@", comment.imageURL);
             
             self.backgroundColor = [UIColor clearColor];
-            [self.profilePicture hnk_setImageFromURL:[NSURL URLWithString:comment.imageURL]];
+            NSString *smallAvatar = [comment.imageURL stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
+            [self.profilePicture hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
         }
         else {
             // default
@@ -38,10 +39,10 @@
         }
     });
     
-    self.commentTextField.attributedText = comment.attributedString;
+    self.commentTextView.attributedText = comment.attributedString;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    [self.commentTextField frs_resize];
-    self.commentTextField.delegate = delegate;
+    [self.commentTextView frs_resize];
+    self.commentTextView.delegate = delegate;
     
     if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
         [self setSeparatorInset:UIEdgeInsetsZero];
@@ -64,7 +65,7 @@
     }
     
     self.rightSwipeSettings.transition = MGSwipeTransitionDrag;
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(profileTapped)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(profileTapped)];
     [self.profilePicture setUserInteractionEnabled:YES];
     [self.profilePicture addGestureRecognizer:tap];
 
