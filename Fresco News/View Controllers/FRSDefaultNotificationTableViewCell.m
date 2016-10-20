@@ -45,7 +45,9 @@
 }
 
 -(void)configureUserRepostNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
-    
+    self.bodyLabel.numberOfLines = 3;
+    self.titleLabel.numberOfLines = 1;
+
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeRepost];
     [self setUserImage:userID];
     self.followButton.alpha = 0;
@@ -53,7 +55,9 @@
 }
 
 -(void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
-    
+    self.bodyLabel.numberOfLines = 3;
+    self.titleLabel.numberOfLines = 1;
+
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeLike];
     [self setUserImage:userID];
     self.followButton.alpha = 0;
@@ -61,7 +65,9 @@
 }
 
 -(void)configureUserCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID {
-    
+    self.bodyLabel.numberOfLines = 3;
+    self.titleLabel.numberOfLines = 1;
+
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeComment];
     [self setUserImage:userID];
     self.followButton.alpha = 0;
@@ -69,6 +75,9 @@
 }
 
 -(void)configureUserMentionCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID {
+    self.bodyLabel.numberOfLines = 3;
+    self.titleLabel.numberOfLines = 1;
+
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeCommentMention];
     [self setUserImage:userID];
     self.followButton.alpha = 0;
@@ -77,6 +86,9 @@
 
 
 -(void)configureUserMentionGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
+    self.bodyLabel.numberOfLines = 3;
+    self.titleLabel.numberOfLines = 1;
+
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeGalleryMention];
     [self setUserImage:userID];
     self.followButton.alpha = 0;
@@ -84,6 +96,9 @@
 }
 
 -(void)configurePhotoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod {
+    self.bodyLabel.numberOfLines = 3;
+    self.titleLabel.numberOfLines = 1;
+
     self.titleLabel.text = @"Your photo was purchased!";
     
     [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
@@ -109,7 +124,9 @@
 
 -(void)configureVideoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod {
     self.titleLabel.text = @"Your video was purchased!";
-    
+    self.bodyLabel.numberOfLines = 3;
+    self.titleLabel.numberOfLines = 1;
+
     [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
         
     }];
@@ -132,7 +149,9 @@
 
 
 -(void)configureUserFollowNotificationWithID:(NSString *)userID {
-    
+    self.bodyLabel.numberOfLines = 3;
+    self.titleLabel.numberOfLines = 1;
+
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeFollow];
     
     self.followButton.alpha = 0;
