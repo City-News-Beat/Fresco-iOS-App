@@ -61,7 +61,7 @@
 @property (strong, nonatomic) NSString *reportReasonString;
 
 @property (strong, nonatomic) FRSAlertView *errorAlertView;
-
+@property (strong, nonatomic) NSString *galleryID;
 @property int totalCommentCount;
 
 @property BOOL didDisplayReport;
@@ -88,6 +88,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self = [super init];
     if (self){
         self.gallery = gallery;
+        
+        if (gallery.uid) {
+            self.galleryID = gallery.uid;
+        }
+        
         self.orderedArticles = [self.gallery.articles allObjects];
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
@@ -993,12 +998,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         return;
     }
     
-    [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.galleryView.gallery completion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.galleryID completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", responseObject, error);
         [UIView animateWithDuration:.15 animations:^{
             if (error) {
                 NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
-                self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"COMMENT FAILED" message:message actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"COMMENT FAILED" message:message actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.errorAlertView show];
             }
             else {
