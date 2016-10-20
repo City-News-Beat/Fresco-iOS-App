@@ -153,6 +153,8 @@
             return;
         }
         
+        [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+        
         FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         
         if (!authenticatedUser) {
@@ -765,7 +767,11 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 -(void)applicationDidBecomeActive:(UIApplication *)application{
-    [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    
+    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    }
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSResetUpload" object:nil userInfo:@{@"type":@"reset"}];
 }
 
