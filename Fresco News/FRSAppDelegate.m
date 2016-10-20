@@ -1232,6 +1232,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
         [navController pushViewController:debitCardVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
@@ -1240,6 +1241,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
         [navController pushViewController:debitCardVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
+
     }
 }
 
@@ -1267,6 +1270,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
         [navController pushViewController:taxVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
@@ -1275,6 +1279,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
         [navController pushViewController:taxVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
     }
 }
 

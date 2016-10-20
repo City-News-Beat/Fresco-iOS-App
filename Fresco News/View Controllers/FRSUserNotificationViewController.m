@@ -596,13 +596,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     /* PAYMENT */
     else if ([currentKey isEqualToString:purchasedContentNotification]) {
-        if ([[push valueForKey:@"has_payment"] boolValue]) {
-            NSString *gallery = [push objectForKey:@"gallery_id"];
-            
-            if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-                [self segueToGallery:gallery];
-            }
-            
+        if ([[[push valueForKey:@"meta"] valueForKey:@"has_payment"] boolValue]) {
             NSString *postID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"post_id"];
             NSString *galleryID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
             [self segueToPost:postID inGallery:galleryID];
@@ -674,7 +668,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         self.navigationController.interactivePopGestureRecognizer.delegate = nil;
         [self hideTabBarAnimated:YES];
     }];
-
 }
 -(void)segueToComment:(NSString *)commentID inGallery:(NSString *)gallery {
     
