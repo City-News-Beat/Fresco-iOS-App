@@ -853,6 +853,7 @@
             if (responseObject && !error) {
                 state = YES;
                 [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
             }
             else {
                 [sender setOn:FALSE];
@@ -865,6 +866,7 @@
         if (responseObject && !error) {
             state = NO;
             [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         }
         else {
             [sender setOn:TRUE];
