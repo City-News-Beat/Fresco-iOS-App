@@ -716,7 +716,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
         cell.isSelectedAssignment = YES;
         
         if (tableView == self.assignmentsTableView) {
-            self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
+            if (indexPath.row < self.assignmentsArray.count) {
+                self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
+            }
         }else if(tableView == self.globalAssignmentsTableView){
             self.selectedAssignment = [self.globalAssignments objectAtIndex:indexPath.row];
         }
