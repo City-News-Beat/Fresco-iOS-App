@@ -631,7 +631,7 @@
         }
     }
     else if (outlets.count > 1) {
-        self.assignmentOutlet = [NSString stringWithFormat:@"%lu active news outlets", self.outlets.count];
+        self.assignmentOutlet = [NSString stringWithFormat:@"%d active news outlets", (int)self.outlets.count];
     }
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
