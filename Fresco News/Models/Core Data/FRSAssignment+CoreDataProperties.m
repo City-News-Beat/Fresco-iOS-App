@@ -24,5 +24,6 @@
 @dynamic uid;
 @dynamic longitude;
 @dynamic latitude;
+@dynamic outlets;
 
 @end

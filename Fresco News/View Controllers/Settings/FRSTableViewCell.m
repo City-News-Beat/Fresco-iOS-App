@@ -838,22 +838,42 @@
     [self checkNotificationStatus];
     [self checkLocationStatus];
     
-    BOOL state;
+    __block BOOL state;
     
     
     if ([sender isOn]) {
-        state = YES;
-        if (!self.notificationsEnabled || !self.locationEnabled) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
-            [alert show];
+        FRSUser *user = [[FRSAPIClient sharedClient] authenticatedUser];
+        float radius = 10;
+        
+        if ([user.notificationRadius floatValue] > 0) {
+            radius = [user.notificationRadius floatValue];
         }
-//        [self requestNotifications]; //Request and enable notifications
+        
+        [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"radius":@(radius)} completion:^(id responseObject, NSError *error) {
+            if (responseObject && !error) {
+                state = YES;
+                [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            else {
+                [sender setOn:FALSE];
+            }
+        }];
+        //        [self requestNotifications]; //Request and enable notifications
     } else {
-        state = NO;
-        [[UIApplication sharedApplication] unregisterForRemoteNotifications]; //Unregister from notifications
-    }
     
-    [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
+    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"radius":@(0)} completion:^(id responseObject, NSError *error) {
+        if (responseObject && !error) {
+            state = NO;
+            [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        else {
+            [sender setOn:TRUE];
+        }
+    }];
+    }
+
 }
 
 -(void)checkNotificationStatus {

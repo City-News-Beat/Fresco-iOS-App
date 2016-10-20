@@ -303,6 +303,10 @@
 #pragma mark - Logout
 
 -(void)logoutWithPop:(BOOL)pop {
+    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"facebook-enabled"];
+    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"twitter-enabled"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
 
     if ([[FRSAPIClient sharedClient] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password

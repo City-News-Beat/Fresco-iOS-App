@@ -887,7 +887,7 @@
 
 -(BOOL)isAuthenticated {
     
-    if ([[SAMKeychain allAccounts] count] > 0 && [self authenticatedUser]) {
+    if ([[SAMKeychain accountsForService:serviceName] count] > 0) {
         return TRUE;
     }
     

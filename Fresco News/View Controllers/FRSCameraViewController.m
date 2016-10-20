@@ -1690,7 +1690,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
     @catch(NSException *e) {
-        
+        @try {
+            [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
+        }
+        @catch (NSException *e) {
+            
+        }
     }
 }
 

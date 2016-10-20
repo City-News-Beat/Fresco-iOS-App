@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11535.1" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
@@ -38,13 +39,35 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qJb-dQ-ifY" userLabel="OutletImagesView">
                         <rect key="frame" x="16" y="82" width="24" height="24"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newspaper16W" highlightedImage="newspaper16W" translatesAutoresizingMaskIntoConstraints="NO" id="bab-rs-J40">
-                                <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newspaper16W" highlightedImage="newspaper16W" translatesAutoresizingMaskIntoConstraints="NO" id="bab-rs-J40">
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25999999046325684" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="24" id="5DG-m5-zg2"/>
                                     <constraint firstAttribute="height" constant="24" id="Qlw-2D-fiz"/>
                                     <constraint firstAttribute="width" constant="24" id="khI-CY-O1U"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="12"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newspaper16W" highlightedImage="newspaper16W" translatesAutoresizingMaskIntoConstraints="NO" id="shN-a1-et2">
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25954198473282442" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="uFO-Ta-aNy"/>
+                                    <constraint firstAttribute="width" constant="24" id="wSY-Yg-wSK"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="12"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newspaper16W" highlightedImage="newspaper16W" translatesAutoresizingMaskIntoConstraints="NO" id="YD4-x8-E5X">
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25954198473282442" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="24" id="bKG-fS-dvX"/>
+                                    <constraint firstAttribute="height" constant="24" id="mwM-4N-iIb"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -55,11 +78,16 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="24" id="5yH-Id-yYx"/>
+                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="104" id="2cn-0f-IR7"/>
                             <constraint firstAttribute="bottom" secondItem="bab-rs-J40" secondAttribute="bottom" id="BSa-Rz-28Z"/>
-                            <constraint firstAttribute="trailing" secondItem="bab-rs-J40" secondAttribute="trailing" id="ZlS-xc-Lht"/>
-                            <constraint firstAttribute="width" constant="24" id="bTr-Wh-83M"/>
+                            <constraint firstItem="YD4-x8-E5X" firstAttribute="leading" secondItem="shN-a1-et2" secondAttribute="trailing" constant="8" id="IqC-BX-FXS"/>
+                            <constraint firstItem="shN-a1-et2" firstAttribute="leading" relation="lessThanOrEqual" secondItem="bab-rs-J40" secondAttribute="trailing" constant="8" id="LXS-Lj-JmN"/>
+                            <constraint firstAttribute="bottom" secondItem="shN-a1-et2" secondAttribute="bottom" id="Mo6-iz-xlL"/>
+                            <constraint firstItem="shN-a1-et2" firstAttribute="top" secondItem="qJb-dQ-ifY" secondAttribute="top" id="bNT-xi-aUE"/>
+                            <constraint firstAttribute="trailing" secondItem="YD4-x8-E5X" secondAttribute="trailing" constant="16" id="eMC-T7-raf"/>
+                            <constraint firstAttribute="bottom" secondItem="YD4-x8-E5X" secondAttribute="bottom" id="fRQ-6a-wCQ"/>
                             <constraint firstItem="bab-rs-J40" firstAttribute="leading" secondItem="qJb-dQ-ifY" secondAttribute="leading" id="jzf-iO-RB6"/>
+                            <constraint firstItem="YD4-x8-E5X" firstAttribute="top" secondItem="qJb-dQ-ifY" secondAttribute="top" id="kk9-1S-Gec"/>
                             <constraint firstItem="bab-rs-J40" firstAttribute="top" secondItem="qJb-dQ-ifY" secondAttribute="top" id="vys-nq-LWI"/>
                         </constraints>
                     </view>
@@ -169,7 +197,7 @@
                     <constraint firstItem="I0N-DT-wge" firstAttribute="centerX" secondItem="jpu-6w-YYc" secondAttribute="centerX" id="4xM-yj-JqN"/>
                     <constraint firstItem="SNw-Gn-mLB" firstAttribute="leading" secondItem="bdj-4p-8OH" secondAttribute="trailing" constant="16" id="6Ub-TH-YND"/>
                     <constraint firstItem="bdj-4p-8OH" firstAttribute="leading" secondItem="jpu-6w-YYc" secondAttribute="leadingMargin" constant="10" id="8Wr-xi-jC2"/>
-                    <constraint firstItem="XH2-zL-2GB" firstAttribute="leading" secondItem="qJb-dQ-ifY" secondAttribute="trailing" constant="16" id="8xk-bY-xgV"/>
+                    <constraint firstItem="XH2-zL-2GB" firstAttribute="leading" secondItem="qJb-dQ-ifY" secondAttribute="trailing" id="8xk-bY-xgV"/>
                     <constraint firstItem="KUX-3g-Y6j" firstAttribute="leading" secondItem="0kd-in-cRr" secondAttribute="trailing" constant="16" id="9Yj-fR-UnU"/>
                     <constraint firstItem="c2f-dt-5zU" firstAttribute="leading" secondItem="KUX-3g-Y6j" secondAttribute="trailing" constant="6" id="B4k-Mx-dDD"/>
                     <constraint firstItem="qJb-dQ-ifY" firstAttribute="top" secondItem="I0N-DT-wge" secondAttribute="bottom" constant="10" id="BTm-qK-GJQ"/>
@@ -206,7 +234,11 @@
                 <outlet property="assignmentDescriptionLabel" destination="34c-07-SJa" id="nKl-RQ-gvh"/>
                 <outlet property="expirationLabel" destination="SNg-km-1KH" id="bc9-Fi-4eW"/>
                 <outlet property="openCameraButton" destination="EOj-1T-883" id="zzC-dc-qU6"/>
+                <outlet property="outletIcon1ImageView" destination="bab-rs-J40" id="HO7-89-fJJ"/>
+                <outlet property="outletIcon2ImageView" destination="shN-a1-et2" id="WRX-Mq-Nsh"/>
+                <outlet property="outletIcon3ImageView" destination="YD4-x8-E5X" id="5sp-8x-goL"/>
                 <outlet property="outletIconsView" destination="qJb-dQ-ifY" id="gtT-GC-aYq"/>
+                <outlet property="outletWidthConstraint" destination="2cn-0f-IR7" id="qA1-cn-CGd"/>
                 <outlet property="photoPriceLabel" destination="0kd-in-cRr" id="XZM-9i-CxS"/>
                 <outlet property="titleLabel" destination="I0N-DT-wge" id="Qta-ny-I73"/>
                 <outlet property="videoPriceLabel" destination="c2f-dt-5zU" id="sqw-7Y-I0Z"/>

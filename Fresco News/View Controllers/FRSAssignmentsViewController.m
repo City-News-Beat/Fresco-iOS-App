@@ -36,6 +36,7 @@
     NSMutableArray *dictionaryRepresentations;
     BOOL hasSnapped;
 }
+@property (nonatomic, retain) NSMutableArray *outletImagesViews;
 @property (strong, nonatomic) NSArray *assignments;
 
 @property (strong, nonatomic) NSArray *overlays;
@@ -48,24 +49,21 @@
 
 @property (strong, nonatomic) FRSLocationManager *locationManager;
 
+@property (strong, nonatomic) NSArray *outlets;
+
 @property (strong, nonatomic) UIScrollView *scrollView;
 
 @property (strong, nonatomic) UIView *dismissView;
 
 @property (strong, nonatomic) UIView *assignmentBottomBar;
-
 @property (strong, nonatomic) NSString *assignmentTitle;
-
+@property (strong, nonatomic) NSString *assignmentOutlet;
 @property (strong, nonatomic) NSString *assignmentCaption;
-
 @property (strong, nonatomic) NSDate *assignmentExpirationDate;
-
 @property (strong, nonatomic) UILabel *assignmentTitleLabel;
-
+@property (strong, nonatomic) UILabel *assignmentOutletLabel;
 @property (strong, nonatomic) UITextView *assignmentTextView;
-
 @property (strong, nonatomic) UIView *assignmentCard;
-
 @property (strong, nonatomic) UILabel *expirationLabel;
 @property (strong, nonatomic) UILabel *distanceLabel;
 
@@ -362,6 +360,7 @@
         
         [self.assignmentIDs addObject:assignment.uid];
         [self addAssignmentAnnotation:assignment index:count];
+        
         count++;
     }
 }
@@ -395,6 +394,7 @@
     CLLocationDistance distance = [assignment.radius floatValue] * 1609.34;
     FRSMapCircle *circle = [FRSMapCircle circleWithCenterCoordinate:coord radius:distance];
     circle.circleType = FRSMapCircleTypeAssignment;
+    ann.outlets = assignment.outlets;
     
     [self.mapView addOverlay:circle];
     [self.mapView addAnnotation:ann];
@@ -404,7 +404,6 @@
 
 -(void)setDefaultAssignment:(FRSAssignment *)assignment {
 
-        
     if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
         
         self.assignmentTitle = assignment.title;
@@ -615,6 +614,26 @@
     self.assignmentCaption = assAnn.subtitle;
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
     
+    self.outlets = assAnn.outlets;
+    NSArray *outlets = self.outlets;
+    
+    if (outlets.count == 1) {
+        NSDictionary *outlet = [outlets firstObject];
+        
+        if (outlet[@"title"] && ![outlet[@"title"] isEqual:[NSNull null]]) {
+            self.assignmentOutlet = outlet[@"title"];
+        }
+        else {
+            self.assignmentOutlet = @"1 active news outlet";
+        }
+    }
+    else if (outlets.count > 1) {
+        self.assignmentOutlet = [NSString stringWithFormat:@"%d active news outlets", (int)self.outlets.count];
+    }
+    else if (outlets.count == 0) {
+        self.assignmentOutlet = @"No active news outlets";
+    }
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterFullStyle];
     NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
@@ -644,6 +663,7 @@
 }
 
 -(void)createAssignmentView{
+    
     self.showsCard = TRUE;
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.multipleTouchEnabled = NO;
@@ -717,8 +737,16 @@
     navigateButton.tintColor = [UIColor blackColor];
     [self.assignmentBottomBar addSubview:navigateButton];
     
+    self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16, 44)];
+    [self.assignmentOutletLabel setFont:[UIFont notaMediumWithSize:17]];
+    self.assignmentOutletLabel.textColor = [UIColor frescoDarkTextColor];
+    self.assignmentOutletLabel.userInteractionEnabled = NO;
+    self.assignmentOutletLabel.backgroundColor = [UIColor clearColor];
+    self.assignmentOutletLabel.text = self.assignmentOutlet;
+    [self.assignmentCard addSubview:self.assignmentOutletLabel];
     
-    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
+    
+    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, self.assignmentOutletLabel.frame.size.height - 3, self.view.frame.size.width - 16, 220)];
     [self.assignmentCard addSubview:self.assignmentTextView];
     [self.assignmentTextView setFont:[UIFont systemFontOfSize:15]];
     self.assignmentTextView.textColor = [UIColor frescoDarkTextColor];
@@ -764,7 +792,7 @@
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
-    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 16, self.view.frame.size.width, 120)];
+    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + self.assignmentTextView.frame.origin.y + 16 + 50, self.view.frame.size.width, 120)];
     [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
     UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
@@ -820,7 +848,7 @@
     
     
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
-    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
+    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding + 25), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     
     
     //Avoid any drawing above these
@@ -839,6 +867,7 @@
     if (_scrollView) {
         self.assignmentTitleLabel.text = self.assignmentTitle;
         self.assignmentTextView.text = self.assignmentCaption;
+        self.assignmentOutletLabel.text = self.assignmentOutlet;
 
     } else {
         [self createAssignmentView];
@@ -855,7 +884,48 @@
     
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
-    self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
+    self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24 + 20, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
+    
+    [self drawImages];
+}
+
+-(void)drawImages {
+    if (self.outletImagesViews) {
+        for (UIImageView *imageView in self.outletImagesViews) {
+            [imageView removeFromSuperview];
+        }
+    }
+    
+    self.outletImagesViews = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary *outlet in self.outlets) {
+        
+        if (self.outletImagesViews.count >= 3) {
+            return;
+        }
+        
+        if (outlet[@"avatar"] && ![outlet[@"avatar"] isEqual:[NSNull null]]) {
+            int xOffset = (int)self.outletImagesViews.count * (int)34 + 13;
+            int width = 28;
+            int height = 28;
+            int y = self.assignmentOutletLabel.frame.origin.y + 6;
+            
+            CGRect imageFrame = CGRectMake(xOffset, y, width, height);
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
+            imageView.layer.masksToBounds = YES;
+            imageView.layer.cornerRadius = width/2;
+            
+            [self.outletImagesViews addObject:imageView];
+            
+            [self.assignmentCard addSubview:imageView];
+            [imageView hnk_setImageFromURL:[NSURL URLWithString:outlet[@"avatar"]]];
+        }
+        
+        int xOffset = (int)self.outletImagesViews.count * (int)34 + 13 + (3 * (self.outletImagesViews.count >0));
+        CGRect frame = self.assignmentOutletLabel.frame;
+        frame.origin.x = xOffset;
+        self.assignmentOutletLabel.frame = frame;
+    }
 }
 
 -(void)dismissTap:(UITapGestureRecognizer *)sender {

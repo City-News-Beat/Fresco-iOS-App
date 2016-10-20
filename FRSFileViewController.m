@@ -150,14 +150,14 @@ static NSString *imageTile = @"ImageTile";
     self.twitterButton.frame = CGRectMake(16, self.view.frame.size.height -24 -10, 24, 24);
     [self.twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
     [self.twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateSelected];
-    [self.view addSubview:self.twitterButton];
+    //[self.view addSubview:self.twitterButton];
     
     self.facebookButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.facebookButton addTarget:self action:@selector(facebookTapped:) forControlEvents:UIControlEventTouchDown];
     self.facebookButton.frame = CGRectMake(56, self.view.frame.size.height -24 -10, 24, 24);
     [self.facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
     [self.facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
-    [self.view addSubview:self.facebookButton];
+   // [self.view addSubview:self.facebookButton];
     
 //    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
 //    [self.anonButton addTarget:self action:@selector(anonTapped:) forControlEvents:UIControlEventTouchDown];

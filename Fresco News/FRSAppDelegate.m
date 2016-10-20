@@ -44,14 +44,14 @@
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
-    
+    [self startFabric]; // crashlytics first yall
+
     if ([self isFirstRun]) {
         [self clearKeychain]; // clear tokens from past install
     }
     
     [self startMixpanel];
     [self configureWindow];
-    [self startFabric]; // crashlytics first yall
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
     [self persistentStoreCoordinator];
     
@@ -626,6 +626,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                                                   ntohl(tokenData[3]), ntohl(tokenData[4]), ntohl(tokenData[5]),
                                                   ntohl(tokenData[6]), ntohl(tokenData[7])];
     
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] == Nil)  {
+        [FRSTracker track:@"Notifications Enabled"];
+    }
+    
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:@"deviceToken"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -635,7 +639,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         NSLog(@"Updated user installation");
     }];
     
-    [FRSTracker track:@"Notifications Enabled"];
 }
 
 -(void)handleLocationUpdate {
