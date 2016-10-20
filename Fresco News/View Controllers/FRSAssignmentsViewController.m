@@ -621,6 +621,9 @@
         if (outlet[@"title"] && ![outlet[@"title"] isEqual:[NSNull null]]) {
             self.assignmentOutlet = outlet[@"title"];
         }
+        else {
+            self.assignmentOutlet = @"1 active news outlet";
+        }
     }
     else if (outlets.count > 1) {
         self.assignmentOutlet = [NSString stringWithFormat:@"%lu active news outlets", self.outlets.count];
@@ -734,10 +737,11 @@
     self.assignmentOutletLabel.textColor = [UIColor frescoDarkTextColor];
     self.assignmentOutletLabel.userInteractionEnabled = NO;
     self.assignmentOutletLabel.backgroundColor = [UIColor clearColor];
+    self.assignmentOutletLabel.text = self.assignmentOutlet;
     [self.assignmentCard addSubview:self.assignmentOutletLabel];
     
     
-    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, self.assignmentOutletLabel.frame.size.height + 15, self.view.frame.size.width - 16, 220)];
+    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, self.assignmentOutletLabel.frame.size.height, self.view.frame.size.width - 16, 220)];
     [self.assignmentCard addSubview:self.assignmentTextView];
     [self.assignmentTextView setFont:[UIFont systemFontOfSize:15]];
     self.assignmentTextView.textColor = [UIColor frescoDarkTextColor];
@@ -783,7 +787,7 @@
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
-    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + self.assignmentTextView.frame.origin.y + 16 + 20, self.view.frame.size.width, 120)];
+    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + self.assignmentTextView.frame.origin.y + 16 + 50, self.view.frame.size.width, 120)];
     [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
     UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
@@ -875,7 +879,7 @@
     
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
-    self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
+    self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24 + 50, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
 }
 
 -(void)dismissTap:(UITapGestureRecognizer *)sender {
