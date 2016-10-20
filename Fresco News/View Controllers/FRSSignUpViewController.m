@@ -1109,10 +1109,10 @@
     
     [self dismissKeyboard];
     
-    if (_isAlreadyRegistered) {
-        [self segueToSetup];
-        return;
-    }
+//    if (_isAlreadyRegistered) {
+//        [self segueToSetup];
+//        return;
+//    }
     
     if (![self checkFields]) {
         return;
@@ -1136,7 +1136,7 @@
     [registrationDigest setObject:@(self.miles) forKey:@"radius"];
 
     
-    if (_isAlreadyRegistered) {
+    if (FALSE) {
         if (![_pastRegistration[@"email"] isEqualToString:self.emailTF.text]) {
             
         }
