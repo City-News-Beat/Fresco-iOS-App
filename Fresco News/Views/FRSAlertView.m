@@ -13,7 +13,7 @@
 #import "UIView+Helpers.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <MapKit/MapKit.h>
-
+#import "FRSAppDelegate.h"
 #import <Contacts/Contacts.h>
 
 #define ALERT_WIDTH 270
@@ -1267,6 +1267,7 @@
         //Only updating username
         if (userHasPassword && userHasEmail && !userHasUsername) {
             usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            
             return self;
         }
         
@@ -1428,19 +1429,19 @@
         [digestion setObject:username forKey:@"username"];
     }
     
-    if ([[FRSAPIClient sharedClient] passwordUsed]) {
-        [digestion setObject:[[FRSAPIClient sharedClient] passwordUsed] forKey:@"verify_password"];
-    } else if (password){
-        [digestion setObject:password forKey:@"verify_password"];
-    }
+   // if ([[FRSAPIClient sharedClient] passwordUsed]) {
+   //     [digestion setObject:[[FRSAPIClient sharedClient] passwordUsed] forKey:@"verify_password"];
+   // } else if (password){
+      //  [digestion setObject:password forKey:@"verify_password"];
+    //}
     
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]) {
+   // if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]) {
         
-        [digestion setObject:password forKey:@"password"];
-        [digestion removeObjectForKey:@"verify_password"];
-    }
+       // [digestion setObject:password forKey:@"password"];
+     //   [digestion removeObjectForKey:@"verify_password"];
+   // }
     
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     
@@ -1452,6 +1453,8 @@
     [self addSubview:spinner];
     
     [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
+        FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate saveUserFields:responseObject];
         
         if (responseObject && !error) {
             [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
@@ -1488,10 +1491,10 @@
             if ([self.emailTextField isEqual:[NSNull null]] || ![self.emailTextField.text isEqualToString:@""]) {
                 [[FRSAPIClient sharedClient] authenticatedUser].email = self.emailTextField.text;
             }
-
-            [self dismiss];
         }
         }
+        
+        [self dismiss];
     }];
 }
 
