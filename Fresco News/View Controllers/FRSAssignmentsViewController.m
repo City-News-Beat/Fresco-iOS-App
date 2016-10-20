@@ -616,8 +616,8 @@
     
     if ([self.assignments count] > index) {
         outlets = [(FRSAssignment *)[self.assignments objectAtIndex:index] outlets];
+        self.outlets = outlets;
         NSLog(@"OUTLETS: %@", outlets);
-
     }
     
     if (outlets.count == 1) {
@@ -749,7 +749,7 @@
     [self.assignmentCard addSubview:self.assignmentOutletLabel];
     
     
-    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(13, self.assignmentOutletLabel.frame.size.height - 3, self.view.frame.size.width - 16, 220)];
+    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, self.assignmentOutletLabel.frame.size.height - 3, self.view.frame.size.width - 16, 220)];
     [self.assignmentCard addSubview:self.assignmentTextView];
     [self.assignmentTextView setFont:[UIFont systemFontOfSize:15]];
     self.assignmentTextView.textColor = [UIColor frescoDarkTextColor];
