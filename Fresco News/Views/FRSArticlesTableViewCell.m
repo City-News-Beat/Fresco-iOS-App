@@ -59,7 +59,7 @@
     [self addSubview:self.titleLabel];
 
 //    self.sourceLabel = [self labelWithText:self.article.source font:[UIFont notaRegularWithSize:13] color:[UIColor frescoMediumTextColor]];
-    self.sourceLabel = [self labelWithText:@"CNN News" font:[UIFont notaRegularWithSize:13] color:[UIColor frescoMediumTextColor]];
+    self.sourceLabel = [self labelWithText:@"" font:[UIFont notaRegularWithSize:13] color:[UIColor frescoMediumTextColor]];
     [self addSubview:self.sourceLabel];
 }
 
