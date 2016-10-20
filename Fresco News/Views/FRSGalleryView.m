@@ -343,8 +343,10 @@
                     // set up FRSPlayer
                     // add AVPlayerLayer
                     NSLog(@"TOP LEVEL PLAYER");
-                    [self.players addObject:[self setupPlayerForPost:post]];
-                    [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.players addObject:[self setupPlayerForPost:post]];
+                        [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                    });
                     [self configureMuteIcon];
                 }
                 else {
@@ -377,33 +379,29 @@
 -(FRSPlayer *)setupPlayerForPost:(FRSPost *)post {
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
-    __block FRSPlayer *videoPlayer;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
-    });
-
+    FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-        videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(playerItemDidReachEnd:)
-                                                     name:AVPlayerItemDidPlayToEndTimeNotification
-                                                   object:[videoPlayer currentItem]];
-        
-        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
-        
-        playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
-        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
-        
-        UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
-        container.backgroundColor = [UIColor clearColor];
-        
-        videoPlayer.container = container;
-        playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
-       
         dispatch_async(dispatch_get_main_queue(), ^{
+            AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+            videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+            
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(playerItemDidReachEnd:)
+                                                         name:AVPlayerItemDidPlayToEndTimeNotification
+                                                       object:[videoPlayer currentItem]];
+            
+            NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+            
+            playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
+            playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+            
+            UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
+            container.backgroundColor = [UIColor clearColor];
+            
+            videoPlayer.container = container;
+            playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
+            
             [container.layer insertSublayer:playerLayer atIndex:1000];
             [self.scrollView addSubview:container];
             [self.scrollView bringSubviewToFront:container];
