@@ -133,6 +133,10 @@
         [self configureWithUser:_representedUser];
     }else{
         [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid completion:^(id responseObject, NSError *error) {
+            if (error || !responseObject) {
+                return;
+            }
+            
             _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
             [self configureWithUser:_representedUser];
             
@@ -1538,10 +1542,6 @@
 #pragma mark - User
 
 -(void)configureWithUser:(FRSUser *)user {
-    
-    if (!user.uid || [user.uid isEqual:[NSNull null]]) {
-        return;
-    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         // self.profileIV.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:user.profileImage]]];

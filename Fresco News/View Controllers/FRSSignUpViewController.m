@@ -1211,9 +1211,9 @@
 }
 
 -(void)checkEmail {
-    
+    NSLog(@"EMAIL: %@", self.emailTF.text);
+
     [[FRSAPIClient sharedClient] checkEmail:self.emailTF.text completion:^(id responseObject, NSError *error) {
-        
         if (!error) {
             self.emailTaken = YES;
             [self shouldShowEmailDialogue:YES];
