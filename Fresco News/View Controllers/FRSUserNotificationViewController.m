@@ -421,7 +421,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    NSDictionary *notif = [self.feed objectAtIndex:indexPath.row];
 
     NSInteger height = 0;
         
@@ -432,6 +432,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     titleLabel.font = [UIFont notaMediumWithSize:17];
     titleLabel.numberOfLines = 1;
     titleLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width -leftPadding -rightPadding, 22);
+    titleLabel.text = notif[@"title"];
     [titleLabel sizeToFit];
     
     UILabel *bodyLabel = [[UILabel alloc] init];
@@ -439,6 +440,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     topPadding = 33;
     bodyLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width - leftPadding -rightPadding, 60);
     bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    bodyLabel.text = notif[@"body"];
     bodyLabel.numberOfLines = 3;
         
     [bodyLabel sizeToFit];
