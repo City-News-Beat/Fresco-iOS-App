@@ -738,7 +738,7 @@
     [self.assignmentBottomBar addSubview:navigateButton];
     
     self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16, 44)];
-    [self.assignmentOutletLabel setFont:[UIFont boldSystemFontOfSize:17]];
+    [self.assignmentOutletLabel setFont:[UIFont notaMediumWithSize:17]];
     self.assignmentOutletLabel.textColor = [UIColor frescoDarkTextColor];
     self.assignmentOutletLabel.userInteractionEnabled = NO;
     self.assignmentOutletLabel.backgroundColor = [UIColor clearColor];
