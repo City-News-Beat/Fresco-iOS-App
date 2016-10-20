@@ -1012,6 +1012,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
                 [self.scrollView setContentOffset:bottomOffset animated:YES];
                 commentField.text = @"";
+                [self dismissKeyboard:Nil];
             }
         } completion:^(BOOL finished) {
         }];
