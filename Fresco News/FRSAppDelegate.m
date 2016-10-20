@@ -936,41 +936,43 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 -(void)segueToTodayInNews:(NSArray *)galleryIDs {
     __block BOOL isSegueingToStory;
 
+    if ([galleryIDs count] == 1) {
+        [self segueToGallery:[galleryIDs firstObject]];
+        return;
+    }
     NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
+    NSString *gallery = @"";
     
-    for (NSString *gallery in galleryIDs) {
-        
-        [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
+    for (int i = 0; i < galleryIDs.count - 1; i++) {
+        gallery = [gallery stringByAppendingString:galleryIDs[i]];
+        gallery = [gallery stringByAppendingString:@","];
+    }
+    
+    gallery = [gallery stringByAppendingString:[galleryIDs lastObject]];
+    
+    [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
+        NSLog(@"TODAY: %@", responseObject);
+
             UITabBarController *tab = (UITabBarController *)self.tabBarController;
             
-            if (![galleryArray containsObject:responseObject]) {
-                [galleryArray addObject:(FRSGallery *)responseObject];
-            }
-            
-            if (galleryArray.count == galleryIDs.count) {
-                if (!isSegueingToStory) {
-                    isSegueingToStory = YES;
-                    FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
-                    [detailVC configureWithGalleries:galleryArray];
-                    detailVC.navigationController = tab.navigationController;
-                    detailVC.title = @"TODAY IN NEWS";
-                    UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+            FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
+            [detailVC configureWithGalleries:responseObject];
+            detailVC.navigationController = tab.navigationController;
+            detailVC.title = @"TODAY IN NEWS";
+            UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
                     
-                    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-                        [navController pushViewController:detailVC animated:TRUE];
-                    }
-                    else {
-                        UITabBarController *tab = (UITabBarController *)navController;
-                        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-                        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-                        
-                        navController = (UINavigationController *)[[tab viewControllers] firstObject];
-                        [navController pushViewController:detailVC animated:TRUE];
-                    }
-                }
+            if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                [navController pushViewController:detailVC animated:TRUE];
             }
-        }];
-    }
+            else {
+                UITabBarController *tab = (UITabBarController *)navController;
+                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                    
+                navController = (UINavigationController *)[[tab viewControllers] firstObject];
+                [navController pushViewController:detailVC animated:TRUE];
+            }
+    }];
 }
 -(void)error:(NSError *)error {
     if (!error) {

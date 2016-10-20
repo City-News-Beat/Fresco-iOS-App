@@ -377,7 +377,10 @@
 -(FRSPlayer *)setupPlayerForPost:(FRSPost *)post {
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
-    FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+    __block FRSPlayer *videoPlayer;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+    });
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
@@ -913,9 +916,13 @@
     }
     
     if (self.imageViews.count > page+1 && self.orderedPosts.count > page+1) {
+        
         UIImageView *nextImage = self.imageViews[page+1];
         FRSPost *nextPost = self.orderedPosts[page+1];
-        [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
+        
+        if (nextPost.videoUrl == Nil) {
+            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
+        }
     }
     
     self.adjustedPage = page;
