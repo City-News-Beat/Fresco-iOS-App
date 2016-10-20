@@ -646,6 +646,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     
     // payment
+    if ([instruction isEqualToString:newAssignmentNotification]) {
+        NSString *assignment = [push objectForKey:@"assignment_id"];
+        
+        if (assignment && ![assignment isEqual:[NSNull null]] && [[assignment class] isSubclassOfClass:[NSString class]]) {
+            [self segueToAssignmentWithID:assignment];
+        }
+        
+        return;
+    }
     if ([instruction isEqualToString:purchasedContentNotification]) {
         NSString *gallery = [push objectForKey:@"gallery_id"];
         
@@ -1126,8 +1135,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                 tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
                 tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
                 
-                navController = (UINavigationController *)[[tab viewControllers] firstObject];
+                navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
                 [navController pushViewController:assignmentsVC animated:TRUE];
+                [tab.tabBarController setSelectedIndex:2];
             }
 
         }];
@@ -1163,7 +1173,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
     }];
 }
-
+-(void)popViewController {
+    
+}
 -(void)segueHome {
     UITabBarController *tab = (UITabBarController *)self.tabBarController;
     tab.selectedIndex = 0;
