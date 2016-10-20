@@ -89,8 +89,8 @@ static NSString * const userEndpoint = @"user/";
 static NSString * const setAvatarEndpoint = @"user/avatar";
 static NSString * const updateUserEndpoint = @"user/update";
 static NSString * const authenticatedUserEndpoint = @"user/me";
-static NSString * const addSocialEndpoint = @"social/connect/";
-static NSString * const deleteSocialEndpoint = @"social/disconnect/";
+static NSString * const addSocialEndpoint = @"user/social/connect/";
+static NSString * const deleteSocialEndpoint = @"user/social/disconnect/";
 
 static NSString * const disableAccountEndpoint = @"user/disable/";
 
