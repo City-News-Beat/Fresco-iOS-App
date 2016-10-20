@@ -866,7 +866,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)configurePaymentExpiringCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     
     [cell.image removeFromSuperview];
-    cell.image = nil;
     [cell configureDefaultCell];
     
     NSString *total = @"(null)";
@@ -878,7 +877,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)configurePaymentSentCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     
     [cell.image removeFromSuperview];
-    cell.image = nil;
     [cell configureDefaultCell];
     
     cell.titleLabel.text = [dictionary objectForKey:@"title"];
@@ -887,7 +885,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configurePaymentDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell.image removeFromSuperview];
-    cell.image = nil;
     
     [cell configureDefaultCell];
     
@@ -898,7 +895,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)configureTaxInfoRequiredCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary{
     
     [cell.image removeFromSuperview];
-    cell.image = nil;
     
     [cell configureDefaultCell];
     
@@ -908,7 +904,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configureTaxInfoProcessedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell.image removeFromSuperview];
-    cell.image = nil;
     
     [cell configureDefaultCell];
     
@@ -924,7 +919,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 -(void)configureTaxInfoDeclinedCell:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary *)dictionary {
     [cell.image removeFromSuperview];
-    cell.image = nil;
     
     [cell configureDefaultCell];
     

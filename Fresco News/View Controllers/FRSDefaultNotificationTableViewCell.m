@@ -341,12 +341,6 @@
 
 -(void)prepareForReuse {
     [super prepareForReuse];
-    self.titleLabel = nil;
-    self.bodyLabel = nil;
-    self.image = nil;
-    self.followButton = nil;
-    self.annotationView = nil;
-    self.annotationLabel = nil;
 }
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {
