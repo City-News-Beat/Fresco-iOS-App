@@ -373,11 +373,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [view addAction:reportGallery];
     
     if (![[[self.gallery creator] uid] isEqualToString:@""]) {
-        [view addAction:report];
+        if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+            [view addAction:report];
+        }
         if ([[[FRSAPIClient sharedClient] authenticatedUser] blocking] || self.didBlockUser) {
-            [view addAction:unblock];
+            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+                [view addAction:unblock];
+            }
         } else {
-            [view addAction:block];
+            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+                [view addAction:block];
+            }
         }
     }
     [view addAction:cancel];
