@@ -53,19 +53,14 @@
 @property (strong, nonatomic) UIView *dismissView;
 
 @property (strong, nonatomic) UIView *assignmentBottomBar;
-
 @property (strong, nonatomic) NSString *assignmentTitle;
-
+@property (strong, nonatomic) NSString *assignmentOutlet;
 @property (strong, nonatomic) NSString *assignmentCaption;
-
 @property (strong, nonatomic) NSDate *assignmentExpirationDate;
-
 @property (strong, nonatomic) UILabel *assignmentTitleLabel;
-
+@property (strong, nonatomic) UILabel *assignmentOutletLabel;
 @property (strong, nonatomic) UITextView *assignmentTextView;
-
 @property (strong, nonatomic) UIView *assignmentCard;
-
 @property (strong, nonatomic) UILabel *expirationLabel;
 @property (strong, nonatomic) UILabel *distanceLabel;
 
@@ -404,7 +399,6 @@
 
 -(void)setDefaultAssignment:(FRSAssignment *)assignment {
 
-        
     if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
         
         self.assignmentTitle = assignment.title;
@@ -717,8 +711,15 @@
     navigateButton.tintColor = [UIColor blackColor];
     [self.assignmentBottomBar addSubview:navigateButton];
     
+    self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16, 44)];
+    [self.assignmentOutletLabel setFont:[UIFont systemFontOfSize:17]];
+    self.assignmentOutletLabel.textColor = [UIColor frescoDarkTextColor];
+    self.assignmentOutletLabel.userInteractionEnabled = NO;
+    self.assignmentOutletLabel.backgroundColor = [UIColor clearColor];
+    [self.assignmentCard addSubview:self.assignmentOutletLabel];
     
-    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 16, self.view.frame.size.width - 32, 220)];
+    
+    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, self.assignmentOutletLabel.frame.size.height, self.view.frame.size.width - 16, 220)];
     [self.assignmentCard addSubview:self.assignmentTextView];
     [self.assignmentTextView setFont:[UIFont systemFontOfSize:15]];
     self.assignmentTextView.textColor = [UIColor frescoDarkTextColor];
@@ -764,7 +765,7 @@
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
-    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 16, self.view.frame.size.width, 120)];
+    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + self.assignmentTextView.frame.origin.y + 16, self.view.frame.size.width, 120)];
     [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
     UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
