@@ -36,6 +36,7 @@
     NSMutableArray *dictionaryRepresentations;
     BOOL hasSnapped;
 }
+@property (nonatomic, retain) NSMutableArray *outletImagesViews;
 @property (strong, nonatomic) NSArray *assignments;
 
 @property (strong, nonatomic) NSArray *overlays;
@@ -888,6 +889,40 @@
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24 + 20, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
+    
+    [self drawImages];
+}
+
+-(void)drawImages {
+    if (self.outletImagesViews) {
+        for (UIImageView *imageView in self.outletImagesViews) {
+            [imageView removeFromSuperview];
+        }
+    }
+    
+    self.outletImagesViews = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary *outlet in self.outlets) {
+        
+        if (outlet[@"avatar"] && ![outlet[@"avatar"] isEqual:[NSNull null]]) {
+            int xOffset = (int)self.outletImagesViews.count * (int)32 + 13;
+            int width = 28;
+            int height = 28;
+            int y = self.assignmentOutletLabel.frame.origin.y;
+            
+            CGRect imageFrame = CGRectMake(xOffset, y, width, height);
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
+            imageView.layer.masksToBounds = YES;
+            imageView.layer.cornerRadius = width/2;
+            
+            [self.outletImagesViews addObject:imageView];
+            
+            [self.assignmentCard addSubview:imageView];
+            [imageView hnk_setImageFromURL:[NSURL URLWithString:outlet[@"avatar"]]];
+        }
+        
+        int xOffset = (int)self.outletImagesViews.count * (int)32 + 13 + 10;
+    }
 }
 
 -(void)dismissTap:(UITapGestureRecognizer *)sender {
