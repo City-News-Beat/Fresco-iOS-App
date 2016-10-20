@@ -934,9 +934,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 -(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
-    __block BOOL isSegueingToStory;
 
-    NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
     NSString *gallery = @"";
     
     for (int i = 0; i < galleryIDs.count - 1; i++) {
