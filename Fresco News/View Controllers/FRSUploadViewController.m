@@ -1186,7 +1186,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
         
         if (selectedRow < self.assignmentsArray.count) {
-            gallery[@"assignment_id"] = self.assignmentsArray[selectedRow][@"id"];
+            gallery[@"assignment_id"] = self.selectedAssignment.uid;
             NSLog(@"attaching assignment: %@", gallery[@"assignment_id"]);
         }
         
