@@ -26,6 +26,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
     [self.navigationItem setTitle:@"PAYMENT METHOD"];
 
     [self setupTableView];
+    [self configureBackButtonAnimated:NO];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -148,6 +149,12 @@ static NSString *addPaymentCell = @"addPaymentCell";
         NSLog(@"PAYMENTS %@", responseObject);
         self.payments = responseObject;
         
+        if (self.payments.count > 1) {
+            [self.navigationItem setTitle:@"PAYMENT METHODS"];
+        } else {
+            [self.navigationItem setTitle:@"PAYMENT METHOD"];
+
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
