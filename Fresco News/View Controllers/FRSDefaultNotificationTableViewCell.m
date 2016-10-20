@@ -45,8 +45,10 @@
 }
 
 -(void)configureUserRepostNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
-    self.bodyLabel.numberOfLines = 3;
-    self.titleLabel.numberOfLines = 1;
+    self.bodyLabel.numberOfLines = 0;
+    self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+
+    self.titleLabel.numberOfLines = 0;
 
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeRepost];
     [self setUserImage:userID];
@@ -55,8 +57,9 @@
 }
 
 -(void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
-    self.bodyLabel.numberOfLines = 3;
-    self.titleLabel.numberOfLines = 1;
+    self.bodyLabel.numberOfLines = 0;
+    self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.titleLabel.numberOfLines = 0;
 
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeLike];
     [self setUserImage:userID];
@@ -65,8 +68,9 @@
 }
 
 -(void)configureUserCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID {
-    self.bodyLabel.numberOfLines = 3;
-    self.titleLabel.numberOfLines = 1;
+    self.bodyLabel.numberOfLines = 0;
+    self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.titleLabel.numberOfLines = 0;
 
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeComment];
     [self setUserImage:userID];
@@ -75,8 +79,9 @@
 }
 
 -(void)configureUserMentionCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID {
-    self.bodyLabel.numberOfLines = 3;
-    self.titleLabel.numberOfLines = 1;
+    self.bodyLabel.numberOfLines = 0;
+    self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.titleLabel.numberOfLines = 0;
 
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeCommentMention];
     [self setUserImage:userID];
@@ -86,8 +91,9 @@
 
 
 -(void)configureUserMentionGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
-    self.bodyLabel.numberOfLines = 3;
-    self.titleLabel.numberOfLines = 1;
+    self.bodyLabel.numberOfLines = 0;
+    self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.titleLabel.numberOfLines = 0;
 
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeGalleryMention];
     [self setUserImage:userID];
@@ -96,8 +102,9 @@
 }
 
 -(void)configurePhotoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod {
-    self.bodyLabel.numberOfLines = 3;
-    self.titleLabel.numberOfLines = 1;
+    self.bodyLabel.numberOfLines = 0;
+    self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.titleLabel.numberOfLines = 0;
 
     self.titleLabel.text = @"Your photo was purchased!";
     
@@ -124,8 +131,9 @@
 
 -(void)configureVideoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod {
     self.titleLabel.text = @"Your video was purchased!";
-    self.bodyLabel.numberOfLines = 3;
-    self.titleLabel.numberOfLines = 1;
+    self.bodyLabel.numberOfLines = 0;
+    self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.titleLabel.numberOfLines = 0;
 
     [[FRSAPIClient sharedClient] getOutletWithID:outletID completion:^(id responseObject, NSError *error) {
         
@@ -149,8 +157,9 @@
 
 
 -(void)configureUserFollowNotificationWithID:(NSString *)userID {
-    self.bodyLabel.numberOfLines = 3;
-    self.titleLabel.numberOfLines = 1;
+    self.bodyLabel.numberOfLines = 0;
+    self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.titleLabel.numberOfLines = 0;
 
     [self configureDefaultCellWithAttributesForNotification:FRSNotificationTypeFollow];
     
@@ -188,7 +197,8 @@
         
         self.titleLabel.text = [NSString stringWithFormat:@"Featured Story: %@", [responseObject objectForKey:@"title"]];
         self.bodyLabel.text = [responseObject objectForKey:@"caption"];
-        self.bodyLabel.numberOfLines = 3;
+        self.bodyLabel.numberOfLines = 0;
+        self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.titleLabel.numberOfLines = 2;
         
         if([responseObject objectForKey:@"thumbnails"] != [NSNull null]){
@@ -284,15 +294,15 @@
     int rightPadding = 16;
     
     self.titleLabel.font = [UIFont notaMediumWithSize:17];
-    self.titleLabel.numberOfLines = 1;
+    self.titleLabel.numberOfLines = 0;
     [self.titleLabel sizeToFit];
     self.titleLabel.frame = CGRectMake(leftPadding, topPadding, self.frame.size.width -leftPadding -rightPadding, 22);
 
     topPadding = 33;
     self.bodyLabel.frame = CGRectMake(leftPadding, topPadding, self.frame.size.width - leftPadding -rightPadding, 60);
     self.bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    self.bodyLabel.numberOfLines = 3;
-    
+    self.bodyLabel.numberOfLines = 0;
+    self.bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
     [self.bodyLabel sizeToFit];
     [self.titleLabel sizeToFit];
     

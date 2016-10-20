@@ -448,7 +448,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     height += bodyLabel.frame.size.height;
     height += titleLabel.frame.size.height;
-    height += 8; //spacing
+    height += 40; //spacing
     
     NSLog(@"HEIGHT: %lu", height);
     
@@ -742,8 +742,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 #pragma mark - Assignments
 -(void)configureAssignmentCell:(FRSAssignmentNotificationTableViewCell *)assignmentCell dictionary:(NSDictionary *)dictionary {
-    assignmentCell.titleLabel.numberOfLines = 0;
-    assignmentCell.bodyLabel.numberOfLines  = 3;
     assignmentCell.actionButton.tintColor = [UIColor blackColor];
     assignmentCell.titleLabel.text = [dictionary objectForKey:@"title"];
     assignmentCell.bodyLabel.text = [dictionary objectForKey:@"body"];
