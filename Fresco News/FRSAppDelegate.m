@@ -676,9 +676,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [self segueToUser:user];
     }
     if ([instruction isEqualToString:@"user-news-gallery"]) {
-        NSString *gallery = [push  objectForKey:@"gallery_id"];
-        
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+        NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
+        for (NSString *gallery in galleryIDs) {
             [self segueToGallery:gallery];
         }
     }
@@ -747,7 +746,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
     if ([instruction isEqualToString:todayInNewsNotification]) {
         NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
-        [self segueToTodayInNews:galleryIDs];
+        for (NSString *gallery in galleryIDs) {
+            [self segueToGallery:gallery];
+        }
     }
     if ([instruction isEqualToString:restartUploadNotification]) {
         [self restartUpload];
