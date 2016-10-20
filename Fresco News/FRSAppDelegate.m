@@ -635,7 +635,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     NSString *instruction = push[@"type"];
     NSString *notificationID = push[@"id"];
-    
+    NSLog(@"INSTRUCTION: %@", instruction);
    // self.window.rootViewController = viewController;
     textView.text = push.description;
     
@@ -676,10 +676,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [self segueToUser:user];
     }
     if ([instruction isEqualToString:@"user-news-gallery"]) {
-        NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
-        for (NSString *gallery in galleryIDs) {
-            [self segueToGallery:gallery];
-        }
+        NSLog(@"TODAY IN NEWS");
+        NSString *galleryID = [push objectForKey:@"gallery_id"];
+        [self segueToGallery:galleryID];
+
     }
     if ([instruction isEqualToString:@"user-news-story"]) {
         NSString *story = [push  objectForKey:@"story_id"];
@@ -745,6 +745,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
     }
     if ([instruction isEqualToString:todayInNewsNotification]) {
+        NSLog(@"TODAY IN NEWS");
+
         NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
         for (NSString *gallery in galleryIDs) {
             [self segueToGallery:gallery];
