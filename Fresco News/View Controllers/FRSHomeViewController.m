@@ -91,8 +91,6 @@
     
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
-    
-    [self presentMigrationAlert];
 }
 
 -(void)logoutNotification {
@@ -157,6 +155,8 @@
     [self.appDelegate startNotificationTimer];
     entry = [NSDate date];
     numberRead = 0;
+    
+    [self presentMigrationAlert];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -214,29 +214,35 @@
 }
 
 -(void)presentMigrationAlert {
-
-    
     /* DEBUG */
-//[[FRSAPIClient sharedClient] authenticatedUser].username = nil;
+//    [[FRSAPIClient sharedClient] authenticatedUser].username = nil;
 //    [[FRSAPIClient sharedClient] authenticatedUser].email = nil;
 //    [[FRSAPIClient sharedClient] authenticatedUser].password = nil;
 //    [FRSAPIClient sharedClient].passwordUsed = nil;
 //    [FRSAPIClient sharedClient].emailUsed = nil;
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"userIsMigrating"]) {
-        [self logoutWithPop:NO];
-        return;
-    }
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] != nil
+        && ![[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]
+        && ![[[NSUserDefaults standardUserDefaults] valueForKey:userHasFinishedMigrating] boolValue]
+        && [[NSUserDefaults standardUserDefaults] valueForKey:userHasFinishedMigrating] != nil) {
 
-    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        [self logoutWithPop:NO];
         
-        if ((![[[FRSAPIClient sharedClient] authenticatedUser] username]) || (![[[FRSAPIClient sharedClient] authenticatedUser] email])) {
-            
-            FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
-            alert.delegate = self;
-            [alert show];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userIsMigrating"];
-        }
+        return;
+        
+    } else {
+        
+    }
+    
+    if ([[FRSAPIClient sharedClient] isAuthenticated] && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[[NSUserDefaults standardUserDefaults] valueForKey:@"needs-password"] boolValue]];
+        alert.delegate = self;
+        [alert show];
+        //[[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:userIsMigrated];
+        //[[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
@@ -362,10 +368,7 @@
     
     [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
-    
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 127.5, self.view.frame.size.width, 0.5)];
-    line.backgroundColor = [UIColor frescoShadowColor];
-    [self.tableView addSubview:line];
+
 }
 
 

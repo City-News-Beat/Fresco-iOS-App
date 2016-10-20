@@ -197,7 +197,7 @@
 //        self.userInteractionEnabled = NO;
 //        self.twitterIV.alpha = 0;
 //        [self configureSpinner];
-        [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+        [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user) {
 //            [self.loadingView stopLoading];
 //            [self.loadingView removeFromSuperview];
             self.twitterSwitch.userInteractionEnabled = YES;

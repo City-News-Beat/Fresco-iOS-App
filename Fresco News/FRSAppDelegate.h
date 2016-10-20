@@ -44,6 +44,8 @@
 -(BOOL)isFirstRun;
 -(void)updateTabBarToUser;
 -(void)clearKeychain;
+
+-(void)saveUserFields:(NSDictionary *)responseObject;
 -(void)startNotificationTimer;
 -(void)stopNotificationTimer;
 -(void)registerForPushNotifications;

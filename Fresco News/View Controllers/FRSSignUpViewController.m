@@ -69,7 +69,7 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
-    
+
     
     //[self addNotifications];
     
@@ -1270,7 +1270,7 @@
     
     _twitterButton.enabled = FALSE; // prevent double tapping
     
-    [FRSSocial registerWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token) {
+    [FRSSocial registerWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user) {
         _twitterButton.enabled = TRUE;
         
         [spinner stopLoading];

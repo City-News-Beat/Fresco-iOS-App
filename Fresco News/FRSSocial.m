@@ -23,21 +23,21 @@
                     
                     NSLog(@"RESPONSE: %d", [[responseObject objectForKey:@"valid_password"] boolValue]);
                     
-                    if ([[responseObject objectForKey:@"valid_password"] boolValue]) {
-                        completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], session, Nil);
+                    /*if ([[responseObject objectForKey:@"valid_password"] boolValue]) {
+                        completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], session, Nil, responseObject);
                         return;
-                    }
-                    completion(TRUE, error, session, Nil);
+                    }*/
+                    completion(TRUE, error, session, Nil, responseObject);
                     return;
                 }
                 
                 if (error) {
-                    completion(FALSE, error, session, Nil);
+                    completion(FALSE, error, session, Nil, nil);
                 }
             }];
             
         } else {
-            completion(FALSE, error, Nil, Nil);
+            completion(FALSE, error, Nil, Nil, nil);
         }
     }];
 }
@@ -45,26 +45,26 @@
 +(void)loginWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent manager:(FBSDKLoginManager *)manager {
     [manager logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:parent handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         if (error) {
-            completion(FALSE, error, Nil, Nil);
+            completion(FALSE, error, Nil, Nil, nil);
         } else if (result.isCancelled) {
-            completion(FALSE, [NSError errorWithDomain:@"com.fresconews.fresco" code:301 userInfo:Nil], Nil, Nil);
+            completion(FALSE, [NSError errorWithDomain:@"com.fresconews.fresco" code:301 userInfo:Nil], Nil, Nil, nil);
         } else {
             [[FRSAPIClient sharedClient] signInWithFacebook:[FBSDKAccessToken currentAccessToken]
                 completion:^(id responseObject, NSError *error) {
                     if (error) {
-                        completion(FALSE, error, Nil, Nil);
+                        completion(FALSE, error, Nil, Nil, nil);
                         
                     }
                     else {
                         
                         NSLog(@"RESPONSE: %d", [[responseObject objectForKey:@"valid_password"] boolValue]);
                         
-                        if ( [[responseObject objectForKey:@"valid_password"] boolValue]) {
-                            completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], Nil, [FBSDKAccessToken currentAccessToken]);
+                        /*if ( [[responseObject objectForKey:@"valid_password"] boolValue]) {
+                            completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], Nil, [FBSDKAccessToken currentAccessToken], responseObject);
                             return;
-                        }
+                        }*/
                         
-                        completion(TRUE, Nil, Nil, [FBSDKAccessToken currentAccessToken]);
+                        completion(TRUE, Nil, Nil, [FBSDKAccessToken currentAccessToken], responseObject);
                         
                     }
             }];
@@ -75,13 +75,13 @@
 +(void)registerWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent {
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"] fromViewController:parent handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-        completion((!error), error, Nil, [FBSDKAccessToken currentAccessToken]);
+        completion((!error), error, Nil, [FBSDKAccessToken currentAccessToken],nil);
     }];
 }
 
 +(void)registerWithTwitter:(LoginCompletionBlock)completion {
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
-        completion((session != Nil && !error), error, session, Nil);
+        completion((session != Nil && !error), error, session, Nil, nil);
     }];
 
 }
