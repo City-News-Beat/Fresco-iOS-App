@@ -234,6 +234,7 @@
                 alert.delegate = self;
                 [alert show];
                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"userIsMigrating"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
             }
         }
     }];

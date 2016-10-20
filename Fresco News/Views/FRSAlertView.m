@@ -1074,22 +1074,19 @@
         
         BOOL userHasEmail;
         BOOL userHasUsername;
-        BOOL userHasPassword = password;
         
-        if (![[[[FRSAPIClient sharedClient] authenticatedUser] username] isEqual:[NSNull null]]) {
-            userHasUsername = YES;
-        } else {
+        if ([[[[FRSAPIClient sharedClient] authenticatedUser] username] isEqual:[NSNull null]] || [[[[FRSAPIClient sharedClient] authenticatedUser] username] isEqualToString:@""] || ![[[FRSAPIClient sharedClient] authenticatedUser] username]) {
             userHasUsername = NO;
-        }
-        
-        if (![[[[FRSAPIClient sharedClient] authenticatedUser] email] isEqual:[NSNull null]]) {
-            userHasEmail = YES;
         } else {
+            userHasUsername = YES;
+        }
+        
+        if ([[[[FRSAPIClient sharedClient] authenticatedUser] email] isEqual:[NSNull null]] || [[[[FRSAPIClient sharedClient] authenticatedUser] email] isEqualToString:@""] || ![[[FRSAPIClient sharedClient] authenticatedUser] email]) {
             userHasEmail = NO;
+        } else {
+            userHasEmail = YES;
         }
 
-
-        
         self.height = 0;
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
         [self configureDarkOverlay];
@@ -1122,7 +1119,6 @@
         NSMutableParagraphStyle   *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:2];
         [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [attributedText.string length])];
-        
         
         self.messageLabel.attributedText = attributedText;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
@@ -1205,14 +1201,14 @@
         self.emailCheckIV.alpha = 0;
         [emailContainer addSubview:self.emailCheckIV];
         
-        if (!userHasEmail) {
+        if (userHasEmail) {
             emailContainer.alpha = 0;
             self.height -= 44;
             self.emailTextField = nil;
             [self.emailTextField removeFromSuperview];
         }
         
-        if (!userHasUsername) {
+        if (userHasUsername) {
             usernameContainer.alpha = 0;
             self.height -= 44;
             self.usernameTextField = nil;
@@ -1303,17 +1299,8 @@
             emailContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
             passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
         }
-        
-        
-        /*//Need to set after frame is set to place password field at the end
-        passwordContainer.frame = CGRectMake(0, self.frame.size.height-88, self.frame.size.width, 44);
-        
-        if (self.emailTextField != nil && (self.passwordTextField != nil || self.usernameTextField != nil)) {
-            emailContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
-        }*/
     }
     return self;
-    
 }
 
 
@@ -1454,7 +1441,11 @@
     [self addSubview:spinner];
     
     [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"userIsMigrating"];
+        
+        if (responseObject && !error) {
+            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"userIsMigrating"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
 
         spinner.alpha = 0;
         [spinner stopLoading];
