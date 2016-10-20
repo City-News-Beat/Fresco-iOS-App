@@ -316,6 +316,8 @@
 
 -(void)prepareForReuse {
     [super prepareForReuse];
+    
+    self.image.image = Nil;
 }
 
 -(void)setSelected:(BOOL)selected animated:(BOOL)animated {

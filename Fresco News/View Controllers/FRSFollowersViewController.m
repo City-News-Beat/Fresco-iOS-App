@@ -453,6 +453,8 @@
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
         
+        NSLog(@"USERN: %@", user.username);
+        
         [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
                                              fullName:user.firstName
                                              userName:user.username
@@ -475,7 +477,7 @@
         if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
-        
+
         [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
                                              fullName:user.firstName
                                              userName:user.username
