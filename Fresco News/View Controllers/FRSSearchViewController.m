@@ -105,6 +105,11 @@
 }
 
 -(void)configureSpinner {
+    
+    if (self.loadingView) {
+        return;
+    }
+    
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
