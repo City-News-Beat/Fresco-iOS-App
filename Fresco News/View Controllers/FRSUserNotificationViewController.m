@@ -757,6 +757,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     NSArray *userIDs = [[dictionary objectForKey:@"meta"] objectForKey:@"user_ids"];
     cell.count = userIDs.count;
     cell.followButton.alpha = 1;
+    cell.followButton.alpha = 0;
+    [cell.followButton removeFromSuperview];
     
     if ([self hasImage:dictionary]) {
         [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
