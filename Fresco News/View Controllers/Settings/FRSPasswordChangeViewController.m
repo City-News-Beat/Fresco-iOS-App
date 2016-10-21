@@ -34,6 +34,9 @@
 @property BOOL updatedPasswordIsValid;
 @property BOOL updatedPasswordVerifyIsValid;
 
+@property (strong, nonatomic) UITextField *passwordVerifyTextField;
+@property (strong, nonatomic) UITextField *passwordTwoTextField;
+
 
 @end
 
@@ -110,6 +113,8 @@
             [cell configureEditableCellWithDefaultText:@"Current password" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
             [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
             cell.textField.tag = 1;
+            cell.textField.delegate = self;
+            cell.textField.returnKeyType = UIReturnKeyNext;
             break;
             
         case 1:
@@ -118,6 +123,10 @@
             [cell configureEditableCellWithDefaultText:@"New password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
             [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
             cell.textField.tag = 2;
+            cell.textField.delegate = self;
+            cell.textField.returnKeyType = UIReturnKeyNext;
+            self.passwordTwoTextField = cell.textField;
+
             break;
         
         case 2:
@@ -126,6 +135,10 @@
             [cell configureEditableCellWithDefaultText:@"Confirm new password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
             [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
             cell.textField.tag = 3;
+            cell.textField.delegate = self;
+            cell.textField.returnKeyType = UIReturnKeyDone;
+            self.passwordVerifyTextField = cell.textField;
+            
             break;
         
         case 3:
@@ -169,6 +182,26 @@
     return YES;
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField*)textField {
+    
+    FRSTableViewCell *currentCell = (FRSTableViewCell *)textField.superview.superview;
+    NSIndexPath *currentIndexPath = [self.tableView indexPathForCell:currentCell];
+    
+    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForRow:currentIndexPath.row + 1 inSection:0];
+    FRSTableViewCell *nextCell = (FRSTableViewCell *)[self.tableView cellForRowAtIndexPath:nextIndexPath];
+    
+    [nextCell.textField becomeFirstResponder];
+    
+    if (textField == self.passwordTwoTextField) {
+        [self.passwordVerifyTextField becomeFirstResponder];
+    } else if (textField == self.passwordVerifyTextField) {
+        [self.passwordVerifyTextField resignFirstResponder];
+        [self.view endEditing:YES];
+        [self updatedPassword];
+    }
+    
+    return NO;
+}
 
 
 #pragma mark - Validators

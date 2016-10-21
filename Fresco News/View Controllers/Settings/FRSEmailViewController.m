@@ -20,6 +20,7 @@
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *password;
+@property (strong, nonatomic) UITextField *passwordTextField;
 
 @property BOOL emailIsValid;
 @property BOOL passwordIsValid;
@@ -106,6 +107,7 @@
             cell.textField.delegate = self;
             [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
             cell.textField.returnKeyType = UIReturnKeyDone;
+            self.passwordTextField = cell.textField;
             break;
         
         case 2:
@@ -244,13 +246,24 @@
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField {
 
-    if (textField.isSecureTextEntry) {
+    /*if (textField.isSecureTextEntry) {
         
         if (!self.passwordIsValid || !self.emailIsValid) {
             return NO;
         }
         
         [textField resignFirstResponder];
+        [self saveEmail];
+    }*/
+    
+    FRSTableViewCell *currentCell = (FRSTableViewCell *)textField.superview.superview;
+    NSIndexPath *currentIndexPath = [self.tableView indexPathForCell:currentCell];
+    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForRow:currentIndexPath.row + 1 inSection:0];
+    FRSTableViewCell *nextCell = (FRSTableViewCell *)[self.tableView cellForRowAtIndexPath:nextIndexPath];
+    [nextCell.textField becomeFirstResponder];
+    
+    if (textField == self.passwordTextField) {
+        [self.view resignFirstResponder];
         [self saveEmail];
     }
     
