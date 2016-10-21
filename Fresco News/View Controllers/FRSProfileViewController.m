@@ -1556,6 +1556,9 @@
                 self.placeholderUserIcon.alpha = 1;
             }
         }
+        else {
+            self.profileIV.image = Nil;
+        }
         
         self.bioTextView.text = user.bio;
         
