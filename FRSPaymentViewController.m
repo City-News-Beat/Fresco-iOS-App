@@ -22,10 +22,11 @@ static NSString *addPaymentCell = @"addPaymentCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+    //self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     [self.navigationItem setTitle:@"PAYMENT METHOD"];
 
     [self setupTableView];
+    [self configureBackButtonAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -42,6 +43,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSAddPaymentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:addPaymentCell];
     [self.view addSubview:self.tableView];
     self.tableView.showsVerticalScrollIndicator = FALSE;
+    self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
     
 }
 
