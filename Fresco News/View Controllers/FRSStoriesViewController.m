@@ -502,10 +502,10 @@
 
 -(void)readMore:(NSInteger)index {
     
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
     detailView.navigationController = self.navigationController;
     [self.navigationController pushViewController:detailView animated:YES];
+    [self expandNavBar:nil];
 }
 
 @end
