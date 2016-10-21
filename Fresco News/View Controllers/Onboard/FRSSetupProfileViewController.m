@@ -328,6 +328,12 @@
     [ring addBorderWithWidth:8 color:[UIColor whiteColor]];
     [self.scrollView addSubview:ring];
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(presentImagePickerController)];
+    UIButton *presentImageControllerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    presentImageControllerButton.frame = CGRectMake(0, 0, height, height);
+    [ring addSubview:presentImageControllerButton];
+    [presentImageControllerButton addGestureRecognizer:tap];
+    
     /*if (self.fbPhotoURL) {
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:self.fbPhotoURL] placeholder:nil success:^(UIImage *image) {
             [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:self.fbPhotoURL] placeholder:nil];
