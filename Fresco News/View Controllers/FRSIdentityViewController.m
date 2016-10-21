@@ -264,6 +264,7 @@
             [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             _addressField = cell.textField;
+            _addressField.returnKeyType = UIReturnKeyNext;
             
             if ([authenticatedUser valueForKey:@"address_line1"]) {
                 _addressField.text = [authenticatedUser valueForKey:@"address_line1"];
@@ -282,10 +283,11 @@
             [cell configureEditableCellWithDefaultText:@"Unit # (optional)" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             _unitField = cell.textField;
-            [_unitField setKeyboardType:UIKeyboardTypeNumberPad];
+            [_unitField setKeyboardType:UIKeyboardTypeDefault];
             [_unitField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             _unitField.tag = 2;
             cell.textField.delegate = self;
+            _unitField.returnKeyType = UIReturnKeyNext;
             break;
             
         case 2:
@@ -329,6 +331,10 @@
             cell.textField.delegate = self;
             cell.secondaryField.delegate = self;
             cell.tertiaryField.delegate = self;
+            _cityField.returnKeyType = UIReturnKeyNext;
+            _stateField.returnKeyType = UIReturnKeyNext;
+            _zipField.returnKeyType = UIReturnKeyDone;
+
             
             break;
         case 4:
@@ -607,10 +613,24 @@
     
     [nextCell.textField becomeFirstResponder];
 
-    if (textField.tag == 2 && textField == _lastNameField) {
+    if (textField == _lastNameField) {
         [textField resignFirstResponder];
         [self startDateSelected:self.datePicker];
         [_dateField becomeFirstResponder];
+    } else if (textField == _addressField) {
+        [textField resignFirstResponder];
+        [_unitField becomeFirstResponder];
+    } else if (textField == _unitField) {
+        [textField resignFirstResponder];
+        [_cityField becomeFirstResponder];
+    } else if (textField == _cityField) {
+        [textField resignFirstResponder];
+        [_stateField becomeFirstResponder];
+    } else if (textField == _stateField) {
+        [textField resignFirstResponder];
+        [_zipField becomeFirstResponder];
+    } else if (textField == _zipField) {
+        [self.view resignFirstResponder];
     }
     
     return NO;

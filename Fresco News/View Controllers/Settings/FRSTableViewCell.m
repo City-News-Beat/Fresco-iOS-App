@@ -470,11 +470,21 @@
     [self addSubview:self.textField];
     
     self.secondaryField = [[UITextField alloc] initWithFrame:CGRectMake(_textField.frame.size.width, _textField.frame.origin.y, _textField.frame.size.width/3, _textField.frame.size.height)];
+    self.secondaryField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.secondaryField.placeholder = titles[0];
+    self.secondaryField.delegate = (id<UITextFieldDelegate>)self;
+    self.secondaryField.textColor = [UIColor frescoDarkTextColor];
+    self.secondaryField.tintColor = [UIColor frescoBlueColor];
     [self addSubview:self.secondaryField];
     
     self.secondaryField.placeholder = titles[1];
     
     self.tertiaryField = [[UITextField alloc] initWithFrame:CGRectMake(_textField.frame.size.width + _secondaryField.frame.size.width, _textField.frame.origin.y, _textField.frame.size.width/3, _textField.frame.size.height)];
+    self.tertiaryField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    self.tertiaryField.placeholder = titles[0];
+    self.tertiaryField.delegate = (id<UITextFieldDelegate>)self;
+    self.tertiaryField.textColor = [UIColor frescoDarkTextColor];
+    self.tertiaryField.tintColor = [UIColor frescoBlueColor];
     [self addSubview:self.tertiaryField];
     
     self.tertiaryField.placeholder = titles[2];
