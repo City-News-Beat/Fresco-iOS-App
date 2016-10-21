@@ -42,7 +42,7 @@
         NSDate *correctDate = [date dateByAddingTimeInterval:secondsFromGMT];
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setTimeZone:[NSTimeZone localTimeZone]];
-        [formatter setDateFormat:@"hh:mm a, MMMM dd"];
+        [formatter setDateFormat:@"hh:mm a, MMMM d"];
         return [[formatter stringFromDate:correctDate] stringByAppendingString:[FRSDateFormatter daySuffixForDate:date]];
     }
     
