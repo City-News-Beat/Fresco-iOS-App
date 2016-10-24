@@ -369,6 +369,8 @@
             
         case 4:{
             if (self.lastActiveIndex == 4) {
+                FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
+                [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
                 return NO;
             }
             if ([[FRSAPIClient sharedClient] isAuthenticated]) {
