@@ -31,17 +31,11 @@
 @interface FRSStoryView() <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
-
 @property (strong, nonatomic) FRSContentActionsBar *actionBar;
-
 @property (strong, nonatomic) UIView *topContainer;
-
 @property (strong, nonatomic) UILabel *titleLabel;
-
 @property (strong, nonatomic) UILabel *caption;
-
 @property (strong, nonatomic) NSMutableArray *imageViews;
-
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) UIImageView *repostImageView;
 @property (strong, nonatomic) UILabel *repostLabel;
@@ -52,15 +46,11 @@
 
 
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
-
-    
-    
     self.shareBlock(@[[@"https://fresconews.com/story/" stringByAppendingString:self.story.uid]]);
-
 }
 
 -(void)handleActionButtonTapped {
-    
+   //?
 }
 
 -(instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id<FRSStoryViewDelegate>)delegate{
@@ -70,9 +60,7 @@
         self.delegate = delegate;
         self.story = story;
         
-        //        self.orderedPosts = [self.story.posts allObjects];
         [self configureUI];
-//        self.backgroundColor = [UIColor blueColor];
         if ([self.story valueForKey:@"reposted_by"] != nil && ![[self.story valueForKey:@"reposted_by"] isEqualToString:@""]) {
             [self configureRepostWithName:[self.story valueForKey:@"reposted_by"]];
         }
@@ -97,15 +85,7 @@
 -(void)configureTopContainer{
     
     NSInteger height = IS_IPHONE_5 ? 192 : 240;
-//    if ([self.caption.text isEqual:[NSNull null]]) {
-//    if (![self.caption.text isKindOfClass:[NSNull class]] && self.caption.text && self.caption.text != NULL) {
-//
-//    
-//    if (self.caption.text.length == 0) {
-//        self.topContainer.backgroundColor = [UIColor greenColor];
-//    }
-//    
-//    
+
     self.topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, height)];
     self.topContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.topContainer.clipsToBounds = YES;
@@ -230,12 +210,9 @@
     
     [self.titleLabel setOriginWithPoint:CGPointMake(16, self.topContainer.frame.size.height - self.titleLabel.frame.size.height - 12)];
     [self.titleLabel setSizeWithSize:CGSizeMake(self.frame.size.width - 16, self.titleLabel.frame.size.height+5)];
-    
 
     [self.topContainer addSubview:view];
-
     [self addShadowToLabel:self.titleLabel];
-    
     [self.topContainer addSubview:self.titleLabel];
 }
 
@@ -246,9 +223,7 @@
     self.caption.textColor = [UIColor frescoDarkTextColor];
     self.caption.font = [UIFont systemFontOfSize:15 weight:-1];
     self.caption.text = self.story.caption;
-    
     [self.caption sizeToFit];
-    
     [self.caption setFrame:CGRectMake(16, self.topContainer.frame.size.height + 11, self.frame.size.width - 32, self.caption.frame.size.height)];
     
     [self addSubview:self.caption];
@@ -261,8 +236,6 @@
     
     NSNumber *numReposts = [self.story valueForKey:@"reposts"];
     BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
-    
-    //NSString *repostedBy = [self.story valueForKey:@"reposted_by"];
     
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
     [self.actionBar handleHeartState:isLiked];
@@ -290,9 +263,7 @@
                 NSLog(@"ERR: %@", error);
             }
         }];
-        
-    }
-    else {
+    } else {
         [[FRSAPIClient sharedClient] likeStory:self.story completion:^(id responseObject, NSError *error) {
             NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
             if (error) {
@@ -350,7 +321,6 @@
 #pragma mark - Action Bar Deletate
 
 -(NSString *)titleForActionButton{
-    
     return @"READ MORE";
 }
 
