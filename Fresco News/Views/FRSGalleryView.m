@@ -115,7 +115,6 @@
     [self.nameLabel sizeToFit];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
 
-    
     [self.actionBar setOriginWithPoint:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height)];
     [self.borderLine.superview bringSubviewToFront:self.borderLine];
 
@@ -131,7 +130,7 @@
 }
 
 -(void)checkOwner {
-    NSString *ownerID = self.gallery.creator.uid;
+    /*NSString *ownerID = self.gallery.creator.uid;
     NSString *userID = [[FRSAPIClient sharedClient] authenticatedUser].uid;
     
     if (userID && ownerID && [ownerID isEqualToString:userID]) {
@@ -140,6 +139,17 @@
     }
     else {
         [self.actionBar setCurrentUser:FALSE];
+    }*/
+    
+    NSLog(@"self.gallery.creator = %@", self.gallery.creator);
+    NSLog(@"self.gallery.creator.uid = %@", self.gallery.creator.uid);
+    NSLog(@"authenticatedUser.uid = %@", [[[FRSAPIClient sharedClient] authenticatedUser] uid]);
+    
+    
+    if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        [self.actionBar setCurrentUser:YES];
+    } else {
+        [self.actionBar setCurrentUser:NO];
     }
 }
 
@@ -180,6 +190,7 @@
     self.repostImageView = Nil;
     
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
+        
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
 }
@@ -671,7 +682,7 @@
         if ([parent.externalSource isEqualToString:@"twitter"] ) {
             NSString *toSet = [NSString stringWithFormat:@"@%@",parent.externalAccountName];
             
-            if (![toSet isEqualToString:@"@"]) {
+            if ([toSet length] != 1) {
                 self.nameLabel.text = toSet;
             }
             

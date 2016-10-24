@@ -60,7 +60,16 @@
         self.creator.username = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
         //blocked
     }
-    NSLog(@"BYLINE: %@", self.byline);
+    
+    if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
+        FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        self.creator = newUser;
+        if (dict [@"id"] != [NSNull null]) {
+            self.creator.uid = dict[@"owner"][@"id"];
+        }
+    }
+    
+    NSLog(@"OWNER: %@", dict[@"owner"]);
 
 //    if ([dict valueForKey:@"curator"] != [NSNull null]) {
 //        self.creator = [FRSUser MR_createEntity];

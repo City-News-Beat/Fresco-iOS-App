@@ -222,7 +222,13 @@
 }
 
 -(void)setCurrentUser:(BOOL)isAuth {
-    self.repostButton.enabled = !isAuth;
+    if (isAuth) {
+        self.repostButton.userInteractionEnabled = NO;
+        //self.backgroundColor = [UIColor redColor];
+    } else {
+        self.repostButton.userInteractionEnabled = YES;
+        //self.backgroundColor = [UIColor clearColor];
+    }
 }
 
 
