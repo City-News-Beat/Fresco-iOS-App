@@ -43,6 +43,8 @@
 @property (strong, nonatomic) NSMutableArray *imageViews;
 
 @property (strong, nonatomic) FRSGallery *gallery;
+@property (strong, nonatomic) UIImageView *repostImageView;
+@property (strong, nonatomic) UILabel *repostLabel;
 
 @end
 
@@ -71,6 +73,9 @@
         //        self.orderedPosts = [self.story.posts allObjects];
         [self configureUI];
 //        self.backgroundColor = [UIColor blueColor];
+        if ([self.story valueForKey:@"reposted_by"] != nil && ![[self.story valueForKey:@"reposted_by"] isEqualToString:@""]) {
+            [self configureRepostWithName:[self.story valueForKey:@"reposted_by"]];
+        }
     }
     return self;
 }
@@ -305,6 +310,21 @@
     }];
 }
 
+-(void)configureRepostWithName:(NSString *)name {
+    
+    if (self.repostLabel == nil) {
+        self.repostImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"repost-icon-white"]];
+        self.repostImageView.frame = CGRectMake(16, 12, 24, 24);
+        [self addSubview:self.repostImageView];
+        
+        self.repostLabel = [[UILabel alloc] initWithFrame:CGRectMake(48, 17, self.frame.size.width - 48 - 16, 17)];
+        self.repostLabel.text = [name uppercaseString];
+        self.repostLabel.font = [UIFont notaBoldWithSize:15];
+        self.repostLabel.textColor = [UIColor whiteColor];
+        [self addShadowToLabel:self.repostLabel];
+        [self addSubview:self.repostLabel];
+    }
+}
 
 -(void)addShadowToLabel:(UILabel*)label {
     
