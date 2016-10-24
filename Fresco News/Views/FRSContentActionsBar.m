@@ -153,6 +153,8 @@
         repost++;
     }
     
+    NSLog(@"LABEL.TEXT = %ld", [self.repostLabel.text intValue]);
+    
     self.repostLabel.text = [NSString stringWithFormat:@"%.0f", repost];
     if (self.delegate) {
         [self.delegate handleRepost:self];
@@ -270,6 +272,7 @@
 }
 
 -(void)handleRepostAmount:(NSInteger)amount {
+        
     if (amount == 0) {
         self.repostLabel.text = @"0";
     }

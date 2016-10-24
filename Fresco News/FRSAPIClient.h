@@ -113,7 +113,10 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)unlikeStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
 
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
+
 -(void)repostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unrepostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion;
 
 -(void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)unfollowUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;

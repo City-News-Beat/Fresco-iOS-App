@@ -43,6 +43,7 @@
     if ([self.gallery.uid isEqualToString:gallery.uid]) {
         self.gallery = gallery;
         [self updateSocial];
+        [self checkOwner];
         return;
     }
     
@@ -145,12 +146,13 @@
     NSLog(@"self.gallery.creator.uid = %@", self.gallery.creator.uid);
     NSLog(@"authenticatedUser.uid = %@", [[[FRSAPIClient sharedClient] authenticatedUser] uid]);
     
-    
-    if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
-        [self.actionBar setCurrentUser:YES];
-    } else {
-        [self.actionBar setCurrentUser:NO];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+            [self.actionBar setCurrentUser:YES];
+        } else {
+            [self.actionBar setCurrentUser:NO];
+        }
+    });
 }
 
 -(void)updateUser {
@@ -248,20 +250,22 @@
 }
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {
-    BOOL state = [[self.gallery valueForKey:@"reposted"] boolValue];
-    NSInteger repostCount = [[self.gallery valueForKey:@"reposts"] boolValue];
-    
-    [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        NSLog(@"REPOSTED %@", error);
-        
-        if (error) {
-            [actionBar handleRepostState:!state];
-        }
-        else {
-            [actionBar handleRepostState:state];
-        }
-        [actionBar handleRepostAmount:repostCount];
-    }];
+    NSInteger reposts = [[self.gallery valueForKey:@"reposts"] integerValue];
+    if ([[self.gallery valueForKey:@"reposted"] boolValue]) {
+        [[FRSAPIClient sharedClient] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            if (error) {
+                [actionBar handleRepostState:TRUE];
+                [actionBar handleRepostAmount:reposts];
+            }
+        }];
+    } else {
+        [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            if (error) {
+                [actionBar handleRepostState:FALSE];
+                [actionBar handleRepostAmount:reposts];
+            }
+        }];
+    }
 }
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate{
