@@ -1015,8 +1015,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     if (self.captureMode == FRSCaptureModePhoto){
         
-        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
-        [self.view addSubview:snapshot];
+        /*UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
+        [self.view addSubview:snapshot];*/
         
         
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -1037,19 +1037,19 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         }];
         
         
-        [UIView animateWithDuration:0.15 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        /*[UIView animateWithDuration:0.15 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             
             snapshot.alpha = 0;
             
         } completion:^(BOOL finished) {
             [snapshot removeFromSuperview];
             
-        }];
+        }];*/
         
     } else {
         
-        UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
-        [self.view addSubview:snapshot];
+        /*UIView *snapshot = [self.preview snapshotViewAfterScreenUpdates:NO];
+        [self.view addSubview:snapshot];*/
         //
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             
@@ -1064,7 +1064,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             self.bottomClearContainer.frame = CGRectMake(0, self.bottomClearContainer.frame.origin.y + offset, self.bottomClearContainer.frame.size.width, self.bottomClearContainer.frame.size.height);
             self.bottomOpaqueContainer.layer.shadowOpacity = 1;
             
-            snapshot.transform = CGAffineTransformMakeScale(0, self.bottomOpaqueContainer.frame.size.height);
+            //snapshot.transform = CGAffineTransformMakeScale(0, self.bottomOpaqueContainer.frame.size.height);
             
             
         } completion:^(BOOL finished){
@@ -1073,10 +1073,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             
             [UIView animateWithDuration:0.15 delay:0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
                 
-                snapshot.alpha = 0;
+                //snapshot.alpha = 0;
                 
             } completion:^(BOOL finished) {
-                [snapshot removeFromSuperview];
+                //[snapshot removeFromSuperview];
                 
             }];
             
