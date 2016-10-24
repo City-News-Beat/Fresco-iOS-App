@@ -301,7 +301,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     dots.tintColor = [UIColor whiteColor];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     
-    self.navigationItem.rightBarButtonItems = @[dots];    
+    self.navigationItem.rightBarButtonItems = @[dots];
     
     if ([[[self.gallery creator] uid] isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
         self.navigationItem.rightBarButtonItems = nil;
