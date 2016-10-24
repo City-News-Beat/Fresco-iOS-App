@@ -295,27 +295,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.navigationItem.titleView = self.titleLabel;
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     
-    
-    
-//    UIBarButtonItem *square = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"square"] style:UIBarButtonItemStylePlain target:self action:@selector(expandGallery)];
-    
-    
-    
-    /* NOTE: Gallery creator is nil, need to setup in FRSGallery */
-    
-//    if (self.gallery.creator) {
-    
-        UIBarButtonItem *dots = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentReportGallerySheet)];
-        
-        //    dots.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
-        
-        //    square.tintColor = [UIColor whiteColor];
-        dots.tintColor = [UIColor whiteColor];
-        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-        
-        self.navigationItem.rightBarButtonItems = @[dots];
-//    }
+    UIBarButtonItem *dots = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentReportGallerySheet)];
 
+    
+    dots.tintColor = [UIColor whiteColor];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    
+    self.navigationItem.rightBarButtonItems = @[dots];    
+    
+    if ([[[self.gallery creator] uid] isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        self.navigationItem.rightBarButtonItems = nil;
+    }
 }
 
 -(void)presentReportGallerySheet {
