@@ -230,20 +230,19 @@
 
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
         [[FRSAPIClient sharedClient] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
             if (error) {
                 [actionBar handleHeartState:TRUE];
                 [actionBar handleHeartAmount:likes];
+                self.gallery.numberOfLikes --;
             }
         }];
 
-    }
-    else {
+    } else {
         [[FRSAPIClient sharedClient] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
             if (error) {
                 [actionBar handleHeartState:FALSE];
                 [actionBar handleHeartAmount:likes];
+                self.gallery.numberOfLikes ++;
             }
         }];
     }
@@ -256,6 +255,7 @@
             if (error) {
                 [actionBar handleRepostState:TRUE];
                 [actionBar handleRepostAmount:reposts];
+                self.gallery.numberOfReposts--;
             }
         }];
     } else {
@@ -263,6 +263,7 @@
             if (error) {
                 [actionBar handleRepostState:FALSE];
                 [actionBar handleRepostAmount:reposts];
+                self.gallery.numberOfReposts++;
             }
         }];
     }

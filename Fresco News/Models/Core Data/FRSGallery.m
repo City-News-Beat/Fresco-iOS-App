@@ -32,6 +32,7 @@
 @dynamic articles;
 @dynamic isLiked;
 @dynamic numberOfLikes;
+@dynamic numberOfReposts;
 @dynamic externalAccountID;
 @dynamic externalAccountName;
 @dynamic externalID;
@@ -68,6 +69,7 @@
             self.creator.uid = dict[@"owner"][@"id"];
         }
     }
+    
     
     NSLog(@"OWNER: %@", dict[@"owner"]);
 
@@ -109,6 +111,9 @@
     
     [self setValue:@([dict[@"liked"] boolValue]) forKey:@"liked"];
     [self setValue:@([dict[@"likes"] integerValue]) forKey:@"likes"];
+
+    [self setValue:@([dict[@"reposted"] boolValue]) forKey:@"reposted"];
+    [self setValue:@([dict[@"reposts"] integerValue]) forKey:@"reposts"];
     
     NSString *repostedBy = dict[@"reposted_by"];
     
