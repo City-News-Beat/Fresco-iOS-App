@@ -762,7 +762,7 @@
     label.layer.shouldRasterize = TRUE;
     label.layer.rasterizationScale = [[UIScreen mainScreen] scale];
     label.adjustsFontSizeToFitWidth = YES;
-    label.numberOfLines = 0;
+    label.numberOfLines = 1;
 
    // [label sizeToFit];
     CGRect labelFrame = label.frame;

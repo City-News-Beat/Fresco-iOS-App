@@ -126,7 +126,10 @@
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
         [[Mixpanel sharedInstance] identify:[[FRSAPIClient sharedClient] authenticatedUser].uid];
         FRSUser *user = [[FRSAPIClient sharedClient] authenticatedUser];
-        [[[Mixpanel sharedInstance] people] set:@{@"fresco_id":user.uid}];
+        
+        if (user.uid && ![user.uid isEqual:[NSNull null]]) {
+            [[[Mixpanel sharedInstance] people] set:@{@"fresco_id":user.uid}];
+        }
         
         if (user.firstName) {
             [[[Mixpanel sharedInstance] people] set:@{@"$name":user.firstName}];
