@@ -652,6 +652,10 @@
     NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
     self.expirationLabel.text = dateString; //Not up to spec. "Expires in 24 minutes"
     
+    
+    
+    
+    
     [self configureAssignmentCard];
     [self animateAssignmentCard];
     [self snapToAnnotationView:view]; // Centers map with y offset
