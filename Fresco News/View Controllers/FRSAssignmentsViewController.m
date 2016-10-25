@@ -805,7 +805,7 @@
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
-    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 14 + 50, self.view.frame.size.width, 120)];
+    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 50, self.view.frame.size.width, 120)];
     [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
     UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
@@ -904,7 +904,7 @@
     [self.dismissView addGestureRecognizer:singleTap];
     
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
-    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15 + 33), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height); // :(
+    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15 + 50), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height); // :(
     self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 14 + 50, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
     
     [self drawImages];
@@ -942,7 +942,7 @@
             [imageView hnk_setImageFromURL:[NSURL URLWithString:outlet[@"avatar"]]];
         }
         
-        int xOffset = (int)self.outletImagesViews.count * (int)34 + 13 + (3 * (self.outletImagesViews.count >0));
+        int xOffset = (int)self.outletImagesViews.count * (int)34 + 17 + (3 * (self.outletImagesViews.count >0));
         CGRect frame = self.assignmentOutletLabel.frame;
         frame.origin.x = xOffset;
         self.assignmentOutletLabel.frame = frame;
