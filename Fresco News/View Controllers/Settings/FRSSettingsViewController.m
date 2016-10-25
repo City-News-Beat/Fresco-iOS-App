@@ -569,12 +569,12 @@
 }
 
 -(void)configureKenny {
-    UILabel *kenny = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -12, self.tableView.frame.size.height*1.9, 24, 24)];
+    UILabel *kenny = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -12, self.tableView.frame.size.height*1.6, 24, 24)];
     kenny.text = @"🎷";
     [self.tableView addSubview:kenny];
     [self rotate:kenny];
     
-    UILabel *music = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -20, self.tableView.frame.size.height*1.9 -5, 24, 24)];
+    UILabel *music = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -20, self.tableView.frame.size.height*1.6 -5, 24, 24)];
     music.text = @"🎶";
     music.transform = CGAffineTransformMakeScale(0.5, 0.5);
     [self.tableView addSubview:music];
@@ -595,11 +595,11 @@
 
 -(void)configureTheSongsOfKennyG:(UILabel *)music {
     music.alpha = 0;
-    music.frame = CGRectMake(self.view.frame.size.width/2 -15, self.tableView.frame.size.height*1.9 -5, 24, 24);
+    music.frame = CGRectMake(self.view.frame.size.width/2 -15, self.tableView.frame.size.height*1.6 -5, 24, 24);
     music.transform = CGAffineTransformMakeScale(0.5, 0.5);
 
     [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        music.frame = CGRectMake(self.view.frame.size.width/2 -20, self.tableView.frame.size.height*1.9 -15, 24, 24);
+        music.frame = CGRectMake(self.view.frame.size.width/2 -20, self.tableView.frame.size.height*1.6 -15, 24, 24);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             music.alpha = 0;
