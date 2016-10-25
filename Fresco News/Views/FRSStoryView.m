@@ -73,8 +73,7 @@
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     [self configureTopContainer];
-    [self configureTitleLabel];
-    //[self configureMetaTags];
+    [self configureTitle];
     [self configureCaption];
     [self configureActionsBar];
     
@@ -190,7 +189,7 @@
     }];
 }
 
--(void)configureTitleLabel{
+-(void)configureTitle{
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, self.topContainer.frame.size.height -50, self.frame.size.width, 50)];
     CAGradientLayer *gradient = [CAGradientLayer layer];
@@ -215,6 +214,24 @@
     [self.topContainer addSubview:view];
     [self addShadowToLabel:self.titleLabel];
     [self.topContainer addSubview:self.titleLabel];
+    
+    if (self.story.editedDate) { //CHECK FOR LOCATION HERE TOO
+        UIImageView *clockIV = [[UIImageView alloc] initWithFrame:CGRectMake(16, self.topContainer.frame.size.height - 12 - 24, 24, 24)];
+        clockIV.image = [UIImage imageNamed:@"gallery-clock"];
+        [self.topContainer addSubview:clockIV];
+        
+        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(clockIV.frame.origin.x +24 +8, clockIV.frame.origin.y +4, self.frame.size.width, 16)]; //MAKE WIDTH DYNAMIC WHEN ADDING LOCATION
+        timestampLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:self.story.editedDate];
+        timestampLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
+        timestampLabel.textColor = [UIColor whiteColor];
+        [self.topContainer addSubview:timestampLabel];
+        
+        self.titleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, self.titleLabel.frame.origin.y - 30, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
+        
+        //self.titleLabel.backgroundColor = [UIColor greenColor];
+        //timestampLabel.backgroundColor = [UIColor orangeColor];
+        //clockIV.backgroundColor = [UIColor redColor];
+    }
 }
 
 

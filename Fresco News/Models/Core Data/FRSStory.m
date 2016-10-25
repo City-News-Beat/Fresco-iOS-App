@@ -33,11 +33,12 @@
     
     self.caption = dict[@"caption"];
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"created_at"] milliseconds:YES];
+    //self.editedDate  = [FRSDateFormatter dateFromEpochTime:dict[@"updated_at"] milliseconds:YES];
+    self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"updated_at"]];
     self.title = dict[@"title"];
     self.uid = dict[@"id"];
     self.imageURLs = [self imagesURLsFromThumbnails:dict[@"thumbnails"]];
     self.galleryCount = dict[@"galleries"];
-    
     
     if ([[dict valueForKey:@"reposted"] boolValue]) {
         [self setValue:@(TRUE) forKey:@"reposted"];
