@@ -650,6 +650,33 @@
     
     self.assignmentLat = assAnn.coordinate.latitude;
     self.assignmentLong = assAnn.coordinate.longitude;
+    
+    CLLocation *locA = [[CLLocation alloc] initWithLatitude:self.assignmentLat longitude:self.assignmentLong];
+    CLLocation *locB = [[CLLocation alloc] initWithLatitude:[FRSLocator sharedLocator].currentLocation.coordinate.latitude longitude:[FRSLocator sharedLocator].currentLocation.coordinate.longitude];
+    CLLocationDistance distance = [locA distanceFromLocation:locB];
+    
+    CGFloat miles = distance / 1609.34;
+    CGFloat feet  = miles * 5280;
+    
+    NSString *distanceString;
+    
+    if (miles != 0) {
+        if (miles <= 10) {
+            distanceString = [NSString stringWithFormat:@"%.1f miles away", miles];
+            
+        } else {
+            //Disable truncation on assignments with a distance away greater than 10 miles
+            distanceString = [NSString stringWithFormat:@"%.0f miles away", miles];
+        }
+        
+        if (feet <= 2000) {
+            distanceString = [NSString stringWithFormat:@"%.0f feet away", feet];
+        }
+    }
+    
+    
+    
+    self.distanceLabel.text = distanceString;
 }
 
 -(void)setExpiration {
@@ -696,7 +723,7 @@
             expirationString = [NSString stringWithFormat:@"Expires in %d second", seconds];
         }
     } else {
-        expirationString = @"Assignment has expired.";
+        expirationString = @"This assignment has expired.";
     }
     
     self.expirationLabel.text = expirationString;
