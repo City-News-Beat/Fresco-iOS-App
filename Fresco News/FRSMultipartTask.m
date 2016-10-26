@@ -12,7 +12,7 @@
 #import "FRSAppDelegate.h"
 
 @implementation FRSMultipartTask
-@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections, destinationURLS = _destinationURLS, session = _session;
+@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections, destinationURLS = _destinationURLS, session = _session, managedObject = _managedObject;
 
 -(void)createUploadFromSource:(NSURL *)asset destinations:(NSArray *)destinations progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
     
@@ -27,6 +27,27 @@
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
     _session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+}
+
+-(void)setManagedObject:(NSManagedObject *)managedObject {
+    _managedObject = managedObject;
+    [self loadEtags];
+}
+
+-(void)loadEtags {
+    FRSUpload *upload = (FRSUpload *)self.managedObject;
+    
+    if (upload.etags) {
+        int index = 0;
+        for (NSString *etag in upload.etags) {
+            [self.eTags addObject:etag];
+            index++;
+        }
+    }
+}
+
+-(NSManagedObject *)managedObject {
+    return _managedObject;
 }
 
 -(instancetype)init {
@@ -105,6 +126,7 @@
                 currentChunkIndex++;
                 
                 if (currentChunkIndex <= [(FRSUpload *)self.managedObject etags].count) {
+                    ranOnce = TRUE;
                     currentData = [[NSMutableData alloc] init];
                     continue;
                 }
