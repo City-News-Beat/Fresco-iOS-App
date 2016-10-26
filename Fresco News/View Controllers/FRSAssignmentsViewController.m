@@ -366,10 +366,7 @@
 }
 
 -(void)focusOnAssignment:(FRSAssignment *)assignment {
-    
     [self setDefaultAssignment:assignment];
-    
-
 }
 
 -(void)removeAssignmentsFromMap {
