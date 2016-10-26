@@ -43,9 +43,16 @@
         didFinish = TRUE;
     }
 
+    int i = 0;
     
     for (FRSUpload *upload in uploads) {
+        i++;
         
+        if (i > 8) {
+            continue;
+        }
+        
+        [context save:Nil];
         NSTimeInterval sinceStart = [upload.creationDate timeIntervalSinceNow];
         sinceStart *= -1;
         
@@ -222,9 +229,6 @@
         [self markAsInComplete];
 
         totalBytesSent = 0;
-        _tasks = [[NSMutableArray alloc] init];
-        _currentTasks = [[NSMutableArray alloc] init];
-        _etags = [[NSMutableArray alloc] init];
         isStarted = FALSE;
         isRunning = TRUE;
         
@@ -240,15 +244,8 @@
 
 -(void)startUploadProcess {
     
-    if (!_posts) {
+    if (self.managedUploads) {
         [self restartFromManaged];
-        return;
-    }
-    
-    toComplete = 0;
-    isComplete = 0;
-
-    if (!_posts) {
         return;
     }
     
@@ -444,7 +441,6 @@
             [self uploadedData:bytesSent];
         } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
             
-            NSLog(@"MNGED OBJ: %@", [(FRSUploadTask *)task managedObject]);
             
             if (success) {
                 if (success) {
@@ -454,7 +450,7 @@
                     NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
                     [(FRSUploadTask *)task complete];
 
-                    postCompletionDigest[@"eTags"] = @[eTag];
+                    postCompletionDigest[@"eTags"] = @[(eTag) ?eTag : @""];
                     postCompletionDigest[@"uploadId"] = post[@"uploadId"];
                     postCompletionDigest[@"key"] = post[@"key"];
                     [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
