@@ -78,7 +78,7 @@
                 }];
                 
                 if (asset) {
-                    [self addMultipartTaskForAsset:asset urls:dest post:@{@"key":upload.key, @"uploadId":upload.uploadID}];
+                    [self addMultipartTaskForAsset:asset urls:dest post:@{@"key":upload.key, @"uploadId":upload.uploadID} upload:upload];
                 }
                 else {
                     continue;
@@ -97,7 +97,7 @@
                 if (asset) {
                     if (urls[0]) {
                         _isRunning = TRUE;
-                        [self addTaskForImageAsset:asset url:[NSURL URLWithString:urls[0]] post:@{@"key":upload.key, @"uploadId":upload.uploadID}];
+                        [self addTaskForImageAsset:asset url:[NSURL URLWithString:urls[0]] post:@{@"key":upload.key, @"uploadId":upload.uploadID} upload:upload];
                     }
                 }
                 else {
@@ -220,8 +220,6 @@
                 [urls addObject:[NSURL URLWithString:partURL]];
             }
             
-            [self addMultipartTaskForAsset:currentAsset urls:urls post:currentPost];
-            
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             FRSUpload *upload = [FRSUpload MR_createEntityInContext:delegate.managedObjectContext];
             NSMutableArray *urlStrings = [[NSMutableArray alloc] init];
@@ -240,12 +238,13 @@
                 [delegate saveContext];
             }];
             
-        [self.managedUploads addObject:upload];
+            [self addMultipartTaskForAsset:currentAsset urls:urls post:currentPost upload:upload];
+
+            [self.managedUploads addObject:upload];
 
 
         }
         else {
-            [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"upload_urls"][0]] post:currentPost];
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             FRSUpload *upload = [FRSUpload MR_createEntityInContext:delegate.managedObjectContext];
             NSMutableArray *urlStrings = [[NSMutableArray alloc] init];;
@@ -266,7 +265,7 @@
             }];
             
             [self.managedUploads addObject:upload];
-
+            [self addTaskForImageAsset:currentAsset url:[NSURL URLWithString:currentPost[@"upload_urls"][0]] post:currentPost upload:upload];
         }
     }
 }
@@ -304,7 +303,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"progress", @"percentage":@((totalBytesSent * 1.0) / (_contentSize * 1.0))}];
 }
 
--(void)addMultipartTaskForAsset:(PHAsset *)asset urls:(NSArray *)urls post:(NSDictionary *)post {
+-(void)addMultipartTaskForAsset:(PHAsset *)asset urls:(NSArray *)urls post:(NSDictionary *)post upload:(FRSUpload *)upload {
     toComplete++;
     
     PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
@@ -325,6 +324,7 @@
         }
         
         FRSMultipartTask *multipartTask = [[FRSMultipartTask alloc] init];
+        multipartTask.managedObject = upload;
         
         [multipartTask createUploadFromSource:myAsset.URL destinations:urls progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
             [self uploadedData:bytesSent];
@@ -343,11 +343,6 @@
                         [self next:task];
                     }
                     else {
-                        if (!_posts) {
-                            isComplete++;
-                            [self next:task];
-                            return;
-                        }
                         
                         if (error.localizedDescription) {
                             [FRSTracker track:@"Upload Error" parameters:@{@"error_message":error.localizedDescription}];
@@ -379,7 +374,7 @@
     }];
 }
 
--(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post {
+-(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post upload:(FRSUpload *)upload {
     toComplete++;
     
     [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
@@ -388,7 +383,8 @@
         }
 
         FRSUploadTask *task = [[FRSUploadTask alloc] init];
-
+        task.managedObject = upload;
+        
         [task createUploadFromData:imageData destination:url progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
             [self uploadedData:bytesSent];
         } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
@@ -398,12 +394,6 @@
                     NSString *eTag = headers[@"Etag"];
                     
                     NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
-                    
-                    if (!eTag || !post[@"uploadId"] || !post[@"key"] || !post[@"post_id"]) {
-                        isComplete++;
-                        [self next:task];
-                        return;
-                    }
                     
                     postCompletionDigest[@"eTags"] = @[eTag];
                     postCompletionDigest[@"uploadId"] = post[@"uploadId"];

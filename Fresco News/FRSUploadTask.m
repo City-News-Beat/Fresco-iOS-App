@@ -8,6 +8,9 @@
 
 #import "FRSUploadTask.h"
 #import "FRSTracker.h"
+#import "FRSUpload+CoreDataProperties.h"
+#import "FRSAppDelegate.h"
+
 @implementation FRSUploadTask
 @synthesize uploadTask = _uploadTask;
 // sets up architecture, start initializes request
@@ -40,6 +43,15 @@
 
 -(void)stop {
     [_uploadTask suspend];
+}
+
+-(void)complete {
+    FRSUpload *upload = (FRSUpload *)self.managedObject;
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.managedObjectContext performBlock:^{
+        upload.completed = @(TRUE);
+        [delegate saveContext];
+    }];
 }
 
 -(void)start {
@@ -125,6 +137,7 @@
 
 -(void)checkEtag:(NSData *)data {
     NSDictionary *responseDictionary = [self serializedObjectFromResponse:data];
+    NSLog(@"ETAGS: %@", data);
     if (responseDictionary[@"eTag"]) {
         _eTag = responseDictionary[@"eTag"];
     }
