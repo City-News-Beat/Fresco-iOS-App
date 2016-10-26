@@ -150,7 +150,7 @@
     id responseObject = [NSJSONSerialization JSONObjectWithData:response options:kNilOptions error:&jsonError];
     
     if (jsonError) {
-        return @{@"err":@"Malformed JSON object", @"success":@(FALSE)};
+        return Nil;
     }
     
     return responseObject;
@@ -158,13 +158,9 @@
 
 -(void)checkEtag:(NSData *)data {
     
-    if (self.eTag) {
-        return;
-    }
-    
     NSDictionary *responseDictionary = [self serializedObjectFromResponse:data];
-    NSLog(@"ETAGS: %@", data);
-    if (responseDictionary[@"eTag"]) {
+    NSLog(@"ETAGS: %@", responseDictionary);
+    if (responseDictionary && responseDictionary[@"eTag"]) {
         _eTag = responseDictionary[@"eTag"];
         FRSUpload *upload = (FRSUpload *)self.managedObject;
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];

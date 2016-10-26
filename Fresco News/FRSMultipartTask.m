@@ -128,6 +128,7 @@
                 if (currentChunkIndex <= [(FRSUpload *)self.managedObject etags].count) {
                     ranOnce = TRUE;
                     currentData = [[NSMutableData alloc] init];
+                    totalConnections++;
                     continue;
                 }
                 
