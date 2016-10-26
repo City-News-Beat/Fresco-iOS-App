@@ -362,7 +362,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     [view addAction:reportGallery];
     
-    if (![[[self.gallery creator] uid] isEqualToString:@""]) {
+    if (![[[self.gallery creator] uid] isEqualToString:@""] && [self.gallery creator] != nil) {
         if ([[FRSAPIClient sharedClient] isAuthenticated]) {
             [view addAction:report];
         }
