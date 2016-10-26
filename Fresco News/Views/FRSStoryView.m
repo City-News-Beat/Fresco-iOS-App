@@ -227,9 +227,9 @@
         
         self.titleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, self.titleLabel.frame.origin.y - 30, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
         
-        self.titleLabel.backgroundColor = [UIColor greenColor];
-        timestampLabel.backgroundColor = [UIColor orangeColor];
-        clockIV.backgroundColor = [UIColor redColor];
+        //self.titleLabel.backgroundColor = [UIColor greenColor];
+        //timestampLabel.backgroundColor = [UIColor orangeColor];
+        //clockIV.backgroundColor = [UIColor redColor];
     }
 }
 
