@@ -176,9 +176,10 @@
     [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
     
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 127.5, self.view.frame.size.width, 0.5)];
+    /*UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 127.5, self.view.frame.size.width, 0.5)];
     line.backgroundColor = [UIColor frescoShadowColor];
-    [self.tableView addSubview:line];
+    [self.tableView addSubview:line];*/
+
 }
 
 -(void)reloadData {
@@ -502,10 +503,10 @@
 
 -(void)readMore:(NSInteger)index {
     
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:[self.stories objectAtIndex:index]];
     detailView.navigationController = self.navigationController;
     [self.navigationController pushViewController:detailView animated:YES];
+    [self expandNavBar:nil];
 }
 
 @end

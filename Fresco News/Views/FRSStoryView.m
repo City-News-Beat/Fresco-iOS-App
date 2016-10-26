@@ -31,18 +31,14 @@
 @interface FRSStoryView() <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
-
 @property (strong, nonatomic) FRSContentActionsBar *actionBar;
-
 @property (strong, nonatomic) UIView *topContainer;
-
 @property (strong, nonatomic) UILabel *titleLabel;
-
 @property (strong, nonatomic) UILabel *caption;
-
 @property (strong, nonatomic) NSMutableArray *imageViews;
-
 @property (strong, nonatomic) FRSGallery *gallery;
+@property (strong, nonatomic) UIImageView *repostImageView;
+@property (strong, nonatomic) UILabel *repostLabel;
 
 @end
 
@@ -50,15 +46,11 @@
 
 
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
-
-    
-    
     self.shareBlock(@[[@"https://fresconews.com/story/" stringByAppendingString:self.story.uid]]);
-
 }
 
 -(void)handleActionButtonTapped {
-    
+   //?
 }
 
 -(instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id<FRSStoryViewDelegate>)delegate{
@@ -68,9 +60,10 @@
         self.delegate = delegate;
         self.story = story;
         
-        //        self.orderedPosts = [self.story.posts allObjects];
         [self configureUI];
-//        self.backgroundColor = [UIColor blueColor];
+        if ([self.story valueForKey:@"reposted_by"] != nil && ![[self.story valueForKey:@"reposted_by"] isEqualToString:@""]) {
+            [self configureRepostWithName:[self.story valueForKey:@"reposted_by"]];
+        }
     }
     return self;
 }
@@ -80,7 +73,7 @@
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     [self configureTopContainer];
-    [self configureTitleLabel];
+    [self configureTitle];
     [self configureCaption];
     [self configureActionsBar];
     
@@ -92,15 +85,7 @@
 -(void)configureTopContainer{
     
     NSInteger height = IS_IPHONE_5 ? 192 : 240;
-//    if ([self.caption.text isEqual:[NSNull null]]) {
-//    if (![self.caption.text isKindOfClass:[NSNull class]] && self.caption.text && self.caption.text != NULL) {
-//
-//    
-//    if (self.caption.text.length == 0) {
-//        self.topContainer.backgroundColor = [UIColor greenColor];
-//    }
-//    
-//    
+
     self.topContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, height)];
     self.topContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.topContainer.clipsToBounds = YES;
@@ -204,7 +189,7 @@
     }];
 }
 
--(void)configureTitleLabel{
+-(void)configureTitle{
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, self.topContainer.frame.size.height -50, self.frame.size.width, 50)];
     CAGradientLayer *gradient = [CAGradientLayer layer];
@@ -225,13 +210,28 @@
     
     [self.titleLabel setOriginWithPoint:CGPointMake(16, self.topContainer.frame.size.height - self.titleLabel.frame.size.height - 12)];
     [self.titleLabel setSizeWithSize:CGSizeMake(self.frame.size.width - 16, self.titleLabel.frame.size.height+5)];
-    
 
     [self.topContainer addSubview:view];
-
     [self addShadowToLabel:self.titleLabel];
-    
     [self.topContainer addSubview:self.titleLabel];
+    
+    if (self.story.editedDate) { //CHECK FOR LOCATION HERE TOO
+        UIImageView *clockIV = [[UIImageView alloc] initWithFrame:CGRectMake(16, self.topContainer.frame.size.height - 12 - 24, 24, 24)];
+        clockIV.image = [UIImage imageNamed:@"gallery-clock"];
+        [self.topContainer addSubview:clockIV];
+        
+        UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(clockIV.frame.origin.x +24 +8, clockIV.frame.origin.y +4, self.frame.size.width, 16)]; //MAKE WIDTH DYNAMIC WHEN ADDING LOCATION
+        timestampLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:self.story.editedDate];
+        timestampLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
+        timestampLabel.textColor = [UIColor whiteColor];
+        [self.topContainer addSubview:timestampLabel];
+        
+        self.titleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, self.titleLabel.frame.origin.y - 30, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
+        
+        //self.titleLabel.backgroundColor = [UIColor greenColor];
+        //timestampLabel.backgroundColor = [UIColor orangeColor];
+        //clockIV.backgroundColor = [UIColor redColor];
+    }
 }
 
 
@@ -241,9 +241,7 @@
     self.caption.textColor = [UIColor frescoDarkTextColor];
     self.caption.font = [UIFont systemFontOfSize:15 weight:-1];
     self.caption.text = self.story.caption;
-    
     [self.caption sizeToFit];
-    
     [self.caption setFrame:CGRectMake(16, self.topContainer.frame.size.height + 11, self.frame.size.width - 32, self.caption.frame.size.height)];
     
     [self addSubview:self.caption];
@@ -256,8 +254,6 @@
     
     NSNumber *numReposts = [self.story valueForKey:@"reposts"];
     BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
-    
-    //NSString *repostedBy = [self.story valueForKey:@"reposted_by"];
     
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
     [self.actionBar handleHeartState:isLiked];
@@ -285,9 +281,7 @@
                 NSLog(@"ERR: %@", error);
             }
         }];
-        
-    }
-    else {
+    } else {
         [[FRSAPIClient sharedClient] likeStory:self.story completion:^(id responseObject, NSError *error) {
             NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
             if (error) {
@@ -305,6 +299,21 @@
     }];
 }
 
+-(void)configureRepostWithName:(NSString *)name {
+    
+    if (self.repostLabel == nil) {
+        self.repostImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"repost-icon-white"]];
+        self.repostImageView.frame = CGRectMake(16, 12, 24, 24);
+        [self addSubview:self.repostImageView];
+        
+        self.repostLabel = [[UILabel alloc] initWithFrame:CGRectMake(48, 17, self.frame.size.width - 48 - 16, 17)];
+        self.repostLabel.text = [name uppercaseString];
+        self.repostLabel.font = [UIFont notaBoldWithSize:15];
+        self.repostLabel.textColor = [UIColor whiteColor];
+        [self addShadowToLabel:self.repostLabel];
+        [self addSubview:self.repostLabel];
+    }
+}
 
 -(void)addShadowToLabel:(UILabel*)label {
     
@@ -330,7 +339,6 @@
 #pragma mark - Action Bar Deletate
 
 -(NSString *)titleForActionButton{
-    
     return @"READ MORE";
 }
 

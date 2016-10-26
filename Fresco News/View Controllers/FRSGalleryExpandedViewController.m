@@ -295,27 +295,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.navigationItem.titleView = self.titleLabel;
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     
-    
-    
-//    UIBarButtonItem *square = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"square"] style:UIBarButtonItemStylePlain target:self action:@selector(expandGallery)];
-    
-    
-    
-    /* NOTE: Gallery creator is nil, need to setup in FRSGallery */
-    
-//    if (self.gallery.creator) {
-    
-        UIBarButtonItem *dots = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentReportGallerySheet)];
-        
-        //    dots.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
-        
-        //    square.tintColor = [UIColor whiteColor];
-        dots.tintColor = [UIColor whiteColor];
-        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-        
-        self.navigationItem.rightBarButtonItems = @[dots];
-//    }
+    UIBarButtonItem *dots = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentReportGallerySheet)];
 
+    
+    dots.tintColor = [UIColor whiteColor];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    
+    self.navigationItem.rightBarButtonItems = @[dots];
+    
+    if ([[[self.gallery creator] uid] isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        self.navigationItem.rightBarButtonItems = nil;
+    }
 }
 
 -(void)presentReportGallerySheet {
@@ -372,7 +362,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     [view addAction:reportGallery];
     
-    if (![[[self.gallery creator] uid] isEqualToString:@""]) {
+    if (![[[self.gallery creator] uid] isEqualToString:@""] && [self.gallery creator] != nil) {
         if ([[FRSAPIClient sharedClient] isAuthenticated]) {
             [view addAction:report];
         }
@@ -679,12 +669,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)adjustScrollViewContentSize{
-    CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + GALLERY_BOTTOM_PADDING;
+    CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + GALLERY_BOTTOM_PADDING +20;
     if (self.comments.count > 0) {
-        height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height;
+        height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height +20;
     }
     if (self.orderedArticles.count > 0) {
-        height += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
+        height += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height +20;
     }
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, height);
 }

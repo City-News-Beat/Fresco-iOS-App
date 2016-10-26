@@ -1144,12 +1144,10 @@
         return;
     }
     
-    
     if ([[gallery valueForKey:@"reposted"] boolValue]) {
         [self unrepostGallery:gallery completion:completion];
         return;
     }
-
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
     
@@ -1605,6 +1603,13 @@
 
 -(void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion {
     [self get:@"user/blocked" withParameters:Nil completion:completion];
+}
+
+-(void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion {
+    [self get:settingsEndpoint withParameters:Nil completion:completion];
+}
+-(void)updateSettings:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:updateSettingsEndpoint withParameters:params completion:completion];
 }
 
 @end

@@ -164,6 +164,68 @@
 }
 
 
+-(void)configureWithDictionary:(NSDictionary *)properties {
+    
+    if ([properties isEqual:[NSNull null]]) {
+        return;
+    }
+    
+    self.uid = (properties[@"id"] != nil ? properties[@"id"] : @"");
+    
+    if (!properties || [properties isEqual:[NSNull null]]){
+        return;
+    }
+    
+    self.firstName = (properties[@"full_name"] != Nil && ![properties[@"full_name"] isEqual:[NSNull null]] && [[properties[@"full_name"] class] isSubclassOfClass:[NSString class]]) ? properties[@"full_name"] : @"";;
+    self.username = (properties[@"username"] != Nil && ![properties[@"username"] isEqual:[NSNull null]]) ? properties[@"username"] : @"";
+    self.isLoggedIn = @(FALSE);
+    self.bio = (properties[@"bio"] != Nil) ? properties[@"bio"] : @"";
+    self.following = (properties[@"following"] != Nil) ? properties[@"following"] : 0;
+    
+    self.email = (properties[@"email"] != nil) ? properties[@"email"] : @"";
+    
+    if (properties[@"location"] != Nil && ![properties[@"location"] isEqual:[NSNull null]]) {
+        [self setValue:properties[@"location"] forKey:@"location"];
+        NSLog(@"USER LOC: %@",properties[@"location"]);
+    }
+    
+    if (properties[@"followed_count"] != Nil && ![properties[@"followed_count"] isEqual:[NSNull null]]) {
+        [self setValue:properties[@"followed_count"] forKey:@"followedCount"];
+    }
+    if (properties[@"following_count"] != Nil && ![properties[@"following_count"] isEqual:[NSNull null]]) {
+        [self setValue:properties[@"following_count"] forKey:@"followingCount"];
+    }
+    
+    if ([[properties objectForKey:@"following"] boolValue]) {
+        [self setValue:@(TRUE) forKey:@"following"];
+    }
+    else {
+        [self setValue:@(FALSE) forKey:@"following"];
+    }
+    
+    if (properties[@"avatar"] && ![properties[@"avatar"] isEqual:[NSNull null]]) {
+        self.profileImage = properties[@"avatar"];
+    }
+    
+    if (properties[@"blocked"] && ![properties[@"blocked"] isEqual:[NSNull null]]) {
+        self.blocked = [properties[@"blocked"] boolValue];
+    }
+    
+    if (properties[@"blocking"] && ![properties[@"blocking"] isEqual:[NSNull null]]) {
+        self.blocking = [properties[@"blocking"] boolValue];
+    }
+    
+    if (properties[@"suspended_until"] && ![properties[@"suspended_until"] isEqual:[NSNull null]]) {
+        self.suspended = YES;
+    } else {
+        self.suspended = NO;
+    }
+    
+    if (properties[@"disabled"] && ![properties[@"disabled"] isEqual:[NSNull null]]) {
+        self.disabled = [properties[@"disabled"] boolValue];
+    }
+}
+
 -(NSDictionary *)jsonObject {
     NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc] init];
     

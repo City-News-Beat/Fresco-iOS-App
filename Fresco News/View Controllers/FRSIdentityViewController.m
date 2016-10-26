@@ -258,12 +258,13 @@
 
 -(void)configureAddressCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-    
+
     switch (indexPath.row) {
         case 0:
             [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             _addressField = cell.textField;
+            _addressField.returnKeyType = UIReturnKeyNext;
             
             if ([authenticatedUser valueForKey:@"address_line1"]) {
                 _addressField.text = [authenticatedUser valueForKey:@"address_line1"];
@@ -271,16 +272,22 @@
                 _addressField.textColor = [UIColor frescoLightTextColor];
             }
             
+            _addressField.tag = 1;
+            _addressField.delegate = self;
             _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
             [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            cell.textField.delegate = self;
             break;
             
         case 1:
             [cell configureEditableCellWithDefaultText:@"Unit # (optional)" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             _unitField = cell.textField;
-            [_unitField setKeyboardType:UIKeyboardTypeNumberPad];
+            [_unitField setKeyboardType:UIKeyboardTypeDefault];
             [_unitField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            _unitField.tag = 2;
+            cell.textField.delegate = self;
+            _unitField.returnKeyType = UIReturnKeyNext;
             break;
             
         case 2:
@@ -318,6 +325,17 @@
             [_cityField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             [_stateField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             [_zipField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            _cityField.tag = 3;
+            _stateField.tag = 4;
+            _zipField.tag = 5;
+            cell.textField.delegate = self;
+            cell.secondaryField.delegate = self;
+            cell.tertiaryField.delegate = self;
+            _cityField.returnKeyType = UIReturnKeyNext;
+            _stateField.returnKeyType = UIReturnKeyNext;
+            _zipField.returnKeyType = UIReturnKeyDone;
+
+            
             break;
         case 4:
             [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
@@ -341,6 +359,7 @@
 
 -(void)configureNameCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    
 
     switch (indexPath.row) {
             
@@ -357,10 +376,14 @@
                 _firstNameField.textColor = [UIColor frescoLightTextColor];
             }
             
+            _firstNameField.tag = 1;
+            _firstNameField.returnKeyType = UIReturnKeyNext;
+            cell.textField.delegate = self;
+            
             break;
             
         case 1:
-            [cell configureEditableCellWithDefaultText:@"Last name" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
+            [cell configureEditableCellWithDefaultText:@"Last name" withTopSeperator:NO withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             _lastNameField = cell.textField;
             _lastNameField.autocapitalizationType = UITextAutocapitalizationTypeWords;
@@ -371,6 +394,10 @@
                 _lastNameField.enabled = FALSE;
                 _lastNameField.textColor = [UIColor frescoLightTextColor];
             }
+            
+            _lastNameField.tag = 2;
+            _lastNameField.returnKeyType = UIReturnKeyNext;
+            cell.textField.delegate = self;
             
             break;
         case 3:
@@ -385,10 +412,10 @@
             _dateField = cell.textField;
             _dateField.secureTextEntry = FALSE;
             
-            UIDatePicker *picker1   = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 210, 320, 216)];
-            [picker1 setDatePickerMode:UIDatePickerModeDate];
-            picker1.backgroundColor = [UIColor whiteColor];
-            [picker1 addTarget:self action:@selector(startDateSelected:) forControlEvents:UIControlEventValueChanged];
+            self.datePicker  = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 210, 320, 216)];
+            [self.datePicker setDatePickerMode:UIDatePickerModeDate];
+            self.datePicker.backgroundColor = [UIColor whiteColor];
+            [self.datePicker addTarget:self action:@selector(startDateSelected:) forControlEvents:UIControlEventValueChanged];
             
             if ([[authenticatedUser valueForKey:@"dob_day"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_month"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_year"] intValue] != 0) {
                 int day = [[authenticatedUser valueForKey:@"dob_day"] intValue];
@@ -401,8 +428,11 @@
                 _dateField.textColor = [UIColor frescoLightTextColor];
             }
             
-            _dateField.inputView = picker1;
+            _dateField.inputView = self.datePicker;
             [_dateField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            cell.textField.delegate = self;
+            cell.textField.tag = 3;
+            _dateField.returnKeyType = UIReturnKeyDone;
             break;
     }
 
@@ -573,4 +603,36 @@
     
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField*)textField {
+    
+    FRSTableViewCell *currentCell = (FRSTableViewCell *)textField.superview.superview;
+    NSIndexPath *currentIndexPath = [self.tableView indexPathForCell:currentCell];
+    
+    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForRow:currentIndexPath.row + 1 inSection:0];
+    FRSTableViewCell *nextCell = (FRSTableViewCell *)[self.tableView cellForRowAtIndexPath:nextIndexPath];
+    
+    [nextCell.textField becomeFirstResponder];
+
+    if (textField == _lastNameField) {
+        [textField resignFirstResponder];
+        [self startDateSelected:self.datePicker];
+        [_dateField becomeFirstResponder];
+    } else if (textField == _addressField) {
+        [textField resignFirstResponder];
+        [_unitField becomeFirstResponder];
+    } else if (textField == _unitField) {
+        [textField resignFirstResponder];
+        [_cityField becomeFirstResponder];
+    } else if (textField == _cityField) {
+        [textField resignFirstResponder];
+        [_stateField becomeFirstResponder];
+    } else if (textField == _stateField) {
+        [textField resignFirstResponder];
+        [_zipField becomeFirstResponder];
+    } else if (textField == _zipField) {
+        [self.view resignFirstResponder];
+    }
+    
+    return NO;
+}
 @end
