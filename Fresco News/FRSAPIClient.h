@@ -165,4 +165,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)linkFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)unlinkFacebook:(FRSAPIDefaultCompletionBlock)completion;
 -(void)unlinkTwitter:(FRSAPIDefaultCompletionBlock)completion;
+
+-(void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion;
+-(void)updateSettings:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 @end

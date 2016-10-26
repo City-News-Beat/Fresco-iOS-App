@@ -1607,4 +1607,11 @@
     [self get:@"user/blocked" withParameters:Nil completion:completion];
 }
 
+-(void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion {
+    [self get:settingsEndpoint withParameters:Nil completion:completion];
+}
+-(void)updateSettings:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:updateSettingsEndpoint withParameters:params completion:completion];
+}
+
 @end
