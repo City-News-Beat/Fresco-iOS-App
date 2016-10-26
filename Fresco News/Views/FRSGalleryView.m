@@ -651,11 +651,8 @@
 
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
             [photoTap setNumberOfTapsRequired:1];
-            
-            if (post.creator != nil) {
-                [self.profileIV setUserInteractionEnabled:YES];
-                [self.profileIV addGestureRecognizer:photoTap];
-            }
+            [self.profileIV setUserInteractionEnabled:YES];
+            [self.profileIV addGestureRecognizer:photoTap];
         });
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
@@ -1098,10 +1095,10 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
-                NSLog(@"CURRENTPOST.CREATOR= %@", (FRSUser *)currentPost.creator);
 
-                
-                [self.delegate.navigationController pushViewController:userViewController animated:YES];
+                if ([currentPost.creator uid] != nil) {
+                    [self.delegate.navigationController pushViewController:userViewController animated:YES];
+                }
             });
         }
     }
