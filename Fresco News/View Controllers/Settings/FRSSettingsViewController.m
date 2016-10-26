@@ -278,11 +278,11 @@
         case 2:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureAssignmentCellEnabled:[[[NSUserDefaults standardUserDefaults] objectForKey:@"assignment-notifications"] boolValue]];
+                    [cell configureAssignmentCellEnabled:[[[NSUserDefaults standardUserDefaults] objectForKey:@"assignment-enabled"] boolValue]];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
-                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"assignment-notifications"] != nil) {
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
                         NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
                         CGFloat milesFloat = [miles floatValue];
                         [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%.0f mi", milesFloat] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
