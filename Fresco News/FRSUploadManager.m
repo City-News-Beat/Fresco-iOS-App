@@ -345,7 +345,7 @@
                     else {
                         
                         if (error.localizedDescription) {
-                            [FRSTracker track:@"Upload Error" parameters:@{@"error_message":error.localizedDescription}];
+                            [FRSTracker track:@"Upload Error" parameters:@{@"error_message":(error.localizedDescription) ? error.localizedDescription : @""}];
                         }
 
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
@@ -366,7 +366,7 @@
                     isRunning = FALSE;
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                     [self markAsComplete];
-                    [FRSTracker track:@"Upload Error" parameters:@{@"error_message":error.localizedDescription}];
+                [FRSTracker track:@"Upload Error" parameters:@{@"error_message":(error.localizedDescription) ? error.localizedDescription : @""}];
             }
         }];
         
@@ -395,7 +395,7 @@
                     
                     NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
                     
-                    postCompletionDigest[@"eTags"] = @[eTag];
+                    postCompletionDigest[@"eTags"] = @[(eTag) ? eTag : @""];
                     postCompletionDigest[@"uploadId"] = post[@"uploadId"];
                     postCompletionDigest[@"key"] = post[@"key"];
                     [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
@@ -419,7 +419,8 @@
                             for (FRSUploadTask *task in _currentTasks) {
                                 [task stop];
                             }
-                            
+                            [FRSTracker track:@"Upload Error" parameters:@{@"error_message":(error.localizedDescription) ? error.localizedDescription : @""}];
+
                             _currentTasks = [[NSMutableArray alloc] init];
                             [self markAsComplete];
                         }
@@ -431,7 +432,7 @@
                 isRunning = FALSE;
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                 [self markAsComplete];
-                [FRSTracker track:@"Upload Error" parameters:@{@"error_message":error.localizedDescription}];
+                [FRSTracker track:@"Upload Error" parameters:@{@"error_message":(error.localizedDescription) ? error.localizedDescription : @""}];
             }
         }];
         

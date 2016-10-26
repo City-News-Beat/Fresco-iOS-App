@@ -76,6 +76,7 @@
 }
 
 -(void)start {
+    
     // our turn in the queue, check if we've already started first
     if (_uploadTask || _hasStarted) {
         return; // FRSUploadTask are one off, no re-use
