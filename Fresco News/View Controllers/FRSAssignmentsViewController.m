@@ -674,11 +674,15 @@
         expirationString = [NSString stringWithFormat:@"Expires in %d hours and %d minutes", hours, minutes];
         if (minutes == 1) {
             expirationString = [NSString stringWithFormat:@"Expires in %d hours and %d minute", hours, minutes];
+        } else if (minutes == 0) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d hours", hours];
         }
         if (hours == 1) {
             expirationString = [NSString stringWithFormat:@"Expires in %d hour and %d minutes", hours, minutes];
             if (minutes == 1) {
                 expirationString = [NSString stringWithFormat:@"Expires in %d hour and %d minute", hours, minutes];
+            } else if (minutes == 0) {
+                expirationString = [NSString stringWithFormat:@"Expires in %d hours", hours];
             }
         }
     } else if (minutes != 0) {
