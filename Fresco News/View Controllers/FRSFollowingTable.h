@@ -15,6 +15,8 @@
 {
     NSInteger numberOfPosts;
     UIView *awkwardView;
+    BOOL isReloading;
+    BOOL isFinished;
 }
 @property (retain, nonatomic, readonly) NSArray *galleries;
 

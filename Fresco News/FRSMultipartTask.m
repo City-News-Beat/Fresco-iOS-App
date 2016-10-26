@@ -7,6 +7,7 @@
 //
 
 #import "FRSMultipartTask.h"
+#import "FRSTracker.h"
 
 @implementation FRSMultipartTask
 @synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections, destinationURLS = _destinationURLS, session = _session;
@@ -108,6 +109,10 @@
         
         NSLog(@"ERROR: %@", [dataInputStream streamError]);
         
+        if ([dataInputStream streamError]) {
+            [FRSTracker track:@"Upload Error" parameters:@{@"error_message":[dataInputStream streamError].localizedDescription}];
+        }
+        
         // last chunk, less than 5mb, streaming process ends here
         if (ranOnce && !triggeredUpload) {
             [self startChunkUpload];
@@ -158,6 +163,8 @@
                 [weakSelf.delegate uploadDidFail:self withError:error response:data];
             }
             
+            [FRSTracker track:@"Upload Error" parameters:@{@"error_message":error.localizedDescription}];
+
             self.completionBlock(self, Nil, Nil, FALSE, Nil);
             return;
         }

@@ -765,6 +765,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     cell.followButton.alpha = 0;
     [cell.followButton removeFromSuperview];
     
+    cell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    
     if ([self hasImage:dictionary]) {
         [cell.image hnk_setImageFromURL:[NSURL URLWithString:dictionary[@"meta"][@"image"]]];
     }

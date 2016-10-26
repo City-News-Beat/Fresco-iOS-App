@@ -686,28 +686,29 @@
                 return;
             }
             
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-
-            NSInteger index = self.highlights.count;
-            for (NSDictionary *gallery in galleries) {
-                FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+            [[self.appDelegate managedObjectContext] performBlock:^{
+                NSInteger index = self.highlights.count;
+                for (NSDictionary *gallery in galleries) {
+                    FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                    
+                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                    [self.dataSource addObject:galleryToSave];
+                    [self.highlights addObject:galleryToSave];
+                    [indexPaths addObject:[NSIndexPath indexPathForRow:self.dataSource.count-1 inSection:0]];
+                    index++;
+                }
                 
-                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-                [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                [self.dataSource addObject:galleryToSave];
-                [self.highlights addObject:galleryToSave];
-                [indexPaths addObject:[NSIndexPath indexPathForRow:self.dataSource.count-1 inSection:0]];
-                index++;
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView beginUpdates];
-                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self.tableView endUpdates];
-                needsUpdate = TRUE;
-                isLoading = FALSE;
-            });
-        });
+                [self.appDelegate saveContext];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.tableView beginUpdates];
+                    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+                    [self.tableView endUpdates];
+                    needsUpdate = TRUE;
+                    isLoading = FALSE;
+                });
+            }];
     }];
 }
 
@@ -968,20 +969,12 @@
 
 -(void)pausePlayers {
     
-    if (!self.tableView || !self.followingTable) {
-        return;
-    }
-    
     for (UITableView *tableView in @[self.tableView, self.followingTable]) {
         for (FRSGalleryCell *cell in [tableView visibleCells]) {
             if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
                 continue;
             }
-            for (FRSPlayer *player in cell.galleryView.players) {
-                if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
-                    [player pause];
-                }
-            }
+            [cell pause];
         }
     }
 }

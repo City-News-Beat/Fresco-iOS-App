@@ -54,6 +54,9 @@ static NSString * const baseURL = @"https://api.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 
+// user settings (notifications)
+static NSString * const settingsEndpoint = @"user/settings";
+static NSString * const updateSettingsEndpoint = @"user/settings/update";
 // search endpoint
 static NSString * const searchEndpoint = @"search";
 

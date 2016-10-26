@@ -278,25 +278,11 @@
         case 2:
             switch (indexPath.row) {
                 case 0:
-                    [self checkNotificationStatus];
-                    
-                     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
-                         NSNumber *notifRadius = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
-                         
-                         if ([notifRadius integerValue] <= 1) {
-                             [cell configureAssignmentCellEnabled:NO];
-                         } else {
-                             [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
-                         }
-                     } else {
-                         [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
-                     }
-                    
-                    
+                    [cell configureAssignmentCellEnabled:[[[NSUserDefaults standardUserDefaults] objectForKey:@"assignment-notifications"] boolValue]];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
-                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"assignment-notifications"] != nil) {
                         NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
                         CGFloat milesFloat = [miles floatValue];
                         [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%.0f mi", milesFloat] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];

@@ -64,7 +64,6 @@
         [mutableDigestion addEntriesFromDictionary:self.socialUsed];
     }
     
-    NSLog(@"DIGESTION: %@", mutableDigestion);
     
     [self updateUserWithDigestion:mutableDigestion completion:completion];
 }
@@ -82,7 +81,6 @@
 }
 
 -(void)setSocialUsed:(NSDictionary *)socialUsed {
-    NSLog(@"SOCIAL USED: %@", socialUsed);
     
     _socialUsed = socialUsed;
 }
@@ -131,7 +129,6 @@
     
     [self post:loginEndpoint withParameters:@{@"username":user, @"password":password, @"installation":[[FRSAPIClient sharedClient] currentInstallation]} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        
         if (!error) {
             [self handleUserLogin:responseObject];
         }
@@ -170,9 +167,6 @@
         if (!error) {
             [self handleUserLogin:responseObject];
         }
-        
-        NSLog(@"FACEBOOK SIGN IN: %@", error);
-
     }];
 }
 
@@ -195,10 +189,7 @@
         
         if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
            // [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
-            [self handleUserLogin:responseObject];
-
-            NSString *userID = responseObject[@"user"][@"id"];
-            
+            [self handleUserLogin:responseObject];            
         }
         
         completion(responseObject, error);
@@ -303,18 +294,12 @@
     
     [self post:updateUserEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        NSLog(@"DIGESTION: %@", digestion);
-        NSLog(@"RESPONSE: %@", responseObject);
-        NSLog(@"ERROR: %@", error);
     }];
 }
 
 -(void)updateIdentityWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:@"user/identity/update" withParameters:digestion completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        NSLog(@"DIGESTION: %@", digestion);
-        NSLog(@"RESPONSE: %@", responseObject);
-        NSLog(@"ERROR: %@", error);
     }];
 }
 
@@ -527,9 +512,6 @@
     
     [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-       
-        NSLog(@"ERROR: %@", error);
-
     }];
 }
 
@@ -573,8 +555,6 @@
                              @"geo" : geoData,
                              @"radius" : @(radius),
                             };
-    
-    NSLog(@"PARAMS: %@", params);
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -763,11 +743,9 @@
 -(void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     
     NSDictionary *params = [gallery jsonObject];
-    NSLog(@"CREATION: %@", params);
     
     [self post:createGalleryEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-        NSLog(@"CREATION ERROR: %@", error);
     }];
 }
 
@@ -1068,8 +1046,6 @@
             completion(responseObject, error);
             return;
         }
-        
-        NSLog(@"responseObject: %@", responseObject);
         
 //        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
 //            completion(responseObject, error);
@@ -1484,10 +1460,17 @@
          if(placemarks && placemarks.count > 0) {
              CLPlacemark *placemark= [placemarks objectAtIndex:0];
              
-             address = [NSString stringWithFormat:@"%@, %@", [placemark locality], [placemark administrativeArea]];
+             NSString *thoroughFare = @"";
+             if ([placemark thoroughfare] && [[placemark thoroughfare] length] > 0) {
+                 thoroughFare = [[placemark thoroughfare] stringByAppendingString:@", "];
+                 
+                 if ([placemark subThoroughfare]) {
+                     thoroughFare = [[[placemark subThoroughfare] stringByAppendingString:@" "] stringByAppendingString:thoroughFare];
+                 }
+             }
              
-             NSLog(@"Found address: %@",address);
-             completion(address, Nil);
+             address = [NSString stringWithFormat:@"%@%@, %@",thoroughFare, [placemark locality], [placemark administrativeArea]];
+            completion(address, Nil);
          }
          else {
              completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:404 userInfo:Nil]);
@@ -1620,6 +1603,13 @@
 
 -(void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion {
     [self get:@"user/blocked" withParameters:Nil completion:completion];
+}
+
+-(void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion {
+    [self get:settingsEndpoint withParameters:Nil completion:completion];
+}
+-(void)updateSettings:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:updateSettingsEndpoint withParameters:params completion:completion];
 }
 
 @end
