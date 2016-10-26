@@ -343,7 +343,7 @@
                         [self next:task];
                     }
                     else {
-                        
+                        [(FRSMultipartTask *)task complete];
                         if (error.localizedDescription) {
                             [FRSTracker track:@"Upload Error" parameters:@{@"error_message":(error.localizedDescription) ? error.localizedDescription : @""}];
                         }
@@ -375,8 +375,12 @@
 }
 
 -(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post upload:(FRSUpload *)upload {
-    toComplete++;
+    if (upload.etags.count > 0) {
+        return;
+    }
     
+    toComplete++;
+
     [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
         if (!_posts) {
             _contentSize += [imageData length];
@@ -388,14 +392,18 @@
         [task createUploadFromData:imageData destination:url progress:^(id task, int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
             [self uploadedData:bytesSent];
         } completion:^(id task, NSData *responseData, NSError *error, BOOL success, NSURLResponse *response) {
+            
+            NSLog(@"MNGED OBJ: %@", [(FRSUploadTask *)task managedObject]);
+            
             if (success) {
                 if (success) {
                     NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
                     NSString *eTag = headers[@"Etag"];
                     
                     NSMutableDictionary *postCompletionDigest = [[NSMutableDictionary alloc] init];
-                    
-                    postCompletionDigest[@"eTags"] = @[(eTag) ? eTag : @""];
+                    [(FRSUploadTask *)task complete];
+
+                    postCompletionDigest[@"eTags"] = @[eTag];
                     postCompletionDigest[@"uploadId"] = post[@"uploadId"];
                     postCompletionDigest[@"key"] = post[@"key"];
                     [[FRSAPIClient sharedClient] completePost:post[@"post_id"] params:postCompletionDigest completion:^(id responseObject, NSError *error) {
