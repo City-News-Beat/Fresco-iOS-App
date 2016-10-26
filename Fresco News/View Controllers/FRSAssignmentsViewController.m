@@ -369,7 +369,6 @@
     
     [self setDefaultAssignment:assignment];
     
-
 }
 
 -(void)removeAssignmentsFromMap {
@@ -417,26 +416,16 @@
         
         self.currentAssignment = assignment;
      
-        
         MKCoordinateRegion region = { {0.0, 0.0 }, { 0.0, 0.0 } };
         region.center.latitude = [assignment.latitude doubleValue];
         region.center.longitude = [assignment.longitude doubleValue];
         region.span.longitudeDelta = 0.05f;
         region.span.latitudeDelta = 0.05f;
-        [self.mapView setRegion:region animated:YES];
-        
+        [self.mapView setRegion:region animated:NO];
         
         CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake([assignment.latitude doubleValue], [assignment.longitude doubleValue]);
         newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
-        [self.mapView setCenterCoordinate:newCenter animated:YES];
-        
-//        if ([self.mapView respondsToSelector:@selector(camera)]) {
-//            [self.mapView setShowsBuildings:NO];
-//            MKMapCamera *newCamera = [[self.mapView camera] copy];
-//            [newCamera setHeading:0];
-//            [newCamera setCenterCoordinate:newCenter];
-//            [self.mapView setCamera:newCamera animated:YES];
-//        }
+        [self.mapView setCenterCoordinate:newCenter animated:NO];
         
         self.hasDefault = NO;
         self.defaultID  = nil;

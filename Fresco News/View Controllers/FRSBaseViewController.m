@@ -229,23 +229,23 @@
     
     FRSNavigationController *navCont = (FRSNavigationController *)[self.tabBarController.viewControllers objectAtIndex:3];
     FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
-    
+        
     assignmentsVC.hasDefault = YES;
     assignmentsVC.defaultID = assignmentID;
     [self.tabBarController setSelectedIndex:3];
     
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
 
-    if (assignmentsVC.mapView) {
+    //if (assignmentsVC.mapView) {
         [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
-
+            
             FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
             [assignment configureWithDictionary:responseObject];
             [assignmentsVC focusOnAssignment:assignment];
             
         }];
-    }
+    //}
 }
 
 
