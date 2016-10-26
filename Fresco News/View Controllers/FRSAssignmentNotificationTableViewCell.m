@@ -47,7 +47,7 @@
     [[FRSAPIClient sharedClient] get:[NSString stringWithFormat:@"assignment/%@", self.assignmentID] withParameters:Nil completion:^(id responseObject, NSError *error) {
         if (!error) {
             NSArray *coordinates = responseObject[@"location"][@"coordinates"];
-            [self.delegate navigateToAssignmentWithLatitude:[[coordinates firstObject] floatValue] longitude:[[coordinates objectAtIndex:1] floatValue]];
+            [self.delegate navigateToAssignmentWithLatitude:[[coordinates objectAtIndex:1] floatValue] longitude:[[coordinates firstObject] floatValue]];
         }
         else {
             
