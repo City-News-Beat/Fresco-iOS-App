@@ -107,12 +107,63 @@
         }
 }
 
+-(void)restartFromManaged {
+    for (FRSUpload *upload in self.managedUploads) {
+        
+        _isRunning = TRUE;
+        NSArray *urls = upload.destinationURLS;
+        
+        if (urls.count > 1) {
+            
+            NSString *resourceURL = upload.resourceURL;
+            NSMutableArray *dest = [[NSMutableArray alloc] init];
+            
+            for (NSString *partURL in urls) {
+                [dest addObject:[NSURL URLWithString:partURL]];
+            }
+            
+            PHFetchResult* assets =[PHAsset fetchAssetsWithLocalIdentifiers:@[resourceURL] options:nil];
+            __block PHAsset *asset;
+            [assets enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                asset = obj;
+            }];
+            
+            if (asset) {
+                [self addMultipartTaskForAsset:asset urls:dest post:@{@"key":upload.key, @"uploadId":upload.uploadID} upload:upload];
+            }
+            else {
+                continue;
+            }
+        }
+        else {
+            
+            NSString *resourceURL = upload.resourceURL;
+            
+            PHFetchResult* assets =[PHAsset fetchAssetsWithLocalIdentifiers:@[resourceURL] options:nil];
+            __block PHAsset *asset;
+            [assets enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                asset = obj;
+            }];
+            
+            if (asset) {
+                if (urls[0]) {
+                    _isRunning = TRUE;
+                    [self addTaskForImageAsset:asset url:[NSURL URLWithString:urls[0]] post:@{@"key":upload.key, @"uploadId":upload.uploadID} upload:upload];
+                }
+            }
+            else {
+                continue;
+            }
+        }
+    }
+}
+
 -(void)appWillResignActive {
     
     if (didFinish) {
         return;
     }
-        
+    
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) == FALSE) {
         UILocalNotification* localNotification = [[UILocalNotification alloc] init];
         localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:3];
@@ -168,11 +219,6 @@
     }];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
-        
-        if (isRunning || didFinish) {
-            return;
-        }
-        
         [self markAsInComplete];
 
         totalBytesSent = 0;
@@ -195,9 +241,7 @@
 -(void)startUploadProcess {
     
     if (!_posts) {
-        self.managedUploads = [[NSMutableArray alloc] init];
-        [self checkAndStart];
-        
+        [self restartFromManaged];
         return;
     }
     
