@@ -63,8 +63,15 @@
     }
     
     if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
-        FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:[[FRSAPIClient sharedClient] managedObjectContext]];
-        self.creator = newUser;
+        //FRSUser *newUser = [FRSUser MR_createEntity];
+        //[newUser configureWithDictionary:dict];
+        
+        //@try {
+            //self.creator = newUser;
+        //}
+        //@catch (NSException *e) {
+        //    NSLog(@"EXCEPTION: %@", e.description);
+        //}
         if (dict [@"id"] != [NSNull null]) {
             self.creator.uid = dict[@"owner"][@"id"];
         }
@@ -143,7 +150,7 @@
     save = TRUE;
     [self configureWithDictionary:dict];
     
-    self.creator = [FRSUser MR_createEntityInContext:context];
+    //self.creator = [FRSUser MR_createEntityInContext:context];
     
     if ([dict valueForKey:@"owner"] != [NSNull null]) {
         self.creator.uid = (dict[@"owner"][@"id"] != nil && ![dict[@"owner"][@"id"] isEqual:[NSNull null]]) ? dict[@"owner"][@"id"] : @"";

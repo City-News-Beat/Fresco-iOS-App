@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(FRSUser *)loggedInUser;
 +(instancetype)nonSavedUserWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context;
 -(NSDictionary *)jsonObject;
+-(void)configureWithDictionary:(NSDictionary *)properties;
 
 @end
 

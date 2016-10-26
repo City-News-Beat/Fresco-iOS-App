@@ -410,11 +410,7 @@
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
         
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateStyle:NSDateFormatterFullStyle];
-        NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
-        self.expirationLabel.text = dateString;
-        
+        [self setExpiration];
         
         [self configureAssignmentCard];
         [self animateAssignmentCard];
@@ -647,22 +643,59 @@
         self.assignmentOutlet = @"No active news outlets";
     }
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterFullStyle];
-    NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
-    self.expirationLabel.text = dateString; //Not up to spec. "Expires in 24 minutes"
-    
-    
-    
-    
-    
+    [self setExpiration];
     [self configureAssignmentCard];
     [self animateAssignmentCard];
     [self snapToAnnotationView:view]; // Centers map with y offset
     
-    
     self.assignmentLat = assAnn.coordinate.latitude;
     self.assignmentLong = assAnn.coordinate.longitude;
+}
+
+-(void)setExpiration {
+    
+    NSTimeInterval doubleDiff = [self.assignmentExpirationDate timeIntervalSinceDate:[NSDate date]];
+    long diff = (long) doubleDiff;
+    int seconds = diff % 60;
+    diff = diff / 60;
+    int minutes = diff % 60;
+    diff = diff / 60;
+    int hours = diff % 24;
+    int days = diff / 24;
+    
+    NSString *expirationString;
+    
+    if (days != 0) {
+        expirationString = [NSString stringWithFormat:@"Expires in %d days", days];
+        if (days == 1) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d day", days];
+        }
+    } else if (hours != 0) {
+        expirationString = [NSString stringWithFormat:@"Expires in %d hours and %d minutes", hours, minutes];
+        if (minutes == 1) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d hours and %d minute", hours, minutes];
+        }
+        if (hours == 1) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d hour and %d minutes", hours, minutes];
+            if (minutes == 1) {
+                expirationString = [NSString stringWithFormat:@"Expires in %d hour and %d minute", hours, minutes];
+            }
+        }
+    } else if (minutes != 0) {
+        expirationString = [NSString stringWithFormat:@"Expires in %d minutes", minutes];
+        if (minutes == 1) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d minute", minutes];
+        }
+    } else if (seconds != 0) {
+        expirationString = [NSString stringWithFormat:@"Expires in %d seconds", seconds];
+        if (seconds == 1) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d second", seconds];
+        }
+    } else {
+        expirationString = @"Assignment has expired.";
+    }
+    
+    self.expirationLabel.text = expirationString;
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
@@ -828,19 +861,16 @@
     self.expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.expirationLabel.textColor = [UIColor frescoMediumTextColor];
 
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterFullStyle];
-    NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
-    self.expirationLabel.text = dateString;
-
+    [self setExpiration];
+    
     [self.assignmentStatsContainer addSubview:self.expirationLabel];
     
     self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 50, self.view.frame.size.width, 20)];
     self.distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.distanceLabel.textColor = [UIColor frescoMediumTextColor];
-    self.distanceLabel.text = @"1.1 miles away";
+    self.distanceLabel.text = @"";
     [self.assignmentStatsContainer addSubview:self.distanceLabel];
-    
+
     UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 90, self.view.frame.size.width, 20)];
     warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     warningLabel.textColor = [UIColor frescoMediumTextColor];
@@ -848,7 +878,7 @@
     [self.assignmentStatsContainer addSubview:warningLabel];
     
     UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*1.3, self.view.frame.size.width, 150)];
-    label.text = @"if you keep scrolling you will find a pigeon.\n\n\n\n\n\n\n🐦\n\nhello there.";
+    label.text = @"if you keep scrolling you will find a pigeon.\n\n\n\n\n\nalmost there...\n\n\n🐦";
     label.font = [UIFont systemFontOfSize:10 weight:UIFontWeightLight];
     label.textAlignment = NSTextAlignmentCenter;
     label.backgroundColor = self.assignmentCard.backgroundColor;
