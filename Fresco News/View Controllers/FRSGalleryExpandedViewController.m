@@ -674,7 +674,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height;
     }
     if (self.orderedArticles.count > 0) {
-        height += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
+        height += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height +20;
     }
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, height);
 }
