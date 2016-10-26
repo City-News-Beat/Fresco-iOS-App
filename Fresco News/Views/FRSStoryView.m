@@ -200,7 +200,7 @@
     [view.layer insertSublayer:gradient atIndex:0];
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 32, 0)];
-    self.titleLabel.numberOfLines = 2;
+    self.titleLabel.numberOfLines = 1;
     self.titleLabel.text = self.story.title;
     self.titleLabel.font = [UIFont notaBoldWithSize:24];
     self.titleLabel.textColor = [UIColor whiteColor];
@@ -210,7 +210,6 @@
     
     [self.titleLabel setOriginWithPoint:CGPointMake(16, self.topContainer.frame.size.height - self.titleLabel.frame.size.height - 12)];
     [self.titleLabel setSizeWithSize:CGSizeMake(self.frame.size.width - 16, self.titleLabel.frame.size.height+5)];
-
     [self.topContainer addSubview:view];
     [self addShadowToLabel:self.titleLabel];
     [self.topContainer addSubview:self.titleLabel];
@@ -228,9 +227,9 @@
         
         self.titleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, self.titleLabel.frame.origin.y - 30, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
         
-        //self.titleLabel.backgroundColor = [UIColor greenColor];
-        //timestampLabel.backgroundColor = [UIColor orangeColor];
-        //clockIV.backgroundColor = [UIColor redColor];
+        self.titleLabel.backgroundColor = [UIColor greenColor];
+        timestampLabel.backgroundColor = [UIColor orangeColor];
+        clockIV.backgroundColor = [UIColor redColor];
     }
 }
 
