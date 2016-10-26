@@ -43,6 +43,7 @@
     if ([self.gallery.uid isEqualToString:gallery.uid]) {
         self.gallery = gallery;
         [self updateSocial];
+        [self checkOwner];
         return;
     }
     
@@ -115,7 +116,6 @@
     [self.nameLabel sizeToFit];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
 
-    
     [self.actionBar setOriginWithPoint:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height)];
     [self.borderLine.superview bringSubviewToFront:self.borderLine];
 
@@ -131,7 +131,7 @@
 }
 
 -(void)checkOwner {
-    NSString *ownerID = self.gallery.creator.uid;
+    /*NSString *ownerID = self.gallery.creator.uid;
     NSString *userID = [[FRSAPIClient sharedClient] authenticatedUser].uid;
     
     if (userID && ownerID && [ownerID isEqualToString:userID]) {
@@ -140,7 +140,19 @@
     }
     else {
         [self.actionBar setCurrentUser:FALSE];
-    }
+    }*/
+    
+    NSLog(@"self.gallery.creator = %@", self.gallery.creator);
+    NSLog(@"self.gallery.creator.uid = %@", self.gallery.creator.uid);
+    NSLog(@"authenticatedUser.uid = %@", [[[FRSAPIClient sharedClient] authenticatedUser] uid]);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+            [self.actionBar setCurrentUser:YES];
+        } else {
+            [self.actionBar setCurrentUser:NO];
+        }
+    });
 }
 
 -(void)updateUser {
@@ -180,6 +192,7 @@
     self.repostImageView = Nil;
     
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
+        
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
 }
@@ -217,40 +230,43 @@
 
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
         [[FRSAPIClient sharedClient] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
             if (error) {
                 [actionBar handleHeartState:TRUE];
                 [actionBar handleHeartAmount:likes];
+                self.gallery.numberOfLikes --;
             }
         }];
 
-    }
-    else {
+    } else {
         [[FRSAPIClient sharedClient] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
             if (error) {
                 [actionBar handleHeartState:FALSE];
                 [actionBar handleHeartAmount:likes];
+                self.gallery.numberOfLikes ++;
             }
         }];
     }
 }
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {
-    BOOL state = [[self.gallery valueForKey:@"reposted"] boolValue];
-    NSInteger repostCount = [[self.gallery valueForKey:@"reposts"] boolValue];
-    
-    [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-        NSLog(@"REPOSTED %@", error);
-        
-        if (error) {
-            [actionBar handleRepostState:!state];
-        }
-        else {
-            [actionBar handleRepostState:state];
-        }
-        [actionBar handleRepostAmount:repostCount];
-    }];
+    NSInteger reposts = [[self.gallery valueForKey:@"reposts"] integerValue];
+    if ([[self.gallery valueForKey:@"reposted"] boolValue]) {
+        [[FRSAPIClient sharedClient] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            if (error) {
+                [actionBar handleRepostState:TRUE];
+                [actionBar handleRepostAmount:reposts];
+                self.gallery.numberOfReposts--;
+            }
+        }];
+    } else {
+        [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            if (error) {
+                [actionBar handleRepostState:FALSE];
+                [actionBar handleRepostAmount:reposts];
+                self.gallery.numberOfReposts++;
+            }
+        }];
+    }
 }
 
 -(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate{
@@ -637,7 +653,6 @@
             [photoTap setNumberOfTapsRequired:1];
             [self.profileIV setUserInteractionEnabled:YES];
             [self.profileIV addGestureRecognizer:photoTap];
-            
         });
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
@@ -657,7 +672,7 @@
     
     FRSGallery *parent = post.gallery;
     
-    if((post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) && ![post.creator.username isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.username class] isSubclassOfClass:[NSString class]]){
+    if((post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) && ![post.creator.username isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.username class] isSubclassOfClass:[NSString class]] && post.creator.username != nil && ![post.creator.username isEqualToString:@""]){
         self.nameLabel.text = [NSString stringWithFormat:@"@%@",post.creator.username];
     }else if (![post.creator.firstName isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.firstName class] isSubclassOfClass:[NSString class]]){
         self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
@@ -671,7 +686,7 @@
         if ([parent.externalSource isEqualToString:@"twitter"] ) {
             NSString *toSet = [NSString stringWithFormat:@"@%@",parent.externalAccountName];
             
-            if (![toSet isEqualToString:@"@"]) {
+            if ([toSet length] != 1) {
                 self.nameLabel.text = toSet;
             }
             
@@ -1080,10 +1095,10 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
-                NSLog(@"CURRENTPOST.CREATOR= %@", (FRSUser *)currentPost.creator);
 
-                
-                [self.delegate.navigationController pushViewController:userViewController animated:YES];
+                if ([currentPost.creator uid] != nil) {
+                    [self.delegate.navigationController pushViewController:userViewController animated:YES];
+                }
             });
         }
     }

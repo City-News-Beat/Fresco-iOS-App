@@ -25,5 +25,6 @@
 @property (weak, nonatomic) IBOutlet UILabel  *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel  *bodyLabel;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
+@property (nonatomic, retain) NSString *assignmentID;
 
 @end

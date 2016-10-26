@@ -23,6 +23,7 @@
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *password;
 @property (strong, nonatomic) NSTimer *usernameTimer;
+@property (strong, nonatomic) UITextField *passwordTextField;
 
 @property (nonatomic) BOOL usernameTaken;
 
@@ -113,6 +114,7 @@
                     cell.textField.delegate = self;
                     cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                     cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+                    cell.textField.returnKeyType = UIReturnKeyNext;
                     [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
                     
                     self.usernameCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-green"]];
@@ -128,7 +130,9 @@
         case 1:
             [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
             cell.textField.delegate = self;
+            cell.textField.returnKeyType = UIReturnKeyDone;
             [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
+            self.passwordTextField = cell.textField;
             break;
         case 2:
             [cell configureCellWithRightAlignedButtonTitle:@"SAVE USERNAME" withWidth:142 withColor:[UIColor frescoLightTextColor]];
@@ -198,6 +202,22 @@
             [self.errorImageView removeFromSuperview];
         }
     }
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    FRSTableViewCell *currentCell = (FRSTableViewCell *)textField.superview.superview;
+    NSIndexPath *currentIndexPath = [self.tableView indexPathForCell:currentCell];
+    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForRow:currentIndexPath.row + 1 inSection:0];
+    FRSTableViewCell *nextCell = (FRSTableViewCell *)[self.tableView cellForRowAtIndexPath:nextIndexPath];
+    [nextCell.textField becomeFirstResponder];
+    
+    if (textField == self.passwordTextField) {
+        [self.view resignFirstResponder];
+        [self saveUsername];
+    }
+    
+    return NO;
 }
 
 -(void)addErrorToView {

@@ -18,7 +18,6 @@
 @property CGFloat assignmentLat;
 @property CGFloat assignmentLong;
 @property NSInteger generatedHeight;
-
 @end
 
 @implementation FRSAssignmentNotificationTableViewCell
@@ -45,7 +44,15 @@
 
 -(IBAction)secondaryAction:(id)sender {
     
-    [self.delegate navigateToAssignmentWithLatitude:self.assignmentLat longitude:self.assignmentLong];
+    [[FRSAPIClient sharedClient] get:[NSString stringWithFormat:@"assignment/%@", self.assignmentID] withParameters:Nil completion:^(id responseObject, NSError *error) {
+        if (!error) {
+            NSArray *coordinates = responseObject[@"location"][@"coordinates"];
+            [self.delegate navigateToAssignmentWithLatitude:[[coordinates firstObject] floatValue] longitude:[[coordinates objectAtIndex:1] floatValue]];
+        }
+        else {
+            
+        }
+    }];
 }
 
 //-(void)configureAssignmentCellWithID:(NSString *)assignmentID {

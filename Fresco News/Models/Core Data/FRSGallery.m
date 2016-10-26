@@ -32,6 +32,7 @@
 @dynamic articles;
 @dynamic isLiked;
 @dynamic numberOfLikes;
+@dynamic numberOfReposts;
 @dynamic externalAccountID;
 @dynamic externalAccountName;
 @dynamic externalID;
@@ -60,7 +61,24 @@
         self.creator.username = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
         //blocked
     }
-    NSLog(@"BYLINE: %@", self.byline);
+    
+    if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
+        //FRSUser *newUser = [FRSUser MR_createEntity];
+        //[newUser configureWithDictionary:dict];
+        
+        //@try {
+        //self.creator = newUser;
+        //}
+        //@catch (NSException *e) {
+        //    NSLog(@"EXCEPTION: %@", e.description);
+        //}
+        if (dict [@"id"] != [NSNull null]) {
+            self.creator.uid = dict[@"owner"][@"id"];
+        }
+    }
+    
+    
+    NSLog(@"OWNER: %@", dict[@"owner"]);
 
 //    if ([dict valueForKey:@"curator"] != [NSNull null]) {
 //        self.creator = [FRSUser MR_createEntity];
@@ -100,6 +118,9 @@
     
     [self setValue:@([dict[@"liked"] boolValue]) forKey:@"liked"];
     [self setValue:@([dict[@"likes"] integerValue]) forKey:@"likes"];
+
+    [self setValue:@([dict[@"reposted"] boolValue]) forKey:@"reposted"];
+    [self setValue:@([dict[@"reposts"] integerValue]) forKey:@"reposts"];
     
     NSString *repostedBy = dict[@"reposted_by"];
     

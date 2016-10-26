@@ -1144,12 +1144,10 @@
         return;
     }
     
-    
     if ([[gallery valueForKey:@"reposted"] boolValue]) {
         [self unrepostGallery:gallery completion:completion];
         return;
     }
-
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
     

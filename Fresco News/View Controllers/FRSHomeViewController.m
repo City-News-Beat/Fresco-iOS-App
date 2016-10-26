@@ -67,7 +67,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.cachedData = [[NSMutableArray alloc] init];
-    
     reloadedFrom = [[NSMutableArray alloc] init];
     if (!self.appDelegate) {
         self.appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];

@@ -410,11 +410,7 @@
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
         
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateStyle:NSDateFormatterFullStyle];
-        NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
-        self.expirationLabel.text = dateString;
-        
+        [self setExpiration];
         
         [self configureAssignmentCard];
         [self animateAssignmentCard];
@@ -647,18 +643,90 @@
         self.assignmentOutlet = @"No active news outlets";
     }
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterFullStyle];
-    NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
-    self.expirationLabel.text = dateString; //Not up to spec. "Expires in 24 minutes"
-    
+    [self setExpiration];
     [self configureAssignmentCard];
     [self animateAssignmentCard];
     [self snapToAnnotationView:view]; // Centers map with y offset
     
-    
     self.assignmentLat = assAnn.coordinate.latitude;
     self.assignmentLong = assAnn.coordinate.longitude;
+    
+    CLLocation *locA = [[CLLocation alloc] initWithLatitude:self.assignmentLat longitude:self.assignmentLong];
+    CLLocation *locB = [[CLLocation alloc] initWithLatitude:[FRSLocator sharedLocator].currentLocation.coordinate.latitude longitude:[FRSLocator sharedLocator].currentLocation.coordinate.longitude];
+    CLLocationDistance distance = [locA distanceFromLocation:locB];
+    
+    CGFloat miles = distance / 1609.34;
+    CGFloat feet  = miles * 5280;
+    
+    NSString *distanceString;
+    
+    if (miles != 0) {
+        if (miles <= 10) {
+            distanceString = [NSString stringWithFormat:@"%.1f miles away", miles];
+            
+        } else {
+            //Disable truncation on assignments with a distance away greater than 10 miles
+            distanceString = [NSString stringWithFormat:@"%.0f miles away", miles];
+        }
+        
+        if (feet <= 2000) {
+            distanceString = [NSString stringWithFormat:@"%.0f feet away", feet];
+        }
+    }
+    
+    
+    
+    self.distanceLabel.text = distanceString;
+}
+
+-(void)setExpiration {
+    
+    NSTimeInterval doubleDiff = [self.assignmentExpirationDate timeIntervalSinceDate:[NSDate date]];
+    long diff = (long) doubleDiff;
+    int seconds = diff % 60;
+    diff = diff / 60;
+    int minutes = diff % 60;
+    diff = diff / 60;
+    int hours = diff % 24;
+    int days = diff / 24;
+    
+    NSString *expirationString;
+    
+    if (days != 0) {
+        expirationString = [NSString stringWithFormat:@"Expires in %d days", days];
+        if (days == 1) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d day", days];
+        }
+    } else if (hours != 0) {
+        expirationString = [NSString stringWithFormat:@"Expires in %d hours and %d minutes", hours, minutes];
+        if (minutes == 1) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d hours and %d minute", hours, minutes];
+        } else if (minutes == 0) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d hours", hours];
+        }
+        if (hours == 1) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d hour and %d minutes", hours, minutes];
+            if (minutes == 1) {
+                expirationString = [NSString stringWithFormat:@"Expires in %d hour and %d minute", hours, minutes];
+            } else if (minutes == 0) {
+                expirationString = [NSString stringWithFormat:@"Expires in %d hours", hours];
+            }
+        }
+    } else if (minutes != 0) {
+        expirationString = [NSString stringWithFormat:@"Expires in %d minutes", minutes];
+        if (minutes == 1) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d minute", minutes];
+        }
+    } else if (seconds != 0) {
+        expirationString = [NSString stringWithFormat:@"Expires in %d seconds", seconds];
+        if (seconds == 1) {
+            expirationString = [NSString stringWithFormat:@"Expires in %d second", seconds];
+        }
+    } else {
+        expirationString = @"This assignment has expired.";
+    }
+    
+    self.expirationLabel.text = expirationString;
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
@@ -750,7 +818,7 @@
     navigateButton.tintColor = [UIColor blackColor];
     [self.assignmentBottomBar addSubview:navigateButton];
     
-    self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 16, 44)];
+    self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, self.view.frame.size.width - 16, 22)];
     [self.assignmentOutletLabel setFont:[UIFont notaMediumWithSize:17]];
     self.assignmentOutletLabel.textColor = [UIColor frescoDarkTextColor];
     self.assignmentOutletLabel.userInteractionEnabled = NO;
@@ -759,7 +827,7 @@
     [self.assignmentCard addSubview:self.assignmentOutletLabel];
     
     
-    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, self.assignmentOutletLabel.frame.size.height - 3, self.view.frame.size.width - 16, 220)];
+    self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, 50, self.view.frame.size.width - 16, 220)];
     [self.assignmentCard addSubview:self.assignmentTextView];
     [self.assignmentTextView setFont:[UIFont systemFontOfSize:15]];
     self.assignmentTextView.textColor = [UIColor frescoDarkTextColor];
@@ -805,7 +873,7 @@
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
-    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + self.assignmentTextView.frame.origin.y + 16 + 50, self.view.frame.size.width, 120)];
+    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 50, self.view.frame.size.width, 120)];
     [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
     UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
@@ -824,30 +892,35 @@
     self.expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.expirationLabel.textColor = [UIColor frescoMediumTextColor];
 
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterFullStyle];
-    NSString *dateString = [formatter stringFromDate:self.assignmentExpirationDate];
-    self.expirationLabel.text = dateString;
-
+    [self setExpiration];
+    
     [self.assignmentStatsContainer addSubview:self.expirationLabel];
     
     self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 50, self.view.frame.size.width, 20)];
     self.distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.distanceLabel.textColor = [UIColor frescoMediumTextColor];
-    self.distanceLabel.text = @"1.1 miles away";
+    self.distanceLabel.text = @"";
     [self.assignmentStatsContainer addSubview:self.distanceLabel];
-    
+
     UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 90, self.view.frame.size.width, 20)];
     warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     warningLabel.textColor = [UIColor frescoMediumTextColor];
     warningLabel.text = @"Not all events are safe. Be careful!";
     [self.assignmentStatsContainer addSubview:warningLabel];
     
+    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*1.3, self.view.frame.size.width, 150)];
+    label.text = @"if you keep scrolling you will find a pigeon.\n\n\n\n\n\nalmost there...\n\n\n🐦";
+    label.font = [UIFont systemFontOfSize:10 weight:UIFontWeightLight];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.backgroundColor = self.assignmentCard.backgroundColor;
+    label.textColor = [UIColor frescoLightTextColor];
+    [self.assignmentCard addSubview:label];
+    
     UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
     self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.closeButton.tintColor = [UIColor whiteColor];
     [self.closeButton setImage:closeButtonImage forState:UIControlStateNormal];
-    self.closeButton.frame = CGRectMake(0 , 0, 24, 24);
+    self.closeButton.frame = CGRectMake(0, 0, 24, 24);
     [self.closeButton addTarget:self action:@selector(dismissAssignmentCard) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
     self.navigationItem.leftBarButtonItem = backButton;
@@ -863,10 +936,10 @@
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding + 25), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     
-    
     //Avoid any drawing above these
     self.scrollView.layer.zPosition = 1;
     self.assignmentBottomBar.layer.zPosition = 2;
+    
 }
 
 -(void)navigateToAssignment {
@@ -896,8 +969,8 @@
     [self.dismissView addGestureRecognizer:singleTap];
     
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
-    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
-    self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 24 + 20, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
+    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + 15 + 50), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height); // :(
+    self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 14 + 50, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
     
     [self drawImages];
 }
@@ -919,11 +992,11 @@
         
         if (outlet[@"avatar"] && ![outlet[@"avatar"] isEqual:[NSNull null]]) {
             int xOffset = (int)self.outletImagesViews.count * (int)34 + 13;
-            int width = 28;
-            int height = 28;
-            int y = self.assignmentOutletLabel.frame.origin.y + 6;
+            int width = 24;
+            int height = 24;
+            int y = 16;
             
-            CGRect imageFrame = CGRectMake(xOffset, y, width, height);
+            CGRect imageFrame = CGRectMake(xOffset +4, y, width, height);
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
             imageView.layer.masksToBounds = YES;
             imageView.layer.cornerRadius = width/2;
@@ -934,7 +1007,7 @@
             [imageView hnk_setImageFromURL:[NSURL URLWithString:outlet[@"avatar"]]];
         }
         
-        int xOffset = (int)self.outletImagesViews.count * (int)34 + 13 + (3 * (self.outletImagesViews.count >0));
+        int xOffset = (int)self.outletImagesViews.count * (int)34 + 17 + (3 * (self.outletImagesViews.count >0));
         CGRect frame = self.assignmentOutletLabel.frame;
         frame.origin.x = xOffset;
         self.assignmentOutletLabel.frame = frame;
