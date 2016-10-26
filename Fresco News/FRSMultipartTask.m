@@ -37,11 +37,13 @@
 -(void)loadEtags {
     FRSUpload *upload = (FRSUpload *)self.managedObject;
     
+    if (!self.eTags) {
+        self.eTags = [[NSMutableArray alloc] init];
+    }
+    
     if (upload.etags) {
-        int index = 0;
         for (NSString *etag in upload.etags) {
             [self.eTags addObject:etag];
-            index++;
         }
     }
 }
@@ -125,9 +127,10 @@
             if ([currentData length] >= chunkSize * megabyteDefinition) {
                 currentChunkIndex++;
                 
-                if (currentChunkIndex <= [(FRSUpload *)self.managedObject etags].count) {
+                if (currentChunkIndex <= self.eTags.count) {
                     ranOnce = TRUE;
                     currentData = [[NSMutableData alloc] init];
+                    NSLog(@"SKIPPING CHUNK: HAS ETAG");
                     totalConnections++;
                     continue;
                 }

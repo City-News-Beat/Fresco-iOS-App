@@ -340,10 +340,10 @@
                     
                     if (!error) {
                         isComplete++;
+                        [(FRSMultipartTask *)task complete];
                         [self next:task];
                     }
                     else {
-                        [(FRSMultipartTask *)task complete];
                         if (error.localizedDescription) {
                             [FRSTracker track:@"Upload Error" parameters:@{@"error_message":(error.localizedDescription) ? error.localizedDescription : @""}];
                         }
