@@ -63,6 +63,9 @@
     }
     
     if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
+        FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:self.currentContext];
+        self.creator = newUser;
+        
         //FRSUser *newUser = [FRSUser MR_createEntity];
         //[newUser configureWithDictionary:dict];
         
