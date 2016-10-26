@@ -344,6 +344,13 @@
                         [self next:task];
                     }
                     else {
+                        
+                        if (!_posts) {
+                            isComplete++;
+                            [self next:task];
+                            return;
+                        }
+                        
                         if (error.localizedDescription) {
                             [FRSTracker track:@"Upload Error" parameters:@{@"error_message":(error.localizedDescription) ? error.localizedDescription : @""}];
                         }
