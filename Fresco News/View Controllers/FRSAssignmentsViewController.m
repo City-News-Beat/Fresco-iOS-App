@@ -722,7 +722,7 @@
         if (seconds == 1) {
             expirationString = [NSString stringWithFormat:@"Expires in %d second", seconds];
         }
-    } else {
+    } else if (minutes <= 0 || seconds <= 0 || hours <= 0 || days <= 0) {
         expirationString = @"This assignment has expired.";
     }
     
