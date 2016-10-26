@@ -157,6 +157,11 @@
 }
 
 -(void)checkEtag:(NSData *)data {
+    
+    if (self.eTag) {
+        return;
+    }
+    
     NSDictionary *responseDictionary = [self serializedObjectFromResponse:data];
     NSLog(@"ETAGS: %@", data);
     if (responseDictionary[@"eTag"]) {
