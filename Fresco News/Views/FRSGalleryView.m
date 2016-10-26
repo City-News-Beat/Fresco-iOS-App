@@ -230,6 +230,10 @@
 }
 
 -(void)handleLike:(FRSContentActionsBar *)actionBar {
+    /*if (![[FRSAPIClient sharedClient] authenticatedUser]) {
+        return;
+    }*/
+    
     NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
 
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
@@ -237,7 +241,9 @@
             if (error) {
                 [actionBar handleHeartState:TRUE];
                 [actionBar handleHeartAmount:likes];
-                self.gallery.numberOfLikes --;
+                if (error.code != 101) {
+                    self.gallery.numberOfLikes --;
+                }
             }
         }];
 
@@ -246,20 +252,28 @@
             if (error) {
                 [actionBar handleHeartState:FALSE];
                 [actionBar handleHeartAmount:likes];
-                self.gallery.numberOfLikes ++;
+                if (error.code != 101) {
+                    self.gallery.numberOfLikes ++;
+                }
             }
         }];
     }
 }
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {
+    /*if (![[FRSAPIClient sharedClient] authenticatedUser]) {
+        return;
+    }*/
+    
     NSInteger reposts = [[self.gallery valueForKey:@"reposts"] integerValue];
     if ([[self.gallery valueForKey:@"reposted"] boolValue]) {
         [[FRSAPIClient sharedClient] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
             if (error) {
                 [actionBar handleRepostState:TRUE];
                 [actionBar handleRepostAmount:reposts];
-                self.gallery.numberOfReposts--;
+                if (error.code != 101) {
+                    self.gallery.numberOfReposts--;
+                }
             }
         }];
     } else {
@@ -267,7 +281,9 @@
             if (error) {
                 [actionBar handleRepostState:FALSE];
                 [actionBar handleRepostAmount:reposts];
-                self.gallery.numberOfReposts++;
+                if (error.code != 101) {
+                    self.gallery.numberOfReposts++;
+                }
             }
         }];
     }
