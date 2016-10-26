@@ -651,9 +651,11 @@
 
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
             [photoTap setNumberOfTapsRequired:1];
-            [self.profileIV setUserInteractionEnabled:YES];
-            [self.profileIV addGestureRecognizer:photoTap];
             
+            if (post.creator != nil) {
+                [self.profileIV setUserInteractionEnabled:YES];
+                [self.profileIV addGestureRecognizer:photoTap];
+            }
         });
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
