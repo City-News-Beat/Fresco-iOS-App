@@ -104,6 +104,7 @@
             _galleries = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleries cache:FALSE]];
             numberOfPosts = [_galleries count];
             [self reloadData];
+            isFinished = FALSE;
         });
     }];
 
@@ -295,6 +296,43 @@
             [weakSelf readMoreStory:indexPath];
         };
     }
+    
+    if (indexPath.row >= self.galleries.count-3) {
+        [self loadMore];
+    }
+}
+
+-(void)loadMore {
+    
+    if (isReloading || isFinished) {
+        return;
+    }
+    
+    isReloading = TRUE;
+    FRSGallery *gallery = [self.galleries lastObject];
+    NSString *galleryID = gallery.uid;
+    
+    FRSUser *authUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    NSString *userID = authUser.uid;
+    
+    NSString *endpoint = [NSString stringWithFormat:followingFeed, userID];
+    
+    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, galleryID];
+    
+    [[FRSAPIClient sharedClient] get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        isReloading = FALSE;
+        
+        
+       NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
+        
+        if (response.count == 0) {
+            isFinished = TRUE;
+        }
+        
+        NSMutableArray *newGalleries = [self.galleries mutableCopy];
+        [newGalleries addObjectsFromArray:response];
+        [self reloadData];
+    }];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -2400,6 +2400,7 @@
 				E72DB15E1B852A6D0017AAA5 /* ShellScript */,
 				795C43D7E48F825023E7D453 /* [CP] Embed Pods Frameworks */,
 				D418E3561CCC1D430003B080 /* Embed Watch Content */,
+				283E05549C2A8324AE8F14D9 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 				D42A13901D89A4DD008909E6 /* PBXBuildRule */,
@@ -2553,6 +2554,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		283E05549C2A8324AE8F14D9 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Fresco/Pods-Fresco-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		795C43D7E48F825023E7D453 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

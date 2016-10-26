@@ -219,11 +219,8 @@
         
         if (error.code == 0) {
             
-            
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-            [delegate saveUserFields:responseObject[@"user"]];
-            [self setMigrateState:responseObject];
-
+            [delegate saveUserFields:responseObject];
             
             [self popToOrigin];
             

@@ -12,6 +12,7 @@
 #import "MagicalRecord.h"
 #import "FRSUpload+CoreDataProperties.h"
 #import "FRSAppDelegate.h"
+#import "FRSTracker.h"
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
@@ -347,7 +348,10 @@
                             [self next:task];
                             return;
                         }
-
+                        
+                        if (error.localizedDescription) {
+                            [FRSTracker track:@"Upload Error" parameters:@{@"error_message":error.localizedDescription}];
+                        }
 
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                         isRunning = FALSE;
@@ -367,7 +371,7 @@
                     isRunning = FALSE;
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                     [self markAsComplete];
-
+                    [FRSTracker track:@"Upload Error" parameters:@{@"error_message":error.localizedDescription}];
             }
         }];
         
@@ -437,6 +441,7 @@
                 isRunning = FALSE;
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"failure"}];
                 [self markAsComplete];
+                [FRSTracker track:@"Upload Error" parameters:@{@"error_message":error.localizedDescription}];
             }
         }];
         

@@ -81,7 +81,6 @@
     
     [self configureTopContainer];
     [self configureTitleLabel];
-    //[self configureMetaTags];
     [self configureCaption];
     [self configureActionsBar];
     

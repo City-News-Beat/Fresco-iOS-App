@@ -7,7 +7,7 @@
 //
 
 #import "FRSUploadTask.h"
-
+#import "FRSTracker.h"
 @implementation FRSUploadTask
 @synthesize uploadTask = _uploadTask;
 // sets up architecture, start initializes request
@@ -63,6 +63,8 @@
                 if (self.delegate) {
                     [self.delegate uploadDidFail:self withError:error response:data];
                 }
+                
+                [FRSTracker track:@"Upload Error" parameters:@{@"error_message":error.localizedDescription}];
             }
             else {
                 [self checkEtag:data];

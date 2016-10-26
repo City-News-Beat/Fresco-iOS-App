@@ -114,10 +114,10 @@
     user.firstName = (properties[@"full_name"] != Nil && ![properties[@"full_name"] isEqual:[NSNull null]] && [[properties[@"full_name"] class] isSubclassOfClass:[NSString class]]) ? properties[@"full_name"] : @"";;
     user.username = (properties[@"username"] != Nil && ![properties[@"username"] isEqual:[NSNull null]]) ? properties[@"username"] : @"";
     user.isLoggedIn = @(FALSE);
-    user.bio = (properties[@"bio"] != Nil) ? properties[@"bio"] : @"";
-    user.following = (properties[@"following"] != Nil) ? properties[@"following"] : 0;
+    user.bio = (properties[@"bio"] != Nil && ![properties[@"bio"] isEqual:[NSNull null]]) ? properties[@"bio"] : @"";
+    user.following = (properties[@"following"] != Nil && ![properties[@"following"] isEqual:[NSNull null]]) ? properties[@"following"] : 0;
     
-    user.email = (properties[@"email"] != nil) ? properties[@"email"] : @"";
+    user.email = (properties[@"email"] != nil && ![properties[@"email"] isEqual:[NSNull null]]) ? properties[@"email"] : @"";
     
     if (properties[@"location"] != Nil && ![properties[@"location"] isEqual:[NSNull null]]) {
         [user setValue:properties[@"location"] forKey:@"location"];

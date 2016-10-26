@@ -35,6 +35,7 @@
 #import "FRSIdentityViewController.h"
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 #import "FRSUploadManager.h"
+#import "FRSStoriesViewController.h"
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -47,7 +48,7 @@
     [self startFabric]; // crashlytics first yall
 
     if ([self isFirstRun]) {
-        [self clearKeychain]; // clear tokens from past install
+        [[FRSAPIClient sharedClient] logout];
     }
     
     [self startMixpanel];
@@ -86,18 +87,14 @@
         
         return YES; // no other stuff going on (no quick action handling, etc)
     }
-    
-    NSLog(@"OPTIONS %@", launchOptions);
-    
+        
     if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
         [self handleLocationUpdate];
     }
     if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
-        NSLog(@"HANDLE PUSH (LOCAL)");
         [self handleLocalPush];
     }
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        NSLog(@"HANDLE PUSH (REMOTE)");
         [self handleRemotePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
     }
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
@@ -148,8 +145,6 @@
         if (!error && responseObject) {
             success = TRUE;
         }
-        
-        NSLog(@"MARK AS READ SUCCESS: %d", success);
     }];
 }
 
@@ -189,7 +184,10 @@
     }
     
     // update user
-    authenticatedUser.uid = responseObject[@"id"];
+    
+    if (responseObject[@"id"] && ![responseObject[@"id"] isEqual:[NSNull null]]) {
+        authenticatedUser.uid = responseObject[@"id"];
+    }
     //        authenticatedUser.email = responseObject[@"email"];
     
     if (![responseObject[@"full_name"] isEqual:[NSNull null]]) {
@@ -222,7 +220,7 @@
     }
     
     
-    if ([responseObject[@"terms"][@"valid"] boolValue] == FALSE) { /* */
+    if (responseObject[@"terms"] && ![responseObject[@"terms"] isEqual:[NSNull null]] && [responseObject[@"terms"][@"valid"] boolValue] == FALSE) { /* */
         UITabBarController *tabBar = (UITabBarController *)self.tabBarController;
         UINavigationController *nav = [tabBar.viewControllers firstObject];
         FRSHomeViewController *homeViewController = [nav.viewControllers firstObject];
@@ -247,11 +245,11 @@
         authenticatedUser.disabled = [responseObject[@"disabled"] boolValue];
     }
     
-    if (![responseObject[@"identity"] isKindOfClass:[[NSNull null] class]]) {
+    if (responseObject[@"identity"] && ![responseObject[@"identity"] isKindOfClass:[[NSNull null] class]]) {
         
-        if (responseObject[@"identity"][@"due_by"] != Nil && ![responseObject[@"identity"][@"due_by"] isEqual:[NSNull null]]) {
-            [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
-        }
+//        if (responseObject[@"identity"][@"due_by"] != Nil && ![responseObject[@"identity"][@"due_by"] isEqual:[NSNull null]]) {
+//            [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
+//        }
         
         if (responseObject[@"identity"][@"first_name"] != Nil && ![responseObject[@"identity"][@"first_name"] isEqual:[NSNull null]]) {
             [authenticatedUser setValue:responseObject[@"identity"][@"first_name"] forKey:@"stripeFirst"];
@@ -320,8 +318,11 @@
         }
         
         NSArray *fieldsNeeded = identity[@"fields_needed"];
-        [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
-        [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
+        
+        if(fieldsNeeded) {
+            [authenticatedUser setValue:fieldsNeeded forKey:@"fieldsNeeded"];
+            [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
+        }
         
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -361,11 +362,11 @@
 
 -(BOOL)isFirstRun {
 
-    BOOL firstRun = ![[[NSUserDefaults standardUserDefaults] stringForKey:@"isFirstRun"] isEqualToString:@"Yeah It Totally Is"];
+    BOOL firstRun = [[[NSUserDefaults standardUserDefaults] stringForKey:@"isFirstRun"] isEqualToString:@"Yeah It Totally Is"];
     [[NSUserDefaults standardUserDefaults] setObject:@"Yeah It Totally Is" forKey:@"isFirstRun"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    return firstRun;
+    return !firstRun;
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
@@ -576,11 +577,9 @@
     
     if( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) )
     {
-        NSLog( @"iOS version >= 10. Let NotificationCenter handle this one." );
         // set a member variable to tell the new delegate that this is background
         return;
     }
-    NSLog( @"HANDLE PUSH, didReceiveRemoteNotification: %@", userInfo );
     
     // custom code to handle notification content
     if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
@@ -1084,7 +1083,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
             UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
             
             if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                UITabBarController *tab = (UITabBarController *)navController.viewControllers[0];
+                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                
+                [navController setNavigationBarHidden:FALSE];
+                navController = (UINavigationController *)[[tab viewControllers] firstObject];
                 [navController pushViewController:detailView animated:TRUE];
+                
+                [tab setSelectedIndex:0];
             }
             else {
                 UITabBarController *tab = (UITabBarController *)navController;
@@ -1111,13 +1118,21 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+        UITabBarController *tab = (UITabBarController *)navController.viewControllers[0];
+        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        
+        [navController setNavigationBarHidden:FALSE];
+        navController = (UINavigationController *)[[tab viewControllers] firstObject];
         [navController pushViewController:profileVC animated:TRUE];
+        [tab setSelectedIndex:0];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
         tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
+        [navController setNavigationBarHidden:FALSE];
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
         [navController pushViewController:profileVC animated:TRUE];
     }
@@ -1238,8 +1253,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-        [navController pushViewController:debitCardVC animated:TRUE];
+        UITabBarController *tab = (UITabBarController *)navController.viewControllers[0];
+        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        
         [navController setNavigationBarHidden:FALSE];
+        navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        [navController pushViewController:debitCardVC animated:TRUE];
+        
+        [tab setSelectedIndex:0];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
@@ -1259,7 +1281,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+        UITabBarController *tab = (UITabBarController *)navController.viewControllers[0];
+        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        
+        [navController setNavigationBarHidden:FALSE];
+        navController = (UINavigationController *)[[tab viewControllers] firstObject];
         [navController pushViewController:taxVC animated:TRUE];
+        
+        [tab setSelectedIndex:0];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
@@ -1276,8 +1306,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-        [navController pushViewController:taxVC animated:TRUE];
+        UITabBarController *tab = (UITabBarController *)navController.viewControllers[0];
+        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        
         [navController setNavigationBarHidden:FALSE];
+        navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        [navController pushViewController:taxVC animated:TRUE];
+        
+        [tab setSelectedIndex:0];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;

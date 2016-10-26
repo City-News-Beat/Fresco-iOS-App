@@ -491,7 +491,6 @@
                                      
                                      NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?q=%f,%f",latitude,longitude]];
                                      if (![[UIApplication sharedApplication] canOpenURL:url]) {
-                                         NSLog(@"Google Maps app is not installed");
                                          
                                          [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/?q=%f,%f", latitude, longitude]]];
                                          
@@ -1571,7 +1570,6 @@
                 
                 NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
                 NSInteger responseCode = response.statusCode;
-                NSLog(@"TIMER CODE: %ld", responseCode);
                 
                 if (responseCode == 404) { //
                     [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
