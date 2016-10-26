@@ -140,6 +140,12 @@
     NSLog(@"ETAGS: %@", data);
     if (responseDictionary[@"eTag"]) {
         _eTag = responseDictionary[@"eTag"];
+        FRSUpload *upload = (FRSUpload *)self.managedObject;
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [delegate.managedObjectContext performBlock:^{
+            upload.etags = responseDictionary[@"eTag"];
+            [delegate saveContext];
+        }];
     }
     else {
         // spells out error in upload

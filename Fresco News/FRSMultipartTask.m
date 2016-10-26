@@ -8,6 +8,8 @@
 
 #import "FRSMultipartTask.h"
 #import "FRSTracker.h"
+#import "FRSUpload+CoreDataProperties.h"
+#import "FRSAppDelegate.h"
 
 @implementation FRSMultipartTask
 @synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections, destinationURLS = _destinationURLS, session = _session;
@@ -183,6 +185,24 @@
             if (eTag) {
                 [tags setObject:eTag forKey:@(connect-1)];
             }
+            
+            FRSUpload *upload = (FRSUpload *)self.managedObject;
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            
+            NSMutableArray *eTags;
+            
+            if ([[upload.etags class] isSubclassOfClass:[NSArray class]]) {
+                eTags = [NSMutableArray arrayWithArray:upload.etags];
+            }
+            else {
+                eTags = [[NSMutableArray alloc] init];
+            }
+            
+            [delegate.managedObjectContext performBlock:^{
+                upload.etags = eTags;
+                [delegate saveContext];
+            }];
+
             
             if (openConnections == 0 && needsData == FALSE) {
                 NSLog(@"UPLOAD COMPLETE");
