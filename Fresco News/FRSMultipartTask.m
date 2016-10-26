@@ -102,6 +102,13 @@
                 [currentData appendBytes:buffer length:length];
             }
             if ([currentData length] >= chunkSize * megabyteDefinition) {
+                currentChunkIndex++;
+                
+                if (currentChunkIndex <= [(FRSUpload *)self.managedObject etags].count) {
+                    currentData = [[NSMutableData alloc] init];
+                    continue;
+                }
+                
                 [self startChunkUpload];
                 triggeredUpload = TRUE;
                 needsData = TRUE;
