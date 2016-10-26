@@ -83,8 +83,7 @@
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
-@property CGFloat assignmentLat;
-@property CGFloat assignmentLong;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -409,10 +408,10 @@
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
         
-        [self setExpiration];
-        
         [self configureAssignmentCard];
         [self animateAssignmentCard];
+        [self setExpiration];
+        [self setDistance];
         
         self.currentAssignment = assignment;
      
@@ -640,6 +639,10 @@
     self.assignmentLat = assAnn.coordinate.latitude;
     self.assignmentLong = assAnn.coordinate.longitude;
     
+    [self setDistance];
+}
+
+-(void)setDistance {
     CLLocation *locA = [[CLLocation alloc] initWithLatitude:self.assignmentLat longitude:self.assignmentLong];
     CLLocation *locB = [[CLLocation alloc] initWithLatitude:[FRSLocator sharedLocator].currentLocation.coordinate.latitude longitude:[FRSLocator sharedLocator].currentLocation.coordinate.longitude];
     CLLocationDistance distance = [locA distanceFromLocation:locB];
@@ -662,9 +665,6 @@
             distanceString = [NSString stringWithFormat:@"%.0f feet away", feet];
         }
     }
-    
-    
-    
     self.distanceLabel.text = distanceString;
 }
 
@@ -718,7 +718,6 @@
     if (minutes <= 0 && seconds <= 0 && hours <= 0 && days <= 0) {
         expirationString = @"This assignment has expired.";
     }
-    
     
     self.expirationLabel.text = expirationString;
 }
