@@ -12,7 +12,7 @@
 #import "FRSAppDelegate.h"
 
 @implementation FRSUploadTask
-@synthesize uploadTask = _uploadTask;
+@synthesize uploadTask = _uploadTask, managedObject = _managedObject;
 // sets up architecture, start initializes request
 -(void)createUploadFromSource:(NSURL *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
     
@@ -38,6 +38,27 @@
     NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
     sessionConfiguration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
     _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]]; // think queue might be able to bet set to nil but test this for now
+}
+
+-(void)setManagedObject:(NSManagedObject *)managedObject {
+    _managedObject = managedObject;
+    
+    [self checkEtag];
+}
+
+-(void)checkEtag {
+    FRSUpload *upload = (FRSUpload *)self.managedObject;
+    
+    if (upload.etags) {
+        for (NSString *etag in upload.etags) {
+            _eTag = etag;
+        }
+    }
+
+}
+
+-(NSManagedObject *)managedObject {
+    return _managedObject;
 }
 
 
@@ -143,7 +164,7 @@
         FRSUpload *upload = (FRSUpload *)self.managedObject;
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         [delegate.managedObjectContext performBlock:^{
-            upload.etags = responseDictionary[@"eTag"];
+            upload.etags = @[responseDictionary[@"eTag"]];
             [delegate saveContext];
         }];
     }
