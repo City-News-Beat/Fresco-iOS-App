@@ -669,9 +669,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)adjustScrollViewContentSize{
-    CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + GALLERY_BOTTOM_PADDING;
+    CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + GALLERY_BOTTOM_PADDING +20;
     if (self.comments.count > 0) {
-        height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height;
+        height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height +20;
     }
     if (self.orderedArticles.count > 0) {
         height += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height +20;
