@@ -73,7 +73,7 @@
      @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
     
     [self configureBackButtonAnimated:NO];
-
+    
     [self.navigationItem setTitle:@"SETTINGS"];
     [self.tableView reloadData];
     
@@ -102,7 +102,7 @@
     
     CGFloat width = [UIScreen mainScreen].bounds.size.width;
     CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
-
+    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.delegate = self;
@@ -165,12 +165,12 @@
         case 10:
             return 3;
             break;
-//        case 11:
-//            return 1;
-//            break;
-//        case 12:
-//            return 1;
-//            break;
+            //        case 11:
+            //            return 1;
+            //            break;
+            //        case 12:
+            //            return 1;
+            //            break;
         default:
             return 0;
             break;
@@ -263,7 +263,7 @@
                     else {
                         [cell configureDefaultCellWithTitle:@"Email" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
-
+                    
                     break;
                 case 2:
                     [cell configureDefaultCellWithTitle:@"Update Password" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
@@ -278,7 +278,21 @@
         case 2:
             switch (indexPath.row) {
                 case 0:
-                    [cell configureAssignmentCellEnabled:[[[NSUserDefaults standardUserDefaults] objectForKey:@"assignment-enabled"] boolValue]];
+                    [self checkNotificationStatus];
+                    
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
+                        NSNumber *notifRadius = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+                        
+                        if ([notifRadius integerValue] <= 1) {
+                            [cell configureAssignmentCellEnabled:NO];
+                        } else {
+                            [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                        }
+                    } else {
+                        [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                    }
+                    
+                    
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
@@ -289,9 +303,9 @@
                     } else {
                         [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
-                break;
+                    break;
                 case 2: {
-
+                    
                     NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
                     if (!card) {
                         card = @"";
@@ -299,7 +313,7 @@
                     
                     [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                 }
-                break;
+                    break;
                 case 3: {
                     
                     NSString *dueBy = [[FRSAPIClient sharedClient] authenticatedUser].dueBy;
@@ -310,7 +324,7 @@
                     NSString *dateString = [NSString stringWithFormat:@"Add by %@", date];
                     
                     if (dueBy != nil) {
-            
+                        
                         [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
                         
                     } else {
@@ -334,7 +348,7 @@
         case 4:
             switch (indexPath.row) {
                 case 0:
-//                    [cell configureFindFriendsCell];
+                    //                    [cell configureFindFriendsCell];
                     
                     self.twitterCell = cell;
                     if (self.twitterCell.twitterHandle) {
@@ -356,7 +370,7 @@
                         [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
                     }
                     break;
-
+                    
                 default:
                     break;
             }
@@ -372,14 +386,14 @@
         case 7:
             [cell configureEmptyCellSpace:NO];
             break;
-
-//        case 8:
-//            //[cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil];
-//            break;
-//        
-//        case 9:
-//            //[cell configureEmptyCellSpace:NO];
-//            break;
+            
+            //        case 8:
+            //            //[cell configureDefaultCellWithTitle:@"About Fresco" andCarret:YES andRightAlignedTitle:nil];
+            //            break;
+            //
+            //        case 9:
+            //            //[cell configureEmptyCellSpace:NO];
+            //            break;
             
         case 8:
             switch (indexPath.row) {
@@ -468,7 +482,7 @@
                     self.navigationItem.title = @"";
                 }
                     break;
-
+                    
                 default:
                     break;
             }
@@ -479,8 +493,8 @@
         case 4:
             switch (indexPath.row) {
                 case 0:{
-//                    FRSAlertView *alert = [[FRSAlertView alloc] initFindFriendsAlert];
-//                    [alert show];
+                    //                    FRSAlertView *alert = [[FRSAlertView alloc] initFindFriendsAlert];
+                    //                    [alert show];
                 }
                     break;
                 case 1: {
@@ -504,9 +518,9 @@
             break;
         case 6:
         {
-//            FRSPromoCodeViewController *promo = [[FRSPromoCodeViewController alloc] init];
-//            [self.navigationController pushViewController:promo animated:YES];
-//            self.navigationItem.title = @"";
+            //            FRSPromoCodeViewController *promo = [[FRSPromoCodeViewController alloc] init];
+            //            [self.navigationController pushViewController:promo animated:YES];
+            //            self.navigationItem.title = @"";
             
             FRSAboutFrescoViewController *about = [[FRSAboutFrescoViewController alloc] init];
             [self.navigationController pushViewController:about animated:YES];
@@ -517,14 +531,14 @@
         case 7:
             //Empty
             break;
-//        case 8: {
-//            FRSAboutFrescoViewController *about = [[FRSAboutFrescoViewController alloc] init];
-//            [self.navigationController pushViewController:about animated:YES];
-//            self.navigationItem.title = @"";
-//        } break;
-//        case 9:
-//            //Empty
-//            break;
+            //        case 8: {
+            //            FRSAboutFrescoViewController *about = [[FRSAboutFrescoViewController alloc] init];
+            //            [self.navigationController pushViewController:about animated:YES];
+            //            self.navigationItem.title = @"";
+            //        } break;
+            //        case 9:
+            //            //Empty
+            //            break;
         case 8:
             switch (indexPath.row) {
                 case 0: {
@@ -537,8 +551,8 @@
                     [self presentSmooch];
                     break;
                 case 2:{
-//                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
-//                    [alert show];
+                    //                    FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+                    //                    [alert show];
                     FRSDisableAccountViewController *disableVC = [[FRSDisableAccountViewController alloc] init];
                     [self.navigationController pushViewController:disableVC animated:YES];
                 }
@@ -583,7 +597,7 @@
     music.alpha = 0;
     music.frame = CGRectMake(self.view.frame.size.width/2 -15, self.tableView.frame.size.height*1.6 -5, 24, 24);
     music.transform = CGAffineTransformMakeScale(0.5, 0.5);
-
+    
     [UIView animateWithDuration:1.0 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         music.frame = CGRectMake(self.view.frame.size.width/2 -20, self.tableView.frame.size.height*1.6 -15, 24, 24);
     } completion:^(BOOL finished) {
@@ -658,4 +672,3 @@
 }
 
 @end
-

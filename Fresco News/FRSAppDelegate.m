@@ -128,7 +128,7 @@
             [[[Mixpanel sharedInstance] people] set:@{@"fresco_id":user.uid}];
         }
         
-        if (user.firstName) {
+        if (user.firstName && ![user.firstName isEqual:[NSNull null]]) {
             [[[Mixpanel sharedInstance] people] set:@{@"$name":user.firstName}];
         }
     }
