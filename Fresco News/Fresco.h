@@ -148,6 +148,7 @@ static NSString * const reportUserEndpoint = @"user/%@/report";
 
 // legacy user defaults
 static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
+static NSString * const settingsUserNotificationRadius = @"notification-radius";
 
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
 

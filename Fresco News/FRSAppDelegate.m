@@ -293,7 +293,10 @@
         NSString *addressCity = identity[@"address_city"];
         NSString *addressState = identity[@"address_state"];
         
-        
+        NSString *radius = [responseObject valueForKey:@"radius"];
+        if ([self isValue:radius]) {
+            [[NSUserDefaults standardUserDefaults] setValue:radius forKey:settingsUserNotificationRadius];
+        }
         
         BOOL hasSavedFields = FALSE;
         
@@ -346,6 +349,8 @@
             [authenticatedUser setValue:@(hasSavedFields) forKey:@"hasSavedFields"];
         }
         
+
+
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self saveContext];

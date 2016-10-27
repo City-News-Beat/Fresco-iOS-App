@@ -280,8 +280,8 @@
                 case 0:
                     [self checkNotificationStatus];
                     
-                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
-                        NSNumber *notifRadius = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius] != nil) {
+                        NSNumber *notifRadius = [[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius];
                         
                         if ([notifRadius integerValue] <= 1) {
                             [cell configureAssignmentCellEnabled:NO];
@@ -296,8 +296,8 @@
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
-                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
-                        NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius] != nil) {
+                        NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius];
                         CGFloat milesFloat = [miles floatValue];
                         [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%.0f mi", milesFloat] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     } else {

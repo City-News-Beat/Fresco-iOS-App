@@ -50,7 +50,7 @@
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
 }
 
 
@@ -67,7 +67,7 @@
     self.mapView.rotateEnabled = NO;
     self.mapView.centerCoordinate = [[FRSLocator sharedLocator] currentLocation].coordinate;
     
-    NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+    NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius];
     CGFloat milesFloat = [miles floatValue];
     
     MKCoordinateRegion region;
@@ -157,7 +157,7 @@
         
         if (responseObject) {
             [self popViewController];
-            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
         }
     }];
 }

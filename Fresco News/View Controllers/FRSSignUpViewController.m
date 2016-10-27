@@ -179,11 +179,11 @@
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
         [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
         
-        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:settingsUserNotificationRadius];
         
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
     
 }
 
@@ -1114,7 +1114,7 @@
 
 -(void)createAccount {
 
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
     
     [self dismissKeyboard];
     
