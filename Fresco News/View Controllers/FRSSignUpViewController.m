@@ -1003,6 +1003,11 @@
         [self.passwordTF resignFirstResponder];
         [self.usernameTF resignFirstResponder];
         
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.radiusSlider setValue:0.6 animated:YES];
+            [[NSUserDefaults standardUserDefaults] setValue:@30 forKey:settingsUserNotificationRadius];
+        });
+        
         if (IS_IPHONE_5) {
             [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height -44) animated:YES];
         } else {
@@ -1041,6 +1046,9 @@
             } completion:nil];
             
         } else {
+            
+            [self.radiusSlider setValue:0 animated:YES];
+            [[NSUserDefaults standardUserDefaults] setValue:@0 forKey:settingsUserNotificationRadius];
             
             //Unregister notifications
             [[UIApplication sharedApplication] unregisterForRemoteNotifications];
