@@ -393,6 +393,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [_sendButton setTintColor:[UIColor frescoLightTextColor]];
     _sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
     [_sendButton setTitle:@"SEND" forState:UIControlStateNormal];
+    _sendButton.userInteractionEnabled = NO;
     [_sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
     _sendButton.userInteractionEnabled = NO;
     [self.bottomContainer addSubview:_sendButton];
@@ -930,6 +931,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self.sendButton setTintColor:[UIColor frescoBlueColor]];
     }else{
         [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
+        self.sendButton.userInteractionEnabled = NO;
     }
     [textView setText:[textView.text stringByReplacingOccurrencesOfString:@"arthurdearaujo" withString:@"💩🎉"]];
 }
@@ -1148,7 +1150,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
     
     [self startSpinner:self.loadingView onButton:self.sendButton];
-        
+    self.sendButton.userInteractionEnabled = NO;
+    [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
+    
     [self dismissKeyboard];
 
     if (self.postToFacebook) {
@@ -1184,6 +1188,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
             if (error) {
                 [self creationError:error];
                 [self stopSpinner:self.loadingView onButton:self.sendButton];
+                self.sendButton.userInteractionEnabled = YES;
                 return;
             }
             
@@ -1221,6 +1226,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
                 NSLog(@"Gallery creation error... (%@)", error);
                 [self creationError:error];
                 [self stopSpinner:self.loadingView onButton:self.sendButton];
+                self.sendButton.userInteractionEnabled = YES;
                 return;
             }
         }];

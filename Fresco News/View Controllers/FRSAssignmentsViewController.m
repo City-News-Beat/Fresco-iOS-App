@@ -415,7 +415,7 @@
         
         self.currentAssignment = assignment;
         [self drawImages];
-     
+
         MKCoordinateRegion region = { {0.0, 0.0 }, { 0.0, 0.0 } };
         region.center.latitude = [assignment.latitude doubleValue];
         region.center.longitude = [assignment.longitude doubleValue];
