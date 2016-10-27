@@ -31,6 +31,7 @@ target 'Fresco' do
 	pod 'Appsee'
 	pod 'Smooch'
     	pod 'Mixpanel'
+	pod 'AWSCore'
 	pod 'CardIO'
 	pod 'MGSwipeTableCell'
 	pod 'Adjust', :git => 'git://github.com/adjust/ios_sdk.git', :tag => 'v4.5.0'
