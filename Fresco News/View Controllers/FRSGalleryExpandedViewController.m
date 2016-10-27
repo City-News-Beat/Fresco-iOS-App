@@ -654,6 +654,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.actionBar handleRepostAmount:[numReposts intValue]];
     
     [self.view addSubview:self.actionBar];
+    
+    if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        [self.actionBar setCurrentUser:YES];
+    } else {
+        [self.actionBar setCurrentUser:NO];
+    }
 }
 
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
