@@ -66,16 +66,7 @@
         
         NSArray *uploadMeta = @[tempPath, revisedToken, postID];
         
-        BOOL restart = FALSE;
-        
-        if (self.uploadMeta.count == 0) {
-            restart = TRUE;
-        }
-        
-        [self.uploadMeta addObject:uploadMeta];
-        if (restart) {
-            [self restart];
-        }
+        [self.uploadMeta addObject:uploadMeta];       
     }];
     
     }
@@ -96,19 +87,8 @@
             // write data from PHAsset resource to temp location, send for upload
             [[PHAssetResourceManager defaultManager] writeDataForAssetResource:resource toFile:[NSURL fileURLWithPath:tempPath] options:options completionHandler:^(NSError * _Nullable error) {
                 
-                BOOL restart = FALSE;
-                
-                if (self.uploadMeta.count == 0) {
-                    restart = TRUE;
-                }
-                
                 NSArray *uploadMeta = @[tempPath, revisedToken, postID];
                 [self.uploadMeta addObject:uploadMeta];
-                
-                if (restart) {
-                    [self restart];
-                }
-                
             }];
         }];
     }
@@ -170,7 +150,7 @@
         if (task.result) {
             NSLog(@"UPLOAD COMPLETE");
             [self taskDidComplete:task];
-            [self next];
+            [self restart];
         }
         
         return nil;
