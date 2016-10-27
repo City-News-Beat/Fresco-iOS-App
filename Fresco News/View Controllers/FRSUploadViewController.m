@@ -1134,8 +1134,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
     //Next button action
 -(void)send {
+    
+    /* if authenticated */
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
-        
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
         [self.navigationController pushViewController:onboardVC animated:NO];
         return;
@@ -1153,10 +1154,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self facebook:self.captionTextView.text];
 
     }
-    
-//    if (self.postToTwitter) {
-//        [self tweet:@"test"]; //does not work, fix before release
-//    }
     
     if (self.postAnon) {
         NSLog(@"Post anonymously");
@@ -1242,6 +1239,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)moveToUpload:(NSDictionary *)postData {
     /* upload started */
+    
+    // instantiate upload process
+    // start upload process
     
     [self.carouselCell pausePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];

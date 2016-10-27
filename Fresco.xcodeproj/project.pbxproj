@@ -195,6 +195,8 @@
 		D46D35651D8F8B5100E38FAA /* trash24W@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D46D35621D8F8B5100E38FAA /* trash24W@3x.png */; };
 		D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D46D35681D9036E700E38FAA /* FRSTracker.m */; };
 		D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */; };
+		D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C08E1DC2677000AFC839 /* FRSUploadManager.m */; };
+		D475C0921DC267B500AFC839 /* FRSUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C0911DC267B500AFC839 /* FRSUpload.m */; };
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
 		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
@@ -642,6 +644,10 @@
 		D46D35681D9036E700E38FAA /* FRSTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTracker.m; sourceTree = "<group>"; };
 		D46E9C3B1D41BDD500A39398 /* FRSUpload+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSUpload+CoreDataProperties.h"; sourceTree = "<group>"; };
 		D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FRSUpload+CoreDataProperties.m"; sourceTree = "<group>"; };
+		D475C08D1DC2677000AFC839 /* FRSUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadManager.h; sourceTree = "<group>"; };
+		D475C08E1DC2677000AFC839 /* FRSUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadManager.m; sourceTree = "<group>"; };
+		D475C0901DC267B500AFC839 /* FRSUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUpload.h; sourceTree = "<group>"; };
+		D475C0911DC267B500AFC839 /* FRSUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUpload.m; sourceTree = "<group>"; };
 		D47999671C96AA1700B46D01 /* FRSLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLocator.h; sourceTree = "<group>"; };
 		D47999681C96AA1700B46D01 /* FRSLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSLocator.m; sourceTree = "<group>"; };
 		D487F1B31CBD6565005742F3 /* FRSSubmissionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSubmissionViewController.h; sourceTree = "<group>"; };
@@ -2104,6 +2110,10 @@
 		D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */ = {
 			isa = PBXGroup;
 			children = (
+				D475C08D1DC2677000AFC839 /* FRSUploadManager.h */,
+				D475C08E1DC2677000AFC839 /* FRSUploadManager.m */,
+				D475C0901DC267B500AFC839 /* FRSUpload.h */,
+				D475C0911DC267B500AFC839 /* FRSUpload.m */,
 			);
 			name = "File Upload";
 			sourceTree = "<group>";
@@ -2643,6 +2653,7 @@
 				65D1E4E91C4EB7B6003362D3 /* FRSMapCircle.m in Sources */,
 				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
 				D4C217D91D64E1700076172D /* FRSAddPaymentCell.m in Sources */,
+				D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */,
 				D4C217D31D64DC010076172D /* FRSPaymentCell.m in Sources */,
 				D453CC7A1CCA80850091A004 /* MagicalRecord+ErrorHandling.m in Sources */,
 				07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */,
@@ -2764,6 +2775,7 @@
 				D4AF8EEF1CFDFED100A33FAB /* FRSFeedTable.m in Sources */,
 				D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
+				D475C0921DC267B500AFC839 /* FRSUpload.m in Sources */,
 				D453CC811CCA80850091A004 /* NSManagedObject+MagicalDataImport.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
 				D41B2EFA1D53E5960007C61F /* FRSSearchResultsTable.m in Sources */,
