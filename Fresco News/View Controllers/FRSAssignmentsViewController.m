@@ -365,9 +365,11 @@
 }
 
 -(void)focusOnAssignment:(FRSAssignment *)assignment {
-    
     [self setDefaultAssignment:assignment];
+<<<<<<< HEAD
     
+=======
+>>>>>>> 3.0-phil
 }
 
 -(void)removeAssignmentsFromMap {

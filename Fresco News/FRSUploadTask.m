@@ -8,8 +8,11 @@
 
 #import "FRSUploadTask.h"
 #import "FRSTracker.h"
+#import "FRSUpload+CoreDataProperties.h"
+#import "FRSAppDelegate.h"
+
 @implementation FRSUploadTask
-@synthesize uploadTask = _uploadTask;
+@synthesize uploadTask = _uploadTask, managedObject = _managedObject;
 // sets up architecture, start initializes request
 -(void)createUploadFromSource:(NSURL *)asset destination:(NSURL *)destination progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
     
@@ -37,12 +40,43 @@
     _session = [NSURLSession sessionWithConfiguration:sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]]; // think queue might be able to bet set to nil but test this for now
 }
 
+-(void)setManagedObject:(NSManagedObject *)managedObject {
+    _managedObject = managedObject;
+    
+    [self checkEtag];
+}
+
+-(void)checkEtag {
+    FRSUpload *upload = (FRSUpload *)self.managedObject;
+    
+    if (upload.etags) {
+        for (NSString *etag in upload.etags) {
+            _eTag = etag;
+        }
+    }
+
+}
+
+-(NSManagedObject *)managedObject {
+    return _managedObject;
+}
+
 
 -(void)stop {
     [_uploadTask suspend];
 }
 
+-(void)complete {
+    FRSUpload *upload = (FRSUpload *)self.managedObject;
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.managedObjectContext performBlock:^{
+        upload.completed = @(TRUE);
+        [delegate saveContext];
+    }];
+}
+
 -(void)start {
+    
     // our turn in the queue, check if we've already started first
     if (_uploadTask || _hasStarted) {
         return; // FRSUploadTask are one off, no re-use
@@ -117,16 +151,24 @@
     id responseObject = [NSJSONSerialization JSONObjectWithData:response options:kNilOptions error:&jsonError];
     
     if (jsonError) {
-        return @{@"err":@"Malformed JSON object", @"success":@(FALSE)};
+        return Nil;
     }
     
     return responseObject;
 }
 
 -(void)checkEtag:(NSData *)data {
+    
     NSDictionary *responseDictionary = [self serializedObjectFromResponse:data];
-    if (responseDictionary[@"eTag"]) {
+    NSLog(@"ETAGS: %@", responseDictionary);
+    if (responseDictionary && responseDictionary[@"eTag"]) {
         _eTag = responseDictionary[@"eTag"];
+        FRSUpload *upload = (FRSUpload *)self.managedObject;
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [delegate.managedObjectContext performBlock:^{
+            upload.etags = @[responseDictionary[@"eTag"]];
+            [delegate saveContext];
+        }];
     }
     else {
         // spells out error in upload

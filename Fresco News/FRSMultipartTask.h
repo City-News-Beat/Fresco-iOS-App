@@ -25,6 +25,8 @@ static int const chunkFailWaitTime = 2; // resets between chunks (otherwise beha
     BOOL needsData;
     NSMutableDictionary *tags;
     BOOL hasRan;
+    
+    int currentChunkIndex;;
 }
 
 @property int totalParts;

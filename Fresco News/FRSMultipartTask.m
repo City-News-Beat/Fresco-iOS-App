@@ -8,9 +8,11 @@
 
 #import "FRSMultipartTask.h"
 #import "FRSTracker.h"
+#import "FRSUpload+CoreDataProperties.h"
+#import "FRSAppDelegate.h"
 
 @implementation FRSMultipartTask
-@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections, destinationURLS = _destinationURLS, session = _session;
+@synthesize completionBlock = _completionBlock, progressBlock = _progressBlock, openConnections = _openConnections, destinationURLS = _destinationURLS, session = _session, managedObject = _managedObject;
 
 -(void)createUploadFromSource:(NSURL *)asset destinations:(NSArray *)destinations progress:(TransferProgressBlock)progress completion:(TransferCompletionBlock)completion {
     
@@ -25,6 +27,29 @@
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.sessionSendsLaunchEvents = TRUE; // trigger info on completion
     _session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+}
+
+-(void)setManagedObject:(NSManagedObject *)managedObject {
+    _managedObject = managedObject;
+    [self loadEtags];
+}
+
+-(void)loadEtags {
+    FRSUpload *upload = (FRSUpload *)self.managedObject;
+    
+    if (!self.eTags) {
+        self.eTags = [[NSMutableArray alloc] init];
+    }
+    
+    if (upload.etags) {
+        for (NSString *etag in upload.etags) {
+            [self.eTags addObject:etag];
+        }
+    }
+}
+
+-(NSManagedObject *)managedObject {
+    return _managedObject;
 }
 
 -(instancetype)init {
@@ -100,6 +125,16 @@
                 [currentData appendBytes:buffer length:length];
             }
             if ([currentData length] >= chunkSize * megabyteDefinition) {
+                currentChunkIndex++;
+                
+                if (currentChunkIndex <= self.eTags.count) {
+                    ranOnce = TRUE;
+                    currentData = [[NSMutableData alloc] init];
+                    NSLog(@"SKIPPING CHUNK: HAS ETAG");
+                    totalConnections++;
+                    continue;
+                }
+                
                 [self startChunkUpload];
                 triggeredUpload = TRUE;
                 needsData = TRUE;
@@ -183,6 +218,24 @@
             if (eTag) {
                 [tags setObject:eTag forKey:@(connect-1)];
             }
+            
+            FRSUpload *upload = (FRSUpload *)self.managedObject;
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            
+            NSMutableArray *eTags;
+            
+            if ([[upload.etags class] isSubclassOfClass:[NSArray class]]) {
+                eTags = [NSMutableArray arrayWithArray:upload.etags];
+            }
+            else {
+                eTags = [[NSMutableArray alloc] init];
+            }
+            
+            [delegate.managedObjectContext performBlock:^{
+                upload.etags = eTags;
+                [delegate saveContext];
+            }];
+
             
             if (openConnections == 0 && needsData == FALSE) {
                 NSLog(@"UPLOAD COMPLETE");
