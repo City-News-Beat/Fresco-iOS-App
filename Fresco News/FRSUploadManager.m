@@ -44,7 +44,7 @@
 }
 
 
--(void)addAsset:(PHAsset *)asset withToken:(NSString *)token {
+-(void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID {
     if (!asset || !token) {
         return;
     }
@@ -54,7 +54,7 @@
     if (asset.mediaType == PHAssetMediaTypeImage) {
         
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeDefault options:Nil resultHandler:^void(UIImage *image, NSDictionary *info) {
-        NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:revisedToken];
+        NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dad_Girl"];
         [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
         
         // write data to temp path (background thread, async)
@@ -64,7 +64,7 @@
         
         // required to run upload on main thread
         
-        NSArray *uploadMeta = @[tempPath, revisedToken];
+        NSArray *uploadMeta = @[tempPath, revisedToken, postID];
         
         BOOL restart = FALSE;
         
@@ -102,7 +102,7 @@
                     restart = TRUE;
                 }
                 
-                NSArray *uploadMeta = @[tempPath, revisedToken];
+                NSArray *uploadMeta = @[tempPath, revisedToken, postID];
                 [self.uploadMeta addObject:uploadMeta];
                 
                 if (restart) {
@@ -115,11 +115,22 @@
 }
 
 -(void)restart {
-    NSArray *request = [self.uploadMeta objectAtIndex:0];
-    [self addUploadForPost:request[1] url:request[0] completion:^(id responseObject, NSError *error) {
+    currentIndex++;
+
+    if (currentIndex >= self.uploadMeta.count) {
+        // complete
+        NSLog(@"UPLOAD PROCESS COMPLETE");
+        
+        return;
+    }
+    
+    NSLog(@"STARTING NEW UPLOAD");
+    
+    NSArray *request = [self.uploadMeta objectAtIndex:currentIndex];
+    [self addUploadForPost:request[1] url:request[0] postID:request[2] completion:^(id responseObject, NSError *error) {
         NSLog(@"COMPLETED: %@ %@", responseObject, error);
     }];
-}
+    }
 
 -(void)next {
     
@@ -133,13 +144,14 @@
     [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
 }
 
--(void)addUploadForPost:(NSString *)postID url:(NSString *)body completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)addUploadForPost:(NSString *)postID url:(NSString *)body postID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
     AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
     
     AWSS3TransferManagerUploadRequest *upload = [AWSS3TransferManagerUploadRequest new];
     NSLog(@"%@", body);
-    upload.body = [NSURL URLWithString:body];
+    upload.body = [NSURL fileURLWithPath:body];
     upload.key = postID;
+    upload.metadata = @{@"post_id":post};
     upload.bucket = awsBucket;
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
         float progress = (totalBytesSent * 1.0) / (totalBytesExpectedToSend * 1.0);
@@ -147,6 +159,7 @@
     };
     __weak typeof (self) weakSelf = self;
     
+    NSLog(@"KEY: %@ METADATA: %@", postID, upload.metadata);
     [[transferManager upload:upload] continueWithBlock:^id(AWSTask *task) {
         
         if (task.error) {

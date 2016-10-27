@@ -13,11 +13,11 @@
 
 @interface FRSUploadManager : NSObject
 {
-    
+    int currentIndex;
 }
 
 +(id)sharedUploader;
--(void)addAsset:(PHAsset *)asset withToken:(NSString *)token;
+-(void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
 @property (nonatomic, retain) NSMutableArray *currentUploads;
 @property (nonatomic, assign) int completedUploads;
 @property (nonatomic, assign) int uploadsToComplete;

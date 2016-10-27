@@ -1249,7 +1249,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     for (PHAsset *asset in self.content) {
         NSDictionary *post = posts[i];
         NSString *key = post[@"key"];
-        [[FRSUploadManager sharedUploader] addAsset:asset withToken:key];
+        [[FRSUploadManager sharedUploader] addAsset:asset withToken:key withPostID:post[@"post_id"]];
         i++;
     }
     
