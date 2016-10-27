@@ -50,6 +50,7 @@
 @property (strong, nonatomic) FRSTableViewCell *facebookCell;
 @property (strong, nonatomic) UISwitch *twitterSwitch;
 @property (strong, nonatomic) UISwitch *facebookSwitch;
+@property (strong, nonatomic) FRSTableViewCell *notifCell;
 
 @end
 
@@ -79,6 +80,7 @@
     
     [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] reloadUser:^(id responseObject, NSError *error) {
         [self.tableView reloadData];
+        
     }];
 }
 
@@ -280,24 +282,13 @@
                 case 0:
                     [self checkNotificationStatus];
                     
-                    if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius] != nil) {
-                        NSNumber *notifRadius = [[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius];
-                        
-                        if ([notifRadius integerValue] <= 1) {
-                            [cell configureAssignmentCellEnabled:NO];
-                        } else {
-                            [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
-                        }
-                    } else {
-                        [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
-                    }
-                    
-                    
+                    [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+   
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
                     if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius] != nil) {
-                        NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius];
+                        NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
                         CGFloat milesFloat = [miles floatValue];
                         [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%.0f mi", milesFloat] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     } else {

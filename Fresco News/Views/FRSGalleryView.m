@@ -147,9 +147,7 @@
     NSLog(@"authenticatedUser.uid = %@", [[[FRSAPIClient sharedClient] authenticatedUser] uid]);
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        NSLog(@"CREATOR: %@", self.gallery.creator);
-        
+                
         if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
             [self.actionBar setCurrentUser:YES];
         } else {

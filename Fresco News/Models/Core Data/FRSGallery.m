@@ -81,8 +81,6 @@
     //}
     
     
-    NSLog(@"OWNER: %@", dict[@"owner"]);
-
 //    if ([dict valueForKey:@"curator"] != [NSNull null]) {
 //        self.creator = [FRSUser MR_createEntity];
 //        self.creator.uid = (dict[@"curator"][@"id"] != nil) ? dict[@"curator"][@"id"] : @"";

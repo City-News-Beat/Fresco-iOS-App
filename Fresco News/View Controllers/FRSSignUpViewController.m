@@ -987,12 +987,6 @@
     
     if (toggle.on){
         
-        
-        [[FRSAPIClient sharedClient] post:@"" withParameters:@{} completion:^(id responseObject, NSError *error) {
-            
-        }];
-        
-        
         if (!self.notificationsEnabled || !self.locationEnabled) {
             FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self];
             alert.locationManager.delegate = self;

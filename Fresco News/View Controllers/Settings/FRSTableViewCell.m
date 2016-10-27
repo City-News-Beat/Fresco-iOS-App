@@ -859,29 +859,42 @@
             radius = [user.notificationRadius floatValue];
         }
         
-        [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"radius":@(radius)} completion:^(id responseObject, NSError *error) {
+        
+
+        
+        NSDictionary *dict = @{@"send_push": @YES};
+        NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:NULL];
+        NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        
+        [[FRSAPIClient sharedClient] post:settingsUpdateEndpoint withParameters:@{@"notify-user-dispatch-new-assignment": str} completion:^(id responseObject, NSError *error) {
             if (responseObject && !error) {
                 state = YES;
                 [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
+                
             }
             else {
                 [sender setOn:FALSE];
             }
         }];
-        //        [self requestNotifications]; //Request and enable notifications
+
     } else {
-    
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"radius":@(0)} completion:^(id responseObject, NSError *error) {
-        if (responseObject && !error) {
-            state = NO;
-            [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-        else {
-            [sender setOn:TRUE];
-        }
-    }];
+        
+        NSDictionary *dict = @{@"send_push": @NO};
+        NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:NULL];
+        NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        
+        [[FRSAPIClient sharedClient] post:settingsUpdateEndpoint withParameters:@{@"notify-user-dispatch-new-assignment": str} completion:^(id responseObject, NSError *error) {
+            if (responseObject && !error) {
+                state = NO;
+                [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+            }
+            else {
+                [sender setOn:TRUE];
+            }
+        }];
     }
 
 }
