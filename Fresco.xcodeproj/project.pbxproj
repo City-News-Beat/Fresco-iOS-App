@@ -196,7 +196,6 @@
 		D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D46D35681D9036E700E38FAA /* FRSTracker.m */; };
 		D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */; };
 		D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C08E1DC2677000AFC839 /* FRSUploadManager.m */; };
-		D475C0951DC26B5A00AFC839 /* FRSUploadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C0941DC26B5A00AFC839 /* FRSUploadTask.m */; };
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
 		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
@@ -648,8 +647,6 @@
 		D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FRSUpload+CoreDataProperties.m"; sourceTree = "<group>"; };
 		D475C08D1DC2677000AFC839 /* FRSUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadManager.h; sourceTree = "<group>"; };
 		D475C08E1DC2677000AFC839 /* FRSUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadManager.m; sourceTree = "<group>"; };
-		D475C0931DC26B5A00AFC839 /* FRSUploadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadTask.h; sourceTree = "<group>"; };
-		D475C0941DC26B5A00AFC839 /* FRSUploadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadTask.m; sourceTree = "<group>"; };
 		D47999671C96AA1700B46D01 /* FRSLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLocator.h; sourceTree = "<group>"; };
 		D47999681C96AA1700B46D01 /* FRSLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSLocator.m; sourceTree = "<group>"; };
 		D487F1B31CBD6565005742F3 /* FRSSubmissionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSubmissionViewController.h; sourceTree = "<group>"; };
@@ -2120,8 +2117,6 @@
 			children = (
 				D475C08D1DC2677000AFC839 /* FRSUploadManager.h */,
 				D475C08E1DC2677000AFC839 /* FRSUploadManager.m */,
-				D475C0931DC26B5A00AFC839 /* FRSUploadTask.h */,
-				D475C0941DC26B5A00AFC839 /* FRSUploadTask.m */,
 			);
 			name = "File Upload";
 			sourceTree = "<group>";
@@ -2706,7 +2701,6 @@
 				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
 				65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */,
 				07697CD21DA8561500C48B34 /* Model.xcdatamodel in Sources */,
-				D475C0951DC26B5A00AFC839 /* FRSUploadTask.m in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */,
 				D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */,

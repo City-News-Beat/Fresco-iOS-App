@@ -66,7 +66,9 @@
         
         NSArray *uploadMeta = @[tempPath, revisedToken, postID];
         
-        [self.uploadMeta addObject:uploadMeta];       
+        [self.uploadMeta addObject:uploadMeta];
+        [self checkRestart];
+       
     }];
     
     }
@@ -76,8 +78,9 @@
             
             // create temp location to move data (PHAsset can not be weakly linked to)
             NSString *file = [[videoURL.absoluteString componentsSeparatedByString:@"/"] lastObject];
-            NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:file];
+            NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"test"];
             [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
+            NSLog(@"%@", tempPath);
             
             // set up resource from PHAsset
             PHAssetResource *resource = [[PHAssetResource assetResourcesForAsset:asset] firstObject];
@@ -89,13 +92,19 @@
                 
                 NSArray *uploadMeta = @[tempPath, revisedToken, postID];
                 [self.uploadMeta addObject:uploadMeta];
+                
+                [self checkRestart];
+
             }];
         }];
     }
 }
 
+-(void)checkRestart {
+    [self restart];
+}
+
 -(void)restart {
-    currentIndex++;
 
     if (currentIndex >= self.uploadMeta.count) {
         // complete
@@ -110,7 +119,9 @@
     [self addUploadForPost:request[1] url:request[0] postID:request[2] completion:^(id responseObject, NSError *error) {
         NSLog(@"COMPLETED: %@ %@", responseObject, error);
     }];
-    }
+    
+    currentIndex++;
+}
 
 -(void)next {
     

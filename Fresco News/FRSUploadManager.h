@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FRSUploadTask.h"
 #import "Fresco.h"
 
 
