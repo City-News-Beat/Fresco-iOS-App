@@ -7,8 +7,294 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66CB1C2AEFD200AB3D9D /* FRSOnboardTwoView.m */; };
+		070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66CE1C2AEFE000AB3D9D /* FRSOnboardThreeView.m */; };
+		070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */ = {isa = PBXBuildFile; fileRef = 070D66D11C2B395D00AB3D9D /* OEParallax.m */; };
+		0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0713D12D1CE5121900F79F49 /* FRSAwkwardView.m */; };
+		072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F401C2491A900F8CCE0 /* Nota-Bold.otf */; };
+		072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F421C2491B100F8CCE0 /* Nota-Medium.otf */; };
+		072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = 072A9F441C2491B900F8CCE0 /* Nota-Normal.otf */; };
+		0741546A1D5A66C20008C34E /* FRSUserNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074154691D5A66C20008C34E /* FRSUserNotificationViewController.m */; };
+		074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 074393F11C3B0F9A0007CFF0 /* UIImageView+Helpers.m */; };
+		075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0759982F1C6BBD9600A0FE73 /* FRSCameraViewController.m */; };
+		075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 075998321C6BCF5300A0FE73 /* FRSAVSessionManager.m */; };
+		0767A55F1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0767A55E1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m */; };
+		0767A5611D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0767A5601D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib */; };
+		07697CD21DA8561500C48B34 /* Model.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 07697CD11DA8561500C48B34 /* Model.xcdatamodel */; };
+		076F4D9E1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 076F4D9D1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m */; };
+		076F4DA01D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 076F4D9F1D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib */; };
+		0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0772512B1D47EF4A007FDB6C /* FRSUserAnnotation.m */; };
+		077CF9D91CE62793006FE908 /* FRSAboutFrescoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 077CF9D81CE62793006FE908 /* FRSAboutFrescoViewController.m */; };
+		077FBC3A1CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 077FBC391CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m */; };
+		0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0780914A1CD93A0D00D7FA40 /* FRSUploadViewController.m */; };
+		078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 078737F91D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib */; };
+		078737FD1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 078737FC1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m */; };
+		078CEB1B1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 078CEB1A1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m */; };
+		079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 079CEEFB1C28740B00E559F3 /* FRSAlertView.m */; };
+		07A138BF1CBC053C00163BA0 /* FRSLoadingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A138BE1CBC053C00163BA0 /* FRSLoadingTableViewCell.m */; };
+		07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */; };
+		07A30BFE1C50488800C536EB /* FRSDebitCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */; };
+		07A30BFF1C50488800C536EB /* FRSDisableAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BEC1C50488800C536EB /* FRSDisableAccountViewController.m */; };
+		07A30C001C50488800C536EB /* FRSEmailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BEE1C50488800C536EB /* FRSEmailViewController.m */; };
+		07A30C011C50488800C536EB /* FRSPasswordChangeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF01C50488800C536EB /* FRSPasswordChangeViewController.m */; };
+		07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF21C50488800C536EB /* FRSPromoCodeViewController.m */; };
+		07A30C031C50488800C536EB /* FRSRadiusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF41C50488800C536EB /* FRSRadiusViewController.m */; };
+		07A30C041C50488800C536EB /* FRSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF61C50488800C536EB /* FRSSettingsViewController.m */; };
+		07A30C051C50488800C536EB /* FRSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF81C50488800C536EB /* FRSTableViewCell.m */; };
+		07A30C061C50488800C536EB /* FRSTaxInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BFA1C50488800C536EB /* FRSTaxInformationViewController.m */; };
+		07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */; };
+		07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C091C50494700C536EB /* FRSStoryView.m */; };
+		07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C0C1C50495C00C536EB /* FRSStoriesViewController.m */; };
+		07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C0F1C50497E00C536EB /* FRSSearchViewController.m */; };
+		07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C121C50499A00C536EB /* FRSStoryCell.m */; };
+		07B61ECD1CAF1C4900D3454F /* PeekPopArticleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */; };
+		07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB471D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m */; };
+		07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07B6FB4E1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib */; };
+		07B6FB551D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B6FB541D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m */; };
+		07E9366D1CB4534B00D3CC39 /* VideoTrimmerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E9366C1CB4534B00D3CC39 /* VideoTrimmerViewController.m */; };
+		07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07EAFF2C1CEA237300E224E2 /* FRSLaunchScreen.xib */; };
+		07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92D81C752037000DBEA8 /* DGElasticPullToRefresh.m */; };
+		07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DA1C752037000DBEA8 /* DGElasticPullToRefreshExtension.m */; };
+		07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DC1C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m */; };
+		07ED92E41C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92DE1C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m */; };
+		07ED92E51C752037000DBEA8 /* DGElasticPullToRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07ED92E01C752037000DBEA8 /* DGElasticPullToRefreshView.m */; };
+		1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B41AFBCD9900924F59 /* Parse.framework */; };
+		1E4983B71AFBCD9900924F59 /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */; };
+		1E4983B91AFBCDEA00924F59 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983B81AFBCDEA00924F59 /* StoreKit.framework */; };
+		1E4983BB1AFBCE7500924F59 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983BA1AFBCE7500924F59 /* AudioToolbox.framework */; };
+		1E4983BD1AFBCE8000924F59 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983BC1AFBCE8000924F59 /* CFNetwork.framework */; };
+		1E4983BF1AFBCE8F00924F59 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983BE1AFBCE8F00924F59 /* CoreGraphics.framework */; };
+		1E4983C11AFBCE9500924F59 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983C01AFBCE9500924F59 /* CoreLocation.framework */; };
+		1E4983C31AFBCEA200924F59 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983C21AFBCEA200924F59 /* MobileCoreServices.framework */; };
+		1E4983C51AFBCEAF00924F59 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983C41AFBCEAF00924F59 /* Security.framework */; };
+		1E4983C71AFBCEBE00924F59 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983C61AFBCEBE00924F59 /* SystemConfiguration.framework */; };
+		1E4983C91AFBCECA00924F59 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983C81AFBCECA00924F59 /* libz.dylib */; };
+		1E4983CB1AFBCED000924F59 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983CA1AFBCED000924F59 /* libsqlite3.dylib */; };
+		1E4983CD1AFBCEF400924F59 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983CC1AFBCEF400924F59 /* Social.framework */; };
+		1E4983CF1AFBCF0800924F59 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983CE1AFBCF0800924F59 /* Accounts.framework */; };
+		1E4983D11AFBCF5100924F59 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E4983D01AFBCF5100924F59 /* Bolts.framework */; };
+		1EA27AA81AF147C4003137CE /* MKMapView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA27AA71AF147C4003137CE /* MKMapView+Helpers.m */; };
+		1EDA44B61AA4CCC70082E08D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44B51AA4CCC70082E08D /* main.m */; };
+		1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EDA44C31AA4CCC70082E08D /* Images.xcassets */; };
 		1EDA44D31AA4CCC70082E08D /* FrescoNewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDA44D21AA4CCC70082E08D /* FrescoNewsTests.m */; };
+		42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */; };
+		42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D997FD1AEAF5B300636F33 /* UIImage+PHAsset.m */; };
+		42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998031AEC458000636F33 /* CLLocation+EXIFGPS.m */; };
+		42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D998061AEC46D900636F33 /* NSDate+ISO.m */; };
+		65046E051C3EFC81003E02B5 /* FRSHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65046E041C3EFC81003E02B5 /* FRSHomeViewController.m */; };
+		65135FD01C286DCF00839149 /* FRSArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FB61C286DCF00839149 /* FRSArticle.m */; };
+		65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FB81C286DCF00839149 /* FRSUser+CoreDataProperties.m */; };
+		65135FD21C286DCF00839149 /* FRSUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FBA1C286DCF00839149 /* FRSUser.m */; };
+		65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FBE1C286DCF00839149 /* FRSAssignment.m */; };
+		65135FD51C286DCF00839149 /* FRSStory+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FC01C286DCF00839149 /* FRSStory+CoreDataProperties.m */; };
+		65135FD61C286DCF00839149 /* FRSStory.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FC21C286DCF00839149 /* FRSStory.m */; };
+		65135FD71C286DCF00839149 /* FRSNotification+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FC41C286DCF00839149 /* FRSNotification+CoreDataProperties.m */; };
+		65135FD81C286DCF00839149 /* FRSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FC61C286DCF00839149 /* FRSNotification.m */; };
+		65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FCA1C286DCF00839149 /* FRSGallery.m */; };
+		65135FDC1C286DCF00839149 /* FRSPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 65135FCE1C286DCF00839149 /* FRSPost.m */; };
+		65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A1E1C3D7D0000B31089 /* FRSNavigationController.m */; };
+		65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A211C3D7D1A00B31089 /* FRSSignUpViewController.m */; };
+		65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A241C3D7D2300B31089 /* FRSLoginViewController.m */; };
+		65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A271C3D7D2B00B31089 /* FRSScrollingViewController.m */; };
+		65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A2A1C3D7D3C00B31089 /* FRSSetupProfileViewController.m */; };
+		65201A311C3D7D6200B31089 /* FRSGalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A301C3D7D6200B31089 /* FRSGalleryView.m */; };
+		65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A331C3D7D7900B31089 /* FRSGalleryCell.m */; };
+		65201A371C3D7D8200B31089 /* FRSScrollViewImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A361C3D7D8200B31089 /* FRSScrollViewImageView.m */; };
+		65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3C1C3D7EEA00B31089 /* FRSBaseViewController.m */; };
+		65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65201A3F1C3D808A00B31089 /* FRSProfileViewController.m */; };
+		654181E41C5144CD00019B3F /* NSObject+Validator.m in Sources */ = {isa = PBXBuildFile; fileRef = 654181E31C5144CD00019B3F /* NSObject+Validator.m */; };
+		6547C9041C6A68A700DAD98C /* FRSUserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6547C9031C6A68A700DAD98C /* FRSUserTableViewCell.m */; };
+		6547C9071C6A69E600DAD98C /* UILabel+Custom.m in Sources */ = {isa = PBXBuildFile; fileRef = 6547C9061C6A69E600DAD98C /* UILabel+Custom.m */; };
+		6547C90A1C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6547C9091C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m */; };
+		655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 655768931C496B3A0031107A /* FRSArticlesTableViewCell.m */; };
+		657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 657F3EA71C0CC9D7009AE08F /* UIImage+Helpers.m */; };
+		6596EC9F1C5031FA0011C18B /* FRSBorderedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6596EC9E1C5031FA0011C18B /* FRSBorderedImageView.m */; };
+		659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */; };
+		65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65A525EE1C4988B9004A622B /* FRSCommentsView.m */; };
+		65A525F21C499FCA004A622B /* FRSCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 65A525F11C499FCA004A622B /* FRSCommentTableViewCell.m */; };
+		65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65C8078C1BFA6BDA00490E73 /* UIView+Helpers.m */; };
+		65D1E4E91C4EB7B6003362D3 /* FRSMapCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D1E4E81C4EB7B6003362D3 /* FRSMapCircle.m */; };
+		65D1E4EC1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D1E4EB1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m */; };
+		65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D1E4F41C4F0675003362D3 /* FRSFollowersViewController.m */; };
+		65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65D789601C4806A000F5C2DD /* FRSPost+CoreDataProperties.m */; };
+		65DC9BE81C485B20001F450A /* FRSArticle+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DC9BE71C485B20001F450A /* FRSArticle+CoreDataProperties.m */; };
+		65DC9BF41C485B7F001F450A /* FRSGallery+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DC9BF31C485B7F001F450A /* FRSGallery+CoreDataProperties.m */; };
+		65E860AC1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 65E860AB1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m */; };
+		65EBEDB11C4404A800BE671F /* FRSDateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB01C4404A800BE671F /* FRSDateFormatter.m */; };
+		65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB31C44116700BE671F /* FRSAssignmentsViewController.m */; };
+		65EBEDB91C44197100BE671F /* FRSLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 65EBEDB81C44197100BE671F /* FRSLocationManager.m */; };
+		65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237AF1C249DC3002182DE /* FRSAppDelegate.m */; };
+		65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237B21C24A94E002182DE /* FRSTabBarController.m */; };
+		65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237B61C24AACF002182DE /* UIColor+Fresco.m */; };
+		65F237B91C24B21F002182DE /* Images_3.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65F237B81C24B21F002182DE /* Images_3.xcassets */; };
+		65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237BE1C24C0E4002182DE /* FRSOnboardingViewController.m */; };
+		65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C11C24C28D002182DE /* FRSOnboardOneView.m */; };
+		65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C61C24D263002182DE /* FRSContentActionsBar.m */; };
+		65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C91C24D464002182DE /* UIFont+Fresco.m */; };
+		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
+		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
+		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
+		CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */; };
+		D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA511D6DE6B3008842E1 /* FRSComment.m */; };
+		D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA561D6DF57E008842E1 /* FRSCommentCell.m */; };
+		D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */; };
+		D400FA681D6E13FA008842E1 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */; };
+		D400FA6B1D6E1A9E008842E1 /* FRSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */; };
+		D406C4091D9F0D9F00133788 /* FRSNotificationTester.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C4081D9F0D9F00133788 /* FRSNotificationTester.m */; };
+		D406C40E1DA2D2F300133788 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C40B1DA2D2F300133788 /* SAMKeychain.m */; };
+		D406C40F1DA2D2F300133788 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C40D1DA2D2F300133788 /* SAMKeychainQuery.m */; };
+		D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */; };
+		D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3D01CDE1EAE00E39701 /* Reachability.m */; };
+		D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */; };
+		D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */; };
+		D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D41365B11CA32DC0004FE848 /* FRSStoryDetailViewController.xib */; };
+		D418E2F71CCA97510003B080 /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E2F61CCA97510003B080 /* MagicalImportFunctions.m */; };
+		D418E3401CCC1A910003B080 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33E1CCC1A910003B080 /* FBSDKCoreKit.framework */; };
+		D418E3411CCC1A910003B080 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E33F1CCC1A910003B080 /* FBSDKLoginKit.framework */; };
+		D418E3441CCC1A9B0003B080 /* AccountKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E3421CCC1A9B0003B080 /* AccountKit.framework */; };
+		D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D418E3431CCC1A9B0003B080 /* AccountKitStrings.bundle */; };
+		D418E34C1CCC1B240003B080 /* FRSSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E34B1CCC1B240003B080 /* FRSSocial.m */; };
+		D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D418E34D1CCC1C360003B080 /* Twitter.framework */; };
+		D41B2EFA1D53E5960007C61F /* FRSSearchResultsTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D41B2EF91D53E5960007C61F /* FRSSearchResultsTable.m */; };
+		D41C10CB1CE9A54900F96B25 /* FRSStripe.m in Sources */ = {isa = PBXBuildFile; fileRef = D41C10CA1CE9A54900F96B25 /* FRSStripe.m */; };
+		D421FC501D5B7ACF004C76B7 /* FRSSearchStoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D421FC4E1D5B7ACF004C76B7 /* FRSSearchStoryCell.m */; };
+		D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D421FC4F1D5B7ACF004C76B7 /* FRSSearchStoryCell.xib */; };
+		D421FC551D5B7AE3004C76B7 /* FRSSearchUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D421FC531D5B7AE3004C76B7 /* FRSSearchUserCell.m */; };
+		D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D421FC541D5B7AE3004C76B7 /* FRSSearchUserCell.xib */; };
+		D42A138F1D89A451008909E6 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42A138E1D89A451008909E6 /* Mixpanel.framework */; };
+		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
+		D434D5821DAC355400F1C58F /* Model.xcdatamodel in Resources */ = {isa = PBXBuildFile; fileRef = 07697CD11DA8561500C48B34 /* Model.xcdatamodel */; };
+		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
+		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
+		D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */; };
+		D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43C7FD51C8E46A500A7A7A7 /* FRSImageViewCell.xib */; };
+		D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD91C8E472B00A7A7A7 /* FRSVideoTrimmer.m */; };
+		D43C7FDD1C8E474C00A7A7A7 /* FRSCheckBox.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FDC1C8E474C00A7A7A7 /* FRSCheckBox.m */; };
+		D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D43C80041C90751500A7A7A7 /* FRSLoadingCell.xib */; };
+		D453CC791CCA80850091A004 /* MagicalRecord+Actions.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC4F1CCA80850091A004 /* MagicalRecord+Actions.m */; };
+		D453CC7A1CCA80850091A004 /* MagicalRecord+ErrorHandling.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC511CCA80850091A004 /* MagicalRecord+ErrorHandling.m */; };
+		D453CC7B1CCA80850091A004 /* MagicalRecord+iCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC531CCA80850091A004 /* MagicalRecord+iCloud.m */; };
+		D453CC7C1CCA80850091A004 /* MagicalRecord+Options.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC551CCA80850091A004 /* MagicalRecord+Options.m */; };
+		D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC571CCA80850091A004 /* MagicalRecord+Setup.m */; };
+		D453CC7E1CCA80850091A004 /* MagicalRecord+ShorthandMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC591CCA80850091A004 /* MagicalRecord+ShorthandMethods.m */; };
+		D453CC7F1CCA80850091A004 /* MagicalRecordInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC5C1CCA80850091A004 /* MagicalRecordInternal.m */; };
+		D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC601CCA80850091A004 /* NSManagedObject+MagicalAggregation.m */; };
+		D453CC811CCA80850091A004 /* NSManagedObject+MagicalDataImport.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC621CCA80850091A004 /* NSManagedObject+MagicalDataImport.m */; };
+		D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC641CCA80850091A004 /* NSManagedObject+MagicalFinders.m */; };
+		D453CC831CCA80850091A004 /* NSManagedObject+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC661CCA80850091A004 /* NSManagedObject+MagicalRecord.m */; };
+		D453CC841CCA80850091A004 /* NSManagedObject+MagicalRequests.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC681CCA80850091A004 /* NSManagedObject+MagicalRequests.m */; };
+		D453CC851CCA80850091A004 /* NSManagedObjectContext+MagicalChainSave.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC6A1CCA80850091A004 /* NSManagedObjectContext+MagicalChainSave.m */; };
+		D453CC861CCA80850091A004 /* NSManagedObjectContext+MagicalObserving.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC6C1CCA80850091A004 /* NSManagedObjectContext+MagicalObserving.m */; };
+		D453CC871CCA80850091A004 /* NSManagedObjectContext+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC6E1CCA80850091A004 /* NSManagedObjectContext+MagicalRecord.m */; };
+		D453CC881CCA80850091A004 /* NSManagedObjectContext+MagicalSaves.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC701CCA80850091A004 /* NSManagedObjectContext+MagicalSaves.m */; };
+		D453CC891CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC721CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m */; };
+		D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC761CCA80850091A004 /* NSPersistentStore+MagicalRecord.m */; };
+		D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC781CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m */; };
+		D46D35631D8F8B5100E38FAA /* trash24W.png in Resources */ = {isa = PBXBuildFile; fileRef = D46D35601D8F8B5100E38FAA /* trash24W.png */; };
+		D46D35641D8F8B5100E38FAA /* trash24W@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D46D35611D8F8B5100E38FAA /* trash24W@2x.png */; };
+		D46D35651D8F8B5100E38FAA /* trash24W@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D46D35621D8F8B5100E38FAA /* trash24W@3x.png */; };
+		D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D46D35681D9036E700E38FAA /* FRSTracker.m */; };
+		D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */; };
+		D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C08E1DC2677000AFC839 /* FRSUploadManager.m */; };
+		D475C0951DC26B5A00AFC839 /* FRSUploadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C0941DC26B5A00AFC839 /* FRSUploadTask.m */; };
+		D475C0991DC26E4900AFC839 /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D475C0961DC26E4900AFC839 /* AWSCognito.framework */; };
+		D475C09A1DC26E4900AFC839 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D475C0971DC26E4900AFC839 /* AWSCore.framework */; };
+		D475C09B1DC26E4900AFC839 /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D475C0981DC26E4900AFC839 /* AWSS3.framework */; };
+		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
+		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
+		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
+		D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1CD1CC14246005742F3 /* FRSPlayer.m */; };
+		D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72231D09D8D2000677BF /* FRSSplitTableView.m */; };
+		D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72261D0B3D5C000677BF /* FRSDevice.m */; };
+		D48C722B1D10C502000677BF /* FRSFollowingController.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C722A1D10C502000677BF /* FRSFollowingController.m */; };
+		D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C722E1D11D2EB000677BF /* FRSActivityViewController.m */; };
+		D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48C722F1D11D2EB000677BF /* FRSActivityViewController.xib */; };
+		D48C72371D11D312000677BF /* FRSGenericActivityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72351D11D312000677BF /* FRSGenericActivityCell.m */; };
+		D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48C72361D11D312000677BF /* FRSGenericActivityCell.xib */; };
+		D48C723D1D11D352000677BF /* FRSUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C723B1D11D352000677BF /* FRSUserCell.m */; };
+		D48C723E1D11D352000677BF /* FRSUserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48C723C1D11D352000677BF /* FRSUserCell.xib */; };
+		D48C72431D11D39F000677BF /* FRSBreakingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D48C72411D11D39F000677BF /* FRSBreakingCell.m */; };
+		D48C72441D11D39F000677BF /* FRSBreakingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D48C72421D11D39F000677BF /* FRSBreakingCell.xib */; };
+		D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = D49B1D991C99EB1E00735846 /* UITextView+Resize.m */; };
+		D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EEA1CF8B50400A33FAB /* FRSRequestSerializer.m */; };
+		D4AF8EEF1CFDFED100A33FAB /* FRSFeedTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EEE1CFDFED100A33FAB /* FRSFeedTable.m */; };
+		D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF8EF21CFF656100A33FAB /* FRSNavigationBar.m */; };
+		D4B35F581CD1758400F5C8A8 /* FRSJSONResponseSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F571CD1758400F5C8A8 /* FRSJSONResponseSerializer.m */; };
+		D4B35F5C1CD1B51400F5C8A8 /* FRSUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B35F5B1CD1B51400F5C8A8 /* FRSUpload.m */; };
+		D4BE3E2D1D17D6530039394C /* FRSCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BE3E2C1D17D6530039394C /* FRSCarousel.m */; };
+		D4BE3E311D17D6760039394C /* FRSCarouselCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BE3E2F1D17D6760039394C /* FRSCarouselCell.m */; };
+		D4BE3E321D17D6760039394C /* FRSCarouselCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4BE3E301D17D6760039394C /* FRSCarouselCell.xib */; };
+		D4C217CA1D63AE230076172D /* FRSIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C217C91D63AE230076172D /* FRSIdentityViewController.m */; };
+		D4C217CE1D63B7B40076172D /* FRSPaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C217CD1D63B7B40076172D /* FRSPaymentViewController.m */; };
+		D4C217D31D64DC010076172D /* FRSPaymentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C217D11D64DC010076172D /* FRSPaymentCell.m */; };
+		D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4C217D21D64DC010076172D /* FRSPaymentCell.xib */; };
+		D4C217D91D64E1700076172D /* FRSAddPaymentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C217D71D64E1700076172D /* FRSAddPaymentCell.m */; };
+		D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4C217D81D64E1700076172D /* FRSAddPaymentCell.xib */; };
+		D4C217DE1D66E28E0076172D /* trash24K2.png in Resources */ = {isa = PBXBuildFile; fileRef = D4C217DB1D66E28E0076172D /* trash24K2.png */; };
+		D4C217DF1D66E28E0076172D /* trash24K2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4C217DC1D66E28E0076172D /* trash24K2@2x.png */; };
+		D4C217E01D66E28E0076172D /* trash24K2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4C217DD1D66E28E0076172D /* trash24K2@3x.png */; };
+		D4D60D0C1CC829C000059EBA /* following.json in Resources */ = {isa = PBXBuildFile; fileRef = D4D60D0B1CC829C000059EBA /* following.json */; };
+		D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */; };
+		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
+		D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF1901CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png */; };
+		D4DBF1931CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF1921CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png */; };
+		D4DBF1951CB468C90098BDC0 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4DBF1941CB468C90098BDC0 /* CoreMedia.framework */; };
+		D4DBF1971CB468E80098BDC0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4DBF1961CB468E80098BDC0 /* AVFoundation.framework */; };
+		D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4E76A2B1CB2B15D00AC7A45 /* FRSLoginViewController.xib */; };
+		D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E76A2F1CB423F600AC7A45 /* FRSTrimTool.m */; };
+		D4EE64251D830DD60034B5EA /* FRSReadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4EE64231D830DD60034B5EA /* FRSReadMoreCell.m */; };
+		D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4EE64241D830DD60034B5EA /* FRSReadMoreCell.xib */; };
+		D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F91A481C8B51500078BF15 /* FRSAPIClient.m */; };
+		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
+		E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */ = {isa = PBXBuildFile; fileRef = E70F4BDF1B9F920D00A765E0 /* WKImagePath.m */; };
+		E72DB1611B852BEF0017AAA5 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72DB15F1B852BEF0017AAA5 /* Fabric.framework */; };
+		E72DB1621B852BEF0017AAA5 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72DB1601B852BEF0017AAA5 /* Crashlytics.framework */; };
+		E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		D42A13901D89A4DD008909E6 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+			);
+		};
+/* End PBXBuildRule section */
+
+/* Begin PBXContainerItemProxy section */
+		1EDA44CD1AA4CCC70082E08D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1EDA44A81AA4CCC70082E08D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1EDA44AF1AA4CCC70082E08D;
+			remoteInfo = FrescoNews;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D418E3561CCC1D430003B080 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7AD777D1B2B2DD700C1A6EC /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fresco.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,6 +412,7 @@
 		1E4983D01AFBCF5100924F59 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		1EA27AA61AF147C4003137CE /* MKMapView+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MKMapView+Helpers.h"; path = "Categories/MKMapView+Helpers.h"; sourceTree = "<group>"; };
 		1EA27AA71AF147C4003137CE /* MKMapView+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MKMapView+Helpers.m"; path = "Categories/MKMapView+Helpers.m"; sourceTree = "<group>"; };
+		1EDA44B01AA4CCC70082E08D /* Fresco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fresco.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EDA44B51AA4CCC70082E08D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1EDA44C31AA4CCC70082E08D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		1EDA44CC1AA4CCC70082E08D /* FrescoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrescoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -474,6 +761,43 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1EDA44AD1AA4CCC70082E08D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D42A138F1D89A451008909E6 /* Mixpanel.framework in Frameworks */,
+				D4DBF1951CB468C90098BDC0 /* CoreMedia.framework in Frameworks */,
+				D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */,
+				D4DBF1971CB468E80098BDC0 /* AVFoundation.framework in Frameworks */,
+				1E4983CF1AFBCF0800924F59 /* Accounts.framework in Frameworks */,
+				D475C09A1DC26E4900AFC839 /* AWSCore.framework in Frameworks */,
+				1E4983CD1AFBCEF400924F59 /* Social.framework in Frameworks */,
+				D475C0991DC26E4900AFC839 /* AWSCognito.framework in Frameworks */,
+				1E4983CB1AFBCED000924F59 /* libsqlite3.dylib in Frameworks */,
+				1E4983C91AFBCECA00924F59 /* libz.dylib in Frameworks */,
+				E72DB1621B852BEF0017AAA5 /* Crashlytics.framework in Frameworks */,
+				1E4983C71AFBCEBE00924F59 /* SystemConfiguration.framework in Frameworks */,
+				1E4983C51AFBCEAF00924F59 /* Security.framework in Frameworks */,
+				1E4983D11AFBCF5100924F59 /* Bolts.framework in Frameworks */,
+				D475C09B1DC26E4900AFC839 /* AWSS3.framework in Frameworks */,
+				1E4983C31AFBCEA200924F59 /* MobileCoreServices.framework in Frameworks */,
+				1E4983C11AFBCE9500924F59 /* CoreLocation.framework in Frameworks */,
+				1E4983BF1AFBCE8F00924F59 /* CoreGraphics.framework in Frameworks */,
+				D418E3441CCC1A9B0003B080 /* AccountKit.framework in Frameworks */,
+				D418E3401CCC1A910003B080 /* FBSDKCoreKit.framework in Frameworks */,
+				1E4983BD1AFBCE8000924F59 /* CFNetwork.framework in Frameworks */,
+				1E4983BB1AFBCE7500924F59 /* AudioToolbox.framework in Frameworks */,
+				1E4983B91AFBCDEA00924F59 /* StoreKit.framework in Frameworks */,
+				E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */,
+				D418E3411CCC1A910003B080 /* FBSDKLoginKit.framework in Frameworks */,
+				1E4983B71AFBCD9900924F59 /* ParseFacebookUtilsV4.framework in Frameworks */,
+				1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */,
+				42B4D4E61ABF7F83006AD3AC /* QuartzCore.framework in Frameworks */,
+				E72DB1611B852BEF0017AAA5 /* Fabric.framework in Frameworks */,
+				C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1EDA44C91AA4CCC70082E08D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -672,6 +996,7 @@
 		1EDA44B11AA4CCC70082E08D /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				1EDA44B01AA4CCC70082E08D /* Fresco.app */,
 				1EDA44CC1AA4CCC70082E08D /* FrescoTests.xctest */,
 			);
 			name = Products;
@@ -2069,6 +2394,31 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1EDA44AF1AA4CCC70082E08D /* Fresco */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1EDA44D61AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "Fresco" */;
+			buildPhases = (
+				A712045BA4FF7C3ECD55DD1A /* [CP] Check Pods Manifest.lock */,
+				1EDA44AC1AA4CCC70082E08D /* Sources */,
+				1EDA44AD1AA4CCC70082E08D /* Frameworks */,
+				1EDA44AE1AA4CCC70082E08D /* Resources */,
+				BCA811ECB60B44FE48F07483 /* [CP] Copy Pods Resources */,
+				E7AD777D1B2B2DD700C1A6EC /* Embed Watch Content */,
+				E72DB15E1B852A6D0017AAA5 /* ShellScript */,
+				795C43D7E48F825023E7D453 /* [CP] Embed Pods Frameworks */,
+				D418E3561CCC1D430003B080 /* Embed Watch Content */,
+				283E05549C2A8324AE8F14D9 /* Embed Pods Frameworks */,
+			);
+			buildRules = (
+				D42A13901D89A4DD008909E6 /* PBXBuildRule */,
+			);
+			dependencies = (
+			);
+			name = Fresco;
+			productName = Fresco;
+			productReference = 1EDA44B01AA4CCC70082E08D /* Fresco.app */;
+			productType = "com.apple.product-type.application";
+		};
 		1EDA44CB1AA4CCC70082E08D /* FrescoTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1EDA44D91AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "FrescoTests" */;
@@ -2080,6 +2430,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1EDA44CE1AA4CCC70082E08D /* PBXTargetDependency */,
 			);
 			name = FrescoTests;
 			productName = FrescoTests;
@@ -2096,6 +2447,17 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Fresco;
 				TargetAttributes = {
+					1EDA44AF1AA4CCC70082E08D = {
+						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = Z7R96S8K3N;
+						DevelopmentTeamName = "Fresco News Inc";
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
 					1EDA44CB1AA4CCC70082E08D = {
 						CreatedOnToolsVersion = 6.1.1;
 						TestTargetID = 1EDA44AF1AA4CCC70082E08D;
@@ -2135,12 +2497,60 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				1EDA44AF1AA4CCC70082E08D /* Fresco */,
 				1EDA44CB1AA4CCC70082E08D /* FrescoTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1EDA44AE1AA4CCC70082E08D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D434D5821DAC355400F1C58F /* Model.xcdatamodel in Resources */,
+				D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */,
+				D43C80051C90751500A7A7A7 /* FRSLoadingCell.xib in Resources */,
+				D4BE3E321D17D6760039394C /* FRSCarouselCell.xib in Resources */,
+				D4DBF1931CB43AAA0098BDC0 /* checkboxBlankCircleOutline24W2@2x.png in Resources */,
+				D46D35631D8F8B5100E38FAA /* trash24W.png in Resources */,
+				65F237B91C24B21F002182DE /* Images_3.xcassets in Resources */,
+				D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */,
+				072A9F431C2491B100F8CCE0 /* Nota-Medium.otf in Resources */,
+				D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */,
+				CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */,
+				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
+				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
+				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
+				D4C217DE1D66E28E0076172D /* trash24K2.png in Resources */,
+				D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */,
+				D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */,
+				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
+				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
+				D4C217DF1D66E28E0076172D /* trash24K2@2x.png in Resources */,
+				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
+				D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */,
+				D48C72441D11D39F000677BF /* FRSBreakingCell.xib in Resources */,
+				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
+				D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */,
+				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
+				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
+				D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */,
+				D46D35641D8F8B5100E38FAA /* trash24W@2x.png in Resources */,
+				D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */,
+				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
+				D48C723E1D11D352000677BF /* FRSUserCell.xib in Resources */,
+				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
+				07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */,
+				D46D35651D8F8B5100E38FAA /* trash24W@3x.png in Resources */,
+				0767A5611D5E2F9800330761 /* FRSAssignmentNotificationTableViewCell.xib in Resources */,
+				076F4DA01D5B7ED1005B88AC /* FRSDefaultNotificationTableViewCell.xib in Resources */,
+				D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */,
+				D4C217E01D66E28E0076172D /* trash24K2@3x.png in Resources */,
+				072A9F451C2491B900F8CCE0 /* Nota-Normal.otf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1EDA44CA1AA4CCC70082E08D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2150,7 +2560,262 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		283E05549C2A8324AE8F14D9 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Fresco/Pods-Fresco-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		795C43D7E48F825023E7D453 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Fresco/Pods-Fresco-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A712045BA4FF7C3ECD55DD1A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		BCA811ECB60B44FE48F07483 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Fresco/Pods-Fresco-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E72DB15E1B852A6D0017AAA5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 5d3a50cd6b6c16af7a378a24019dc620c50ea24e fb5bec029f2408d8373b98ff0bbd6e9ba7ffe881e2b745fc4d9bb5d78bcb52d1";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		1EDA44AC1AA4CCC70082E08D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4C217CE1D63B7B40076172D /* FRSPaymentViewController.m in Sources */,
+				65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */,
+				07ED92E51C752037000DBEA8 /* DGElasticPullToRefreshView.m in Sources */,
+				6596EC9F1C5031FA0011C18B /* FRSBorderedImageView.m in Sources */,
+				07B61ECD1CAF1C4900D3454F /* PeekPopArticleViewController.m in Sources */,
+				D400FA6B1D6E1A9E008842E1 /* FRSTextView.m in Sources */,
+				D41C10CB1CE9A54900F96B25 /* FRSStripe.m in Sources */,
+				65D1E4EC1C4EE7C2003362D3 /* FRSAssignmentAnnotation.m in Sources */,
+				D453CC861CCA80850091A004 /* NSManagedObjectContext+MagicalObserving.m in Sources */,
+				07A30BFE1C50488800C536EB /* FRSDebitCardViewController.m in Sources */,
+				07A30BFF1C50488800C536EB /* FRSDisableAccountViewController.m in Sources */,
+				079CEEFC1C28740B00E559F3 /* FRSAlertView.m in Sources */,
+				D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */,
+				D48C72371D11D312000677BF /* FRSGenericActivityCell.m in Sources */,
+				078CEB1B1CB6B2F3003A0C93 /* MissingSomethingCollectionReusableView.m in Sources */,
+				07E9366D1CB4534B00D3CC39 /* VideoTrimmerViewController.m in Sources */,
+				42D998041AEC458000636F33 /* CLLocation+EXIFGPS.m in Sources */,
+				D406C40E1DA2D2F300133788 /* SAMKeychain.m in Sources */,
+				1EA27AA81AF147C4003137CE /* MKMapView+Helpers.m in Sources */,
+				D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
+				D48C72241D09D8D2000677BF /* FRSSplitTableView.m in Sources */,
+				65D1E4E91C4EB7B6003362D3 /* FRSMapCircle.m in Sources */,
+				65201A221C3D7D1A00B31089 /* FRSSignUpViewController.m in Sources */,
+				D4C217D91D64E1700076172D /* FRSAddPaymentCell.m in Sources */,
+				D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */,
+				D4C217D31D64DC010076172D /* FRSPaymentCell.m in Sources */,
+				D453CC7A1CCA80850091A004 /* MagicalRecord+ErrorHandling.m in Sources */,
+				07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */,
+				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
+				D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */,
+				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
+				65DC9BE81C485B20001F450A /* FRSArticle+CoreDataProperties.m in Sources */,
+				6547C9071C6A69E600DAD98C /* UILabel+Custom.m in Sources */,
+				D453CC841CCA80850091A004 /* NSManagedObject+MagicalRequests.m in Sources */,
+				65201A251C3D7D2300B31089 /* FRSLoginViewController.m in Sources */,
+				07A30C041C50488800C536EB /* FRSSettingsViewController.m in Sources */,
+				D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */,
+				65135FDC1C286DCF00839149 /* FRSPost.m in Sources */,
+				0741546A1D5A66C20008C34E /* FRSUserNotificationViewController.m in Sources */,
+				D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */,
+				0713D12E1CE5121900F79F49 /* FRSAwkwardView.m in Sources */,
+				D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */,
+				D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */,
+				D453CC7D1CCA80850091A004 /* MagicalRecord+Setup.m in Sources */,
+				E7AAC0A21B4DEBBB003EC8E3 /* WKRelativeDate.m in Sources */,
+				65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */,
+				D4AF8EF31CFF656100A33FAB /* FRSNavigationBar.m in Sources */,
+				D48C72271D0B3D5C000677BF /* FRSDevice.m in Sources */,
+				65201A401C3D808A00B31089 /* FRSProfileViewController.m in Sources */,
+				65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */,
+				65F237B31C24A94E002182DE /* FRSTabBarController.m in Sources */,
+				D48C722B1D10C502000677BF /* FRSFollowingController.m in Sources */,
+				65046E051C3EFC81003E02B5 /* FRSHomeViewController.m in Sources */,
+				D48C723D1D11D352000677BF /* FRSUserCell.m in Sources */,
+				D453CC891CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m in Sources */,
+				07A30C001C50488800C536EB /* FRSEmailViewController.m in Sources */,
+				65201A311C3D7D6200B31089 /* FRSGalleryView.m in Sources */,
+				D4EE64251D830DD60034B5EA /* FRSReadMoreCell.m in Sources */,
+				65201A371C3D7D8200B31089 /* FRSScrollViewImageView.m in Sources */,
+				65F237BF1C24C0E4002182DE /* FRSOnboardingViewController.m in Sources */,
+				D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */,
+				D406C40F1DA2D2F300133788 /* SAMKeychainQuery.m in Sources */,
+				07ED92E11C752037000DBEA8 /* DGElasticPullToRefresh.m in Sources */,
+				D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */,
+				65201A1F1C3D7D0000B31089 /* FRSNavigationController.m in Sources */,
+				D453CC881CCA80850091A004 /* NSManagedObjectContext+MagicalSaves.m in Sources */,
+				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
+				65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */,
+				07697CD21DA8561500C48B34 /* Model.xcdatamodel in Sources */,
+				D475C0951DC26B5A00AFC839 /* FRSUploadTask.m in Sources */,
+				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
+				D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */,
+				D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */,
+				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
+				D48C72431D11D39F000677BF /* FRSBreakingCell.m in Sources */,
+				078737FD1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m in Sources */,
+				07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */,
+				D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */,
+				65135FD51C286DCF00839149 /* FRSStory+CoreDataProperties.m in Sources */,
+				6547C90A1C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m in Sources */,
+				65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */,
+				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
+				077CF9D91CE62793006FE908 /* FRSAboutFrescoViewController.m in Sources */,
+				65E860AC1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m in Sources */,
+				07A30C031C50488800C536EB /* FRSRadiusViewController.m in Sources */,
+				65D789611C4806A000F5C2DD /* FRSPost+CoreDataProperties.m in Sources */,
+				070D66D21C2B395D00AB3D9D /* OEParallax.m in Sources */,
+				077FBC3A1CDBA73700FB53FD /* FRSAssignmentPickerTableViewCell.m in Sources */,
+				65DC9BF41C485B7F001F450A /* FRSGallery+CoreDataProperties.m in Sources */,
+				0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */,
+				D453CC871CCA80850091A004 /* NSManagedObjectContext+MagicalRecord.m in Sources */,
+				07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */,
+				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
+				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
+				D43C7FDD1C8E474C00A7A7A7 /* FRSCheckBox.m in Sources */,
+				074393F21C3B0F9A0007CFF0 /* UIImageView+Helpers.m in Sources */,
+				BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */,
+				07A30C051C50488800C536EB /* FRSTableViewCell.m in Sources */,
+				D453CC7F1CCA80850091A004 /* MagicalRecordInternal.m in Sources */,
+				65A525F21C499FCA004A622B /* FRSCommentTableViewCell.m in Sources */,
+				D453CC851CCA80850091A004 /* NSManagedObjectContext+MagicalChainSave.m in Sources */,
+				D453CC791CCA80850091A004 /* MagicalRecord+Actions.m in Sources */,
+				D4B35F5C1CD1B51400F5C8A8 /* FRSUpload.m in Sources */,
+				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
+				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
+				075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */,
+				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,
+				07B6FB551D0A0F3F001C3120 /* GlobalAssignmentsTableViewCell.m in Sources */,
+				D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */,
+				0767A55F1D5E2F0700330761 /* FRSAssignmentNotificationTableViewCell.m in Sources */,
+				D453CC7E1CCA80850091A004 /* MagicalRecord+ShorthandMethods.m in Sources */,
+				D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */,
+				65EBEDB11C4404A800BE671F /* FRSDateFormatter.m in Sources */,
+				654181E41C5144CD00019B3F /* NSObject+Validator.m in Sources */,
+				65135FD71C286DCF00839149 /* FRSNotification+CoreDataProperties.m in Sources */,
+				D418E34C1CCC1B240003B080 /* FRSSocial.m in Sources */,
+				D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */,
+				D453CC831CCA80850091A004 /* NSManagedObject+MagicalRecord.m in Sources */,
+				07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */,
+				65EBEDB91C44197100BE671F /* FRSLocationManager.m in Sources */,
+				D4BE3E311D17D6760039394C /* FRSCarouselCell.m in Sources */,
+				07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */,
+				D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */,
+				D421FC501D5B7ACF004C76B7 /* FRSSearchStoryCell.m in Sources */,
+				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
+				07A30C021C50488800C536EB /* FRSPromoCodeViewController.m in Sources */,
+				D400FA681D6E13FA008842E1 /* TTTAttributedLabel.m in Sources */,
+				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
+				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,
+				42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */,
+				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
+				07A30C061C50488800C536EB /* FRSTaxInformationViewController.m in Sources */,
+				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,
+				D421FC551D5B7AE3004C76B7 /* FRSSearchUserCell.m in Sources */,
+				D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */,
+				07A30C011C50488800C536EB /* FRSPasswordChangeViewController.m in Sources */,
+				D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */,
+				07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */,
+				65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */,
+				07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */,
+				65EBEDB41C44116700BE671F /* FRSAssignmentsViewController.m in Sources */,
+				65135FD41C286DCF00839149 /* FRSAssignment.m in Sources */,
+				D48C72301D11D2EB000677BF /* FRSActivityViewController.m in Sources */,
+				D49B1D9A1C99EB1E00735846 /* UITextView+Resize.m in Sources */,
+				D4AF8EEF1CFDFED100A33FAB /* FRSFeedTable.m in Sources */,
+				D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */,
+				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
+				D453CC811CCA80850091A004 /* NSManagedObject+MagicalDataImport.m in Sources */,
+				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
+				D41B2EFA1D53E5960007C61F /* FRSSearchResultsTable.m in Sources */,
+				6547C9041C6A68A700DAD98C /* FRSUserTableViewCell.m in Sources */,
+				D4C217CA1D63AE230076172D /* FRSIdentityViewController.m in Sources */,
+				D453CC7B1CCA80850091A004 /* MagicalRecord+iCloud.m in Sources */,
+				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
+				D4B35F581CD1758400F5C8A8 /* FRSJSONResponseSerializer.m in Sources */,
+				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
+				07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */,
+				076F4D9E1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m in Sources */,
+				D406C4091D9F0D9F00133788 /* FRSNotificationTester.m in Sources */,
+				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,
+				075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */,
+				07ED92E41C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m in Sources */,
+				D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */,
+				07A138BF1CBC053C00163BA0 /* FRSLoadingTableViewCell.m in Sources */,
+				D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */,
+				D418E2F71CCA97510003B080 /* MagicalImportFunctions.m in Sources */,
+				D453CC7C1CCA80850091A004 /* MagicalRecord+Options.m in Sources */,
+				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
+				D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */,
+				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,
+				D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */,
+				D4BE3E2D1D17D6530039394C /* FRSCarousel.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1EDA44C81AA4CCC70082E08D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2160,6 +2825,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1EDA44CE1AA4CCC70082E08D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1EDA44AF1AA4CCC70082E08D /* Fresco */;
+			targetProxy = 1EDA44CD1AA4CCC70082E08D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1EDA44D41AA4CCC70082E08D /* Debug */ = {
@@ -2260,6 +2933,91 @@
 			};
 			name = Release;
 		};
+		1EDA44D71AA4CCC70082E08D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0EF68A1162525EE2C41C79CE /* Pods-Fresco.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				BUNDLE_ID_SUFFIX = .dev;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Fresco.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = Z7R96S8K3N;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Fresco News/PrefixHeader.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/CardIO\"",
+					"$(ProjectDir)/**",
+				);
+				INFOPLIST_FILE = "Fresco News/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		1EDA44D81AA4CCC70082E08D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 29F0D2E42008DF25D7353EF4 /* Pods-Fresco.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				BUNDLE_ID_SUFFIX = "";
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Fresco.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = Z7R96S8K3N;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Fresco News/PrefixHeader.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/CardIO\"",
+					"$(ProjectDir)/**",
+				);
+				INFOPLIST_FILE = "Fresco News/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		1EDA44DA1AA4CCC70082E08D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2346,6 +3104,48 @@
 			};
 			name = Beta;
 		};
+		E78493001BA882D2004491DA /* Beta */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7C3D3E2111D42B3157BFB768 /* Pods-Fresco.beta.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				BUNDLE_ID_SUFFIX = .beta;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Fresco.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = Z7R96S8K3N;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Fresco News/PrefixHeader.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/CardIO\"",
+					"$(ProjectDir)/**",
+				);
+				INFOPLIST_FILE = "Fresco News/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.fresconews.Fresco;
+				PRODUCT_NAME = VPN;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Fresco News/Views/Fresco-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Beta;
+		};
 		E78493011BA882D2004491DA /* Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2373,6 +3173,16 @@
 				1EDA44D41AA4CCC70082E08D /* Debug */,
 				1EDA44D51AA4CCC70082E08D /* Release */,
 				E78492FF1BA882D2004491DA /* Beta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1EDA44D61AA4CCC70082E08D /* Build configuration list for PBXNativeTarget "Fresco" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1EDA44D71AA4CCC70082E08D /* Debug */,
+				1EDA44D81AA4CCC70082E08D /* Release */,
+				E78493001BA882D2004491DA /* Beta */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
