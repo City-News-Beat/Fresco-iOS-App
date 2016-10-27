@@ -405,13 +405,16 @@
         self.assignmentTitle = assignment.title;
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
+        self.outlets = assignment.outlets;
         
         [self configureAssignmentCard];
         [self animateAssignmentCard];
         [self setExpiration];
         [self setDistance];
+        [self configureOutlets];
         
         self.currentAssignment = assignment;
+        [self drawImages];
      
         MKCoordinateRegion region = { {0.0, 0.0 }, { 0.0, 0.0 } };
         region.center.latitude = [assignment.latitude doubleValue];
@@ -610,6 +613,20 @@
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
     
     self.outlets = assAnn.outlets;
+    [self configureOutlets];
+    
+    [self setExpiration];
+    [self configureAssignmentCard];
+    [self animateAssignmentCard];
+    [self snapToAnnotationView:view]; // Centers map with y offset
+    
+    self.assignmentLat = assAnn.coordinate.latitude;
+    self.assignmentLong = assAnn.coordinate.longitude;
+    
+    [self setDistance];
+}
+
+-(void)configureOutlets {
     NSArray *outlets = self.outlets;
     
     if (outlets.count == 1) {
@@ -628,16 +645,6 @@
     else if (outlets.count == 0) {
         self.assignmentOutlet = @"No active news outlets";
     }
-    
-    [self setExpiration];
-    [self configureAssignmentCard];
-    [self animateAssignmentCard];
-    [self snapToAnnotationView:view]; // Centers map with y offset
-    
-    self.assignmentLat = assAnn.coordinate.latitude;
-    self.assignmentLong = assAnn.coordinate.longitude;
-    
-    [self setDistance];
 }
 
 -(void)setDistance {

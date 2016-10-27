@@ -150,7 +150,6 @@
         
         NSLog(@"CREATOR: %@", self.gallery.creator);
         
-        
         if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
             [self.actionBar setCurrentUser:YES];
         } else {
