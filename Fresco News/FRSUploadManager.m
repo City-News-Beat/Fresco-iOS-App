@@ -54,12 +54,12 @@
     if (asset.mediaType == PHAssetMediaTypeImage) {
         
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeDefault options:Nil resultHandler:^void(UIImage *image, NSDictionary *info) {
-        NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dad_Girl"];
+        NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dadGirl"];
         [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
         
         // write data to temp path (background thread, async)
         
-        NSData *imageData = UIImagePNGRepresentation(image);
+        NSData *imageData = UIImageJPEGRepresentation(image, 1);
         [imageData writeToFile:tempPath atomically:NO];
         
         // required to run upload on main thread
@@ -74,13 +74,9 @@
     }
     else if (asset.mediaType == PHAssetMediaTypeVideo) {
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:Nil resultHandler:^(AVAsset * avasset, AVAudioMix * audioMix, NSDictionary * info) {
-            NSURL *videoURL = [(AVURLAsset *)avasset URL];
-            
             // create temp location to move data (PHAsset can not be weakly linked to)
-            NSString *file = [[videoURL.absoluteString componentsSeparatedByString:@"/"] lastObject];
-            NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"test"];
+            NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dadBod"];
             [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
-            NSLog(@"%@", tempPath);
             
             // set up resource from PHAsset
             PHAssetResource *resource = [[PHAssetResource assetResourcesForAsset:asset] firstObject];
@@ -150,7 +146,6 @@
     };
     __weak typeof (self) weakSelf = self;
     
-    NSLog(@"KEY: %@ METADATA: %@", postID, upload.metadata);
     [[transferManager upload:upload] continueWithBlock:^id(AWSTask *task) {
         
         if (task.error) {
