@@ -115,7 +115,12 @@
 }
 
 -(void)restartFromManaged {
+    
     for (FRSUpload *upload in self.managedUploads) {
+        
+        if ([upload.completed boolValue] == TRUE) {
+            continue;
+        }
         
         _isRunning = TRUE;
         NSArray *urls = upload.destinationURLS;
@@ -226,11 +231,12 @@
     }];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
-        [self markAsInComplete];
+       // [self markAsInComplete];
 
         totalBytesSent = 0;
         isStarted = FALSE;
         isRunning = TRUE;
+        hasRetried = TRUE;
         
         if (_gallery) {
             [self startUploadProcess];
@@ -244,7 +250,7 @@
 
 -(void)startUploadProcess {
     
-    if (self.managedUploads) {
+    if (self.managedUploads.count > 0) {
         [self restartFromManaged];
         return;
     }
@@ -386,8 +392,9 @@
                     }
                     else {
                         
-                        if (!_posts) {
+                        if (!_posts || hasRetried) {
                             isComplete++;
+                            [(FRSMultipartTask *)task complete];
                             [self next:task];
                             return;
                         }
@@ -443,7 +450,6 @@
             
             
             if (success) {
-                if (success) {
                     NSDictionary *headers = [(NSHTTPURLResponse *)response allHeaderFields];
                     NSString *eTag = headers[@"Etag"];
                     
@@ -461,7 +467,7 @@
                             [self next:task];
                         }
                         else {
-                            if (!_posts) {
+                            if (!_posts || hasRetried) {
                                 isComplete++;
                                 [self next:task];
                                 return;
@@ -480,7 +486,6 @@
                             [self markAsComplete];
                         }
                     }];
-                }
             }
             else {
                 NSLog(@"%@", error);

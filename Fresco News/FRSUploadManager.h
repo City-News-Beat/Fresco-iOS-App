@@ -26,6 +26,7 @@ static int const maxConcurrent = 5;
     BOOL isRunning;
     BOOL didFinish;
     unsigned long long totalSize;
+    BOOL hasRetried;
 }
 -(instancetype)initWithGallery:(NSDictionary *)gallery assets:(NSArray *)assets;
 -(void)checkAndStart;
