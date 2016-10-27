@@ -987,15 +987,18 @@
     
     if (toggle.on){
         
+        
+        [[FRSAPIClient sharedClient] post:@"" withParameters:@{} completion:^(id responseObject, NSError *error) {
+            
+        }];
+        
+        
         if (!self.notificationsEnabled || !self.locationEnabled) {
             FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self];
             alert.locationManager.delegate = self;
             [alert show];
         }
 
-//        [self checkNotificationStatus];
-//        [self requestNotifications];
-        
         self.notificationsEnabled = YES;
         self.scrollView.scrollEnabled = YES;
         [self.promoTF resignFirstResponder];
@@ -1004,7 +1007,10 @@
         [self.usernameTF resignFirstResponder];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.radiusSlider setValue:0.6 animated:YES];
+            [UIView animateWithDuration:0.3 animations:^{
+                [self.radiusSlider setValue:0.6 animated:YES];
+                [self sliderValueChanged:self.radiusSlider];
+            }];
             [[NSUserDefaults standardUserDefaults] setValue:@30 forKey:settingsUserNotificationRadius];
         });
         
