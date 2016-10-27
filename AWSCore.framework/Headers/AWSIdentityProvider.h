@@ -28,160 +28,128 @@ FOUNDATION_EXPORT NSString *const AWSIdentityProviderGoogle;
 FOUNDATION_EXPORT NSString *const AWSIdentityProviderLoginWithAmazon;
 FOUNDATION_EXPORT NSString *const AWSIdentityProviderTwitter;
 
+FOUNDATION_EXPORT NSString *const AWSIdentityProviderAmazonCognitoIdentity;
+
 typedef NS_ENUM(NSInteger, AWSCognitoLoginProviderKey) {
     AWSCognitoLoginProviderKeyUnknown,
     AWSCognitoLoginProviderKeyFacebook,
     AWSCognitoLoginProviderKeyGoogle,
     AWSCognitoLoginProviderKeyLoginWithAmazon,
     AWSCognitoLoginProviderKeyTwitter,
-} __attribute__((deprecated("Use AWSIdentityProvider const strings instead. e.g. AWSIdentityProviderFacebook")));
+} __attribute__((deprecated("Use 'AWSIdentityProvider' const strings instead. e.g. 'AWSIdentityProviderFacebook'")));
 
-FOUNDATION_EXPORT NSString *const AWSCognitoIdentityProviderErrorDomain;
-typedef NS_ENUM(NSInteger, AWSCognitoIdentityProviderErrorType) {
-    AWSCognitoIdentityProviderErrorIdentityIsNil,
-    AWSCognitoIdentityProviderErrorTokenRefreshTimeout,
+FOUNDATION_EXPORT NSString *const AWSCognitoCredentialsProviderHelperErrorDomain;
+typedef NS_ENUM(NSInteger, AWSCognitoCredentialsProviderHelperErrorType) {
+    AWSCognitoCredentialsProviderHelperErrorIdentityIsNil,
+    AWSCognitoCredentialsProviderHelperErrorTokenRefreshTimeout,
 };
 
 @class AWSTask<__covariant ResultType>;
 
 /**
- * AWSIdentityProvider provides an interface for acquiring an identity token from a provider.
+ AWSIdentityProvider provides an interface for acquiring an identity token from a provider.
  */
 @protocol AWSIdentityProvider <NSObject>
 
 /**
- *  The name of the identity provider. e.g. graph.facebook.com.
+ The name of the identity provider. e.g. graph.facebook.com.
  */
 @property (nonatomic, readonly) NSString *identityProviderName;
 
 /**
- * Returns the token associated with this provider. If the token is cached and invalid, should refresh and return the valid token.
+ Returns the token associated with this provider. If the token is cached and invalid, should refresh and return the valid token.
  */
 - (AWSTask<NSString *> *)token;
 
 @end
 
+/**
+ `AWSIdentityProviderManager` provides an interface for creating the `logins` dictionary for Amazon Cognito Identity.
+ */
 @protocol AWSIdentityProviderManager <NSObject>
 
 /**
- * Each entry in logins represents a single login with an identity provider.
- * The key is the domain of the login provider (e.g. 'graph.facebook.com') and the value is the
- * OAuth/OpenId Connect token that results from an authentication with that login provider.
+ Each entry in logins represents a single login with an identity provider. The key is the domain of the login provider (e.g. 'graph.facebook.com') and the value is the OAuth/OpenId Connect token that results from an authentication with that login provider.
  */
 - (AWSTask<NSDictionary<NSString *, NSString *> *> *)logins;
+
+@optional
+/**
+ * If the token contains the role arn and there are multiple roles, return the custom role to assume.  This is currently only supported for SAML identity providers.
+ */
+@property (nonatomic, readonly) NSString *customRoleArn;
 
 @end
 
 /**
- * AWSCognitoIdentityProvider provides a Cognito specific identity provider. Cognito Identity 
- * providers are associated with an identity pool. If the identity pool supports authenticated
- * access, multiple logins may be added to link to the Cognito identity.
+ AWSCognitoCredentialsProviderHelper provides a Cognito specific identity provider. Cognito Identity providers are associated with an identity pool. If the identity pool supports authenticated access, multiple logins may be added to link to the Cognito identity.
  */
-@protocol AWSCognitoIdentityProvider <AWSIdentityProvider, AWSIdentityProviderManager>
+@protocol AWSCognitoCredentialsProviderHelper <AWSIdentityProvider, AWSIdentityProviderManager>
 
 /**
- * The identity pool for this provider. Used to when making calls to the Amazon Cognito service
+ The identity pool for this provider. Used to when making calls to the Amazon Cognito service
  */
 @property (nonatomic, strong, readonly) NSString *identityPoolId;
 
 /**
- * The identity id as determined by the Amazon Cognito service
+ The identity id as determined by the Amazon Cognito service
  */
-@property (nonatomic, strong) NSString * _Nullable identityId;
+@property (nonatomic, strong, nullable) NSString *identityId;
 
 /**
- *
  */
-@property (nonatomic, strong) id<AWSIdentityProviderManager> _Nullable identityProviderManager;
+@property (nonatomic, strong, readonly, nullable) id<AWSIdentityProviderManager> identityProviderManager;
 
 /**
- * Get/retrieve the identity id for this provider. If an identity id is already set on this
- * provider, no remote call is made and the identity will be returned as a result of the AWSTask 
- * (the identityId is also available as a property). 
- * If no identityId is set on this provider, one will be retrieved from the service.
+ Get/retrieve the identity id for this provider. If an identity id is already set on this provider, no remote call is made and the identity will be returned as a result of the AWSTask (the identityId is also available as a property). If no identityId is set on this provider, one will be retrieved from the service.
  */
 - (AWSTask<NSString *> *)getIdentityId;
 
 /**
- * Is this provider considered 'authenticated'. By default, only returns YES if logins is set.
+ Is this provider considered 'authenticated'. By default, only returns YES if logins is set.
  */
 - (BOOL)isAuthenticated;
 
 /**
- * Clear saved values for identityId, token, and logins.
+ Clear saved values for identityId, token, and logins.
  */
 - (void)clear;
-
-@optional
-
-/**
- * Specifies the AWS Account Id for the owner of the identity pool.
- * No longer required by Amazon Cognito
- */
-@property (nonatomic, strong, readonly) NSString *accountId;
 
 @end
 
 /**
- * An abstract implementation of the AWSCognitoIdentityProvider. Developers should extend this class
- * when they want to implement developer authenticated identities but do not need to support the basic
- * Amazon Cognito authflow in the same application.
+ An abstract implementation of the AWSCognitoCredentialsProviderHelper.
  */
-@interface AWSAbstractIdentityProvider : NSObject <AWSCognitoIdentityProvider>
+@interface AWSAbstractCognitoCredentialsProviderHelper : NSObject <AWSCognitoCredentialsProviderHelper>
 
 /**
- * The identity pool for this provider. Used to when making calls to the Amazon Cognito service
+ The identity pool for this provider. Used to when making calls to the Amazon Cognito service
  */
 @property (nonatomic, strong, readonly) NSString *identityPoolId;
 
 /**
- * The identity id as determined by the Amazon Cognito service
+ The identity id as determined by the Amazon Cognito service
  */
-@property (nonatomic, strong) NSString * _Nullable identityId;
+@property (nonatomic, strong, nullable) NSString *identityId;
 
 /**
- *
+ The identity provider manager that asynchronously returns `logins`.
  */
-@property (nonatomic, strong) id<AWSIdentityProviderManager> _Nullable identityProviderManager;
+@property (nonatomic, strong, readonly, nullable) id<AWSIdentityProviderManager> identityProviderManager;
 
 @end
 
 /**
- * An abstract implementation of the AWSCognitoIdentityProvider. Developers should extend this class
- * when they want to implement developer authenticated identities and want to support the basic
- * Amazon Cognito authflow in the same application.
+ An abstract implementation of the AWSCognitoCredentialsProviderHelper. Developers should extend this class when they want to implement developer authenticated identities and want to support the basic Amazon Cognito authflow in the same application.
  */
-@interface AWSAbstractCognitoIdentityProvider : AWSAbstractIdentityProvider
+@interface AWSCognitoCredentialsProviderHelper : AWSAbstractCognitoCredentialsProviderHelper
+
+@property (nonatomic, assign) BOOL useEnhancedFlow;
 
 - (instancetype)initWithRegionType:(AWSRegionType)regionType
-                        identityId:(nullable NSString *)identityId
-                         accountId:(nullable NSString *)accountId
                     identityPoolId:(NSString *)identityPoolId
+                   useEnhancedFlow:(BOOL)useEnhancedFlow
            identityProviderManager:(nullable id<AWSIdentityProviderManager>)identityProviderManager;
-@end
-
-/**
- * The basic Amazon Cognito Identity Provider. Follows the following flow for credentials:
- * 1. Calls GetId to establish an identity id.
- * 2. Calls GetOpenIdToken to get an OpenId Connect token for that identity id.
- * 3. Calls AssumeRoleWithWebIdentity to get credentials with that token.
- */
-@interface AWSBasicCognitoIdentityProvider : AWSAbstractCognitoIdentityProvider
-
-@end
-
-/**
- * The basic Amazon Cognito Identity Provider. Follows the following flow for credentials:
- * 1. Calls GetId to establish an identity id.
- * 2. Calls GetCredentialsForIdentity to get credentials that identity id.
- */
-@interface AWSEnhancedCognitoIdentityProvider : AWSAbstractCognitoIdentityProvider
-
-- (instancetype)initWithRegionType:(AWSRegionType)regionType
-                        identityId:(nullable NSString *)identityId
-                    identityPoolId:(NSString *)identityPoolId
-           identityProviderManager:(nullable id<AWSIdentityProviderManager>)identityProviderManager;
-
 @end
 
 NS_ASSUME_NONNULL_END

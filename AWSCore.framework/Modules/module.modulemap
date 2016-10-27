@@ -3,8 +3,4 @@ framework module AWSCore {
 
   export *
   module * { export * }
-
-  link "z"
-  link "sqlite3"
-  link framework "SystemConfiguration"
 }

@@ -197,9 +197,6 @@
 		D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */; };
 		D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C08E1DC2677000AFC839 /* FRSUploadManager.m */; };
 		D475C0951DC26B5A00AFC839 /* FRSUploadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C0941DC26B5A00AFC839 /* FRSUploadTask.m */; };
-		D475C0991DC26E4900AFC839 /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D475C0961DC26E4900AFC839 /* AWSCognito.framework */; };
-		D475C09A1DC26E4900AFC839 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D475C0971DC26E4900AFC839 /* AWSCore.framework */; };
-		D475C09B1DC26E4900AFC839 /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D475C0981DC26E4900AFC839 /* AWSS3.framework */; };
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
 		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
@@ -233,6 +230,8 @@
 		D4C217DE1D66E28E0076172D /* trash24K2.png in Resources */ = {isa = PBXBuildFile; fileRef = D4C217DB1D66E28E0076172D /* trash24K2.png */; };
 		D4C217DF1D66E28E0076172D /* trash24K2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4C217DC1D66E28E0076172D /* trash24K2@2x.png */; };
 		D4C217E01D66E28E0076172D /* trash24K2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D4C217DD1D66E28E0076172D /* trash24K2@3x.png */; };
+		D4C83D761DC2744B00F5FA9D /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4C83D751DC2744A00F5FA9D /* AWSCore.framework */; };
+		D4C83D781DC2745600F5FA9D /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4C83D771DC2745600F5FA9D /* AWSS3.framework */; };
 		D4D60D0C1CC829C000059EBA /* following.json in Resources */ = {isa = PBXBuildFile; fileRef = D4D60D0B1CC829C000059EBA /* following.json */; };
 		D4D60D101CC8368300059EBA /* FRSFollowingTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */; };
 		D4DBF18F1CB42FBB0098BDC0 /* karmina-bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D4DBF18E1CB42F730098BDC0 /* karmina-bold.otf */; };
@@ -651,9 +650,6 @@
 		D475C08E1DC2677000AFC839 /* FRSUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadManager.m; sourceTree = "<group>"; };
 		D475C0931DC26B5A00AFC839 /* FRSUploadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadTask.h; sourceTree = "<group>"; };
 		D475C0941DC26B5A00AFC839 /* FRSUploadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadTask.m; sourceTree = "<group>"; };
-		D475C0961DC26E4900AFC839 /* AWSCognito.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCognito.framework; sourceTree = "<group>"; };
-		D475C0971DC26E4900AFC839 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
-		D475C0981DC26E4900AFC839 /* AWSS3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSS3.framework; sourceTree = "<group>"; };
 		D47999671C96AA1700B46D01 /* FRSLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLocator.h; sourceTree = "<group>"; };
 		D47999681C96AA1700B46D01 /* FRSLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSLocator.m; sourceTree = "<group>"; };
 		D487F1B31CBD6565005742F3 /* FRSSubmissionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSubmissionViewController.h; sourceTree = "<group>"; };
@@ -710,6 +706,8 @@
 		D4C217DB1D66E28E0076172D /* trash24K2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trash24K2.png; sourceTree = "<group>"; };
 		D4C217DC1D66E28E0076172D /* trash24K2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash24K2@2x.png"; sourceTree = "<group>"; };
 		D4C217DD1D66E28E0076172D /* trash24K2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash24K2@3x.png"; sourceTree = "<group>"; };
+		D4C83D751DC2744A00F5FA9D /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
+		D4C83D771DC2745600F5FA9D /* AWSS3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSS3.framework; sourceTree = "<group>"; };
 		D4D60D0B1CC829C000059EBA /* following.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = following.json; path = ../following.json; sourceTree = "<group>"; };
 		D4D60D0E1CC8368300059EBA /* FRSFollowingTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollowingTable.h; sourceTree = "<group>"; };
 		D4D60D0F1CC8368300059EBA /* FRSFollowingTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollowingTable.m; sourceTree = "<group>"; };
@@ -766,20 +764,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				D42A138F1D89A451008909E6 /* Mixpanel.framework in Frameworks */,
+				D4C83D761DC2744B00F5FA9D /* AWSCore.framework in Frameworks */,
 				D4DBF1951CB468C90098BDC0 /* CoreMedia.framework in Frameworks */,
 				D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */,
 				D4DBF1971CB468E80098BDC0 /* AVFoundation.framework in Frameworks */,
 				1E4983CF1AFBCF0800924F59 /* Accounts.framework in Frameworks */,
-				D475C09A1DC26E4900AFC839 /* AWSCore.framework in Frameworks */,
 				1E4983CD1AFBCEF400924F59 /* Social.framework in Frameworks */,
-				D475C0991DC26E4900AFC839 /* AWSCognito.framework in Frameworks */,
 				1E4983CB1AFBCED000924F59 /* libsqlite3.dylib in Frameworks */,
 				1E4983C91AFBCECA00924F59 /* libz.dylib in Frameworks */,
 				E72DB1621B852BEF0017AAA5 /* Crashlytics.framework in Frameworks */,
 				1E4983C71AFBCEBE00924F59 /* SystemConfiguration.framework in Frameworks */,
 				1E4983C51AFBCEAF00924F59 /* Security.framework in Frameworks */,
 				1E4983D11AFBCF5100924F59 /* Bolts.framework in Frameworks */,
-				D475C09B1DC26E4900AFC839 /* AWSS3.framework in Frameworks */,
 				1E4983C31AFBCEA200924F59 /* MobileCoreServices.framework in Frameworks */,
 				1E4983C11AFBCE9500924F59 /* CoreLocation.framework in Frameworks */,
 				1E4983BF1AFBCE8F00924F59 /* CoreGraphics.framework in Frameworks */,
@@ -789,6 +785,7 @@
 				1E4983BB1AFBCE7500924F59 /* AudioToolbox.framework in Frameworks */,
 				1E4983B91AFBCDEA00924F59 /* StoreKit.framework in Frameworks */,
 				E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */,
+				D4C83D781DC2745600F5FA9D /* AWSS3.framework in Frameworks */,
 				D418E3411CCC1A910003B080 /* FBSDKLoginKit.framework in Frameworks */,
 				1E4983B71AFBCD9900924F59 /* ParseFacebookUtilsV4.framework in Frameworks */,
 				1E4983B61AFBCD9900924F59 /* Parse.framework in Frameworks */,
@@ -942,9 +939,8 @@
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D475C0961DC26E4900AFC839 /* AWSCognito.framework */,
-				D475C0971DC26E4900AFC839 /* AWSCore.framework */,
-				D475C0981DC26E4900AFC839 /* AWSS3.framework */,
+				D4C83D771DC2745600F5FA9D /* AWSS3.framework */,
+				D4C83D751DC2744A00F5FA9D /* AWSCore.framework */,
 				D42A138E1D89A451008909E6 /* Mixpanel.framework */,
 				D418E3571CCC1DE50003B080 /* AFNetworking.framework */,
 				D418E34D1CCC1C360003B080 /* Twitter.framework */,

@@ -10,4 +10,22 @@
 
 @implementation FRSUploadTask
 
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(void)commonInit {
+    
+}
+
+-(void)uploadAsset:(AVURLAsset *)asset key:(NSString *)key withCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    
+}
+
 @end

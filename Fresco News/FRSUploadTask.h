@@ -7,7 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Photos/Photos.h> // dealing with PHAssets
+#import <AVFoundation/AVFoundation.h> // dealing with PHAssets
+#import "Fresco.h"
 
 @interface FRSUploadTask : NSObject
+{
+    
+}
+
 
 @end
