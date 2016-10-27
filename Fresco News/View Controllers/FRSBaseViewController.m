@@ -234,7 +234,7 @@
     assignmentsVC.defaultID = assignmentID;
     [self.tabBarController setSelectedIndex:3];
     
-    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0];
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
         
         NSArray *coordinates = [[responseObject objectForKey:@"location"] objectForKey:@"coordinates"];
