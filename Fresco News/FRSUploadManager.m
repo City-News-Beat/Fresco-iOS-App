@@ -52,22 +52,32 @@
     NSString *revisedToken = [@"raw/" stringByAppendingString:token];
 
     if (asset.mediaType == PHAssetMediaTypeImage) {
-        [asset requestContentEditingInputWithOptions:Nil completionHandler:^(PHContentEditingInput *contentEditingInput, NSDictionary *info) {
-            NSURL *imageURL = contentEditingInput.fullSizeImageURL;
-            
-            NSArray *uploadMeta = @[imageURL.absoluteString, revisedToken];
-            
-            BOOL restart = FALSE;
-            
-            if (self.uploadMeta.count == 0) {
-                restart = TRUE;
-            }
-            
-            [self.uploadMeta addObject:uploadMeta];
-            if (restart) {
-                [self restart];
-            }
-        }];
+        
+    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeDefault options:Nil resultHandler:^void(UIImage *image, NSDictionary *info) {
+        NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:revisedToken];
+        [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
+        
+        // write data to temp path (background thread, async)
+        
+        NSData *imageData = UIImagePNGRepresentation(image);
+        [imageData writeToFile:tempPath atomically:NO];
+        
+        // required to run upload on main thread
+        
+        NSArray *uploadMeta = @[tempPath, revisedToken];
+        
+        BOOL restart = FALSE;
+        
+        if (self.uploadMeta.count == 0) {
+            restart = TRUE;
+        }
+        
+        [self.uploadMeta addObject:uploadMeta];
+        if (restart) {
+            [self restart];
+        }
+    }];
+    
     }
     else if (asset.mediaType == PHAssetMediaTypeVideo) {
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:Nil resultHandler:^(AVAsset * avasset, AVAudioMix * audioMix, NSDictionary * info) {
