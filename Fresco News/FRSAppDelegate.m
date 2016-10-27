@@ -34,7 +34,6 @@
 #import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
-#import "FRSUploadManager.h"
 #import "FRSStoriesViewController.h"
 
 @implementation FRSAppDelegate
@@ -104,16 +103,6 @@
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
 
-    FRSUploadManager *manager = [[FRSUploadManager alloc] init];
-    [manager checkAndStart];
-    
-    if (!manager.isRunning) {
-        manager = Nil;
-    }
-    else {
-        
-    }
-    
     return YES;
 }
 

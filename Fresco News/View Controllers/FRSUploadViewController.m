@@ -17,8 +17,6 @@
 #import "FRSPlayer.h"
 #import "FRSAPIClient.h"
 #import <Photos/Photos.h>
-#import "FRSUploadTask.h"
-#import "FRSMultipartTask.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAppDelegate.h"
 
@@ -1243,13 +1241,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)moveToUpload:(NSDictionary *)postData {
-    if (!_uploadManager) {
-        _uploadManager = [[FRSUploadManager alloc] initWithGallery:postData assets:_content];
-        _uploadManager.contentSize = contentSize;
-    }
-    else {
-        NSLog(@"NO UPLOAD: ALREADY STARTED");
-    }
+    /* upload started */
     
     [self.carouselCell pausePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];
