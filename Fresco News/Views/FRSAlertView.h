@@ -29,7 +29,7 @@
 -(void)show;
 -(void)dismiss;
 
--(instancetype)initPermissionsAlert;
+-(instancetype)initPermissionsAlert:(id)delegate;
 -(instancetype)initFindFriendsAlert;
 -(instancetype)initSignUpAlert;
 -(instancetype)initNoConnectionAlert;
@@ -42,5 +42,6 @@
 -(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude;
 
 @property (strong, nonatomic) UITextView *textView;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end

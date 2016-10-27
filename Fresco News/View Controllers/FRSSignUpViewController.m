@@ -26,7 +26,7 @@
 
 @import MapKit;
 
-@interface FRSSignUpViewController () <UITextFieldDelegate, MKMapViewDelegate, UIScrollViewDelegate, FRSAlertViewDelegate>
+@interface FRSSignUpViewController () <UITextFieldDelegate, MKMapViewDelegate, UIScrollViewDelegate, FRSAlertViewDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UITextField *usernameTF;
@@ -70,7 +70,6 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
-
     
     //[self addNotifications];
     
@@ -989,7 +988,8 @@
     if (toggle.on){
         
         if (!self.notificationsEnabled || !self.locationEnabled) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self];
+            alert.locationManager.delegate = self;
             [alert show];
         }
 
@@ -1793,6 +1793,11 @@
     
 }
 
+-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    
+    
+    
+}
 
 #pragma mark - FRSAlertViewDelegate
 
