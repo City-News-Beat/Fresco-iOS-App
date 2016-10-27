@@ -28,7 +28,8 @@
 -(void)focusOnAssignment:(FRSAssignment *)assignment;
 -(void)configureMap;
 -(void)fetchLocalAssignments;
-
+@property CGFloat assignmentLat;
+@property CGFloat assignmentLong;
 
 @property (nonatomic) BOOL hasDefault;
 @property (nonatomic, retain) NSString *defaultID;

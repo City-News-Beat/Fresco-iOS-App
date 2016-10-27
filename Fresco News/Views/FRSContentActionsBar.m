@@ -11,6 +11,7 @@
 #import "UIFont+Fresco.h"
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
+#import "FRSAPIClient.h"
 
 
 @interface FRSContentActionsBar()
@@ -107,8 +108,6 @@
     [self.repostButton addTarget:self action:@selector(handleButtonDrag:)      forControlEvents:UIControlEventTouchDragExit];
     [self addSubview:self.repostButton];
     
-    
-    
 }
 
 -(void)configureLikeSection{
@@ -152,9 +151,7 @@
         self.repostLabel.textColor = [UIColor frescoGreenColor];
         repost++;
     }
-    
-    NSLog(@"LABEL.TEXT = %ld", [self.repostLabel.text intValue]);
-    
+        
     self.repostLabel.text = [NSString stringWithFormat:@"%.0f", repost];
     if (self.delegate) {
         [self.delegate handleRepost:self];

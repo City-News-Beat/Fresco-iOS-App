@@ -83,8 +83,7 @@
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
-@property CGFloat assignmentLat;
-@property CGFloat assignmentLong;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -407,33 +406,23 @@
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
         
-        [self setExpiration];
-        
         [self configureAssignmentCard];
         [self animateAssignmentCard];
+        [self setExpiration];
+        [self setDistance];
         
         self.currentAssignment = assignment;
      
-        
         MKCoordinateRegion region = { {0.0, 0.0 }, { 0.0, 0.0 } };
         region.center.latitude = [assignment.latitude doubleValue];
         region.center.longitude = [assignment.longitude doubleValue];
         region.span.longitudeDelta = 0.05f;
         region.span.latitudeDelta = 0.05f;
-        [self.mapView setRegion:region animated:YES];
-        
+        [self.mapView setRegion:region animated:NO];
         
         CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake([assignment.latitude doubleValue], [assignment.longitude doubleValue]);
         newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
-        [self.mapView setCenterCoordinate:newCenter animated:YES];
-        
-//        if ([self.mapView respondsToSelector:@selector(camera)]) {
-//            [self.mapView setShowsBuildings:NO];
-//            MKMapCamera *newCamera = [[self.mapView camera] copy];
-//            [newCamera setHeading:0];
-//            [newCamera setCenterCoordinate:newCenter];
-//            [self.mapView setCamera:newCamera animated:YES];
-//        }
+        [self.mapView setCenterCoordinate:newCenter animated:NO];
         
         self.hasDefault = NO;
         self.defaultID  = nil;
@@ -648,6 +637,10 @@
     self.assignmentLat = assAnn.coordinate.latitude;
     self.assignmentLong = assAnn.coordinate.longitude;
     
+    [self setDistance];
+}
+
+-(void)setDistance {
     CLLocation *locA = [[CLLocation alloc] initWithLatitude:self.assignmentLat longitude:self.assignmentLong];
     CLLocation *locB = [[CLLocation alloc] initWithLatitude:[FRSLocator sharedLocator].currentLocation.coordinate.latitude longitude:[FRSLocator sharedLocator].currentLocation.coordinate.longitude];
     CLLocationDistance distance = [locA distanceFromLocation:locB];
@@ -670,9 +663,6 @@
             distanceString = [NSString stringWithFormat:@"%.0f feet away", feet];
         }
     }
-    
-    
-    
     self.distanceLabel.text = distanceString;
 }
 
@@ -720,6 +710,10 @@
             expirationString = [NSString stringWithFormat:@"Expires in %d second", seconds];
         }
     } else {
+        expirationString = @"This assignment has expired.";
+    }
+    
+    if (minutes <= 0 && seconds <= 0 && hours <= 0 && days <= 0) {
         expirationString = @"This assignment has expired.";
     }
     
