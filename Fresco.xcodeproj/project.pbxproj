@@ -196,7 +196,10 @@
 		D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D46D35681D9036E700E38FAA /* FRSTracker.m */; };
 		D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */; };
 		D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C08E1DC2677000AFC839 /* FRSUploadManager.m */; };
-		D475C0921DC267B500AFC839 /* FRSUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C0911DC267B500AFC839 /* FRSUpload.m */; };
+		D475C0951DC26B5A00AFC839 /* FRSUploadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C0941DC26B5A00AFC839 /* FRSUploadTask.m */; };
+		D475C0991DC26E4900AFC839 /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D475C0961DC26E4900AFC839 /* AWSCognito.framework */; };
+		D475C09A1DC26E4900AFC839 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D475C0971DC26E4900AFC839 /* AWSCore.framework */; };
+		D475C09B1DC26E4900AFC839 /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D475C0981DC26E4900AFC839 /* AWSS3.framework */; };
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
 		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
@@ -646,8 +649,11 @@
 		D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FRSUpload+CoreDataProperties.m"; sourceTree = "<group>"; };
 		D475C08D1DC2677000AFC839 /* FRSUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadManager.h; sourceTree = "<group>"; };
 		D475C08E1DC2677000AFC839 /* FRSUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadManager.m; sourceTree = "<group>"; };
-		D475C0901DC267B500AFC839 /* FRSUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUpload.h; sourceTree = "<group>"; };
-		D475C0911DC267B500AFC839 /* FRSUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUpload.m; sourceTree = "<group>"; };
+		D475C0931DC26B5A00AFC839 /* FRSUploadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUploadTask.h; sourceTree = "<group>"; };
+		D475C0941DC26B5A00AFC839 /* FRSUploadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUploadTask.m; sourceTree = "<group>"; };
+		D475C0961DC26E4900AFC839 /* AWSCognito.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCognito.framework; sourceTree = "<group>"; };
+		D475C0971DC26E4900AFC839 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
+		D475C0981DC26E4900AFC839 /* AWSS3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSS3.framework; sourceTree = "<group>"; };
 		D47999671C96AA1700B46D01 /* FRSLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSLocator.h; sourceTree = "<group>"; };
 		D47999681C96AA1700B46D01 /* FRSLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSLocator.m; sourceTree = "<group>"; };
 		D487F1B31CBD6565005742F3 /* FRSSubmissionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSubmissionViewController.h; sourceTree = "<group>"; };
@@ -764,13 +770,16 @@
 				D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */,
 				D4DBF1971CB468E80098BDC0 /* AVFoundation.framework in Frameworks */,
 				1E4983CF1AFBCF0800924F59 /* Accounts.framework in Frameworks */,
+				D475C09A1DC26E4900AFC839 /* AWSCore.framework in Frameworks */,
 				1E4983CD1AFBCEF400924F59 /* Social.framework in Frameworks */,
+				D475C0991DC26E4900AFC839 /* AWSCognito.framework in Frameworks */,
 				1E4983CB1AFBCED000924F59 /* libsqlite3.dylib in Frameworks */,
 				1E4983C91AFBCECA00924F59 /* libz.dylib in Frameworks */,
 				E72DB1621B852BEF0017AAA5 /* Crashlytics.framework in Frameworks */,
 				1E4983C71AFBCEBE00924F59 /* SystemConfiguration.framework in Frameworks */,
 				1E4983C51AFBCEAF00924F59 /* Security.framework in Frameworks */,
 				1E4983D11AFBCF5100924F59 /* Bolts.framework in Frameworks */,
+				D475C09B1DC26E4900AFC839 /* AWSS3.framework in Frameworks */,
 				1E4983C31AFBCEA200924F59 /* MobileCoreServices.framework in Frameworks */,
 				1E4983C11AFBCE9500924F59 /* CoreLocation.framework in Frameworks */,
 				1E4983BF1AFBCE8F00924F59 /* CoreGraphics.framework in Frameworks */,
@@ -933,6 +942,9 @@
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D475C0961DC26E4900AFC839 /* AWSCognito.framework */,
+				D475C0971DC26E4900AFC839 /* AWSCore.framework */,
+				D475C0981DC26E4900AFC839 /* AWSS3.framework */,
 				D42A138E1D89A451008909E6 /* Mixpanel.framework */,
 				D418E3571CCC1DE50003B080 /* AFNetworking.framework */,
 				D418E34D1CCC1C360003B080 /* Twitter.framework */,
@@ -2112,8 +2124,8 @@
 			children = (
 				D475C08D1DC2677000AFC839 /* FRSUploadManager.h */,
 				D475C08E1DC2677000AFC839 /* FRSUploadManager.m */,
-				D475C0901DC267B500AFC839 /* FRSUpload.h */,
-				D475C0911DC267B500AFC839 /* FRSUpload.m */,
+				D475C0931DC26B5A00AFC839 /* FRSUploadTask.h */,
+				D475C0941DC26B5A00AFC839 /* FRSUploadTask.m */,
 			);
 			name = "File Upload";
 			sourceTree = "<group>";
@@ -2698,6 +2710,7 @@
 				65F237B71C24AACF002182DE /* UIColor+Fresco.m in Sources */,
 				65A525EF1C4988B9004A622B /* FRSCommentsView.m in Sources */,
 				07697CD21DA8561500C48B34 /* Model.xcdatamodel in Sources */,
+				D475C0951DC26B5A00AFC839 /* FRSUploadTask.m in Sources */,
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */,
 				D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */,
@@ -2775,7 +2788,6 @@
 				D4AF8EEF1CFDFED100A33FAB /* FRSFeedTable.m in Sources */,
 				D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */,
 				1EDA44B61AA4CCC70082E08D /* main.m in Sources */,
-				D475C0921DC267B500AFC839 /* FRSUpload.m in Sources */,
 				D453CC811CCA80850091A004 /* NSManagedObject+MagicalDataImport.m in Sources */,
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
 				D41B2EFA1D53E5960007C61F /* FRSSearchResultsTable.m in Sources */,
