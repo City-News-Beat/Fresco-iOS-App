@@ -19,6 +19,7 @@
 #import <Photos/Photos.h>
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAppDelegate.h"
+#import "FRSUploadManager.h"
 
 @interface FRSUploadViewController () {
     NSMutableArray *dictionaryRepresentations;
@@ -1242,6 +1243,15 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     // instantiate upload process
     // start upload process
+    NSArray *posts = postData[@"posts_new"];
+    
+    int i = 0;
+    for (PHAsset *asset in self.content) {
+        NSDictionary *post = posts[i];
+        NSString *key = post[@"key"];
+        [[FRSUploadManager sharedUploader] addAsset:asset withToken:key];
+        i++;
+    }
     
     [self.carouselCell pausePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];

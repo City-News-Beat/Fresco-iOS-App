@@ -25,7 +25,7 @@
     AWS
  */
 
-static NSString * const awsBucket = @"com.fresconews.fresco";
+static NSString * const awsBucket = @"com.fresconews.dev";
 static NSString * const awsAccessKey = @"AKIAIFLQKVYXPMMMF7CQ";
 static NSString * const awsSecretKey = @"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";
 #define AWS_REGION AWSRegionUSEast1
