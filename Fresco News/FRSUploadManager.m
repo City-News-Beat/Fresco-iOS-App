@@ -41,6 +41,7 @@
     self.completedUploads = 0;
     self.uploadMeta = [[NSMutableArray alloc] init];
     [self startAWS];
+    currentIndex = 0;
 }
 
 
@@ -69,7 +70,6 @@
         
         [self.uploadMeta addObject:uploadMeta];
         [self checkRestart];
-       
     }];
     
     }
@@ -92,27 +92,22 @@
 
                 NSArray *uploadMeta = @[tempPath, revisedToken, postID];
                 [self.uploadMeta addObject:uploadMeta];
-                
                 [self checkRestart];
-
             }];
         }];
     }
 }
 
 -(void)checkRestart {
-    [self restart];
+    if (self.uploadMeta.count == 1) {
+        [self restart];
+    }
 }
 
 -(void)restart {
-
-    if (currentIndex > self.uploadMeta.count) {
+    
+    if (currentIndex+1 == self.uploadMeta.count) {
         // complete
-        currentIndex = 0;
-        totalFileSize = 0;
-        uploadedFileSize = 0;
-        self.uploadMeta = [[NSMutableArray alloc] init];
-        
         NSLog(@"UPLOAD PROCESS COMPLETE");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
         
@@ -120,13 +115,10 @@
     }
     
     NSLog(@"STARTING NEW UPLOAD");
-    
     NSArray *request = [self.uploadMeta objectAtIndex:currentIndex];
     [self addUploadForPost:request[1] url:request[0] postID:request[2] completion:^(id responseObject, NSError *error) {
         NSLog(@"COMPLETED: %@ %@", responseObject, error);
     }];
-    
-    currentIndex++;
 }
 
 -(void)next {
@@ -166,12 +158,12 @@
     [[transferManager upload:upload] continueWithBlock:^id(AWSTask *task) {
         
         if (task.error) {
-            NSLog(@"UPLOAD ERROR: %@", task.error);
             [weakSelf uploadDidErrorWithError:task.error];
         }
         
         if (task.result) {
             NSLog(@"UPLOAD COMPLETE");
+            currentIndex++;
             [self taskDidComplete:task];
             [self restart];
         }
