@@ -26,7 +26,7 @@
 
 @import MapKit;
 
-@interface FRSSignUpViewController () <UITextFieldDelegate, MKMapViewDelegate, UIScrollViewDelegate, FRSAlertViewDelegate>
+@interface FRSSignUpViewController () <UITextFieldDelegate, MKMapViewDelegate, UIScrollViewDelegate, FRSAlertViewDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UITextField *usernameTF;
@@ -70,7 +70,6 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self configureUI];
-
     
     //[self addNotifications];
     
@@ -180,12 +179,15 @@
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
         [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
         
-        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:settingsUserNotificationRadius];
         
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
     
+    FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+    userToUpdate.notificationRadius = @(self.miles);
+    [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
 }
 
 
@@ -989,19 +991,25 @@
     if (toggle.on){
         
         if (!self.notificationsEnabled || !self.locationEnabled) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert];
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self];
+            alert.locationManager.delegate = self;
             [alert show];
         }
 
-//        [self checkNotificationStatus];
-//        [self requestNotifications];
-        
         self.notificationsEnabled = YES;
         self.scrollView.scrollEnabled = YES;
         [self.promoTF resignFirstResponder];
         [self.usernameTF resignFirstResponder];
         [self.passwordTF resignFirstResponder];
         [self.usernameTF resignFirstResponder];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:0.3 animations:^{
+                [self.radiusSlider setValue:0.6 animated:YES];
+                [self sliderValueChanged:self.radiusSlider];
+            }];
+            [[NSUserDefaults standardUserDefaults] setValue:@30 forKey:settingsUserNotificationRadius];
+        });
         
         if (IS_IPHONE_5) {
             [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height -44) animated:YES];
@@ -1041,6 +1049,9 @@
             } completion:nil];
             
         } else {
+            
+            [self.radiusSlider setValue:0 animated:YES];
+            [[NSUserDefaults standardUserDefaults] setValue:@0 forKey:settingsUserNotificationRadius];
             
             //Unregister notifications
             [[UIApplication sharedApplication] unregisterForRemoteNotifications];
@@ -1114,7 +1125,7 @@
 
 -(void)createAccount {
 
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
     
     [self dismissKeyboard];
     
@@ -1772,10 +1783,10 @@
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
             self.notificationsEnabled = YES;
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
         } else {
             self.notificationsEnabled = NO;
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:settingsUserNotificationToggle];
         }
     }
 }
@@ -1793,6 +1804,11 @@
     
 }
 
+-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    
+    
+    
+}
 
 #pragma mark - FRSAlertViewDelegate
 

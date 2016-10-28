@@ -92,7 +92,7 @@
     if (properties[@"disabled"] && ![properties[@"disabled"] isEqual:[NSNull null]]) {
         user.disabled = [properties[@"disabled"] boolValue];
     }
-    
+
     return user;
 }
 

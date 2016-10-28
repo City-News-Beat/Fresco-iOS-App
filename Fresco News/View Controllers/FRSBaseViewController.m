@@ -234,7 +234,7 @@
     assignmentsVC.defaultID = assignmentID;
     [self.tabBarController setSelectedIndex:3];
     
-    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
+    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0];
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
         
         NSArray *coordinates = [[responseObject objectForKey:@"location"] objectForKey:@"coordinates"];
@@ -331,8 +331,8 @@
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"notification-radius"];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:settingsUserNotificationRadius];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userHasFinishedMigrating];
     [[NSUserDefaults standardUserDefaults] synchronize];

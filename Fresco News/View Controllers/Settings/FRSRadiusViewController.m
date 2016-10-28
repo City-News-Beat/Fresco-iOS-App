@@ -31,7 +31,8 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) FRSAlertView      *alert;
 
-@property CGFloat  miles;
+@property CGFloat miles;
+@property BOOL sliderDidSlide;
 
 @end
 
@@ -50,7 +51,9 @@
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+    //if (self.miles) {
+    //    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
+    //}
 }
 
 
@@ -67,7 +70,7 @@
     self.mapView.rotateEnabled = NO;
     self.mapView.centerCoordinate = [[FRSLocator sharedLocator] currentLocation].coordinate;
     
-    NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+    NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius];
     CGFloat milesFloat = [miles floatValue];
     
     MKCoordinateRegion region;
@@ -157,13 +160,18 @@
         
         if (responseObject) {
             [self popViewController];
-            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:@"notification-radius"];
+            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
+            FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+            userToUpdate.notificationRadius = @(self.miles);
+            [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
         }
     }];
 }
 
 -(void)sliderValueChanged:(UISlider *)slider {
 
+    self.sliderDidSlide = YES;
+    
     self.miles = slider.value * 50;
     
     if (slider.value == 0) {

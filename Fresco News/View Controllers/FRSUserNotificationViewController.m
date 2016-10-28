@@ -751,6 +751,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     assignmentCell.actionButton.tintColor = [UIColor blackColor];
     assignmentCell.titleLabel.text = [dictionary objectForKey:@"title"];
     assignmentCell.bodyLabel.text = [dictionary objectForKey:@"body"];
+    assignmentCell.bodyLabel.numberOfLines = 0;
 }
 
 

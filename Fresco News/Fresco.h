@@ -155,8 +155,11 @@ static NSString * const unblockUserEndpoint = @"user/%@/unblock";
 static NSString * const reportUserEndpoint = @"user/%@/report";
 
 
-// legacy user defaults
+// user defaults
 static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
+static NSString * const settingsUserNotificationRadius = @"notification-radius";
+static NSString * const settingsPaymentLastFour = @"payment-last-four";
+static NSString * const settingsUserNotificationToggle = @"notifications-enabled";
 
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
 

@@ -50,6 +50,7 @@
 @property (strong, nonatomic) FRSTableViewCell *facebookCell;
 @property (strong, nonatomic) UISwitch *twitterSwitch;
 @property (strong, nonatomic) UISwitch *facebookSwitch;
+@property (strong, nonatomic) FRSTableViewCell *notifCell;
 
 @end
 
@@ -79,6 +80,7 @@
     
     [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] reloadUser:^(id responseObject, NSError *error) {
         [self.tableView reloadData];
+        
     }];
 }
 
@@ -86,6 +88,7 @@
     [super viewDidAppear:animated];
     
     [self.tableView reloadData];
+
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -282,38 +285,38 @@
                 case 0:
                     [self checkNotificationStatus];
                     
-                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
-                        NSNumber *notifRadius = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
-                        
-                        if ([notifRadius integerValue] <= 1) {
-                            [cell configureAssignmentCellEnabled:NO];
-                        } else {
-                            [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
-                        }
-                    } else {
-                        [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
-                    }
-                    
-                    
+                    [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:settingsUserNotificationToggle]];
+   
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
-                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"] != nil) {
-                        NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
-                        CGFloat milesFloat = [miles floatValue];
-                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%.0f mi", milesFloat] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius] != nil) {
+//                        NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+//                        CGFloat milesFloat = [miles floatValue];
+                        
+                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%@ mi", [[[FRSAPIClient sharedClient] authenticatedUser] notificationRadius]] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     } else {
                         [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
                     break;
                 case 2: {
                     
-                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
+//                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
+//                    if (!card) {
+//                        card = @"";
+//                    }
+//                    
+//                    [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    
+                    
+                    NSString *card = [[NSUserDefaults standardUserDefaults] objectForKey:settingsPaymentLastFour];
                     if (!card) {
                         card = @"";
                     }
                     
                     [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    
+                    
                 }
                     break;
                 case 3: {
@@ -666,9 +669,9 @@
         UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
-            //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+            //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
         } else {
-            //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+            //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:settingsUserNotificationTogglet];
         }
     }
 }

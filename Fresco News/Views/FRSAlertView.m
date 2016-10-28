@@ -41,8 +41,6 @@
 @property (nonatomic) BOOL notificationsEnabled;
 @property (nonatomic) BOOL locationEnabled;
 
-@property (strong, nonatomic) CLLocationManager *locationManager;
-
 @property (strong, nonatomic) UIButton *locationButton;
 @property (strong, nonatomic) UIButton *locationButtonDisabled;
 @property (strong, nonatomic) UIButton *notificationButton;
@@ -272,7 +270,7 @@
 
 #pragma mark - Custom Alerts
 
--(instancetype)initPermissionsAlert {
+-(instancetype)initPermissionsAlert:(id)delegate {
     self = [super init];
     
     if (self) {
@@ -334,6 +332,8 @@
         
         [self addShadowAndClip];
         [self animateIn];
+        
+        self.locationManager.delegate = delegate;
     }
     return self;
 }
@@ -465,10 +465,10 @@
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
             self.notificationsEnabled = NO;
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
         } else {
             self.notificationsEnabled = YES;
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:settingsUserNotificationToggle];
         }
     }
 }

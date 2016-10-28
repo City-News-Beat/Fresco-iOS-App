@@ -587,6 +587,11 @@
     
     NSString *stringFromDate = [formatter stringFromDate:currentDate];
     _dateField.text = stringFromDate;
+    
+    self.saveIDInfoButton.userInteractionEnabled = true;
+    self.saveIDInfoButton.enabled = true;
+    [self.saveIDInfoButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+
 }
 
 
