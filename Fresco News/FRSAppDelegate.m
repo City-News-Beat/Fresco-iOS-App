@@ -152,13 +152,13 @@
     [[FRSAPIClient sharedClient] fetchSettings:^(id responseObject, NSError *error) {
         if ([[responseObject class] isSubclassOfClass:[NSArray class]]) {
             for (NSDictionary *setting in responseObject) {
-                if ([setting[@"type"] isEqualToString:@"dispatch-new-assignment"]) {
+                if ([setting[@"type"] isEqualToString:@"notify-user-dispatch-new-assignment"]) {
                     if (setting[@"options"] && ![setting[@"option"] isEqual:[NSNull null]]) {
                         if ([setting[@"options"][@"send_push"] boolValue]) {
-                            [[NSUserDefaults standardUserDefaults] setValue:@(TRUE) forKey:@"assignment-enabled"];
+                            [[NSUserDefaults standardUserDefaults] setValue:@(TRUE) forKey:settingsUserNotificationToggle];
                         }
                         else {
-                            [[NSUserDefaults standardUserDefaults] setValue:@(FALSE) forKey:@"assignment-enabled"];
+                            [[NSUserDefaults standardUserDefaults] setValue:@(FALSE) forKey:settingsUserNotificationToggle];
                         }
                         [[NSUserDefaults standardUserDefaults] synchronize];
                     }
