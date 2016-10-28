@@ -265,14 +265,14 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    @try {
-        [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
-        [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-    }
-    @catch (NSException *e) {
-        
-    }
+//    @try {
+//        [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
+//        [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
+//        [[NSNotificationCenter defaultCenter] removeObserver:self];
+//    }
+//    @catch (NSException *e) {
+    
+//    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -541,42 +541,42 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self.nextButton clipAsCircle];
     //    [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
     [self.nextButton.titleLabel setFont:[UIFont notaBoldWithSize: 15]];
-    [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+//    [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.nextButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
 }
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
-    if ([keyPath isEqualToString:@"highlighted"]){
-        
-        NSNumber *new = [change objectForKey:@"new"];
-        NSNumber *old = [change objectForKey:@"old"];
-        
-        if ([new isEqualToNumber:@1] && [old isEqualToNumber:@0]){ //Was unhighlighted and then became highlighted
-            if (object == self.nextButton)
-                self.previewBackgroundIV.alpha = 0.7;
-            else if (object == self.flashButton)
-                self.flashButton.alpha = 0.7;
-        }
-        else if ([new isEqualToNumber:@0] && [old isEqualToNumber:@1]){ //Was highlighted and now unhighlighted
-            if (object == self.nextButton)
-                self.previewBackgroundIV.alpha = 1.0;
-            else if (object == self.flashButton)
-                self.flashButton.alpha = 1.0;
-        }
-        else if ([new isEqualToNumber:@1] && [old isEqualToNumber:@1]){ //Was highlighted and is staying highlighted
-            if (object == self.nextButton)
-                self.previewBackgroundIV.alpha = 0.7;
-            else if (object == self.flashButton)
-                self.flashButton.alpha = 0.7;
-        }
-        else {
-            if (object == self.nextButton)
-                self.previewBackgroundIV.alpha = 1.0;
-            else if (object == self.flashButton)
-                self.flashButton.alpha = 1.0;
-        }
-    }
-}
+//-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
+//    if ([keyPath isEqualToString:@"highlighted"]){
+//        
+//        NSNumber *new = [change objectForKey:@"new"];
+//        NSNumber *old = [change objectForKey:@"old"];
+//        
+//        if ([new isEqualToNumber:@1] && [old isEqualToNumber:@0]){ //Was unhighlighted and then became highlighted
+//            if (object == self.nextButton)
+//                self.previewBackgroundIV.alpha = 0.7;
+//            else if (object == self.flashButton)
+//                self.flashButton.alpha = 0.7;
+//        }
+//        else if ([new isEqualToNumber:@0] && [old isEqualToNumber:@1]){ //Was highlighted and now unhighlighted
+//            if (object == self.nextButton)
+//                self.previewBackgroundIV.alpha = 1.0;
+//            else if (object == self.flashButton)
+//                self.flashButton.alpha = 1.0;
+//        }
+//        else if ([new isEqualToNumber:@1] && [old isEqualToNumber:@1]){ //Was highlighted and is staying highlighted
+//            if (object == self.nextButton)
+//                self.previewBackgroundIV.alpha = 0.7;
+//            else if (object == self.flashButton)
+//                self.flashButton.alpha = 0.7;
+//        }
+//        else {
+//            if (object == self.nextButton)
+//                self.previewBackgroundIV.alpha = 1.0;
+//            else if (object == self.flashButton)
+//                self.flashButton.alpha = 1.0;
+//        }
+//    }
+//}
 
 -(void)configureApertureButton{
     
@@ -839,7 +839,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self.flashButton addDropShadowWithColor:[UIColor frescoShadowColor] path:nil];
     self.flashButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.flashButton.clipsToBounds = YES;
-    [self.flashButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+//    [self.flashButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.bottomClearContainer addSubview:self.flashButton];
     [self.flashButton addTarget:self action:@selector(flashButtonTapped) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -1682,22 +1682,22 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)dealloc{
-    
-    @try {
-        [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
-        [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
-    }
-    @catch(NSException *e) {
-        @try {
-            [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
-        }
-        @catch (NSException *e) {
-            
-        }
-    }
-}
+//-(void)dealloc{
+//    
+//    @try {
+////        [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
+////        [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
+////        [[NSNotificationCenter defaultCenter] removeObserver:self];
+//    }
+//    @catch(NSException *e) {
+//        @try {
+//            [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
+//        }
+//        @catch (NSException *e) {
+//            
+//        }
+//    }
+//}
 
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
