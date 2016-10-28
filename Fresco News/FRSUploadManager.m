@@ -54,7 +54,7 @@
     if (asset.mediaType == PHAssetMediaTypeImage) {
         
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeDefault options:Nil resultHandler:^void(UIImage *image, NSDictionary *info) {
-        NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dadGirl"];
+        NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[[NSProcessInfo processInfo] globallyUniqueString] stringByAppendingString:@".jpeg"]];
         [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
         
         // write data to temp path (background thread, async)
@@ -62,7 +62,8 @@
         NSData *imageData = UIImageJPEGRepresentation(image, 1);
         [imageData writeToFile:tempPath atomically:NO];
         
-        // required to run upload on main thread
+        unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
+        totalFileSize += fileSize;
         
         NSArray *uploadMeta = @[tempPath, revisedToken, postID];
         
@@ -75,7 +76,7 @@
     else if (asset.mediaType == PHAssetMediaTypeVideo) {
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:Nil resultHandler:^(AVAsset * avasset, AVAudioMix * audioMix, NSDictionary * info) {
             // create temp location to move data (PHAsset can not be weakly linked to)
-            NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"dadBod"];
+            NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
             [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
             
             // set up resource from PHAsset
@@ -86,6 +87,9 @@
             // write data from PHAsset resource to temp location, send for upload
             [[PHAssetResourceManager defaultManager] writeDataForAssetResource:resource toFile:[NSURL fileURLWithPath:tempPath] options:options completionHandler:^(NSError * _Nullable error) {
                 
+                unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
+                totalFileSize += fileSize;
+
                 NSArray *uploadMeta = @[tempPath, revisedToken, postID];
                 [self.uploadMeta addObject:uploadMeta];
                 
@@ -134,8 +138,16 @@
 -(void)addUploadForPost:(NSString *)postID url:(NSString *)body postID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
     AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
     
+    
     AWSS3TransferManagerUploadRequest *upload = [AWSS3TransferManagerUploadRequest new];
-    NSLog(@"%@", body);
+    
+    if ([body containsString:@".jpeg"]) {
+        upload.contentType = @"image/jpeg";
+    }
+    else {
+        upload.contentType = @"video/mp4";
+    }
+    
     upload.body = [NSURL fileURLWithPath:body];
     upload.key = postID;
     upload.metadata = @{@"post_id":post};

@@ -13,6 +13,8 @@
 @interface FRSUploadManager : NSObject
 {
     int currentIndex;
+    unsigned long long totalFileSize;
+    unsigned long long uploadedFileSize;
 }
 
 +(id)sharedUploader;
