@@ -43,9 +43,8 @@
     
     if (uploads.count > 0) {
         for (FRSUpload *upload in uploads) {
-            
-            NSString *key = upload.uploadID;
-            [uploadsDictionary setObject:upload forKey:key];
+                NSString *key = upload.uploadID;
+                [uploadsDictionary setObject:upload forKey:key];
         }
         
         self.managedObjects = uploadsDictionary;
@@ -196,7 +195,7 @@
     
     NSString *revisedToken = [@"raw/" stringByAppendingString:token];
     
-    [self createUploadWithAsset:asset token:revisedToken post:postID];
+    [self createUploadWithAsset:asset token:token post:postID];
     
     if (asset.mediaType == PHAssetMediaTypeImage) {
         

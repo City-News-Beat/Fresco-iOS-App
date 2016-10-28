@@ -27,8 +27,8 @@
     //CHECK FOR RELEASE data validation especially favicon
     
 
-    self.imageStringURL = [dictionary[@"favicon"] isEqual:[NSNull null]] ? @"" : dictionary[@"favicon"];
-    self.articleStringURL = dictionary[@"link"];
+    self.imageStringURL = (dictionary[@"favicon"] && [dictionary[@"favicon"] isEqual:[NSNull null]]) ? @"" : dictionary[@"favicon"];
+    self.articleStringURL = (dictionary[@"link"] && [dictionary[@"link"] isEqual:[NSNull null]]) ?dictionary[@"link"] : @"";
     
     if (dictionary[@"title"] && ![dictionary[@"title"] isEqual:[NSNull null]]) {
         self.title = dictionary[@"title"];
@@ -37,8 +37,8 @@
         self.title = self.articleStringURL;
     }
     
-    self.source = dictionary[@"source"];
-    self.uid = dictionary[@"_id"];
+    self.source = (dictionary[@"source"] && [dictionary[@"source"] isEqual:[NSNull null]]) ? dictionary[@"source"] : @"";
+    self.uid = (dictionary[@"source"] && [dictionary[@"source"] isEqual:[NSNull null]]) ? dictionary[@"id"] : @"";
     self.createdDate = [FRSDateFormatter dateFromEpochTime:dictionary[@"time_created"] milliseconds:YES];
 }
 
