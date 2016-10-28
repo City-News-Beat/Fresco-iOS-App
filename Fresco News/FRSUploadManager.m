@@ -43,6 +43,19 @@
     
     if (uploads.count > 0) {
         for (FRSUpload *upload in uploads) {
+            
+            NSTimeInterval sinceStart = [upload.creationDate timeIntervalSinceNow];
+            sinceStart *= -1;
+            
+            if (sinceStart >= (24 * 60 * 60)) {
+                
+                [self.context performBlock:^{
+                    upload.completed = @(TRUE);
+                    [self.context save:Nil];
+                }];
+                
+                continue;
+            }
                 NSString *key = upload.uploadID;
                 [uploadsDictionary setObject:upload forKey:key];
         }
