@@ -61,6 +61,8 @@
 @property (strong, nonatomic) UIButton *TOSCheckBoxButton;
 @property BOOL TOSAccepted;
 @property (strong, nonatomic) FRSSetupProfileViewController *setupProfileVC;
+@property CGFloat latitude;
+@property CGFloat longitude;
 
 @end
 
@@ -133,6 +135,7 @@
         [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
     }
     
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateUserLocationOnMap) userInfo:nil repeats:YES];
 }
 
 -(void)back {
@@ -190,6 +193,26 @@
     [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
 }
 
+-(void)updateUserLocationOnMap {
+    
+    if (self.latitude && self.longitude) {
+        return;
+    }
+    
+    self.latitude  = [FRSLocator sharedLocator].currentLocation.coordinate.latitude;
+    self.longitude = [FRSLocator sharedLocator].currentLocation.coordinate.longitude;
+    
+    self.mapView.centerCoordinate = CLLocationCoordinate2DMake(self.latitude, self.longitude);
+    
+    MKCoordinateRegion region;
+    region.center.latitude = self.latitude;
+    region.center.longitude = self.longitude;
+    region.span.latitudeDelta = 0.015;
+    region.span.longitudeDelta = 0.015;
+    self.mapView.region = region;
+    
+    [self zoomToCoordinates:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.latitude] lon:[NSNumber numberWithDouble:[[FRSLocator sharedLocator] currentLocation].coordinate.longitude] withRadius:@(self.miles) withAnimation:YES];
+}
 
 
 -(void)addNotifications {
