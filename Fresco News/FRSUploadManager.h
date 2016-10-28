@@ -15,6 +15,7 @@
     int currentIndex;
     unsigned long long totalFileSize;
     unsigned long long uploadedFileSize;
+    float lastProgress;
 }
 
 +(id)sharedUploader;

@@ -106,9 +106,15 @@
 
 -(void)restart {
 
-    if (currentIndex >= self.uploadMeta.count) {
+    if (currentIndex > self.uploadMeta.count) {
         // complete
+        currentIndex = 0;
+        totalFileSize = 0;
+        uploadedFileSize = 0;
+        self.uploadMeta = [[NSMutableArray alloc] init];
+        
         NSLog(@"UPLOAD PROCESS COMPLETE");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
         
         return;
     }
@@ -153,8 +159,7 @@
     upload.metadata = @{@"post_id":post};
     upload.bucket = awsBucket;
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
-        float progress = (totalBytesSent * 1.0) / (totalBytesExpectedToSend * 1.0);
-        NSLog(@"PROGRESS: %f", progress);
+        [self updateProgress:bytesSent];
     };
     __weak typeof (self) weakSelf = self;
     
@@ -173,6 +178,15 @@
         
         return nil;
     }];
+}
+
+-(void)updateProgress:(int64_t)bytes {
+    uploadedFileSize+= bytes;
+    float progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
+    NSLog(@"PROG: %f", progress);
+    if (progress - lastProgress >= .03) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"progress", @"percentage":@(progress)}];
+    }
 }
 
 -(void)uploadDidErrorWithError:(NSError *)error {
