@@ -42,13 +42,7 @@
     NSMutableDictionary *uploadsDictionary = [[NSMutableDictionary alloc] init];
     
     if (uploads.count > 0) {
-        int i = 0;
         for (FRSUpload *upload in uploads) {
-            i++;
-            
-            if (i > 9) {
-                return;
-            }
             
             NSString *key = upload.uploadID;
             [uploadsDictionary setObject:upload forKey:key];
