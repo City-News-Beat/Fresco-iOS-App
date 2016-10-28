@@ -31,7 +31,8 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) FRSAlertView      *alert;
 
-@property CGFloat  miles;
+@property CGFloat miles;
+@property BOOL sliderDidSlide;
 
 @end
 
@@ -50,7 +51,9 @@
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
+    //if (self.miles) {
+    //    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
+    //}
 }
 
 
@@ -164,6 +167,8 @@
 
 -(void)sliderValueChanged:(UISlider *)slider {
 
+    self.sliderDidSlide = YES;
+    
     self.miles = slider.value * 50;
     
     if (slider.value == 0) {
