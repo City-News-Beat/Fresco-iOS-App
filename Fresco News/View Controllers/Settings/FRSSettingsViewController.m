@@ -297,12 +297,22 @@
                     break;
                 case 2: {
                     
-                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
+//                    NSString *card = (NSString *)[[[FRSAPIClient sharedClient] authenticatedUser] valueForKey:@"creditCardDigits"];
+//                    if (!card) {
+//                        card = @"";
+//                    }
+//                    
+//                    [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    
+                    
+                    NSString *card = [[NSUserDefaults standardUserDefaults] objectForKey:settingsPaymentLastFour];
                     if (!card) {
                         card = @"";
                     }
                     
                     [cell configureDefaultCellWithTitle:@"Payment method" andCarret:YES andRightAlignedTitle:(card) ? card : @"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    
+                    
                 }
                     break;
                 case 3: {

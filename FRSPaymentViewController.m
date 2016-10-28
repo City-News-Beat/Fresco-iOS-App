@@ -67,7 +67,6 @@ static NSString *addPaymentCell = @"addPaymentCell";
         __block NSDictionary *payment = self.payments[indexPath.row];
         cell.paymentTitleLabel.text = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
         cell.payment = self.payments[indexPath.row];
-        
         if ([payment[@"active"] boolValue]) {
             [cell setActive:TRUE];
         }
@@ -97,6 +96,10 @@ static NSString *addPaymentCell = @"addPaymentCell";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    NSDictionary *payment = [self.payments objectAtIndex:indexPath.row];
+    NSString *digits = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
+    [[NSUserDefaults standardUserDefaults] setObject:digits forKey:settingsPaymentLastFour];
+    
     if (indexPath.section == 1) {
         FRSDebitCardViewController *debit = [[FRSDebitCardViewController alloc] init];
         [self.navigationController pushViewController:debit animated:YES];
@@ -111,7 +114,9 @@ static NSString *addPaymentCell = @"addPaymentCell";
         NSString *digits = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
         [[[FRSAPIClient sharedClient] authenticatedUser] setValue:digits forKey:@"creditCardDigits"];
         [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
-
+        
+        [[NSUserDefaults standardUserDefaults] setObject:digits forKey:settingsPaymentLastFour];
+        
         [[FRSAPIClient sharedClient] makePaymentActive:paymentID completion:^(id responseObject, NSError *error) {
             if (!error) {
                 [self resetOtherPayments:paymentID];
@@ -151,6 +156,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
         
         NSLog(@"PAYMENTS %@", responseObject);
         self.payments = responseObject;
+
         
         if (self.payments.count > 1) {
             [self.navigationItem setTitle:@"PAYMENT METHODS"];
