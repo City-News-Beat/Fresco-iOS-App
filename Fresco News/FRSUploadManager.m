@@ -189,6 +189,7 @@
         upload.key = token;
         upload.uploadID = post;
         upload.completed = @(FALSE);
+        upload.creationDate = [NSDate date];
         [self.context save:Nil];
     }];
     

@@ -26,8 +26,8 @@
  */
 
 static NSString * const awsBucket = @"com.fresconews.dev";
-static NSString * const awsAccessKey = @"AKIAIFLQKVYXPMMMF7CQ";
-static NSString * const awsSecretKey = @"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";
+static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
+static NSString * const awsSecretKey = @"maStuGRQsr2xL0dyHjz6k127mGVRE2uMwESo7T";
 #define AWS_REGION AWSRegionUSEast1
 
 // mixpanel
@@ -59,7 +59,7 @@ static NSString * const serviceName = @"frescoNewsService3";
 static NSString * const FRSUploadNotification = @"FRSUploadUpdateNotification";
 
 // base URLS
-static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
+static NSString * const baseURL = @"https://api.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 
