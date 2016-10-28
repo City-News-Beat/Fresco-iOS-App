@@ -17,10 +17,9 @@
 #import "FRSPlayer.h"
 #import "FRSAPIClient.h"
 #import <Photos/Photos.h>
-#import "FRSUploadTask.h"
-#import "FRSMultipartTask.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAppDelegate.h"
+#import "FRSUploadManager.h"
 
 @interface FRSUploadViewController () {
     NSMutableArray *dictionaryRepresentations;
@@ -1138,8 +1137,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
     //Next button action
 -(void)send {
+    
+    /* if authenticated */
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
-        
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
         [self.navigationController pushViewController:onboardVC animated:NO];
         return;
@@ -1159,10 +1159,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self facebook:self.captionTextView.text];
 
     }
-    
-//    if (self.postToTwitter) {
-//        [self tweet:@"test"]; //does not work, fix before release
-//    }
     
     if (self.postAnon) {
         NSLog(@"Post anonymously");
@@ -1249,12 +1245,18 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)moveToUpload:(NSDictionary *)postData {
-    if (!_uploadManager) {
-        _uploadManager = [[FRSUploadManager alloc] initWithGallery:postData assets:_content];
-        _uploadManager.contentSize = contentSize;
-    }
-    else {
-        NSLog(@"NO UPLOAD: ALREADY STARTED");
+    /* upload started */
+    
+    // instantiate upload process
+    // start upload process
+    NSArray *posts = postData[@"posts_new"];
+    
+    int i = 0;
+    for (PHAsset *asset in self.content) {
+        NSDictionary *post = posts[i];
+        NSString *key = post[@"key"];
+        [[FRSUploadManager sharedUploader] addAsset:asset withToken:key withPostID:post[@"post_id"]];
+        i++;
     }
     
     [self.carouselCell pausePlayer];

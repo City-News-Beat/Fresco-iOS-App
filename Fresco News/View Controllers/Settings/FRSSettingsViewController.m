@@ -96,8 +96,10 @@
 }
 
 -(void)popViewController {
-    [super popViewController];
-    [self showTabBarAnimated:YES];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+//    return;
+//    [super popViewController];
+//    [self showTabBarAnimated:YES];
 }
 
 -(void)configureTableView {

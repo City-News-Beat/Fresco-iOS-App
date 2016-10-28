@@ -21,6 +21,15 @@
 #define NSLog //
 #endif
 
+/*
+    AWS
+ */
+
+static NSString * const awsBucket = @"com.fresconews.dev";
+static NSString * const awsAccessKey = @"AKIAIFLQKVYXPMMMF7CQ";
+static NSString * const awsSecretKey = @"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";
+#define AWS_REGION AWSRegionUSEast1
+
 // mixpanel
 //static NSString * const mixPanelToken = @"4a01dc9d6ffde669d683102db23c8bcd";
 static NSString * const mixPanelToken = @"0e6b9d8ade7a9f56bf6ddae4b0374148";
@@ -50,7 +59,7 @@ static NSString * const serviceName = @"frescoNewsService3";
 static NSString * const FRSUploadNotification = @"FRSUploadUpdateNotification";
 
 // base URLS
-static NSString * const baseURL = @"https://api.fresconews.com/v2/";
+static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 

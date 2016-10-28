@@ -350,14 +350,12 @@
     FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
     [tabBarController updateUserIcon];
     
-    if (pop) {
-        [self popViewController];
-    }
     
     [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
     FRSTabBarController *tab = (FRSTabBarController *)self.tabBarController;
     [tab updateUserIcon];
     [FRSTracker track:@"Logouts"];
+    [self popViewController];
 }
 
 #pragma mark - Smooch

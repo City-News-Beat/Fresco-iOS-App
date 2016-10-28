@@ -2,46 +2,32 @@
 //  FRSUploadManager.h
 //  Fresco
 //
-//  Created by Philip Bernstein on 7/14/16.
+//  Created by Philip Bernstein on 10/27/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <Photos/Photos.h>
-#import "FRSMultipartTask.h"
-#import "FRSUploadTask.h"
+#import "Fresco.h"
 
-static int const maxConcurrent = 5;
 
 @interface FRSUploadManager : NSObject
 {
-    __weak id weakSelf;
-    unsigned long long totalBytesSent;
-    BOOL invalidated;
+    int currentIndex;
+    unsigned long long totalFileSize;
+    unsigned long long uploadedFileSize;
+    float lastProgress;
     int toComplete;
-    int isComplete;
-    BOOL isStarted;
-    BOOL isRetry;
-    BOOL currentIndex;
-    BOOL isRunning;
-    BOOL didFinish;
-    unsigned long long totalSize;
-    BOOL hasRetried;
+    int completed;
+    BOOL isFromFresh;
 }
--(instancetype)initWithGallery:(NSDictionary *)gallery assets:(NSArray *)assets;
--(void)checkAndStart;
-@property (nonatomic, retain) NSMutableArray *tasks;
-@property (nonatomic, retain) NSMutableArray *currentTasks;
-@property (nonatomic, retain) NSMutableArray *etags;
-@property (nonatomic, retain) NSDictionary *gallery;
-@property (nonatomic, retain) NSArray *assets;
-@property (nonatomic, retain) NSArray *posts;
-@property (nonatomic) BOOL isRunning;
-@property (nonatomic, retain) NSMutableArray *managedUploads;
-@property unsigned long long contentSize;
--(void)addTaskForImageAsset:(PHAsset *)asset url:(NSURL *)url post:(NSDictionary *)post;
--(void)addMultipartTaskForAsset:(PHAsset *)asset urls:(NSArray *)urls post:(NSDictionary *)post;
--(void)start;
--(void)pause;
--(void)resume;
+
++(id)sharedUploader;
+-(void)checkCachedUploads;
+-(void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
+@property (nonatomic, retain) NSMutableArray *currentUploads;
+@property (nonatomic, assign) int completedUploads;
+@property (nonatomic, assign) int uploadsToComplete;
+@property (nonatomic, retain) NSMutableArray *uploadMeta;
+@property (nonatomic, weak) NSManagedObjectContext *context;
+@property (nonatomic, retain) NSMutableDictionary *managedObjects;
 @end
