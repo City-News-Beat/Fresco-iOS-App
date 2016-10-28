@@ -12,6 +12,7 @@
 #import "FRSUpload+CoreDataProperties.h"
 #import "Fresco.h"
 #import "FRSAppDelegate.h"
+#import "FRSTracker.h"
 
 @implementation FRSUploadManager
 
@@ -67,6 +68,14 @@
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     self.context = delegate.managedObjectContext;
+    
+    [self subscribeToEvents];
+}
+
+-(void)subscribeToEvents {
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        [self retryUpload];
+    }];
 }
 
 -(void)createUploadWithAsset:(PHAsset *)asset token:(NSString *)token post:(NSString *)post {
@@ -242,12 +251,10 @@
 }
 
 -(void)uploadDidErrorWithError:(NSError *)error {
-    if (!error) {
-        
+    if (error.localizedDescription) {
+        [FRSTracker track:@"Upload Failure" parameters:@{@"error_message":error.localizedDescription}];
     }
-    else {
-
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{@"type":@"failure"}];
 }
 
 -(void)taskDidComplete:(AWSTask *)task {
@@ -256,6 +263,10 @@
     if (eTag == nil) {
         [self uploadDidErrorWithError:Nil];
     }
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
