@@ -106,7 +106,7 @@
 
 -(void)restart {
     
-    if (currentIndex+1 == self.uploadMeta.count) {
+    if (currentIndex+1 == self.uploadMeta.count && self.uploadMeta.count > 0) {
         // complete
         NSLog(@"UPLOAD PROCESS COMPLETE");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
