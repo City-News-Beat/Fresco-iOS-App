@@ -282,15 +282,16 @@
                 case 0:
                     [self checkNotificationStatus];
                     
-                    [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                    [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:settingsUserNotificationToggle]];
    
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
                 case 1:
                     if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius] != nil) {
-                        NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
-                        CGFloat milesFloat = [miles floatValue];
-                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%.0f mi", milesFloat] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+//                        NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
+//                        CGFloat milesFloat = [miles floatValue];
+                        
+                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%@ mi", [[[FRSAPIClient sharedClient] authenticatedUser] notificationRadius]] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     } else {
                         [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
@@ -665,9 +666,9 @@
         UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
-            //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+            //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
         } else {
-            //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+            //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:settingsUserNotificationTogglet];
         }
     }
 }

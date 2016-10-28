@@ -185,6 +185,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
     
+    FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+    userToUpdate.notificationRadius = @(self.miles);
+    [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
 }
 
 
@@ -1780,10 +1783,10 @@
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
             self.notificationsEnabled = YES;
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
         } else {
             self.notificationsEnabled = NO;
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:settingsUserNotificationToggle];
         }
     }
 }

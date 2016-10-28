@@ -869,7 +869,7 @@
         [[FRSAPIClient sharedClient] post:settingsUpdateEndpoint withParameters:@{@"notify-user-dispatch-new-assignment": str} completion:^(id responseObject, NSError *error) {
             if (responseObject && !error) {
                 state = YES;
-                [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
+                [[NSUserDefaults standardUserDefaults] setBool:state forKey:settingsUserNotificationToggle];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
             }
@@ -887,7 +887,7 @@
         [[FRSAPIClient sharedClient] post:settingsUpdateEndpoint withParameters:@{@"notify-user-dispatch-new-assignment": str} completion:^(id responseObject, NSError *error) {
             if (responseObject && !error) {
                 state = NO;
-                [[NSUserDefaults standardUserDefaults] setBool:state forKey:@"notifications-enabled"];
+                [[NSUserDefaults standardUserDefaults] setBool:state forKey:settingsUserNotificationToggle];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
             }
@@ -904,10 +904,10 @@
         UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
             self.notificationsEnabled = NO;
         } else {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:settingsUserNotificationToggle];
             self.notificationsEnabled = YES;
         }
     }
@@ -927,7 +927,7 @@
 
 -(void)requestNotifications {
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:settingsUserNotificationToggle]) {
         return;
     }
     

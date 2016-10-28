@@ -257,7 +257,7 @@
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
     
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:settingsUserNotificationRadius];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
     
     [self popViewController];
     

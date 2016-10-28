@@ -465,10 +465,10 @@
         
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
             self.notificationsEnabled = NO;
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
         } else {
             self.notificationsEnabled = YES;
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:settingsUserNotificationToggle];
         }
     }
 }

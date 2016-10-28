@@ -296,6 +296,7 @@
         NSString *radius = [responseObject valueForKey:@"radius"];
         if ([self isValue:radius]) {
             [[NSUserDefaults standardUserDefaults] setValue:radius forKey:settingsUserNotificationRadius];
+            authenticatedUser.notificationRadius = @([radius floatValue]);
         }
         
         BOOL hasSavedFields = FALSE;

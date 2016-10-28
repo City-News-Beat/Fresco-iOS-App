@@ -161,6 +161,9 @@
         if (responseObject) {
             [self popViewController];
             [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
+            FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+            userToUpdate.notificationRadius = @(self.miles);
+            [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
         }
     }];
 }
