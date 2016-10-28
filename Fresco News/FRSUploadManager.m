@@ -9,8 +9,9 @@
 #import "FRSUploadManager.h"
 #import <AWSCore/AWSCore.h>
 #import <AWSS3/AWSS3.h>
-
+#import "FRSUpload+CoreDataProperties.h"
 #import "Fresco.h"
+#import "FRSAppDelegate.h"
 
 @implementation FRSUploadManager
 
@@ -23,6 +24,27 @@
     });
     
     return sharedUploader;
+}
+
+-(void)retryUpload {
+    currentIndex = 0;
+    totalFileSize = 0;
+    uploadedFileSize = 0;
+    lastProgress = 0;
+    toComplete = 0;
+    completed = 0;
+    self.uploadMeta = [[NSMutableArray alloc] init];
+    
+    for (FRSUpload *upload in self.managedObjects) {
+        if ([upload.completed boolValue] != TRUE) {
+            // key = TOKEN uploadID = POST resourceURL = ASSEt
+            if (upload.key && upload.uploadID && upload.resourceURL) {
+                PHFetchResult *assetArray = [PHAsset fetchAssetsWithLocalIdentifiers:@[upload.resourceURL] options:nil];
+                PHAsset *asset = [assetArray firstObject];
+                [self addAsset:asset withToken:upload.key withPostID:upload.uploadID];
+            }
+        }
+    }
 }
 
 -(instancetype)init {
@@ -42,16 +64,41 @@
     self.uploadMeta = [[NSMutableArray alloc] init];
     [self startAWS];
     currentIndex = 0;
+    
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.context = delegate.managedObjectContext;
 }
 
+-(void)createUploadWithAsset:(PHAsset *)asset token:(NSString *)token post:(NSString *)post {
+    
+    FRSUpload *upload = [FRSUpload MR_createEntityInContext:self.context];
+    
+    [self.context performBlock:^{
+        upload.resourceURL = asset.localIdentifier;
+        upload.key = token;
+        upload.uploadID = post;
+        upload.completed = @(FALSE);
+        [self.context save:Nil];
+    }];
+    
+    if (!self.managedObjects) {
+        self.managedObjects = [[NSMutableDictionary alloc] init];
+    }
+    
+    [self.managedObjects setObject:upload forKey:post];
+}
 
 -(void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID {
     if (!asset || !token) {
         return;
     }
     
+    toComplete++;
+    
     NSString *revisedToken = [@"raw/" stringByAppendingString:token];
-
+    
+    [self createUploadWithAsset:asset token:revisedToken post:postID];
+    
     if (asset.mediaType == PHAssetMediaTypeImage) {
         
     [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeDefault options:Nil resultHandler:^void(UIImage *image, NSDictionary *info) {
@@ -106,10 +153,14 @@
 
 -(void)restart {
     
-    if (currentIndex+1 == self.uploadMeta.count && self.uploadMeta.count > 0) {
+    if (completed == toComplete) {
         // complete
         NSLog(@"UPLOAD PROCESS COMPLETE");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
+        toComplete = 0;
+        completed = 0;
+        currentIndex = 0;
+        self.uploadMeta = [[NSMutableArray alloc] init];
         
         return;
     }
@@ -162,6 +213,17 @@
         }
         
         if (task.result) {
+            
+            FRSUpload *upload = [self.managedObjects objectForKey:post];
+            
+            if (upload) {
+                [self.context performBlock:^{
+                    upload.completed = @(TRUE);
+                    [self.context save:Nil];
+                }];
+            }
+            
+            completed++;
             NSLog(@"UPLOAD COMPLETE");
             currentIndex++;
             [self taskDidComplete:task];
@@ -176,9 +238,7 @@
     uploadedFileSize+= bytes;
     float progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
     NSLog(@"PROG: %f", progress);
-    if (progress - lastProgress >= .03) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"progress", @"percentage":@(progress)}];
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"progress", @"percentage":@(progress)}];
 }
 
 -(void)uploadDidErrorWithError:(NSError *)error {
@@ -186,7 +246,7 @@
         
     }
     else {
-        
+
     }
 }
 

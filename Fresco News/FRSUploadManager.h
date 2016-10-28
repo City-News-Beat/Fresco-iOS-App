@@ -16,6 +16,9 @@
     unsigned long long totalFileSize;
     unsigned long long uploadedFileSize;
     float lastProgress;
+    int toComplete;
+    int completed;
+    BOOL isFromFresh;
 }
 
 +(id)sharedUploader;
@@ -24,4 +27,6 @@
 @property (nonatomic, assign) int completedUploads;
 @property (nonatomic, assign) int uploadsToComplete;
 @property (nonatomic, retain) NSMutableArray *uploadMeta;
+@property (nonatomic, weak) NSManagedObjectContext *context;
+@property (nonatomic, retain) NSMutableDictionary *managedObjects;
 @end
