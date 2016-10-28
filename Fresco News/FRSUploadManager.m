@@ -13,6 +13,7 @@
 #import "Fresco.h"
 #import "FRSAppDelegate.h"
 #import "FRSTracker.h"
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
 
@@ -27,6 +28,79 @@
     return sharedUploader;
 }
 
+-(void)checkCachedUploads {
+    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"completed", @(FALSE)];
+    NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUpload"];
+    signedInRequest.predicate = signedInPredicate;
+    
+    // get context from app deleegate (hate this dependency but no need to re-write rn to move up)
+    NSManagedObjectContext *context = [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext]; // temp (replace with internal or above method
+    
+    // no need to sort response, because theoretically there is 1
+    NSError *fetchError;
+    NSArray *uploads = [context executeFetchRequest:signedInRequest error:&fetchError];
+    NSMutableDictionary *uploadsDictionary = [[NSMutableDictionary alloc] init];
+    
+    if (uploads.count > 0) {
+        int i = 0;
+        for (FRSUpload *upload in uploads) {
+            i++;
+            
+            if (i > 9) {
+                return;
+            }
+            
+            NSString *key = upload.uploadID;
+            [uploadsDictionary setObject:upload forKey:key];
+        }
+        
+        self.managedObjects = uploadsDictionary;
+        [self retryUpload];
+    }
+}
+
+-(void)appWillResignActive {
+    
+    if (completed == toComplete) {
+        return;
+    }
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) == FALSE) {
+        UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+        localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:3];
+        localNotification.alertBody = @"Wait, we're almost done! Come back to Fresco to finish uploading your gallery.";
+        localNotification.timeZone = [NSTimeZone defaultTimeZone];
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        
+        return;
+    }
+    
+    UNMutableNotificationContent *objNotificationContent = [[UNMutableNotificationContent alloc] init];
+    objNotificationContent.title = [NSString localizedUserNotificationStringForKey:@"Come back and finish your upload!" arguments:nil];
+    objNotificationContent.body = [NSString localizedUserNotificationStringForKey:@"Wait, we're almost done! Come back to Fresco to finish uploading your gallery."
+                                                                        arguments:nil];
+    objNotificationContent.sound = [UNNotificationSound defaultSound];
+    objNotificationContent.userInfo = @{@"type":@"trigger-upload-notification"};
+    
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[NSDate date]];
+    components.second += 3;
+    UNCalendarNotificationTrigger *trigger = [UNCalendarNotificationTrigger
+                                              triggerWithDateMatchingComponents:components repeats:FALSE];
+    
+    
+    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"com.fresconews.Fresco"
+                                                                          content:objNotificationContent trigger:trigger];
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+        if (!error) {
+            NSLog(@"Local Notification succeeded");
+        }
+        else {
+            NSLog(@"Local Notification failed");
+        }
+    }];
+}
+
 -(void)retryUpload {
     currentIndex = 0;
     totalFileSize = 0;
@@ -36,7 +110,8 @@
     completed = 0;
     self.uploadMeta = [[NSMutableArray alloc] init];
     
-    for (FRSUpload *upload in self.managedObjects) {
+    for (NSString *uploadPost in [self.managedObjects allKeys]) {
+        FRSUpload *upload = [self.managedObjects objectForKey:uploadPost];
         if ([upload.completed boolValue] != TRUE) {
             // key = TOKEN uploadID = POST resourceURL = ASSEt
             if (upload.key && upload.uploadID && upload.resourceURL) {
@@ -44,6 +119,11 @@
                 PHAsset *asset = [assetArray firstObject];
                 [self addAsset:asset withToken:upload.key withPostID:upload.uploadID];
             }
+            
+            [self.context performBlock:^{
+                upload.completed = @(TRUE);
+                [self.context save:Nil];
+            }];
         }
     }
 }
@@ -70,12 +150,28 @@
     self.context = delegate.managedObjectContext;
     
     [self subscribeToEvents];
+    
 }
 
 -(void)subscribeToEvents {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
+
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
         [self retryUpload];
     }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSDismissUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        for (NSString *uploadPost in [self.managedObjects allKeys]) {
+            FRSUpload *upload = [self.managedObjects objectForKey:uploadPost];
+            
+            [self.context performBlock:^{
+                upload.completed = @(TRUE);
+                [self.context save:Nil];
+            }];
+        }
+
+    }];
+    
 }
 
 -(void)createUploadWithAsset:(PHAsset *)asset token:(NSString *)token post:(NSString *)post {
@@ -166,11 +262,13 @@
         // complete
         NSLog(@"UPLOAD PROCESS COMPLETE");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{@"type":@"completion"}];
+        currentIndex = 0;
+        totalFileSize = 0;
+        uploadedFileSize = 0;
+        lastProgress = 0;
         toComplete = 0;
         completed = 0;
-        currentIndex = 0;
         self.uploadMeta = [[NSMutableArray alloc] init];
-        
         return;
     }
     
@@ -218,6 +316,7 @@
     [[transferManager upload:upload] continueWithBlock:^id(AWSTask *task) {
         
         if (task.error) {
+            NSLog(@"ERR: %@", task.error);
             [weakSelf uploadDidErrorWithError:task.error];
         }
         
@@ -258,11 +357,11 @@
 }
 
 -(void)taskDidComplete:(AWSTask *)task {
-    NSString *eTag = task.aws_properties[@"ETag"];
-    
-    if (eTag == nil) {
-        [self uploadDidErrorWithError:Nil];
-    }
+//    NSString *eTag = task.aws_properties[@"ETag"];
+//    
+//    if (eTag == nil) {
+//        [self uploadDidErrorWithError:Nil];
+//    }
 }
 
 -(void)dealloc {

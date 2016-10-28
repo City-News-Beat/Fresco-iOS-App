@@ -22,6 +22,7 @@
 }
 
 +(id)sharedUploader;
+-(void)checkCachedUploads;
 -(void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
 @property (nonatomic, retain) NSMutableArray *currentUploads;
 @property (nonatomic, assign) int completedUploads;

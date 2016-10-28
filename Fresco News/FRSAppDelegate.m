@@ -35,6 +35,7 @@
 #import "FRSIdentityViewController.h"
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 #import "FRSStoriesViewController.h"
+#import "FRSUploadManager.h"
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -102,7 +103,8 @@
     
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-
+    [[FRSUploadManager sharedUploader] checkCachedUploads];
+    
     return YES;
 }
 
