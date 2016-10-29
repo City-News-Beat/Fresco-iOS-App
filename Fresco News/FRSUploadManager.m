@@ -189,6 +189,10 @@
         upload.key = token;
         upload.uploadID = post;
         upload.completed = @(FALSE);
+<<<<<<< HEAD
+=======
+        upload.creationDate = [NSDate date];
+>>>>>>> 3.0-phil
         [self.context save:Nil];
     }];
     

@@ -39,7 +39,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
+<<<<<<< HEAD
 	<string>3.0.5</string>
+=======
+	<string>3.0.6</string>
+>>>>>>> 3.0-phil
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -69,7 +73,11 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
+<<<<<<< HEAD
 	<string>9</string>
+=======
+	<string>11</string>
+>>>>>>> 3.0-phil
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
