@@ -187,7 +187,8 @@
 #pragma mark - Actions
 
 -(void)share {
-    NSLog(@"share");
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[[NSURL URLWithString:@"https://itunes.apple.com/us/app/fresco-be-a-part-of-the-news/id872040692?mt=8"]] applicationActivities:nil];
+    [self.view.window.rootViewController presentViewController:activityController animated:YES completion:nil];
 }
 
 -(void)twitter {
