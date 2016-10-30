@@ -939,6 +939,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    if (tableView == self.articlesTV) {
+        FRSArticle *article = [self.orderedArticles objectAtIndex:indexPath.row];
+        NSURL *url = [NSURL URLWithString:article.articleStringURL];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url];
+        }
+    }
 }
 
 #pragma mark - Comments View Delegate
