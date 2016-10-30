@@ -242,6 +242,7 @@
 		D4E76A301CB423F600AC7A45 /* FRSTrimTool.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E76A2F1CB423F600AC7A45 /* FRSTrimTool.m */; };
 		D4EE64251D830DD60034B5EA /* FRSReadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4EE64231D830DD60034B5EA /* FRSReadMoreCell.m */; };
 		D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4EE64241D830DD60034B5EA /* FRSReadMoreCell.xib */; };
+		D4F23AC91DC64BF000B0B6DF /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4F23AC81DC64BF000B0B6DF /* CoreTelephony.framework */; };
 		D4F91A491C8B51500078BF15 /* FRSAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F91A481C8B51500078BF15 /* FRSAPIClient.m */; };
 		E65C24591AE6E328001A5208 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E65C24581AE6E328001A5208 /* MapKit.framework */; };
 		E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */ = {isa = PBXBuildFile; fileRef = E70F4BDF1B9F920D00A765E0 /* WKImagePath.m */; };
@@ -719,6 +720,7 @@
 		D4EE64221D830DD60034B5EA /* FRSReadMoreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSReadMoreCell.h; sourceTree = "<group>"; };
 		D4EE64231D830DD60034B5EA /* FRSReadMoreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSReadMoreCell.m; sourceTree = "<group>"; };
 		D4EE64241D830DD60034B5EA /* FRSReadMoreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSReadMoreCell.xib; sourceTree = "<group>"; };
+		D4F23AC81DC64BF000B0B6DF /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		D4F91A461C8B508A0078BF15 /* Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fresco.h; sourceTree = "<group>"; };
 		D4F91A471C8B51500078BF15 /* FRSAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSAPIClient.h; sourceTree = "<group>"; };
 		D4F91A481C8B51500078BF15 /* FRSAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSAPIClient.m; sourceTree = "<group>"; };
@@ -760,6 +762,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4F23AC91DC64BF000B0B6DF /* CoreTelephony.framework in Frameworks */,
 				D42A138F1D89A451008909E6 /* Mixpanel.framework in Frameworks */,
 				D4DBF1951CB468C90098BDC0 /* CoreMedia.framework in Frameworks */,
 				D418E34E1CCC1C360003B080 /* Twitter.framework in Frameworks */,
@@ -936,6 +939,7 @@
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D4F23AC81DC64BF000B0B6DF /* CoreTelephony.framework */,
 				D42A138E1D89A451008909E6 /* Mixpanel.framework */,
 				D418E3571CCC1DE50003B080 /* AFNetworking.framework */,
 				D418E34D1CCC1C360003B080 /* Twitter.framework */,
