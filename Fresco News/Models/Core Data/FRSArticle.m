@@ -31,7 +31,7 @@
     }
 
     if (dictionary[@"link"] && ![dictionary[@"link"] isEqual:[NSNull null]]) {
-        self.articleStringURL = (dictionary[@"link"] && [dictionary[@"link"] isEqual:[NSNull null]]) ?dictionary[@"link"] : @"";
+        self.articleStringURL = dictionary[@"link"];
     }
     
     if (dictionary[@"title"] && ![dictionary[@"title"] isEqual:[NSNull null]]) {
