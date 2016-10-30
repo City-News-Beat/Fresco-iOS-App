@@ -26,9 +26,13 @@
 -(void)configureWithDictionary:(NSDictionary *)dictionary{
     //CHECK FOR RELEASE data validation especially favicon
     
+    if (dictionary[@"favicon"] && ![dictionary[@"favicon"] isEqual:[NSNull null]]) {
+        self.imageStringURL = (dictionary[@"favicon"] && [dictionary[@"favicon"] isEqual:[NSNull null]]) ? @"" : dictionary[@"favicon"];
+    }
 
-    self.imageStringURL = (dictionary[@"favicon"] && [dictionary[@"favicon"] isEqual:[NSNull null]]) ? @"" : dictionary[@"favicon"];
-    self.articleStringURL = (dictionary[@"link"] && [dictionary[@"link"] isEqual:[NSNull null]]) ?dictionary[@"link"] : @"";
+    if (dictionary[@"link"] && ![dictionary[@"link"] isEqual:[NSNull null]]) {
+        self.articleStringURL = (dictionary[@"link"] && [dictionary[@"link"] isEqual:[NSNull null]]) ?dictionary[@"link"] : @"";
+    }
     
     if (dictionary[@"title"] && ![dictionary[@"title"] isEqual:[NSNull null]]) {
         self.title = dictionary[@"title"];
