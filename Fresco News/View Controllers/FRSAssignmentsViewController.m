@@ -105,6 +105,16 @@
                                                object:nil];
     
     self.assignmentIDs = [[NSMutableArray alloc] init];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification object:nil queue:nil usingBlock:^(NSNotification *notification) {
+
+        CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
+                
+        if (lastLocation) {
+            [self locationUpdate:lastLocation];
+        }
+
+    }];
 
 }
 
@@ -129,6 +139,10 @@
     
     [self removeNavigationBarLine];
 
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)didReceiveLocationUpdate:(NSNotification *)notification {
