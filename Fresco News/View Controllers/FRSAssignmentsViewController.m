@@ -88,6 +88,45 @@
 
 @implementation FRSAssignmentsViewController
 
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+-(void)commonInit {
+    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
+    
+    [self fetchLocalAssignments];
+    
+    if (lastLocation) {
+        [self locationUpdate:lastLocation];
+    }
+}
+
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID {
     self = [super init];
     
