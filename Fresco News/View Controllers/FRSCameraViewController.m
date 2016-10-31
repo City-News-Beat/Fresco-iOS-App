@@ -1971,8 +1971,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 
 -(void)alertUserOfFastPan:(BOOL)isTooFast {
-    return;
-    NSLog(@"PAN SLOWER");
+
     [self configureAlertWithText:@"Slow down your panning for a better shot."];
     
     if (pan && [pan isValid]) {
@@ -1984,8 +1983,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)alertUserOfWobble:(BOOL)isTooFast {
-    //NSLog(@"STOP WOBBLING");
-    return;
+
     [self configureAlertWithText:@"Hold your phone steadier for a better shot."];
     
     if (wobble && [wobble isValid]) {
