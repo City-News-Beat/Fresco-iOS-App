@@ -177,7 +177,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     [self checkLibrary];
     
-    [self addPanGesture];
+    //[self addPanGesture];
     
     
     self.isRecording = NO;
