@@ -95,7 +95,10 @@
         NSString *stringURL = thumb[@"image"];
         if (!stringURL) continue;
         NSURL *url = [NSURL URLWithString:stringURL];
-        [mArr addObject:url];
+        
+        if (url) {
+            [mArr addObject:url];
+        }
     }
     
     NSLog(@"COMPLETE");
