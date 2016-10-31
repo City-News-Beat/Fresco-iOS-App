@@ -30,10 +30,15 @@
 
 -(void)configureWithDictionary:(NSDictionary *)dictionary {
     
-    self.uid = dictionary[@"id"];
-    self.title = dictionary[@"title"];
+    if (dictionary[@"title"] && ![dictionary[@"title"] isEqual:[NSNull null]]) {
+        self.title = dictionary[@"title"];
+    }
+    
+    if (dictionary[@"id"] && ![dictionary[@"id"] isEqual:[NSNull null]]) {
+        self.uid = dictionary[@"id"];
+    }
 
-    if (dictionary[@"location"][@"coordinates"] != Nil && ![dictionary[@"location"][@"coordinates"] isEqual: [NSNull null]]){
+    if (dictionary[@"location"] != Nil && dictionary[@"location"][@"coordinates"] != Nil && ![dictionary[@"location"][@"coordinates"] isEqual: [NSNull null]]){
         NSArray *coords = dictionary[@"location"][@"coordinates"]; //coordinates are sent in geojson format meaning (long, lat)
         if (coords.count == 2){
             self.longitude = [coords firstObject];

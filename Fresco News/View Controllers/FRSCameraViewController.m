@@ -1901,25 +1901,23 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     [_motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
         CGFloat rotationRate = fabs(gyroData.rotationRate.x);
-        if (rotationRate > .5) {
+        if (rotationRate > .8) {
             [self alertUserOfFastPan:TRUE];
         }
         
         CGFloat wobbleRate = fabs(gyroData.rotationRate.z);
-        
         if (lastZ == 0) {
             lastZ = wobbleRate;
         }
-        else if (fabs(lastZ-wobbleRate) > .2) {
+        else if (lastZ-wobbleRate < -1) {
             [self alertUserOfWobble:YES];
         }
         
         CGFloat forwardWobble = fabs(gyroData.rotationRate.y);
-        
         if (lastY == 0) {
             lastY = forwardWobble;
         }
-        else if (fabs(lastY - forwardWobble) > .2) {
+        else if (lastY - forwardWobble < -1) {
             [self alertUserOfWobble:YES];
         }
         
@@ -1949,11 +1947,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             orientationNew = self.lastOrientation;
             NSLog(@"acel x = %f, acel z = %f", acceleration.x, acceleration.z);
         }
-        
-        //        } else if (acceleration.z < -0.85) {
-        //            orientationNew = UIDeviceOrientationPortrait;
-        //
-        //        }
         else {
             // Consider same as last time
             return;
