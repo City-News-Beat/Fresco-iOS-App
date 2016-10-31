@@ -58,27 +58,20 @@
         self.byline = dict[@"owner"][@"full_name"];
         self.creator.uid = (dict[@"owner"][@"id"] != nil && ![dict[@"owner"][@"id"] isEqual:[NSNull null]]) ? dict[@"owner"][@"id"] : @"";
         self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
-        self.creator.username = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
-        //blocked
+        self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
     }
     
-    //if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
-       // FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:self.currentContext];
-       // self.creator = newUser;
-        
-        //FRSUser *newUser = [FRSUser MR_createEntity];
-        //[newUser configureWithDictionary:dict];
-        
-        //@try {
-        //self.creator = newUser;
-        //}
-        //@catch (NSException *e) {
-        //    NSLog(@"EXCEPTION: %@", e.description);
-        //}
-       // if (dict [@"id"] != [NSNull null]) {
-       //     self.creator.uid = dict[@"owner"][@"id"];
-        //}
-    //}
+    NSLog(@"USERNAME: %@", dict[@"owner"][@"username"]);
+    
+    if (dict[@"owner"][@"username"] != [NSNull null]) {
+    }
+    
+    
+    if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
+        FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:self.currentContext];
+        self.creator = newUser;
+        self.creator.uid = dict[@"owner"][@"id"];
+    }
     
     
 //    if ([dict valueForKey:@"curator"] != [NSNull null]) {
@@ -87,7 +80,7 @@
 //        self.creator.username = (dict[@"curator"][@"username"] != nil) ? dict[@"curator"][@"username"] : @"";
 //        self.creator.username = (dict[@"curator"][@"full_name"] != nil) ? dict[@"curator"][@"full_name"] : @"";
 //        //blocked
-//    }
+//    }ff
     
     if ([dict valueForKey:@"external_account_id"] != [NSNull null]) {
         self.externalAccountID = [dict objectForKey:@"external_account_id"];
@@ -159,7 +152,6 @@
         self.creator.username = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
         //blocked
     }
-
 }
 
 -(void)addPostsWithArray:(NSArray *)posts{

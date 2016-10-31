@@ -279,6 +279,11 @@
                 [actionBar handleRepostState:FALSE];
                 [actionBar handleRepostAmount:reposts];
                 if (error.code != 101) {
+                    
+                    NSLog(@"GALLERY: %@", self.gallery);
+                    NSLog(@"CREATOR: %@", self.gallery.creator);
+                    NSLog(@"UID: %@", self.gallery.creator.uid);
+
                     self.gallery.numberOfReposts++;
                 }
             }
