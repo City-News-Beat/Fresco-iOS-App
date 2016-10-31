@@ -241,7 +241,7 @@
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
         
-        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
         
         if (globalAssignments.count > 0) {

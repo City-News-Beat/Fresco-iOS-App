@@ -1864,7 +1864,6 @@
 
 -(instancetype)initGalleryReportDelegate:(id)delegate {
     self = [super init];
-    delegate = self.delegate;
     
     if (self) {
         

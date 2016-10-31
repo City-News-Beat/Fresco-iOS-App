@@ -601,7 +601,7 @@
     if (indexPath.section == userIndex) {
         cell.delegate = self;
         if (self.users.count == 0) {
-            return 0;
+            return Nil;
         }
         
         if (indexPath.row == 3 && !_userExtended) {
@@ -644,7 +644,7 @@
     else if (indexPath.section == storyIndex) {
         
         if (self.stories.count == 0) {
-            return 0;
+            return Nil;
         }
         
         if (indexPath.row == 3 && !_storyExtended) {

@@ -1169,7 +1169,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 -(void)segueToAssignmentWithID:(NSString *)assignmentID {
     UITabBarController *tab = (UITabBarController *)self.tabBarController;
 
-    FRSNavigationController *navCont = (FRSNavigationController *)[tab.viewControllers objectAtIndex:3];
     [self.tabBarController setSelectedIndex:3];
     
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
@@ -1266,7 +1265,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 -(void)segueToDebitCard {
-    UITabBarController *tab = (UITabBarController *)self.tabBarController;
 
     FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
     UINavigationController *navController = (UINavigationController *)self.window.rootViewController;

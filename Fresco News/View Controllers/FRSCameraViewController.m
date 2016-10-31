@@ -1380,6 +1380,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                         //make the metadata dictionary mutable so we can add properties to it
                         NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
                         
+                        
                         NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
                         
                         if(!GPSDictionary)
