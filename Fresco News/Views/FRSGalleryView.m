@@ -431,7 +431,7 @@
             NSInteger postIndex = [self.orderedPosts indexOfObject:post];
             
             playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
-            playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
             playerLayer.backgroundColor = [UIColor clearColor].CGColor;
             
             UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
@@ -1076,8 +1076,6 @@
         NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
         NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
         
-        NSLog(@"WIDTH: %ld, HEIGHT: %ld", rawWidth, rawHeight);
-        
         if (rawHeight == 0 || rawWidth == 0){
             totalHeight += [UIScreen mainScreen].bounds.size.width;
         }
@@ -1095,7 +1093,7 @@
     NSInteger averageHeight = totalHeight/divider;
     
     averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
-
+    
     return averageHeight;
 }
 
