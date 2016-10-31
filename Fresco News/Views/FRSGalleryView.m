@@ -1076,6 +1076,8 @@
         NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
         NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
         
+        NSLog(@"WIDTH: %ld, HEIGHT: %ld", rawWidth, rawHeight);
+        
         if (rawHeight == 0 || rawWidth == 0){
             totalHeight += [UIScreen mainScreen].bounds.size.width;
         }
@@ -1093,7 +1095,7 @@
     NSInteger averageHeight = totalHeight/divider;
     
     averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
-    
+
     return averageHeight;
 }
 

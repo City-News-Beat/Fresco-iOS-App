@@ -88,8 +88,8 @@
         self.creator.profileImage = [[dict objectForKey:@"owner"] objectForKey:@"avatar"];
     }
     
-    NSNumber *height = dict[@"meta"][@"height"] ? : @0;
-    NSNumber *width = dict[@"meta"][@"width"] ? : @0;
+    NSNumber *height = dict[@"height"] ? : @0;
+    NSNumber *width = dict[@"width"] ? : @0;
     
     self.meta = @{@"image_height" : height, @"image_width" : width};
     
