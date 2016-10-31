@@ -123,7 +123,7 @@
     [self fetchLocalAssignments];
     
     if (lastLocation) {
-        [self locationUpdate:lastLocation];
+        [self fetchAssignmentsNearLocation:lastLocation radius:10];
     }
 }
 
