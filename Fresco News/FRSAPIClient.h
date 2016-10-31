@@ -140,6 +140,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 // search
 -(void)searchWithQuery:(NSString *)query completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)fetchNearbyUsersWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 
 -(void)createPaymentWithToken:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchPayments:(FRSAPIDefaultCompletionBlock)completion;
