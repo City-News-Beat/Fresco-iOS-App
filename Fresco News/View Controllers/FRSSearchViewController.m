@@ -54,9 +54,8 @@
     storyIndex   = 1;
     galleryIndex = 2;
     
-    
-    //Do not delay when using real data
-    [self performSelector:@selector(configureNearbyUsers) withObject:nil afterDelay:1];
+    [self.searchTextField becomeFirstResponder];
+    [self configureNearbyUsers];
 }
 
 -(void)search:(NSString *)string {
@@ -298,6 +297,11 @@
     self.configuredNearby = YES;
 
     [[FRSAPIClient sharedClient] fetchNearbyUsersWithCompletion:^(id responseObject, NSError *error) {
+        
+        if (![self.searchTextField.text isEqualToString:@""]) {
+            return;
+        }
+        
         
         NSDictionary *galleryObject = responseObject[@"galleries"];
         NSDictionary *userObject = responseObject[@"users"];
