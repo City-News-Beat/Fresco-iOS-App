@@ -33,6 +33,7 @@
 @property BOOL userExtended;
 @property BOOL storyExtended;
 @property BOOL onlyDisplayGalleries;
+@property BOOL configuredNearby;
 
 @property NSInteger usersDisplayed;
 @property NSInteger storiesDisplayed;
@@ -53,7 +54,9 @@
     storyIndex   = 1;
     galleryIndex = 2;
     
-    [self.searchTextField becomeFirstResponder];
+    
+    //Do not delay when using real data
+    [self performSelector:@selector(configureNearbyUsers) withObject:nil afterDelay:1];
 }
 
 -(void)search:(NSString *)string {
@@ -267,6 +270,9 @@
             return;
         }
 
+        //NSString *filePath = @"";
+        //NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:@"file://path"] options:0 error:Nil];
+        
         NSDictionary *storyObject = responseObject[@"stories"];
         NSDictionary *galleryObject = responseObject[@"galleries"];
         NSDictionary *userObject = responseObject[@"users"];
@@ -286,6 +292,60 @@
             [self.awkwardView removeFromSuperview];
         }
     }];
+}
+
+-(void)configureNearbyUsers {
+    
+    self.configuredNearby = YES;
+    
+    /* DEBUG -- Added to simulate nearby users */
+    NSDictionary *user = @{@"avatar" : @"https://d2t62bltxqtzkl.cloudfront.net/57e44461b1e5137d293970ff_1474577765145.uploads/56500dd21dc1e5e24ffcaa6ab2b0c588",
+                           @"bio" : @"",
+                           @"created_at" : @"2016-07-28T05:03:06.670Z",
+                           @"followed_count" : @0,
+                           @"following" : @0,
+                           @"following_count" : @0,
+                           @"full_name" : @"Kit Spry",
+                           @"id" : @"YOJ8vRgl8ML4",
+                           @"location" : @"",
+                           @"object" : @"user",
+                           @"photo_count" : @0,
+                           @"submission_count" : @0,
+                           @"suspended_until" : @"<null>",
+                           @"twitter_handle" : @"",
+                           @"username" : @"kitsand",
+                           @"video_count" : @0};
+    
+    
+    NSMutableArray *usersArray = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < 10; i++) {
+        [usersArray insertObject:user atIndex:usersArray.count];
+    }
+    
+    NSDictionary *tempUserDict = @{@"count" : @"5",
+                                   @"results" : usersArray };
+    
+    self.users = tempUserDict[@"results"];
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(15, 0, -56, 0);
+    userIndex    = 0;
+    storyIndex   = 1;
+    galleryIndex = 2;
+    
+    [self removeSpinner];
+    [self reloadData];
+    
+    _userExtended = YES;
+    [self.tableView reloadData];
+    
+    
+    
+    //Remove dispatch_after block, added to simulate the time it would take to get a response.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.configuredNearby = NO;
+    });
+
 }
 
 -(void)rearrangeIndexes {
@@ -565,7 +625,11 @@
     NSString *title = @"";
     
     if (section == userIndex && self.users.count > 0) {
-        title = @"USERS";
+        if (!self.configuredNearby) {
+            title = @"USERS";
+        } else {
+            title = @"NEARBY USERS";
+        }
     }
    
     if (section == storyIndex && self.stories.count > 0) {
