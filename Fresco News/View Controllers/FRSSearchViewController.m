@@ -298,10 +298,13 @@
 
     [[FRSAPIClient sharedClient] fetchNearbyUsersWithCompletion:^(id responseObject, NSError *error) {
         
-        if (![self.searchTextField.text isEqualToString:@""]) {
+        if (error) {
             return;
         }
         
+        if (![self.searchTextField.text isEqualToString:@""]) {
+            return;
+        }
         //NSDictionary *galleryObject = responseObject[@"galleries"];
         //NSDictionary *userObject = responseObject;
         //self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
@@ -319,8 +322,11 @@
         _userExtended = YES;
         [self.tableView reloadData];
         
-        self.configuredNearby = NO;
-        
+        //Delaying here because viewForHeaderInSection is not called fast enough
+        //viewForHeaderInSection determines if the title should be `NEARBY`
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.configuredNearby = NO;
+        });
     }];
 }
 
@@ -603,6 +609,8 @@
     if (section == userIndex && self.users.count > 0) {
         if (!self.configuredNearby) {
             title = @"USERS";
+        } else {
+            title = @"NEARBY USERS";
         }
     }
    
@@ -818,8 +826,9 @@
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
 //    [super scrollViewDidScroll:scrollView];
-    [self.searchTextField resignFirstResponder];
-    
+    if (!self.configuredNearby) {
+        [self.searchTextField resignFirstResponder];
+    }
 }
 
 #pragma mark - dealloc
