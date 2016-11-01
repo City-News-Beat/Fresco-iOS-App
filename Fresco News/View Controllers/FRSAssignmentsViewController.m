@@ -663,16 +663,12 @@
 
 -(void)setDistance {
     
-    NSLog(@"ASSLAT: %f, ASSLON: %f, USERLAT: %f, USERLON: %f", self.assignmentLat, self.assignmentLong, [FRSLocator sharedLocator].currentLocation.coordinate.latitude, [FRSLocator sharedLocator].currentLocation.coordinate.longitude);
-    
     CLLocation *locA = [[CLLocation alloc] initWithLatitude:self.assignmentLat longitude:self.assignmentLong];
     CLLocation *locB = [[CLLocation alloc] initWithLatitude:[FRSLocator sharedLocator].currentLocation.coordinate.latitude longitude:[FRSLocator sharedLocator].currentLocation.coordinate.longitude];
     CLLocationDistance distance = [locA distanceFromLocation:locB];
     
     CGFloat miles = distance / 1609.34;
     CGFloat feet  = miles * 5280;
-    
-    NSLog(@"DISTANCE: %f, MILES: %f", distance, miles);
     
     NSString *distanceString;
     
