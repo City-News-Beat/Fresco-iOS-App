@@ -421,11 +421,11 @@
         self.assignmentExpirationDate = assignment.expirationDate;
         self.outlets = assignment.outlets;
         
+        [self configureOutlets];
         [self configureAssignmentCard];
         [self animateAssignmentCard];
         [self setExpiration];
         [self setDistance];
-        [self configureOutlets];
         
         self.currentAssignment = assignment;
         [self drawImages];
