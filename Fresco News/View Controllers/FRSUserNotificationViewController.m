@@ -444,10 +444,14 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     bodyLabel.numberOfLines = 0;
     bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
 
+    if (bodyLabel.text) {
+        [bodyLabel sizeToFit];
+    }
     
-    [bodyLabel sizeToFit];
-    [titleLabel sizeToFit];
-        
+    if (titleLabel.text) {
+        [titleLabel sizeToFit];
+    }
+    
     height += bodyLabel.frame.size.height;
     height += titleLabel.frame.size.height;
     height += 25; //spacing
