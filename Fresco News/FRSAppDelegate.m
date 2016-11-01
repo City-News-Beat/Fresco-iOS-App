@@ -46,7 +46,9 @@
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
     [self startFabric]; // crashlytics first yall
-
+    
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
     if ([self isFirstRun]) {
         [[FRSAPIClient sharedClient] logout];
     }
