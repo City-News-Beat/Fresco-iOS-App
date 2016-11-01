@@ -52,7 +52,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [super viewDidLoad];
     [self getNotifications];
     [self configureUI];
-//    [(FRSTabBarController *)self.tabBarController updateBellIcon:NO];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -65,12 +64,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [super viewDidDisappear:animated];
     self.isSegueingToGallery = NO;
     self.isSegueingToStory = NO;
-    /*if (self.tabBarController) {
-        [(FRSTabBarController *)self.tabBarController updateUserIcon];
-    } else {
-        FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
-        [tabBarController updateUserIcon];
-    }*/
 }
 
 -(void)getNotifications {
@@ -460,7 +453,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return 75;
     }
         
-        return height;
+    return height;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {

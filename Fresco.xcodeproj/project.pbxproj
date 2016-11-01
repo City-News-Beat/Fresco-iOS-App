@@ -140,7 +140,6 @@
 		D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */; };
 		D400FA681D6E13FA008842E1 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */; };
 		D400FA6B1D6E1A9E008842E1 /* FRSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */; };
-		D406C4091D9F0D9F00133788 /* FRSNotificationTester.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C4081D9F0D9F00133788 /* FRSNotificationTester.m */; };
 		D406C40E1DA2D2F300133788 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C40B1DA2D2F300133788 /* SAMKeychain.m */; };
 		D406C40F1DA2D2F300133788 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C40D1DA2D2F300133788 /* SAMKeychainQuery.m */; };
 		D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */; };
@@ -545,8 +544,6 @@
 		D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		D400FA691D6E1A9E008842E1 /* FRSTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTextView.h; sourceTree = "<group>"; };
 		D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTextView.m; sourceTree = "<group>"; };
-		D406C4071D9F0D9F00133788 /* FRSNotificationTester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationTester.h; sourceTree = "<group>"; };
-		D406C4081D9F0D9F00133788 /* FRSNotificationTester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNotificationTester.m; sourceTree = "<group>"; };
 		D406C40A1DA2D2F300133788 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		D406C40B1DA2D2F300133788 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
 		D406C40C1DA2D2F300133788 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
@@ -1495,13 +1492,6 @@
 			name = Detail;
 			sourceTree = "<group>";
 		};
-		D41365B41CA33347004FE848 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Settings;
-			sourceTree = "<group>";
-		};
 		D418E3491CCC1B0F0003B080 /* Social */ = {
 			isa = PBXGroup;
 			children = (
@@ -2250,15 +2240,12 @@
 				D4F91A461C8B508A0078BF15 /* Fresco.h */,
 				D4F91A471C8B51500078BF15 /* FRSAPIClient.h */,
 				D4F91A481C8B51500078BF15 /* FRSAPIClient.m */,
-				D406C4071D9F0D9F00133788 /* FRSNotificationTester.h */,
-				D406C4081D9F0D9F00133788 /* FRSNotificationTester.m */,
 				D41C10C81CE9A4AF00F96B25 /* Stripe */,
 				D418E3491CCC1B0F0003B080 /* Social */,
 				D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */,
 				65EBEDBD1C44507600BE671F /* Networking */,
 				D43C7FF41C8F588C00A7A7A7 /* Defaults */,
 				D47999631C96A8FD00B46D01 /* Location */,
-				D41365B41CA33347004FE848 /* Settings */,
 				D46D35661D9036C400E38FAA /* Tracking */,
 				D48C72251D0B3D5C000677BF /* FRSDevice.h */,
 				D48C72261D0B3D5C000677BF /* FRSDevice.m */,
@@ -2793,7 +2780,6 @@
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
 				07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */,
 				076F4D9E1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m in Sources */,
-				D406C4091D9F0D9F00133788 /* FRSNotificationTester.m in Sources */,
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,
 				075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */,
 				07ED92E41C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m in Sources */,
