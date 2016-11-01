@@ -302,13 +302,13 @@
             return;
         }
         
+        //NSDictionary *galleryObject = responseObject[@"galleries"];
+        //NSDictionary *userObject = responseObject;
+        //self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
+        self.users = responseObject;
         
-        NSDictionary *galleryObject = responseObject[@"galleries"];
-        NSDictionary *userObject = responseObject[@"users"];
-        self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
-        self.users = userObject[@"results"];
-        
-        self.tableView.contentInset = UIEdgeInsetsMake(15, 0, -56, 0);
+        self.tableView.contentInset = UIEdgeInsetsMake(15, 0, 0, 0);
+        self.tableView.bounces = YES;
         userIndex    = 0;
         galleryIndex = 1;
         storyIndex   = 2;

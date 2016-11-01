@@ -1112,9 +1112,9 @@
 
 -(void)fetchNearbyUsersWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
 
-    NSDictionary *params = @{@"q":@"cat", @"stories":@(FALSE), @"galleries":@(TRUE), @"users":@(TRUE), @"limit":@999};
+//    NSDictionary *params = @{@"q":@"cat", @"stories":@(FALSE), @"galleries":@(TRUE), @"users":@(TRUE), @"limit":@999};
 
-    [self get:nearbyUsersEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+    [self get:nearbyUsersEndpoint withParameters:nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
