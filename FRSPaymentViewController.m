@@ -96,14 +96,6 @@ static NSString *addPaymentCell = @"addPaymentCell";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (self.payments.count <= indexPath.row) {
-        return;
-    }
-    
-    NSDictionary *payment = [self.payments objectAtIndex:indexPath.row];
-    NSString *digits = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
-    [[NSUserDefaults standardUserDefaults] setObject:digits forKey:settingsPaymentLastFour];
-    
     if (indexPath.section == 1) {
         FRSDebitCardViewController *debit = [[FRSDebitCardViewController alloc] init];
         [self.navigationController pushViewController:debit animated:YES];
