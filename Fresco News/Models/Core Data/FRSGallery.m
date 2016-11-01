@@ -69,8 +69,15 @@
     
     if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
         FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:self.currentContext];
-        self.creator = newUser;
-        self.creator.uid = dict[@"owner"][@"id"];
+        
+        @try {
+            self.creator = newUser;
+            self.creator.uid = dict[@"owner"][@"id"];
+        } @catch (NSException *exception) {
+            NSLog(@"EXCEPTION: %@", exception.description);
+        } @finally {
+            
+        }
     }
     
     
@@ -197,6 +204,7 @@
     float totalHeight = 0;
     
     for (FRSPost *post in self.posts){
+        
         float rawHeight = [post.meta[@"image_height"] integerValue];
         float rawWidth = [post.meta[@"image_width"] integerValue];
         

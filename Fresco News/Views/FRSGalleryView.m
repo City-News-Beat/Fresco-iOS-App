@@ -431,8 +431,8 @@
             NSInteger postIndex = [self.orderedPosts indexOfObject:post];
             
             playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
-            playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
-            playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+            playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            playerLayer.backgroundColor = [UIColor whiteColor].CGColor;
             
             UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
             container.backgroundColor = [UIColor clearColor];
@@ -1075,6 +1075,8 @@
     for (FRSPost *post in self.gallery.posts){
         NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
         NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
+        
+//        NSLog(@"\nHEIGHT: %ld, WIDTH : %ld\n", rawHeight, rawWidth);
         
         if (rawHeight == 0 || rawWidth == 0){
             totalHeight += [UIScreen mainScreen].bounds.size.width;
