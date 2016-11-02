@@ -173,9 +173,10 @@
             [self saveUserFields:responseObject];
         }];
         
-        [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+        //[[FRSLocationManager sharedManager] startLocationMonitoringForeground];
         
-        FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        
+        //FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
