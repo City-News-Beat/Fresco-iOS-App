@@ -163,6 +163,7 @@
 		D42A138F1D89A451008909E6 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42A138E1D89A451008909E6 /* Mixpanel.framework */; };
 		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D434D5821DAC355400F1C58F /* Model.xcdatamodel in Resources */ = {isa = PBXBuildFile; fileRef = 07697CD11DA8561500C48B34 /* Model.xcdatamodel */; };
+		D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D43AA8BB1DCA29DA0002DF00 /* FRSWobbleView.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
 		D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */; };
@@ -580,6 +581,8 @@
 		D42A138E1D89A451008909E6 /* Mixpanel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mixpanel.framework; path = "../../Library/Developer/Xcode/DerivedData/Fresco-fdljnwvdniqudpbfysumtikmtfbi/Build/Products/Release-iphoneos/Mixpanel.framework"; sourceTree = "<group>"; };
 		D42C907F1CC6191400B25C99 /* UIImage+Pixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Pixels.h"; path = "../../UIImage+Pixels.h"; sourceTree = "<group>"; };
 		D42C90801CC6191400B25C99 /* UIImage+Pixels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Pixels.m"; path = "../../UIImage+Pixels.m"; sourceTree = "<group>"; };
+		D43AA8BA1DCA29DA0002DF00 /* FRSWobbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSWobbleView.h; sourceTree = "<group>"; };
+		D43AA8BB1DCA29DA0002DF00 /* FRSWobbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSWobbleView.m; sourceTree = "<group>"; };
 		D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSFileLoader.h; path = ../FRSFileLoader.h; sourceTree = "<group>"; };
 		D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSFileLoader.m; path = ../FRSFileLoader.m; sourceTree = "<group>"; };
 		D43C7FD01C8E469800A7A7A7 /* FRSFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileViewController.h; sourceTree = "<group>"; };
@@ -1057,6 +1060,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D43AA8B71DCA29A50002DF00 /* Stabilization */,
 				D41B2EF71D53E5810007C61F /* Search */,
 				D48C72211D09D8BC000677BF /* Split Table View */,
 				D4AF8EF01CFF654A00A33FAB /* Nav Bar */,
@@ -1539,6 +1543,15 @@
 				D421FC4F1D5B7ACF004C76B7 /* FRSSearchStoryCell.xib */,
 			);
 			name = "Story Cell";
+			sourceTree = "<group>";
+		};
+		D43AA8B71DCA29A50002DF00 /* Stabilization */ = {
+			isa = PBXGroup;
+			children = (
+				D43AA8BA1DCA29DA0002DF00 /* FRSWobbleView.h */,
+				D43AA8BB1DCA29DA0002DF00 /* FRSWobbleView.m */,
+			);
+			name = Stabilization;
 			sourceTree = "<group>";
 		};
 		D43C7FCC1C8E464800A7A7A7 /* Image Picker */ = {
@@ -2752,6 +2765,7 @@
 				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
 				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */,
+				D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				07A30C061C50488800C536EB /* FRSTaxInformationViewController.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,
