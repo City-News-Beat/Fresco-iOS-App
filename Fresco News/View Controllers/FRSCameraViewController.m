@@ -1902,7 +1902,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     [_motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
         CGFloat rotationRate = fabs(gyroData.rotationRate.x);
-        if (rotationRate > .5) {
+        if (rotationRate > .4) {
             [self alertUserOfFastPan:TRUE];
         }
         
@@ -1972,7 +1972,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         [wobble invalidate];
     }
     
-    wobble = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
+    wobble = [NSTimer timerWithTimeInterval:.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
     [[NSRunLoop mainRunLoop] addTimer:wobble forMode:NSDefaultRunLoopMode];
     
 }
@@ -1985,7 +1985,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         [wobble invalidate];
     }
     
-    wobble = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
+    wobble = [NSTimer timerWithTimeInterval:.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
     [[NSRunLoop mainRunLoop] addTimer:wobble forMode:NSDefaultRunLoopMode];
 }
 
