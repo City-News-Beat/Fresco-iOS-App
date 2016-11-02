@@ -174,10 +174,10 @@
         }];
         
         if ([[FRSAPIClient sharedClient] isAuthenticated] && !self.didPresentPermissionsRequest) {
-            
-            
-            [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
-        }        
+            if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
+                [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+            }
+        }
         
         //FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         
@@ -826,8 +826,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 -(void)applicationDidBecomeActive:(UIApplication *)application{
     
-    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
-        [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    if ([[FRSAPIClient sharedClient] isAuthenticated] && !self.didPresentPermissionsRequest) {
+        if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
+            [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+        }
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSResetUpload" object:nil userInfo:@{@"type":@"reset"}];

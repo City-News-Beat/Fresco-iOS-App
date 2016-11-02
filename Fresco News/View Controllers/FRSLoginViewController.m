@@ -59,6 +59,8 @@
     
     [self configureSpinner];
     
+    self.locationManager = [[FRSLocationManager alloc] init];
+    
     self.didAnimate = NO;
     self.didTransform = NO;
     
@@ -243,7 +245,6 @@
                 [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
             }
             
-            self.locationManager = [[FRSLocationManager alloc] init];
             [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
             
             return;
@@ -373,6 +374,8 @@
             
             self.didAuthenticateSocial = YES;
             
+            [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+            
 //            if (<#condition#>) {
 //                [self displayMigrationAlert];
 //            }
@@ -499,7 +502,7 @@
             
             
             self.didAuthenticateSocial = YES;
-            NSLog(@"Popped");
+            [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
             [self popToOrigin];
 
             [spinner stopLoading];
@@ -507,7 +510,6 @@
             self.facebookButton.hidden = false;
             return;
         } else {
-            NSLog(@"Else");
         }
         
         if (error) {
