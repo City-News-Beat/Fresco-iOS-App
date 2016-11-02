@@ -240,6 +240,7 @@
     [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
+        NSLog(@"ASS: %@ %@", assignments, error);
         
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
