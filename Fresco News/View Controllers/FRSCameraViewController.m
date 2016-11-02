@@ -1994,6 +1994,13 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)showWobble {
+    
+    if (isShowingWobble) {
+        return;
+    }
+    
+    isShowingWobble = TRUE;
+    
     shakeAlert = [[FRSWobbleView alloc] init];
     [shakeAlert configureForWobble];
     CGAffineTransform transform;
@@ -2037,6 +2044,9 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             
         }];
     });
+    
+    isShowingWobble = FALSE;
+    isShowingPan = FALSE;
 }
 
 -(void)configureAlertWithText:(NSString *)text {

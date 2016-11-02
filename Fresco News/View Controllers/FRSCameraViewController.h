@@ -31,6 +31,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     FRSWobbleView *panAlert;
     FRSWobbleView *shakeAlert;
+    
+    BOOL isShowingWobble;
+    BOOL isShowingPan;
 }
 
 @property (nonatomic) BOOL isPresented;
