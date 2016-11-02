@@ -173,8 +173,11 @@
             [self saveUserFields:responseObject];
         }];
         
-        //[[FRSLocationManager sharedManager] startLocationMonitoringForeground];
-        
+        if ([[FRSAPIClient sharedClient] isAuthenticated] && !self.didPresentPermissionsRequest) {
+            
+            
+            [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+        }        
         
         //FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         

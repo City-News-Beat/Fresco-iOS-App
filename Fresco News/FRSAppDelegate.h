@@ -37,6 +37,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain) id tabBarController;
+@property BOOL didPresentPermissionsRequest;
 -(void)reloadUser;
 -(void)reloadUser:(FRSAPIDefaultCompletionBlock)completion;
 -(void)saveContext;

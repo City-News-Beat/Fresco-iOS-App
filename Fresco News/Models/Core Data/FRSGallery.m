@@ -60,9 +60,7 @@
         self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
         self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
     }
-    
-    NSLog(@"USERNAME: %@", dict[@"owner"][@"username"]);
-    
+        
     if (dict[@"owner"][@"username"] != [NSNull null]) {
     }
     

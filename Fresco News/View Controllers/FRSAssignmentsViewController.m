@@ -138,7 +138,8 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     [self removeNavigationBarLine];
-
+    
+    [self checkStatusAndPresentPermissionsAlert:_locationManager.delegate];
 }
 
 -(void)dealloc {

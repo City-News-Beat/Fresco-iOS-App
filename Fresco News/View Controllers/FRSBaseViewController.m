@@ -294,11 +294,24 @@
 
 }
 
-#pragma mark - Errors
+#pragma mark - FRSAlertView
 
 -(void)presentGenericError {
     FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
     [alert show];
+}
+
+
+-(void)checkStatusAndPresentPermissionsAlert:(id)delegate {
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
+        UIUserNotificationSettings *grantedSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted) || grantedSettings.types == UIUserNotificationTypeNone) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:delegate];
+            [alert show];
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            delegate.didPresentPermissionsRequest = YES;
+        }
+    }
 }
 
 #pragma mark - Logout
@@ -378,6 +391,7 @@
     [Smooch show];
     
 }
+
 
 #pragma mark - Moderation
 -(void)checkSuspended {
