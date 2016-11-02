@@ -2004,17 +2004,17 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         double rads = DEGREES_TO_RADIANS(90);
         transform = CGAffineTransformRotate(panAlert.transform, rads);
         
-        shakeAlert.transform = transform;
+        panAlert.transform = transform;
         
         CGRect shakeFrame = panAlert.frame;
         shakeFrame.origin.x += self.view.frame.size.width - (panAlert.frame.size.height / 2) - 33;
         shakeFrame.origin.y += 120;
         
         if (isShowingWobble) {
-            shakeFrame.origin.x += 50;
+            shakeFrame.origin.x -= 50;
         }
         
-        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120 + (shakeFrame.size.width) + 33;
         panAlert.frame = shakeFrame;
         panAlert.alpha = 0;
         [self.view addSubview:panAlert];
@@ -2038,7 +2038,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             shakeFrame.origin.x += 50;
         }
         
-        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120 + (shakeFrame.size.width) + 33;
         panAlert.frame = shakeFrame;
         panAlert.alpha = 0;
         [self.view addSubview:panAlert];
@@ -2075,7 +2075,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         shakeFrame.origin.y += 120;
         
         if (isShowingPan) {
-            shakeFrame.origin.x += 50;
+            shakeFrame.origin.x -= 50;
         }
         
         shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
@@ -2116,6 +2116,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 }
 
+
 -(void)hideAlert {
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -2123,6 +2124,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             shakeAlert.alpha = 0;
             panAlert.alpha = 0;
         } completion:^(BOOL finished) {
+            [shakeAlert removeFromSuperview];
+            [panAlert removeFromSuperview];
+            
+            shakeAlert = Nil;
+            panAlert = Nil;
             isShowingWobble = FALSE;
             isShowingPan = FALSE;
         }];
