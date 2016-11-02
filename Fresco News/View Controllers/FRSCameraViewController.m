@@ -1966,8 +1966,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 -(void)alertUserOfFastPan:(BOOL)isTooFast {
 
-    [self configureAlertWithText:@"Slow down your panning for a better shot."];
-    
+    if (!panAlert) {
+        panAlert = [[FRSWobbleView alloc] init];
+//        [self.view addSubview:panAlert];
+//        [self.view bringSubviewToFront:panAlert];
+    }
+        
     if (pan && [pan isValid]) {
         [pan invalidate];
     }
@@ -1977,8 +1981,13 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)alertUserOfWobble:(BOOL)isTooFast {
-
-    [self configureAlertWithText:@"Hold your phone steadier for a better shot."];
+    
+    if (!shakeAlert) {
+        shakeAlert = [[FRSWobbleView alloc] init];
+        [shakeAlert configureForWobble];
+        [self.view addSubview:shakeAlert];
+        [self.view bringSubviewToFront:shakeAlert];
+    }
     
     if (wobble && [wobble isValid]) {
         [wobble invalidate];

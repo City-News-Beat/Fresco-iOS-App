@@ -12,6 +12,7 @@
 @property (nonatomic, retain) UIImage *handImage;
 @property (nonatomic, retain) UIImageView *imageView;
 @property (nonatomic, retain) UILabel *warningLabel;
+@property (nonatomic, retain) UIView *backingView;
 
 -(void)configureForWobble;
 @end
