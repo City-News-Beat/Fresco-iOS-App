@@ -51,9 +51,9 @@
 -(void)configureForWobble {
     self.handImage = [UIImage imageNamed:@"hold"];
     self.imageView.image = self.handImage;
-    self.imageView.frame = CGRectMake(16, 0, 74, 38);
+    self.imageView.frame = CGRectMake(16, 4, 74, 38);
     
-    self.warningLabel.frame = CGRectMake(87, 10, 167, 20);
+    self.warningLabel.frame = CGRectMake(95, 10, 167, 20);
     self.warningLabel.text = @"Hold your phone steady";
     self.frame = CGRectMake(0, 0, 281, 40);
 }
