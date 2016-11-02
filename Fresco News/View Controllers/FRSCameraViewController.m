@@ -1972,22 +1972,18 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 //        [self.view bringSubviewToFront:panAlert];
     }
     
-    if (pan && [pan isValid]) {
-        [pan invalidate];
+    if (wobble && [wobble isValid]) {
+        [wobble invalidate];
     }
     
-    pan = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
-    [[NSRunLoop mainRunLoop] addTimer:pan forMode:NSDefaultRunLoopMode];
+    wobble = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
+    [[NSRunLoop mainRunLoop] addTimer:wobble forMode:NSDefaultRunLoopMode];
+    
 }
 
 -(void)alertUserOfWobble:(BOOL)isTooFast {
     
-    if (!shakeAlert) {
-        shakeAlert = [[FRSWobbleView alloc] init];
-        [shakeAlert configureForWobble];
-        [self.view addSubview:shakeAlert];
-        [self.view bringSubviewToFront:shakeAlert];
-    }
+    [self showWobble];
     
     if (wobble && [wobble isValid]) {
         [wobble invalidate];
@@ -1997,12 +1993,46 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [[NSRunLoop mainRunLoop] addTimer:wobble forMode:NSDefaultRunLoopMode];
 }
 
+-(void)showWobble {
+    shakeAlert = [[FRSWobbleView alloc] init];
+    [shakeAlert configureForWobble];
+    CGAffineTransform transform;
+
+    if (self.lastOrientation == UIDeviceOrientationLandscapeLeft) {
+        // 90 degrees
+        double rads = DEGREES_TO_RADIANS(90);
+        transform = CGAffineTransformRotate(shakeAlert.transform, rads);
+        
+        shakeAlert.transform = transform;
+        
+        CGRect shakeFrame = shakeAlert.frame;
+        shakeFrame.origin.x += 240;
+        shakeFrame.origin.y += 120;
+        
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
+        shakeAlert.frame = shakeFrame;
+        shakeAlert.alpha = 0;
+        [self.view addSubview:shakeAlert];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            shakeAlert.alpha = 1;
+        }];
+        
+        [self.view bringSubviewToFront:shakeAlert];
+    }
+    else if (self.lastOrientation == UIDeviceOrientationLandscapeRight) {
+        double rads = DEGREES_TO_RADIANS(-90);
+        CGAffineTransformRotate(shakeAlert.transform, rads);
+    }
+
+}
+
 -(void)hideAlert {
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.alertContainer.alpha = 0;
-            
+            shakeAlert.alpha = 0;
+            panAlert.alpha = 0;
         } completion:^(BOOL finished) {
             
         }];
