@@ -1966,11 +1966,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 -(void)alertUserOfFastPan:(BOOL)isTooFast {
 
-    if (!panAlert) {
-      //  panAlert = [[FRSWobbleView alloc] init];
-//        [self.view addSubview:panAlert];
-//        [self.view bringSubviewToFront:panAlert];
-    }
+    [self showPan];
     
     if (wobble && [wobble isValid]) {
         [wobble invalidate];
@@ -1991,6 +1987,68 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     wobble = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
     [[NSRunLoop mainRunLoop] addTimer:wobble forMode:NSDefaultRunLoopMode];
+}
+
+-(void)showPan {
+    if (isShowingPan) {
+        return;
+    }
+    
+    isShowingPan = TRUE;
+    
+    panAlert = [[FRSWobbleView alloc] init];
+    CGAffineTransform transform;
+    
+    if (self.lastOrientation == UIDeviceOrientationLandscapeLeft) {
+        // 90 degrees
+        double rads = DEGREES_TO_RADIANS(90);
+        transform = CGAffineTransformRotate(panAlert.transform, rads);
+        
+        shakeAlert.transform = transform;
+        
+        CGRect shakeFrame = panAlert.frame;
+        shakeFrame.origin.x += self.view.frame.size.width - (panAlert.frame.size.height / 2) - 33;
+        shakeFrame.origin.y += 120;
+        
+        if (isShowingWobble) {
+            shakeFrame.origin.x += 50;
+        }
+        
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
+        panAlert.frame = shakeFrame;
+        panAlert.alpha = 0;
+        [self.view addSubview:panAlert];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            panAlert.alpha = 1;
+        }];
+        
+        [self.view bringSubviewToFront:panAlert];
+    }
+    else if (self.lastOrientation == UIDeviceOrientationLandscapeRight) {
+        double rads = DEGREES_TO_RADIANS(-90);
+        transform = CGAffineTransformRotate(panAlert.transform, rads);
+        panAlert.transform = transform;
+        
+        CGRect shakeFrame = panAlert.frame;
+        shakeFrame.origin.x = 15;
+        shakeFrame.origin.y += 120;
+        
+        if (isShowingWobble) {
+            shakeFrame.origin.x += 50;
+        }
+        
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
+        panAlert.frame = shakeFrame;
+        panAlert.alpha = 0;
+        [self.view addSubview:panAlert];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            panAlert.alpha = 1;
+        }];
+        
+        [self.view bringSubviewToFront:panAlert];
+    }
 }
 
 -(void)showWobble {
@@ -2037,7 +2095,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         shakeAlert.transform = transform;
         
         CGRect shakeFrame = shakeAlert.frame;
-        shakeFrame.origin.x -= shakeAlert.frame.size.width;
+        shakeFrame.origin.x = 15;
         shakeFrame.origin.y += 120;
         
         if (isShowingPan) {
