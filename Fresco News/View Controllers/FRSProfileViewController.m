@@ -139,9 +139,7 @@
             
             _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
             [self configureWithUser:_representedUser];
-            
-            
-                    
+                                
         }];
      }
     

@@ -17,7 +17,7 @@
 @import UIKit;
 
 @implementation FRSGallery
-@synthesize currentContext = _currentContext, generatedHeight = _generatedHeight;
+@synthesize currentContext = _currentContext, generatedHeight = _generatedHeight, sourceUser = _sourceUser;
 
 @dynamic byline;
 @dynamic caption;
@@ -60,10 +60,19 @@
         self.creator.username = (dict[@"owner"][@"username"] != nil && ![dict[@"owner"][@"username"] isEqual:[NSNull null]]) ? dict[@"owner"][@"username"] : @"";
         self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
     }
-        
-    if (dict[@"owner"][@"username"] != [NSNull null]) {
-    }
     
+    
+    NSArray *sources = (NSArray *)dict[@"sources"];
+    if ([[sources class] isSubclassOfClass:[NSArray class]] && sources.count > 0) {
+        NSDictionary *source = (NSDictionary *)[sources firstObject];
+        
+        NSString *userID = source[@"user_id"];
+        
+        [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
+            FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+            self.sourceUser = user;
+        }];
+    }
     
     if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
         FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:self.currentContext];

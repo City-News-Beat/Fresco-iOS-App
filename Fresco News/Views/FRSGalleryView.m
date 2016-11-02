@@ -588,6 +588,11 @@
         self.repostLabel.textColor = [UIColor whiteColor];
         [self addShadowToLabel:self.repostLabel];
         [self addSubview:self.repostLabel];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToSourceUser)];
+        [tap setNumberOfTapsRequired:1];
+        [self.repostLabel setUserInteractionEnabled:YES];
+        [self.repostLabel addGestureRecognizer:tap];
     }
 }
 
@@ -1095,6 +1100,22 @@
     averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
     
     return averageHeight;
+}
+
+//-(void)segueToUserProfileFromRepost {
+//    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
+//    
+//    if ([currentPost.creator uid] != nil) {
+//        [self.delegate.navigationController pushViewController:userViewController animated:YES];
+//    }
+//}
+
+-(void)segueToSourceUser {
+    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:self.gallery.sourceUser];
+    
+    if ([self.gallery.sourceUser uid] != nil) {
+        [self.delegate.navigationController pushViewController:userViewController animated:YES];
+    }
 }
 
 -(void)segueToUserProfile:(FRSUser *)user {

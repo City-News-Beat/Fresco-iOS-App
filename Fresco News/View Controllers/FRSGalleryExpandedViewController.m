@@ -1279,6 +1279,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             NSString *username = @"";
 
             if (self.isReportingComment) {
+                
                 if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
                     username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
                 } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
@@ -1287,6 +1288,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                     username = @"them";
                 }
             } else {
+                
                 if ([self.gallery.creator.username class] != [NSNull null] && (![self.gallery.creator.username isEqualToString:@"<null>"])) {
                     username = [NSString stringWithFormat:@"@%@", self.gallery.creator.username];
                 } else if ([self.gallery.creator.firstName class] != [NSNull null] && (![self.gallery.creator.firstName isEqualToString:@"<null>"])) {
