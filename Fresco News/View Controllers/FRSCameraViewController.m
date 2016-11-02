@@ -2014,7 +2014,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             shakeFrame.origin.x -= 50;
         }
         
-        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120 + (shakeFrame.size.width) + 33;
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120 + (shakeFrame.size.width) + 25;
         panAlert.frame = shakeFrame;
         panAlert.alpha = 0;
         [self.view addSubview:panAlert];
@@ -2038,7 +2038,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             shakeFrame.origin.x += 50;
         }
         
-        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120 + (shakeFrame.size.width) + 33;
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120 + (shakeFrame.size.width) + 25;
         panAlert.frame = shakeFrame;
         panAlert.alpha = 0;
         [self.view addSubview:panAlert];
