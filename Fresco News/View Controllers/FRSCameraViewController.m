@@ -2013,8 +2013,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         shakeAlert.transform = transform;
         
         CGRect shakeFrame = shakeAlert.frame;
-        shakeFrame.origin.x += 240;
+        shakeFrame.origin.x += self.view.frame.size.width - (shakeAlert.frame.size.height / 2) - 33;
         shakeFrame.origin.y += 120;
+        
+        if (isShowingPan) {
+            shakeFrame.origin.x += 50;
+        }
         
         shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
         shakeAlert.frame = shakeFrame;
@@ -2029,7 +2033,27 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     }
     else if (self.lastOrientation == UIDeviceOrientationLandscapeRight) {
         double rads = DEGREES_TO_RADIANS(-90);
-        CGAffineTransformRotate(shakeAlert.transform, rads);
+        transform = CGAffineTransformRotate(shakeAlert.transform, rads);
+        shakeAlert.transform = transform;
+        
+        CGRect shakeFrame = shakeAlert.frame;
+        shakeFrame.origin.x -= shakeAlert.frame.size.width;
+        shakeFrame.origin.y += 120;
+        
+        if (isShowingPan) {
+            shakeFrame.origin.x += 50;
+        }
+        
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
+        shakeAlert.frame = shakeFrame;
+        shakeAlert.alpha = 0;
+        [self.view addSubview:shakeAlert];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            shakeAlert.alpha = 1;
+        }];
+        
+        [self.view bringSubviewToFront:shakeAlert];
     }
 
 }
@@ -2041,12 +2065,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             shakeAlert.alpha = 0;
             panAlert.alpha = 0;
         } completion:^(BOOL finished) {
-            
+            isShowingWobble = FALSE;
+            isShowingPan = FALSE;
         }];
     });
-    
-    isShowingWobble = FALSE;
-    isShowingPan = FALSE;
 }
 
 -(void)configureAlertWithText:(NSString *)text {
