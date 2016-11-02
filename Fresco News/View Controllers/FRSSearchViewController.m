@@ -33,6 +33,7 @@
 @property BOOL userExtended;
 @property BOOL storyExtended;
 @property BOOL onlyDisplayGalleries;
+@property BOOL configuredNearby;
 
 @property NSInteger usersDisplayed;
 @property NSInteger storiesDisplayed;
@@ -54,6 +55,7 @@
     galleryIndex = 2;
     
     [self.searchTextField becomeFirstResponder];
+    [self configureNearbyUsers];
 }
 
 -(void)search:(NSString *)string {
@@ -267,10 +269,12 @@
             return;
         }
 
+        //NSString *filePath = @"";
+        //NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:@"file://path"] options:0 error:Nil];
+        
         NSDictionary *storyObject = responseObject[@"stories"];
         NSDictionary *galleryObject = responseObject[@"galleries"];
         NSDictionary *userObject = responseObject[@"users"];
-        self.users = storyObject[@"results"];
         self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
         self.users = userObject[@"results"];
         self.stories = storyObject[@"results"];
@@ -285,6 +289,44 @@
             self.awkwardView.alpha = 0;
             [self.awkwardView removeFromSuperview];
         }
+    }];
+}
+
+-(void)configureNearbyUsers {
+    
+    self.configuredNearby = YES;
+
+    [[FRSAPIClient sharedClient] fetchNearbyUsersWithCompletion:^(id responseObject, NSError *error) {
+        
+        if (error) {
+            return;
+        }
+        
+        if (![self.searchTextField.text isEqualToString:@""]) {
+            return;
+        }
+        //NSDictionary *galleryObject = responseObject[@"galleries"];
+        //NSDictionary *userObject = responseObject;
+        //self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
+        self.users = responseObject;
+        
+        self.tableView.contentInset = UIEdgeInsetsMake(15, 0, 0, 0);
+        self.tableView.bounces = YES;
+        userIndex    = 0;
+        galleryIndex = 1;
+        storyIndex   = 2;
+        
+        [self removeSpinner];
+        [self reloadData];
+        
+        _userExtended = YES;
+        [self.tableView reloadData];
+        
+        //Delaying here because viewForHeaderInSection is not called fast enough
+        //viewForHeaderInSection determines if the title should be `NEARBY`
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.configuredNearby = NO;
+        });
     }];
 }
 
@@ -565,7 +607,11 @@
     NSString *title = @"";
     
     if (section == userIndex && self.users.count > 0) {
-        title = @"USERS";
+        if (!self.configuredNearby) {
+            title = @"USERS";
+        } else {
+            title = @"NEARBY USERS";
+        }
     }
    
     if (section == storyIndex && self.stories.count > 0) {
@@ -780,8 +826,9 @@
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
 //    [super scrollViewDidScroll:scrollView];
-    [self.searchTextField resignFirstResponder];
-    
+    if (!self.configuredNearby) {
+        [self.searchTextField resignFirstResponder];
+    }
 }
 
 #pragma mark - dealloc

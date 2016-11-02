@@ -73,8 +73,10 @@ static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 // user settings (notifications)
 static NSString * const settingsEndpoint = @"user/settings";
 static NSString * const updateSettingsEndpoint = @"user/settings/update";
+
 // search endpoint
 static NSString * const searchEndpoint = @"search";
+static NSString * const nearbyUsersEndpoint = @"user/suggestions";
 
 // notification endpoint
 static NSString * const notificationEndpoint = @"user/notifications";

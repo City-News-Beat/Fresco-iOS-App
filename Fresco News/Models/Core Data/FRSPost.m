@@ -53,10 +53,13 @@
         self.videoUrl = dict[@"stream"];
     }
     
-    NSNumber *height = dict[@"height"] ? : @0;
-    NSNumber *width = dict[@"width"] ? : @0;
-    
-    self.meta = @{@"image_height" : height, @"image_width" : width};
+    if (dict[@"height"] != nil && ![dict[@"height"] isEqual:[NSNull null]] && dict[@"width"] != nil && ![dict[@"width"] isEqual:[NSNull null]]) {
+        
+        NSNumber *height = dict[@"height"] ? : @0;
+        NSNumber *width = dict[@"width"] ? : @0;
+        
+        self.meta = @{@"image_height" : height, @"image_width" : width};
+    }
 }
 
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context {
@@ -87,11 +90,13 @@
         //self.creator = [FRSUser MR_createEntityInContext:context];
         self.creator.profileImage = [[dict objectForKey:@"owner"] objectForKey:@"avatar"];
     }
-    
-    NSNumber *height = dict[@"meta"][@"height"] ? : @0;
-    NSNumber *width = dict[@"meta"][@"width"] ? : @0;
-    
-    self.meta = @{@"image_height" : height, @"image_width" : width};
+    if (dict[@"height"] != nil && ![dict[@"height"] isEqual:[NSNull null]] && dict[@"width"] != nil && ![dict[@"width"] isEqual:[NSNull null]]) {
+        
+        NSNumber *height = dict[@"height"] ? : @0;
+        NSNumber *width = dict[@"width"] ? : @0;
+        
+        self.meta = @{@"image_height" : height, @"image_width" : width};
+    }
     
     if (dict[@"created_at"] && ![dict[@"created_at"] isEqual:[NSNull null]]) {
         self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_at"]];
@@ -135,10 +140,13 @@
         self.creator.profileImage = [[dict objectForKey:@"owner"] objectForKey:@"avatar"];
     }
     
-    NSNumber *height = dict[@"meta"][@"height"] ? : @0;
-    NSNumber *width = dict[@"meta"][@"width"] ? : @0;
-    
-    self.meta = @{@"image_height" : height, @"image_width" : width};
+    if (dict[@"height"] != nil && ![dict[@"height"] isEqual:[NSNull null]] && dict[@"width"] != nil && ![dict[@"width"] isEqual:[NSNull null]]) {
+        
+        NSNumber *height = dict[@"height"] ? : @0;
+        NSNumber *width = dict[@"width"] ? : @0;
+        
+        self.meta = @{@"image_height" : height, @"image_width" : width};
+    }
 }
 
 +(instancetype)initWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context {

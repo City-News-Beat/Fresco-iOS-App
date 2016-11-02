@@ -460,11 +460,11 @@
         self.assignmentExpirationDate = assignment.expirationDate;
         self.outlets = assignment.outlets;
         
+        [self configureOutlets];
         [self configureAssignmentCard];
         [self animateAssignmentCard];
         [self setExpiration];
         [self setDistance];
-        [self configureOutlets];
         
         self.currentAssignment = assignment;
         [self drawImages];
@@ -701,6 +701,7 @@
 }
 
 -(void)setDistance {
+    
     CLLocation *locA = [[CLLocation alloc] initWithLatitude:self.assignmentLat longitude:self.assignmentLong];
     CLLocation *locB = [[CLLocation alloc] initWithLatitude:[FRSLocator sharedLocator].currentLocation.coordinate.latitude longitude:[FRSLocator sharedLocator].currentLocation.coordinate.longitude];
     CLLocationDistance distance = [locA distanceFromLocation:locB];

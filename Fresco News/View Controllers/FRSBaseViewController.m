@@ -238,8 +238,8 @@
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
         
         NSArray *coordinates = [[responseObject objectForKey:@"location"] objectForKey:@"coordinates"];
-        assignmentsVC.assignmentLat = [[coordinates objectAtIndex:0] floatValue];
-        assignmentsVC.assignmentLong = [[coordinates objectAtIndex:1] floatValue];
+        assignmentsVC.assignmentLat = [[coordinates objectAtIndex:1] floatValue];
+        assignmentsVC.assignmentLong = [[coordinates objectAtIndex:0] floatValue];
         
         FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];

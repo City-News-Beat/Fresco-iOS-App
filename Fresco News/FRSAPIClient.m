@@ -1109,6 +1109,14 @@
     }];
 }
 
+
+-(void)fetchNearbyUsersWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    [self get:nearbyUsersEndpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+
 -(void)searchWithQuery:(NSString *)query completion:(FRSAPIDefaultCompletionBlock)completion {
     if (!query) {
         // error out
