@@ -1967,11 +1967,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 -(void)alertUserOfFastPan:(BOOL)isTooFast {
 
     if (!panAlert) {
-        panAlert = [[FRSWobbleView alloc] init];
+      //  panAlert = [[FRSWobbleView alloc] init];
 //        [self.view addSubview:panAlert];
 //        [self.view bringSubviewToFront:panAlert];
     }
-        
+    
     if (pan && [pan isValid]) {
         [pan invalidate];
     }
