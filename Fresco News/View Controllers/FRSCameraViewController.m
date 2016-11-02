@@ -1990,7 +1990,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)showPan {
-    if (isShowingPan) {
+    if (isShowingPan && !panAlert) {
         return;
     }
     
@@ -2053,7 +2053,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 -(void)showWobble {
     
-    if (isShowingWobble) {
+    if (isShowingWobble && !shakeAlert) {
         return;
     }
     
