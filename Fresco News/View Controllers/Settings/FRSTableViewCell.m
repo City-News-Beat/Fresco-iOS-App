@@ -18,6 +18,9 @@
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAPIClient.h"
 #import <Haneke/Haneke.h>
+#import "FRSAppDelegate.h"
+#import "FRSLocationManager.h"
+
 @interface FRSTableViewCell() <FRSAlertViewDelegate>
 
 @property CGFloat leftPadding;
@@ -53,6 +56,8 @@
 @property (strong, nonatomic) FRSAlertView *alert;
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
+@property (strong, nonatomic) FRSLocationManager *locationManager;
 
 @property BOOL notificationsEnabled;
 @property BOOL locationEnabled;
@@ -849,7 +854,6 @@
     [self checkLocationStatus];
     
     __block BOOL state;
-    
     
     if ([sender isOn]) {
         FRSUser *user = [[FRSAPIClient sharedClient] authenticatedUser];

@@ -27,6 +27,7 @@
 #import "FRSAppDelegate.h"
 #import "FRSGallery+CoreDataProperties.h"
 #import "FRSFollowingTable.h"
+#import "FRSLocationManager.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 {
@@ -60,6 +61,8 @@
 @property (strong, nonatomic) FRSAlertView *TOSAlert;
 @property (strong, nonatomic) FRSAlertView *migrationAlert;
 
+@property (strong, nonatomic) FRSLocationManager *locationManager;
+
 @end
 
 @implementation FRSHomeViewController
@@ -90,6 +93,10 @@
     
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
+    
+    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+    }
 }
 
 -(void)logoutNotification {

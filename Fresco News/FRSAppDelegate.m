@@ -554,6 +554,9 @@
 
 -(void)registerForPushNotifications {
     
+    return; //cc:phil
+    
+    
 //    UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge |
 //                                                             UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
 //    
