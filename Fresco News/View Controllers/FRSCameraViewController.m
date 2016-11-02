@@ -1990,7 +1990,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)showPan {
-    if (isShowingPan && !panAlert) {
+    if (isShowingPan) {
         return;
     }
     
@@ -2053,7 +2053,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 -(void)showWobble {
     
-    if (isShowingWobble && !shakeAlert) {
+    if (isShowingWobble) {
         return;
     }
     
@@ -2118,7 +2118,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 
 -(void)hideAlert {
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
             shakeAlert.alpha = 0;
