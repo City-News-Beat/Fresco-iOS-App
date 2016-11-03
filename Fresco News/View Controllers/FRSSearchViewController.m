@@ -39,6 +39,8 @@
 @property NSInteger storiesDisplayed;
 @property (nonatomic, retain) NSDate *currentQuery;
 @property (strong, nonatomic) FRSAlertView *alert;
+@property (strong, nonatomic) NSString *userSectionTitleString;
+@property (strong, nonatomic) UIView *nearbyHeaderContainer;
 
 @end
 
@@ -56,6 +58,8 @@
     
     [self.searchTextField becomeFirstResponder];
     [self configureNearbyUsers];
+    
+    self.userSectionTitleString = @"";
 }
 
 -(void)search:(NSString *)string {
@@ -248,6 +252,9 @@
         return;
     }
     
+    self.nearbyHeaderContainer = nil;
+    [self.nearbyHeaderContainer removeFromSuperview];
+    
     [self configureSpinner];
     self.users = @[];
     self.galleries = @[];
@@ -268,6 +275,8 @@
             [self searchError:error];
             return;
         }
+
+        self.userSectionTitleString = @"USERS";
 
         //NSString *filePath = @"";
         //NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:@"file://path"] options:0 error:Nil];
@@ -306,15 +315,22 @@
             return;
         }
         
-        UIView *headerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 12, self.view.frame.size.width, 100)];
-        [self.view addSubview:headerContainer];
+        self.nearbyHeaderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -70, self.view.frame.size.width, 100)];
+        [self.tableView addSubview:self.nearbyHeaderContainer];
         
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24, headerContainer.frame.size.width, 31)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24, self.nearbyHeaderContainer.frame.size.width, 31)];
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.text = @"Suggested users";
         titleLabel.textColor = [UIColor frescoDarkTextColor];
         titleLabel.font = [UIFont karminaBoldWithSize:28];
-        [headerContainer addSubview:titleLabel];
+        [self.nearbyHeaderContainer addSubview:titleLabel];
+        
+        UILabel *subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 57, self.nearbyHeaderContainer.frame.size.width, 20)];
+        subtitleLabel.textAlignment = NSTextAlignmentCenter;
+        subtitleLabel.text = @"Active citizen journalists in your area:";
+        subtitleLabel.textColor = [UIColor frescoMediumTextColor];
+        subtitleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        [self.nearbyHeaderContainer addSubview:subtitleLabel];
         
         self.users = responseObject;
         
@@ -615,13 +631,9 @@
     NSString *title = @"";
     
     if (section == userIndex && self.users.count > 0) {
-        if (!self.configuredNearby) {
-            title = @"USERS";
-        } else {
-            title = @"NEARBY USERS";
-        }
+        title = self.userSectionTitleString;
     }
-   
+
     if (section == storyIndex && self.stories.count > 0) {
         title = @"STORIES";
     }
