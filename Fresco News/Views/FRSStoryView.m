@@ -23,6 +23,8 @@
 
 #import <Haneke/Haneke.h>
 
+#import "FRSProfileViewController.h"
+
 #define TEXTVIEW_TOP_PADDING 12
 
 #define TOP_CONTAINER_HALF_HEIGHT (self.topContainer.frame.size.height/2)
@@ -59,6 +61,7 @@
     if (self){
         self.delegate = delegate;
         self.story = story;
+        //self.delegate.navigationController = self.navigationController;
         
         [self configureUI];
         if ([self.story valueForKey:@"reposted_by"] != nil && ![[self.story valueForKey:@"reposted_by"] isEqualToString:@""]) {
@@ -311,6 +314,20 @@
         self.repostLabel.textColor = [UIColor whiteColor];
         [self addShadowToLabel:self.repostLabel];
         [self addSubview:self.repostLabel];
+        
+        UIButton *repostSegueButton = [[UIButton alloc] initWithFrame:CGRectMake(self.repostLabel.frame.origin.x -60, self.repostLabel.frame.origin.y-15, self.repostLabel.frame.size.width, self.repostLabel.frame.size.height +30)];
+        [repostSegueButton addTarget:self action:@selector(segueToSourceUser) forControlEvents:UIControlEventTouchUpInside];
+        repostSegueButton.backgroundColor = [UIColor redColor];
+        [self addSubview:repostSegueButton];
+    }
+}
+
+-(void)segueToSourceUser {
+    
+    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:self.story.sourceUser];
+    if ([self.story.sourceUser uid] != nil) {
+        
+        [self.delegate.navigationController pushViewController:userViewController animated:YES];
     }
 }
 

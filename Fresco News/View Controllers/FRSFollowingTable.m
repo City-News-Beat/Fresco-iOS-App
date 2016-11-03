@@ -280,6 +280,7 @@
     else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
         storyCell.storyView.navigationController = self.navigationController;
+        storyCell.storyView.delegate.navigationController = self.navigationController;
         [storyCell clearCell];
         
         storyCell.story = _galleries[indexPath.row];

@@ -1101,14 +1101,6 @@
     return averageHeight;
 }
 
-//-(void)segueToUserProfileFromRepost {
-//    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
-//    
-//    if ([currentPost.creator uid] != nil) {
-//        [self.delegate.navigationController pushViewController:userViewController animated:YES];
-//    }
-//}
-
 -(void)segueToSourceUser {
     FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:self.gallery.sourceUser];
     
