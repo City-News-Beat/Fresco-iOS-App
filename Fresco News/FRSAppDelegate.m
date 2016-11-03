@@ -177,10 +177,7 @@
         
         [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
         
-        FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
-            
             if (completion) {
                 completion(Nil,Nil);
             }
