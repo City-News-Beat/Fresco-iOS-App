@@ -307,8 +307,14 @@
         }
         
         UIView *headerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 12, self.view.frame.size.width, 100)];
-        headerContainer.backgroundColor = [UIColor redColor];
         [self.view addSubview:headerContainer];
+        
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24, headerContainer.frame.size.width, 31)];
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.text = @"Suggested users";
+        titleLabel.textColor = [UIColor frescoDarkTextColor];
+        titleLabel.font = [UIFont karminaBoldWithSize:28];
+        [headerContainer addSubview:titleLabel];
         
         self.users = responseObject;
         
