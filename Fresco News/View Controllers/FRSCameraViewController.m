@@ -1990,6 +1990,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)showPan {
+    
+    if (_isRecording == FALSE) {
+        return;
+    }
+    
     if (isShowingPan) {
         return;
     }
@@ -2052,6 +2057,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)showWobble {
+    
+    if (_isRecording == FALSE) {
+        return;
+    }
     
     if (isShowingWobble) {
         return;
