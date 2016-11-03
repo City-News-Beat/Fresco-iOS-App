@@ -253,6 +253,7 @@
     }
     
     self.nearbyHeaderContainer = nil;
+    self.nearbyHeaderContainer.alpha = 0;
     [self.nearbyHeaderContainer removeFromSuperview];
     
     [self configureSpinner];
@@ -333,7 +334,6 @@
         [self.nearbyHeaderContainer addSubview:subtitleLabel];
         
         self.users = responseObject;
-        
         self.tableView.contentInset = UIEdgeInsetsMake(82, 0, 0, 0);
         self.tableView.bounces = YES;
         userIndex    = 0;
@@ -682,6 +682,7 @@
         
         // users
         NSDictionary *user = self.users[indexPath.row];
+
         NSString *avatarURL;
         if ([user objectForKey:@"avatar"] || ![[user objectForKey:@"avatar"] isEqual:[NSNull null]]) {
             avatarURL = user[@"avatar"];
@@ -703,7 +704,12 @@
             username = user[@"username"];
         }
         
-        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
+        if (!self.configuredNearby) {
+            [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
+        } else {
+            [cell configureSearchNearbyUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
+
+        }
         
         return cell;
     }

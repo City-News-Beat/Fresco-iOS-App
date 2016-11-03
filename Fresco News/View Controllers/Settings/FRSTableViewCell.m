@@ -675,6 +675,81 @@
     self.backgroundColor = [UIColor whiteColor];
 }
 
+-(void)configureSearchNearbyUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing userDict:(NSDictionary *)userDict user:(FRSUser *)user {
+    
+    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
+    [self addSubview:topLine];
+    
+    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 56, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    bottomLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00];
+    [self addSubview:bottomLine];
+    
+    UIImageView *profileIV = [[UIImageView alloc] init];
+    profileIV.frame = CGRectMake(16, 12, 32, 32);
+    profileIV.layer.cornerRadius = 16;
+    profileIV.clipsToBounds = YES;
+    
+    [profileIV hnk_setImageFromURL:(NSURL *)profile];
+    
+    profileIV.backgroundColor = [UIColor frescoLightTextColor];
+    NSLog(@"profile image URL: %@", profile);
+    if (!profile) {
+        UIImageView *profileIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user-24"]];
+        profileIcon.frame = CGRectMake(4, 4, 24, 24);
+        [profileIV addSubview:profileIcon];
+    }
+    
+    [self addSubview:profileIV];
+    
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8 + 7, self.frame.size.width - 64, self.frame.size.height)];
+    nameLabel.text = nameString;
+    nameLabel.font = [UIFont notaMediumWithSize:17];
+    nameLabel.textColor = [UIColor frescoDarkTextColor];
+    [nameLabel sizeToFit];
+    [self addSubview:nameLabel];
+    
+    UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64 + 8 + nameLabel.frame.size.width, 23, self.frame.size.width - 64, 14)];
+    usernameLabel.text = (username && ![username isEqual:[NSNull null]] && ![username isEqualToString:@""]) ? [@"@" stringByAppendingString:username] : @"";
+    usernameLabel.font = [UIFont notaRegularWithSize:12];
+    usernameLabel.textColor = [UIColor frescoMediumTextColor];
+    [usernameLabel sizeToFit];
+    usernameLabel.frame = CGRectMake(64 + 8 + nameLabel.frame.size.width, 23, self.frame.size.width - 64 - nameLabel.frame.size.width, 14); //set label max width
+    
+    //Checks if username label is truncating and nameLabel.text is not empty
+    CGSize size = [usernameLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont notaRegularWithSize:12]}];
+    if ((size.width > usernameLabel.bounds.size.width) && ![nameLabel.text isEqualToString:@""]) {
+        usernameLabel.alpha = 0;
+    }
+    
+    if ([nameLabel.text isEqualToString: @""]) {
+        usernameLabel.frame = CGRectMake(64 + nameLabel.frame.size.width, 23, self.frame.size.width - 64, 14);
+    }
+    
+    
+    [self addSubview:usernameLabel];
+    
+    self.followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.followingButton addTarget:self action:@selector(follow) forControlEvents:UIControlEventTouchUpInside];
+    self.followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 24, 24);
+    
+    [self addSubview:self.followingButton];
+    
+    if (isFollowing){
+        [self.followingButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+        self.followingButton.tintColor = [UIColor frescoOrangeColor];
+    } else {
+        [self.followingButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+        self.followingButton.tintColor = [UIColor blackColor];
+    }
+    
+    self.currentUserDict = userDict;
+    self.following = isFollowing;
+    self.currentUser = user;
+    
+    self.backgroundColor = [UIColor redColor];
+}
+
 
 -(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing userDict:(NSDictionary *)userDict user:(FRSUser *)user {
     
