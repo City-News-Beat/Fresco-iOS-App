@@ -1208,7 +1208,7 @@
         
         
         if (error) {
-            [Answers logSignUpWithMethod:@"Digits"
+            [Answers logSignUpWithMethod:@"Email"
                                  success:@NO
                         customAttributes:@{}];
             
@@ -1239,7 +1239,7 @@
         
         
         if (error.code == 0) {
-            [Answers logSignUpWithMethod:@"Digits"
+            [Answers logSignUpWithMethod:@"Email"
                                  success:@YES
                         customAttributes:@{}];
             
