@@ -94,9 +94,38 @@
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
     
-//    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
-//        [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
-//    }
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        //Present permissions alert on launch after two days from downloading the app only if the they have not seen the alert yet.
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:userHasSeenPermissionsAlert]) {
+            if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate]) {
+                NSString *startDateString = [[NSUserDefaults standardUserDefaults] valueForKey:userHasSeenPermissionsAlert];
+                NSDate *startDate = [[FRSAPIClient sharedClient] dateFromString:startDateString];
+                NSDate *today = [NSDate date];
+                
+                NSInteger days = [FRSHomeViewController daysBetweenDate:startDate andDate:today];
+                if (days <= 2) {
+                    [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+                }
+            }
+        }
+    }
+}
+
++(NSInteger)daysBetweenDate:(NSDate *)fromDateTime andDate:(NSDate *)toDateTime {
+    NSDate *fromDate;
+    NSDate *toDate;
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    [calendar rangeOfUnit:NSCalendarUnitDay startDate:&fromDate
+                 interval:NULL forDate:fromDateTime];
+    [calendar rangeOfUnit:NSCalendarUnitDay startDate:&toDate
+                 interval:NULL forDate:toDateTime];
+    
+    NSDateComponents *difference = [calendar components:NSCalendarUnitDay
+                                               fromDate:fromDate toDate:toDate options:0];
+    
+    return [difference day];
 }
 
 -(void)logoutNotification {

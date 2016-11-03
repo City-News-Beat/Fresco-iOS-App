@@ -46,7 +46,7 @@
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
     [self startFabric]; // crashlytics first yall
-
+    [self configureStartDate];
     if ([self isFirstRun]) {
         [[FRSAPIClient sharedClient] logout];
     }
@@ -106,6 +106,12 @@
     [[FRSUploadManager sharedUploader] checkCachedUploads];
     
     return YES;
+}
+
+-(void)configureStartDate {
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate] == nil) {
+        [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:startDate];
+    }
 }
 
 -(void)startMixpanel {
