@@ -118,13 +118,13 @@
     return self;
 }
 -(void)commonInit {
-    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
-    
-    [self fetchLocalAssignments];
-    
-    if (lastLocation) {
-        [self fetchAssignmentsNearLocation:lastLocation radius:10];
-    }
+//    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
+//    
+//    [self fetchLocalAssignments];
+//    
+//    if (lastLocation) {
+//        [self fetchAssignmentsNearLocation:lastLocation radius:10];
+//    }
 }
 
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID {

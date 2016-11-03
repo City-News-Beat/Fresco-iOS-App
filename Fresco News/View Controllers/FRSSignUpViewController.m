@@ -438,6 +438,10 @@
     }
     
     [self checkCreateAccountButtonState];
+    
+    if ([self checkFields]) {
+        [self toggleCreateAccountButtonTitleColorToState:UIControlStateHighlighted];
+    }
 }
 
 -(void)configureMapView {
@@ -1144,6 +1148,11 @@
             self.sliderContainer.alpha = 0;
         } completion:nil];
     }
+    
+    if ([self checkFields]) {
+        [self toggleCreateAccountButtonTitleColorToState:UIControlStateHighlighted];
+    }
+    
 }
 
 -(void)createAccount {
@@ -1295,6 +1304,10 @@
     }
     
     if (self.emailTF.text.length == 0 || ![self isValidEmail:self.emailTF.text]) {
+        return FALSE;
+    }
+    
+    if (!self.TOSAccepted) {
         return FALSE;
     }
     
