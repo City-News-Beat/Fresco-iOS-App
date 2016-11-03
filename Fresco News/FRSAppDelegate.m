@@ -33,9 +33,10 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
-#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 #import "FRSStoriesViewController.h"
 #import "FRSUploadManager.h"
+
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -1318,6 +1319,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 -(void)segueToIDInfo {
+    
     FRSIdentityViewController *taxVC = [[FRSIdentityViewController alloc] init];
     UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
     

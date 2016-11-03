@@ -1188,32 +1188,6 @@
     [registrationDigest setObject:@(self.miles) forKey:@"radius"];
 
     
-    if (FALSE) {
-        if (![_pastRegistration[@"email"] isEqualToString:self.emailTF.text]) {
-            
-        }
-        
-        [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
-            
-            
-            if (error.code == -1009) {
-                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                [alert show];
-                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-
-                return;
-            }
-
-            if (error && !responseObject) {
-                [self presentGenericError];
-                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-                return;
-            }
-        }];
-
-        return;
-    }
-    
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", error, responseObject);
         
@@ -1234,6 +1208,9 @@
         
         
         if (error) {
+            [Answers logSignUpWithMethod:@"Digits"
+                                 success:@NO
+                        customAttributes:@{}];
             
             NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
             NSInteger responseCode = response.statusCode;
@@ -1262,6 +1239,10 @@
         
         
         if (error.code == 0) {
+            [Answers logSignUpWithMethod:@"Digits"
+                                 success:@YES
+                        customAttributes:@{}];
+            
             _isAlreadyRegistered = TRUE;
             [self segueToSetup];
 
