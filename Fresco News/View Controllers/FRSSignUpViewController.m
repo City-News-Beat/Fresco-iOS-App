@@ -1210,7 +1210,7 @@
         if (error) {
             [Answers logSignUpWithMethod:@"Email"
                                  success:@NO
-                        customAttributes:@{}];
+                        customAttributes:@{@"twitter":@((self.twitterSession != Nil)), @"facebook":@((self.facebookToken != Nil))}];
             
             NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
             NSInteger responseCode = response.statusCode;
@@ -1241,7 +1241,7 @@
         if (error.code == 0) {
             [Answers logSignUpWithMethod:@"Email"
                                  success:@YES
-                        customAttributes:@{}];
+                        customAttributes:@{@"twitter":@((self.twitterSession != Nil)), @"facebook":@((self.facebookToken != Nil))}];
             
             _isAlreadyRegistered = TRUE;
             [self segueToSetup];
