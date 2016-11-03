@@ -305,12 +305,14 @@
         if (![self.searchTextField.text isEqualToString:@""]) {
             return;
         }
-        //NSDictionary *galleryObject = responseObject[@"galleries"];
-        //NSDictionary *userObject = responseObject;
-        //self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
+        
+        UIView *headerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 12, self.view.frame.size.width, 100)];
+        headerContainer.backgroundColor = [UIColor redColor];
+        [self.view addSubview:headerContainer];
+        
         self.users = responseObject;
         
-        self.tableView.contentInset = UIEdgeInsetsMake(15, 0, 0, 0);
+        self.tableView.contentInset = UIEdgeInsetsMake(82, 0, 0, 0);
         self.tableView.bounces = YES;
         userIndex    = 0;
         galleryIndex = 1;
