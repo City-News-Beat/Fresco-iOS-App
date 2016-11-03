@@ -18,7 +18,7 @@
     NSInteger userIndex;
     NSInteger storyIndex;
     NSInteger galleryIndex;
-    
+    BOOL hasSearched;
     NSString *defaultSearch;
 }
 @property (nonatomic, retain) NSArray *users;

@@ -24,7 +24,6 @@
 #import <TwitterKit/TwitterKit.h>
 #import <Crashlytics/Crashlytics.h>
 #import <Smooch/Smooch.h>
-#import "FRSNotificationTester.h"
 #import <UserNotifications/UserNotifications.h>
 #import "FRSAPIClient.h"
 

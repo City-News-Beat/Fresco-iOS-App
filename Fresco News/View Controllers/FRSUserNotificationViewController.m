@@ -52,7 +52,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [super viewDidLoad];
     [self getNotifications];
     [self configureUI];
-//    [(FRSTabBarController *)self.tabBarController updateBellIcon:NO];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -65,12 +64,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [super viewDidDisappear:animated];
     self.isSegueingToGallery = NO;
     self.isSegueingToStory = NO;
-    /*if (self.tabBarController) {
-        [(FRSTabBarController *)self.tabBarController updateUserIcon];
-    } else {
-        FRSTabBarController *tabBarController = (FRSTabBarController *)[[[UIApplication sharedApplication] delegate] window].rootViewController;
-        [tabBarController updateUserIcon];
-    }*/
 }
 
 -(void)getNotifications {
@@ -432,7 +425,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     titleLabel.font = [UIFont notaMediumWithSize:17];
     titleLabel.numberOfLines = 0;
     titleLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width -leftPadding -rightPadding, 22);
-    titleLabel.text = notif[@"title"];
+    titleLabel.text = (notif[@"title"] && ![notif[@"title"] isEqual:[NSNull null]]) ? notif[@"title"] : @"";
     [titleLabel sizeToFit];
     
     UILabel *bodyLabel = [[UILabel alloc] init];
@@ -440,14 +433,18 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     topPadding = 33;
     bodyLabel.frame = CGRectMake(leftPadding, topPadding, self.view.frame.size.width - leftPadding -rightPadding, 60);
     bodyLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    bodyLabel.text = notif[@"body"];
+    bodyLabel.text = (notif[@"body"] && ![notif[@"body"] isEqual:[NSNull null]]) ? notif[@"body"] : @"";
     bodyLabel.numberOfLines = 0;
     bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
 
+    if (bodyLabel.text) {
+        [bodyLabel sizeToFit];
+    }
     
-    [bodyLabel sizeToFit];
-    [titleLabel sizeToFit];
-        
+    if (titleLabel.text) {
+        [titleLabel sizeToFit];
+    }
+    
     height += bodyLabel.frame.size.height;
     height += titleLabel.frame.size.height;
     height += 25; //spacing
@@ -456,7 +453,7 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return 75;
     }
         
-        return height;
+    return height;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {

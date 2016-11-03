@@ -139,7 +139,6 @@
 		D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */; };
 		D400FA681D6E13FA008842E1 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */; };
 		D400FA6B1D6E1A9E008842E1 /* FRSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */; };
-		D406C4091D9F0D9F00133788 /* FRSNotificationTester.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C4081D9F0D9F00133788 /* FRSNotificationTester.m */; };
 		D406C40E1DA2D2F300133788 /* SAMKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C40B1DA2D2F300133788 /* SAMKeychain.m */; };
 		D406C40F1DA2D2F300133788 /* SAMKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D406C40D1DA2D2F300133788 /* SAMKeychainQuery.m */; };
 		D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */; };
@@ -163,6 +162,7 @@
 		D42A138F1D89A451008909E6 /* Mixpanel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42A138E1D89A451008909E6 /* Mixpanel.framework */; };
 		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D434D5821DAC355400F1C58F /* Model.xcdatamodel in Resources */ = {isa = PBXBuildFile; fileRef = 07697CD11DA8561500C48B34 /* Model.xcdatamodel */; };
+		D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D43AA8BB1DCA29DA0002DF00 /* FRSWobbleView.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
 		D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD41C8E46A500A7A7A7 /* FRSImageViewCell.m */; };
@@ -537,8 +537,6 @@
 		D400FA671D6E13FA008842E1 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		D400FA691D6E1A9E008842E1 /* FRSTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTextView.h; sourceTree = "<group>"; };
 		D400FA6A1D6E1A9E008842E1 /* FRSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTextView.m; sourceTree = "<group>"; };
-		D406C4071D9F0D9F00133788 /* FRSNotificationTester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationTester.h; sourceTree = "<group>"; };
-		D406C4081D9F0D9F00133788 /* FRSNotificationTester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNotificationTester.m; sourceTree = "<group>"; };
 		D406C40A1DA2D2F300133788 /* SAMKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychain.h; sourceTree = "<group>"; };
 		D406C40B1DA2D2F300133788 /* SAMKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMKeychain.m; sourceTree = "<group>"; };
 		D406C40C1DA2D2F300133788 /* SAMKeychainQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMKeychainQuery.h; sourceTree = "<group>"; };
@@ -575,6 +573,8 @@
 		D42A138E1D89A451008909E6 /* Mixpanel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mixpanel.framework; path = "../../Library/Developer/Xcode/DerivedData/Fresco-fdljnwvdniqudpbfysumtikmtfbi/Build/Products/Release-iphoneos/Mixpanel.framework"; sourceTree = "<group>"; };
 		D42C907F1CC6191400B25C99 /* UIImage+Pixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Pixels.h"; path = "../../UIImage+Pixels.h"; sourceTree = "<group>"; };
 		D42C90801CC6191400B25C99 /* UIImage+Pixels.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Pixels.m"; path = "../../UIImage+Pixels.m"; sourceTree = "<group>"; };
+		D43AA8BA1DCA29DA0002DF00 /* FRSWobbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSWobbleView.h; sourceTree = "<group>"; };
+		D43AA8BB1DCA29DA0002DF00 /* FRSWobbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSWobbleView.m; sourceTree = "<group>"; };
 		D43C7FCD1C8E469000A7A7A7 /* FRSFileLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSFileLoader.h; path = ../FRSFileLoader.h; sourceTree = "<group>"; };
 		D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSFileLoader.m; path = ../FRSFileLoader.m; sourceTree = "<group>"; };
 		D43C7FD01C8E469800A7A7A7 /* FRSFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFileViewController.h; sourceTree = "<group>"; };
@@ -1039,6 +1039,7 @@
 		1EDA44DD1AA4CCF20082E08D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D43AA8B71DCA29A50002DF00 /* Stabilization */,
 				D41B2EF71D53E5810007C61F /* Search */,
 				D48C72211D09D8BC000677BF /* Split Table View */,
 				D4AF8EF01CFF654A00A33FAB /* Nav Bar */,
@@ -1474,13 +1475,6 @@
 			name = Detail;
 			sourceTree = "<group>";
 		};
-		D41365B41CA33347004FE848 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Settings;
-			sourceTree = "<group>";
-		};
 		D418E3491CCC1B0F0003B080 /* Social */ = {
 			isa = PBXGroup;
 			children = (
@@ -1528,6 +1522,15 @@
 				D421FC4F1D5B7ACF004C76B7 /* FRSSearchStoryCell.xib */,
 			);
 			name = "Story Cell";
+			sourceTree = "<group>";
+		};
+		D43AA8B71DCA29A50002DF00 /* Stabilization */ = {
+			isa = PBXGroup;
+			children = (
+				D43AA8BA1DCA29DA0002DF00 /* FRSWobbleView.h */,
+				D43AA8BB1DCA29DA0002DF00 /* FRSWobbleView.m */,
+			);
+			name = Stabilization;
 			sourceTree = "<group>";
 		};
 		D43C7FCC1C8E464800A7A7A7 /* Image Picker */ = {
@@ -2229,15 +2232,12 @@
 				D4F91A461C8B508A0078BF15 /* Fresco.h */,
 				D4F91A471C8B51500078BF15 /* FRSAPIClient.h */,
 				D4F91A481C8B51500078BF15 /* FRSAPIClient.m */,
-				D406C4071D9F0D9F00133788 /* FRSNotificationTester.h */,
-				D406C4081D9F0D9F00133788 /* FRSNotificationTester.m */,
 				D41C10C81CE9A4AF00F96B25 /* Stripe */,
 				D418E3491CCC1B0F0003B080 /* Social */,
 				D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */,
 				65EBEDBD1C44507600BE671F /* Networking */,
 				D43C7FF41C8F588C00A7A7A7 /* Defaults */,
 				D47999631C96A8FD00B46D01 /* Location */,
-				D41365B41CA33347004FE848 /* Settings */,
 				D46D35661D9036C400E38FAA /* Tracking */,
 				D48C72251D0B3D5C000677BF /* FRSDevice.h */,
 				D48C72261D0B3D5C000677BF /* FRSDevice.m */,
@@ -2737,6 +2737,7 @@
 				0772512C1D47EF4A007FDB6C /* FRSUserAnnotation.m in Sources */,
 				D453CC821CCA80850091A004 /* NSManagedObject+MagicalFinders.m in Sources */,
 				42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */,
+				D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
 				07A30C061C50488800C536EB /* FRSTaxInformationViewController.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,
@@ -2765,7 +2766,6 @@
 				65D1E4F51C4F0675003362D3 /* FRSFollowersViewController.m in Sources */,
 				07A30C131C50499A00C536EB /* FRSStoryCell.m in Sources */,
 				076F4D9E1D5B7CE9005B88AC /* FRSDefaultNotificationTableViewCell.m in Sources */,
-				D406C4091D9F0D9F00133788 /* FRSNotificationTester.m in Sources */,
 				070D66CF1C2AEFE000AB3D9D /* FRSOnboardThreeView.m in Sources */,
 				075998301C6BBD9600A0FE73 /* FRSCameraViewController.m in Sources */,
 				07ED92E41C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m in Sources */,

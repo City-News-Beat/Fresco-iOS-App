@@ -177,7 +177,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     [self checkLibrary];
     
-    [self addPanGesture];
+    //[self addPanGesture];
     
     
     self.isRecording = NO;
@@ -1380,6 +1380,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                         //make the metadata dictionary mutable so we can add properties to it
                         NSMutableDictionary *metadata = [(__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(imgSource, 0, NULL) mutableCopy];
                         
+                        
                         NSMutableDictionary *GPSDictionary = [[metadata objectForKey:(NSString *)kCGImagePropertyGPSDictionary] mutableCopy];
                         
                         if(!GPSDictionary)
@@ -1901,25 +1902,23 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     [_motionManager startGyroUpdatesToQueue:[NSOperationQueue mainQueue] withHandler:^(CMGyroData * _Nullable gyroData, NSError * _Nullable error) {
         CGFloat rotationRate = fabs(gyroData.rotationRate.x);
-        if (rotationRate > .5) {
+        if (rotationRate > .4) {
             [self alertUserOfFastPan:TRUE];
         }
         
         CGFloat wobbleRate = fabs(gyroData.rotationRate.z);
-        
         if (lastZ == 0) {
             lastZ = wobbleRate;
         }
-        else if (fabs(lastZ-wobbleRate) > .2) {
+        else if (lastZ-wobbleRate < -.7) {
             [self alertUserOfWobble:YES];
         }
         
         CGFloat forwardWobble = fabs(gyroData.rotationRate.y);
-        
         if (lastY == 0) {
             lastY = forwardWobble;
         }
-        else if (fabs(lastY - forwardWobble) > .2) {
+        else if (lastY - forwardWobble < -1) {
             [self alertUserOfWobble:YES];
         }
         
@@ -1949,11 +1948,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
             orientationNew = self.lastOrientation;
             NSLog(@"acel x = %f, acel z = %f", acceleration.x, acceleration.z);
         }
-        
-        //        } else if (acceleration.z < -0.85) {
-        //            orientationNew = UIDeviceOrientationPortrait;
-        //
-        //        }
         else {
             // Consider same as last time
             return;
@@ -1971,39 +1965,180 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 
 -(void)alertUserOfFastPan:(BOOL)isTooFast {
-    return;
-    NSLog(@"PAN SLOWER");
-    [self configureAlertWithText:@"Slow down your panning for a better shot."];
-    
-    if (pan && [pan isValid]) {
-        [pan invalidate];
-    }
-    
-    pan = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
-    [[NSRunLoop mainRunLoop] addTimer:pan forMode:NSDefaultRunLoopMode];
-}
 
--(void)alertUserOfWobble:(BOOL)isTooFast {
-    //NSLog(@"STOP WOBBLING");
-    return;
-    [self configureAlertWithText:@"Hold your phone steadier for a better shot."];
+    [self showPan];
     
     if (wobble && [wobble isValid]) {
         [wobble invalidate];
     }
     
-    wobble = [NSTimer timerWithTimeInterval:1.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
+    wobble = [NSTimer timerWithTimeInterval:.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
+    [[NSRunLoop mainRunLoop] addTimer:wobble forMode:NSDefaultRunLoopMode];
+    
+}
+
+-(void)alertUserOfWobble:(BOOL)isTooFast {
+    
+    [self showWobble];
+    
+    if (wobble && [wobble isValid]) {
+        [wobble invalidate];
+    }
+    
+    wobble = [NSTimer timerWithTimeInterval:.5 target:self selector:@selector(hideAlert) userInfo:Nil repeats:NO];
     [[NSRunLoop mainRunLoop] addTimer:wobble forMode:NSDefaultRunLoopMode];
 }
 
--(void)hideAlert {
+-(void)showPan {
     
+    if (_isRecording == FALSE) {
+        return;
+    }
+    
+    if (isShowingPan) {
+        return;
+    }
+    
+    isShowingPan = TRUE;
+    
+    panAlert = [[FRSWobbleView alloc] init];
+    CGAffineTransform transform;
+    
+    if (self.lastOrientation == UIDeviceOrientationLandscapeLeft) {
+        // 90 degrees
+        double rads = DEGREES_TO_RADIANS(90);
+        transform = CGAffineTransformRotate(panAlert.transform, rads);
+        
+        panAlert.transform = transform;
+        
+        CGRect shakeFrame = panAlert.frame;
+        shakeFrame.origin.x += self.view.frame.size.width - (panAlert.frame.size.height / 2) - 33;
+        shakeFrame.origin.y += 120;
+        
+        if (isShowingWobble) {
+            shakeFrame.origin.x -= 50;
+        }
+        
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120 + (shakeFrame.size.width) + 25;
+        panAlert.frame = shakeFrame;
+        panAlert.alpha = 0;
+        [self.view addSubview:panAlert];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            panAlert.alpha = 1;
+        }];
+        
+        [self.view bringSubviewToFront:panAlert];
+    }
+    else if (self.lastOrientation == UIDeviceOrientationLandscapeRight) {
+        double rads = DEGREES_TO_RADIANS(-90);
+        transform = CGAffineTransformRotate(panAlert.transform, rads);
+        panAlert.transform = transform;
+        
+        CGRect shakeFrame = panAlert.frame;
+        shakeFrame.origin.x = 15;
+        shakeFrame.origin.y += 120;
+        
+        if (isShowingWobble) {
+            shakeFrame.origin.x += 50;
+        }
+        
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120 + (shakeFrame.size.width) + 25;
+        panAlert.frame = shakeFrame;
+        panAlert.alpha = 0;
+        [self.view addSubview:panAlert];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            panAlert.alpha = 1;
+        }];
+        
+        [self.view bringSubviewToFront:panAlert];
+    }
+}
+
+-(void)showWobble {
+    
+    if (_isRecording == FALSE) {
+        return;
+    }
+    
+    if (isShowingWobble) {
+        return;
+    }
+    
+    isShowingWobble = TRUE;
+    
+    shakeAlert = [[FRSWobbleView alloc] init];
+    [shakeAlert configureForWobble];
+    CGAffineTransform transform;
+
+    if (self.lastOrientation == UIDeviceOrientationLandscapeLeft) {
+        // 90 degrees
+        double rads = DEGREES_TO_RADIANS(90);
+        transform = CGAffineTransformRotate(shakeAlert.transform, rads);
+        
+        shakeAlert.transform = transform;
+        
+        CGRect shakeFrame = shakeAlert.frame;
+        shakeFrame.origin.x += self.view.frame.size.width - (shakeAlert.frame.size.height / 2) - 33;
+        shakeFrame.origin.y += 120;
+        
+        if (isShowingPan) {
+            shakeFrame.origin.x -= 50;
+        }
+        
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
+        shakeAlert.frame = shakeFrame;
+        shakeAlert.alpha = 0;
+        [self.view addSubview:shakeAlert];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            shakeAlert.alpha = 1;
+        }];
+        
+        [self.view bringSubviewToFront:shakeAlert];
+    }
+    else if (self.lastOrientation == UIDeviceOrientationLandscapeRight) {
+        double rads = DEGREES_TO_RADIANS(-90);
+        transform = CGAffineTransformRotate(shakeAlert.transform, rads);
+        shakeAlert.transform = transform;
+        
+        CGRect shakeFrame = shakeAlert.frame;
+        shakeFrame.origin.x = 15;
+        shakeFrame.origin.y += 120;
+        
+        if (isShowingPan) {
+            shakeFrame.origin.x += 50;
+        }
+        
+        shakeFrame.origin.y = ((self.view.frame.size.height - shakeFrame.size.width) / 2) - 120;
+        shakeAlert.frame = shakeFrame;
+        shakeAlert.alpha = 0;
+        [self.view addSubview:shakeAlert];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            shakeAlert.alpha = 1;
+        }];
+        
+        [self.view bringSubviewToFront:shakeAlert];
+    }
+
+}
+
+
+-(void)hideAlert {
     dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.alertContainer.alpha = 0;
-            
+            shakeAlert.alpha = 0;
+            panAlert.alpha = 0;
         } completion:^(BOOL finished) {
+            [shakeAlert removeFromSuperview];
+            [panAlert removeFromSuperview];
             
+            shakeAlert = Nil;
+            panAlert = Nil;
+            isShowingWobble = FALSE;
+            isShowingPan = FALSE;
         }];
     });
 }

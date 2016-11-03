@@ -33,9 +33,10 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
-#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 #import "FRSStoriesViewController.h"
 #import "FRSUploadManager.h"
+
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSAppDelegate
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator, managedObjectModel = _managedObjectModel, managedObjectContext = _managedObjectContext;
@@ -46,7 +47,11 @@
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
     [self startFabric]; // crashlytics first yall
+
     [self configureStartDate];
+    
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+
     if ([self isFirstRun]) {
         [[FRSAPIClient sharedClient] logout];
     }
@@ -184,11 +189,8 @@
                 [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
             }
         }
-        
-        //FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
-            
             if (completion) {
                 completion(Nil,Nil);
             }
@@ -1184,7 +1186,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 -(void)segueToAssignmentWithID:(NSString *)assignmentID {
     UITabBarController *tab = (UITabBarController *)self.tabBarController;
 
-    FRSNavigationController *navCont = (FRSNavigationController *)[tab.viewControllers objectAtIndex:3];
     [self.tabBarController setSelectedIndex:3];
     
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
@@ -1281,7 +1282,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 -(void)segueToDebitCard {
-    UITabBarController *tab = (UITabBarController *)self.tabBarController;
 
     FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
     UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
@@ -1336,6 +1336,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 -(void)segueToIDInfo {
+    
     FRSIdentityViewController *taxVC = [[FRSIdentityViewController alloc] init];
     UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
     

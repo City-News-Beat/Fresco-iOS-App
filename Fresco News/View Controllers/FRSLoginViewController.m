@@ -365,21 +365,11 @@
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             [delegate saveUserFields:responseObject[@"user"]];
             [self setMigrateState:responseObject];
-            
 
-            /*  */
-            NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:session facebook:nil];
-           // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
-            /*  */
-            
             self.didAuthenticateSocial = YES;
             
             [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
-            
-//            if (<#condition#>) {
-//                [self displayMigrationAlert];
-//            }
-            
+
             [self popToOrigin];
             
             return;
@@ -387,7 +377,6 @@
         
         
         if (error) {
-            
             
             if (error.code == -1009) {
                 

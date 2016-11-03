@@ -10,6 +10,7 @@
 #import "FRSFileLoader.h"
 #import "FRSFileViewController.h"
 #import "UIImage+Pixels.h"
+#import "FRSWobbleView.h"
 
 typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModePhoto,
@@ -27,6 +28,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     NSDate *entry;
     NSDate *exit;
+    
+    FRSWobbleView *panAlert;
+    FRSWobbleView *shakeAlert;
+    
+    BOOL isShowingWobble;
+    BOOL isShowingPan;
 }
 
 @property (nonatomic) BOOL isPresented;

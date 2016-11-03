@@ -87,7 +87,7 @@ static NSString* keyPathForPanGestureRecognizerState = @"panGestureRecognizer.st
 {
     NSAssert(NO, @"init(coder:) has not been implemented");
     self = [super initWithCoder:aDecoder];
-    return nil;
+    return self;
 }
 
 #pragma mark -initialize

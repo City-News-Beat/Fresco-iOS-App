@@ -89,6 +89,7 @@
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     [self removeStatusBarNotification];
     self.shouldUpdateOnReturn = NO;
 }

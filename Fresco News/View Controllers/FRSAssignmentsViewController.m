@@ -88,6 +88,45 @@
 
 @implementation FRSAssignmentsViewController
 
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+-(void)commonInit {
+//    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
+//    
+//    [self fetchLocalAssignments];
+//    
+//    if (lastLocation) {
+//        [self fetchAssignmentsNearLocation:lastLocation radius:10];
+//    }
+}
+
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID {
     self = [super init];
     
@@ -206,8 +245,9 @@
     [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
+        NSLog(@"ASS: %@ %@", assignments, error);
         
-        FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
         
         if (globalAssignments.count > 0) {

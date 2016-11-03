@@ -55,6 +55,7 @@
     _progressView.backgroundColor = [UIColor colorWithRed:1.00 green:0.71 blue:0.00 alpha:1.0];
     
     [self addSubview:_progressView];
+    [self sendSubviewToBack:_progressView];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSUploadUpdate" object:nil queue:nil usingBlock:^(NSNotification *notification) {
         NSDictionary *update = notification.userInfo;
@@ -71,6 +72,7 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                    // [UIView animateWithDuration:.05 animations:^{
+                    [self sendSubviewToBack:_progressView];
                         _progressView.frame = navFrame;
                    // }];
                 });

@@ -438,6 +438,10 @@
     }
     
     [self checkCreateAccountButtonState];
+    
+    if ([self checkFields]) {
+        [self toggleCreateAccountButtonTitleColorToState:UIControlStateHighlighted];
+    }
 }
 
 -(void)configureMapView {
@@ -1144,6 +1148,11 @@
             self.sliderContainer.alpha = 0;
         } completion:nil];
     }
+    
+    if ([self checkFields]) {
+        [self toggleCreateAccountButtonTitleColorToState:UIControlStateHighlighted];
+    }
+    
 }
 
 -(void)createAccount {
@@ -1179,42 +1188,6 @@
     [registrationDigest setObject:@(self.miles) forKey:@"radius"];
 
     
-    if (FALSE) {
-        if (![_pastRegistration[@"email"] isEqualToString:self.emailTF.text]) {
-            
-        }
-        
-        [[FRSAPIClient sharedClient] updateUserWithDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
-            
-            
-            if (error.code == -1009) {
-                NSString *title;
-                
-                if (IS_IPHONE_5) {
-                    title = @"UNABLE TO CONNECT";
-                } else if (IS_IPHONE_6) {
-                    title = @"UNABLE TO CONNECT. CHECK SIGNAL";
-                } else if (IS_IPHONE_6_PLUS) {
-                    title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
-                }
-                
-                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                [alert show];
-                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-
-                return;
-            }
-
-            if (error && !responseObject) {
-                [self presentGenericError];
-                [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-                return;
-            }
-        }];
-
-        return;
-    }
-    
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", error, responseObject);
         
@@ -1235,6 +1208,9 @@
         
         
         if (error) {
+            [Answers logSignUpWithMethod:@"Digits"
+                                 success:@NO
+                        customAttributes:@{}];
             
             NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
             NSInteger responseCode = response.statusCode;
@@ -1263,6 +1239,10 @@
         
         
         if (error.code == 0) {
+            [Answers logSignUpWithMethod:@"Digits"
+                                 success:@YES
+                        customAttributes:@{}];
+            
             _isAlreadyRegistered = TRUE;
             [self segueToSetup];
 
@@ -1305,6 +1285,10 @@
     }
     
     if (self.emailTF.text.length == 0 || ![self isValidEmail:self.emailTF.text]) {
+        return FALSE;
+    }
+    
+    if (!self.TOSAccepted) {
         return FALSE;
     }
     
@@ -1440,9 +1424,7 @@
             
             //Save token to controller state
             _facebookToken = result.token;
-            
-            NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
-            
+                        
             //Make request for facebook user's profile meta
             [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"picture.width(300).height(300), name, email"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                 if (!error) {

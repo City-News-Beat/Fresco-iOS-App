@@ -75,7 +75,9 @@
     self.businessType = [notification object];
 }
 
--(void)viewWillAppear:(BOOL)animated{    [self.navigationItem setTitle:@"TAX INFORMATION"];
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationItem setTitle:@"TAX INFORMATION"];
     [self.tableView reloadData];
 }
 

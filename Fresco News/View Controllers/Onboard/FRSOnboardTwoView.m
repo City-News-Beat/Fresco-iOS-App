@@ -86,14 +86,12 @@
 -(void)configureIV{
     NSInteger width = 144;
     NSInteger height = 96;
-    CGFloat xOrigin = self.frame.size.width/2;
     CGFloat yOrigin = 23;
     CGFloat offset;
     CGFloat camWidth = 80;
     CGFloat camHeight = 72;
     
     if (IS_IPHONE_5){
-        xOrigin = self.frame.size.width;
         yOrigin = 23;
         offset = 205;
     } else if (IS_STANDARD_IPHONE_6){

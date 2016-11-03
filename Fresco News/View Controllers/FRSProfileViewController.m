@@ -174,17 +174,6 @@
 
 -(void)reportUserAlertAction {
     
-    
-    NSString *username = @"";
-    
-    
-    if (([_representedUser.username class] != [NSNull null]) && (![_representedUser.username isEqualToString:@""])) {
-        username = [NSString stringWithFormat:@"@%@", _representedUser.username];
-    } else if (([_representedUser.firstName class] != [NSNull null]) && (![_representedUser.firstName isEqualToString:@""])) {
-        username = _representedUser.firstName;
-    }
-    
-    
     [self reportUser:_representedUser.uid];
 
 }

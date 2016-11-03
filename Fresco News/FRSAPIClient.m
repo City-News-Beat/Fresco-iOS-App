@@ -262,7 +262,7 @@
     }];
 }
 
--(void)getNotificationsWithLast:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)getNotificationsWithLast:(nonnull NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
     if (!last) {
         completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:Nil]);
     }
@@ -661,7 +661,7 @@
     }];
 }
 
--(void)createPaymentWithToken:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)createPaymentWithToken:(nonnull NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
 
     if (!token) {
         completion(Nil, Nil);

@@ -38,7 +38,9 @@
         self.title = dictionary[@"title"];
     }
     else {
-        self.title = self.articleStringURL;
+        if (dictionary[@"link"] && ![dictionary[@"link"] isEqual:[NSNull null]]) {
+            self.title = dictionary[@"link"];
+        }
     }
     
     self.source = (dictionary[@"source"] && [dictionary[@"source"] isEqual:[NSNull null]]) ? dictionary[@"source"] : @"";
