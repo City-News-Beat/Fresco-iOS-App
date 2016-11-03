@@ -94,9 +94,9 @@
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
     
-    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
-        [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
-    }
+//    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+//        [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+//    }
 }
 
 -(void)logoutNotification {
