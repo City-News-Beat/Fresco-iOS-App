@@ -789,6 +789,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
             NSInteger height = cell.commentTextView.frame.size.height;
             
+            NSLog(@"CELL: %@", cell);
+            
+            
             if (height < 56) {
                 return 56;
             }
