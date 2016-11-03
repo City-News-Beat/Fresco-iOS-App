@@ -677,13 +677,9 @@
 
 -(void)configureSearchNearbyUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing userDict:(NSDictionary *)userDict user:(FRSUser *)user {
     
-    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(72, 66, [UIScreen mainScreen].bounds.size.width, 0.5)];
     topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
     [self addSubview:topLine];
-    
-    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 56, [UIScreen mainScreen].bounds.size.width, 0.5)];
-    bottomLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00];
-    [self addSubview:bottomLine];
     
     UIImageView *profileIV = [[UIImageView alloc] init];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
@@ -702,19 +698,19 @@
     
     [self addSubview:profileIV];
     
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, self.frame.size.height/2 - 8 + 7, self.frame.size.width - 64, self.frame.size.height)];
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(72, 12, self.frame.size.width - 64, self.frame.size.height)];
     nameLabel.text = nameString;
     nameLabel.font = [UIFont notaMediumWithSize:17];
     nameLabel.textColor = [UIColor frescoDarkTextColor];
     [nameLabel sizeToFit];
     [self addSubview:nameLabel];
     
-    UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(64 + 8 + nameLabel.frame.size.width, 23, self.frame.size.width - 64, 14)];
+    UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(72 + 16 + nameLabel.frame.size.width, 15, self.frame.size.width - 64, 14)];
     usernameLabel.text = (username && ![username isEqual:[NSNull null]] && ![username isEqualToString:@""]) ? [@"@" stringByAppendingString:username] : @"";
     usernameLabel.font = [UIFont notaRegularWithSize:12];
     usernameLabel.textColor = [UIColor frescoMediumTextColor];
     [usernameLabel sizeToFit];
-    usernameLabel.frame = CGRectMake(64 + 8 + nameLabel.frame.size.width, 23, self.frame.size.width - 64 - nameLabel.frame.size.width, 14); //set label max width
+    usernameLabel.frame = CGRectMake(64 + 16 + nameLabel.frame.size.width, 15, self.frame.size.width - 64 - nameLabel.frame.size.width, 14); //set label max width
     
     //Checks if username label is truncating and nameLabel.text is not empty
     CGSize size = [usernameLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont notaRegularWithSize:12]}];
@@ -723,11 +719,18 @@
     }
     
     if ([nameLabel.text isEqualToString: @""]) {
-        usernameLabel.frame = CGRectMake(64 + nameLabel.frame.size.width, 23, self.frame.size.width - 64, 14);
+        usernameLabel.frame = CGRectMake(64 + nameLabel.frame.size.width + 16, 15, self.frame.size.width - 64, 14);
     }
-    
-    
     [self addSubview:usernameLabel];
+    
+    NSString *bio = userDict[@"bio"];
+    UILabel *bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(72, 34, self.frame.size.width - 72 - 56, 0)];
+    bioLabel.text = (bio && ![bio isEqual:[NSNull null]] && ![bio isEqualToString:@""]) ? bio : @"";
+    bioLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    bioLabel.textColor = [UIColor frescoMediumTextColor];
+    [bioLabel sizeToFit];
+    bioLabel.frame = CGRectMake(72, 34, [UIScreen mainScreen].bounds.size.width - 72 - 56, bioLabel.frame.size.height);
+    [self addSubview:bioLabel];
     
     self.followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.followingButton addTarget:self action:@selector(follow) forControlEvents:UIControlEventTouchUpInside];
@@ -747,7 +750,8 @@
     self.following = isFollowing;
     self.currentUser = user;
     
-    self.backgroundColor = [UIColor redColor];
+    self.backgroundColor = [UIColor frescoBackgroundColorDark];
+
 }
 
 

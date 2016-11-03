@@ -103,7 +103,7 @@
                 NSDate *today = [NSDate date];
                 
                 NSInteger days = [FRSHomeViewController daysBetweenDate:startDate andDate:today];
-                if (days <= 2) {
+                if (days >= 2) {
                     [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
                 }
             }

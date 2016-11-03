@@ -317,7 +317,6 @@
         
         UIButton *repostSegueButton = [[UIButton alloc] initWithFrame:CGRectMake(self.repostLabel.frame.origin.x -60, self.repostLabel.frame.origin.y-15, self.repostLabel.frame.size.width, self.repostLabel.frame.size.height +30)];
         [repostSegueButton addTarget:self action:@selector(segueToSourceUser) forControlEvents:UIControlEventTouchUpInside];
-        repostSegueButton.backgroundColor = [UIColor redColor];
         [self addSubview:repostSegueButton];
     }
 }

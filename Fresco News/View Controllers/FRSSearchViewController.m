@@ -57,6 +57,8 @@
     galleryIndex = 2;
     
     [self.searchTextField becomeFirstResponder];
+    
+    self.configuredNearby = YES;
     [self configureNearbyUsers];
     
     self.userSectionTitleString = @"";
@@ -244,7 +246,6 @@
 }
 
 -(void)performSearchWithQuery:(NSString *)query {
-    
     _storyExtended = NO;
     _userExtended  = NO;
     
@@ -252,10 +253,8 @@
         return;
     }
     
-    self.nearbyHeaderContainer = nil;
-    self.nearbyHeaderContainer.alpha = 0;
-    [self.nearbyHeaderContainer removeFromSuperview];
-    
+    self.configuredNearby = NO;
+
     [self configureSpinner];
     self.users = @[];
     self.galleries = @[];
@@ -299,22 +298,27 @@
             self.awkwardView.alpha = 0;
             [self.awkwardView removeFromSuperview];
         }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.nearbyHeaderContainer.alpha = 0;
+        });
     }];
 }
 
 -(void)configureNearbyUsers {
     
-    self.configuredNearby = YES;
-
     [[FRSAPIClient sharedClient] fetchNearbyUsersWithCompletion:^(id responseObject, NSError *error) {
         
         if (error) {
+            self.configuredNearby = NO;
             return;
         }
         
         if (![self.searchTextField.text isEqualToString:@""]) {
             return;
         }
+        
+        self.configuredNearby = YES;
         
         self.nearbyHeaderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -70, self.view.frame.size.width, 100)];
         [self.tableView addSubview:self.nearbyHeaderContainer];
@@ -346,11 +350,6 @@
         _userExtended = YES;
         [self.tableView reloadData];
         
-        //Delaying here because viewForHeaderInSection is not called fast enough
-        //viewForHeaderInSection determines if the title should be `NEARBY`
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.configuredNearby = NO;
-        });
     }];
 }
 
@@ -559,6 +558,10 @@
         if (indexPath.row == 3 && !_userExtended) {
             return 44;
         }
+        
+        if (self.configuredNearby) {
+            return 66;
+        }
 
         return 56;
     }
@@ -664,6 +667,8 @@
         [cell setLayoutMargins:UIEdgeInsetsZero];
     }
     
+
+    
     if (indexPath.section == userIndex) {
         cell.delegate = self;
         if (self.users.count == 0) {
@@ -704,13 +709,15 @@
             username = user[@"username"];
         }
         
-        if (!self.configuredNearby) {
-            [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
+        if (self.configuredNearby) {
+            
+            NSLog(@"FOLLOWING: %@", user[@"following"]);
+            
+            [cell configureSearchNearbyUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] guserDict:self.users[indexPath.row] user:nil];
         } else {
-            [cell configureSearchNearbyUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
-
+            [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
         }
-        
+
         return cell;
     }
     else if (indexPath.section == storyIndex) {
@@ -851,10 +858,7 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-//    [super scrollViewDidScroll:scrollView];
-    if (!self.configuredNearby) {
-        [self.searchTextField resignFirstResponder];
-    }
+    [self.searchTextField resignFirstResponder];
 }
 
 #pragma mark - dealloc
