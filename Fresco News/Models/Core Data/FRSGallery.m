@@ -61,7 +61,6 @@
         self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
     }
     
-        
     
     NSArray *sources = (NSArray *)dict[@"sources"];
     if ([[sources class] isSubclassOfClass:[NSArray class]] && sources.count > 0) {
