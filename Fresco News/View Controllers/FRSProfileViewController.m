@@ -108,10 +108,7 @@
     self = [super init];
     
     if (self) {
-        if (!_representedUser) {
-            _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-            self.authenticatedProfile = TRUE;
-        }
+       
     }
     
     return self;
@@ -127,7 +124,7 @@
         return;
     }
     
-    if (!_representedUser) {
+    if (FALSE) {
         _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
         self.authenticatedProfile = TRUE;
         [self configureWithUser:_representedUser];
@@ -363,21 +360,6 @@
             
             if (self.shouldShowNotificationsOnLoad) {
                 [self showNotificationsNotAnimated];
-            }
-            
-            if(!self.editedProfile){
-                if (!_representedUser) {
-                    _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-                    self.authenticatedProfile = TRUE;
-                    [self configureWithUser:_representedUser];
-                }else{
-                    [[FRSAPIClient sharedClient] getUserWithUID:userName completion:^(id responseObject, NSError *error) {
-                        _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                        [self configureWithUser:_representedUser];
-                    }];
-                }
-            }else{
-                self.editedProfile = false;
             }
 
             [self showTabBarAnimated:YES];
