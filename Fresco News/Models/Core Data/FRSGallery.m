@@ -61,11 +61,15 @@
         self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
     }
     
+        
     
     NSArray *sources = (NSArray *)dict[@"sources"];
     if ([[sources class] isSubclassOfClass:[NSArray class]] && sources.count > 0) {
-        NSDictionary *source = (NSDictionary *)[sources firstObject];
         
+        NSString *repostedBy = dict[@"reposted_by"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF contains[c] %@", repostedBy];
+        NSArray *results = [sources filteredArrayUsingPredicate:predicate];
+        NSDictionary *source = (NSDictionary *)[results firstObject];
         NSString *userID = source[@"user_id"];
         
         [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
@@ -73,6 +77,7 @@
             self.sourceUser = user;
         }];
     }
+
     
     if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
         FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:self.currentContext];
