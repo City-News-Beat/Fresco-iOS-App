@@ -1481,7 +1481,8 @@
             completion(address, Nil);
          }
          else {
-             completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:404 userInfo:Nil]);
+             completion(@"No address found.", Nil);
+             [FRSTracker track:@"Address Error" parameters:@{@"coordinates":@[@(location.coordinate.longitude), @(location.coordinate.latitude)]}];
          }
          
      }];

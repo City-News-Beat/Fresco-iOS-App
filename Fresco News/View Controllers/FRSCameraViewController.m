@@ -1991,6 +1991,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 -(void)showPan {
     
+    if (!hasPanned) {
+        hasPanned = TRUE;
+        [FRSTracker track:@"Capture Agressive Pan"];
+    }
+    
     if (_isRecording == FALSE) {
         return;
     }
@@ -2057,6 +2062,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 }
 
 -(void)showWobble {
+    
+    if (!hasShaken) {
+        hasShaken = TRUE;
+        [FRSTracker track:@"Capture Wobble"];
+    }
     
     if (_isRecording == FALSE) {
         return;

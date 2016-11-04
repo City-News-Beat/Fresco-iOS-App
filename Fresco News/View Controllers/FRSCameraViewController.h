@@ -34,6 +34,9 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     
     BOOL isShowingWobble;
     BOOL isShowingPan;
+    
+    BOOL hasShaken;
+    BOOL hasPanned;
 }
 
 @property (nonatomic) BOOL isPresented;
