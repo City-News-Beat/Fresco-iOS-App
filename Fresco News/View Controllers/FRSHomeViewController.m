@@ -213,15 +213,6 @@
 }
 
 -(void)presentMigrationAlert {
-    /* DEBUG */
-//    [[FRSAPIClient sharedClient] authenticatedUser].username = nil;
-//    [[FRSAPIClient sharedClient] authenticatedUser].email = nil;
-//    [[FRSAPIClient sharedClient] authenticatedUser].password = nil;
-//    [FRSAPIClient sharedClient].passwordUsed = nil;
-//    [FRSAPIClient sharedClient].emailUsed = nil;
-    
-    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
     
     if ([[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] != nil
         && ![[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]
@@ -232,16 +223,13 @@
         
         return;
         
-    } else {
-        
     }
     
     if ([[FRSAPIClient sharedClient] isAuthenticated] && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
         FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[[NSUserDefaults standardUserDefaults] valueForKey:@"needs-password"] boolValue]];
         alert.delegate = self;
         [alert show];
-        //[[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:userIsMigrated];
-        //[[NSUserDefaults standardUserDefaults] synchronize];
+        [FRSTracker track:@"Migration Shown"];
     }
 }
 
