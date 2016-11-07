@@ -315,6 +315,17 @@
     }
 }
 
+#pragma mark - Keyboard 
+
+-(void)configureDismissKeyboardGestureRecognizer {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboardFromView)];
+    [self.view addGestureRecognizer:tap];
+}
+
+-(void)dismissKeyboardFromView {
+    [self.view endEditing:YES];
+}
+
 #pragma mark - Logout
 
 -(void)logoutWithPop:(BOOL)pop {

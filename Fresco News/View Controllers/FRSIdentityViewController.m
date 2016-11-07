@@ -39,8 +39,8 @@
     
     [self configureTableView];
     [self configureBackButtonAnimated:NO];
+    [self configureDismissKeyboardGestureRecognizer];
 }
-
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -632,7 +632,6 @@
         }
         NSLog(@"SAVING INFO: %@ %@ %@ %@ %@ %@ %@", _firstNameField.text, _lastNameField.text, _addressField.text, _unitField.text, _stateField.text, _zipField.text, _dateField.text);
     }
-    
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField*)textField {

@@ -52,6 +52,7 @@
     
     self.dismissKeyboardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:self.dismissKeyboardGestureRecognizer];
+    [self configureDismissKeyboardGestureRecognizer];
 }
 
 
@@ -114,6 +115,7 @@
     expirationDateTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     expirationDateTextField  = [[UITextField alloc] initWithFrame:CGRectMake(16, 44, [UIScreen mainScreen].bounds.size.width/2, 44)];
     expirationDateTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    expirationDateTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     expirationDateTextField.placeholder =  @"00 / 00";
     expirationDateTextField.textColor = [UIColor frescoDarkTextColor];
     expirationDateTextField.tintColor = [UIColor frescoBlueColor];
@@ -250,10 +252,10 @@
 }
 
 -(void)bankTapped {
+    [self dismissKeyboardFromView];
     [_contentScroller setContentOffset:CGPointMake(_contentScroller.frame.size.width, 0) animated:YES];
     self.bankButton.alpha = 1.0;
     self.debitButton.alpha = 0.7;
-
 }
 
 -(void)debitTapped {
@@ -556,14 +558,22 @@
 }
 
 -(void)keyboardDidShow:(NSNotification *)notification {
-    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    if (_accountNumberField.isEditing || _routingNumberField.isEditing) {
+        return;
+    }
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.view.frame = CGRectMake(0, -30, self.view.frame.size.width,self.view.frame.size.height);
     } completion:nil];
 }
 
 
 -(void)keyboardDidHide:(NSNotification *)notification {
-    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    if (_accountNumberField.isEditing || _routingNumberField.isEditing) {
+        return;
+    }
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.view.frame = CGRectMake(0, 64, self.view.frame.size.width,self.view.frame.size.height);
     } completion:nil];
 }

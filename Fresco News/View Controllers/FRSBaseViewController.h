@@ -51,6 +51,10 @@
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID;
 -(void)segueToDebitCard;
 
+/* KEYBOARD */
+-(void)configureDismissKeyboardGestureRecognizer;
+-(void)dismissKeyboardFromView;
+
 /* FRSAlertView */
 -(void)presentGenericError;
 -(void)checkStatusAndPresentPermissionsAlert:(id)delegate;

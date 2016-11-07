@@ -127,7 +127,10 @@
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
     self.passwordUsed = password;
     
-    [self post:loginEndpoint withParameters:@{@"username":user, @"password":password, @"installation":[[FRSAPIClient sharedClient] currentInstallation]} completion:^(id responseObject, NSError *error) {
+    NSDictionary *params = @{@"username":user, @"password":password, @"installation":[[FRSAPIClient sharedClient] currentInstallation]};
+    
+    [self post:loginEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        
         completion(responseObject, error);
         if (!error) {
             [self handleUserLogin:responseObject];
