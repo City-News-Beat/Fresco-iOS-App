@@ -499,6 +499,26 @@
     }
 }
 
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (IS_IPHONE_5) {
+        if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField) {
+            [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.tableView.transform = CGAffineTransformMakeTranslation(0, -70);
+            } completion:nil];
+        }
+    }
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField {
+    if (IS_IPHONE_5) {
+        if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField) {
+            [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.tableView.transform = CGAffineTransformMakeTranslation(0, 0);
+            } completion:nil];
+        }
+    }
+}
+
 -(void)textFieldDidChange:(UITextField *)textField{
     BOOL enableSaveButton = true;
     
@@ -512,10 +532,12 @@
         self.saveIDInfoButton.userInteractionEnabled = true;
         self.saveIDInfoButton.enabled = true;
         [self.saveIDInfoButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.saveIDInfoButton.userInteractionEnabled = NO;
     }else{
         self.saveIDInfoButton.userInteractionEnabled = false;
         self.saveIDInfoButton.enabled = false;
         [self.saveIDInfoButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.saveIDInfoButton.userInteractionEnabled = YES;
     }
 }
 
@@ -600,6 +622,11 @@
     
     if (indexPath.row == 3 && indexPath.section == 2) {
         // save
+        
+        if (!self.saveIDInfoButton.userInteractionEnabled) {
+            [self.view endEditing:YES];
+            return;
+        }
         if(self.saveIDInfoButton.enabled && !self.savingInfo){
             [self saveIDInfo];
         }
