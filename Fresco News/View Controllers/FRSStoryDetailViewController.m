@@ -17,6 +17,8 @@
 @interface FRSStoryDetailViewController () <UINavigationBarDelegate>
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+@property (strong, nonatomic) UIView *headerContainer;
+@property BOOL didConfigureHeader;
 
 @end
 
@@ -70,7 +72,11 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
     [self setupTableView];
+    if (self.story.caption != nil && ![self.story.caption isEqualToString:@""]) {
+        [self configureCaptionHeader];
+    }
     [self configureNavigationBar];
     [self addStatusBarNotification];
     
@@ -80,6 +86,104 @@ static NSString *galleryCell = @"GalleryCellReuse";
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.galleriesTable.frame.size.width, 1)];
     self.galleriesTable.tableFooterView.backgroundColor = [UIColor clearColor];
 
+}
+
+-(void)configureCaptionHeader {
+    self.didConfigureHeader = YES;
+    
+    self.headerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)]; // Height is calculated later
+    self.headerContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self.view addSubview:self.headerContainer];
+    
+    UIImageView *avatar = [[UIImageView alloc] initWithFrame:CGRectMake(16, 12, 24, 24)];
+    avatar.backgroundColor = [UIColor frescoLightTextColor];
+    avatar.layer.cornerRadius = 12;
+    [self.headerContainer addSubview:avatar];
+    
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(48, 14, [UIScreen mainScreen].bounds.size.width -80, 22)];
+    nameLabel.font = [UIFont notaMediumWithSize:17];
+    nameLabel.textColor = [UIColor frescoDarkTextColor];
+    nameLabel.text = [self.story.creator firstName];
+    [self.headerContainer addSubview:nameLabel];
+    
+    if (nameLabel.text.length == 0) {
+        nameLabel.text = @"Fresco News";
+    }
+    
+    if (avatar.image == nil) {
+        avatar.alpha = 0;
+        nameLabel.transform = CGAffineTransformMakeTranslation(-32, 0);
+    }
+    
+    UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 17, [UIScreen mainScreen].bounds.size.width -16, 14)];
+    timestampLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
+    timestampLabel.textColor = [UIColor frescoMediumTextColor];
+    timestampLabel.textAlignment = NSTextAlignmentRight;
+    [self.headerContainer addSubview:timestampLabel];
+    
+    NSTimeInterval doubleDiff = [[_story editedDate] timeIntervalSinceNow];
+    long diff = (long) doubleDiff;
+    int seconds = diff % 60;
+    diff = diff / 60;
+    int minutes = diff % 60;
+    diff = diff / 60;
+    int hours = diff % 24;
+    int days = diff / 24;
+    
+    NSString *expirationString;
+    
+    if (days != 0) {
+        expirationString = [NSString stringWithFormat:@"%d days ago", days];
+        if (days == 1) {
+            expirationString = [NSString stringWithFormat:@"%d day ago", days];
+        }
+    } else if (hours != 0) {
+        expirationString = [NSString stringWithFormat:@"%d hours ago", hours];
+        if (hours == 1) {
+            expirationString = [NSString stringWithFormat:@"%d hour ago", hours];
+        }
+    } else if (minutes != 0) {
+        expirationString = [NSString stringWithFormat:@"%d minutes ago", minutes];
+        if (hours == 1) {
+            expirationString = [NSString stringWithFormat:@"%d minute ago", minutes];
+        }
+    } else if (seconds != 0) {
+        expirationString = [NSString stringWithFormat:@"%d seconds ago", seconds];
+        if (hours == 1) {
+            expirationString = [NSString stringWithFormat:@"%d second ago", seconds];
+        }
+    }
+    
+    if ([expirationString containsString:@"-"]) {
+        NSCharacterSet *trim = [NSCharacterSet characterSetWithCharactersInString:@"-"];
+        expirationString = [[expirationString componentsSeparatedByCharactersInSet:trim] componentsJoinedByString:@""];
+    }
+    
+    timestampLabel.text = expirationString;
+    
+    UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 48, [UIScreen mainScreen].bounds.size.width -32, 20)];
+    captionLabel.textColor = [UIColor frescoDarkTextColor];
+    captionLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    captionLabel.text = _story.caption;
+    captionLabel.numberOfLines = 0;
+    [self.headerContainer addSubview:captionLabel];
+    [captionLabel sizeToFit];
+    
+    UIView *bottomGap = [[UIView alloc] initWithFrame:CGRectMake(0, captionLabel.frame.size.height +60, self.view.frame.size.width, 12)];
+    bottomGap.backgroundColor = [UIColor frescoBackgroundColorDark];
+    [self.headerContainer addSubview:bottomGap];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0.5)];
+    line.backgroundColor = [UIColor frescoLightTextColor];
+    [bottomGap addSubview:line];
+    
+    self.headerContainer.frame = CGRectMake(0, 0, self.view.frame.size.width, captionLabel.frame.size.height + 72);
+
+    
+    
+
+    
+    self.galleriesTable.tableHeaderView = self.headerContainer;
 }
 
 -(void)setupTableView {

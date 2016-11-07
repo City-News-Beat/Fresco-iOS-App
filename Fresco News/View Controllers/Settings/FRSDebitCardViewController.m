@@ -252,7 +252,8 @@
 }
 
 -(void)bankTapped {
-    [self dismissKeyboardFromView];
+    [self.view resignFirstResponder];
+    [self resignFirstResponder];
     [_contentScroller setContentOffset:CGPointMake(_contentScroller.frame.size.width, 0) animated:YES];
     self.bankButton.alpha = 1.0;
     self.debitButton.alpha = 0.7;
@@ -288,7 +289,7 @@
     NSLog(@"PARAMS: %@", bankParams);
     
     if (!bankParams) {
-        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         [self.alertView show];
         [self stopSpinner:self.loadingView onButton:self.saveBankButton];
         return;
@@ -299,7 +300,7 @@
         // created token
         if (error || !token) {
             // failed
-            self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             [self.alertView show];
             [self stopSpinner:self.loadingView onButton:self.saveBankButton];
 
@@ -310,7 +311,7 @@
             
             if (error) {
                 // failed
-                self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.alertView show];
             }
             else {
@@ -499,7 +500,7 @@
         expiration = @[@([components[0] intValue]), @([components[1] intValue])];
     }
     else {
-        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoDarkTextColor] delegate:self];
+        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         [self.alertView show];
         [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
         return;
@@ -508,7 +509,7 @@
     STPCardParams *params = [FRSStripe creditCardWithNumber:cardNumberTextField.text expiration:expiration cvc:securityCodeTextField.text];
     
     if (!params) {
-        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please check your card information and try again." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoDarkTextColor] delegate:self];
+        self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:@"Please check your card information and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         [self.alertView show];
         [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
         return;
@@ -519,7 +520,7 @@
     [FRSStripe createTokenWithCard:params completion:^(STPToken *stripeToken, NSError *error) {
         
         if (error || !stripeToken) {
-            self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:error.localizedDescription actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoDarkTextColor] delegate:self];
+            self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT CARD INFORMATION" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             [self.alertView show];
             [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
             return;
@@ -530,8 +531,9 @@
             //
             NSLog(@"RESP: %@ \n ERR:%@", responseObject, error);
             if (error) {
-                self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:error.localizedDescription actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoDarkTextColor] delegate:self];
+                self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.alertView show];
+                [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
             }
             else if (responseObject) {
                 NSString *brand = [responseObject objectForKey:@"brand"];
@@ -543,9 +545,8 @@
                     [self.navigationController popViewControllerAnimated:YES];
                 }
                 else {
-                    self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"The card you entered was invalid. Please try again." actionTitle:@"OK" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoDarkTextColor] delegate:self];
+                    self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"The card you entered was invalid. Please try again." actionTitle:@"TRY AGAIN" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                     [self.alertView show];
-                    
                 }
                 
                 [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];

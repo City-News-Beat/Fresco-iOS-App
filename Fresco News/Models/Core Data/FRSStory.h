@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, retain) NSNumber *galleryCount;
 @property (nullable, nonatomic, retain) FRSUser *sourceUser;
-
+@property (nullable, nonatomic, retain) FRSUser *creator;
 // Insert code here to declare functionality of your managed object subclass
 
 -(void)configureWithDictionary:(NSDictionary *)dict;

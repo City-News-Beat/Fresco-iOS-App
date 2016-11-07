@@ -1574,7 +1574,10 @@
 -(void)makePaymentActive:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:makePaymentActiveEndpoint, paymentID];
     
-    [self post:endpoint withParameters:@{@"active":@(1)} completion:^(id responseObject, NSError *error) {
+    NSDictionary *params = @{@"active":@(1)};
+    
+    [self post:endpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        
         completion(responseObject, error);
     }];
 }

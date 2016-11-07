@@ -61,6 +61,22 @@
     NSNumber *likes = [dict valueForKey:@"likes"];
     [self setValue:likes forKey:@"likes"];
     
+    
+    
+    NSString *curatorID = [dict valueForKey:@"curator_id"];
+    
+    if (curatorID != nil && ![curatorID isEqual:[NSNull null]]) {
+        [[FRSAPIClient sharedClient] getUserWithUID:curatorID completion:^(id responseObject, NSError *error) {
+            NSLog(@"RESPONSE OBJ: %@", responseObject);
+            NSLog(@"CURATOR_ID: %@", curatorID);
+            
+//            FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+//            self.creator = user;
+
+        }];
+    }
+    
+    
     NSString *repostedBy = [dict valueForKey:@"reposted_by"];
     
     if (repostedBy != Nil && ![repostedBy isEqual:[NSNull null]]) {
