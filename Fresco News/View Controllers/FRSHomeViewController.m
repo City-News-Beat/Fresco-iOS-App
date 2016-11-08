@@ -189,7 +189,7 @@
     }
     
     [self removeStatusBarNotification];
-    [self pausePlayers];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
 }
 
 -(void)configureUI {
