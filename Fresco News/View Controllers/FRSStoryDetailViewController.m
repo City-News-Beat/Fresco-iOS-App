@@ -97,18 +97,21 @@ static NSString *galleryCell = @"GalleryCellReuse";
     
     UIImageView *avatar = [[UIImageView alloc] initWithFrame:CGRectMake(16, 12, 24, 24)];
     avatar.backgroundColor = [UIColor frescoLightTextColor];
+    //set image
     avatar.layer.cornerRadius = 12;
     [self.headerContainer addSubview:avatar];
     
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(48, 14, [UIScreen mainScreen].bounds.size.width -80, 22)];
     nameLabel.font = [UIFont notaMediumWithSize:17];
     nameLabel.textColor = [UIColor frescoDarkTextColor];
-    nameLabel.text = [self.story.creator firstName];
+    nameLabel.text = [[_story creator] firstName];
+    
     [self.headerContainer addSubview:nameLabel];
     
-    if (nameLabel.text.length == 0) {
-        nameLabel.text = @"Fresco News";
-    }
+//    if (nameLabel.text.length == 0) {
+//        nameLabel.text = @"Fresco News";
+//    }
+    
     
     if (avatar.image == nil) {
         avatar.alpha = 0;
@@ -174,7 +177,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     [self.headerContainer addSubview:bottomGap];
     
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0.5)];
-    line.backgroundColor = [UIColor frescoLightTextColor];
+    line.backgroundColor = [UIColor frescoShadowColor];
     [bottomGap addSubview:line];
     
     self.headerContainer.frame = CGRectMake(0, 0, self.view.frame.size.width, captionLabel.frame.size.height + 72);

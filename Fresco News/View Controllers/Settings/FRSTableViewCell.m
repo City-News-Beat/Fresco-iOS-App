@@ -728,6 +728,7 @@
     bioLabel.text = (bio && ![bio isEqual:[NSNull null]] && ![bio isEqualToString:@""]) ? bio : @"";
     bioLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     bioLabel.textColor = [UIColor frescoMediumTextColor];
+    bioLabel.numberOfLines = 0;
     [bioLabel sizeToFit];
     bioLabel.frame = CGRectMake(72, 34, [UIScreen mainScreen].bounds.size.width - 72 - 56, bioLabel.frame.size.height);
     [self addSubview:bioLabel];

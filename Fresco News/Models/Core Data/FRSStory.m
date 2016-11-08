@@ -26,7 +26,7 @@
 //@property (nullable, nonatomic, retain) NSSet<FRSGallery *> *galleries;
 
 @implementation FRSStory
-@synthesize galleryCount = _galleryCount, sourceUser = _sourceUser;
+@synthesize galleryCount = _galleryCount, sourceUser = _sourceUser, creator = _creator;
 
 // Insert code here to add functionality to your managed object subclass
 -(void)configureWithDictionary:(NSDictionary *)dict {
@@ -63,18 +63,18 @@
     
     
     
-    NSString *curatorID = [dict valueForKey:@"curator_id"];
+//    NSString *curatorID = [dict valueForKey:@"curator_id"];
     
-    if (curatorID != nil && ![curatorID isEqual:[NSNull null]]) {
-        [[FRSAPIClient sharedClient] getUserWithUID:curatorID completion:^(id responseObject, NSError *error) {
-            NSLog(@"RESPONSE OBJ: %@", responseObject);
-            NSLog(@"CURATOR_ID: %@", curatorID);
-            
+//    if (curatorID != nil && ![curatorID isEqual:[NSNull null]]) {
+//        [[FRSAPIClient sharedClient] getUserWithUID:curatorID completion:^(id responseObject, NSError *error) {
+//            NSLog(@"RESPONSE OBJ: %@", responseObject);
+//            NSLog(@"CURATOR_ID: %@", curatorID);
+//            
 //            FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
 //            self.creator = user;
-
-        }];
-    }
+//
+//        }];
+//    }
     
     
     NSString *repostedBy = [dict valueForKey:@"reposted_by"];
