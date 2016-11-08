@@ -1154,21 +1154,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
     
     [self dismissKeyboard];
-
-    if (self.postToFacebook) {
-        [self facebook:self.captionTextView.text];
-
-    }
     
-    if (self.postAnon) {
-        NSLog(@"Post anonymously");
-    }
-    else {
-        [FRSTracker track:@"Submissions"];
-        [FRSTracker track:@"Submission items in gallery" parameters:@{@"count":@(self.content.count)}];
+    [FRSTracker track:@"Submissions"];
+    [FRSTracker track:@"Submission items in gallery" parameters:@{@"count":@(self.content.count)}];
         
-        [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
-    }
+    [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
 }
 
 -(void)getPostData:(NSMutableArray *)posts current:(NSMutableArray *)current {
