@@ -800,6 +800,13 @@
     [self.view addSubview:self.tableView];
 }
 
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        [(FRSGalleryCell *)cell pause];
+    }
+}
+
 -(void)createProfileSection{
     self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 0)];
     self.profileContainer.backgroundColor = [UIColor frescoOrangeColor];

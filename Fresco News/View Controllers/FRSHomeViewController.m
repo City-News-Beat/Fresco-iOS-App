@@ -192,6 +192,12 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
 }
 
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        [(FRSGalleryCell *)cell pause];
+    }
+}
 -(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
@@ -264,14 +270,6 @@
                 });
             }];
         }];
-}
-
--(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    FRSGalleryCell *galleryCell = (FRSGalleryCell *)cell;
-    if ([galleryCell respondsToSelector:@selector(pause)]) {
-        [galleryCell pause];
-    }
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
