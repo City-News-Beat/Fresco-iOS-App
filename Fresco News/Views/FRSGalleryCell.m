@@ -87,11 +87,10 @@
         return;
     }
     
-    hasPlayed = TRUE;
-    
     [self.galleryView play];
 }
 -(void)pause {
+    hasPlayed = TRUE;
     [self.galleryView pause];
 }
 @end
