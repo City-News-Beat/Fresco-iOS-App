@@ -928,7 +928,6 @@
             FRSPlayer *player = [self setupPlayerForPost:post];
             [self.players addObject:player];
             [self.videoPlayer play];
-            
         }
         else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
             if (self.players && imageView) {
@@ -936,7 +935,7 @@
             }
         }
         else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_async(dispatch_get_global_queue(dispatch_get_main_queue(), 0), ^{
                 FRSPlayer *player = (FRSPlayer *)self.players[page];
                 if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
                     self.videoPlayer = player;
