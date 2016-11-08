@@ -82,6 +82,13 @@
 }
 
 -(void)play {
+    
+    if (hasPlayed) {
+        return;
+    }
+    
+    hasPlayed = TRUE;
+    
     [self.galleryView play];
 }
 -(void)pause {
