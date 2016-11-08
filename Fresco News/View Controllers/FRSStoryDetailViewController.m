@@ -110,8 +110,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     
 //    if (nameLabel.text.length == 0) {
 //        nameLabel.text = @"Fresco News";
-//    }
-    
+//    }    
     
     if (avatar.image == nil) {
         avatar.alpha = 0;

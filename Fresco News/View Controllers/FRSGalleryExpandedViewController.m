@@ -476,6 +476,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard:)];
+    tap.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tap];
 }
 
@@ -849,6 +850,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 FRSComment *comment = _comments[indexPath.row-showsMoreButton];
                 cell.cellDelegate = self;
                 [cell configureCell:comment delegate:self];
+                [cell.commentTextView sizeToFit];
                 return cell;
             }
         }
@@ -914,6 +916,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+    
     if ([URL.absoluteString containsString:@"name"]) {
         NSString *user = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
         NSLog(@"USER: %@", user);
@@ -942,6 +945,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    if (tableView == _commentTableView) {
+        [self contentActionBarDidSelectActionButton:self.actionBar];
+        FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
+        commentField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
+    }
 }
 
 #pragma mark - Comments View Delegate
