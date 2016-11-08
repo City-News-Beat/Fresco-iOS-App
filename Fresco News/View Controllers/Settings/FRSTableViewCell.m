@@ -681,6 +681,8 @@
     topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
     [self addSubview:topLine];
     
+    [self constrainSubview:topLine ToBottomOfParentView:self WithHeight:0.5];
+    
     UIImageView *profileIV = [[UIImageView alloc] init];
     profileIV.frame = CGRectMake(16, 12, 32, 32);
     profileIV.layer.cornerRadius = 16;
@@ -733,6 +735,7 @@
     bioLabel.frame = CGRectMake(72, 34, [UIScreen mainScreen].bounds.size.width - 72 - 56, bioLabel.frame.size.height);
     [self addSubview:bioLabel];
     
+    
     self.followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.followingButton addTarget:self action:@selector(follow) forControlEvents:UIControlEventTouchUpInside];
     self.followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 24, 24);
@@ -751,8 +754,60 @@
     self.following = isFollowing;
     self.currentUser = user;
     
+    
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
 
+}
+
+-(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
+    
+    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    //Trailing
+    NSLayoutConstraint *trailing = [NSLayoutConstraint
+                                    constraintWithItem:subView
+                                    attribute:NSLayoutAttributeTrailing
+                                    relatedBy:NSLayoutRelationEqual
+                                    toItem:parentView
+                                    attribute:NSLayoutAttributeTrailing
+                                    multiplier:1
+                                    constant:0];
+    
+    //Leading
+    NSLayoutConstraint *leading = [NSLayoutConstraint
+                                   constraintWithItem:subView
+                                   attribute:NSLayoutAttributeLeading
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:parentView
+                                   attribute:NSLayoutAttributeLeading
+                                   multiplier:1
+                                   constant:72];
+    
+    //Bottom
+    NSLayoutConstraint *bottom = [NSLayoutConstraint
+                                  constraintWithItem:subView
+                                  attribute:NSLayoutAttributeBottom
+                                  relatedBy:NSLayoutRelationEqual
+                                  toItem:parentView
+                                  attribute:NSLayoutAttributeBottom
+                                  multiplier:1
+                                  constant:0];
+    
+    //Height
+    NSLayoutConstraint *constantHeight = [NSLayoutConstraint
+                                          constraintWithItem:subView
+                                          attribute:NSLayoutAttributeHeight
+                                          relatedBy:NSLayoutRelationEqual
+                                          toItem:nil
+                                          attribute:0
+                                          multiplier:0
+                                          constant:height];
+    
+    [parentView addConstraint:trailing];
+    [parentView addConstraint:bottom];
+    [parentView addConstraint:leading];
+    
+    [subView addConstraint:constantHeight];
 }
 
 

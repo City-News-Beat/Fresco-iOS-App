@@ -560,7 +560,25 @@
         }
         
         if (self.configuredNearby) {
-            return 66;
+            
+            NSDictionary *user = [self.users objectAtIndex:indexPath.row];
+            
+            if ([user[@"bio"] isEqualToString:@""] || [user[@"bio"] isEqual:[NSNull null]] || user[@"bio"] == nil) {
+                return 66;
+            } else {
+                
+                //This label is never added to the view, it's just used to calculate the height.
+                NSString *bio = user[@"bio"];
+                UILabel *bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(72, 34, [UIScreen mainScreen].bounds.size.width - 72 - 56, 0)];
+                bioLabel.text = (bio && ![bio isEqual:[NSNull null]] && ![bio isEqualToString:@""]) ? bio : @"";
+                bioLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+                bioLabel.textColor = [UIColor frescoMediumTextColor];
+                bioLabel.numberOfLines = 0;
+                [bioLabel sizeToFit];
+                bioLabel.frame = CGRectMake(72, 34, [UIScreen mainScreen].bounds.size.width - 72 - 56, bioLabel.frame.size.height);
+                
+                return bioLabel.frame.size.height +34 +24;
+            }
         }
 
         return 56;
