@@ -402,12 +402,7 @@
 
 -(void)startFabric {
     [[Twitter sharedInstance] startWithConsumerKey:@"kT772ISFiuWQdVQblU4AmBWw3" consumerSecret:@"navenvTSRCcyUL7F4Ait3gACnxfc7YXWyaee2bAX1sWnYGe4oY"];
-    
     [Fabric with:@[[Twitter class], [Crashlytics class]]];
-    
-    [[FRSAPIClient sharedClient] searchWithQuery:@"bernie" completion:^(id responseObject, NSError *error) {
-    }];
-    
     [Smooch initWithSettings:[SKTSettings settingsWithAppToken:@"bmk6otjwgrb5wyaiohse0qbr0"]];
 }
 
