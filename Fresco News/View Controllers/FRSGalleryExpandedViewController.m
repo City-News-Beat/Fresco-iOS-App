@@ -499,7 +499,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard:)];
     
-    
     [self.galleryView addGestureRecognizer:tap];
     [self.galleryView play];
     [self focus];
