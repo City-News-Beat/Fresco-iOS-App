@@ -105,6 +105,10 @@
                 case 405:
                     
                     break;
+                    
+                case 412:
+                    // installation token error or social taken error
+                    break;
                 default:
                     break;
             }
@@ -1352,7 +1356,6 @@
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
         
         id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
-        FRSTabBarController *tabBar = (FRSTabBarController *) [appDelegate tabBar];
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
         UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
         
