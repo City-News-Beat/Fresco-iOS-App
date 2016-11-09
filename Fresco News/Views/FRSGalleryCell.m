@@ -17,6 +17,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    [super awakeFromNib];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -32,7 +33,13 @@
 
 -(void)configureCell {
     
+    
     if (self.galleryView != Nil) {
+        
+        if (![self.galleryView.gallery.uid isEqualToString:self.gallery.uid]) {
+            hasPlayed = FALSE;
+        }
+        
         [self.galleryView loadGallery:self.gallery];
         self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
         return;
