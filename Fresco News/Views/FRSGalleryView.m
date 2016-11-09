@@ -418,6 +418,7 @@
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
     FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
         videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
