@@ -333,8 +333,6 @@
 
 -(void)configureSpinner {
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    //Doesn't do anything
-    //self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
@@ -382,8 +380,6 @@
 -(void)configureNavigationBar {
     
     [self removeNavigationBarLine];
-
-    int offset = 8;
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
@@ -908,11 +904,17 @@
             
             for (FRSGalleryCell *cell in visibleCells) {
                 
+                /*
+                    Start playback mid frame -- at least 300 from top & at least 100 from bottom
+                 */
                 if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
                     
                     if (!taken) {
                         NSIndexPath *path = [self.tableView indexPathForCell:cell];
                         
+                        /*
+                            If cell != cell we tried to last play, play the cell
+                         */
                         if (path != lastIndexPath) {
                             lastIndexPath = path;
                             [cell play];
@@ -920,6 +922,9 @@
                         }
                     }
                     else {
+                        /*
+                            If cell is going out of the playable area, pause it
+                         */
                         [cell pause];
                     }
                 }
@@ -929,11 +934,6 @@
                 lastIndexPath = Nil;
             }
         });
-    }
-    
-    if (scrollView == self.pageScroller) {
-        // animate nav up
-        
     }
 }
 
