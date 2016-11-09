@@ -47,7 +47,8 @@
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
     [self startFabric]; // crashlytics first yall
-    
+    [self clearUploadCache];
+
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
     if ([self isFirstRun]) {
@@ -107,7 +108,6 @@
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     [[FRSUploadManager sharedUploader] checkCachedUploads];
-    [self clearUploadCache];
     
     return YES;
 }
