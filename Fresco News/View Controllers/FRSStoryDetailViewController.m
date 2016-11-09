@@ -121,60 +121,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
     timestampLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
     timestampLabel.textColor = [UIColor frescoMediumTextColor];
     timestampLabel.textAlignment = NSTextAlignmentRight;
+    timestampLabel.text = [FRSDateFormatter timestampStringFromDate:[_story editedDate]];
     [self.headerContainer addSubview:timestampLabel];
-    
-    NSTimeInterval doubleDiff = [[_story editedDate] timeIntervalSinceNow];
-    long diff = (long) doubleDiff;
-    int seconds = diff % 60;
-    diff = diff / 60;
-    int minutes = diff % 60;
-    diff = diff / 60;
-    int hours = diff % 24;
-    int days = diff / 24;
-    
-    NSString *expirationString;
-    
-    if (days < 0) {
-        days *= -1;
-    }
-    if (hours < 0) {
-        hours *= -1;
-    }
-    if (minutes < 0) {
-        minutes *= -1;
-    }
-    if (seconds < 0) {
-        seconds *= -1;
-    }
-    
-    if (days != 0) {
-        expirationString = [NSString stringWithFormat:@"%d days ago", days];
-        if (days >= 1 && days < 2) {
-            expirationString = [NSString stringWithFormat:@"%d day ago", days];
-        }
-    } else if (hours != 0) {
-        expirationString = [NSString stringWithFormat:@"%d hours ago", hours];
-        if (hours == 1 && hours < 2) {
-            expirationString = [NSString stringWithFormat:@"%d hour ago", hours];
-        }
-    } else if (minutes != 0) {
-        expirationString = [NSString stringWithFormat:@"%d minutes ago", minutes];
-        if (minutes == 1 && minutes < 2) {
-            expirationString = [NSString stringWithFormat:@"%d minute ago", minutes];
-        }
-    } else if (seconds != 0) {
-        expirationString = [NSString stringWithFormat:@"%d seconds ago", seconds];
-        if (seconds == 1 && seconds <2) {
-            expirationString = [NSString stringWithFormat:@"%d second ago", seconds];
-        }
-    }
-    
-    if ([expirationString containsString:@"-"]) {
-        NSCharacterSet *trim = [NSCharacterSet characterSetWithCharactersInString:@"-"];
-        expirationString = [[expirationString componentsSeparatedByCharactersInSet:trim] componentsJoinedByString:@""];
-    }
-    
-    timestampLabel.text = expirationString;
     
     UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 48, [UIScreen mainScreen].bounds.size.width -32, 20)];
     captionLabel.textColor = [UIColor frescoDarkTextColor];
