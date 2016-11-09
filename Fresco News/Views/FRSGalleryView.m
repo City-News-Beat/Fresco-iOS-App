@@ -374,7 +374,7 @@
         [self.scrollView addSubview:imageView];
 
             if (i==0) {
-                [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+                [self loadImage:post.imageUrl forImageView:imageView];
 
                 if (post.videoUrl != Nil) {
                     // videof
@@ -920,7 +920,7 @@
     imageView = (self.imageViews.count > page) ? self.imageViews[page] : Nil;
     post = (self.orderedPosts.count > page) ? self.orderedPosts[page] : Nil;
     
-    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
+    [self loadImage:post.imageUrl forImageView:imageView];
     [self handlePlay:TRUE player:Nil];
     
     if (self.players.count <= page) {
@@ -954,7 +954,7 @@
         FRSPost *nextPost = self.orderedPosts[page+1];
         
         if (nextPost.videoUrl == Nil) {
-            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
+            [self loadImage:nextPost.imageUrl forImageView:nextImage];
         }
     }
     
@@ -1030,6 +1030,16 @@
     if (adjustedPost.videoUrl == nil) {
         self.muteImageView.alpha = 0;
     }
+}
+
+-(void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
+    NSString *adjustedURL = url;
+    
+    /*
+     Adjust sizing from URL string
+     */
+    
+    [imageView hnk_setImageFromURL:[NSURL URLWithString:adjustedURL]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
