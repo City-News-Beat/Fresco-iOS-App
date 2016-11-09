@@ -1038,6 +1038,9 @@
     /*
      Adjust sizing from URL string
      */
+    NSString *adjustedSize = [NSString stringWithFormat:@"%d", (int)([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])];
+    adjustedSize = [@"/images/" stringByAppendingString:adjustedSize];
+    adjustedURL = [adjustedURL stringByReplacingOccurrencesOfString:@"/images" withString:adjustedSize];
     
     [imageView hnk_setImageFromURL:[NSURL URLWithString:adjustedURL]];
 }
