@@ -121,6 +121,7 @@
         if(![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL])
             NSLog(@"Error: Create folder failed %@", directory);
     
+    // purge old un-needed files
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"];
         NSError *error = nil;
