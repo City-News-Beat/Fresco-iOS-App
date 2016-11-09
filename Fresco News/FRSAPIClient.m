@@ -934,7 +934,7 @@
 
 -(void)getUserWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     
-    NSString *endpoint = [NSString stringWithFormat:@"user/?id=%@", user];
+    NSString *endpoint = [NSString stringWithFormat:@"user/%@", user];
     
     [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
         if (error) {
