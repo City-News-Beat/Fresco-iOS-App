@@ -430,7 +430,8 @@
         
         playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
         playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        playerLayer.backgroundColor = [UIColor whiteColor].CGColor;
+        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+        playerLayer.opaque = FALSE;
         
         UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
         container.backgroundColor = [UIColor clearColor];
@@ -440,7 +441,7 @@
         
         [container.layer insertSublayer:playerLayer atIndex:1000];
         [self.scrollView addSubview:container];
-        [self.scrollView sendSubviewToBack:container];
+        [self.scrollView bringSubviewToFront:container];
         [self configureMuteIcon];
     });
     
@@ -1047,9 +1048,7 @@
     if (object == self.videoPlayer && [keyPath isEqualToString:@"status"]) {
         
         if (self.videoPlayer.status == AVPlayerStatusReadyToPlay) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [_scrollView sendSubviewToBack:self.imageViews[_adjustedPage]];
-            });
+            
         }
         else if (self.videoPlayer.status == AVPlayerStatusFailed) {
             
