@@ -134,24 +134,37 @@ static NSString *galleryCell = @"GalleryCellReuse";
     
     NSString *expirationString;
     
+    if (days < 0) {
+        days *= -1;
+    }
+    if (hours < 0) {
+        hours *= -1;
+    }
+    if (minutes < 0) {
+        minutes *= -1;
+    }
+    if (seconds < 0) {
+        seconds *= -1;
+    }
+    
     if (days != 0) {
         expirationString = [NSString stringWithFormat:@"%d days ago", days];
-        if (days == 1) {
+        if (days >= 1 && days < 2) {
             expirationString = [NSString stringWithFormat:@"%d day ago", days];
         }
     } else if (hours != 0) {
         expirationString = [NSString stringWithFormat:@"%d hours ago", hours];
-        if (hours == 1) {
+        if (hours == 1 && hours < 2) {
             expirationString = [NSString stringWithFormat:@"%d hour ago", hours];
         }
     } else if (minutes != 0) {
         expirationString = [NSString stringWithFormat:@"%d minutes ago", minutes];
-        if (hours == 1) {
+        if (minutes == 1 && minutes < 2) {
             expirationString = [NSString stringWithFormat:@"%d minute ago", minutes];
         }
     } else if (seconds != 0) {
         expirationString = [NSString stringWithFormat:@"%d seconds ago", seconds];
-        if (hours == 1) {
+        if (seconds == 1 && seconds <2) {
             expirationString = [NSString stringWithFormat:@"%d second ago", seconds];
         }
     }
