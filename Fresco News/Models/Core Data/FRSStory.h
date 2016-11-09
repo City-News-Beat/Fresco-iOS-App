@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface FRSStory : NSManagedObject<FRSManagedObject>
 
 @property (nonatomic, retain) NSNumber *galleryCount;
+@property (strong, nonatomic, retain) NSDictionary *curatorDict;
 @property (nullable, nonatomic, retain) FRSUser *sourceUser;
 @property (nullable, nonatomic, retain) FRSUser *creator;
 // Insert code here to declare functionality of your managed object subclass

@@ -12,6 +12,7 @@
 #import "FRSStory+CoreDataProperties.h"
 #import "FRSAppDelegate.h"
 #import "DGElasticPullToRefresh.h"
+#import "Haneke.h"
 #import "FRSGalleryExpandedViewController.h"
 
 @interface FRSStoryDetailViewController () <UINavigationBarDelegate>
@@ -99,6 +100,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
     avatar.backgroundColor = [UIColor frescoLightTextColor];
     //set image
     avatar.layer.cornerRadius = 12;
+    avatar.clipsToBounds = YES;
+    avatar.layer.masksToBounds = YES;
     [self.headerContainer addSubview:avatar];
     
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(48, 14, [UIScreen mainScreen].bounds.size.width -80, 22)];
@@ -108,11 +111,11 @@ static NSString *galleryCell = @"GalleryCellReuse";
     
     [self.headerContainer addSubview:nameLabel];
     
-//    if (nameLabel.text.length == 0) {
-//        nameLabel.text = @"Fresco News";
-//    }
-    
-    if (avatar.image == nil) {
+    if ([self.story curatorDict]) {
+        nameLabel.text = [[self story] curatorDict][@"full_name"];
+        [avatar hnk_setImageFromURL:[NSURL URLWithString:[[self story] curatorDict][@"avatar"]]];
+    } else {
+        nameLabel.text = @"Fresco News";
         avatar.alpha = 0;
         nameLabel.transform = CGAffineTransformMakeTranslation(-32, 0);
     }

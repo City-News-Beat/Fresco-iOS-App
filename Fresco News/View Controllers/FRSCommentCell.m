@@ -45,13 +45,13 @@
     self.commentTextView.delegate = delegate;
 //    self.commentTextView.backgroundColor = [UIColor redColor];
     
-    //Not sure why we need to delay this.
-    //Calling size to fit here scales the textview down so the user can
-    //tap on the comment cell and begin commenting with the original commenters username pre-loaded.
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//    //Not sure why we need to delay this.
+//    //Calling size to fit here scales the textview down so the user can
+//    //tap on the comment cell and begin commenting with the original commenters username pre-loaded.
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.commentTextView sizeToFit];
-    });
-    
+//    });
+
     if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
         [self setSeparatorInset:UIEdgeInsetsZero];
     }

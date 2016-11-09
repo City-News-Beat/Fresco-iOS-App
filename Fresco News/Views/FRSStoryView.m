@@ -227,7 +227,14 @@
         timestampLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
         timestampLabel.textColor = [UIColor whiteColor];
         [self.topContainer addSubview:timestampLabel];
+        
+        
 
+        
+        
+        
+        
+        
         self.titleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, self.titleLabel.frame.origin.y - 30, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
         
         //self.titleLabel.backgroundColor = [UIColor greenColor];

@@ -26,9 +26,18 @@
 //@property (nullable, nonatomic, retain) NSSet<FRSGallery *> *galleries;
 
 @implementation FRSStory
-@synthesize galleryCount = _galleryCount, sourceUser = _sourceUser, creator = _creator;
+@synthesize galleryCount = _galleryCount, sourceUser = _sourceUser, creator = _creator, curatorDict = _curatorDict;
 
 // Insert code here to add functionality to your managed object subclass
+
+-(NSDictionary *)curatorDict {
+    return _curatorDict;
+}
+
+-(void)setCuratorDict:(NSDictionary *)curatorDict {
+    _curatorDict = curatorDict;
+}
+
 -(void)configureWithDictionary:(NSDictionary *)dict {
     
     self.caption = dict[@"caption"];
@@ -75,7 +84,11 @@
 //
 //        }];
 //    }
-    
+    NSLog(@"CURATOR: %@", dict[@"curator"]);
+
+    if (![dict[@"curator"] isEqual:[NSNull null]]) {
+        self.curatorDict = dict[@"curator"];
+    }
     
     NSString *repostedBy = [dict valueForKey:@"reposted_by"];
     

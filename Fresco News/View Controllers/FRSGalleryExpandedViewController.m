@@ -849,6 +849,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 FRSComment *comment = _comments[indexPath.row-showsMoreButton];
                 cell.cellDelegate = self;
                 [cell configureCell:comment delegate:self];
+                [cell.textLabel sizeToFit];
                 return cell;
             }
         }
