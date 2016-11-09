@@ -945,11 +945,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    if (tableView == _commentTableView) {
-        [self contentActionBarDidSelectActionButton:self.actionBar];
-        FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
-        commentField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
-    }
+//    if (tableView == _commentTableView) {
+//        [self contentActionBarDidSelectActionButton:self.actionBar];
+//        FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
+//        commentField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
+//    }
 }
 
 #pragma mark - Comments View Delegate

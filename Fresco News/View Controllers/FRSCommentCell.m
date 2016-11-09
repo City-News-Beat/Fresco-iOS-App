@@ -41,7 +41,7 @@
     
     self.commentTextView.attributedText = comment.attributedString;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-//    [self.commentTextView frs_resize];
+    [self.commentTextView frs_resize];
     self.commentTextView.delegate = delegate;
 //    self.commentTextView.backgroundColor = [UIColor redColor];
     
@@ -49,7 +49,7 @@
 //    //Calling size to fit here scales the textview down so the user can
 //    //tap on the comment cell and begin commenting with the original commenters username pre-loaded.
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.commentTextView sizeToFit];
+//        [self.commentTextView sizeToFit];
 //    });
 
     if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
