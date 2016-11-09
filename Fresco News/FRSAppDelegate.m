@@ -107,8 +107,24 @@
     [self registerForPushNotifications];
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     [[FRSUploadManager sharedUploader] checkCachedUploads];
+    [self clearUploadCache];
     
     return YES;
+}
+
+-(void)clearUploadCache {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"];
+        NSError *error = nil;
+        for (NSString *file in [fileManager contentsOfDirectoryAtPath:directory error:&error]) {
+            BOOL success = [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@%@", directory, file] error:&error];
+            
+            if (!success || error) {
+                NSLog(@"Upload cache purge %@ with error: %@", (success) ? @"succeeded" : @"failed", error);
+            }
+        }
+    });
 }
 
 -(void)startMixpanel {
