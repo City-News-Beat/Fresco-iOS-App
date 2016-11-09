@@ -113,8 +113,15 @@
 }
 
 -(void)clearUploadCache {
+    
+    BOOL isDir;
+    NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"]; // temp directory where we store video
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if(![fileManager fileExistsAtPath:directory isDirectory:&isDir])
+        if(![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL])
+            NSLog(@"Error: Create folder failed %@", directory);
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"];
         NSError *error = nil;
         for (NSString *file in [fileManager contentsOfDirectoryAtPath:directory error:&error]) {
