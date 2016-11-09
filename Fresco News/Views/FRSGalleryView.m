@@ -395,13 +395,13 @@
             imageView.userInteractionEnabled = YES;
     }
     
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        if (self.imageViews.count > 1) {
-//            UIImageView *nextImage = self.imageViews[1];
-//            FRSPost *nextPost = self.orderedPosts[1];
-//            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
-//        }
-//    });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.imageViews.count > 1) {
+            UIImageView *nextImage = self.imageViews[1];
+            FRSPost *nextPost = self.orderedPosts[1];
+            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
+        }
+    });
 
     if (!self.topLine) {
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
@@ -940,7 +940,6 @@
                 if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
                     self.videoPlayer = player;
                     [player play];
-                    
                 }
                 else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
                     [player pause];
