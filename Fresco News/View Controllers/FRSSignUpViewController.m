@@ -1195,7 +1195,10 @@
         NSLog(@"%@", errorMessage);
 
         
-        
+        if (error) {
+            [registrationDigest setObject:error.localizedDescription forKey:@"error"];
+            [FRSTracker track:@"Registration Error" parameters:@{@"error":registrationDigest}];
+        }
         
         if (error.code == -1009) {
             

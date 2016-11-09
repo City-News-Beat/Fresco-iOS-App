@@ -47,9 +47,14 @@
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
     [self startFabric]; // crashlytics first yall
+<<<<<<< HEAD
 
     [self configureStartDate];
     
+=======
+    [self clearUploadCache];
+
+>>>>>>> 3.0-phil
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
     if ([self isFirstRun]) {
@@ -113,10 +118,34 @@
     return YES;
 }
 
+<<<<<<< HEAD
 -(void)configureStartDate {
     if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate] == nil) {
         [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:startDate];
     }
+=======
+-(void)clearUploadCache {
+    
+    BOOL isDir;
+    NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"]; // temp directory where we store video
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if(![fileManager fileExistsAtPath:directory isDirectory:&isDir])
+        if(![fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL])
+            NSLog(@"Error: Create folder failed %@", directory);
+    
+    // purge old un-needed files
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"];
+        NSError *error = nil;
+        for (NSString *file in [fileManager contentsOfDirectoryAtPath:directory error:&error]) {
+            BOOL success = [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@%@", directory, file] error:&error];
+            
+            if (!success || error) {
+                NSLog(@"Upload cache purge %@ with error: %@", (success) ? @"succeeded" : @"failed", error);
+            }
+        }
+    });
+>>>>>>> 3.0-phil
 }
 
 -(void)startMixpanel {
@@ -414,12 +443,7 @@
 
 -(void)startFabric {
     [[Twitter sharedInstance] startWithConsumerKey:@"kT772ISFiuWQdVQblU4AmBWw3" consumerSecret:@"navenvTSRCcyUL7F4Ait3gACnxfc7YXWyaee2bAX1sWnYGe4oY"];
-    
     [Fabric with:@[[Twitter class], [Crashlytics class]]];
-    
-    [[FRSAPIClient sharedClient] searchWithQuery:@"bernie" completion:^(id responseObject, NSError *error) {
-    }];
-    
     [Smooch initWithSettings:[SKTSettings settingsWithAppToken:@"bmk6otjwgrb5wyaiohse0qbr0"]];
 }
 

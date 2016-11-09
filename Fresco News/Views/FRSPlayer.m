@@ -10,8 +10,49 @@
 
 @implementation FRSPlayer
 
+
+-(instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(instancetype)initWithURL:(NSURL *)URL {
+    self = [super initWithURL:URL];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(instancetype)initWithPlayerItem:(AVPlayerItem *)item {
+    self = [super initWithPlayerItem:item];
+    
+    if (self) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+-(void)commonInit {
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSPlayerPlay" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+        if (notification.object != self) {
+            [self pause];
+        }
+    }];
+}
+
 -(void)play {
     [super play];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
     
     if (!_hasNotifs) {
         _hasNotifs = FALSE;

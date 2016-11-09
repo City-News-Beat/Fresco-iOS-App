@@ -221,6 +221,10 @@
     
     [[FRSAPIClient sharedClient] signIn:username password:password completion:^(id responseObject, NSError *error) {
         
+        if (error) {
+            [FRSTracker track:@"Login Error" parameters:@{@"method":@"email", @"error":error.localizedDescription}];
+        }
+        
         [self stopSpinner:self.loadingView onButton:self.loginButton];
         
         if (error.code == 0) {
@@ -356,6 +360,10 @@
     
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
 
+        if (error) {
+            [FRSTracker track:@"Login Error" parameters:@{@"method":@"twitter", @"error":error.localizedDescription}];
+        }
+        
         if (authenticated) {
             
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
@@ -461,6 +469,10 @@
     [spinner  setFrame:CGRectMake(self.facebookButton.frame.origin.x, self.facebookButton.frame.origin.y, self.facebookButton.frame.size.width, self.facebookButton.frame.size.width)];
     
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
+        
+        if (error) {
+            [FRSTracker track:@"Login Error" parameters:@{@"method":@"facebook", @"error":error.localizedDescription}];
+        }
         
         if (authenticated) {
             

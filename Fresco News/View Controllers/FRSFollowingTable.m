@@ -311,14 +311,17 @@
     
     isReloading = TRUE;
     FRSGallery *gallery = [self.galleries lastObject];
-    NSString *galleryID = gallery.uid;
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
     
     FRSUser *authUser = [[FRSAPIClient sharedClient] authenticatedUser];
     NSString *userID = authUser.uid;
     
     NSString *endpoint = [NSString stringWithFormat:followingFeed, userID];
     
-    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, galleryID];
+    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
     
     [[FRSAPIClient sharedClient] get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
         isReloading = FALSE;
@@ -332,6 +335,7 @@
         
         NSMutableArray *newGalleries = [self.galleries mutableCopy];
         [newGalleries addObjectsFromArray:response];
+        self.galleries = newGalleries;
         [self reloadData];
     }];
 }

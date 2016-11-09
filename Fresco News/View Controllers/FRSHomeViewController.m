@@ -225,9 +225,15 @@
     }
     
     [self removeStatusBarNotification];
-    [self pausePlayers];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
 }
 
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        [(FRSGalleryCell *)cell pause];
+    }
+}
 -(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
@@ -249,15 +255,6 @@
 }
 
 -(void)presentMigrationAlert {
-    /* DEBUG */
-//    [[FRSAPIClient sharedClient] authenticatedUser].username = nil;
-//    [[FRSAPIClient sharedClient] authenticatedUser].email = nil;
-//    [[FRSAPIClient sharedClient] authenticatedUser].password = nil;
-//    [FRSAPIClient sharedClient].passwordUsed = nil;
-//    [FRSAPIClient sharedClient].emailUsed = nil;
-    
-    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
     
     if ([[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] != nil
         && ![[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]
@@ -268,16 +265,13 @@
         
         return;
         
-    } else {
-        
     }
     
     if ([[FRSAPIClient sharedClient] isAuthenticated] && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
         FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[[NSUserDefaults standardUserDefaults] valueForKey:@"needs-password"] boolValue]];
         alert.delegate = self;
         [alert show];
-        //[[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:userIsMigrated];
-        //[[NSUserDefaults standardUserDefaults] synchronize];
+        [FRSTracker track:@"Migration Shown"];
     }
 }
 
@@ -312,14 +306,6 @@
                 });
             }];
         }];
-}
-
--(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    FRSGalleryCell *galleryCell = (FRSGalleryCell *)cell;
-    if ([galleryCell respondsToSelector:@selector(pause)]) {
-        [galleryCell pause];
-    }
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -383,8 +369,6 @@
 
 -(void)configureSpinner {
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    //Doesn't do anything
-    //self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
@@ -432,8 +416,6 @@
 -(void)configureNavigationBar {
     
     [self removeNavigationBarLine];
-
-    int offset = 8;
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
@@ -958,11 +940,17 @@
             
             for (FRSGalleryCell *cell in visibleCells) {
                 
+                /*
+                    Start playback mid frame -- at least 300 from top & at least 100 from bottom
+                 */
                 if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
                     
                     if (!taken) {
                         NSIndexPath *path = [self.tableView indexPathForCell:cell];
                         
+                        /*
+                            If cell != cell we tried to last play, play the cell
+                         */
                         if (path != lastIndexPath) {
                             lastIndexPath = path;
                             [cell play];
@@ -970,6 +958,9 @@
                         }
                     }
                     else {
+                        /*
+                            If cell is going out of the playable area, pause it
+                         */
                         [cell pause];
                     }
                 }
@@ -979,11 +970,6 @@
                 lastIndexPath = Nil;
             }
         });
-    }
-    
-    if (scrollView == self.pageScroller) {
-        // animate nav up
-        
     }
 }
 

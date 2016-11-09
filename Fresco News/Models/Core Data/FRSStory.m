@@ -41,9 +41,12 @@
 -(void)configureWithDictionary:(NSDictionary *)dict {
     
     self.caption = dict[@"caption"];
-    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"created_at"] milliseconds:YES];
-    //self.editedDate  = [FRSDateFormatter dateFromEpochTime:dict[@"updated_at"] milliseconds:YES];
-    self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"updated_at"]];
+    self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"time_created"]];
+    
+    if (dict[@"action_at"] && ![dict[@"action_at"] isEqual:[NSNull null]]) {
+        self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"action_at"]];
+    }
+    
     self.title = dict[@"title"];
     self.uid = dict[@"id"];
     self.imageURLs = [self imagesURLsFromThumbnails:dict[@"thumbnails"]];

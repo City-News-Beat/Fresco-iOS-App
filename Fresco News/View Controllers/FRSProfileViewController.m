@@ -307,6 +307,7 @@
     if (!self.didFollow) {
         [self shouldRefresh:NO]; //Reset the bool. Used when the current user is browsing profiles in search, and when following/unfollowing in followersVC
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
 }
 
 
@@ -795,6 +796,13 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.showsVerticalScrollIndicator = FALSE;
     [self.view addSubview:self.tableView];
+}
+
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        [(FRSGalleryCell *)cell pause];
+    }
 }
 
 -(void)createProfileSection{

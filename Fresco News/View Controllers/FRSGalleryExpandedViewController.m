@@ -945,11 +945,22 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
+<<<<<<< HEAD
 //    if (tableView == _commentTableView) {
 //        [self contentActionBarDidSelectActionButton:self.actionBar];
 //        FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
 //        commentField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
 //    }
+=======
+    if (tableView == self.articlesTV) {
+        if (self.orderedArticles.count > indexPath.row) {
+            FRSArticle *article = self.orderedArticles[indexPath.row];
+            if (article.articleStringURL) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:article.articleStringURL]];
+            }
+        }
+    }
+>>>>>>> 3.0-phil
 }
 
 #pragma mark - Comments View Delegate

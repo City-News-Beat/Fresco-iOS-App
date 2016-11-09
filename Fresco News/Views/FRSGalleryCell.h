@@ -12,7 +12,9 @@
 @class FRSGallery;
 
 @interface FRSGalleryCell : UITableViewCell <FRSGalleryViewDelegate>
-
+{
+    BOOL hasPlayed;
+}
 @property (strong, nonatomic) FRSGalleryView *galleryView;
 
 @property (strong, nonatomic) FRSGallery *gallery;
