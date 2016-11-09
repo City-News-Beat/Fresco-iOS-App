@@ -476,6 +476,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard:)];
+    tap.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tap];
 }
 
@@ -497,7 +498,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard:)];
-    
     
     [self.galleryView addGestureRecognizer:tap];
     [self.galleryView play];
@@ -789,6 +789,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
             NSInteger height = cell.commentTextView.frame.size.height;
             
+            NSLog(@"CELL: %@", cell);
+            
+            
             if (height < 56) {
                 return 56;
             }
@@ -846,6 +849,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 FRSComment *comment = _comments[indexPath.row-showsMoreButton];
                 cell.cellDelegate = self;
                 [cell configureCell:comment delegate:self];
+                [cell.textLabel sizeToFit];
                 return cell;
             }
         }
@@ -911,6 +915,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
+    
     if ([URL.absoluteString containsString:@"name"]) {
         NSString *user = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
         NSLog(@"USER: %@", user);
@@ -1288,6 +1293,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             NSString *username = @"";
 
             if (self.isReportingComment) {
+                
                 if (self.currentCommentUserDictionary[@"username"] != [NSNull null] && (![self.currentCommentUserDictionary[@"username"] isEqualToString:@"<null>"])) {
                     username = [NSString stringWithFormat:@"@%@", self.currentCommentUserDictionary[@"username"]];
                 } else if (self.currentCommentUserDictionary[@"full_name"] != [NSNull null] && (![self.currentCommentUserDictionary[@"full_name"] isEqualToString:@"<null>"])) {
@@ -1296,6 +1302,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                     username = @"them";
                 }
             } else {
+                
                 if ([self.gallery.creator.username class] != [NSNull null] && (![self.gallery.creator.username isEqualToString:@"<null>"])) {
                     username = [NSString stringWithFormat:@"@%@", self.gallery.creator.username];
                 } else if ([self.gallery.creator.firstName class] != [NSNull null] && (![self.gallery.creator.firstName isEqualToString:@"<null>"])) {

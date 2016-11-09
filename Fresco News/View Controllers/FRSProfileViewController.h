@@ -11,7 +11,7 @@
 #import "FRSFeedTable.h"
 #import "FRSBorderedImageView.h"
 
-@interface FRSProfileViewController : FRSScrollingViewController <UITextViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource>
+@interface FRSProfileViewController : FRSScrollingViewController <UITextViewDelegate, FRSGalleryViewDelegate, FRSStoryViewDelegate, UITableViewDataSource>
 {
     UILabel *titleLabel;
     UIView *topView;

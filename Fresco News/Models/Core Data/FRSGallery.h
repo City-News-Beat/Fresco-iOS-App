@@ -46,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *externalID;
 @property (nullable, nonatomic, retain) NSString *externalSource;
 @property (nullable, nonatomic, retain) NSString *externalURL;
+@property (nullable, nonatomic, retain) FRSUser *sourceUser;
 
 @property (nonatomic, assign) BOOL isLiked;
 @property (nonatomic, assign) NSInteger numberOfLikes;

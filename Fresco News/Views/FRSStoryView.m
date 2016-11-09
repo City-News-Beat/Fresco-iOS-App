@@ -23,6 +23,8 @@
 
 #import <Haneke/Haneke.h>
 
+#import "FRSProfileViewController.h"
+
 #define TEXTVIEW_TOP_PADDING 12
 
 #define TOP_CONTAINER_HALF_HEIGHT (self.topContainer.frame.size.height/2)
@@ -59,6 +61,7 @@
     if (self){
         self.delegate = delegate;
         self.story = story;
+        //self.delegate.navigationController = self.navigationController;
         
         [self configureUI];
         if ([self.story valueForKey:@"reposted_by"] != nil && ![[self.story valueForKey:@"reposted_by"] isEqualToString:@""]) {
@@ -220,10 +223,17 @@
         [self.topContainer addSubview:clockIV];
         
         UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(clockIV.frame.origin.x +24 +8, clockIV.frame.origin.y +4, self.frame.size.width, 16)]; //MAKE WIDTH DYNAMIC WHEN ADDING LOCATION
-        timestampLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:self.story.editedDate];
+        timestampLabel.text = [FRSDateFormatter timestampStringFromDate:[_story editedDate]];
         timestampLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
         timestampLabel.textColor = [UIColor whiteColor];
         [self.topContainer addSubview:timestampLabel];
+        
+        
+
+        
+        
+        
+        
         
         self.titleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, self.titleLabel.frame.origin.y - 30, self.titleLabel.frame.size.width, self.titleLabel.frame.size.height);
         
@@ -311,6 +321,19 @@
         self.repostLabel.textColor = [UIColor whiteColor];
         [self addShadowToLabel:self.repostLabel];
         [self addSubview:self.repostLabel];
+        
+        UIButton *repostSegueButton = [[UIButton alloc] initWithFrame:CGRectMake(self.repostLabel.frame.origin.x -60, self.repostLabel.frame.origin.y-15, self.repostLabel.frame.size.width, self.repostLabel.frame.size.height +30)];
+        [repostSegueButton addTarget:self action:@selector(segueToSourceUser) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:repostSegueButton];
+    }
+}
+
+-(void)segueToSourceUser {
+    
+    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:self.story.sourceUser];
+    if ([self.story.sourceUser uid] != nil) {
+        
+        [self.delegate.navigationController pushViewController:userViewController animated:YES];
     }
 }
 

@@ -18,12 +18,15 @@
 #import "FRSNavigationBar.h"
 #import "FRSAppDelegate.h"
 #import "FRSUserNotificationViewController.h"
+#import "FRSLocationManager.h"
+#import "FRSBaseViewController.h"
 
 @interface FRSTabBarController () <UITabBarControllerDelegate>
 
 @property (strong, nonatomic) UIView *cameraBackgroundView;
 @property CGFloat notificationDotXOffset;
 @property (strong, nonatomic) UIImage *bellImage;
+@property (strong, nonatomic) FRSLocationManager *locationManager;
 
 @end
 
@@ -256,10 +259,26 @@
 }
 
 
+-(void)checkLocationAndPresentPermissionsAlert {
+    if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self.locationManager];
+        [alert show];
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        delegate.didPresentPermissionsRequest = YES;
+    }
+}
+
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     item.title = @"";
     
     if ([self.tabBar.items indexOfObject:item] == 2) {
+        if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self.locationManager];
+            [alert show];
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            delegate.didPresentPermissionsRequest = YES;
+            return;
+        }
         
         [FRSTracker track:@"Camera Opened"];
         

@@ -177,7 +177,12 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     [self removeNavigationBarLine];
-
+    
+    
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    if (!delegate.didPresentPermissionsRequest) { //Avoid double alerts
+        [self checkStatusAndPresentPermissionsAlert:_locationManager.delegate];
+    }
 }
 
 -(void)dealloc {

@@ -47,10 +47,11 @@
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
     [self startFabric]; // crashlytics first yall
+    [self configureStartDate];
     [self clearUploadCache];
 
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    
+
     if ([self isFirstRun]) {
         [[FRSAPIClient sharedClient] logout];
     }
@@ -110,6 +111,12 @@
     [[FRSUploadManager sharedUploader] checkCachedUploads];
     
     return YES;
+}
+
+-(void)configureStartDate {
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate] == nil) {
+        [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:startDate];
+    }
 }
 
 -(void)clearUploadCache {
@@ -200,8 +207,12 @@
             [self saveUserFields:responseObject];
         }];
         
-        [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
-        
+        if ([[FRSAPIClient sharedClient] isAuthenticated] && !self.didPresentPermissionsRequest) {
+            if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
+                [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+            }
+        }
+
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completion) {
                 completion(Nil,Nil);
@@ -569,6 +580,9 @@
 
 -(void)registerForPushNotifications {
     
+    return;
+    
+    
 //    UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge |
 //                                                             UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
 //    
@@ -841,8 +855,10 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 -(void)applicationDidBecomeActive:(UIApplication *)application{
     
-    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
-        [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+    if ([[FRSAPIClient sharedClient] isAuthenticated] && !self.didPresentPermissionsRequest) {
+        if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
+            [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
+        }
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSResetUpload" object:nil userInfo:@{@"type":@"reset"}];

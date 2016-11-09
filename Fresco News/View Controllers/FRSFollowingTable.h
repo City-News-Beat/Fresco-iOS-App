@@ -10,8 +10,9 @@
 #import "FRSGallery.h"
 #import "FRSGalleryCell.h"
 #import "FRSScrollingViewController.h"
+#import "FRSStoryView.h"
 
-@interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
+@interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate, FRSStoryViewDelegate>
 {
     NSInteger numberOfPosts;
     UIView *awkwardView;

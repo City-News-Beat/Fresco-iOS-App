@@ -28,6 +28,8 @@ static NSString *addPaymentCell = @"addPaymentCell";
     [self setupTableView];
 
     [self configureBackButtonAnimated:NO];
+    [self configureDismissKeyboardGestureRecognizer];
+
 
 }
 

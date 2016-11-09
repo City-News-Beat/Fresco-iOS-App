@@ -26,9 +26,18 @@
 //@property (nullable, nonatomic, retain) NSSet<FRSGallery *> *galleries;
 
 @implementation FRSStory
-@synthesize galleryCount = _galleryCount;
+@synthesize galleryCount = _galleryCount, sourceUser = _sourceUser, creator = _creator, curatorDict = _curatorDict;
 
 // Insert code here to add functionality to your managed object subclass
+
+-(NSDictionary *)curatorDict {
+    return _curatorDict;
+}
+
+-(void)setCuratorDict:(NSDictionary *)curatorDict {
+    _curatorDict = curatorDict;
+}
+
 -(void)configureWithDictionary:(NSDictionary *)dict {
     
     self.caption = dict[@"caption"];
@@ -64,10 +73,45 @@
     NSNumber *likes = [dict valueForKey:@"likes"];
     [self setValue:likes forKey:@"likes"];
     
+    
+    
+//    NSString *curatorID = [dict valueForKey:@"curator_id"];
+    
+//    if (curatorID != nil && ![curatorID isEqual:[NSNull null]]) {
+//        [[FRSAPIClient sharedClient] getUserWithUID:curatorID completion:^(id responseObject, NSError *error) {
+//            NSLog(@"RESPONSE OBJ: %@", responseObject);
+//            NSLog(@"CURATOR_ID: %@", curatorID);
+//            
+//            FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+//            self.creator = user;
+//
+//        }];
+//    }
+    NSLog(@"CURATOR: %@", dict[@"curator"]);
+
+    if (![dict[@"curator"] isEqual:[NSNull null]]) {
+        self.curatorDict = dict[@"curator"];
+    }
+    
     NSString *repostedBy = [dict valueForKey:@"reposted_by"];
     
     if (repostedBy != Nil && ![repostedBy isEqual:[NSNull null]]) {
         [self setValue:repostedBy forKey:@"reposted_by"];
+        
+        NSArray *sources = (NSArray *)dict[@"sources"];
+        if ([[sources class] isSubclassOfClass:[NSArray class]] && sources.count > 0) {
+            
+            NSString *repostedBy = dict[@"reposted_by"];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF contains[c] %@", repostedBy];
+            NSArray *results = [sources filteredArrayUsingPredicate:predicate];
+            NSDictionary *source = (NSDictionary *)[results firstObject];
+            NSString *userID = source[@"user_id"];
+            
+            [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
+                FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                self.sourceUser = user;
+            }];
+        }
     }
 }
 

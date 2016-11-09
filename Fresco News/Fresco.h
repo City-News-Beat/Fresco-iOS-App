@@ -169,6 +169,9 @@ static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
 static NSString * const settingsUserNotificationRadius = @"notification-radius";
 static NSString * const settingsPaymentLastFour = @"payment-last-four";
 static NSString * const settingsUserNotificationToggle = @"notifications-enabled";
+static NSString * const userHasSeenPermissionsAlert = @"userHasSeenPermissionsAlert";
+static NSString * const startDate = @"startDate";
+
 
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
 

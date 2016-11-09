@@ -23,7 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 +(instancetype)nonSavedUserWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context;
 -(NSDictionary *)jsonObject;
 -(void)configureWithDictionary:(NSDictionary *)properties;
-
 @end
 
 NS_ASSUME_NONNULL_END

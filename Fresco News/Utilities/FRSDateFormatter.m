@@ -54,6 +54,61 @@
     return [formatter stringFromDate:correctDate];
 }
 
++(NSString *)timestampStringFromDate:(NSDate *)date {
+    NSTimeInterval doubleDiff = [date timeIntervalSinceNow];
+    long diff = (long) doubleDiff;
+    int seconds = diff % 60;
+    diff = diff / 60;
+    int minutes = diff % 60;
+    diff = diff / 60;
+    int hours = diff % 24;
+    int days = diff / 24;
+    
+    NSString *timestampString;
+    
+    if (days < 0) {
+        days *= -1;
+    }
+    if (hours < 0) {
+        hours *= -1;
+    }
+    if (minutes < 0) {
+        minutes *= -1;
+    }
+    if (seconds < 0) {
+        seconds *= -1;
+    }
+    
+    if (days != 0) {
+        timestampString = [NSString stringWithFormat:@"%d days ago", days];
+        if (days >= 1 && days < 2) {
+            timestampString = [NSString stringWithFormat:@"%d day ago", days];
+        }
+    } else if (hours != 0) {
+        timestampString = [NSString stringWithFormat:@"%d hours ago", hours];
+        if (hours == 1 && hours < 2) {
+            timestampString = [NSString stringWithFormat:@"%d hour ago", hours];
+        }
+    } else if (minutes != 0) {
+        timestampString = [NSString stringWithFormat:@"%d minutes ago", minutes];
+        if (minutes == 1 && minutes < 2) {
+            timestampString = [NSString stringWithFormat:@"%d minute ago", minutes];
+        }
+    } else if (seconds != 0) {
+        timestampString = [NSString stringWithFormat:@"%d seconds ago", seconds];
+        if (seconds == 1 && seconds <2) {
+            timestampString = [NSString stringWithFormat:@"%d second ago", seconds];
+        }
+    }
+    
+    if ([timestampString containsString:@"-"]) {
+        NSCharacterSet *trim = [NSCharacterSet characterSetWithCharactersInString:@"-"];
+        timestampString = [[timestampString componentsSeparatedByCharactersInSet:trim] componentsJoinedByString:@""];
+    }
+    
+    return timestampString;
+}
+
 //temp method
 +(NSString *)dateStringFromDate:(NSDate *)date{
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];

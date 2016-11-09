@@ -587,6 +587,10 @@
         self.repostLabel.textColor = [UIColor whiteColor];
         [self addShadowToLabel:self.repostLabel];
         [self addSubview:self.repostLabel];
+        
+        UIButton *repostSegueButton = [[UIButton alloc] initWithFrame:CGRectMake(self.repostLabel.frame.origin.x -60, self.repostLabel.frame.origin.y-15, self.repostLabel.frame.size.width, self.repostLabel.frame.size.height +30)];
+        [repostSegueButton addTarget:self action:@selector(segueToSourceUser) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:repostSegueButton];
     }
 }
 
@@ -1087,8 +1091,6 @@
         NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
         NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
         
-//        NSLog(@"\nHEIGHT: %ld, WIDTH : %ld\n", rawHeight, rawWidth);
-        
         if (rawHeight == 0 || rawWidth == 0){
             totalHeight += [UIScreen mainScreen].bounds.size.width;
         }
@@ -1108,6 +1110,14 @@
     averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
     
     return averageHeight;
+}
+
+-(void)segueToSourceUser {
+    FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:self.gallery.sourceUser];
+    
+    if ([self.gallery.sourceUser uid] != nil) {
+        [self.delegate.navigationController pushViewController:userViewController animated:YES];
+    }
 }
 
 -(void)segueToUserProfile:(FRSUser *)user {
