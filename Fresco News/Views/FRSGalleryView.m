@@ -1047,7 +1047,9 @@
     if (object == self.videoPlayer && [keyPath isEqualToString:@"status"]) {
         
         if (self.videoPlayer.status == AVPlayerStatusReadyToPlay) {
-            [_scrollView sendSubviewToBack:self.imageViews[_currentPage]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_scrollView sendSubviewToBack:self.imageViews[_adjustedPage]];
+            });
         }
         else if (self.videoPlayer.status == AVPlayerStatusFailed) {
             
