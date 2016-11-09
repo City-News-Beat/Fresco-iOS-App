@@ -47,14 +47,9 @@
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
     [self startFabric]; // crashlytics first yall
-<<<<<<< HEAD
-
     [self configureStartDate];
-    
-=======
     [self clearUploadCache];
 
->>>>>>> 3.0-phil
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
     if ([self isFirstRun]) {
@@ -118,12 +113,12 @@
     return YES;
 }
 
-<<<<<<< HEAD
 -(void)configureStartDate {
     if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate] == nil) {
         [[NSUserDefaults standardUserDefaults] setValue:[NSDate date] forKey:startDate];
     }
-=======
+}
+
 -(void)clearUploadCache {
     
     BOOL isDir;
@@ -145,7 +140,6 @@
             }
         }
     });
->>>>>>> 3.0-phil
 }
 
 -(void)startMixpanel {
