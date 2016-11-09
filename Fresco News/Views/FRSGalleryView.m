@@ -418,37 +418,37 @@
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
     FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-            videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
-            
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(playerItemDidReachEnd:)
-                                                         name:AVPlayerItemDidPlayToEndTimeNotification
-                                                       object:[videoPlayer currentItem]];
-            
-            NSInteger postIndex = [self.orderedPosts indexOfObject:post];
-            
-            playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
-            playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-            playerLayer.backgroundColor = [UIColor whiteColor].CGColor;
-            
-            UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
-            container.backgroundColor = [UIColor clearColor];
-            
-            videoPlayer.container = container;
-            playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
-            
-            [container.layer insertSublayer:playerLayer atIndex:1000];
-            [self.scrollView addSubview:container];
-            [self.scrollView bringSubviewToFront:container];
-            [self configureMuteIcon];
-        });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+        videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+        playerLayer.opaque = FALSE;
         
-        videoPlayer.muted = TRUE;
-        videoPlayer.wasMuted = FALSE;
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playerItemDidReachEnd:)
+                                                     name:AVPlayerItemDidPlayToEndTimeNotification
+                                                   object:[videoPlayer currentItem]];
+        
+        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+        
+        playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
+        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        playerLayer.backgroundColor = [UIColor whiteColor].CGColor;
+        
+        UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
+        container.backgroundColor = [UIColor clearColor];
+        
+        videoPlayer.container = container;
+        playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
+        
+        [container.layer insertSublayer:playerLayer atIndex:1000];
+        [self.scrollView addSubview:container];
+        [self.scrollView bringSubviewToFront:container];
+        [self configureMuteIcon];
     });
+    
+    videoPlayer.muted = TRUE;
+    videoPlayer.wasMuted = FALSE;
     
     __weak typeof(self) weakSelf = self;
     
