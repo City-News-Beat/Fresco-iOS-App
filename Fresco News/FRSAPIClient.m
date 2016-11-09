@@ -248,49 +248,23 @@
 -(void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
     
     [self get:notificationEndpoint withParameters:@{} completion:^(id responseObject, NSError *error) {
-        
-//        NSArray *feed = [responseObject objectForKey:@"feed"];
-//        NSMutableArray *notificationIDs = [[NSMutableArray alloc] init];
-//        
         completion(responseObject, error);
-
-//        for (int i=0; i<feed.count; i++) {
-//            [notificationIDs addObject:[[[responseObject objectForKey:@"feed"] objectAtIndex:i] objectForKey:@"id"]];
-//        }
-//        [self post:@"user/notifications/see" withParameters:@{@"notification_ids": notificationIDs} completion:^(id responseObject, NSError *error) {
-//        }];
     }];
 }
 
 -(void)getNotificationsWithLast:(nonnull NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
+    
     if (!last) {
         completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:Nil]);
     }
     
     [self get:notificationEndpoint withParameters:@{@"last":last} completion:^(id responseObject, NSError *error) {
-        
-        //        NSArray *feed = [responseObject objectForKey:@"feed"];
-        //        NSMutableArray *notificationIDs = [[NSMutableArray alloc] init];
-        //
         completion(responseObject, error);
-        
-        //        for (int i=0; i<feed.count; i++) {
-        //            [notificationIDs addObject:[[[responseObject objectForKey:@"feed"] objectAtIndex:i] objectForKey:@"id"]];
-        //        }
-        //        [self post:@"user/notifications/see" withParameters:@{@"notification_ids": notificationIDs} completion:^(id responseObject, NSError *error) {
-        //        }];
     }];
 
 }
 
 -(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    
-    // ** WARNING ** Don't update users info just to update it, update it only if new (i.e. changing email to identical email has resulted in issues with api v1)
-    // full_name: User's full name
-    // bio: User's profile bio
-    // avatar: User's avatar URL
-    // installation
-    // social links
     
     [self post:updateUserEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
