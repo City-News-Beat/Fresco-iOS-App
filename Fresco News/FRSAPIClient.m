@@ -378,15 +378,6 @@
     if (appVersion) {
         currentInstallation[@"app_version"] = appVersion;
     }
-
-    
-    /*
-     If we ever choose to move towards a UTC+X approach in timezones, as opposed to the unix timestamp that includes the current timezone, this is how we would do it.
-     
-    NSInteger secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
-    NSInteger hoursFromGMT = secondsFromGMT / 60; // GMT = UTC
-    NSString *timeZone = [NSString stringWithFormat:@"UTC+%d", (int)hoursFromGMT]; 
-    */
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
