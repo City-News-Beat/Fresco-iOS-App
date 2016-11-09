@@ -421,9 +421,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
         videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
-        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
-        playerLayer.opaque = FALSE;
-        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(playerItemDidReachEnd:)
                                                      name:AVPlayerItemDidPlayToEndTimeNotification
@@ -443,7 +440,7 @@
         
         [container.layer insertSublayer:playerLayer atIndex:1000];
         [self.scrollView addSubview:container];
-        [self.scrollView bringSubviewToFront:container];
+        [self.scrollView sendSubviewToBack:container];
         [self configureMuteIcon];
     });
     
@@ -1050,7 +1047,7 @@
     if (object == self.videoPlayer && [keyPath isEqualToString:@"status"]) {
         
         if (self.videoPlayer.status == AVPlayerStatusReadyToPlay) {
-            
+            [_scrollView sendSubviewToBack:self.imageViews[_currentPage]];
         }
         else if (self.videoPlayer.status == AVPlayerStatusFailed) {
             
