@@ -69,7 +69,11 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
+<<<<<<< HEAD
 	<string>15</string>
+=======
+	<string>16</string>
+>>>>>>> 3.0-phil
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>

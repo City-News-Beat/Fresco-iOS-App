@@ -28,9 +28,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
     [self setupTableView];
 
     [self configureBackButtonAnimated:NO];
-    [self configureDismissKeyboardGestureRecognizer];
-
-
+   // [self configureDismissKeyboardGestureRecognizer];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -76,10 +74,12 @@ static NSString *addPaymentCell = @"addPaymentCell";
             [cell setActive:FALSE];
         }
         cell.delegate = self;
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
     }
     else if (indexPath.section == 1) {
         UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:addPaymentCell];
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
     }
     
