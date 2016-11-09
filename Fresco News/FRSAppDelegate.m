@@ -1202,8 +1202,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 -(void)segueToAssignmentWithID:(NSString *)assignmentID {
-    UITabBarController *tab = (UITabBarController *)self.tabBarController;
-
     [self.tabBarController setSelectedIndex:3];
     
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
