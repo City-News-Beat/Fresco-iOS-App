@@ -52,7 +52,12 @@
     self.tags = [[NSMutableDictionary alloc] init];
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
-    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
+    self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"time_created"]];
+    
+    if (dict[@"action_at"] && ![dict[@"action_at"] isEqual:[NSNull null]]) {
+        self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"action_at"]];
+    }
+    
     self.caption = dict[@"caption"];
     if([dict valueForKey:@"owner"] != [NSNull null] && [[dict valueForKey:@"owner"] valueForKey:@"full_name"] != [NSNull null]){
         self.byline = dict[@"owner"][@"full_name"];

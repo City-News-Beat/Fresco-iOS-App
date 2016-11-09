@@ -374,7 +374,7 @@
         [self.scrollView addSubview:imageView];
 
             if (i==0) {
-                [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl]];
+                [self loadImage:post.imageUrl forImageView:imageView];
 
                 if (post.videoUrl != Nil) {
                     // videof
@@ -418,37 +418,36 @@
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
     FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-            videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
-            
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(playerItemDidReachEnd:)
-                                                         name:AVPlayerItemDidPlayToEndTimeNotification
-                                                       object:[videoPlayer currentItem]];
-            
-            NSInteger postIndex = [self.orderedPosts indexOfObject:post];
-            
-            playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
-            playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-            playerLayer.backgroundColor = [UIColor whiteColor].CGColor;
-            
-            UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
-            container.backgroundColor = [UIColor clearColor];
-            
-            videoPlayer.container = container;
-            playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
-            
-            [container.layer insertSublayer:playerLayer atIndex:1000];
-            [self.scrollView addSubview:container];
-            [self.scrollView bringSubviewToFront:container];
-            [self configureMuteIcon];
-        });
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+        videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playerItemDidReachEnd:)
+                                                     name:AVPlayerItemDidPlayToEndTimeNotification
+                                                   object:[videoPlayer currentItem]];
         
-        videoPlayer.muted = TRUE;
-        videoPlayer.wasMuted = FALSE;
+        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+        
+        playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
+        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+        playerLayer.opaque = FALSE;
+        
+        UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
+        container.backgroundColor = [UIColor clearColor];
+        
+        videoPlayer.container = container;
+        playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
+        
+        [container.layer insertSublayer:playerLayer atIndex:1000];
+        [self.scrollView addSubview:container];
+        [self.scrollView bringSubviewToFront:container];
+        [self configureMuteIcon];
     });
+    
+    videoPlayer.muted = TRUE;
+    videoPlayer.wasMuted = FALSE;
     
     __weak typeof(self) weakSelf = self;
     
@@ -924,7 +923,7 @@
     imageView = (self.imageViews.count > page) ? self.imageViews[page] : Nil;
     post = (self.orderedPosts.count > page) ? self.orderedPosts[page] : Nil;
     
-    [imageView hnk_setImageFromURL:[NSURL URLWithString:post.imageUrl] placeholder:nil];
+    [self loadImage:post.imageUrl forImageView:imageView];
     [self handlePlay:TRUE player:Nil];
     
     if (self.players.count <= page) {
@@ -932,7 +931,6 @@
             FRSPlayer *player = [self setupPlayerForPost:post];
             [self.players addObject:player];
             [self.videoPlayer play];
-            
         }
         else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
             if (self.players && imageView) {
@@ -940,12 +938,11 @@
             }
         }
         else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 FRSPlayer *player = (FRSPlayer *)self.players[page];
                 if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
                     self.videoPlayer = player;
                     [player play];
-                    
                 }
                 else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
                     [player pause];
@@ -960,7 +957,7 @@
         FRSPost *nextPost = self.orderedPosts[page+1];
         
         if (nextPost.videoUrl == Nil) {
-            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
+            [self loadImage:nextPost.imageUrl forImageView:nextImage];
         }
     }
     
@@ -1018,6 +1015,7 @@
         self.muteImageView.alpha = absAlpha;
     }
     
+    self.profileIV.image = Nil;
     
     FRSPost *adjustedPost = self.orderedPosts[self.adjustedPage];
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
@@ -1035,6 +1033,19 @@
     if (adjustedPost.videoUrl == nil) {
         self.muteImageView.alpha = 0;
     }
+}
+
+-(void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
+    NSString *adjustedURL = url;
+    
+    /*
+     Adjust sizing from URL string
+     */
+    NSString *adjustedSize = [NSString stringWithFormat:@"%d", (int)([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])];
+    adjustedSize = [@"/images/" stringByAppendingString:adjustedSize];
+    adjustedURL = [adjustedURL stringByReplacingOccurrencesOfString:@"/images" withString:adjustedSize];
+    
+    [imageView hnk_setImageFromURL:[NSURL URLWithString:adjustedURL]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object

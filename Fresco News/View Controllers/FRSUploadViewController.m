@@ -1154,21 +1154,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
     
     [self dismissKeyboard];
-
-    if (self.postToFacebook) {
-        [self facebook:self.captionTextView.text];
-
-    }
     
-    if (self.postAnon) {
-        NSLog(@"Post anonymously");
-    }
-    else {
-        [FRSTracker track:@"Submissions"];
-        [FRSTracker track:@"Submission items in gallery" parameters:@{@"count":@(self.content.count)}];
+    [FRSTracker track:@"Submissions"];
+    [FRSTracker track:@"Submission items in gallery" parameters:@{@"count":@(self.content.count)}];
         
-        [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
-    }
+    [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
 }
 
 -(void)getPostData:(NSMutableArray *)posts current:(NSMutableArray *)current {
@@ -1246,7 +1236,21 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 -(void)moveToUpload:(NSDictionary *)postData {
     /* upload started */
+    NSString *galleryID = postData[@"id"];
     
+    if (galleryID && ![galleryID isEqual:[NSNull null]]) {
+        
+        NSString *shareString = [[[self.captionTextView.text stringByAppendingString:@" "] stringByAppendingString:@"https://fresconews.com/gallery/"] stringByAppendingString:galleryID];
+        
+        if (self.twitterButton.selected) {
+            [self tweet:shareString];
+        }
+        
+        if (self.facebookButton.selected) {
+            [self facebook:shareString];
+        }
+        
+    }
     // instantiate upload process
     // start upload process
     NSArray *posts = postData[@"posts_new"];
@@ -1269,14 +1273,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
     TWTRAPIClient *client = [[TWTRAPIClient alloc] initWithUserID:userID];
 
     NSString *tweetEndpoint = @"https://api.twitter.com/1.1/statuses/update.json";
-    NSDictionary *params = @{@"status" : @"hello my friend"};
+    NSDictionary *params = @{@"status" : string};
     NSError *clientError;
     
     NSURLRequest *request = [client URLRequestWithMethod:@"POST" URL:tweetEndpoint parameters:params error:&clientError];
     if (request) {
         [client sendTwitterRequest:request completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
             
-            NSLog(@"Twitter Ressponse: %@", response);
+            NSLog(@"Twitter Response: %@", response);
             
             if (data) {
                 NSError *jsonError;
@@ -1291,7 +1295,6 @@ static NSString * const cellIdentifier = @"assignment-cell";
     else {
         NSLog(@"Error: %@", clientError);
     }
-    
 }
 
 -(void)facebook:(NSString *)text {
@@ -1302,7 +1305,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     } else {
         FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
         [loginManager logInWithPublishPermissions:@[@"publish_actions"] fromViewController:self handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters: @{ @"message" : @""} HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters: @{ @"message" : text} HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
             }];
         }];
     }
