@@ -159,6 +159,10 @@
     return YES;
 }
 
+-(void)scrollToTop {
+    [self.followingTable setContentOffset:CGPointMake(0, 0) animated:YES];
+}
+
 -(void)loadData {
     
 }

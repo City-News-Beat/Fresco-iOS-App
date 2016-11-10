@@ -268,6 +268,23 @@
     }
 }
 
+-(void)scrollToTop {
+    
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController
+ didSelectViewController:(UIViewController *)viewController
+{
+    static UIViewController *previousController = nil;
+    if (previousController == viewController) {
+        // the same tab was tapped a second time
+        if ([viewController respondsToSelector:@selector(scrollToTop)]) {
+            [viewController performSelector:@selector(scrollToTop)];
+        }
+    }
+    previousController = viewController;
+}
+
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     item.title = @"";
     
