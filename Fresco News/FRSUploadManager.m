@@ -213,24 +213,25 @@
     
     if (asset.mediaType == PHAssetMediaTypeImage) {
         
-    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeDefault options:Nil resultHandler:^void(UIImage *image, NSDictionary *info) {
-        NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[[NSProcessInfo processInfo] globallyUniqueString] stringByAppendingString:@".jpeg"]];
-        [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
+        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+        options.resizeMode = PHImageRequestOptionsResizeModeNone;
+        options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
         
-        // write data to temp path (background thread, async)
-        
-        NSData *imageData = UIImageJPEGRepresentation(image, 1);
-        [imageData writeToFile:tempPath atomically:NO];
-        
-        unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
-        totalFileSize += fileSize;
-        
-        NSArray *uploadMeta = @[tempPath, revisedToken, postID];
-        
-        [self.uploadMeta addObject:uploadMeta];
-        [self checkRestart];
-    }];
-    
+        [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[[NSProcessInfo processInfo] globallyUniqueString] stringByAppendingString:@".jpeg"]];
+            [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
+            
+            // write data to temp path (background thread, async)
+            [imageData writeToFile:tempPath atomically:NO];
+            
+            unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
+            totalFileSize += fileSize;
+            
+            NSArray *uploadMeta = @[tempPath, revisedToken, postID];
+            
+            [self.uploadMeta addObject:uploadMeta];
+            [self checkRestart];
+        }];
     }
     else if (asset.mediaType == PHAssetMediaTypeVideo) {
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:Nil resultHandler:^(AVAsset * avasset, AVAudioMix * audioMix, NSDictionary * info) {
