@@ -272,18 +272,6 @@
     
 }
 
-- (void)tabBarController:(UITabBarController *)tabBarController
- didSelectViewController:(UIViewController *)viewController
-{
-    static UIViewController *previousController = nil;
-    if (previousController == viewController) {
-        // the same tab was tapped a second time
-        if ([viewController respondsToSelector:@selector(scrollToTop)]) {
-            [viewController performSelector:@selector(scrollToTop)];
-        }
-    }
-    previousController = viewController;
-}
 
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     item.title = @"";
@@ -356,6 +344,12 @@
 }
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
+    
+    if (viewController == self.selectedViewController) {
+        if ([viewController respondsToSelector:@selector(scrollToTop)]) {
+            [viewController performSelector:@selector(scrollToTop)];
+        }
+    }
     
     // UD_PREVIOUSLY_SELECTED_TAB = tabBarController.selectedIndex;
     UIViewController *selectedVC = viewController;
