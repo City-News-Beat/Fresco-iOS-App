@@ -97,7 +97,12 @@
     CGFloat halfHeight = self.topContainer.frame.size.height/2 - 0.5;
     CGFloat width = halfHeight * 1.333333333 - 2;
     
-    NSMutableArray *smallImageURLS = [NSMutableArray arrayWithArray:self.story.imageURLs];
+    NSMutableArray *smallImageURLS = [[NSMutableArray alloc] init];
+    
+    for (NSURL *url in self.story.imageURLs) {
+        NSString *newURL = [url.absoluteString stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/400"];
+        [smallImageURLS addObject:[NSURL URLWithString:newURL]];
+    }
     
     if (smallImageURLS.count < 6 && smallImageURLS.count != 0) {
         
