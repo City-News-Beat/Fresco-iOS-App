@@ -886,6 +886,13 @@
     self.currentUserDict = userDict;
     self.following = isFollowing;
     self.currentUser = user;
+    
+    if (self.currentUser.uid && [[FRSAPIClient sharedClient] authenticatedUser].uid && [self.currentUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        self.followingButton.alpha = 0;
+    }
+    else {
+        self.followingButton.alpha = 1;
+    }
 
 }
 
