@@ -45,6 +45,7 @@
     
     if (dict[@"updated_at"] && ![dict[@"updated_at"] isEqual:[NSNull null]]) {
         self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"updated_at"]];
+        
     }
     
     self.title = dict[@"title"];

@@ -628,6 +628,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.commentTableView.hidden = self.comments.count == 0;
     self.commentLabel.hidden = self.comments.count == 0;
     
+    [self.commentTableView setSeparatorColor:[UIColor frescoBackgroundColorLight]];
+    
     if (self.comments.count > 0) {
         [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.commentTableView.frame.origin.y - 0.5)]];
     }
@@ -639,6 +641,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)configureActionBar{
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.view.frame.size.height - TOP_NAV_BAR_HEIGHT - 44) delegate:self];
     self.actionBar.delegate = self;
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0.5)];
+    line.backgroundColor = [UIColor frescoShadowColor];
+    [self.actionBar addSubview:line];
     
     NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
     BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
@@ -787,7 +793,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         if (indexPath.row < self.comments.count + showsMoreButton) {
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
-            NSInteger height = cell.commentTextView.frame.size.height;
+            NSInteger height = cell.commentTextView.frame.size.height + 36;
             
             NSLog(@"CELL: %@", cell);
             
@@ -904,7 +910,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             index++;
         }
         
-        height += 55;
+        height += 56;
         
         self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
         [self adjustScrollViewContentSize];
@@ -952,6 +958,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:article.articleStringURL]];
             }
         }
+    }
+    
+    if (tableView == _commentTableView) {
+        [self contentActionBarDidSelectActionButton:self.actionBar];
+        FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
+        commentField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
     }
 }
 

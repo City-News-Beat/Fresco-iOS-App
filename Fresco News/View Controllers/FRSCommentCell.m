@@ -26,42 +26,55 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         if (comment.imageURL && ![comment.imageURL isEqual:[NSNull null]] && ![comment.imageURL isEqualToString:@""]) {
-            NSLog(@"%@", comment.imageURL);
             
-            self.backgroundColor = [UIColor clearColor];
+            self.profilePicture.backgroundColor = [UIColor frescoShadowColor];
             NSString *smallAvatar = [comment.imageURL stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
             [self.profilePicture hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
         }
         else {
             // default
-            self.backgroundColor = [UIColor frescoLightTextColor];
-            self.profilePicture.image = [UIImage imageNamed:@"user-24"];
+            self.profilePicture.backgroundColor = [UIColor frescoShadowColor];
+            
+            UIImageView *userIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user-24"]];
+            userIcon.frame = CGRectMake(4, 4, 24, 24);
+            [self.profilePicture addSubview:userIcon];
         }
     });
     
     self.commentTextView.attributedText = comment.attributedString;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     [self.commentTextView frs_resize];
+//    [self.commentTextView sizeToFit];
     self.commentTextView.delegate = delegate;
-//    self.commentTextView.backgroundColor = [UIColor redColor];
     
-//    //Not sure why we need to delay this.
-//    //Calling size to fit here scales the textview down so the user can
-//    //tap on the comment cell and begin commenting with the original commenters username pre-loaded.
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self.commentTextView sizeToFit];
+    NSDate *date = [comment createdAt];
+    self.timestampLabel.text = [FRSDateFormatter timestampStringFromDate:date];
+    
+    if (![[comment userDictionary][@"full_name"] isEqual:[NSNull null]] && ![[comment userDictionary][@"full_name"] isEqualToString:@""]) {
+        self.nameLabel.text = [comment userDictionary][@"full_name"];
+    } else if (![[comment userDictionary][@"username"] isEqual:[NSNull null]] && ![[comment userDictionary][@"username"] isEqualToString:@""]) {
+        self.nameLabel.text = [NSString stringWithFormat:@"@%@", [comment userDictionary][@"username"]];
+    } else {
+        self.nameLabel.text = @"@username";
+        self.timestampLabel.transform = CGAffineTransformMakeTranslation(-8, 0);
+    }
+ 
+    //Not sure why we need to delay this.
+    //Calling size to fit here scales the textview down so the user can tap on the comment cell
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.commentTextView.backgroundColor = [UIColor redColor];
 //    });
 
-    if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
-        [self setSeparatorInset:UIEdgeInsetsZero];
-    }
-    if ([self respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-        [self setPreservesSuperviewLayoutMargins:NO];
-    }
-    if ([self respondsToSelector:@selector(setLayoutMargins:)]) {
-        [self setLayoutMargins:UIEdgeInsetsZero];
-    }
-        
+//    if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
+//        [self setSeparatorInset:UIEdgeInsetsZero];
+//    }
+//    if ([self respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
+//        [self setPreservesSuperviewLayoutMargins:NO];
+//    }
+//    if ([self respondsToSelector:@selector(setLayoutMargins:)]) {
+//        [self setLayoutMargins:UIEdgeInsetsZero];
+//    }
+    
     if (comment.isDeletable && !comment.isReportable) {
         self.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
     }else if (comment.isReportable && !comment.isDeletable) {
