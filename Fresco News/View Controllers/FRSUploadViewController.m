@@ -110,7 +110,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self resetFrames:false];
 
     
-    self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    if (!self.spinner) {
+        self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    }
     
     if (!self.assignmentsTableView) {
         self.spinner.frame = CGRectMake(self.view.frame.size.width/2 -20/2, (self.view.frame.size.height + self.galleryCollectionViewHeight)/2 -64 +20/2, 20, 20);
@@ -147,6 +149,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)configureSpinner {
+    
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
