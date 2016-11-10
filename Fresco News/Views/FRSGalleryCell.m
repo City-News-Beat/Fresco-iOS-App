@@ -36,14 +36,14 @@
     
     if (self.galleryView != Nil) {
         
-        if (![self.galleryView.gallery.uid isEqualToString:self.gallery.uid]) {
-            hasPlayed = FALSE;
-        }
+        hasPlayed = FALSE;
         
         [self.galleryView loadGallery:self.gallery];
         self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
         return;
     }
+    
+    hasPlayed = FALSE;
 
     self.clipsToBounds = YES;
     

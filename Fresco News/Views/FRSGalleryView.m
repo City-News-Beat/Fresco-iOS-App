@@ -1183,6 +1183,7 @@
 }
 
 -(void)play {
+    
     NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
     
     if (self.players.count > page) {
