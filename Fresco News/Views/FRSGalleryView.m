@@ -1049,9 +1049,7 @@
         adjustedURL = [adjustedURL stringByReplacingOccurrencesOfString:@"/images" withString:adjustedSize];
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [imageView hnk_setImageFromURL:[NSURL URLWithString:adjustedURL]];
-    });
+    [imageView hnk_setImageFromURL:[NSURL URLWithString:adjustedURL]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
