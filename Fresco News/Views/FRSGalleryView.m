@@ -418,6 +418,7 @@
 }
 
 -(FRSPlayer *)setupPlayerForPost:(FRSPost *)post {
+    
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
     FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
