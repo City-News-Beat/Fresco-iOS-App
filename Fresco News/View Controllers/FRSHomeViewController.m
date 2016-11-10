@@ -950,6 +950,7 @@
                 if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
                     
                     if (!taken) {
+                        taken = TRUE;
                         [cell play];
                     }
                     
