@@ -80,6 +80,12 @@
     NSLog(@"Showed Nav");
 }
 
+-(void)scrollToTop {
+    if ([[self.viewControllers firstObject] respondsToSelector:@selector(scrollToTop)]) {
+        [[self.viewControllers firstObject] performSelector:@selector(scrollToTop)];
+    }
+}
+
 -(void)adjustFrames{
     
     NSInteger availableWidth = [UIScreen mainScreen].bounds.size.width - SIDE_MARGIN * 2 - SIDE_PADDING * 4 - BAR_BUTTON_WIDTH * 2;
