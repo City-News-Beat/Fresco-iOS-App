@@ -160,7 +160,7 @@
 }
 
 -(void)scrollToTop {
-    [self.followingTable setContentOffset:CGPointMake(0, 0) animated:YES];
+    [self.followingTable scrollRectToVisible:CGRectMake(0, 0, self.followingTable.frame.size.width, self.followingTable.frame.size.height) animated:YES];
 }
 
 -(void)loadData {
