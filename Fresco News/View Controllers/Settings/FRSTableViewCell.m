@@ -872,7 +872,7 @@
     self.followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.followingButton addTarget:self action:@selector(follow) forControlEvents:UIControlEventTouchUpInside];
     self.followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 34, 34);
-    self.followingButton.contentEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    self.followingButton.contentEdgeInsets = UIEdgeInsetsMake(5, 0, 5, 10);
     
     [self addSubview:self.followingButton];
     
