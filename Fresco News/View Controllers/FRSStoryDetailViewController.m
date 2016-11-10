@@ -247,15 +247,16 @@ static NSString *galleryCell = @"GalleryCellReuse";
             
             for (FRSGalleryCell *cell in visibleCells) {
                 
+                /*
+                 Start playback mid frame -- at least 300 from top & at least 100 from bottom
+                 */
                 if (cell.frame.origin.y - self.galleriesTable.contentOffset.y < 300 && cell.frame.origin.y - self.galleriesTable.contentOffset.y > 100) {
                     
                     if (!taken) {
-                        [cell play];
                         taken = TRUE;
+                        [cell play];
                     }
-                    else {
-                        [cell pause];
-                    }
+                    
                 }
             }
         });

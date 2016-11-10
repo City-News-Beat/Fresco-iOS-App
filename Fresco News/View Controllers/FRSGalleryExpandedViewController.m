@@ -500,7 +500,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                    action:@selector(dismissKeyboard:)];
     
     [self.galleryView addGestureRecognizer:tap];
-    [self.galleryView play];
+    [self.galleryView performSelector:@selector(play) withObject:Nil afterDelay:1];
     [self focus];
 
 //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
