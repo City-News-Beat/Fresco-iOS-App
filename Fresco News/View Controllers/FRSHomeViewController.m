@@ -952,12 +952,7 @@
                     if (!taken) {
                         [cell play];
                     }
-                    else {
-                        /*
-                            If cell is going out of the playable area, pause it
-                         */
-                        [cell pause];
-                    }
+                    
                 }
             }
             
