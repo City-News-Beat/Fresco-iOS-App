@@ -100,8 +100,13 @@
     NSMutableArray *smallImageURLS = [[NSMutableArray alloc] init];
     
     for (NSURL *url in self.story.imageURLs) {
-        NSString *newURL = [url.absoluteString stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/400"];
-        [smallImageURLS addObject:[NSURL URLWithString:newURL]];
+        if ([url.absoluteString containsString:@"cdn.fresconews"]) {
+            NSString *newURL = [url.absoluteString stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/400"];
+            [smallImageURLS addObject:[NSURL URLWithString:newURL]];
+        }
+        else {
+            [smallImageURLS addObject:url];
+        }
     }
     
     if (smallImageURLS.count < 6 && smallImageURLS.count != 0) {

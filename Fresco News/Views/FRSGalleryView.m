@@ -1038,14 +1038,20 @@
 -(void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
     NSString *adjustedURL = url;
     
+    
     /*
      Adjust sizing from URL string
      */
-    NSString *adjustedSize = [NSString stringWithFormat:@"%d", (int)([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])];
-    adjustedSize = [@"/images/" stringByAppendingString:adjustedSize];
-    adjustedURL = [adjustedURL stringByReplacingOccurrencesOfString:@"/images" withString:adjustedSize];
     
-    [imageView hnk_setImageFromURL:[NSURL URLWithString:adjustedURL]];
+    if ([adjustedURL containsString:@"cdn.fresconews"]) {
+        NSString *adjustedSize = [NSString stringWithFormat:@"%d", (int)([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])];
+        adjustedSize = [@"/images/" stringByAppendingString:adjustedSize];
+        adjustedURL = [adjustedURL stringByReplacingOccurrencesOfString:@"/images" withString:adjustedSize];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [imageView hnk_setImageFromURL:[NSURL URLWithString:adjustedURL]];
+    });
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
