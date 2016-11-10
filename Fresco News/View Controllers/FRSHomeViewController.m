@@ -941,28 +941,22 @@
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             BOOL taken = FALSE;
+            
             for (FRSGalleryCell *cell in visibleCells) {
+                
                 /*
                     Start playback mid frame -- at least 300 from top & at least 100 from bottom
                  */
-                if (cell.frame.origin.y - self.tableView.contentOffset.y < 450 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
+                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
                     
                     if (!taken) {
-                        NSIndexPath *path = [self.tableView indexPathForCell:cell];
-                        
-                        /*
-                            If cell != cell we tried to last play, play the cell
-                         */
-                        if (path != lastIndexPath) {
-                            lastIndexPath = path;
-                            [cell play];
-                            taken = TRUE;
-                        }
+                        [cell play];
                     }
                     else {
                         /*
                             If cell is going out of the playable area, pause it
                          */
+                        [cell pause];
                     }
                 }
             }
