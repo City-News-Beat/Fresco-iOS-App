@@ -159,6 +159,10 @@
     return YES;
 }
 
+-(void)scrollToTop {
+    [self.followingTable scrollRectToVisible:CGRectMake(0, 0, self.followingTable.frame.size.width, self.followingTable.frame.size.height) animated:YES];
+}
+
 -(void)loadData {
     
 }

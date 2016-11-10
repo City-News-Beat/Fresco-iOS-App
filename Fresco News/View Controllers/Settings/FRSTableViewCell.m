@@ -871,7 +871,8 @@
 
     self.followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.followingButton addTarget:self action:@selector(follow) forControlEvents:UIControlEventTouchUpInside];
-    self.followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 24, 24);
+    self.followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 34, 34);
+    self.followingButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 10, 10);
     
     [self addSubview:self.followingButton];
     
@@ -886,6 +887,13 @@
     self.currentUserDict = userDict;
     self.following = isFollowing;
     self.currentUser = user;
+    
+    if (self.currentUser.uid && [[FRSAPIClient sharedClient] authenticatedUser].uid && [self.currentUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        self.followingButton.alpha = 0;
+    }
+    else {
+        self.followingButton.alpha = 1;
+    }
 
 }
 
