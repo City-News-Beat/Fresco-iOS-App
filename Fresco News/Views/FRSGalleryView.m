@@ -322,7 +322,10 @@
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     [self configureScrollView]; //
-    [self configureImageViews]; // these three will be wrapped in carousel
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self configureImageViews]; 
+    });
+    // these three will be wrapped in carousel
     [self configurePageControl];//
     
     [self configureGalleryInfo]; // this will stay similar
@@ -395,13 +398,13 @@
             imageView.userInteractionEnabled = YES;
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.imageViews.count > 1) {
-            UIImageView *nextImage = self.imageViews[1];
-            FRSPost *nextPost = self.orderedPosts[1];
-            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
-        }
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if (self.imageViews.count > 1) {
+//            UIImageView *nextImage = self.imageViews[1];
+//            FRSPost *nextPost = self.orderedPosts[1];
+//            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
+//        }
+//    });
 
     if (!self.topLine) {
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];

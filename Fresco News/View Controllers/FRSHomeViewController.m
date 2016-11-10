@@ -238,6 +238,7 @@
         [(FRSGalleryCell *)cell pause];
     }
 }
+
 -(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
