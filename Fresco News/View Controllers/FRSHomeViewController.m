@@ -284,7 +284,6 @@
 -(void)reloadData {
     [self.followingTable reloadFollowing];
 
-    
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
             [self.appDelegate.managedObjectContext performBlock:^{
                 NSInteger index = 0;
@@ -294,6 +293,9 @@
                     NSString *galleryID = gallery[@"id"];
                     NSInteger galleryIndex = [self galleryExists:galleryID];
                     
+                    /*
+                        Gallery does not exist -- create it in persistence layer & volotile memory
+                     */
                     if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
                         FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.managedObjectContext];
                         [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
@@ -303,6 +305,10 @@
                         continue;
                     }
                     
+                    /*
+                        Gallery already exists, update its index & meta information (things change)
+                     */
+                    
                     FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
                     [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
                     [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
@@ -310,6 +316,9 @@
                     index++;
                 }
                 
+                /*
+                    Set new data source, reload the table view, stop and hide spinner (crucial to insure its on the main thread)
+                 */
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.dataSource = newGalleries;
                     [self.tableView reloadData];
