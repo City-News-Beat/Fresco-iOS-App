@@ -79,6 +79,10 @@
     //[self.galleryView removeFromSuperview];
 }
 
+-(void)prepareForReuse {
+    [super prepareForReuse];
+}
+
 #pragma mark - DataSource For Action Bar
 -(BOOL)shouldHaveActionBar{
     return YES;

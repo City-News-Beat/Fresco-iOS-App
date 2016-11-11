@@ -417,6 +417,14 @@
     }
 }
 
+-(void)dealloc {
+    for (FRSPlayer *player in self.players) {
+        [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:@"http://localhost"]]];
+    }
+    
+    self.players = Nil;
+    self.videoPlayer = Nil;
+}
 -(FRSPlayer *)setupPlayerForPost:(FRSPost *)post {
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
