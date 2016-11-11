@@ -297,6 +297,10 @@
             [self.loadingView stopLoading];
             [self.loadingView removeFromSuperview];
             hasLoadedOnce = TRUE;
+            isLoading = FALSE;
+            [self.tableView dg_stopLoading];
+            [self.followingTable dg_stopLoading];
+
         });
     }];
 
