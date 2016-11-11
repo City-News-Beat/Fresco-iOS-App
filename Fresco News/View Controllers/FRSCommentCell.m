@@ -43,8 +43,8 @@
     
     self.commentTextView.attributedText = comment.attributedString;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    [self.commentTextView frs_resize];
-//    [self.commentTextView sizeToFit];
+//    [self.commentTextView frs_resize];
+    [self.commentTextView sizeToFit];
     self.commentTextView.delegate = delegate;
     
     NSDate *date = [comment createdAt];
