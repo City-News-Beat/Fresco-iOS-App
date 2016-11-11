@@ -94,7 +94,7 @@
 
 -(void)play {
     
-    if (hasPlayed) {
+    if (self.galleryView.hasTapped) {
         return;
     }
     

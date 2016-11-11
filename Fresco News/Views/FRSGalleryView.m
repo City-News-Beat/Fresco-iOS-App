@@ -48,6 +48,8 @@
         return;
     }
     
+    _hasTapped = FALSE;
+    
     for (FRSPlayer *player in self.players) {
         if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
             [player.currentItem cancelPendingSeeks];
@@ -529,6 +531,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         CGPoint location = [tap locationInView:self];
         
+        
         if (location.y > _scrollView.frame.size.height) {
             return;
         }
@@ -539,6 +542,8 @@
         if (![[player class] isSubclassOfClass:[FRSPlayer class]]) {
             return;
         }
+        
+        _hasTapped = TRUE;
         
         player.muted = FALSE;
         
