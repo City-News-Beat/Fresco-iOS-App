@@ -289,8 +289,7 @@
             [self.appDelegate.managedObjectContext performBlock:^{
                 NSInteger index = 0;
                 
-                NSMutableArray *galleries = [[NSMutableArray alloc] init];
-                
+                NSMutableArray *newGalleries = [[NSMutableArray alloc] init];
                 for (NSDictionary *gallery in galleries) {
                     NSString *galleryID = gallery[@"id"];
                     NSInteger galleryIndex = [self galleryExists:galleryID];
@@ -299,7 +298,7 @@
                         FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.managedObjectContext];
                         [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
                         [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                        [galleries addObject:galleryToSave];
+                        [newGalleries addObject:galleryToSave];
                         index++;
                         continue;
                     }
@@ -307,13 +306,12 @@
                     FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
                     [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
                     [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                    [galleries addObject:galleryToSave];
+                    [newGalleries addObject:galleryToSave];
                     index++;
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    self.dataSource = galleries;
+                    self.dataSource = newGalleries;
                     [self.tableView reloadData];
                     isLoading = FALSE;
                     [self.tableView dg_stopLoading];
