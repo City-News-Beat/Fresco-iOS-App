@@ -49,8 +49,10 @@
     }
     
     for (FRSPlayer *player in self.players) {
-        [player.currentItem cancelPendingSeeks];
-        [player.currentItem.asset cancelLoading];
+        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
+            [player.currentItem cancelPendingSeeks];
+            [player.currentItem.asset cancelLoading];
+        }
     }
     
     for (AVPlayerLayer *layer in self.playerLayers) {
