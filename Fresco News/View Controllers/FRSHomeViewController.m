@@ -481,7 +481,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    CGFloat dummyViewHeight = 30;
+    CGFloat dummyViewHeight = 24;
     UIView *dummyView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, dummyViewHeight)];
     self.tableView.tableFooterView = dummyView;
     
