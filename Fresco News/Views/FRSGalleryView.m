@@ -399,12 +399,11 @@
                     // set up FRSPlayer
                     // add AVPlayerLayer
                     NSLog(@"TOP LEVEL PLAYER");
+                    
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                        [self.players addObject:[self setupPlayerForPost:post]];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self.scrollView bringSubviewToFront:[self.players[0] container]];
-                        });
+                        [self setupPlayerForPost:post play:FALSE];
                     });
+                    
                     [self configureMuteIcon];
                 }
                 else {
@@ -415,6 +414,7 @@
             imageView.userInteractionEnabled = YES;
     }
     
+    // if we want to preload the next image
 //    dispatch_async(dispatch_get_main_queue(), ^{
 //        if (self.imageViews.count > 1) {
 //            UIImageView *nextImage = self.imageViews[1];
@@ -460,15 +460,18 @@
 }
 
 -(void)dealloc {
+    
     for (FRSPlayer *player in self.players) {
-        [player.currentItem cancelPendingSeeks];
-        [player.currentItem.asset cancelLoading];
+        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
+            [player.currentItem cancelPendingSeeks];
+            [player.currentItem.asset cancelLoading];
+        }
     }
     
     self.players = Nil;
     self.videoPlayer = Nil;
 }
--(FRSPlayer *)setupPlayerForPost:(FRSPost *)post {
+-(FRSPlayer *)setupPlayerForPost:(FRSPost *)post play:(BOOL)play {
     
     if (!_playerLayers) {
         _playerLayers = [[NSMutableArray alloc] init];
@@ -476,7 +479,11 @@
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
-    FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+    __block FRSPlayer *videoPlayer;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+       videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+    });
     
     dispatch_async(dispatch_get_main_queue(), ^{
         AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
@@ -503,6 +510,14 @@
         [self.scrollView addSubview:container];
         [self.scrollView bringSubviewToFront:container];
         [self configureMuteIcon];
+        
+        [self.players addObject:videoPlayer];
+        [self.scrollView bringSubviewToFront:[self.players[self.players.count-1] container]];
+        
+        if (play) {
+            [videoPlayer play];
+        }
+
     });
     
     videoPlayer.muted = TRUE;
@@ -985,9 +1000,7 @@
     if (self.players.count <= page) {
         if (post.videoUrl != Nil && page >= self.players.count) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                FRSPlayer *player = [self setupPlayerForPost:post];
-                [self.players addObject:player];
-                [self.videoPlayer play];
+                [self setupPlayerForPost:post play:TRUE];
             });
         }
         else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
