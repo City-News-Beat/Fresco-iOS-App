@@ -543,8 +543,6 @@
             return;
         }
         
-        _hasTapped = TRUE;
-        
         player.muted = FALSE;
         
         if (self.muteImageView.alpha == 1 && player.rate == 0.0) {
@@ -567,6 +565,7 @@
             [player play];
         } else {
             [player pause];
+            _hasTapped = TRUE;
         }
     });
 }
