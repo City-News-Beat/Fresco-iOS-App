@@ -1121,6 +1121,10 @@
 }
 
 -(void)breakDownPlayer:(AVPlayerLayer *)layer {
+    if (![[layer class] isSubclassOfClass:[AVPlayerLayer class]]) {
+        return;
+    }
+    
     [layer.player pause];
     [layer.player replaceCurrentItemWithPlayerItem:Nil];
     [layer removeFromSuperlayer];
