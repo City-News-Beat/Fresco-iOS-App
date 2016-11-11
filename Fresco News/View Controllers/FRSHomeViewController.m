@@ -956,6 +956,9 @@
                     }
                     
                 }
+                else {
+                    [cell pause];
+                }
             }
             
             if (!taken) {
