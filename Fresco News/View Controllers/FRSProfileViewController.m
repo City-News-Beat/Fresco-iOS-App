@@ -1269,7 +1269,7 @@
         dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
         
-        FRSUser *authUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        FRSUser *authUser = self.representedUser;
         NSString *userID = authUser.uid;
         
         NSString *endpoint = [NSString stringWithFormat:likeFeed, userID];
@@ -1306,7 +1306,7 @@
         dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
         
-        FRSUser *authUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        FRSUser *authUser = self.representedUser;
         NSString *userID = authUser.uid;
         
         NSString *endpoint = [NSString stringWithFormat:userFeed, userID];
