@@ -417,6 +417,17 @@
     }
 }
 
+-(void)removeFromSuperview {
+    [super removeFromSuperview];
+    for (FRSPlayer *player in self.players) {
+        [player.currentItem cancelPendingSeeks];
+        [player.currentItem.asset cancelLoading];
+    }
+    
+    self.players = Nil;
+    self.videoPlayer = Nil;
+}
+
 -(void)dealloc {
     for (FRSPlayer *player in self.players) {
         [player.currentItem cancelPendingSeeks];
