@@ -1245,12 +1245,91 @@
             }
         }
         
+        if (indexPath.row > self.currentFeed.count - 5) {
+            [self loadMoreInCurrentFeed];
+        }
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }
+
+-(void)loadMoreInCurrentFeed {
+    if (self.currentFeed == self.likes) {
+        
+        if (isReloading || isFinishedLikes) {
+            return;
+        }
+        
+        FRSGallery *gallery = [self.likes lastObject];
+        
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
+        
+        FRSUser *authUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        NSString *userID = authUser.uid;
+        
+        NSString *endpoint = [NSString stringWithFormat:userFeed, userID];
+        
+        endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
+        
+        [[FRSAPIClient sharedClient] get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+            isReloading = FALSE;
+            
+            NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
+            
+            if (response.count == 0) {
+                isFinishedLikes = TRUE;
+            }
+            
+            NSMutableArray *newGalleries = [self.likes mutableCopy];
+            [newGalleries addObjectsFromArray:response];
+            self.likes = newGalleries;
+            [self.tableView reloadData];
+        }];
+
+
+    }
+    else if (self.currentFeed == self.galleries) {
+        
+        if (isReloading || isFinishedUser) {
+            return;
+        }
+        
+        FRSGallery *gallery = [self.galleries lastObject];
+        
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
+        
+        FRSUser *authUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        NSString *userID = authUser.uid;
+        
+        NSString *endpoint = [NSString stringWithFormat:likeFeed, userID];
+        
+        endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
+        
+        [[FRSAPIClient sharedClient] get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+            isReloading = FALSE;
+            
+            
+            NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
+            
+            if (response.count == 0) {
+                isFinishedUser = TRUE;
+            }
+            
+            NSMutableArray *newGalleries = [self.galleries mutableCopy];
+            [newGalleries addObjectsFromArray:response];
+            self.galleries = newGalleries;
+            [self.tableView reloadData];
+        }];
+        
+    }
+}
+
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section== 0){
