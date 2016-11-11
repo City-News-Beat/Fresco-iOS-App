@@ -72,7 +72,7 @@
 @property NSString *defaultPostID;
 
 @property (strong, nonatomic) NSDictionary *currentCommentUserDictionary;
-
+@property BOOL didChangeUp;
 
 @end
 
@@ -1058,6 +1058,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)changeUp:(NSNotification *)change {
+    
+    if (self.didChangeUp) {
+        return;
+    }
+    
     [UIView animateWithDuration:.2 animations:^{
         NSDictionary *info = [change userInfo];
         
@@ -1066,6 +1071,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         [commentField setFrame:CGRectMake(0, originY , commentField.frame.size.width, commentField.frame.size.height)];
         [self.view setFrame:CGRectMake(0, self.view.frame.origin.y - keyboardSize.height, self.view.frame.size.width, self.view.frame.size.height)];
     }];
+    
+    self.didChangeUp = YES;
 }
 
 -(void)dealloc {
@@ -1114,11 +1121,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 
 -(void)dismissKeyboard:(UITapGestureRecognizer *)tap {
+    self.didChangeUp = NO;
+    
     [self.galleryView playerTap:tap];
     if (commentField.isEditing) {
         [commentField resignFirstResponder];
-        [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
-        [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+        
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
+            [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+        } completion:nil];
     }
     else {
         
