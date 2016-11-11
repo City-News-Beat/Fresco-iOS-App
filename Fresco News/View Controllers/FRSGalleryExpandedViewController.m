@@ -614,7 +614,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.commentLabel setOriginWithPoint:CGPointMake(16, labelOriginY + 6)];
     [self.scrollView addSubview:self.commentLabel];
     
-    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
+    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height+150)];
     self.commentTableView.delegate = self;
     self.commentTableView.dataSource = self;
     self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -793,7 +793,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         if (indexPath.row < self.comments.count + showsMoreButton) {
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
-            NSInteger height = cell.commentTextView.frame.size.height + 36;
+            [cell.commentTextView sizeToFit];
+            NSInteger height = cell.commentTextView.frame.size.height + 36; //36 is top and bottom padding
             
             NSLog(@"CELL: %@", cell);
             
