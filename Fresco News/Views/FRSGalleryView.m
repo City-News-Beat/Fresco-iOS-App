@@ -471,17 +471,17 @@
 }
 
 -(void)handlePlay:(BOOL)play player:(FRSPlayer *)player {
-    if (play) {
-        for (FRSPlayer *potential in self.players) {
-            if (potential != player && [[potential class] isSubclassOfClass:[FRSPlayer class]]) {
-                [potential pause];
-            }
-        }
-        
-        if (self.delegate) {
-            [self.delegate playerWillPlay:player];
-        }
-    }
+//    if (play) {
+//        for (FRSPlayer *potential in self.players) {
+//            if (potential != player && [[potential class] isSubclassOfClass:[FRSPlayer class]]) {
+//                [potential pause];
+//            }
+//        }
+//        
+//        if (self.delegate) {
+//            [self.delegate playerWillPlay:player];
+//        }
+//    }
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
@@ -509,6 +509,7 @@
     if (player.muted) {
         player.muted = FALSE;
         [player play];
+        return;
     }
     else if (self.muteImageView.alpha == 1) {
         self.muteImageView.alpha = 0;
