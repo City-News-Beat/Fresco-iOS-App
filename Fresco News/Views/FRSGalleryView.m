@@ -419,7 +419,8 @@
 
 -(void)dealloc {
     for (FRSPlayer *player in self.players) {
-        [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:@"http://localhost"]]];
+        [player.currentItem cancelPendingSeeks];
+        [player.currentItem.asset cancelLoading];
     }
     
     self.players = Nil;
@@ -485,42 +486,45 @@
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
-    CGPoint location = [tap locationInView:self];
     
-    if (location.y > _scrollView.frame.size.height) {
-        return;
-    }
-    
-    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
-    FRSPlayer *player = self.players[page];
-    
-    if (![[player class] isSubclassOfClass:[FRSPlayer class]]) {
-        return;
-    }
-    
-    player.muted = FALSE;
-    
-    if (self.muteImageView.alpha == 1 && player.rate == 0.0) {
-        self.muteImageView.alpha = 0;
-        [player play];
-        return;
-    }
-    
-    if (player.muted) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CGPoint location = [tap locationInView:self];
+        
+        if (location.y > _scrollView.frame.size.height) {
+            return;
+        }
+        
+        NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+        FRSPlayer *player = self.players[page];
+        
+        if (![[player class] isSubclassOfClass:[FRSPlayer class]]) {
+            return;
+        }
+        
         player.muted = FALSE;
-        [player play];
-        return;
-    }
-    else if (self.muteImageView.alpha == 1) {
-        self.muteImageView.alpha = 0;
-        return;
-    }
-    
-    if (player.rate == 0.0) {
-        [player play];
-    } else {
-        [player pause];
-    }
+        
+        if (self.muteImageView.alpha == 1 && player.rate == 0.0) {
+            self.muteImageView.alpha = 0;
+            [player play];
+            return;
+        }
+        
+        if (player.muted) {
+            player.muted = FALSE;
+            [player play];
+            return;
+        }
+        else if (self.muteImageView.alpha == 1) {
+            self.muteImageView.alpha = 0;
+            return;
+        }
+        
+        if (player.rate == 0.0) {
+            [player play];
+        } else {
+            [player pause];
+        }
+    });
 }
 
 -(void)handlePhotoTap:(NSInteger)index {
