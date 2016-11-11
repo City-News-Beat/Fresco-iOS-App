@@ -50,6 +50,11 @@
 }
 
 -(void)play {
+    
+    [[AVAudioSession sharedInstance]
+     setCategory: AVAudioSessionCategoryPlayback
+     error: nil];
+    
     [super play];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
