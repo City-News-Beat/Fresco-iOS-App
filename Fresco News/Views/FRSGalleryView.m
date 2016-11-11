@@ -483,51 +483,52 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
        videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+            videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(playerItemDidReachEnd:)
+                                                         name:AVPlayerItemDidPlayToEndTimeNotification
+                                                       object:[videoPlayer currentItem]];
+            
+            NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+            
+            playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
+            playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+            playerLayer.opaque = FALSE;
+            
+            UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
+            container.backgroundColor = [UIColor clearColor];
+            
+            videoPlayer.container = container;
+            playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
+            [_playerLayers addObject:playerLayer];
+            [container.layer insertSublayer:playerLayer atIndex:1000];
+            [self.scrollView addSubview:container];
+            [self.scrollView bringSubviewToFront:container];
+            [self configureMuteIcon];
+            
+            [self.players addObject:videoPlayer];
+            [self.scrollView bringSubviewToFront:[self.players[self.players.count-1] container]];
+            
+            if (play) {
+                [videoPlayer play];
+            }
+            
+        });
+        
+        videoPlayer.muted = TRUE;
+        videoPlayer.wasMuted = FALSE;
+        
+        __weak typeof(self) weakSelf = self;
+        
+        videoPlayer.playBlock = ^(BOOL playing, FRSPlayer *player) {
+            [weakSelf handlePlay:playing player:player];
+        };
     });
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-        videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(playerItemDidReachEnd:)
-                                                     name:AVPlayerItemDidPlayToEndTimeNotification
-                                                   object:[videoPlayer currentItem]];
-        
-        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
-        
-        playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
-        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
-        playerLayer.opaque = FALSE;
-        
-        UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
-        container.backgroundColor = [UIColor clearColor];
-        
-        videoPlayer.container = container;
-        playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
-        [_playerLayers addObject:playerLayer];
-        [container.layer insertSublayer:playerLayer atIndex:1000];
-        [self.scrollView addSubview:container];
-        [self.scrollView bringSubviewToFront:container];
-        [self configureMuteIcon];
-        
-        [self.players addObject:videoPlayer];
-        [self.scrollView bringSubviewToFront:[self.players[self.players.count-1] container]];
-        
-        if (play) {
-            [videoPlayer play];
-        }
-
-    });
-    
-    videoPlayer.muted = TRUE;
-    videoPlayer.wasMuted = FALSE;
-    
-    __weak typeof(self) weakSelf = self;
-    
-    videoPlayer.playBlock = ^(BOOL playing, FRSPlayer *player) {
-        [weakSelf handlePlay:playing player:player];
-    };
     
     return videoPlayer;
 }
