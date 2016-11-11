@@ -283,55 +283,44 @@
 
 -(void)reloadData {
     [self.followingTable reloadFollowing];
-    
-    // network call
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
-        if ([galleries count] == 0){
-            
-        }
-        else {
-            [self cacheLocalData:galleries];
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.loadingView stopLoading];
-            [self.loadingView removeFromSuperview];
-            hasLoadedOnce = TRUE;
-            isLoading = FALSE;
-            [self.tableView dg_stopLoading];
-            [self.followingTable dg_stopLoading];
-
-        });
-    }];
 
     
-//    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
-//            [self.appDelegate.managedObjectContext performBlock:^{
-//                NSInteger index = 0;
-//                
-//                for (NSDictionary *gallery in galleries) {
-//                    NSString *galleryID = gallery[@"id"];
-//                    NSInteger galleryIndex = [self galleryExists:galleryID];
-//                    
-//                    if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
-//                        continue;
-//                    }
-//                    
-//                    FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
-//                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-//                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-//                    
-//                    index++;
-//                }
-//                
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [self.tableView reloadData];
-//                    isLoading = FALSE;
-//                    [self.tableView dg_stopLoading];
-//                    [self.followingTable dg_stopLoading];
-//                });
-//            }];
-//        }];
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
+            [self.appDelegate.managedObjectContext performBlock:^{
+                NSInteger index = 0;
+                
+                NSMutableArray *galleries = [[NSMutableArray alloc] init];
+                
+                for (NSDictionary *gallery in galleries) {
+                    NSString *galleryID = gallery[@"id"];
+                    NSInteger galleryIndex = [self galleryExists:galleryID];
+                    
+                    if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
+                        FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.managedObjectContext];
+                        [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                        [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                        [galleries addObject:galleryToSave];
+                        index++;
+                        continue;
+                    }
+                    
+                    FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
+                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                    [galleries addObject:galleryToSave];
+                    index++;
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    self.dataSource = galleries;
+                    [self.tableView reloadData];
+                    isLoading = FALSE;
+                    [self.tableView dg_stopLoading];
+                    [self.followingTable dg_stopLoading];
+                });
+            }];
+        }];
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
