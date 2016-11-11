@@ -418,14 +418,21 @@
 }
 
 -(void)removeFromSuperview {
-    [super removeFromSuperview];
+    
     for (FRSPlayer *player in self.players) {
         [player.currentItem cancelPendingSeeks];
         [player.currentItem.asset cancelLoading];
     }
     
+    for (UIImageView *imageView in self.imageViews) {
+        imageView.image = Nil;
+    }
+    
+    
     self.players = Nil;
     self.videoPlayer = Nil;
+    
+    [super removeFromSuperview];
 }
 
 -(void)dealloc {
@@ -838,15 +845,6 @@
     labelFrame.size.width = [UIScreen mainScreen].bounds.size.width;
     label.frame = labelFrame;
     return label;
-}
-
--(void)removeFromSuperview {
-    
-    for (UIImageView *imageView in self.imageViews) {
-        imageView.image = Nil;
-    }
-    
-    [super removeFromSuperview];
 }
 
 -(void)configureCaptionLabel{
