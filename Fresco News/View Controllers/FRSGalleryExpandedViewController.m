@@ -128,20 +128,24 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self register3DTouch];
-    [self hideTabBarAnimated:NO];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     self.navigationItem.titleView = self.titleLabel;
+    [self hideTabBarAnimated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    
     self.navigationItem.titleView = self.titleLabel;
+    [self showTabBarAnimated:NO];
+}
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 }
 
 -(void)setupDeepLinkedComment:(NSString *)commentID {
@@ -1127,7 +1131,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (commentField.isEditing) {
         [commentField resignFirstResponder];
         
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
             [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
         } completion:nil];
