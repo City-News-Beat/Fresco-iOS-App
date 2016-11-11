@@ -94,7 +94,7 @@
 
 -(void)play {
     
-    if (hasPlayed) {
+    if (hasPlayed && FALSE) {
         return;
     }
     
