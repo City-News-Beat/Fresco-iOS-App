@@ -965,7 +965,7 @@
                 /*
                     Start playback mid frame -- at least 300 from top & at least 100 from bottom
                  */
-                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
+                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
                     
                     if (!taken) {
                         taken = TRUE;

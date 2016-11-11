@@ -1365,7 +1365,7 @@
         
         for (FRSGalleryCell *cell in visibleCells) {
             if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
+                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
                     if (!taken) {
                         [cell play];
                         taken = TRUE;
