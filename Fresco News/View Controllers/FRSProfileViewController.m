@@ -1262,6 +1262,7 @@
             return;
         }
         
+        isReloading = TRUE;
         FRSGallery *gallery = [self.likes lastObject];
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -1298,6 +1299,7 @@
             return;
         }
         
+        isReloading = TRUE;
         FRSGallery *gallery = [self.galleries lastObject];
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
