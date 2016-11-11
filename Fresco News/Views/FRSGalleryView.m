@@ -33,6 +33,10 @@
 @property (strong, nonatomic) UILabel *repostLabel;
 @property BOOL playerHasFocus;
 @property BOOL isVideo;
+@property BOOL hasLocation;
+@property BOOL hasTime;
+@property BOOL hasName;
+
 @end
 
 @implementation FRSGalleryView
@@ -126,6 +130,46 @@
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
+    
+    
+    self.hasLocation = YES;
+    self.hasTime = YES;
+    self.hasName = YES;
+    
+    if ([self.locationLabel.text isEqualToString:@""] || [self.locationLabel.text isEqual:[NSNull null]]) {
+        self.hasLocation = NO;
+    }
+    if ([self.timeLabel.text isEqualToString:@""] || [self.timeLabel.text isEqual:[NSNull null]]) {
+        self.hasTime = NO;
+    }
+    if ([self.nameLabel.text isEqualToString:@""] || [self.nameLabel.text isEqual:[NSNull null]]) {
+        self.hasName = NO;
+    }
+    
+    if (!self.hasLocation && self.hasTime && self.hasName) {
+        self.locationLabel.alpha = 0;
+        self.locationIV.alpha = 0;
+        self.profileIV.transform = CGAffineTransformMakeTranslation(0, -20);
+        self.nameLabel.transform = CGAffineTransformMakeTranslation(0, -20);
+    } else if (!self.hasLocation && !self.hasTime && self.hasName) {
+        self.locationLabel.alpha = 0;
+        self.locationIV.alpha = 0;
+        self.timeLabel.alpha = 0;
+        self.clockIV.alpha = 0;
+        self.profileIV.transform = CGAffineTransformMakeTranslation(0, -20);
+        self.nameLabel.transform = CGAffineTransformMakeTranslation(0, -20);
+    } else if (self.hasLocation && !self.hasTime && self.hasName) {
+        self.timeLabel.alpha = 0;
+        self.clockIV.alpha = 0;
+        self.profileIV.transform = CGAffineTransformMakeTranslation(0, -20);
+        self.nameLabel.transform = CGAffineTransformMakeTranslation(0, -20);
+        self.locationIV.transform = CGAffineTransformMakeTranslation(0, -20);
+        self.locationLabel.transform = CGAffineTransformMakeTranslation(0, -20);
+    }
+    
+    
+
+    
     
     [self checkOwner];
 }
@@ -1033,6 +1077,27 @@
     if (adjustedPost.videoUrl == nil) {
         self.muteImageView.alpha = 0;
     }
+    
+    if ([self.locationLabel.text isEqualToString:@""] || [self.locationLabel.text isEqual:[NSNull null]]) {
+        self.locationLabel.alpha = 0;
+        self.locationIV.alpha = 0;
+    }
+    
+
+//    if (!self.hasName) {
+//        self.nameLabel.alpha = 0;
+//        self.profileIV.alpha = 0;
+//    }
+//    
+//    if (!self.hasTime) {
+//        self.timeLabel.alpha = 0;
+//        self.clockIV.alpha = 0;
+//    }
+//    
+//    if (!self.hasLocation) {
+//        self.locationLabel.alpha = 0;
+//        self.locationIV.alpha = 0;
+//    }
 }
 
 -(void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {

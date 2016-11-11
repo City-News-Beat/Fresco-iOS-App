@@ -123,7 +123,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self configureUI];
     [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     self.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
+
+    //    [[NSNotificationCenter defaultCenter]addObserver:self
+//                                            selector:@selector(expandNavigationBar)
+//                                                name:UIApplicationWillEnterForegroundNotification
+//                                              object:nil];
 }
+
+//-(void)expandNavigationBar {
+////    [self expandNavFRSBar:nil];
+//}
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -482,6 +491,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                    action:@selector(dismissKeyboard:)];
     tap.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tap];
+
 }
 
 
