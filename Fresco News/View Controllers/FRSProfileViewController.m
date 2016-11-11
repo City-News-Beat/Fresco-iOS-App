@@ -1302,7 +1302,7 @@
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-        NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
+        NSString *timeStamp = [dateFormat stringFromDate:gallery.createdDate];
         
         FRSUser *authUser = [[FRSAPIClient sharedClient] authenticatedUser];
         NSString *userID = authUser.uid;
