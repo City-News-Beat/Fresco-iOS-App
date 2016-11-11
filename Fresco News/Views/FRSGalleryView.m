@@ -399,9 +399,11 @@
                     // set up FRSPlayer
                     // add AVPlayerLayer
                     NSLog(@"TOP LEVEL PLAYER");
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                         [self.players addObject:[self setupPlayerForPost:post]];
-                        [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                        });
                     });
                     [self configureMuteIcon];
                 }
@@ -467,6 +469,7 @@
     self.videoPlayer = Nil;
 }
 -(FRSPlayer *)setupPlayerForPost:(FRSPost *)post {
+    
     if (!_playerLayers) {
         _playerLayers = [[NSMutableArray alloc] init];
     }
@@ -981,9 +984,11 @@
     
     if (self.players.count <= page) {
         if (post.videoUrl != Nil && page >= self.players.count) {
-            FRSPlayer *player = [self setupPlayerForPost:post];
-            [self.players addObject:player];
-            [self.videoPlayer play];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                FRSPlayer *player = [self setupPlayerForPost:post];
+                [self.players addObject:player];
+                [self.videoPlayer play];
+            });
         }
         else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
             if (self.players && imageView) {
