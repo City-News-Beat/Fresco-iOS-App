@@ -31,6 +31,7 @@
 @property (strong, nonatomic) UIImageView *muteImageView;
 @property (strong, nonatomic) UIImageView *repostImageView;
 @property (strong, nonatomic) UILabel *repostLabel;
+@property (strong, nonatomic) NSMutableArray *playerLayers;
 @property BOOL playerHasFocus;
 @property BOOL isVideo;
 @end
@@ -47,18 +48,28 @@
         return;
     }
     
+    for (FRSPlayer *player in self.players) {
+        [player.currentItem cancelPendingSeeks];
+        [player.currentItem.asset cancelLoading];
+    }
+    
+    for (AVPlayerLayer *layer in self.playerLayers) {
+        [layer removeFromSuperlayer];
+    }
+    
+    for (UIImageView *imageView in self.imageViews) {
+        imageView.image = Nil;
+    }
+    
+    
+    self.players = Nil;
+    self.videoPlayer = Nil;
+    self.playerLayers = Nil;
     
     self.gallery = gallery;
     
-    for (FRSPlayer *player in self.players) {
-        if ([player respondsToSelector:@selector(pause)]) {
-            [player.container removeFromSuperview];
-            [player pause];
-            [player replaceCurrentItemWithPlayerItem:Nil];
-        }
-    }
-    
     self.players = [[NSMutableArray alloc] init];
+    self.playerLayers = [[NSMutableArray alloc] init];
     
     self.clipsToBounds = NO;
     self.gallery = gallery;
@@ -424,6 +435,10 @@
         [player.currentItem.asset cancelLoading];
     }
     
+    for (AVPlayerLayer *layer in self.playerLayers) {
+        [layer removeFromSuperlayer];
+    }
+    
     for (UIImageView *imageView in self.imageViews) {
         imageView.image = Nil;
     }
@@ -431,6 +446,7 @@
     
     self.players = Nil;
     self.videoPlayer = Nil;
+    self.playerLayers = Nil;
     
     [super removeFromSuperview];
 }
@@ -445,6 +461,9 @@
     self.videoPlayer = Nil;
 }
 -(FRSPlayer *)setupPlayerForPost:(FRSPost *)post {
+    if (!_playerLayers) {
+        _playerLayers = [[NSMutableArray alloc] init];
+    }
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
@@ -470,7 +489,7 @@
         
         videoPlayer.container = container;
         playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
-        
+        [_playerLayers addObject:playerLayer];
         [container.layer insertSublayer:playerLayer atIndex:1000];
         [self.scrollView addSubview:container];
         [self.scrollView bringSubviewToFront:container];
