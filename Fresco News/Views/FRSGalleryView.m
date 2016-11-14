@@ -1294,7 +1294,7 @@
             }
             
             [(AVPlayer *)self.players[page] play];
-            [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.1];
+            [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
 
         }
     }
@@ -1304,6 +1304,12 @@
     for (FRSPlayer *player in self.players) {
         [player.currentItem cancelPendingSeeks];
         [player.currentItem.asset cancelLoading];
+        
+        for (CALayer *layer in player.container.layer.sublayers) {
+            [layer removeFromSuperlayer];
+        }
+        
+        player.hasEstablished = FALSE;
     }
 }
 
