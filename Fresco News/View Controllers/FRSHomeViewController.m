@@ -974,7 +974,9 @@
                     
                 }
                 else {
-                    [cell pause];
+                    if ([cell respondsToSelector:@selector(pause)]) {
+                        [cell pause];
+                    }
                 }
             }
             

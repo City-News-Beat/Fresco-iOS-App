@@ -1287,15 +1287,15 @@
                         [player.container.layer insertSublayer:playerLayer atIndex:10000];
                         [(AVPlayerLayer *)self.playerLayers[self.currentPage] removeFromSuperlayer];
                         self.playerLayers[self.currentPage] = playerLayer;
+                        
+                        [(AVPlayer *)self.players[page] play];
+                        [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
                     });
                     
                     player.hasEstablished = TRUE;
                 }
             }
             
-            [(AVPlayer *)self.players[page] play];
-            [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
-
         }
     }
 }
