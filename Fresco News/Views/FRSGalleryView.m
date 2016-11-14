@@ -1294,6 +1294,8 @@
             }
             
             [(AVPlayer *)self.players[page] play];
+            [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.1];
+
         }
     }
 }
