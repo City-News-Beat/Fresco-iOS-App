@@ -466,6 +466,7 @@
     self.players = Nil;
     self.videoPlayer = Nil;
 }
+
 -(FRSPlayer *)setupPlayerForPost:(FRSPost *)post play:(BOOL)play {
     if (!_playerLayers) {
         _playerLayers = [[NSMutableArray alloc] init];
@@ -482,6 +483,8 @@
     else {
         videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
     }
+    
+    videoPlayer.hasEstablished = play;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
@@ -1265,17 +1268,34 @@
                 FRSPost *post = (FRSPost *)self.orderedPosts[self.currentPage];
                 [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:post.videoUrl]]];
                 
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    AVPlayerLayer *playerLayer = (AVPlayerLayer *)self.playerLayers[self.currentPage];
-                    [player.container.layer insertSublayer:playerLayer atIndex:1000];
-                });
+                if (!player.hasEstablished) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+                        player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+                        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                                 selector:@selector(playerItemDidReachEnd:)
+                                                                     name:AVPlayerItemDidPlayToEndTimeNotification
+                                                                   object:[player currentItem]];
+                        
+                        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+                        
+                        playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
+                        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+                        playerLayer.opaque = FALSE;
+                        [player.container.layer insertSublayer:playerLayer atIndex:10000];
+                        [(AVPlayerLayer *)self.playerLayers[self.currentPage] removeFromSuperlayer];
+                        self.playerLayers[self.currentPage] = playerLayer;
+                    });
+                    
+                    player.hasEstablished = TRUE;
+                }
             }
             
             [(AVPlayer *)self.players[page] play];
         }
     }
-    
-//    self.muteImageView.alpha = 0;
 }
 
 -(void)offScreen {
