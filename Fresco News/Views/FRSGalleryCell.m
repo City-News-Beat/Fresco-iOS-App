@@ -96,13 +96,6 @@
 }
 
 -(void)play {
-    
-    if (self.galleryView.hasTapped && FALSE) {
-        return;
-    }
-    
-    hasPlayed = TRUE;
-    
     [self.galleryView play];
 }
 -(void)pause {
