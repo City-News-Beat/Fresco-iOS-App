@@ -235,7 +235,7 @@
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-        [(FRSGalleryCell *)cell pause];
+        [(FRSGalleryCell *)cell offScreen];
     }
 }
 
@@ -974,9 +974,7 @@
                     
                 }
                 else {
-                    if ([cell respondsToSelector:@selector(pause)]) {
-                        [cell pause];
-                    }
+                  
                 }
             }
             

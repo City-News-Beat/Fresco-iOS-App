@@ -459,8 +459,10 @@
 
 -(void)dealloc {
     for (FRSPlayer *player in self.players) {
-        [player.currentItem cancelPendingSeeks];
-        [player.currentItem.asset cancelLoading];
+        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
+            [player.currentItem cancelPendingSeeks];
+            [player.currentItem.asset cancelLoading];
+        }
     }
     
     self.players = Nil;
@@ -1264,7 +1266,7 @@
             
             FRSPlayer *player = (FRSPlayer *)self.players[page];
             
-            if (!player.currentItem && _currentPage < self.orderedPosts.count) {
+            if ([[player class] isSubclassOfClass:[FRSPlayer class]] && !player.currentItem && _currentPage < self.orderedPosts.count) {
                 FRSPost *post = (FRSPost *)self.orderedPosts[self.currentPage];
                 [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:post.videoUrl]]];
                 
@@ -1302,14 +1304,16 @@
 
 -(void)offScreen {
     for (FRSPlayer *player in self.players) {
-        [player.currentItem cancelPendingSeeks];
-        [player.currentItem.asset cancelLoading];
-        
-        for (CALayer *layer in player.container.layer.sublayers) {
-            [layer removeFromSuperlayer];
+        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
+            [player.currentItem cancelPendingSeeks];
+            [player.currentItem.asset cancelLoading];
+            
+            for (CALayer *layer in player.container.layer.sublayers) {
+                [layer removeFromSuperlayer];
+            }
+            
+            player.hasEstablished = FALSE;
         }
-        
-        player.hasEstablished = FALSE;
     }
 }
 
