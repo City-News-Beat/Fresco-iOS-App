@@ -504,12 +504,14 @@
         videoPlayer.container = container;
         playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
         [_playerLayers addObject:playerLayer];
-        [container.layer insertSublayer:playerLayer atIndex:1000];
         
         if (play) {
-            [self.scrollView addSubview:container];
-            [self.scrollView bringSubviewToFront:container];
+            [container.layer insertSublayer:playerLayer atIndex:1000];
         }
+        
+        [self.scrollView addSubview:container];
+        [self.scrollView bringSubviewToFront:container];
+        
         [self configureMuteIcon];
     });
     
@@ -1262,10 +1264,10 @@
             if (!player.currentItem && _currentPage < self.orderedPosts.count) {
                 FRSPost *post = (FRSPost *)self.orderedPosts[self.currentPage];
                 [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:post.videoUrl]]];
-
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.scrollView addSubview:player.container];
-                    [self.scrollView bringSubviewToFront:player.container];
+                    AVPlayerLayer *playerLayer = (AVPlayerLayer *)self.playerLayers[self.currentPage];
+                    [player.container.layer insertSublayer:playerLayer atIndex:1000];
                 });
             }
             
