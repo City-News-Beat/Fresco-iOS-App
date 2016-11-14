@@ -400,7 +400,7 @@
                     // add AVPlayerLayer
                     NSLog(@"TOP LEVEL PLAYER");
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.players addObject:[self setupPlayerForPost:post]];
+                        [self.players addObject:[self setupPlayerForPost:post play:FALSE]];
                         [self.scrollView bringSubviewToFront:[self.players[0] container]];
                     });
                     [self configureMuteIcon];
@@ -466,14 +466,22 @@
     self.players = Nil;
     self.videoPlayer = Nil;
 }
--(FRSPlayer *)setupPlayerForPost:(FRSPost *)post {
+-(FRSPlayer *)setupPlayerForPost:(FRSPost *)post play:(BOOL)play {
     if (!_playerLayers) {
         _playerLayers = [[NSMutableArray alloc] init];
     }
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
-    FRSPlayer *videoPlayer = [[FRSPlayer alloc] init];
+    
+    FRSPlayer *videoPlayer;
+    
+    if (!play) {
+        videoPlayer = [[FRSPlayer alloc] init];
+    }
+    else {
+        videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
@@ -981,7 +989,7 @@
     
     if (self.players.count <= page) {
         if (post.videoUrl != Nil && page >= self.players.count) {
-            FRSPlayer *player = [self setupPlayerForPost:post];
+            FRSPlayer *player = [self setupPlayerForPost:post play:TRUE];
             [self.players addObject:player];
             [self.videoPlayer play];
         }
@@ -1248,7 +1256,7 @@
             
             FRSPlayer *player = (FRSPlayer *)self.players[page];
             
-            if (!player.currentItem) {
+            if (!player.currentItem && _currentPage < self.orderedPosts.count) {
                 FRSPost *post = (FRSPost *)self.orderedPosts[self.currentPage];
                 [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:post.videoUrl]]];
             }
