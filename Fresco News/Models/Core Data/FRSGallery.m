@@ -208,7 +208,6 @@
             [self addArticlesObject:article];
         }
     }
-    
 }
 
 -(NSInteger)heightForGallery{
