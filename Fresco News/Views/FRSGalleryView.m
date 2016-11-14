@@ -473,7 +473,7 @@
     
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
-    FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+    FRSPlayer *videoPlayer = [[FRSPlayer alloc] init];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
@@ -1245,6 +1245,14 @@
     
     if (self.players.count > page) {
         if ([[self.players[page] class] isSubclassOfClass:[FRSPlayer class]]) {
+            
+            FRSPlayer *player = (FRSPlayer *)self.players[page];
+            
+            if (!player.currentItem) {
+                FRSPost *post = (FRSPost *)self.orderedPosts[self.currentPage];
+                [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:post.videoUrl]]];
+            }
+            
             [(AVPlayer *)self.players[page] play];
         }
     }
