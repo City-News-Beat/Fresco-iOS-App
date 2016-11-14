@@ -75,6 +75,7 @@
 -(void)loadGallery:(FRSGallery *)gallery;
 -(void)play;
 -(void)pause;
+-(void)offScreen;
 
 //Should probably have a resize method that adjusts the size of the entire view. Still haven't out the best way to do this.
 

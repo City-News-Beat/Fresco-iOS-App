@@ -1260,6 +1260,13 @@
 //    self.muteImageView.alpha = 0;
 }
 
+-(void)offScreen {
+    for (FRSPlayer *player in self.players) {
+        [player.currentItem cancelPendingSeeks];
+        [player.currentItem.asset cancelLoading];
+    }
+}
+
 -(void)pause {
     for (AVPlayer *player in self.players) {
         if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {

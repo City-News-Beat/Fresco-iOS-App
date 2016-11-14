@@ -82,6 +82,9 @@
 -(void)prepareForReuse {
     [super prepareForReuse];
 }
+-(void)offScreen {
+    [self.galleryView offScreen];
+}
 
 #pragma mark - DataSource For Action Bar
 -(BOOL)shouldHaveActionBar{
