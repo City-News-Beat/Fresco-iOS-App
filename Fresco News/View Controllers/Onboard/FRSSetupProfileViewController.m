@@ -108,7 +108,6 @@
         } else {
             profileInfo[@"bio"] = @"";
         }
-        
     }
     if (self.nameTF.text) {
         profileInfo[@"full_name"] = self.nameTF.text;
@@ -120,7 +119,6 @@
         //Send image to backend and set the url to the avatar :)
         NSData *imageData = UIImageJPEGRepresentation(self.profileIV.image, 1.0);
         
-
         [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint withParameters:@{@"avatar":imageData} completion:^(id responseObject, NSError *error) {
             NSLog(@"Response Object: %@", responseObject);
             NSLog(@"Error: %@", error);

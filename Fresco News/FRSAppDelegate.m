@@ -97,7 +97,7 @@
         [self handleLocationUpdate];
     }
     if (launchOptions[UIApplicationLaunchOptionsLocalNotificationKey]) {
-        [self handleLocalPush];
+        [self handleLocalPush:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo]];
     }
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         [self handleRemotePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
@@ -699,8 +699,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
 }
 
--(void)handleLocalPush {
-    
+-(void)handleLocalPush:(NSDictionary *)push {
+    [self handleRemotePush:push];
 }
 
 -(void)handleRemotePush:(NSDictionary *)push {
@@ -845,8 +845,35 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 -(void)restartUpload {
     
 }
--(void)applicationDidEnterBackground:(UIApplication *)application {
 
+-(void)application:(UIApplication *)application didReceiveLocalNotification:(nonnull UILocalNotification *)notification {
+    [self handleRemotePush:notification.userInfo];
+}
+
+-(void)applicationDidEnterBackground:(UIApplication *)application {
+//    UNMutableNotificationContent *objNotificationContent = [[UNMutableNotificationContent alloc] init];
+//    objNotificationContent.title = [NSString localizedUserNotificationStringForKey:@"Title" arguments:nil];
+//    objNotificationContent.body = [NSString localizedUserNotificationStringForKey:@"Body"
+//                                                                        arguments:nil];
+//    objNotificationContent.sound = [UNNotificationSound defaultSound];
+//    objNotificationContent.userInfo = @{@"type":followedNotification, @"meta": @{@"user_ids": @[@"neN16OqW3D47"]}};
+//    
+//    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[NSDate date]];
+//    components.second += 3;
+//    UNCalendarNotificationTrigger *trigger = [UNCalendarNotificationTrigger
+//                                              triggerWithDateMatchingComponents:components repeats:FALSE];
+//    
+//    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"com.fresconews.Fresco"
+//                                                                          content:objNotificationContent trigger:trigger];
+//    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+//    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+//        if (!error) {
+//            NSLog(@"Local Notification succeeded");
+//        }
+//        else {
+//            NSLog(@"Local Notification failed");
+//        }
+//    }];
 }
 
 -(void)applicationWillResignActive:(UIApplication *)application{
