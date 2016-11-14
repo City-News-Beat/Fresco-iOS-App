@@ -1262,9 +1262,11 @@
             if (!player.currentItem && _currentPage < self.orderedPosts.count) {
                 FRSPost *post = (FRSPost *)self.orderedPosts[self.currentPage];
                 [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:post.videoUrl]]];
-                AVPlayerLayer *layer = (AVPlayerLayer *)self.playerLayers[self.currentPage];
-                [self.scrollView addSubview:player.container];
-                [self.scrollView bringSubviewToFront:player.container];
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.scrollView addSubview:player.container];
+                    [self.scrollView bringSubviewToFront:player.container];
+                });
             }
             
             [(AVPlayer *)self.players[page] play];
