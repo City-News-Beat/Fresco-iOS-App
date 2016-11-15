@@ -1267,7 +1267,8 @@
             FRSPlayer *player = (FRSPlayer *)self.players[page];
             
             if ([[player class] isSubclassOfClass:[FRSPlayer class]] && !player.currentItem && _currentPage < self.orderedPosts.count) {
-                FRSPost *post = (FRSPost *)self.orderedPosts[self.currentPage];
+                
+                FRSPost *post = (FRSPost *)self.orderedPosts[page];
                 [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:post.videoUrl]]];
                 
                 if (!player.hasEstablished) {
@@ -1287,8 +1288,8 @@
                         playerLayer.backgroundColor = [UIColor clearColor].CGColor;
                         playerLayer.opaque = FALSE;
                         [player.container.layer insertSublayer:playerLayer atIndex:10000];
-                        [(AVPlayerLayer *)self.playerLayers[self.currentPage] removeFromSuperlayer];
-                        self.playerLayers[self.currentPage] = playerLayer;
+                        [(AVPlayerLayer *)self.playerLayers[page] removeFromSuperlayer];
+                        self.playerLayers[page] = playerLayer;
                         
                         [(AVPlayer *)self.players[page] play];
                         [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
