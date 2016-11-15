@@ -550,10 +550,7 @@
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
         CGPoint location = [tap locationInView:self];
-        
         
         if (location.y > _scrollView.frame.size.height) {
             return;
@@ -590,7 +587,6 @@
             [player pause];
             _hasTapped = TRUE;
         }
-    });
 }
 
 -(void)handlePhotoTap:(NSInteger)index {
