@@ -924,7 +924,15 @@
 
 #pragma mark - Action Bar Delegate
 -(NSString *)titleForActionButton{
-    return @"READ MORE";
+    int comments = [[self.gallery comments] intValue];
+    
+    if (comments == 1) {
+        return [NSString stringWithFormat:@"%d COMMENT", comments];
+    } else if (comments >= 600) {
+        return [NSString stringWithFormat:@"HELLA COMMENTS"];
+    }
+    
+    return [NSString stringWithFormat:@"%d COMMENTS", comments];
 }
 
 -(UIColor *)colorForActionButton{
