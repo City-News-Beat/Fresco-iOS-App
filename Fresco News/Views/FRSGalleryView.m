@@ -928,6 +928,8 @@
     
     if (comments == 1) {
         return [NSString stringWithFormat:@"%d COMMENT", comments];
+    } else if (comments == 0) {
+        return @"READ MORE";
     } else if (comments >= 600) {
         return [NSString stringWithFormat:@"HELLA COMMENTS"];
     }
