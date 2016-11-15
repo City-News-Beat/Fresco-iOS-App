@@ -401,7 +401,10 @@
                     NSLog(@"TOP LEVEL PLAYER");
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self.players addObject:[self setupPlayerForPost:post play:FALSE]];
-                        [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                        
+                        if ([self.players[0] respondsToSelector:@selector(container)]) {
+                            [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                        }
                     });
                     [self configureMuteIcon];
                 }
