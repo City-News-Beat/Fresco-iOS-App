@@ -46,6 +46,7 @@
 
 -(void)configureNavigationBar {
     [self configureBackButtonAnimated:YES];
+        
     self.title = @"GLOBAL ASSIGNMENTS";
 }
 
