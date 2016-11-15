@@ -126,7 +126,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
     timestampLabel.textAlignment = NSTextAlignmentRight;
     timestampLabel.text = [FRSDateFormatter timestampStringFromDate:[_story editedDate]];
     [self.headerContainer addSubview:timestampLabel];
-        
     
     UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 48, [UIScreen mainScreen].bounds.size.width -32, 20)];
     captionLabel.textColor = [UIColor frescoDarkTextColor];

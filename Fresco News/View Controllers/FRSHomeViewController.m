@@ -504,15 +504,9 @@
     
 //    self.tableView.backgroundColor = [UIColor frescoOrangeColor];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
-    self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height+15);
+    self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height+20);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
-//    CGFloat dummyViewHeight = 24;
-//    UIView *dummyView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, dummyViewHeight)];
-//    self.tableView.tableFooterView = dummyView;
-//    
-//    self.tableView.contentInset = UIEdgeInsetsMake(-dummyViewHeight, 0, 0, 0);
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.bounces = YES;
     self.pageScroller.delegate = self;
