@@ -59,10 +59,10 @@
     
     //self.navigationItem.titleView.alpha = 1.0;
     
-    if (self.shouldHaveBackButton){
-        [super configureBackButtonAnimated:YES];
-        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-    }
+//    if (self.shouldHaveBackButton){
+//        [super configureBackButtonAnimated:YES];
+//        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+//    }
 }
 
 -(void)configureTableView{
