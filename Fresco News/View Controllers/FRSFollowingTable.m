@@ -300,6 +300,23 @@
     
 }
 
+-(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)indexPath {
+    if (_galleries.count > indexPath.row) {
+        id representedObject = _galleries[indexPath.row];
+        
+        if ([[representedObject class] isSubclassOfClass:[FRSGallery class]]) {
+            if (self.leadDelegate) {
+                [self.leadDelegate expandGallery:representedObject];
+            }
+        }
+        else if ([[representedObject class] isSubclassOfClass:[FRSStory class]]) {
+            if (self.leadDelegate) {
+                [self.leadDelegate expandStory:representedObject];
+            }
+        }
+    }
+}
+
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
       

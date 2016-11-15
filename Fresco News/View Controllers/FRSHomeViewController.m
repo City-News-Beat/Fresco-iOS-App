@@ -174,10 +174,19 @@
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
     self.followingTable.navigationController = self.navigationController;
+    self.followingTable.leadDelegate = (id<FRSFollowingTableDelegate>)self;
     //[self configureNoFollowers];
     
     [self.pageScroller addSubview:self.followingTable];
     self.followingTable.scrollDelegate = self;
+}
+
+-(void)expandGallery:(FRSGallery *)gallery {
+    [self galleryClicked:gallery];
+}
+
+-(void)expandStory:(FRSStory *)story {
+    [self storyClicked:story];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
