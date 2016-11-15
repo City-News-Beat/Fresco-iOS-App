@@ -148,6 +148,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+<<<<<<< HEAD
+=======
+    [self.galleryView offScreen];
+>>>>>>> 3.0-phil
     
     self.navigationItem.titleView = self.titleLabel;
     [self showTabBarAnimated:NO];
@@ -514,7 +518,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                    action:@selector(dismissKeyboard:)];
     
     [self.galleryView addGestureRecognizer:tap];
-    [self.galleryView play];
+    [self.galleryView performSelector:@selector(play) withObject:Nil afterDelay:1];
     [self focus];
 
 //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];

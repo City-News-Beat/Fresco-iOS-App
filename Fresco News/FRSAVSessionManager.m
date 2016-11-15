@@ -139,6 +139,7 @@
     AVCaptureDevice *audioDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
     AVCaptureDeviceInput *audioDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:&error];
     
+    self.session.automaticallyConfiguresApplicationAudioSession = FALSE;
     if ([self.session canAddInput:audioDeviceInput]) {
         [self.session addInput:audioDeviceInput];
     }
@@ -180,6 +181,14 @@
     } else
         self.AVSetupSuccess = NO;
     
+    AVAudioSession *session1 = [AVAudioSession sharedInstance];
+    [session1 setCategory:AVAudioSessionCategoryPlayAndRecord  withOptions:AVAudioSessionCategoryOptionMixWithOthers|AVAudioSessionCategoryOptionDefaultToSpeaker|AVAudioSessionCategoryOptionAllowBluetooth error:nil];
+    
+    [session1 setActive:YES error:nil];
+    
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+
+    self.session.automaticallyConfiguresApplicationAudioSession = FALSE;
     [self.session startRunning];
 
     

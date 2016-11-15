@@ -31,6 +31,7 @@
     return self;
 }
 
+
 -(instancetype)initWithPlayerItem:(AVPlayerItem *)item {
     self = [super initWithPlayerItem:item];
     
@@ -50,6 +51,11 @@
 }
 
 -(void)play {
+    
+    [[AVAudioSession sharedInstance]
+     setCategory: AVAudioSessionCategoryPlayback
+     error: nil];
+    
     [super play];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];

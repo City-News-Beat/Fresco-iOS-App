@@ -174,10 +174,19 @@
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
     self.followingTable.navigationController = self.navigationController;
+    self.followingTable.leadDelegate = (id<FRSFollowingTableDelegate>)self;
     //[self configureNoFollowers];
     
     [self.pageScroller addSubview:self.followingTable];
     self.followingTable.scrollDelegate = self;
+}
+
+-(void)expandGallery:(FRSGallery *)gallery {
+    [self galleryClicked:gallery];
+}
+
+-(void)expandStory:(FRSStory *)story {
+    [self storyClicked:story];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -235,9 +244,10 @@
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-        [(FRSGalleryCell *)cell pause];
+        [(FRSGalleryCell *)cell offScreen];
     }
 }
+
 -(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
@@ -282,27 +292,44 @@
 
 -(void)reloadData {
     [self.followingTable reloadFollowing];
-    
+
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
             [self.appDelegate.managedObjectContext performBlock:^{
                 NSInteger index = 0;
                 
+                NSMutableArray *newGalleries = [[NSMutableArray alloc] init];
                 for (NSDictionary *gallery in galleries) {
                     NSString *galleryID = gallery[@"id"];
                     NSInteger galleryIndex = [self galleryExists:galleryID];
                     
+                    /*
+                        Gallery does not exist -- create it in persistence layer & volotile memory
+                     */
                     if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
+                        FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.managedObjectContext];
+                        [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                        [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                        [newGalleries addObject:galleryToSave];
+                        index++;
                         continue;
                     }
+                    
+                    /*
+                        Gallery already exists, update its index & meta information (things change)
+                     */
                     
                     FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
                     [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
                     [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                    
+                    [newGalleries addObject:galleryToSave];
                     index++;
                 }
                 
+                /*
+                    Set new data source, reload the table view, stop and hide spinner (crucial to insure its on the main thread)
+                 */
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    self.dataSource = newGalleries;
                     [self.tableView reloadData];
                     isLoading = FALSE;
                     [self.tableView dg_stopLoading];
@@ -741,19 +768,19 @@
 }
 
 -(void)playerWillPlay:(AVPlayer *)play {
-    for (UITableView *tableView in @[self.tableView, self.followingTable]) {
-        NSArray *visibleCells = [tableView visibleCells];
-        for (FRSGalleryCell *cell in visibleCells) {
-            if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]] || !cell.galleryView.players) {
-                continue;
-            }
-            for (FRSPlayer *player in cell.galleryView.players) {
-                if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
-                    [player pause];
-                }
-            }
-        }
-    }
+//    for (UITableView *tableView in @[self.tableView, self.followingTable]) {
+//        NSArray *visibleCells = [tableView visibleCells];
+//        for (FRSGalleryCell *cell in visibleCells) {
+//            if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]] || !cell.galleryView.players) {
+//                continue;
+//            }
+//            for (FRSPlayer *player in cell.galleryView.players) {
+//                if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
+//                    [player pause];
+//                }
+//            }
+//        }
+//    }
 }
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{
@@ -953,26 +980,16 @@
                 /*
                     Start playback mid frame -- at least 300 from top & at least 100 from bottom
                  */
-                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
+                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
                     
                     if (!taken) {
-                        NSIndexPath *path = [self.tableView indexPathForCell:cell];
-                        
-                        /*
-                            If cell != cell we tried to last play, play the cell
-                         */
-                        if (path != lastIndexPath) {
-                            lastIndexPath = path;
-                            [cell play];
-                            taken = TRUE;
-                        }
+                        taken = TRUE;
+                        [cell play];
                     }
-                    else {
-                        /*
-                            If cell is going out of the playable area, pause it
-                         */
-                        [cell pause];
-                    }
+                    
+                }
+                else {
+                  
                 }
             }
             

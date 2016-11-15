@@ -26,7 +26,7 @@
 @property BOOL hasVideoAsFirstPost;
 -(void)clearCell;
 -(void)configureCell;
-
+-(void)offScreen;
 -(void)play;
 -(void)pause;
 

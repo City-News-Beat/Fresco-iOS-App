@@ -36,14 +36,14 @@
     
     if (self.galleryView != Nil) {
         
-        if (![self.galleryView.gallery.uid isEqualToString:self.gallery.uid]) {
-            hasPlayed = FALSE;
-        }
+        hasPlayed = FALSE;
         
         [self.galleryView loadGallery:self.gallery];
         self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
         return;
     }
+    
+    hasPlayed = FALSE;
 
     self.clipsToBounds = YES;
     
@@ -79,6 +79,13 @@
     //[self.galleryView removeFromSuperview];
 }
 
+-(void)prepareForReuse {
+    [super prepareForReuse];
+}
+-(void)offScreen {
+    [self.galleryView offScreen];
+}
+
 #pragma mark - DataSource For Action Bar
 -(BOOL)shouldHaveActionBar{
     return YES;
@@ -89,13 +96,6 @@
 }
 
 -(void)play {
-    
-    if (hasPlayed) {
-        return;
-    }
-    
-    hasPlayed = TRUE;
-    
     [self.galleryView play];
 }
 -(void)pause {
