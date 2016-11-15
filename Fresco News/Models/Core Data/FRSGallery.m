@@ -66,7 +66,6 @@
         self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
     }
     
-    
     NSArray *sources = (NSArray *)dict[@"sources"];
     if ([[sources class] isSubclassOfClass:[NSArray class]] && sources.count > 0) {
         
@@ -205,10 +204,10 @@
         else {
             NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSArticle" inManagedObjectContext:self.currentContext];
             FRSArticle *article = (FRSArticle *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
+            [article configureWithDictionary:dict];
             [self addArticlesObject:article];
         }
     }
-    
 }
 
 -(NSInteger)heightForGallery{
