@@ -103,7 +103,11 @@
     NSMutableDictionary *profileInfo = [[NSMutableDictionary alloc] init];
     
     if (self.bioTV.text) {
-        profileInfo[@"bio"] = self.bioTV.text;
+        if (![self.bioTV.text isEqualToString:@"Bio"]) {
+            profileInfo[@"bio"] = self.bioTV.text;
+        } else {
+            profileInfo[@"bio"] = @"";
+        }
     }
     if (self.nameTF.text) {
         profileInfo[@"full_name"] = self.nameTF.text;
@@ -115,7 +119,6 @@
         //Send image to backend and set the url to the avatar :)
         NSData *imageData = UIImageJPEGRepresentation(self.profileIV.image, 1.0);
         
-
         [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint withParameters:@{@"avatar":imageData} completion:^(id responseObject, NSError *error) {
             NSLog(@"Response Object: %@", responseObject);
             NSLog(@"Error: %@", error);
@@ -189,7 +192,11 @@
             profileController.nameLabel.text = self.nameTF.text;
             profileController.locationLabel.text = self.locationTF.text;
             profileController.bioTextView.text = self.bioTV.text;
-            [profileController.bioTextView frs_setTextWithResize:self.bioTV.text];
+            if (![self.bioTV.text isEqualToString:@"Bio"]) {
+                [profileController.bioTextView frs_setTextWithResize:self.bioTV.text];
+            } else {
+                [profileController.bioTextView frs_setTextWithResize:@""];
+            }
             [profileController resizeProfileContainer];
             [profileController.profileIV setImage:self.profileIV.image];
             profileController.editedProfile = true;

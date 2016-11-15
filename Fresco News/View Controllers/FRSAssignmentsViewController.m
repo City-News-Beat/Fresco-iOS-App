@@ -747,6 +747,7 @@
     NSString *expirationString;
     
     if (days != 0) {
+        
         expirationString = [NSString stringWithFormat:@"Expires in %d days", days];
         if (days == 1) {
             expirationString = [NSString stringWithFormat:@"Expires in %d day", days];
