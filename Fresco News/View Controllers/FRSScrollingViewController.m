@@ -57,7 +57,7 @@
 
 -(void)appWillResignActive:(NSNotification*)notification {
     
-    self.navigationItem.titleView.alpha = 1.0;
+    //self.navigationItem.titleView.alpha = 1.0;
     
     if (self.shouldHaveBackButton){
         [super configureBackButtonAnimated:YES];
