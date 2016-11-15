@@ -148,11 +148,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-<<<<<<< HEAD
-=======
-    [self.galleryView offScreen];
->>>>>>> 3.0-phil
-    
+    [self.galleryView offScreen];    
     self.navigationItem.titleView = self.titleLabel;
     [self showTabBarAnimated:NO];
 }
