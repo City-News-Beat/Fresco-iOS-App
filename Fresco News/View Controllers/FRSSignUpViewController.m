@@ -636,7 +636,6 @@
     
     [self addSocialButtonsToBottomBar];
     
-    
     [self constrainSubview:self.bottomBar ToBottomOfParentView:self.view WithHeight:44];
 }
 

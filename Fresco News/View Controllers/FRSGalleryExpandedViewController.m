@@ -72,7 +72,7 @@
 @property NSString *defaultPostID;
 
 @property (strong, nonatomic) NSDictionary *currentCommentUserDictionary;
-
+@property BOOL didChangeUp;
 
 @end
 
@@ -123,25 +123,38 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self configureUI];
     [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     self.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
+
+    //    [[NSNotificationCenter defaultCenter]addObserver:self
+//                                            selector:@selector(expandNavigationBar)
+//                                                name:UIApplicationWillEnterForegroundNotification
+//                                              object:nil];
 }
+
+//-(void)expandNavigationBar {
+////    [self expandNavFRSBar:nil];
+//}
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self register3DTouch];
-    [self hideTabBarAnimated:NO];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     self.navigationItem.titleView = self.titleLabel;
+    [self hideTabBarAnimated:NO];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.galleryView offScreen];
-    
+    [self.galleryView offScreen];    
     self.navigationItem.titleView = self.titleLabel;
+    [self showTabBarAnimated:NO];
+}
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 }
 
 -(void)setupDeepLinkedComment:(NSString *)commentID {
@@ -478,6 +491,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                    action:@selector(dismissKeyboard:)];
     tap.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tap];
+
 }
 
 
@@ -614,7 +628,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.commentLabel setOriginWithPoint:CGPointMake(16, labelOriginY + 6)];
     [self.scrollView addSubview:self.commentLabel];
     
-    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
+    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height+150)];
     self.commentTableView.delegate = self;
     self.commentTableView.dataSource = self;
     self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -628,6 +642,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.commentTableView.hidden = self.comments.count == 0;
     self.commentLabel.hidden = self.comments.count == 0;
     
+    [self.commentTableView setSeparatorColor:[UIColor frescoBackgroundColorLight]];
+    
     if (self.comments.count > 0) {
         [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.commentTableView.frame.origin.y - 0.5)]];
     }
@@ -639,6 +655,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)configureActionBar{
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.view.frame.size.height - TOP_NAV_BAR_HEIGHT - 44) delegate:self];
     self.actionBar.delegate = self;
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0.5)];
+    line.backgroundColor = [UIColor frescoShadowColor];
+    [self.actionBar addSubview:line];
     
     NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
     BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
@@ -787,7 +807,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         if (indexPath.row < self.comments.count + showsMoreButton) {
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
-            NSInteger height = cell.commentTextView.frame.size.height;
+            [cell.commentTextView sizeToFit];
+            NSInteger height = cell.commentTextView.frame.size.height + 36; //36 is top and bottom padding
             
             NSLog(@"CELL: %@", cell);
             
@@ -904,7 +925,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             index++;
         }
         
-        height += 55;
+        height += 56;
         
         self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
         [self adjustScrollViewContentSize];
@@ -952,6 +973,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:article.articleStringURL]];
             }
         }
+    }
+    
+    if (tableView == _commentTableView) {
+        [self contentActionBarDidSelectActionButton:self.actionBar];
+        FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
+        commentField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
     }
 }
 
@@ -1045,6 +1072,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)changeUp:(NSNotification *)change {
+    
+    if (self.didChangeUp) {
+        return;
+    }
+    
     [UIView animateWithDuration:.2 animations:^{
         NSDictionary *info = [change userInfo];
         
@@ -1053,6 +1085,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         [commentField setFrame:CGRectMake(0, originY , commentField.frame.size.width, commentField.frame.size.height)];
         [self.view setFrame:CGRectMake(0, self.view.frame.origin.y - keyboardSize.height, self.view.frame.size.width, self.view.frame.size.height)];
     }];
+    
+    self.didChangeUp = YES;
 }
 
 -(void)dealloc {
@@ -1101,11 +1135,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 
 -(void)dismissKeyboard:(UITapGestureRecognizer *)tap {
+    self.didChangeUp = NO;
+    
     [self.galleryView playerTap:tap];
     if (commentField.isEditing) {
         [commentField resignFirstResponder];
-        [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
-        [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+        
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
+            [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+        } completion:nil];
     }
     else {
         

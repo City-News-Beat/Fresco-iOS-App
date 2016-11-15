@@ -31,6 +31,12 @@
     
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self expandNavBar:nil];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -40,6 +46,7 @@
 
 -(void)configureNavigationBar {
     [self configureBackButtonAnimated:YES];
+        
     self.title = @"GLOBAL ASSIGNMENTS";
 }
 

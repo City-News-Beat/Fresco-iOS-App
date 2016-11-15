@@ -13,6 +13,7 @@
 
 @implementation GlobalAssignmentsTableViewCell {
     __strong IBOutlet NSLayoutConstraint *outletWidthConstraint;
+    __weak IBOutlet NSLayoutConstraint *titleLabelHeightConstraint;
     __weak IBOutlet UILabel *titleLabel;
     __weak IBOutlet UILabel *activeOutletsLabel;
     
@@ -55,6 +56,15 @@
     return [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 }
 
+-(int)lineCountForLabel:(UILabel *)label {
+    CGFloat labelWidth = label.frame.size.width;
+    int lineCount = 0;
+    CGSize textSize = CGSizeMake(labelWidth, MAXFLOAT);
+    long rHeight = lroundf([label sizeThatFits:textSize].height);
+    long charSize = lroundf(label.font.leading);
+    lineCount = (int)( rHeight / charSize );
+    return lineCount/12;
+}
 
 -(void)configureGlobalAssignmentCellWithAssignment:(NSDictionary *)assignment{
     self.assignment = assignment;
@@ -66,8 +76,11 @@
     //[videoPriceLabel setText:(NSString *)[self.assignment objectForKey:@"video price key?"]];
     
     [titleLabel setText:(NSString *)[self.assignment objectForKey:@"title"]];
+//    titleLabel.backgroundColor = [UIColor redColor];
+    titleLabelHeightConstraint.constant = 24 * [self lineCountForLabel:titleLabel];
     [assignmentDescriptionLabel setText:(NSString *)[self.assignment objectForKey:@"caption"]];
     [self configureExpirationDateWithString:dateInString];
+    
     NSArray *outletArray = (NSArray *)[self.assignment objectForKey:@"outlets"];
     NSMutableArray *outletImageUrls = [[NSMutableArray alloc] init];
     for (NSDictionary *outlet in outletArray){
