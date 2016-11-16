@@ -23,6 +23,7 @@
 @property (strong, nonnull) UITextField *cityField;
 @property (strong, nonnull) UITextField *stateField;
 @property (strong, nonnull) UITextField *zipField;
+@property (strong, nonnull) UITextField *socialField;
 @property (nonatomic, retain) UITextField *dateField;
 @property (strong, nonatomic) UIDatePicker *datePicker;
 @property (strong, nonatomic) UIButton *saveIDInfoButton;
@@ -92,8 +93,7 @@
 
 
 -(BOOL)isSSNArea:(NSString *)field {
-    if ([field isEqualToString:@"ssn"]) {
-        
+    if ([field isEqualToString:ssnField]) {
         return TRUE;
     }
     
@@ -441,11 +441,12 @@
 -(void)configureSSNCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.row) {
         case 0:
-            [cell configureEditableCellWithDefaultText:@"Social Security number" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypePhonePad];
+            [cell configureEditableCellWithDefaultText:@"Last 4 Digits of Social Security Number" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypePhonePad];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             //                    _addressField = cell.textField;
             //                    _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
             //                    [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            _socialField = cell.textField;
             break;
         case 1:
             [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
@@ -583,6 +584,11 @@
         [addressInfo setObject:_lastNameField.text forKey:@"last_name"];
 
     }
+    
+    if (_socialField.enabled && ![_socialField.text isEqualToString:@""]) {
+        [addressInfo setObject:_socialField.text forKey:@"pid_last4"];
+    }
+    
     
     self.savingInfo = true;
     [[FRSAPIClient sharedClient] updateIdentityWithDigestion:addressInfo completion:^(id responseObject, NSError *error) {
