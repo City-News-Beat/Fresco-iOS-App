@@ -449,13 +449,15 @@
             //                    _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
             //                    [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             _socialField = cell.textField;
-            _socialField.delegate = self;
             
             if ([authenticatedUser valueForKey:@"ssn"]) {
                 _socialField.text = [authenticatedUser valueForKey:@"ssn"];
                 _socialField.enabled = FALSE;
                 _socialField.textColor = [UIColor frescoLightTextColor];
             }
+            
+            cell.textField.delegate = self;
+            cell.textField.tag = 4;
 
             break;
         case 1:
