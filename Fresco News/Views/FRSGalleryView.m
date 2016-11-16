@@ -977,7 +977,8 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     //We add half a screen's width so that the image loading occurs half way through the scroll.
-
+    [self pause];
+    
     if (!self.players) {
         self.players = [[NSMutableArray alloc] init];
     }
