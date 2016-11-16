@@ -451,8 +451,8 @@
             _socialField = cell.textField;
             _socialField.delegate = self;
             
-            if ([authenticatedUser valueForKey:@"pid_last4"]) {
-                _socialField.text = [authenticatedUser valueForKey:@"pid_last4"];
+            if ([authenticatedUser valueForKey:@"ssn"]) {
+                _socialField.text = [authenticatedUser valueForKey:@"ssn"];
                 _socialField.enabled = FALSE;
                 _socialField.textColor = [UIColor frescoLightTextColor];
             }
