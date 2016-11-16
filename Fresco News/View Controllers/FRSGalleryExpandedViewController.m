@@ -66,6 +66,7 @@
 
 @property BOOL didDisplayReport;
 @property BOOL didDisplayBlock;
+@property BOOL didPrepareForReply;
 @property BOOL didBlockUser;
 @property BOOL isReportingComment;
 @property BOOL isBlockingFromComment;
@@ -976,9 +977,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     
     if (tableView == _commentTableView) {
-        [self contentActionBarDidSelectActionButton:self.actionBar];
-        FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
-        commentField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
+        
+        if (self.didPrepareForReply) {
+            self.didPrepareForReply = NO;
+            [self dismissKeyboardFromView];
+        } else {
+            self.didPrepareForReply = YES;
+            [self contentActionBarDidSelectActionButton:self.actionBar];
+            FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
+            commentField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
+        }
     }
 }
 
