@@ -248,6 +248,7 @@
     }
 }
 
+
 -(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self configureTableView];
@@ -977,13 +978,18 @@
                 if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
                     
                     if (!taken) {
-                        taken = TRUE;
-                        [cell play];
+                        
+                        if ([cell respondsToSelector:@selector(play)]) {
+                            taken = TRUE;
+                            [cell play];
+                        }
                     }
                     
                 }
                 else {
-                  
+                    if ([cell respondsToSelector:@selector(play)]) {
+                        [cell pause];
+                    }
                 }
             }
             

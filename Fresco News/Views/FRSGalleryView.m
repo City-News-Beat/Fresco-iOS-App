@@ -1299,15 +1299,16 @@
                         }
                         
                         self.playerLayers[page] = playerLayer;
-                        
-                        if (self.players.count > page) {
-                            [(AVPlayer *)self.players[page] play];
-                            [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
-                        }
                     });
                     
                     player.hasEstablished = TRUE;
                 }
+                
+                if (self.players.count > page) {
+                    [(AVPlayer *)self.players[page] play];
+                    [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
+                }
+
             }
             
         }
