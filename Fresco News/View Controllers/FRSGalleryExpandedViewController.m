@@ -9,6 +9,7 @@
 #import "FRSGalleryExpandedViewController.h"
 #import "UITextView+Resize.h"
 #import "FRSArticlesTableViewCell.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 #import "FRSGallery.h"
 #import "FRSArticle.h"
@@ -75,6 +76,8 @@
 @property (strong, nonatomic) NSDictionary *currentCommentUserDictionary;
 @property BOOL didChangeUp;
 
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
 @end
 
 @implementation FRSGalleryExpandedViewController
@@ -128,6 +131,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     if ([self.gallery.comments integerValue] >= 1) {
          [self configureCommentLabel];
+        [self configureSpinner];
     }
 
     //    [[NSNotificationCenter defaultCenter]addObserver:self
@@ -191,8 +195,21 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake(82, 13, 20, 20)];
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+    [self.loadingView startAnimating];
+    [self.commentLabel addSubview:self.loadingView];
+}
+
 -(void)fetchCommentsWithID:(NSString  *)galleryID {
+    
     [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID completion:^(id responseObject, NSError *error) {
+        
+        [self.loadingView removeFromSuperview];
+        self.loadingView.alpha = 0;
+        
         if (error || !responseObject) {
             [self commentError:error];
             return;
@@ -629,7 +646,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     //[self configureCommentLabel];
     
-    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height+150)];
+    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
+    self.commentTableView.clipsToBounds = NO;
     self.commentTableView.delegate = self;
     self.commentTableView.dataSource = self;
     self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -802,7 +820,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             return 0;
         }
         
-        return (showsMoreButton) ? self.comments.count + 1 : self.comments.count;
+        if (showsMoreButton) {
+            return self.comments.count + 1;
+
+        } else {
+            return self.comments.count;
+        }
     }
     
     return 0;
