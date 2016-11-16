@@ -35,6 +35,8 @@
 #import "FRSIdentityViewController.h"
 #import "FRSStoriesViewController.h"
 #import "FRSUploadManager.h"
+#import "FRSFollow.h"
+
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -49,7 +51,14 @@
     [self startFabric]; // crashlytics first yall
     [self configureStartDate];
     [self clearUploadCache];
-
+    
+    /* 
+        FOLLOW EVERY USER ON THE PLATFORM
+     */
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        [FRSFollow follow:1];
+//    });
+    
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
     if ([self isFirstRun]) {
