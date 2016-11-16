@@ -124,6 +124,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self configureUI];
     [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     self.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
+    
+    
+    if ([self.gallery.comments integerValue] >= 1) {
+         [self configureCommentLabel];
+    }
 
     //    [[NSNotificationCenter defaultCenter]addObserver:self
 //                                            selector:@selector(expandNavigationBar)
@@ -610,24 +615,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
         else {
             height += commentSize;
+            height += 36; //36 is topPadding+bottomPadding
         }
         
         index++;
     }
-    
-    height += 55;
     
     CGFloat labelOriginY = self.galleryView.frame.origin.y + self.galleryView.frame.size.height;
     
     if (self.orderedArticles.count > 0) {
         labelOriginY += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
     }
-    self.commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelOriginY, self.view.frame.size.width, 48)];
-    self.commentLabel.text = @"COMMENTS";
-    self.commentLabel.textColor = [UIColor frescoMediumTextColor];
-    self.commentLabel.font = [UIFont notaBoldWithSize:15];
-    [self.commentLabel setOriginWithPoint:CGPointMake(16, labelOriginY + 6)];
-    [self.scrollView addSubview:self.commentLabel];
+    
+    //[self configureCommentLabel];
     
     self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height+150)];
     self.commentTableView.delegate = self;
@@ -651,6 +651,20 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     [self adjustScrollViewContentSize];
     [self.actionBar actionButtonTitleNeedsUpdate];
+}
+
+-(void)configureCommentLabel {
+    CGFloat labelOriginY = self.galleryView.frame.origin.y + self.galleryView.frame.size.height;
+    
+    if (self.orderedArticles.count > 0) {
+        labelOriginY += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
+    }
+    self.commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelOriginY, self.view.frame.size.width, 48)];
+    self.commentLabel.text = @"COMMENTS";
+    self.commentLabel.textColor = [UIColor frescoMediumTextColor];
+    self.commentLabel.font = [UIFont notaBoldWithSize:15];
+    [self.commentLabel setOriginWithPoint:CGPointMake(16, labelOriginY + 6)];
+    [self.scrollView addSubview:self.commentLabel];
 }
 
 -(void)configureActionBar{
