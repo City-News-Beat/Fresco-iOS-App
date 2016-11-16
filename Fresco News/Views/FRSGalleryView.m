@@ -1327,7 +1327,13 @@
             
             player.hasEstablished = FALSE;
         }
+        else {
+            FRSScrollViewImageView *imageView = (FRSScrollViewImageView *)player;
+            imageView.image = Nil;
+            [imageView removeFromSuperview];
+        }
     }
+    
 }
 
 -(void)pause {
