@@ -439,6 +439,8 @@
 }
 
 -(void)configureSSNCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
+    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+
     switch (indexPath.row) {
         case 0:
             [cell configureEditableCellWithDefaultText:@"Last 4 Digits of Social Security Number" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypePhonePad];
@@ -447,6 +449,14 @@
             //                    _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
             //                    [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             _socialField = cell.textField;
+            _socialField.delegate = self;
+            
+            if ([authenticatedUser valueForKey:@"pid_last4"]) {
+                _socialField.text = [authenticatedUser valueForKey:@"pid_last4"];
+                _socialField.enabled = FALSE;
+                _socialField.textColor = [UIColor frescoLightTextColor];
+            }
+
             break;
         case 1:
             [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
@@ -523,7 +533,7 @@
 -(void)textFieldDidChange:(UITextField *)textField{
     BOOL enableSaveButton = true;
     
-    NSArray *mandatoryTextFieldArray = [[NSArray alloc] initWithObjects:_firstNameField,_lastNameField, _addressField, _cityField, _stateField, _zipField, _dateField, nil];
+    NSArray *mandatoryTextFieldArray = [[NSArray alloc] initWithObjects:_firstNameField,_lastNameField, _addressField, _cityField, _stateField, _zipField, _dateField, _socialField, nil];
     for(UITextField *textField in mandatoryTextFieldArray){
         if(textField.text.length == 0 || [textField.text isEqualToString:textField.placeholder]){
             enableSaveButton = false;
