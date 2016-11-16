@@ -447,9 +447,9 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             //                    _addressField = cell.textField;
             //                    _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-            //                    [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             _socialField = cell.textField;
-            
+            [_socialField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+
             if ([authenticatedUser valueForKey:@"ssn"]) {
                 _socialField.text = [authenticatedUser valueForKey:@"ssn"];
                 _socialField.enabled = FALSE;
@@ -537,15 +537,16 @@
     
     NSArray *mandatoryTextFieldArray = [[NSArray alloc] initWithObjects:_firstNameField,_lastNameField, _addressField, _cityField, _stateField, _zipField, _dateField, _socialField, nil];
     for(UITextField *textField in mandatoryTextFieldArray){
-        if(textField.text.length == 0 || [textField.text isEqualToString:textField.placeholder]){
+        if((textField.text.length == 0 || [textField.text isEqualToString:@""]) && textField.enabled){
             enableSaveButton = false;
         }
     }
+    
     if(enableSaveButton){
         self.saveIDInfoButton.userInteractionEnabled = true;
         self.saveIDInfoButton.enabled = true;
         [self.saveIDInfoButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        self.saveIDInfoButton.userInteractionEnabled = NO;
+        self.saveIDInfoButton.userInteractionEnabled = TRUE;
     }else{
         self.saveIDInfoButton.userInteractionEnabled = false;
         self.saveIDInfoButton.enabled = false;
