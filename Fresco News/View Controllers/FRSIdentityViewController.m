@@ -93,7 +93,7 @@
 
 
 -(BOOL)isSSNArea:(NSString *)field {
-    if ([field isEqualToString:ssnField]) {
+    if ([field isEqualToString:@"pid_last4"]) {
         return TRUE;
     }
     
