@@ -65,7 +65,7 @@
     //Calling size to fit here scales the textview down so the user can tap on the comment cell
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.commentTextView sizeToFit];
-//        [self.commentTextView setBackgroundColor:[UIColor redColor]];
+        [self.commentTextView setBackgroundColor:[UIColor redColor]];
     });
 
     
@@ -96,6 +96,13 @@
     [self.profilePicture setUserInteractionEnabled:YES];
     [self.profilePicture addGestureRecognizer:tap];
     
+    self.delegate = self;
+    
+}
+
+-(void)swipeTableCell:(MGSwipeTableCell *)cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive {
+    // The textView goes back to its original size (set in the nib) if we don't size to fit on the swipe action.
+    [self.commentTextView sizeToFit];
 }
 
 
