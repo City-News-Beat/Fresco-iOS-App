@@ -69,11 +69,9 @@
 
 
     if ([self.commentTextView.text containsString:@"@"] || [self.commentTextView.text containsString:@"#"]) {
-        self.commentTextView.backgroundColor = [UIColor orangeColor];
         self.commentTextView.userInteractionEnabled = YES;
     } else {
         self.commentTextView.userInteractionEnabled = NO;
-        [self.commentTextView setBackgroundColor:[UIColor redColor]];
     }
     
     
