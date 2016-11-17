@@ -92,9 +92,10 @@
     [self.profilePicture setUserInteractionEnabled:YES];
     [self.profilePicture addGestureRecognizer:tap];
     
-    self.delegate = self;
+//    self.delegate = self;
     
 }
+
 
 -(void)swipeTableCell:(MGSwipeTableCell *)cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive {
     // The textView goes back to its original size (set in the nib) if we don't size to fit on the swipe action.
