@@ -131,11 +131,17 @@
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
     
-    
     self.hasLocation = YES;
-    self.hasTime = YES;
-    self.hasName = YES;
+    self.hasTime     = YES;
+    self.hasName     = YES;
+
+    [self updateMetaFields];
     
+    [self checkOwner];
+}
+
+
+-(void)updateMetaFields {
     if ([self.locationLabel.text isEqualToString:@""] || [self.locationLabel.text isEqual:[NSNull null]]) {
         self.hasLocation = NO;
     }
@@ -166,12 +172,6 @@
         self.locationIV.transform = CGAffineTransformMakeTranslation(0, -20);
         self.locationLabel.transform = CGAffineTransformMakeTranslation(0, -20);
     }
-    
-    
-
-    
-    
-    [self checkOwner];
 }
 
 -(void)checkOwner {
@@ -1109,6 +1109,7 @@
 //        self.locationIV.alpha = 0;
 //    }
 }
+
 
 -(void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
     NSString *adjustedURL = url;

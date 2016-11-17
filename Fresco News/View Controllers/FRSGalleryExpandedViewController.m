@@ -141,7 +141,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 //-(void)expandNavigationBar {
-////    [self expandNavFRSBar:nil];
+//    [self expandNavFRSBar:nil];
 //}
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -728,7 +728,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)adjustScrollViewContentSize{
-    CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + GALLERY_BOTTOM_PADDING +20;
+    CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + GALLERY_BOTTOM_PADDING +40;
     if (self.comments.count > 0) {
         height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height +20;
     }

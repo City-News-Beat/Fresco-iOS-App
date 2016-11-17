@@ -65,19 +65,17 @@
     //Calling size to fit here scales the textview down so the user can tap on the comment cell
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.commentTextView sizeToFit];
-        [self.commentTextView setBackgroundColor:[UIColor redColor]];
     });
 
+
+    if ([self.commentTextView.text containsString:@"@"] || [self.commentTextView.text containsString:@"#"]) {
+        self.commentTextView.backgroundColor = [UIColor orangeColor];
+        self.commentTextView.userInteractionEnabled = YES;
+    } else {
+        self.commentTextView.userInteractionEnabled = NO;
+        [self.commentTextView setBackgroundColor:[UIColor redColor]];
+    }
     
-//    if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
-//        [self setSeparatorInset:UIEdgeInsetsZero];
-//    }
-//    if ([self respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-//        [self setPreservesSuperviewLayoutMargins:NO];
-//    }
-//    if ([self respondsToSelector:@selector(setLayoutMargins:)]) {
-//        [self setLayoutMargins:UIEdgeInsetsZero];
-//    }
     
     if (comment.isDeletable && !comment.isReportable) {
         self.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"garbage-light"] backgroundColor:[UIColor frescoRedHeartColor]]];
