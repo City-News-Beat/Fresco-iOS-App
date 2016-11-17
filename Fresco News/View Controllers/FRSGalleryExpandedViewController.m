@@ -1080,7 +1080,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [commentField addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventEditingDidEndOnExit];
             commentField.delegate = self;
         }
-        
+        commentField.text = @"";
         [commentField becomeFirstResponder];
     }
 }
