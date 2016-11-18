@@ -159,14 +159,6 @@
         [FRSNotificationHandler restartUpload];
     }
     
-    if ([instruction isEqualToString:@"user-dispatch-content-verified"]) {
-        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
-        
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-            [FRSNotificationHandler segueToGallery:gallery];
-        }
-    }
-    
     if ([instruction isEqualToString:@"user-social-mentioned-comment"]) {
         NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         
