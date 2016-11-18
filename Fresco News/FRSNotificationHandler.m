@@ -219,6 +219,10 @@
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
         NSLog(@"TODAY: %@", responseObject);
+        if (error) {
+            [self error:error];
+        }
+        
         if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
             responseObject = @[responseObject];
         }
@@ -240,22 +244,23 @@
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-        [navController setNavigationBarHidden:FALSE];
         [navController pushViewController:detailVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
         tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
-        [navController setNavigationBarHidden:FALSE];
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
         [navController pushViewController:detailVC animated:TRUE];
+        [navController setNavigationBarHidden:FALSE];
     }
 
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
         if (error || !responseObject) {
+            [self error:error];
             return;
         }
         
@@ -273,6 +278,21 @@
             [detailVC loadGallery:galleryToSave];
         });
     }];
+}
+
++(void)error:(NSError *)error {
+    if (!error) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+    else if (error.code == -1009) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"CONNECTION ERROR" message:@"Unable to connect to the internet. Please check your connection and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
+    else {
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"This gallery could not be found, or does not exist." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    }
 }
 
 +(void)segueToStory:(NSString *)storyID {
@@ -301,6 +321,9 @@
    // __block BOOL isSegueingToStory;
     
     [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
+        if (error) {
+            [self error:error];
+        }
         
         FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:[appDelegate managedObjectContext]];
         [story configureWithDictionary:responseObject];
@@ -343,6 +366,14 @@
         navController = (UINavigationController *)tab.selectedViewController;
         [navController pushViewController:profileVC animated:TRUE];
     }
+}
+
+-(void)popViewController {
+    
+}
+
++(void)popViewController {
+    
 }
 
 +(void)segueToGallery:(NSString *)gallery post:(NSString *)post {
