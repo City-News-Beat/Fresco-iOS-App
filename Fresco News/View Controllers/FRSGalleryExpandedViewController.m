@@ -172,6 +172,20 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
+-(void)loadGallery:(FRSGallery *)gallery {
+    self.gallery = gallery;
+    
+    if (gallery.uid) {
+        self.galleryID = gallery.uid;
+    }
+    
+    self.orderedArticles = [self.gallery.articles allObjects];
+    self.hiddenTabBar = YES;
+    self.actionBarVisible = YES;
+    self.touchEnabled = NO;
+    [self fetchCommentsWithID:gallery.uid];
+}
+
 -(void)fetchCommentsWithID:(NSString  *)galleryID {
     [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID completion:^(id responseObject, NSError *error) {
         if (error || !responseObject) {
