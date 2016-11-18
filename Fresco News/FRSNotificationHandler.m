@@ -312,7 +312,7 @@
         tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
-        [navController setNavigationBarHidden:FALSE];
+       // [navController setNavigationBarHidden:FALSE];
         navController = (UINavigationController *)tab.selectedViewController;
         [navController pushViewController:profileVC animated:TRUE];
     }
@@ -321,7 +321,7 @@
         tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
-        [navController setNavigationBarHidden:FALSE];
+       // [navController setNavigationBarHidden:FALSE];
         navController = (UINavigationController *)tab.selectedViewController;
         [navController pushViewController:profileVC animated:TRUE];
     }

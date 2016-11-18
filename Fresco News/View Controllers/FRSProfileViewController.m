@@ -354,6 +354,7 @@
             FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
             _representedUser = user;
             
+            [self configureWithUser:user];
             [self fetchGalleries];
             [super removeNavigationBarLine];
             
