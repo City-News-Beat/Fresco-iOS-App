@@ -36,7 +36,7 @@
     }
     if ([instruction isEqualToString:purchasedContentNotification]) {
         if ([[push valueForKey:@"has_payment"] boolValue]) {
-            NSString *gallery = [push objectForKey:@"gallery_id"];
+            NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
             
             if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
                 [self segueToGallery:gallery];
@@ -79,13 +79,13 @@
     
     if ([instruction isEqualToString:@"user-news-gallery"]) {
         NSLog(@"TODAY IN NEWS");
-        NSString *galleryID = [push objectForKey:@"gallery_id"];
+        NSString *galleryID = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         [FRSNotificationHandler segueToGallery:galleryID];
         
     }
     
     if ([instruction isEqualToString:@"user-news-story"]) {
-        NSString *story = [push  objectForKey:@"story_id"];
+        NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
         
         if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToStory:story];
