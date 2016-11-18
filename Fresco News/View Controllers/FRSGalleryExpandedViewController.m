@@ -534,6 +534,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, TOP_NAV_BAR_HEIGHT, self.view.frame.size.width, 500) gallery:self.gallery delegate:self];
     [self.scrollView addSubview:self.galleryView];
     
+    NSLog(@"%f", self.galleryView.frame.size.height);
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard:)];
@@ -730,6 +732,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)adjustScrollViewContentSize{
+    
     CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + GALLERY_BOTTOM_PADDING +40;
     if (self.comments.count > 0) {
         height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height +20;
@@ -1359,6 +1362,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - FRSCommentCellDelegate
 
 - (void)didPressProfilePictureWithUserId:(NSString *)userId {
+    
     FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUserID:userId];
     [self.navigationController pushViewController:controller animated:TRUE];
 }
