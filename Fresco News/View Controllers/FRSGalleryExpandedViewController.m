@@ -183,7 +183,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.hiddenTabBar = YES;
     self.actionBarVisible = YES;
     self.touchEnabled = NO;
+    [self.galleryView loadGallery:gallery];
     [self fetchCommentsWithID:gallery.uid];
+    
 }
 
 -(void)fetchCommentsWithID:(NSString  *)galleryID {
