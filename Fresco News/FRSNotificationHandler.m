@@ -73,7 +73,7 @@
     
     // social
     if ([instruction isEqualToString:followedNotification]) {
-        NSString *user = [[push objectForKey:@"user_ids"] firstObject];
+        NSString *user = [[[push objectForKey:@"meta"] objectForKey:@"user_ids"] firstObject];
         [FRSNotificationHandler segueToUser:user];
     }
     
