@@ -48,6 +48,7 @@
         self.gallery = gallery;
         [self updateSocial];
         [self checkOwner];
+        [self updateMetaFields];
         return;
     }
     
@@ -142,6 +143,9 @@
 
 
 -(void)updateMetaFields {
+    
+    [self updateScrollView];
+    
     if ([self.locationLabel.text isEqualToString:@""] || [self.locationLabel.text isEqual:[NSNull null]]) {
         self.hasLocation = NO;
     }
@@ -152,11 +156,15 @@
         self.hasName = NO;
     }
     
+    
+    
+    
+    
     if (!self.hasLocation && self.hasTime && self.hasName) {
         self.locationLabel.alpha = 0;
         self.locationIV.alpha = 0;
-        self.profileIV.transform = CGAffineTransformMakeTranslation(0, -20);
-        self.nameLabel.transform = CGAffineTransformMakeTranslation(0, -20);
+        self.profileIV.transform = CGAffineTransformMakeTranslation(0, 20);
+        self.nameLabel.transform = CGAffineTransformMakeTranslation(0, 20);
     } else if (!self.hasLocation && !self.hasTime && self.hasName) {
         self.locationLabel.alpha = 0;
         self.locationIV.alpha = 0;
@@ -924,7 +932,7 @@
 
 #pragma mark - Action Bar Delegate
 -(NSString *)titleForActionButton{
-    int comments = [[self.gallery comments] intValue];
+    int comments = [[self.gallery valueForKey:@"comments"] intValue];
     
     if (comments == 1) {
         return [NSString stringWithFormat:@"%d COMMENT", comments];

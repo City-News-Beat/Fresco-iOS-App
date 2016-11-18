@@ -128,16 +128,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     self.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
     
-    
     if ([self.gallery.comments integerValue] >= 1) {
-         [self configureCommentLabel];
+        [self configureCommentLabel];
         [self configureSpinner];
     }
 
     //    [[NSNotificationCenter defaultCenter]addObserver:self
-//                                            selector:@selector(expandNavigationBar)
-//                                                name:UIApplicationWillEnterForegroundNotification
-//                                              object:nil];
+    //                                            selector:@selector(expandNavigationBar)
+    //                                                name:UIApplicationWillEnterForegroundNotification
+    //                                              object:nil];
 }
 
 //-(void)expandNavigationBar {
@@ -648,7 +647,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         labelOriginY += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
     }
     
-    //[self configureCommentLabel];
+    [self configureCommentLabel];
     
     self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
     self.commentTableView.clipsToBounds = NO;
@@ -665,10 +664,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.commentTableView.hidden = self.comments.count == 0;
     self.commentLabel.hidden = self.comments.count == 0;
     
-    [self.commentTableView setSeparatorColor:[UIColor frescoBackgroundColorLight]];
+    [self.commentTableView setSeparatorColor:[UIColor clearColor]];
     
     if (self.comments.count > 0) {
-        [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.commentTableView.frame.origin.y - 0.5)]];
+        [self.commentTableView addSubview:[UIView lineAtPoint:CGPointMake(0, self.commentTableView.frame.origin.y - 0.5)]];
     }
     
     [self adjustScrollViewContentSize];
@@ -676,10 +675,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)configureCommentLabel {
+
     CGFloat labelOriginY = self.galleryView.frame.origin.y + self.galleryView.frame.size.height;
     
     if (self.orderedArticles.count > 0) {
         labelOriginY += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
+    }
+    
+    if (self.commentLabel) {
+        return;
     }
     self.commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelOriginY, self.view.frame.size.width, 48)];
     self.commentLabel.text = @"COMMENTS";
@@ -1146,17 +1150,20 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 [self.errorAlertView show];
             }
             else {
+                
                 self.totalCommentCount++;
                 [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
-                [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+//                [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
 
                 self.totalCommentCount++;
                 self.commentTableView.hidden = NO;
                 [self reload];
-                CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
-                [self.scrollView setContentOffset:bottomOffset animated:YES];
+//                CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+//                [self.scrollView setContentOffset:bottomOffset animated:YES];
+                
                 commentField.text = @"";
                 [self dismissKeyboard:Nil];
+                
             }
         } completion:^(BOOL finished) {
         }];
