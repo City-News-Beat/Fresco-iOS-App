@@ -60,6 +60,16 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [super viewWillAppear:animated];
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.navigationItem.title = @"ACTIVITY";
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    UINavigationController *nav = (UINavigationController *)appDelegate.window.rootViewController;
+    
+    if ([[nav class] isSubclassOfClass:[UINavigationController class]]) {
+        [nav setNavigationBarHidden:TRUE];
+    }
+    else {
+        nav = nav.navigationController;
+        [nav setNavigationBarHidden:TRUE];
+    }
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
