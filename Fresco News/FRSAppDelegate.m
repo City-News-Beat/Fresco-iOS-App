@@ -633,13 +633,6 @@
 -(void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void(^)(UIBackgroundFetchResult))completionHandler
 {
     // iOS 10 will handle notifications through other methods
-    
-    if( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) )
-    {
-        // set a member variable to tell the new delegate that this is background
-        return;
-    }
-    
     // custom code to handle notification content
     if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
     {
