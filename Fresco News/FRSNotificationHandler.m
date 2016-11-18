@@ -26,7 +26,7 @@
     
     // payment
     if ([instruction isEqualToString:newAssignmentNotification]) {
-        NSString *assignment = [push objectForKey:@"assignment_id"];
+        NSString *assignment = [[push objectForKey:@"meta"] objectForKey:@"assignment_id"];
         
         if (assignment && ![assignment isEqual:[NSNull null]] && [[assignment class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToAssignment:assignment];
@@ -93,13 +93,13 @@
     }
     
     if ([instruction isEqualToString:@"user-social-gallery-liked"]) {
-        NSString *gallery = [push  objectForKey:@"gallery_id"];
+        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToGallery:gallery];
         }
         else {
-            NSString *story = [push objectForKey:@"story_id"];
+            NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];;
             if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
                 [FRSNotificationHandler segueToStory:story];
             }
@@ -107,7 +107,7 @@
     }
     
     if ([instruction isEqualToString:repostedNotification]) {
-        NSString *gallery = [push objectForKey:@"gallery_id"];
+        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToGallery:gallery];
@@ -121,7 +121,7 @@
     }
     
     if ([instruction isEqualToString:galleryApprovedNotification]) {
-        NSString *gallery = [push objectForKey:@"gallery_id"];
+        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToGallery:gallery];
@@ -135,7 +135,7 @@
     }
     
     if ([instruction isEqualToString:commentedNotification]) {
-        NSString *gallery = [push objectForKey:@"gallery_id"];
+        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToGallery:gallery];
@@ -143,7 +143,7 @@
     }
     
     if ([instruction isEqualToString:photoOfDayNotification]) {
-        NSString *gallery = [push objectForKey:@"gallery_id"];
+        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToGallery:gallery];
@@ -151,13 +151,30 @@
     }
     
     if ([instruction isEqualToString:todayInNewsNotification]) {
-        NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
+        NSArray *galleryIDs = [[push objectForKey:@"meta"] objectForKey:@"gallery_ids"];
         [FRSNotificationHandler segueToTodayInNews:galleryIDs title:push[@"aps"][@"alert"][@"title"]];
     }
     
     if ([instruction isEqualToString:restartUploadNotification]) {
         [FRSNotificationHandler restartUpload];
     }
+    
+    if ([instruction isEqualToString:@"user-dispatch-content-verified"]) {
+        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
+        
+        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [FRSNotificationHandler segueToGallery:gallery];
+        }
+    }
+    
+    if ([instruction isEqualToString:@"user-social-mentioned-comment"]) {
+        NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
+        
+        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [FRSNotificationHandler segueToGallery:gallery];
+        }
+    }
+    
 }
 
 +(void)restartUpload {
@@ -216,16 +233,14 @@
     __block BOOL isPushingGallery = FALSE;
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] init];
-    vc.shouldHaveBackButton = YES;
+    FRSGalleryExpandedViewController *detailVC = [[FRSGalleryExpandedViewController alloc] init];
+    detailVC.shouldHaveBackButton = YES;
     
     
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-        [navController pushViewController:vc animated:TRUE];
-        [navController setNavigationBarHidden:NO];
-        
+        [navController pushViewController:detailVC animated:TRUE];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
@@ -233,8 +248,7 @@
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
-        [navController pushViewController:vc animated:TRUE];
-        [navController setNavigationBarHidden:NO];
+        [navController pushViewController:detailVC animated:TRUE];
     }
 
     
@@ -254,7 +268,7 @@
         [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [vc loadGallery:galleryToSave];
+            [detailVC loadGallery:galleryToSave];
         });
     }];
 }
