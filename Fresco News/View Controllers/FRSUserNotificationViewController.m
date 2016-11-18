@@ -29,6 +29,8 @@
 
 #import <Haneke/Haneke.h>
 
+#import "FRSNotificationHandler.h"
+
 
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate, FRSAlertViewDelegate, FRSDefaultNotificationCellDelegate>
@@ -517,6 +519,8 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     NSString *notificationID = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"id"];
     NSDictionary *push = [self.feed objectAtIndex:indexPath.row];
+    [FRSNotificationHandler handleNotification:push];
+    return;
     if (notificationID && ![notificationID isEqual:[NSNull null]]) {
         [self markAsRead:notificationID];
     }

@@ -313,9 +313,8 @@
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
         [navController setNavigationBarHidden:FALSE];
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        navController = (UINavigationController *)tab.selectedViewController;
         [navController pushViewController:profileVC animated:TRUE];
-        [tab setSelectedIndex:0];
     }
     else {
         UITabBarController *tab = (UITabBarController *)navController;
@@ -323,7 +322,7 @@
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
         [navController setNavigationBarHidden:FALSE];
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        navController = (UINavigationController *)tab.selectedViewController;
         [navController pushViewController:profileVC animated:TRUE];
     }
 }
