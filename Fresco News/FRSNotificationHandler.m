@@ -31,6 +31,10 @@
         if (assignment && ![assignment isEqual:[NSNull null]] && [[assignment class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToAssignment:assignment];
         }
+        else {
+            NSString *assignment = [push objectForKey:@"assignment_id"];
+            [FRSNotificationHandler segueToAssignment:assignment];
+        }
         
         return;
     }
@@ -39,6 +43,10 @@
             NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
             
             if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+                [self segueToGallery:gallery];
+            }
+            else {
+                NSString *gallery = [push objectForKey:@"gallery_id"];
                 [self segueToGallery:gallery];
             }
         }
@@ -74,13 +82,28 @@
     // social
     if ([instruction isEqualToString:followedNotification]) {
         NSString *user = [[[push objectForKey:@"meta"] objectForKey:@"user_ids"] firstObject];
-        [FRSNotificationHandler segueToUser:user];
+        
+        if (user && [[user class] isSubclassOfClass:[NSString class]]) {
+            [FRSNotificationHandler segueToUser:user];
+        }
+        else {
+            user = [[push objectForKey:@"user_ids"] firstObject];
+            [FRSNotificationHandler segueToUser:user];
+        }
+
     }
     
     if ([instruction isEqualToString:@"user-news-gallery"]) {
         NSLog(@"TODAY IN NEWS");
         NSString *galleryID = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
-        [FRSNotificationHandler segueToGallery:galleryID];
+        
+        if (galleryID && [[galleryID class] isSubclassOfClass:[NSString class]]) {
+            [FRSNotificationHandler segueToGallery:galleryID];
+        }
+        else {
+            NSString *gallery = [push objectForKey:@"gallery_id"];
+            [FRSNotificationHandler segueToGallery:gallery];
+        }
         
     }
     
@@ -89,6 +112,10 @@
         
         if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToStory:story];
+        }
+        else {
+            NSString *story = [push objectForKey:@"story_id"];
+            [FRSNotificationHandler segueToGallery:story];
         }
     }
     
@@ -99,10 +126,8 @@
             [FRSNotificationHandler segueToGallery:gallery];
         }
         else {
-            NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];;
-            if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
-                [FRSNotificationHandler segueToStory:story];
-            }
+            NSString *gallery = [push objectForKey:@"gallery_id"];
+            [FRSNotificationHandler segueToGallery:gallery];
         }
     }
     
@@ -113,10 +138,8 @@
             [FRSNotificationHandler segueToGallery:gallery];
         }
         else {
-            NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
-            if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
-                [FRSNotificationHandler segueToStory:story];
-            }
+            NSString *gallery = [push objectForKey:@"gallery_id"];
+            [FRSNotificationHandler segueToGallery:gallery];
         }
     }
     
@@ -127,10 +150,8 @@
             [FRSNotificationHandler segueToGallery:gallery];
         }
         else {
-            NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
-            if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
-                [FRSNotificationHandler segueToStory:story];
-            }
+            NSString *gallery = [push objectForKey:@"gallery_id"];
+            [FRSNotificationHandler segueToGallery:gallery];
         }
     }
     
@@ -138,6 +159,10 @@
         NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [FRSNotificationHandler segueToGallery:gallery];
+        }
+        else {
+            NSString *gallery = [push objectForKey:@"gallery_id"];
             [FRSNotificationHandler segueToGallery:gallery];
         }
     }
@@ -148,11 +173,22 @@
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
             [FRSNotificationHandler segueToGallery:gallery];
         }
+        else {
+            NSString *gallery = [push objectForKey:@"gallery_id"];
+            [FRSNotificationHandler segueToGallery:gallery];
+        }
     }
     
     if ([instruction isEqualToString:todayInNewsNotification]) {
         NSArray *galleryIDs = [[push objectForKey:@"meta"] objectForKey:@"gallery_ids"];
-        [FRSNotificationHandler segueToTodayInNews:galleryIDs title:push[@"aps"][@"alert"][@"title"]];
+        
+        if (galleryIDs && [[galleryIDs class] isSubclassOfClass:[galleryIDs class]]) {
+            [FRSNotificationHandler segueToTodayInNews:galleryIDs title:push[@"aps"][@"alert"][@"title"]];
+        }
+        else {
+            NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
+            [FRSNotificationHandler segueToTodayInNews:galleryIDs title:@"Today In News"];
+        }
     }
     
     if ([instruction isEqualToString:restartUploadNotification]) {
@@ -163,6 +199,10 @@
         NSString *gallery = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
         
         if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
+            [FRSNotificationHandler segueToGallery:gallery];
+        }
+        else {
+            NSString *gallery = [push objectForKey:@"gallery_id"];
             [FRSNotificationHandler segueToGallery:gallery];
         }
     }

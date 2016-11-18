@@ -653,6 +653,7 @@
     }
     else if( [UIApplication sharedApplication].applicationState == UIApplicationStateBackground )
     {
+        [self handleRemotePush:userInfo];
         NSLog( @"BACKGROUND" );
         completionHandler( UIBackgroundFetchResultNewData );
     }
@@ -667,6 +668,7 @@
 {  
     [self application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:^(UIBackgroundFetchResult result) {
         // nothing
+        [self handleRemotePush:userInfo];
     }];  
 }
 
