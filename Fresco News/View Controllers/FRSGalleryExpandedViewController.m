@@ -222,7 +222,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [_comments addObject:commentObject];
         }
         
-        if ([_comments count] < 10) {
+        if ([_comments count] <= 10) {
             showsMoreButton = FALSE;
         }
         else {
@@ -883,9 +883,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
             topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
             int total = (int)self.totalCommentCount - (int)_comments.count;
-            if (total < 0) {
+            if (total < 0 || total == (int)nil) {
                 total = 0;
             }
+            
             [topButton setTitle:[NSString stringWithFormat:@"%d MORE COMMENTS", total] forState:UIControlStateNormal];
             [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
             [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
