@@ -142,7 +142,7 @@
     
     [self setupUI];
     [self configureUI];
-    [self fetchGalleries];
+   // [self fetchGalleries];
     [super removeNavigationBarLine];
     
     if (self.shouldShowNotificationsOnLoad) {
@@ -332,7 +332,7 @@
         
         [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
         [self.navigationController.navigationBar setShadowImage:[UIImage new]];
-        
+        [self fetchGalleries];
     }
     return self;
 }
@@ -386,7 +386,7 @@
     
     /* TABLE VIEW */
     [self configureTableView];
-    [self fetchGalleries];
+    //[self fetchGalleries];
     [self configureSpinner];
     
     [super removeNavigationBarLine];
