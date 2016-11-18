@@ -13,11 +13,12 @@
 
 @interface FRSNotificationHandler : NSObject
 +(void)handleNotification:(NSDictionary *)notification;
-+(void)segueTouser:(FRSUser *)user;
-+(void)segueToAssignment:(FRSAssignment *)assignment;
-+(void)segueToGallery:(FRSGallery *)gallery;
-+(void)segueToGallery:(FRSGallery *)gallery post:(FRSPost *)post;
-+(void)segueToStory:(FRSStory *)story;
++(void)segueToUser:(NSString *)user;
++(void)segueToAssignment:(NSString *)assignment;
++(void)segueToGallery:(NSString *)gallery;
++(void)segueToGallery:(NSString *)gallery post:(NSString *)post;
++(void)segueToStory:(NSString *)story;
++(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title;
 +(void)segueToPayment;
 +(void)segueToIdentification;
 @end
