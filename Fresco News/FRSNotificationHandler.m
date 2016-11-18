@@ -240,6 +240,7 @@
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+        [navController setNavigationBarHidden:FALSE];
         [navController pushViewController:detailVC animated:TRUE];
     }
     else {
@@ -247,6 +248,7 @@
         tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
+        [navController setNavigationBarHidden:FALSE];
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
         [navController pushViewController:detailVC animated:TRUE];
     }
@@ -281,7 +283,8 @@
     
     detailVC.navigationController = tab.navigationController;
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
-    
+    [navController setNavigationBarHidden:FALSE];
+
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
         [navController pushViewController:detailVC animated:TRUE];
     }
@@ -291,6 +294,7 @@
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        [navController setNavigationBarHidden:FALSE];
         [navController pushViewController:detailVC animated:TRUE];
     }
 
