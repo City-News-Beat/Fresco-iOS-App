@@ -194,6 +194,7 @@
 		D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C08E1DC2677000AFC839 /* FRSUploadManager.m */; };
 		D47999691C96AA1700B46D01 /* FRSLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = D47999681C96AA1700B46D01 /* FRSLocator.m */; };
 		D47A47831DDCE204004572A1 /* FRSFollow.m in Sources */ = {isa = PBXBuildFile; fileRef = D47A47821DDCE204004572A1 /* FRSFollow.m */; };
+		D47A47D11DDE4E6E004572A1 /* FRSNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D47A47D01DDE4E6E004572A1 /* FRSNotificationHandler.m */; };
 		D487F1B61CBD6565005742F3 /* FRSSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */; };
 		D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */; };
 		D487F1CE1CC14246005742F3 /* FRSPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D487F1CD1CC14246005742F3 /* FRSPlayer.m */; };
@@ -642,6 +643,8 @@
 		D47999681C96AA1700B46D01 /* FRSLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSLocator.m; sourceTree = "<group>"; };
 		D47A47811DDCE204004572A1 /* FRSFollow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSFollow.h; sourceTree = "<group>"; };
 		D47A47821DDCE204004572A1 /* FRSFollow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSFollow.m; sourceTree = "<group>"; };
+		D47A47CF1DDE4E6E004572A1 /* FRSNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSNotificationHandler.h; sourceTree = "<group>"; };
+		D47A47D01DDE4E6E004572A1 /* FRSNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSNotificationHandler.m; sourceTree = "<group>"; };
 		D487F1B31CBD6565005742F3 /* FRSSubmissionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSSubmissionViewController.h; sourceTree = "<group>"; };
 		D487F1B41CBD6565005742F3 /* FRSSubmissionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSSubmissionViewController.m; sourceTree = "<group>"; };
 		D487F1B51CBD6565005742F3 /* FRSSubmissionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSSubmissionViewController.xib; sourceTree = "<group>"; };
@@ -993,6 +996,8 @@
 			children = (
 				65F237AE1C249DC3002182DE /* FRSAppDelegate.h */,
 				65F237AF1C249DC3002182DE /* FRSAppDelegate.m */,
+				D47A47CF1DDE4E6E004572A1 /* FRSNotificationHandler.h */,
+				D47A47D01DDE4E6E004572A1 /* FRSNotificationHandler.m */,
 				D4F91A451C8B50670078BF15 /* Fresco API */,
 				074393EF1C3AC56E0007CFF0 /* Utilities */,
 				6596ECA01C5032000011C18B /* Subclasses */,
@@ -2643,6 +2648,7 @@
 				07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */,
 				070D66CC1C2AEFD200AB3D9D /* FRSOnboardTwoView.m in Sources */,
 				D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */,
+				D47A47D11DDE4E6E004572A1 /* FRSNotificationHandler.m in Sources */,
 				65135FD01C286DCF00839149 /* FRSArticle.m in Sources */,
 				65DC9BE81C485B20001F450A /* FRSArticle+CoreDataProperties.m in Sources */,
 				6547C9071C6A69E600DAD98C /* UILabel+Custom.m in Sources */,

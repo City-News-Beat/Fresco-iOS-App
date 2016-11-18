@@ -32,6 +32,11 @@
         [request setValue:@"multipart/form-data" forHTTPHeaderField:@"content-type"];
     }
     
+    if ([endpoint containsString:@"assignment/find"]) {
+        NSString *authorization = [@"Basic " stringByAppendingString:clientAuthorization];
+        [request setValue:authorization forHTTPHeaderField:@"Authorization"];
+    }
+    
     
     return request;
 }

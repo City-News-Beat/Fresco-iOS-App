@@ -52,11 +52,8 @@
     [self configureStartDate];
     [self clearUploadCache];
     
-    /* 
-        FOLLOW EVERY USER ON THE PLATFORM
-     */
 //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        [FRSFollow follow:1];
+//        [FRSFollow follow:30000];
 //    });
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
