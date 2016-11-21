@@ -212,7 +212,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [_comments addObject:commentObject];
         }
         
-        if ([_comments count] <= 10) {
+        if ([self.gallery.comments integerValue] <= 10) {
             showsMoreButton = FALSE;
         }
         else {
@@ -663,7 +663,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     if (self.comments.count > 0) {
         [self.commentTableView addSubview:[UIView lineAtPoint:CGPointMake(0, 0)]];
-        [self.commentTableView addSubview:[UIView lineAtPoint:CGPointMake(0, height -0.5)]];
     }
     
     [self adjustScrollViewContentSize];
@@ -970,6 +969,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         if (count < 10) {
             showsMoreButton = FALSE;
+        } else {
+            showsMoreButton = TRUE;
         }
         
         [self adjustHeight];
