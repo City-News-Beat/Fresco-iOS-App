@@ -911,6 +911,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [cell addSubview:topButton];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = [UIColor frescoBackgroundColorLight];
+
             
             if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
                 [cell setSeparatorInset:UIEdgeInsetsZero];
@@ -971,6 +972,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             showsMoreButton = FALSE;
         } else {
             showsMoreButton = TRUE;
+        }
+        
+        if ([topButton.titleLabel.text isEqualToString:@"0 MORE COMMENTS"]) {
+            showsMoreButton = FALSE;
         }
         
         [self adjustHeight];
