@@ -35,7 +35,6 @@
 #import "FRSIdentityViewController.h"
 #import "FRSStoriesViewController.h"
 #import "FRSUploadManager.h"
-#import "FRSFollow.h"
 #import "FRSNotificationHandler.h"
 #import <UserNotifications/UserNotifications.h>
 
@@ -53,10 +52,6 @@
     [self startFabric]; // crashlytics first yall
     [self configureStartDate];
     [self clearUploadCache];
-    
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        [FRSFollow follow:30000];
-//    });
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
@@ -698,10 +693,16 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [FRSTracker track:@"Notifications Enabled"];
     }
     
+    NSString *oldDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
+    
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:@"deviceToken"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    NSDictionary *installationDigest = [[FRSAPIClient sharedClient] currentInstallation];
+    NSMutableDictionary *installationDigest = [[FRSAPIClient sharedClient] currentInstallation];
+    
+    if (oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]]) {
+        [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
+    }
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"installation":installationDigest} completion:^(id responseObject, NSError *error) {
         NSLog(@"Updated user installation");
