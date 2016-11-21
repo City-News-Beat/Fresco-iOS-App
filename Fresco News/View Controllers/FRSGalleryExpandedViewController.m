@@ -629,11 +629,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         else {
             height += commentSize += 10; //10 is bottom padding
         }
-        
-        
-        
-        
-        
+
         NSLog(@"STRING SIZE  : %f", labelRect.size.height);
         NSLog(@"COMMENT SIZE : %f", commentSize);
         NSLog(@"HEIGHT       : %f", height);
@@ -808,8 +804,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - UIScrollView Delegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    [super scrollViewDidScroll:scrollView];
-    [self.actionBar actionButtonTitleNeedsUpdate];
+    if (scrollView == self.scrollView) {
+        [super scrollViewDidScroll:scrollView];
+        [self.actionBar actionButtonTitleNeedsUpdate];
+    }
 }
 
 #pragma mark - Articles Table View DataSource Delegate

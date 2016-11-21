@@ -33,7 +33,7 @@
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@user" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sba-fD-aA5">
-                        <rect key="frame" x="64" y="10" width="36" height="14"/>
+                        <rect key="frame" x="60" y="10" width="36" height="14"/>
                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="14" id="weM-HW-9Av"/>
@@ -43,7 +43,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 minutes ago" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t61-UP-jCA">
-                        <rect key="frame" x="108" y="10" width="81" height="14"/>
+                        <rect key="frame" x="104" y="10" width="81" height="14"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="14" id="7c2-nY-oaA"/>
                         </constraints>
@@ -63,7 +63,7 @@
                     <constraint firstAttribute="trailingMargin" secondItem="2i5-gr-qVH" secondAttribute="trailing" constant="2" id="TvZ-9R-CE3"/>
                     <constraint firstItem="2i5-gr-qVH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="56" id="ZVE-fO-2pg"/>
                     <constraint firstItem="2i5-gr-qVH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="16" id="gmf-YU-6dV"/>
-                    <constraint firstItem="Sba-fD-aA5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="64" id="pVE-W4-Ssy"/>
+                    <constraint firstItem="Sba-fD-aA5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="60" id="pVE-W4-Ssy"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
