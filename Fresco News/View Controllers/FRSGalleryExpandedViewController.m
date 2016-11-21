@@ -1143,30 +1143,27 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.galleryID completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", responseObject, error);
-        [UIView animateWithDuration:.15 animations:^{
-            if (error) {
-                NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
-                self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"COMMENT FAILED" message:message actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-                [self.errorAlertView show];
-            }
-            else {
-                
-                self.totalCommentCount++;
-                [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
-//                [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
-
-                self.totalCommentCount++;
-                self.commentTableView.hidden = NO;
-                [self reload];
-//                CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
-//                [self.scrollView setContentOffset:bottomOffset animated:YES];
-                
-                commentField.text = @"";
-                [self dismissKeyboard:Nil];
-                
-            }
-        } completion:^(BOOL finished) {
-        }];
+        if (error) {
+            NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
+            self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed. Please try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [self.errorAlertView show];
+        }
+        else {
+            
+            self.totalCommentCount++;
+            [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
+            //                [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+            
+            self.totalCommentCount++;
+            self.commentTableView.hidden = NO;
+            [self reload];
+            //                CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+            //                [self.scrollView setContentOffset:bottomOffset animated:YES];
+            
+            commentField.text = @"";
+            [self dismissKeyboard:Nil];
+            
+        }
     }];
 }
 
