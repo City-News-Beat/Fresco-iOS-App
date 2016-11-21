@@ -48,7 +48,9 @@
     self.commentTextView.delegate = delegate;
     
     NSDate *date = [comment updatedAt];
-    self.timestampLabel.text = [FRSDateFormatter timestampStringFromDate:date];
+    self.timestampLabel.text = [FRSDateFormatter relativeTimeFromDate:date];
+    
+    
     
     if (![[comment userDictionary][@"full_name"] isEqual:[NSNull null]] && ![[comment userDictionary][@"full_name"] isEqualToString:@""]) {
         self.nameLabel.text = [comment userDictionary][@"full_name"];
