@@ -61,13 +61,13 @@
         self.timestampLabel.transform = CGAffineTransformMakeTranslation(-8, 0);
     }
     
-    [self.commentTextView sizeToFit];
+
+//    Calling size to fit here scales the textview down so the user can tap on the comment cell
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.commentTextView sizeToFit];
+//    });
     
-    //Not sure why we need to delay this.
-    //Calling size to fit here scales the textview down so the user can tap on the comment cell
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.commentTextView sizeToFit];
-    });
+    self.commentTextView.backgroundColor = [UIColor redColor];
 
 
     if ([self.commentTextView.text containsString:@"@"] || [self.commentTextView.text containsString:@"#"]) {
@@ -93,7 +93,7 @@
     tap.cancelsTouchesInView = NO;
     [self.profilePicture setUserInteractionEnabled:YES];
     [self.profilePicture addGestureRecognizer:tap];
-        
+    
 }
 
 -(void)profileTapped {

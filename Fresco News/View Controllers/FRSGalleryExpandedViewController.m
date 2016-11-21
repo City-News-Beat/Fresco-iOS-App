@@ -627,7 +627,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             height += 56;
         }
         else {
-            height += commentSize += 10; //10 is bottom padding
+            height += commentSize += 20;
         }
 
         NSLog(@"STRING SIZE  : %f", labelRect.size.height);
@@ -870,7 +870,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 height += 56;
             }
             else {
-                height = commentSize +10; //10 is bottom padding
+                height = commentSize +20;
             }
             
             NSLog(@"STRING SIZE  : %f", labelRect.size.height);
@@ -931,7 +931,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 FRSComment *comment = _comments[indexPath.row-showsMoreButton];
                 cell.cellDelegate = self;
                 [cell configureCell:comment delegate:self];
-                [cell.commentTextView sizeToFit];
+//                [cell.commentTextView sizeToFit];
                 return cell;
             }
         }
@@ -940,10 +940,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     return Nil;
 }
 
--(void)swipeTableCell:(FRSCommentCell *)cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive {
-    // The textView goes back to its original size (set in the nib) if we don't size to fit on the swipe action.
-    [cell.commentTextView sizeToFit];
-}
+//-(void)swipeTableCell:(FRSCommentCell *)cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive {
+//    // The textView goes back to its original size (set in the nib) if we don't size to fit on the swipe action.
+//    [cell.commentTextView sizeToFit];
+//}
+//
+//-(void)swipeTableCellWillEndSwiping:(FRSCommentCell *)cell {
+//    [cell.commentTextView sizeToFit];
+//}
 
 -(void)loadMoreComments {
     FRSComment *comment = self.comments[0];
