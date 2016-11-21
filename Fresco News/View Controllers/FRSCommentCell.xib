@@ -19,14 +19,14 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ffk-GZ-vjB">
-                        <rect key="frame" x="13" y="13" width="32" height="32"/>
+                        <rect key="frame" x="16" y="13" width="32" height="32"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="32" id="0P0-CO-m2t"/>
                             <constraint firstAttribute="height" constant="32" id="WA0-bn-lCr"/>
                         </constraints>
                     </imageView>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2i5-gr-qVH" customClass="FRSTextView">
-                        <rect key="frame" x="60" y="24" width="248" height="72.5"/>
+                        <rect key="frame" x="56" y="24" width="254" height="72.5"/>
                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
                         <inset key="scrollIndicatorInsets" minX="15" minY="15" maxX="15" maxY="15"/>
                         <attributedString key="attributedText"/>
@@ -59,9 +59,9 @@
                     <constraint firstItem="t61-UP-jCA" firstAttribute="leading" secondItem="Sba-fD-aA5" secondAttribute="trailing" constant="8" id="GYt-BU-qtV"/>
                     <constraint firstItem="Sba-fD-aA5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="HsZ-8i-N6n"/>
                     <constraint firstItem="t61-UP-jCA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="LhU-WM-LJn"/>
-                    <constraint firstItem="ffk-GZ-vjB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="Rb9-Cm-1z8"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="2i5-gr-qVH" secondAttribute="trailing" constant="4" id="TvZ-9R-CE3"/>
-                    <constraint firstItem="2i5-gr-qVH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="60" id="ZVE-fO-2pg"/>
+                    <constraint firstItem="ffk-GZ-vjB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="Rb9-Cm-1z8"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="2i5-gr-qVH" secondAttribute="trailing" constant="2" id="TvZ-9R-CE3"/>
+                    <constraint firstItem="2i5-gr-qVH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="56" id="ZVE-fO-2pg"/>
                     <constraint firstItem="2i5-gr-qVH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="16" id="gmf-YU-6dV"/>
                     <constraint firstItem="Sba-fD-aA5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="64" id="pVE-W4-Ssy"/>
                 </constraints>
