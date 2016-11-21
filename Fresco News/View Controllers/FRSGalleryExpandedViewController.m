@@ -733,13 +733,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)adjustScrollViewContentSize{
     
-    CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + GALLERY_BOTTOM_PADDING +40;
+    CGFloat height = self.galleryView.layer.frame.size.height + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING +50;
     if (self.comments.count > 0) {
         height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height +20;
     }
     if (self.orderedArticles.count > 0) {
         height += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height +20;
     }
+    
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, height);
 }
 

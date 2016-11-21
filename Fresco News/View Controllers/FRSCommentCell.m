@@ -67,8 +67,6 @@
 //        [self.commentTextView sizeToFit];
 //    });
     
-    self.commentTextView.backgroundColor = [UIColor redColor];
-
 
     if ([self.commentTextView.text containsString:@"@"] || [self.commentTextView.text containsString:@"#"]) {
         self.commentTextView.userInteractionEnabled = YES;
