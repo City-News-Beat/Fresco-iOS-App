@@ -20,9 +20,19 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
-    
     [self configureNavigationBar];
     [self configureTableView];
+
+
+    if (!self.assignments) {
+        [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:0 ofLocation:@[@0, @0] withCompletion:^(id responseObject, NSError *error) {
+            if (!error && responseObject[@"global"]) {
+                self.assignments = (NSArray *)responseObject[@"global"];
+                [self.tableView reloadData];
+            }
+        }];
+    } else {
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{

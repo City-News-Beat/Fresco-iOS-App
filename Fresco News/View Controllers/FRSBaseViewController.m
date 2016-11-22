@@ -252,14 +252,11 @@
 
 -(void)segueToGlobalAssignmentWithID:(NSString *)assignmentID {
     
-    //untested
-    
     FRSNavigationController *navCont = (FRSNavigationController *)[self.tabBarController.viewControllers objectAtIndex:3];
     FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
     
-    [assignmentsVC globalAssignmentsSegue];
-
     [self.tabBarController setSelectedIndex:3];
+    [assignmentsVC globalAssignmentsSegue];
     
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0];
 }
