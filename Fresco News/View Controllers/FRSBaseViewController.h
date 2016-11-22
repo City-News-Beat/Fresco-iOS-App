@@ -48,7 +48,6 @@
 -(void)segueToUser:(NSString *)userID;
 -(void)segueToPost:(NSString *)postID;
 -(void)segueToAssignmentWithID:(NSString *)assignmentID;
--(void)segueToGlobalAssignmentWithID:(NSString *)assignmentID;
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID;
 -(void)segueToDebitCard;
 

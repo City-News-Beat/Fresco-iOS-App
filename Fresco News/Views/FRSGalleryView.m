@@ -144,11 +144,8 @@
     }
     
 <<<<<<< HEAD
-<<<<<<< HEAD
     [self checkOwner];
 =======
-=======
->>>>>>> origin/3.0-omar
     self.hasLocation = YES;
     self.hasTime     = YES;
     self.hasName     = YES;
@@ -197,9 +194,6 @@
         self.locationIV.transform = CGAffineTransformMakeTranslation(0, -20);
         self.locationLabel.transform = CGAffineTransformMakeTranslation(0, -20);
     }
-<<<<<<< HEAD
->>>>>>> origin/3.0-omar
-=======
 >>>>>>> origin/3.0-omar
 }
 
@@ -1009,11 +1003,8 @@
 #pragma mark - Action Bar Delegate
 -(NSString *)titleForActionButton{
 <<<<<<< HEAD
-<<<<<<< HEAD
     return @"READ MORE";
 =======
-=======
->>>>>>> origin/3.0-omar
     int comments = [[self.gallery valueForKey:@"comments"] intValue];
     
     if (comments == 1) {

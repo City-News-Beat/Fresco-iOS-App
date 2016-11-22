@@ -84,7 +84,6 @@
 }
 
 <<<<<<< HEAD
-<<<<<<< HEAD
 //temp method
 +(NSString *)dateStringFromDate:(NSDate *)date{
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -92,8 +91,6 @@
     return [formatter stringFromDate:date];
 }
 
-=======
->>>>>>> origin/3.0-omar
 =======
 >>>>>>> origin/3.0-omar
 @end
