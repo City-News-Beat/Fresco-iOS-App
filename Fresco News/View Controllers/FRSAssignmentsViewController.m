@@ -60,6 +60,7 @@
 @property (strong, nonatomic) NSString *assignmentOutlet;
 @property (strong, nonatomic) NSString *assignmentCaption;
 @property (strong, nonatomic) NSDate *assignmentExpirationDate;
+@property (strong, nonatomic) NSDate *assignmentPostedDate;
 @property (strong, nonatomic) UILabel *assignmentTitleLabel;
 @property (strong, nonatomic) UILabel *assignmentOutletLabel;
 @property (strong, nonatomic) UITextView *assignmentTextView;
@@ -83,6 +84,8 @@
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
+
+@property (strong, nonatomic) UILabel *postedLabel;
 
 @end
 
@@ -464,12 +467,15 @@
         self.assignmentTitle = assignment.title;
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
+        self.assignmentPostedDate = assignment.createdDate;
+
         self.outlets = assignment.outlets;
         
         [self configureOutlets];
         [self configureAssignmentCard];
         [self animateAssignmentCard];
         [self setExpiration];
+        [self setPostedDate];
         [self setDistance];
         
         self.currentAssignment = assignment;
@@ -670,11 +676,13 @@
     self.assignmentTitle = assAnn.title;
     self.assignmentCaption = assAnn.subtitle;
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
+    self.assignmentPostedDate = assAnn.assignmentPostedDate;
     
     self.outlets = assAnn.outlets;
     [self configureOutlets];
     
     [self setExpiration];
+    [self setPostedDate];
     [self configureAssignmentCard];
     [self animateAssignmentCard];
     [self snapToAnnotationView:view]; // Centers map with y offset
@@ -731,6 +739,22 @@
         }
     }
     self.distanceLabel.text = distanceString;
+}
+
+-(void)setPostedDate {
+    NSString *postedString;
+    
+    
+    NSTimeInterval secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
+    NSDate *correctDate = [self.assignmentPostedDate dateByAddingTimeInterval:secondsFromGMT];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    [formatter setDateFormat:@"h:mm a"];
+    
+    
+    postedString = [NSString stringWithFormat:@"Posted %@ at %@", [FRSDateFormatter dateDifference:self.assignmentPostedDate], [formatter stringFromDate:correctDate]];
+    
+    self.postedLabel.text = postedString;
 }
 
 -(void)setExpiration {
@@ -950,8 +974,14 @@
     self.expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
     self.expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.expirationLabel.textColor = [UIColor frescoMediumTextColor];
+    
+    self.postedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 14)];
+    self.postedLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
+    self.postedLabel.textColor = [UIColor frescoMediumTextColor];
+    [self.expirationLabel addSubview:self.postedLabel];
 
     [self setExpiration];
+    [self setPostedDate];
     
     [self.assignmentStatsContainer addSubview:self.expirationLabel];
     
@@ -967,13 +997,13 @@
     warningLabel.text = @"Not all events are safe. Be careful!";
     [self.assignmentStatsContainer addSubview:warningLabel];
     
-    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*1.3, self.view.frame.size.width, 150)];
-    label.text = @"if you keep scrolling you will find a pigeon.\n\n\n\n\n\nalmost there...\n\n\n🐦";
-    label.font = [UIFont systemFontOfSize:10 weight:UIFontWeightLight];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.backgroundColor = self.assignmentCard.backgroundColor;
-    label.textColor = [UIColor frescoLightTextColor];
-    [self.assignmentCard addSubview:label];
+//    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*1.3, self.view.frame.size.width, 150)];
+//    label.text = @"if you keep scrolling you will find a pigeon.\n\n\n\n\n\nalmost there...\n\n\n🐦";
+//    label.font = [UIFont systemFontOfSize:10 weight:UIFontWeightLight];
+//    label.textAlignment = NSTextAlignmentCenter;
+//    label.backgroundColor = self.assignmentCard.backgroundColor;
+//    label.textColor = [UIColor frescoLightTextColor];
+//    [self.assignmentCard addSubview:label];
     
     UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
     self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -1006,6 +1036,8 @@
     alert.delegate = self;
     [alert navigateToAssignmentWithLatitude:self.assignmentLat longitude:self.assignmentLong];
 }
+
+
 
 -(void)configureAssignmentCard {
     
