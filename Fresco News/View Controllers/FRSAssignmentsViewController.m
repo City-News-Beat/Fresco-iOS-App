@@ -742,7 +742,7 @@
     }
     self.distanceLabel.text = distanceString;
     [self.distanceLabel sizeToFit];
-    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +56, 66, 24, 24);
+    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
 }
 
 -(void)setPostedDate {
@@ -998,7 +998,7 @@
     
     
     self.navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +56, 66, 24, 24);
+    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
     self.navigateButton.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
     self.navigateButton.alpha = 0.5;
     [self.navigateButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
