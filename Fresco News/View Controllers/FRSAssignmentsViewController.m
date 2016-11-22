@@ -956,7 +956,7 @@
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
-    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 50, self.view.frame.size.width, 120)];
+    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 50, self.view.frame.size.width, 144)];
     [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
     UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
@@ -964,11 +964,11 @@
     [self.assignmentStatsContainer addSubview:clock];
     
     UIImageView *mapAnnotation = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"annotation"]];
-    mapAnnotation.frame = CGRectMake(16, 48, 24, 24);
+    mapAnnotation.frame = CGRectMake(16, 66, 24, 24);
     [self.assignmentStatsContainer addSubview:mapAnnotation];
     
     UIImageView *warning = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"warning"]];
-    warning.frame = CGRectMake(16, 88, 24, 24);
+    warning.frame = CGRectMake(16, 110, 24, 24);
     [self.assignmentStatsContainer addSubview:warning];
     
     self.expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
@@ -985,13 +985,13 @@
     
     [self.assignmentStatsContainer addSubview:self.expirationLabel];
     
-    self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 50, self.view.frame.size.width, 20)];
+    self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 68, self.view.frame.size.width, 20)];
     self.distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.distanceLabel.textColor = [UIColor frescoMediumTextColor];
     self.distanceLabel.text = @"";
     [self.assignmentStatsContainer addSubview:self.distanceLabel];
 
-    UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 90, self.view.frame.size.width, 20)];
+    UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 112, self.view.frame.size.width, 20)];
     warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     warningLabel.textColor = [UIColor frescoMediumTextColor];
     warningLabel.text = @"Not all events are safe. Be careful!";
@@ -1125,7 +1125,7 @@
     [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         
         CGRect scrollFrame = self.scrollView.frame;
-        scrollFrame.origin.y = 0;
+        scrollFrame.origin.y = -12;
         self.scrollView.frame = scrollFrame;
         
     } completion:nil];
