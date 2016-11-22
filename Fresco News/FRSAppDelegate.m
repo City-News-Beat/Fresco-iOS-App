@@ -35,6 +35,9 @@
 #import "FRSIdentityViewController.h"
 #import "FRSStoriesViewController.h"
 #import "FRSUploadManager.h"
+#import "FRSNotificationHandler.h"
+#import <UserNotifications/UserNotifications.h>
+
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -49,7 +52,9 @@
     [self startFabric]; // crashlytics first yall
     [self configureStartDate];
     [self clearUploadCache];
-
+    
+    [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
+    
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
     if ([self isFirstRun]) {
@@ -457,6 +462,22 @@
     return _managedObjectModel;
 }
 
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+   // [self handleRemotePush:notification.request.content.userInfo];
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void (^)())completionHandler
+{
+    NSLog( @"Handle push from background or closed" );
+    // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
+    NSLog(@"%@", response.notification.request.content.userInfo);
+    [self handleRemotePush:response.notification.request.content.userInfo];
+}
+
+
+
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
     // The persistent store coordinator for the application. This implementation creates and returns a coordinator, having added the store for the application to it.
     if (_persistentStoreCoordinator != nil) {
@@ -623,16 +644,9 @@
     }
 }
 
--(void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void(^)(UIBackgroundFetchResult))completionHandler
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void(^)(UIBackgroundFetchResult))completionHandler
 {
     // iOS 10 will handle notifications through other methods
-    
-    if( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO( @"10.0" ) )
-    {
-        // set a member variable to tell the new delegate that this is background
-        return;
-    }
-    
     // custom code to handle notification content
     if([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive)
     {
@@ -646,6 +660,7 @@
     }
     else if( [UIApplication sharedApplication].applicationState == UIApplicationStateBackground )
     {
+        [self handleRemotePush:userInfo];
         NSLog( @"BACKGROUND" );
         completionHandler( UIBackgroundFetchResultNewData );
     }
@@ -660,16 +675,10 @@
 {  
     [self application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:^(UIBackgroundFetchResult result) {
         // nothing
+        [self handleRemotePush:userInfo];
     }];  
 }
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center
-didReceiveNotificationResponse:(UNNotificationResponse *)response
-         withCompletionHandler:(void (^)())completionHandler
-{
-    NSLog( @"Handle push from background or closed" );
-    [self handleRemotePush:response.notification.request.content.userInfo];
-}
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
@@ -684,10 +693,16 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [FRSTracker track:@"Notifications Enabled"];
     }
     
+    NSString *oldDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
+    
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:@"deviceToken"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    NSDictionary *installationDigest = [[FRSAPIClient sharedClient] currentInstallation];
+    NSMutableDictionary *installationDigest = [[FRSAPIClient sharedClient] currentInstallation];
+    
+    if (oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]]) {
+        [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
+    }
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"installation":installationDigest} completion:^(id responseObject, NSError *error) {
         NSLog(@"Updated user installation");
@@ -704,142 +719,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 -(void)handleRemotePush:(NSDictionary *)push {
-    UIViewController *viewController = [[UIViewController alloc] init];
-    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, 300, 900)];
-    [viewController.view addSubview:textView];
-    
-    NSString *instruction = push[@"type"];
-    NSString *notificationID = push[@"id"];
-    NSLog(@"INSTRUCTION: %@", push);
-   // self.window.rootViewController = viewController;
-    textView.text = push.description;
-    
-    if (notificationID && ![notificationID isEqual:[NSNull null]]) {
-        [self markAsRead:notificationID];
-    }
-    
-    // payment
-    if ([instruction isEqualToString:newAssignmentNotification]) {
-        NSString *assignment = [push objectForKey:@"assignment_id"];
-        
-        if (assignment && ![assignment isEqual:[NSNull null]] && [[assignment class] isSubclassOfClass:[NSString class]]) {
-            [self segueToAssignmentWithID:assignment];
-        }
-        
-        return;
-    }
-    if ([instruction isEqualToString:purchasedContentNotification]) {
-        if ([[push valueForKey:@"has_payment"] boolValue]) {
-            NSString *gallery = [push objectForKey:@"gallery_id"];
-            
-            if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-                [self segueToGallery:gallery];
-            }
-        }
-        else {
-            [self segueToDebitCard];
-        }
-    }
-    if ([instruction isEqualToString:paymentExpiringNotification]) {
-        [self segueToDebitCard];
-    }
-    if ([instruction isEqualToString:paymentSentNotification]) {
-        [self segueToDebitCard];
-    }
-    if ([instruction isEqualToString:taxInfoRequiredNotification]) {
-        [self segueToTaxInfo];
-    }
-    if ([instruction isEqualToString:taxInfoDeclinedNotification]) {
-        [self segueToTaxInfo];
-    }
-    if ([instruction isEqualToString:taxInfoProcessedNotification]) {
-        [self segueToTaxInfo];
-    }
-    if ([instruction isEqualToString:paymentDeclinedNotification]) {
-        [self segueToDebitCard];
-    }
-    
-    // social
-    if ([instruction isEqualToString:followedNotification]) {
-        NSString *user = [[push objectForKey:@"user_ids"] firstObject];
-        [self segueToUser:user];
-    }
-    if ([instruction isEqualToString:@"user-news-gallery"]) {
-        NSLog(@"TODAY IN NEWS");
-        NSString *galleryID = [push objectForKey:@"gallery_id"];
-        [self segueToGallery:galleryID];
-
-    }
-    if ([instruction isEqualToString:@"user-news-story"]) {
-        NSString *story = [push  objectForKey:@"story_id"];
-        
-        if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
-            [self segueToStory:story];
-        }
-    }
-    if ([instruction isEqualToString:@"user-social-gallery-liked"]) {
-        NSString *gallery = [push  objectForKey:@"gallery_id"];
-        
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-            [self segueToGallery:gallery];
-        }
-        else {
-            NSString *story = [push objectForKey:@"story_id"];
-            if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
-                [self segueToStory:story];
-            }
-        }
-    }
-    if ([instruction isEqualToString:repostedNotification]) {
-        NSString *gallery = [push objectForKey:@"gallery_id"];
-        
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-            [self segueToGallery:gallery];
-        }
-        else {
-            NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
-            if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
-                [self segueToStory:story];
-            }
-        }
-    }
-    if ([instruction isEqualToString:galleryApprovedNotification]) {
-        NSString *gallery = [push objectForKey:@"gallery_id"];
-        
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-            [self segueToGallery:gallery];
-        }
-        else {
-            NSString *story = [[push objectForKey:@"meta"] objectForKey:@"story_id"];
-            if (story && ![story isEqual:[NSNull null]] && [[story class] isSubclassOfClass:[NSString class]]) {
-                [self segueToStory:story];
-            }
-        }
-    }
-
-    if ([instruction isEqualToString:commentedNotification]) {
-        NSString *gallery = [push objectForKey:@"gallery_id"];
-        
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-            [self segueToGallery:gallery];
-        }
-    }
-    
-    // general
-    if ([instruction isEqualToString:photoOfDayNotification]) {
-        NSString *gallery = [push objectForKey:@"gallery_id"];
-        
-        if (gallery && ![gallery isEqual:[NSNull null]] && [[gallery class] isSubclassOfClass:[NSString class]]) {
-            [self segueToGallery:gallery];
-        }
-    }
-    if ([instruction isEqualToString:todayInNewsNotification]) {
-        NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
-        [self segueToTodayInNews:galleryIDs title:push[@"aps"][@"alert"][@"title"]];
-    }
-    if ([instruction isEqualToString:restartUploadNotification]) {
-        [self restartUpload];
-    }
+    [FRSNotificationHandler handleNotification:push];
 }
 
 -(void)restartUpload {
@@ -1043,49 +923,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
    // [[FRSFileUploadManager sharedUploader] handleEventsForBackgroundURLSession:identifier completionHandler:completionHandler];
 }
 
-
-// DEEP LINKING
--(void)segueToPhotosOfTheDay:(NSArray *)postIDs {
-    //Not part of the initial 3.0 release
-}
-
--(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
-
-    NSString *gallery = @"";
-    
-    for (int i = 0; i < galleryIDs.count - 1; i++) {
-        gallery = [gallery stringByAppendingString:galleryIDs[i]];
-        gallery = [gallery stringByAppendingString:@","];
-    }
-    
-    gallery = [gallery stringByAppendingString:[galleryIDs lastObject]];
-    
-    [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
-        NSLog(@"TODAY: %@", responseObject);
-        if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
-            responseObject = @[responseObject];
-        }
-            UITabBarController *tab = (UITabBarController *)self.tabBarController;
-            
-            FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
-            [detailVC configureWithGalleries:responseObject];
-            detailVC.navigationController = tab.navigationController;
-            detailVC.title = (title) ? [title uppercaseString] : @"TODAY IN NEWS";
-            UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-                    
-            if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-                [navController pushViewController:detailVC animated:TRUE];
-            }
-            else {
-                UITabBarController *tab = (UITabBarController *)navController;
-                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-                    
-                navController = (UINavigationController *)[[tab viewControllers] firstObject];
-                [navController pushViewController:detailVC animated:TRUE];
-            }
-    }];
-}
 -(void)error:(NSError *)error {
     if (!error) {
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
@@ -1101,91 +938,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     }
 }
 
-
--(void)segueToGallery:(NSString *)galleryID {
-    __block BOOL isPushingGallery = FALSE;
-    
-    [[FRSAPIClient sharedClient] getGalleryWithUID:galleryID completion:^(id responseObject, NSError *error) {
-        if (error || !responseObject) {
-            [self error:error];
-            return;
-        }
-
-        if (isPushingGallery) {
-            return;
-        }
-        
-        isPushingGallery = TRUE;
-        
-        FRSAppDelegate *appDelegate = self;
-        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
-        
-        [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
-        
-        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:galleryToSave];
-        vc.shouldHaveBackButton = YES;
-        
-        
-        UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-        
-        if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-            [navController pushViewController:vc animated:TRUE];
-            [navController setNavigationBarHidden:NO];
-
-        }
-        else {
-            UITabBarController *tab = (UITabBarController *)navController;
-            tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-            tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-            
-            navController = (UINavigationController *)[[tab viewControllers] firstObject];
-            [navController pushViewController:vc animated:TRUE];
-            [navController setNavigationBarHidden:NO];
-        }
-    }];
-}
-
--(void)segueToStory:(NSString *)storyID {
-    UITabBarController *tab = (UITabBarController *)self.tabBarController;
-    __block BOOL isSegueingToStory;
-
-    [[FRSAPIClient sharedClient] getStoryWithUID:storyID completion:^(id responseObject, NSError *error) {
-        
-        FRSAppDelegate *appDelegate = self;
-        FRSStory *story = [NSEntityDescription insertNewObjectForEntityForName:@"FRSStory" inManagedObjectContext:[appDelegate managedObjectContext]];
-        
-        [story configureWithDictionary:responseObject];
-        
-        FRSStoryDetailViewController *detailView = [self detailViewControllerWithStory:story];
-        detailView.navigationController = tab.navigationController;
-        
-        if (isSegueingToStory) {
-            isSegueingToStory = YES;
-            UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-            
-            if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-                UITabBarController *tab = (UITabBarController *)navController.viewControllers[0];
-                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-                
-                [navController setNavigationBarHidden:FALSE];
-                navController = (UINavigationController *)[[tab viewControllers] firstObject];
-                [navController pushViewController:detailView animated:TRUE];
-                
-                [tab setSelectedIndex:0];
-            }
-            else {
-                UITabBarController *tab = (UITabBarController *)navController;
-                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-                
-                navController = (UINavigationController *)[[tab viewControllers] firstObject];
-                [navController pushViewController:detailView animated:TRUE];
-            }
-        }
-    }];
-}
-
 -(FRSStoryDetailViewController *)detailViewControllerWithStory:(FRSStory *)story {
     FRSStoryDetailViewController *detailView = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
     detailView.story = story;
@@ -1193,128 +945,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     return detailView;
 }
 
--(void)segueToUser:(NSString *)userID {
-
-    FRSProfileViewController *profileVC = [[FRSProfileViewController alloc] initWithUserID:userID];
-    UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-    
-    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-        UITabBarController *tab = (UITabBarController *)navController.viewControllers[0];
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-        
-        [navController setNavigationBarHidden:FALSE];
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
-        [navController pushViewController:profileVC animated:TRUE];
-        [tab setSelectedIndex:0];
-    }
-    else {
-        UITabBarController *tab = (UITabBarController *)navController;
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-        
-        [navController setNavigationBarHidden:FALSE];
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
-        [navController pushViewController:profileVC animated:TRUE];
-    }
-}
-
--(void)segueToPost:(NSString *)postID {
-
-    [[FRSAPIClient sharedClient] getPostWithID:postID completion:^(id responseObject, NSError *error) {
-        
-        [self segueToGallery:[[responseObject objectForKey:@"parent"] objectForKey:@"id"]];
-        
-    }];
-}
-
--(void)segueToAssignmentWithID:(NSString *)assignmentID {
-    [self.tabBarController setSelectedIndex:3];
-    
-    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
-    __block BOOL ranOnce = FALSE;
-    
-        [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
-            if (ranOnce) {
-                return;
-            }
-            
-            ranOnce = TRUE;
-            FRSAppDelegate *appDelegate = self;
-            FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
-            
-            
-            UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-            
-            if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-                UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
-                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-                
-                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
-                
-                assignmentsVC.hasDefault = YES;
-                assignmentsVC.defaultID = assignmentID;
-                
-                [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
-                
-                [assignment configureWithDictionary:responseObject];
-                [assignmentsVC focusOnAssignment:assignment];
-                
-                navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
-                [tab setSelectedIndex:3];
-            }
-            else {
-                UITabBarController *tab = (UITabBarController *)navController;
-                tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-                tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-                
-                FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
-                
-                assignmentsVC.hasDefault = YES;
-                assignmentsVC.defaultID = assignmentID;
-                
-                [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
-                
-                [assignment configureWithDictionary:responseObject];
-                [assignmentsVC focusOnAssignment:assignment];
-                
-                navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
-                [tab setSelectedIndex:3];
-            }
-            
-        }];
-}
-
-
--(void)segueToCameraWithAssignmentID:(NSString *)assignmentID {
-
-    [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
-        
-        NSDictionary *assDict = [[NSDictionary alloc] init];
-        assDict = responseObject;
-        
-        FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:assDict selectedGlobalAssignment:nil];
-        UINavigationController *navControl = [[UINavigationController alloc] init];
-        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-        [navControl pushViewController:cam animated:NO];
-        [navControl setNavigationBarHidden:YES];
-        
-        UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-        
-        if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-            [navController presentViewController:navControl animated:YES completion:Nil];
-        }
-        else {
-            UITabBarController *tab = (UITabBarController *)navController;
-            tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-            tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-            
-            navController = (UINavigationController *)[[tab viewControllers] firstObject];
-            [navController presentViewController:navControl animated:YES completion:Nil];
-        }
-    }];
-}
 -(void)popViewController {
     
 }
@@ -1324,85 +954,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [tab.navigationController popViewControllerAnimated:TRUE];
 }
 
--(void)segueToDebitCard {
 
-    FRSDebitCardViewController *debitCardVC = [[FRSDebitCardViewController alloc] init];
-    UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-    
-    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-        UITabBarController *tab = (UITabBarController *)navController.viewControllers[0];
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-        
-        [navController setNavigationBarHidden:FALSE];
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
-        [navController pushViewController:debitCardVC animated:TRUE];
-        
-        [tab setSelectedIndex:0];
-    }
-    else {
-        UITabBarController *tab = (UITabBarController *)navController;
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-        
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
-        [navController pushViewController:debitCardVC animated:TRUE];
-        [navController setNavigationBarHidden:FALSE];
-
-    }
-}
-
--(void)segueToTaxInfo {
-
-    FRSIdentityViewController *taxVC = [[FRSIdentityViewController alloc] init];
-    UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-    
-    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-        UITabBarController *tab = (UITabBarController *)navController.viewControllers[0];
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-        
-        [navController setNavigationBarHidden:FALSE];
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
-        [navController pushViewController:taxVC animated:TRUE];
-        
-        [tab setSelectedIndex:0];
-    }
-    else {
-        UITabBarController *tab = (UITabBarController *)navController;
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-        
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
-        [navController pushViewController:taxVC animated:TRUE];
-    }
-}
-
--(void)segueToIDInfo {
-    
-    FRSIdentityViewController *taxVC = [[FRSIdentityViewController alloc] init];
-    UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-    
-    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-        UITabBarController *tab = (UITabBarController *)navController.viewControllers[0];
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-        
-        [navController setNavigationBarHidden:FALSE];
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
-        [navController pushViewController:taxVC animated:TRUE];
-        
-        [tab setSelectedIndex:0];
-    }
-    else {
-        UITabBarController *tab = (UITabBarController *)navController;
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-        
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
-        [navController pushViewController:taxVC animated:TRUE];
-        [navController setNavigationBarHidden:FALSE];
-    }
-}
 
 @end
