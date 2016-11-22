@@ -977,7 +977,7 @@
     
     self.expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
     self.expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    self.expirationLabel.textColor = [UIColor frescoMediumTextColor];
+    self.expirationLabel.textColor = [UIColor frescoDarkTextColor];
     
     self.postedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 14)];
     self.postedLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
@@ -991,7 +991,7 @@
     
     self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 68, self.view.frame.size.width, 20)];
     self.distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    self.distanceLabel.textColor = [UIColor frescoMediumTextColor];
+    self.distanceLabel.textColor = [UIColor frescoDarkTextColor];
     self.distanceLabel.text = @"";
     self.distanceLabel.userInteractionEnabled = YES;
     [self.assignmentStatsContainer addSubview:self.distanceLabel];
@@ -1008,7 +1008,7 @@
 
     UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 112, self.view.frame.size.width, 20)];
     warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    warningLabel.textColor = [UIColor frescoMediumTextColor];
+    warningLabel.textColor = [UIColor frescoDarkTextColor];
     warningLabel.text = @"Not all events are safe. Be careful!";
     [self.assignmentStatsContainer addSubview:warningLabel];
     
