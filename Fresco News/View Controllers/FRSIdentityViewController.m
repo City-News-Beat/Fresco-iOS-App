@@ -23,7 +23,6 @@
 @property (strong, nonnull) UITextField *cityField;
 @property (strong, nonnull) UITextField *stateField;
 @property (strong, nonnull) UITextField *zipField;
-@property (strong, nonnull) UITextField *socialField;
 @property (nonatomic, retain) UITextField *dateField;
 @property (strong, nonatomic) UIDatePicker *datePicker;
 @property (strong, nonatomic) UIButton *saveIDInfoButton;
@@ -93,7 +92,8 @@
 
 
 -(BOOL)isSSNArea:(NSString *)field {
-    if ([field isEqualToString:@"pid_last4"]) {
+    if ([field isEqualToString:@"ssn"]) {
+        
         return TRUE;
     }
     
@@ -439,26 +439,13 @@
 }
 
 -(void)configureSSNCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-
     switch (indexPath.row) {
         case 0:
-            [cell configureEditableCellWithDefaultText:@"Last 4 Digits of Social Security Number" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypePhonePad];
+            [cell configureEditableCellWithDefaultText:@"Social Security number" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypePhonePad];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             //                    _addressField = cell.textField;
             //                    _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-            _socialField = cell.textField;
-            [_socialField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-
-            if ([authenticatedUser valueForKey:@"ssn"]) {
-                _socialField.text = [authenticatedUser valueForKey:@"ssn"];
-                _socialField.enabled = FALSE;
-                _socialField.textColor = [UIColor frescoLightTextColor];
-            }
-            
-            cell.textField.delegate = self;
-            cell.textField.tag = 4;
-
+            //                    [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             break;
         case 1:
             [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
@@ -535,18 +522,17 @@
 -(void)textFieldDidChange:(UITextField *)textField{
     BOOL enableSaveButton = true;
     
-    NSArray *mandatoryTextFieldArray = [[NSArray alloc] initWithObjects:_firstNameField,_lastNameField, _addressField, _cityField, _stateField, _zipField, _dateField, _socialField, nil];
+    NSArray *mandatoryTextFieldArray = [[NSArray alloc] initWithObjects:_firstNameField,_lastNameField, _addressField, _cityField, _stateField, _zipField, _dateField, nil];
     for(UITextField *textField in mandatoryTextFieldArray){
-        if((textField.text.length == 0 || [textField.text isEqualToString:@""]) && textField.enabled){
+        if(textField.text.length == 0 || [textField.text isEqualToString:textField.placeholder]){
             enableSaveButton = false;
         }
     }
-    
     if(enableSaveButton){
         self.saveIDInfoButton.userInteractionEnabled = true;
         self.saveIDInfoButton.enabled = true;
         [self.saveIDInfoButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        self.saveIDInfoButton.userInteractionEnabled = TRUE;
+        self.saveIDInfoButton.userInteractionEnabled = NO;
     }else{
         self.saveIDInfoButton.userInteractionEnabled = false;
         self.saveIDInfoButton.enabled = false;
@@ -597,11 +583,6 @@
         [addressInfo setObject:_lastNameField.text forKey:@"last_name"];
 
     }
-    
-    if (_socialField.enabled && ![_socialField.text isEqualToString:@""]) {
-        [addressInfo setObject:_socialField.text forKey:@"pid_last4"];
-    }
-    
     
     self.savingInfo = true;
     [[FRSAPIClient sharedClient] updateIdentityWithDigestion:addressInfo completion:^(id responseObject, NSError *error) {

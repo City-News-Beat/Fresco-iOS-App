@@ -85,7 +85,7 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(NSString *)authenticationToken; // current token, assuming 1 user support
 -(NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken; // current social links, formatted for transmission to server
 -(FRSUser *)authenticatedUser;
--(NSMutableDictionary *)currentInstallation;
+-(NSDictionary *)currentInstallation;
 -(NSNumber *)fileSizeForURL:(NSURL *)url;
 // social
 -(void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion;

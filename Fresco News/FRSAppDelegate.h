@@ -26,9 +26,8 @@
 #import <Smooch/Smooch.h>
 #import <UserNotifications/UserNotifications.h>
 #import "FRSAPIClient.h"
-#import <UserNotifications/UserNotifications.h>
 
-@interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, UNUserNotificationCenterDelegate>
+@interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate>
 {
     NSTimer *notificationTimer;
 }
@@ -45,7 +44,7 @@
 -(BOOL)isFirstRun;
 -(void)updateTabBarToUser;
 -(void)clearKeychain;
--(void)restartUpload;
+
 -(void)saveUserFields:(NSDictionary *)responseObject;
 -(void)startNotificationTimer;
 -(void)stopNotificationTimer;

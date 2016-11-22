@@ -350,7 +350,7 @@
 
 
 // all info needed for "installation" field of registration/signin
--(NSMutableDictionary *)currentInstallation {
+-(NSDictionary *)currentInstallation {
     
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
