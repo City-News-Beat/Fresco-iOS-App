@@ -871,9 +871,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 total = 0;
             }
             
-            [topButton setTitle:[NSString stringWithFormat:@"%d MORE COMMENTS", total] forState:UIControlStateNormal];
-            [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-            [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+//            if (total <= 10) {
+                [topButton setTitle:[NSString stringWithFormat:@"Show all %d comments", total] forState:UIControlStateNormal];
+//            } else {
+//                //cc:imogen
+//            }
+            [topButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+            [topButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
+            topButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            topButton.contentEdgeInsets = UIEdgeInsetsMake(0, 16, 0, 0);
+
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:topButton];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
