@@ -87,6 +87,8 @@
 
 @property (strong, nonatomic) UILabel *postedLabel;
 
+@property (strong, nonatomic) UIButton *navigateButton;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -739,6 +741,8 @@
         }
     }
     self.distanceLabel.text = distanceString;
+    [self.distanceLabel sizeToFit];
+    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +56, 66, 24, 24);
 }
 
 -(void)setPostedDate {
@@ -885,7 +889,7 @@
     [self.assignmentBottomBar addSubview:bottomContainerLine];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectMake(self.view.frame.size.width -93-23 -24 -6 , 15, 100, 17);
+    button.frame = CGRectMake(self.view.frame.size.width -93-23, 15, 100, 17);
     [button setTitle:@"OPEN CAMERA" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
@@ -894,12 +898,12 @@
     [self.assignmentBottomBar addSubview:button];
 
     
-    UIButton *navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    navigateButton.frame = CGRectMake(self.view.frame.size.width -24-16, 10, 24, 24);
-    [navigateButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
-    [navigateButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
-    navigateButton.tintColor = [UIColor blackColor];
-    [self.assignmentBottomBar addSubview:navigateButton];
+//    UIButton *navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    navigateButton.frame = CGRectMake(self.view.frame.size.width -24-16, 10, 24, 24);
+//    [navigateButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
+//    [navigateButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
+//    navigateButton.tintColor = [UIColor blackColor];
+//    [self.assignmentBottomBar addSubview:navigateButton];
     
     self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, self.view.frame.size.width - 16, 22)];
     [self.assignmentOutletLabel setFont:[UIFont notaMediumWithSize:17]];
@@ -989,7 +993,18 @@
     self.distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.distanceLabel.textColor = [UIColor frescoMediumTextColor];
     self.distanceLabel.text = @"";
+    self.distanceLabel.userInteractionEnabled = YES;
     [self.assignmentStatsContainer addSubview:self.distanceLabel];
+    
+    
+    self.navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +56, 66, 24, 24);
+    self.navigateButton.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
+    self.navigateButton.alpha = 0.5;
+    [self.navigateButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
+    [self.navigateButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
+    self.navigateButton.tintColor = [UIColor blackColor];
+    [self.assignmentStatsContainer addSubview:self.navigateButton];
 
     UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 112, self.view.frame.size.width, 20)];
     warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
