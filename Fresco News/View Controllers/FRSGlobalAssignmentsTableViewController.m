@@ -55,9 +55,15 @@
 #pragma mark - UI Configuration
 
 -(void)configureNavigationBar {
+    
     [self configureBackButtonAnimated:YES];
-        
     self.title = @"GLOBAL ASSIGNMENTS";
+    
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    [self removeNavigationBarLine];
 }
 
 -(void)configureTableView {
