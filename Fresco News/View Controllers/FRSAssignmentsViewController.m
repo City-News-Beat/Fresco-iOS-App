@@ -960,7 +960,7 @@
     [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
     UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
-    clock.frame = CGRectMake(16, 8, 24, 24);
+    clock.frame = CGRectMake(16, 12, 24, 24);
     [self.assignmentStatsContainer addSubview:clock];
     
     UIImageView *mapAnnotation = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"annotation"]];
