@@ -16,7 +16,7 @@
 
 @end
 
-@interface FRSCommentCell : MGSwipeTableCell <MGSwipeTableCellDelegate>
+@interface FRSCommentCell : MGSwipeTableCell
 @property (nonatomic, retain) IBOutlet UIImageView *profilePicture;
 @property (nonatomic, retain) IBOutlet UITextView *commentTextView;
 

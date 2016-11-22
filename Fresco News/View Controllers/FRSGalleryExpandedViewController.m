@@ -9,7 +9,6 @@
 #import "FRSGalleryExpandedViewController.h"
 #import "UITextView+Resize.h"
 #import "FRSArticlesTableViewCell.h"
-#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 #import "FRSGallery.h"
 #import "FRSArticle.h"
@@ -67,7 +66,6 @@
 
 @property BOOL didDisplayReport;
 @property BOOL didDisplayBlock;
-@property BOOL didPrepareForReply;
 @property BOOL didBlockUser;
 @property BOOL isReportingComment;
 @property BOOL isBlockingFromComment;
@@ -75,8 +73,6 @@
 
 @property (strong, nonatomic) NSDictionary *currentCommentUserDictionary;
 
-
-@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
 @end
 
@@ -127,14 +123,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self configureUI];
     [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     self.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
-<<<<<<< HEAD
-=======
-    
-    if ([self.gallery.comments integerValue] >= 1) {
-        [self configureCommentLabel];
-        [self configureSpinner];
-    }
->>>>>>> origin/3.0-omar
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -173,7 +161,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [_comments addObject:commentObject];
         }
         
-        if ([_comments count] <= 10) {
+        if ([_comments count] < 10) {
             showsMoreButton = FALSE;
         }
         else {
@@ -184,7 +172,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
-<<<<<<< HEAD
 -(void)loadGallery:(FRSGallery *)gallery {
     self.gallery = gallery;
     
@@ -199,23 +186,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.galleryView loadGallery:gallery];
     [self fetchCommentsWithID:gallery.uid];
     
-=======
--(void)configureSpinner {
-    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake(82, 13, 20, 20)];
-    self.loadingView.tintColor = [UIColor frescoOrangeColor];
-    [self.loadingView setPullProgress:90];
-    [self.loadingView startAnimating];
-    [self.commentLabel addSubview:self.loadingView];
->>>>>>> origin/3.0-omar
 }
 
 -(void)fetchCommentsWithID:(NSString  *)galleryID {
-    
     [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID completion:^(id responseObject, NSError *error) {
-        
-        [self.loadingView removeFromSuperview];
-        self.loadingView.alpha = 0;
-        
         if (error || !responseObject) {
             [self commentError:error];
             return;
@@ -228,7 +202,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [_comments addObject:commentObject];
         }
         
-        if ([self.gallery.comments integerValue] <= 10) {
+        if ([_comments count] < 10) {
             showsMoreButton = FALSE;
         }
         else {
@@ -280,8 +254,39 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             showsMoreButton = TRUE;
         }
         
-        [self adjustHeight];
-
+        float height = 0;
+        NSInteger index = 0;
+        
+        for (FRSComment *comment in _comments) {
+            
+            CGRect labelRect = [comment.comment
+                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, INT_MAX)
+                                options:NSStringDrawingUsesLineFragmentOrigin
+                                attributes:@{
+                                             NSFontAttributeName : [UIFont systemFontOfSize:15]
+                                             }
+                                context:nil];
+            
+            float commentSize = labelRect.size.height;
+            
+            if (commentSize < 56) {
+                height += 56;
+            }
+            else {
+                height += commentSize;
+            }
+            
+            
+            index++;
+        }
+        
+        height += 55;
+        
+        self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
+        [self adjustScrollViewContentSize];
+        [self.commentTableView reloadData];
+        self.commentTableView.hidden = self.comments.count == 0;
+        self.commentLabel.hidden = self.comments.count == 0;
     }];
 }
 
@@ -506,8 +511,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, TOP_NAV_BAR_HEIGHT, self.view.frame.size.width, 500) gallery:self.gallery delegate:self];
     [self.scrollView addSubview:self.galleryView];
     
-    NSLog(@"%f", self.galleryView.frame.size.height);
-    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard:)];
@@ -594,7 +597,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     for (FRSComment *comment in _comments) {
         
         CGRect labelRect = [comment.comment
-                            boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 78, INT_MAX) //78 is the padding on the left and right sides
+                            boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, INT_MAX)
                             options:NSStringDrawingUsesLineFragmentOrigin
                             attributes:@{
                                          NSFontAttributeName : [UIFont systemFontOfSize:15]
@@ -603,71 +606,22 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         float commentSize = labelRect.size.height;
         
-        commentSize += 36; //36 is default padding
-        
         if (commentSize < 56) {
             height += 56;
         }
         else {
-            height += commentSize += 20;
+            height += commentSize;
         }
-
-        NSLog(@"STRING SIZE  : %f", labelRect.size.height);
-        NSLog(@"COMMENT SIZE : %f", commentSize);
-        NSLog(@"HEIGHT       : %f", height);
         
         index++;
     }
     
+    height += 55;
+    
     CGFloat labelOriginY = self.galleryView.frame.origin.y + self.galleryView.frame.size.height;
     
     if (self.orderedArticles.count > 0) {
         labelOriginY += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
-    }
-    
-<<<<<<< HEAD
-    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
-=======
-    [self configureCommentLabel];
-    
-    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
-//    self.commentTableView.clipsToBounds = NO;
->>>>>>> origin/3.0-omar
-    self.commentTableView.delegate = self;
-    self.commentTableView.dataSource = self;
-    self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.commentTableView.backgroundColor = [UIColor whiteColor];
-    self.commentTableView.scrollEnabled = NO;
-    [self.scrollView addSubview:self.commentTableView];
-    self.commentTableView.backgroundColor = [UIColor clearColor];
-    self.commentTableView.backgroundView.backgroundColor = [UIColor clearColor];
-    [self.commentTableView registerNib:[UINib nibWithNibName:@"FRSCommentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:reusableCommentIdentifier];
-    self.commentTableView.hidden = self.comments.count == 0;
-    self.commentLabel.hidden = self.comments.count == 0;
-    
-<<<<<<< HEAD
-=======
-    [self.commentTableView setSeparatorColor:[UIColor clearColor]];
-    
->>>>>>> origin/3.0-omar
-    if (self.comments.count > 0) {
-        [self.commentTableView addSubview:[UIView lineAtPoint:CGPointMake(0, 0)]];
-    }
-    
-    [self adjustScrollViewContentSize];
-    [self.actionBar actionButtonTitleNeedsUpdate];
-}
-
--(void)configureCommentLabel {
-
-    CGFloat labelOriginY = self.galleryView.frame.origin.y + self.galleryView.frame.size.height;
-    
-    if (self.orderedArticles.count > 0) {
-        labelOriginY += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
-    }
-    
-    if (self.commentLabel) {
-        return;
     }
     self.commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelOriginY, self.view.frame.size.width, 48)];
     self.commentLabel.text = @"COMMENTS";
@@ -675,6 +629,27 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.commentLabel.font = [UIFont notaBoldWithSize:15];
     [self.commentLabel setOriginWithPoint:CGPointMake(16, labelOriginY + 6)];
     [self.scrollView addSubview:self.commentLabel];
+    
+    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
+    self.commentTableView.delegate = self;
+    self.commentTableView.dataSource = self;
+    self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.commentTableView.backgroundColor = [UIColor whiteColor];
+    self.commentTableView.scrollEnabled = NO;
+    [self.scrollView addSubview:self.commentTableView];
+    self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.commentTableView.backgroundColor = [UIColor clearColor];
+    self.commentTableView.backgroundView.backgroundColor = [UIColor clearColor];
+    [self.commentTableView registerNib:[UINib nibWithNibName:@"FRSCommentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:reusableCommentIdentifier];
+    self.commentTableView.hidden = self.comments.count == 0;
+    self.commentLabel.hidden = self.comments.count == 0;
+    
+    if (self.comments.count > 0) {
+        [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.commentTableView.frame.origin.y - 0.5)]];
+    }
+    
+    [self adjustScrollViewContentSize];
+    [self.actionBar actionButtonTitleNeedsUpdate];
 }
 
 -(void)configureActionBar{
@@ -716,15 +691,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)adjustScrollViewContentSize{
-    
-    CGFloat height = self.galleryView.layer.frame.size.height + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING +50;
+    CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + GALLERY_BOTTOM_PADDING +20;
     if (self.comments.count > 0) {
         height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height +20;
     }
     if (self.orderedArticles.count > 0) {
         height += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height +20;
     }
-    
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, height);
 }
 
@@ -789,10 +762,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - UIScrollView Delegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if (scrollView == self.scrollView) {
-        [super scrollViewDidScroll:scrollView];
-        [self.actionBar actionButtonTitleNeedsUpdate];
-    }
+    [super scrollViewDidScroll:scrollView];
+    [self.actionBar actionButtonTitleNeedsUpdate];
 }
 
 #pragma mark - Articles Table View DataSource Delegate
@@ -812,12 +783,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             return 0;
         }
         
-        if (showsMoreButton) {
-            return self.comments.count + 1;
-
-        } else {
-            return self.comments.count;
-        }
+        return (showsMoreButton) ? self.comments.count + 1 : self.comments.count;
     }
     
     return 0;
@@ -837,34 +803,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         if (indexPath.row < self.comments.count + showsMoreButton) {
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
-<<<<<<< HEAD
             NSInteger height = cell.commentTextView.frame.size.height;
-=======
->>>>>>> origin/3.0-omar
             
-            CGFloat height = 0;
+            NSLog(@"CELL: %@", cell);
             
-            CGRect labelRect = [cell.commentTextView.text
-                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 78, INT_MAX) //78 is the padding on the left and right sides
-                                options:NSStringDrawingUsesLineFragmentOrigin
-                                attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15]
-                                             }
-                                context:nil];
             
-            float commentSize = labelRect.size.height;
-            
-            commentSize += 36; //36 is default padding
-            
-            if (commentSize < 56) {
-                height += 56;
+            if (height < 56) {
+                return 56;
             }
-            else {
-                height = commentSize +20;
-            }
-            
-            NSLog(@"STRING SIZE  : %f", labelRect.size.height);
-            NSLog(@"COMMENT SIZE : %f", commentSize);
-            NSLog(@"HEIGHT       : %f", height);
             
             return height;
         }
@@ -889,10 +835,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"readAll"];
             topButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 45)];
             int total = (int)self.totalCommentCount - (int)_comments.count;
-            if (total < 0 || total == (int)nil) {
+            if (total < 0) {
                 total = 0;
             }
-            
             [topButton setTitle:[NSString stringWithFormat:@"%d MORE COMMENTS", total] forState:UIControlStateNormal];
             [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
             [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
@@ -900,7 +845,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [cell addSubview:topButton];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = [UIColor frescoBackgroundColorLight];
-
             
             if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
                 [cell setSeparatorInset:UIEdgeInsetsZero];
@@ -921,7 +865,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 FRSComment *comment = _comments[indexPath.row-showsMoreButton];
                 cell.cellDelegate = self;
                 [cell configureCell:comment delegate:self];
-//                [cell.commentTextView sizeToFit];
+                [cell.textLabel sizeToFit];
                 return cell;
             }
         }
@@ -929,15 +873,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     return Nil;
 }
-
-//-(void)swipeTableCell:(FRSCommentCell *)cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive {
-//    // The textView goes back to its original size (set in the nib) if we don't size to fit on the swipe action.
-//    [cell.commentTextView sizeToFit];
-//}
-//
-//-(void)swipeTableCellWillEndSwiping:(FRSCommentCell *)cell {
-//    [cell.commentTextView sizeToFit];
-//}
 
 -(void)loadMoreComments {
     FRSComment *comment = self.comments[0];
@@ -959,54 +894,40 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         if (count < 10) {
             showsMoreButton = FALSE;
-        } else {
-            showsMoreButton = TRUE;
         }
         
-        if (([self.commentTableView visibleCells].count -1) == [self.gallery.comments integerValue] -10) {
-            showsMoreButton = FALSE;
+        float height = 0;
+        NSInteger index = 0;
+        
+        for (FRSComment *comment in _comments) {
+            
+            CGRect labelRect = [comment.comment
+                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, INT_MAX)
+                                options:NSStringDrawingUsesLineFragmentOrigin
+                                attributes:@{
+                                             NSFontAttributeName : [UIFont systemFontOfSize:15]
+                                             }
+                                context:nil];
+            
+            float commentSize = labelRect.size.height;
+            
+            if (commentSize < 56) {
+                height += 56;
+            }
+            else {
+                height += commentSize;
+            }
+            index++;
         }
-
-        [self adjustHeight];
-    }];
-}
-
--(void)adjustHeight {
-    float height = 0;
-    NSInteger index = 0;
-    
-    for (FRSComment *comment in _comments) {
         
-        CGRect labelRect = [comment.comment
-                            boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width -78, INT_MAX) //78 is left and right padding
-                            options:NSStringDrawingUsesLineFragmentOrigin
-                            attributes:@{
-                                         NSFontAttributeName : [UIFont systemFontOfSize:15]
-                                         }
-                            context:nil];
-        
-<<<<<<< HEAD
         height += 55;
-=======
-        float commentSize = labelRect.size.height;
->>>>>>> origin/3.0-omar
         
-        if (commentSize < 56) {
-            height += 56;
-        }
-        else {
-            height += commentSize;
-        }
-        index++;
-    }
-    
-    height += 56;
-    
-    self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
-    [self adjustScrollViewContentSize];
-    [self.commentTableView reloadData];
-    self.commentTableView.hidden = self.comments.count == 0;
-    self.commentLabel.hidden = self.comments.count == 0;
+        self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
+        [self adjustScrollViewContentSize];
+        [self.commentTableView reloadData];
+        self.commentTableView.hidden = self.comments.count == 0;
+        self.commentLabel.hidden = self.comments.count == 0;
+    }];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
@@ -1048,22 +969,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             }
         }
     }
-<<<<<<< HEAD
-=======
-    
-    if (tableView == _commentTableView) {
-        
-        if (self.didPrepareForReply) {
-            self.didPrepareForReply = NO;
-            [self dismissKeyboardFromView];
-        } else {
-            self.didPrepareForReply = YES;
-            [self contentActionBarDidSelectActionButton:self.actionBar];
-            FRSComment *currentComment = [self.comments objectAtIndex:indexPath.row];
-            commentField.text = [NSString stringWithFormat:@"@%@ ", [[currentComment userDictionary] objectForKey:@"username"]];
-        }
-    }
->>>>>>> origin/3.0-omar
 }
 
 #pragma mark - Comments View Delegate
@@ -1119,7 +1024,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [commentField addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventEditingDidEndOnExit];
             commentField.delegate = self;
         }
-        commentField.text = @"";
+        
         [commentField becomeFirstResponder];
     }
 }
@@ -1131,27 +1036,27 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.galleryID completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", responseObject, error);
-        if (error) {
-            NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
-            self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed.\nPlease try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-            [self.errorAlertView show];
-        }
-        else {
-            
-            self.totalCommentCount++;
-            [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
-            //                [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
-            
-            self.totalCommentCount++;
-            self.commentTableView.hidden = NO;
-            [self reload];
-            //                CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
-            //                [self.scrollView setContentOffset:bottomOffset animated:YES];
-            
-            commentField.text = @"";
-            [self dismissKeyboard:Nil];
-            
-        }
+        [UIView animateWithDuration:.15 animations:^{
+            if (error) {
+                NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
+                self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"COMMENT FAILED" message:message actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                [self.errorAlertView show];
+            }
+            else {
+                self.totalCommentCount++;
+                [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
+                [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+
+                self.totalCommentCount++;
+                self.commentTableView.hidden = NO;
+                [self reload];
+                CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+                [self.scrollView setContentOffset:bottomOffset animated:YES];
+                commentField.text = @"";
+                [self dismissKeyboard:Nil];
+            }
+        } completion:^(BOOL finished) {
+        }];
     }];
 }
 
@@ -1343,7 +1248,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - FRSCommentCellDelegate
 
 - (void)didPressProfilePictureWithUserId:(NSString *)userId {
-    
     FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUserID:userId];
     [self.navigationController pushViewController:controller animated:TRUE];
 }

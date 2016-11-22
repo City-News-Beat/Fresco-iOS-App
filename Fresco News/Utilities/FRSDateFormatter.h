@@ -13,5 +13,7 @@
 +(NSDate*)dateFromEpochTime:(id)epochTime milliseconds:(BOOL)milliseconds;
 +(NSString *)dateStringGalleryFormatFromDate:(NSDate *)date;
 +(NSString *)timestampStringFromDate:(NSDate *)date;
-+(NSString *)relativeTimeFromDate:(NSDate *)compareDate;
+
+//temp
++(NSString *)dateStringFromDate:(NSDate *)date;
 @end

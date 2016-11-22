@@ -361,24 +361,14 @@
             if (self.shouldShowNotificationsOnLoad) {
                 [self showNotificationsNotAnimated];
             }
-            
-//            [self reloadLabelsForUser];
+
             [self showTabBarAnimated:YES];
             self.tableView.bounces = false;
-            
-            [self configureWithUser:user];
         }];
     }
     
     return self;
 }
-
-//-(void)reloadLabelsForUser {
-//    self.usernameLabel.text = @"hello";
-//    self.locationLabel.text = @"hello";
-//    self.bioTextView.text   = @"hello";
-//}
-
 -(void)setupUI {
     
     self.presentingUser = YES;
@@ -1628,9 +1618,6 @@
             self.profileIV.image = Nil;
         }
         
-        self.usernameLabel.text = user.username;
-        [self.usernameLabel sizeToFit];
-        
         self.bioTextView.text = user.bio;
         
         [self.bioTextView frs_setTextWithResize:user.bio];
@@ -1654,14 +1641,13 @@
             [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
         }
 
+
         self.nameLabel.text = user.firstName;
         [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followedCount"]] forState:UIControlStateNormal];
         self.locationLabel.text = [user valueForKey:@"location"];
         self.usernameLabel.text = user.username;
         titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
-//        titleLabel.backgroundColor = [UIColor redColor];
-//        [titleLabel sizeToFit];
-//        titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, titleLabel.frame.origin.y, titleLabel.frame.size.width, self.navigationController.navigationBar.frame.size.height);
+        
         if ([user.username isEqualToString:@""] || !user.username || [user.username isEqual:[NSNull null]]) {
             if (![user.firstName isEqualToString:@""]) {
                 titleLabel.adjustsFontSizeToFitWidth = YES;

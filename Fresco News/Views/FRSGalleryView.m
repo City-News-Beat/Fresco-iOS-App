@@ -45,7 +45,6 @@
         self.gallery = gallery;
         [self updateSocial];
         [self checkOwner];
-        [self updateMetaFields];
         return;
     }
     
@@ -143,58 +142,7 @@
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
     
-<<<<<<< HEAD
     [self checkOwner];
-=======
-    self.hasLocation = YES;
-    self.hasTime     = YES;
-    self.hasName     = YES;
-
-    [self updateMetaFields];
-    
-    [self checkOwner];
-}
-
-
--(void)updateMetaFields {
-    
-    [self updateScrollView];
-    
-    if ([self.locationLabel.text isEqualToString:@""] || [self.locationLabel.text isEqual:[NSNull null]]) {
-        self.hasLocation = NO;
-    }
-    if ([self.timeLabel.text isEqualToString:@""] || [self.timeLabel.text isEqual:[NSNull null]]) {
-        self.hasTime = NO;
-    }
-    if ([self.nameLabel.text isEqualToString:@""] || [self.nameLabel.text isEqual:[NSNull null]]) {
-        self.hasName = NO;
-    }
-    
-    
-    
-    
-    
-    if (!self.hasLocation && self.hasTime && self.hasName) {
-        self.locationLabel.alpha = 0;
-        self.locationIV.alpha = 0;
-        self.profileIV.transform = CGAffineTransformMakeTranslation(0, 20);
-        self.nameLabel.transform = CGAffineTransformMakeTranslation(0, 20);
-    } else if (!self.hasLocation && !self.hasTime && self.hasName) {
-        self.locationLabel.alpha = 0;
-        self.locationIV.alpha = 0;
-        self.timeLabel.alpha = 0;
-        self.clockIV.alpha = 0;
-        self.profileIV.transform = CGAffineTransformMakeTranslation(0, -20);
-        self.nameLabel.transform = CGAffineTransformMakeTranslation(0, -20);
-    } else if (self.hasLocation && !self.hasTime && self.hasName) {
-        self.timeLabel.alpha = 0;
-        self.clockIV.alpha = 0;
-        self.profileIV.transform = CGAffineTransformMakeTranslation(0, -20);
-        self.nameLabel.transform = CGAffineTransformMakeTranslation(0, -20);
-        self.locationIV.transform = CGAffineTransformMakeTranslation(0, -20);
-        self.locationLabel.transform = CGAffineTransformMakeTranslation(0, -20);
-    }
->>>>>>> origin/3.0-omar
 }
 
 -(void)checkOwner {
@@ -1002,21 +950,7 @@
 
 #pragma mark - Action Bar Delegate
 -(NSString *)titleForActionButton{
-<<<<<<< HEAD
     return @"READ MORE";
-=======
-    int comments = [[self.gallery valueForKey:@"comments"] intValue];
-    
-    if (comments == 1) {
-        return [NSString stringWithFormat:@"%d COMMENT", comments];
-    } else if (comments == 0) {
-        return @"READ MORE";
-    } else if (comments >= 600) {
-        return [NSString stringWithFormat:@"HELLA COMMENTS"];
-    }
-    
-    return [NSString stringWithFormat:@"%d COMMENTS", comments];
->>>>>>> origin/3.0-omar
 }
 
 -(UIColor *)colorForActionButton{
@@ -1171,7 +1105,6 @@
         self.muteImageView.alpha = 0;
     }
 }
-
 
 -(void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
     NSString *adjustedURL = url;
