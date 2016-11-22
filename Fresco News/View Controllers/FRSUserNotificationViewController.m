@@ -585,10 +585,14 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     /* ASSIGNMENT */
     else if ([currentKey isEqualToString:newAssignmentNotification]) {
-        //check for global
-        NSLog(@"%@", [self.feed objectAtIndex:indexPath.row]);
-        NSString *assignmentID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"assignment_id"];
-        [self segueToAssignmentWithID:assignmentID];
+        
+        if ([[[push valueForKey:@"meta"] valueForKey:@"is_global"] boolValue]) {
+            NSString *assignmentID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"assignment_id"];
+            [self segueToGlobalAssignmentWithID:assignmentID];
+        } else {
+            NSString *assignmentID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"assignment_id"];
+            [self segueToAssignmentWithID:assignmentID];
+        }
     }
     
     /* PAYMENT */

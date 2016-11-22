@@ -77,13 +77,6 @@
         self.timestampLabel.transform = CGAffineTransformMakeTranslation(-8, 0);
     }
     
-
-    
-    
-    
-    
-    
-    
     
 //    Calling size to fit here scales the textview down so the user can tap on the comment cell
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

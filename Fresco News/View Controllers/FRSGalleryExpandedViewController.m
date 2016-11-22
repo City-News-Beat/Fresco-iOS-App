@@ -613,7 +613,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self configureCommentLabel];
     
     self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
-//    self.commentTableView.clipsToBounds = NO;
+    self.commentTableView.clipsToBounds = NO;
     self.commentTableView.delegate = self;
     self.commentTableView.dataSource = self;
     self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
