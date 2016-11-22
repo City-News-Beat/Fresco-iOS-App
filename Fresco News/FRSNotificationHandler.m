@@ -24,9 +24,6 @@
     NSString *instruction = push[@"type"];
     NSLog(@"INSTRUCTION: %@", push);
     
-    NSArray *galleryNotifications = @[purchasedContentNotification, likedNotification, repostedNotification, userNewsGalleryNotification, galleryApprovedNotification, commentedNotification, mentionCommentNotification];
-    NSArray *userNotifications = @[followedNotification];
-    
     // payment
     if ([instruction isEqualToString:newAssignmentNotification]) {
         NSString *assignment = [[push objectForKey:@"meta"] objectForKey:@"assignment_id"];
