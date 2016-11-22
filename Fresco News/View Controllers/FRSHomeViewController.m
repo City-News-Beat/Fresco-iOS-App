@@ -654,6 +654,7 @@
         cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.navigationController = self.navigationController;
+        cell.shouldRefreshActionBar = YES;
     }
     
     cell.gallery = self.dataSource[indexPath.row];

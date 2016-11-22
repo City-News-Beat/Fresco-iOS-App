@@ -44,6 +44,7 @@
 
 -(void)loadGallery:(FRSGallery *)gallery {
     
+    
     if ([self.gallery.uid isEqualToString:gallery.uid]) {
         self.gallery = gallery;
         [self updateSocial];
@@ -51,7 +52,6 @@
         [self updateMetaFields];
         return;
     }
-    
     
     self.gallery = gallery;
     

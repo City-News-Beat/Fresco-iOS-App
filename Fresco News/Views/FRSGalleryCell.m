@@ -42,9 +42,18 @@
         
         [self.galleryView loadGallery:self.gallery];
         self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
+        
+        if (self.shouldRefreshActionBar) {
+            [self.galleryView.actionBar actionButtonTitleNeedsUpdate];
+        }
+        
         return;
     }
 
+    if (self.shouldRefreshActionBar) {
+        [self.galleryView.actionBar actionButtonTitleNeedsUpdate];
+    }
+    
     self.clipsToBounds = YES;
     
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
