@@ -1261,7 +1261,7 @@
     caret.frame = CGRectMake(self.view.frame.size.width -24 -6, 10, 24, 24);
     [self.globalAssignmentsBottomContainer addSubview:caret];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(globalAssignmentsSegue)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(globalAssignmentsAnimatedSegue)];
     [self.globalAssignmentsBottomContainer addGestureRecognizer:tap];
     
 }
@@ -1284,6 +1284,14 @@
 }
 
 -(void)globalAssignmentsSegue {
+    FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
+    tableViewController.assignments = self.globalAssignmentsArray;
+    [self.navigationController pushViewController:tableViewController animated:NO];
+}
+
+//Redundant, but we need two because the deep link is not an animated transition
+//and we can't pass in a BOOL value to a selector
+-(void)globalAssignmentsAnimatedSegue {
     FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
     tableViewController.assignments = self.globalAssignmentsArray;
     [self.navigationController pushViewController:tableViewController animated:YES];

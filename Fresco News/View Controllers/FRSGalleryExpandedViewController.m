@@ -78,6 +78,8 @@
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
 @end
 
 @implementation FRSGalleryExpandedViewController
@@ -128,12 +130,18 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     self.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/3.0-omar
     
     if ([self.gallery.comments integerValue] >= 1) {
         [self configureCommentLabel];
         [self configureSpinner];
     }
+<<<<<<< HEAD
+>>>>>>> origin/3.0-omar
+=======
 >>>>>>> origin/3.0-omar
 }
 
@@ -185,6 +193,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 -(void)loadGallery:(FRSGallery *)gallery {
     self.gallery = gallery;
     
@@ -200,12 +209,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self fetchCommentsWithID:gallery.uid];
     
 =======
+=======
+>>>>>>> origin/3.0-omar
 -(void)configureSpinner {
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake(82, 13, 20, 20)];
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
     [self.commentLabel addSubview:self.loadingView];
+<<<<<<< HEAD
+>>>>>>> origin/3.0-omar
+=======
 >>>>>>> origin/3.0-omar
 }
 
@@ -626,12 +640,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
 =======
     [self configureCommentLabel];
     
     self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
 //    self.commentTableView.clipsToBounds = NO;
+>>>>>>> origin/3.0-omar
+=======
+    [self configureCommentLabel];
+    
+    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
+    self.commentTableView.clipsToBounds = NO;
 >>>>>>> origin/3.0-omar
     self.commentTableView.delegate = self;
     self.commentTableView.dataSource = self;
@@ -646,7 +667,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.commentLabel.hidden = self.comments.count == 0;
     
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/3.0-omar
     [self.commentTableView setSeparatorColor:[UIColor clearColor]];
     
 >>>>>>> origin/3.0-omar
@@ -838,6 +862,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         if (indexPath.row < self.comments.count + showsMoreButton) {
             FRSCommentCell *cell = (FRSCommentCell *)[self tableView:_commentTableView cellForRowAtIndexPath:indexPath];
 <<<<<<< HEAD
+<<<<<<< HEAD
             NSInteger height = cell.commentTextView.frame.size.height;
 =======
 >>>>>>> origin/3.0-omar
@@ -857,10 +882,35 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             
             if (commentSize < 56) {
                 height += 56;
+=======
+            
+            CGFloat height = 0;
+            
+            CGRect labelRect = [cell.commentTextView.text
+                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 78, INT_MAX) //78 is the padding on the left and right sides
+                                options:NSStringDrawingUsesLineFragmentOrigin
+                                attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15]
+                                             }
+                                context:nil];
+            
+            float commentSize = labelRect.size.height;
+            
+            commentSize += 36; //36 is default padding
+            
+            if (commentSize < 56) {
+                height += 56;
+            }
+            else {
+                height = commentSize +20;
+>>>>>>> origin/3.0-omar
             }
             else {
                 height = commentSize +20;
             }
+            
+            NSLog(@"STRING SIZE  : %f", labelRect.size.height);
+            NSLog(@"COMMENT SIZE : %f", commentSize);
+            NSLog(@"HEIGHT       : %f", height);
             
             NSLog(@"STRING SIZE  : %f", labelRect.size.height);
             NSLog(@"COMMENT SIZE : %f", commentSize);
@@ -893,9 +943,22 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 total = 0;
             }
             
+<<<<<<< HEAD
             [topButton setTitle:[NSString stringWithFormat:@"%d MORE COMMENTS", total] forState:UIControlStateNormal];
             [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
             [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+=======
+//            if (total <= 10) {
+                [topButton setTitle:[NSString stringWithFormat:@"Show all %d comments", total] forState:UIControlStateNormal];
+//            } else {
+//                //cc:imogen
+//            }
+            [topButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+            [topButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
+            topButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            topButton.contentEdgeInsets = UIEdgeInsetsMake(0, 16, 0, 0);
+
+>>>>>>> origin/3.0-omar
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:topButton];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -986,7 +1049,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                             context:nil];
         
 <<<<<<< HEAD
+<<<<<<< HEAD
         height += 55;
+=======
+        float commentSize = labelRect.size.height;
+>>>>>>> origin/3.0-omar
 =======
         float commentSize = labelRect.size.height;
 >>>>>>> origin/3.0-omar

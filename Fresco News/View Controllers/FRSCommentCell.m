@@ -66,22 +66,52 @@
     self.timestampLabel.text = [FRSDateFormatter relativeTimeFromDate:date];
     
     
+    BOOL userHasName = NO;
+    BOOL userHasUsername = NO;
+    
+    NSDate *date = [comment updatedAt];
+    self.timestampLabel.text = [FRSDateFormatter relativeTimeFromDate:date];
+    
+    
+>>>>>>> origin/3.0-omar
     
     if (![[comment userDictionary][@"full_name"] isEqual:[NSNull null]] && ![[comment userDictionary][@"full_name"] isEqualToString:@""]) {
+        userHasName = YES;
+    }
+    
+    if (![[comment userDictionary][@"username"] isEqual:[NSNull null]] && ![[comment userDictionary][@"username"] isEqualToString:@""]) {
+        userHasUsername = YES;
+    }
+    
+    
+    if (userHasName && userHasUsername) {
         self.nameLabel.text = [comment userDictionary][@"full_name"];
-    } else if (![[comment userDictionary][@"username"] isEqual:[NSNull null]] && ![[comment userDictionary][@"username"] isEqualToString:@""]) {
+        self.timestampLabel.text = [NSString stringWithFormat:@"@%@ • %@", [comment userDictionary][@"username"], [FRSDateFormatter relativeTimeFromDate:date]];
+    } else if (!userHasName && userHasUsername) {
         self.nameLabel.text = [NSString stringWithFormat:@"@%@", [comment userDictionary][@"username"]];
-    } else {
-        self.nameLabel.text = @"@username";
+        self.timestampLabel.text = [FRSDateFormatter relativeTimeFromDate:date];
+    } else if (userHasName && !userHasUsername) {
+        self.nameLabel.text = [NSString stringWithFormat:@"@%@", [comment userDictionary][@"first_name"]];
+        self.timestampLabel.text = [FRSDateFormatter relativeTimeFromDate:date];
+    } else if (!userHasUsername && !userHasUsername) {
         self.timestampLabel.transform = CGAffineTransformMakeTranslation(-8, 0);
     }
     
+<<<<<<< HEAD
 
 //    Calling size to fit here scales the textview down so the user can tap on the comment cell
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        [self.commentTextView sizeToFit];
 //    });
     
+=======
+    
+//    Calling size to fit here scales the textview down so the user can tap on the comment cell
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.commentTextView sizeToFit];
+//    });
+    
+>>>>>>> origin/3.0-omar
 
     if ([self.commentTextView.text containsString:@"@"] || [self.commentTextView.text containsString:@"#"]) {
         self.commentTextView.userInteractionEnabled = YES;

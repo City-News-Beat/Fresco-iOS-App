@@ -525,7 +525,121 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSDictionary *push = [self.feed objectAtIndex:indexPath.row];
+<<<<<<< HEAD
     [FRSNotificationHandler handleNotification:push];
+=======
+    if (notificationID && ![notificationID isEqual:[NSNull null]]) {
+        [self markAsRead:notificationID];
+    }
+    
+    /* NEWS */
+    if ([currentKey isEqualToString:photoOfDayNotification]) {
+
+    } else if ([currentKey isEqualToString:todayInNewsNotification]) {
+        
+        NSArray *galleryIDs = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_ids"];
+        
+        if (galleryIDs) {
+            [self segueToTodayInNews:galleryIDs];
+        }
+        
+    } else if ([currentKey isEqualToString:userNewsGalleryNotification]) {
+        [self segueToGallery:[self.feed objectAtIndex:indexPath.row]];
+        
+    } else if ([currentKey isEqualToString:userNewsStoryNotification]) {
+        [self segueToStory:[self.payload objectForKey:userNewsStoryNotification]];
+
+    } else if ([currentKey isEqualToString:userNewsCustomNotification]) {
+        // Do nothing (for now)
+        
+    /* SOCIAL */
+    } else if ([currentKey isEqualToString:followedNotification]) {
+        
+        NSString *userID = [[[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"user_ids"] firstObject];
+        [self segueToUser:userID];
+        
+    } else if ([currentKey isEqualToString:likedNotification]) {
+        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
+
+        [self segueToGallery:gallery];
+        
+    } else if ([currentKey isEqualToString:repostedNotification]) {
+        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
+        
+        [self segueToGallery:gallery];
+    } else if ([currentKey isEqualToString:commentedNotification] || [currentKey isEqualToString:mentionCommentNotification]) {
+        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
+        
+        [self segueToGallery:gallery];
+    } else if ([currentKey isEqualToString:mentionCommentNotification]) {
+        NSLog(@"MENTION COMMENT");
+        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
+        
+        NSString *comment = [[[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"comment_ids"] firstObject];
+        
+        [self segueToComment:comment inGallery:gallery];
+      }
+    else if ([currentKey isEqualToString:mentionGalleryNotification]) {
+      NSLog(@"MENTION GALLERY");
+        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
+        
+        NSString *comment = [[[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"comment_ids"] firstObject];
+        
+        [self segueToComment:comment inGallery:gallery];
+      }
+    else if ([currentKey isEqualToString:galleryApprovedNotification]) {
+        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
+
+        NSLog(@"APPROVED: %@", gallery);
+        [self segueToGallery:gallery];
+    }
+    
+    /* ASSIGNMENT */
+    else if ([currentKey isEqualToString:newAssignmentNotification]) {
+        
+        if ([[[push valueForKey:@"meta"] valueForKey:@"is_global"] boolValue]) {
+            NSString *assignmentID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"assignment_id"];
+            [self segueToGlobalAssignmentWithID:assignmentID];
+        } else {
+            NSString *assignmentID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"assignment_id"];
+            [self segueToAssignmentWithID:assignmentID];
+        }
+    }
+    
+    /* PAYMENT */
+    else if ([currentKey isEqualToString:purchasedContentNotification]) {
+        if ([[[push valueForKey:@"meta"] valueForKey:@"has_payment"] boolValue]) {
+            NSString *postID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"post_id"];
+            NSString *galleryID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
+            [self segueToPost:postID inGallery:galleryID];
+        }
+        else {
+            [self segueToDebitCard];
+        }
+
+        
+    } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
+        [self segueToDebitCard];
+        
+    } else if ([currentKey isEqualToString:paymentSentNotification]) {
+        
+    } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
+        [self segueToDebitCard];
+
+    } else if ([currentKey isEqualToString:taxInfoRequiredNotification]) {
+        [self segueToTaxInfo];
+        
+    } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
+        // do nothing
+        [self segueToTaxInfo];
+        
+    } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
+        [self segueToTaxInfo];
+    } else {
+
+    
+    }
+>>>>>>> origin/3.0-omar
 }
 
 -(void)error:(NSError *)error {
