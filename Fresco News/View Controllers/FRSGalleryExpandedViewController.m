@@ -266,39 +266,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         
         [self adjustHeight];
 
-        
-//        float height = 0;
-//        NSInteger index = 0;
-//        for (FRSComment *comment in _comments) {
-//            
-//            CGRect labelRect = [comment.comment
-//                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, INT_MAX)
-//                                options:NSStringDrawingUsesLineFragmentOrigin
-//                                attributes:@{
-//                                             NSFontAttributeName : [UIFont systemFontOfSize:15]
-//                                             }
-//                                context:nil];
-//            
-//            float commentSize = labelRect.size.height;
-//            
-//            if (commentSize < 56) {
-//                height += 56;
-//            }
-//            else {
-//                height += commentSize;
-//            }
-//            
-//            
-//            index++;
-//        }
-//        
-//        height += 55;
-//        
-//        self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
-//        [self adjustScrollViewContentSize];
-//        [self.commentTableView reloadData];
-//        self.commentTableView.hidden = self.comments.count == 0;
-//        self.commentLabel.hidden = self.comments.count == 0;
     }];
 }
 
@@ -974,43 +941,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             showsMoreButton = TRUE;
         }
         
-        if ([topButton.titleLabel.text isEqualToString:@"0 MORE COMMENTS"]) {
+        if (([self.commentTableView visibleCells].count -1) == [self.gallery.comments integerValue] -10) {
             showsMoreButton = FALSE;
         }
-        
+
         [self adjustHeight];
-        
-//        float height = 0;
-//        NSInteger index = 0;
-//        
-//        for (FRSComment *comment in _comments) {
-//            
-//            CGRect labelRect = [comment.comment
-//                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, INT_MAX)
-//                                options:NSStringDrawingUsesLineFragmentOrigin
-//                                attributes:@{
-//                                             NSFontAttributeName : [UIFont systemFontOfSize:15]
-//                                             }
-//                                context:nil];
-//            
-//            float commentSize = labelRect.size.height;
-//            
-//            if (commentSize < 56) {
-//                height += 56;
-//            }
-//            else {
-//                height += commentSize;
-//            }
-//            index++;
-//        }
-//        
-//        height += 56;
-//        
-//        self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
-//        [self adjustScrollViewContentSize];
-//        [self.commentTableView reloadData];
-//        self.commentTableView.hidden = self.comments.count == 0;
-//        self.commentLabel.hidden = self.comments.count == 0;
     }];
 }
 
