@@ -1012,13 +1012,13 @@
     warningLabel.text = @"Not all events are safe. Be careful!";
     [self.assignmentStatsContainer addSubview:warningLabel];
     
-//    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*1.3, self.view.frame.size.width, 150)];
-//    label.text = @"if you keep scrolling you will find a pigeon.\n\n\n\n\n\nalmost there...\n\n\n🐦";
-//    label.font = [UIFont systemFontOfSize:10 weight:UIFontWeightLight];
-//    label.textAlignment = NSTextAlignmentCenter;
-//    label.backgroundColor = self.assignmentCard.backgroundColor;
-//    label.textColor = [UIColor frescoLightTextColor];
-//    [self.assignmentCard addSubview:label];
+    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*1.3, self.view.frame.size.width, 150)];
+    label.text = @"if you keep scrolling you will find a pigeon.\n\n\n\n\n\nalmost there...\n\n\n🐦";
+    label.font = [UIFont systemFontOfSize:10 weight:UIFontWeightLight];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.backgroundColor = self.assignmentCard.backgroundColor;
+    label.textColor = [UIColor frescoLightTextColor];
+    [self.assignmentCard addSubview:label];
     
     UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
     self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
