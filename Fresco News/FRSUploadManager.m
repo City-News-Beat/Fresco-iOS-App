@@ -331,7 +331,7 @@
         NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
         float percentageOfSecond = 1 / secondsSinceLastUpdate;
         
-        int64_t bytesPerSecond = bytesSent * percentageOfSecond;
+        int64_t bytesPerSecond = (bytesSent * percentageOfSecond) / 1024 /* kb */ / 1024 /* mb */;
         NSLog(@"UPLOAD SPEED: %lld", bytesPerSecond);
         
         lastDate = [NSDate date];
