@@ -271,6 +271,7 @@ static BOOL isDeeplinking;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [detailVC configureWithGalleries:responseObject];
+            isDeeplinking = FALSE;
         });
     }];
 }
