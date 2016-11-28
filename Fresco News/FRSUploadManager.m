@@ -16,6 +16,8 @@
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
+static NSDate *lastDate;
+
 
 + (id)sharedUploader {
     
@@ -301,6 +303,9 @@
 }
 
 -(void)addUploadForPost:(NSString *)postID url:(NSString *)body postID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    __block int uploadUpdates;
+    
     AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
     
     
@@ -317,8 +322,33 @@
     upload.key = postID;
     upload.metadata = @{@"post_id":post};
     upload.bucket = awsBucket;
+    
+    /*
+        MixPanel speed tracking
+     */
+    lastDate = [NSDate date];
+    
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
+        
         [self updateProgress:bytesSent];
+        
+        NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
+        float percentageOfSecond = 1 / secondsSinceLastUpdate;
+        
+        float megabitsPerSecond = bytesSent * percentageOfSecond * 1.0 / 1024 /* kb */ / 1024 /* mb */;
+        float averageMegabitsPerSecond = megabitsPerSecond;
+        
+        if (uploadUpdates > 0) {
+            averageMegabitsPerSecond = uploadSpeed / uploadUpdates;
+            averageMegabitsPerSecond = ((averageMegabitsPerSecond * uploadUpdates) + megabitsPerSecond) / (uploadUpdates + 1);
+        }
+        
+        uploadSpeed = averageMegabitsPerSecond;
+        
+        NSLog(@"UPLOAD SPEED: %fmbps", megabitsPerSecond);
+        
+        lastDate = [NSDate date];
+        uploadUpdates++;
     };
     __weak typeof (self) weakSelf = self;
     
@@ -359,8 +389,14 @@
 }
 
 -(void)uploadDidErrorWithError:(NSError *)error {
+    
+    NSMutableDictionary *uploadErrorSummary = [@{@"error_message":error.localizedDescription} mutableCopy];
+    if (uploadSpeed > 0) {
+        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed"];
+    }
+    
     if (error.localizedDescription) {
-        [FRSTracker track:@"Upload Failure" parameters:@{@"error_message":error.localizedDescription}];
+        [FRSTracker track:@"Upload Failure" parameters:uploadErrorSummary];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{@"type":@"failure"}];
 }
