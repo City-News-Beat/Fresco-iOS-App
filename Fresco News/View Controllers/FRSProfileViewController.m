@@ -255,17 +255,34 @@
     }
 }
 
+-(void)showTabBarAnimated:(BOOL)animated{
+    
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    if (![appDelegate.tabBarController tabBar]) return;
+    
+    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - [appDelegate.tabBarController tabBar].frame.size.height;
+    
+    if ([appDelegate.tabBarController tabBar].frame.origin.y == yOrigin) return;
+    
+    self.hiddenTabBar = NO;
+    
+    [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [appDelegate.tabBarController tabBar].frame = CGRectMake(0, yOrigin, [appDelegate.tabBarController tabBar].frame.size.width, [appDelegate.tabBarController tabBar].frame.size.height);
+    } completion:nil];
+}
+
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
-    
+    [self.navigationController.tabBarController.tabBar setHidden:FALSE];
     // Default tab bar in profile to visible
-    [self.tabBarController.tabBar setHidden:NO];
+//    [self.tabBarController.tabBar setHidden:NO];
+//
+
     
-//    if (self.tabBarController.tabBar == nil) {
-//        self.tabBarController = [[FRSTabBarController alloc] init];
-//    }
+    [self showTabBarAnimated:YES];
 
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     if (isLoadingUser) {

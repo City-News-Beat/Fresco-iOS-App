@@ -242,9 +242,11 @@ static BOOL isDeeplinking;
     detailVC.navigationController = tab.navigationController;
     detailVC.title = (title) ? [title uppercaseString] : @"TODAY IN NEWS";
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+    [[appDelegate.tabBarController tabBar] setHidden:NO];
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
         [navController pushViewController:detailVC animated:TRUE];
+        
     }
     else {
         

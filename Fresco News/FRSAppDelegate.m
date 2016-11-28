@@ -541,13 +541,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 -(UITabBarController *)tabBar {
-    return _tabBarController;
+    return self.tabBarController;
 }
 
 
 
+
+
 -(void)startAuthentication {
-    _tabBarController = [[FRSTabBarController alloc] init];
+    self.tabBarController = [[FRSTabBarController alloc] init];
     
     FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
     [mainNav pushViewController:_tabBarController animated:FALSE];
