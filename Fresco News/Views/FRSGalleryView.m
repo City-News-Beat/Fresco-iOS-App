@@ -49,11 +49,8 @@
         return;
     }
     
-<<<<<<< HEAD
     _hasTapped = FALSE;
-=======
     self.gallery = gallery;
->>>>>>> origin/3.0-omar
     
     for (FRSPlayer *player in self.players) {
         if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
