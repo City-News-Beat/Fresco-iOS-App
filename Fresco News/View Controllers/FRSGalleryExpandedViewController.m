@@ -172,22 +172,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
--(void)loadGallery:(FRSGallery *)gallery {
-    self.gallery = gallery;
-    
-    if (gallery.uid) {
-        self.galleryID = gallery.uid;
-    }
-    
-    self.orderedArticles = [self.gallery.articles allObjects];
-    self.hiddenTabBar = YES;
-    self.actionBarVisible = YES;
-    self.touchEnabled = NO;
-    [self.galleryView loadGallery:gallery];
-    [self fetchCommentsWithID:gallery.uid];
-    
-}
-
 -(void)fetchCommentsWithID:(NSString  *)galleryID {
     [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID completion:^(id responseObject, NSError *error) {
         if (error || !responseObject) {
@@ -841,6 +825,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [topButton setTitle:[NSString stringWithFormat:@"%d MORE COMMENTS", total] forState:UIControlStateNormal];
             [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
             [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+            
+            if (total == 1) {
+                [topButton setTitle:[NSString stringWithFormat:@"Show %d comment", total] forState:UIControlStateNormal];
+            } else {
+                [topButton setTitle:[NSString stringWithFormat:@"Show all %d comments", total] forState:UIControlStateNormal];
+            }
+            [topButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+            [topButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
+            topButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            topButton.contentEdgeInsets = UIEdgeInsetsMake(0, 16, 0, 0);
+
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:topButton];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;

@@ -41,6 +41,7 @@
 
 -(void)loadGallery:(FRSGallery *)gallery {
     
+    
     if ([self.gallery.uid isEqualToString:gallery.uid]) {
         self.gallery = gallery;
         [self updateSocial];
@@ -49,6 +50,7 @@
     }
     
     _hasTapped = FALSE;
+    self.gallery = gallery;
     
     for (FRSPlayer *player in self.players) {
         if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
@@ -973,6 +975,7 @@
     self.shareBlock(@[sharedContent]);
 }
 
+
 #pragma mark ScrollView Delegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -1327,7 +1330,13 @@
             
             player.hasEstablished = FALSE;
         }
+        else {
+            FRSScrollViewImageView *imageView = (FRSScrollViewImageView *)player;
+            imageView.image = Nil;
+            [imageView removeFromSuperview];
+        }
     }
+    
 }
 
 -(void)pause {

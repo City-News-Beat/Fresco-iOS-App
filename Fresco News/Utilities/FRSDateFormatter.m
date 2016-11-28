@@ -50,7 +50,7 @@
     NSDate *correctDate = [date dateByAddingTimeInterval:secondsFromGMT];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    [formatter setDateFormat:@"hh:mm a"];
+    [formatter setDateFormat:@"h:mm a"];
     return [formatter stringFromDate:correctDate];
 }
 
@@ -114,6 +114,26 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterLongStyle;
     return [formatter stringFromDate:date];
+}
+
++(NSString *)dateDifference:(NSDate *)date {
+    const NSTimeInterval secondsPerDay = 60 * 60 * 24;
+    NSTimeInterval diff = [date timeIntervalSinceNow] * -1.0;
+
+    diff /= secondsPerDay;
+    
+    if (diff < 1) {
+        return @"today";
+    } else if (diff < 2) {
+        return @"yesterday";
+    } else {
+        NSTimeInterval secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
+        NSDate *correctDate = [date dateByAddingTimeInterval:secondsFromGMT];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone:[NSTimeZone localTimeZone]];
+        [formatter setDateFormat:@"MMMM d"];
+        return [formatter stringFromDate:correctDate];
+    }
 }
 
 @end

@@ -22,5 +22,5 @@
 -(void)focusOnPost:(NSString *)postID;
 -(instancetype)initWithGallery:(FRSGallery *)gallery;
 -(instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID;
--(void)loadGallery:(FRSGallery *)gallery;
+
 @end
