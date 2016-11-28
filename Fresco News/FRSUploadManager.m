@@ -331,10 +331,10 @@ static NSDate *lastDate;
         NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
         float percentageOfSecond = 1 / secondsSinceLastUpdate;
         
-        int64_t bytesPerSecond = (bytesSent * percentageOfSecond) / 1024 /* kb */ / 1024 /* mb */;
-        uploadSpeed = bytesPerSecond;
+        float megabitsPerSecond = bytesSent * percentageOfSecond * 1.0 / 1024 /* kb */ / 1024 /* mb */;
+        uploadSpeed = megabitsPerSecond;
         
-        NSLog(@"UPLOAD SPEED: %lld", bytesPerSecond);
+        NSLog(@"UPLOAD SPEED: %fmbps", megabitsPerSecond);
         
         lastDate = [NSDate date];
     };
