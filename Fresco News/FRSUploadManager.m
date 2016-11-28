@@ -303,6 +303,9 @@ static NSDate *lastDate;
 }
 
 -(void)addUploadForPost:(NSString *)postID url:(NSString *)body postID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    __block int uploadUpdates;
+    
     AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
     
     
@@ -326,17 +329,26 @@ static NSDate *lastDate;
     lastDate = [NSDate date];
     
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
+        
         [self updateProgress:bytesSent];
         
         NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
         float percentageOfSecond = 1 / secondsSinceLastUpdate;
         
         float megabitsPerSecond = bytesSent * percentageOfSecond * 1.0 / 1024 /* kb */ / 1024 /* mb */;
-        uploadSpeed = megabitsPerSecond;
+        float averageMegabitsPerSecond = megabitsPerSecond;
+        
+        if (uploadUpdates > 0) {
+            averageMegabitsPerSecond = uploadSpeed / uploadUpdates;
+            averageMegabitsPerSecond = ((averageMegabitsPerSecond * uploadUpdates) + megabitsPerSecond) / uploadUpdates;
+        }
+        
+        uploadSpeed = averageMegabitsPerSecond;
         
         NSLog(@"UPLOAD SPEED: %fmbps", megabitsPerSecond);
         
         lastDate = [NSDate date];
+        uploadUpdates++;
     };
     __weak typeof (self) weakSelf = self;
     
