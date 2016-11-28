@@ -16,6 +16,8 @@
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
+static NSDate *lastDate;
+
 
 + (id)sharedUploader {
     
@@ -321,8 +323,6 @@
     /*
         MixPanel speed tracking
      */
-     static NSDate *lastDate;
-    
     lastDate = [NSDate date];
     
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
@@ -332,6 +332,8 @@
         float percentageOfSecond = 1 / secondsSinceLastUpdate;
         
         int64_t bytesPerSecond = (bytesSent * percentageOfSecond) / 1024 /* kb */ / 1024 /* mb */;
+        uploadSpeed = bytesPerSecond;
+        
         NSLog(@"UPLOAD SPEED: %lld", bytesPerSecond);
         
         lastDate = [NSDate date];
@@ -375,8 +377,14 @@
 }
 
 -(void)uploadDidErrorWithError:(NSError *)error {
+    
+    NSMutableDictionary *uploadErrorSummary = [@{@"error_message":error.localizedDescription} mutableCopy];
+    if (uploadSpeed > 0) {
+        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed"];
+    }
+    
     if (error.localizedDescription) {
-        [FRSTracker track:@"Upload Failure" parameters:@{@"error_message":error.localizedDescription}];
+        [FRSTracker track:@"Upload Failure" parameters:uploadErrorSummary];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{@"type":@"failure"}];
 }

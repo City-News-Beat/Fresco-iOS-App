@@ -19,6 +19,7 @@
     int toComplete;
     int completed;
     BOOL isFromFresh;
+    uint64_t uploadSpeed;
 }
 
 +(id)sharedUploader;
