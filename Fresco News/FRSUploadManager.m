@@ -317,8 +317,24 @@
     upload.key = postID;
     upload.metadata = @{@"post_id":post};
     upload.bucket = awsBucket;
+    
+    /*
+        MixPanel speed tracking
+     */
+     static NSDate *lastDate;
+    
+    lastDate = [NSDate date];
+    
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
         [self updateProgress:bytesSent];
+        
+        NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
+        float percentageOfSecond = 1 / secondsSinceLastUpdate;
+        
+        int64_t bytesPerSecond = bytesSent * percentageOfSecond;
+        NSLog(@"UPLOAD SPEED: %lld", bytesPerSecond);
+        
+        lastDate = [NSDate date];
     };
     __weak typeof (self) weakSelf = self;
     
