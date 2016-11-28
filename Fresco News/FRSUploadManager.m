@@ -340,7 +340,7 @@ static NSDate *lastDate;
         
         if (uploadUpdates > 0) {
             averageMegabitsPerSecond = uploadSpeed / uploadUpdates;
-            averageMegabitsPerSecond = ((averageMegabitsPerSecond * uploadUpdates) + megabitsPerSecond) / uploadUpdates;
+            averageMegabitsPerSecond = ((averageMegabitsPerSecond * uploadUpdates) + megabitsPerSecond) / (uploadUpdates + 1);
         }
         
         uploadSpeed = averageMegabitsPerSecond;
