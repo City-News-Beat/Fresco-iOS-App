@@ -14,7 +14,6 @@
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *address;
 @property (strong, nonatomic) NSDate *assignmentExpirationDate;
-@property (strong, nonatomic) NSDate *assignmentPostedDate;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 
 @end
@@ -39,7 +38,6 @@
             _subtitle = @"";
         }
         self.assignmentExpirationDate = assignment.expirationDate;
-        self.assignmentPostedDate = assignment.createdDate;
         self.assignmentIndex = index;
         self.assignmentId = assignment.uid;
         self.address = assignment.address;

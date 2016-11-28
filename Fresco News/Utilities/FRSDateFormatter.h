@@ -16,6 +16,4 @@
 
 //temp
 +(NSString *)dateStringFromDate:(NSDate *)date;
-+(NSString *)relativeTimeFromDate:(NSDate *)compareDate;
-+(NSString *)dateDifference:(NSDate *)date;
 @end
