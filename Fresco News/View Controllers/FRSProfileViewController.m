@@ -115,7 +115,6 @@
 }
 
 -(void)viewDidLoad {
-    
     [super viewDidLoad];
     
     self.editedProfile = false;
@@ -133,10 +132,10 @@
             if (error || !responseObject) {
                 return;
             }
-            
+
             _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
             [self configureWithUser:_representedUser];
-                                
+
         }];
      }
     
@@ -258,7 +257,15 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
+    
+    // Default tab bar in profile to visible
+    [self.tabBarController.tabBar setHidden:NO];
+    
+//    if (self.tabBarController.tabBar == nil) {
+//        self.tabBarController = [[FRSTabBarController alloc] init];
+//    }
 
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     if (isLoadingUser) {

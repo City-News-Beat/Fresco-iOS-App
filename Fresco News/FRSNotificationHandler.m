@@ -221,7 +221,6 @@
 +(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
     __block BOOL isDeeplinking = FALSE;
     
-    
     NSString *gallery = @"";
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
 
@@ -238,26 +237,28 @@
     detailVC.title = (title) ? [title uppercaseString] : @"TODAY IN NEWS";
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
     
+    if (isDeeplinking) {
+        return;
+    }
+    isDeeplinking = TRUE;
+    
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
         [navController pushViewController:detailVC animated:TRUE];
     }
     else {
+        
         UITabBarController *tab = (UITabBarController *)navController;
         tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
         
-        if (isDeeplinking) {
-            return;
-        }
-        
-        isDeeplinking = TRUE;
-        
         [navController pushViewController:detailVC animated:TRUE];
     }
     
+    
     [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
+        
         NSLog(@"TODAY: %@", responseObject);
         if (error) {
             [self error:error];

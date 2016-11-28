@@ -21,4 +21,5 @@
 +(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title;
 +(void)segueToPayment;
 +(void)segueToIdentification;
+//+(BOOL)isDeeplinking;
 @end
