@@ -219,6 +219,8 @@
 }
 
 +(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
+    __block BOOL isDeeplinking = FALSE;
+    
     
     NSString *gallery = @"";
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -245,9 +247,15 @@
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        
+        if (isDeeplinking) {
+            return;
+        }
+        
+        isDeeplinking = TRUE;
+        
         [navController pushViewController:detailVC animated:TRUE];
     }
-
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
         NSLog(@"TODAY: %@", responseObject);
