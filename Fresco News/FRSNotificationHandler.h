@@ -12,6 +12,7 @@
 #import "FRSAssignment+CoreDataProperties.h"
 
 @interface FRSNotificationHandler : NSObject
+
 +(void)handleNotification:(NSDictionary *)notification;
 +(void)segueToUser:(NSString *)user;
 +(void)segueToAssignment:(NSString *)assignment;
@@ -21,5 +22,8 @@
 +(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title;
 +(void)segueToPayment;
 +(void)segueToIdentification;
-//+(BOOL)isDeeplinking;
+
++(BOOL)isDeeplinking;
++(void)setIsDeeplinking:(BOOL)value;
+
 @end

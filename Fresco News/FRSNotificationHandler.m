@@ -16,8 +16,9 @@
 #import "FRSIdentityViewController.h"
 #import "Fresco.h"
 
+static BOOL isDeeplinking;
+
 @implementation FRSNotificationHandler
-// DEEP LINKING
 
 +(void)handleNotification:(NSDictionary *)push
 {
@@ -219,7 +220,12 @@
 }
 
 +(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
-    __block BOOL isDeeplinking = FALSE;
+    
+    if (isDeeplinking) {
+        return;
+    }
+    
+    isDeeplinking = TRUE;
     
     NSString *gallery = @"";
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -236,11 +242,6 @@
     detailVC.navigationController = tab.navigationController;
     detailVC.title = (title) ? [title uppercaseString] : @"TODAY IN NEWS";
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
-    
-    if (isDeeplinking) {
-        return;
-    }
-    isDeeplinking = TRUE;
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
         [navController pushViewController:detailVC animated:TRUE];
@@ -538,6 +539,15 @@
         [navController pushViewController:taxVC animated:TRUE];
         [navController setNavigationBarHidden:FALSE];
     }
+}
+
+// DEEP LINKING
++(BOOL)isDeeplinking {
+    return isDeeplinking;
+}
+
++(void)setIsDeeplinking:(BOOL)value {
+    isDeeplinking = value;
 }
 
 @end
