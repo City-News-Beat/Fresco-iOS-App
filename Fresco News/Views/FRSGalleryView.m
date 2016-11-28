@@ -41,6 +41,7 @@
 
 -(void)loadGallery:(FRSGallery *)gallery {
     
+    
     if ([self.gallery.uid isEqualToString:gallery.uid]) {
         self.gallery = gallery;
         [self updateSocial];
@@ -48,7 +49,11 @@
         return;
     }
     
+<<<<<<< HEAD
     _hasTapped = FALSE;
+=======
+    self.gallery = gallery;
+>>>>>>> origin/3.0-omar
     
     for (FRSPlayer *player in self.players) {
         if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
@@ -972,6 +977,7 @@
     sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
     self.shareBlock(@[sharedContent]);
 }
+
 
 #pragma mark ScrollView Delegate
 

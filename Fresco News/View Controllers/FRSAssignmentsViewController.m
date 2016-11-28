@@ -60,6 +60,7 @@
 @property (strong, nonatomic) NSString *assignmentOutlet;
 @property (strong, nonatomic) NSString *assignmentCaption;
 @property (strong, nonatomic) NSDate *assignmentExpirationDate;
+@property (strong, nonatomic) NSDate *assignmentPostedDate;
 @property (strong, nonatomic) UILabel *assignmentTitleLabel;
 @property (strong, nonatomic) UILabel *assignmentOutletLabel;
 @property (strong, nonatomic) UITextView *assignmentTextView;
@@ -83,6 +84,10 @@
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
+
+@property (strong, nonatomic) UILabel *postedLabel;
+
+@property (strong, nonatomic) UIButton *navigateButton;
 
 @end
 
@@ -464,12 +469,15 @@
         self.assignmentTitle = assignment.title;
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
+        self.assignmentPostedDate = assignment.createdDate;
+
         self.outlets = assignment.outlets;
         
         [self configureOutlets];
         [self configureAssignmentCard];
         [self animateAssignmentCard];
         [self setExpiration];
+        [self setPostedDate];
         [self setDistance];
         
         self.currentAssignment = assignment;
@@ -670,11 +678,13 @@
     self.assignmentTitle = assAnn.title;
     self.assignmentCaption = assAnn.subtitle;
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
+    self.assignmentPostedDate = assAnn.assignmentPostedDate;
     
     self.outlets = assAnn.outlets;
     [self configureOutlets];
     
     [self setExpiration];
+    [self setPostedDate];
     [self configureAssignmentCard];
     [self animateAssignmentCard];
     [self snapToAnnotationView:view]; // Centers map with y offset
@@ -731,6 +741,24 @@
         }
     }
     self.distanceLabel.text = distanceString;
+    [self.distanceLabel sizeToFit];
+    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
+}
+
+-(void)setPostedDate {
+    NSString *postedString;
+    
+    
+    NSTimeInterval secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
+    NSDate *correctDate = [self.assignmentPostedDate dateByAddingTimeInterval:secondsFromGMT];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    [formatter setDateFormat:@"h:mm a"];
+    
+    
+    postedString = [NSString stringWithFormat:@"Posted %@ at %@", [FRSDateFormatter dateDifference:self.assignmentPostedDate], [formatter stringFromDate:correctDate]];
+    
+    self.postedLabel.text = postedString;
 }
 
 -(void)setExpiration {
@@ -861,7 +889,7 @@
     [self.assignmentBottomBar addSubview:bottomContainerLine];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectMake(self.view.frame.size.width -93-23 -24 -6 , 15, 100, 17);
+    button.frame = CGRectMake(self.view.frame.size.width -93-23, 15, 100, 17);
     [button setTitle:@"OPEN CAMERA" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
@@ -870,12 +898,12 @@
     [self.assignmentBottomBar addSubview:button];
 
     
-    UIButton *navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    navigateButton.frame = CGRectMake(self.view.frame.size.width -24-16, 10, 24, 24);
-    [navigateButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
-    [navigateButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
-    navigateButton.tintColor = [UIColor blackColor];
-    [self.assignmentBottomBar addSubview:navigateButton];
+//    UIButton *navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    navigateButton.frame = CGRectMake(self.view.frame.size.width -24-16, 10, 24, 24);
+//    [navigateButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
+//    [navigateButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
+//    navigateButton.tintColor = [UIColor blackColor];
+//    [self.assignmentBottomBar addSubview:navigateButton];
     
     self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, self.view.frame.size.width - 16, 22)];
     [self.assignmentOutletLabel setFont:[UIFont notaMediumWithSize:17]];
@@ -932,38 +960,55 @@
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
-    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 50, self.view.frame.size.width, 120)];
+    self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 50, self.view.frame.size.width, 144)];
     [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
     UIImageView *clock = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clock"]];
-    clock.frame = CGRectMake(16, 8, 24, 24);
+    clock.frame = CGRectMake(16, 12, 24, 24);
     [self.assignmentStatsContainer addSubview:clock];
     
     UIImageView *mapAnnotation = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"annotation"]];
-    mapAnnotation.frame = CGRectMake(16, 48, 24, 24);
+    mapAnnotation.frame = CGRectMake(16, 66, 24, 24);
     [self.assignmentStatsContainer addSubview:mapAnnotation];
     
     UIImageView *warning = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"warning"]];
-    warning.frame = CGRectMake(16, 88, 24, 24);
+    warning.frame = CGRectMake(16, 110, 24, 24);
     [self.assignmentStatsContainer addSubview:warning];
     
     self.expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
     self.expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    self.expirationLabel.textColor = [UIColor frescoMediumTextColor];
+    self.expirationLabel.textColor = [UIColor frescoDarkTextColor];
+    
+    self.postedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 14)];
+    self.postedLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
+    self.postedLabel.textColor = [UIColor frescoMediumTextColor];
+    [self.expirationLabel addSubview:self.postedLabel];
 
     [self setExpiration];
+    [self setPostedDate];
     
     [self.assignmentStatsContainer addSubview:self.expirationLabel];
     
-    self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 50, self.view.frame.size.width, 20)];
+    self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 68, self.view.frame.size.width, 20)];
     self.distanceLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    self.distanceLabel.textColor = [UIColor frescoMediumTextColor];
+    self.distanceLabel.textColor = [UIColor frescoDarkTextColor];
     self.distanceLabel.text = @"";
+    self.distanceLabel.userInteractionEnabled = YES;
     [self.assignmentStatsContainer addSubview:self.distanceLabel];
+    
+    
+    self.navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
+    self.navigateButton.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
+    self.navigateButton.alpha = 0.5;
+    [self.navigateButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
+    [self.navigateButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
+    self.navigateButton.tintColor = [UIColor blackColor];
+    [self.assignmentStatsContainer addSubview:self.navigateButton];
 
-    UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 90, self.view.frame.size.width, 20)];
+    UILabel *warningLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 112, self.view.frame.size.width, 20)];
     warningLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-    warningLabel.textColor = [UIColor frescoMediumTextColor];
+    warningLabel.textColor = [UIColor frescoDarkTextColor];
     warningLabel.text = @"Not all events are safe. Be careful!";
     [self.assignmentStatsContainer addSubview:warningLabel];
     
@@ -1006,6 +1051,8 @@
     alert.delegate = self;
     [alert navigateToAssignmentWithLatitude:self.assignmentLat longitude:self.assignmentLong];
 }
+
+
 
 -(void)configureAssignmentCard {
     
@@ -1093,7 +1140,7 @@
     [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         
         CGRect scrollFrame = self.scrollView.frame;
-        scrollFrame.origin.y = 0;
+        scrollFrame.origin.y = -12;
         self.scrollView.frame = scrollFrame;
         
     } completion:nil];

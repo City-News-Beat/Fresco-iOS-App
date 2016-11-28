@@ -822,9 +822,23 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             if (total < 0) {
                 total = 0;
             }
+<<<<<<< HEAD
             [topButton setTitle:[NSString stringWithFormat:@"%d MORE COMMENTS", total] forState:UIControlStateNormal];
             [topButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
             [topButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+=======
+            
+            if (total == 1) {
+                [topButton setTitle:[NSString stringWithFormat:@"Show %d comment", total] forState:UIControlStateNormal];
+            } else {
+                [topButton setTitle:[NSString stringWithFormat:@"Show all %d comments", total] forState:UIControlStateNormal];
+            }
+            [topButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+            [topButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
+            topButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            topButton.contentEdgeInsets = UIEdgeInsetsMake(0, 16, 0, 0);
+
+>>>>>>> origin/3.0-omar
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:topButton];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
