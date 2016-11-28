@@ -39,6 +39,10 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 }
 
+-(void)configureWithStory:(FRSStory *)story {
+    
+}
+
 -(void)configureWithGalleries:(NSArray *)galleries {
     
     self.stories = [[NSMutableArray alloc] init];

@@ -19,5 +19,4 @@
 -(NSString *)title;
 -(NSString *)subtitle;
 -(NSDate *)assignmentExpirationDate;
--(NSDate *)assignmentPostedDate;
 @end

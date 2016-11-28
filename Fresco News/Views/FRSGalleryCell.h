@@ -24,7 +24,6 @@
 @property (weak, nonatomic) UINavigationController *navigationController;
 @property (weak, nonatomic) id<FRSGalleryViewDelegate> delegate;
 @property BOOL hasVideoAsFirstPost;
-@property BOOL shouldRefreshActionBar;
 -(void)clearCell;
 -(void)configureCell;
 -(void)offScreen;
