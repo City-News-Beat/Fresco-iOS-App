@@ -129,6 +129,7 @@
                     [detailVC configureWithGalleries:galleryArray];
                     detailVC.navigationController = self.navigationController;
                     detailVC.title = @"TODAY IN NEWS";
+                    
                     [self.navigationController pushViewController:detailVC animated:YES];
                 }
             }

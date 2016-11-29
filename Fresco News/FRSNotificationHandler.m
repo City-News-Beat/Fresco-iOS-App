@@ -16,8 +16,9 @@
 #import "FRSIdentityViewController.h"
 #import "Fresco.h"
 
+static BOOL isDeeplinking;
+
 @implementation FRSNotificationHandler
-// DEEP LINKING
 
 +(void)handleNotification:(NSDictionary *)push
 {
@@ -220,6 +221,12 @@
 
 +(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
     
+    if (isDeeplinking) {
+        return;
+    }
+    
+    isDeeplinking = TRUE;
+    
     NSString *gallery = @"";
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
 
@@ -235,21 +242,26 @@
     detailVC.navigationController = tab.navigationController;
     detailVC.title = (title) ? [title uppercaseString] : @"TODAY IN NEWS";
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+    [[appDelegate.tabBarController tabBar] setHidden:NO];
     
     if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
         [navController pushViewController:detailVC animated:TRUE];
+        
     }
     else {
+        
         UITabBarController *tab = (UITabBarController *)navController;
         tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
         tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
         
         navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        
         [navController pushViewController:detailVC animated:TRUE];
     }
-
+    
     
     [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
+        
         NSLog(@"TODAY: %@", responseObject);
         if (error) {
             [self error:error];
@@ -261,6 +273,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [detailVC configureWithGalleries:responseObject];
+            isDeeplinking = FALSE;
         });
     }];
 }
@@ -529,6 +542,15 @@
         [navController pushViewController:taxVC animated:TRUE];
         [navController setNavigationBarHidden:FALSE];
     }
+}
+
+// DEEP LINKING
++(BOOL)isDeeplinking {
+    return isDeeplinking;
+}
+
++(void)setIsDeeplinking:(BOOL)value {
+    isDeeplinking = value;
 }
 
 @end
