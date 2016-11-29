@@ -144,6 +144,8 @@
     }
     
     [self checkOwner];
+    
+    [self.actionBar.actionButton setTitle:[self titleForActionButton] forState:UIControlStateNormal];
 }
 
 -(void)checkOwner {
@@ -957,9 +959,9 @@
         return [NSString stringWithFormat:@"%d COMMENT", comments];
     } else if (comments == 0) {
         return @"READ MORE";
-    } else if (comments >= 600) {
-        return [NSString stringWithFormat:@"HELLA COMMENTS"];
-    }
+   } //else if (comments >= 600) {
+//        return [NSString stringWithFormat:@"HELLA COMMENTS"];
+//    }
     
     return [NSString stringWithFormat:@"%d COMMENTS", comments];
 }

@@ -16,7 +16,6 @@
 
 @interface FRSContentActionsBar()
 
-@property (strong, nonatomic) UIButton *actionButton;
 
 @property (strong, nonatomic) UIButton *likeButton;
 
