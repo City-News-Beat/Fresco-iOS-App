@@ -34,6 +34,7 @@ target 'Fresco' do
 	pod 'CardIO'
 	pod 'MGSwipeTableCell'
 	pod 'Adjust', :git => 'git://github.com/adjust/ios_sdk.git', :tag => 'v4.5.0'
+    pod 'AttributedMarkdown', :git => 'https://github.com/dreamwieber/AttributedMarkdown.git'
 end
 
 	

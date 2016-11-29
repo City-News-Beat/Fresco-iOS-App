@@ -31,6 +31,8 @@
 @property CGFloat assignmentLat;
 @property CGFloat assignmentLong;
 
+-(void)globalAssignmentsSegue;
+
 @property (nonatomic) BOOL hasDefault;
 @property (nonatomic, retain) NSString *defaultID;
 @property (strong, nonatomic) MKMapView *mapView;

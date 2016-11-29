@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context;
 @property (nullable, nonatomic, retain) NSString *byline;
 @property (nullable, nonatomic, retain) NSString *caption;
+@property (nullable, nonatomic, retain) NSString *comments;
 @property (nullable, nonatomic, retain) NSDate *createdDate;
 @property (nullable, nonatomic, retain) NSDate *editedDate;
 @property (nullable, nonatomic, retain) id relatedStories;

@@ -17,9 +17,6 @@
     UIView *topView;
     BOOL isLoadingUser;
     NSString *userId;
-    BOOL isReloading;
-    BOOL isFinishedLikes;
-    BOOL isFinishedUser;
 }
 
 -(void)resizeProfileContainer;

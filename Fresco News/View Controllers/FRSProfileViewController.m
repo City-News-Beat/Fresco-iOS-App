@@ -115,22 +115,10 @@
 }
 
 -(void)viewDidLoad {
+    
     [super viewDidLoad];
     
-    
-//    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-//    
-//    [[appDelegate.tabBarController tabBar] setHidden:NO];
-//    
-//    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - [appDelegate.tabBarController tabBar].frame.size.height;
-//    self.tabBarController.tabBar.frame = CGRectMake(0, yOrigin, [appDelegate.tabBarController tabBar].frame.size.width, [appDelegate.tabBarController tabBar].frame.size.height);
-
-    
     self.editedProfile = false;
-    
-    [self.navigationController.tabBarController.tabBar setHidden:FALSE];
-    
-    [self showTabBarAnimated:NO];
     
     if (isLoadingUser) {
         return;
@@ -145,16 +133,16 @@
             if (error || !responseObject) {
                 return;
             }
-
+            
             _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
             [self configureWithUser:_representedUser];
-
+                                
         }];
      }
     
     [self setupUI];
     [self configureUI];
-   // [self fetchGalleries];
+    [self fetchGalleries];
     [super removeNavigationBarLine];
     
     if (self.shouldShowNotificationsOnLoad) {
@@ -268,34 +256,9 @@
     }
 }
 
-//-(void)showTabBarAnimated:(BOOL)animated{
-//    
-//    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-//    
-//    if (![appDelegate.tabBarController tabBar]) return;
-//    
-//    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - [appDelegate.tabBarController tabBar].frame.size.height;
-//    
-//    if ([appDelegate.tabBarController tabBar].frame.origin.y == yOrigin) return;
-//    
-//    self.hiddenTabBar = NO;
-//    
-//    [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-//        [appDelegate.tabBarController tabBar].frame = CGRectMake(0, yOrigin, [appDelegate.tabBarController tabBar].frame.size.width, [appDelegate.tabBarController tabBar].frame.size.height);
-//    } completion:nil];
-//}
-
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
-    [self.navigationController.tabBarController.tabBar setHidden:FALSE];
-    // Default tab bar in profile to visible
-//    [self.tabBarController.tabBar setHidden:NO];
-//
-
-    
-//    [self showTabBarAnimated:YES];
 
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     if (isLoadingUser) {
@@ -369,7 +332,7 @@
         
         [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
         [self.navigationController.navigationBar setShadowImage:[UIImage new]];
-        [self fetchGalleries];
+        
     }
     return self;
 }
@@ -391,21 +354,30 @@
             FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
             _representedUser = user;
             
-            [self configureWithUser:user];
             [self fetchGalleries];
             [super removeNavigationBarLine];
             
             if (self.shouldShowNotificationsOnLoad) {
                 [self showNotificationsNotAnimated];
             }
-
+            
+//            [self reloadLabelsForUser];
             [self showTabBarAnimated:YES];
             self.tableView.bounces = false;
+            
+            [self configureWithUser:user];
         }];
     }
     
     return self;
 }
+
+//-(void)reloadLabelsForUser {
+//    self.usernameLabel.text = @"hello";
+//    self.locationLabel.text = @"hello";
+//    self.bioTextView.text   = @"hello";
+//}
+
 -(void)setupUI {
     
     self.presentingUser = YES;
@@ -423,7 +395,7 @@
     
     /* TABLE VIEW */
     [self configureTableView];
-    //[self fetchGalleries];
+    [self fetchGalleries];
     [self configureSpinner];
     
     [super removeNavigationBarLine];
@@ -1145,18 +1117,11 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-    [FRSTracker track:@"Gallery Shared" parameters:@{@"content":content.firstObject}];
 }
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-    FRSGallery *gallery = [[FRSGallery alloc] init];
-
-    if (self.likesButton.alpha == 1) {
-        gallery = self.likes[notification.row];
-    } else {
-        gallery = self.galleries[notification.row];
-    }
+    FRSGallery *gallery = self.galleries[notification.row];
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
@@ -1290,93 +1255,12 @@
             }
         }
         
-        if (indexPath.row > self.currentFeed.count - 5) {
-            [self loadMoreInCurrentFeed];
-        }
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }
-
--(void)loadMoreInCurrentFeed {
-    if (self.currentFeed == self.likes) {
-        
-        if (isReloading || isFinishedLikes) {
-            return;
-        }
-        
-        isReloading = TRUE;
-        FRSGallery *gallery = [self.likes lastObject];
-        
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-        NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
-        
-        FRSUser *authUser = self.representedUser;
-        NSString *userID = authUser.uid;
-        
-        NSString *endpoint = [NSString stringWithFormat:likeFeed, userID];
-        
-        endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
-        
-        [[FRSAPIClient sharedClient] get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
-            isReloading = FALSE;
-            
-            NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
-            
-            if (response.count == 0) {
-                isFinishedLikes = TRUE;
-            }
-            
-            NSMutableArray *newGalleries = [self.likes mutableCopy];
-            [newGalleries addObjectsFromArray:response];
-            self.likes = newGalleries;
-            [self.tableView reloadData];
-        }];
-
-
-    }
-    else if (self.currentFeed == self.galleries) {
-        
-        if (isReloading || isFinishedUser) {
-            return;
-        }
-        
-        isReloading = TRUE;
-        FRSGallery *gallery = [self.galleries lastObject];
-        
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-        NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
-        
-        FRSUser *authUser = self.representedUser;
-        NSString *userID = authUser.uid;
-        
-        NSString *endpoint = [NSString stringWithFormat:userFeed, userID];
-        
-        endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, timeStamp];
-        
-        [[FRSAPIClient sharedClient] get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
-            isReloading = FALSE;
-            
-            
-            NSArray *response = [NSArray arrayWithArray:[[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:responseObject cache:FALSE]];
-            
-            if (response.count == 0) {
-                isFinishedUser = TRUE;
-            }
-            
-            NSMutableArray *newGalleries = [self.galleries mutableCopy];
-            [newGalleries addObjectsFromArray:response];
-            self.galleries = newGalleries;
-            [self.tableView reloadData];
-        }];
-        
-    }
-}
-
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section== 0){
@@ -1394,7 +1278,7 @@
                 [weakSelf showShareSheetWithContent:sharedContent];
             };
             
-            galCell.readMoreBlock = ^(NSArray *array){
+            galCell.readMoreBlock = ^(NSArray *bullshit){
                 [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
             };
             
@@ -1491,7 +1375,7 @@
         
         for (FRSGalleryCell *cell in visibleCells) {
             if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
+                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
                     if (!taken) {
                         [cell play];
                         taken = TRUE;
@@ -1662,6 +1546,9 @@
             self.profileIV.image = Nil;
         }
         
+        self.usernameLabel.text = user.username;
+        [self.usernameLabel sizeToFit];
+        
         self.bioTextView.text = user.bio;
         
         [self.bioTextView frs_setTextWithResize:user.bio];
@@ -1685,13 +1572,14 @@
             [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
         }
 
-
         self.nameLabel.text = user.firstName;
         [self.followersButton setTitle:[NSString stringWithFormat:@"%@", [user valueForKey:@"followedCount"]] forState:UIControlStateNormal];
         self.locationLabel.text = [user valueForKey:@"location"];
         self.usernameLabel.text = user.username;
         titleLabel.text = [NSString stringWithFormat:@"@%@", user.username];
-        
+//        titleLabel.backgroundColor = [UIColor redColor];
+//        [titleLabel sizeToFit];
+//        titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, titleLabel.frame.origin.y, titleLabel.frame.size.width, self.navigationController.navigationBar.frame.size.height);
         if ([user.username isEqualToString:@""] || !user.username || [user.username isEqual:[NSNull null]]) {
             if (![user.firstName isEqualToString:@""]) {
                 titleLabel.adjustsFontSizeToFitWidth = YES;
