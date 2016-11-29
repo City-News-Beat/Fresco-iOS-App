@@ -412,7 +412,7 @@ static NSDate *lastDate;
     }
     
     if (error.localizedDescription) {
-        [FRSTracker track:@"Upload Failure" parameters:uploadErrorSummary];
+        [FRSTracker track:@"Upload Error" parameters:uploadErrorSummary];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{@"type":@"failure"}];
 }
