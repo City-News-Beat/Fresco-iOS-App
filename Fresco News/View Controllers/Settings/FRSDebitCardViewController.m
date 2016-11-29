@@ -188,10 +188,6 @@
         self.bankButton.alpha = 1.0;
         self.debitButton.alpha = 0.7;
     }
-    
-    [securityCodeTextField resignFirstResponder];
-    [cardNumberTextField resignFirstResponder];
-    [expirationDateTextField resignFirstResponder];
 }
 
 -(void)configureBankView {
@@ -258,9 +254,6 @@
 -(void)bankTapped {
     [self.view resignFirstResponder];
     [self resignFirstResponder];
-    [securityCodeTextField resignFirstResponder];
-    [cardNumberTextField resignFirstResponder];
-    [expirationDateTextField resignFirstResponder];
     [_contentScroller setContentOffset:CGPointMake(_contentScroller.frame.size.width, 0) animated:YES];
     self.bankButton.alpha = 1.0;
     self.debitButton.alpha = 0.7;

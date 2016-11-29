@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FRSTabBarController : UITabBarController <FRSAlertViewDelegate>
+@interface FRSTabBarController : UITabBarController
 
 
 @property (nonatomic) NSInteger lastActiveIndex;

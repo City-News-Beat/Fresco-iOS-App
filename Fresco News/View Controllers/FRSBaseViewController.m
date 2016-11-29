@@ -129,6 +129,7 @@
                     [detailVC configureWithGalleries:galleryArray];
                     detailVC.navigationController = self.navigationController;
                     detailVC.title = @"TODAY IN NEWS";
+                    
                     [self.navigationController pushViewController:detailVC animated:YES];
                 }
             }
@@ -247,18 +248,6 @@
         [assignmentsVC focusOnAssignment:assignment];
         
     }];
-}
-
-
--(void)segueToGlobalAssignmentWithID:(NSString *)assignmentID {
-    
-    FRSNavigationController *navCont = (FRSNavigationController *)[self.tabBarController.viewControllers objectAtIndex:3];
-    FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
-    
-    [self.tabBarController setSelectedIndex:3];
-    [assignmentsVC globalAssignmentsSegue];
-    
-    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0];
 }
 
 

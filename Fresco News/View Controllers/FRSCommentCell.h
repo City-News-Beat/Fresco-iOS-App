@@ -16,13 +16,12 @@
 
 @end
 
-@interface FRSCommentCell : MGSwipeTableCell <MGSwipeTableCellDelegate>
+@interface FRSCommentCell : MGSwipeTableCell
 @property (nonatomic, retain) IBOutlet UIImageView *profilePicture;
 @property (nonatomic, retain) IBOutlet UITextView *commentTextView;
 
 @property (weak, nonatomic) NSObject<FRSCommentCellDelegate> *cellDelegate;
-@property (weak, nonatomic) IBOutlet UILabel *timestampLabel;
-@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+
 @property (nonatomic, strong) FRSComment *comment;
 
 - (void)configureCell:(FRSComment *)comment delegate:(id<UITextViewDelegate>)delegate;
