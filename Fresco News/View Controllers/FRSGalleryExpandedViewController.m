@@ -121,7 +121,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [super viewDidLoad];
 
     [self configureUI];
-    [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     self.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
 }
 

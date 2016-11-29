@@ -847,7 +847,8 @@
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
     FRSGallery *gallery = self.dataSource[notification.row];
-    
+    [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
     vc.gallery = gallery;
