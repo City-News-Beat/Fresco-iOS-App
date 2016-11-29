@@ -119,6 +119,8 @@
     
     self.editedProfile = false;
     
+    [self.navigationController.tabBarController.tabBar setHidden:FALSE];
+    
     if (isLoadingUser) {
         return;
     }
@@ -255,22 +257,22 @@
     }
 }
 
--(void)showTabBarAnimated:(BOOL)animated{
-    
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    if (![appDelegate.tabBarController tabBar]) return;
-    
-    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - [appDelegate.tabBarController tabBar].frame.size.height;
-    
-    if ([appDelegate.tabBarController tabBar].frame.origin.y == yOrigin) return;
-    
-    self.hiddenTabBar = NO;
-    
-    [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        [appDelegate.tabBarController tabBar].frame = CGRectMake(0, yOrigin, [appDelegate.tabBarController tabBar].frame.size.width, [appDelegate.tabBarController tabBar].frame.size.height);
-    } completion:nil];
-}
+//-(void)showTabBarAnimated:(BOOL)animated{
+//    
+//    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+//    
+//    if (![appDelegate.tabBarController tabBar]) return;
+//    
+//    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - [appDelegate.tabBarController tabBar].frame.size.height;
+//    
+//    if ([appDelegate.tabBarController tabBar].frame.origin.y == yOrigin) return;
+//    
+//    self.hiddenTabBar = NO;
+//    
+//    [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+//        [appDelegate.tabBarController tabBar].frame = CGRectMake(0, yOrigin, [appDelegate.tabBarController tabBar].frame.size.width, [appDelegate.tabBarController tabBar].frame.size.height);
+//    } completion:nil];
+//}
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -282,7 +284,7 @@
 //
 
     
-    [self showTabBarAnimated:YES];
+//    [self showTabBarAnimated:YES];
 
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     if (isLoadingUser) {

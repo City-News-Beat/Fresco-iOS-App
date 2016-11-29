@@ -142,6 +142,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.galleryView offScreen];
     
     self.navigationItem.titleView = self.titleLabel;
+    [self showNavBarForScrollView:self.scrollView animated:YES];
 }
 
 -(void)setupDeepLinkedComment:(NSString *)commentID {
@@ -937,7 +938,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         NSLog(@"USER: %@", user);
         FRSProfileViewController *viewController = [[FRSProfileViewController alloc] initWithUserID:user];
         self.navigationItem.title = @"";
-        [self.tabBarController.tabBar setHidden:YES];
+//        [self.tabBarController.tabBar setHidden:YES];
         [self.navigationController pushViewController:viewController animated:YES];
     }
     else if ([URL.absoluteString containsString:@"tag"]) {
