@@ -137,7 +137,6 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.window.rootViewController presentViewController:activityController animated:YES completion:nil];
-    [FRSTracker track:@"Gallery Shared" parameters:@{@"content":content.firstObject}];
 }
 
 -(void)reloadData {
@@ -206,23 +205,19 @@
         
         for (FRSGalleryCell *cell in visibleCells) {
             
-            /*
-             Start playback mid frame -- at least 300 from top & at least 100 from bottom
-             */
-            if (cell.frame.origin.y - self.contentOffset.y < 300 && cell.frame.origin.y - self.contentOffset.y > 0) {
+            if (cell.frame.origin.y - self.contentOffset.y < 300 && cell.frame.origin.y - self.contentOffset.y > 100) {
                 
                 if (!taken) {
-                    taken = TRUE;
                     [cell play];
+                    taken = TRUE;
                 }
-                
-            }
-            else {
-                [cell pause];
+                else {
+                    [cell pause];
+                }
             }
         }
-
     });
+
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
@@ -243,7 +238,11 @@
     UITableViewCell *cell;
     
     if ([[[_galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSGallery class]]) {
-        return [self highlightCellForIndexPath:indexPath];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"gallery-cell"];
+        
+        if (!cell){
+            cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
+        }
     }
     else if ([[[_galleries objectAtIndex:indexPath.row] class] isSubclassOfClass:[FRSStory class]]) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"story-cell"];
@@ -258,69 +257,25 @@
     return cell;
 }
 
--(UITableViewCell *)highlightCellForIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.row == self.galleries.count && self.galleries.count != 0 && self.galleries != Nil) { // we're reloading
-        
-        UITableViewCell *cell = [self dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
-        CGRect cellFrame = cell.frame;
-        cellFrame.size.height = 20;
-        cell.frame = cellFrame;
-        return cell;
-    }
-    
-    FRSGalleryCell *cell = [self dequeueReusableCellWithIdentifier:@"gallery-cell"];
-    
-    if (!cell) {
-        cell = [[FRSGalleryCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gallery-cell"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.navigationController = self.navigationController;
-    }
-    
-    cell.gallery = self.galleries[indexPath.row];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [cell configureCell];
-    });
-    
-    __weak typeof(self) weakSelf = self;
-    
-    cell.shareBlock = ^void(NSArray *sharedContent) {
-        [weakSelf showShareSheetWithContent:sharedContent];
-    };
-    
-    cell.readMoreBlock = ^(NSArray *bullshit){
-        [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
-    };
-    
-    cell.delegate = self;
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
-    
-    return cell;
-    
-}
-
--(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)indexPath {
-    if (_galleries.count > indexPath.row) {
-        id representedObject = _galleries[indexPath.row];
-        
-        if ([[representedObject class] isSubclassOfClass:[FRSGallery class]]) {
-            if (self.leadDelegate) {
-                [self.leadDelegate expandGallery:representedObject];
-            }
-        }
-        else if ([[representedObject class] isSubclassOfClass:[FRSStory class]]) {
-            if (self.leadDelegate) {
-                [self.leadDelegate expandStory:representedObject];
-            }
-        }
-    }
-}
-
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
-      
+        FRSGalleryCell *galCell = (FRSGalleryCell *)cell;
+        galCell.galleryView.delegate.navigationController = self.navigationController;
+        galCell.navigationController = self.navigationController;
+        [galCell clearCell];
+        
+        galCell.gallery = _galleries[indexPath.row];
+        [galCell configureCell];
+        
+        __weak typeof(self) weakSelf = self;
+        
+        galCell.shareBlock = ^void(NSArray *sharedContent) {
+            [weakSelf showShareSheetWithContent:sharedContent];
+        };
+        
+        galCell.readMoreBlock = ^(NSArray *bullshit){
+            [weakSelf readMore:indexPath];
+        };
     }
     else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
@@ -343,7 +298,7 @@
         };
     }
     
-    if (indexPath.row >= self.galleries.count-5) {
+    if (indexPath.row >= self.galleries.count-3) {
         [self loadMore];
     }
 }

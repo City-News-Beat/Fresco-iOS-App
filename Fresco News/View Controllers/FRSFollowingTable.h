@@ -12,10 +12,6 @@
 #import "FRSScrollingViewController.h"
 #import "FRSStoryView.h"
 
-@protocol FRSFollowingTableDelegate
--(void)expandGallery:(FRSGallery *)gallery;
--(void)expandStory:(FRSStory *)story;
-@end
 @interface FRSFollowingTable : UITableView <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate, FRSStoryViewDelegate>
 {
     NSInteger numberOfPosts;
@@ -24,7 +20,7 @@
     BOOL isFinished;
 }
 @property (retain, nonatomic, readonly) NSArray *galleries;
-@property (weak, nonatomic) id<FRSFollowingTableDelegate> leadDelegate;
+
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
 -(void)reloadFollowing;
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)indexPath;

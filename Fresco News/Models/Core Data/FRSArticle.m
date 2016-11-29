@@ -36,6 +36,11 @@
     
     if (dictionary[@"title"] && ![dictionary[@"title"] isEqual:[NSNull null]]) {
         self.title = dictionary[@"title"];
+        if ([self.title isEqualToString:@"Title not found"] || [self.title isEqualToString:@""]) {
+            if (dictionary[@"link"] && ![dictionary[@"link"] isEqual:[NSNull null]]) {
+                self.title = self.articleStringURL;
+            }
+        }
     }
     else {
         if (dictionary[@"link"] && ![dictionary[@"link"] isEqual:[NSNull null]]) {

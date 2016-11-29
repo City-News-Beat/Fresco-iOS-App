@@ -26,19 +26,20 @@
         [self addSubview:imageView];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            
-            PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-            options.resizeMode = PHImageRequestOptionsResizeModeNone;
-            options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
-            options.version = PHImageRequestOptionsVersionOriginal;
-            
-            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                imageView.image = [UIImage imageWithData:imageData];
-                imageView.contentMode = UIViewContentModeScaleAspectFill;
-                
-                [self constrainSubview:imageView ToBottomOfParentView:self];
-            }];
-            
+            [[PHImageManager defaultManager]
+             requestImageForAsset:asset
+             targetSize:CGSizeMake(self.frame.size.width, self.frame.size.height)
+             contentMode:PHImageContentModeAspectFill
+             options:nil
+             resultHandler:^(UIImage *result, NSDictionary *info) {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     imageView.image = result;
+                     imageView.contentMode = UIViewContentModeScaleAspectFill;
+                     
+                     [self constrainSubview:imageView ToBottomOfParentView:self];
+                     //self.asset = asset;
+                 });
+             }];
         });
     }
 }

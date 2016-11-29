@@ -29,15 +29,14 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+
+
     [self configureSpinner];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
     
     [FRSTracker track:@"Galleries opened from stories" parameters:@{@"story_id":(self.story.uid != Nil) ? self.story.uid : @""}];
-}
 
--(void)configureWithStory:(FRSStory *)story {
-    
 }
 
 -(void)configureWithGalleries:(NSArray *)galleries {
@@ -127,6 +126,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     timestampLabel.textAlignment = NSTextAlignmentRight;
     timestampLabel.text = [FRSDateFormatter timestampStringFromDate:[_story editedDate]];
     [self.headerContainer addSubview:timestampLabel];
+        
     
     UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 48, [UIScreen mainScreen].bounds.size.width -32, 20)];
     captionLabel.textColor = [UIColor frescoDarkTextColor];
@@ -181,7 +181,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     label.textColor = [UIColor whiteColor];
     
     [self.navigationItem setTitleView:label];
-    
+
 }
 
 -(void)dismissDetail {
@@ -248,16 +248,15 @@ static NSString *galleryCell = @"GalleryCellReuse";
             
             for (FRSGalleryCell *cell in visibleCells) {
                 
-                /*
-                 Start playback mid frame -- at least 300 from top & at least 100 from bottom
-                 */
                 if (cell.frame.origin.y - self.galleriesTable.contentOffset.y < 300 && cell.frame.origin.y - self.galleriesTable.contentOffset.y > 100) {
                     
                     if (!taken) {
-                        taken = TRUE;
                         [cell play];
+                        taken = TRUE;
                     }
-                    
+                    else {
+                        [cell pause];
+                    }
                 }
             }
         });
