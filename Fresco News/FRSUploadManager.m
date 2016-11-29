@@ -25,9 +25,24 @@ static NSDate *lastDate;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedUploader = [[self alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:sharedUploader selector:@selector(notifyExit:) name:UIApplicationWillResignActiveNotification object:nil];
+
     });
     
     return sharedUploader;
+}
+    
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)notifyExit:(NSNotification*)notification {
+    
+    if (completed == toComplete || toComplete == 0) {
+        return;
+    }
+    
+    [FRSTracker track:@"Upload Close" parameters:@{@"percent_complete":@(lastProgress), @"gallery_id":_currentGalleryID}];
 }
 
 -(void)checkCachedUploads {
@@ -140,6 +155,7 @@ static NSDate *lastDate;
     self = [super init];
     
     if (self) {
+        _currentGalleryID = @"";
         [self commonInit];
     }
     
@@ -409,8 +425,5 @@ static NSDate *lastDate;
 //    }
 }
 
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 @end
