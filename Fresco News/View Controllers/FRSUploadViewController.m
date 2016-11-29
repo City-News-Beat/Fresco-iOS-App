@@ -1240,6 +1240,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
 -(void)moveToUpload:(NSDictionary *)postData {
     /* upload started */
     NSString *galleryID = postData[@"id"];
+    [[FRSUploadManager sharedUploader] setCurrentGalleryID:galleryID];
     
     if (galleryID && ![galleryID isEqual:[NSNull null]]) {
         

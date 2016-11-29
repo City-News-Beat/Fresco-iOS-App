@@ -43,9 +43,8 @@
     self.caption = dict[@"caption"];
     self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"time_created"]];
     
-    if (dict[@"updated_at"] && ![dict[@"updated_at"] isEqual:[NSNull null]]) {
-        self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"updated_at"]];
-        
+    if (dict[@"action_at"] && ![dict[@"action_at"] isEqual:[NSNull null]]) {
+        self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"action_at"]];
     }
     
     self.title = dict[@"title"];

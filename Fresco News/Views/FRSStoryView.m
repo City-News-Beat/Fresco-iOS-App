@@ -233,8 +233,7 @@
         [self.topContainer addSubview:clockIV];
         
         UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(clockIV.frame.origin.x +24 +8, clockIV.frame.origin.y +4, self.frame.size.width, 16)]; //MAKE WIDTH DYNAMIC WHEN ADDING LOCATION
-        timestampLabel.text = [FRSDateFormatter relativeTimeFromDate:[_story editedDate]];
-
+        timestampLabel.text = [FRSDateFormatter timestampStringFromDate:[_story editedDate]];
         timestampLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
         timestampLabel.textColor = [UIColor whiteColor];
         [self.topContainer addSubview:timestampLabel];
