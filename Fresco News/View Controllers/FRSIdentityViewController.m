@@ -422,7 +422,7 @@
                 int month = [[authenticatedUser valueForKey:@"dob_month"] intValue];
                 int year = [[authenticatedUser valueForKey:@"dob_year"] intValue];
                 
-                NSString *birthday = [NSString stringWithFormat:@"%d/%d/%d", day, month, year];
+                NSString *birthday = [NSString stringWithFormat:@"%d/%d/%d", month, day, year];
                 _dateField.enabled = FALSE;
                 _dateField.text = birthday;
                 _dateField.textColor = [UIColor frescoLightTextColor];
