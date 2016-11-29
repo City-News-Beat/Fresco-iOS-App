@@ -62,9 +62,6 @@
     [self configureNearbyUsers];
     
     self.userSectionTitleString = @"";
-    
-    // Default tab bar to visible
-    [self showTabBarAnimated:NO];
 }
 
 -(void)search:(NSString *)string {
@@ -818,7 +815,6 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [[[self.view window] rootViewController] presentViewController:activityController animated:YES completion:nil];
-    [FRSTracker track:@"Gallery Shared" parameters:@{@"content":content.firstObject}];
 }
 
 -(void)readMore:(NSIndexPath *)indexPath {
