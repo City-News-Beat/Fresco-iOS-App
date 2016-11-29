@@ -21,6 +21,7 @@
 //#import "FRSUserProfileViewController.h"
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
+#import "FRSAppDelegate.h"
 
 #define TEXTVIEW_TOP_PAD 12
 
@@ -31,12 +32,9 @@
 @property (strong, nonatomic) UIImageView *muteImageView;
 @property (strong, nonatomic) UIImageView *repostImageView;
 @property (strong, nonatomic) UILabel *repostLabel;
+@property (strong, nonatomic) NSMutableArray *playerLayers;
 @property BOOL playerHasFocus;
 @property BOOL isVideo;
-@property BOOL hasLocation;
-@property BOOL hasTime;
-@property BOOL hasName;
-
 @end
 
 @implementation FRSGalleryView
@@ -44,26 +42,39 @@
 
 -(void)loadGallery:(FRSGallery *)gallery {
     
-    
     if ([self.gallery.uid isEqualToString:gallery.uid]) {
         self.gallery = gallery;
         [self updateSocial];
         [self checkOwner];
-        [self updateMetaFields];
         return;
     }
     
-    self.gallery = gallery;
+    _hasTapped = FALSE;
     
     for (FRSPlayer *player in self.players) {
-        if ([player respondsToSelector:@selector(pause)]) {
-            [player.container removeFromSuperview];
-            [player pause];
-            [player replaceCurrentItemWithPlayerItem:Nil];
+        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
+            [player.currentItem cancelPendingSeeks];
+            [player.currentItem.asset cancelLoading];
         }
     }
     
+    for (AVPlayerLayer *layer in self.playerLayers) {
+        [layer removeFromSuperlayer];
+    }
+    
+    for (UIImageView *imageView in self.imageViews) {
+        imageView.image = Nil;
+    }
+    
+    
+    self.players = Nil;
+    self.videoPlayer = Nil;
+    self.playerLayers = Nil;
+    
+    self.gallery = gallery;
+    
     self.players = [[NSMutableArray alloc] init];
+    self.playerLayers = [[NSMutableArray alloc] init];
     
     self.clipsToBounds = NO;
     self.gallery = gallery;
@@ -132,54 +143,7 @@
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
     
-    self.hasLocation = YES;
-    self.hasTime     = YES;
-    self.hasName     = YES;
-
-    [self updateMetaFields];
-    
     [self checkOwner];
-}
-
-
--(void)updateMetaFields {
-    
-    [self updateScrollView];
-    
-    if ([self.locationLabel.text isEqualToString:@""] || [self.locationLabel.text isEqual:[NSNull null]]) {
-        self.hasLocation = NO;
-    }
-    if ([self.timeLabel.text isEqualToString:@""] || [self.timeLabel.text isEqual:[NSNull null]]) {
-        self.hasTime = NO;
-    }
-    if ([self.nameLabel.text isEqualToString:@""] || [self.nameLabel.text isEqual:[NSNull null]]) {
-        self.hasName = NO;
-    }
-    
-    
-    
-    
-    
-    if (!self.hasLocation && self.hasTime && self.hasName) {
-        self.locationLabel.alpha = 0;
-        self.locationIV.alpha = 0;
-        self.profileIV.transform = CGAffineTransformMakeTranslation(0, 20);
-        self.nameLabel.transform = CGAffineTransformMakeTranslation(0, 20);
-    } else if (!self.hasLocation && !self.hasTime && self.hasName) {
-        self.locationLabel.alpha = 0;
-        self.locationIV.alpha = 0;
-        self.timeLabel.alpha = 0;
-        self.clockIV.alpha = 0;
-        self.profileIV.transform = CGAffineTransformMakeTranslation(0, -20);
-        self.nameLabel.transform = CGAffineTransformMakeTranslation(0, -20);
-    } else if (self.hasLocation && !self.hasTime && self.hasName) {
-        self.timeLabel.alpha = 0;
-        self.clockIV.alpha = 0;
-        self.profileIV.transform = CGAffineTransformMakeTranslation(0, -20);
-        self.nameLabel.transform = CGAffineTransformMakeTranslation(0, -20);
-        self.locationIV.transform = CGAffineTransformMakeTranslation(0, -20);
-        self.locationLabel.transform = CGAffineTransformMakeTranslation(0, -20);
-    }
 }
 
 -(void)checkOwner {
@@ -374,7 +338,10 @@
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
     
     [self configureScrollView]; //
-    [self configureImageViews]; // these three will be wrapped in carousel
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self configureImageViews]; 
+    });
+    // these three will be wrapped in carousel
     [self configurePageControl];//
     
     [self configureGalleryInfo]; // this will stay similar
@@ -434,8 +401,11 @@
                     // add AVPlayerLayer
                     NSLog(@"TOP LEVEL PLAYER");
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.players addObject:[self setupPlayerForPost:post]];
-                        [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                        [self.players addObject:[self setupPlayerForPost:post play:FALSE]];
+                        
+                        if ([self.players[0] respondsToSelector:@selector(container)]) {
+                            [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                        }
                     });
                     [self configureMuteIcon];
                 }
@@ -447,13 +417,13 @@
             imageView.userInteractionEnabled = YES;
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.imageViews.count > 1) {
-            UIImageView *nextImage = self.imageViews[1];
-            FRSPost *nextPost = self.orderedPosts[1];
-            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
-        }
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if (self.imageViews.count > 1) {
+//            UIImageView *nextImage = self.imageViews[1];
+//            FRSPost *nextPost = self.orderedPosts[1];
+//            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
+//        }
+//    });
 
     if (!self.topLine) {
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
@@ -466,10 +436,61 @@
     }
 }
 
--(FRSPlayer *)setupPlayerForPost:(FRSPost *)post {
+-(void)removeFromSuperview {
+    
+    for (FRSPlayer *player in self.players) {
+        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
+            [player.currentItem cancelPendingSeeks];
+            [player.currentItem.asset cancelLoading];
+        }
+    }
+    
+    for (AVPlayerLayer *layer in self.playerLayers) {
+        [layer removeFromSuperlayer];
+    }
+    
+    for (UIImageView *imageView in self.imageViews) {
+        imageView.image = Nil;
+    }
+    
+    
+    self.players = Nil;
+    self.videoPlayer = Nil;
+    self.playerLayers = Nil;
+    
+    [super removeFromSuperview];
+}
+
+-(void)dealloc {
+    for (FRSPlayer *player in self.players) {
+        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
+            [player.currentItem cancelPendingSeeks];
+            [player.currentItem.asset cancelLoading];
+        }
+    }
+    
+    self.players = Nil;
+    self.videoPlayer = Nil;
+}
+
+-(FRSPlayer *)setupPlayerForPost:(FRSPost *)post play:(BOOL)play {
+    if (!_playerLayers) {
+        _playerLayers = [[NSMutableArray alloc] init];
+    }
+    
     [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
-    FRSPlayer *videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+    
+    FRSPlayer *videoPlayer;
+    
+    if (!play) {
+        videoPlayer = [[FRSPlayer alloc] init];
+    }
+    else {
+        videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
+    }
+    
+    videoPlayer.hasEstablished = play;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
@@ -491,10 +512,15 @@
         
         videoPlayer.container = container;
         playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
+        [_playerLayers addObject:playerLayer];
         
-        [container.layer insertSublayer:playerLayer atIndex:1000];
+        if (play) {
+            [container.layer insertSublayer:playerLayer atIndex:1000];
+        }
+        
         [self.scrollView addSubview:container];
         [self.scrollView bringSubviewToFront:container];
+        
         [self configureMuteIcon];
     });
     
@@ -511,55 +537,57 @@
 }
 
 -(void)handlePlay:(BOOL)play player:(FRSPlayer *)player {
-    if (play) {
-        for (FRSPlayer *potential in self.players) {
-            if (potential != player && [[potential class] isSubclassOfClass:[FRSPlayer class]]) {
-                [potential pause];
-            }
-        }
-        
-        if (self.delegate) {
-            [self.delegate playerWillPlay:player];
-        }
-    }
+//    if (play) {
+//        for (FRSPlayer *potential in self.players) {
+//            if (potential != player && [[potential class] isSubclassOfClass:[FRSPlayer class]]) {
+//                [potential pause];
+//            }
+//        }
+//        
+//        if (self.delegate) {
+//            [self.delegate playerWillPlay:player];
+//        }
+//    }
 }
 
 -(void)playerTap:(UITapGestureRecognizer *)tap {
-    CGPoint location = [tap locationInView:self];
-    
-    if (location.y > _scrollView.frame.size.height) {
-        return;
-    }
-    
-    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
-    FRSPlayer *player = self.players[page];
-    
-    if (![[player class] isSubclassOfClass:[FRSPlayer class]]) {
-        return;
-    }
-    
-    player.muted = FALSE;
-    
-    if (self.muteImageView.alpha == 1 && player.rate == 0.0) {
-        self.muteImageView.alpha = 0;
-        [player play];
-        return;
-    }
-    
-    if (player.muted) {
+        CGPoint location = [tap locationInView:self];
+        
+        if (location.y > _scrollView.frame.size.height) {
+            return;
+        }
+        
+        NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+        FRSPlayer *player = self.players[page];
+        
+        if (![[player class] isSubclassOfClass:[FRSPlayer class]]) {
+            return;
+        }
+        
         player.muted = FALSE;
-        [player play];
-    }
-    else if (self.muteImageView.alpha == 1) {
-        self.muteImageView.alpha = 0;
-        return;
-    }
-    
-    if (player.rate == 0.0) {
-        [player play];
-    } else {
-        [player pause];
-    }
+        
+        if (self.muteImageView.alpha == 1 && player.rate == 0.0) {
+            self.muteImageView.alpha = 0;
+            [player play];
+            return;
+        }
+        
+        if (player.muted) {
+            player.muted = FALSE;
+            [player play];
+            return;
+        }
+        else if (self.muteImageView.alpha == 1) {
+            self.muteImageView.alpha = 0;
+            return;
+        }
+        
+        if (player.rate == 0.0) {
+            [player play];
+        } else {
+            [player pause];
+            _hasTapped = TRUE;
+        }
 }
 
 -(void)handlePhotoTap:(NSInteger)index {
@@ -864,15 +892,6 @@
     return label;
 }
 
--(void)removeFromSuperview {
-    
-    for (UIImageView *imageView in self.imageViews) {
-        imageView.image = Nil;
-    }
-    
-    [super removeFromSuperview];
-}
-
 -(void)configureCaptionLabel{
     self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.scrollView.frame.size.height, self.scrollView.frame.size.width - 32, 0)];
     self.captionLabel.textColor = [UIColor frescoDarkTextColor];
@@ -932,17 +951,7 @@
 
 #pragma mark - Action Bar Delegate
 -(NSString *)titleForActionButton{
-    int comments = [[self.gallery valueForKey:@"comments"] intValue];
-    
-    if (comments == 1) {
-        return [NSString stringWithFormat:@"%d COMMENT", comments];
-    } else if (comments == 0) {
-        return @"READ MORE";
-    } else if (comments >= 600) {
-        return [NSString stringWithFormat:@"HELLA COMMENTS"];
-    }
-    
-    return [NSString stringWithFormat:@"%d COMMENTS", comments];
+    return @"READ MORE";
 }
 
 -(UIColor *)colorForActionButton{
@@ -965,12 +974,12 @@
     self.shareBlock(@[sharedContent]);
 }
 
-
 #pragma mark ScrollView Delegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     //We add half a screen's width so that the image loading occurs half way through the scroll.
-
+    [self pause];
+    
     if (!self.players) {
         self.players = [[NSMutableArray alloc] init];
     }
@@ -991,7 +1000,7 @@
     
     if (self.players.count <= page) {
         if (post.videoUrl != Nil && page >= self.players.count) {
-            FRSPlayer *player = [self setupPlayerForPost:post];
+            FRSPlayer *player = [self setupPlayerForPost:post play:TRUE];
             [self.players addObject:player];
             [self.videoPlayer play];
         }
@@ -1096,29 +1105,7 @@
     if (adjustedPost.videoUrl == nil) {
         self.muteImageView.alpha = 0;
     }
-    
-    if ([self.locationLabel.text isEqualToString:@""] || [self.locationLabel.text isEqual:[NSNull null]]) {
-        self.locationLabel.alpha = 0;
-        self.locationIV.alpha = 0;
-    }
-    
-
-//    if (!self.hasName) {
-//        self.nameLabel.alpha = 0;
-//        self.profileIV.alpha = 0;
-//    }
-//    
-//    if (!self.hasTime) {
-//        self.timeLabel.alpha = 0;
-//        self.clockIV.alpha = 0;
-//    }
-//    
-//    if (!self.hasLocation) {
-//        self.locationLabel.alpha = 0;
-//        self.locationIV.alpha = 0;
-//    }
 }
-
 
 -(void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
     NSString *adjustedURL = url;
@@ -1155,6 +1142,10 @@
 }
 
 -(void)breakDownPlayer:(AVPlayerLayer *)layer {
+    if (![[layer class] isSubclassOfClass:[AVPlayerLayer class]]) {
+        return;
+    }
+    
     [layer.player pause];
     [layer.player replaceCurrentItemWithPlayerItem:Nil];
     [layer removeFromSuperlayer];
@@ -1206,6 +1197,7 @@
     
     if ([self.gallery.sourceUser uid] != nil) {
         [self.delegate.navigationController pushViewController:userViewController animated:YES];
+
     }
 }
 
@@ -1232,6 +1224,15 @@
 
                 if ([currentPost.creator uid] != nil) {
                     [self.delegate.navigationController pushViewController:userViewController animated:YES];
+                    
+//                    userViewController.hidesBottomBarWhenPushed = NO;
+
+//                    [userViewController setHiddenTabBar:NO];
+                    
+//                    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+//                    [[appDelegate.tabBarController tabBar] setHidden:NO];
+                    
+//                    [self.delegate.navigationController.tabBarController.tabBar setHidden:NO];
                 }
             });
         }
@@ -1268,15 +1269,76 @@
 }
 
 -(void)play {
+    
     NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
     
     if (self.players.count > page) {
         if ([[self.players[page] class] isSubclassOfClass:[FRSPlayer class]]) {
-            [(AVPlayer *)self.players[page] play];
+            
+            FRSPlayer *player = (FRSPlayer *)self.players[page];
+            
+            if ([[player class] isSubclassOfClass:[FRSPlayer class]] && !player.currentItem && _currentPage < self.orderedPosts.count) {
+                
+                if (page >= self.orderedPosts.count) {
+                    return;
+                }
+                
+                FRSPost *post = (FRSPost *)self.orderedPosts[page];
+                
+                [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:post.videoUrl]]];
+                
+                if (!player.hasEstablished) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+                        player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+                        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                                 selector:@selector(playerItemDidReachEnd:)
+                                                                     name:AVPlayerItemDidPlayToEndTimeNotification
+                                                                   object:[player currentItem]];
+                        
+                        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+                        
+                        playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
+                        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+                        playerLayer.opaque = FALSE;
+                        [player.container.layer insertSublayer:playerLayer atIndex:10000];
+                        
+                        if (self.playerLayers.count > page) {
+                            [(AVPlayerLayer *)self.playerLayers[page] removeFromSuperlayer];
+                        }
+                        
+                        self.playerLayers[page] = playerLayer;
+                    });
+                    
+                    player.hasEstablished = TRUE;
+                }
+                
+                if (self.players.count > page) {
+                    [(AVPlayer *)self.players[page] play];
+                    [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
+                }
+
+            }
+            
         }
     }
-    
-//    self.muteImageView.alpha = 0;
+}
+
+-(void)offScreen {
+    for (FRSPlayer *player in self.players) {
+        if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
+            [player.currentItem cancelPendingSeeks];
+            [player.currentItem.asset cancelLoading];
+            
+            for (CALayer *layer in player.container.layer.sublayers) {
+                [layer removeFromSuperlayer];
+            }
+            
+            player.hasEstablished = FALSE;
+        }
+    }
 }
 
 -(void)pause {
