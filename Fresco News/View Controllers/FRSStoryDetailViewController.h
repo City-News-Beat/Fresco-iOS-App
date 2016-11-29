@@ -13,8 +13,9 @@
 #import "FRSGalleryView.h"
 #import "FRSBaseViewController.h"
 #import "FRSStoryDetailViewController.h"
+#import "FRSScrollingViewController.h"
 
-@interface FRSStoryDetailViewController : FRSBaseViewController<UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
+@interface FRSStoryDetailViewController : FRSScrollingViewController<UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
 
 {
     

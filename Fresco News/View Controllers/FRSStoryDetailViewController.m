@@ -29,14 +29,11 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-
-
     [self configureSpinner];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
     
     [FRSTracker track:@"Galleries opened from stories" parameters:@{@"story_id":(self.story.uid != Nil) ? self.story.uid : @""}];
-
 }
 
 -(void)configureWithStory:(FRSStory *)story {
@@ -184,7 +181,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     label.textColor = [UIColor whiteColor];
     
     [self.navigationItem setTitleView:label];
-
+    
 }
 
 -(void)dismissDetail {
