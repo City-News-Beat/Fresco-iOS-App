@@ -147,6 +147,8 @@
     
     [self.actionBar.actionButton setTitle:[self titleForActionButton] forState:UIControlStateNormal];
     [self.actionBar.actionButton.titleLabel sizeToFit];
+    
+    [self.actionBar actionButtonTitleNeedsUpdate];
 }
 
 -(void)checkOwner {
