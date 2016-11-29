@@ -13,9 +13,8 @@
 #import "FRSGalleryView.h"
 #import "FRSBaseViewController.h"
 #import "FRSStoryDetailViewController.h"
-#import "FRSScrollingViewController.h"
 
-@interface FRSStoryDetailViewController : FRSScrollingViewController<UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
+@interface FRSStoryDetailViewController : FRSBaseViewController<UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
 
 {
     
@@ -30,6 +29,5 @@
 -(void)reloadData;
 -(void)scrollToGalleryIndex:(NSInteger)index;
 -(void)configureWithGalleries:(NSArray *)galleries;
--(void)configureWithStory:(FRSStory *)story;
 
 @end

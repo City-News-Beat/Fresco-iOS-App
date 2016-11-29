@@ -36,15 +36,24 @@
     
     if (self.galleryView != Nil) {
         
-        hasPlayed = FALSE;
+        if (![self.galleryView.gallery.uid isEqualToString:self.gallery.uid]) {
+            hasPlayed = FALSE;
+        }
         
         [self.galleryView loadGallery:self.gallery];
         self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
+        
+        if (self.shouldRefreshActionBar) {
+            [self.galleryView.actionBar actionButtonTitleNeedsUpdate];
+        }
+        
         return;
     }
-    
-    hasPlayed = FALSE;
 
+    if (self.shouldRefreshActionBar) {
+        [self.galleryView.actionBar actionButtonTitleNeedsUpdate];
+    }
+    
     self.clipsToBounds = YES;
     
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -75,15 +84,8 @@
     [super setFrame:frame];
 }
 -(void)clearCell{
-    
-    //[self.galleryView removeFromSuperview];
-}
 
--(void)prepareForReuse {
-    [super prepareForReuse];
-}
--(void)offScreen {
-    [self.galleryView offScreen];
+    //[self.galleryView removeFromSuperview];
 }
 
 #pragma mark - DataSource For Action Bar
@@ -96,6 +98,13 @@
 }
 
 -(void)play {
+    
+    if (hasPlayed) {
+        return;
+    }
+    
+    hasPlayed = TRUE;
+    
     [self.galleryView play];
 }
 -(void)pause {
