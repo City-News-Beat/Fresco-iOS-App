@@ -20,31 +20,15 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
+    
     [self configureNavigationBar];
     [self configureTableView];
-
-
-    if (!self.assignments) {
-        [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:0 ofLocation:@[@0, @0] withCompletion:^(id responseObject, NSError *error) {
-            if (!error && responseObject[@"global"]) {
-                self.assignments = (NSArray *)responseObject[@"global"];
-                [self.tableView reloadData];
-            }
-        }];
-    } else {
-    }
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self showTabBarAnimated:animated];
     
-}
-
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self expandNavBar:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,15 +39,8 @@
 #pragma mark - UI Configuration
 
 -(void)configureNavigationBar {
-    
     [self configureBackButtonAnimated:YES];
     self.title = @"GLOBAL ASSIGNMENTS";
-    
-    [self.navigationController.navigationBar setTitleTextAttributes:
-     @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
-    [self removeNavigationBarLine];
 }
 
 -(void)configureTableView {

@@ -29,6 +29,8 @@
 
 #import <Haneke/Haneke.h>
 
+#import "FRSNotificationHandler.h"
+
 
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate, FRSAlertViewDelegate, FRSDefaultNotificationCellDelegate>
@@ -58,6 +60,16 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [super viewWillAppear:animated];
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     self.navigationItem.title = @"ACTIVITY";
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    UINavigationController *nav = (UINavigationController *)appDelegate.window.rootViewController;
+    
+    if ([[nav class] isSubclassOfClass:[UINavigationController class]]) {
+        [nav setNavigationBarHidden:TRUE];
+    }
+    else {
+        nav = nav.navigationController;
+        [nav setNavigationBarHidden:TRUE];
+    }
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -512,123 +524,10 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
-    NSLog(@"%@", [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"]);
-    
-    NSString *notificationID = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"id"];
     NSDictionary *push = [self.feed objectAtIndex:indexPath.row];
-    if (notificationID && ![notificationID isEqual:[NSNull null]]) {
-        [self markAsRead:notificationID];
-    }
-    
-    /* NEWS */
-    if ([currentKey isEqualToString:photoOfDayNotification]) {
-
-    } else if ([currentKey isEqualToString:todayInNewsNotification]) {
-        
-        NSArray *galleryIDs = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_ids"];
-        
-        if (galleryIDs) {
-            [self segueToTodayInNews:galleryIDs];
-        }
-        
-    } else if ([currentKey isEqualToString:userNewsGalleryNotification]) {
-        [self segueToGallery:[self.feed objectAtIndex:indexPath.row]];
-        
-    } else if ([currentKey isEqualToString:userNewsStoryNotification]) {
-        [self segueToStory:[self.payload objectForKey:userNewsStoryNotification]];
-
-    } else if ([currentKey isEqualToString:userNewsCustomNotification]) {
-        // Do nothing (for now)
-        
-    /* SOCIAL */
-    } else if ([currentKey isEqualToString:followedNotification]) {
-        
-        NSString *userID = [[[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"user_ids"] firstObject];
-        [self segueToUser:userID];
-        
-    } else if ([currentKey isEqualToString:likedNotification]) {
-        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
-
-        [self segueToGallery:gallery];
-        
-    } else if ([currentKey isEqualToString:repostedNotification]) {
-        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
-        
-        [self segueToGallery:gallery];
-    } else if ([currentKey isEqualToString:commentedNotification] || [currentKey isEqualToString:mentionCommentNotification]) {
-        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
-        
-        [self segueToGallery:gallery];
-    } else if ([currentKey isEqualToString:mentionCommentNotification]) {
-        NSLog(@"MENTION COMMENT");
-        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
-        
-        NSString *comment = [[[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"comment_ids"] firstObject];
-        
-        [self segueToComment:comment inGallery:gallery];
-      }
-    else if ([currentKey isEqualToString:mentionGalleryNotification]) {
-      NSLog(@"MENTION GALLERY");
-        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
-        
-        NSString *comment = [[[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"comment_ids"] firstObject];
-        
-        [self segueToComment:comment inGallery:gallery];
-      }
-    else if ([currentKey isEqualToString:galleryApprovedNotification]) {
-        NSString *gallery = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
-
-        NSLog(@"APPROVED: %@", gallery);
-        [self segueToGallery:gallery];
-    }
-    
-    /* ASSIGNMENT */
-    else if ([currentKey isEqualToString:newAssignmentNotification]) {
-        
-        if ([[[push valueForKey:@"meta"] valueForKey:@"is_global"] boolValue]) {
-            NSString *assignmentID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"assignment_id"];
-            [self segueToGlobalAssignmentWithID:assignmentID];
-        } else {
-            NSString *assignmentID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"assignment_id"];
-            [self segueToAssignmentWithID:assignmentID];
-        }
-    }
-    
-    /* PAYMENT */
-    else if ([currentKey isEqualToString:purchasedContentNotification]) {
-        if ([[[push valueForKey:@"meta"] valueForKey:@"has_payment"] boolValue]) {
-            NSString *postID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"post_id"];
-            NSString *galleryID = [[[self.feed objectAtIndex:indexPath.row] objectForKey:@"meta"] objectForKey:@"gallery_id"];
-            [self segueToPost:postID inGallery:galleryID];
-        }
-        else {
-            [self segueToDebitCard];
-        }
-
-        
-    } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
-        [self segueToDebitCard];
-        
-    } else if ([currentKey isEqualToString:paymentSentNotification]) {
-        
-    } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
-        [self segueToDebitCard];
-
-    } else if ([currentKey isEqualToString:taxInfoRequiredNotification]) {
-        [self segueToTaxInfo];
-        
-    } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
-        // do nothing
-        [self segueToTaxInfo];
-        
-    } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
-        [self segueToTaxInfo];
-    } else {
-
-    
-    }
+    [FRSNotificationHandler handleNotification:push];
 }
+
 -(void)error:(NSError *)error {
     if (!error) {
         FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY LOAD ERROR" message:@"Unable to load gallery. Please try again later." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
@@ -643,37 +542,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         [alert show];
     }
 }
-
--(void)segueToPost:(NSString *)postID inGallery:(NSString *)gallery {
-    [[FRSAPIClient sharedClient] getGalleryWithUID:gallery completion:^(id responseObject, NSError *error) {
-        
-        if (error || !responseObject) {
-            [self error:error];
-            return;
-        }
-        
-        FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-        FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[appDelegate managedObjectContext]];
-        
-        [galleryToSave configureWithDictionary:responseObject context:[appDelegate managedObjectContext]];
-        
-        FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:galleryToSave];
-        vc.shouldHaveBackButton = YES;
-        [vc focusOnPost:postID];
-        
-        if (!self.isSegueingToGallery) {
-            self.isSegueingToGallery = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
-        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-        [self hideTabBarAnimated:YES];
-    }];
-}
--(void)segueToComment:(NSString *)commentID inGallery:(NSString *)gallery {
-    
-}
-#pragma mark - Cell Configuration
 
 #pragma mark - News
 -(void)configureTodayInNews:(FRSDefaultNotificationTableViewCell *)cell dictionary:(NSDictionary*)dictionary {

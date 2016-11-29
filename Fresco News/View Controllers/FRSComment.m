@@ -39,19 +39,9 @@
     
     _entities = dictionary[@"entities"];
     _imageURL = dictionary[@"user"][@"avatar"];
+    _updatedAt = dictionary[@"updated_at"];
+    _createdAt = dictionary[@"created_at"];
     _uid = dictionary[@"id"];
-    
-    
-    
-    if (![dictionary[@"created_at"] isEqual:[NSNull null]]) {
-        _createdAt = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"created_at"]];
-        
-    }
-    
-    if (![dictionary[@"updated_at"] isEqual:[NSNull null]]) {
-        _updatedAt = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"updated_at"]];
-        
-    }
     
     [self createAttributedText];
 }
