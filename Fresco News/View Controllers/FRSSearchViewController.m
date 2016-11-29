@@ -62,6 +62,9 @@
     [self configureNearbyUsers];
     
     self.userSectionTitleString = @"";
+    
+    // Default tab bar to visible
+    [self showTabBarAnimated:NO];
 }
 
 -(void)search:(NSString *)string {
