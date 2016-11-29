@@ -21,6 +21,7 @@
 //#import "FRSUserProfileViewController.h"
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
+#import "FRSAppDelegate.h"
 
 #define TEXTVIEW_TOP_PAD 12
 
@@ -1196,6 +1197,7 @@
     
     if ([self.gallery.sourceUser uid] != nil) {
         [self.delegate.navigationController pushViewController:userViewController animated:YES];
+
     }
 }
 
@@ -1222,6 +1224,15 @@
 
                 if ([currentPost.creator uid] != nil) {
                     [self.delegate.navigationController pushViewController:userViewController animated:YES];
+                    
+//                    userViewController.hidesBottomBarWhenPushed = NO;
+
+//                    [userViewController setHiddenTabBar:NO];
+                    
+//                    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+//                    [[appDelegate.tabBarController tabBar] setHidden:NO];
+                    
+//                    [self.delegate.navigationController.tabBarController.tabBar setHidden:NO];
                 }
             });
         }

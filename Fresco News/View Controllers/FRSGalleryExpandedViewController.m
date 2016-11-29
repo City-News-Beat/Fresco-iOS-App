@@ -121,7 +121,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [super viewDidLoad];
 
     [self configureUI];
-    [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     self.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
 }
 
@@ -142,6 +141,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.galleryView offScreen];
     
     self.navigationItem.titleView = self.titleLabel;
+    [self showNavBarForScrollView:self.scrollView animated:YES];
 }
 
 -(void)setupDeepLinkedComment:(NSString *)commentID {
@@ -937,7 +937,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         NSLog(@"USER: %@", user);
         FRSProfileViewController *viewController = [[FRSProfileViewController alloc] initWithUserID:user];
         self.navigationItem.title = @"";
-        [self.tabBarController.tabBar setHidden:YES];
+//        [self.tabBarController.tabBar setHidden:YES];
         [self.navigationController pushViewController:viewController animated:YES];
     }
     else if ([URL.absoluteString containsString:@"tag"]) {

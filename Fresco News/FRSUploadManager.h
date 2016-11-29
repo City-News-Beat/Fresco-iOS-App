@@ -31,4 +31,6 @@
 @property (nonatomic, retain) NSMutableArray *uploadMeta;
 @property (nonatomic, weak) NSManagedObjectContext *context;
 @property (nonatomic, retain) NSMutableDictionary *managedObjects;
+@property (nonatomic, retain) NSString *currentGalleryID;
+
 @end

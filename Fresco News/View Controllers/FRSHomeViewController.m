@@ -817,6 +817,7 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
+    [FRSTracker track:@"Gallery Shared" parameters:@{@"content":content.firstObject}];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -846,7 +847,8 @@
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
     FRSGallery *gallery = self.dataSource[notification.row];
-    
+    [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
     vc.gallery = gallery;

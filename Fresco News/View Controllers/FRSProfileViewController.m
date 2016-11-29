@@ -115,10 +115,22 @@
 }
 
 -(void)viewDidLoad {
-    
     [super viewDidLoad];
     
+    
+//    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+//    
+//    [[appDelegate.tabBarController tabBar] setHidden:NO];
+//    
+//    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - [appDelegate.tabBarController tabBar].frame.size.height;
+//    self.tabBarController.tabBar.frame = CGRectMake(0, yOrigin, [appDelegate.tabBarController tabBar].frame.size.width, [appDelegate.tabBarController tabBar].frame.size.height);
+
+    
     self.editedProfile = false;
+    
+    [self.navigationController.tabBarController.tabBar setHidden:FALSE];
+    
+    [self showTabBarAnimated:NO];
     
     if (isLoadingUser) {
         return;
@@ -133,10 +145,10 @@
             if (error || !responseObject) {
                 return;
             }
-            
+
             _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
             [self configureWithUser:_representedUser];
-                                
+
         }];
      }
     
@@ -256,9 +268,34 @@
     }
 }
 
+//-(void)showTabBarAnimated:(BOOL)animated{
+//    
+//    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+//    
+//    if (![appDelegate.tabBarController tabBar]) return;
+//    
+//    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - [appDelegate.tabBarController tabBar].frame.size.height;
+//    
+//    if ([appDelegate.tabBarController tabBar].frame.origin.y == yOrigin) return;
+//    
+//    self.hiddenTabBar = NO;
+//    
+//    [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+//        [appDelegate.tabBarController tabBar].frame = CGRectMake(0, yOrigin, [appDelegate.tabBarController tabBar].frame.size.width, [appDelegate.tabBarController tabBar].frame.size.height);
+//    } completion:nil];
+//}
+
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
+    [self.navigationController.tabBarController.tabBar setHidden:FALSE];
+    // Default tab bar in profile to visible
+//    [self.tabBarController.tabBar setHidden:NO];
+//
+
+    
+//    [self showTabBarAnimated:YES];
 
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     if (isLoadingUser) {
@@ -1108,11 +1145,18 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
+    [FRSTracker track:@"Gallery Shared" parameters:@{@"content":content.firstObject}];
 }
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-    FRSGallery *gallery = self.galleries[notification.row];
+    FRSGallery *gallery = [[FRSGallery alloc] init];
+
+    if (self.likesButton.alpha == 1) {
+        gallery = self.likes[notification.row];
+    } else {
+        gallery = self.galleries[notification.row];
+    }
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
@@ -1350,7 +1394,7 @@
                 [weakSelf showShareSheetWithContent:sharedContent];
             };
             
-            galCell.readMoreBlock = ^(NSArray *bullshit){
+            galCell.readMoreBlock = ^(NSArray *array){
                 [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
             };
             
