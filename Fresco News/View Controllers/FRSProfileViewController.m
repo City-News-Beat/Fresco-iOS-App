@@ -117,9 +117,20 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     
+    
+//    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+//    
+//    [[appDelegate.tabBarController tabBar] setHidden:NO];
+//    
+//    NSInteger yOrigin = [UIScreen mainScreen].bounds.size.height - [appDelegate.tabBarController tabBar].frame.size.height;
+//    self.tabBarController.tabBar.frame = CGRectMake(0, yOrigin, [appDelegate.tabBarController tabBar].frame.size.width, [appDelegate.tabBarController tabBar].frame.size.height);
+
+    
     self.editedProfile = false;
     
     [self.navigationController.tabBarController.tabBar setHidden:FALSE];
+    
+    [self showTabBarAnimated:NO];
     
     if (isLoadingUser) {
         return;
@@ -1138,7 +1149,13 @@
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-    FRSGallery *gallery = self.galleries[notification.row];
+    FRSGallery *gallery = [[FRSGallery alloc] init];
+
+    if (self.likesButton.alpha == 1) {
+        gallery = self.likes[notification.row];
+    } else {
+        gallery = self.galleries[notification.row];
+    }
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
@@ -1376,7 +1393,7 @@
                 [weakSelf showShareSheetWithContent:sharedContent];
             };
             
-            galCell.readMoreBlock = ^(NSArray *bullshit){
+            galCell.readMoreBlock = ^(NSArray *array){
                 [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
             };
             
