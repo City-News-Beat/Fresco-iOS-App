@@ -1049,6 +1049,10 @@
 }
 
 -(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
+    if ([self checkAuthAndPresentOnboard]) {
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
+        return;
+    }
     
     [self post:acceptAssignmentEndpoint withParameters:@{@"assignment_id":assignmentID} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
