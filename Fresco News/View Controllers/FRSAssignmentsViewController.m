@@ -91,6 +91,9 @@
 
 @property (strong, nonatomic) NSString *assignmentID;
 
+@property (strong, nonatomic) UIView *greenView;
+@property (strong, nonatomic) UIButton *unacceptAssignmentButton;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -226,6 +229,8 @@
     self.hasDefault = NO;
     self.defaultID  = nil;
     self.showsCard  = NO;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:nil];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -1347,45 +1352,83 @@
         if (responseObject) {
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
-            NSDictionary *dict = responseObject; //might need to dig deeper in the dict, not sure what reesponseObject looks like atm
+            NSDictionary *dict = responseObject;
             [assignment configureWithDictionary:dict];
             [self configureAcceptedAssignment:assignment];
         }
-        
+
         NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
         NSInteger responseCode = response.statusCode;
         
+        // user has already accepted the assignment
         if (responseCode == 412) {
-            // user has already accepted the assignment
+            // unaccept
             return;
         }
-        
-        if (error) {
+
+        if (error.code != 101) {
             [self presentGenericError];
         }
     }];
+    
+    
+    
+    
 
     // IF OPEN CAMERA   v
-    
-    //    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
-    //    UINavigationController *navControl = [[UINavigationController alloc] init];
-    //    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-    //    [navControl pushViewController:cam animated:NO];
-    //    [navControl setNavigationBarHidden:YES];
-    //
-    //    [self presentViewController:navControl animated:YES completion:^{
-    //        [self.tabBarController setSelectedIndex:3];//should return to assignments
-    //    }];
+    //[self openCamera];
 }
-
 
 -(void)configureAcceptedAssignment:(FRSAssignment *)assignment {
+    [[NSNotificationCenter defaultCenter] postNotificationName:enableAssignmentAccept object:assignment];
+    
+    self.greenView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 64)];
+    self.greenView.backgroundColor = [UIColor frescoGreenColor];
+    [self.navigationController.navigationBar addSubview:self.greenView];
+    [self.navigationController.navigationBar bringSubviewToFront:self.greenView];
+    self.navigationController.navigationBar.clipsToBounds = NO;
+    
+    UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
+    self.unacceptAssignmentButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.unacceptAssignmentButton.tintColor = [UIColor whiteColor];
+    [self.unacceptAssignmentButton setImage:closeButtonImage forState:UIControlStateNormal];
+    self.unacceptAssignmentButton.frame = CGRectMake(16, 30, 24, 24);
+    [self.unacceptAssignmentButton addTarget:self action:@selector(unacceptAssignment) forControlEvents:UIControlEventTouchUpInside];
+    [self.greenView addSubview:self.unacceptAssignmentButton];
     
 }
 
 
 
+-(void)unacceptAssignment {
+    [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
+        
+        // error or response, user should be able to unaccept. at least visually
+        
+        [self.greenView removeFromSuperview];
+        [self.unacceptAssignmentButton removeFromSuperview];
+        [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:nil];
+    }];
+}
 
+
+//-(void)configureUnacceptAssignment:(FRSAssignment *)assignment {
+//    [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:assignment];
+//
+//}
+
+
+-(void)openCamera {
+    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+    UINavigationController *navControl = [[UINavigationController alloc] init];
+    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    [navControl pushViewController:cam animated:NO];
+    [navControl setNavigationBarHidden:YES];
+    
+    [self presentViewController:navControl animated:YES completion:^{
+        [self.tabBarController setSelectedIndex:3];//should return to assignments
+    }];
+}
 
 
 

@@ -93,6 +93,7 @@ static NSString * const settingsUpdateEndpoint = @"user/settings/update";
 static NSString * const locationEndpoint = @"user/locate"; // send location
 static NSString * const dualLocationEndpoint = @"user/locationcall";  // send location & get nearby assignments
 static NSString * const acceptAssignmentEndpoint = @"assignment/%@/accept";
+static NSString * const unacceptAssignmentEndpoint = @"assignment/%@/unaccept";
 
 // sign in / sign up (authorization) methods
 static NSString * const loginEndpoint = @"auth/signin";
@@ -171,6 +172,10 @@ static NSString * const settingsPaymentLastFour = @"payment-last-four";
 static NSString * const settingsUserNotificationToggle = @"notifications-enabled";
 static NSString * const userHasSeenPermissionsAlert = @"userHasSeenPermissionsAlert";
 static NSString * const startDate = @"startDate";
+
+// nsnotification
+static NSString * const enableAssignmentAccept = @"enableAssignmentAccept";
+static NSString * const disableAssignmentAccept = @"disableAssignmentAccept";
 
 
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
