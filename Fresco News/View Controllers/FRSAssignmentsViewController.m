@@ -897,7 +897,7 @@
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(acceptAssignment) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(assignmentAction) forControlEvents:UIControlEventTouchUpInside];
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
     [self.assignmentBottomBar addSubview:button];
 
@@ -1221,30 +1221,6 @@
     self.hasDefault = NO;
 }
 
--(void)acceptAssignment {
-    
-    
-    [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
-        
-        
-        
-        
-        
-        
-    }];
-    
-    // IF OPEN CAMERA   v
-    
-//    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
-//    UINavigationController *navControl = [[UINavigationController alloc] init];
-//    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-//    [navControl pushViewController:cam animated:NO];
-//    [navControl setNavigationBarHidden:YES];
-//    
-//    [self presentViewController:navControl animated:YES completion:^{
-//        [self.tabBarController setSelectedIndex:3];//should return to assignments 
-//    }];
-}
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == currentScroller) {
@@ -1360,6 +1336,68 @@
     tableViewController.assignments = self.globalAssignmentsArray;
     [self.navigationController pushViewController:tableViewController animated:YES];
 }
+
+
+#pragma mark - Assignment Accepting
+
+-(void)assignmentAction {
+    
+    [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
+        
+        if (responseObject) {
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+            NSDictionary *dict = responseObject; //might need to dig deeper in the dict, not sure what reesponseObject looks like atm
+            [assignment configureWithDictionary:dict];
+            [self configureAcceptedAssignment:assignment];
+        }
+        
+        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+        NSInteger responseCode = response.statusCode;
+        
+        if (responseCode == 412) {
+            // user has already accepted the assignment
+            return;
+        }
+        
+        if (error) {
+            [self presentGenericError];
+        }
+    }];
+
+    // IF OPEN CAMERA   v
+    
+    //    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+    //    UINavigationController *navControl = [[UINavigationController alloc] init];
+    //    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    //    [navControl pushViewController:cam animated:NO];
+    //    [navControl setNavigationBarHidden:YES];
+    //
+    //    [self presentViewController:navControl animated:YES completion:^{
+    //        [self.tabBarController setSelectedIndex:3];//should return to assignments
+    //    }];
+}
+
+
+-(void)configureAcceptedAssignment:(FRSAssignment *)assignment {
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
