@@ -89,6 +89,8 @@
 
 @property (strong, nonatomic) UIButton *navigateButton;
 
+@property (strong, nonatomic) NSString *assignmentID;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -679,6 +681,7 @@
     self.assignmentCaption = assAnn.subtitle;
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
     self.assignmentPostedDate = assAnn.assignmentPostedDate;
+    self.assignmentID = assAnn.assignmentId;
     
     self.outlets = assAnn.outlets;
     [self configureOutlets];
@@ -890,7 +893,7 @@
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.frame = CGRectMake(self.view.frame.size.width -93-23, 15, 100, 17);
-    [button setTitle:@"OPEN CAMERA" forState:UIControlStateNormal];
+    [button setTitle:@"ACCEPT" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(acceptAssignment) forControlEvents:UIControlEventTouchUpInside];
@@ -1218,15 +1221,27 @@
 }
 
 -(void)acceptAssignment {
-    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
-    UINavigationController *navControl = [[UINavigationController alloc] init];
-    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-    [navControl pushViewController:cam animated:NO];
-    [navControl setNavigationBarHidden:YES];
     
-    [self presentViewController:navControl animated:YES completion:^{
-        [self.tabBarController setSelectedIndex:3];//should return to assignments 
+    
+    [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
+        
+        
+        
+        
+        
+        
     }];
+    
+    
+//    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+//    UINavigationController *navControl = [[UINavigationController alloc] init];
+//    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+//    [navControl pushViewController:cam animated:NO];
+//    [navControl setNavigationBarHidden:YES];
+//    
+//    [self presentViewController:navControl animated:YES completion:^{
+//        [self.tabBarController setSelectedIndex:3];//should return to assignments 
+//    }];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
