@@ -1121,7 +1121,13 @@
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-    FRSGallery *gallery = self.galleries[notification.row];
+    FRSGallery *gallery = [[FRSGallery alloc] init];
+    
+    if (self.currentFeed == self.galleries) {
+        gallery = self.galleries[notification.row];
+    } else {
+        gallery = self.likes[notification.row];
+    }
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
@@ -1278,7 +1284,7 @@
                 [weakSelf showShareSheetWithContent:sharedContent];
             };
             
-            galCell.readMoreBlock = ^(NSArray *bullshit){
+            galCell.readMoreBlock = ^(NSArray *array){
                 [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
             };
             
