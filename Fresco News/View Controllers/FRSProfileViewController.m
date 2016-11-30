@@ -150,6 +150,9 @@
     }
     
      self.fbLoginManager = [[FBSDKLoginManager alloc] init];
+    
+    // Tab bar should always be visible in this view controller
+    [self showTabBarAnimated:NO];
 }
 
 -(void)didPressButtonAtIndex:(NSInteger)index {

@@ -62,6 +62,9 @@
     [self configureNearbyUsers];
     
     self.userSectionTitleString = @"";
+    
+    // Tab bar should always be visible in this view controller
+    [self showTabBarAnimated:NO];
 }
 
 -(void)search:(NSString *)string {
