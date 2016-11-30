@@ -1054,7 +1054,9 @@
         return;
     }
     
-    [self post:acceptAssignmentEndpoint withParameters:@{@"assignment_id":assignmentID} completion:^(id responseObject, NSError *error) {
+    NSString *endpoint = [NSString stringWithFormat:acceptAssignmentEndpoint, assignmentID];
+
+    [self post:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }

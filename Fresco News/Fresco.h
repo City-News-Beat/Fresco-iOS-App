@@ -92,7 +92,7 @@ static NSString * const settingsUpdateEndpoint = @"user/settings/update";
 // location endpoints
 static NSString * const locationEndpoint = @"user/locate"; // send location
 static NSString * const dualLocationEndpoint = @"user/locationcall";  // send location & get nearby assignments
-static NSString * const acceptAssignmentEndpoint = @"assignment/accept";
+static NSString * const acceptAssignmentEndpoint = @"assignment/%@/accept";
 
 // sign in / sign up (authorization) methods
 static NSString * const loginEndpoint = @"auth/signin";

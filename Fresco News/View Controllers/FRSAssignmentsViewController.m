@@ -892,9 +892,10 @@
     [self.assignmentBottomBar addSubview:bottomContainerLine];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectMake(self.view.frame.size.width -93-23, 15, 100, 17);
+    button.frame = CGRectMake(self.view.frame.size.width -100 -16, 15, 100, 17);
     [button setTitle:@"ACCEPT" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(acceptAssignment) forControlEvents:UIControlEventTouchUpInside];
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -1232,6 +1233,7 @@
         
     }];
     
+    // IF OPEN CAMERA   v
     
 //    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
 //    UINavigationController *navControl = [[UINavigationController alloc] init];
