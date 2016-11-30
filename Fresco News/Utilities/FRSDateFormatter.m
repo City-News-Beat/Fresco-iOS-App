@@ -99,8 +99,14 @@
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setTimeZone:[NSTimeZone localTimeZone]];
         [formatter setDateFormat:@"MMMM d"];
+        
+        // Display year only if <1yr
+        if (diff >= 365) {
+            [formatter setDateFormat:@"MMMM d, yyy"];
+        }
         return [formatter stringFromDate:correctDate];
     }
+
 }
 
 @end
