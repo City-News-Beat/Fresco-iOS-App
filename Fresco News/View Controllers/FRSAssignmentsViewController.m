@@ -1453,7 +1453,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.unacceptAssignmentButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.unacceptAssignmentButton.tintColor = [UIColor whiteColor];
     [self.unacceptAssignmentButton setImage:closeButtonImage forState:UIControlStateNormal];
-    self.unacceptAssignmentButton.frame = CGRectMake(20, 30, 24, 24);
+    self.unacceptAssignmentButton.frame = CGRectMake(12, 30, 24, 24);
     [self.unacceptAssignmentButton addTarget:self action:@selector(unacceptAssignment) forControlEvents:UIControlEventTouchUpInside];
     [self.greenView addSubview:self.unacceptAssignmentButton];
     
@@ -1472,8 +1472,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.greenView addSubview:self.acceptAssignmentTimeRemainingLabel];
     
     UIButton *navigationButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    navigationButton.frame = CGRectMake(self.greenView.frame.size.width - 36, 30, 24, 24);
     navigationButton.tintColor = [UIColor whiteColor];
-    
+    [navigationButton setImage:[UIImage imageNamed:@"navigate-white"] forState:UIControlStateNormal];
+    [navigationButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
+    [self.greenView addSubview:navigationButton];
     
 }
 
