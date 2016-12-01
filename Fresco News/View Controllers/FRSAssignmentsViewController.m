@@ -173,7 +173,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         }
 
     }];
-
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -509,7 +508,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self configureOutlets];
         [self configureAssignmentCard];
         [self animateAssignmentCard];
-        [self setExpiration];
+        [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
         [self setPostedDate];
         [self setDistance];
         
@@ -735,7 +734,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     [self configureOutlets];
     
-    [self setExpiration];
+    [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
     [self setPostedDate];
     [self configureAssignmentCard];
     [self animateAssignmentCard];
@@ -795,6 +794,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.distanceLabel.text = distanceString;
     [self.distanceLabel sizeToFit];
     self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
+    self.acceptAssignmentDistanceAwayLabel.text = [distanceString uppercaseString];
 }
 
 -(void)setPostedDate {
@@ -813,9 +813,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.postedLabel.text = postedString;
 }
 
--(void)setExpiration {
+-(void)setExpiration:(NSDate *)date days:(int)expDays hours:(int)expHours minutes:(int)expMinutes seconds:(int)expSeconds {
     
-    NSTimeInterval doubleDiff = [self.assignmentExpirationDate timeIntervalSinceDate:[NSDate date]];
+    NSTimeInterval doubleDiff = [date timeIntervalSinceDate:[NSDate date]];
     long diff = (long) doubleDiff;
     int seconds = diff % 60;
     diff = diff / 60;
@@ -824,6 +824,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     int hours = diff % 24;
     int days = diff / 24;
     
+    if (!date) {
+        days = expDays;
+        hours = expHours;
+        minutes = expMinutes;
+        seconds = expSeconds;
+    }
+
     NSString *expirationString;
     
     if (days != 0) {
@@ -866,6 +873,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
     
     self.expirationLabel.text = expirationString;
+    self.acceptAssignmentTimeRemainingLabel.text = expirationString;
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
@@ -1037,7 +1045,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.postedLabel.textColor = [UIColor frescoMediumTextColor];
     [self.expirationLabel addSubview:self.postedLabel];
 
-    [self setExpiration];
+    [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
     [self setPostedDate];
     
     [self.assignmentStatsContainer addSubview:self.expirationLabel];
@@ -1294,6 +1302,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    
     if (!locations.count) {
         NSLog(@"FRSLocationManager did not return any locations");
         return;
@@ -1436,6 +1445,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self removeAssignmentsFromMap];
     [self removeAllOverlaysIncludingUser:NO];
     [self addAnnotationsForAssignments];
+    
+    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
 }
 
 -(void)configureAcceptedAssignment:(FRSAssignment *)assignment {
@@ -1518,16 +1529,43 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [navControl setNavigationBarHidden:YES];
     
     [self presentViewController:navControl animated:YES completion:^{
-        [self.tabBarController setSelectedIndex:3];//should return to assignments
+        [self.tabBarController setSelectedIndex:3]; // should return to assignments
     }];
 }
 
 
 
+-(void)updateExpirationAndDistanceLabels {
+    
+    if (!self.didAcceptAssignment) {
+        return;
+    }
+    
+    [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
+    [self setDistance];
+}
 
 
-
-
+-(void)updateCounter:(NSTimer *)theTimer {
+    
+    
+    [self setDistance];
+    
+    
+    
+    NSDate *now = [NSDate date];
+    if ([self.assignmentExpirationDate earlierDate:now] == self.assignmentExpirationDate) {
+        [theTimer invalidate];
+    } else {
+        NSUInteger flags = NSCalendarUnitYear | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+        NSDateComponents *components = [[NSCalendar currentCalendar] components:flags fromDate:now toDate:self.assignmentExpirationDate options:0];
+        
+        NSLog(@"there are %ld years, %ld days, %ld hours, %ld minutes and %ld seconds remaining", (long)[components year], (long)[components day], (long)[components hour], (long)[components minute], (long)[components second]);
+        
+        [self setExpiration:nil days:(int)[components day] hours:(int)[components hour] minutes:(int)[components minute] seconds:(int)[components second]];
+        
+    }
+}
 
 
 
