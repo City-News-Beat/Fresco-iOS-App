@@ -1458,14 +1458,14 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.greenView addSubview:self.unacceptAssignmentButton];
     
     self.acceptAssignmentDistanceAwayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 28, self.greenView.frame.size.width, 17)];
-    self.acceptAssignmentDistanceAwayLabel.text = @"1.1 MILES AWAY";
+    self.acceptAssignmentDistanceAwayLabel.text = [self.distanceLabel.text uppercaseString];
     self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
     self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
     self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
     [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
     
     self.acceptAssignmentTimeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 45, self.greenView.frame.size.width, 12)];
-    self.acceptAssignmentTimeRemainingLabel.text = @"Expires in 24 minutes";
+    self.acceptAssignmentTimeRemainingLabel.text = self.expirationLabel.text;
     self.acceptAssignmentTimeRemainingLabel.font = [UIFont systemFontOfSize:10 weight:UIFontWeightRegular];
     self.acceptAssignmentTimeRemainingLabel.textColor = [UIColor whiteColor];
     self.acceptAssignmentTimeRemainingLabel.textAlignment = NSTextAlignmentCenter;
