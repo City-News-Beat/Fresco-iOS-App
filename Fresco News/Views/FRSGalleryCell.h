@@ -29,5 +29,4 @@
 -(void)offScreen;
 -(void)play;
 -(void)pause;
-
 @end
