@@ -1536,7 +1536,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 
 -(void)updateExpirationAndDistanceLabels {
-    
     if (!self.didAcceptAssignment) {
         return;
     }
@@ -1548,10 +1547,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)updateCounter:(NSTimer *)theTimer {
     
-    
     [self setDistance];
-    
-    
     
     NSDate *now = [NSDate date];
     if ([self.assignmentExpirationDate earlierDate:now] == self.assignmentExpirationDate) {
@@ -1563,8 +1559,23 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         NSLog(@"there are %ld years, %ld days, %ld hours, %ld minutes and %ld seconds remaining", (long)[components year], (long)[components day], (long)[components hour], (long)[components minute], (long)[components second]);
         
         [self setExpiration:nil days:(int)[components day] hours:(int)[components hour] minutes:(int)[components minute] seconds:(int)[components second]];
-        
     }
+    
+    [self updateNavBarToOpenCamera];
+
+}
+
+-(void)updateNavBarToOpenCamera {
+
+    self.acceptAssignmentDistanceAwayLabel.frame = CGRectMake(0, 35, self.greenView.frame.size.width, 17);
+    self.acceptAssignmentDistanceAwayLabel.text = @"OPEN YOUR CAMERA";
+    self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
+    self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
+    self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
+    [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
+    
+    
+    self.acceptAssignmentTimeRemainingLabel.alpha = 0;
 }
 
 
