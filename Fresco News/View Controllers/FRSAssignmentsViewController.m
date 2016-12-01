@@ -93,10 +93,16 @@
 
 @property (strong, nonatomic) UIView *greenView;
 @property (strong, nonatomic) UIButton *unacceptAssignmentButton;
+@property (strong, nonatomic) UIButton *assignmentActionButton;
+@property (strong, nonatomic) NSString *assignemntAcceptButtonTitle;
 
 @end
 
 @implementation FRSAssignmentsViewController
+
+static NSString *const ACTION_TITLE_ONE = @"ACCEPT";
+static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
+
 
 -(instancetype)init {
     self = [super init];
@@ -187,7 +193,6 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     [self removeNavigationBarLine];
-    
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (!delegate.didPresentPermissionsRequest) { //Avoid double alerts
@@ -687,8 +692,15 @@
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
     self.assignmentPostedDate = assAnn.assignmentPostedDate;
     self.assignmentID = assAnn.assignmentId;
-    
     self.outlets = assAnn.outlets;
+    
+    if (assAnn.isAcceptable) {
+        self.assignemntAcceptButtonTitle = ACTION_TITLE_ONE;
+    } else {
+        self.assignemntAcceptButtonTitle = ACTION_TITLE_TWO;
+    }
+    
+    
     [self configureOutlets];
     
     [self setExpiration];
@@ -896,15 +908,15 @@
     bottomContainerLine.backgroundColor = [UIColor frescoShadowColor];
     [self.assignmentBottomBar addSubview:bottomContainerLine];
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectMake(self.view.frame.size.width -100 -16, 15, 100, 17);
-    [button setTitle:@"ACCEPT" forState:UIControlStateNormal];
-    [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(assignmentAction) forControlEvents:UIControlEventTouchUpInside];
-    button.titleLabel.adjustsFontSizeToFitWidth = YES;
-    [self.assignmentBottomBar addSubview:button];
+    self.assignmentActionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.assignmentActionButton.frame = CGRectMake(self.view.frame.size.width -100 -16, 15, 100, 17);
+    [self.assignmentActionButton setTitle:self.assignemntAcceptButtonTitle forState:UIControlStateNormal];
+    [self.assignmentActionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    self.assignmentActionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    [self.assignmentActionButton setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
+    [self.assignmentActionButton addTarget:self action:@selector(assignmentAction) forControlEvents:UIControlEventTouchUpInside];
+    self.assignmentActionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+    [self.assignmentBottomBar addSubview:self.assignmentActionButton];
 
     
 //    UIButton *navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -1069,6 +1081,7 @@
         self.assignmentTitleLabel.text = self.assignmentTitle;
         self.assignmentTextView.text = self.assignmentCaption;
         self.assignmentOutletLabel.text = self.assignmentOutlet;
+        [self.assignmentActionButton setTitle:self.assignemntAcceptButtonTitle forState:UIControlStateNormal];
 
     } else {
         [self createAssignmentView];
@@ -1347,36 +1360,35 @@
 
 -(void)assignmentAction {
     
-    [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
+    
+    if ([self.assignmentActionButton.titleLabel.text isEqualToString:ACTION_TITLE_TWO]) {
+        [self openCamera];
+    } else {
         
-        if (responseObject) {
-            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-            FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
-            NSDictionary *dict = responseObject;
-            [assignment configureWithDictionary:dict];
-            [self configureAcceptedAssignment:assignment];
-        }
+        [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
+            
+            if (responseObject) {
+                FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+                NSDictionary *dict = responseObject;
+                [assignment configureWithDictionary:dict];
+                [self configureAcceptedAssignment:assignment];
+            }
 
-        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-        NSInteger responseCode = response.statusCode;
-        
-        // user has already accepted the assignment
-        if (responseCode == 412) {
-            // unaccept
-            return;
-        }
-
-        if (error.code != 101) {
-            [self presentGenericError];
-        }
-    }];
-    
-    
-    
-    
-
-    // IF OPEN CAMERA   v
-    //[self openCamera];
+            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+            NSInteger responseCode = response.statusCode;
+            
+            // user has already accepted the assignment
+            if (responseCode == 412) {
+                // unaccept
+                return;
+            }
+            
+            if (error.code != 101) {
+                [self presentGenericError];
+            }
+        }];
+    }
 }
 
 -(void)configureAcceptedAssignment:(FRSAssignment *)assignment {
