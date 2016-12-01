@@ -45,7 +45,7 @@
         self.address = assignment.address;
         self.coordinate = CLLocationCoordinate2DMake([assignment.latitude floatValue], [assignment.longitude floatValue]);
         
-        self.isAcceptable = NO; // add isAcceptable to model
+        self.isAcceptable = YES; // add isAcceptable to model
     }
     return self;
 }

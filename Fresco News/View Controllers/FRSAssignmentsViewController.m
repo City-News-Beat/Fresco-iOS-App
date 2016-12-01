@@ -95,6 +95,9 @@
 @property (strong, nonatomic) UIButton *unacceptAssignmentButton;
 @property (strong, nonatomic) UIButton *assignmentActionButton;
 @property (strong, nonatomic) NSString *assignemntAcceptButtonTitle;
+@property (strong, nonatomic) UILabel *acceptAssignmentDistanceAwayLabel;
+@property (strong, nonatomic) UILabel *acceptAssignmentTimeRemainingLabel;
+@property BOOL didAcceptAssignment;
 
 @end
 
@@ -424,6 +427,18 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }*/
     
     /*[self removeAllOverlaysIncludingUser:NO];*/
+
+    
+    
+    if (self.didAcceptAssignment) {
+        if ([self assignmentExists:self.currentAssignment.uid]) {
+            [self.assignmentIDs addObject:self.currentAssignment.uid];
+            [self addAssignmentAnnotation:self.currentAssignment index:0];
+        }
+        return;
+    }
+    
+    
     
     NSInteger count = 0;
     
@@ -449,6 +464,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     NSMutableArray *assignments = [[NSMutableArray alloc] initWithArray:[self.mapView annotations]];
     if (userLocation != nil ) {
         [assignments removeObject:userLocation]; // avoid removing user location off the map
+    }
+    
+    for (id <MKAnnotation> annotation in self.mapView.annotations) {
+        if ([annotation isKindOfClass:[FRSMapCircle class]]) {
+            [assignments removeObject:annotation];
+        }
     }
     
     [self.mapView removeAnnotations:assignments];
@@ -519,6 +540,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)updateAssignments {
+    
+    if (self.didAcceptAssignment) {
+        return;
+    }
     
     MKCoordinateRegion region = self.mapView.region;
     CLLocationCoordinate2D center = region.center;
@@ -601,6 +626,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             UIView *yellowView = [[UIView alloc] initWithFrame:CGRectMake(4, 4, 16, 16)];
             yellowView.layer.cornerRadius = 8;
             yellowView.backgroundColor = [UIColor frescoOrangeColor];
+
+            if (self.didAcceptAssignment) {
+                yellowView.backgroundColor = [UIColor frescoGreenColor];
+            }
             
             [whiteView addSubview:yellowView];
             [container addSubview:whiteView];
@@ -654,6 +683,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         }
         else if (circle.circleType == FRSMapCircleTypeAssignment) {
             circleR.fillColor = [UIColor frescoOrangeColor];
+            if (self.didAcceptAssignment) {
+                circleR.fillColor = [UIColor frescoGreenColor];
+            }
             circleR.alpha = 0.5;
         }
     }
@@ -1367,20 +1399,28 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         
         [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
             
-            if (responseObject) {
+            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+            NSInteger responseCode = response.statusCode;
+            
+            if (responseObject || responseCode == 403) {
                 FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                 FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
                 NSDictionary *dict = responseObject;
                 [assignment configureWithDictionary:dict];
+                self.currentAssignment = assignment;
                 [self configureAcceptedAssignment:assignment];
+                return;
             }
-
-            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-            NSInteger responseCode = response.statusCode;
             
             // user has already accepted the assignment
             if (responseCode == 412) {
-                // unaccept
+                // should never happen, bottom tab bar is not visible when in an accepted state
+                return;
+            }
+            
+            
+            // user is not authenticated (allow assignment accept)
+            if (responseCode == 403) {
                 return;
             }
             
@@ -1391,8 +1431,17 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
+-(void)didAcceptAssignment:(FRSAssignment *)assignment {
+    self.didAcceptAssignment = YES;
+    [self removeAssignmentsFromMap];
+    [self removeAllOverlaysIncludingUser:NO];
+    [self addAnnotationsForAssignments];
+}
+
 -(void)configureAcceptedAssignment:(FRSAssignment *)assignment {
     [[NSNotificationCenter defaultCenter] postNotificationName:enableAssignmentAccept object:assignment];
+    
+    [self didAcceptAssignment:assignment];
     
     self.greenView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 64)];
     self.greenView.backgroundColor = [UIColor frescoGreenColor];
@@ -1404,9 +1453,27 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.unacceptAssignmentButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.unacceptAssignmentButton.tintColor = [UIColor whiteColor];
     [self.unacceptAssignmentButton setImage:closeButtonImage forState:UIControlStateNormal];
-    self.unacceptAssignmentButton.frame = CGRectMake(16, 30, 24, 24);
+    self.unacceptAssignmentButton.frame = CGRectMake(20, 30, 24, 24);
     [self.unacceptAssignmentButton addTarget:self action:@selector(unacceptAssignment) forControlEvents:UIControlEventTouchUpInside];
     [self.greenView addSubview:self.unacceptAssignmentButton];
+    
+    self.acceptAssignmentDistanceAwayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 28, self.greenView.frame.size.width, 17)];
+    self.acceptAssignmentDistanceAwayLabel.text = @"1.1 MILES AWAY";
+    self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
+    self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
+    self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
+    [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
+    
+    self.acceptAssignmentTimeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 45, self.greenView.frame.size.width, 12)];
+    self.acceptAssignmentTimeRemainingLabel.text = @"Expires in 24 minutes";
+    self.acceptAssignmentTimeRemainingLabel.font = [UIFont systemFontOfSize:10 weight:UIFontWeightRegular];
+    self.acceptAssignmentTimeRemainingLabel.textColor = [UIColor whiteColor];
+    self.acceptAssignmentTimeRemainingLabel.textAlignment = NSTextAlignmentCenter;
+    [self.greenView addSubview:self.acceptAssignmentTimeRemainingLabel];
+    
+    UIButton *navigationButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    navigationButton.tintColor = [UIColor whiteColor];
+    
     
 }
 
@@ -1416,10 +1483,20 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
         
         // error or response, user should be able to unaccept. at least visually
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:nil];
         [self.greenView removeFromSuperview];
         [self.unacceptAssignmentButton removeFromSuperview];
-        [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:nil];
+        
+        self.didAcceptAssignment = NO;
+
+        [self removeAssignmentsFromMap];
+        [self removeAllOverlaysIncludingUser:NO];
+        
+//        [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:100];
+//        [self fetchLocalAssignments];
+//        [self addAnnotationsForAssignments];
+//        [self updateAssignments];
+
     }];
 }
 
@@ -1441,8 +1518,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self.tabBarController setSelectedIndex:3];//should return to assignments
     }];
 }
-
-
 
 
 
