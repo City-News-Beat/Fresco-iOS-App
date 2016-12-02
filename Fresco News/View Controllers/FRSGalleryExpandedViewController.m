@@ -1512,7 +1512,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                               @"opened_from":_openedFrom
                             };
     
-   // [FRSTracker track:@"Gallery Session" parameters:session];
+    [FRSTracker track:@"Gallery Session" parameters:session];
 }
 
 
