@@ -523,6 +523,10 @@
                                           isFollowing:[user.following boolValue]
                                                  userDict:nil
                                                  user:user];
+        
+        if (indexPath.row >= self.followingArray.count-3) {
+            [self loadMoreFollowing];
+        }
     }
     
     if (self.followerArray.count > 0 && self.tableView == tableView){
@@ -546,6 +550,10 @@
                                           isFollowing:[user.following boolValue]
                                              userDict:nil
                                                  user:user];
+        
+        if (indexPath.row >= self.followerArray.count-3) {
+            [self loadMoreFollowers];
+        }
     }
     
     
