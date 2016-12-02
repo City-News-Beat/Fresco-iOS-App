@@ -1367,29 +1367,19 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)showGlobalAssignmentsBar {
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
         self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, -44-49);
+        
     } completion:nil];
 }
 
 -(void)hideGlobalAssignmentsBar {
-    if (self.didAcceptAssignment) {
-        return;
-    }
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        
         self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, self.globalAssignmentsBottomContainer.frame.size.height);
+
+        
     } completion:nil];
-}
-
-
--(void)showAssignmentBottomBar {
-    self.assignmentBottomBar.alpha = 1;
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height -44);
-}
-
--(void)hideAssignmentBottomBar {
-    self.assignmentBottomBar.alpha = 0;
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height +44);
-
 }
 
 -(void)globalAssignmentsSegue {
@@ -1455,8 +1445,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self removeAssignmentsFromMap];
     [self removeAllOverlaysIncludingUser:NO];
     [self addAnnotationsForAssignments];
-    [self hideGlobalAssignmentsBar];
-    [self hideAssignmentBottomBar];
     
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
 }
@@ -1500,7 +1488,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [navigationButton setImage:[UIImage imageNamed:@"navigate-white"] forState:UIControlStateNormal];
     [navigationButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
     [self.greenView addSubview:navigationButton];
+    
 }
+
+
 
 -(void)unacceptAssignment {
     [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
@@ -1511,21 +1502,24 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self.unacceptAssignmentButton removeFromSuperview];
         
         self.didAcceptAssignment = NO;
-        [self showAssignmentBottomBar];
 
         [self removeAssignmentsFromMap];
         [self removeAllOverlaysIncludingUser:NO];
-        
-        if (self.globalAssignmentsArray.count <= 1) {
-            [self showGlobalAssignmentsBar];
-        }
         
 //        [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:100];
 //        [self fetchLocalAssignments];
 //        [self addAnnotationsForAssignments];
 //        [self updateAssignments];
+
     }];
 }
+
+
+//-(void)configureUnacceptAssignment:(FRSAssignment *)assignment {
+//    [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:assignment];
+//
+//}
+
 
 -(void)openCamera {
     FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
@@ -1545,11 +1539,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (!self.didAcceptAssignment) {
         return;
     }
-    
-    // if user is in range,
-    // [self updateNavBarToOpenCamera];
-    // return;
-
     
     [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
     [self setDistance];
@@ -1571,6 +1560,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         
         [self setExpiration:nil days:(int)[components day] hours:(int)[components hour] minutes:(int)[components minute] seconds:(int)[components second]];
     }
+    
+    [self updateNavBarToOpenCamera];
+
 }
 
 -(void)updateNavBarToOpenCamera {
@@ -1581,6 +1573,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
     self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
     [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
+    
     
     self.acceptAssignmentTimeRemainingLabel.alpha = 0;
 }
