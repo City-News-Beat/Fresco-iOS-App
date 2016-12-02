@@ -1150,7 +1150,7 @@
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-    FRSGallery *gallery = [[FRSGallery alloc] init];
+    FRSGallery *gallery = Nil;
     
     if (self.likesButton.alpha == 1) {
         gallery = self.likes[notification.row];
