@@ -9,6 +9,7 @@
 #import "FRSGalleryExpandedViewController.h"
 #import "UITextView+Resize.h"
 #import "FRSArticlesTableViewCell.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 #import "FRSGallery.h"
 #import "FRSArticle.h"
@@ -75,6 +76,8 @@
 @property (strong, nonatomic) NSDictionary *currentCommentUserDictionary;
 @property BOOL didChangeUp;
 
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
 @end
 
 @implementation FRSGalleryExpandedViewController
@@ -125,6 +128,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
     self.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
     
+    
+    if ([self.gallery.comments integerValue] >= 1) {
+        [self configureCommentLabel];
+        [self configureSpinner];
+    }
+    
     //    [[NSNotificationCenter defaultCenter]addObserver:self
     //                                            selector:@selector(expandNavigationBar)
     //                                                name:UIApplicationWillEnterForegroundNotification
@@ -132,7 +141,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 //-(void)expandNavigationBar {
-////    [self expandNavFRSBar:nil];
+//    [self expandNavFRSBar:nil];
 //}
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -175,7 +184,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [_comments addObject:commentObject];
         }
         
-        if ([_comments count] < 10) {
+        if ([_comments count] <= 10) {
             showsMoreButton = FALSE;
         }
         else {
@@ -186,8 +195,21 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
+-(void)configureSpinner {
+    self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake(82, 13, 20, 20)];
+    self.loadingView.tintColor = [UIColor frescoOrangeColor];
+    [self.loadingView setPullProgress:90];
+    [self.loadingView startAnimating];
+    [self.commentLabel addSubview:self.loadingView];
+}
+
 -(void)fetchCommentsWithID:(NSString  *)galleryID {
+    
     [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID completion:^(id responseObject, NSError *error) {
+        
+        [self.loadingView removeFromSuperview];
+        self.loadingView.alpha = 0;
+        
         if (error || !responseObject) {
             [self commentError:error];
             return;
@@ -252,39 +274,41 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             showsMoreButton = TRUE;
         }
         
-        float height = 0;
-        NSInteger index = 0;
+        [self adjustHeight];
         
-        for (FRSComment *comment in _comments) {
-            
-            CGRect labelRect = [comment.comment
-                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, INT_MAX)
-                                options:NSStringDrawingUsesLineFragmentOrigin
-                                attributes:@{
-                                             NSFontAttributeName : [UIFont systemFontOfSize:15]
-                                             }
-                                context:nil];
-            
-            float commentSize = labelRect.size.height;
-            
-            if (commentSize < 56) {
-                height += 56;
-            }
-            else {
-                height += commentSize;
-            }
-            
-            
-            index++;
-        }
         
-        height += 55;
-        
-        self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
-        [self adjustScrollViewContentSize];
-        [self.commentTableView reloadData];
-        self.commentTableView.hidden = self.comments.count == 0;
-        self.commentLabel.hidden = self.comments.count == 0;
+        //        float height = 0;
+        //        NSInteger index = 0;
+        //        for (FRSComment *comment in _comments) {
+        //
+        //            CGRect labelRect = [comment.comment
+        //                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, INT_MAX)
+        //                                options:NSStringDrawingUsesLineFragmentOrigin
+        //                                attributes:@{
+        //                                             NSFontAttributeName : [UIFont systemFontOfSize:15]
+        //                                             }
+        //                                context:nil];
+        //
+        //            float commentSize = labelRect.size.height;
+        //
+        //            if (commentSize < 56) {
+        //                height += 56;
+        //            }
+        //            else {
+        //                height += commentSize;
+        //            }
+        //
+        //
+        //            index++;
+        //        }
+        //
+        //        height += 55;
+        //
+        //        self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
+        //        [self adjustScrollViewContentSize];
+        //        [self.commentTableView reloadData];
+        //        self.commentTableView.hidden = self.comments.count == 0;
+        //        self.commentLabel.hidden = self.comments.count == 0;
     }];
 }
 
@@ -610,26 +634,22 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
         else {
             height += commentSize;
+            height += 36; //36 is topPadding+bottomPadding
         }
         
         index++;
     }
-    
-    height += 55;
     
     CGFloat labelOriginY = self.galleryView.frame.origin.y + self.galleryView.frame.size.height;
     
     if (self.orderedArticles.count > 0) {
         labelOriginY += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
     }
-    self.commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelOriginY, self.view.frame.size.width, 48)];
-    self.commentLabel.text = @"COMMENTS";
-    self.commentLabel.textColor = [UIColor frescoMediumTextColor];
-    self.commentLabel.font = [UIFont notaBoldWithSize:15];
-    [self.commentLabel setOriginWithPoint:CGPointMake(16, labelOriginY + 6)];
-    [self.scrollView addSubview:self.commentLabel];
     
-    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height+150)];
+    //[self configureCommentLabel];
+    
+    self.commentTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + self.commentLabel.frame.size.height, self.view.frame.size.width, height)];
+    self.commentTableView.clipsToBounds = NO;
     self.commentTableView.delegate = self;
     self.commentTableView.dataSource = self;
     self.commentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -651,6 +671,20 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     [self adjustScrollViewContentSize];
     [self.actionBar actionButtonTitleNeedsUpdate];
+}
+
+-(void)configureCommentLabel {
+    CGFloat labelOriginY = self.galleryView.frame.origin.y + self.galleryView.frame.size.height;
+    
+    if (self.orderedArticles.count > 0) {
+        labelOriginY += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
+    }
+    self.commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, labelOriginY, self.view.frame.size.width, 48)];
+    self.commentLabel.text = @"COMMENTS";
+    self.commentLabel.textColor = [UIColor frescoMediumTextColor];
+    self.commentLabel.font = [UIFont notaBoldWithSize:15];
+    [self.commentLabel setOriginWithPoint:CGPointMake(16, labelOriginY + 6)];
+    [self.scrollView addSubview:self.commentLabel];
 }
 
 -(void)configureActionBar{
@@ -696,7 +730,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)adjustScrollViewContentSize{
-    CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + GALLERY_BOTTOM_PADDING +20;
+    CGFloat height = self.galleryView.frame.size.height + self.actionBar.frame.size.height + GALLERY_BOTTOM_PADDING +40;
     if (self.comments.count > 0) {
         height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height +20;
     }
@@ -788,7 +822,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             return 0;
         }
         
-        return (showsMoreButton) ? self.comments.count + 1 : self.comments.count;
+        if (showsMoreButton) {
+            return self.comments.count + 1;
+            
+        } else {
+            return self.comments.count;
+        }
     }
     
     return 0;
@@ -871,13 +910,18 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 FRSComment *comment = _comments[indexPath.row-showsMoreButton];
                 cell.cellDelegate = self;
                 [cell configureCell:comment delegate:self];
-                [cell.textLabel sizeToFit];
+                [cell.commentTextView sizeToFit];
                 return cell;
             }
         }
     }
     
     return Nil;
+}
+
+-(void)swipeTableCell:(FRSCommentCell *)cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive {
+    // The textView goes back to its original size (set in the nib) if we don't size to fit on the swipe action.
+    [cell.commentTextView sizeToFit];
 }
 
 -(void)loadMoreComments {
@@ -902,38 +946,74 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             showsMoreButton = FALSE;
         }
         
-        float height = 0;
-        NSInteger index = 0;
+        [self adjustHeight];
         
-        for (FRSComment *comment in _comments) {
-            
-            CGRect labelRect = [comment.comment
-                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, INT_MAX)
-                                options:NSStringDrawingUsesLineFragmentOrigin
-                                attributes:@{
-                                             NSFontAttributeName : [UIFont systemFontOfSize:15]
-                                             }
-                                context:nil];
-            
-            float commentSize = labelRect.size.height;
-            
-            if (commentSize < 56) {
-                height += 56;
-            }
-            else {
-                height += commentSize;
-            }
-            index++;
-        }
-        
-        height += 56;
-        
-        self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
-        [self adjustScrollViewContentSize];
-        [self.commentTableView reloadData];
-        self.commentTableView.hidden = self.comments.count == 0;
-        self.commentLabel.hidden = self.comments.count == 0;
+        //        float height = 0;
+        //        NSInteger index = 0;
+        //
+        //        for (FRSComment *comment in _comments) {
+        //
+        //            CGRect labelRect = [comment.comment
+        //                                boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, INT_MAX)
+        //                                options:NSStringDrawingUsesLineFragmentOrigin
+        //                                attributes:@{
+        //                                             NSFontAttributeName : [UIFont systemFontOfSize:15]
+        //                                             }
+        //                                context:nil];
+        //
+        //            float commentSize = labelRect.size.height;
+        //
+        //            if (commentSize < 56) {
+        //                height += 56;
+        //            }
+        //            else {
+        //                height += commentSize;
+        //            }
+        //            index++;
+        //        }
+        //
+        //        height += 56;
+        //
+        //        self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
+        //        [self adjustScrollViewContentSize];
+        //        [self.commentTableView reloadData];
+        //        self.commentTableView.hidden = self.comments.count == 0;
+        //        self.commentLabel.hidden = self.comments.count == 0;
     }];
+}
+
+-(void)adjustHeight {
+    float height = 0;
+    NSInteger index = 0;
+    
+    for (FRSComment *comment in _comments) {
+        
+        CGRect labelRect = [comment.comment
+                            boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, INT_MAX)
+                            options:NSStringDrawingUsesLineFragmentOrigin
+                            attributes:@{
+                                         NSFontAttributeName : [UIFont systemFontOfSize:15]
+                                         }
+                            context:nil];
+        
+        float commentSize = labelRect.size.height;
+        
+        if (commentSize < 56) {
+            height += 56;
+        }
+        else {
+            height += commentSize;
+        }
+        index++;
+    }
+    
+    height += 56;
+    
+    self.commentTableView.frame = CGRectMake(0, self.commentTableView.frame.origin.y, self.view.frame.size.width, height);
+    [self adjustScrollViewContentSize];
+    [self.commentTableView reloadData];
+    self.commentTableView.hidden = self.comments.count == 0;
+    self.commentLabel.hidden = self.comments.count == 0;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange {
@@ -1043,7 +1123,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [commentField addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventEditingDidEndOnExit];
             commentField.delegate = self;
         }
-        
+        commentField.text = @"";
         [commentField becomeFirstResponder];
     }
 }
@@ -1139,22 +1219,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if ([[UIApplication sharedApplication] canOpenURL:url]) {
         [[UIApplication sharedApplication] openURL:url];
     }
-}
-
--(void)loadGallery:(FRSGallery *)gallery {
-    self.gallery = gallery;
-    
-    if (gallery.uid) {
-        self.galleryID = gallery.uid;
-    }
-    
-    self.orderedArticles = [self.gallery.articles allObjects];
-    self.hiddenTabBar = YES;
-    self.actionBarVisible = YES;
-    self.touchEnabled = NO;
-    [self.galleryView loadGallery:gallery];
-    [self fetchCommentsWithID:gallery.uid];
-    
 }
 
 
@@ -1382,5 +1446,22 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         }
     }];
 }
+
+-(void)loadGallery:(FRSGallery *)gallery {
+    self.gallery = gallery;
+    
+    if (gallery.uid) {
+        self.galleryID = gallery.uid;
+    }
+    
+    self.orderedArticles = [self.gallery.articles allObjects];
+    self.hiddenTabBar = YES;
+    self.actionBarVisible = YES;
+    self.touchEnabled = NO;
+    [self.galleryView loadGallery:gallery];
+    [self fetchCommentsWithID:gallery.uid];
+    
+}
+
 
 @end
