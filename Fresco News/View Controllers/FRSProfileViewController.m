@@ -744,7 +744,7 @@
 }
 
 
--(void)configureNavigationBar{
+-(void)configureNavigationBar {
     //  [super configureNavigationBar];
     [super removeNavigationBarLine];
     
@@ -1701,6 +1701,8 @@
                 titleLabel.text = @"";
             }
         }
+        
+        [self configureNavigationBar];
     });
 }
 
@@ -1834,13 +1836,5 @@
         }
     }];
 }
-
-
-
-
-
-
-
-
 
 @end
