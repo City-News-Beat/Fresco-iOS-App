@@ -1380,6 +1380,18 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     } completion:nil];
 }
 
+
+-(void)showAssignmentBottomBar {
+    self.assignmentBottomBar.alpha = 1;
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height -44);
+}
+
+-(void)hideAssignmentBottomBar {
+    self.assignmentBottomBar.alpha = 0;
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height +44);
+
+}
+
 -(void)globalAssignmentsSegue {
     FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
     tableViewController.assignments = self.globalAssignmentsArray;
@@ -1444,6 +1456,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self removeAllOverlaysIncludingUser:NO];
     [self addAnnotationsForAssignments];
     [self hideGlobalAssignmentsBar];
+    [self hideAssignmentBottomBar];
     
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
 }
@@ -1487,11 +1500,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [navigationButton setImage:[UIImage imageNamed:@"navigate-white"] forState:UIControlStateNormal];
     [navigationButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
     [self.greenView addSubview:navigationButton];
-    
-    
 }
-
-
 
 -(void)unacceptAssignment {
     [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
@@ -1502,6 +1511,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self.unacceptAssignmentButton removeFromSuperview];
         
         self.didAcceptAssignment = NO;
+        [self showAssignmentBottomBar];
 
         [self removeAssignmentsFromMap];
         [self removeAllOverlaysIncludingUser:NO];
@@ -1514,16 +1524,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 //        [self fetchLocalAssignments];
 //        [self addAnnotationsForAssignments];
 //        [self updateAssignments];
-
     }];
 }
-
-
-//-(void)configureUnacceptAssignment:(FRSAssignment *)assignment {
-//    [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:assignment];
-//
-//}
-
 
 -(void)openCamera {
     FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
