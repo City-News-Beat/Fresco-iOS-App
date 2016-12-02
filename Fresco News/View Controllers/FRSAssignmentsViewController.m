@@ -331,6 +331,21 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }];
 }
 
+-(BOOL)location:(CLLocation *)location isWithinAssignmentRadius:(FRSAssignment *)assignment {
+    NSNumber *assignmentRadius = assignment.radius;
+    float milesRadius = [assignmentRadius floatValue];
+    
+    CLLocation *assignmentLocation = [[CLLocation alloc] initWithLatitude:assignment.latitude.floatValue longitude:assignment.longitude.floatValue];
+    float distance = (float)[assignmentLocation distanceFromLocation:location];
+    float distanceInMiles = distance / 1609.34;
+    
+    if (distanceInMiles < milesRadius) {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
 -(BOOL)assignmentExists:(NSString *)assignment {
     
     __block BOOL returnValue = FALSE;
