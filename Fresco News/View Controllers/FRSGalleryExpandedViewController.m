@@ -936,7 +936,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         NSString *user = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
         FRSProfileViewController *viewController = [[FRSProfileViewController alloc] initWithUserID:user];
         self.navigationItem.title = @"";
-        //        [self.tabBarController.tabBar setHidden:YES];
         [self animateDismissCommentField];
         [self.navigationController pushViewController:viewController animated:YES];
     }
@@ -945,6 +944,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         FRSSearchViewController *controller = [[FRSSearchViewController alloc] init];
         [controller search:search];
         self.navigationItem.title = @"";
+        // [self.tabBarController.tabBar setHidden:YES];
         [self.tabBarController.tabBar setHidden:NO];
         [self animateDismissCommentField];
         [self.navigationController pushViewController:controller animated:YES];
