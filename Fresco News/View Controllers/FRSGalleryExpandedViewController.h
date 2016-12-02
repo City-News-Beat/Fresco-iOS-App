@@ -15,6 +15,8 @@
     NSString *last;
     UIButton *topButton;
     BOOL showsMoreButton;
+    NSDate *dateEntered;
+    float percentageScrolled;
 }
 @property BOOL isLoadingUser;
 @property (strong, nonatomic) FRSGallery *gallery;

@@ -1472,5 +1472,29 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
 }
 
+-(void)trackSession {
+    NSTimeInterval timeInSession = [dateEntered timeIntervalSinceNow];
+    NSString *galleryID = self.gallery.uid;
+    NSString *authorID = self.gallery.creator.uid;
+    
+    
+    if (!galleryID || [galleryID isEqual:[NSNull null]]) {
+        galleryID = @"";
+    }
+    
+    if (!authorID || [authorID isEqual:[NSNull null]]) {
+        authorID = @"";
+    }
+    
+    NSDictionary *session = @{
+                              @"activity_duration":@(timeInSession),
+                              @"gallery_id":galleryID,
+                              @"scrolled_percent":@(percentageScrolled),
+                              @"author":authorID
+                            };
+    
+    [FRSTracker track:@"Gallery Session" parameters:session];
+}
+
 
 @end
