@@ -1367,19 +1367,24 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)showGlobalAssignmentsBar {
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
         self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, -44-49);
-        
     } completion:nil];
 }
 
 -(void)hideGlobalAssignmentsBar {
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
         self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, self.globalAssignmentsBottomContainer.frame.size.height);
-
-        
     } completion:nil];
+}
+
+-(void)showAssignmentsMetaBar {
+    self.assignmentBottomBar.alpha = 1;
+    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y +44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+}
+
+-(void)hideAssignmentsMetaBar {
+    self.assignmentBottomBar.alpha = 0;
+    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y -44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
 }
 
 -(void)globalAssignmentsSegue {
@@ -1445,6 +1450,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self removeAssignmentsFromMap];
     [self removeAllOverlaysIncludingUser:NO];
     [self addAnnotationsForAssignments];
+    [self hideGlobalAssignmentsBar];
+    [self hideAssignmentsMetaBar];
     
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
 }
@@ -1506,6 +1513,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self removeAssignmentsFromMap];
         [self removeAllOverlaysIncludingUser:NO];
         
+        [self showAssignmentsMetaBar];
+        if (self.globalAssignmentsArray.count <= 1) {
+            [self showGlobalAssignmentsBar];
+        }
+        
 //        [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:100];
 //        [self fetchLocalAssignments];
 //        [self addAnnotationsForAssignments];
@@ -1540,6 +1552,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         return;
     }
     
+    // if in range
+    // [self updateNavBarToOpenCamera];
+    
     [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
     [self setDistance];
 }
@@ -1555,14 +1570,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     } else {
         NSUInteger flags = NSCalendarUnitYear | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
         NSDateComponents *components = [[NSCalendar currentCalendar] components:flags fromDate:now toDate:self.assignmentExpirationDate options:0];
-        
-        NSLog(@"there are %ld years, %ld days, %ld hours, %ld minutes and %ld seconds remaining", (long)[components year], (long)[components day], (long)[components hour], (long)[components minute], (long)[components second]);
-        
         [self setExpiration:nil days:(int)[components day] hours:(int)[components hour] minutes:(int)[components minute] seconds:(int)[components second]];
     }
-    
-    [self updateNavBarToOpenCamera];
-
 }
 
 -(void)updateNavBarToOpenCamera {
@@ -1573,8 +1582,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
     self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
     [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
-    
-    
+
     self.acceptAssignmentTimeRemainingLabel.alpha = 0;
 }
 
