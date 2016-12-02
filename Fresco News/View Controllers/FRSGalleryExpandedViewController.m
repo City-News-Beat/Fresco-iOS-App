@@ -123,6 +123,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    dateEntered = [NSDate date];
     
     [self configureUI];
     [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
@@ -810,6 +811,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     [super scrollViewDidScroll:scrollView];
     [self.actionBar actionButtonTitleNeedsUpdate];
+    
+    if (scrollView == self.tableView) {
+        float size = self.tableView.contentSize.height;
+        float offset = self.tableView.contentOffset.y;
+        
+        float percentage = offset / size;
+        
+        if (percentageScrolled < percentage) {
+            percentageScrolled = percentage;
+        }
+    }
 }
 
 #pragma mark - Articles Table View DataSource Delegate
