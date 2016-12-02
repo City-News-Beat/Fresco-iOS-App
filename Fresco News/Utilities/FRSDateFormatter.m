@@ -53,6 +53,33 @@
     [formatter setDateFormat:@"hh:mm a"];
     return [formatter stringFromDate:correctDate];
 }
++(NSString *)relativeTimeFromDate:(NSDate *)compareDate {
+    
+    NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:compareDate];
+    
+    int temp = 0;
+    NSString *result;
+    if (timeInterval < 60) {
+        result = [NSString stringWithFormat:@"Just now"];
+    } else if ((temp = timeInterval/60) <60){
+        result = [NSString stringWithFormat:@"%d minutes ago", temp];
+        if ([result isEqualToString:@"1 minutes ago"]) {
+            result = @"1 minute ago";
+        }
+    } else if ((temp = temp/60) <24){
+        result = [NSString stringWithFormat:@"%d hours ago", temp];
+        if ([result isEqualToString:@"1 hours ago"]) {
+            result = @"1 hour ago";
+        }
+    } else {
+        temp = temp / 24;
+        result = [NSString stringWithFormat:@"%d days ago", temp];
+        if ([result isEqualToString:@"1 days ago"]) {
+            result = @"1 day ago";
+        }
+    }
+    return result;
+}
 
 +(NSString *)timestampStringFromDate:(NSDate *)date {
     NSTimeInterval doubleDiff = [date timeIntervalSinceNow];
