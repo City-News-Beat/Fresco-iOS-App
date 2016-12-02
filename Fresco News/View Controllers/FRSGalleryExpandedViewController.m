@@ -1492,7 +1492,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     NSString *authorID = self.gallery.creator.uid;
     
     
-    if (!galleryID || [galleryID isEqual:[NSNull null]]) {
+    if (!galleryID || [galleryID isEqual:[NSNull null]]  || ![[galleryID class] isSubclassOfClass:[NSString class]]) {
         galleryID = @"";
     }
     
@@ -1500,7 +1500,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         authorID = @"";
     }
     
-    if (!_openedFrom || [_openedFrom isEqual:[NSNull null]]) {
+    if (!_openedFrom || [_openedFrom isEqual:[NSNull null]] || ![[_openedFrom class] isSubclassOfClass:[NSString class]]) {
         _openedFrom = @"";
     }
     
