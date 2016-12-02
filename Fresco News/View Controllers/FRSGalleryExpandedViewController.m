@@ -814,9 +814,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [super scrollViewDidScroll:scrollView];
     [self.actionBar actionButtonTitleNeedsUpdate];
     
-    if (scrollView == self.tableView) {
-        float size = self.tableView.contentSize.height;
-        float offset = self.tableView.contentOffset.y;
+    if (scrollView == self.scrollView) {
+        float size = self.scrollView.contentSize.height;
+        float offset = self.scrollView.contentOffset.y;
         
         float percentage = offset / size;
         
@@ -1487,7 +1487,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)trackSession {
-    NSTimeInterval timeInSession = [dateEntered timeIntervalSinceNow];
+    NSTimeInterval timeInSession = -1 * [dateEntered timeIntervalSinceNow];
     NSString *galleryID = self.gallery.uid;
     NSString *authorID = self.gallery.creator.uid;
     
@@ -1496,7 +1496,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         galleryID = @"";
     }
     
-    if (!authorID || [authorID isEqual:[NSNull null]]) {
+    if (!authorID || [authorID isEqual:[NSNull null]] || ![[authorID class] isSubclassOfClass:[NSString class]]) {
         authorID = @"";
     }
     

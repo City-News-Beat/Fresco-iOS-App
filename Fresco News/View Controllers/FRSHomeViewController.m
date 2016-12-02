@@ -834,8 +834,8 @@
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.gallery = gallery;
     vc.shouldHaveBackButton = YES;
-    vc.openedFrom = @"Highlights";
-    
+    vc.openedFrom = @"Following";
+
     [super showNavBarForScrollView:self.tableView animated:NO];
     
     self.navigationItem.title = @"";
@@ -855,6 +855,8 @@
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
     vc.gallery = gallery;
+    vc.openedFrom = @"Highlights";
+
     [super showNavBarForScrollView:self.tableView animated:NO];
     
     self.navigationItem.title = @"";
