@@ -16,6 +16,8 @@
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
+static NSDate *lastDate;
+
 
 + (id)sharedUploader {
     
@@ -23,9 +25,24 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedUploader = [[self alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:sharedUploader selector:@selector(notifyExit:) name:UIApplicationWillResignActiveNotification object:nil];
+        
     });
     
     return sharedUploader;
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)notifyExit:(NSNotification*)notification {
+    
+    if (completed == toComplete || toComplete == 0) {
+        return;
+    }
+    
+    [FRSTracker track:@"Upload Close" parameters:@{@"percent_complete":@(lastProgress), @"gallery_id":_currentGalleryID}];
 }
 
 -(void)checkCachedUploads {
@@ -56,8 +73,8 @@
                 
                 continue;
             }
-                NSString *key = upload.uploadID;
-                [uploadsDictionary setObject:upload forKey:key];
+            NSString *key = upload.uploadID;
+            [uploadsDictionary setObject:upload forKey:key];
         }
         
         self.managedObjects = uploadsDictionary;
@@ -138,6 +155,7 @@
     self = [super init];
     
     if (self) {
+        _currentGalleryID = @"";
         [self commonInit];
     }
     
@@ -161,7 +179,7 @@
 
 -(void)subscribeToEvents {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
-
+    
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
         [self retryUpload];
     }];
@@ -175,7 +193,7 @@
                 [self.context save:Nil];
             }];
         }
-
+        
     }];
     
 }
@@ -250,7 +268,7 @@
                 
                 unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
                 totalFileSize += fileSize;
-
+                
                 NSArray *uploadMeta = @[tempPath, revisedToken, postID];
                 [self.uploadMeta addObject:uploadMeta];
                 [self checkRestart];
@@ -294,13 +312,16 @@
 
 -(void)startAWS {
     AWSStaticCredentialsProvider *credentialsProvider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:awsAccessKey secretKey:awsSecretKey];
-        
+    
     AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWS_REGION credentialsProvider:credentialsProvider];
-        
+    
     [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
 }
 
 -(void)addUploadForPost:(NSString *)postID url:(NSString *)body postID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    __block int uploadUpdates;
+    
     AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
     
     
@@ -317,8 +338,33 @@
     upload.key = postID;
     upload.metadata = @{@"post_id":post};
     upload.bucket = awsBucket;
+    
+    /*
+     MixPanel speed tracking
+     */
+    lastDate = [NSDate date];
+    
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
+        
         [self updateProgress:bytesSent];
+        
+        NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
+        float percentageOfSecond = 1 / secondsSinceLastUpdate;
+        
+        float megabitsPerSecond = bytesSent * percentageOfSecond * 1.0 / 1024 /* kb */ / 1024 /* mb */;
+        float averageMegabitsPerSecond = megabitsPerSecond;
+        
+        if (uploadUpdates > 0) {
+            averageMegabitsPerSecond = uploadSpeed / uploadUpdates;
+            averageMegabitsPerSecond = ((averageMegabitsPerSecond * uploadUpdates) + megabitsPerSecond) / (uploadUpdates + 1);
+        }
+        
+        uploadSpeed = averageMegabitsPerSecond;
+        
+        NSLog(@"UPLOAD SPEED: %fmbps", megabitsPerSecond);
+        
+        lastDate = [NSDate date];
+        uploadUpdates++;
     };
     __weak typeof (self) weakSelf = self;
     
@@ -359,22 +405,25 @@
 }
 
 -(void)uploadDidErrorWithError:(NSError *)error {
+    
+    NSMutableDictionary *uploadErrorSummary = [@{@"error_message":error.localizedDescription} mutableCopy];
+    if (uploadSpeed > 0) {
+        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed"];
+    }
+    
     if (error.localizedDescription) {
-        [FRSTracker track:@"Upload Failure" parameters:@{@"error_message":error.localizedDescription}];
+        [FRSTracker track:@"Upload Error" parameters:uploadErrorSummary];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{@"type":@"failure"}];
 }
 
 -(void)taskDidComplete:(AWSTask *)task {
-//    NSString *eTag = task.aws_properties[@"ETag"];
-//    
-//    if (eTag == nil) {
-//        [self uploadDidErrorWithError:Nil];
-//    }
+    //    NSString *eTag = task.aws_properties[@"ETag"];
+    //
+    //    if (eTag == nil) {
+    //        [self uploadDidErrorWithError:Nil];
+    //    }
 }
 
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 @end
