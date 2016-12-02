@@ -1144,7 +1144,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[FRSAPIClient sharedClient] addComment:commentField.text toGallery:self.galleryID completion:^(id responseObject, NSError *error) {
         NSLog(@"%@ %@", responseObject, error);
         if (error) {
-            NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
+           // NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
             self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed. Please try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
             [self.errorAlertView show];
         }
