@@ -752,9 +752,10 @@
             [self.appDelegate saveContext];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView beginUpdates];
-                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self.tableView endUpdates];
+//                [self.tableView beginUpdates];
+//                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+//                [self.tableView endUpdates];
+                [self.tableView reloadData];
                 needsUpdate = TRUE;
                 isLoading = FALSE;
             });
