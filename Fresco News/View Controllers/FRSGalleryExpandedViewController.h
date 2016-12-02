@@ -20,7 +20,7 @@
 }
 @property BOOL isLoadingUser;
 @property (strong, nonatomic) FRSGallery *gallery;
-
+@property (strong, nonatomic) NSString *openedFrom;
 -(void)focusOnPost:(NSString *)postID;
 -(instancetype)initWithGallery:(FRSGallery *)gallery;
 -(instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID;

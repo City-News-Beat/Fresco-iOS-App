@@ -81,6 +81,7 @@
 @end
 
 @implementation FRSGalleryExpandedViewController
+@synthesize openedFrom = _openedFrom;
 
 static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
@@ -158,6 +159,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [self trackSession];
     
     self.navigationItem.titleView = self.titleLabel;
     [self showTabBarAnimated:NO];
@@ -1498,14 +1500,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         authorID = @"";
     }
     
+    if (!_openedFrom || [_openedFrom isEqual:[NSNull null]]) {
+        _openedFrom = @"";
+    }
+    
     NSDictionary *session = @{
                               @"activity_duration":@(timeInSession),
                               @"gallery_id":galleryID,
                               @"scrolled_percent":@(percentageScrolled),
-                              @"author":authorID
+                              @"author":authorID,
+                              @"opened_from":_openedFrom
                             };
     
-    [FRSTracker track:@"Gallery Session" parameters:session];
+   // [FRSTracker track:@"Gallery Session" parameters:session];
 }
 
 

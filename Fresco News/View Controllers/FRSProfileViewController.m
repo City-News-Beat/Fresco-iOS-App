@@ -1160,6 +1160,8 @@
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
+    vc.openedFrom = @"Profile";
+    
     [super showNavBarForScrollView:self.tableView animated:NO];
     
     self.navigationItem.title = @"";

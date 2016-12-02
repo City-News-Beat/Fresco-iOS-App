@@ -221,6 +221,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.stories objectAtIndex:indexPath.row]];
     
     vc.shouldHaveBackButton = YES;
+    vc.openedFrom = @"Stories";
+    
     self.navigationItem.title = @"";
     [self.navigationController pushViewController:vc animated:YES];
     [self hideTabBarAnimated:YES];
