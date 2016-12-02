@@ -1011,7 +1011,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     for (FRSComment *comment in _comments) {
         
         CGRect labelRect = [comment.comment
-                            boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, INT_MAX)
+                            boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 40, INT_MAX)
                             options:NSStringDrawingUsesLineFragmentOrigin
                             attributes:@{
                                          NSFontAttributeName : [UIFont systemFontOfSize:15]
