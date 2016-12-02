@@ -1393,12 +1393,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)showAssignmentsMetaBar {
-    self.assignmentBottomBar.alpha = 1;
+//    self.assignmentBottomBar.alpha = 1;
 //    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y +44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
 }
 
 -(void)hideAssignmentsMetaBar {
-    self.assignmentBottomBar.alpha = 0;
+//    self.assignmentBottomBar.alpha = 0;
 //    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y -44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
 }
 
@@ -1467,12 +1467,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self addAnnotationsForAssignments];
     [self hideGlobalAssignmentsBar];
     [self hideAssignmentsMetaBar];
+    [self updateUIForLocation];
     
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
 }
 
 -(void)configureAcceptedAssignment:(FRSAssignment *)assignment {
-    [[NSNotificationCenter defaultCenter] postNotificationName:enableAssignmentAccept object:assignment];
     
     [self didAcceptAssignment:assignment];
     
@@ -1528,6 +1528,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self removeAssignmentsFromMap];
         [self removeAllOverlaysIncludingUser:NO];
         
+        if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
+            [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
+        }
+        
         [self showAssignmentsMetaBar];
         if (self.globalAssignmentsArray.count <= 1) {
             [self showGlobalAssignmentsBar];
@@ -1577,6 +1581,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)updateCounter:(NSTimer *)theTimer {
     
+    if (!self.didAcceptAssignment) {
+        return;
+    }
+    
     [self setDistance];
     
     NSDate *now = [NSDate date];
@@ -1587,10 +1595,19 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         NSDateComponents *components = [[NSCalendar currentCalendar] components:flags fromDate:now toDate:self.assignmentExpirationDate options:0];
         [self setExpiration:nil days:(int)[components day] hours:(int)[components hour] minutes:(int)[components minute] seconds:(int)[components second]];
     }
+    
+    [self updateUIForLocation];
+}
+
+-(void)updateUIForLocation {
+    if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
+        [self updateNavBarToOpenCamera];
+        [[NSNotificationCenter defaultCenter] postNotificationName:enableAssignmentAccept object:nil];
+        [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
+    }
 }
 
 -(void)updateNavBarToOpenCamera {
-
     self.acceptAssignmentDistanceAwayLabel.frame = CGRectMake(0, 35, self.greenView.frame.size.width, 17);
     self.acceptAssignmentDistanceAwayLabel.text = @"OPEN YOUR CAMERA";
     self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
