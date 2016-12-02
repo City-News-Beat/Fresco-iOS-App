@@ -1049,8 +1049,27 @@
 }
 
 -(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
+//    if ([self checkAuthAndPresentOnboard]) {
+//        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
+//        return;
+//    }
     
-    [self post:acceptAssignmentEndpoint withParameters:@{@"assignment_id":assignmentID} completion:^(id responseObject, NSError *error) {
+    NSString *endpoint = [NSString stringWithFormat:acceptAssignmentEndpoint, assignmentID];
+
+    [self post:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)unacceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
+    //    if ([self checkAuthAndPresentOnboard]) {
+    //        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
+    //        return;
+    //    }
+    
+    NSString *endpoint = [NSString stringWithFormat:unacceptAssignmentEndpoint, assignmentID];
+    
+    [self post:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }

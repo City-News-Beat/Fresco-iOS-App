@@ -934,10 +934,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     if ([URL.absoluteString containsString:@"name"]) {
         NSString *user = [URL.absoluteString stringByReplacingOccurrencesOfString:@"name://" withString:@""];
-        NSLog(@"USER: %@", user);
         FRSProfileViewController *viewController = [[FRSProfileViewController alloc] initWithUserID:user];
         self.navigationItem.title = @"";
+<<<<<<< HEAD
         //        [self.tabBarController.tabBar setHidden:YES];
+=======
+        [self animateDismissCommentField];
+>>>>>>> origin/3.0-omar
         [self.navigationController pushViewController:viewController animated:YES];
     }
     else if ([URL.absoluteString containsString:@"tag"]) {
@@ -945,8 +948,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         FRSSearchViewController *controller = [[FRSSearchViewController alloc] init];
         [controller search:search];
         self.navigationItem.title = @"";
+<<<<<<< HEAD
         // [self.tabBarController.tabBar setHidden:YES];
+=======
+        [self.tabBarController.tabBar setHidden:NO];
+        [self animateDismissCommentField];
+>>>>>>> origin/3.0-omar
         [self.navigationController pushViewController:controller animated:YES];
+        [self expandNavBar:nil];
     }
     
     return NO;
@@ -1119,9 +1128,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)dismissKeyboard:(UITapGestureRecognizer *)tap {
     [self.galleryView playerTap:tap];
     if (commentField.isEditing) {
+<<<<<<< HEAD
         [commentField resignFirstResponder];
         [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
         [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+=======
+        [self animateDismissCommentField];
+>>>>>>> origin/3.0-omar
     }
     else {
         
@@ -1261,6 +1274,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
     return YES;
 }
+
+-(void)animateDismissCommentField {
+    [commentField resignFirstResponder];
+    
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [commentField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentField.frame.size.width, commentField.frame.size.height)];
+        [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+    } completion:nil];
+}
+
 
 #pragma mark - Moderation
 

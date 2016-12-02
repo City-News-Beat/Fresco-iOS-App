@@ -89,9 +89,23 @@
 
 @property (strong, nonatomic) UIButton *navigateButton;
 
+@property (strong, nonatomic) NSString *assignmentID;
+
+@property (strong, nonatomic) UIView *greenView;
+@property (strong, nonatomic) UIButton *unacceptAssignmentButton;
+@property (strong, nonatomic) UIButton *assignmentActionButton;
+@property (strong, nonatomic) NSString *assignemntAcceptButtonTitle;
+@property (strong, nonatomic) UILabel *acceptAssignmentDistanceAwayLabel;
+@property (strong, nonatomic) UILabel *acceptAssignmentTimeRemainingLabel;
+@property BOOL didAcceptAssignment;
+
 @end
 
 @implementation FRSAssignmentsViewController
+
+static NSString *const ACTION_TITLE_ONE = @"ACCEPT";
+static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
+
 
 -(instancetype)init {
     self = [super init];
@@ -159,7 +173,6 @@
         }
 
     }];
-
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -182,7 +195,6 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     [self removeNavigationBarLine];
-    
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     if (!delegate.didPresentPermissionsRequest) { //Avoid double alerts
@@ -224,6 +236,8 @@
     self.hasDefault = NO;
     self.defaultID  = nil;
     self.showsCard  = NO;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:nil];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -412,6 +426,18 @@
     }*/
     
     /*[self removeAllOverlaysIncludingUser:NO];*/
+
+    
+    
+    if (self.didAcceptAssignment) {
+        if ([self assignmentExists:self.currentAssignment.uid]) {
+            [self.assignmentIDs addObject:self.currentAssignment.uid];
+            [self addAssignmentAnnotation:self.currentAssignment index:0];
+        }
+        return;
+    }
+    
+    
     
     NSInteger count = 0;
     
@@ -437,6 +463,12 @@
     NSMutableArray *assignments = [[NSMutableArray alloc] initWithArray:[self.mapView annotations]];
     if (userLocation != nil ) {
         [assignments removeObject:userLocation]; // avoid removing user location off the map
+    }
+    
+    for (id <MKAnnotation> annotation in self.mapView.annotations) {
+        if ([annotation isKindOfClass:[FRSMapCircle class]]) {
+            [assignments removeObject:annotation];
+        }
     }
     
     [self.mapView removeAnnotations:assignments];
@@ -476,7 +508,7 @@
         [self configureOutlets];
         [self configureAssignmentCard];
         [self animateAssignmentCard];
-        [self setExpiration];
+        [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
         [self setPostedDate];
         [self setDistance];
         
@@ -507,6 +539,10 @@
 }
 
 -(void)updateAssignments {
+    
+    if (self.didAcceptAssignment) {
+        return;
+    }
     
     MKCoordinateRegion region = self.mapView.region;
     CLLocationCoordinate2D center = region.center;
@@ -589,6 +625,10 @@
             UIView *yellowView = [[UIView alloc] initWithFrame:CGRectMake(4, 4, 16, 16)];
             yellowView.layer.cornerRadius = 8;
             yellowView.backgroundColor = [UIColor frescoOrangeColor];
+
+            if (self.didAcceptAssignment) {
+                yellowView.backgroundColor = [UIColor frescoGreenColor];
+            }
             
             [whiteView addSubview:yellowView];
             [container addSubview:whiteView];
@@ -642,6 +682,9 @@
         }
         else if (circle.circleType == FRSMapCircleTypeAssignment) {
             circleR.fillColor = [UIColor frescoOrangeColor];
+            if (self.didAcceptAssignment) {
+                circleR.fillColor = [UIColor frescoGreenColor];
+            }
             circleR.alpha = 0.5;
         }
     }
@@ -679,11 +722,19 @@
     self.assignmentCaption = assAnn.subtitle;
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
     self.assignmentPostedDate = assAnn.assignmentPostedDate;
-    
+    self.assignmentID = assAnn.assignmentId;
     self.outlets = assAnn.outlets;
+    
+    if (assAnn.isAcceptable) {
+        self.assignemntAcceptButtonTitle = ACTION_TITLE_ONE;
+    } else {
+        self.assignemntAcceptButtonTitle = ACTION_TITLE_TWO;
+    }
+    
+    
     [self configureOutlets];
     
-    [self setExpiration];
+    [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
     [self setPostedDate];
     [self configureAssignmentCard];
     [self animateAssignmentCard];
@@ -743,6 +794,7 @@
     self.distanceLabel.text = distanceString;
     [self.distanceLabel sizeToFit];
     self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
+    self.acceptAssignmentDistanceAwayLabel.text = [distanceString uppercaseString];
 }
 
 -(void)setPostedDate {
@@ -761,9 +813,9 @@
     self.postedLabel.text = postedString;
 }
 
--(void)setExpiration {
+-(void)setExpiration:(NSDate *)date days:(int)expDays hours:(int)expHours minutes:(int)expMinutes seconds:(int)expSeconds {
     
-    NSTimeInterval doubleDiff = [self.assignmentExpirationDate timeIntervalSinceDate:[NSDate date]];
+    NSTimeInterval doubleDiff = [date timeIntervalSinceDate:[NSDate date]];
     long diff = (long) doubleDiff;
     int seconds = diff % 60;
     diff = diff / 60;
@@ -772,6 +824,13 @@
     int hours = diff % 24;
     int days = diff / 24;
     
+    if (!date) {
+        days = expDays;
+        hours = expHours;
+        minutes = expMinutes;
+        seconds = expSeconds;
+    }
+
     NSString *expirationString;
     
     if (days != 0) {
@@ -814,6 +873,7 @@
     }
     
     self.expirationLabel.text = expirationString;
+    self.acceptAssignmentTimeRemainingLabel.text = expirationString;
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
@@ -888,14 +948,15 @@
     bottomContainerLine.backgroundColor = [UIColor frescoShadowColor];
     [self.assignmentBottomBar addSubview:bottomContainerLine];
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectMake(self.view.frame.size.width -93-23, 15, 100, 17);
-    [button setTitle:@"OPEN CAMERA" forState:UIControlStateNormal];
-    [button.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(acceptAssignment) forControlEvents:UIControlEventTouchUpInside];
-    button.titleLabel.adjustsFontSizeToFitWidth = YES;
-    [self.assignmentBottomBar addSubview:button];
+    self.assignmentActionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.assignmentActionButton.frame = CGRectMake(self.view.frame.size.width -100 -16, 15, 100, 17);
+    [self.assignmentActionButton setTitle:self.assignemntAcceptButtonTitle forState:UIControlStateNormal];
+    [self.assignmentActionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
+    self.assignmentActionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    [self.assignmentActionButton setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
+    [self.assignmentActionButton addTarget:self action:@selector(assignmentAction) forControlEvents:UIControlEventTouchUpInside];
+    self.assignmentActionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+    [self.assignmentBottomBar addSubview:self.assignmentActionButton];
 
     
 //    UIButton *navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -984,7 +1045,7 @@
     self.postedLabel.textColor = [UIColor frescoMediumTextColor];
     [self.expirationLabel addSubview:self.postedLabel];
 
-    [self setExpiration];
+    [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
     [self setPostedDate];
     
     [self.assignmentStatsContainer addSubview:self.expirationLabel];
@@ -1060,6 +1121,7 @@
         self.assignmentTitleLabel.text = self.assignmentTitle;
         self.assignmentTextView.text = self.assignmentCaption;
         self.assignmentOutletLabel.text = self.assignmentOutlet;
+        [self.assignmentActionButton setTitle:self.assignemntAcceptButtonTitle forState:UIControlStateNormal];
 
     } else {
         [self createAssignmentView];
@@ -1217,17 +1279,6 @@
     self.hasDefault = NO;
 }
 
--(void)acceptAssignment {
-    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
-    UINavigationController *navControl = [[UINavigationController alloc] init];
-    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-    [navControl pushViewController:cam animated:NO];
-    [navControl setNavigationBarHidden:YES];
-    
-    [self presentViewController:navControl animated:YES completion:^{
-        [self.tabBarController setSelectedIndex:3];//should return to assignments 
-    }];
-}
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == currentScroller) {
@@ -1251,6 +1302,7 @@
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    
     if (!locations.count) {
         NSLog(@"FRSLocationManager did not return any locations");
         return;
@@ -1343,6 +1395,191 @@
     tableViewController.assignments = self.globalAssignmentsArray;
     [self.navigationController pushViewController:tableViewController animated:YES];
 }
+
+
+#pragma mark - Assignment Accepting
+
+-(void)assignmentAction {
+    
+    
+    if ([self.assignmentActionButton.titleLabel.text isEqualToString:ACTION_TITLE_TWO]) {
+        [self openCamera];
+    } else {
+        
+        [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
+            
+            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+            NSInteger responseCode = response.statusCode;
+            
+            if (responseObject || responseCode == 403) {
+                FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+                NSDictionary *dict = responseObject;
+                [assignment configureWithDictionary:dict];
+                self.currentAssignment = assignment;
+                [self configureAcceptedAssignment:assignment];
+                return;
+            }
+            
+            // user has already accepted the assignment
+            if (responseCode == 412) {
+                // should never happen, bottom tab bar is not visible when in an accepted state
+                return;
+            }
+            
+            
+            // user is not authenticated (allow assignment accept)
+            if (responseCode == 403) {
+                return;
+            }
+            
+            if (error.code != 101) {
+                [self presentGenericError];
+            }
+        }];
+    }
+}
+
+-(void)didAcceptAssignment:(FRSAssignment *)assignment {
+    self.didAcceptAssignment = YES;
+    [self removeAssignmentsFromMap];
+    [self removeAllOverlaysIncludingUser:NO];
+    [self addAnnotationsForAssignments];
+    
+    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
+}
+
+-(void)configureAcceptedAssignment:(FRSAssignment *)assignment {
+    [[NSNotificationCenter defaultCenter] postNotificationName:enableAssignmentAccept object:assignment];
+    
+    [self didAcceptAssignment:assignment];
+    
+    self.greenView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 64)];
+    self.greenView.backgroundColor = [UIColor frescoGreenColor];
+    [self.navigationController.navigationBar addSubview:self.greenView];
+    [self.navigationController.navigationBar bringSubviewToFront:self.greenView];
+    self.navigationController.navigationBar.clipsToBounds = NO;
+    
+    UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
+    self.unacceptAssignmentButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.unacceptAssignmentButton.tintColor = [UIColor whiteColor];
+    [self.unacceptAssignmentButton setImage:closeButtonImage forState:UIControlStateNormal];
+    self.unacceptAssignmentButton.frame = CGRectMake(12, 30, 24, 24);
+    [self.unacceptAssignmentButton addTarget:self action:@selector(unacceptAssignment) forControlEvents:UIControlEventTouchUpInside];
+    [self.greenView addSubview:self.unacceptAssignmentButton];
+    
+    self.acceptAssignmentDistanceAwayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 28, self.greenView.frame.size.width, 17)];
+    self.acceptAssignmentDistanceAwayLabel.text = [self.distanceLabel.text uppercaseString];
+    self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
+    self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
+    self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
+    [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
+    
+    self.acceptAssignmentTimeRemainingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 45, self.greenView.frame.size.width, 12)];
+    self.acceptAssignmentTimeRemainingLabel.text = self.expirationLabel.text;
+    self.acceptAssignmentTimeRemainingLabel.font = [UIFont systemFontOfSize:10 weight:UIFontWeightRegular];
+    self.acceptAssignmentTimeRemainingLabel.textColor = [UIColor whiteColor];
+    self.acceptAssignmentTimeRemainingLabel.textAlignment = NSTextAlignmentCenter;
+    [self.greenView addSubview:self.acceptAssignmentTimeRemainingLabel];
+    
+    UIButton *navigationButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    navigationButton.frame = CGRectMake(self.greenView.frame.size.width - 36, 30, 24, 24);
+    navigationButton.tintColor = [UIColor whiteColor];
+    [navigationButton setImage:[UIImage imageNamed:@"navigate-white"] forState:UIControlStateNormal];
+    [navigationButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
+    [self.greenView addSubview:navigationButton];
+    
+}
+
+
+
+-(void)unacceptAssignment {
+    [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
+        
+        // error or response, user should be able to unaccept. at least visually
+        [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:nil];
+        [self.greenView removeFromSuperview];
+        [self.unacceptAssignmentButton removeFromSuperview];
+        
+        self.didAcceptAssignment = NO;
+
+        [self removeAssignmentsFromMap];
+        [self removeAllOverlaysIncludingUser:NO];
+        
+//        [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:100];
+//        [self fetchLocalAssignments];
+//        [self addAnnotationsForAssignments];
+//        [self updateAssignments];
+
+    }];
+}
+
+
+//-(void)configureUnacceptAssignment:(FRSAssignment *)assignment {
+//    [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:assignment];
+//
+//}
+
+
+-(void)openCamera {
+    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+    UINavigationController *navControl = [[UINavigationController alloc] init];
+    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    [navControl pushViewController:cam animated:NO];
+    [navControl setNavigationBarHidden:YES];
+    
+    [self presentViewController:navControl animated:YES completion:^{
+        [self.tabBarController setSelectedIndex:3]; // should return to assignments
+    }];
+}
+
+
+
+-(void)updateExpirationAndDistanceLabels {
+    if (!self.didAcceptAssignment) {
+        return;
+    }
+    
+    [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
+    [self setDistance];
+}
+
+
+-(void)updateCounter:(NSTimer *)theTimer {
+    
+    [self setDistance];
+    
+    NSDate *now = [NSDate date];
+    if ([self.assignmentExpirationDate earlierDate:now] == self.assignmentExpirationDate) {
+        [theTimer invalidate];
+    } else {
+        NSUInteger flags = NSCalendarUnitYear | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+        NSDateComponents *components = [[NSCalendar currentCalendar] components:flags fromDate:now toDate:self.assignmentExpirationDate options:0];
+        
+        NSLog(@"there are %ld years, %ld days, %ld hours, %ld minutes and %ld seconds remaining", (long)[components year], (long)[components day], (long)[components hour], (long)[components minute], (long)[components second]);
+        
+        [self setExpiration:nil days:(int)[components day] hours:(int)[components hour] minutes:(int)[components minute] seconds:(int)[components second]];
+    }
+    
+    [self updateNavBarToOpenCamera];
+
+}
+
+-(void)updateNavBarToOpenCamera {
+
+    self.acceptAssignmentDistanceAwayLabel.frame = CGRectMake(0, 35, self.greenView.frame.size.width, 17);
+    self.acceptAssignmentDistanceAwayLabel.text = @"OPEN YOUR CAMERA";
+    self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
+    self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
+    self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
+    [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
+    
+    
+    self.acceptAssignmentTimeRemainingLabel.alpha = 0;
+}
+
+
+
 
 
 

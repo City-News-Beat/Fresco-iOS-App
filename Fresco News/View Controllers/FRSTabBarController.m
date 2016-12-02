@@ -87,22 +87,27 @@
     
     [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
     [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
-    
     [[UITabBar appearance] setBackgroundColor:[UIColor frescoTabBarColor]];
 
     [self configureAppearance];
     [self configureViewControllersWithNotif:NO];
-    
     [self configureTabBarItems];
-    
     [self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
-        
         vc.title = nil;
-//        vc.tabBarItem.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
     }];
-    
     [self configureIrisItem];
-    // Do any additional setup after loading the view.
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assignmentAccepted:)      name:enableAssignmentAccept  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disableAssignmentAccept:) name:disableAssignmentAccept object:nil];
+
+}
+
+-(void)assignmentAccepted:(NSNotification *)assignment {
+    self.cameraBackgroundView.backgroundColor = [UIColor frescoGreenColor];
+}
+
+-(void)disableAssignmentAccept:(NSNotification *)assignment {
+    self.cameraBackgroundView.backgroundColor = [UIColor frescoOrangeColor];
 }
 
 -(void)configureAppearance{

@@ -66,7 +66,7 @@ static NSString * const serviceName = @"frescoNewsService3";
 static NSString * const FRSUploadNotification = @"FRSUploadUpdateNotification";
 
 // base URLS
-static NSString * const baseURL = @"https://api.fresconews.com/v2/";
+static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 
@@ -92,7 +92,8 @@ static NSString * const settingsUpdateEndpoint = @"user/settings/update";
 // location endpoints
 static NSString * const locationEndpoint = @"user/locate"; // send location
 static NSString * const dualLocationEndpoint = @"user/locationcall";  // send location & get nearby assignments
-static NSString * const acceptAssignmentEndpoint = @"assignment/accept";
+static NSString * const acceptAssignmentEndpoint = @"assignment/%@/accept";
+static NSString * const unacceptAssignmentEndpoint = @"assignment/%@/unaccept";
 
 // sign in / sign up (authorization) methods
 static NSString * const loginEndpoint = @"auth/signin";
@@ -171,6 +172,10 @@ static NSString * const settingsPaymentLastFour = @"payment-last-four";
 static NSString * const settingsUserNotificationToggle = @"notifications-enabled";
 static NSString * const userHasSeenPermissionsAlert = @"userHasSeenPermissionsAlert";
 static NSString * const startDate = @"startDate";
+
+// nsnotification
+static NSString * const enableAssignmentAccept = @"enableAssignmentAccept";
+static NSString * const disableAssignmentAccept = @"disableAssignmentAccept";
 
 
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
