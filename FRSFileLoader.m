@@ -169,26 +169,27 @@
     
     [assetLoader requestImageDataForAsset:phAsset options:Nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
         NSError *error;
-        float screenSize = [[UIScreen mainScreen] bounds].size.width/3.0;
+        //  float screenSize = [[UIScreen mainScreen] bounds].size.width/3.0;
         
-        [[PHImageManager defaultManager]
-         requestImageForAsset:phAsset
-         targetSize:CGSizeMake(screenSize, screenSize)
-         contentMode:PHImageContentModeAspectFill
-         options:nil
-         resultHandler:^(UIImage *result, NSDictionary *info) {
-             
-             if (phAsset.mediaType == PHAssetMediaTypeVideo) {
-                 
-                 [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:Nil resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                     callback(result, avAsset, phAsset.mediaType, error);
-                 }];
-                 
-                 return; // don't want 2 callbacks
-             }
-             
-             callback(result, Nil, phAsset.mediaType, error);
-         }];
+        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+        options.resizeMode = PHImageRequestOptionsResizeModeNone;
+        options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+        options.version = PHImageRequestOptionsVersionOriginal;
+        
+        [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            if (phAsset.mediaType == PHAssetMediaTypeVideo) {
+                
+                [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:Nil resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                    callback([UIImage imageWithData:imageData], avAsset, phAsset.mediaType, error);
+                }];
+                
+                return; // don't want 2 callbacks
+            }
+            
+            callback([UIImage imageWithData:imageData], Nil, phAsset.mediaType, error);
+            
+        }];
+        
     }];
 }
 
