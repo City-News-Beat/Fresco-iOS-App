@@ -790,10 +790,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)setDistance {
     
-    if (self.acceptedAssignment) {
-        return;
-    }
-    
     CLLocation *locA = [[CLLocation alloc] initWithLatitude:self.assignmentLat longitude:self.assignmentLong];
     CLLocation *locB = [[CLLocation alloc] initWithLatitude:[FRSLocator sharedLocator].currentLocation.coordinate.latitude longitude:[FRSLocator sharedLocator].currentLocation.coordinate.longitude];
     CLLocationDistance distance = [locA distanceFromLocation:locB];
@@ -819,7 +815,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.distanceLabel.text = distanceString;
     [self.distanceLabel sizeToFit];
     self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
-    self.acceptAssignmentDistanceAwayLabel.text = [distanceString uppercaseString];
+    
+    if (!self.acceptedAssignment) {
+        self.acceptAssignmentDistanceAwayLabel.text = [distanceString uppercaseString];
+    }
 }
 
 -(void)setPostedDate {
