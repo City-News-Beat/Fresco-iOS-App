@@ -705,6 +705,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
     }
     
+    
+    
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"installation":installationDigest} completion:^(id responseObject, NSError *error) {
         NSLog(@"Updated user installation");
     }];

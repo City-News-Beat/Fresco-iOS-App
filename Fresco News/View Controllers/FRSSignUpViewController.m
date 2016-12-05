@@ -1177,7 +1177,7 @@
     NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
     [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
     
-    if (currentInstallation && [currentInstallation objectForKey:@"deviceToken"]) {
+    if (currentInstallation && [currentInstallation objectForKey:@"device_token"]) {
         [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
     }
     
