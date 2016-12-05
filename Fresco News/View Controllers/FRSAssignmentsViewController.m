@@ -99,6 +99,8 @@
 @property (strong, nonatomic) UILabel *acceptAssignmentTimeRemainingLabel;
 @property BOOL didAcceptAssignment;
 
+@property (strong, nonatomic) UIView *annotationColorView;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -637,15 +639,15 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             whiteView.layer.shouldRasterize = YES;
             whiteView.layer.rasterizationScale = [[UIScreen mainScreen] scale];
             
-            UIView *yellowView = [[UIView alloc] initWithFrame:CGRectMake(4, 4, 16, 16)];
-            yellowView.layer.cornerRadius = 8;
-            yellowView.backgroundColor = [UIColor frescoOrangeColor];
+            self.annotationColorView = [[UIView alloc] initWithFrame:CGRectMake(4, 4, 16, 16)];
+            self.annotationColorView.layer.cornerRadius = 8;
+            self.annotationColorView.backgroundColor = [UIColor frescoOrangeColor];
 
             if (self.didAcceptAssignment) {
-                yellowView.backgroundColor = [UIColor frescoGreenColor];
+                self.annotationColorView.backgroundColor = [UIColor frescoGreenColor];
             }
             
-            [whiteView addSubview:yellowView];
+            [whiteView addSubview:self.annotationColorView];
             [container addSubview:whiteView];
             [annotationView addSubview:container];
             
@@ -1431,6 +1433,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
             NSInteger responseCode = response.statusCode;
             
+            self.annotationColorView.backgroundColor = [UIColor frescoGreenColor];
+            
             if (responseObject || responseCode == 403) {
                 FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                 FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
@@ -1531,6 +1535,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
             [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
         }
+        
+        self.annotationColorView.backgroundColor = [UIColor frescoOrangeColor];
         
         [self showAssignmentsMetaBar];
         if (self.globalAssignmentsArray.count <= 1) {
