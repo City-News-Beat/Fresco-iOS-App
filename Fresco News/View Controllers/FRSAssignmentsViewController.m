@@ -790,6 +790,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)setDistance {
     
+    if (self.acceptedAssignment) {
+        return;
+    }
+    
     CLLocation *locA = [[CLLocation alloc] initWithLatitude:self.assignmentLat longitude:self.assignmentLong];
     CLLocation *locB = [[CLLocation alloc] initWithLatitude:[FRSLocator sharedLocator].currentLocation.coordinate.latitude longitude:[FRSLocator sharedLocator].currentLocation.coordinate.longitude];
     CLLocationDistance distance = [locA distanceFromLocation:locB];
@@ -1109,23 +1113,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.closeButton addTarget:self action:@selector(dismissAssignmentCard) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
     self.navigationItem.leftBarButtonItem = backButton;
-
-    
-    //Configure photo/video labels for animation
-    self.closeButton.alpha    = 0;
-    //self.photoCashLabel.alpha = 0;
-    //self.videoCashLabel.alpha = 0;
-    //self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
-    //self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
-    
-    
+    self.closeButton.alpha = 0;
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding + 25), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     
-    //Avoid any drawing above these
+    // avoid any drawing above these
     self.scrollView.layer.zPosition = 1;
     self.assignmentBottomBar.layer.zPosition = 2;
-    
 }
 
 -(void)navigateToAssignment {
@@ -1216,55 +1210,31 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)animateAssignmentCard{
     
-    CGFloat yOffset;
-
-    
-    //Animate scrollView in y
+    // animate scrollView in y
     [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        
         CGRect scrollFrame = self.scrollView.frame;
         scrollFrame.origin.y = -12;
         self.scrollView.frame = scrollFrame;
-        
     } completion:nil];
     
-    //Animate bottom bar in y
-    
-//    CGFloat yValue = -93;
-//    if (self.defaultID) {
-//        yValue = -157;
-//    }
-    
     [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseOut animations:^{
-        
         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -93);
-        
-    } completion:^(BOOL finished) {
-        
-        //Animate photoCashLabel
-        [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            
-            //self.photoCashLabel.alpha = 1;
-            //self.photoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
-
-        } completion:nil];
-        
-        //Animate videoCashLabel with delay
-        [UIView animateWithDuration:0.2 delay:0.1 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            
-            //self.videoCashLabel.alpha = 1;
-            //self.videoCashLabel.transform = CGAffineTransformMakeTranslation(0, 0);
-
-        } completion:nil];
-    }];
+    } completion:nil];
     
     [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
         self.closeButton.alpha = 1;
-        
     } completion:nil];
     
     [self hideGlobalAssignmentsBar];
+    
+    // configure accepted assignment state
+    if (self.acceptedAssignment) {
+        if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.acceptedAssignment]) {
+            [self showAssignmentsMetaBar];
+        } else {
+            [self hideAssignmentsMetaBar];
+        }
+    }
 }
 
 -(void)dismissAssignmentCard {
@@ -1393,13 +1363,17 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)showAssignmentsMetaBar {
-//    self.assignmentBottomBar.alpha = 1;
-//    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y +44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.assignmentBottomBar.alpha = 1;
+        self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y +44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    } completion:nil];
 }
 
 -(void)hideAssignmentsMetaBar {
-//    self.assignmentBottomBar.alpha = 0;
-//    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y -44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.assignmentBottomBar.alpha = 0;
+        self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y -44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    } completion:nil];
 }
 
 -(void)globalAssignmentsSegue {
@@ -1515,6 +1489,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [navigationButton setImage:[UIImage imageNamed:@"navigate-white"] forState:UIControlStateNormal];
     [navigationButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
     [self.greenView addSubview:navigationButton];
+    
+    [self updateUIForLocation];
 }
 
 
@@ -1595,9 +1571,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)updateUIForLocation {
     if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateNavBarToOpenCamera];
-        });
+        [self updateNavBarToOpenCamera];
     }
 }
 
@@ -1612,9 +1586,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
     [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
     self.acceptAssignmentTimeRemainingLabel.alpha = 0;
+    
     self.annotationColorView.backgroundColor = [UIColor frescoGreenColor];
     [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoGreenColor]];
     [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
+    [self showAssignmentsMetaBar];
 }
 
 
