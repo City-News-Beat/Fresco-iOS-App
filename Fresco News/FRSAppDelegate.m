@@ -700,7 +700,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:@"deviceToken"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    NSMutableDictionary *installationDigest = [[FRSAPIClient sharedClient] currentInstallation];
+    NSMutableDictionary *installationDigest = (NSMutableDictionary *)[[FRSAPIClient sharedClient] currentInstallation];
     
     if (oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]] && ![oldDeviceToken isEqualToString:newDeviceToken]) {
         [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
