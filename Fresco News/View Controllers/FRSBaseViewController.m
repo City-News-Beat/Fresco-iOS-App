@@ -377,7 +377,9 @@
     
     NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
     for (NSString *key in [defaultsDictionary allKeys]) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+        if (![key isEqualToString:@"deviceToken"]) {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+        }
     }
     [[NSUserDefaults standardUserDefaults] synchronize];
     

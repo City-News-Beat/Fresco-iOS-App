@@ -684,7 +684,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    
     const unsigned *tokenData = [deviceToken bytes];
     NSString *newDeviceToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
                                 ntohl(tokenData[0]), ntohl(tokenData[1]), ntohl(tokenData[2]),
