@@ -1616,6 +1616,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 -(void)updateNavBarToOpenCamera {
     self.acceptAssignmentDistanceAwayLabel.frame = CGRectMake(0, 35, self.greenView.frame.size.width, 17);
     self.acceptAssignmentDistanceAwayLabel.text = @"OPEN YOUR CAMERA";
+    if (IS_IPHONE_5) {
+        self.acceptAssignmentDistanceAwayLabel.text = @"OPEN CAMERA";
+    }
     self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
     self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
     self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
