@@ -702,7 +702,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     
     NSMutableDictionary *installationDigest = [[FRSAPIClient sharedClient] currentInstallation];
     
-    if (oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]]) {
+    if (oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]] && ![oldDeviceToken isEqualToString:newDeviceToken]) {
         [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
     }
     
