@@ -1105,9 +1105,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.closeButton.tintColor = [UIColor whiteColor];
     [self.closeButton setImage:closeButtonImage forState:UIControlStateNormal];
     self.closeButton.frame = CGRectMake(0, 0, 24, 24);
+    self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0);
     [self.closeButton addTarget:self action:@selector(dismissAssignmentCard) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
     self.navigationItem.leftBarButtonItem = backButton;
+
     
     //Configure photo/video labels for animation
     self.closeButton.alpha    = 0;
@@ -1479,6 +1481,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self didAcceptAssignment:assignment];
     
     self.greenView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, 64)];
+    self.greenView.layer.zPosition = 1;
     self.greenView.backgroundColor = [UIColor frescoGreenColor];
     [self.navigationController.navigationBar addSubview:self.greenView];
     [self.navigationController.navigationBar bringSubviewToFront:self.greenView];
