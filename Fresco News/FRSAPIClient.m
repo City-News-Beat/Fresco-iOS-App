@@ -273,6 +273,7 @@
 
 -(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     if (![digestion objectForKey:@"deviceToken"]) {
+        completion(Nil, Nil);
         return;
     }
     
