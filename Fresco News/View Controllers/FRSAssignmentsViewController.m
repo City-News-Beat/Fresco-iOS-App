@@ -268,6 +268,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
         NSLog(@"ASS: %@ %@", assignments, error);
         
+        
         FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
         NSMutableArray *mSerializedAssignments = [NSMutableArray new];
         
@@ -308,6 +309,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
             if (!dictionaryRepresentations) {
                 dictionaryRepresentations = [[NSMutableArray alloc] init];
+            }
+    
+            if ([assignmentToAdd.accepted boolValue]) {
+                self.currentAssignment = assignmentToAdd;
+                self.assignmentID = assignmentToAdd.uid;
+                [self focusOnAssignment:assignmentToAdd];
+                [self configureAcceptedAssignment:assignmentToAdd];
             }
             
             [dictionaryRepresentations addObject:dict];
@@ -1457,6 +1465,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)configureAcceptedAssignment:(FRSAssignment *)assignment {
+    
+    if (self.didAcceptAssignment) {
+        return;
+    }
     
     [self didAcceptAssignment:assignment];
     
