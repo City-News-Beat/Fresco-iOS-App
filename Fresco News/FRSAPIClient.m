@@ -131,7 +131,7 @@
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
     self.passwordUsed = password;
     
-    NSDictionary *params = @{@"username":user, @"password":password, @"installation":[[FRSAPIClient sharedClient] currentInstallation]};
+    NSDictionary *params = @{@"username":user, @"password":password};
     
     [self post:loginEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         
@@ -363,8 +363,7 @@
         currentInstallation[@"device_token"] = deviceToken;
     }
     else {
-        
-        currentInstallation[@"device_token"] = [[FRSAPIClient sharedClient] random64CharacterString]; // no installation without push info, apparently
+        NSLog(@"NO DEVICE TOKEN -- INSTALLATION WILL FAIL");
     }
     
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
