@@ -190,6 +190,7 @@
 		D453CC891CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC721CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m */; };
 		D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC761CCA80850091A004 /* NSPersistentStore+MagicalRecord.m */; };
 		D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC781CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m */; };
+		D4638F0A1DF4FA1E001F2E05 /* FRSVideoCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = D4638F091DF4FA1E001F2E05 /* FRSVideoCompressor.m */; };
 		D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D46D35681D9036E700E38FAA /* FRSTracker.m */; };
 		D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */; };
 		D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C08E1DC2677000AFC839 /* FRSUploadManager.m */; };
@@ -635,6 +636,8 @@
 		D453CC761CCA80850091A004 /* NSPersistentStore+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStore+MagicalRecord.m"; sourceTree = "<group>"; };
 		D453CC771CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStoreCoordinator+MagicalRecord.h"; sourceTree = "<group>"; };
 		D453CC781CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStoreCoordinator+MagicalRecord.m"; sourceTree = "<group>"; };
+		D4638F081DF4FA1E001F2E05 /* FRSVideoCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSVideoCompressor.h; sourceTree = "<group>"; };
+		D4638F091DF4FA1E001F2E05 /* FRSVideoCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSVideoCompressor.m; sourceTree = "<group>"; };
 		D46D35671D9036E700E38FAA /* FRSTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTracker.h; sourceTree = "<group>"; };
 		D46D35681D9036E700E38FAA /* FRSTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTracker.m; sourceTree = "<group>"; };
 		D46E9C3B1D41BDD500A39398 /* FRSUpload+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSUpload+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -1936,6 +1939,15 @@
 			name = MagicalRecord;
 			sourceTree = "<group>";
 		};
+		D4638F071DF4F9D9001F2E05 /* Compression */ = {
+			isa = PBXGroup;
+			children = (
+				D4638F081DF4FA1E001F2E05 /* FRSVideoCompressor.h */,
+				D4638F091DF4FA1E001F2E05 /* FRSVideoCompressor.m */,
+			);
+			name = Compression;
+			sourceTree = "<group>";
+		};
 		D46D35661D9036C400E38FAA /* Tracking */ = {
 			isa = PBXGroup;
 			children = (
@@ -2112,6 +2124,7 @@
 		D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */ = {
 			isa = PBXGroup;
 			children = (
+				D4638F071DF4F9D9001F2E05 /* Compression */,
 				D475C08D1DC2677000AFC839 /* FRSUploadManager.h */,
 				D475C08E1DC2677000AFC839 /* FRSUploadManager.m */,
 			);
@@ -2741,6 +2754,7 @@
 				65EBEDB91C44197100BE671F /* FRSLocationManager.m in Sources */,
 				D4BE3E311D17D6760039394C /* FRSCarouselCell.m in Sources */,
 				07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */,
+				D4638F0A1DF4FA1E001F2E05 /* FRSVideoCompressor.m in Sources */,
 				D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */,
 				D421FC501D5B7ACF004C76B7 /* FRSSearchStoryCell.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
