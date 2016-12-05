@@ -239,7 +239,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.defaultID  = nil;
     self.showsCard  = NO;
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:nil];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -1423,7 +1423,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)assignmentAction {
     
-    
     if ([self.assignmentActionButton.titleLabel.text isEqualToString:ACTION_TITLE_TWO]) {
         [self openCamera];
     } else {
@@ -1432,8 +1431,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             
             NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
             NSInteger responseCode = response.statusCode;
-            
-            self.annotationColorView.backgroundColor = [UIColor frescoGreenColor];
             
             if (responseObject || responseCode == 403) {
                 FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -1447,16 +1444,17 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             
             // user has already accepted the assignment
             if (responseCode == 412) {
-                // should never happen, bottom tab bar is not visible when in an accepted state
+                // should never happen
+                // bottom tab bar is not visible when in an accepted state
                 return;
             }
-            
             
             // user is not authenticated (allow assignment accept)
             if (responseCode == 403) {
                 return;
             }
             
+            // 101 is unauthenticated (FRSAPIClient)
             if (error.code != 101) {
                 [self presentGenericError];
             }
@@ -1514,49 +1512,36 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [navigationButton setImage:[UIImage imageNamed:@"navigate-white"] forState:UIControlStateNormal];
     [navigationButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
     [self.greenView addSubview:navigationButton];
-    
 }
 
 
 
 -(void)unacceptAssignment {
     [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
-        
         // error or response, user should be able to unaccept. at least visually
-        [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:nil];
-        [self.greenView removeFromSuperview];
-        [self.unacceptAssignmentButton removeFromSuperview];
-        
-        self.didAcceptAssignment = NO;
-
-        [self removeAssignmentsFromMap];
-        [self removeAllOverlaysIncludingUser:NO];
-        
-        if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
-            [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
-        }
-        
-        self.annotationColorView.backgroundColor = [UIColor frescoOrangeColor];
-        
-        [self showAssignmentsMetaBar];
-        if (self.globalAssignmentsArray.count <= 1) {
-            [self showGlobalAssignmentsBar];
-        }
-        
-//        [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:100];
-//        [self fetchLocalAssignments];
-//        [self addAnnotationsForAssignments];
-//        [self updateAssignments];
-
     }];
+    
+    self.didAcceptAssignment = NO;
+
+    [self.greenView removeFromSuperview];
+    [self.unacceptAssignmentButton removeFromSuperview];
+    
+    [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
+    self.annotationColorView.backgroundColor = [UIColor frescoOrangeColor];
+    
+    [self removeAssignmentsFromMap];
+    [self removeAllOverlaysIncludingUser:NO];
+    
+    if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
+        [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
+    }
+    
+    if (self.globalAssignmentsArray.count <= 1) {
+        [self showGlobalAssignmentsBar];
+    }
+    
+    [self showAssignmentsMetaBar];
 }
-
-
-//-(void)configureUnacceptAssignment:(FRSAssignment *)assignment {
-//    [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:assignment];
-//
-//}
-
 
 -(void)openCamera {
     FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
@@ -1576,16 +1561,15 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (!self.didAcceptAssignment) {
         return;
     }
-    
-    // if in range
-    // [self updateNavBarToOpenCamera];
+
+    [self updateUIForLocation];
     
     [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
     [self setDistance];
 }
 
 
--(void)updateCounter:(NSTimer *)theTimer {
+-(void)updateCounter:(NSTimer *)timer {
     
     if (!self.didAcceptAssignment) {
         return;
@@ -1595,7 +1579,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     NSDate *now = [NSDate date];
     if ([self.assignmentExpirationDate earlierDate:now] == self.assignmentExpirationDate) {
-        [theTimer invalidate];
+        [timer invalidate];
     } else {
         NSUInteger flags = NSCalendarUnitYear | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
         NSDateComponents *components = [[NSCalendar currentCalendar] components:flags fromDate:now toDate:self.assignmentExpirationDate options:0];
@@ -1607,9 +1591,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)updateUIForLocation {
     if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
-        [self updateNavBarToOpenCamera];
-        [[NSNotificationCenter defaultCenter] postNotificationName:enableAssignmentAccept object:nil];
-        [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateNavBarToOpenCamera];
+            [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
+        });
     }
 }
 
@@ -1623,8 +1608,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
     self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
     [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
-
     self.acceptAssignmentTimeRemainingLabel.alpha = 0;
+    self.annotationColorView.backgroundColor = [UIColor frescoGreenColor];
+    [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoGreenColor]];
 }
 
 
