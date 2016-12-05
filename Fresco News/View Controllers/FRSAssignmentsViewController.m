@@ -687,7 +687,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         }
         else if (circle.circleType == FRSMapCircleTypeAssignment) {
             circleR.fillColor = [UIColor frescoOrangeColor];
-            if (self.didAcceptAssignment) {
+            if (self.didAcceptAssignment && [self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
                 circleR.fillColor = [UIColor frescoGreenColor];
             }
             circleR.alpha = 0.5;
@@ -1289,15 +1289,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (scrollView == currentScroller) {
         [self handleAssignmentScroll];
     }
-        
-//    if (self.scrollView.contentOffset.y <= -80) {
-//        [self dismissAssignmentCard];
-//    }
 }
 
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (scrollView.contentOffset.y <= -75) { //QA value, see what's most comfortable for over scrolling and dismissing
+    if (scrollView.contentOffset.y <= -75) {
         [self dismissAssignmentCard];
     }
 }
@@ -1351,8 +1347,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     self.globalAssignmentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 12, self.view.frame.size.width -56 -24 -18 -6, 20)];
     self.globalAssignmentsLabel.text = @"  global assignments";
-    //TO DO GRAB THE NUMBER OF GLOBAL ASSIGNMENTS
-    
     self.globalAssignmentsLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.globalAssignmentsLabel.textColor = [UIColor frescoDarkTextColor];
     [self.globalAssignmentsBottomContainer addSubview:self.globalAssignmentsLabel];
