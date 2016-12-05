@@ -255,6 +255,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
+    if (self.didAcceptAssignment) {
+        return;
+    }
     
     if (self.isFetching) return;
     
