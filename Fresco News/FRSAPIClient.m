@@ -272,10 +272,6 @@
 }
 
 -(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    if (![digestion objectForKey:@"device_token"]) {
-        completion(Nil, Nil);
-        return;
-    }
     
     [self post:updateUserEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -440,6 +436,15 @@
     
     [self reevaluateAuthorization];
     [self updateLocalUser];
+    
+    NSDictionary *currentInstallation = [self currentInstallation];
+    
+    if ([currentInstallation objectForKey:@"device_token"]) {
+        NSDictionary *update = @{@"installation":currentInstallation};
+        [self updateUserWithDigestion:update completion:^(id responseObject, NSError *error) {
+            NSLog(@"USER UPDATED: %@ %@", responseObject, error);
+        }];
+    }
 }
 
 -(void)updateLocalUser {
