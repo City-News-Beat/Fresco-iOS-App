@@ -314,7 +314,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             }
     
             if ([assignmentToAdd.accepted boolValue]) {
-                // why do we need to set both of these? investigate
+                // set both current and accepted here to avoid adding multiple cases for each assignment
+                // when a user is not accepting an assignment for example
                 self.currentAssignment = assignmentToAdd;
                 self.acceptedAssignment = assignmentToAdd;
             }
@@ -977,14 +978,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.assignmentActionButton addTarget:self action:@selector(assignmentAction) forControlEvents:UIControlEventTouchUpInside];
     self.assignmentActionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     [self.assignmentBottomBar addSubview:self.assignmentActionButton];
-
     
-//    UIButton *navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
-//    navigateButton.frame = CGRectMake(self.view.frame.size.width -24-16, 10, 24, 24);
-//    [navigateButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
-//    [navigateButton addTarget:self action:@selector(navigateToAssignment) forControlEvents:UIControlEventTouchUpInside];
-//    navigateButton.tintColor = [UIColor blackColor];
-//    [self.assignmentBottomBar addSubview:navigateButton];
+    if (self.acceptedAssignment) {
+        if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.acceptedAssignment]) {
+            [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
+        }
+    }
     
     self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, self.view.frame.size.width - 16, 22)];
     [self.assignmentOutletLabel setFont:[UIFont notaMediumWithSize:17]];
@@ -1523,6 +1522,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }];
     
     self.didAcceptAssignment = NO;
+    self.acceptedAssignment = nil;
 
     [self.greenView removeFromSuperview];
     [self.unacceptAssignmentButton removeFromSuperview];
@@ -1594,7 +1594,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self updateNavBarToOpenCamera];
-            [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
         });
     }
 }
@@ -1612,6 +1611,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.acceptAssignmentTimeRemainingLabel.alpha = 0;
     self.annotationColorView.backgroundColor = [UIColor frescoGreenColor];
     [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoGreenColor]];
+    [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
 }
 
 
