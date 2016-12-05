@@ -101,6 +101,8 @@
 
 @property (strong, nonatomic) UIView *annotationColorView;
 
+@property (strong, nonatomic) FRSAssignment *acceptedAssignment;
+
 @end
 
 @implementation FRSAssignmentsViewController
@@ -312,10 +314,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             }
     
             if ([assignmentToAdd.accepted boolValue]) {
+                // why do we need to set both of these? investigate
                 self.currentAssignment = assignmentToAdd;
-                self.assignmentID = assignmentToAdd.uid;
-                [self focusOnAssignment:assignmentToAdd];
-                [self configureAcceptedAssignment:assignmentToAdd];
+                self.acceptedAssignment = assignmentToAdd;
             }
             
             [dictionaryRepresentations addObject:dict];
@@ -337,6 +338,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         
         if (self.defaultID && defaultAssignment) {
             [self focusOnAssignment:defaultAssignment];
+        }
+        
+        if (self.acceptedAssignment) {
+            [self focusOnAssignment:self.acceptedAssignment];
+            self.assignmentID = self.acceptedAssignment.uid;
+            [self configureAcceptedAssignment:self.acceptedAssignment];
         }
     }];
 }
