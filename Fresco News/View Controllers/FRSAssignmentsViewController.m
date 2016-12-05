@@ -141,8 +141,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 -(void)commonInit {
 //    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
 //    
-//    [self fetchLocalAssignments];
-//    
+//
 //    if (lastLocation) {
 //        [self fetchAssignmentsNearLocation:lastLocation radius:10];
 //    }
@@ -184,8 +183,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.isPresented = YES;
     
     CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
-    
-    [self fetchLocalAssignments];
     
     if (lastLocation) {
         [self locationUpdate:lastLocation];
@@ -363,18 +360,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     return returnValue;
 }
 
--(void)fetchLocalAssignments {
-//    FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(expirationDate >= %@)", [NSDate date]];
-//    NSManagedObjectContext *moc = [delegate managedObjectContext];
-//    
-//    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"FRSAssignment"];
-//    request.predicate = predicate;
-//    NSError *error = nil;
-//    NSArray *stored = [moc executeFetchRequest:request error:&error];
-//    self.assignments = [NSMutableArray arrayWithArray:stored];
-//    [self configureAnnotationsForMap];
-}
 
 -(void)cacheAssignments {
    
