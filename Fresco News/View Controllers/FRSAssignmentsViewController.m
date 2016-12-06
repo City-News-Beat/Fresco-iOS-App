@@ -460,10 +460,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     
     if (self.didAcceptAssignment) {
-        if ([self assignmentExists:self.currentAssignment.uid]) {
+//        if ([self assignmentExists:self.currentAssignment.uid]) {
             [self.assignmentIDs addObject:self.currentAssignment.uid];
             [self addAssignmentAnnotation:self.currentAssignment index:0];
-        }
+//        }
         return;
     }
     
