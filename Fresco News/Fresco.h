@@ -309,6 +309,27 @@ static NSString * const taxInfoDeclinedNotification = @"user-payment-tax-info-de
 // Assignments
 static NSString * const newAssignmentNotification = @"user-dispatch-new-assignment";
 static NSString * const galleryApprovedNotification = @"user-dispatch-content-verified";
+
+
+// MixPanel
+static NSString * const gallerySession = @"Gallery session";
+static NSString * const galleryLiked = @"Gallery liked";
+static NSString * const galleryUnlked = @"Gallery unliked";
+static NSString * const galleryReposted = @"Gallery reposted";
+static NSString * const galleryUnreposted = @"Gallery unreposted";
+static NSString * const cameraSession = @"Camera session";
+static NSString * const cameraSessionPhotoCount = @"Camera session photo count";
+static NSString * const cameraSessionVideoCount = @"Camera session video count";
+static NSString * const highlightsSession = @"Highlights session";
+static NSString * const profileSession = @"Profile session";
+static NSString * const storiesSession = @"Stories session";
+static NSString * const uploadError = @"Upload error";
+static NSString * const uploadDebug = @"Upload debug";
+static NSString * const uploadClose = @"Upload close";
+
+
+
+
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]
