@@ -168,13 +168,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentIDs = [[NSMutableArray alloc] init];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification object:nil queue:nil usingBlock:^(NSNotification *notification) {
-
         CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
-                
         if (lastLocation) {
             [self locationUpdate:lastLocation];
         }
-
     }];
 }
 
@@ -342,9 +339,21 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         }
         
         if (self.acceptedAssignment) {
-            [self focusOnAssignment:self.acceptedAssignment];
             self.assignmentID = self.acceptedAssignment.uid;
             [self configureAcceptedAssignment:self.acceptedAssignment];
+            [self focusOnAssignment:self.acceptedAssignment];
+
+            // fall back on nsuserdefaults if accepted assignment is not directly in viewport
+        } else if ([[NSUserDefaults standardUserDefaults] valueForKey:acceptedAssignmentID]) {
+            [[FRSAPIClient sharedClient] getAssignmentWithUID:[[NSUserDefaults standardUserDefaults] valueForKey:acceptedAssignmentID] completion:^(id responseObject, NSError *error) {
+                FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+                [assignment configureWithDictionary:responseObject];
+                self.assignmentID = assignment.uid;
+                self.acceptedAssignment = assignment;
+                self.currentAssignment = assignment;
+                [self configureAcceptedAssignment:assignment];
+                [self focusOnAssignment:assignment];
+            }];
         }
     }];
 }
@@ -816,9 +825,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.distanceLabel sizeToFit];
     self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
     
-    if (!self.acceptedAssignment) {
+//    if (self.acceptedAssignment) {
         self.acceptAssignmentDistanceAwayLabel.text = [distanceString uppercaseString];
-    }
+//    }
 }
 
 -(void)setPostedDate {
@@ -1078,6 +1087,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.distanceLabel.text = @"";
     self.distanceLabel.userInteractionEnabled = YES;
     [self.assignmentStatsContainer addSubview:self.distanceLabel];
+    [self setDistance];
     
     
     self.navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -1364,14 +1374,14 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 -(void)showAssignmentsMetaBar {
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.assignmentBottomBar.alpha = 1;
-        self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y +44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+//        self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y +44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
     } completion:nil];
 }
 
 -(void)hideAssignmentsMetaBar {
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.assignmentBottomBar.alpha = 0;
-        self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y -44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+//        self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y -44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
     } completion:nil];
 }
 
@@ -1410,6 +1420,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                 [assignment configureWithDictionary:dict];
                 self.currentAssignment = assignment;
                 [self configureAcceptedAssignment:assignment];
+                
+                // used for persisting assignments that are not loaded with map
+                [[NSUserDefaults standardUserDefaults] setValue:[NSString stringWithFormat:@"%@", assignment.uid] forKey:acceptedAssignmentID];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
                 return;
             }
             
@@ -1450,6 +1465,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (self.didAcceptAssignment) {
         return;
     }
+    
+    self.hasDefault = YES;
+    self.defaultID = assignment.uid;
+    
+    self.assignmentLat  = [assignment.latitude floatValue];
+    self.assignmentLong = [assignment.longitude floatValue];
     
     [self didAcceptAssignment:assignment];
     
@@ -1498,6 +1519,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
         // error or response, user should be able to unaccept. at least visually
     }];
+    
+    // used for assignments that are not loaded with map
+    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:acceptedAssignmentID];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
     self.didAcceptAssignment = NO;
     self.acceptedAssignment = nil;
@@ -1563,6 +1588,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         NSUInteger flags = NSCalendarUnitYear | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
         NSDateComponents *components = [[NSCalendar currentCalendar] components:flags fromDate:now toDate:self.assignmentExpirationDate options:0];
         [self setExpiration:nil days:(int)[components day] hours:(int)[components hour] minutes:(int)[components minute] seconds:(int)[components second]];
+        [self setDistance];
     }
     
     [self updateUIForLocation];
