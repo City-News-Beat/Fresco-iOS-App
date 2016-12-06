@@ -28,4 +28,8 @@
     return self;
 }
 
+-(NSURL *)temporaryFilePathURL {
+    return Nil;
+}
+
 @end
