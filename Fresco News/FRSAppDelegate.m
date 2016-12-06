@@ -57,7 +57,7 @@
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
-    if ([self isFirstRun]) {
+    if ([self isFirstRun] && !launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         [[FRSAPIClient sharedClient] logout];
     }
     
@@ -74,7 +74,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
-    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+    if ([[FRSAPIClient sharedClient] isAuthenticated] || launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
         FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
         
