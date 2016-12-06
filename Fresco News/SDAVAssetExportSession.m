@@ -9,6 +9,7 @@
 // For the full copyright and license iyformation, please view the LICENSE
 // file that was distributed with this source code.
 //
+// Updated by Philip Bernstein
 
 
 #import "SDAVAssetExportSession.h"
