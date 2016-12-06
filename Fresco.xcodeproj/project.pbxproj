@@ -191,6 +191,7 @@
 		D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC761CCA80850091A004 /* NSPersistentStore+MagicalRecord.m */; };
 		D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC781CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m */; };
 		D4638F0A1DF4FA1E001F2E05 /* FRSVideoCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = D4638F091DF4FA1E001F2E05 /* FRSVideoCompressor.m */; };
+		D4638F211DF74FA2001F2E05 /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = D4638F201DF74FA2001F2E05 /* SDAVAssetExportSession.m */; };
 		D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D46D35681D9036E700E38FAA /* FRSTracker.m */; };
 		D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */; };
 		D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C08E1DC2677000AFC839 /* FRSUploadManager.m */; };
@@ -638,6 +639,8 @@
 		D453CC781CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStoreCoordinator+MagicalRecord.m"; sourceTree = "<group>"; };
 		D4638F081DF4FA1E001F2E05 /* FRSVideoCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSVideoCompressor.h; sourceTree = "<group>"; };
 		D4638F091DF4FA1E001F2E05 /* FRSVideoCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSVideoCompressor.m; sourceTree = "<group>"; };
+		D4638F1F1DF74FA2001F2E05 /* SDAVAssetExportSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDAVAssetExportSession.h; sourceTree = "<group>"; };
+		D4638F201DF74FA2001F2E05 /* SDAVAssetExportSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDAVAssetExportSession.m; sourceTree = "<group>"; };
 		D46D35671D9036E700E38FAA /* FRSTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTracker.h; sourceTree = "<group>"; };
 		D46D35681D9036E700E38FAA /* FRSTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTracker.m; sourceTree = "<group>"; };
 		D46E9C3B1D41BDD500A39398 /* FRSUpload+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSUpload+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -1942,6 +1945,8 @@
 		D4638F071DF4F9D9001F2E05 /* Compression */ = {
 			isa = PBXGroup;
 			children = (
+				D4638F1F1DF74FA2001F2E05 /* SDAVAssetExportSession.h */,
+				D4638F201DF74FA2001F2E05 /* SDAVAssetExportSession.m */,
 				D4638F081DF4FA1E001F2E05 /* FRSVideoCompressor.h */,
 				D4638F091DF4FA1E001F2E05 /* FRSVideoCompressor.m */,
 			);
@@ -2771,6 +2776,7 @@
 				D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */,
 				07A30C011C50488800C536EB /* FRSPasswordChangeViewController.m in Sources */,
 				D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */,
+				D4638F211DF74FA2001F2E05 /* SDAVAssetExportSession.m in Sources */,
 				07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */,
 				65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */,
 				07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */,
