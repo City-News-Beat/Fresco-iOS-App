@@ -9,7 +9,7 @@
 #import "FRSVideoCompressor.h"
 
 @implementation FRSVideoCompressor
--(instancetype)initWithAsset:(AVAsset *)asset {
+-(instancetype)initWithAsset:(AVAsset *)asset completion:(FRSCompressionCompletionBlock)completion {
     self = [super init];
     
     if (self) {
@@ -18,7 +18,7 @@
     
     return self;
 }
--(instancetype)initWithAsset:(AVAsset *)asset preferences:(NSDictionary *)preferences {
+-(instancetype)initWithAsset:(AVAsset *)asset preferences:(NSDictionary *)preferences completion:(FRSCompressionCompletionBlock)completion {
     self = [super init];
     
     if (self) {
