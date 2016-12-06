@@ -98,6 +98,7 @@
 @property (strong, nonatomic) UILabel *acceptAssignmentDistanceAwayLabel;
 @property (strong, nonatomic) UILabel *acceptAssignmentTimeRemainingLabel;
 @property BOOL didAcceptAssignment;
+@property BOOL assignmentCardIsOpen;
 
 @property (strong, nonatomic) UIView *annotationColorView;
 
@@ -780,6 +781,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentLong = assAnn.coordinate.longitude;
     
     [self setDistance];
+    
+    if (self.didAcceptAssignment) {
+        [self hideAssignmentsMetaBar];
+    }
 }
 
 -(void)configureOutlets {
@@ -1000,7 +1005,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (self.acceptedAssignment) {
         if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.acceptedAssignment]) {
             [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
+        } else {
+            [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
         }
+    } else {
+        [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
     }
     
     self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, self.view.frame.size.width - 16, 22)];
@@ -1111,13 +1120,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     warningLabel.text = @"Not all events are safe. Be careful!";
     [self.assignmentStatsContainer addSubview:warningLabel];
     
-    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*1.3, self.view.frame.size.width, 150)];
-    label.text = @"if you keep scrolling you will find a pigeon.\n\n\n\n\n\nalmost there...\n\n\n🐦";
+    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*1.7, self.view.frame.size.width, 150)];
+    label.text = @"If you keep scrolling you will find a pigeon.\n\n\n\n\n\nAlmost there...\n\n\n🐦";
     label.font = [UIFont systemFontOfSize:10 weight:UIFontWeightLight];
     label.textAlignment = NSTextAlignmentCenter;
     label.backgroundColor = self.assignmentCard.backgroundColor;
     label.textColor = [UIColor frescoLightTextColor];
-    [self.assignmentCard addSubview:label];
+    [self.scrollView addSubview:label];
     
     UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
     self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -1225,6 +1234,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)animateAssignmentCard{
     
+    self.assignmentCardIsOpen = YES;
+    
     // animate scrollView in y
     [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         CGRect scrollFrame = self.scrollView.frame;
@@ -1254,27 +1265,18 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)dismissAssignmentCard {
     
+    self.assignmentCardIsOpen = NO;
     self.showsCard = FALSE;
     
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-    self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.assignmentCard.frame.origin.y + (self.view.frame.size.height - self.assignmentCard.frame.origin.y) +100, self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
-        
+        self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.assignmentCard.frame.origin.y + (self.view.frame.size.height - self.assignmentCard.frame.origin.y) +100, self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     } completion:nil];
     
     [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
-        
         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
-        
     } completion:^(BOOL finished) {
         
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
-
-        //Reset animated labels
-//        self.photoCashLabel.alpha = 0;
-//        self.videoCashLabel.alpha = 0;
-//        self.photoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
-//        self.videoCashLabel.transform = CGAffineTransformMakeTranslation(-5, 0);
     }];
     
     [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -1366,6 +1368,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)showGlobalAssignmentsBar {
+    if (self.didAcceptAssignment) {
+        return;
+    }
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, -44-49);
     } completion:nil];
@@ -1379,15 +1384,15 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)showAssignmentsMetaBar {
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.assignmentBottomBar.alpha = 1;
-//        self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y +44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -44-49);
+        [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     } completion:nil];
 }
 
 -(void)hideAssignmentsMetaBar {
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.assignmentBottomBar.alpha = 0;
-//        self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y -44, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, self.assignmentBottomBar.frame.size.height);
+        [self.scrollView setContentOffset:CGPointMake(0, -44) animated:YES];
     } completion:nil];
 }
 
@@ -1534,7 +1539,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.acceptedAssignment = nil;
 
     [self.greenView removeFromSuperview];
-    [self.unacceptAssignmentButton removeFromSuperview];
     
     [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
     self.annotationColorView.backgroundColor = [UIColor frescoOrangeColor];
@@ -1550,7 +1554,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self showGlobalAssignmentsBar];
     }
     
-    [self showAssignmentsMetaBar];
+    // should only come back up if assignment card is open
+    if (self.assignmentCardIsOpen) {
+        [self showAssignmentsMetaBar];
+    } else {
+        [self hideAssignmentsMetaBar];
+    }
 }
 
 -(void)openCamera {
