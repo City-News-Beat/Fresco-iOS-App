@@ -27,7 +27,6 @@
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID;
 -(void)focusOnAssignment:(FRSAssignment *)assignment;
 -(void)configureMap;
--(void)fetchLocalAssignments;
 @property CGFloat assignmentLat;
 @property CGFloat assignmentLong;
 

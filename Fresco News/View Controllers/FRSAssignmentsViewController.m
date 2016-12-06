@@ -693,17 +693,20 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray<MKAnnotationView *> *)views {
     
-//    for (MKAnnotationView *annView in views) {
-//        annView.alpha = 0;
-//        annView.transform = CGAffineTransformMakeScale(0.001, 0.001);
-//        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-//            annView.transform = CGAffineTransformMakeScale(1.1, 1.1);
-//        } completion:^(BOOL finished) {
-//            [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-//                annView.transform = CGAffineTransformMakeScale(1, 1);
-//            } completion:nil];
-//        }];
-//    }
+    for (MKAnnotationView *annView in views) {
+        annView.transform = CGAffineTransformMakeScale(0.001, 0.001);
+        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            annView.transform = CGAffineTransformMakeScale(1.1, 1.1);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                annView.transform = CGAffineTransformMakeScale(1, 1);
+            } completion:nil];
+        }];
+    }
+}
+
+-(void)mapView:(MKMapView *)mapView didAddOverlayRenderers:(NSArray<MKOverlayRenderer *> *)renderers {
+    
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay
@@ -725,6 +728,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             circleR.alpha = 0.5;
         }
     }
+    
+
     
     return circleR;
 }
