@@ -451,22 +451,14 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)addAnnotationsForAssignments {
     
-    /*for (id<MKAnnotation> annotation in self.mapView.annotations) {
-        [self.mapView removeAnnotation:annotation];
-    }*/
-    
-    /*[self removeAllOverlaysIncludingUser:NO];*/
-
-    
-    
     if (self.didAcceptAssignment) {
-//        if ([self assignmentExists:self.currentAssignment.uid]) {
+        // avoid drawing mutliple
+        if ([self.mapView.annotations count] <= 1) {
             [self.assignmentIDs addObject:self.currentAssignment.uid];
             [self addAssignmentAnnotation:self.currentAssignment index:0];
-//        }
+        }
         return;
     }
-    
     
     
     NSInteger count = 0;
@@ -612,8 +604,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             [annotationView addSubview:view];
             
             UIImageView *imageView = [[UIImageView alloc] init];
-            imageView.frame = CGRectMake(-9, -9, 18, 18);
-            imageView.layer.cornerRadius = 9;
+            imageView.frame = CGRectMake(-8, -8, 16, 16);
+            imageView.layer.cornerRadius = 8;
             imageView.clipsToBounds = YES;
             imageView.contentMode = UIViewContentModeScaleAspectFill;
             [annotationView addSubview:imageView];
