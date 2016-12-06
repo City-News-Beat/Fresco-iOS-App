@@ -453,7 +453,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     if (self.didAcceptAssignment) {
         // avoid drawing mutliple
-        if ([self.mapView.annotations count] <= 1) {
+        if ([self.mapView.annotations count] <= 1 && self.currentAssignment.uid) {
             [self.assignmentIDs addObject:self.currentAssignment.uid];
             [self addAssignmentAnnotation:self.currentAssignment index:0];
         }
@@ -690,6 +690,20 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.mapView addAnnotation:self.userCircle];
 }
 
+-(void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray<MKAnnotationView *> *)views {
+    
+//    for (MKAnnotationView *annView in views) {
+//        annView.alpha = 0;
+//        annView.transform = CGAffineTransformMakeScale(0.001, 0.001);
+//        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+//            annView.transform = CGAffineTransformMakeScale(1.1, 1.1);
+//        } completion:^(BOOL finished) {
+//            [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+//                annView.transform = CGAffineTransformMakeScale(1, 1);
+//            } completion:nil];
+//        }];
+//    }
+}
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay
 {
