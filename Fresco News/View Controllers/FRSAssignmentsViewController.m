@@ -1002,17 +1002,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.assignmentActionButton addTarget:self action:@selector(assignmentAction) forControlEvents:UIControlEventTouchUpInside];
     self.assignmentActionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     [self.assignmentBottomBar addSubview:self.assignmentActionButton];
-    
-    if (self.acceptedAssignment) {
-        if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.acceptedAssignment]) {
-            [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
-        } else {
-            [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
-        }
-    } else {
-        [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
-    }
-    
+
     self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, self.view.frame.size.width - 16, 22)];
     [self.assignmentOutletLabel setFont:[UIFont notaMediumWithSize:17]];
     self.assignmentOutletLabel.textColor = [UIColor frescoDarkTextColor];
@@ -1020,7 +1010,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentOutletLabel.backgroundColor = [UIColor clearColor];
     self.assignmentOutletLabel.text = self.assignmentOutlet;
     [self.assignmentCard addSubview:self.assignmentOutletLabel];
-    
     
     self.assignmentTextView = [[UITextView alloc] initWithFrame:CGRectMake(11, 50, self.view.frame.size.width - 16, 220)];
     [self.assignmentCard addSubview:self.assignmentTextView];
@@ -1052,8 +1041,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
-    
-//    self.scrollView.contentSize = CGSizeMake(self.assignmentCard.frame.size.width, (self.assignmentTextView.frame.size.height + 50)+[UIScreen mainScreen].bounds.size.height/3.5 + topContainer.frame.size.height + self.assignmentBottomBar.frame.size.height + bottomPadding +190); //120 is the height of the container at the bottom where expiration time, assignemnt distance, and the warning label live.
     
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height +1); //TODO: test with longer assignment captions
     
@@ -1104,7 +1091,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.distanceLabel.userInteractionEnabled = YES;
     [self.assignmentStatsContainer addSubview:self.distanceLabel];
     [self setDistance];
-    
     
     self.navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
