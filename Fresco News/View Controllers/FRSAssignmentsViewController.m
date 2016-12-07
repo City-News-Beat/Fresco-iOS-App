@@ -1010,7 +1010,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
         }
     } else {
-        [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
+        [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
     }
     
     self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, self.view.frame.size.width - 16, 22)];
