@@ -13,6 +13,8 @@
 #import "Fresco.h"
 #import "FRSAppDelegate.h"
 #import "FRSTracker.h"
+#import "SDAVAssetExportSession.h"
+
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
@@ -257,7 +259,21 @@ static NSDate *lastDate;
             // create temp location to move data (PHAsset can not be weakly linked to)
             NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
             [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
+            SDAVAssetExportSession *exporter = [[SDAVAssetExportSession alloc] initWithAsset:avasset];
+            exporter.outputURL = [NSURL fileURLWithPath:tempPath];
             
+            [exporter exportAsynchronouslyWithCompletionHandler:^{
+                if (!exporter.error) {
+                    unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
+                    totalFileSize += fileSize;
+                    
+                    NSArray *uploadMeta = @[tempPath, revisedToken, postID];
+                    [self.uploadMeta addObject:uploadMeta];
+                    [self checkRestart];
+                }
+            }];
+            
+            return;
             // set up resource from PHAsset
             PHAssetResource *resource = [[PHAssetResource assetResourcesForAsset:asset] firstObject];
             PHAssetResourceRequestOptions *options = [PHAssetResourceRequestOptions new];

@@ -260,7 +260,15 @@
                 [actionBar handleHeartState:TRUE];
                 [actionBar handleHeartAmount:likes];
                 if (error.code != 101) {
-                    self.gallery.numberOfLikes --;
+                    self.gallery.likes = @([self.gallery.likes intValue] - 1);
+                    
+                    @try {
+                        self.gallery.numberOfLikes--;
+                    }
+                    @catch(NSException *e) {
+                        
+                    }
+
                 }
             }
         }];
@@ -271,7 +279,14 @@
                 [actionBar handleHeartState:FALSE];
                 [actionBar handleHeartAmount:likes];
                 if (error.code != 101) {
-                    self.gallery.numberOfLikes ++;
+                    self.gallery.likes = @([self.gallery.likes intValue] + 1);
+                    @try {
+                        self.gallery.numberOfLikes++;
+                    }
+                    @catch(NSException *e) {
+                        
+                    }
+                    
                 }
             }
         }];
