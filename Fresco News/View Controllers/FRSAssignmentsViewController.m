@@ -99,6 +99,9 @@
 @property (strong, nonatomic) UILabel *acceptAssignmentTimeRemainingLabel;
 @property BOOL didAcceptAssignment;
 @property BOOL assignmentCardIsOpen;
+@property BOOL assignmentDidExpire;
+
+@property (strong, nonatomic) FRSAlertView *expiredAssignmentAlert;
 
 @property (strong, nonatomic) UIView *annotationColorView;
 
@@ -762,6 +765,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentPostedDate = assAnn.assignmentPostedDate;
     self.assignmentID = assAnn.assignmentId;
     self.outlets = assAnn.outlets;
+    self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
     
     if (!assAnn.isAcceptable) {
         self.assignemntAcceptButtonTitle = ACTION_TITLE_TWO;
@@ -860,6 +864,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)setExpiration:(NSDate *)date days:(int)expDays hours:(int)expHours minutes:(int)expMinutes seconds:(int)expSeconds {
     
+    if (self.assignmentDidExpire) {
+        return;
+    }
+    
+    self.assignmentDidExpire = NO;
+    
     NSTimeInterval doubleDiff = [date timeIntervalSinceDate:[NSDate date]];
     long diff = (long) doubleDiff;
     int seconds = diff % 60;
@@ -911,14 +921,32 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         }
     } else {
         expirationString = @"This assignment has expired.";
+        if (self.acceptedAssignment) {
+            [self assignmentExpired];
+        }
     }
     
     if (minutes <= 0 && seconds <= 0 && hours <= 0 && days <= 0) {
         expirationString = @"This assignment has expired.";
+        if (self.acceptedAssignment) {
+            [self assignmentExpired];
+        }
     }
     
     self.expirationLabel.text = expirationString;
     self.acceptAssignmentTimeRemainingLabel.text = expirationString;
+}
+
+-(void)assignmentExpired {
+    self.assignmentDidExpire = YES;
+    if (!self.expiredAssignmentAlert) {
+        self.expiredAssignmentAlert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"This assignment has expired!" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+        [self.expiredAssignmentAlert show];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self unacceptAssignment];
+    });
 }
 
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
@@ -1527,6 +1555,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentIDs = nil;
     self.assignmentIDs = [[NSMutableArray alloc] init];
     self.defaultID = nil;
+    
+    self.assignmentDidExpire = NO;
 
     [self.greenView removeFromSuperview];
     
@@ -1535,6 +1565,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     [self removeAssignmentsFromMap];
     [self removeAllOverlaysIncludingUser:NO];
+    
+    [self dismissAssignmentCard];
     
     if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
         [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
