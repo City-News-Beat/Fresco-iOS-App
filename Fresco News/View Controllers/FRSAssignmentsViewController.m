@@ -723,7 +723,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             if (self.didAcceptAssignment && [self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
                 circleR.fillColor = [UIColor frescoGreenColor];
             }
-            circleR.alpha = 0.5;
+            circleR.alpha = 0.3;
         }
     }
 
