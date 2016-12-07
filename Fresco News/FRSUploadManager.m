@@ -259,22 +259,46 @@ static NSDate *lastDate;
             // create temp location to move data (PHAsset can not be weakly linked to)
             NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
             [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
-            SDAVAssetExportSession *exporter = [[SDAVAssetExportSession alloc] initWithAsset:avasset];
-            exporter.outputURL = [NSURL fileURLWithPath:tempPath];
             
-            [exporter exportAsynchronouslyWithCompletionHandler:^{
-                if (!exporter.error) {
-                    unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
-                    totalFileSize += fileSize;
-                    
-                    NSArray *uploadMeta = @[tempPath, revisedToken, postID];
-                    [self.uploadMeta addObject:uploadMeta];
-                    [self checkRestart];
-                }
-            }];
-            
-            return;
+//            SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:avasset];
+//            encoder.outputFileType = AVFileTypeMPEG4;
+//            encoder.outputURL = [NSURL fileURLWithPath:tempPath];
+//            encoder.videoSettings = @
+//            {
+//                AVVideoCodecKey: AVVideoCodecH264,
+//                AVVideoWidthKey: @1920,
+//                AVVideoHeightKey: @1080,
+//                AVVideoCompressionPropertiesKey: @
+//                {
+//                    AVVideoProfileLevelKey: AVVideoProfileLevelH264High41,
+//                    AVVideoMaxKeyFrameIntervalDurationKey: @16
+//                },
+//            };
+//            encoder.audioSettings = @
+//            {
+//                AVFormatIDKey: @(kAudioFormatMPEG4AAC),
+//                AVNumberOfChannelsKey: @2,
+//                AVSampleRateKey: @44100,
+//                AVEncoderBitRateKey: @64000,
+//            };
+//            
+//            NSLog(@"STARTING EXPORT");
+//            
+//            [encoder exportAsynchronouslyWithCompletionHandler:^
+//             {
+//                 NSLog(@"ENDING EXPORT %@", encoder.error);
+//                 unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
+//                 totalFileSize += fileSize;
+//                 
+//                 NSArray *uploadMeta = @[tempPath, revisedToken, postID];
+//                 [self.uploadMeta addObject:uploadMeta];
+//                 [self checkRestart];
+//
+//            }];
+//            
+//            return;
             // set up resource from PHAsset
+            
             PHAssetResource *resource = [[PHAssetResource assetResourcesForAsset:asset] firstObject];
             PHAssetResourceRequestOptions *options = [PHAssetResourceRequestOptions new];
             options.networkAccessAllowed = YES;

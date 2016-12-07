@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Fresco.h"
-
+#import "SDAVAssetExportSession.h"
 
 @interface FRSUploadManager : NSObject
 {
@@ -20,6 +20,7 @@
     int completed;
     BOOL isFromFresh;
     float uploadSpeed;
+    SDAVAssetExportSession *exporter;
 }
 
 +(id)sharedUploader;
