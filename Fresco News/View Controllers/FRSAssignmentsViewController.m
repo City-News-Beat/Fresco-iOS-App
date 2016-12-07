@@ -763,10 +763,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentID = assAnn.assignmentId;
     self.outlets = assAnn.outlets;
     
-    if (assAnn.isAcceptable) {
-        self.assignemntAcceptButtonTitle = ACTION_TITLE_ONE;
-    } else {
+    if (!assAnn.isAcceptable) {
         self.assignemntAcceptButtonTitle = ACTION_TITLE_TWO;
+    } else {
+        self.assignemntAcceptButtonTitle = ACTION_TITLE_ONE;
     }
     
     
