@@ -301,9 +301,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                 defaultAssignment = assignmentToAdd;
             }
             
-            if ([self assignmentExists:uid]) {
-                continue;
-            }
+//            if ([self assignmentExists:uid]) {
+//                continue;
+//            }
             
             [mSerializedAssignments addObject:assignmentToAdd];
 
@@ -345,7 +345,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             [self focusOnAssignment:self.acceptedAssignment];
 
             // fall back on nsuserdefaults if accepted assignment is not directly in viewport
-        } else if ([[NSUserDefaults standardUserDefaults] valueForKey:acceptedAssignmentID]) {
+        } else if ([[NSUserDefaults standardUserDefaults] valueForKey:acceptedAssignmentID] != nil) {
             [[FRSAPIClient sharedClient] getAssignmentWithUID:[[NSUserDefaults standardUserDefaults] valueForKey:acceptedAssignmentID] completion:^(id responseObject, NSError *error) {
                 FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
                 [assignment configureWithDictionary:responseObject];
@@ -692,27 +692,25 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray<MKAnnotationView *> *)views {
-    
-    for (MKAnnotationView *annView in views) {
-        annView.transform = CGAffineTransformMakeScale(0.001, 0.001);
-        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            annView.transform = CGAffineTransformMakeScale(1.1, 1.1);
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                annView.transform = CGAffineTransformMakeScale(1, 1);
-            } completion:nil];
-        }];
-    }
+//    for (MKAnnotationView *annView in views) {
+//        annView.transform = CGAffineTransformMakeScale(0.001, 0.001);
+//        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+//            annView.transform = CGAffineTransformMakeScale(1.1, 1.1);
+//        } completion:^(BOOL finished) {
+//            [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+//                annView.transform = CGAffineTransformMakeScale(1, 1);
+//            } completion:nil];
+//        }];
+//    }
 }
 
 -(void)mapView:(MKMapView *)mapView didAddOverlayRenderers:(NSArray<MKOverlayRenderer *> *)renderers {
     
 }
 
-- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay
-{
-    MKCircleRenderer *circleR = [[MKCircleRenderer alloc] initWithCircle:(MKCircle *)overlay];
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay {
     
+    MKCircleRenderer *circleR = [[MKCircleRenderer alloc] initWithCircle:(MKCircle *)overlay];
     if ([overlay isKindOfClass:[FRSMapCircle class]]) {
         FRSMapCircle *circle = (FRSMapCircle *)overlay;
         
@@ -728,9 +726,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             circleR.alpha = 0.5;
         }
     }
-    
 
-    
     return circleR;
 }
 
@@ -1125,8 +1121,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     warningLabel.text = @"Not all events are safe. Be careful!";
     [self.assignmentStatsContainer addSubview:warningLabel];
     
-    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*1.7, self.view.frame.size.width, 150)];
-    label.text = @"If you keep scrolling you will find a pigeon.\n\n\n\n\n\nAlmost there...\n\n\n🐦";
+    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*1.6, self.view.frame.size.width, 150)];
+    label.text = @"If you keep scrolling you will find a pigeon.\n\n\n\n\nAlmost there...\n\n\n🐦";
     label.font = [UIFont systemFontOfSize:10 weight:UIFontWeightLight];
     label.textAlignment = NSTextAlignmentCenter;
     label.backgroundColor = self.assignmentCard.backgroundColor;
@@ -1542,6 +1538,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     self.didAcceptAssignment = NO;
     self.acceptedAssignment = nil;
+    self.assignmentIDs = nil;
+    self.assignmentIDs = [[NSMutableArray alloc] init];
+    self.defaultID = nil;
 
     [self.greenView removeFromSuperview];
     
@@ -1558,6 +1557,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (self.globalAssignmentsArray.count <= 1) {
         [self showGlobalAssignmentsBar];
     }
+    
+    
+    [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:10];
+    [self configureAnnotationsForMap];
     
     // should only come back up if assignment card is open
     if (self.assignmentCardIsOpen) {
