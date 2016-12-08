@@ -97,7 +97,7 @@
 @property (strong, nonatomic) NSString *assignemntAcceptButtonTitle;
 @property (strong, nonatomic) UILabel *acceptAssignmentDistanceAwayLabel;
 @property (strong, nonatomic) UILabel *acceptAssignmentTimeRemainingLabel;
-@property BOOL didAcceptAssignment;
+@property (nonatomic) BOOL didAcceptAssignment;
 @property BOOL assignmentCardIsOpen;
 @property BOOL assignmentDidExpire;
 
@@ -632,6 +632,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     } else {
         static NSString *annotationIdentifer = @"assignment-annotation";
         MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifer];
+        annotationView = nil; // clear these to force redraw, avoid yellow annotations that shoud be green and visa versa
+        self.annotationColorView = nil;
         if (annotationView == nil) {
             annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifer];
             UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
@@ -650,9 +652,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             
             self.annotationColorView = [[UIView alloc] initWithFrame:CGRectMake(4, 4, 16, 16)];
             self.annotationColorView.layer.cornerRadius = 8;
+
             self.annotationColorView.backgroundColor = [UIColor frescoOrangeColor];
 
-            if (self.didAcceptAssignment) {
+            if (self.didAcceptAssignment && [self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
                 self.annotationColorView.backgroundColor = [UIColor frescoGreenColor];
             }
             
@@ -680,7 +683,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     //    CGFloat radius = self.mapView.usergLocation.location.horizontalAccuracy > 100 ? 100 : self.mapView.userLocation.location.horizontalAccuracy;
     
-    CGFloat radius = 300;
+    CGFloat radius = 200;
     
     if (self.userCircle) {
         [self.mapView removeOverlay:self.userCircle];
@@ -695,6 +698,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray<MKAnnotationView *> *)views {
+    
 //    for (MKAnnotationView *annView in views) {
 //        annView.transform = CGAffineTransformMakeScale(0.001, 0.001);
 //        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -1398,17 +1402,17 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)showAssignmentsMetaBar {
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -44-49);
         [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-    } completion:nil];
+//    } completion:nil];
 }
 
 -(void)hideAssignmentsMetaBar {
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, self.assignmentBottomBar.frame.size.height);
         [self.scrollView setContentOffset:CGPointMake(0, -44) animated:YES];
-    } completion:nil];
+//    } completion:nil];
 }
 
 -(void)globalAssignmentsSegue {
@@ -1446,6 +1450,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                 [assignment configureWithDictionary:dict];
                 self.currentAssignment = assignment;
                 [self configureAcceptedAssignment:assignment];
+                
+//                if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:assignment]) {
+//                    self.annotationColorView.backgroundColor = [UIColor frescoGreenColor];
+//                }
                 
                 // used for persisting assignments that are not loaded with map
                 [[NSUserDefaults standardUserDefaults] setValue:[NSString stringWithFormat:@"%@", assignment.uid] forKey:acceptedAssignmentID];
@@ -1561,10 +1569,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.greenView removeFromSuperview];
     
     [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
-    self.annotationColorView.backgroundColor = [UIColor frescoOrangeColor];
     
     [self removeAssignmentsFromMap];
     [self removeAllOverlaysIncludingUser:NO];
+    [self addAnnotationsForAssignments];
     
     [self dismissAssignmentCard];
     
@@ -1632,31 +1640,36 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self setDistance];
     }
     
-    [self updateUIForLocation];
+//    [self updateUIForLocation];
 }
 
 -(void)updateUIForLocation {
     if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
         [self updateNavBarToOpenCamera];
+        
+        [self removeAssignmentsFromMap];
+        [self removeAllOverlaysIncludingUser:NO];
+        [self addAnnotationsForAssignments];
     }
 }
 
 -(void)updateNavBarToOpenCamera {
-    self.acceptAssignmentDistanceAwayLabel.frame = CGRectMake(0, 35, self.greenView.frame.size.width, 17);
-    self.acceptAssignmentDistanceAwayLabel.text = @"OPEN YOUR CAMERA";
-    if (IS_IPHONE_5) {
-        self.acceptAssignmentDistanceAwayLabel.text = @"OPEN CAMERA";
-    }
-    self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
-    self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
-    self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
-    [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
-    self.acceptAssignmentTimeRemainingLabel.alpha = 0;
-    
-    self.annotationColorView.backgroundColor = [UIColor frescoGreenColor];
-    [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoGreenColor]];
-    [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
-    [self showAssignmentsMetaBar];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.acceptAssignmentDistanceAwayLabel.frame = CGRectMake(0, 35, self.greenView.frame.size.width, 17);
+        self.acceptAssignmentDistanceAwayLabel.text = @"OPEN YOUR CAMERA";
+        if (IS_IPHONE_5) {
+            self.acceptAssignmentDistanceAwayLabel.text = @"OPEN CAMERA";
+        }
+        self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
+        self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
+        self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
+        [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
+        self.acceptAssignmentTimeRemainingLabel.alpha = 0;
+
+        [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoGreenColor]];
+        [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
+        [self showAssignmentsMetaBar];
+    });
 }
 
 
