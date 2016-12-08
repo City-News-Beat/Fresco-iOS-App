@@ -252,6 +252,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
+    self.mapView.showsUserLocation = YES;
+    [self.mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
     self.mapView.showsBuildings = NO;
     self.isOriginalSpan = YES;
     [self.view addSubview:self.mapView];
@@ -1654,22 +1656,20 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)updateNavBarToOpenCamera {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.acceptAssignmentDistanceAwayLabel.frame = CGRectMake(0, 35, self.greenView.frame.size.width, 17);
-        self.acceptAssignmentDistanceAwayLabel.text = @"OPEN YOUR CAMERA";
-        if (IS_IPHONE_5) {
-            self.acceptAssignmentDistanceAwayLabel.text = @"OPEN CAMERA";
-        }
-        self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
-        self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
-        self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
-        [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
-        self.acceptAssignmentTimeRemainingLabel.alpha = 0;
-
-        [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoGreenColor]];
-        [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
-        [self showAssignmentsMetaBar];
-    });
+    self.acceptAssignmentDistanceAwayLabel.frame = CGRectMake(0, 35, self.greenView.frame.size.width, 17);
+    self.acceptAssignmentDistanceAwayLabel.text = @"OPEN YOUR CAMERA";
+    if (IS_IPHONE_5) {
+        self.acceptAssignmentDistanceAwayLabel.text = @"OPEN CAMERA";
+    }
+    self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
+    self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
+    self.acceptAssignmentDistanceAwayLabel.textAlignment = NSTextAlignmentCenter;
+    [self.greenView addSubview:self.acceptAssignmentDistanceAwayLabel];
+    self.acceptAssignmentTimeRemainingLabel.alpha = 0;
+    
+    [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoGreenColor]];
+    [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
+    [self showAssignmentsMetaBar];
 }
 
 
