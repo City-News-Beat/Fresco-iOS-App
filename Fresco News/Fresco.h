@@ -368,7 +368,7 @@ static NSString * const itemsInGallery = @"Submission item in gallery";
 
 
 // scrolling, video playback
-static float const maxScrollVelocity = 1.5;
+static float const maxScrollVelocity = 2.1;
 
 
 
