@@ -821,7 +821,7 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     if (isLoadingUser) {
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , [UIScreen mainScreen].bounds.size.height)];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , [UIScreen mainScreen].bounds.size.height-64)];
     }
     else {
         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , self.view.frame.size.height-44)];
