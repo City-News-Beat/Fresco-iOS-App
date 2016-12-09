@@ -75,6 +75,7 @@
 @property (strong, nonatomic) UIView *annotationColorView;
 @property (strong, nonatomic) FRSAssignment *acceptedAssignment;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *spinner;
+@property (strong, nonatomic) NSTimer *timer;
 
 @property BOOL didAcceptAssignment;
 @property BOOL assignmentCardIsOpen;
@@ -1497,7 +1498,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self hideAssignmentsMetaBar];
     [self updateUIForLocation];
     
-    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
 }
 
 -(void)configureAcceptedAssignment:(FRSAssignment *)assignment {
@@ -1572,10 +1573,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         self.assignmentIDs = nil;
         self.assignmentIDs = [[NSMutableArray alloc] init];
         self.defaultID = nil;
-        
         self.assignmentDidExpire = NO;
         
         [self.greenView removeFromSuperview];
+        [self.timer invalidate];
         
         [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
         
