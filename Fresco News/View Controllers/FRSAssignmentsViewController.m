@@ -81,6 +81,7 @@
 @property BOOL assignmentCardIsOpen;
 @property BOOL assignmentDidExpire;
 @property BOOL mapShouldFollowUser;
+@property BOOL userIsInRange;
 
 @end
 
@@ -1608,6 +1609,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)openCamera {
+    
     FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
     UINavigationController *navControl = [[UINavigationController alloc] init];
     navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
@@ -1622,9 +1624,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 
 -(void)updateExpirationAndDistanceLabels {
-    if (!self.didAcceptAssignment) {
-        return;
-    }
 
     [self updateUIForLocation];
     
@@ -1656,8 +1655,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)updateUIForLocation {
     if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
+        self.userIsInRange = YES;
         [self updateNavBarToOpenCamera];
-        
         [self removeAssignmentsFromMap];
         [self removeAllOverlaysIncludingUser:NO];
         [self addAnnotationsForAssignments];
@@ -1668,7 +1667,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.acceptAssignmentDistanceAwayLabel.frame = CGRectMake(0, 35, self.greenView.frame.size.width, 17);
     self.acceptAssignmentDistanceAwayLabel.text = @"OPEN YOUR CAMERA";
     if (IS_IPHONE_5) {
-        self.acceptAssignmentDistanceAwayLabel.text = @"OPEN CAMERA";
+        self.acceptAssignmentDistanceAwayLabel.text = ACTION_TITLE_TWO;
     }
     self.acceptAssignmentDistanceAwayLabel.font = [UIFont notaBoldWithSize:15];
     self.acceptAssignmentDistanceAwayLabel.textColor = [UIColor whiteColor];
