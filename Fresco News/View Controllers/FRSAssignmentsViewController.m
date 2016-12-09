@@ -1292,9 +1292,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
     }];
     
-    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+//    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.closeButton.alpha = 0;
-    } completion:nil];
+//    } completion:nil];
     
     [self showGlobalAssignmentsBar];
     self.hasDefault = NO;
@@ -1396,17 +1396,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)showAssignmentsMetaBar {
-//    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -44-49);
-        [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-//    } completion:nil];
+    self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -44-49);
+    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
 }
 
 -(void)hideAssignmentsMetaBar {
-//    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, self.assignmentBottomBar.frame.size.height);
-        [self.scrollView setContentOffset:CGPointMake(0, -44) animated:YES];
-//    } completion:nil];
+    self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, self.assignmentBottomBar.frame.size.height);
+    [self.scrollView setContentOffset:CGPointMake(0, -44) animated:YES];
 }
 
 -(void)globalAssignmentsSegue {
@@ -1429,14 +1425,15 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
     [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    button.tintColor = [UIColor clearColor];
     spinner.frame = CGRectMake(button.frame.size.width - 20, button.frame.size.height/2 -10, 20, 20);
     [spinner startAnimating];
     [button addSubview:spinner];
 }
 
--(void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button {
+-(void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button color:(UIColor *)color {
     
-    [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
+    [button setTitleColor:color forState:UIControlStateNormal];
     [spinner stopLoading];
     [spinner removeFromSuperview];
 }
@@ -1448,7 +1445,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self openCamera];
     } else {
         
-        
         self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
         self.spinner.tintColor = [UIColor frescoOrangeColor];
         [self.spinner setPullProgress:90];
@@ -1456,7 +1452,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         
         [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
             
-            [self stopSpinner:self.spinner onButton:self.assignmentActionButton];
+            [self stopSpinner:self.spinner onButton:self.assignmentActionButton color:[UIColor frescoGreenColor]];
 
             NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
             NSInteger responseCode = response.statusCode;
@@ -1560,50 +1556,54 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 
 -(void)unacceptAssignment {
+    
+    self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.spinner.tintColor = [UIColor whiteColor];
+    [self.spinner setPullProgress:90];
+    
+    [self startSpinner:self.spinner onButton:self.unacceptAssignmentButton];
+    
     [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
         // error or response, user should be able to unaccept. at least visually
+        
+        [self stopSpinner:self.spinner onButton:self.unacceptAssignmentButton color:[UIColor whiteColor]];
+        self.didAcceptAssignment = NO;
+        self.acceptedAssignment = nil;
+        self.assignmentIDs = nil;
+        self.assignmentIDs = [[NSMutableArray alloc] init];
+        self.defaultID = nil;
+        
+        self.assignmentDidExpire = NO;
+        
+        [self.greenView removeFromSuperview];
+        
+        [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
+        
+        [self removeAssignmentsFromMap];
+        [self removeAllOverlaysIncludingUser:NO];
+        [self addAnnotationsForAssignments];
+        
+        [self dismissAssignmentCard];
+        
+        if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
+            [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
+        }
+        
+        if (self.globalAssignmentsArray.count <= 1) {
+            [self showGlobalAssignmentsBar];
+        }
+        
+        
+        [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:10];
+        [self configureAnnotationsForMap];
+        
+        // should only come back up if assignment card is open
+        if (self.assignmentCardIsOpen) {
+            [self showAssignmentsMetaBar];
+        } else {
+            [self hideAssignmentsMetaBar];
+        }
     }];
-    
-    // used for assignments that are not loaded with map
-//    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:acceptedAssignmentID];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    self.didAcceptAssignment = NO;
-    self.acceptedAssignment = nil;
-    self.assignmentIDs = nil;
-    self.assignmentIDs = [[NSMutableArray alloc] init];
-    self.defaultID = nil;
-    
-    self.assignmentDidExpire = NO;
-
-    [self.greenView removeFromSuperview];
-    
-    [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
-    
-    [self removeAssignmentsFromMap];
-    [self removeAllOverlaysIncludingUser:NO];
-    [self addAnnotationsForAssignments];
-    
-    [self dismissAssignmentCard];
-    
-    if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
-        [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
-    }
-    
-    if (self.globalAssignmentsArray.count <= 1) {
-        [self showGlobalAssignmentsBar];
-    }
-    
-    
-    [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:10];
-    [self configureAnnotationsForMap];
-    
-    // should only come back up if assignment card is open
-    if (self.assignmentCardIsOpen) {
-        [self showAssignmentsMetaBar];
-    } else {
-        [self hideAssignmentsMetaBar];
-    }
 }
 
 -(void)openCamera {
