@@ -9,25 +9,18 @@
 #import "FRSAssignmentsViewController.h"
 #import "FRSTabBarController.h"
 #import "FRSCameraViewController.h"
-
 #import "FRSLocationManager.h"
-
 #import "FRSAssignment.h"
-
 #import "FRSDateFormatter.h"
-
 #import "FRSMapCircle.h"
 #import "FRSAssignmentAnnotation.h"
-
 #import "UITextView+Resize.h"
 #import "Fresco.h"
-
 #import "FRSAppDelegate.h"
 #import "FRSGlobalAssignmentsTableViewController.h"
-
 #import "Haneke.h"
-
 #import "FRSAlertView.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 @import MapKit;
 
@@ -36,25 +29,19 @@
     NSMutableArray *dictionaryRepresentations;
     BOOL hasSnapped;
 }
-@property (nonatomic, retain) NSMutableArray *outletImagesViews;
-@property (strong, nonatomic) NSArray *assignments;
-
-@property (strong, nonatomic) NSArray *overlays;
 
 @property (nonatomic) BOOL isFetching;
-
 @property (nonatomic) BOOL isOriginalSpan;
-
+@property (nonatomic, assign) BOOL showsCard;
+@property (nonatomic, retain) NSMutableArray *assignmentIDs;
 @property (strong, nonatomic) FRSMapCircle *userCircle;
-
 @property (strong, nonatomic) FRSLocationManager *locationManager;
-
+@property (nonatomic, retain) NSMutableArray *outletImagesViews;
+@property (strong, nonatomic) NSArray *assignments;
+@property (strong, nonatomic) NSArray *overlays;
 @property (strong, nonatomic) NSArray *outlets;
-
 @property (strong, nonatomic) UIScrollView *scrollView;
-
 @property (strong, nonatomic) UIView *dismissView;
-
 @property (strong, nonatomic) UIView *assignmentBottomBar;
 @property (strong, nonatomic) NSString *assignmentTitle;
 @property (strong, nonatomic) NSString *assignmentOutlet;
@@ -67,45 +54,31 @@
 @property (strong, nonatomic) UIView *assignmentCard;
 @property (strong, nonatomic) UILabel *expirationLabel;
 @property (strong, nonatomic) UILabel *distanceLabel;
-
-@property (nonatomic, assign) BOOL showsCard;
-@property (nonatomic, retain) NSMutableArray *assignmentIDs;
-
 @property (strong, nonatomic) UILabel *photoCashLabel;
 @property (strong, nonatomic) UILabel *videoCashLabel;
-
 @property (strong, nonatomic) UILabel *globalAssignmentsLabel;
 @property (strong, nonatomic) NSArray *globalAssignmentsArray;
-
 @property (strong, nonatomic) UIButton *closeButton;
-
 @property (strong, nonatomic) UIView *assignmentStatsContainer;
-
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
-
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
-
 @property (strong, nonatomic) UILabel *postedLabel;
-
 @property (strong, nonatomic) UIButton *navigateButton;
-
 @property (strong, nonatomic) NSString *assignmentID;
-
 @property (strong, nonatomic) UIView *greenView;
 @property (strong, nonatomic) UIButton *unacceptAssignmentButton;
 @property (strong, nonatomic) UIButton *assignmentActionButton;
 @property (strong, nonatomic) NSString *assignemntAcceptButtonTitle;
 @property (strong, nonatomic) UILabel *acceptAssignmentDistanceAwayLabel;
 @property (strong, nonatomic) UILabel *acceptAssignmentTimeRemainingLabel;
-@property (nonatomic) BOOL didAcceptAssignment;
+@property (strong, nonatomic) FRSAlertView *expiredAssignmentAlert;
+@property (strong, nonatomic) UIView *annotationColorView;
+@property (strong, nonatomic) FRSAssignment *acceptedAssignment;
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *spinner;
+
+@property BOOL didAcceptAssignment;
 @property BOOL assignmentCardIsOpen;
 @property BOOL assignmentDidExpire;
-
-@property (strong, nonatomic) FRSAlertView *expiredAssignmentAlert;
-
-@property (strong, nonatomic) UIView *annotationColorView;
-
-@property (strong, nonatomic) FRSAssignment *acceptedAssignment;
 @property BOOL mapShouldFollowUser;
 
 @end
@@ -237,14 +210,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-//    [[FRSLocationManager sharedManager] pauseLocationMonitoring];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     self.hasDefault = NO;
     self.defaultID  = nil;
     self.showsCard  = NO;
-    
-//    [[NSNotificationCenter defaultCenter] postNotificationName:disableAssignmentAccept object:nil];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -285,9 +255,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.isFetching = YES;
     
     [[FRSAPIClient sharedClient] getAcceptedAssignmentWithCompletion:^(id responseObject, NSError *error) {
-        
-        NSLog(@"getAccepted (RESPO): %@", responseObject);
-        NSLog(@"getAccepted (ERROR): %@", error);
         
         if (responseObject) {
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -338,11 +305,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             if ([uid isEqualToString:self.defaultID]) {
                 defaultAssignment = assignmentToAdd;
             }
-            
-//            if ([self assignmentExists:uid]) {
-//                continue;
-//            }
-            
+
             [mSerializedAssignments addObject:assignmentToAdd];
 
             if (!dictionaryRepresentations) {
@@ -381,19 +344,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             self.assignmentID = self.acceptedAssignment.uid;
             [self configureAcceptedAssignment:self.acceptedAssignment];
             [self focusOnAssignment:self.acceptedAssignment];
-
-            // fall back on nsuserdefaults if accepted assignment is not directly in viewport
-        } /*else if ([[NSUserDefaults standardUserDefaults] valueForKey:acceptedAssignmentID] != nil) {
-            [[FRSAPIClient sharedClient] getAssignmentWithUID:[[NSUserDefaults standardUserDefaults] valueForKey:acceptedAssignmentID] completion:^(id responseObject, NSError *error) {
-                FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
-                [assignment configureWithDictionary:responseObject];
-                self.assignmentID = assignment.uid;
-                self.acceptedAssignment = assignment;
-                self.currentAssignment = assignment;
-                [self configureAcceptedAssignment:assignment];
-                [self focusOnAssignment:assignment];
-            }];
-        }*/
+        }
     }];
 }
 
@@ -1473,6 +1424,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if ([self.assignmentActionButton.titleLabel.text isEqualToString:ACTION_TITLE_TWO]) {
         [self openCamera];
     } else {
+
         
         [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
             
@@ -1486,14 +1438,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                 [assignment configureWithDictionary:dict];
                 self.currentAssignment = assignment;
                 [self configureAcceptedAssignment:assignment];
-                
-//                if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:assignment]) {
-//                    self.annotationColorView.backgroundColor = [UIColor frescoGreenColor];
-//                }
-                
-                // used for persisting assignments that are not loaded with map
-//                [[NSUserDefaults standardUserDefaults] setValue:[NSString stringWithFormat:@"%@", assignment.uid] forKey:acceptedAssignmentID];
-//                [[NSUserDefaults standardUserDefaults] synchronize];
                 
                 return;
             }
