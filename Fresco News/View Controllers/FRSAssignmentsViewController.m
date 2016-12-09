@@ -61,6 +61,7 @@
 @property (strong, nonatomic) NSString *assignmentCaption;
 @property (strong, nonatomic) NSDate *assignmentExpirationDate;
 @property (strong, nonatomic) UILabel *assignmentTitleLabel;
+@property (strong, nonatomic) NSDate *assignmentPostedDate;
 @property (strong, nonatomic) UILabel *assignmentOutletLabel;
 @property (strong, nonatomic) UITextView *assignmentTextView;
 @property (strong, nonatomic) UIView *assignmentCard;
@@ -83,6 +84,9 @@
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
+
+@property (strong, nonatomic) UILabel *postedLabel;
+
 
 @end
 
@@ -465,12 +469,14 @@
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
         self.outlets = assignment.outlets;
-        
+        self.assignmentPostedDate = assignment.createdDate;
+
         [self configureOutlets];
         [self configureAssignmentCard];
         [self animateAssignmentCard];
         [self setExpiration];
         [self setDistance];
+        [self setPostedDate];
         
         self.currentAssignment = assignment;
         [self drawImages];
@@ -670,11 +676,13 @@
     self.assignmentTitle = assAnn.title;
     self.assignmentCaption = assAnn.subtitle;
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
-    
+    self.assignmentPostedDate = assAnn.assignmentPostedDate;
+
     self.outlets = assAnn.outlets;
     [self configureOutlets];
     
     [self setExpiration];
+    [self setPostedDate];
     [self configureAssignmentCard];
     [self animateAssignmentCard];
     [self snapToAnnotationView:view]; // Centers map with y offset
@@ -800,6 +808,22 @@
         [newCamera setHeading:0];
         [self.mapView setCamera:newCamera animated:YES];
     }
+}
+
+-(void)setPostedDate {
+    NSString *postedString;
+    
+    
+    NSTimeInterval secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
+    NSDate *correctDate = [self.assignmentPostedDate dateByAddingTimeInterval:secondsFromGMT];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    [formatter setDateFormat:@"h:mm a"];
+    
+    
+    postedString = [NSString stringWithFormat:@"Posted %@ at %@", [FRSDateFormatter dateDifference:self.assignmentPostedDate], [formatter stringFromDate:correctDate]];
+    
+    self.postedLabel.text = postedString;
 }
 
 -(void)createAssignmentView{
@@ -998,6 +1022,7 @@
     //Avoid any drawing above these
     self.scrollView.layer.zPosition = 1;
     self.assignmentBottomBar.layer.zPosition = 2;
+    [self setPostedDate];
     
 }
 
