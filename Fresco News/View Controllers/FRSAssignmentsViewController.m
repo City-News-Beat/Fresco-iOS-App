@@ -106,6 +106,7 @@
 @property (strong, nonatomic) UIView *annotationColorView;
 
 @property (strong, nonatomic) FRSAssignment *acceptedAssignment;
+@property BOOL mapShouldFollowUser;
 
 @end
 
@@ -177,6 +178,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             [self locationUpdate:lastLocation];
         }
     }];
+    
+    
+    self.mapShouldFollowUser = YES;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -216,6 +220,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     CLLocation *location = [[CLLocation alloc] initWithLatitude:[lat floatValue] longitude:[lon floatValue]];
     [self locationUpdate:location];
+    [self adjustRegion:location];
 }
 
 -(void)locationUpdate:(CLLocation *)location {
@@ -252,11 +257,22 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
-    self.mapView.showsUserLocation = YES;
-    [self.mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
+//    self.mapView.showsUserLocation = YES;
+//    [self.mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
     self.mapView.showsBuildings = NO;
     self.isOriginalSpan = YES;
     [self.view addSubview:self.mapView];
+}
+
+-(void)adjustRegion:(CLLocation*)location {
+    
+//    if (!self.mapShouldFollowUser) {
+//        return;
+//    }
+//    
+//    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, 1000, 1000);
+//    MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:viewRegion];
+//    [self.mapView setRegion:adjustedRegion animated:YES];
 }
 
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
@@ -564,6 +580,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
     [self updateAssignments];
+    self.mapShouldFollowUser = NO;
 }
 
 -(void)updateAssignments {
