@@ -31,6 +31,11 @@
     NSDate *exit;
     NSInteger numberRead;
     NSIndexPath *lastIndexPath;
+    
+    CGPoint lastScrollOffset;
+    NSTimeInterval lastOffsetCapture;
+    BOOL isScrollingFast;
+
 }
 @property BOOL loadNoMore;
 -(void)loadData;

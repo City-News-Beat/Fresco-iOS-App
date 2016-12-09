@@ -199,6 +199,29 @@
         [self.scrollDelegate scrollViewDidScroll:scrollView];
     }
     
+    CGPoint currentOffset = scrollView.contentOffset;
+    NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+    
+    NSTimeInterval timeDiff = currentTime - lastOffsetCapture;
+    if(timeDiff > 0.1) {
+        CGFloat distance = currentOffset.y - lastScrollOffset.y;
+        //The multiply by 10, / 1000 isn't really necessary.......
+        CGFloat scrollSpeedNotAbs = (distance * 10) / 1000; //in pixels per millisecond
+        
+        CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
+        if (scrollSpeed > 0.5) {
+            isScrollingFast = YES;
+            NSLog(@"Fast");
+        } else {
+            isScrollingFast = NO;
+            NSLog(@"Slow");
+        }
+        
+        lastScrollOffset = currentOffset;
+        lastOffsetCapture = currentTime;
+    }
+
+    
     NSArray *visibleCells = [self visibleCells];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
