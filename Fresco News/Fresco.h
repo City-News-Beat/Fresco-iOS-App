@@ -172,7 +172,7 @@ static NSString * const settingsPaymentLastFour = @"payment-last-four";
 static NSString * const settingsUserNotificationToggle = @"notifications-enabled";
 static NSString * const userHasSeenPermissionsAlert = @"userHasSeenPermissionsAlert";
 static NSString * const startDate = @"startDate";
-static NSString * const acceptedAssignmentID = @"acceptedAssignmentID";
+static NSString * const acceptedAssignmentEndpoint = @"assignment/accepted";
 
 
 // nsnotification

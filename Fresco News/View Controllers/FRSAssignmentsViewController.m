@@ -284,6 +284,23 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     self.isFetching = YES;
     
+    [[FRSAPIClient sharedClient] getAcceptedAssignmentWithCompletion:^(id responseObject, NSError *error) {
+        
+        NSLog(@"getAccepted (RESPO): %@", responseObject);
+        NSLog(@"getAccepted (ERROR): %@", error);
+        
+        if (responseObject) {
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+            [assignment configureWithDictionary:responseObject];
+            self.assignmentID = assignment.uid;
+            self.acceptedAssignment = assignment;
+            self.currentAssignment = assignment;
+            [self configureAcceptedAssignment:assignment];
+            [self focusOnAssignment:assignment];
+        }
+    }];
+    
     [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
         NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
@@ -366,7 +383,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             [self focusOnAssignment:self.acceptedAssignment];
 
             // fall back on nsuserdefaults if accepted assignment is not directly in viewport
-        } else if ([[NSUserDefaults standardUserDefaults] valueForKey:acceptedAssignmentID] != nil) {
+        } /*else if ([[NSUserDefaults standardUserDefaults] valueForKey:acceptedAssignmentID] != nil) {
             [[FRSAPIClient sharedClient] getAssignmentWithUID:[[NSUserDefaults standardUserDefaults] valueForKey:acceptedAssignmentID] completion:^(id responseObject, NSError *error) {
                 FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
                 [assignment configureWithDictionary:responseObject];
@@ -376,7 +393,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                 [self configureAcceptedAssignment:assignment];
                 [self focusOnAssignment:assignment];
             }];
-        }
+        }*/
     }];
 }
 
@@ -1475,8 +1492,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 //                }
                 
                 // used for persisting assignments that are not loaded with map
-                [[NSUserDefaults standardUserDefaults] setValue:[NSString stringWithFormat:@"%@", assignment.uid] forKey:acceptedAssignmentID];
-                [[NSUserDefaults standardUserDefaults] synchronize];
+//                [[NSUserDefaults standardUserDefaults] setValue:[NSString stringWithFormat:@"%@", assignment.uid] forKey:acceptedAssignmentID];
+//                [[NSUserDefaults standardUserDefaults] synchronize];
                 
                 return;
             }
@@ -1574,8 +1591,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }];
     
     // used for assignments that are not loaded with map
-    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:acceptedAssignmentID];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+//    [[NSUserDefaults standardUserDefaults] setValue:nil forKey:acceptedAssignmentID];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
     
     self.didAcceptAssignment = NO;
     self.acceptedAssignment = nil;

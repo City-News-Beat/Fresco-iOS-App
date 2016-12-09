@@ -1074,6 +1074,12 @@
     }];
 }
 
+-(void)getAcceptedAssignmentWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    [self get:acceptedAssignmentEndpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 -(NSDate *)dateFromString:(NSString *)string {
     if (!self.dateFormatter) {
         self.dateFormatter = [[NSDateFormatter alloc] init];
