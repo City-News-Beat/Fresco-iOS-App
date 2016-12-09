@@ -1022,6 +1022,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentActionButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     [self.assignmentBottomBar addSubview:self.assignmentActionButton];
 
+    self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    self.spinner.frame = CGRectMake(self.assignmentActionButton.frame.size.width - 20, self.assignmentActionButton.frame.size.height/2 - 10, 20, 20);
+    self.spinner.tintColor = [UIColor frescoOrangeColor];
+    [self.spinner setPullProgress:90];
+    self.spinner.alpha = 0;
+    [self.view addSubview:self.spinner];
+    
     self.assignmentOutletLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 18, self.view.frame.size.width - 16, 22)];
     [self.assignmentOutletLabel setFont:[UIFont notaMediumWithSize:17]];
     self.assignmentOutletLabel.textColor = [UIColor frescoDarkTextColor];
@@ -1419,15 +1426,38 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 #pragma mark - Assignment Accepting
 
+
+-(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+    [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    spinner.frame = CGRectMake(button.frame.size.width - 20, button.frame.size.height/2 -10, 20, 20);
+    [spinner startAnimating];
+    [button addSubview:spinner];
+}
+
+-(void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button {
+    
+    [button setTitleColor:[UIColor frescoGreenColor] forState:UIControlStateNormal];
+    [spinner stopLoading];
+    [spinner removeFromSuperview];
+}
+
+
 -(void)assignmentAction {
     
     if ([self.assignmentActionButton.titleLabel.text isEqualToString:ACTION_TITLE_TWO]) {
         [self openCamera];
     } else {
-
+        
+        
+        self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+        self.spinner.tintColor = [UIColor frescoOrangeColor];
+        [self.spinner setPullProgress:90];
+        [self startSpinner:self.spinner onButton:self.assignmentActionButton];
         
         [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
             
+            [self stopSpinner:self.spinner onButton:self.assignmentActionButton];
+
             NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
             NSInteger responseCode = response.statusCode;
             
