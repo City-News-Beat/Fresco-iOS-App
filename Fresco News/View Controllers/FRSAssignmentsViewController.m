@@ -686,23 +686,23 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.mapView addAnnotation:self.userCircle];
 }
 
--(void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray<MKAnnotationView *> *)views {
-    
-//    for (MKAnnotationView *annView in views) {
-//        annView.transform = CGAffineTransformMakeScale(0.001, 0.001);
-//        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-//            annView.transform = CGAffineTransformMakeScale(1.1, 1.1);
-//        } completion:^(BOOL finished) {
-//            [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-//                annView.transform = CGAffineTransformMakeScale(1, 1);
-//            } completion:nil];
-//        }];
-//    }
-}
-
--(void)mapView:(MKMapView *)mapView didAddOverlayRenderers:(NSArray<MKOverlayRenderer *> *)renderers {
-    
-}
+//-(void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray<MKAnnotationView *> *)views {
+//    
+////    for (MKAnnotationView *annView in views) {
+////        annView.transform = CGAffineTransformMakeScale(0.001, 0.001);
+////        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+////            annView.transform = CGAffineTransformMakeScale(1.1, 1.1);
+////        } completion:^(BOOL finished) {
+////            [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+////                annView.transform = CGAffineTransformMakeScale(1, 1);
+////            } completion:nil];
+////        }];
+////    }
+//}
+//
+//-(void)mapView:(MKMapView *)mapView didAddOverlayRenderers:(NSArray<MKOverlayRenderer *> *)renderers {
+//    
+//}
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay {
     
@@ -834,9 +834,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.distanceLabel sizeToFit];
     self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
     
-//    if (self.acceptedAssignment) {
+    if (!self.userIsInRange) {
         self.acceptAssignmentDistanceAwayLabel.text = [distanceString uppercaseString];
-//    }
+    }
 }
 
 -(void)setPostedDate {
@@ -1649,8 +1649,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self setExpiration:nil days:(int)[components day] hours:(int)[components hour] minutes:(int)[components minute] seconds:(int)[components second]];
         [self setDistance];
     }
-    
-//    [self updateUIForLocation];
 }
 
 -(void)updateUIForLocation {
@@ -1660,6 +1658,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self removeAssignmentsFromMap];
         [self removeAllOverlaysIncludingUser:NO];
         [self addAnnotationsForAssignments];
+    } else {
+        self.userIsInRange = NO;
     }
 }
 
