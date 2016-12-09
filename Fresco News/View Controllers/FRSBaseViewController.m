@@ -393,7 +393,7 @@
     [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
     FRSTabBarController *tab = (FRSTabBarController *)self.tabBarController;
     [tab updateUserIcon];
-    [FRSTracker track:@"Logouts"];
+    [FRSTracker track:logoutEvent];
     [self popViewController];
 }
 

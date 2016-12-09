@@ -105,7 +105,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [FRSTracker track:@"Onboarding reads"];
+    [FRSTracker track:onboardingReads];
     
     if (!_hasShown) {
         //        [self.usernameTF becomeFirstResponder];
@@ -554,7 +554,7 @@
     
     if (!_firstSlide) {
         _firstSlide = TRUE;
-        [FRSTracker track:@"Signup radius changes"];
+        [FRSTracker track:signupRadiusChange];
     }
     
     self.miles = slider.value * 50;
@@ -1196,7 +1196,7 @@
         
         if (error) {
             [registrationDigest setObject:error.localizedDescription forKey:@"error"];
-            [FRSTracker track:@"Registration Error" parameters:@{@"error":registrationDigest}];
+            [FRSTracker track:registrationError parameters:@{@"error":registrationDigest}];
         }
         
         if (error.code == -1009) {

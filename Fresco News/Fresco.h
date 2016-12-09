@@ -313,10 +313,10 @@ static NSString * const galleryApprovedNotification = @"user-dispatch-content-ve
 
 // MixPanel
 static NSString * const gallerySession = @"Gallery session";
-static NSString * const galleryLiked = @"Gallery liked";
-static NSString * const galleryUnlked = @"Gallery unliked";
-static NSString * const galleryReposted = @"Gallery reposted";
-static NSString * const galleryUnreposted = @"Gallery unreposted";
+static NSString * const galleryLiked = @"Gallery Liked";
+static NSString * const galleryUnliked = @"Gallery Unliked";
+static NSString * const galleryReposted = @"Gallery Reposted";
+static NSString * const galleryUnreposted = @"Gallery Unreposted";
 static NSString * const cameraSession = @"Camera session";
 static NSString * const cameraSessionPhotoCount = @"Camera session photo count";
 static NSString * const cameraSessionVideoCount = @"Camera session video count";
@@ -326,8 +326,45 @@ static NSString * const storiesSession = @"Stories session";
 static NSString * const uploadError = @"Upload error";
 static NSString * const uploadDebug = @"Upload debug";
 static NSString * const uploadClose = @"Upload close";
+static NSString * const uploadCancel = @"Upload cancel";
+static NSString * const uploadRetry = @"Upload retry";
+static NSString * const onboardingEvent = @"Onboarding";
+static NSString * const onboardingReads = @"Onboarding reads";
+static NSString * const onboardingQuits = @"Onboarding immediate quits";
 static NSString * const galleryShared = @"Gallery shared";
+static NSString * const signupsWithTwitter = @"Signups with Twitter";
+static NSString * const signupsWithFacebook = @"Signups with Facebook";
+static NSString * const signupsWithEmail = @"Signups with email";
+static NSString * const loginEvent = @"Logins";
+static NSString * const addressError = @"Address Error";
+static NSString * const notificationsEnabled = @"Permissions notification enables";
+static NSString * const notificationsDisabled = @"Permissions notification disables";
+static NSString * const cameraEnabled = @"Permissions camera enabled";
+static NSString * const cameraDisabled = @"Permissions camera disables";
+static NSString * const microphoneEnabled = @"Permissions microphone enables";
+static NSString * const microphoneDisabled = @"Permissions microphone disables";
+static NSString * const logoutEvent = @"Logouts";
+static NSString * const aggressivePan = @"Capture Agressive Pan";
+static NSString * const captureWobble = @"Capture Wobble";
 
+static NSString * const photosEnabled = @"Permissions photos enables";
+static NSString * const photosDisabled = @"Permissions photos disables";
+static NSString * const videosInGallery = @"Submission videos in gallery";
+static NSString * const photosInGallery = @"Submission photos in gallery";
+static NSString * const sharedFromHighlights = @"Galleries shared from highlights";
+static NSString * const migrationShown = @"Migration Shown";
+static NSString * const galleryOpenedFromHighlights = @"Galleries opened from highlights";
+static NSString * const galleryOpenedFromProfile = @"Galleries opened from profile";
+static NSString * const galleryOpenedFromStories = @"Galleries opened from stories";
+
+static NSString * const locationEnabled = @"Permissions location enables";
+static NSString * const locationDisabled = @"Permissions location disables";
+static NSString * const loginError = @"Login Error";
+static NSString * const registrationError = @"Registration Error";
+
+static NSString * const signupRadiusChange = @"Signup radius changes";
+static NSString * const submissionsEvent = @"Submissions";
+static NSString * const itemsInGallery = @"Submission item in gallery";
 
 
 // scrolling, video playback

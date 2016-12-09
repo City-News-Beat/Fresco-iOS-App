@@ -115,7 +115,7 @@
             case PHAuthorizationStatusAuthorized:
                 [self getAssets];
                 if (!wasPreviouslyAuthorized) {
-                    [FRSTracker track:@"Permissions photos enables"];
+                    [FRSTracker track:photosEnabled];
                 }
                 break;
             case PHAuthorizationStatusRestricted:
@@ -127,7 +127,7 @@
                 }
                 
                 if (wasPreviouslyAuthorized) {
-                    [FRSTracker track:@"Permissions photos disables"];
+                    [FRSTracker track:photosDisabled];
                 }
                 
                 break;

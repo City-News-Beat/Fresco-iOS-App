@@ -44,7 +44,7 @@ static NSDate *lastDate;
         return;
     }
     
-    [FRSTracker track:@"Upload Close" parameters:@{@"percent_complete":@(lastProgress), @"gallery_id":_currentGalleryID}];
+    [FRSTracker track:uploadClose parameters:@{@"percent_complete":@(lastProgress), @"gallery_id":_currentGalleryID}];
 }
 
 -(void)checkCachedUploads {
@@ -452,7 +452,7 @@ static NSDate *lastDate;
     }
     
     if (error.localizedDescription) {
-        [FRSTracker track:@"Upload Error" parameters:uploadErrorSummary];
+        [FRSTracker track:uploadError parameters:uploadErrorSummary];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{@"type":@"failure"}];
 }

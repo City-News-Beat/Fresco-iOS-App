@@ -234,7 +234,7 @@
     if (entry) {
         exit = [NSDate date];
         NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
-        [FRSTracker track:@"Highlights session" parameters:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
+        [FRSTracker track:highlightsSession parameters:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
     }
     
     [self removeStatusBarNotification];
@@ -286,7 +286,7 @@
         FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[[NSUserDefaults standardUserDefaults] valueForKey:@"needs-password"] boolValue]];
         alert.delegate = self;
         [alert show];
-        [FRSTracker track:@"Migration Shown"];
+        [FRSTracker track:migrationShown];
     }
 }
 
@@ -818,7 +818,7 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-    [FRSTracker track:@"Gallery Shared" parameters:@{@"content":content.firstObject}];
+    [FRSTracker track:galleryShared parameters:@{@"content":content.firstObject}];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -850,7 +850,7 @@
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
     FRSGallery *gallery = self.dataSource[notification.row];
-    [FRSTracker track:@"Galleries opened from highlights" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:galleryOpenedFromHighlights parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;

@@ -54,8 +54,8 @@
             if (![[NSUserDefaults standardUserDefaults] objectForKey:@"first-camera"]) {
                 [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-camera"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                [FRSTracker track:@"Permissions camera enables"];
-                [FRSTracker track:@"Permissions microphone enables"];
+                [FRSTracker track:cameraEnabled];
+                [FRSTracker track:microphoneEnabled];
             }
             return FRSAVStatusAuthorized;
             break;
@@ -66,8 +66,8 @@
             if (![[NSUserDefaults standardUserDefaults] objectForKey:@"first-camera-disabled"]) {
                 [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-camera-disabled"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                [FRSTracker track:@"Permissions camera disables"];
-                [FRSTracker track:@"Permissions microphone disables"];
+                [FRSTracker track:cameraDisabled];
+                [FRSTracker track:microphoneDisabled];
             }            return FRSAVStatusDenied;
             break;
         default:

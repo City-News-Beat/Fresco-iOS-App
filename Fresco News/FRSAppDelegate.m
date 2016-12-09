@@ -691,7 +691,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                                 ntohl(tokenData[6]), ntohl(tokenData[7])];
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] == Nil)  {
-        [FRSTracker track:@"Notifications Enabled"];
+        [FRSTracker track:notificationsEnabled];
     }
     
     NSString *oldDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
@@ -783,7 +783,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
-    [FRSTracker track:@"Permissions notification disables"];
+    [FRSTracker track:notificationsDisabled];
 }
 
 

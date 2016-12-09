@@ -313,7 +313,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         exit = [NSDate date];
         
         NSInteger secondsInCamera = [exit timeIntervalSinceDate:entry];
-        [FRSTracker track:@"Camera session" parameters:@{activityDuration:@(secondsInCamera)}];
+        [FRSTracker track:cameraSession parameters:@{activityDuration:@(secondsInCamera)}];
     }
     [self.locationManager stopMonitoringSignificantLocationChanges];
     
@@ -1993,7 +1993,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     if (!hasPanned) {
         hasPanned = TRUE;
-        [FRSTracker track:@"Capture Agressive Pan"];
+        [FRSTracker track:aggressivePan];
     }
     
     if (_isRecording == FALSE) {
@@ -2065,7 +2065,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     if (!hasShaken) {
         hasShaken = TRUE;
-        [FRSTracker track:@"Capture Wobble"];
+        [FRSTracker track:captureWobble];
     }
     
     if (_isRecording == FALSE) {

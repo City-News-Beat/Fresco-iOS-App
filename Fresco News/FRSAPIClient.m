@@ -332,7 +332,7 @@
         if (twitterSession.authToken && twitterSession.authTokenSecret) {
             NSDictionary *twitterDigestion = @{@"token":twitterSession.authToken, @"secret": twitterSession.authTokenSecret};
             [socialDigestion setObject:twitterDigestion forKey:@"twitter"];
-            [FRSTracker track:@"Signups with Twitter"];
+            [FRSTracker track:signupsWithTwitter];
         }
     }
     
@@ -341,7 +341,7 @@
         if (facebookToken.tokenString) {
             NSDictionary *facebookDigestion = @{@"token":facebookToken.tokenString};
             [socialDigestion setObject:facebookDigestion forKey:@"facebook"];
-            [FRSTracker track:@"Signups with Facebook"];
+            [FRSTracker track:signupsWithFacebook];
         }
     }
     
@@ -478,7 +478,7 @@
             [mixpanel identify:userID];
         }
         
-        [FRSTracker track:@"Logins"];
+        [FRSTracker track:loginEvent];
     }];
 }
 
@@ -690,7 +690,7 @@
 }
 
 -(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    [FRSTracker track:@"Gallery Disliked" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:galleryUnliked parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
 
     NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
@@ -1104,7 +1104,7 @@
         return;
     }
     
-    [FRSTracker track:@"Gallery Liked" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:galleryLiked parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
     
     NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
@@ -1162,7 +1162,7 @@
         return;
     }
     
-    [FRSTracker track:@"Gallery Reposted" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:galleryReposted parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
 
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
@@ -1196,7 +1196,7 @@
 
 -(void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
-    [FRSTracker track:@"Gallery Unreposted" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:galleryUnreposted parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
 
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -1510,7 +1510,7 @@
          }
          else {
              completion(@"No address found.", Nil);
-             [FRSTracker track:@"Address Error" parameters:@{@"coordinates":@[@(location.coordinate.longitude), @(location.coordinate.latitude)]}];
+             [FRSTracker track:addressError parameters:@{@"coordinates":@[@(location.coordinate.longitude), @(location.coordinate.latitude)]}];
          }
          
      }];

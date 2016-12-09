@@ -696,7 +696,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[sharedContent] applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
     
-    [FRSTracker track:@"Galleries shared from highlights" parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
+    [FRSTracker track:sharedFromHighlights parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
 }
 
 -(void)adjustScrollViewContentSize{
@@ -1477,7 +1477,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                               @"opened_from":_openedFrom
                             };
     
-    [FRSTracker track:@"Gallery Session" parameters:session];
+    [FRSTracker track:gallerySession parameters:session];
 }
 
 

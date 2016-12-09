@@ -137,7 +137,7 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.window.rootViewController presentViewController:activityController animated:YES completion:nil];
-    [FRSTracker track:@"Gallery Shared" parameters:@{@"content":content.firstObject}];
+    [FRSTracker track:galleryShared parameters:@{@"content":content.firstObject}];
 }
 
 -(void)reloadData {
