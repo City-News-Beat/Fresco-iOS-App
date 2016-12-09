@@ -326,7 +326,12 @@ static NSString * const storiesSession = @"Stories session";
 static NSString * const uploadError = @"Upload error";
 static NSString * const uploadDebug = @"Upload debug";
 static NSString * const uploadClose = @"Upload close";
-static int const maxScrollVelocity = 20;
+static NSString * const galleryShared = @"Gallery shared";
+
+
+
+// scrolling, video playback
+static float const maxScrollVelocity = 1.5;
 
 
 

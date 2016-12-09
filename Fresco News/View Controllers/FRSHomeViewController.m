@@ -973,9 +973,26 @@
     
     if (scrollView == self.tableView) {
         
-        CGPoint scrollVelocity = [[scrollView panGestureRecognizer] velocityInView:self.view];
-        if (scrollVelocity.y > maxScrollVelocity) {
+        CGPoint currentOffset = scrollView.contentOffset;
+        NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+        
+        NSTimeInterval timeDiff = currentTime - lastOffsetCapture;
+        if(timeDiff > 0.1) {
+            CGFloat distance = currentOffset.y - lastScrollOffset.y;
+            //The multiply by 10, / 1000 isn't really necessary.......
+            CGFloat scrollSpeedNotAbs = (distance * 10) / 1000; //in pixels per millisecond
             
+            CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
+            if (scrollSpeed > maxScrollVelocity) {
+                isScrollingFast = YES;
+                NSLog(@"Fast");
+            } else {
+                isScrollingFast = NO;
+                NSLog(@"Slow");
+            }
+            
+            lastScrollOffset = currentOffset;
+            lastOffsetCapture = currentTime;
         }
         
         NSArray *visibleCells = [self.tableView visibleCells];
@@ -992,7 +1009,7 @@
                     
                     if (!taken) {
                         
-                        if ([cell respondsToSelector:@selector(play)]) {
+                        if ([cell respondsToSelector:@selector(play)] && !isScrollingFast) {
                             taken = TRUE;
                             [cell play];
                         }
