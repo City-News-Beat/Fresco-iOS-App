@@ -22,10 +22,6 @@
     UIView *awkwardView;
     BOOL isReloading;
     BOOL isFinished;
-    
-    CGPoint lastScrollOffset;
-    NSTimeInterval lastOffsetCapture;
-    BOOL isScrollingFast;
 }
 @property (retain, nonatomic, readonly) NSArray *galleries;
 @property (weak, nonatomic) id<FRSFollowingTableDelegate> leadDelegate;
