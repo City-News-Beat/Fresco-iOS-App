@@ -956,6 +956,10 @@
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
+    self.postedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 14)];
+    self.postedLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
+    self.postedLabel.textColor = [UIColor frescoMediumTextColor];
+    
     self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 50, self.view.frame.size.width, 120)];
     [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
@@ -974,7 +978,8 @@
     self.expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
     self.expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.expirationLabel.textColor = [UIColor frescoMediumTextColor];
-    
+    [self.expirationLabel addSubview:self.postedLabel];
+
     [self setExpiration];
     
     [self.assignmentStatsContainer addSubview:self.expirationLabel];
