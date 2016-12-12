@@ -155,6 +155,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         }
     }];
     
+    self.assignmentCardIsOpen = NO;
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -194,7 +196,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     CLLocation *location = [[CLLocation alloc] initWithLatitude:[lat floatValue] longitude:[lon floatValue]];
     [self locationUpdate:location];
-    [self adjustRegion:location];
+//    [self adjustRegion:location];
 }
 
 -(void)locationUpdate:(CLLocation *)location {
@@ -210,10 +212,15 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     
+    if (self.assignmentCardIsOpen) {
+        return;
+    }
+    
     [self updateUIForLocation];
     
     if (self.mapShouldFollowUser) {
         [self.mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
+//        [self adjustRegion:userLocation];
     }
 }
 
@@ -245,9 +252,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)adjustRegion:(CLLocation*)location {
-    if (!self.mapShouldFollowUser) {
+    if (!self.mapShouldFollowUser || self.assignmentCardIsOpen) {
         return;
     }
+    
     MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, 1000, 1000);
     MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:viewRegion];
     [self.mapView setRegion:adjustedRegion animated:YES];
@@ -425,9 +433,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)setInitialMapRegion {
     
-    if (self.showsCard) {
-        // dismiss card?
-        
+    if (self.showsCard || self.assignmentCardIsOpen) {
         return;
     }
     
@@ -751,6 +757,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if ([[view.annotation class] isSubclassOfClass:[MKUserLocation class]]) {
         return;
     }
+    
+    self.assignmentCardIsOpen = YES;
     
     [self.mapView deselectAnnotation:view.annotation animated:NO];
 
@@ -1258,6 +1266,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 -(void)animateAssignmentCard{
     
     self.assignmentCardIsOpen = YES;
+    self.mapShouldFollowUser = NO;
     
     // animate scrollView in y
     [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -1302,9 +1311,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
     }];
     
-//    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.closeButton.alpha = 0;
-//    } completion:nil];
+    self.closeButton.alpha = 0;
     
     [self showGlobalAssignmentsBar];
     self.hasDefault = NO;
