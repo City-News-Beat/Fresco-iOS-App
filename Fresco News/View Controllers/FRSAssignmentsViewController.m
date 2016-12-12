@@ -153,9 +153,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             [self locationUpdate:lastLocation];
         }
     }];
-    
-    
-    self.mapShouldFollowUser = YES;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -207,6 +204,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self fetchAssignmentsNearLocation:location radius:10];
         [self configureAnnotationsForMap];
     }
+}
+
+-(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+//    if (self.mapShouldFollowUser) {
+        [self.mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
+//    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -548,7 +551,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
     [self updateAssignments];
-    self.mapShouldFollowUser = NO;
+//    self.mapShouldFollowUser = NO;
 }
 
 -(void)updateAssignments {
