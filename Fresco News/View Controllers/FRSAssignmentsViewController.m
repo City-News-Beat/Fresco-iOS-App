@@ -229,22 +229,20 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
-//    self.mapView.showsUserLocation = YES;
-//    [self.mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
+    self.mapView.showsUserLocation = YES;
+    [self.mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
     self.mapView.showsBuildings = NO;
     self.isOriginalSpan = YES;
     [self.view addSubview:self.mapView];
 }
 
 -(void)adjustRegion:(CLLocation*)location {
-    
-//    if (!self.mapShouldFollowUser) {
-//        return;
-//    }
-//    
-//    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, 1000, 1000);
-//    MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:viewRegion];
-//    [self.mapView setRegion:adjustedRegion animated:YES];
+    if (!self.mapShouldFollowUser) {
+        return;
+    }
+    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, 1000, 1000);
+    MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:viewRegion];
+    [self.mapView setRegion:adjustedRegion animated:YES];
 }
 
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
@@ -575,7 +573,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
-    if ([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) {
+    if (([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) || [annotation isKindOfClass:[MKUserLocation class]]) {
         static NSString *annotationIdentifer = @"user-annotation";
         MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifer];
         if (annotationView == nil) {
@@ -585,13 +583,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
             view.backgroundColor = [UIColor whiteColor];
             
-            view.layer.cornerRadius = 12;
             view.layer.shadowColor = [UIColor blackColor].CGColor;
             view.layer.shadowOffset = CGSizeMake(0, 2);
             view.layer.shadowOpacity = 0.15;
             view.layer.shadowRadius = 1.5;
             view.layer.shouldRasterize = YES;
-            view.clipsToBounds = YES;
             view.layer.rasterizationScale = [[UIScreen mainScreen] scale];
             
             [annotationView addSubview:view];
