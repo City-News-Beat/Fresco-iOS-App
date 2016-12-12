@@ -470,6 +470,7 @@
                 if (![selectedVC isKindOfClass:[FRSAssignmentsViewController class]]) break;
                 FRSAssignmentsViewController *assignVC = (FRSAssignmentsViewController *)selectedVC;
                 [assignVC setInitialMapRegion];
+                assignVC.mapShouldFollowUser = YES;
                 
             } break;
             

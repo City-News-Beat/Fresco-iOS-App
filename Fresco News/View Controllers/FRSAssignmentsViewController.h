@@ -35,5 +35,6 @@
 @property (nonatomic) BOOL hasDefault;
 @property (nonatomic, retain) NSString *defaultID;
 @property (strong, nonatomic) MKMapView *mapView;
+@property BOOL mapShouldFollowUser;
 
 @end

@@ -24,7 +24,7 @@
 
 @import MapKit;
 
-@interface FRSAssignmentsViewController () <MKMapViewDelegate>
+@interface FRSAssignmentsViewController () <MKMapViewDelegate, UIGestureRecognizerDelegate>
 {
     NSMutableArray *dictionaryRepresentations;
     BOOL hasSnapped;
@@ -80,8 +80,8 @@
 @property BOOL didAcceptAssignment;
 @property BOOL assignmentCardIsOpen;
 @property BOOL assignmentDidExpire;
-@property BOOL mapShouldFollowUser;
 @property BOOL userIsInRange;
+@property BOOL shouldRefreshMap;
 
 @end
 
@@ -138,6 +138,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 -(void)viewDidLoad {
     [super viewDidLoad];
     [self configureMap];
+    [self configurePanGestureRec];
     
     // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -153,6 +154,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             [self locationUpdate:lastLocation];
         }
     }];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -207,9 +209,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-//    if (self.mapShouldFollowUser) {
-//        [self.mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
-//    }
+    
+    [self updateUIForLocation];
+    
+    if (self.mapShouldFollowUser) {
+        [self.mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -551,7 +556,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
     [self updateAssignments];
-//    self.mapShouldFollowUser = NO;
 }
 
 -(void)updateAssignments {
@@ -1355,6 +1359,25 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self configureAnnotationsForMap];
 }
 
+#pragma mark - UIPanGestureRec
+
+-(void)configurePanGestureRec {
+    self.mapShouldFollowUser = YES;
+    UIPanGestureRecognizer* panRec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
+    [panRec setDelegate:self];
+    [self.mapView addGestureRecognizer:panRec];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+
+-(void)didDragMap:(UIGestureRecognizer*)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan){
+        self.mapShouldFollowUser = NO;
+    }
+}
+
 #pragma mark - Global Assignments
 
 -(void)configureGlobalAssignmentsBar {
@@ -1657,13 +1680,27 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)updateUIForLocation {
     if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
+        if (!self.userIsInRange) {
+            self.shouldRefreshMap = YES;
+        } else {
+            self.shouldRefreshMap = NO;
+        }
         self.userIsInRange = YES;
         [self updateNavBarToOpenCamera];
+
+    } else {
+        if (self.userIsInRange) {
+            self.shouldRefreshMap = YES;
+        } else {
+            self.shouldRefreshMap = NO;
+        }
+        self.userIsInRange = NO;
+    }
+    
+    if (self.shouldRefreshMap) {
         [self removeAssignmentsFromMap];
         [self removeAllOverlaysIncludingUser:NO];
         [self addAnnotationsForAssignments];
-    } else {
-        self.userIsInRange = NO;
     }
 }
 
