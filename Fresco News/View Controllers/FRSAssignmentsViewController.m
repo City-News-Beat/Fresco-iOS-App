@@ -215,7 +215,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         return;
     }
     
-    [self updateUIForLocation];
+    if (self.didAcceptAssignment) {
+        [self updateUIForLocation];
+    }
     
     if (self.mapShouldFollowUser) {
         [self.mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
