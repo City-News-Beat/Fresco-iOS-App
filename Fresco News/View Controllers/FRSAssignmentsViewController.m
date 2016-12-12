@@ -32,7 +32,6 @@
 
 @property (nonatomic) BOOL isFetching;
 @property (nonatomic) BOOL isOriginalSpan;
-@property (nonatomic, assign) BOOL showsCard;
 @property (nonatomic, retain) NSMutableArray *assignmentIDs;
 @property (strong, nonatomic) FRSMapCircle *userCircle;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
@@ -231,7 +230,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     self.hasDefault = NO;
     self.defaultID  = nil;
-    self.showsCard  = NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -433,7 +431,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)setInitialMapRegion {
     
-    if (self.showsCard || self.assignmentCardIsOpen) {
+    if (self.assignmentCardIsOpen) {
         return;
     }
     
@@ -554,7 +552,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         
         self.hasDefault = NO;
         self.defaultID  = nil;
-        self.showsCard  = NO;
+        self.assignmentCardIsOpen  = NO;
     }
 }
 
@@ -974,7 +972,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)createAssignmentView{
     
-    self.showsCard = TRUE;
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.multipleTouchEnabled = NO;
     [self.view addSubview:self.scrollView];
@@ -1298,7 +1295,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 -(void)dismissAssignmentCard {
     
     self.assignmentCardIsOpen = NO;
-    self.showsCard = FALSE;
     
     [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.assignmentCard.frame.origin.y + (self.view.frame.size.height - self.assignmentCard.frame.origin.y) +100, self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
