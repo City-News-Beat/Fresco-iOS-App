@@ -581,6 +581,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             annotationView.userInteractionEnabled = NO;
             
             UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
+            view.layer.cornerRadius = view.frame.size.width/2;
             view.backgroundColor = [UIColor whiteColor];
             
             view.layer.shadowColor = [UIColor blackColor].CGColor;
