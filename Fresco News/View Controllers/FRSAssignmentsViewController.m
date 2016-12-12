@@ -61,7 +61,6 @@
 @property (strong, nonatomic) NSString *assignmentCaption;
 @property (strong, nonatomic) NSDate *assignmentExpirationDate;
 @property (strong, nonatomic) UILabel *assignmentTitleLabel;
-@property (strong, nonatomic) NSDate *assignmentPostedDate;
 @property (strong, nonatomic) UILabel *assignmentOutletLabel;
 @property (strong, nonatomic) UITextView *assignmentTextView;
 @property (strong, nonatomic) UIView *assignmentCard;
@@ -84,9 +83,6 @@
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
-
-@property (strong, nonatomic) UILabel *postedLabel;
-
 
 @end
 
@@ -271,32 +267,35 @@
         if (self.globalAssignmentsArray.count >= 1) {
             [self showGlobalAssignmentsBar];
         }
+        
         FRSAssignment *defaultAssignment;
         
-        for (NSDictionary *dict in assignments){
-            
-            FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
-            [assignmentToAdd configureWithDictionary:dict];
-            NSString *uid = assignmentToAdd.uid;
-            
-            if ([uid isEqualToString:self.defaultID]) {
-                defaultAssignment = assignmentToAdd;
+        if (assignments.count > 0) {
+            for (NSDictionary *dict in assignments){
+                FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+                [assignmentToAdd configureWithDictionary:dict];
+                NSString *uid = assignmentToAdd.uid;
+                
+                if ([uid isEqualToString:self.defaultID]) {
+                    defaultAssignment = assignmentToAdd;
+                }
+                
+                if ([self assignmentExists:uid]) {
+                    continue;
+                }
+                
+                [mSerializedAssignments addObject:assignmentToAdd];
+                
+                if (!dictionaryRepresentations) {
+                    dictionaryRepresentations = [[NSMutableArray alloc] init];
+                }
+                
+                [dictionaryRepresentations addObject:dict];
             }
             
-            if ([self assignmentExists:uid]) {
-                continue;
-            }
-            
-            [mSerializedAssignments addObject:assignmentToAdd];
-            
-            if (!dictionaryRepresentations) {
-                dictionaryRepresentations = [[NSMutableArray alloc] init];
-            }
-            
-            [dictionaryRepresentations addObject:dict];
+            self.assignments = [mSerializedAssignments copy];
         }
-        
-        self.assignments = [mSerializedAssignments copy];
+       
         [self addAnnotationsForAssignments];
         
         self.isFetching = NO;
@@ -469,14 +468,12 @@
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
         self.outlets = assignment.outlets;
-        self.assignmentPostedDate = assignment.createdDate;
-
+        
         [self configureOutlets];
         [self configureAssignmentCard];
         [self animateAssignmentCard];
         [self setExpiration];
         [self setDistance];
-        [self setPostedDate];
         
         self.currentAssignment = assignment;
         [self drawImages];
@@ -676,13 +673,11 @@
     self.assignmentTitle = assAnn.title;
     self.assignmentCaption = assAnn.subtitle;
     self.assignmentExpirationDate = assAnn.assignmentExpirationDate;
-    self.assignmentPostedDate = assAnn.assignmentPostedDate;
-
+    
     self.outlets = assAnn.outlets;
     [self configureOutlets];
     
     [self setExpiration];
-    [self setPostedDate];
     [self configureAssignmentCard];
     [self animateAssignmentCard];
     [self snapToAnnotationView:view]; // Centers map with y offset
@@ -808,22 +803,6 @@
         [newCamera setHeading:0];
         [self.mapView setCamera:newCamera animated:YES];
     }
-}
-
--(void)setPostedDate {
-    NSString *postedString;
-    
-    
-    NSTimeInterval secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
-    NSDate *correctDate = [self.assignmentPostedDate dateByAddingTimeInterval:secondsFromGMT];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    [formatter setDateFormat:@"h:mm a"];
-    
-    
-    postedString = [NSString stringWithFormat:@"Posted %@ at %@", [FRSDateFormatter dateDifference:self.assignmentPostedDate], [formatter stringFromDate:correctDate]];
-    
-    self.postedLabel.text = postedString;
 }
 
 -(void)createAssignmentView{
@@ -956,10 +935,6 @@
     self.videoCashLabel.font = [UIFont notaBoldWithSize:15];
     [self.assignmentBottomBar addSubview:self.videoCashLabel];
     
-    self.postedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 14)];
-    self.postedLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
-    self.postedLabel.textColor = [UIColor frescoMediumTextColor];
-    
     self.assignmentStatsContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentTextView.frame.size.height + 50, self.view.frame.size.width, 120)];
     [self.assignmentCard addSubview:self.assignmentStatsContainer];
     
@@ -978,8 +953,7 @@
     self.expirationLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 10, self.view.frame.size.width, 20)];
     self.expirationLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.expirationLabel.textColor = [UIColor frescoMediumTextColor];
-    [self.expirationLabel addSubview:self.postedLabel];
-
+    
     [self setExpiration];
     
     [self.assignmentStatsContainer addSubview:self.expirationLabel];
@@ -1027,7 +1001,6 @@
     //Avoid any drawing above these
     self.scrollView.layer.zPosition = 1;
     self.assignmentBottomBar.layer.zPosition = 2;
-    [self setPostedDate];
     
 }
 
