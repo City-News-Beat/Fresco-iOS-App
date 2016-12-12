@@ -57,9 +57,12 @@
     
     self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"starts_at"]];
     self.expirationDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"ends_at"]];
-    self.caption = dictionary[@"caption"];
     
-    if (dictionary[@"outlets"]) {
+    if ([[dictionary[@"caption"] class] isSubclassOfClass:[NSString class]]) {
+        self.caption = dictionary[@"caption"];
+    }
+    
+    if ([[dictionary[@"outlets"] class] isSubclassOfClass:[NSArray class]]) {
         self.outlets = dictionary[@"outlets"];
     }
 }
