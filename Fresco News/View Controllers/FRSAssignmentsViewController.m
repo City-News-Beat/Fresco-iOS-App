@@ -200,7 +200,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (!hasSnapped) {
         hasSnapped = TRUE;
         [self adjustMapRegionWithLocation:location];
-        [self addUserLocationCircleOverlay];
+//        [self addUserLocationCircleOverlay];
         [self fetchAssignmentsNearLocation:location radius:10];
         [self configureAnnotationsForMap];
     }
@@ -208,7 +208,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
 //    if (self.mapShouldFollowUser) {
-        [self.mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
+//        [self.mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
 //    }
 }
 
@@ -576,7 +576,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
-    if (([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) || [annotation isKindOfClass:[MKUserLocation class]]) {
+    if (/*([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) ||*/[annotation isKindOfClass:[MKUserLocation class]]) {
         static NSString *annotationIdentifer = @"user-annotation";
         MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifer];
         if (annotationView == nil) {
@@ -743,6 +743,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    
+    if ([[view.annotation class] isSubclassOfClass:[MKUserLocation class]]) {
+        return;
+    }
     
     [self.mapView deselectAnnotation:view.annotation animated:NO];
 
