@@ -203,7 +203,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (!hasSnapped) {
         hasSnapped = TRUE;
         [self adjustMapRegionWithLocation:location];
-//        [self addUserLocationCircleOverlay];
         [self fetchAssignmentsNearLocation:location radius:10];
         [self configureAnnotationsForMap];
     }
@@ -221,7 +220,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     if (self.mapShouldFollowUser) {
         [self.mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
-//        [self adjustRegion:userLocation];
     }
 }
 
@@ -504,7 +502,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 -(void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index {
     
     FRSAssignmentAnnotation *ann = [[FRSAssignmentAnnotation alloc] initWithAssignment:assignment atIndex:index];
-//    NSLog(@"EXPIRATION %@", assignment.expirationDate);
     //Create center coordinate for the assignment
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([assignment.latitude floatValue], [assignment.longitude floatValue]);
     
