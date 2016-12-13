@@ -1580,6 +1580,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     [self.mapView showAnnotations:self.mapView.annotations animated:YES];
     [self dismissAssignmentCard];
+    
+    self.mapShouldFollowUser = YES;
 }
 
 
