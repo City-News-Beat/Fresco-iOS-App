@@ -216,6 +216,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self updateUIForLocation];
     }
     
+    if (self.didAcceptAssignment && self.mapShouldFollowUser) {
+        [self.mapView showAnnotations:self.mapView.annotations animated:YES];
+        return;
+    }
+    
     if (self.mapShouldFollowUser) {
         [self.mapView setCenterCoordinate:userLocation.location.coordinate animated:YES];
     }
@@ -396,34 +401,46 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 #pragma mark - Region
 
--(void)adjustMapRegionWithLocation:(CLLocation *)location {
-    
-    
-    MKCoordinateSpan currentSpan = MKCoordinateSpanMake(0.03f, 0.03f);
-    MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude), currentSpan);
-
-    if (self.defaultID) {
-        region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([self.currentAssignment.latitude doubleValue], [self.currentAssignment.longitude doubleValue]), currentSpan);
-    }
-    
-    [self.mapView setRegion:region animated:YES];
-}
-
+// gets called when user taps on map icon in tab bar
 -(void)setInitialMapRegion {
     
-    // disable track if already tracking
+    // disable snap if already tracking
     if (self.mapShouldFollowUser) {
         return;
     }
     
+    // disable snap if viewing assignment
     if (self.assignmentCardIsOpen) {
+        return;
+    }
+    
+    if (self.didAcceptAssignment) {
+        [self.mapView showAnnotations:self.mapView.annotations animated:YES];
         return;
     }
     
     if ([FRSLocator sharedLocator].currentLocation) {
         [self adjustMapRegionWithLocation:[FRSLocator sharedLocator].currentLocation];
-        self.mapView.camera.altitude /= 1.4;
     }
+}
+
+
+-(void)adjustMapRegionWithLocation:(CLLocation *)location {
+    
+    // if user accepted assignment, keep assignment and user annotations on map
+    if (self.didAcceptAssignment) {
+        [self.mapView showAnnotations:self.mapView.annotations animated:YES];
+        return;
+    }
+    
+    MKCoordinateSpan currentSpan = MKCoordinateSpanMake(0.03f, 0.03f);
+    MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude), currentSpan);
+    
+    if (self.defaultID) {
+        region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([self.currentAssignment.latitude doubleValue], [self.currentAssignment.longitude doubleValue]), currentSpan);
+    }
+    
+    [self.mapView setRegion:region animated:YES];
 }
 
 #pragma mark - Annotations
@@ -1350,7 +1367,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.mapView addGestureRecognizer:panRec];
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return YES;
 }
 
