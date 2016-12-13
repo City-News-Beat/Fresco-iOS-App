@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Fresco.h"
+#import <Analytics/SEGAnalytics.h>
 
 @interface FRSTracker : NSObject
 {
@@ -15,4 +17,5 @@
 
 +(void)track:(NSString *)eventName parameters:(NSDictionary *)parameters;
 +(void)track:(NSString *)eventName;
++(void)startTracking;
 @end

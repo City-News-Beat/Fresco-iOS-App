@@ -115,8 +115,11 @@
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     [[FRSUploadManager sharedUploader] checkCachedUploads];
     
+    [FRSTracker startTracking];
+    
     return YES;
 }
+
 
 -(void)configureStartDate {
     if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate] == nil) {

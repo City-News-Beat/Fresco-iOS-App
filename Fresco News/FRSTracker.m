@@ -11,10 +11,18 @@
 
 @implementation FRSTracker
 +(void)track:(NSString *)eventName parameters:(NSDictionary *)parameters {
-    [[Mixpanel sharedInstance] track:eventName properties:parameters];
+    [[SEGAnalytics sharedAnalytics] track:eventName
+                               properties:parameters];
 }
 +(void)track:(NSString *)eventName {
-    [[Mixpanel sharedInstance] track:eventName];
+    [[SEGAnalytics sharedAnalytics] track:eventName];
+}
+
++(void)startTracking {
+    SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:segmentWriteKey];
+    configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
+    configuration.recordScreenViews = YES; // Enable this to record screen views automatically!
+    [SEGAnalytics setupWithConfiguration:configuration];
 }
 
 @end
