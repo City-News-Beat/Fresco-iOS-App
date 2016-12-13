@@ -61,7 +61,6 @@
         [[FRSAPIClient sharedClient] logout];
     }
     
-    [self startMixpanel];
     [self configureWindow];
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
     [self persistentStoreCoordinator];
@@ -116,7 +115,8 @@
     [[FRSUploadManager sharedUploader] checkCachedUploads];
     
     [FRSTracker startTracking];
-    
+    [self startTracking];
+
     return YES;
 }
 
@@ -150,7 +150,7 @@
     });
 }
 
--(void)startMixpanel {
+-(void)startTracking {
     
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
         FRSUser *user = [[FRSAPIClient sharedClient] authenticatedUser];
