@@ -357,6 +357,7 @@
     });
     [[FRSAPIClient sharedClient] logout];
     
+    [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate clearKeychain];
