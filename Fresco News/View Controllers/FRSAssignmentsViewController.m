@@ -280,7 +280,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             self.acceptedAssignment = assignment;
             self.currentAssignment = assignment;
             [self configureAcceptedAssignment:assignment];
-            [self focusOnAssignment:assignment];
+//            [self focusOnAssignment:assignment];
         }
     }];
     
