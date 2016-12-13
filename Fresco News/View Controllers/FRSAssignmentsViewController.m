@@ -180,6 +180,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (!delegate.didPresentPermissionsRequest) { //Avoid double alerts
         [self checkStatusAndPresentPermissionsAlert:_locationManager.delegate];
     }
+    
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        if (self.didAcceptAssignment) {
+            [self configureUnacceptedAssignment];
+        }
+    }
 }
 
 -(void)dealloc {
@@ -406,6 +412,14 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     // disable snap if already tracking
     if (self.mapShouldFollowUser) {
+        // zoom in only if tracking user
+        if (!self.didAcceptAssignment) {
+            MKCoordinateRegion mapRegion;
+            mapRegion.center = self.mapView.userLocation.coordinate;
+            mapRegion.span.latitudeDelta = 0.002;
+            mapRegion.span.longitudeDelta = 0.002;
+            [self.mapView setRegion:mapRegion animated: YES];
+        }
         return;
     }
     
@@ -413,12 +427,14 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (self.assignmentCardIsOpen) {
         return;
     }
-    
+
     if (self.didAcceptAssignment) {
+        // show both accepted assignment and user annotation
         [self.mapView showAnnotations:self.mapView.annotations animated:YES];
         return;
     }
     
+    // default snap map cam to user behavior
     if ([FRSLocator sharedLocator].currentLocation) {
         [self adjustMapRegionWithLocation:[FRSLocator sharedLocator].currentLocation];
     }
@@ -776,6 +792,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         self.assignemntAcceptButtonTitle = ACTION_TITLE_ONE;
     }
     
+    if (self.didAcceptAssignment) {
+        self.assignemntAcceptButtonTitle = ACTION_TITLE_TWO;
+    }
     
     [self configureOutlets];
     
@@ -790,8 +809,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     [self setDistance];
     
-    if (self.didAcceptAssignment) {
+    if (self.didAcceptAssignment && !self.userIsInRange) {
         [self hideAssignmentsMetaBar];
+    } else {
+        [self showAssignmentsMetaBar];
     }
 }
 
@@ -1597,44 +1618,49 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
         // error or response, user should be able to unaccept. at least visually
         
-        [self stopSpinner:self.spinner onButton:self.unacceptAssignmentButton color:[UIColor whiteColor]];
-        self.didAcceptAssignment = NO;
-        self.acceptedAssignment = nil;
-        self.assignmentIDs = nil;
-        self.assignmentIDs = [[NSMutableArray alloc] init];
-        self.defaultID = nil;
-        self.assignmentDidExpire = NO;
-        
-        [self.greenView removeFromSuperview];
-        [self.timer invalidate];
-        
-        [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
-        
-        [self removeAssignmentsFromMap];
-        [self removeAllOverlaysIncludingUser:NO];
-        [self addAnnotationsForAssignments];
-        
-        [self dismissAssignmentCard];
-        
-        if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
-            [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
-        }
-        
-        if (self.globalAssignmentsArray.count <= 1) {
-            [self showGlobalAssignmentsBar];
-        }
-        
-        
-        [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:10];
-        [self configureAnnotationsForMap];
-        
-        // should only come back up if assignment card is open
-        if (self.assignmentCardIsOpen) {
-            [self showAssignmentsMetaBar];
-        } else {
-            [self hideAssignmentsMetaBar];
-        }
+        [self configureUnacceptedAssignment];
+
     }];
+}
+
+-(void)configureUnacceptedAssignment {
+    [self stopSpinner:self.spinner onButton:self.unacceptAssignmentButton color:[UIColor whiteColor]];
+    self.didAcceptAssignment = NO;
+    self.acceptedAssignment = nil;
+    self.assignmentIDs = nil;
+    self.assignmentIDs = [[NSMutableArray alloc] init];
+    self.defaultID = nil;
+    self.assignmentDidExpire = NO;
+    
+    [self.greenView removeFromSuperview];
+    [self.timer invalidate];
+    
+    [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
+    
+    [self removeAssignmentsFromMap];
+    [self removeAllOverlaysIncludingUser:NO];
+    [self addAnnotationsForAssignments];
+    
+    [self dismissAssignmentCard];
+    
+    if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
+        [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
+    }
+    
+    if (self.globalAssignmentsArray.count <= 1) {
+        [self showGlobalAssignmentsBar];
+    }
+    
+    
+    [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:10];
+    [self configureAnnotationsForMap];
+    
+    // should only come back up if assignment card is open
+    if (self.assignmentCardIsOpen) {
+        [self showAssignmentsMetaBar];
+    } else {
+        [self hideAssignmentsMetaBar];
+    }
 }
 
 -(void)openCamera {
@@ -1720,7 +1746,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoGreenColor]];
     [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
-    [self showAssignmentsMetaBar];
+    
+    if (self.assignmentCardIsOpen) {
+        [self showAssignmentsMetaBar];
+    }
 }
 
 
