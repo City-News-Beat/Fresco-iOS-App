@@ -194,7 +194,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     CLLocation *location = [[CLLocation alloc] initWithLatitude:[lat floatValue] longitude:[lon floatValue]];
     [self locationUpdate:location];
-//    [self adjustRegion:location];
 }
 
 -(void)locationUpdate:(CLLocation *)location {
@@ -423,6 +422,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     if ([FRSLocator sharedLocator].currentLocation) {
         [self adjustMapRegionWithLocation:[FRSLocator sharedLocator].currentLocation];
+        self.mapView.camera.altitude /= 1.4;
     }
 }
 
@@ -1471,7 +1471,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                 FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
                 NSDictionary *dict = responseObject;
                 [assignment configureWithDictionary:dict];
-                self.currentAssignment = assignment;
                 [self configureAcceptedAssignment:assignment];
                 
                 return;
@@ -1515,6 +1514,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         return;
     }
     
+    self.currentAssignment = assignment;
     self.hasDefault = YES;
     self.defaultID = assignment.uid;
     
@@ -1560,6 +1560,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.greenView addSubview:navigationButton];
     
     [self updateUIForLocation];
+    
+    [self.mapView showAnnotations:self.mapView.annotations animated:YES];
+    [self dismissAssignmentCard];
 }
 
 
