@@ -502,10 +502,7 @@
 //            [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
             
             //}
-
-           
-
-            
+                       
         } break;
             
         default:

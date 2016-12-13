@@ -551,12 +551,14 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         self.currentAssignment = assignment;
         [self drawImages];
 
-        MKCoordinateRegion region = { {0.0, 0.0 }, { 0.0, 0.0 } };
-        region.center.latitude = [assignment.latitude doubleValue];
-        region.center.longitude = [assignment.longitude doubleValue];
-        region.span.longitudeDelta = 0.05f;
-        region.span.latitudeDelta = 0.05f;
-        [self.mapView setRegion:region animated:NO];
+        if (!self.didAcceptAssignment) {
+            MKCoordinateRegion region = { {0.0, 0.0 }, { 0.0, 0.0 } };
+            region.center.latitude = [assignment.latitude doubleValue];
+            region.center.longitude = [assignment.longitude doubleValue];
+            region.span.longitudeDelta = 0.05f;
+            region.span.latitudeDelta = 0.05f;
+            [self.mapView setRegion:region animated:NO];
+        }
         
         CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake([assignment.latitude doubleValue], [assignment.longitude doubleValue]);
         newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
