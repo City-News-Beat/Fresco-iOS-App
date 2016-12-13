@@ -31,7 +31,7 @@ static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
 static NSString * const awsSecretKey = @"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";
 
 // segment
-static NSString * const segmentWriteKey = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI";
+static NSString * const segmentWriteKey = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h";
 /* dev */
 //static NSString * const awsBucket = @"com.fresconews.v2.prod";
 //static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
