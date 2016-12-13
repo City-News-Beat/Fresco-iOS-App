@@ -155,7 +155,7 @@
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
         FRSUser *user = [[FRSAPIClient sharedClient] authenticatedUser];
         NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
-        NSString *userID = @"";
+        NSString *userID = Nil;
         
         if (user.uid && ![user.uid isEqual:[NSNull null]]) {
             userID = user.uid;
