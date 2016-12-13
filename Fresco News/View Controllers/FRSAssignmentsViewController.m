@@ -24,14 +24,13 @@
 
 @import MapKit;
 
-@interface FRSAssignmentsViewController () <MKMapViewDelegate, UIGestureRecognizerDelegate>
+@interface FRSAssignmentsViewController () <MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate>
 {
     NSMutableArray *dictionaryRepresentations;
     BOOL hasSnapped;
 }
 
 @property (nonatomic) BOOL isFetching;
-@property (nonatomic) BOOL isOriginalSpan;
 @property (nonatomic, retain) NSMutableArray *assignmentIDs;
 @property (strong, nonatomic) FRSMapCircle *userCircle;
 @property (strong, nonatomic) FRSLocationManager *locationManager;
@@ -245,19 +244,18 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.mapView.showsUserLocation = YES;
     [self.mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
     self.mapView.showsBuildings = NO;
-    self.isOriginalSpan = YES;
     [self.view addSubview:self.mapView];
 }
 
--(void)adjustRegion:(CLLocation*)location {
-    if (!self.mapShouldFollowUser || self.assignmentCardIsOpen) {
-        return;
-    }
-    
-    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, 1000, 1000);
-    MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:viewRegion];
-    [self.mapView setRegion:adjustedRegion animated:YES];
-}
+//-(void)adjustRegion:(CLLocation*)location {
+//    if (!self.mapShouldFollowUser || self.assignmentCardIsOpen) {
+//        return;
+//    }
+//    
+//    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, 1000, 1000);
+//    MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:viewRegion];
+//    [self.mapView setRegion:adjustedRegion animated:YES];
+//}
 
 -(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
     if (self.didAcceptAssignment) {
@@ -401,46 +399,29 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)adjustMapRegionWithLocation:(CLLocation *)location {
     
-    if (self.defaultID) {
-        
-        MKCoordinateSpan currentSpan = self.mapView.region.span;
-        
-        if (self.isOriginalSpan){
-            currentSpan = MKCoordinateSpanMake(0.03f, 0.03f);
-            self.isOriginalSpan = NO;
-        }
-        
-        MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([self.currentAssignment.latitude doubleValue], [self.currentAssignment.longitude doubleValue]), currentSpan);
-        [self.mapView setRegion:region animated:YES];
-
-        return;
-    }
     
-    //We want to preserve the span if the user modified it.
-    MKCoordinateSpan currentSpan = self.mapView.region.span;
-    
-    if (self.isOriginalSpan){
-        currentSpan = MKCoordinateSpanMake(0.03f, 0.03f);
-        self.isOriginalSpan = NO;
-    }
-    
+    MKCoordinateSpan currentSpan = MKCoordinateSpanMake(0.03f, 0.03f);
     MKCoordinateRegion region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude), currentSpan);
+
+    if (self.defaultID) {
+        region = MKCoordinateRegionMake(CLLocationCoordinate2DMake([self.currentAssignment.latitude doubleValue], [self.currentAssignment.longitude doubleValue]), currentSpan);
+    }
     
     [self.mapView setRegion:region animated:YES];
 }
 
 -(void)setInitialMapRegion {
     
+    // disable track if already tracking
+    if (self.mapShouldFollowUser) {
+        return;
+    }
+    
     if (self.assignmentCardIsOpen) {
         return;
     }
     
-    self.isOriginalSpan = YES;
-    
-    
-    
     if ([FRSLocator sharedLocator].currentLocation) {
-        
         [self adjustMapRegionWithLocation:[FRSLocator sharedLocator].currentLocation];
     }
 }
@@ -461,7 +442,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         }
         return;
     }
-    
     
     NSInteger count = 0;
     
@@ -1375,9 +1355,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)didDragMap:(UIGestureRecognizer*)gestureRecognizer {
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan){
-        self.mapShouldFollowUser = NO;
-    }
+    self.mapShouldFollowUser = NO;
 }
 
 #pragma mark - Global Assignments
@@ -1722,10 +1700,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.assignmentActionButton setTitle:ACTION_TITLE_TWO forState:UIControlStateNormal];
     [self showAssignmentsMetaBar];
 }
-
-
-
-
 
 
 

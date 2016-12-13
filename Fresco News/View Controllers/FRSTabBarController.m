@@ -473,7 +473,7 @@
                 
                 // used to delay map tracking until map region has been animated to user location
                 // avoid multiple map animation calls (causes minor zoom issues)
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     assignVC.mapShouldFollowUser = YES;
                 });
                 
