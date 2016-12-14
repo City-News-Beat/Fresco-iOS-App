@@ -11,10 +11,13 @@
 
 @implementation FRSTracker
 +(void)track:(NSString *)eventName parameters:(NSDictionary *)parameters {
+    [FRSTracker startTracking];
     [[SEGAnalytics sharedAnalytics] track:eventName
                                properties:parameters];
 }
 +(void)track:(NSString *)eventName {
+    
+    [FRSTracker startTracking];
     [[SEGAnalytics sharedAnalytics] track:eventName];
 }
 
