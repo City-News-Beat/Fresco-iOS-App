@@ -530,6 +530,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self setDefaultAssignment:assignment];
 }
 
+
+// used when coming in from another view controller and 
 -(void)setDefaultAssignment:(FRSAssignment *)assignment {
 
     if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
@@ -972,16 +974,23 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self unacceptAssignment];
-        [self removeAssignmentsFromMap];
-        [self removeAllOverlaysIncludingUser:NO];
-        [self addAnnotationsForAssignments];
-        [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:10];
-        [self configureAnnotationsForMap];
+        [self reloadAssignmentAnnotations];
     });
 }
 
+
+// removes and readds all assignment annotations
+-(void)reloadAssignmentAnnotations {
+    [self removeAssignmentsFromMap];
+    [self removeAllOverlaysIncludingUser:NO];
+    [self addAnnotationsForAssignments];
+    [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:10];
+    [self configureAnnotationsForMap];
+}
+
+
+// snaps camera to fit assignment annotation between top of assignment card and top of map
 -(void)snapToAnnotationView:(MKAnnotationView *)view {
-    
     CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake(view.annotation.coordinate.latitude, view.annotation.coordinate.longitude);
     newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
     [self.mapView setCenterCoordinate:newCenter animated:YES];
@@ -994,14 +1003,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
--(void)createAssignmentView{
-    
+// configures assignment card
+-(void)createAssignmentView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.multipleTouchEnabled = NO;
     [self.view addSubview:self.scrollView];
-    
     self.scrollView.showsVerticalScrollIndicator = NO;
-    
     self.dismissView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
     [self.scrollView addSubview:self.dismissView];
     
@@ -1026,7 +1033,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentTitleLabel.font = [UIFont notaBoldWithSize:24];
     self.assignmentTitleLabel.numberOfLines = 0;
     self.assignmentTitleLabel.text = self.assignmentTitle;
-//    [self.assignmentTitleLabel sizeToFit];
     self.assignmentTitleLabel.textColor = [UIColor whiteColor];
     self.assignmentTitleLabel.adjustsFontSizeToFitWidth = YES;
     
@@ -1042,7 +1048,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     [topContainer addSubview:self.assignmentTitleLabel];
     
-    //Configure bottom container
     self.assignmentBottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 44)];
     self.assignmentBottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.assignmentBottomBar];
@@ -1107,7 +1112,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height +1); //TODO: test with longer assignment captions
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height +1);
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"video-icon"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
@@ -1642,11 +1647,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
     
-    [self removeAssignmentsFromMap];
-    [self removeAllOverlaysIncludingUser:NO];
-    [self addAnnotationsForAssignments];
-    
     [self dismissAssignmentCard];
+    [self reloadAssignmentAnnotations];
     
     if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
         [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
@@ -1655,11 +1657,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (self.globalAssignmentsArray.count <= 1) {
         [self showGlobalAssignmentsBar];
     }
-    
-    
-    [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:10];
-    [self configureAnnotationsForMap];
-    
+
     // should only come back up if assignment card is open
     if (self.assignmentCardIsOpen) {
         [self showAssignmentsMetaBar];
@@ -1669,7 +1667,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)openCamera {
-    
     FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
     UINavigationController *navControl = [[UINavigationController alloc] init];
     navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
