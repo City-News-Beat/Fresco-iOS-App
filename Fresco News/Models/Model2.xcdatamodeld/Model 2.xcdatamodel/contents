@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11542" systemVersion="16A323" minimumToolsVersion="Xcode 7.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11758" systemVersion="16B2659" minimumToolsVersion="Xcode 7.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="FRSArticle" representedClassName="FRSArticle" syncable="YES">
         <attribute name="articleStringURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -67,6 +67,7 @@
         <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="mediaType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="meta" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
@@ -156,7 +157,7 @@
         <element name="FRSAssignment" positionX="-819" positionY="45" width="128" height="255"/>
         <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="405"/>
         <element name="FRSNotification" positionX="-839" positionY="-153" width="128" height="148"/>
-        <element name="FRSPost" positionX="-36" positionY="9" width="128" height="253"/>
+        <element name="FRSPost" positionX="-36" positionY="9" width="128" height="270"/>
         <element name="FRSStory" positionX="-72" positionY="285" width="128" height="253"/>
         <element name="FRSUpload" positionX="-990" positionY="-9" width="128" height="270"/>
         <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="645"/>
