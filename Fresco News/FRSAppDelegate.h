@@ -27,6 +27,7 @@
 #import <UserNotifications/UserNotifications.h>
 #import "FRSAPIClient.h"
 #import <UserNotifications/UserNotifications.h>
+#import <Adjust/Adjust.h>
 
 @interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, UNUserNotificationCenterDelegate>
 {

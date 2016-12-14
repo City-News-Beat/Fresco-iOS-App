@@ -49,6 +49,14 @@
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
+    
+    NSString *yourAppToken = @"bxk48kwhbx8g";
+    NSString *environment = ADJEnvironmentSandbox;
+    ADJConfig *adjustConfig = [ADJConfig configWithAppToken:yourAppToken
+                                                environment:environment];
+    
+    [Adjust appDidLaunch:adjustConfig];
+    
     [self startFabric]; // crashlytics first yall
     [self configureStartDate];
     [self clearUploadCache];

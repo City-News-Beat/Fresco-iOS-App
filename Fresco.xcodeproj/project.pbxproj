@@ -144,6 +144,8 @@
 		D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */; };
 		D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3D01CDE1EAE00E39701 /* Reachability.m */; };
 		D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */; };
+		D41186751E01C80100C0F60A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41186731E01C80000C0F60A /* AdSupport.framework */; };
+		D41186761E01C80100C0F60A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41186741E01C80100C0F60A /* iAd.framework */; };
 		D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */; };
 		D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D41365B11CA32DC0004FE848 /* FRSStoryDetailViewController.xib */; };
 		D418E2F71CCA97510003B080 /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E2F61CCA97510003B080 /* MagicalImportFunctions.m */; };
@@ -550,6 +552,8 @@
 		D40BD3D01CDE1EAE00E39701 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		D40FA3191CAAFB2100A4FE47 /* FRSUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserDefaults.h; sourceTree = "<group>"; };
 		D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserDefaults.m; sourceTree = "<group>"; };
+		D41186731E01C80000C0F60A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		D41186741E01C80100C0F60A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		D41365AF1CA32DC0004FE848 /* FRSStoryDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryDetailViewController.h; sourceTree = "<group>"; };
 		D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryDetailViewController.m; sourceTree = "<group>"; };
 		D41365B11CA32DC0004FE848 /* FRSStoryDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryDetailViewController.xib; sourceTree = "<group>"; };
@@ -756,6 +760,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D41186751E01C80100C0F60A /* AdSupport.framework in Frameworks */,
+				D41186761E01C80100C0F60A /* iAd.framework in Frameworks */,
 				D4F23AC91DC64BF000B0B6DF /* CoreTelephony.framework in Frameworks */,
 				D42A138F1D89A451008909E6 /* Mixpanel.framework in Frameworks */,
 				D4DBF1951CB468C90098BDC0 /* CoreMedia.framework in Frameworks */,
@@ -933,6 +939,8 @@
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D41186731E01C80000C0F60A /* AdSupport.framework */,
+				D41186741E01C80100C0F60A /* iAd.framework */,
 				D4F23AC81DC64BF000B0B6DF /* CoreTelephony.framework */,
 				D42A138E1D89A451008909E6 /* Mixpanel.framework */,
 				D418E3571CCC1DE50003B080 /* AFNetworking.framework */,
