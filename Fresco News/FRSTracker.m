@@ -24,7 +24,8 @@
 +(void)startTracking {
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:segmentWriteKey];
     configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
-    configuration.recordScreenViews = YES; // Enable this to record screen views automatically!
+    configuration.recordScreenViews = NO; // Enable this to record screen views automatically!
+    
     [SEGAnalytics setupWithConfiguration:configuration];
 }
 
