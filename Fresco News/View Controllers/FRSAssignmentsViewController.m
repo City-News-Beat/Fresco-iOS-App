@@ -972,6 +972,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self unacceptAssignment];
+        [self removeAssignmentsFromMap];
+        [self removeAllOverlaysIncludingUser:NO];
+        [self addAnnotationsForAssignments];
+        [self fetchAssignmentsNearLocation:[[FRSLocator sharedLocator] currentLocation] radius:10];
+        [self configureAnnotationsForMap];
     });
 }
 
@@ -1619,9 +1624,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
         // error or response, user should be able to unaccept. at least visually
-        
         [self configureUnacceptedAssignment];
-
     }];
 }
 
