@@ -20,4 +20,5 @@
 +(void)screen:(NSString *)screen;
 +(void)screen:(NSString *)screen parameters:(NSDictionary *)parameters;
 +(void)startTracking;
++(void)reset;
 @end

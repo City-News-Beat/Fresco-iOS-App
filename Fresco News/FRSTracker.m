@@ -38,4 +38,8 @@
                                 properties:parameters];
 }
 
++(void)reset {
+    [[SEGAnalytics sharedAnalytics] reset];
+}
+
 @end

@@ -341,6 +341,9 @@
 #pragma mark - Logout
 
 -(void)logoutWithPop:(BOOL)pop {
+    
+    [FRSTracker reset];
+    
     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"facebook-enabled"];
     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"twitter-enabled"];
     [[NSUserDefaults standardUserDefaults] synchronize];
