@@ -47,6 +47,8 @@
     [super viewWillAppear:animated];
     [self configureSpinner];
     
+    [FRSTracker screen:@"Identity"];
+    
     [self.navigationItem setTitle:@"IDENTIFICATION"];
     [self.tableView reloadData];
     

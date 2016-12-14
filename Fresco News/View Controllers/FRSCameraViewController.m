@@ -278,6 +278,8 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    [FRSTracker screen:@"Camera"];
+    
     self.isPresented = YES;
     self.didPush = NO;
     

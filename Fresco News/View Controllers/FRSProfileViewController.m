@@ -288,6 +288,8 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [FRSTracker screen:@"Profile"];
+    
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
     [self.navigationController.tabBarController.tabBar setHidden:FALSE];
     // Default tab bar in profile to visible

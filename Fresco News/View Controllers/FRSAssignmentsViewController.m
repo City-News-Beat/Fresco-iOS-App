@@ -161,6 +161,8 @@
     [super viewWillAppear:animated];
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
     
+    [FRSTracker screen:@"Assignments"];
+    
     self.isPresented = YES;
     
     CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;

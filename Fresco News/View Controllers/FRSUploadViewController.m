@@ -95,6 +95,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     [self configureAssignments]; //Tableview configures are called here
 
+    [FRSTracker screen:@"Submission"];
+    
     [self.galleryCollectionView reloadData];
     [self configurePageController];
     

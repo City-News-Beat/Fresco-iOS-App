@@ -195,6 +195,8 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.scrollView animated:NO];
     
+    [FRSTracker screen:@"Home"];
+    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     [self.tabBarController.tabBar setHidden:FALSE];
     

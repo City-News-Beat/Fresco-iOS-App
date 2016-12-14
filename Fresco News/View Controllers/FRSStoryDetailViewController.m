@@ -74,6 +74,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    [FRSTracker screen:@"Story Detail"];
+    
     [self setupTableView];
     if (self.story.caption != nil && ![self.story.caption isEqualToString:@""]) {
         [self configureCaptionHeader];

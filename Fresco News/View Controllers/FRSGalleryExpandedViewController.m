@@ -136,6 +136,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self register3DTouch];
+    
+    [FRSTracker screen:@"Gallery Detail"];
+    
     dateEntered = [NSDate date];
 }
 
