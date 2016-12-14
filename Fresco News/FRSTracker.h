@@ -17,5 +17,7 @@
 
 +(void)track:(NSString *)eventName parameters:(NSDictionary *)parameters;
 +(void)track:(NSString *)eventName;
++(void)screen:(NSString *)screen;
++(void)screen:(NSString *)screen parameters:(NSDictionary *)parameters;
 +(void)startTracking;
 @end

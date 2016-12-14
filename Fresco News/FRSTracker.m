@@ -29,4 +29,13 @@
     [SEGAnalytics setupWithConfiguration:configuration];
 }
 
++(void)screen:(NSString *)screen {
+    [FRSTracker screen:screen parameters:@{}];
+}
+
++(void)screen:(NSString *)screen parameters:(NSDictionary *)parameters {
+    [[SEGAnalytics sharedAnalytics] screen:screen
+                                properties:parameters];
+}
+
 @end
