@@ -1101,6 +1101,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
             }
             if(self.preselectedAssignment){
                 [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+            } else {
+                [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.assignmentsTableView.visibleCells.count -1 inSection:0]];
             }
         });
     }];
@@ -1111,8 +1113,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
     for (FRSAssignmentPickerTableViewCell *cell in [self.assignmentsTableView visibleCells]) {
         
         if ([cell.titleLabel.text isEqualToString:title]) {
-            NSIndexPath *indexPath = [self.assignmentsTableView indexPathForCell:cell];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSIndexPath *indexPath = [self.assignmentsTableView indexPathForCell:cell];            
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:indexPath];
             });
         }
