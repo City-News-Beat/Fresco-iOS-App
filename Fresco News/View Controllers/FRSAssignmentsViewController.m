@@ -81,6 +81,7 @@
 @property BOOL assignmentDidExpire;
 @property BOOL userIsInRange;
 @property BOOL shouldRefreshMap;
+@property BOOL isCheckingForAcceptedAssignment;
 
 @end
 
@@ -187,6 +188,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             [self configureUnacceptedAssignment];
         }
     }
+    
+    [self checkForAcceptedAssignment];
 }
 
 -(void)dealloc {
@@ -258,27 +261,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.view addSubview:self.mapView];
 }
 
-//-(void)adjustRegion:(CLLocation*)location {
-//    if (!self.mapShouldFollowUser || self.assignmentCardIsOpen) {
-//        return;
-//    }
-//    
-//    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, 1000, 1000);
-//    MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:viewRegion];
-//    [self.mapView setRegion:adjustedRegion animated:YES];
-//}
-
--(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
-    if (self.didAcceptAssignment) {
+-(void)checkForAcceptedAssignment {
+    if (self.isCheckingForAcceptedAssignment) {
         return;
     }
-    
-    if (self.isFetching) return;
-    
-    self.isFetching = YES;
-    
+    self.isCheckingForAcceptedAssignment = YES;
     [[FRSAPIClient sharedClient] getAcceptedAssignmentWithCompletion:^(id responseObject, NSError *error) {
-        
+        self.isCheckingForAcceptedAssignment = NO;
         if (responseObject) {
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
@@ -290,6 +279,18 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             [self configureAcceptedAssignment:assignment];
         }
     }];
+}
+
+-(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
+    if (self.didAcceptAssignment) {
+        return;
+    }
+    
+    if (self.isFetching) return;
+    
+    self.isFetching = YES;
+    
+    [self checkForAcceptedAssignment];
     
     [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
         NSArray *assignments = (NSArray *)responseObject[@"nearby"];
