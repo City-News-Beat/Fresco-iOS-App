@@ -58,6 +58,7 @@
 
 /* FRSAlertView */
 -(void)presentGenericError;
+-(void)presentNoConnectionError;
 -(void)checkStatusAndPresentPermissionsAlert:(id)delegate;
 
 /* MODERATION */

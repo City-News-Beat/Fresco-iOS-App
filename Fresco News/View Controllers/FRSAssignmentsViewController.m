@@ -1506,6 +1506,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             return;
         }
         
+        if (error.code == -1009) {
+            [self presentNoConnectionError];
+            return;
+        }
+        
         // 101 is unauthenticated (FRSAPIClient)
         if (error.code != 101) {
             [self presentGenericError];
