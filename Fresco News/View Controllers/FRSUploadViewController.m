@@ -1107,13 +1107,14 @@ static NSString * const cellIdentifier = @"assignment-cell";
 }
 
 -(void)selectAssignmentWithTitle:(NSString *)title {
-    
+ 
     for (FRSAssignmentPickerTableViewCell *cell in [self.assignmentsTableView visibleCells]) {
         
         if ([cell.titleLabel.text isEqualToString:title]) {
-            NSLog(@"SELECT CELL: %@", cell.titleLabel.text);
-        } else {
-            NSLog(@"SELECT CELL: No Assignment");
+            NSIndexPath *indexPath = [self.assignmentsTableView indexPathForCell:cell];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:indexPath];
+            });
         }
     }
 }
