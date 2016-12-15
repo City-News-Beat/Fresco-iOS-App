@@ -1443,12 +1443,15 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 -(void)showAssignmentsMetaBar {
     self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -44-49);
-    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+//    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    self.scrollView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
 }
 
 -(void)hideAssignmentsMetaBar {
     self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, self.assignmentBottomBar.frame.size.height);
-    [self.scrollView setContentOffset:CGPointMake(0, -44) animated:YES];
+//    [self.scrollView setContentOffset:CGPointMake(0, -44) animated:YES];
+    self.scrollView.frame = CGRectMake(0, 36, self.view.frame.size.width, self.view.frame.size.height);
+
 }
 
 -(void)globalAssignmentsSegue {
