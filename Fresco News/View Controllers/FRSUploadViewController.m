@@ -985,7 +985,8 @@ static NSString * const cellIdentifier = @"assignment-cell";
        // self.assignmentsArray = [[NSMutableArray alloc] init];
       //  self.assignmentsArray  = [assignments mutableCopy];
         self.globalAssignments = [globalAssignments copy];
-        
+        self.assignments = [assignments copy];
+
         self.isFetching = NO;
         
         if (!notFirstFetch) {
@@ -1058,6 +1059,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
             }
         }
         
+        
+        [self configureAssignmentsTableView];
+
         self.closestAssignmentIndex = closestIndex;
         
         //If there is a preselectedGlobalAssignment then change the index
@@ -1075,11 +1079,12 @@ static NSString * const cellIdentifier = @"assignment-cell";
             for(int i = 0; i < self.assignments.count; i++){
                 if([[self.assignments objectAtIndex:i] isEqual:self.preselectedAssignment]){
                     self.closestAssignmentIndex = i;
+                    NSString *assignmentTitle = [[self.assignments objectAtIndex:i] objectForKey:@"title"];
+                    [self selectAssignmentWithTitle:assignmentTitle];
                 }
             }
         }
         
-        [self configureAssignmentsTableView];
         [self configureGlobalAssignmentsDrawer];
         if(self.preselectedGlobalAssignment){
             [self toggleGlobalAssignmentsDrawer];
@@ -1099,6 +1104,18 @@ static NSString * const cellIdentifier = @"assignment-cell";
             }
         });
     }];
+}
+
+-(void)selectAssignmentWithTitle:(NSString *)title {
+    
+    for (FRSAssignmentPickerTableViewCell *cell in [self.assignmentsTableView visibleCells]) {
+        
+        if ([cell.titleLabel.text isEqualToString:title]) {
+            NSLog(@"SELECT CELL: %@", cell.titleLabel.text);
+        } else {
+            NSLog(@"SELECT CELL: No Assignment");
+        }
+    }
 }
 
 -(BOOL)assignmentExists:(NSString *)assignment {

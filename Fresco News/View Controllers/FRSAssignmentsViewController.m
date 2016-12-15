@@ -74,6 +74,7 @@
 @property (strong, nonatomic) FRSAssignment *acceptedAssignment;
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *spinner;
 @property (strong, nonatomic) NSTimer *timer;
+@property (strong, nonatomic) NSDictionary *acceptedAssignmentDictionary;
 
 @property BOOL didAcceptAssignment;
 @property BOOL assignmentCardIsOpen;
@@ -282,6 +283,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
             FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
             [assignment configureWithDictionary:responseObject];
+            self.acceptedAssignmentDictionary = assignment;
             self.assignmentID = assignment.uid;
             self.acceptedAssignment = assignment;
             self.currentAssignment = assignment;
@@ -338,6 +340,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                 // when a user is not accepting an assignment for example
                 self.currentAssignment = assignmentToAdd;
                 self.acceptedAssignment = assignmentToAdd;
+                
+                // pass dict to camera -> file picker -> upload (for preselecting)
+                self.acceptedAssignmentDictionary = dict;
             }
             
             [dictionaryRepresentations addObject:dict];
@@ -1491,6 +1496,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             [assignment configureWithDictionary:dict];
             [self configureAcceptedAssignment:assignment];
             
+            self.acceptedAssignmentDictionary = dict;
+            
             return;
         }
         
@@ -1519,7 +1526,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 -(void)openCamera {
-    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:self.acceptedAssignmentDictionary selectedGlobalAssignment:nil];
     UINavigationController *navControl = [[UINavigationController alloc] init];
     navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
     [navControl pushViewController:cam animated:NO];
@@ -1621,10 +1628,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self stopSpinner:self.spinner onButton:self.unacceptAssignmentButton color:[UIColor whiteColor]];
     self.didAcceptAssignment = NO;
     self.acceptedAssignment = nil;
+    self.acceptedAssignmentDictionary = nil;
     self.assignmentIDs = nil;
     self.assignmentIDs = [[NSMutableArray alloc] init];
     self.defaultID = nil;
     self.assignmentDidExpire = NO;
+    self.acceptedAssignmentDictionary = nil;
     
     [self.greenView removeFromSuperview];
     [self.timer invalidate];
