@@ -314,7 +314,7 @@
 }
 
 -(void)presentNoConnectionError {
-    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"It seems like you're not connected to the internet! Please make sure your phone is not in airplane mode and try again." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"It seems like you're not connected to the internet! Please make sure your phone is not in airplane mode and try again when you have a better connection." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
     [alert show];
 }
 
