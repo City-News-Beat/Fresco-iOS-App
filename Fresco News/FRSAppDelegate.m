@@ -158,6 +158,20 @@
     });
 }
 
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
+    if ([[userActivity activityType] isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+       // NSURL *url = [userActivity webpageURL];
+        
+        // url object contains your universal link content
+    }
+    
+    // Apply your logic to determine the return value of this method
+    return YES;
+    // or
+    // return NO;
+}
+
 -(void)startTracking {
     
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
