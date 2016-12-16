@@ -136,7 +136,7 @@
     if (entry) {
         exit = [NSDate date];
         NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
-        [FRSTracker track:storiesSession parameters:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
+        [FRSTracker track:storiesSession parameters:@{activityDuration:@(sessionLength), @"stories_scrolled_past":@(numberRead)}];
     }
 
     [self.navigationController setNavigationBarHidden:NO animated:NO];
