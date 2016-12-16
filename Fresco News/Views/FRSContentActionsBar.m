@@ -72,10 +72,13 @@
 }
 
 -(void)configureShareButton{
-    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 6 - 44, 1, 44, 42)];
+    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 6 - 44, 0, 44, 44)];
     [self.shareButton setImage:[UIImage imageNamed:@"share-icon-dark"] forState:UIControlStateNormal];
     [self addSubview:self.shareButton];
     [self.shareButton addTarget:self action:@selector(handleShareButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.shareButton.backgroundColor = [UIColor cyanColor];
+    self.shareButton.alpha = 0.5;
 }
 
 -(void)handleShareButtonTapped {
@@ -83,9 +86,13 @@
 }
 
 -(void)configureRepostSection{
+    
+    // currently the label will truncate if over 999.
+    // when we see likes/reposts reaching tripple digts we should rewrite with constraints
+    
     self.repostLabel = [[UILabel alloc] init];
     self.repostLabel.font = [UIFont notaBoldWithSize:15];
-    self.repostLabel.text = @"30";
+    self.repostLabel.text = @"999";
     self.repostLabel.textColor = [UIColor frescoMediumTextColor];
     
     if (self.repostButton.imageView.image == [UIImage imageNamed:@"repost-icon-green"]) {
@@ -94,7 +101,7 @@
     
     [self.repostLabel sizeToFit];
     
-    self.repostLabel.frame = CGRectMake(self.shareButton.frame.origin.x - 6 - self.repostLabel.frame.size.width, 0, self.repostLabel.frame.size.width, self.frame.size.height);
+    self.repostLabel.frame = CGRectMake(self.shareButton.frame.origin.x - self.repostLabel.frame.size.width, 0, self.repostLabel.frame.size.width, self.frame.size.height);
     [self addSubview:self.repostLabel];
     
     self.repostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.repostLabel.frame.origin.x - 36.5, 0, 36.5, self.frame.size.height)];
@@ -106,21 +113,33 @@
     [self.repostButton addTarget:self action:@selector(handleButtonSelected:)  forControlEvents:UIControlEventTouchDragEnter];
     [self.repostButton addTarget:self action:@selector(handleButtonDrag:)      forControlEvents:UIControlEventTouchDragExit];
     [self addSubview:self.repostButton];
+
+    
+    self.repostButton.backgroundColor = [UIColor greenColor];
+    self.repostButton.alpha = 0.5;
+    
+    self.repostLabel.backgroundColor = [UIColor blueColor];
+    self.repostButton.alpha = 0.5;
     
 }
 
 -(void)configureLikeSection{
     
+    // currently the label will truncate if over 999.
+    // when we see likes/reposts reaching tripple digts we should rewrite with constraints
+    
     self.likeLabel = [[UILabel alloc] init];
     self.likeLabel.textColor = [UIColor frescoMediumTextColor];
     self.likeLabel.font = [UIFont notaBoldWithSize:15];
+    self.likeLabel.text = @"999";
 
     if (self.likeButton.imageView.image == [UIImage imageNamed:@"like-heart-filled"]) {
         self.likeLabel.textColor = [UIColor frescoRedHeartColor];
     }
     
-    self.likeLabel.frame = CGRectMake(self.frame.size.width - (16 + self.shareButton.frame.size.width + 16 + self.repostLabel.frame.size.width + 6 + self.repostButton.frame.size.width), 0, 100, 44);
-
+    [self.likeLabel sizeToFit];
+    
+    self.likeLabel.frame = CGRectMake(self.frame.size.width - (16 + self.shareButton.frame.size.width + 12 + self.repostLabel.frame.size.width + self.repostButton.frame.size.width), 0, self.likeLabel.frame.size.width, self.frame.size.height);
     [self addSubview:self.likeLabel];
     
     self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeLabel.frame.origin.x - 36, 0, 36, self.frame.size.height)];
@@ -134,6 +153,14 @@
     [self.likeButton addTarget:self action:@selector(handleButtonSelected:)  forControlEvents:UIControlEventTouchDragEnter];
     [self.likeButton addTarget:self action:@selector(handleButtonDrag:)      forControlEvents:UIControlEventTouchDragExit];
     [self addSubview:self.likeButton];
+    
+    
+    self.likeLabel.backgroundColor = [UIColor orangeColor];
+    self.likeLabel.alpha = 0.5;
+    
+    self.likeButton.backgroundColor = [UIColor redColor];
+    self.likeButton.alpha = 0.5;
+
 }
 
 -(void)handleRepostTapped {
