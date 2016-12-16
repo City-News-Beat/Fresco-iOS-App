@@ -1478,7 +1478,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     NSDictionary *session = @{
                               @"activity_duration":@(timeInSession),
                               @"gallery_id":galleryID,
-                              @"scrolled_percent":@(percentageScrolled),
+                              @"scrolled_percent":@(percentageScrolled * 100),
                               @"author":authorID,
                               @"opened_from":_openedFrom
                             };
