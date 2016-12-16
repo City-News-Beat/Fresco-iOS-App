@@ -79,11 +79,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-<<<<<<< HEAD
-	<string>2</string>
-=======
 	<string>5</string>
->>>>>>> 3.1-analytics
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
