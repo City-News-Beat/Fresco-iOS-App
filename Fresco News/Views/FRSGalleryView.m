@@ -234,6 +234,10 @@
     });
 }
 
+-(void)handleLabelTapped:(FRSContentActionsBar *)actionBar {
+    
+}
+
 -(void)handleActionButtonTapped {
     // idk why dan made this method life is a mystery
     
@@ -277,6 +281,7 @@
         }];
     }
 }
+
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {
     /*if (![[FRSAPIClient sharedClient] authenticatedUser]) {

@@ -77,8 +77,8 @@
     [self addSubview:self.shareButton];
     [self.shareButton addTarget:self action:@selector(handleShareButtonTapped) forControlEvents:UIControlEventTouchUpInside];
     
-    self.shareButton.backgroundColor = [UIColor cyanColor];
-    self.shareButton.alpha = 0.5;
+//    self.shareButton.backgroundColor = [UIColor cyanColor];
+//    self.shareButton.alpha = 0.5;
 }
 
 -(void)handleShareButtonTapped {
@@ -94,6 +94,10 @@
     self.repostLabel.font = [UIFont notaBoldWithSize:15];
     self.repostLabel.text = @"999";
     self.repostLabel.textColor = [UIColor frescoMediumTextColor];
+    self.repostLabel.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleLabelTapped)];
+    [self.repostLabel addGestureRecognizer:tap];
     
     if (self.repostButton.imageView.image == [UIImage imageNamed:@"repost-icon-green"]) {
         self.repostLabel.textColor = [UIColor frescoGreenColor];
@@ -115,11 +119,10 @@
     [self addSubview:self.repostButton];
 
     
-    self.repostButton.backgroundColor = [UIColor greenColor];
-    self.repostButton.alpha = 0.5;
-    
-    self.repostLabel.backgroundColor = [UIColor blueColor];
-    self.repostButton.alpha = 0.5;
+//    self.repostButton.backgroundColor = [UIColor greenColor];
+//    self.repostButton.alpha = 0.5;
+//    self.repostLabel.backgroundColor = [UIColor blueColor];
+//    self.repostButton.alpha = 0.5;
     
 }
 
@@ -132,6 +135,10 @@
     self.likeLabel.textColor = [UIColor frescoMediumTextColor];
     self.likeLabel.font = [UIFont notaBoldWithSize:15];
     self.likeLabel.text = @"999";
+    self.likeLabel.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleLabelTapped)];
+    [self.likeLabel addGestureRecognizer:tap];
 
     if (self.likeButton.imageView.image == [UIImage imageNamed:@"like-heart-filled"]) {
         self.likeLabel.textColor = [UIColor frescoRedHeartColor];
@@ -155,12 +162,19 @@
     [self addSubview:self.likeButton];
     
     
-    self.likeLabel.backgroundColor = [UIColor orangeColor];
-    self.likeLabel.alpha = 0.5;
-    
-    self.likeButton.backgroundColor = [UIColor redColor];
-    self.likeButton.alpha = 0.5;
+//    self.likeLabel.backgroundColor = [UIColor orangeColor];
+//    self.likeLabel.alpha = 0.5;
+//    self.likeButton.backgroundColor = [UIColor redColor];
+//    self.likeButton.alpha = 0.5;
 
+}
+
+-(void)handleLabelTapped {
+    NSLog(@"Label tapped");
+    
+    if (self.delegate) {
+        [self.delegate handleLabelTapped:self];
+    }
 }
 
 -(void)handleRepostTapped {
