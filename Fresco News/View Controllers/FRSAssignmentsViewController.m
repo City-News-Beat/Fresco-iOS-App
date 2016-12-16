@@ -321,35 +321,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         
         FRSAssignment *defaultAssignment;
         
-<<<<<<< HEAD
-        for (NSDictionary *dict in assignments){
-            
-            FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
-            [assignmentToAdd configureWithDictionary:dict];
-            NSString *uid = assignmentToAdd.uid;
-            
-            if ([uid isEqualToString:self.defaultID]) {
-                defaultAssignment = assignmentToAdd;
-            }
-            
-            [mSerializedAssignments addObject:assignmentToAdd];
-            
-            if (!dictionaryRepresentations) {
-                dictionaryRepresentations = [[NSMutableArray alloc] init];
-            }
-            
-            if ([assignmentToAdd.accepted boolValue]) {
-                // set both current and accepted here to avoid adding multiple cases for each assignment
-                // when a user is not accepting an assignment for example
-                self.currentAssignment = assignmentToAdd;
-                self.acceptedAssignment = assignmentToAdd;
-                
-                // pass dict to camera -> file picker -> upload (for preselecting)
-                self.acceptedAssignmentDictionary = dict;
-            }
-            
-            [dictionaryRepresentations addObject:dict];
-=======
         if (assignments.count > 0) {
             for (NSDictionary *dict in assignments){
                 FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
@@ -374,7 +345,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             }
             
             self.assignments = [mSerializedAssignments copy];
->>>>>>> 3.1-bug-fixes
         }
        
         [self addAnnotationsForAssignments];
