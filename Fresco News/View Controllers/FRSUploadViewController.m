@@ -1160,9 +1160,20 @@ static NSString * const cellIdentifier = @"assignment-cell";
     
     [self dismissKeyboard];
     
-    [FRSTracker track:submissionsEvent];
-    [FRSTracker track:itemsInGallery parameters:@{@"count":@(self.content.count)}];
-        
+    NSInteger videosCounted = 0;
+    NSInteger photosCounted = 0;
+    
+    for (PHAsset *asset in self.content) {
+        if (asset.mediaType == PHAssetMediaTypeVideo) {
+            videosCounted++;
+        }
+        else {
+            photosCounted++;
+        }
+    }
+    
+    [FRSTracker track:submissionsEvent parameters:@{@"videos_submitted":@(videosCounted), @"photos_submitted":@(photosCounted)}];
+
     [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
 }
 
