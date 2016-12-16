@@ -821,7 +821,7 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     if (isLoadingUser) {
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , [UIScreen mainScreen].bounds.size.height)];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , [UIScreen mainScreen].bounds.size.height-64)];
     }
     else {
         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , self.view.frame.size.height-44)];
@@ -1145,7 +1145,7 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-    [FRSTracker track:@"Gallery Shared" parameters:@{@"content":content.firstObject}];
+    [FRSTracker track:galleryShared parameters:@{@"content":content.firstObject}];
 }
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
@@ -1171,7 +1171,7 @@
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
     
-    [FRSTracker track:@"Galleries opened from profile" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:galleryOpenedFromProfile parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
     
 }
 
@@ -1488,13 +1488,36 @@
     
     NSArray *visibleCells = [self.tableView visibleCells];
     
+    CGPoint currentOffset = scrollView.contentOffset;
+    NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+    
+    NSTimeInterval timeDiff = currentTime - lastOffsetCapture;
+    if(timeDiff > 0.1) {
+        CGFloat distance = currentOffset.y - lastScrollOffset.y;
+        //The multiply by 10, / 1000 isn't really necessary.......
+        CGFloat scrollSpeedNotAbs = (distance * 10) / 1000; //in pixels per millisecond
+        
+        CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
+        if (scrollSpeed > maxScrollVelocity) {
+            isScrollingFast = YES;
+            NSLog(@"Fast");
+        } else {
+            isScrollingFast = NO;
+            NSLog(@"Slow");
+        }
+        
+        lastScrollOffset = currentOffset;
+        lastOffsetCapture = currentTime;
+    }
+
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         BOOL taken = FALSE;
         
         for (FRSGalleryCell *cell in visibleCells) {
             if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
                 if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
-                    if (!taken) {
+                    if (!taken && !isScrollingFast) {
                         [cell play];
                         taken = TRUE;
                     }

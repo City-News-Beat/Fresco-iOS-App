@@ -38,16 +38,15 @@
     sinceStart *= -1;
     
     if (sinceStart >= (24 * 60 * 60)) {
-        NSTimeInterval secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
-        NSDate *correctDate = [date dateByAddingTimeInterval:secondsFromGMT];
+        NSDate *correctDate = date;
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setTimeZone:[NSTimeZone localTimeZone]];
         [formatter setDateFormat:@"hh:mm a, MMMM d"];
         return [[formatter stringFromDate:correctDate] stringByAppendingString:[FRSDateFormatter daySuffixForDate:date]];
     }
     
-    NSTimeInterval secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
-    NSDate *correctDate = [date dateByAddingTimeInterval:secondsFromGMT];
+    
+    NSDate *correctDate = date;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     [formatter setDateFormat:@"hh:mm a"];

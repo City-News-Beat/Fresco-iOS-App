@@ -20,6 +20,11 @@
     BOOL isReloading;
     BOOL isFinishedLikes;
     BOOL isFinishedUser;
+    
+    CGPoint lastScrollOffset;
+    NSTimeInterval lastOffsetCapture;
+    BOOL isScrollingFast;
+
 }
 
 -(void)resizeProfileContainer;

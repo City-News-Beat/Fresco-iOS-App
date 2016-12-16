@@ -57,7 +57,7 @@
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
-    if ([self isFirstRun]) {
+    if ([self isFirstRun] && !launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         [[FRSAPIClient sharedClient] logout];
     }
     
@@ -74,7 +74,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
-    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+    if ([[FRSAPIClient sharedClient] isAuthenticated] || launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
         FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
         
@@ -688,7 +688,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    
     const unsigned *tokenData = [deviceToken bytes];
     NSString *newDeviceToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
                                 ntohl(tokenData[0]), ntohl(tokenData[1]), ntohl(tokenData[2]),
@@ -696,7 +695,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                                 ntohl(tokenData[6]), ntohl(tokenData[7])];
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] == Nil)  {
-        [FRSTracker track:@"Notifications Enabled"];
+        [FRSTracker track:notificationsEnabled];
     }
     
     NSString *oldDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
@@ -704,11 +703,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:@"deviceToken"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    NSMutableDictionary *installationDigest = [[FRSAPIClient sharedClient] currentInstallation];
+    NSMutableDictionary *installationDigest = (NSMutableDictionary *)[[FRSAPIClient sharedClient] currentInstallation];
     
-    if (oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]]) {
+    if (oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]] && ![oldDeviceToken isEqualToString:newDeviceToken]) {
         [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
     }
+    
+    
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"installation":installationDigest} completion:^(id responseObject, NSError *error) {
         NSLog(@"Updated user installation");
@@ -786,7 +787,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
-    [FRSTracker track:@"Permissions notification disables"];
+    [FRSTracker track:notificationsDisabled];
 }
 
 

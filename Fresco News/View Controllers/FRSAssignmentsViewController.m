@@ -318,8 +318,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         if (self.globalAssignmentsArray.count >= 1) {
             [self showGlobalAssignmentsBar];
         }
+        
         FRSAssignment *defaultAssignment;
         
+<<<<<<< HEAD
         for (NSDictionary *dict in assignments){
             
             FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
@@ -347,9 +349,34 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             }
             
             [dictionaryRepresentations addObject:dict];
+=======
+        if (assignments.count > 0) {
+            for (NSDictionary *dict in assignments){
+                FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+                [assignmentToAdd configureWithDictionary:dict];
+                NSString *uid = assignmentToAdd.uid;
+                
+                if ([uid isEqualToString:self.defaultID]) {
+                    defaultAssignment = assignmentToAdd;
+                }
+                
+                if ([self assignmentExists:uid]) {
+                    continue;
+                }
+                
+                [mSerializedAssignments addObject:assignmentToAdd];
+                
+                if (!dictionaryRepresentations) {
+                    dictionaryRepresentations = [[NSMutableArray alloc] init];
+                }
+                
+                [dictionaryRepresentations addObject:dict];
+            }
+            
+            self.assignments = [mSerializedAssignments copy];
+>>>>>>> 3.1-bug-fixes
         }
-        
-        self.assignments = [mSerializedAssignments copy];
+       
         [self addAnnotationsForAssignments];
         
         self.isFetching = NO;

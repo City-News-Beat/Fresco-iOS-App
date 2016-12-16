@@ -209,7 +209,7 @@
 }
 
 -(void)dismissFailureView {
-    [FRSTracker track:@"Upload Cancel"];
+    [FRSTracker track:uploadCancel];
     NSLog(@"dismiss");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSDismissUpload" object:nil userInfo:@{@"type":@"dismiss"}];
 
@@ -219,7 +219,7 @@
 }
 
 -(void)retryUpload {
-    [FRSTracker track:@"Upload Retry"];
+    [FRSTracker track:uploadRetry];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSRetryUpload" object:nil userInfo:@{@"type":@"retry"}];
     
     [UIView animateWithDuration:.2 animations:^{
