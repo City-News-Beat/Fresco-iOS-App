@@ -1555,6 +1555,12 @@
         digest[@"lat"] = @(asset.location.coordinate.latitude);
         digest[@"lng"] = @(asset.location.coordinate.longitude);
         
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
+        
+        digest[@"created_at"] = [dateFormat stringFromDate:asset.creationDate];
+        
         if (asset.mediaType == PHAssetMediaTypeImage) {
             digest[@"contentType"] = @"image/jpeg";
             [self fetchFileSizeForImage:asset callback:^(NSInteger size, NSError *err) {
