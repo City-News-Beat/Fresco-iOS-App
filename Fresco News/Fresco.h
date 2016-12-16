@@ -313,7 +313,7 @@ static NSString * const newAssignmentNotification = @"user-dispatch-new-assignme
 static NSString * const galleryApprovedNotification = @"user-dispatch-content-verified";
 
 
-// MixPanel
+// Event Tracking [FRSTracker]
 static NSString * const gallerySession = @"Gallery session";
 static NSString * const galleryLiked = @"Gallery liked";
 static NSString * const galleryUnliked = @"Gallery unliked";
@@ -349,7 +349,6 @@ static NSString * const logoutEvent = @"Logouts";
 static NSString * const aggressivePan = @"Capture Agressive Pan";
 static NSString * const captureWobble = @"Capture Wobble";
 static NSString * const articleOpens = @"Article opens";
-
 static NSString * const photosEnabled = @"Permissions photos enables";
 static NSString * const photosDisabled = @"Permissions photos disables";
 static NSString * const videosInGallery = @"Submission videos in gallery";
@@ -359,12 +358,10 @@ static NSString * const migrationShown = @"Migration Shown";
 static NSString * const galleryOpenedFromHighlights = @"Gallery opened";
 static NSString * const galleryOpenedFromProfile = @"Gallery opened";
 static NSString * const galleryOpenedFromStories = @"Gallery opened";
-
 static NSString * const locationEnabled = @"Permissions location enables";
 static NSString * const locationDisabled = @"Permissions location disables";
 static NSString * const loginError = @"Login Error";
 static NSString * const registrationError = @"Registration Error";
-
 static NSString * const signupRadiusChange = @"Signup radius changes";
 static NSString * const submissionsEvent = @"Submissions";
 static NSString * const itemsInGallery = @"Submission item in gallery";
