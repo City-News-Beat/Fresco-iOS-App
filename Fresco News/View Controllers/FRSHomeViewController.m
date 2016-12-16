@@ -1035,4 +1035,10 @@
     }
 }
 
+#pragma mark - FRSGalleryViewDelegate
+
+-(void)segueToLikesAndRepostsViewController {
+    
+}
+
 @end

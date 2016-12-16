@@ -235,7 +235,7 @@
 }
 
 -(void)handleLabelTapped:(FRSContentActionsBar *)actionBar {
-    
+//    [self.delegate segueToLikesAndRepostsViewController];
 }
 
 -(void)handleActionButtonTapped {

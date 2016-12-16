@@ -1482,5 +1482,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [FRSTracker track:@"Gallery Session" parameters:session];
 }
 
+#pragma mark - FRSGalleryViewDelegate
+
+-(void)segueToLikesAndRepostsViewController {
+    
+}
+
 
 @end
