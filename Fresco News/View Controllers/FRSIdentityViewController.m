@@ -23,6 +23,7 @@
 @property (strong, nonnull) UITextField *cityField;
 @property (strong, nonnull) UITextField *stateField;
 @property (strong, nonnull) UITextField *zipField;
+@property (strong, nonnull) UITextField *socialField;
 @property (nonatomic, retain) UITextField *dateField;
 @property (strong, nonatomic) UIDatePicker *datePicker;
 @property (strong, nonatomic) UIButton *saveIDInfoButton;
@@ -71,10 +72,10 @@
         showsAddressArea = TRUE;
     }
 }
-            
+
 -(BOOL)isNameArea:(NSString *)field {
     if ([field isEqualToString:@"first_name"] || [field isEqualToString:@"last_name"] ||  [field isEqualToString:@"dob_month"] ||  [field isEqualToString:@"dob_day"] ||  [field isEqualToString:@"dob_year"]) {
-     
+        
         return TRUE;
     }
     
@@ -92,8 +93,7 @@
 
 
 -(BOOL)isSSNArea:(NSString *)field {
-    if ([field isEqualToString:@"ssn"]) {
-        
+    if ([field isEqualToString:@"pid_last4"]) {
         return TRUE;
     }
     
@@ -258,7 +258,7 @@
 
 -(void)configureAddressCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
-
+    
     switch (indexPath.row) {
         case 0:
             [cell configureEditableCellWithDefaultText:@"Address" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeDefault];
@@ -334,7 +334,7 @@
             _cityField.returnKeyType = UIReturnKeyNext;
             _stateField.returnKeyType = UIReturnKeyNext;
             _zipField.returnKeyType = UIReturnKeyDone;
-
+            
             
             break;
         case 4:
@@ -360,7 +360,7 @@
 -(void)configureNameCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
     
-
+    
     switch (indexPath.row) {
             
         case 0:
@@ -435,17 +435,30 @@
             _dateField.returnKeyType = UIReturnKeyDone;
             break;
     }
-
+    
 }
 
 -(void)configureSSNCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
+    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    
     switch (indexPath.row) {
         case 0:
-            [cell configureEditableCellWithDefaultText:@"Social Security number" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypePhonePad];
+            [cell configureEditableCellWithDefaultText:@"Last 4 Digits of Social Security Number" withTopSeperator:YES withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypePhonePad];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             //                    _addressField = cell.textField;
             //                    _addressField.autocapitalizationType = UITextAutocapitalizationTypeWords;
-            //                    [_addressField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            _socialField = cell.textField;
+            [_socialField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            
+            if ([authenticatedUser valueForKey:@"ssn"]) {
+                _socialField.text = [authenticatedUser valueForKey:@"ssn"];
+                _socialField.enabled = FALSE;
+                _socialField.textColor = [UIColor frescoLightTextColor];
+            }
+            
+            cell.textField.delegate = self;
+            cell.textField.tag = 4;
+            
             break;
         case 1:
             [cell configureCellWithRightAlignedButtonTitle:@"SAVE ID INFO" withWidth:143 withColor:[UIColor frescoLightTextColor]];
@@ -456,7 +469,7 @@
         default:
             break;
     }
-
+    
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -471,7 +484,7 @@
             else if (showsSocialSecurityArea) {
                 [self configureSSNCell:cell forIndexPath:indexPath];
             }
-        break;
+            break;
             
         case 1:
             
@@ -485,15 +498,15 @@
             else if (showsSocialSecurityArea) {
                 [self configureSSNCell:cell forIndexPath:indexPath];
             }
-
-        break;
+            
+            break;
         case 3:
             [cell configureEmptyCellSpace:NO];
             break;
         case 4:
             [self configureSSNCell:cell forIndexPath:indexPath];
             break;
-
+            
         default:
             break;
     }
@@ -522,17 +535,18 @@
 -(void)textFieldDidChange:(UITextField *)textField{
     BOOL enableSaveButton = true;
     
-    NSArray *mandatoryTextFieldArray = [[NSArray alloc] initWithObjects:_firstNameField,_lastNameField, _addressField, _cityField, _stateField, _zipField, _dateField, nil];
+    NSArray *mandatoryTextFieldArray = [[NSArray alloc] initWithObjects:_firstNameField,_lastNameField, _addressField, _cityField, _stateField, _zipField, _dateField, _socialField, nil];
     for(UITextField *textField in mandatoryTextFieldArray){
-        if(textField.text.length == 0 || [textField.text isEqualToString:textField.placeholder]){
+        if((textField.text.length == 0 || [textField.text isEqualToString:@""]) && textField.enabled){
             enableSaveButton = false;
         }
     }
+    
     if(enableSaveButton){
         self.saveIDInfoButton.userInteractionEnabled = true;
         self.saveIDInfoButton.enabled = true;
         [self.saveIDInfoButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        self.saveIDInfoButton.userInteractionEnabled = NO;
+        self.saveIDInfoButton.userInteractionEnabled = TRUE;
     }else{
         self.saveIDInfoButton.userInteractionEnabled = false;
         self.saveIDInfoButton.enabled = false;
@@ -542,7 +556,7 @@
 }
 
 -(void)saveIDInfo{
-   // NSString *country = @"US";//TODO BEWARE THIS IS HARDCODED!!!
+    // NSString *country = @"US";//TODO BEWARE THIS IS HARDCODED!!!
     
     [self startSpinner:self.loadingView onButton:self.saveIDInfoButton];
     
@@ -564,11 +578,11 @@
     }
     if (_stateField.enabled && ![_stateField.text isEqualToString:@""]) {
         [addressInfo setObject:_stateField.text forKey:@"address_state"];
-
+        
     }
     if (_zipField.enabled && ![_zipField.text isEqualToString:@""]) {
         [addressInfo setObject:_zipField.text forKey:@"address_zip"];
-
+        
     }
     if (_dateField.enabled && ![_dateField.text isEqualToString:@""]) {
         [addressInfo setObject:[NSNumber numberWithInteger:[components day]] forKey:@"dob_day"];
@@ -577,12 +591,17 @@
     }
     if (_firstNameField.enabled && ![_firstNameField.text isEqualToString:@""]) {
         [addressInfo setObject:_firstNameField.text forKey:@"first_name"];
-
+        
     }
     if (_lastNameField.enabled && ![_lastNameField.text isEqualToString:@""]) {
         [addressInfo setObject:_lastNameField.text forKey:@"last_name"];
-
+        
     }
+    
+    if (_socialField.enabled && ![_socialField.text isEqualToString:@""]) {
+        [addressInfo setObject:_socialField.text forKey:@"pid_last4"];
+    }
+    
     
     self.savingInfo = true;
     [[FRSAPIClient sharedClient] updateIdentityWithDigestion:addressInfo completion:^(id responseObject, NSError *error) {
@@ -613,7 +632,7 @@
     self.saveIDInfoButton.userInteractionEnabled = true;
     self.saveIDInfoButton.enabled = true;
     [self.saveIDInfoButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-
+    
 }
 
 
@@ -643,7 +662,7 @@
     FRSTableViewCell *nextCell = (FRSTableViewCell *)[self.tableView cellForRowAtIndexPath:nextIndexPath];
     
     [nextCell.textField becomeFirstResponder];
-
+    
     if (textField == _lastNameField) {
         [textField resignFirstResponder];
         [self startDateSelected:self.datePicker];

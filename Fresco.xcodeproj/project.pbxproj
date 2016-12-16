@@ -163,7 +163,7 @@
 		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D433E5621DF1D574007440EC /* FRSNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D433E5601DF1D574007440EC /* FRSNotificationHandler.m */; };
 		D433E5671DF1D6A5007440EC /* Model2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D433E5641DF1D6A5007440EC /* Model2.xcdatamodeld */; };
-		D433E56E1DF1DA9E007440EC /* Model2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D433E56A1DF1DA9E007440EC /* Model2.xcdatamodeld */; };
+		D433E5701DF1E2A6007440EC /* Model.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = D433E56F1DF1E2A6007440EC /* Model.xcdatamodel */; };
 		D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D43AA8BB1DCA29DA0002DF00 /* FRSWobbleView.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
@@ -1278,6 +1278,7 @@
 		6501D56E1C249612001F54EF /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				D433E56F1DF1E2A6007440EC /* Model.xcdatamodel */,
 				D4F91A4D1C8B6ECA0078BF15 /* FRSCoreData.h */,
 				D433E56A1DF1DA9E007440EC /* Model2.xcdatamodeld */,
 				D4B35F5D1CD1B51A00F5C8A8 /* FRSUpload */,
@@ -2727,6 +2728,7 @@
 				D453CC791CCA80850091A004 /* MagicalRecord+Actions.m in Sources */,
 				D4B35F5C1CD1B51400F5C8A8 /* FRSUpload.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
+				D433E5701DF1E2A6007440EC /* Model.xcdatamodel in Sources */,
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
 				075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */,
 				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,

@@ -1150,7 +1150,7 @@
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
-    FRSGallery *gallery = [[FRSGallery alloc] init];
+    FRSGallery *gallery = Nil;
     
     if (self.likesButton.alpha == 1) {
         gallery = self.likes[notification.row];
@@ -1160,6 +1160,8 @@
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
+    vc.openedFrom = @"Profile";
+    
     [super showNavBarForScrollView:self.tableView animated:NO];
     
     self.navigationItem.title = @"";
@@ -1836,13 +1838,5 @@
         }
     }];
 }
-
-
-
-
-
-
-
-
 
 @end

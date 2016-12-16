@@ -682,6 +682,8 @@
 }
 
 -(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    [FRSTracker track:@"Gallery Disliked" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+
     NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -1100,6 +1102,8 @@
         return;
     }
     
+    [FRSTracker track:@"Gallery Liked" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    
     NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -1155,6 +1159,9 @@
         [self unrepostGallery:gallery completion:completion];
         return;
     }
+    
+    [FRSTracker track:@"Gallery Reposted" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
     
@@ -1187,6 +1194,7 @@
 
 -(void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
+    [FRSTracker track:@"Gallery Unreposted" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
 
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -1248,6 +1256,26 @@
         completion(responseObject, error);
     }];
 }
+
+
+-(void)getFollowersForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:followersEndpoint, user.uid];
+    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, lastUser.uid];
+    
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)getFollowingForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:followingEndpoint, user.uid];
+    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, lastUser.uid];
+    
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 
 -(void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:followUserEndpoint, userID];

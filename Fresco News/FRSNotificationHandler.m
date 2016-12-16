@@ -285,7 +285,7 @@ static BOOL isDeeplinking;
     
     FRSGalleryExpandedViewController *detailVC = [[FRSGalleryExpandedViewController alloc] init];
     detailVC.shouldHaveBackButton = YES;
-    
+    detailVC.openedFrom = @"Push";
     
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
     
