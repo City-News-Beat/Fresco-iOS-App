@@ -332,7 +332,6 @@
         if (twitterSession.authToken && twitterSession.authTokenSecret) {
             NSDictionary *twitterDigestion = @{@"token":twitterSession.authToken, @"secret": twitterSession.authTokenSecret};
             [socialDigestion setObject:twitterDigestion forKey:@"twitter"];
-            [FRSTracker track:signupsWithTwitter];
         }
     }
     
@@ -341,7 +340,6 @@
         if (facebookToken.tokenString) {
             NSDictionary *facebookDigestion = @{@"token":facebookToken.tokenString};
             [socialDigestion setObject:facebookDigestion forKey:@"facebook"];
-            [FRSTracker track:signupsWithFacebook];
         }
     }
     
