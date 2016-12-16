@@ -348,6 +348,7 @@ static NSString * const microphoneDisabled = @"Permissions microphone disables";
 static NSString * const logoutEvent = @"Logouts";
 static NSString * const aggressivePan = @"Capture Agressive Pan";
 static NSString * const captureWobble = @"Capture Wobble";
+static NSString * const articleOpens = @"Article opens";
 
 static NSString * const photosEnabled = @"Permissions photos enables";
 static NSString * const photosDisabled = @"Permissions photos disables";

@@ -1042,6 +1042,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             FRSArticle *article = self.orderedArticles[indexPath.row];
             if (article.articleStringURL) {
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:article.articleStringURL]];
+                [FRSTracker track:articleOpens parameters:@{@"article_url":article.articleStringURL, @"article_id":article.uid}];
             }
         }
     }
@@ -1206,7 +1207,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit {
     
     NSURL *url = [NSURL URLWithString:viewControllerToCommit.title];
+
     if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [FRSTracker track:articleOpens parameters:@{@"article_url":viewControllerToCommit.title}];
         [[UIApplication sharedApplication] openURL:url];
     }
 }
