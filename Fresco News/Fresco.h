@@ -315,10 +315,10 @@ static NSString * const galleryApprovedNotification = @"user-dispatch-content-ve
 
 // MixPanel
 static NSString * const gallerySession = @"Gallery session";
-static NSString * const galleryLiked = @"Gallery Liked";
-static NSString * const galleryUnliked = @"Gallery Unliked";
-static NSString * const galleryReposted = @"Gallery Reposted";
-static NSString * const galleryUnreposted = @"Gallery Unreposted";
+static NSString * const galleryLiked = @"Gallery liked";
+static NSString * const galleryUnliked = @"Gallery unliked";
+static NSString * const galleryReposted = @"Gallery reposted";
+static NSString * const galleryUnreposted = @"Gallery unreposted";
 static NSString * const cameraSession = @"Camera session";
 static NSString * const cameraSessionPhotoCount = @"Camera session photo count";
 static NSString * const cameraSessionVideoCount = @"Camera session video count";
@@ -355,9 +355,9 @@ static NSString * const videosInGallery = @"Submission videos in gallery";
 static NSString * const photosInGallery = @"Submission photos in gallery";
 static NSString * const sharedFromHighlights = @"Galleries shared from highlights";
 static NSString * const migrationShown = @"Migration Shown";
-static NSString * const galleryOpenedFromHighlights = @"Galleries opened from highlights";
-static NSString * const galleryOpenedFromProfile = @"Galleries opened from profile";
-static NSString * const galleryOpenedFromStories = @"Galleries opened from stories";
+static NSString * const galleryOpenedFromHighlights = @"Gallery opened";
+static NSString * const galleryOpenedFromProfile = @"Gallery opened";
+static NSString * const galleryOpenedFromStories = @"Gallery opened";
 
 static NSString * const locationEnabled = @"Permissions location enables";
 static NSString * const locationDisabled = @"Permissions location disables";

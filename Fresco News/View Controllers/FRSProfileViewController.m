@@ -1147,7 +1147,9 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-    [FRSTracker track:galleryShared parameters:@{@"content":content.firstObject}];
+    NSString *url = content[0];
+    url = [[url componentsSeparatedByString:@"/"] lastObject];
+    [FRSTracker track:galleryShared parameters:@{@"gallery_id":url, @"shared_from":@"profile"}];
 }
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
@@ -1173,7 +1175,7 @@
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
     
-    [FRSTracker track:galleryOpenedFromProfile parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:galleryOpenedFromProfile parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @"", @"opened_from":@"profile"}];
     
 }
 

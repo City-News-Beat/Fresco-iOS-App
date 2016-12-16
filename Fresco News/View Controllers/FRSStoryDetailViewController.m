@@ -35,7 +35,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
     
-    [FRSTracker track:galleryOpenedFromStories parameters:@{@"story_id":(self.story.uid != Nil) ? self.story.uid : @""}];
+    [FRSTracker track:galleryOpenedFromStories parameters:@{@"story_id":(self.story.uid != Nil) ? self.story.uid : @"", @"opened_from":@"stories"}];
 
 }
 
@@ -309,7 +309,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-        [FRSTracker track:galleryShared parameters:@{@"story_id":(self.story.uid != Nil) ? self.story.uid : @""}];
+    NSString *url = content[0];
+    url = [[url componentsSeparatedByString:@"/"] lastObject];
+    [FRSTracker track:galleryShared parameters:@{@"gallery_id":url, @"shared_from":@"story"}];
 }
 
 -(void)reloadData {
