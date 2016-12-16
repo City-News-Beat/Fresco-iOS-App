@@ -236,7 +236,7 @@
     if (entry) {
         exit = [NSDate date];
         NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
-        [FRSTracker track:highlightsSession parameters:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
+        [FRSTracker track:highlightsSession parameters:@{activityDuration:@(sessionLength), @"galleries_scrolled_past":@(numberRead)}];
     }
     
     [self removeStatusBarNotification];
