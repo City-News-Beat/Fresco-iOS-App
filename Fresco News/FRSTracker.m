@@ -30,10 +30,12 @@
 }
 
 +(void)screen:(NSString *)screen {
+    [FRSTracker startTracking];
     [FRSTracker screen:screen parameters:@{}];
 }
 
 +(void)screen:(NSString *)screen parameters:(NSDictionary *)parameters {
+    [FRSTracker startTracking];
     [[SEGAnalytics sharedAnalytics] screen:screen
                                 properties:parameters];
 }
