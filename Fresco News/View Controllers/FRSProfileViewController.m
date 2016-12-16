@@ -360,7 +360,7 @@
     
     galleriesScrolledPast = currentProfileCount + currentLikesCount;
     
-    NSInteger secondsInProfile = [dateOpened timeIntervalSinceNow];
+    NSInteger secondsInProfile = -1 * [dateOpened timeIntervalSinceNow];
     
     [FRSTracker track:profileSession parameters:@{@"activity_duration":@(secondsInProfile), @"user_id":userID, @"galleries_scrolled_past":@(galleriesScrolledPast)}];
 }
