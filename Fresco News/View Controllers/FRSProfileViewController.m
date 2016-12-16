@@ -288,6 +288,7 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    dateOpened = [NSDate date];
     [FRSTracker screen:@"Profile"];
     
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
@@ -342,11 +343,26 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self removeStatusBarNotification];
+    [self trackSession];
     
     if (!self.didFollow) {
         [self shouldRefresh:NO]; //Reset the bool. Used when the current user is browsing profiles in search, and when following/unfollowing in followersVC
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
+}
+
+-(void)trackSession {
+    NSString *userID = @"";
+    
+    if (self.representedUser.uid && [[self.representedUser.uid class] isSubclassOfClass:[NSString class]]) {
+        userID = self.representedUser.uid;
+    }
+    
+    galleriesScrolledPast = currentProfileCount + currentLikesCount;
+    
+    NSInteger secondsInProfile = [dateOpened timeIntervalSinceNow];
+    
+    [FRSTracker track:profileSession parameters:@{@"activity_duration":@(secondsInProfile), @"user_id":userID, @"galleries_scrolled_past":@(galleriesScrolledPast)}];
 }
 
 
@@ -1267,6 +1283,17 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    
+    if (self.currentFeed == self.likes) {
+        if (indexPath.row > currentLikesCount) {
+            currentLikesCount = indexPath.row;
+        }
+    }
+    else {
+        if (indexPath.row > currentProfileCount) {
+            currentProfileCount = indexPath.row;
+        }
+    }
     UITableViewCell *cell;
     if (indexPath.section == 0){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];
