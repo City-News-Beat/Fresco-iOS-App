@@ -43,7 +43,7 @@
 -(NSArray *)sorted {
     NSArray *sorted;
     
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:YES];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
     sorted=[self.posts sortedArrayUsingDescriptors:@[sort]];
 
     return sorted;
@@ -179,20 +179,23 @@
 }
 
 -(void)addPostsWithArray:(NSArray *)posts{
-        
+    
+    int i = 0;
     for (NSDictionary *dict in posts){
         if (save) {
             FRSPost *post = [NSEntityDescription insertNewObjectForEntityForName:@"FRSPost" inManagedObjectContext:self.currentContext];
+            [post setValue:@(i) forKey:@"index"];
             [post configureWithDictionary:dict context:_currentContext];
             [self addPostsObject:post];
         }
         else {
             NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSPost" inManagedObjectContext:self.currentContext];
             FRSPost *post = (FRSPost *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
-            
+            [post setValue:@(i) forKey:@"index"];
             [post configureWithDictionary:dict context:self.currentContext save:FALSE];
             [self addPostsObject:post];
         }
+        i++;
     }
 }
 

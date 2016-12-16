@@ -79,7 +79,7 @@
     self.clipsToBounds = NO;
     self.gallery = gallery;
     self.orderedPosts = [gallery.posts allObjects];
-    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
+    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE]]];
     
     self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight]);
     self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
