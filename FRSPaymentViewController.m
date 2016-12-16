@@ -33,6 +33,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [FRSTracker screen:@"Payment Method"];
     
     [self reloadPayments];
 }

@@ -24,7 +24,12 @@
     CGPoint lastScrollOffset;
     NSTimeInterval lastOffsetCapture;
     BOOL isScrollingFast;
-
+    NSInteger galleriesScrolledPast;
+    
+    NSInteger currentProfileCount;
+    NSInteger currentLikesCount;
+    
+    NSDate *dateOpened;
 }
 
 -(void)resizeProfileContainer;

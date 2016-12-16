@@ -195,6 +195,8 @@
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.scrollView animated:NO];
     
+    [FRSTracker screen:@"Home"];
+    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     [self.tabBarController.tabBar setHidden:FALSE];
     
@@ -234,7 +236,7 @@
     if (entry) {
         exit = [NSDate date];
         NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
-        [FRSTracker track:highlightsSession parameters:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
+        [FRSTracker track:highlightsSession parameters:@{activityDuration:@(sessionLength), @"galleries_scrolled_past":@(numberRead)}];
     }
     
     [self removeStatusBarNotification];
@@ -818,7 +820,9 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-    [FRSTracker track:galleryShared parameters:@{@"content":content.firstObject}];
+    NSString *url = content[0];
+    url = [[url componentsSeparatedByString:@"/"] lastObject];
+    [FRSTracker track:galleryShared parameters:@{@"gallery_id":url, @"shared_from":@"highlights"}];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -850,7 +854,7 @@
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
     FRSGallery *gallery = self.dataSource[notification.row];
-    [FRSTracker track:galleryOpenedFromHighlights parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:galleryOpenedFromHighlights parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @"", @"opened_from":@"highlights"}];
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;

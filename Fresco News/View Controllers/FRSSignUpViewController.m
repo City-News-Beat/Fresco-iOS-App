@@ -1188,6 +1188,16 @@
 
     
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
+        BOOL facebookSignup = FALSE;
+        BOOL twitterSignup = FALSE;
+        
+        if ([self.currentSocialDigest objectForKey:@"twitter"]) {
+            twitterSignup = true;
+        }
+        if ([self.currentSocialDigest objectForKey:@"facebook"]) {
+            facebookSignup = true;
+        }
+        
         NSLog(@"%@ %@", error, responseObject);
         
         NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];

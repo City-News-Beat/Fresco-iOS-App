@@ -67,9 +67,23 @@
 				<string>tl-e94f4bb3</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.fresconews.Fresco</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fresco</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
+<<<<<<< HEAD
 	<string>2</string>
+=======
+	<string>5</string>
+>>>>>>> 3.1-analytics
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>

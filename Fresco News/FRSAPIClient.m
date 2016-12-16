@@ -332,7 +332,6 @@
         if (twitterSession.authToken && twitterSession.authTokenSecret) {
             NSDictionary *twitterDigestion = @{@"token":twitterSession.authToken, @"secret": twitterSession.authTokenSecret};
             [socialDigestion setObject:twitterDigestion forKey:@"twitter"];
-            [FRSTracker track:signupsWithTwitter];
         }
     }
     
@@ -341,7 +340,6 @@
         if (facebookToken.tokenString) {
             NSDictionary *facebookDigestion = @{@"token":facebookToken.tokenString};
             [socialDigestion setObject:facebookDigestion forKey:@"facebook"];
-            [FRSTracker track:signupsWithFacebook];
         }
     }
     
@@ -458,26 +456,27 @@
         }
         
         // set up FRSUser object with this info, set authenticated to true
-        
-        NSString *userID = responseObject[@"id"];
+        NSString *userID = Nil;
+
+        userID = responseObject[@"id"];
         NSString *email = responseObject[@"email"];
         NSString *name = responseObject[@"full_name"];
-        
-        if (userID != Nil && ![userID isEqual:[NSNull null]]) {
-            [[Mixpanel sharedInstance] registerSuperProperties:@{@"fresco_id": userID}];
-        }
-        if (email != Nil && ![email isEqual:[NSNull null]]) {
-            [[Mixpanel sharedInstance] registerSuperProperties:@{@"email": email}];
-        }
-        if (name != Nil && ![name isEqual:[NSNull null]]) {
-            [[Mixpanel sharedInstance] registerSuperProperties:@{@"name": name}];
-        }
+        NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
+    
         if (userID && ![userID isEqual:[NSNull null]]) {
-            Mixpanel *mixpanel = [Mixpanel sharedInstance];
-            [mixpanel createAlias:userID forDistinctID:mixpanel.distinctId];
-            [mixpanel identify:userID];
+            userID = userID;
         }
         
+        if (name && ![name isEqual:[NSNull null]]) {
+            identityDictionary[@"name"] = name;
+        }
+        
+        if (email && ![email isEqual:[NSNull null]]) {
+            identityDictionary[@"email"] = email;
+        }
+        
+        [[SEGAnalytics sharedAnalytics] identify:userID
+                                          traits:identityDictionary];
         [FRSTracker track:loginEvent];
     }];
 }
@@ -1559,6 +1558,12 @@
         digest[@"address"] = responseObject;
         digest[@"lat"] = @(asset.location.coordinate.latitude);
         digest[@"lng"] = @(asset.location.coordinate.longitude);
+        
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
+        
+        digest[@"created_at"] = [dateFormat stringFromDate:asset.creationDate];
         
         if (asset.mediaType == PHAssetMediaTypeImage) {
             digest[@"contentType"] = @"image/jpeg";

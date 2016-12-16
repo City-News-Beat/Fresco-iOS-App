@@ -49,6 +49,14 @@
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
+    
+    NSString *yourAppToken = @"bxk48kwhbx8g";
+    NSString *environment = ADJEnvironmentSandbox;
+    ADJConfig *adjustConfig = [ADJConfig configWithAppToken:yourAppToken
+                                                environment:environment];
+    
+    [Adjust appDidLaunch:adjustConfig];
+    
     [self startFabric]; // crashlytics first yall
     [self configureStartDate];
     [self clearUploadCache];
@@ -61,7 +69,6 @@
         [[FRSAPIClient sharedClient] logout];
     }
     
-    [self startMixpanel];
     [self configureWindow];
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
     [self persistentStoreCoordinator];
@@ -115,8 +122,12 @@
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     [[FRSUploadManager sharedUploader] checkCachedUploads];
     
+    [FRSTracker startTracking];
+    [self startTracking];
+
     return YES;
 }
+
 
 -(void)configureStartDate {
     if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate] == nil) {
@@ -147,23 +158,28 @@
     });
 }
 
--(void)startMixpanel {
-    [Mixpanel sharedInstanceWithToken:mixPanelToken];
+-(void)startTracking {
     
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-        [[Mixpanel sharedInstance] identify:[[FRSAPIClient sharedClient] authenticatedUser].uid];
         FRSUser *user = [[FRSAPIClient sharedClient] authenticatedUser];
+        NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
+        NSString *userID = Nil;
         
         if (user.uid && ![user.uid isEqual:[NSNull null]]) {
-            [[[Mixpanel sharedInstance] people] set:@{@"fresco_id":user.uid}];
+            userID = user.uid;
         }
         
         if (user.firstName && ![user.firstName isEqual:[NSNull null]]) {
-            [[[Mixpanel sharedInstance] people] set:@{@"$name":user.firstName}];
+            identityDictionary[@"name"] = user.firstName;
         }
-    }
-    else {
-        [[Mixpanel sharedInstance] identify:[Mixpanel sharedInstance].distinctId];
+        
+        if (user.email && ![user.email isEqual:[NSNull null]]) {
+            identityDictionary[@"email"] = user.email;
+        }
+        
+        [[SEGAnalytics sharedAnalytics] identify:userID
+                                          traits:identityDictionary];
+
     }
 }
 

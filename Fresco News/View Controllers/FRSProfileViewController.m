@@ -288,6 +288,9 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    dateOpened = [NSDate date];
+    [FRSTracker screen:@"Profile"];
+    
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
     [self.navigationController.tabBarController.tabBar setHidden:FALSE];
     // Default tab bar in profile to visible
@@ -340,11 +343,26 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self removeStatusBarNotification];
+    [self trackSession];
     
     if (!self.didFollow) {
         [self shouldRefresh:NO]; //Reset the bool. Used when the current user is browsing profiles in search, and when following/unfollowing in followersVC
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
+}
+
+-(void)trackSession {
+    NSString *userID = @"";
+    
+    if (self.representedUser.uid && [[self.representedUser.uid class] isSubclassOfClass:[NSString class]]) {
+        userID = self.representedUser.uid;
+    }
+    
+    galleriesScrolledPast = currentProfileCount + currentLikesCount;
+    
+    NSInteger secondsInProfile = -1 * [dateOpened timeIntervalSinceNow];
+    
+    [FRSTracker track:profileSession parameters:@{@"activity_duration":@(secondsInProfile), @"user_id":userID, @"galleries_scrolled_past":@(galleriesScrolledPast)}];
 }
 
 
@@ -1145,7 +1163,9 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-    [FRSTracker track:galleryShared parameters:@{@"content":content.firstObject}];
+    NSString *url = content[0];
+    url = [[url componentsSeparatedByString:@"/"] lastObject];
+    [FRSTracker track:galleryShared parameters:@{@"gallery_id":url, @"shared_from":@"profile"}];
 }
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
@@ -1171,7 +1191,7 @@
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
     
-    [FRSTracker track:galleryOpenedFromProfile parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:galleryOpenedFromProfile parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @"", @"opened_from":@"profile"}];
     
 }
 
@@ -1263,6 +1283,17 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    
+    if (self.currentFeed == self.likes) {
+        if (indexPath.row > currentLikesCount) {
+            currentLikesCount = indexPath.row;
+        }
+    }
+    else {
+        if (indexPath.row > currentProfileCount) {
+            currentProfileCount = indexPath.row;
+        }
+    }
     UITableViewCell *cell;
     if (indexPath.section == 0){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];

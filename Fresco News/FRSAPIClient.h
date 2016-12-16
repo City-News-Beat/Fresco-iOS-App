@@ -11,7 +11,7 @@
 #import "FRSUser.h"
 #import "FRSSocial.h"
 #import "FRSJSONResponseSerializer.h"
-#import <AFNetworking/AFNetworking.h>
+#import "AFNetworking.h"
 #import "SAMKeychain.h"
 #import <Photos/Photos.h>
 #import <Mixpanel/Mixpanel.h>

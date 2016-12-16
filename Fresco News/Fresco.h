@@ -14,7 +14,7 @@
 #import "FRSStripe.h"
 #import <Mixpanel/Mixpanel.h>
 //libraries
-#import <AFNetworking/AFNetworking.h>
+#import "AFNetworking.h"
 #import "FRSTracker.h"
 // #define distribution TRUE // disable logging
 #ifdef distribution 
@@ -30,6 +30,9 @@ static NSString * const awsBucket = @"com.fresconews.v2.prod";
 static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
 static NSString * const awsSecretKey = @"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";
 
+// segment
+static NSString * const segmentWriteKey = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
+//static NSString * const segmentWriteKey = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug
 /* dev */
 //static NSString * const awsBucket = @"com.fresconews.v2.prod";
 //static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
@@ -313,12 +316,12 @@ static NSString * const newAssignmentNotification = @"user-dispatch-new-assignme
 static NSString * const galleryApprovedNotification = @"user-dispatch-content-verified";
 
 
-// MixPanel
+// Event Tracking [FRSTracker]
 static NSString * const gallerySession = @"Gallery session";
-static NSString * const galleryLiked = @"Gallery Liked";
-static NSString * const galleryUnliked = @"Gallery Unliked";
-static NSString * const galleryReposted = @"Gallery Reposted";
-static NSString * const galleryUnreposted = @"Gallery Unreposted";
+static NSString * const galleryLiked = @"Gallery liked";
+static NSString * const galleryUnliked = @"Gallery unliked";
+static NSString * const galleryReposted = @"Gallery reposted";
+static NSString * const galleryUnreposted = @"Gallery unreposted";
 static NSString * const cameraSession = @"Camera session";
 static NSString * const cameraSessionPhotoCount = @"Camera session photo count";
 static NSString * const cameraSessionVideoCount = @"Camera session video count";
@@ -348,22 +351,20 @@ static NSString * const microphoneDisabled = @"Permissions microphone disables";
 static NSString * const logoutEvent = @"Logouts";
 static NSString * const aggressivePan = @"Capture Agressive Pan";
 static NSString * const captureWobble = @"Capture Wobble";
-
+static NSString * const articleOpens = @"Article opens";
 static NSString * const photosEnabled = @"Permissions photos enables";
 static NSString * const photosDisabled = @"Permissions photos disables";
 static NSString * const videosInGallery = @"Submission videos in gallery";
 static NSString * const photosInGallery = @"Submission photos in gallery";
 static NSString * const sharedFromHighlights = @"Galleries shared from highlights";
 static NSString * const migrationShown = @"Migration Shown";
-static NSString * const galleryOpenedFromHighlights = @"Galleries opened from highlights";
-static NSString * const galleryOpenedFromProfile = @"Galleries opened from profile";
-static NSString * const galleryOpenedFromStories = @"Galleries opened from stories";
-
+static NSString * const galleryOpenedFromHighlights = @"Gallery opened";
+static NSString * const galleryOpenedFromProfile = @"Gallery opened";
+static NSString * const galleryOpenedFromStories = @"Gallery opened";
 static NSString * const locationEnabled = @"Permissions location enables";
 static NSString * const locationDisabled = @"Permissions location disables";
 static NSString * const loginError = @"Login Error";
 static NSString * const registrationError = @"Registration Error";
-
 static NSString * const signupRadiusChange = @"Signup radius changes";
 static NSString * const submissionsEvent = @"Submissions";
 static NSString * const itemsInGallery = @"Submission item in gallery";
