@@ -48,17 +48,23 @@
 -(void)segueToUser:(NSString *)userID;
 -(void)segueToPost:(NSString *)postID;
 -(void)segueToAssignmentWithID:(NSString *)assignmentID;
+-(void)segueToGlobalAssignmentWithID:(NSString *)assignmentID;
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID;
 -(void)segueToDebitCard;
 
-/* ERRORS */
+/* KEYBOARD */
+-(void)configureDismissKeyboardGestureRecognizer;
+-(void)dismissKeyboardFromView;
+
+/* FRSAlertView */
 -(void)presentGenericError;
+-(void)presentNoConnectionError;
+-(void)checkStatusAndPresentPermissionsAlert:(id)delegate;
 
 /* MODERATION */
 -(void)checkSuspended;
 
 /* SMOOCH */
 -(void)presentSmooch;
-
 
 @end

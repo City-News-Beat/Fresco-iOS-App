@@ -47,6 +47,7 @@
 }
 
 -(void)commonInit {
+    
     CGRect navFrame = self.frame;
     navFrame.origin.y -= 20;
     navFrame.size.height += 20;
@@ -146,8 +147,22 @@
             _progressView.frame = navFrame;
         });
     }];
+    
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assignmentAccepted:)      name:enableAssignmentAccept  object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disableAssignmentAccept:) name:disableAssignmentAccept object:nil];
 
 }
+
+
+//-(void)assignmentAccepted:(NSNotification *)assignment {
+//    self.tintColor = [UIColor frescoGreenColor];
+//}
+//
+//-(void)disableAssignmentAccept:(NSNotification *)assignment {
+//    self.tintColor = [UIColor frescoOrangeColor];
+//}
+
 
 -(void)showFailureView {
     
@@ -193,9 +208,8 @@
     
 }
 
-
 -(void)dismissFailureView {
-    [FRSTracker track:@"Upload Cancel"];
+    [FRSTracker track:uploadCancel];
     NSLog(@"dismiss");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSDismissUpload" object:nil userInfo:@{@"type":@"dismiss"}];
 
@@ -205,7 +219,7 @@
 }
 
 -(void)retryUpload {
-    [FRSTracker track:@"Upload Retry"];
+    [FRSTracker track:uploadRetry];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSRetryUpload" object:nil userInfo:@{@"type":@"retry"}];
     
     [UIView animateWithDuration:.2 animations:^{

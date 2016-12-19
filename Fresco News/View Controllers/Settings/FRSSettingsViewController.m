@@ -68,6 +68,8 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [FRSTracker screen:@"Settings"];
+    
     [self checkNotificationStatus];
     
     [self.navigationController.navigationBar setTitleTextAttributes:

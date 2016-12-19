@@ -18,12 +18,15 @@
 #import "FRSNavigationBar.h"
 #import "FRSAppDelegate.h"
 #import "FRSUserNotificationViewController.h"
+#import "FRSLocationManager.h"
+#import "FRSBaseViewController.h"
 
 @interface FRSTabBarController () <UITabBarControllerDelegate>
 
 @property (strong, nonatomic) UIView *cameraBackgroundView;
 @property CGFloat notificationDotXOffset;
 @property (strong, nonatomic) UIImage *bellImage;
+@property (strong, nonatomic) FRSLocationManager *locationManager;
 
 @end
 
@@ -44,7 +47,7 @@
     }
     else if ([quickAction isEqualToString:takePhotoAction]) {
         // open camera, switch to photo
-        [FRSTracker track:@"Camera Opened"];
+//        [FRSTracker track:@"Camera Opened"];
         
         FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
         UINavigationController *navControl = [[UINavigationController alloc] init];
@@ -58,7 +61,7 @@
     }
     else if ([quickAction isEqualToString:takeVideoAction]) {
         // just open camera
-        [FRSTracker track:@"Camera Opened"];
+//        [FRSTracker track:@"Camera Opened"];
         
         FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
         UINavigationController *navControl = [[UINavigationController alloc] init];
@@ -84,22 +87,27 @@
     
     [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
     [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
-    
     [[UITabBar appearance] setBackgroundColor:[UIColor frescoTabBarColor]];
 
     [self configureAppearance];
     [self configureViewControllersWithNotif:NO];
-    
     [self configureTabBarItems];
-    
     [self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
-        
         vc.title = nil;
-//        vc.tabBarItem.imageInsets = UIEdgeInsetsMake(5, 0, -5, 0);
     }];
-    
     [self configureIrisItem];
-    // Do any additional setup after loading the view.
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assignmentAccepted:)      name:enableAssignmentAccept  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(disableAssignmentAccept:) name:disableAssignmentAccept object:nil];
+
+}
+
+-(void)assignmentAccepted:(NSNotification *)assignment {
+    self.cameraBackgroundView.backgroundColor = [UIColor frescoGreenColor];
+}
+
+-(void)disableAssignmentAccept:(NSNotification *)assignment {
+    self.cameraBackgroundView.backgroundColor = [UIColor frescoOrangeColor];
 }
 
 -(void)configureAppearance{
@@ -255,23 +263,101 @@
     }
 }
 
+-(void)checkLocationAndPresentPermissionsAlert {
+    if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
+        FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self.locationManager];
+        [alert show];
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        delegate.didPresentPermissionsRequest = YES;
+    }
+}
+
+-(void)presentCameraPermissionsAlert {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"HOLD UP" message:@"We need permission to access your camera, microphone, and camera. Head over to Settings and make sure these are all enabled to continue." actionTitle:@"ASK LATER" cancelTitle:@"SETTINGS" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+        [alert show];
+    });
+}
+
+-(void)didPressButtonAtIndex:(NSInteger)index {
+    if (index == 1) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
+}
+
+-(AVAuthorizationStatus)cameraAuthStatus {
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    return authStatus;
+}
+
+-(AVAuthorizationStatus)microphoneAuthStatus {
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
+    return authStatus;
+}
+
+-(PHAuthorizationStatus)photoLibraryAuthStatus {
+    PHAuthorizationStatus authStatus = [PHPhotoLibrary authorizationStatus];
+    return authStatus;
+}
+
+-(void)scrollToTop {
+    
+}
+
 
 -(void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     item.title = @"";
     
     if ([self.tabBar.items indexOfObject:item] == 2) {
+        if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:self.locationManager];
+            [alert show];
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            delegate.didPresentPermissionsRequest = YES;
+            return;
+        }
         
-        [FRSTracker track:@"Camera Opened"];
+
         
-        FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
-        UINavigationController *navControl = [[UINavigationController alloc] init];
-        navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
-        [navControl pushViewController:cam animated:NO];
-        [navControl setNavigationBarHidden:YES];
+        //If not determined, request and return
+        if ([self cameraAuthStatus] == AVAuthorizationStatusDenied || [self cameraAuthStatus] == AVAuthorizationStatusNotDetermined || [self microphoneAuthStatus] == AVAuthorizationStatusDenied || [self microphoneAuthStatus] == AVAuthorizationStatusNotDetermined|| [self photoLibraryAuthStatus] == PHAuthorizationStatusDenied || [self photoLibraryAuthStatus] == PHAuthorizationStatusNotDetermined) {
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+                if (granted) {
+                    //If camera granted, request Audio
+                    [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+                        if (granted) {
+                            //If audio granted, request photo library
+                            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                                if (status == PHAuthorizationStatusAuthorized) {
+                                    [self presentCameraViewController];
+                                } else {
+                                    //If photo library is not granted, present alert
+                                    [self presentCameraPermissionsAlert];
+                                }
+                            }];
+                        } else {
+                            //If photo library is not granted, present alert
+                            [self presentCameraPermissionsAlert];
+                        }
+                    }];
+                } else {
+                    //If camera is not granted, present alert
+                    [self presentCameraPermissionsAlert];
+                }
+            }];
+            return;
+        } else {
+            [self presentCameraViewController];
+        }
         
-        [self presentViewController:navControl animated:YES completion:^{
-            [self setSelectedIndex:self.lastActiveIndex];
-        }];
+        
+        //If denied or not determined, present alert
+        if ([self cameraAuthStatus] == AVAuthorizationStatusDenied || [self cameraAuthStatus] == AVAuthorizationStatusNotDetermined || [self microphoneAuthStatus] == AVAuthorizationStatusDenied || [self microphoneAuthStatus] == AVAuthorizationStatusNotDetermined|| [self photoLibraryAuthStatus] == PHAuthorizationStatusDenied || [self photoLibraryAuthStatus] == PHAuthorizationStatusNotDetermined) {
+            [self presentCameraPermissionsAlert];
+            return;
+        } else {
+            [self presentCameraViewController];
+        }
     }
     
     if ([self.tabBar.items indexOfObject:item] == 4) {
@@ -314,12 +400,32 @@
     }
 }
 
+-(void)presentCameraViewController {
+//    [FRSTracker track:@"Camera Opened"];
+    
+    FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
+    UINavigationController *navControl = [[UINavigationController alloc] init];
+    navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
+    [navControl pushViewController:cam animated:NO];
+    [navControl setNavigationBarHidden:YES];
+    
+    [self presentViewController:navControl animated:YES completion:^{
+        [self setSelectedIndex:self.lastActiveIndex];
+    }];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
+    
+    if (viewController == self.selectedViewController) {
+        if ([viewController respondsToSelector:@selector(scrollToTop)]) {
+            [viewController performSelector:@selector(scrollToTop)];
+        }
+    }
     
     // UD_PREVIOUSLY_SELECTED_TAB = tabBarController.selectedIndex;
     UIViewController *selectedVC = viewController;
@@ -365,6 +471,12 @@
                 FRSAssignmentsViewController *assignVC = (FRSAssignmentsViewController *)selectedVC;
                 [assignVC setInitialMapRegion];
                 
+                // used to delay map tracking until map region has been animated to user location
+                // avoid multiple map animation calls (causes minor zoom issues)
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    assignVC.mapShouldFollowUser = YES;
+                });
+                
             } break;
             
         case 4:{
@@ -390,10 +502,7 @@
 //            [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
             
             //}
-
-           
-
-            
+                       
         } break;
             
         default:

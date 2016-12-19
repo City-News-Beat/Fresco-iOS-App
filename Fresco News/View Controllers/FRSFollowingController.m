@@ -171,6 +171,8 @@
             [weakSelf goToExpandedGalleryForContentBarTap:indexPath];
         };
         
+        storyCell.delegate = self;
+        
         storyCell.story = self.feed[indexPath.row];
         [storyCell configureCell];
     }

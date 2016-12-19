@@ -64,11 +64,11 @@
     if (!currentCollection) {
         [self getAlbumCollection];
     }
-
+    
     if (!allAssets) { // discount doublecheck
         allAssets = [[NSMutableArray alloc] init];
     }
-
+    
     PHFetchOptions *options = [[PHFetchOptions alloc] init];
     // have most recently created assets at this top of list
     options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
@@ -115,7 +115,7 @@
             case PHAuthorizationStatusAuthorized:
                 [self getAssets];
                 if (!wasPreviouslyAuthorized) {
-                    [FRSTracker track:@"Permissions photos enables"];
+                    [FRSTracker track:photosEnabled];
                 }
                 break;
             case PHAuthorizationStatusRestricted:
@@ -127,7 +127,7 @@
                 }
                 
                 if (wasPreviouslyAuthorized) {
-                    [FRSTracker track:@"Permissions photos disables"];
+                    [FRSTracker track:photosDisabled];
                 }
                 
                 break;
@@ -140,7 +140,7 @@
 // just checks if we're already authorized
 -(BOOL)checkAuthorization {
     __block BOOL authorized = FALSE;
-
+    
     switch ([PHPhotoLibrary authorizationStatus]) {
         case PHAuthorizationStatusAuthorized:
             authorized = TRUE;
@@ -156,7 +156,7 @@
     }
     
     wasPreviouslyAuthorized = authorized;
-
+    
     return authorized;
 }
 
@@ -169,27 +169,28 @@
     
     [assetLoader requestImageDataForAsset:phAsset options:Nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
         NSError *error;
-        float screenSize = [[UIScreen mainScreen] bounds].size.width/3.0;
+        //  float screenSize = [[UIScreen mainScreen] bounds].size.width/3.0;
         
-        [[PHImageManager defaultManager]
-            requestImageForAsset:phAsset
-            targetSize:CGSizeMake(screenSize, screenSize)
-            contentMode:PHImageContentModeAspectFill
-            options:nil
-            resultHandler:^(UIImage *result, NSDictionary *info) {
+        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+        options.resizeMode = PHImageRequestOptionsResizeModeNone;
+        options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+        options.version = PHImageRequestOptionsVersionOriginal;
+        
+        [[PHImageManager defaultManager] requestImageDataForAsset:phAsset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            if (phAsset.mediaType == PHAssetMediaTypeVideo) {
                 
-                if (phAsset.mediaType == PHAssetMediaTypeVideo) {
-                    
-                    [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:Nil resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                        callback(result, avAsset, phAsset.mediaType, error);
-                    }];
-                    
-                    return; // don't want 2 callbacks
-                }
+                [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:Nil resultHandler:^(AVAsset * _Nullable avAsset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                    callback([UIImage imageWithData:imageData], avAsset, phAsset.mediaType, error);
+                }];
                 
-                callback(result, Nil, phAsset.mediaType, error);
-            }];
+                return; // don't want 2 callbacks
+            }
+            
+            callback([UIImage imageWithData:imageData], Nil, phAsset.mediaType, error);
+            
         }];
+        
+    }];
 }
 
 // only overrode so that we'd immediately load assets, and, by design, request authorization upon open

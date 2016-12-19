@@ -37,7 +37,7 @@
     if (dictionary[@"id"] && ![dictionary[@"id"] isEqual:[NSNull null]]) {
         self.uid = dictionary[@"id"];
     }
-
+    
     if (dictionary[@"location"] != Nil && dictionary[@"location"][@"coordinates"] != Nil && ![dictionary[@"location"][@"coordinates"] isEqual: [NSNull null]]){
         NSArray *coords = dictionary[@"location"][@"coordinates"]; //coordinates are sent in geojson format meaning (long, lat)
         if (coords.count == 2){
@@ -58,6 +58,14 @@
     self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"starts_at"]];
     self.expirationDate = [[FRSAPIClient sharedClient] dateFromString:dictionary[@"ends_at"]];
     self.caption = dictionary[@"caption"];
+    
+    if (dictionary[@"is_acceptable"]) {
+        self.acceptable = dictionary[@"is_acceptable"];
+    }
+    
+    if (dictionary[@"accepted"]) {
+        self.accepted = dictionary[@"accepted"];
+    }
     
     if (dictionary[@"outlets"]) {
         self.outlets = dictionary[@"outlets"];

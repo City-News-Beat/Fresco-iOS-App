@@ -201,6 +201,9 @@
     if (self.delegate) {
         [self.delegate didPressButtonAtIndex:1];
     }
+    
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    delegate.didPresentPermissionsRequest = NO;
 }
 
 -(void)actionTapped {
@@ -209,6 +212,9 @@
     if (self.delegate) {
         [self.delegate didPressButtonAtIndex:0];
     }
+    
+    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    delegate.didPresentPermissionsRequest = NO;
 }
 
 -(void)settingsTapped {

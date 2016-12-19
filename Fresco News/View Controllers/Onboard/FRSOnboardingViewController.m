@@ -49,7 +49,7 @@
     
     [super viewDidLoad];
     [self configureUI];
-    [FRSTracker track:@"Onboard Began"];
+    [FRSTracker track:onboardingEvent];
     [self animateFirstLaunch];
     
     //Make delegate
@@ -242,7 +242,7 @@
 
 -(void)dismiss {
     
-    [FRSTracker track:@"Onboarding reads"];
+    [FRSTracker track:onboardingReads];
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
     

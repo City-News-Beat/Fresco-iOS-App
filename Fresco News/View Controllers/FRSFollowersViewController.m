@@ -21,8 +21,8 @@
 @property (strong, nonatomic) UIButton *followersTab;
 @property (strong, nonatomic) UIButton *followingTab;
 
-@property (strong, nonatomic) NSArray *followerArray;
-@property (strong, nonatomic) NSArray *followingArray;
+@property (strong, nonatomic) NSMutableArray *followerArray;
+@property (strong, nonatomic) NSMutableArray *followingArray;
 @property BOOL hasLoadedOnce;
 
 @property (strong, nonatomic) UIButton *followersTabButton;
@@ -186,6 +186,69 @@
     [self.tableView dg_removePullToRefresh];
     [self.followingTable dg_removePullToRefresh];
 //[self release];
+}
+
+-(void)loadMoreFollowing {
+    if (isAtBottomFollowing || isReloadingFollowing || self.followingArray.count == 0) {
+        return;
+    }
+    
+    // load more following
+    FRSUser *user = [self.followingArray lastObject];
+    isReloadingFollowing = TRUE;
+    
+    [[FRSAPIClient sharedClient] getFollowingForUser:_representedUser last:user completion:^(id responseObject, NSError *error) {
+        
+        if (error || !responseObject) {
+            NSLog(@"LOAD MORE FOLLOWING ERROR: %@", error);
+            return;
+        }
+        
+        NSArray *users = (NSArray *)responseObject;
+        
+        if (users.count == 0) {
+            isAtBottomFollowing = TRUE;
+        }
+        
+        for (NSDictionary *user in users) {
+            FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+            [self.followingArray addObject:newUser];
+        }
+        
+        isReloadingFollowing = FALSE;
+        [self.followingTable reloadData];
+    }];
+}
+
+-(void)loadMoreFollowers {
+    if (isAtBottomFollowers || isReloadingFollowers || self.followerArray.count == 0) {
+        return;
+    }
+    
+    // load more followers
+    FRSUser *user = [self.followerArray lastObject];
+    isReloadingFollowers = TRUE;
+    
+    [[FRSAPIClient sharedClient] getFollowersForUser:_representedUser last:user completion:^(id responseObject, NSError *error) {
+        if (error || !responseObject) {
+            NSLog(@"LOAD MORE FOLLOWERS ERROR: %@", error);
+            return;
+        }
+        
+        NSArray *users = (NSArray *)responseObject;
+        
+        if (users.count == 0) {
+            isAtBottomFollowers = TRUE;
+        }
+        
+        for (NSDictionary *user in users) {
+            FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
+            [self.followerArray addObject:newUser];
+        }
+        
+        isReloadingFollowers = FALSE;
+        [self.tableView reloadData];
+    }];
 }
 
 -(void)reloadFollowing{
@@ -460,6 +523,10 @@
                                           isFollowing:[user.following boolValue]
                                                  userDict:nil
                                                  user:user];
+        
+        if (indexPath.row >= self.followingArray.count-3) {
+            [self loadMoreFollowing];
+        }
     }
     
     if (self.followerArray.count > 0 && self.tableView == tableView){
@@ -483,6 +550,10 @@
                                           isFollowing:[user.following boolValue]
                                              userDict:nil
                                                  user:user];
+        
+        if (indexPath.row >= self.followerArray.count-3) {
+            [self loadMoreFollowers];
+        }
     }
     
     

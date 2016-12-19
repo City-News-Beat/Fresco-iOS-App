@@ -17,6 +17,8 @@
 -(BOOL)shouldHaveTextLimit;
 
 -(void)clickedImageAtIndex:(NSInteger)imageIndex;
+@property (weak, nonatomic) UINavigationController *navigationController;
+
 @end
 
 @interface FRSStoryView : UIView

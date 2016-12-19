@@ -6,7 +6,7 @@
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
-#import <AFNetworking/AFNetworking.h>
+#import "AFNetworking.h"
 
 @interface FRSJSONResponseSerializer : AFJSONResponseSerializer
 /*

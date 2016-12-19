@@ -12,8 +12,9 @@
 #import "FRSSplitTableView.h"
 #import "FRSFollowingController.h"
 #import "FRSAlertView.h"
+#import "FRSStoryView.h"
 
-@interface FRSHomeViewController : FRSScrollingViewController <FRSGalleryViewDelegate, FRSAlertViewDelegate>
+@interface FRSHomeViewController : FRSScrollingViewController <FRSGalleryViewDelegate, FRSStoryViewDelegate, FRSAlertViewDelegate>
 {
     BOOL delayClear;
     BOOL needsUpdate;
@@ -30,6 +31,11 @@
     NSDate *exit;
     NSInteger numberRead;
     NSIndexPath *lastIndexPath;
+    
+    CGPoint lastScrollOffset;
+    NSTimeInterval lastOffsetCapture;
+    BOOL isScrollingFast;
+
 }
 @property BOOL loadNoMore;
 -(void)loadData;
