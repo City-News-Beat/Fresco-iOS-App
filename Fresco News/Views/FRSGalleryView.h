@@ -19,7 +19,6 @@
 @protocol FRSGalleryViewDelegate <NSObject>
 -(BOOL)shouldHaveActionBar;
 -(BOOL)shouldHaveTextLimit;
--(void)segueToLikesAndRepostsViewController;
 -(void)playerWillPlay:(FRSPlayer *)player;
 @property (weak, nonatomic) UINavigationController *navigationController;
 @end

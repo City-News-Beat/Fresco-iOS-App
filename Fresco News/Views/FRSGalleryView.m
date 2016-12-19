@@ -234,8 +234,9 @@
     });
 }
 
--(void)handleLabelTapped:(FRSContentActionsBar *)actionBar {
-//    [self.delegate segueToLikesAndRepostsViewController];
+-(void)handleLabelTapped:(FRSContentActionsBar *)actionBar {    
+    UIViewController *vc = [[UIViewController alloc] init];
+    [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)handleActionButtonTapped {
