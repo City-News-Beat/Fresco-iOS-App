@@ -113,7 +113,7 @@
                     break;
             }
             break;
-        
+            
         case 3:
             // redirection
             break;
@@ -143,7 +143,7 @@
 }
 
 /*
-    Sign in: all expect user to have an account, either returns a token, a challenge (i.e. 'create an account') or incorrect details
+ Sign in: all expect user to have an account, either returns a token, a challenge (i.e. 'create an account') or incorrect details
  */
 -(void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *twitterAccessToken = session.authToken;
@@ -195,8 +195,8 @@
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         
         if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
-           // [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
-            [self handleUserLogin:responseObject];            
+            // [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
+            [self handleUserLogin:responseObject];
         }
         
         completion(responseObject, error);
@@ -268,7 +268,7 @@
     [self get:notificationEndpoint withParameters:@{@"last":last} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
-
+    
 }
 
 -(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -313,7 +313,7 @@
     
     // if we have multiple "authenticated" users in data store, we probs messed up big time
     if ([authenticatedUsers count] > 1) {
-
+        
     }
     
     _authenticatedUser = [authenticatedUsers firstObject];
@@ -396,7 +396,7 @@
     if (localeString) {
         currentInstallation[@"locale_identifier"] = localeString;
     }
-
+    
     
     return currentInstallation;
 }
@@ -502,7 +502,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateUserLocation:userInfo.userInfo completion:^(NSDictionary *response, NSError *error) {
             if (!error) {
-               // NSLog(@"Sent Location");
+                // NSLog(@"Sent Location");
             }
             else {
                 NSLog(@"Location Error: %@ %@", response, error);
@@ -526,7 +526,7 @@
     NSDictionary *params = @{
                              @"geo" : geoData,
                              @"radius" : @(radius),
-                            };
+                             };
     
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -541,7 +541,7 @@
 -(void)getAssignmentsWithinRadius:(float)radius ofLocations:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
     NSMutableDictionary *geoData = [[NSMutableDictionary alloc] init];
     [geoData setObject:@"MultiPoint" forKey:@"type"];
-
+    
     
     NSMutableDictionary *coordinates = [[NSMutableDictionary alloc] init];
     
@@ -557,13 +557,13 @@
     NSDictionary *params = @{
                              @"geo" : geoData,
                              @"radius" : @(radius)
-                            };
+                             };
     
-
+    
     [self get:assignmentsEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
-
+    
 }
 
 #pragma mark - Gallery Fetch
@@ -577,9 +577,9 @@
 -(void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void(^)(NSArray *galleries, NSError *error))completion {
     
     NSDictionary *params = @{
-                        @"limit" : [NSNumber numberWithInteger:limit],
-                        @"last" : (offset != Nil) ? offset : @"",
-                    };
+                             @"limit" : [NSNumber numberWithInteger:limit],
+                             @"last" : (offset != Nil) ? offset : @"",
+                             };
     
     if (!offset) {
         params = @{
@@ -592,8 +592,24 @@
     }];
 }
 
--(void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)fetchLikesForGallery:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:likedGalleryEndpoint, galleryID];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
 
+-(void)fetchRepostsForGallery:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:repostedGalleryEndpoint, galleryID];
+    
+    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    
     NSString *endpoint = [NSString stringWithFormat:deleteCommentEndpoint, gallery.uid];
     NSDictionary *params = @{@"comment_id":commentID};
     
@@ -606,7 +622,7 @@
     
     NSString *endpoint = [NSString stringWithFormat:storyGalleriesEndpoint, storyID];
     
-    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {        
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
@@ -620,12 +636,12 @@
     NSDictionary *params = @{
                              @"limit" : [NSNumber numberWithInteger:limit],
                              @"last" : (offsetID != Nil) ? offsetID : @""
-                            };
+                             };
     
     if (!offsetID) {
         params = @{
-                    @"limit" : [NSNumber numberWithInteger:limit],
-                  };
+                   @"limit" : [NSNumber numberWithInteger:limit],
+                   };
     }
     
     [self get:storiesEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
@@ -634,7 +650,7 @@
 }
 
 -(void)createPaymentWithToken:(nonnull NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
-
+    
     if (!token) {
         completion(Nil, Nil);
     }
@@ -657,7 +673,7 @@
     [self post:locationEndpoint withParameters:inputParams completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
-        
+    
 }
 
 -(void)fetchFollowing:(void(^)(NSArray *galleries, NSError *error))completion {
@@ -683,7 +699,7 @@
 
 -(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     [FRSTracker track:@"Gallery Disliked" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
-
+    
     NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -764,7 +780,7 @@
 }
 
 /*
-    Keychain-Based interaction & authentication
+ Keychain-Based interaction & authentication
  */
 
 // user/me
@@ -826,7 +842,7 @@
         NSString *accountName = account[kSAMKeychainAccountKey];
         [SAMKeychain deletePasswordForService:serviceName account:accountName];
     }
-
+    
 }
 
 -(void)saveToken:(NSString *)token forUser:(NSString *)userName {
@@ -851,7 +867,7 @@
 }
 
 /*
-    Generic HTTP methods for use within class
+ Generic HTTP methods for use within class
  */
 -(void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     
@@ -884,7 +900,7 @@
 -(void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion
 {
     AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
-
+    
     [manager POST:endPoint parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData){
         NSString *paramNameForImage = @"avatar";
         [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
@@ -900,7 +916,7 @@
 }
 
 /*
-    One-off tools for use within class
+ One-off tools for use within class
  */
 
 -(NSNumber *)fileSizeForURL:(NSURL *)url {
@@ -1021,9 +1037,9 @@
             return;
         }
         
-//        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-//            completion(responseObject, error);
-//        }
+        //        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
+        //            completion(responseObject, error);
+        //        }
         
         // shouldn't happen
         completion(responseObject, error);
@@ -1093,9 +1109,9 @@
     return [self.dateFormatter dateFromString:string];
 }
 
-/* 
-    Social interaction
-*/
+/*
+ Social interaction
+ */
 -(void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     if ([self checkAuthAndPresentOnboard]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
@@ -1149,7 +1165,7 @@
 
 
 -(void)repostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-
+    
     if ([self checkAuthAndPresentOnboard]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
@@ -1161,8 +1177,8 @@
     }
     
     [FRSTracker track:@"Gallery Reposted" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
-
-
+    
+    
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
     
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
@@ -1195,10 +1211,10 @@
 -(void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
     [FRSTracker track:@"Gallery Unreposted" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
-
+    
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
-
+        
         [gallery setValue:@(FALSE) forKey:@"reposted"];
         
         [[self managedObjectContext] save:Nil];
@@ -1214,7 +1230,7 @@
         
         [[self managedObjectContext] save:Nil];
     }];
-
+    
 }
 
 -(void)followUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -1309,16 +1325,16 @@
 }
 
 -(void)addComment:(NSString *)comment toGallery:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-//    if ([self checkAuthAndPresentOnboard]) {
-//        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
-//        return;
-//    }
+    //    if ([self checkAuthAndPresentOnboard]) {
+    //        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
+    //        return;
+    //    }
     
     [self addComment:comment toGalleryID:gallery completion:completion];
 }
 
 -(void)addComment:(NSString *)comment toGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
-   
+    
     if ([self checkAuthAndPresentOnboard]) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
@@ -1369,11 +1385,11 @@
             
             [responseObjects addObject:[self objectFromDictionary:responseObject context:managedObjectContext]];
         }
-
+        
         return responseObjects;
     }
     else {
-
+        
     }
     
     return response;
@@ -1425,7 +1441,7 @@
             [onboardNav pushViewController:onboardVC animated:NO];
             [tab presentViewController:onboardNav animated:YES completion:Nil];
         }
-
+        
         return TRUE;
     }
     
@@ -1504,7 +1520,7 @@
              }
              
              address = [NSString stringWithFormat:@"%@%@, %@",thoroughFare, [placemark locality], [placemark administrativeArea]];
-            completion(address, Nil);
+             completion(address, Nil);
          }
          else {
              completion(@"No address found.", Nil);
@@ -1564,7 +1580,7 @@
             [self fetchFileSizeForVideo:asset callback:^(NSInteger size, NSError *err) {
                 digest[@"fileSize"] = @(size);
                 digest[@"chunkSize"] = @(chunkSize * megabyteDefinition);
-                digest[@"contentType"] = @"video/mp4";                
+                digest[@"contentType"] = @"video/mp4";
                 callback(digest, err);
             }];
         }

@@ -236,7 +236,7 @@
 }
 
 -(void)handleLabelTapped:(FRSContentActionsBar *)actionBar {    
-    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] init];
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 

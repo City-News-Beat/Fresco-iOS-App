@@ -11,6 +11,6 @@
 
 @interface FRSDualUserListViewController : FRSBaseViewController
 
--(instancetype)initWithArrayOne:(NSArray *)arrayOne arrayTwo:(NSArray *)arrayTwo;
+-(instancetype)initWithGallery:(NSString *)galleryID;
 
 @end
