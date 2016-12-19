@@ -22,6 +22,7 @@
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
+#import "FRSDualUserListViewController.h"
 
 #define TEXTVIEW_TOP_PAD 12
 
@@ -235,7 +236,7 @@
 }
 
 -(void)handleLabelTapped:(FRSContentActionsBar *)actionBar {    
-    UIViewController *vc = [[UIViewController alloc] init];
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] init];
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
