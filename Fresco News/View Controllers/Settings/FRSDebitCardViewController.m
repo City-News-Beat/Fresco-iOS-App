@@ -124,7 +124,7 @@
     
     [container addSubview:expirationDateTextField];
     
-    expirationDateTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    expirationDateTextField.keyboardType = UIKeyboardTypeNumberPad;
 
     securityCodeTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     securityCodeTextField  = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 , 44, [UIScreen mainScreen].bounds.size.width/2, 44)];

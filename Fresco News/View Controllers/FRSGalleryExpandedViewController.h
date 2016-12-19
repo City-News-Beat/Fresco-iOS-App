@@ -18,6 +18,7 @@
     NSDate *dateEntered;
     float percentageScrolled;
 }
+
 @property BOOL isLoadingUser;
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) NSString *openedFrom;

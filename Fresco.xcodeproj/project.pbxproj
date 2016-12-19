@@ -294,6 +294,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02C62B9EAF84913D79E7BEC7 /* Pods-Fresco.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.beta.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.beta.xcconfig"; sourceTree = "<group>"; };
 		05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fresco.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		062D4653F3BC0751E4BC6E6A /* Pods.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.beta.xcconfig; path = "Pods/Target Support Files/Pods/Pods.beta.xcconfig"; sourceTree = "<group>"; };
 		070D66CA1C2AEFD200AB3D9D /* FRSOnboardTwoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardTwoView.h; sourceTree = "<group>"; };
@@ -393,7 +394,6 @@
 		07ED92DE1C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGElasticPullToRefreshLoadingViewCircle.m; sourceTree = "<group>"; };
 		07ED92DF1C752037000DBEA8 /* DGElasticPullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGElasticPullToRefreshView.h; sourceTree = "<group>"; };
 		07ED92E01C752037000DBEA8 /* DGElasticPullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGElasticPullToRefreshView.m; sourceTree = "<group>"; };
-		0EF68A1162525EE2C41C79CE /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 		1E408B761AA79A370057AC16 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		1E4983B41AFBCD9900924F59 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
@@ -419,7 +419,6 @@
 		1EDA44D11AA4CCC70082E08D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EDA44D21AA4CCC70082E08D /* FrescoNewsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FrescoNewsTests.m; sourceTree = "<group>"; };
 		24BD02930A66131EB6AED7E3 /* Pods_Fresco_WatchKit_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fresco_WatchKit_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		29F0D2E42008DF25D7353EF4 /* Pods-Fresco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.release.xcconfig"; sourceTree = "<group>"; };
 		39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42D997FC1AEAF5B300636F33 /* UIImage+PHAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+PHAsset.h"; path = "Categories/UIImage+PHAsset.h"; sourceTree = "<group>"; };
@@ -526,7 +525,6 @@
 		65F237C81C24D464002182DE /* UIFont+Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIFont+Fresco.h"; path = "Categories/UIFont+Fresco.h"; sourceTree = "<group>"; };
 		65F237C91C24D464002182DE /* UIFont+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIFont+Fresco.m"; path = "Categories/UIFont+Fresco.m"; sourceTree = "<group>"; };
 		65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_Fresco_WatchKit_Extension.framework; path = "Pods/../build/Debug-iphoneos/Pods_Fresco_WatchKit_Extension.framework"; sourceTree = "<group>"; };
-		7C3D3E2111D42B3157BFB768 /* Pods-Fresco.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.beta.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.beta.xcconfig"; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		9B264C482E5F5EEE8FB92D96 /* Pods-Fresco WatchKit Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -756,7 +754,9 @@
 		E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationPayloadTests.apns; sourceTree = "<group>"; };
 		E7AAC0A01B4DEBBB003EC8E3 /* WKRelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WKRelativeDate.h; path = Categories/WKRelativeDate.h; sourceTree = "<group>"; };
 		E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WKRelativeDate.m; path = Categories/WKRelativeDate.m; sourceTree = "<group>"; };
+		E9F516F9B9F89BA241B36CA1 /* Pods-Fresco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.release.xcconfig"; sourceTree = "<group>"; };
 		EE251A1A7F1010A0E6CA6B7F /* Pods-Fresco WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
+		F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1419,12 +1419,12 @@
 				39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */,
 				9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */,
 				062D4653F3BC0751E4BC6E6A /* Pods.beta.xcconfig */,
-				0EF68A1162525EE2C41C79CE /* Pods-Fresco.debug.xcconfig */,
-				29F0D2E42008DF25D7353EF4 /* Pods-Fresco.release.xcconfig */,
-				7C3D3E2111D42B3157BFB768 /* Pods-Fresco.beta.xcconfig */,
 				9B264C482E5F5EEE8FB92D96 /* Pods-Fresco WatchKit Extension.debug.xcconfig */,
 				EE251A1A7F1010A0E6CA6B7F /* Pods-Fresco WatchKit Extension.release.xcconfig */,
 				52CC8732D9311BE822B8EC9B /* Pods-Fresco WatchKit Extension.beta.xcconfig */,
+				F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */,
+				E9F516F9B9F89BA241B36CA1 /* Pods-Fresco.release.xcconfig */,
+				02C62B9EAF84913D79E7BEC7 /* Pods-Fresco.beta.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -2890,6 +2890,16 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Appsee\"",
+					"\"${PODS_ROOT}/Headers/Public/CardIO\"",
+					"\"${PODS_ROOT}/Headers/Public/Fabric\"",
+					"\"${PODS_ROOT}/Headers/Public/Smooch\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterCore\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterKit\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -2935,6 +2945,18 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Appsee\"",
+					"\"${PODS_ROOT}/Headers/Public/CardIO\"",
+					"\"${PODS_ROOT}/Headers/Public/Fabric\"",
+					"\"${PODS_ROOT}/Headers/Public/Smooch\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterCore\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterKit\"",
+					"\"${PODS_ROOT}\"/**",
+					"\"$(BUILT_PRODUCTS_DIR)\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -2947,7 +2969,7 @@
 		};
 		1EDA44D71AA4CCC70082E08D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0EF68A1162525EE2C41C79CE /* Pods-Fresco.debug.xcconfig */;
+			baseConfigurationReference = F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -2990,7 +3012,7 @@
 		};
 		1EDA44D81AA4CCC70082E08D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 29F0D2E42008DF25D7353EF4 /* Pods-Fresco.release.xcconfig */;
+			baseConfigurationReference = E9F516F9B9F89BA241B36CA1 /* Pods-Fresco.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -3105,6 +3127,18 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Appsee\"",
+					"\"${PODS_ROOT}/Headers/Public/CardIO\"",
+					"\"${PODS_ROOT}/Headers/Public/Fabric\"",
+					"\"${PODS_ROOT}/Headers/Public/Smooch\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterCore\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterKit\"",
+					"\"${PODS_ROOT}\"/**",
+					"\"$(BUILT_PRODUCTS_DIR)\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -3118,7 +3152,7 @@
 		};
 		E78493001BA882D2004491DA /* Beta */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C3D3E2111D42B3157BFB768 /* Pods-Fresco.beta.xcconfig */;
+			baseConfigurationReference = 02C62B9EAF84913D79E7BEC7 /* Pods-Fresco.beta.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
