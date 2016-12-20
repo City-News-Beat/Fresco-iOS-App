@@ -9,6 +9,7 @@
 #import "FRSDualUserListViewController.h"
 #import "FRSTableViewCell.h"
 #import "FRSProfileViewController.h"
+#import "FRSAwkwardView.h"
 
 @interface FRSDualUserListViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -64,6 +65,7 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     [self configureNavigationButtons];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 -(void)configureScrollers {
@@ -247,16 +249,30 @@
 
 #pragma mark - Fetch Data
 
+-(void)fetchData {
+    [self fetchLikers];
+    [self fetchReposters];
+}
+
+-(void)reloadData {
+    [self.likesTableView   reloadData];
+    [self.repostsTableView reloadData];
+}
+
+
 -(void)fetchReposters {
     [[FRSAPIClient sharedClient] fetchLikesForGallery:self.galleryID completion:^(id responseObject, NSError *error) {
         
         if (responseObject) {
             self.likedUsers = responseObject;
             [self reloadData];
+            
+            if ([self.likedUsers count] == 0) {
+                [self configureFrogInTableView:self.likesTableView];
+            }
         }
         
         if (error && !responseObject) {
-            // frog it
         }
     }];
 }
@@ -267,23 +283,40 @@
         if (responseObject) {
             self.repostedUsers = responseObject;
             [self reloadData];
+            
+            if ([self.repostedUsers count] == 0) {
+                [self configureFrogInTableView:self.repostsTableView];
+            }
         }
         
         if (error && !responseObject) {
-            // frog it
         }
     }];
 }
 
--(void)fetchData {
-    [self fetchLikers];
-    [self fetchReposters];
+
+#pragma mark - Frog
+
+-(void)configureFrogInTableView:(UITableView *)tableView {
+    
+    FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, tableView.frame.size.width / 2, tableView.frame.size.width, tableView.frame.size.height)];
+    [tableView addSubview:awkwardView];
+    
 }
 
--(void)reloadData {
-    [self.likesTableView   reloadData];
-    [self.repostsTableView reloadData];
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @end
