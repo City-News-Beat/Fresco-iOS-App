@@ -78,15 +78,17 @@
     self.likesTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight + navBarHeight))];
     self.likesTableView.delegate   = self;
     self.likesTableView.dataSource = self;
+    [self.likesTableView setSeparatorColor:[UIColor clearColor]];
     [self.horizontalScrollView addSubview:self.likesTableView];
-    self.likesTableView.backgroundColor = [UIColor orangeColor];
+    self.likesTableView.backgroundColor = [UIColor clearColor];
     
     // repost config
     self.repostsTableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight + navBarHeight))];
     self.repostsTableView.delegate   = self;
     self.repostsTableView.dataSource = self;
     [self.horizontalScrollView addSubview:self.repostsTableView];
-    self.repostsTableView.backgroundColor = [UIColor purpleColor];
+    [self.repostsTableView setSeparatorColor:[UIColor clearColor]];
+    self.repostsTableView.backgroundColor = [UIColor clearColor];
 }
 
 -(void)configureNavigationButtons {
