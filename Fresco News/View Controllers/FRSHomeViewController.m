@@ -239,6 +239,7 @@
     
     [self removeStatusBarNotification];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
+    [self expandNavBar:nil animated:NO];
 }
 
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
