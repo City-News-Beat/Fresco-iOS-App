@@ -8,6 +8,7 @@
 
 #import "FRSDualUserListViewController.h"
 #import "FRSTableViewCell.h"
+#import "FRSProfileViewController.h"
 
 @interface FRSDualUserListViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -48,6 +49,10 @@
     [self configureNavigationBar];
     
     [self fetchData];
+}
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 }
 
 
@@ -150,6 +155,21 @@
     return 56;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView == self.likesTableView) {
+        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsers objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:user];
+        [self.navigationController pushViewController:controller animated:TRUE];
+        
+    } else if (tableView == self.repostsTableView) {
+        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsers objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:user];
+        [self.navigationController pushViewController:controller animated:TRUE];
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *cellIdentifier;
     
@@ -201,12 +221,7 @@
                                           isFollowing:[user.following boolValue]
                                              userDict:nil
                                                  user:user];
-        
-//        if (indexPath.row >= self.followerArray.count-3) {
-//            [self loadMoreFollowers];
-//        }
     }
-    
     
     return cell;
 }
