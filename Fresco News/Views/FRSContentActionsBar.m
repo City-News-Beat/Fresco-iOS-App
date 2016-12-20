@@ -96,7 +96,7 @@
     self.repostLabel.textColor = [UIColor frescoMediumTextColor];
     self.repostLabel.userInteractionEnabled = YES;
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleLabelTapped)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleRepostLabelTapped:)];
     [self.repostLabel addGestureRecognizer:tap];
     
     if (self.repostButton.imageView.image == [UIImage imageNamed:@"repost-icon-green"]) {
@@ -137,7 +137,7 @@
     self.likeLabel.text = @"999";
     self.likeLabel.userInteractionEnabled = YES;
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleLabelTapped)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleLikeLabelTapped:)];
     [self.likeLabel addGestureRecognizer:tap];
 
     if (self.likeButton.imageView.image == [UIImage imageNamed:@"like-heart-filled"]) {
@@ -169,11 +169,15 @@
 
 }
 
--(void)handleLabelTapped {
-    NSLog(@"Label tapped");
-    
+-(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
     if (self.delegate) {
-        [self.delegate handleLabelTapped:self];
+        [self.delegate handleLikeLabelTapped:actionBar];
+    }
+}
+
+-(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+    if (self.delegate) {
+        [self.delegate handleRepostLabelTapped:actionBar];
     }
 }
 

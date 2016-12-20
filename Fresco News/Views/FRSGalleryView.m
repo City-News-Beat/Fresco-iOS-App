@@ -235,8 +235,14 @@
     });
 }
 
--(void)handleLabelTapped:(FRSContentActionsBar *)actionBar {    
+-(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    [self.delegate.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    vc.didTapRepostLabel = YES;
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 

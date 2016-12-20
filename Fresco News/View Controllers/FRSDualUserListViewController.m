@@ -8,7 +8,7 @@
 
 #import "FRSDualUserListViewController.h"
 
-@interface FRSDualUserListViewController ()
+@interface FRSDualUserListViewController () <UIScrollViewDelegate>
 
 @property (strong, nonatomic) NSString *galleryID;
 @property (strong, nonatomic) NSArray *likedUsers;
@@ -18,6 +18,9 @@
 
 @property (strong, nonatomic) UITableView *likesTableView;
 @property (strong, nonatomic) UITableView *repostsTableView;
+
+@property (strong, nonatomic) UIButton *likesButton;
+@property (strong, nonatomic) UIButton *repostsButton;
 
 @end
 
@@ -40,17 +43,22 @@
     
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
     
-    [self configureNavigationBar];
     [self configureScrollers];
+    [self configureNavigationBar];
     
     [self fetchLikers];
     [self fetchReposters];
 }
 
+
+#pragma mark - UI Configuration
+
 -(void)configureNavigationBar {
     // default config
     [super configureBackButtonAnimated:YES];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    [self configureNavigationButtons];
 }
 
 -(void)configureScrollers {
@@ -58,23 +66,83 @@
     int tabBarHeight = 49;
     int navBarHeight = 64;
     
+    // horizontal scrollview config
     self.horizontalScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight))];
     self.horizontalScrollView.contentSize = CGSizeMake(self.view.frame.size.width * 2, self.view.frame.size.height - (tabBarHeight + navBarHeight));
     self.horizontalScrollView.pagingEnabled = YES;
     self.horizontalScrollView.bounces = NO;
+    self.horizontalScrollView.delegate = self;
     [self.view addSubview:self.horizontalScrollView];
     
-    self.horizontalScrollView.backgroundColor = [UIColor redColor];
-    
+    // likes config
     self.likesTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight + navBarHeight))];
     [self.horizontalScrollView addSubview:self.likesTableView];
+    self.likesTableView.backgroundColor = [UIColor orangeColor];
     
+    // repost config
     self.repostsTableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight + navBarHeight))];
     [self.horizontalScrollView addSubview:self.repostsTableView];
-    
-    self.likesTableView.alpha = 0.5;
-    self.repostsTableView.alpha = 0.5;
+    self.repostsTableView.backgroundColor = [UIColor purpleColor];
 }
+
+-(void)configureNavigationButtons {
+    
+    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
+    self.navigationItem.titleView = titleView;
+
+    self.likesButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width/2 - 60 - 45 - titleView.frame.size.width/5, 8, 120, 30)];
+    [self.likesButton setTitle:@"LIKES" forState:UIControlStateNormal];
+    [self.likesButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    [self.likesButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.likesButton addTarget:self action:@selector(handleLikesTapped) forControlEvents:UIControlEventTouchUpInside];
+    [titleView addSubview:self.likesButton];
+    
+    self.repostsButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width/2 - 60 - 45 + titleView.frame.size.width/8, 8, 120, 30)];
+    self.repostsButton.contentMode = UIViewContentModeCenter;
+    [self.repostsButton setTitle:@"REPOSTS" forState:UIControlStateNormal];
+    [self.repostsButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
+    [self.repostsButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
+    [self.repostsButton addTarget:self action:@selector(handleRepostsTapped) forControlEvents:UIControlEventTouchUpInside];
+    [titleView addSubview:self.repostsButton];
+    
+    if (self.didTapRepostLabel) {
+        [self handleRepostsTapped];
+    } else {
+        [self handleLikesTapped];
+    }
+}
+
+
+#pragma mark - UIScrollView Delegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView == self.horizontalScrollView) {
+        if (scrollView.contentOffset.x == 0) {
+            [self handleLikesTapped];
+        } else if (scrollView.contentOffset.x == self.view.frame.size.width) {
+            [self handleRepostsTapped];
+        }
+    }
+}
+
+
+#pragma mark - Navigation Bar Actions
+
+-(void)handleLikesTapped {
+    [self.likesButton   setTitleColor:[UIColor colorWithWhite:1.0 alpha:1.0] forState:UIControlStateNormal];
+    [self.repostsButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
+    [self.horizontalScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+}
+
+-(void)handleRepostsTapped {
+    [self.likesButton   setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
+    [self.repostsButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1.0] forState:UIControlStateNormal];
+    [self.horizontalScrollView setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:YES];
+}
+
+
+
+#pragma mark - Fetch Data
 
 -(void)fetchReposters {
     [[FRSAPIClient sharedClient] fetchLikesForGallery:self.galleryID completion:^(id responseObject, NSError *error) {
@@ -101,6 +169,7 @@
         }
     }];
 }
+
 
 
 

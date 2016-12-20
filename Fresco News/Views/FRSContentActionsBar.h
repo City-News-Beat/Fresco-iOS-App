@@ -37,5 +37,7 @@
 -(void)handleActionButtonTapped;
 -(void)handleRepost:(FRSContentActionsBar *)actionBar;
 -(void)handleLike:(FRSContentActionsBar *)actionBar;
--(void)handleLabelTapped:(FRSContentActionsBar *)actionBar;
+-(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar;
+-(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar;
+
 @end
