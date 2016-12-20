@@ -26,6 +26,10 @@
 @property (strong, nonatomic) UIButton *likesButton;
 @property (strong, nonatomic) UIButton *repostsButton;
 
+@property (strong, nonatomic) FRSAlertView *alert;
+
+@property BOOL didPresentError;
+
 @end
 
 @implementation FRSDualUserListViewController
@@ -272,6 +276,14 @@
         }
         
         if (error && !responseObject) {
+            if (error.code == -1009) {
+                [self configureNoConnectionBannerAlert];
+            } else {
+                if (!self.didPresentError) {
+                    [self presentGenericError];
+                    self.didPresentError = YES;
+                }
+            }
         }
     }];
 }
@@ -291,6 +303,14 @@
         }
         
         if (error && !responseObject) {
+            if (error.code == -1009) {
+                [self configureNoConnectionBannerAlert];
+            } else {
+                if (!self.didPresentError) {
+                    [self presentGenericError];
+                    self.didPresentError = YES;
+                }
+            }
         }
     }];
 }
@@ -324,6 +344,12 @@
 }
 
 
+#pragma mark - FRSAlertView 
+
+-(void)configureNoConnectionBannerAlert {
+    self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+    [self.alert show];
+}
 
 
 
