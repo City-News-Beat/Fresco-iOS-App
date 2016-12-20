@@ -10,6 +10,7 @@
 #import "FRSTableViewCell.h"
 #import "FRSProfileViewController.h"
 #import "FRSAwkwardView.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 
 @interface FRSDualUserListViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
@@ -33,9 +34,7 @@
     self = [super init];
     
     if (self) {
-
         self.galleryID = galleryID;
-    
     }
     
     return self;
@@ -230,7 +229,6 @@
 
 
 
-
 #pragma mark - Navigation Bar Actions
 
 -(void)handleLikesTapped {
@@ -259,9 +257,10 @@
     [self.repostsTableView reloadData];
 }
 
-
--(void)fetchReposters {
-    [[FRSAPIClient sharedClient] fetchLikesForGallery:self.galleryID completion:^(id responseObject, NSError *error) {
+-(void)fetchLikers {
+    [self configureSpinnerInTableView:self.likesTableView];
+    [[FRSAPIClient sharedClient] fetchLikesForGallery:self.galleryID completion:^(id responseObject, NSError *error) {        
+        [self removeSpinnerInTableView:self.likesTableView];
         
         if (responseObject) {
             self.likedUsers = responseObject;
@@ -277,8 +276,10 @@
     }];
 }
 
--(void)fetchLikers {
+-(void)fetchReposters {
+    [self configureSpinnerInTableView:self.repostsTableView];
     [[FRSAPIClient sharedClient] fetchRepostsForGallery:self.galleryID completion:^(id responseObject, NSError *error) {
+        [self removeSpinnerInTableView:self.repostsTableView];
         
         if (responseObject) {
             self.repostedUsers = responseObject;
@@ -295,13 +296,31 @@
 }
 
 
+
 #pragma mark - Frog
 
 -(void)configureFrogInTableView:(UITableView *)tableView {
-    
     FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, tableView.frame.size.width / 2, tableView.frame.size.width, tableView.frame.size.height)];
     [tableView addSubview:awkwardView];
-    
+}
+
+#pragma mark - Spinner
+
+-(void)configureSpinnerInTableView:(UITableView *)tableView {
+    DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    spinner.frame = CGRectMake(tableView.frame.size.width/2 -10, tableView.frame.size.height/2 - 10, 20, 20);
+    spinner.tintColor = [UIColor frescoOrangeColor];
+    [spinner setPullProgress:90];
+    [spinner startAnimating];
+    [tableView addSubview:spinner];
+}
+
+-(void)removeSpinnerInTableView:(UITableView *)tableView {
+    for(UIView *spinner in tableView.subviews) {
+        if([spinner isKindOfClass:[DGElasticPullToRefreshLoadingViewCircle class]]) {
+            [spinner removeFromSuperview];
+        }
+    }
 }
 
 
