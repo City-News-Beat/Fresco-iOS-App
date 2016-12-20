@@ -29,11 +29,13 @@
 #import "MGSwipeTableCell.h"
 #import "FRSCommentCell.h"
 
+#import "FRSDualUserListViewController.h"
+
 #define TOP_NAV_BAR_HEIGHT 64
 #define GALLERY_BOTTOM_PADDING 16
 #define CELL_HEIGHT 62
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, MGSwipeTableCellDelegate, FRSCommentCellDelegate, UITextFieldDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, MGSwipeTableCellDelegate, FRSCommentCellDelegate, UITextFieldDelegate, FRSGalleryViewDelegate>
 
 
 @property (strong, nonatomic) FRSGalleryView *galleryView;
@@ -153,6 +155,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self showTabBarAnimated:NO];
     
     [self trackSession];
+    
+    [self expandNavBar:nil animated:NO];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -1480,6 +1484,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                             };
     
     [FRSTracker track:@"Gallery Session" parameters:session];
+}
+
+#pragma mark - FRSGalleryViewDelegate 
+
+-(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    vc.didTapRepostLabel = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end
