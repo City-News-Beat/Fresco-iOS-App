@@ -7,8 +7,9 @@
 //
 
 #import "FRSDualUserListViewController.h"
+#import "FRSTableViewCell.h"
 
-@interface FRSDualUserListViewController () <UIScrollViewDelegate>
+@interface FRSDualUserListViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) NSString *galleryID;
 @property (strong, nonatomic) NSArray *likedUsers;
@@ -46,8 +47,7 @@
     [self configureScrollers];
     [self configureNavigationBar];
     
-    [self fetchLikers];
-    [self fetchReposters];
+    [self fetchData];
 }
 
 
@@ -76,11 +76,15 @@
     
     // likes config
     self.likesTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight + navBarHeight))];
+    self.likesTableView.delegate   = self;
+    self.likesTableView.dataSource = self;
     [self.horizontalScrollView addSubview:self.likesTableView];
     self.likesTableView.backgroundColor = [UIColor orangeColor];
     
     // repost config
     self.repostsTableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height - (tabBarHeight + navBarHeight))];
+    self.repostsTableView.delegate   = self;
+    self.repostsTableView.dataSource = self;
     [self.horizontalScrollView addSubview:self.repostsTableView];
     self.repostsTableView.backgroundColor = [UIColor purpleColor];
 }
@@ -126,6 +130,88 @@
 }
 
 
+#pragma mark - UITableView Delegate / Datasource
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (tableView == self.likesTableView) {
+        return [self.likedUsers count];
+    }
+    
+    if (tableView == self.repostsTableView) {
+        return [self.repostedUsers count];
+    }
+    
+    return 0;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 56;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *cellIdentifier;
+    
+    FRSTableViewCell *cell = [self.likesTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    if (cell == nil) {
+        cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    
+    if (tableView == self.likesTableView && self.likedUsers.count > 0){
+
+        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsers objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        
+        NSString *avatarURL;
+        if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
+            avatarURL = user.profileImage;
+        }
+        
+        NSURL *avatarURLObject;
+        if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
+            avatarURLObject = [NSURL URLWithString:avatarURL];
+        }
+        
+        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
+                                             fullName:user.firstName
+                                             userName:user.username
+                                          isFollowing:[user.following boolValue]
+                                             userDict:nil
+                                                 user:user];
+    }
+    
+    if (tableView == self.repostsTableView && self.repostedUsers.count > 0){
+        
+        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsers objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        
+        NSString *avatarURL;
+        if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
+            avatarURL = user.profileImage;
+        }
+        
+        NSURL *avatarURLObject;
+        if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
+            avatarURLObject = [NSURL URLWithString:avatarURL];
+        }
+        
+        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
+                                             fullName:user.firstName
+                                             userName:user.username
+                                          isFollowing:[user.following boolValue]
+                                             userDict:nil
+                                                 user:user];
+        
+//        if (indexPath.row >= self.followerArray.count-3) {
+//            [self loadMoreFollowers];
+//        }
+    }
+    
+    
+    return cell;
+}
+
+
+
+
 #pragma mark - Navigation Bar Actions
 
 -(void)handleLikesTapped {
@@ -149,6 +235,7 @@
         
         if (responseObject) {
             self.likedUsers = responseObject;
+            [self reloadData];
         }
         
         if (error && !responseObject) {
@@ -162,6 +249,7 @@
         
         if (responseObject) {
             self.repostedUsers = responseObject;
+            [self reloadData];
         }
         
         if (error && !responseObject) {
@@ -170,7 +258,15 @@
     }];
 }
 
+-(void)fetchData {
+    [self fetchLikers];
+    [self fetchReposters];
+}
 
+-(void)reloadData {
+    [self.likesTableView   reloadData];
+    [self.repostsTableView reloadData];
+}
 
 
 @end
