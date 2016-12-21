@@ -31,8 +31,12 @@
 @property BOOL didPresentError;
 @property BOOL isLoadingLikers;
 @property BOOL isLoadingReposters;
+@property BOOL hasReachedEndOfLikers;
+@property BOOL hasReachedEndOfReposters;
 
 @end
+
+int const FETCH_LIMIT = 20;
 
 @implementation FRSDualUserListViewController
 
@@ -156,7 +160,6 @@
         CGFloat distanceFromBottom = scrollView.contentSize.height - contentYoffset;
         
         if (distanceFromBottom < height) {
-            NSLog(@"end of the table");
             if (scrollView == self.likesTableView) {
                 [self loadMoreLikers];
             } else if (scrollView == self.likesTableView) {
@@ -302,7 +305,7 @@
         lastUserID = [(FRSUser *)[self.likedUsersArray lastObject] uid];
     }
     
-    [[FRSAPIClient sharedClient] fetchLikesForGallery:self.galleryID limit:@15 lastID:lastUserID completion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] fetchLikesForGallery:self.galleryID limit:[NSNumber numberWithInteger:FETCH_LIMIT] lastID:lastUserID completion:^(id responseObject, NSError *error) {
         [self removeSpinnerInTableView:self.likesTableView];
         
         if (responseObject) {
@@ -355,7 +358,7 @@
         lastUserID = [(FRSUser *)[self.repostedUsersArray lastObject] uid];
     }
     
-    [[FRSAPIClient sharedClient] fetchRepostsForGallery:self.galleryID limit:@15 lastID:lastUserID completion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] fetchRepostsForGallery:self.galleryID limit:[NSNumber numberWithInteger:FETCH_LIMIT] lastID:lastUserID completion:^(id responseObject, NSError *error) {
         [self removeSpinnerInTableView:self.repostsTableView];
         
         if (responseObject) {
@@ -393,7 +396,7 @@
 
 
 -(void)loadMoreLikers {
-    if (self.isLoadingLikers || [self.likedUsersArray count] == 0) {
+    if (self.isLoadingLikers || [self.likedUsersArray count] == 0 || self.hasReachedEndOfLikers) {
         return;
     }
     self.isLoadingLikers = YES;
@@ -403,7 +406,7 @@
         lastUserID = [(FRSUser *)[self.likedUsersArray lastObject] uid];
     }
     
-    [[FRSAPIClient sharedClient] fetchRepostsForGallery:self.galleryID limit:@15 lastID:lastUserID completion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] fetchRepostsForGallery:self.galleryID limit:[NSNumber numberWithInteger:FETCH_LIMIT] lastID:lastUserID completion:^(id responseObject, NSError *error) {
         
         if (responseObject) {
             
@@ -412,6 +415,10 @@
             for (NSDictionary *user in users) {
                 FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
                 [self.likedUsersArray addObject:newUser];
+            }
+            
+            if ([users count] == 0) {
+                self.hasReachedEndOfLikers = YES;
             }
             
             [self reloadData];
@@ -427,7 +434,7 @@
 }
 
 -(void)loadMoreReposters {
-    if (self.isLoadingReposters || [self.repostedUsersArray count] == 0) {
+    if (self.isLoadingReposters || [self.repostedUsersArray count] == 0 || self.hasReachedEndOfReposters) {
         return;
     }
     self.isLoadingReposters = YES;
@@ -437,7 +444,7 @@
         lastUserID = [(FRSUser *)[self.repostedUsersArray lastObject] uid];
     }
     
-    [[FRSAPIClient sharedClient] fetchRepostsForGallery:self.galleryID limit:@15 lastID:lastUserID completion:^(id responseObject, NSError *error) {
+    [[FRSAPIClient sharedClient] fetchRepostsForGallery:self.galleryID limit:[NSNumber numberWithInteger:FETCH_LIMIT] lastID:lastUserID completion:^(id responseObject, NSError *error) {
         if (responseObject) {
             
             NSArray *users = (NSArray *)responseObject;
@@ -445,6 +452,10 @@
             for (NSDictionary *user in users) {
                 FRSUser *newUser = [FRSUser nonSavedUserWithProperties:user context:[[FRSAPIClient sharedClient] managedObjectContext]];
                 [self.repostedUsersArray addObject:newUser];
+            }
+            
+            if ([users count] == 0) {
+                self.hasReachedEndOfReposters = YES;
             }
             
             [self reloadData];
