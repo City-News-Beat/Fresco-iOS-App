@@ -592,21 +592,23 @@
     }];
 }
 
--(void)fetchLikesForGallery:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)fetchLikesForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:likedGalleryEndpoint, galleryID];
     
-    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+    [self get:endpoint withParameters:@{@"limit" : limit, @"last" : lastID} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
 
--(void)fetchRepostsForGallery:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
+
+-(void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:repostedGalleryEndpoint, galleryID];
     
-    [self get:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+    [self get:endpoint withParameters:@{@"limit" : limit, @"last" : lastID} completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
+
 
 -(void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     

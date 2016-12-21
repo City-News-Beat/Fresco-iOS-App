@@ -55,8 +55,9 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)unacceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)getAcceptedAssignmentWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
--(void)fetchRepostsForGallery:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion;
--(void)fetchLikesForGallery:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)fetchLikesForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion;
+
 // notifications
 -(void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)getNotificationsWithLast:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
