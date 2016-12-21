@@ -462,6 +462,11 @@ int const FETCH_LIMIT = 20;
 
                                                    [self reloadData];
                                                }
+
+                                               if (error) {
+                                                   // soft fail
+                                               }
+
                                                self.isLoadingReposters = NO;
                                              }];
 }

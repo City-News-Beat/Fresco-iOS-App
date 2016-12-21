@@ -282,7 +282,11 @@
             if (error) {
                 [actionBar handleHeartState:FALSE];
                 [actionBar handleHeartAmount:likes];
-                if (error.code != 101) {
+                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                NSInteger responseCode = response.statusCode;
+                
+                // 400 status code means the user has already liked the gallery, should soft fail.
+                if (error.code != 101 && responseCode != 400) {
                     self.gallery.numberOfLikes ++;
                 }
             }
@@ -312,12 +316,11 @@
             if (error) {
                 [actionBar handleRepostState:FALSE];
                 [actionBar handleRepostAmount:reposts];
-                if (error.code != 101) {
-                    
-                    NSLog(@"GALLERY: %@", self.gallery);
-                    NSLog(@"CREATOR: %@", self.gallery.creator);
-                    NSLog(@"UID: %@", self.gallery.creator.uid);
-
+                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                NSInteger responseCode = response.statusCode;
+                
+                // 400 status code means the user has already reposted the gallery, should soft fail.
+                if (error.code != 101 && responseCode != 400) {
                     self.gallery.numberOfReposts++;
                 }
             }
