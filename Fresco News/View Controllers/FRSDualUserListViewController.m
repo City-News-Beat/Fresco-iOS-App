@@ -15,8 +15,8 @@
 @interface FRSDualUserListViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) NSString *galleryID;
-@property (strong, nonatomic) NSArray *likedUsers;
-@property (strong, nonatomic) NSArray *repostedUsers;
+@property (strong, nonatomic) NSMutableArray *likedUsersArray;
+@property (strong, nonatomic) NSMutableArray *repostedUsersArray;
 
 @property (strong, nonatomic) UIScrollView *horizontalScrollView;
 
@@ -53,6 +53,10 @@
     [self configureNavigationBar];
     
     [self fetchData];
+    
+    // this in conjunction with shouldRecognizeSimultaneouslyWithGestureRecognizer enables the user
+    // to swipe back to the previous view controller. UIScrollView cancels the navigation controllers popGestureRec by default
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id<UIGestureRecognizerDelegate>)self;
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -146,11 +150,11 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.likesTableView) {
-        return [self.likedUsers count];
+        return [self.likedUsersArray count];
     }
     
     if (tableView == self.repostsTableView) {
-        return [self.repostedUsers count];
+        return [self.repostedUsersArray count];
     }
     
     return 0;
@@ -162,12 +166,12 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == self.likesTableView) {
-        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsers objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsersArray objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:user];
         [self.navigationController pushViewController:controller animated:TRUE];
         
     } else if (tableView == self.repostsTableView) {
-        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsers objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsersArray objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:user];
         [self.navigationController pushViewController:controller animated:TRUE];
     }
@@ -184,9 +188,9 @@
         cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    if (tableView == self.likesTableView && self.likedUsers.count > 0){
+    if (tableView == self.likesTableView && self.likedUsersArray.count > 0){
 
-        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsers objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsersArray objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
         
         NSString *avatarURL;
         if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
@@ -206,9 +210,9 @@
                                                  user:user];
     }
     
-    if (tableView == self.repostsTableView && self.repostedUsers.count > 0){
+    if (tableView == self.repostsTableView && self.repostedUsersArray.count > 0){
         
-        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsers objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
+        FRSUser *user = [FRSUser nonSavedUserWithProperties:[self.likedUsersArray objectAtIndex:indexPath.row] context:[[FRSAPIClient sharedClient] managedObjectContext]];
         
         NSString *avatarURL;
         if (user.profileImage || ![user.profileImage isEqual:[NSNull null]]) {
@@ -267,10 +271,10 @@
         [self removeSpinnerInTableView:self.likesTableView];
         
         if (responseObject) {
-            self.likedUsers = responseObject;
+            self.likedUsersArray= responseObject;
             [self reloadData];
             
-            if ([self.likedUsers count] == 0) {
+            if ([self.likedUsersArray count] == 0) {
                 [self configureFrogInTableView:self.likesTableView];
             }
         }
@@ -294,10 +298,10 @@
         [self removeSpinnerInTableView:self.repostsTableView];
         
         if (responseObject) {
-            self.repostedUsers = responseObject;
+            self.repostedUsersArray = responseObject;
             [self reloadData];
             
-            if ([self.repostedUsers count] == 0) {
+            if ([self.repostedUsersArray count] == 0) {
                 [self configureFrogInTableView:self.repostsTableView];
             }
         }
@@ -351,7 +355,9 @@
     [self.alert show];
 }
 
-
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
 
 
 
