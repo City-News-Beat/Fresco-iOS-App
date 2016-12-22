@@ -38,7 +38,6 @@
 #import "FRSNotificationHandler.h"
 #import <UserNotifications/UserNotifications.h>
 
-
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSAppDelegate
@@ -51,11 +50,12 @@
                              didFinishLaunchingWithOptions:launchOptions];
     
     NSString *yourAppToken = @"bxk48kwhbx8g";
-    NSString *environment = ADJEnvironmentSandbox;
+    NSString *environment = ADJEnvironmentProduction;
     ADJConfig *adjustConfig = [ADJConfig configWithAppToken:yourAppToken
                                                 environment:environment];
     
     [Adjust appDidLaunch:adjustConfig];
+    
     
     [self startFabric]; // crashlytics first yall
     [self configureStartDate];
@@ -94,7 +94,6 @@
         [self startNotificationTimer];
     }
     else {
-        
         [self startAuthentication];
         
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {

@@ -7,7 +7,10 @@
 //
 
 #import "FRSTracker.h"
-#import <Mixpanel/Mixpanel.h>
+#import <Segment_Flurry/SEGFlurryIntegrationFactory.h>
+#import <Segment_Mixpanel/SEGMixpanelIntegrationFactory.h>
+#import <Segment_Localytics/SEGLocalyticsIntegrationFactory.h>
+#import <Segment_Adjust/SEGAdjustIntegrationFactory.h>
 
 @implementation FRSTracker
 +(void)track:(NSString *)eventName parameters:(NSDictionary *)parameters {
@@ -25,6 +28,11 @@
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:segmentWriteKey];
     configuration.trackApplicationLifecycleEvents = YES; // Enable this to record certain application events automatically!
     configuration.recordScreenViews = NO; // Enable this to record screen views automatically!
+    
+    [configuration use:[SEGFlurryIntegrationFactory instance]];
+    [configuration use:[SEGMixpanelIntegrationFactory instance]];
+    [configuration use:[SEGLocalyticsIntegrationFactory instance]];
+    [configuration use:[SEGAdjustIntegrationFactory instance]];
     
     [SEGAnalytics setupWithConfiguration:configuration];
 }
