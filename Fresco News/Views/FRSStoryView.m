@@ -25,6 +25,8 @@
 
 #import "FRSProfileViewController.h"
 
+#import "FRSDualUserListViewController.h"
+
 #define TEXTVIEW_TOP_PADDING 12
 
 #define TOP_CONTAINER_HALF_HEIGHT (self.topContainer.frame.size.height/2)
@@ -276,10 +278,11 @@
     BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
     
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
+
     [self.actionBar handleRepostState:!isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
+    [self.actionBar handleHeartState:isLiked];
+    [self.actionBar handleHeartAmount:[numLikes intValue]];
 
     if (self.caption.text.length == 0) {
         [self.actionBar setOriginWithPoint:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height-12)];
@@ -311,6 +314,17 @@
             }
         }];
     }
+}
+
+-(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.story.uid];
+    [self.delegate.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.story.uid];
+    vc.didTapRepostLabel = YES;
+    [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {

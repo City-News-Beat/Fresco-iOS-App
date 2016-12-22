@@ -210,6 +210,17 @@
     
 }
 
+-(void)expandNavBar:(NSArray *)barButtonItems animated:(BOOL)animated{
+    [self.navigationController.navigationBar setFrame:CGRectMake(self.navigationController.navigationBar.frame.origin.x,self.navBarHeight, self.navigationController.navigationBar.frame.size.width,self.navigationController.navigationBar.frame.size.height)];
+    
+    if (animated) {
+        self.navigationItem.titleView.alpha = 1.0;
+        for (UIBarButtonItem *item in barButtonItems) {
+            [item setTintColor:[item.tintColor colorWithAlphaComponent:1]];
+        }
+    }
+}
+    
 -(void)expandNavBar:(NSArray *)barButtonItems{
     [self.navigationController.navigationBar setFrame:CGRectMake(self.navigationController.navigationBar.frame.origin.x,self.navBarHeight, self.navigationController.navigationBar.frame.size.width,self.navigationController.navigationBar.frame.size.height)];
     for(UIBarButtonItem *item in barButtonItems){

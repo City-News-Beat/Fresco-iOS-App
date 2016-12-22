@@ -20,8 +20,9 @@
 #import "DGElasticPullToRefresh.h"
 #import "FRSLoadingTableViewCell.h"
 #import "FRSAppDelegate.h"
+#import "FRSDualUserListViewController.h"
 
-@interface FRSStoriesViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+@interface FRSStoriesViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FRSContentActionBarDelegate>
 
 @property (strong, nonatomic) NSMutableArray *stories;
 
@@ -509,6 +510,17 @@
     detailView.navigationController = self.navigationController;
     [self.navigationController pushViewController:detailView animated:YES];
     [self expandNavBar:nil];
+}
+
+- (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+//    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+//    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+//    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+//    vc.didTapRepostLabel = YES;
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

@@ -24,6 +24,7 @@
 -(void)setCurrentUser:(BOOL)isAuth;
 @property (strong, nonatomic) UIButton *actionButton;
 
+
 @end
 
 @protocol FRSContentActionBarDelegate <NSObject>
@@ -37,4 +38,7 @@
 -(void)handleActionButtonTapped;
 -(void)handleRepost:(FRSContentActionsBar *)actionBar;
 -(void)handleLike:(FRSContentActionsBar *)actionBar;
+-(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar;
+-(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar;
+
 @end
