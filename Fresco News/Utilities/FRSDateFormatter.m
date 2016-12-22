@@ -34,10 +34,17 @@
 }
 
 +(NSString *)dateStringGalleryFormatFromDate:(NSDate *)date {
-    NSTimeInterval sinceStart = [date timeIntervalSinceNow];
-    sinceStart *= -1;
+    NSDateComponents *currentComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
+    NSInteger currentDay = [currentComponents day];
+    NSInteger currentMonth = [currentComponents month];
+    NSInteger currentYear = [currentComponents year];
     
-    if (sinceStart >= (24 * 60 * 60)) {
+    NSDateComponents *postComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:date];
+    NSInteger postDay = [postComponents day];
+    NSInteger postMonth = [postComponents month];
+    NSInteger postYear = [postComponents year];
+    
+    if (currentDay != postDay || currentMonth != postMonth || currentYear != postYear) {
         NSDate *correctDate = date;
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setTimeZone:[NSTimeZone localTimeZone]];
@@ -52,6 +59,7 @@
     [formatter setDateFormat:@"hh:mm a"];
     return [formatter stringFromDate:correctDate];
 }
+
 +(NSString *)relativeTimeFromDate:(NSDate *)compareDate {
     
     NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:compareDate];
