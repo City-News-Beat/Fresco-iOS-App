@@ -204,10 +204,10 @@
     
    // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
     
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
+    [self.actionBar handleHeartState:isLiked];
+    [self.actionBar handleHeartAmount:[numLikes intValue]];
     
     [self.repostLabel removeFromSuperview];
     self.repostLabel = Nil;
@@ -942,7 +942,7 @@
     }
     
     self.actionBar.delegate = self;
-    
+
     [self addSubview:self.actionBar];
     
 }

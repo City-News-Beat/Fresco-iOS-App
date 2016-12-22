@@ -46,14 +46,6 @@
     }
     return self;
 }
--(void)handleHeartAmount:(NSInteger)amount {
-    
-    if (amount == 0) {
-        self.likeLabel.text = @"0";
-    }
-    
-    self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
-}
 
 -(void)configureActionButton{
     
@@ -86,13 +78,10 @@
 }
 
 -(void)configureRepostSection{
-    
-    // currently the label will truncate if over 999.
-    // when we see likes/reposts reaching tripple digts we should rewrite with constraints
-    
+
     self.repostLabel = [[UILabel alloc] init];
     self.repostLabel.font = [UIFont notaBoldWithSize:15];
-    self.repostLabel.text = @"999";
+    self.repostLabel.text = @"";
     self.repostLabel.textColor = [UIColor frescoMediumTextColor];
     self.repostLabel.userInteractionEnabled = YES;
     
@@ -119,22 +108,19 @@
     [self addSubview:self.repostButton];
 
     
-//    self.repostButton.backgroundColor = [UIColor greenColor];
-//    self.repostButton.alpha = 0.5;
-//    self.repostLabel.backgroundColor = [UIColor blueColor];
-//    self.repostButton.alpha = 0.5;
+    self.repostButton.backgroundColor = [UIColor greenColor];
+    self.repostButton.alpha = 0.5;
+    self.repostLabel.backgroundColor = [UIColor blueColor];
+    self.repostButton.alpha = 0.5;
     
 }
 
 -(void)configureLikeSection{
     
-    // currently the label will truncate if over 999.
-    // when we see likes/reposts reaching tripple digts we should rewrite with constraints
-    
     self.likeLabel = [[UILabel alloc] init];
     self.likeLabel.textColor = [UIColor frescoMediumTextColor];
     self.likeLabel.font = [UIFont notaBoldWithSize:15];
-    self.likeLabel.text = @"999";
+    self.repostLabel.text = @"";
     self.likeLabel.userInteractionEnabled = YES;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleLikeLabelTapped:)];
@@ -162,10 +148,10 @@
     [self addSubview:self.likeButton];
     
     
-//    self.likeLabel.backgroundColor = [UIColor orangeColor];
-//    self.likeLabel.alpha = 0.5;
-//    self.likeButton.backgroundColor = [UIColor redColor];
-//    self.likeButton.alpha = 0.5;
+    self.likeLabel.backgroundColor = [UIColor orangeColor];
+    self.likeLabel.alpha = 0.5;
+    self.likeButton.backgroundColor = [UIColor redColor];
+    self.likeButton.alpha = 0.5;
 
 }
 
@@ -319,6 +305,21 @@
     }
     
     self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+    [self.repostLabel sizeToFit];
+    self.repostLabel.frame = CGRectMake(self.shareButton.frame.origin.x - self.repostLabel.frame.size.width, 0, self.repostLabel.frame.size.width +10, self.frame.size.height);
+    self.repostButton.frame = CGRectMake(self.repostLabel.frame.origin.x - 36.5, 0, 36.5, self.frame.size.height);
+}
+
+-(void)handleHeartAmount:(NSInteger)amount {
+    
+    if (amount == 0) {
+        self.likeLabel.text = @"0";
+    }
+    
+    self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+    [self.likeLabel sizeToFit];
+    self.likeLabel.frame = CGRectMake(self.frame.size.width - (16 + self.shareButton.frame.size.width + 12 + self.repostLabel.frame.size.width + self.repostButton.frame.size.width), 0, self.likeLabel.frame.size.width +10, self.frame.size.height);
+    self.likeButton.frame = CGRectMake(self.likeLabel.frame.origin.x - 36, 0, 36, self.frame.size.height);
 }
 
 @end

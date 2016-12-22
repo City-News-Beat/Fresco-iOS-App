@@ -24,6 +24,7 @@
 -(void)setCurrentUser:(BOOL)isAuth;
 @property (strong, nonatomic) UIButton *actionButton;
 
+
 @end
 
 @protocol FRSContentActionBarDelegate <NSObject>
