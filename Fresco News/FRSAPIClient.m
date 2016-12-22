@@ -1561,7 +1561,8 @@
         
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-
+        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+        dateFormat.timeZone = timeZone;
         
         digest[@"captured_at"] = [dateFormat stringFromDate:asset.creationDate];
         
