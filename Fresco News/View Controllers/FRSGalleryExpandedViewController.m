@@ -690,10 +690,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
 
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
+    [self.actionBar handleHeartState:isLiked];
+    [self.actionBar handleHeartAmount:[numLikes intValue]];
 
     [self.view addSubview:self.actionBar];
 
