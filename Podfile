@@ -30,12 +30,15 @@ target 'Fresco' do
 	pod 'TwitterCore'
 	pod 'Appsee'
 	pod 'Smooch'
-    	pod 'Mixpanel'
 	pod 'CardIO'
 	pod 'MGSwipeTableCell'
-	pod 'Analytics', '~> 3.0'
-	pod 'Adjust', :git => 'git://github.com/adjust/ios_sdk.git', :tag => 'v4.5.0'
-    pod 'AttributedMarkdown', :git => 'https://github.com/dreamwieber/AttributedMarkdown.git'
+    	pod 'AttributedMarkdown', :git => 'https://github.com/dreamwieber/AttributedMarkdown.git'
+	pod 'Adjust', '~> 4.10.3'
+	pod "Analytics", "3.5.5"
+	pod "Segment-Adjust"
+	pod "Segment-Flurry"
+	pod "Segment-Localytics"
+	pod "Segment-Mixpanel"
 end
 
 	

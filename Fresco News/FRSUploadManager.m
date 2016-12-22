@@ -448,7 +448,7 @@ static NSDate *lastDate;
     
     NSMutableDictionary *uploadErrorSummary = [@{@"error_message":error.localizedDescription} mutableCopy];
     if (uploadSpeed > 0) {
-        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed"];
+        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
     }
     
     if (error.localizedDescription) {
