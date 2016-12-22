@@ -25,6 +25,8 @@
 
 #import "FRSProfileViewController.h"
 
+#import "FRSDualUserListViewController.h"
+
 #define TEXTVIEW_TOP_PADDING 12
 
 #define TOP_CONTAINER_HALF_HEIGHT (self.topContainer.frame.size.height/2)
@@ -312,6 +314,17 @@
             }
         }];
     }
+}
+
+-(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.story.uid];
+    [self.delegate.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.story.uid];
+    vc.didTapRepostLabel = YES;
+    [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {
