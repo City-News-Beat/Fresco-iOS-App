@@ -65,10 +65,6 @@ int const FETCH_LIMIT = 20;
     self.navigationController.interactivePopGestureRecognizer.delegate = (id<UIGestureRecognizerDelegate>)self;
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-
 #pragma mark - UI Configuration
 
 - (void)configureNavigationBar {

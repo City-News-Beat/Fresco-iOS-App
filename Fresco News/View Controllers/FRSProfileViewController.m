@@ -345,6 +345,7 @@
         [self shouldRefresh:NO]; //Reset the bool. Used when the current user is browsing profiles in search, and when following/unfollowing in followersVC
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
+    [self expandNavBar:nil animated:NO];
 }
 
 
