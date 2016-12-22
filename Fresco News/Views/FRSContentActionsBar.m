@@ -64,7 +64,7 @@
 }
 
 -(void)configureShareButton{
-    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 6 - 44, 0, 44, 44)];
+    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 8 - 44, 0, 44, 44)];
     [self.shareButton setImage:[UIImage imageNamed:@"share-icon-dark"] forState:UIControlStateNormal];
     [self addSubview:self.shareButton];
     [self.shareButton addTarget:self action:@selector(handleShareButtonTapped) forControlEvents:UIControlEventTouchUpInside];
@@ -304,10 +304,13 @@
         self.repostLabel.text = @"0";
     }
     
-    self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
-    [self.repostLabel sizeToFit];
-    self.repostLabel.frame = CGRectMake(self.shareButton.frame.origin.x - self.repostLabel.frame.size.width, 0, self.repostLabel.frame.size.width +10, self.frame.size.height);
-    self.repostButton.frame = CGRectMake(self.repostLabel.frame.origin.x - 36.5, 0, 36.5, self.frame.size.height);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+        [self.repostLabel sizeToFit];
+        self.repostLabel.frame = CGRectMake(self.shareButton.frame.origin.x - self.repostLabel.frame.size.width, 0, self.repostLabel.frame.size.width +10, self.frame.size.height);
+        self.repostButton.frame = CGRectMake(self.repostLabel.frame.origin.x - 40, 0, 40, self.frame.size.height);
+    });
+
 }
 
 -(void)handleHeartAmount:(NSInteger)amount {
@@ -316,10 +319,13 @@
         self.likeLabel.text = @"0";
     }
     
-    self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
-    [self.likeLabel sizeToFit];
-    self.likeLabel.frame = CGRectMake(self.frame.size.width - (16 + self.shareButton.frame.size.width + 12 + self.repostLabel.frame.size.width + self.repostButton.frame.size.width), 0, self.likeLabel.frame.size.width +10, self.frame.size.height);
-    self.likeButton.frame = CGRectMake(self.likeLabel.frame.origin.x - 36, 0, 36, self.frame.size.height);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+        [self.likeLabel sizeToFit];
+        self.likeLabel.frame = CGRectMake(self.repostButton.frame.origin.x - self.likeLabel.frame.size.width -10, 0, self.likeLabel.frame.size.width +10, self.frame.size.height);
+        self.likeButton.frame = CGRectMake(self.likeLabel.frame.origin.x - 40, 0, 40, self.frame.size.height);
+    });
+
 }
 
 @end
