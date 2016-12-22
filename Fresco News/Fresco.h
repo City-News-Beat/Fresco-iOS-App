@@ -31,18 +31,14 @@ static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
 static NSString * const awsSecretKey = @"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";
 
 // segment
-static NSString * const segmentWriteKey = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
-//static NSString * const segmentWriteKey = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug
+//static NSString * const segmentWriteKey = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
+static NSString * const segmentWriteKey = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug
 /* dev */
 //static NSString * const awsBucket = @"com.fresconews.v2.prod";
 //static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
 //static NSString * const awsSecretKey = @"maStuGRQsr2xL0dyHjz6k127mGVRE2uMwESo7T";
 
 #define AWS_REGION AWSRegionUSEast1
-
-// mixpanel
-//static NSString * const mixPanelToken = @"4a01dc9d6ffde669d683102db23c8bcd";
-static NSString * const mixPanelToken = @"0e6b9d8ade7a9f56bf6ddae4b0374148";
 
 // image CDN sizing
 static NSString * const thumbImageSize = @"150x";
@@ -69,7 +65,7 @@ static NSString * const serviceName = @"frescoNewsService3";
 static NSString * const FRSUploadNotification = @"FRSUploadUpdateNotification";
 
 // base URLS
-static NSString * const baseURL = @"https://api.fresconews.com/v2/";
+static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 
