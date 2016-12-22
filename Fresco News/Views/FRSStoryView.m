@@ -276,10 +276,11 @@
     BOOL isReposted = [[self.story valueForKey:@"reposted"] boolValue];
     
     self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height) delegate:self];
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
+
     [self.actionBar handleRepostState:!isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
+    [self.actionBar handleHeartState:isLiked];
+    [self.actionBar handleHeartAmount:[numLikes intValue]];
 
     if (self.caption.text.length == 0) {
         [self.actionBar setOriginWithPoint:CGPointMake(0, self.caption.frame.origin.y + self.caption.frame.size.height-12)];
