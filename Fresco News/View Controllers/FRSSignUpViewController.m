@@ -1257,6 +1257,15 @@
             
             _isAlreadyRegistered = TRUE;
             [self segueToSetup];
+            NSString *platform;
+            if (self.twitterSession) {
+                platform = @"twitter";
+            } else if (self.facebookToken) {
+                platform = @"facebook";
+            } else {
+                platform = @"email";
+            }
+            [FRSTracker track:signup parameters:@{@"platform":platform}];
 
         }
         _pastRegistration = registrationDigest;
