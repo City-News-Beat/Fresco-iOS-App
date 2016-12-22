@@ -854,7 +854,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 height += 56;
             }
             else {
-                height = commentSize +20;
+                height = commentSize;
             }
             
             NSLog(@"STRING SIZE  : %f", labelRect.size.height);
