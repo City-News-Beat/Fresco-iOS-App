@@ -134,7 +134,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [FRSTracker track:@"Onboarding reads"];
+    [FRSTracker track:onboardingReads];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
     if (!self.didAnimate) {
@@ -222,7 +222,7 @@
     [[FRSAPIClient sharedClient] signIn:username password:password completion:^(id responseObject, NSError *error) {
         
         if (error) {
-            [FRSTracker track:@"Login Error" parameters:@{@"method":@"email", @"error":error.localizedDescription}];
+            [FRSTracker track:loginError parameters:@{@"method":@"email", @"error":error.localizedDescription}];
         }
         
         [self stopSpinner:self.loadingView onButton:self.loginButton];
@@ -361,7 +361,7 @@
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
 
         if (error) {
-            [FRSTracker track:@"Login Error" parameters:@{@"method":@"twitter", @"error":error.localizedDescription}];
+            [FRSTracker track:loginError parameters:@{@"method":@"twitter", @"error":error.localizedDescription}];
         }
         
         if (authenticated) {
@@ -471,7 +471,7 @@
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
         
         if (error) {
-            [FRSTracker track:@"Login Error" parameters:@{@"method":@"facebook", @"error":error.localizedDescription}];
+            [FRSTracker track:loginError parameters:@{@"method":@"facebook", @"error":error.localizedDescription}];
         }
         
         if (authenticated) {

@@ -233,8 +233,8 @@ static NSString *imageTile = @"ImageTile";
         
     }
     
-    [FRSTracker track:@"Submission videos in gallery" parameters:@{@"count":@(numberOfVideos)}];
-    [FRSTracker track:@"Submission photos in gallery" parameters:@{@"count":@(numberOfPhotos)}];
+    [FRSTracker track:videosInGallery parameters:@{@"count":@(numberOfVideos)}];
+    [FRSTracker track:photosInGallery parameters:@{@"count":@(numberOfPhotos)}];
     
     self.uploadViewController.content = nil;
     self.uploadViewController.players = nil;

@@ -47,7 +47,7 @@
     }
     else if ([quickAction isEqualToString:takePhotoAction]) {
         // open camera, switch to photo
-        [FRSTracker track:@"Camera Opened"];
+//        [FRSTracker track:@"Camera Opened"];
         
         FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
         UINavigationController *navControl = [[UINavigationController alloc] init];
@@ -61,7 +61,7 @@
     }
     else if ([quickAction isEqualToString:takeVideoAction]) {
         // just open camera
-        [FRSTracker track:@"Camera Opened"];
+//        [FRSTracker track:@"Camera Opened"];
         
         FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
         UINavigationController *navControl = [[UINavigationController alloc] init];
@@ -401,7 +401,7 @@
 }
 
 -(void)presentCameraViewController {
-    [FRSTracker track:@"Camera Opened"];
+//    [FRSTracker track:@"Camera Opened"];
     
     FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo];
     UINavigationController *navControl = [[UINavigationController alloc] init];

@@ -288,6 +288,9 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    dateOpened = [NSDate date];
+    [FRSTracker screen:@"Profile"];
+    
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
     [self.navigationController.tabBarController.tabBar setHidden:FALSE];
     // Default tab bar in profile to visible
@@ -340,12 +343,27 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self removeStatusBarNotification];
+    [self trackSession];
     
     if (!self.didFollow) {
         [self shouldRefresh:NO]; //Reset the bool. Used when the current user is browsing profiles in search, and when following/unfollowing in followersVC
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
     [self expandNavBar:nil animated:NO];
+}
+
+-(void)trackSession {
+    NSString *userID = @"";
+    
+    if (self.representedUser.uid && [[self.representedUser.uid class] isSubclassOfClass:[NSString class]]) {
+        userID = self.representedUser.uid;
+    }
+    
+    galleriesScrolledPast = currentProfileCount + currentLikesCount;
+    
+    NSInteger secondsInProfile = -1 * [dateOpened timeIntervalSinceNow];
+    
+    [FRSTracker track:profileSession parameters:@{@"activity_duration":@(secondsInProfile), @"user_id":userID, @"galleries_scrolled_past":@(galleriesScrolledPast)}];
 }
 
 
@@ -822,7 +840,7 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     if (isLoadingUser) {
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , [UIScreen mainScreen].bounds.size.height)];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , [UIScreen mainScreen].bounds.size.height-64)];
     }
     else {
         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, self.view.frame.size.width , self.view.frame.size.height-44)];
@@ -1146,7 +1164,9 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-    [FRSTracker track:@"Gallery Shared" parameters:@{@"content":content.firstObject}];
+    NSString *url = content[0];
+    url = [[url componentsSeparatedByString:@"/"] lastObject];
+    [FRSTracker track:galleryShared parameters:@{@"gallery_id":url, @"shared_from":@"profile"}];
 }
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
@@ -1172,7 +1192,7 @@
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
     
-    [FRSTracker track:@"Galleries opened from profile" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:galleryOpenedFromProfile parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @"", @"opened_from":@"profile"}];
     
 }
 
@@ -1264,6 +1284,17 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    
+    if (self.currentFeed == self.likes) {
+        if (indexPath.row > currentLikesCount) {
+            currentLikesCount = indexPath.row;
+        }
+    }
+    else {
+        if (indexPath.row > currentProfileCount) {
+            currentProfileCount = indexPath.row;
+        }
+    }
     UITableViewCell *cell;
     if (indexPath.section == 0){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"profile-cell"];
@@ -1489,13 +1520,36 @@
     
     NSArray *visibleCells = [self.tableView visibleCells];
     
+    CGPoint currentOffset = scrollView.contentOffset;
+    NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+    
+    NSTimeInterval timeDiff = currentTime - lastOffsetCapture;
+    if(timeDiff > 0.1) {
+        CGFloat distance = currentOffset.y - lastScrollOffset.y;
+        //The multiply by 10, / 1000 isn't really necessary.......
+        CGFloat scrollSpeedNotAbs = (distance * 10) / 1000; //in pixels per millisecond
+        
+        CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
+        if (scrollSpeed > maxScrollVelocity) {
+            isScrollingFast = YES;
+            NSLog(@"Fast");
+        } else {
+            isScrollingFast = NO;
+            NSLog(@"Slow");
+        }
+        
+        lastScrollOffset = currentOffset;
+        lastOffsetCapture = currentTime;
+    }
+
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         BOOL taken = FALSE;
         
         for (FRSGalleryCell *cell in visibleCells) {
             if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
                 if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
-                    if (!taken) {
+                    if (!taken && !isScrollingFast) {
                         [cell play];
                         taken = TRUE;
                     }

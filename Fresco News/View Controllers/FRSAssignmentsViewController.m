@@ -163,6 +163,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [super viewWillAppear:animated];
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
     
+    [FRSTracker screen:@"Assignments"];
+    
     self.isPresented = YES;
     
     CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
@@ -318,38 +320,35 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         if (self.globalAssignmentsArray.count >= 1) {
             [self showGlobalAssignmentsBar];
         }
+        
         FRSAssignment *defaultAssignment;
         
-        for (NSDictionary *dict in assignments){
-            
-            FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
-            [assignmentToAdd configureWithDictionary:dict];
-            NSString *uid = assignmentToAdd.uid;
-            
-            if ([uid isEqualToString:self.defaultID]) {
-                defaultAssignment = assignmentToAdd;
-            }
-            
-            [mSerializedAssignments addObject:assignmentToAdd];
-            
-            if (!dictionaryRepresentations) {
-                dictionaryRepresentations = [[NSMutableArray alloc] init];
-            }
-            
-            if ([assignmentToAdd.accepted boolValue]) {
-                // set both current and accepted here to avoid adding multiple cases for each assignment
-                // when a user is not accepting an assignment for example
-                self.currentAssignment = assignmentToAdd;
-                self.acceptedAssignment = assignmentToAdd;
+        if (assignments.count > 0) {
+            for (NSDictionary *dict in assignments){
+                FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+                [assignmentToAdd configureWithDictionary:dict];
+                NSString *uid = assignmentToAdd.uid;
                 
-                // pass dict to camera -> file picker -> upload (for preselecting)
-                self.acceptedAssignmentDictionary = dict;
+                if ([uid isEqualToString:self.defaultID]) {
+                    defaultAssignment = assignmentToAdd;
+                }
+                
+                if ([self assignmentExists:uid]) {
+                    continue;
+                }
+                
+                [mSerializedAssignments addObject:assignmentToAdd];
+                
+                if (!dictionaryRepresentations) {
+                    dictionaryRepresentations = [[NSMutableArray alloc] init];
+                }
+                
+                [dictionaryRepresentations addObject:dict];
             }
             
-            [dictionaryRepresentations addObject:dict];
+            self.assignments = [mSerializedAssignments copy];
         }
-        
-        self.assignments = [mSerializedAssignments copy];
+       
         [self addAnnotationsForAssignments];
         
         self.isFetching = NO;

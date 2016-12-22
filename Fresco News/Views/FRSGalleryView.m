@@ -80,7 +80,7 @@
     self.clipsToBounds = NO;
     self.gallery = gallery;
     self.orderedPosts = [gallery.posts allObjects];
-    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
+    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE]]];
     
     self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight]);
     self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
@@ -272,7 +272,15 @@
                 [actionBar handleHeartState:TRUE];
                 [actionBar handleHeartAmount:likes];
                 if (error.code != 101) {
-                    self.gallery.numberOfLikes --;
+                    self.gallery.likes = @([self.gallery.likes intValue] - 1);
+                    
+                    @try {
+                        self.gallery.numberOfLikes--;
+                    }
+                    @catch(NSException *e) {
+                        
+                    }
+
                 }
             }
         }];
@@ -282,12 +290,14 @@
             if (error) {
                 [actionBar handleHeartState:FALSE];
                 [actionBar handleHeartAmount:likes];
-                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                NSInteger responseCode = response.statusCode;
-                
-                // 400 status code means the user has already liked the gallery, should soft fail.
-                if (error.code != 101 && responseCode != 400) {
-                    self.gallery.numberOfLikes ++;
+                if (error.code != 101) {
+                    self.gallery.likes = @([self.gallery.likes intValue] + 1);
+                    @try {
+                        self.gallery.numberOfLikes++;
+                    }
+                    @catch(NSException *e) {
+                        
+                    }
                 }
             }
         }];

@@ -131,7 +131,7 @@
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
     self.passwordUsed = password;
     
-    NSDictionary *params = @{@"username":user, @"password":password, @"installation":[[FRSAPIClient sharedClient] currentInstallation]};
+    NSDictionary *params = @{@"username":user, @"password":password};
     
     [self post:loginEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
         
@@ -332,7 +332,6 @@
         if (twitterSession.authToken && twitterSession.authTokenSecret) {
             NSDictionary *twitterDigestion = @{@"token":twitterSession.authToken, @"secret": twitterSession.authTokenSecret};
             [socialDigestion setObject:twitterDigestion forKey:@"twitter"];
-            [FRSTracker track:@"Signups with Twitter"];
         }
     }
     
@@ -341,7 +340,6 @@
         if (facebookToken.tokenString) {
             NSDictionary *facebookDigestion = @{@"token":facebookToken.tokenString};
             [socialDigestion setObject:facebookDigestion forKey:@"facebook"];
-            [FRSTracker track:@"Signups with Facebook"];
         }
     }
     
@@ -359,8 +357,7 @@
         currentInstallation[@"device_token"] = deviceToken;
     }
     else {
-        
-        currentInstallation[@"device_token"] = [[FRSAPIClient sharedClient] random64CharacterString]; // no installation without push info, apparently
+        NSLog(@"NO DEVICE TOKEN -- INSTALLATION WILL FAIL");
     }
     
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
@@ -437,6 +434,15 @@
     
     [self reevaluateAuthorization];
     [self updateLocalUser];
+    
+    NSDictionary *currentInstallation = [self currentInstallation];
+    
+    if ([currentInstallation objectForKey:@"device_token"]) {
+        NSDictionary *update = @{@"installation":currentInstallation};
+        [self updateUserWithDigestion:update completion:^(id responseObject, NSError *error) {
+            NSLog(@"USER UPDATED: %@ %@", responseObject, error);
+        }];
+    }
 }
 
 -(void)updateLocalUser {
@@ -450,27 +456,28 @@
         }
         
         // set up FRSUser object with this info, set authenticated to true
-        
-        NSString *userID = responseObject[@"id"];
+        NSString *userID = Nil;
+
+        userID = responseObject[@"id"];
         NSString *email = responseObject[@"email"];
         NSString *name = responseObject[@"full_name"];
-        
-        if (userID != Nil && ![userID isEqual:[NSNull null]]) {
-            [[Mixpanel sharedInstance] registerSuperProperties:@{@"fresco_id": userID}];
-        }
-        if (email != Nil && ![email isEqual:[NSNull null]]) {
-            [[Mixpanel sharedInstance] registerSuperProperties:@{@"email": email}];
-        }
-        if (name != Nil && ![name isEqual:[NSNull null]]) {
-            [[Mixpanel sharedInstance] registerSuperProperties:@{@"name": name}];
-        }
+        NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
+    
         if (userID && ![userID isEqual:[NSNull null]]) {
-            Mixpanel *mixpanel = [Mixpanel sharedInstance];
-            [mixpanel createAlias:userID forDistinctID:mixpanel.distinctId];
-            [mixpanel identify:userID];
+            userID = userID;
         }
         
-        [FRSTracker track:@"Logins"];
+        if (name && ![name isEqual:[NSNull null]]) {
+            identityDictionary[@"name"] = name;
+        }
+        
+        if (email && ![email isEqual:[NSNull null]]) {
+            identityDictionary[@"email"] = email;
+        }
+        
+        [[SEGAnalytics sharedAnalytics] identify:userID
+                                          traits:identityDictionary];
+        [FRSTracker track:loginEvent];
     }];
 }
 
@@ -700,8 +707,7 @@
 }
 
 -(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    [FRSTracker track:@"Gallery Disliked" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
-    
+    [FRSTracker track:galleryUnliked parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
     NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -1120,7 +1126,7 @@
         return;
     }
     
-    [FRSTracker track:@"Gallery Liked" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+    [FRSTracker track:galleryLiked parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
     
     NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
@@ -1178,9 +1184,8 @@
         return;
     }
     
-    [FRSTracker track:@"Gallery Reposted" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
-    
-    
+    [FRSTracker track:galleryReposted parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
     
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
@@ -1212,8 +1217,9 @@
 
 -(void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
-    [FRSTracker track:@"Gallery Unreposted" parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
     
+    [FRSTracker track:galleryUnreposted parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
         
@@ -1526,7 +1532,7 @@
          }
          else {
              completion(@"No address found.", Nil);
-             [FRSTracker track:@"Address Error" parameters:@{@"coordinates":@[@(location.coordinate.longitude), @(location.coordinate.latitude)]}];
+             [FRSTracker track:addressError parameters:@{@"coordinates":@[@(location.coordinate.longitude), @(location.coordinate.latitude)]}];
          }
          
      }];
@@ -1569,6 +1575,12 @@
         digest[@"address"] = responseObject;
         digest[@"lat"] = @(asset.location.coordinate.latitude);
         digest[@"lng"] = @(asset.location.coordinate.longitude);
+        
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
+        
+        digest[@"captured_at"] = [dateFormat stringFromDate:asset.creationDate];
         
         if (asset.mediaType == PHAssetMediaTypeImage) {
             digest[@"contentType"] = @"image/jpeg";

@@ -38,7 +38,6 @@
 #import "FRSNotificationHandler.h"
 #import <UserNotifications/UserNotifications.h>
 
-
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSAppDelegate
@@ -49,6 +48,15 @@
 -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
+    
+    NSString *yourAppToken = @"bxk48kwhbx8g";
+    NSString *environment = ADJEnvironmentProduction;
+    ADJConfig *adjustConfig = [ADJConfig configWithAppToken:yourAppToken
+                                                environment:environment];
+    
+    [Adjust appDidLaunch:adjustConfig];
+    
+    
     [self startFabric]; // crashlytics first yall
     [self configureStartDate];
     [self clearUploadCache];
@@ -57,11 +65,10 @@
     
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
-    if ([self isFirstRun]) {
+    if ([self isFirstRun] && !launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         [[FRSAPIClient sharedClient] logout];
     }
     
-    [self startMixpanel];
     [self configureWindow];
     [self configureThirdPartyApplicationsWithOptions:launchOptions];
     [self persistentStoreCoordinator];
@@ -74,7 +81,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
-    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+    if ([[FRSAPIClient sharedClient] isAuthenticated] || launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
         FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
         
@@ -87,7 +94,6 @@
         [self startNotificationTimer];
     }
     else {
-        
         [self startAuthentication];
         
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
@@ -115,8 +121,12 @@
     [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     [[FRSUploadManager sharedUploader] checkCachedUploads];
     
+    [FRSTracker startTracking];
+    [self startTracking];
+
     return YES;
 }
+
 
 -(void)configureStartDate {
     if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate] == nil) {
@@ -147,23 +157,44 @@
     });
 }
 
--(void)startMixpanel {
-    [Mixpanel sharedInstanceWithToken:mixPanelToken];
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
+    if ([[userActivity activityType] isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+        NSURL *url = [userActivity webpageURL];
+        
+        // url object contains your universal link content
+        
+        [Adjust appWillOpenUrl:url];
+    }
+    
+    // Apply your logic to determine the return value of this method
+    return YES;
+    // or
+    // return NO;
+}
+
+-(void)startTracking {
     
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-        [[Mixpanel sharedInstance] identify:[[FRSAPIClient sharedClient] authenticatedUser].uid];
         FRSUser *user = [[FRSAPIClient sharedClient] authenticatedUser];
+        NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
+        NSString *userID = Nil;
         
         if (user.uid && ![user.uid isEqual:[NSNull null]]) {
-            [[[Mixpanel sharedInstance] people] set:@{@"fresco_id":user.uid}];
+            userID = user.uid;
         }
         
         if (user.firstName && ![user.firstName isEqual:[NSNull null]]) {
-            [[[Mixpanel sharedInstance] people] set:@{@"$name":user.firstName}];
+            identityDictionary[@"name"] = user.firstName;
         }
-    }
-    else {
-        [[Mixpanel sharedInstance] identify:[Mixpanel sharedInstance].distinctId];
+        
+        if (user.email && ![user.email isEqual:[NSNull null]]) {
+            identityDictionary[@"email"] = user.email;
+        }
+        
+        [[SEGAnalytics sharedAnalytics] identify:userID
+                                          traits:identityDictionary];
+
     }
 }
 
@@ -688,7 +719,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    
     const unsigned *tokenData = [deviceToken bytes];
     NSString *newDeviceToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
                                 ntohl(tokenData[0]), ntohl(tokenData[1]), ntohl(tokenData[2]),
@@ -696,7 +726,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
                                 ntohl(tokenData[6]), ntohl(tokenData[7])];
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"] == Nil)  {
-        [FRSTracker track:@"Notifications Enabled"];
+        [FRSTracker track:notificationsEnabled];
     }
     
     NSString *oldDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
@@ -704,11 +734,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [[NSUserDefaults standardUserDefaults] setObject:newDeviceToken forKey:@"deviceToken"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    NSMutableDictionary *installationDigest = [[FRSAPIClient sharedClient] currentInstallation];
+    NSMutableDictionary *installationDigest = (NSMutableDictionary *)[[FRSAPIClient sharedClient] currentInstallation];
     
-    if (oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]]) {
+    if (oldDeviceToken && [[oldDeviceToken class] isSubclassOfClass:[NSString class]] && ![oldDeviceToken isEqualToString:newDeviceToken]) {
         [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
     }
+    
+    
     
     [[FRSAPIClient sharedClient] updateUserWithDigestion:@{@"installation":installationDigest} completion:^(id responseObject, NSError *error) {
         NSLog(@"Updated user installation");
@@ -786,7 +818,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
-    [FRSTracker track:@"Permissions notification disables"];
+    [FRSTracker track:notificationsDisabled];
 }
 
 

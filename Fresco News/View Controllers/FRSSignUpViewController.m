@@ -105,7 +105,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [FRSTracker track:@"Onboarding reads"];
+    [FRSTracker track:onboardingReads];
     
     if (!_hasShown) {
         //        [self.usernameTF becomeFirstResponder];
@@ -554,7 +554,7 @@
     
     if (!_firstSlide) {
         _firstSlide = TRUE;
-        [FRSTracker track:@"Signup radius changes"];
+        [FRSTracker track:signupRadiusChange];
     }
     
     self.miles = slider.value * 50;
@@ -1177,7 +1177,7 @@
     NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
     [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
     
-    if (currentInstallation) {
+    if (currentInstallation && [currentInstallation objectForKey:@"device_token"]) {
         [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
     }
     
@@ -1188,6 +1188,16 @@
 
     
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
+        BOOL facebookSignup = FALSE;
+        BOOL twitterSignup = FALSE;
+        
+        if ([self.currentSocialDigest objectForKey:@"twitter"]) {
+            twitterSignup = true;
+        }
+        if ([self.currentSocialDigest objectForKey:@"facebook"]) {
+            facebookSignup = true;
+        }
+        
         NSLog(@"%@ %@", error, responseObject);
         
         NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
@@ -1196,7 +1206,7 @@
         
         if (error) {
             [registrationDigest setObject:error.localizedDescription forKey:@"error"];
-            [FRSTracker track:@"Registration Error" parameters:@{@"error":registrationDigest}];
+            [FRSTracker track:registrationError parameters:@{@"error":registrationDigest}];
         }
         
         if (error.code == -1009) {
@@ -1247,6 +1257,15 @@
             
             _isAlreadyRegistered = TRUE;
             [self segueToSetup];
+            NSString *platform;
+            if (self.twitterSession) {
+                platform = @"twitter";
+            } else if (self.facebookToken) {
+                platform = @"facebook";
+            } else {
+                platform = @"email";
+            }
+            [FRSTracker track:signup parameters:@{@"platform":platform}];
 
         }
         _pastRegistration = registrationDigest;

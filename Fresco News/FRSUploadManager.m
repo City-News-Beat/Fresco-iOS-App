@@ -13,6 +13,8 @@
 #import "Fresco.h"
 #import "FRSAppDelegate.h"
 #import "FRSTracker.h"
+#import "SDAVAssetExportSession.h"
+
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
@@ -42,7 +44,7 @@ static NSDate *lastDate;
         return;
     }
     
-    [FRSTracker track:@"Upload Close" parameters:@{@"percent_complete":@(lastProgress), @"gallery_id":_currentGalleryID}];
+    [FRSTracker track:uploadClose parameters:@{@"percent_complete":@(lastProgress), @"gallery_id":_currentGalleryID}];
 }
 
 -(void)checkCachedUploads {
@@ -258,7 +260,45 @@ static NSDate *lastDate;
             NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
             [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
             
+//            SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:avasset];
+//            encoder.outputFileType = AVFileTypeMPEG4;
+//            encoder.outputURL = [NSURL fileURLWithPath:tempPath];
+//            encoder.videoSettings = @
+//            {
+//                AVVideoCodecKey: AVVideoCodecH264,
+//                AVVideoWidthKey: @1920,
+//                AVVideoHeightKey: @1080,
+//                AVVideoCompressionPropertiesKey: @
+//                {
+//                    AVVideoProfileLevelKey: AVVideoProfileLevelH264High41,
+//                    AVVideoMaxKeyFrameIntervalDurationKey: @16
+//                },
+//            };
+//            encoder.audioSettings = @
+//            {
+//                AVFormatIDKey: @(kAudioFormatMPEG4AAC),
+//                AVNumberOfChannelsKey: @2,
+//                AVSampleRateKey: @44100,
+//                AVEncoderBitRateKey: @64000,
+//            };
+//            
+//            NSLog(@"STARTING EXPORT");
+//            
+//            [encoder exportAsynchronouslyWithCompletionHandler:^
+//             {
+//                 NSLog(@"ENDING EXPORT %@", encoder.error);
+//                 unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
+//                 totalFileSize += fileSize;
+//                 
+//                 NSArray *uploadMeta = @[tempPath, revisedToken, postID];
+//                 [self.uploadMeta addObject:uploadMeta];
+//                 [self checkRestart];
+//
+//            }];
+//            
+//            return;
             // set up resource from PHAsset
+            
             PHAssetResource *resource = [[PHAssetResource assetResourcesForAsset:asset] firstObject];
             PHAssetResourceRequestOptions *options = [PHAssetResourceRequestOptions new];
             options.networkAccessAllowed = YES;
@@ -408,11 +448,11 @@ static NSDate *lastDate;
     
     NSMutableDictionary *uploadErrorSummary = [@{@"error_message":error.localizedDescription} mutableCopy];
     if (uploadSpeed > 0) {
-        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed"];
+        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
     }
     
     if (error.localizedDescription) {
-        [FRSTracker track:@"Upload Error" parameters:uploadErrorSummary];
+        [FRSTracker track:uploadError parameters:uploadErrorSummary];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{@"type":@"failure"}];
 }

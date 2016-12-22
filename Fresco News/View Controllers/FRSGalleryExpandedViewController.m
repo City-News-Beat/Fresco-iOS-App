@@ -136,6 +136,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self register3DTouch];
+    
+    [FRSTracker screen:@"Gallery Detail"];
+    
     dateEntered = [NSDate date];
 }
 
@@ -712,8 +715,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[ sharedContent ] applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-
-    [FRSTracker track:@"Galleries shared from highlights" parameters:@{ @"gallery_id" : (self.gallery.uid != Nil) ? self.gallery.uid : @"" }];
+    
+    [FRSTracker track:sharedFromHighlights parameters:@{@"gallery_id":(self.gallery.uid != Nil) ? self.gallery.uid : @""}];
 }
 
 - (void)adjustScrollViewContentSize {
@@ -1055,6 +1058,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             FRSArticle *article = self.orderedArticles[indexPath.row];
             if (article.articleStringURL) {
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:article.articleStringURL]];
+                [FRSTracker track:articleOpens parameters:@{@"article_url":article.articleStringURL, @"article_id":article.uid}];
             }
         }
     }
@@ -1220,7 +1224,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit {
 
     NSURL *url = [NSURL URLWithString:viewControllerToCommit.title];
+
     if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [FRSTracker track:articleOpens parameters:@{@"article_url":viewControllerToCommit.title}];
         [[UIApplication sharedApplication] openURL:url];
     }
 }
@@ -1485,14 +1491,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 
     NSDictionary *session = @{
-        @"activity_duration" : @(timeInSession),
-        @"gallery_id" : galleryID,
-        @"scrolled_percent" : @(percentageScrolled),
-        @"author" : authorID,
-        @"opened_from" : _openedFrom
-    };
+                              @"activity_duration":@(timeInSession),
+                              @"gallery_id":galleryID,
+                              @"scrolled_percent":@(percentageScrolled * 100),
+                              @"author":authorID,
+                              @"opened_from":_openedFrom
+                            };
+    
+    [FRSTracker track:gallerySession parameters:session];
 
-    [FRSTracker track:@"Gallery Session" parameters:session];
 }
 
 #pragma mark - FRSGalleryViewDelegate

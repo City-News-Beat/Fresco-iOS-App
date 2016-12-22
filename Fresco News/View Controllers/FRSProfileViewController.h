@@ -20,6 +20,16 @@
     BOOL isReloading;
     BOOL isFinishedLikes;
     BOOL isFinishedUser;
+    
+    CGPoint lastScrollOffset;
+    NSTimeInterval lastOffsetCapture;
+    BOOL isScrollingFast;
+    NSInteger galleriesScrolledPast;
+    
+    NSInteger currentProfileCount;
+    NSInteger currentLikesCount;
+    
+    NSDate *dateOpened;
 }
 
 -(void)resizeProfileContainer;

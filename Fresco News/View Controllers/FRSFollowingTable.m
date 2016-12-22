@@ -137,7 +137,10 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.window.rootViewController presentViewController:activityController animated:YES completion:nil];
-    [FRSTracker track:@"Gallery Shared" parameters:@{@"content":content.firstObject}];
+    
+    NSString *url = content[0];
+    url = [[url componentsSeparatedByString:@"/"] lastObject];
+    [FRSTracker track:galleryShared parameters:@{@"gallery_id":url, @"shared_from":@"following"}];
 }
 
 -(void)reloadData {
@@ -199,6 +202,29 @@
         [self.scrollDelegate scrollViewDidScroll:scrollView];
     }
     
+    CGPoint currentOffset = scrollView.contentOffset;
+    NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+    
+    NSTimeInterval timeDiff = currentTime - lastOffsetCapture;
+    if(timeDiff > 0.1) {
+        CGFloat distance = currentOffset.y - lastScrollOffset.y;
+        //The multiply by 10, / 1000 isn't really necessary.......
+        CGFloat scrollSpeedNotAbs = (distance * 10) / 1000; //in pixels per millisecond
+        
+        CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
+        if (scrollSpeed > maxScrollVelocity) {
+            isScrollingFast = YES;
+            NSLog(@"Fast");
+        } else {
+            isScrollingFast = NO;
+            NSLog(@"Slow");
+        }
+        
+        lastScrollOffset = currentOffset;
+        lastOffsetCapture = currentTime;
+    }
+
+    
     NSArray *visibleCells = [self visibleCells];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -211,7 +237,7 @@
              */
             if (cell.frame.origin.y - self.contentOffset.y < 300 && cell.frame.origin.y - self.contentOffset.y > 0) {
                 
-                if (!taken) {
+                if (!taken && !isScrollingFast) {
                     taken = TRUE;
                     [cell play];
                 }

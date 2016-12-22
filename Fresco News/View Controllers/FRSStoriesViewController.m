@@ -101,6 +101,8 @@
     [super viewWillAppear:animated];
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
 
+    [FRSTracker screen:@"Stories"];
+    
     self.navigationItem.titleView.alpha = 1;
     
     if (!self.firstTime) {
@@ -135,7 +137,7 @@
     if (entry) {
         exit = [NSDate date];
         NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
-        [FRSTracker track:@"Stories session" parameters:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
+        [FRSTracker track:storiesSession parameters:@{activityDuration:@(sessionLength), @"stories_scrolled_past":@(numberRead)}];
     }
 
     [self.navigationController setNavigationBarHidden:NO animated:NO];
