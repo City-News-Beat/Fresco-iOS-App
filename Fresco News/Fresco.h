@@ -69,7 +69,7 @@ static NSString * const serviceName = @"frescoNewsService3";
 static NSString * const FRSUploadNotification = @"FRSUploadUpdateNotification";
 
 // base URLS
-static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
+static NSString * const baseURL = @"https://api.fresconews.com/v2/";
 static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
 static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 
@@ -139,8 +139,6 @@ static NSString * const commentEndpoint = @"gallery/%@/comment/";
 static NSString * const galleryUnlikeEndpoint = @"gallery/%@/unlike";
 static NSString * const storyUnlikeEndpoint = @"story/%@/unlike";
 static NSString * const deleteCommentEndpoint = @"gallery/%@/comment/delete"; // comment_id -> comment
-static NSString * const likedGalleryEndpoint = @"gallery/%@/likes";
-static NSString * const repostedGalleryEndpoint = @"gallery/%@/reposts";
 
 // feeds
 static NSString * const likeFeed = @"feeds/%@/likes";

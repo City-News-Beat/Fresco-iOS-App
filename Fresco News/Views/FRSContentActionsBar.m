@@ -46,6 +46,14 @@
     }
     return self;
 }
+-(void)handleHeartAmount:(NSInteger)amount {
+    
+    if (amount == 0) {
+        self.likeLabel.text = @"0";
+    }
+    
+    self.likeLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
+}
 
 -(void)configureActionButton{
     
@@ -64,13 +72,10 @@
 }
 
 -(void)configureShareButton{
-    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 8 - 40, 0, 40, 44)];
+    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 6 - 44, 1, 44, 42)];
     [self.shareButton setImage:[UIImage imageNamed:@"share-icon-dark"] forState:UIControlStateNormal];
     [self addSubview:self.shareButton];
     [self.shareButton addTarget:self action:@selector(handleShareButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-    
-//    self.shareButton.backgroundColor = [UIColor cyanColor];
-//    self.shareButton.alpha = 0.5;
 }
 
 -(void)handleShareButtonTapped {
@@ -78,15 +83,10 @@
 }
 
 -(void)configureRepostSection{
-
     self.repostLabel = [[UILabel alloc] init];
     self.repostLabel.font = [UIFont notaBoldWithSize:15];
-    self.repostLabel.text = @"";
+    self.repostLabel.text = @"30";
     self.repostLabel.textColor = [UIColor frescoMediumTextColor];
-    self.repostLabel.userInteractionEnabled = YES;
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleRepostLabelTapped:)];
-    [self.repostLabel addGestureRecognizer:tap];
     
     if (self.repostButton.imageView.image == [UIImage imageNamed:@"repost-icon-green"]) {
         self.repostLabel.textColor = [UIColor frescoGreenColor];
@@ -94,7 +94,7 @@
     
     [self.repostLabel sizeToFit];
     
-    self.repostLabel.frame = CGRectMake(self.shareButton.frame.origin.x - self.repostLabel.frame.size.width, 0, self.repostLabel.frame.size.width, self.frame.size.height);
+    self.repostLabel.frame = CGRectMake(self.shareButton.frame.origin.x - 6 - self.repostLabel.frame.size.width, 0, self.repostLabel.frame.size.width, self.frame.size.height);
     [self addSubview:self.repostLabel];
     
     self.repostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.repostLabel.frame.origin.x - 36.5, 0, 36.5, self.frame.size.height)];
@@ -106,12 +106,6 @@
     [self.repostButton addTarget:self action:@selector(handleButtonSelected:)  forControlEvents:UIControlEventTouchDragEnter];
     [self.repostButton addTarget:self action:@selector(handleButtonDrag:)      forControlEvents:UIControlEventTouchDragExit];
     [self addSubview:self.repostButton];
-
-    
-//    self.repostButton.backgroundColor = [UIColor greenColor];
-//    self.repostButton.alpha = 0.5;
-//    self.repostLabel.backgroundColor = [UIColor blueColor];
-//    self.repostButton.alpha = 0.5;
     
 }
 
@@ -120,19 +114,13 @@
     self.likeLabel = [[UILabel alloc] init];
     self.likeLabel.textColor = [UIColor frescoMediumTextColor];
     self.likeLabel.font = [UIFont notaBoldWithSize:15];
-    self.repostLabel.text = @"";
-    self.likeLabel.userInteractionEnabled = YES;
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleLikeLabelTapped:)];
-    [self.likeLabel addGestureRecognizer:tap];
 
     if (self.likeButton.imageView.image == [UIImage imageNamed:@"like-heart-filled"]) {
         self.likeLabel.textColor = [UIColor frescoRedHeartColor];
     }
     
-    [self.likeLabel sizeToFit];
-    
-    self.likeLabel.frame = CGRectMake(self.frame.size.width - (16 + self.shareButton.frame.size.width + 12 + self.repostLabel.frame.size.width + self.repostButton.frame.size.width), 0, self.likeLabel.frame.size.width, self.frame.size.height);
+    self.likeLabel.frame = CGRectMake(self.frame.size.width - (16 + self.shareButton.frame.size.width + 16 + self.repostLabel.frame.size.width + 6 + self.repostButton.frame.size.width), 0, 100, 44);
+
     [self addSubview:self.likeLabel];
     
     self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.likeLabel.frame.origin.x - 36, 0, 36, self.frame.size.height)];
@@ -146,25 +134,6 @@
     [self.likeButton addTarget:self action:@selector(handleButtonSelected:)  forControlEvents:UIControlEventTouchDragEnter];
     [self.likeButton addTarget:self action:@selector(handleButtonDrag:)      forControlEvents:UIControlEventTouchDragExit];
     [self addSubview:self.likeButton];
-    
-    
-//    self.likeLabel.backgroundColor = [UIColor orangeColor];
-//    self.likeLabel.alpha = 0.5;
-//    self.likeButton.backgroundColor = [UIColor redColor];
-//    self.likeButton.alpha = 0.5;
-
-}
-
--(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
-    if (self.delegate) {
-        [self.delegate handleLikeLabelTapped:actionBar];
-    }
-}
-
--(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
-    if (self.delegate) {
-        [self.delegate handleRepostLabelTapped:actionBar];
-    }
 }
 
 -(void)handleRepostTapped {
@@ -182,7 +151,7 @@
         repost++;
     }
         
-    self.repostLabel.text = [NSString stringWithFormat:@" %.0f", repost];
+    self.repostLabel.text = [NSString stringWithFormat:@"%.0f", repost];
     if (self.delegate) {
         [self.delegate handleRepost:self];
     }
@@ -204,7 +173,7 @@
         likes--;
     }
     
-    self.likeLabel.text = [NSString stringWithFormat:@" %.0f", likes];
+    self.likeLabel.text = [NSString stringWithFormat:@"%.0f", likes];
     
     [self bounceButton:self.likeButton];
     
@@ -301,33 +270,10 @@
 -(void)handleRepostAmount:(NSInteger)amount {
         
     if (amount == 0) {
-        self.repostLabel.text = @"";
+        self.repostLabel.text = @"0";
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.repostLabel.text = [NSString stringWithFormat:@" %lu", (long)amount];
-        [self.repostLabel sizeToFit];
-        self.repostLabel.frame = CGRectMake(self.shareButton.frame.origin.x - self.repostLabel.frame.size.width -10, 0, self.repostLabel.frame.size.width +10, self.frame.size.height);
-        self.repostButton.frame = CGRectMake(self.repostLabel.frame.origin.x - 36, 0, 36, self.frame.size.height);
-        self.repostButton.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
-    });
-
-}
-
--(void)handleHeartAmount:(NSInteger)amount {
-    
-    if (amount == 0) {
-        self.likeLabel.text = @"";
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.likeLabel.text = [NSString stringWithFormat:@" %lu", (long)amount];
-        [self.likeLabel sizeToFit];
-        self.likeLabel.frame = CGRectMake(self.repostButton.frame.origin.x - self.likeLabel.frame.size.width -8, 0, self.likeLabel.frame.size.width +8, self.frame.size.height);
-        self.likeButton.frame = CGRectMake(self.likeLabel.frame.origin.x - 36, 0, 36, self.frame.size.height);
-        self.likeButton.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
-    });
-
+    self.repostLabel.text = [NSString stringWithFormat:@"%lu", (long)amount];
 }
 
 @end
