@@ -26,19 +26,19 @@
  */
 
 /* dev */
-static NSString *const awsBucket = @"com.fresconews.dev";
-static NSString *const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
-static NSString *const awsSecretKey = @"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";
+//static NSString *const awsBucket = @"com.fresconews.dev";
+//static NSString *const awsAccessKey = @"AKIAIFLQKVYXPMMMF7CQ";
+//static NSString *const awsSecretKey = @"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";
 
 /* prod */
-//static NSString * const awsBucket = @"com.fresconews.v2.prod";
-//static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
-//static NSString * const awsSecretKey = @"maStuGRQsr2xL0dyHjz6k127mGVRE2uMwESo7T";
+static NSString * const awsBucket = @"com.fresconews.v2.prod";
+static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
+static NSString * const awsSecretKey = @"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";
 
 
 // segment
-//static NSString * const segmentWriteKey = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
-static NSString *const segmentWriteKey = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug
+static NSString * const segmentWriteKey = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
+//static NSString *const segmentWriteKey = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug
 
 
 #define AWS_REGION AWSRegionUSEast1
