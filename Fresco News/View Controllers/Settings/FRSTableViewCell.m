@@ -18,6 +18,9 @@
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "FRSAPIClient.h"
 #import <Haneke/Haneke.h>
+#import "FRSAppDelegate.h"
+#import "FRSLocationManager.h"
+
 @interface FRSTableViewCell() <FRSAlertViewDelegate>
 
 @property CGFloat leftPadding;
@@ -53,6 +56,8 @@
 @property (strong, nonatomic) FRSAlertView *alert;
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
+@property (strong, nonatomic) FRSLocationManager *locationManager;
 
 @property BOOL notificationsEnabled;
 @property BOOL locationEnabled;
@@ -670,6 +675,141 @@
     self.backgroundColor = [UIColor whiteColor];
 }
 
+-(void)configureSearchNearbyUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing userDict:(NSDictionary *)userDict user:(FRSUser *)user {
+    
+    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(72, 66, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    topLine.backgroundColor = [UIColor colorWithRed:0.878 green:0.878 blue:0.878 alpha:1.00]; //Color is frescoShadowColor behnd frescoBackgroundColorLight without any transparency. Added to avoid double alpha when top and bottom overlap
+    [self addSubview:topLine];
+    
+    [self constrainSubview:topLine ToBottomOfParentView:self WithHeight:0.5];
+    
+    UIImageView *profileIV = [[UIImageView alloc] init];
+    profileIV.frame = CGRectMake(16, 12, 32, 32);
+    profileIV.layer.cornerRadius = 16;
+    profileIV.clipsToBounds = YES;
+    
+    [profileIV hnk_setImageFromURL:(NSURL *)profile];
+    
+    profileIV.backgroundColor = [UIColor frescoLightTextColor];
+    NSLog(@"profile image URL: %@", profile);
+    if (!profile) {
+        UIImageView *profileIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user-24"]];
+        profileIcon.frame = CGRectMake(4, 4, 24, 24);
+        [profileIV addSubview:profileIcon];
+    }
+    
+    [self addSubview:profileIV];
+    
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(72, 12, self.frame.size.width - 64, self.frame.size.height)];
+    nameLabel.text = nameString;
+    nameLabel.font = [UIFont notaMediumWithSize:17];
+    nameLabel.textColor = [UIColor frescoDarkTextColor];
+    [nameLabel sizeToFit];
+    [self addSubview:nameLabel];
+    
+    UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(72 + 16 + nameLabel.frame.size.width, 15, self.frame.size.width - 64, 14)];
+    usernameLabel.text = (username && ![username isEqual:[NSNull null]] && ![username isEqualToString:@""]) ? [@"@" stringByAppendingString:username] : @"";
+    usernameLabel.font = [UIFont notaRegularWithSize:12];
+    usernameLabel.textColor = [UIColor frescoMediumTextColor];
+    [usernameLabel sizeToFit];
+    usernameLabel.frame = CGRectMake(64 + 16 + nameLabel.frame.size.width, 15, self.frame.size.width - 64 - nameLabel.frame.size.width, 14); //set label max width
+    
+    //Checks if username label is truncating and nameLabel.text is not empty
+    CGSize size = [usernameLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont notaRegularWithSize:12]}];
+    if ((size.width > usernameLabel.bounds.size.width) && ![nameLabel.text isEqualToString:@""]) {
+        usernameLabel.alpha = 0;
+    }
+    
+    if ([nameLabel.text isEqualToString: @""]) {
+        usernameLabel.frame = CGRectMake(64 + nameLabel.frame.size.width + 16, 15, self.frame.size.width - 64, 14);
+    }
+    [self addSubview:usernameLabel];
+    
+    NSString *bio = userDict[@"bio"];
+    UILabel *bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(72, 34, self.frame.size.width - 72 - 56, 0)];
+    bioLabel.text = (bio && ![bio isEqual:[NSNull null]] && ![bio isEqualToString:@""]) ? bio : @"";
+    bioLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    bioLabel.textColor = [UIColor frescoMediumTextColor];
+    bioLabel.numberOfLines = 0;
+    [bioLabel sizeToFit];
+    bioLabel.frame = CGRectMake(72, 34, [UIScreen mainScreen].bounds.size.width - 72 - 56, bioLabel.frame.size.height);
+    [self addSubview:bioLabel];
+    
+    
+    self.followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.followingButton addTarget:self action:@selector(follow) forControlEvents:UIControlEventTouchUpInside];
+    self.followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 24, 24);
+    
+    [self addSubview:self.followingButton];
+    
+    if (isFollowing){
+        [self.followingButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+        self.followingButton.tintColor = [UIColor frescoOrangeColor];
+    } else {
+        [self.followingButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+        self.followingButton.tintColor = [UIColor blackColor];
+    }
+    
+    self.currentUserDict = userDict;
+    self.following = isFollowing;
+    self.currentUser = user;
+    
+    
+    self.backgroundColor = [UIColor frescoBackgroundColorDark];
+
+}
+
+-(void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView WithHeight:(CGFloat)height {
+    
+    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    //Trailing
+    NSLayoutConstraint *trailing = [NSLayoutConstraint
+                                    constraintWithItem:subView
+                                    attribute:NSLayoutAttributeTrailing
+                                    relatedBy:NSLayoutRelationEqual
+                                    toItem:parentView
+                                    attribute:NSLayoutAttributeTrailing
+                                    multiplier:1
+                                    constant:0];
+    
+    //Leading
+    NSLayoutConstraint *leading = [NSLayoutConstraint
+                                   constraintWithItem:subView
+                                   attribute:NSLayoutAttributeLeading
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:parentView
+                                   attribute:NSLayoutAttributeLeading
+                                   multiplier:1
+                                   constant:72];
+    
+    //Bottom
+    NSLayoutConstraint *bottom = [NSLayoutConstraint
+                                  constraintWithItem:subView
+                                  attribute:NSLayoutAttributeBottom
+                                  relatedBy:NSLayoutRelationEqual
+                                  toItem:parentView
+                                  attribute:NSLayoutAttributeBottom
+                                  multiplier:1
+                                  constant:0];
+    
+    //Height
+    NSLayoutConstraint *constantHeight = [NSLayoutConstraint
+                                          constraintWithItem:subView
+                                          attribute:NSLayoutAttributeHeight
+                                          relatedBy:NSLayoutRelationEqual
+                                          toItem:nil
+                                          attribute:0
+                                          multiplier:0
+                                          constant:height];
+    
+    [parentView addConstraint:trailing];
+    [parentView addConstraint:bottom];
+    [parentView addConstraint:leading];
+    
+    [subView addConstraint:constantHeight];
+}
+
 
 -(void)configureSearchUserCellWithProfilePhoto:(NSURL *)profile fullName:(NSString *)nameString userName:(NSString *)username isFollowing:(BOOL)isFollowing userDict:(NSDictionary *)userDict user:(FRSUser *)user {
     
@@ -731,7 +871,8 @@
 
     self.followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.followingButton addTarget:self action:@selector(follow) forControlEvents:UIControlEventTouchUpInside];
-    self.followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 24, 24);
+    self.followingButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 40, 16, 34, 34);
+    self.followingButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 10, 10);
     
     [self addSubview:self.followingButton];
     
@@ -746,6 +887,13 @@
     self.currentUserDict = userDict;
     self.following = isFollowing;
     self.currentUser = user;
+    
+    if (self.currentUser.uid && [[FRSAPIClient sharedClient] authenticatedUser].uid && [self.currentUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        self.followingButton.alpha = 0;
+    }
+    else {
+        self.followingButton.alpha = 1;
+    }
 
 }
 
@@ -849,7 +997,6 @@
     [self checkLocationStatus];
     
     __block BOOL state;
-    
     
     if ([sender isOn]) {
         FRSUser *user = [[FRSAPIClient sharedClient] authenticatedUser];

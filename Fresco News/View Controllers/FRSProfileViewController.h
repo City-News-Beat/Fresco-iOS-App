@@ -11,12 +11,25 @@
 #import "FRSFeedTable.h"
 #import "FRSBorderedImageView.h"
 
-@interface FRSProfileViewController : FRSScrollingViewController <UITextViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource>
+@interface FRSProfileViewController : FRSScrollingViewController <UITextViewDelegate, FRSGalleryViewDelegate, FRSStoryViewDelegate, UITableViewDataSource>
 {
     UILabel *titleLabel;
     UIView *topView;
     BOOL isLoadingUser;
     NSString *userId;
+    BOOL isReloading;
+    BOOL isFinishedLikes;
+    BOOL isFinishedUser;
+    
+    CGPoint lastScrollOffset;
+    NSTimeInterval lastOffsetCapture;
+    BOOL isScrollingFast;
+    NSInteger galleriesScrolledPast;
+    
+    NSInteger currentProfileCount;
+    NSInteger currentLikesCount;
+    
+    NSDate *dateOpened;
 }
 
 -(void)resizeProfileContainer;

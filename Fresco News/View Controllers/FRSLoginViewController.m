@@ -22,6 +22,8 @@
 //Alert View
 #import "FRSAlertView.h"
 
+#import "FRSLocationManager.h"
+
 @interface FRSLoginViewController () <UITextFieldDelegate, FRSAlertViewDelegate>
 
 @property (nonatomic) BOOL didAnimate;
@@ -32,6 +34,8 @@
 @property (nonatomic) BOOL didAuthenticateSocial;
 @property (strong, nonatomic) FRSAlertView *alert;
 @property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
+@property (strong, nonatomic) FRSLocationManager *locationManager;
+
 @end
 
 @implementation FRSLoginViewController
@@ -54,6 +58,8 @@
     [super viewDidLoad];
     
     [self configureSpinner];
+    
+    self.locationManager = [[FRSLocationManager alloc] init];
     
     self.didAnimate = NO;
     self.didTransform = NO;
@@ -128,7 +134,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [FRSTracker track:@"Onboarding reads"];
+    [FRSTracker track:onboardingReads];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
     if (!self.didAnimate) {
@@ -216,7 +222,7 @@
     [[FRSAPIClient sharedClient] signIn:username password:password completion:^(id responseObject, NSError *error) {
         
         if (error) {
-            [FRSTracker track:@"Login Error" parameters:@{@"method":@"email", @"error":error.localizedDescription}];
+            [FRSTracker track:loginError parameters:@{@"method":@"email", @"error":error.localizedDescription}];
         }
         
         [self stopSpinner:self.loadingView onButton:self.loginButton];
@@ -242,6 +248,9 @@
             if ([self validEmail:username]) {
                 [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
             }
+            
+            [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+            
             return;
         }
         
@@ -352,7 +361,7 @@
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
 
         if (error) {
-            [FRSTracker track:@"Login Error" parameters:@{@"method":@"twitter", @"error":error.localizedDescription}];
+            [FRSTracker track:loginError parameters:@{@"method":@"twitter", @"error":error.localizedDescription}];
         }
         
         if (authenticated) {
@@ -367,6 +376,8 @@
 
             self.didAuthenticateSocial = YES;
             
+            [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+
             [self popToOrigin];
             
             return;
@@ -404,7 +415,7 @@
     //[appDelegate reloadUser];
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
-    [appDelegate registerForPushNotifications];
+    //[appDelegate registerForPushNotifications];
     
     NSArray *viewControllers = [self.navigationController viewControllers];    
     
@@ -460,7 +471,7 @@
     [FRSSocial loginWithFacebook:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
         
         if (error) {
-            [FRSTracker track:@"Login Error" parameters:@{@"method":@"facebook", @"error":error.localizedDescription}];
+            [FRSTracker track:loginError parameters:@{@"method":@"facebook", @"error":error.localizedDescription}];
         }
         
         if (authenticated) {
@@ -492,7 +503,7 @@
             
             
             self.didAuthenticateSocial = YES;
-            NSLog(@"Popped");
+            [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
             [self popToOrigin];
 
             [spinner stopLoading];
@@ -500,7 +511,6 @@
             self.facebookButton.hidden = false;
             return;
         } else {
-            NSLog(@"Else");
         }
         
         if (error) {

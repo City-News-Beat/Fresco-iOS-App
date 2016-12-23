@@ -37,8 +37,6 @@
     self.navBarHeight = 20;
     //NSLog(@"Nav Bar Height: %f", self.navBarHeight);
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
-    
     self.enabled = YES;
     self.backButtonHidden = NO;
 }
@@ -53,16 +51,6 @@
     [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
     [self expandNavBar:barButtonItems];
     [super viewWillAppear:animated];
-}
-
--(void)appWillResignActive:(NSNotification*)notification {
-    
-    self.navigationItem.titleView.alpha = 1.0;
-    
-    if (self.shouldHaveBackButton){
-        [super configureBackButtonAnimated:YES];
-        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-    }
 }
 
 -(void)configureTableView{

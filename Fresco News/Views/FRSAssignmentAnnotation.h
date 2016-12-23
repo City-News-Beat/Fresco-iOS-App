@@ -19,4 +19,6 @@
 -(NSString *)title;
 -(NSString *)subtitle;
 -(NSDate *)assignmentExpirationDate;
+-(NSDate *)assignmentPostedDate;
+@property (nonatomic) BOOL isAcceptable; // add isAcceptable to model
 @end

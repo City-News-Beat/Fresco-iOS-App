@@ -13,9 +13,13 @@
 #import "Fresco.h"
 #import "FRSAppDelegate.h"
 #import "FRSTracker.h"
+#import "SDAVAssetExportSession.h"
+
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
+static NSDate *lastDate;
+
 
 + (id)sharedUploader {
     
@@ -23,9 +27,24 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedUploader = [[self alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:sharedUploader selector:@selector(notifyExit:) name:UIApplicationWillResignActiveNotification object:nil];
+        
     });
     
     return sharedUploader;
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)notifyExit:(NSNotification*)notification {
+    
+    if (completed == toComplete || toComplete == 0) {
+        return;
+    }
+    
+    [FRSTracker track:uploadClose parameters:@{@"percent_complete":@(lastProgress), @"gallery_id":_currentGalleryID}];
 }
 
 -(void)checkCachedUploads {
@@ -56,8 +75,8 @@
                 
                 continue;
             }
-                NSString *key = upload.uploadID;
-                [uploadsDictionary setObject:upload forKey:key];
+            NSString *key = upload.uploadID;
+            [uploadsDictionary setObject:upload forKey:key];
         }
         
         self.managedObjects = uploadsDictionary;
@@ -138,6 +157,7 @@
     self = [super init];
     
     if (self) {
+        _currentGalleryID = @"";
         [self commonInit];
     }
     
@@ -161,7 +181,7 @@
 
 -(void)subscribeToEvents {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
-
+    
     [[NSNotificationCenter defaultCenter] addObserverForName:@"FRSRetryUpload" object:nil queue:nil usingBlock:^(NSNotification *notification) {
         [self retryUpload];
     }];
@@ -175,7 +195,7 @@
                 [self.context save:Nil];
             }];
         }
-
+        
     }];
     
 }
@@ -213,32 +233,72 @@
     
     if (asset.mediaType == PHAssetMediaTypeImage) {
         
-    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeDefault options:Nil resultHandler:^void(UIImage *image, NSDictionary *info) {
-        NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[[NSProcessInfo processInfo] globallyUniqueString] stringByAppendingString:@".jpeg"]];
-        [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
+        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+        options.resizeMode = PHImageRequestOptionsResizeModeNone;
+        options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+        options.version = PHImageRequestOptionsVersionOriginal;
         
-        // write data to temp path (background thread, async)
-        
-        NSData *imageData = UIImageJPEGRepresentation(image, 1);
-        [imageData writeToFile:tempPath atomically:NO];
-        
-        unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
-        totalFileSize += fileSize;
-        
-        NSArray *uploadMeta = @[tempPath, revisedToken, postID];
-        
-        [self.uploadMeta addObject:uploadMeta];
-        [self checkRestart];
-    }];
-    
+        [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[[NSProcessInfo processInfo] globallyUniqueString] stringByAppendingString:@".jpeg"]];
+            [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
+            
+            // write data to temp path (background thread, async)
+            [imageData writeToFile:tempPath atomically:NO];
+            
+            unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
+            totalFileSize += fileSize;
+            
+            NSArray *uploadMeta = @[tempPath, revisedToken, postID];
+            
+            [self.uploadMeta addObject:uploadMeta];
+            [self checkRestart];
+        }];
     }
     else if (asset.mediaType == PHAssetMediaTypeVideo) {
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:Nil resultHandler:^(AVAsset * avasset, AVAudioMix * audioMix, NSDictionary * info) {
             // create temp location to move data (PHAsset can not be weakly linked to)
-            NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+            NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
             [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
             
+//            SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:avasset];
+//            encoder.outputFileType = AVFileTypeMPEG4;
+//            encoder.outputURL = [NSURL fileURLWithPath:tempPath];
+//            encoder.videoSettings = @
+//            {
+//                AVVideoCodecKey: AVVideoCodecH264,
+//                AVVideoWidthKey: @1920,
+//                AVVideoHeightKey: @1080,
+//                AVVideoCompressionPropertiesKey: @
+//                {
+//                    AVVideoProfileLevelKey: AVVideoProfileLevelH264High41,
+//                    AVVideoMaxKeyFrameIntervalDurationKey: @16
+//                },
+//            };
+//            encoder.audioSettings = @
+//            {
+//                AVFormatIDKey: @(kAudioFormatMPEG4AAC),
+//                AVNumberOfChannelsKey: @2,
+//                AVSampleRateKey: @44100,
+//                AVEncoderBitRateKey: @64000,
+//            };
+//            
+//            NSLog(@"STARTING EXPORT");
+//            
+//            [encoder exportAsynchronouslyWithCompletionHandler:^
+//             {
+//                 NSLog(@"ENDING EXPORT %@", encoder.error);
+//                 unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
+//                 totalFileSize += fileSize;
+//                 
+//                 NSArray *uploadMeta = @[tempPath, revisedToken, postID];
+//                 [self.uploadMeta addObject:uploadMeta];
+//                 [self checkRestart];
+//
+//            }];
+//            
+//            return;
             // set up resource from PHAsset
+            
             PHAssetResource *resource = [[PHAssetResource assetResourcesForAsset:asset] firstObject];
             PHAssetResourceRequestOptions *options = [PHAssetResourceRequestOptions new];
             options.networkAccessAllowed = YES;
@@ -248,7 +308,7 @@
                 
                 unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
                 totalFileSize += fileSize;
-
+                
                 NSArray *uploadMeta = @[tempPath, revisedToken, postID];
                 [self.uploadMeta addObject:uploadMeta];
                 [self checkRestart];
@@ -292,13 +352,16 @@
 
 -(void)startAWS {
     AWSStaticCredentialsProvider *credentialsProvider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:awsAccessKey secretKey:awsSecretKey];
-        
+    
     AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWS_REGION credentialsProvider:credentialsProvider];
-        
+    
     [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
 }
 
 -(void)addUploadForPost:(NSString *)postID url:(NSString *)body postID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
+    
+    __block int uploadUpdates;
+    
     AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
     
     
@@ -315,8 +378,33 @@
     upload.key = postID;
     upload.metadata = @{@"post_id":post};
     upload.bucket = awsBucket;
+    
+    /*
+     MixPanel speed tracking
+     */
+    lastDate = [NSDate date];
+    
     upload.uploadProgress = ^(int64_t bytesSent, int64_t totalBytesSent, int64_t totalBytesExpectedToSend) {
+        
         [self updateProgress:bytesSent];
+        
+        NSTimeInterval secondsSinceLastUpdate = [[NSDate date] timeIntervalSinceDate:lastDate];
+        float percentageOfSecond = 1 / secondsSinceLastUpdate;
+        
+        float megabitsPerSecond = bytesSent * percentageOfSecond * 1.0 / 1024 /* kb */ / 1024 /* mb */;
+        float averageMegabitsPerSecond = megabitsPerSecond;
+        
+        if (uploadUpdates > 0) {
+            averageMegabitsPerSecond = uploadSpeed / uploadUpdates;
+            averageMegabitsPerSecond = ((averageMegabitsPerSecond * uploadUpdates) + megabitsPerSecond) / (uploadUpdates + 1);
+        }
+        
+        uploadSpeed = averageMegabitsPerSecond;
+        
+        NSLog(@"UPLOAD SPEED: %fmbps", megabitsPerSecond);
+        
+        lastDate = [NSDate date];
+        uploadUpdates++;
     };
     __weak typeof (self) weakSelf = self;
     
@@ -357,22 +445,25 @@
 }
 
 -(void)uploadDidErrorWithError:(NSError *)error {
+    
+    NSMutableDictionary *uploadErrorSummary = [@{@"error_message":error.localizedDescription} mutableCopy];
+    if (uploadSpeed > 0) {
+        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
+    }
+    
     if (error.localizedDescription) {
-        [FRSTracker track:@"Upload Failure" parameters:@{@"error_message":error.localizedDescription}];
+        [FRSTracker track:uploadError parameters:uploadErrorSummary];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{@"type":@"failure"}];
 }
 
 -(void)taskDidComplete:(AWSTask *)task {
-//    NSString *eTag = task.aws_properties[@"ETag"];
-//    
-//    if (eTag == nil) {
-//        [self uploadDidErrorWithError:Nil];
-//    }
+    //    NSString *eTag = task.aws_properties[@"ETag"];
+    //
+    //    if (eTag == nil) {
+    //        [self uploadDidErrorWithError:Nil];
+    //    }
 }
 
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 @end

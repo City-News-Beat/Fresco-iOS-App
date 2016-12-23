@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *longitude;
 @property (nullable, nonatomic, retain) NSNumber *latitude;
 @property (nullable, nonatomic, retain) NSArray *outlets;
+@property (nullable, nonatomic, retain) NSNumber *acceptable;
+@property (nullable, nonatomic, retain) NSNumber *accepted;
 
 
 @end

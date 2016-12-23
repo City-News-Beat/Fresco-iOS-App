@@ -12,7 +12,9 @@
 @class FRSGallery;
 
 @interface FRSGalleryCell : UITableViewCell <FRSGalleryViewDelegate>
-
+{
+    BOOL hasPlayed;
+}
 @property (strong, nonatomic) FRSGalleryView *galleryView;
 
 @property (strong, nonatomic) FRSGallery *gallery;
@@ -24,8 +26,7 @@
 @property BOOL hasVideoAsFirstPost;
 -(void)clearCell;
 -(void)configureCell;
-
+-(void)offScreen;
 -(void)play;
 -(void)pause;
-
 @end

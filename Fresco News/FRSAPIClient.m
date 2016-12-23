@@ -105,6 +105,10 @@
                 case 405:
                     
                     break;
+                    
+                case 412:
+                    // installation token error or social taken error
+                    break;
                 default:
                     break;
             }
@@ -127,7 +131,10 @@
 -(void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
     self.passwordUsed = password;
     
-    [self post:loginEndpoint withParameters:@{@"username":user, @"password":password, @"installation":[[FRSAPIClient sharedClient] currentInstallation]} completion:^(id responseObject, NSError *error) {
+    NSDictionary *params = @{@"username":user, @"password":password};
+    
+    [self post:loginEndpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        
         completion(responseObject, error);
         if (!error) {
             [self handleUserLogin:responseObject];
@@ -248,49 +255,23 @@
 -(void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
     
     [self get:notificationEndpoint withParameters:@{} completion:^(id responseObject, NSError *error) {
-        
-//        NSArray *feed = [responseObject objectForKey:@"feed"];
-//        NSMutableArray *notificationIDs = [[NSMutableArray alloc] init];
-//        
         completion(responseObject, error);
-
-//        for (int i=0; i<feed.count; i++) {
-//            [notificationIDs addObject:[[[responseObject objectForKey:@"feed"] objectAtIndex:i] objectForKey:@"id"]];
-//        }
-//        [self post:@"user/notifications/see" withParameters:@{@"notification_ids": notificationIDs} completion:^(id responseObject, NSError *error) {
-//        }];
     }];
 }
 
 -(void)getNotificationsWithLast:(nonnull NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
+    
     if (!last) {
         completion(Nil, [NSError errorWithDomain:@"com.fresconews.Fresco" code:400 userInfo:Nil]);
     }
     
     [self get:notificationEndpoint withParameters:@{@"last":last} completion:^(id responseObject, NSError *error) {
-        
-        //        NSArray *feed = [responseObject objectForKey:@"feed"];
-        //        NSMutableArray *notificationIDs = [[NSMutableArray alloc] init];
-        //
         completion(responseObject, error);
-        
-        //        for (int i=0; i<feed.count; i++) {
-        //            [notificationIDs addObject:[[[responseObject objectForKey:@"feed"] objectAtIndex:i] objectForKey:@"id"]];
-        //        }
-        //        [self post:@"user/notifications/see" withParameters:@{@"notification_ids": notificationIDs} completion:^(id responseObject, NSError *error) {
-        //        }];
     }];
 
 }
 
 -(void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    
-    // ** WARNING ** Don't update users info just to update it, update it only if new (i.e. changing email to identical email has resulted in issues with api v1)
-    // full_name: User's full name
-    // bio: User's profile bio
-    // avatar: User's avatar URL
-    // installation
-    // social links
     
     [self post:updateUserEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -351,7 +332,6 @@
         if (twitterSession.authToken && twitterSession.authTokenSecret) {
             NSDictionary *twitterDigestion = @{@"token":twitterSession.authToken, @"secret": twitterSession.authTokenSecret};
             [socialDigestion setObject:twitterDigestion forKey:@"twitter"];
-            [FRSTracker track:@"Signups with Twitter"];
         }
     }
     
@@ -360,7 +340,6 @@
         if (facebookToken.tokenString) {
             NSDictionary *facebookDigestion = @{@"token":facebookToken.tokenString};
             [socialDigestion setObject:facebookDigestion forKey:@"facebook"];
-            [FRSTracker track:@"Signups with Facebook"];
         }
     }
     
@@ -378,8 +357,7 @@
         currentInstallation[@"device_token"] = deviceToken;
     }
     else {
-        
-        currentInstallation[@"device_token"] = [[FRSAPIClient sharedClient] random64CharacterString]; // no installation without push info, apparently
+        NSLog(@"NO DEVICE TOKEN -- INSTALLATION WILL FAIL");
     }
     
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
@@ -401,15 +379,6 @@
     if (appVersion) {
         currentInstallation[@"app_version"] = appVersion;
     }
-
-    
-    /*
-     If we ever choose to move towards a UTC+X approach in timezones, as opposed to the unix timestamp that includes the current timezone, this is how we would do it.
-     
-    NSInteger secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
-    NSInteger hoursFromGMT = secondsFromGMT / 60; // GMT = UTC
-    NSString *timeZone = [NSString stringWithFormat:@"UTC+%d", (int)hoursFromGMT]; 
-    */
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -465,6 +434,15 @@
     
     [self reevaluateAuthorization];
     [self updateLocalUser];
+    
+    NSDictionary *currentInstallation = [self currentInstallation];
+    
+    if ([currentInstallation objectForKey:@"device_token"]) {
+        NSDictionary *update = @{@"installation":currentInstallation};
+        [self updateUserWithDigestion:update completion:^(id responseObject, NSError *error) {
+            NSLog(@"USER UPDATED: %@ %@", responseObject, error);
+        }];
+    }
 }
 
 -(void)updateLocalUser {
@@ -478,27 +456,28 @@
         }
         
         // set up FRSUser object with this info, set authenticated to true
-        
-        NSString *userID = responseObject[@"id"];
+        NSString *userID = Nil;
+
+        userID = responseObject[@"id"];
         NSString *email = responseObject[@"email"];
         NSString *name = responseObject[@"full_name"];
-        
-        if (userID != Nil && ![userID isEqual:[NSNull null]]) {
-            [[Mixpanel sharedInstance] registerSuperProperties:@{@"fresco_id": userID}];
-        }
-        if (email != Nil && ![email isEqual:[NSNull null]]) {
-            [[Mixpanel sharedInstance] registerSuperProperties:@{@"email": email}];
-        }
-        if (name != Nil && ![name isEqual:[NSNull null]]) {
-            [[Mixpanel sharedInstance] registerSuperProperties:@{@"name": name}];
-        }
+        NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
+    
         if (userID && ![userID isEqual:[NSNull null]]) {
-            Mixpanel *mixpanel = [Mixpanel sharedInstance];
-            [mixpanel createAlias:userID forDistinctID:mixpanel.distinctId];
-            [mixpanel identify:userID];
+            userID = userID;
         }
         
-        [FRSTracker track:@"Logins"];
+        if (name && ![name isEqual:[NSNull null]]) {
+            identityDictionary[@"name"] = name;
+        }
+        
+        if (email && ![email isEqual:[NSNull null]]) {
+            identityDictionary[@"email"] = email;
+        }
+        
+        [[SEGAnalytics sharedAnalytics] identify:userID
+                                          traits:identityDictionary];
+        [FRSTracker track:loginEvent];
     }];
 }
 
@@ -710,6 +689,8 @@
 }
 
 -(void)unlikeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    [FRSTracker track:galleryUnliked parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+
     NSString *endpoint = [NSString stringWithFormat:galleryUnlikeEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -1077,8 +1058,33 @@
 }
 
 -(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
+    if ([self checkAuthAndPresentOnboard]) {
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
+        return;
+    }
     
-    [self post:acceptAssignmentEndpoint withParameters:@{@"assignment_id":assignmentID} completion:^(id responseObject, NSError *error) {
+    NSString *endpoint = [NSString stringWithFormat:acceptAssignmentEndpoint, assignmentID];
+    
+    [self post:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)unacceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion {
+    if ([self checkAuthAndPresentOnboard]) {
+        completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
+        return;
+    }
+    
+    NSString *endpoint = [NSString stringWithFormat:unacceptAssignmentEndpoint, assignmentID];
+    
+    [self post:endpoint withParameters:nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)getAcceptedAssignmentWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
+    [self get:acceptedAssignmentEndpoint withParameters:nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
     }];
 }
@@ -1086,6 +1092,8 @@
 -(NSDate *)dateFromString:(NSString *)string {
     if (!self.dateFormatter) {
         self.dateFormatter = [[NSDateFormatter alloc] init];
+        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+        self.dateFormatter.timeZone = timeZone;
         self.dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     }
     
@@ -1100,6 +1108,8 @@
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresco.news" code:101 userInfo:Nil]);
         return;
     }
+    
+    [FRSTracker track:galleryLiked parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
     
     NSString *endpoint = [NSString stringWithFormat:likeGalleryEndpoint, gallery.uid];
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
@@ -1156,6 +1166,9 @@
         [self unrepostGallery:gallery completion:completion];
         return;
     }
+    
+    [FRSTracker track:galleryReposted parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
+
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
     
@@ -1188,6 +1201,7 @@
 
 -(void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
+    [FRSTracker track:galleryUnreposted parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @""}];
 
     [self post:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
         completion(responseObject, error);
@@ -1249,6 +1263,26 @@
         completion(responseObject, error);
     }];
 }
+
+
+-(void)getFollowersForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:followersEndpoint, user.uid];
+    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, lastUser.uid];
+    
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+-(void)getFollowingForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:followingEndpoint, user.uid];
+    endpoint = [NSString stringWithFormat:@"%@?last=%@", endpoint, lastUser.uid];
+    
+    [self get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
 
 -(void)followUserID:(NSString *)userID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:followUserEndpoint, userID];
@@ -1384,7 +1418,6 @@
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
         
         id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
-        FRSTabBarController *tabBar = (FRSTabBarController *) [appDelegate tabBar];
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
         UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
         
@@ -1482,7 +1515,7 @@
          }
          else {
              completion(@"No address found.", Nil);
-             [FRSTracker track:@"Address Error" parameters:@{@"coordinates":@[@(location.coordinate.longitude), @(location.coordinate.latitude)]}];
+             [FRSTracker track:addressError parameters:@{@"coordinates":@[@(location.coordinate.longitude), @(location.coordinate.latitude)]}];
          }
          
      }];
@@ -1525,6 +1558,13 @@
         digest[@"address"] = responseObject;
         digest[@"lat"] = @(asset.location.coordinate.latitude);
         digest[@"lng"] = @(asset.location.coordinate.longitude);
+        
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+        dateFormat.timeZone = timeZone;
+        
+        digest[@"captured_at"] = [dateFormat stringFromDate:asset.creationDate];
         
         if (asset.mediaType == PHAssetMediaTypeImage) {
             digest[@"contentType"] = @"image/jpeg";
@@ -1571,7 +1611,10 @@
 -(void)makePaymentActive:(NSString *)paymentID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:makePaymentActiveEndpoint, paymentID];
     
-    [self post:endpoint withParameters:@{@"active":@(1)} completion:^(id responseObject, NSError *error) {
+    NSDictionary *params = @{@"active":@(1)};
+    
+    [self post:endpoint withParameters:params completion:^(id responseObject, NSError *error) {
+        
         completion(responseObject, error);
     }];
 }
