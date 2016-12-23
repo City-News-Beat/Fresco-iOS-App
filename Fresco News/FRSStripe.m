@@ -54,7 +54,8 @@
 +(void)startLive {
     [Stripe setDefaultPublishableKey:stripeLive];
 }
+
 +(void)startTest {
-    [Stripe setDefaultPublishableKey:stripeLive];
+    [Stripe setDefaultPublishableKey:stripeTest];
 }
 @end
