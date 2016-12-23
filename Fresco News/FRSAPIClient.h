@@ -52,7 +52,12 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchGalleriesInStory:(NSString *)storyID completion:(void(^)(NSArray *galleries, NSError *error))completion;
 -(void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)unacceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)getAcceptedAssignmentWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)fetchLikesForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion;
+
 // notifications
 -(void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)getNotificationsWithLast:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -129,6 +134,10 @@ typedef void(^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)getFollowersForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)getFollowingForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 -(NSArray *)parsedObjectsFromAPIResponse:(NSArray *)response cache:(BOOL)cache;
+
+-(void)getFollowersForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)getFollowingForUser:(FRSUser *)user last:(FRSUser *)lastUser completion:(FRSAPIDefaultCompletionBlock)completion;
+
 
 -(BOOL)checkAuthAndPresentOnboard;
 -(void)fetchLikesFeedForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;

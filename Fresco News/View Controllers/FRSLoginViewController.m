@@ -22,6 +22,8 @@
 //Alert View
 #import "FRSAlertView.h"
 
+#import "FRSLocationManager.h"
+
 @interface FRSLoginViewController () <UITextFieldDelegate, FRSAlertViewDelegate>
 
 @property (nonatomic) BOOL didAnimate;
@@ -32,6 +34,8 @@
 @property (nonatomic) BOOL didAuthenticateSocial;
 @property (strong, nonatomic) FRSAlertView *alert;
 @property (strong, nonatomic) FBSDKLoginManager *fbLoginManager;
+@property (strong, nonatomic) FRSLocationManager *locationManager;
+
 @end
 
 @implementation FRSLoginViewController
@@ -54,6 +58,8 @@
     [super viewDidLoad];
     
     [self configureSpinner];
+    
+    self.locationManager = [[FRSLocationManager alloc] init];
     
     self.didAnimate = NO;
     self.didTransform = NO;
@@ -242,6 +248,9 @@
             if ([self validEmail:username]) {
                 [[FRSAPIClient sharedClient] setEmailUsed:self.userField.text];
             }
+            
+            [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+            
             return;
         }
         
@@ -367,6 +376,8 @@
 
             self.didAuthenticateSocial = YES;
             
+            [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+
             [self popToOrigin];
             
             return;
@@ -404,7 +415,7 @@
     //[appDelegate reloadUser];
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
-    [appDelegate registerForPushNotifications];
+    //[appDelegate registerForPushNotifications];
     
     NSArray *viewControllers = [self.navigationController viewControllers];    
     
@@ -492,7 +503,7 @@
             
             
             self.didAuthenticateSocial = YES;
-            NSLog(@"Popped");
+            [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
             [self popToOrigin];
 
             [spinner stopLoading];
@@ -500,7 +511,6 @@
             self.facebookButton.hidden = false;
             return;
         } else {
-            NSLog(@"Else");
         }
         
         if (error) {

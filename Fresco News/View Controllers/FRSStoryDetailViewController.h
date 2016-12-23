@@ -24,6 +24,7 @@
 @property (nonatomic, retain) NSMutableArray *stories;
 @property (nonatomic, weak) FRSStory *story;
 @property (nonatomic, retain) NSString *storyID;
+@property (strong, nonatomic) NSString *timestamp;
 
 -(void)reloadData;
 -(void)scrollToGalleryIndex:(NSInteger)index;

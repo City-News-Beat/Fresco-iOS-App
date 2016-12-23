@@ -165,7 +165,6 @@
         return YES;
     }
     
-    NSLog(@"USERNAME: %@", textField.text);
     if ([textField.text isEqualToString:@""] || textField.text == nil) {
         self.usernameCheckIV.alpha = 0;
         [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];

@@ -22,7 +22,7 @@
 
 
 
-@interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource, FRSTableViewCellDelegate, FRSGalleryViewDelegate>
+@interface FRSSearchViewController() <UITableViewDelegate, UITableViewDataSource, FRSTableViewCellDelegate, FRSGalleryViewDelegate, FRSStoryViewDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UITextField *searchTextField;
@@ -39,6 +39,8 @@
 @property NSInteger storiesDisplayed;
 @property (nonatomic, retain) NSDate *currentQuery;
 @property (strong, nonatomic) FRSAlertView *alert;
+@property (strong, nonatomic) NSString *userSectionTitleString;
+@property (strong, nonatomic) UIView *nearbyHeaderContainer;
 
 @end
 
@@ -55,7 +57,14 @@
     galleryIndex = 2;
     
     [self.searchTextField becomeFirstResponder];
+    
+    self.configuredNearby = YES;
     [self configureNearbyUsers];
+    
+    self.userSectionTitleString = @"";
+    
+    // Tab bar should always be visible in this view controller
+    [self showTabBarAnimated:NO];
 }
 
 -(void)search:(NSString *)string {
@@ -240,7 +249,6 @@
 }
 
 -(void)performSearchWithQuery:(NSString *)query {
-    
     _storyExtended = NO;
     _userExtended  = NO;
     
@@ -248,6 +256,8 @@
         return;
     }
     
+    self.configuredNearby = NO;
+
     [self configureSpinner];
     self.users = @[];
     self.galleries = @[];
@@ -269,6 +279,8 @@
             return;
         }
 
+        self.userSectionTitleString = @"USERS";
+
         //NSString *filePath = @"";
         //NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:@"file://path"] options:0 error:Nil];
         
@@ -289,28 +301,47 @@
             self.awkwardView.alpha = 0;
             [self.awkwardView removeFromSuperview];
         }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.nearbyHeaderContainer.alpha = 0;
+        });
     }];
 }
 
 -(void)configureNearbyUsers {
     
-    self.configuredNearby = YES;
-
     [[FRSAPIClient sharedClient] fetchNearbyUsersWithCompletion:^(id responseObject, NSError *error) {
         
         if (error) {
+            self.configuredNearby = NO;
             return;
         }
         
         if (![self.searchTextField.text isEqualToString:@""]) {
             return;
         }
-        //NSDictionary *galleryObject = responseObject[@"galleries"];
-        //NSDictionary *userObject = responseObject;
-        //self.galleries = [[FRSAPIClient sharedClient] parsedObjectsFromAPIResponse:galleryObject[@"results"] cache:NO];
-        self.users = responseObject;
         
-        self.tableView.contentInset = UIEdgeInsetsMake(15, 0, 0, 0);
+        self.configuredNearby = YES;
+        
+        self.nearbyHeaderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -70, self.view.frame.size.width, 100)];
+        [self.tableView addSubview:self.nearbyHeaderContainer];
+        
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24, self.nearbyHeaderContainer.frame.size.width, 31)];
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.text = @"Suggested users";
+        titleLabel.textColor = [UIColor frescoDarkTextColor];
+        titleLabel.font = [UIFont karminaBoldWithSize:28];
+        [self.nearbyHeaderContainer addSubview:titleLabel];
+        
+        UILabel *subtitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 57, self.nearbyHeaderContainer.frame.size.width, 20)];
+        subtitleLabel.textAlignment = NSTextAlignmentCenter;
+        subtitleLabel.text = @"Active citizen journalists in your area:";
+        subtitleLabel.textColor = [UIColor frescoMediumTextColor];
+        subtitleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+        [self.nearbyHeaderContainer addSubview:subtitleLabel];
+        
+        self.users = responseObject;
+        self.tableView.contentInset = UIEdgeInsetsMake(82, 0, 0, 0);
         self.tableView.bounces = YES;
         userIndex    = 0;
         galleryIndex = 1;
@@ -322,11 +353,6 @@
         _userExtended = YES;
         [self.tableView reloadData];
         
-        //Delaying here because viewForHeaderInSection is not called fast enough
-        //viewForHeaderInSection determines if the title should be `NEARBY`
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.configuredNearby = NO;
-        });
     }];
 }
 
@@ -535,6 +561,28 @@
         if (indexPath.row == 3 && !_userExtended) {
             return 44;
         }
+        
+        if (self.configuredNearby) {
+            
+            NSDictionary *user = [self.users objectAtIndex:indexPath.row];
+            
+            if ([user[@"bio"] isEqualToString:@""] || [user[@"bio"] isEqual:[NSNull null]] || user[@"bio"] == nil) {
+                return 66;
+            } else {
+                
+                //This label is never added to the view, it's just used to calculate the height.
+                NSString *bio = user[@"bio"];
+                UILabel *bioLabel = [[UILabel alloc] initWithFrame:CGRectMake(72, 34, [UIScreen mainScreen].bounds.size.width - 72 - 56, 0)];
+                bioLabel.text = (bio && ![bio isEqual:[NSNull null]] && ![bio isEqualToString:@""]) ? bio : @"";
+                bioLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+                bioLabel.textColor = [UIColor frescoMediumTextColor];
+                bioLabel.numberOfLines = 0;
+                [bioLabel sizeToFit];
+                bioLabel.frame = CGRectMake(72, 34, [UIScreen mainScreen].bounds.size.width - 72 - 56, bioLabel.frame.size.height);
+                
+                return bioLabel.frame.size.height +34 +24;
+            }
+        }
 
         return 56;
     }
@@ -607,13 +655,9 @@
     NSString *title = @"";
     
     if (section == userIndex && self.users.count > 0) {
-        if (!self.configuredNearby) {
-            title = @"USERS";
-        } else {
-            title = @"NEARBY USERS";
-        }
+        title = self.userSectionTitleString;
     }
-   
+
     if (section == storyIndex && self.stories.count > 0) {
         title = @"STORIES";
     }
@@ -644,6 +688,8 @@
         [cell setLayoutMargins:UIEdgeInsetsZero];
     }
     
+
+    
     if (indexPath.section == userIndex) {
         cell.delegate = self;
         if (self.users.count == 0) {
@@ -662,6 +708,7 @@
         
         // users
         NSDictionary *user = self.users[indexPath.row];
+
         NSString *avatarURL;
         if ([user objectForKey:@"avatar"] || ![[user objectForKey:@"avatar"] isEqual:[NSNull null]]) {
             avatarURL = user[@"avatar"];
@@ -683,8 +730,15 @@
             username = user[@"username"];
         }
         
-        [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
-        
+        if (self.configuredNearby) {
+            
+            NSLog(@"FOLLOWING: %@", user[@"following"]);
+            
+            [cell configureSearchNearbyUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
+        } else {
+            [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
+        }
+
         return cell;
     }
     else if (indexPath.section == storyIndex) {
@@ -825,10 +879,7 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-//    [super scrollViewDidScroll:scrollView];
-    if (!self.configuredNearby) {
-        [self.searchTextField resignFirstResponder];
-    }
+    [self.searchTextField resignFirstResponder];
 }
 
 #pragma mark - dealloc

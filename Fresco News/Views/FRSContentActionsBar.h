@@ -22,6 +22,8 @@
 -(void)handleHeartAmount:(NSInteger)amount;
 -(void)handleRepostAmount:(NSInteger)amount;
 -(void)setCurrentUser:(BOOL)isAuth;
+@property (strong, nonatomic) UIButton *actionButton;
+
 
 @end
 
@@ -36,4 +38,7 @@
 -(void)handleActionButtonTapped;
 -(void)handleRepost:(FRSContentActionsBar *)actionBar;
 -(void)handleLike:(FRSContentActionsBar *)actionBar;
+-(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar;
+-(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar;
+
 @end

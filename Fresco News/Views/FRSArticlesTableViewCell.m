@@ -28,6 +28,7 @@
 @implementation FRSArticlesTableViewCell
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
     // Initialization code
 }
 
@@ -59,7 +60,6 @@
     
     [self addSubview:self.titleLabel];
 
-//    self.sourceLabel = [self labelWithText:self.article.source font:[UIFont notaRegularWithSize:13] color:[UIColor frescoMediumTextColor]];
     self.sourceLabel = [self labelWithText:@"" font:[UIFont notaRegularWithSize:13] color:[UIColor frescoMediumTextColor]];
     [self addSubview:self.sourceLabel];
 }
@@ -71,21 +71,6 @@
     label.font = font;
     [label sizeToFit];
     return label;
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-    
-    if (self.selectable) {
-        self.sourceIV.backgroundColor = [UIColor frescoLightTextColor];
-    }
-
-    if (selected) { //Checks if the cell is selected to avoid opening the URL on didLoad
-        NSURL *url = [NSURL URLWithString:self.article.articleStringURL];
-        if ([[UIApplication sharedApplication] canOpenURL:url]) {
-            [[UIApplication sharedApplication] openURL:url];
-        }
-    }
 }
 
 -(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {

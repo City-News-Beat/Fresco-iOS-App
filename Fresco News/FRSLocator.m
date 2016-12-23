@@ -184,7 +184,8 @@
     
     _currentState = UIApplicationStateActive;
     
-    [_locationManager requestWhenInUseAuthorization];
+    //[_locationManager requestWhenInUseAuthorization];
+    
     _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
     [_locationManager startUpdatingLocation];
 }
