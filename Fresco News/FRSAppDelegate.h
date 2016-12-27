@@ -29,8 +29,7 @@
 #import <UserNotifications/UserNotifications.h>
 #import "Adjust.h"
 
-@interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, UNUserNotificationCenterDelegate>
-{
+@interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, UNUserNotificationCenterDelegate> {
     NSTimer *notificationTimer;
 }
 @property (strong, nonatomic) UIWindow *window;
@@ -39,16 +38,16 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain) id tabBarController;
 @property BOOL didPresentPermissionsRequest;
--(void)reloadUser;
--(void)reloadUser:(FRSAPIDefaultCompletionBlock)completion;
--(void)saveContext;
--(UITabBarController *)tabBar;
--(BOOL)isFirstRun;
--(void)updateTabBarToUser;
--(void)clearKeychain;
--(void)restartUpload;
--(void)saveUserFields:(NSDictionary *)responseObject;
--(void)startNotificationTimer;
--(void)stopNotificationTimer;
--(void)registerForPushNotifications;
+- (void)reloadUser;
+- (void)reloadUser:(FRSAPIDefaultCompletionBlock)completion;
+- (void)saveContext;
+- (UITabBarController *)tabBar;
+- (BOOL)isFirstRun;
+- (void)updateTabBarToUser;
+- (void)clearKeychain;
+- (void)restartUpload;
+- (void)saveUserFields:(NSDictionary *)responseObject;
+- (void)startNotificationTimer;
+- (void)stopNotificationTimer;
+- (void)registerForPushNotifications;
 @end

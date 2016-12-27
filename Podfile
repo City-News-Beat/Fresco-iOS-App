@@ -40,5 +40,3 @@ target 'Fresco' do
 	pod "Segment-Localytics"
 	pod "Segment-Mixpanel"
 end
-
-	
