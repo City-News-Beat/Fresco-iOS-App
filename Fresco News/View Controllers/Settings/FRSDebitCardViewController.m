@@ -453,10 +453,9 @@
         if (range.location > 4) {
             return NO;
         }
-        
-        if (![textField.text isEqualToString:@""] && textField.text != Nil && string) {
+        if (textField.text != Nil && ![textField.text isEqualToString:@""] && string) {
             NSString *proposedNewString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
-            if (proposedNewString.length == 2 && textField.text.length <= 2) {
+            if (proposedNewString != Nil && proposedNewString.length == 2 && textField.text.length <= 2) {
                 proposedNewString = [proposedNewString stringByAppendingString:@"/"];
                 textField.text = proposedNewString;
                 return FALSE;
