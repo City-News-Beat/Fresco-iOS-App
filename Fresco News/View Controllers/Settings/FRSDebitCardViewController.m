@@ -124,7 +124,7 @@
     
     [container addSubview:expirationDateTextField];
     
-    expirationDateTextField.keyboardType = UIKeyboardTypeNumberPad;
+    expirationDateTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
 
     securityCodeTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     securityCodeTextField  = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 , 44, [UIScreen mainScreen].bounds.size.width/2, 44)];
@@ -453,9 +453,10 @@
         if (range.location > 4) {
             return NO;
         }
-        if (textField.text != Nil && ![textField.text isEqualToString:@""] && string) {
+        
+        if (![textField.text isEqualToString:@""] && textField.text != Nil && string) {
             NSString *proposedNewString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
-            if (proposedNewString != Nil && proposedNewString.length == 2 && textField.text.length <= 2) {
+            if (proposedNewString.length == 2 && textField.text.length <= 2) {
                 proposedNewString = [proposedNewString stringByAppendingString:@"/"];
                 textField.text = proposedNewString;
                 return FALSE;
