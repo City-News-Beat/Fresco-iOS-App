@@ -17,6 +17,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    [super awakeFromNib];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -32,12 +33,18 @@
 
 -(void)configureCell {
     
+    
     if (self.galleryView != Nil) {
+        
+        hasPlayed = FALSE;
+        
         [self.galleryView loadGallery:self.gallery];
         self.galleryView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 20);
         return;
     }
-
+    
+    hasPlayed = FALSE;
+    
     self.clipsToBounds = YES;
     
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -70,6 +77,13 @@
 -(void)clearCell{
     
     //[self.galleryView removeFromSuperview];
+}
+
+-(void)prepareForReuse {
+    [super prepareForReuse];
+}
+-(void)offScreen {
+    [self.galleryView offScreen];
 }
 
 #pragma mark - DataSource For Action Bar

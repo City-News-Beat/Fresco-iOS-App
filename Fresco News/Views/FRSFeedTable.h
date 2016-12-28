@@ -13,7 +13,7 @@
 #import "FRSGalleryCell.h"
 #import "FRSStoryCell.h"
 
-@interface FRSFeedTable : UITableView <FRSGalleryViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface FRSFeedTable : UITableView <FRSGalleryViewDelegate, FRSStoryViewDelegate, UITableViewDelegate, UITableViewDataSource>
 @property NSArray *feed;
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
 // loading more data

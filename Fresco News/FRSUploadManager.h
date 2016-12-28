@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Fresco.h"
-
+#import "SDAVAssetExportSession.h"
 
 @interface FRSUploadManager : NSObject
 {
@@ -19,6 +19,8 @@
     int toComplete;
     int completed;
     BOOL isFromFresh;
+    float uploadSpeed;
+    SDAVAssetExportSession *exporter;
 }
 
 +(id)sharedUploader;
@@ -30,4 +32,6 @@
 @property (nonatomic, retain) NSMutableArray *uploadMeta;
 @property (nonatomic, weak) NSManagedObjectContext *context;
 @property (nonatomic, retain) NSMutableDictionary *managedObjects;
+@property (nonatomic, retain) NSString *currentGalleryID;
+
 @end

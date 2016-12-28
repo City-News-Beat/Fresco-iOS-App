@@ -27,6 +27,7 @@
 #import "FRSAppDelegate.h"
 #import "FRSGallery+CoreDataProperties.h"
 #import "FRSFollowingTable.h"
+#import "FRSLocationManager.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 {
@@ -60,6 +61,8 @@
 @property (strong, nonatomic) FRSAlertView *TOSAlert;
 @property (strong, nonatomic) FRSAlertView *migrationAlert;
 
+@property (strong, nonatomic) FRSLocationManager *locationManager;
+
 @end
 
 @implementation FRSHomeViewController
@@ -72,24 +75,57 @@
         self.appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     }
     self.temp = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
-
+    
     [self configureUI];
     [self addNotificationObservers];
     
     [self configureFollowing];
     [self configureNavigationBar];
-
+    
     self.scrollView.delegate = self;
     
     self.isInHighlights = true;
     self.isInFollowers = true;
     
     [self displayPreviousTab];
-
+    
     [self checkSuspended];
     
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
+    
+    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+        //Present permissions alert on launch after two days from downloading the app only if the they have not seen the alert yet.
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:userHasSeenPermissionsAlert]) {
+            if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate]) {
+                NSString *startDateString = [[NSUserDefaults standardUserDefaults] valueForKey:userHasSeenPermissionsAlert];
+                NSDate *startDate = [[FRSAPIClient sharedClient] dateFromString:startDateString];
+                NSDate *today = [NSDate date];
+                
+                NSInteger days = [FRSHomeViewController daysBetweenDate:startDate andDate:today];
+                if (days >= 2) {
+                    [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
+                }
+            }
+        }
+    }
+}
+
++(NSInteger)daysBetweenDate:(NSDate *)fromDateTime andDate:(NSDate *)toDateTime {
+    NSDate *fromDate;
+    NSDate *toDate;
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    [calendar rangeOfUnit:NSCalendarUnitDay startDate:&fromDate
+                 interval:NULL forDate:fromDateTime];
+    [calendar rangeOfUnit:NSCalendarUnitDay startDate:&toDate
+                 interval:NULL forDate:toDateTime];
+    
+    NSDateComponents *difference = [calendar components:NSCalendarUnitDay
+                                               fromDate:fromDate toDate:toDate options:0];
+    
+    return [difference day];
 }
 
 -(void)logoutNotification {
@@ -123,6 +159,10 @@
     return YES;
 }
 
+-(void)scrollToTop {
+    [self.followingTable scrollRectToVisible:CGRectMake(0, 0, self.followingTable.frame.size.width, self.followingTable.frame.size.height) animated:YES];
+}
+
 -(void)loadData {
     
 }
@@ -134,10 +174,19 @@
     
     self.followingTable = [[FRSFollowingTable alloc] initWithFrame:scrollFrame];
     self.followingTable.navigationController = self.navigationController;
+    self.followingTable.leadDelegate = (id<FRSFollowingTableDelegate>)self;
     //[self configureNoFollowers];
     
     [self.pageScroller addSubview:self.followingTable];
     self.followingTable.scrollDelegate = self;
+}
+
+-(void)expandGallery:(FRSGallery *)gallery {
+    [self galleryClicked:gallery];
+}
+
+-(void)expandStory:(FRSStory *)story {
+    [self storyClicked:story];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -145,6 +194,8 @@
     
     [self addStatusBarNotification];
     [self showNavBarForScrollView:self.scrollView animated:NO];
+    
+    [FRSTracker screen:@"Home"];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     [self.tabBarController.tabBar setHidden:FALSE];
@@ -185,12 +236,20 @@
     if (entry) {
         exit = [NSDate date];
         NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
-        [FRSTracker track:@"Highlights session" parameters:@{activityDuration:@(sessionLength), @"count":@(numberRead)}];
+        [FRSTracker track:highlightsSession parameters:@{activityDuration:@(sessionLength), @"galleries_scrolled_past":@(numberRead)}];
     }
     
     [self removeStatusBarNotification];
-    [self pausePlayers];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
 }
+
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([[cell class] isSubclassOfClass:[FRSGalleryCell class]]) {
+        [(FRSGalleryCell *)cell offScreen];
+    }
+}
+
 
 -(void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
@@ -206,7 +265,7 @@
     
     if ([[FRSAPIClient sharedClient] authenticatedUser]) {
         if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
-
+            
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutAlertAction) name:UIApplicationWillTerminateNotification object:nil];
         }
     }
@@ -218,7 +277,7 @@
         && ![[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]
         && ![[[NSUserDefaults standardUserDefaults] valueForKey:userHasFinishedMigrating] boolValue]
         && [[NSUserDefaults standardUserDefaults] valueForKey:userHasFinishedMigrating] != nil) {
-
+        
         [self logoutWithPop:NO];
         
         return;
@@ -229,7 +288,7 @@
         FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[[NSUserDefaults standardUserDefaults] valueForKey:@"needs-password"] boolValue]];
         alert.delegate = self;
         [alert show];
-        [FRSTracker track:@"Migration Shown"];
+        [FRSTracker track:migrationShown];
     }
 }
 
@@ -238,40 +297,49 @@
     [self.followingTable reloadFollowing];
     
     [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count offsetGalleryID:Nil completion:^(NSArray *galleries, NSError *error) {
-            [self.appDelegate.managedObjectContext performBlock:^{
-                NSInteger index = 0;
+        [self.appDelegate.managedObjectContext performBlock:^{
+            NSInteger index = 0;
+            
+            NSMutableArray *newGalleries = [[NSMutableArray alloc] init];
+            for (NSDictionary *gallery in galleries) {
+                NSString *galleryID = gallery[@"id"];
+                NSInteger galleryIndex = [self galleryExists:galleryID];
                 
-                for (NSDictionary *gallery in galleries) {
-                    NSString *galleryID = gallery[@"id"];
-                    NSInteger galleryIndex = [self galleryExists:galleryID];
-                    
-                    if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
-                        continue;
-                    }
-                    
-                    FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
+                /*
+                 Gallery does not exist -- create it in persistence layer & volotile memory
+                 */
+                if (galleryIndex < 0 || galleryIndex >= self.dataSource.count) {
+                    FRSGallery *galleryToSave = [FRSGallery MR_createEntityInContext:self.appDelegate.managedObjectContext];
                     [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
                     [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                    
+                    [newGalleries addObject:galleryToSave];
                     index++;
+                    continue;
                 }
                 
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
-                    isLoading = FALSE;
-                    [self.tableView dg_stopLoading];
-                    [self.followingTable dg_stopLoading];
-                });
-            }];
+                /*
+                 Gallery already exists, update its index & meta information (things change)
+                 */
+                
+                FRSGallery *galleryToSave = [self.dataSource objectAtIndex:galleryIndex];
+                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                [newGalleries addObject:galleryToSave];
+                index++;
+            }
+            
+            /*
+             Set new data source, reload the table view, stop and hide spinner (crucial to insure its on the main thread)
+             */
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.dataSource = newGalleries;
+                [self.tableView reloadData];
+                isLoading = FALSE;
+                [self.tableView dg_stopLoading];
+                [self.followingTable dg_stopLoading];
+            });
         }];
-}
-
--(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    FRSGalleryCell *galleryCell = (FRSGalleryCell *)cell;
-    if ([galleryCell respondsToSelector:@selector(pause)]) {
-        [galleryCell pause];
-    }
+    }];
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -293,40 +361,40 @@
 
 -(void)configureNoFollowers {
     
-//    UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"frog"]];
-//    frog.frame = CGRectMake(self.view.frame.size.width/2 - 200/2, self.view.frame.size.height/2 -60, 200, 120);
-//    frog.alpha = 0.54;
-//    [self.followingTable addSubview:frog];
-//    
-//    UILabel *awkward = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 +100, self.followingTable.frame.size.width, 30)];
-//    [awkward setTextAlignment:NSTextAlignmentCenter];
-//    [awkward setText:@"AWKWARD"];
-//    [awkward setTextColor:[UIColor frescoDarkTextColor]];
-//    [awkward setFont:[UIFont notaBoldWithSize:35]];
-//    [self.followingTable addSubview:awkward];
-//    
-//    
-//    UIView *textContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 +140, self.followingTable.frame.size.width, 40)];
-//    [self.followingTable addSubview:textContainer];
-//    
-//    UILabel *subText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.followingTable.frame.size.width, 40)];
-//    [subText setTextAlignment:NSTextAlignmentCenter];
-//    subText.backgroundColor = [UIColor clearColor];
-//    [subText setText:@"It looks like you aren't following anyone yet. \nSee which of your friends are using Fresco         ."];
-//    subText.numberOfLines = 2;
-//    subText.textColor = [UIColor frescoMediumTextColor];
-//    [subText setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightRegular]];
-//    [subText sizeToFit];
-//    subText.frame = CGRectMake(textContainer.frame.size.width/2 -subText.frame.size.width/2, subText.frame.origin.y, subText.frame.size.width, subText.frame.size.height);
-//    [textContainer addSubview:subText];
-//    
-//    UIButton *here = [UIButton buttonWithType:UIButtonTypeSystem];
-//    here.frame = CGRectMake(subText.frame.size.width - 18, 16, 40, 20);
-//    [here setTitle:@"here" forState:UIControlStateNormal];
-//    [here setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
-//    [here.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
-//    [here addTarget:self action:@selector(hereTapped) forControlEvents:UIControlEventTouchUpInside];
-//    [textContainer addSubview:here];
+    //    UIImageView *frog = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"frog"]];
+    //    frog.frame = CGRectMake(self.view.frame.size.width/2 - 200/2, self.view.frame.size.height/2 -60, 200, 120);
+    //    frog.alpha = 0.54;
+    //    [self.followingTable addSubview:frog];
+    //
+    //    UILabel *awkward = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 +100, self.followingTable.frame.size.width, 30)];
+    //    [awkward setTextAlignment:NSTextAlignmentCenter];
+    //    [awkward setText:@"AWKWARD"];
+    //    [awkward setTextColor:[UIColor frescoDarkTextColor]];
+    //    [awkward setFont:[UIFont notaBoldWithSize:35]];
+    //    [self.followingTable addSubview:awkward];
+    //
+    //
+    //    UIView *textContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2 +140, self.followingTable.frame.size.width, 40)];
+    //    [self.followingTable addSubview:textContainer];
+    //
+    //    UILabel *subText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.followingTable.frame.size.width, 40)];
+    //    [subText setTextAlignment:NSTextAlignmentCenter];
+    //    subText.backgroundColor = [UIColor clearColor];
+    //    [subText setText:@"It looks like you aren't following anyone yet. \nSee which of your friends are using Fresco         ."];
+    //    subText.numberOfLines = 2;
+    //    subText.textColor = [UIColor frescoMediumTextColor];
+    //    [subText setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightRegular]];
+    //    [subText sizeToFit];
+    //    subText.frame = CGRectMake(textContainer.frame.size.width/2 -subText.frame.size.width/2, subText.frame.origin.y, subText.frame.size.width, subText.frame.size.height);
+    //    [textContainer addSubview:subText];
+    //
+    //    UIButton *here = [UIButton buttonWithType:UIButtonTypeSystem];
+    //    here.frame = CGRectMake(subText.frame.size.width - 18, 16, 40, 20);
+    //    [here setTitle:@"here" forState:UIControlStateNormal];
+    //    [here setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+    //    [here.titleLabel setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]];
+    //    [here addTarget:self action:@selector(hereTapped) forControlEvents:UIControlEventTouchUpInside];
+    //    [textContainer addSubview:here];
 }
 
 -(void)hereTapped {
@@ -335,8 +403,6 @@
 
 -(void)configureSpinner {
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    //Doesn't do anything
-    //self.loadingView.frame = CGRectMake(self.view.frame.size.width/2 -10, self.view.frame.size.height/2 - 44 - 10, 20, 20);
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
@@ -355,25 +421,25 @@
     
     [self.tableView dg_setPullToRefreshFillColor:self.tableView.backgroundColor];
     [self.tableView dg_setPullToRefreshBackgroundColor:self.tableView.backgroundColor];
-
+    
 }
 
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if (needsUpdate) {
         needsUpdate = FALSE;
-       // [self.tableView reloadData];
+        // [self.tableView reloadData];
     }
     
     if (scrollView == self.pageScroller) {
-
+        
     }
 }
 
 -(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
     if (needsUpdate) {
         needsUpdate = FALSE;
-       // [self.tableView reloadData];
+        // [self.tableView reloadData];
     }
 }
 
@@ -384,12 +450,10 @@
 -(void)configureNavigationBar {
     
     [self removeNavigationBarLine];
-
-    int offset = 8;
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
-
+    
     NSLog(@"View Width/2: %f", self.view.frame.size.width/2);
     NSLog(@"Origin: %f", (self.tableView.frame.size.width/4));
     self.highlightTabButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width/2 - 60 - 10 - titleView.frame.size.width/6, 6, 120, 30)];
@@ -414,7 +478,7 @@
     self.sudoNavBar = [[UIView alloc] initWithFrame:CGRectMake(0, -88, self.view.frame.size.width, 44)];
     self.sudoNavBar.backgroundColor = [UIColor frescoOrangeColor];
     [self.view addSubview:self.sudoNavBar];
-        
+    
     UIButton *sudoHighlightButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width/2 - 60 - 10 - titleView.frame.size.width/6, 6, 120, 30)];
     [sudoHighlightButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
     [sudoHighlightButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:0.7] forState:UIControlStateNormal];
@@ -441,7 +505,7 @@
 -(void)configureTableView {
     [super configureTableView];
     
-//    self.tableView.backgroundColor = [UIColor frescoOrangeColor];
+    //    self.tableView.backgroundColor = [UIColor frescoOrangeColor];
     [self.tableView registerNib:[UINib nibWithNibName:@"FRSLoadingCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:loadingCellIdentifier];
     self.tableView.frame = CGRectMake(0, -64, self.view.frame.size.width, self.view.frame.size.height+20);
     self.tableView.delegate = self;
@@ -477,7 +541,7 @@
 
 -(void)fetchLocalData {
     [self flushCache:Nil];
-
+    
 }
 
 -(NSInteger)galleryExists:(NSString *)galleryID {
@@ -593,14 +657,14 @@
     if (tableView == self.tableView && indexPath) {
         return [self highlightCellForIndexPath:indexPath];
     }
-
+    
     return Nil;
 }
 
 -(UITableViewCell *)highlightCellForIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.row == self.dataSource.count && self.dataSource.count != 0 && self.dataSource != Nil) { // we're reloading
-
+        
         UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:loadingCellIdentifier forIndexPath:indexPath];
         CGRect cellFrame = cell.frame;
         cellFrame.size.height = 20;
@@ -638,7 +702,7 @@
     [cell updateConstraintsIfNeeded];
     
     return cell;
-
+    
 }
 
 -(void)loadMore {
@@ -661,59 +725,60 @@
         NSLog(@"NOT RELOADING");
         return;
     }
-        
+    
     lastOffset = self.dataSource.count;
     
-        NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+    
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:offsetID completion:^(NSArray *galleries, NSError *error) {
         
-        [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12 offsetGalleryID:offsetID completion:^(NSArray *galleries, NSError *error) {
-                        
-            if ([galleries count] == 0){
-                _loadNoMore = TRUE;
-                [self.tableView reloadData];
-                return;
+        if ([galleries count] == 0){
+            _loadNoMore = TRUE;
+            [self.tableView reloadData];
+            return;
+        }
+        
+        [[self.appDelegate managedObjectContext] performBlock:^{
+            NSInteger index = self.highlights.count;
+            for (NSDictionary *gallery in galleries) {
+                FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                
+                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
+                [self.dataSource addObject:galleryToSave];
+                [self.highlights addObject:galleryToSave];
+                [indexPaths addObject:[NSIndexPath indexPathForRow:self.dataSource.count-1 inSection:0]];
+                index++;
             }
             
-            [[self.appDelegate managedObjectContext] performBlock:^{
-                NSInteger index = self.highlights.count;
-                for (NSDictionary *gallery in galleries) {
-                    FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-                    
-                    [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-                    [galleryToSave setValue:[NSNumber numberWithInteger:index] forKey:@"index"];
-                    [self.dataSource addObject:galleryToSave];
-                    [self.highlights addObject:galleryToSave];
-                    [indexPaths addObject:[NSIndexPath indexPathForRow:self.dataSource.count-1 inSection:0]];
-                    index++;
-                }
-                
-                [self.appDelegate saveContext];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView beginUpdates];
-                    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-                    [self.tableView endUpdates];
-                    needsUpdate = TRUE;
-                    isLoading = FALSE;
-                });
-            }];
+            [self.appDelegate saveContext];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+//                [self.tableView beginUpdates];
+//                [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+//                [self.tableView endUpdates];
+                [self.tableView reloadData];
+                needsUpdate = TRUE;
+                isLoading = FALSE;
+            });
+        }];
     }];
 }
 
 -(void)playerWillPlay:(AVPlayer *)play {
-    for (UITableView *tableView in @[self.tableView, self.followingTable]) {
-        NSArray *visibleCells = [tableView visibleCells];
-        for (FRSGalleryCell *cell in visibleCells) {
-            if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]] || !cell.galleryView.players) {
-                continue;
-            }
-            for (FRSPlayer *player in cell.galleryView.players) {
-                if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
-                    [player pause];
-                }
-            }
-        }
-    }
+    //    for (UITableView *tableView in @[self.tableView, self.followingTable]) {
+    //        NSArray *visibleCells = [tableView visibleCells];
+    //        for (FRSGalleryCell *cell in visibleCells) {
+    //            if (![[cell class] isSubclassOfClass:[FRSGalleryCell class]] || !cell.galleryView.players) {
+    //                continue;
+    //            }
+    //            for (FRSPlayer *player in cell.galleryView.players) {
+    //                if (player != play && [[player class] isSubclassOfClass:[FRSPlayer class]]) {
+    //                    [player pause];
+    //                }
+    //            }
+    //        }
+    //    }
 }
 
 -(NSInteger)heightForItemAtDataSourceIndex:(NSInteger)index{
@@ -723,7 +788,7 @@
     }
     
     FRSGallery *gallery = self.dataSource[index];
-//    return [self heightForCellForGallery:gallery];
+    //    return [self heightForCellForGallery:gallery];
     return [gallery heightForGallery];
 }
 
@@ -755,6 +820,9 @@
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
+    NSString *url = content[0];
+    url = [[url componentsSeparatedByString:@"/"] lastObject];
+    [FRSTracker track:galleryShared parameters:@{@"gallery_id":url, @"shared_from":@"highlights"}];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -770,6 +838,8 @@
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.gallery = gallery;
     vc.shouldHaveBackButton = YES;
+    vc.openedFrom = @"Following";
+
     [super showNavBarForScrollView:self.tableView animated:NO];
     
     self.navigationItem.title = @"";
@@ -778,16 +848,19 @@
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
-
+    
 }
 
 -(void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
     
     FRSGallery *gallery = self.dataSource[notification.row];
+    [FRSTracker track:galleryOpenedFromHighlights parameters:@{@"gallery_id":(gallery.uid != Nil) ? gallery.uid : @"", @"opened_from":@"highlights"}];
     
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
     vc.gallery = gallery;
+    vc.openedFrom = @"Highlights";
+
     [super showNavBarForScrollView:self.tableView animated:NO];
     
     self.navigationItem.title = @"";
@@ -831,22 +904,22 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     //self.sudoNavBar.frame = CGRectMake(0, (scrollView.contentOffset.x/8.5)-88, self.view.frame.size.width, 44);
-
+    
     // Check if horizontal scrollView to avoid issues with potentially conflicting scrollViews
     
     //Make the nav bar expand relative to the x offset
     [super scrollViewDidScroll:scrollView];
-
-//    NSMutableArray *barButtonItems = [NSMutableArray array];
-//    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
-//    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
-//    float navBarHeight=20.0;
-//    float scrollingDifferenceX = (scrollView.contentOffset.x/self.tableView.frame.size.width*(navBarHeight*2))-navBarHeight-3;
+    
+    //    NSMutableArray *barButtonItems = [NSMutableArray array];
+    //    [barButtonItems addObjectsFromArray:self.navigationItem.rightBarButtonItems];
+    //    [barButtonItems addObjectsFromArray:self.navigationItem.leftBarButtonItems];
+    //    float navBarHeight=20.0;
+    //    float scrollingDifferenceX = (scrollView.contentOffset.x/self.tableView.frame.size.width*(navBarHeight*2))-navBarHeight-3;
     
     //NSLog(@"TABLEVIEW WIDTH: %f",self.tableView.frame.size.width);
     //NSLog(@"CONTENT X: %f",scrollView.contentOffset.x);
     //NSLog(@"SCROLLING Y: %f",scrollingDifference);
-
+    
     if (scrollView == self.pageScroller) {
         self.loadingView.alpha = 1-(scrollView.contentOffset.x/(scrollView.contentSize.width - scrollView.frame.size.width));
         
@@ -859,11 +932,11 @@
             //self.navigationItem.titleView.alpha = 1;
             [self.tableView dg_stopLoading];
             [self.followingTable dg_stopLoading];
-
+            
             [self.tableView dg_removePullToRefresh];
             loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
             loadingView.tintColor = [UIColor frescoBlueColor];
-
+            
             __weak typeof(self) weakSelf = self;
             [self.followingTable dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
                 [weakSelf reloadData];
@@ -881,12 +954,12 @@
             self.highlightTabButton.alpha = 1;
             [self.tableView dg_stopLoading];
             [self.followingTable dg_stopLoading];
-
+            
             [self.followingTable dg_removePullToRefresh];
             
             loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
             loadingView.tintColor = [UIColor frescoBlueColor];
-
+            
             __weak typeof(self) weakSelf = self;
             [self.tableView dg_addPullToRefreshWithWaveMaxHeight:0 minOffsetToPull:80 loadingContentInset:44 loadingViewSize:20 velocity:0 actionHandler:^{
                 [weakSelf reloadData];
@@ -899,29 +972,56 @@
             self.isInHighlights = false;
             self.isInFollowers = true;
         }
-
+        
     }
     
     if (scrollView == self.tableView) {
+        
+        CGPoint currentOffset = scrollView.contentOffset;
+        NSTimeInterval currentTime = [NSDate timeIntervalSinceReferenceDate];
+        
+        NSTimeInterval timeDiff = currentTime - lastOffsetCapture;
+        if(timeDiff > 0.1) {
+            CGFloat distance = currentOffset.y - lastScrollOffset.y;
+            //The multiply by 10, / 1000 isn't really necessary.......
+            CGFloat scrollSpeedNotAbs = (distance * 10) / 1000; //in pixels per millisecond
+            
+            CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
+            if (scrollSpeed > maxScrollVelocity) {
+                isScrollingFast = YES;
+                NSLog(@"Fast");
+            } else {
+                isScrollingFast = NO;
+                NSLog(@"Slow");
+            }
+            
+            lastScrollOffset = currentOffset;
+            lastOffsetCapture = currentTime;
+        }
+        
         NSArray *visibleCells = [self.tableView visibleCells];
-
+        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             BOOL taken = FALSE;
             
             for (FRSGalleryCell *cell in visibleCells) {
                 
-                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 100) {
+                /*
+                 Start playback mid frame -- at least 300 from top & at least 100 from bottom
+                 */
+                if (cell.frame.origin.y - self.tableView.contentOffset.y < 300 && cell.frame.origin.y - self.tableView.contentOffset.y > 0) {
                     
                     if (!taken) {
-                        NSIndexPath *path = [self.tableView indexPathForCell:cell];
                         
-                        if (path != lastIndexPath) {
-                            lastIndexPath = path;
-                            [cell play];
+                        if ([cell respondsToSelector:@selector(play)] && !isScrollingFast) {
                             taken = TRUE;
+                            [cell play];
                         }
                     }
-                    else {
+                    
+                }
+                else {
+                    if ([cell respondsToSelector:@selector(play)]) {
                         [cell pause];
                     }
                 }
@@ -932,26 +1032,21 @@
             }
         });
     }
-    
-    if (scrollView == self.pageScroller) {
-        // animate nav up
-        
-    }
 }
 
 -(void)displayPreviousTab {
     //Checks which tab the user left the view from and displays it on next launch
-
+    
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"shouldDisplayFollowing"]) {
         [self.pageScroller setContentOffset:CGPointMake(self.view.frame.size.width, 0) animated:YES];
         self.followingTabButton.alpha = 1.0;
         self.highlightTabButton.alpha = 0.7;
-    
+        
     } else {
         [self.pageScroller setContentOffset:CGPointMake(0, 0) animated:YES];
         self.highlightTabButton.alpha = 1.0;
         self.followingTabButton.alpha = 0.7;
-
+        
     }
 }
 

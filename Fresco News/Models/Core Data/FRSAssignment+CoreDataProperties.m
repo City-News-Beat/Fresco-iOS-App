@@ -25,5 +25,7 @@
 @dynamic longitude;
 @dynamic latitude;
 @dynamic outlets;
+@dynamic accepted;
+@dynamic acceptable;
 
 @end

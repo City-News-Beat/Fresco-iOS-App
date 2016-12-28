@@ -12,11 +12,14 @@
 #import "FRSStory+CoreDataProperties.h"
 #import "FRSAppDelegate.h"
 #import "DGElasticPullToRefresh.h"
+#import "Haneke.h"
 #import "FRSGalleryExpandedViewController.h"
 
 @interface FRSStoryDetailViewController () <UINavigationBarDelegate>
 
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+@property (strong, nonatomic) UIView *headerContainer;
+@property BOOL didConfigureHeader;
 
 @end
 
@@ -32,7 +35,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
     
-    [FRSTracker track:@"Galleries opened from stories" parameters:@{@"story_id":(self.story.uid != Nil) ? self.story.uid : @""}];
+    [FRSTracker track:galleryOpenedFromStories parameters:@{@"story_id":(self.story.uid != Nil) ? self.story.uid : @"", @"opened_from":@"stories"}];
 
 }
 
@@ -70,7 +73,13 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    [FRSTracker screen:@"Story Detail"];
+    
     [self setupTableView];
+    if (self.story.caption != nil && ![self.story.caption isEqualToString:@""]) {
+        [self configureCaptionHeader];
+    }
     [self configureNavigationBar];
     [self addStatusBarNotification];
     
@@ -80,6 +89,70 @@ static NSString *galleryCell = @"GalleryCellReuse";
     self.galleriesTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.galleriesTable.frame.size.width, 1)];
     self.galleriesTable.tableFooterView.backgroundColor = [UIColor clearColor];
 
+}
+
+-(void)configureCaptionHeader {
+    self.didConfigureHeader = YES;
+    
+    self.headerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)]; // Height is calculated later
+    self.headerContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
+    [self.view addSubview:self.headerContainer];
+    
+    UIImageView *avatar = [[UIImageView alloc] initWithFrame:CGRectMake(16, 12, 24, 24)];
+    avatar.backgroundColor = [UIColor frescoLightTextColor];
+    //set image
+    avatar.layer.cornerRadius = 12;
+    avatar.clipsToBounds = YES;
+    avatar.layer.masksToBounds = YES;
+    [self.headerContainer addSubview:avatar];
+    
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(48, 14, [UIScreen mainScreen].bounds.size.width -80, 22)];
+    nameLabel.font = [UIFont notaMediumWithSize:17];
+    nameLabel.textColor = [UIColor frescoDarkTextColor];
+    nameLabel.text = [[_story creator] firstName];
+    
+    [self.headerContainer addSubview:nameLabel];
+    
+    if ([self.story curatorDict]) {
+        nameLabel.text = [[self story] curatorDict][@"full_name"];
+        [avatar hnk_setImageFromURL:[NSURL URLWithString:[[self story] curatorDict][@"avatar"]]];
+    } else {
+        nameLabel.text = @"Fresco News";
+        avatar.alpha = 0;
+        nameLabel.transform = CGAffineTransformMakeTranslation(-32, 0);
+    }
+    
+    UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 17, [UIScreen mainScreen].bounds.size.width -16, 14)];
+    timestampLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
+    timestampLabel.textColor = [UIColor frescoMediumTextColor];
+    timestampLabel.textAlignment = NSTextAlignmentRight;
+    timestampLabel.text = [FRSDateFormatter timestampStringFromDate:[_story editedDate]];
+    [self.headerContainer addSubview:timestampLabel];
+        
+    
+    UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 48, [UIScreen mainScreen].bounds.size.width -32, 20)];
+    captionLabel.textColor = [UIColor frescoDarkTextColor];
+    captionLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    captionLabel.text = _story.caption;
+    captionLabel.numberOfLines = 0;
+    [self.headerContainer addSubview:captionLabel];
+    [captionLabel sizeToFit];
+    
+    UIView *bottomGap = [[UIView alloc] initWithFrame:CGRectMake(0, captionLabel.frame.size.height +60, self.view.frame.size.width, 12)];
+    bottomGap.backgroundColor = [UIColor frescoBackgroundColorDark];
+    [self.headerContainer addSubview:bottomGap];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0.5)];
+    line.backgroundColor = [UIColor frescoShadowColor];
+    [bottomGap addSubview:line];
+    
+    self.headerContainer.frame = CGRectMake(0, 0, self.view.frame.size.width, captionLabel.frame.size.height + 72);
+
+    
+    
+
+    
+    self.galleriesTable.tableHeaderView = self.headerContainer;
 }
 
 -(void)setupTableView {
@@ -150,6 +223,8 @@ static NSString *galleryCell = @"GalleryCellReuse";
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.stories objectAtIndex:indexPath.row]];
     
     vc.shouldHaveBackButton = YES;
+    vc.openedFrom = @"Stories";
+    
     self.navigationItem.title = @"";
     [self.navigationController pushViewController:vc animated:YES];
     [self hideTabBarAnimated:YES];
@@ -234,7 +309,9 @@ static NSString *galleryCell = @"GalleryCellReuse";
 -(void)showShareSheetWithContent:(NSArray *)content {
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:content applicationActivities:nil];
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
-        [FRSTracker track:@"Galleries shared from stories" parameters:@{@"story_id":(self.story.uid != Nil) ? self.story.uid : @""}];
+    NSString *url = content[0];
+    url = [[url componentsSeparatedByString:@"/"] lastObject];
+    [FRSTracker track:galleryShared parameters:@{@"gallery_id":url, @"shared_from":@"story"}];
 }
 
 -(void)reloadData {

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<<<<<<< HEAD
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="16A323" minimumToolsVersion="Xcode 7.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
-=======
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1004" minimumToolsVersion="Xcode 7.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
->>>>>>> 3.0-omar
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11758" systemVersion="16B2659" minimumToolsVersion="Xcode 7.0" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="FRSArticle" representedClassName="FRSArticle" syncable="YES">
         <attribute name="articleStringURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -14,6 +10,8 @@
         <relationship name="gallery" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FRSGallery" inverseName="articles" inverseEntity="FRSGallery" syncable="YES"/>
     </entity>
     <entity name="FRSAssignment" representedClassName="FRSAssignment" syncable="YES">
+        <attribute name="acceptable" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="accepted" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="active" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
@@ -22,6 +20,7 @@
         <attribute name="expirationDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="outlets" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="radius" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
@@ -68,6 +67,7 @@
         <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="mediaType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="meta" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
@@ -100,6 +100,7 @@
         <attribute name="destinationURLS" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="etags" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="fileSize" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="multipart" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
@@ -107,6 +108,7 @@
         <attribute name="resourceURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uploadID" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="FRSUser" representedClassName="FRSUser" syncable="YES">
         <attribute name="address_city" optional="YES" attributeType="String" syncable="YES"/>
@@ -120,6 +122,7 @@
         <attribute name="blocked" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="blocking" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="creditCardDigits" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="disabled" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="dob_day" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="dob_month" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="dob_year" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -142,6 +145,7 @@
         <attribute name="ssn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="stripeFirst" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="stripeLast" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="suspended" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="galleries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FRSGallery" inverseName="creator" inverseEntity="FRSGallery" syncable="YES"/>
@@ -150,16 +154,12 @@
     </entity>
     <elements>
         <element name="FRSArticle" positionX="-614" positionY="-132" width="128" height="148"/>
-        <element name="FRSAssignment" positionX="-819" positionY="45" width="128" height="208"/>
+        <element name="FRSAssignment" positionX="-819" positionY="45" width="128" height="255"/>
         <element name="FRSGallery" positionX="-1190" positionY="81" width="128" height="405"/>
         <element name="FRSNotification" positionX="-839" positionY="-153" width="128" height="148"/>
-        <element name="FRSPost" positionX="-36" positionY="9" width="128" height="253"/>
+        <element name="FRSPost" positionX="-36" positionY="9" width="128" height="270"/>
         <element name="FRSStory" positionX="-72" positionY="285" width="128" height="253"/>
-        <element name="FRSUpload" positionX="-990" positionY="-9" width="128" height="238"/>
-<<<<<<< HEAD
-        <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="585"/>
-=======
-        <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="403"/>
->>>>>>> 3.0-omar
+        <element name="FRSUpload" positionX="-990" positionY="-9" width="128" height="270"/>
+        <element name="FRSUser" positionX="-297" positionY="-90" width="128" height="645"/>
     </elements>
 </model>

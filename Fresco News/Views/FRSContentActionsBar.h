@@ -22,6 +22,7 @@
 -(void)handleHeartAmount:(NSInteger)amount;
 -(void)handleRepostAmount:(NSInteger)amount;
 -(void)setCurrentUser:(BOOL)isAuth;
+@property (strong, nonatomic) UIButton *actionButton;
 
 @end
 

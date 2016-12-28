@@ -2,7 +2,7 @@
 //  FRSAssignmentsViewController.h
 //  Fresco
 //
-//  Created by Daniel Sun on 1/11/16.
+//  Created by Fresco News on 1/11/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
@@ -27,12 +27,14 @@
 -(instancetype)initWithActiveAssignment:(NSString *)assignmentID;
 -(void)focusOnAssignment:(FRSAssignment *)assignment;
 -(void)configureMap;
--(void)fetchLocalAssignments;
 @property CGFloat assignmentLat;
 @property CGFloat assignmentLong;
+
+-(void)globalAssignmentsSegue;
 
 @property (nonatomic) BOOL hasDefault;
 @property (nonatomic, retain) NSString *defaultID;
 @property (strong, nonatomic) MKMapView *mapView;
+@property BOOL mapShouldFollowUser;
 
 @end

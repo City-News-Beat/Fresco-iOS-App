@@ -149,7 +149,7 @@
             if ([CLLocationManager locationServicesEnabled]){
                 
                 if ([CLLocationManager authorizationStatus]==kCLAuthorizationStatusDenied){
-                    [FRSTracker track:@"Permissions location disables"];
+                    [FRSTracker track:locationDisabled];
                 }
             }
         }
@@ -184,7 +184,8 @@
     
     _currentState = UIApplicationStateActive;
     
-    [_locationManager requestWhenInUseAuthorization];
+    //[_locationManager requestWhenInUseAuthorization];
+    
     _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
     [_locationManager startUpdatingLocation];
 }
@@ -229,7 +230,7 @@
         [[NSUserDefaults standardUserDefaults] setObject:@(TRUE) forKey:@"first-location"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
-        [FRSTracker track:@"Permissions location enables"];
+        [FRSTracker track:locationEnabled];
     }
     
     if ([locations count] == 0) {

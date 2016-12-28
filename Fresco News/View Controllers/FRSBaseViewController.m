@@ -250,6 +250,18 @@
 }
 
 
+-(void)segueToGlobalAssignmentWithID:(NSString *)assignmentID {
+    
+    FRSNavigationController *navCont = (FRSNavigationController *)[self.tabBarController.viewControllers objectAtIndex:3];
+    FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
+    
+    [self.tabBarController setSelectedIndex:3];
+    [assignmentsVC globalAssignmentsSegue];
+    
+    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0];
+}
+
+
 -(void)segueToCameraWithAssignmentID:(NSString *)assignmentID {
     
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID completion:^(id responseObject, NSError *error) {
@@ -294,16 +306,47 @@
 
 }
 
-#pragma mark - Errors
+#pragma mark - FRSAlertView
 
 -(void)presentGenericError {
     FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
     [alert show];
 }
 
+-(void)presentNoConnectionError {
+    FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"It seems like you're not connected to the internet! Please make sure your phone is not in airplane mode and try again when you have a better connection." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+    [alert show];
+}
+
+
+-(void)checkStatusAndPresentPermissionsAlert:(id)delegate {
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
+        UIUserNotificationSettings *grantedSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+        if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted) || grantedSettings.types == UIUserNotificationTypeNone) {
+            FRSAlertView *alert = [[FRSAlertView alloc] initPermissionsAlert:delegate];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:userHasSeenPermissionsAlert]; //Used for super edge case, see viewDidLoad in HomeVC for more details.
+            [alert show];
+            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+            delegate.didPresentPermissionsRequest = YES;
+        }
+    }
+}
+
+#pragma mark - Keyboard 
+
+-(void)configureDismissKeyboardGestureRecognizer {
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboardFromView)];
+    [self.view addGestureRecognizer:tap];
+}
+
+-(void)dismissKeyboardFromView {
+    [self.view endEditing:YES];
+}
+
 #pragma mark - Logout
 
 -(void)logoutWithPop:(BOOL)pop {
+    
     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"facebook-enabled"];
     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"twitter-enabled"];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -313,13 +356,16 @@
     if ([[FRSAPIClient sharedClient] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
         [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSAPIClient sharedClient] authenticatedUser]];
     }
+    
     [[FRSAPIClient sharedClient] logout];
+    [FRSTracker reset];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
     });
     [[FRSAPIClient sharedClient] logout];
     
+    [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
     
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate clearKeychain];
@@ -340,7 +386,9 @@
     
     NSDictionary *defaultsDictionary = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
     for (NSString *key in [defaultsDictionary allKeys]) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+        if (![key isEqualToString:@"deviceToken"]) {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+        }
     }
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -354,7 +402,7 @@
     [self.tabBarController setSelectedViewController:[self.tabBarController.viewControllers firstObject]];
     FRSTabBarController *tab = (FRSTabBarController *)self.tabBarController;
     [tab updateUserIcon];
-    [FRSTracker track:@"Logouts"];
+    [FRSTracker track:logoutEvent];
     [self popViewController];
 }
 
@@ -378,6 +426,7 @@
     [Smooch show];
     
 }
+
 
 #pragma mark - Moderation
 -(void)checkSuspended {

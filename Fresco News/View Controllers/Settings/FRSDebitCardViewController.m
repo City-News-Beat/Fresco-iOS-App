@@ -52,6 +52,7 @@
     
     self.dismissKeyboardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:self.dismissKeyboardGestureRecognizer];
+    [self configureDismissKeyboardGestureRecognizer];
 }
 
 
@@ -114,6 +115,7 @@
     expirationDateTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     expirationDateTextField  = [[UITextField alloc] initWithFrame:CGRectMake(16, 44, [UIScreen mainScreen].bounds.size.width/2, 44)];
     expirationDateTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
+    expirationDateTextField.autocorrectionType = UITextAutocorrectionTypeNo;
     expirationDateTextField.placeholder =  @"00 / 00";
     expirationDateTextField.textColor = [UIColor frescoDarkTextColor];
     expirationDateTextField.tintColor = [UIColor frescoBlueColor];
@@ -122,7 +124,7 @@
     
     [container addSubview:expirationDateTextField];
     
-    expirationDateTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    expirationDateTextField.keyboardType = UIKeyboardTypeNumberPad;
 
     securityCodeTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     securityCodeTextField  = [[UITextField alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 , 44, [UIScreen mainScreen].bounds.size.width/2, 44)];
@@ -186,6 +188,10 @@
         self.bankButton.alpha = 1.0;
         self.debitButton.alpha = 0.7;
     }
+    
+    [securityCodeTextField resignFirstResponder];
+    [cardNumberTextField resignFirstResponder];
+    [expirationDateTextField resignFirstResponder];
 }
 
 -(void)configureBankView {
@@ -250,10 +256,14 @@
 }
 
 -(void)bankTapped {
+    [self.view resignFirstResponder];
+    [self resignFirstResponder];
+    [securityCodeTextField resignFirstResponder];
+    [cardNumberTextField resignFirstResponder];
+    [expirationDateTextField resignFirstResponder];
     [_contentScroller setContentOffset:CGPointMake(_contentScroller.frame.size.width, 0) animated:YES];
     self.bankButton.alpha = 1.0;
     self.debitButton.alpha = 0.7;
-
 }
 
 -(void)debitTapped {
@@ -330,7 +340,7 @@
     [super viewWillAppear:animated];
     
     [CardIOUtilities preload];
-    CardIOView *cardIOView = [[CardIOView alloc] initWithFrame:CGRectMake(0, -185, self.view.frame.size.width, self.view.frame.size.height)];
+    CardIOView *cardIOView = [[CardIOView alloc] initWithFrame:CGRectMake(0, cardViewport.frame.size.height/2 - self.view.frame.size.height/2, self.view.frame.size.width, self.view.frame.size.height)];
     cardIOView.delegate = self;
     
     [cardViewport addSubview:cardIOView];
@@ -443,10 +453,9 @@
         if (range.location > 4) {
             return NO;
         }
-        
-        if (![textField.text isEqualToString:@""] && textField.text != Nil && string) {
+        if (textField.text != Nil && ![textField.text isEqualToString:@""] && string) {
             NSString *proposedNewString = [[textField text] stringByReplacingCharactersInRange:range withString:string];
-            if (proposedNewString.length == 2 && textField.text.length <= 2) {
+            if (proposedNewString != Nil && proposedNewString.length == 2 && textField.text.length <= 2) {
                 proposedNewString = [proposedNewString stringByAppendingString:@"/"];
                 textField.text = proposedNewString;
                 return FALSE;
@@ -530,6 +539,7 @@
             if (error) {
                 self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                 [self.alertView show];
+                [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
             }
             else if (responseObject) {
                 NSString *brand = [responseObject objectForKey:@"brand"];
@@ -556,14 +566,22 @@
 }
 
 -(void)keyboardDidShow:(NSNotification *)notification {
-    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    if (_accountNumberField.isEditing || _routingNumberField.isEditing) {
+        return;
+    }
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.view.frame = CGRectMake(0, -30, self.view.frame.size.width,self.view.frame.size.height);
     } completion:nil];
 }
 
 
 -(void)keyboardDidHide:(NSNotification *)notification {
-    [UIView animateWithDuration:0.35 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+    if (_accountNumberField.isEditing || _routingNumberField.isEditing) {
+        return;
+    }
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
         self.view.frame = CGRectMake(0, 64, self.view.frame.size.width,self.view.frame.size.height);
     } completion:nil];
 }

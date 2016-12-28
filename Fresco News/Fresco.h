@@ -14,7 +14,7 @@
 #import "FRSStripe.h"
 #import <Mixpanel/Mixpanel.h>
 //libraries
-#import <AFNetworking/AFNetworking.h>
+#import "AFNetworking.h"
 #import "FRSTracker.h"
 // #define distribution TRUE // disable logging
 #ifdef distribution 
@@ -31,6 +31,10 @@ static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
 static NSString * const awsSecretKey = @"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";
 
 /* prod */
+// segment
+static NSString * const segmentWriteKey = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
+//static NSString * const segmentWriteKey = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug
+/* dev */
 //static NSString * const awsBucket = @"com.fresconews.v2.prod";
 //static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
 //static NSString * const awsSecretKey = @"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";
@@ -92,7 +96,8 @@ static NSString * const settingsUpdateEndpoint = @"user/settings/update";
 // location endpoints
 static NSString * const locationEndpoint = @"user/locate"; // send location
 static NSString * const dualLocationEndpoint = @"user/locationcall";  // send location & get nearby assignments
-static NSString * const acceptAssignmentEndpoint = @"assignment/accept";
+static NSString * const acceptAssignmentEndpoint = @"assignment/%@/accept";
+static NSString * const unacceptAssignmentEndpoint = @"assignment/%@/unaccept";
 
 // sign in / sign up (authorization) methods
 static NSString * const loginEndpoint = @"auth/signin";
@@ -169,6 +174,15 @@ static NSString * const previouslySelectedTabKey = @"previouslySelectedTab";
 static NSString * const settingsUserNotificationRadius = @"notification-radius";
 static NSString * const settingsPaymentLastFour = @"payment-last-four";
 static NSString * const settingsUserNotificationToggle = @"notifications-enabled";
+static NSString * const userHasSeenPermissionsAlert = @"userHasSeenPermissionsAlert";
+static NSString * const startDate = @"startDate";
+static NSString * const acceptedAssignmentEndpoint = @"assignment/accepted";
+
+
+// nsnotification
+static NSString * const enableAssignmentAccept = @"enableAssignmentAccept";
+static NSString * const disableAssignmentAccept = @"disableAssignmentAccept";
+
 
 #define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
 
@@ -301,6 +315,67 @@ static NSString * const taxInfoDeclinedNotification = @"user-payment-tax-info-de
 // Assignments
 static NSString * const newAssignmentNotification = @"user-dispatch-new-assignment";
 static NSString * const galleryApprovedNotification = @"user-dispatch-content-verified";
+
+
+// Event Tracking [FRSTracker]
+static NSString * const gallerySession = @"Gallery session";
+static NSString * const galleryLiked = @"Gallery liked";
+static NSString * const galleryUnliked = @"Gallery unliked";
+static NSString * const galleryReposted = @"Gallery reposted";
+static NSString * const galleryUnreposted = @"Gallery unreposted";
+static NSString * const cameraSession = @"Camera session";
+static NSString * const cameraSessionPhotoCount = @"Camera session photo count";
+static NSString * const cameraSessionVideoCount = @"Camera session video count";
+static NSString * const highlightsSession = @"Highlights session";
+static NSString * const profileSession = @"Profile session";
+static NSString * const storiesSession = @"Stories session";
+static NSString * const uploadError = @"Upload error";
+static NSString * const uploadDebug = @"Upload debug";
+static NSString * const uploadClose = @"Upload close";
+static NSString * const uploadCancel = @"Upload cancel";
+static NSString * const uploadRetry = @"Upload retry";
+static NSString * const onboardingEvent = @"Onboarding";
+static NSString * const onboardingReads = @"Onboarding reads";
+static NSString * const onboardingQuits = @"Onboarding immediate quits";
+static NSString * const galleryShared = @"Gallery shared";
+static NSString * const signupsWithTwitter = @"Signups with Twitter";
+static NSString * const signupsWithFacebook = @"Signups with Facebook";
+static NSString * const signupsWithEmail = @"Signups with email";
+static NSString * const loginEvent = @"Logins";
+static NSString * const addressError = @"Address Error";
+static NSString * const notificationsEnabled = @"Permissions notification enables";
+static NSString * const notificationsDisabled = @"Permissions notification disables";
+static NSString * const cameraEnabled = @"Permissions camera enabled";
+static NSString * const cameraDisabled = @"Permissions camera disables";
+static NSString * const microphoneEnabled = @"Permissions microphone enables";
+static NSString * const microphoneDisabled = @"Permissions microphone disables";
+static NSString * const logoutEvent = @"Logouts";
+static NSString * const aggressivePan = @"Capture Agressive Pan";
+static NSString * const captureWobble = @"Capture Wobble";
+static NSString * const articleOpens = @"Article opens";
+static NSString * const photosEnabled = @"Permissions photos enables";
+static NSString * const photosDisabled = @"Permissions photos disables";
+static NSString * const videosInGallery = @"Submission videos in gallery";
+static NSString * const photosInGallery = @"Submission photos in gallery";
+static NSString * const sharedFromHighlights = @"Galleries shared from highlights";
+static NSString * const migrationShown = @"Migration Shown";
+static NSString * const galleryOpenedFromHighlights = @"Gallery opened";
+static NSString * const galleryOpenedFromProfile = @"Gallery opened";
+static NSString * const galleryOpenedFromStories = @"Gallery opened";
+static NSString * const locationEnabled = @"Permissions location enables";
+static NSString * const locationDisabled = @"Permissions location disables";
+static NSString * const loginError = @"Login Error";
+static NSString * const registrationError = @"Registration Error";
+static NSString * const signupRadiusChange = @"Signup radius changes";
+static NSString * const submissionsEvent = @"Submissions";
+static NSString * const itemsInGallery = @"Submission item in gallery";
+
+
+// scrolling, video playback
+static float const maxScrollVelocity = 2.1;
+
+
+
 #define ResourcePath(path)[[NSBundle mainBundle] pathForResource:path ofType:nil]
 
 #define ImageWithPath(path)[UIImage imageWithContentsOfFile:path]

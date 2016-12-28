@@ -33,7 +33,10 @@
     
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
-    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
+    
+    if ([[dict[@"created_date"] class] isSubclassOfClass:[NSString class]]) {
+        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_date"]];
+    }
     
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
@@ -65,7 +68,10 @@
 -(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context {
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
-    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
+    
+    if ([[dict[@"created_date"] class] isSubclassOfClass:[NSString class]]) {
+        self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"created_date"]];
+    }
     self.imageUrl = dict[@"image"];
     self.byline = dict[@"byline"];
     self.address = [self shortAddressFromAddress:dict[@"address"]];
@@ -80,7 +86,7 @@
         self.creator.bio = (dict[@"owner"][@"bio"] != nil) ? dict[@"owner"][@"bio"] : @"";
         self.creator.following = dict[@"owner"][@"following"];
     }
-
+    
     if ([dict objectForKey:@"stream"] != [NSNull null]) {
         self.mediaType = @(1);
         self.videoUrl = [dict objectForKey:@"stream"];
@@ -227,7 +233,7 @@
     
     if ([self checkVal:self.coordinates]) {
         jsonObject[@"lat"] = self.coordinates[1];
-        jsonObject[@"lng"] = self.coordinates[0]; 
+        jsonObject[@"lng"] = self.coordinates[0];
     }
     
     

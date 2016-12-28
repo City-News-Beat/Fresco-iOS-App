@@ -17,10 +17,11 @@
 @import UIKit;
 
 @implementation FRSGallery
-@synthesize currentContext = _currentContext, generatedHeight = _generatedHeight;
+@synthesize currentContext = _currentContext, generatedHeight = _generatedHeight, sourceUser = _sourceUser;
 
 @dynamic byline;
 @dynamic caption;
+@dynamic comments;
 @dynamic createdDate;
 @dynamic editedDate;
 @dynamic relatedStories;
@@ -42,7 +43,7 @@
 -(NSArray *)sorted {
     NSArray *sorted;
     
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:YES];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES];
     sorted=[self.posts sortedArrayUsingDescriptors:@[sort]];
 
     return sorted;
@@ -52,7 +53,12 @@
     self.tags = [[NSMutableDictionary alloc] init];
     self.uid = dict[@"id"];
     self.visibility = dict[@"visiblity"];
-    self.createdDate = [FRSDateFormatter dateFromEpochTime:dict[@"time_created"] milliseconds:YES];
+    self.createdDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"time_created"]];
+    
+    if (dict[@"action_at"] && ![dict[@"action_at"] isEqual:[NSNull null]]) {
+        self.editedDate = [[FRSAPIClient sharedClient] dateFromString:dict[@"action_at"]];
+    }
+    
     self.caption = dict[@"caption"];
     if([dict valueForKey:@"owner"] != [NSNull null] && [[dict valueForKey:@"owner"] valueForKey:@"full_name"] != [NSNull null]){
         self.byline = dict[@"owner"][@"full_name"];
@@ -61,11 +67,21 @@
         self.creator.firstName = (dict[@"owner"][@"full_name"] != nil && ![dict[@"owner"][@"full_name"] isEqual:[NSNull null]]) ? dict[@"owner"][@"full_name"] : @"";
     }
     
-    NSLog(@"USERNAME: %@", dict[@"owner"][@"username"]);
-    
-    if (dict[@"owner"][@"username"] != [NSNull null]) {
+    NSArray *sources = (NSArray *)dict[@"sources"];
+    if ([[sources class] isSubclassOfClass:[NSArray class]] && sources.count > 0) {
+        
+        NSString *repostedBy = dict[@"reposted_by"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF contains[c] %@", repostedBy];
+        NSArray *results = [sources filteredArrayUsingPredicate:predicate];
+        NSDictionary *source = (NSDictionary *)[results firstObject];
+        NSString *userID = source[@"user_id"];
+        
+        [[FRSAPIClient sharedClient] getUserWithUID:userID completion:^(id responseObject, NSError *error) {
+            FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+            self.sourceUser = user;
+        }];
     }
-    
+
     
     if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {
         FRSUser *newUser = [FRSUser nonSavedUserWithProperties:dict[@"owner"] context:self.currentContext];
@@ -131,6 +147,7 @@
     
     int comments = [dict[@"comments"] intValue];
     [self setValue:@(comments) forKey:@"comments"];
+    self.comments = dict[@"comments"];
     
     [self setValue:@([dict[@"reposts"] intValue]) forKey:@"reposts"];
     [self setValue:@([dict[@"reposted"] boolValue]) forKey:@"reposted"];
@@ -162,20 +179,23 @@
 }
 
 -(void)addPostsWithArray:(NSArray *)posts{
-        
+    
+    int i = 0;
     for (NSDictionary *dict in posts){
         if (save) {
             FRSPost *post = [NSEntityDescription insertNewObjectForEntityForName:@"FRSPost" inManagedObjectContext:self.currentContext];
+            [post setValue:@(i) forKey:@"index"];
             [post configureWithDictionary:dict context:_currentContext];
             [self addPostsObject:post];
         }
         else {
             NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSPost" inManagedObjectContext:self.currentContext];
             FRSPost *post = (FRSPost *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
-            
+            [post setValue:@(i) forKey:@"index"];
             [post configureWithDictionary:dict context:self.currentContext save:FALSE];
             [self addPostsObject:post];
         }
+        i++;
     }
 }
 
@@ -189,10 +209,10 @@
         else {
             NSEntityDescription *galleryEntity = [NSEntityDescription entityForName:@"FRSArticle" inManagedObjectContext:self.currentContext];
             FRSArticle *article = (FRSArticle *)[[NSManagedObject alloc] initWithEntity:galleryEntity insertIntoManagedObjectContext:nil];
+            [article configureWithDictionary:dict];
             [self addArticlesObject:article];
         }
     }
-    
 }
 
 -(NSInteger)heightForGallery{

@@ -26,9 +26,10 @@
 #import <Smooch/Smooch.h>
 #import <UserNotifications/UserNotifications.h>
 #import "FRSAPIClient.h"
+#import <UserNotifications/UserNotifications.h>
+#import "Adjust.h"
 
-@interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate>
-{
+@interface FRSAppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, UNUserNotificationCenterDelegate> {
     NSTimer *notificationTimer;
 }
 @property (strong, nonatomic) UIWindow *window;
@@ -36,16 +37,17 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, retain) id tabBarController;
--(void)reloadUser;
--(void)reloadUser:(FRSAPIDefaultCompletionBlock)completion;
--(void)saveContext;
--(UITabBarController *)tabBar;
--(BOOL)isFirstRun;
--(void)updateTabBarToUser;
--(void)clearKeychain;
-
--(void)saveUserFields:(NSDictionary *)responseObject;
--(void)startNotificationTimer;
--(void)stopNotificationTimer;
--(void)registerForPushNotifications;
+@property BOOL didPresentPermissionsRequest;
+- (void)reloadUser;
+- (void)reloadUser:(FRSAPIDefaultCompletionBlock)completion;
+- (void)saveContext;
+- (UITabBarController *)tabBar;
+- (BOOL)isFirstRun;
+- (void)updateTabBarToUser;
+- (void)clearKeychain;
+- (void)restartUpload;
+- (void)saveUserFields:(NSDictionary *)responseObject;
+- (void)startNotificationTimer;
+- (void)stopNotificationTimer;
+- (void)registerForPushNotifications;
 @end
