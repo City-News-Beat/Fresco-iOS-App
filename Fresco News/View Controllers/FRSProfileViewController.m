@@ -680,6 +680,10 @@
             if (self.galleries.count <= 0) {
                 [self configureFrogForFeed:self.tableView];
                 self.feedAwkwardView.alpha = 1;
+                
+                NSLog(@"Unable to connect.");
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:NO];
+                [alert show];
             } else {
                 self.feedAwkwardView.alpha = 0;
             }
@@ -707,6 +711,10 @@
             if (self.likes.count <= 0) {
                 [self configureFrogForFeed:self.tableView];
                 self.feedAwkwardView.alpha = 1;
+                
+                NSLog(@"Unable to connect.");
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:NO];
+                [alert show];
             } else {
                 self.feedAwkwardView.alpha = 0;
             }
