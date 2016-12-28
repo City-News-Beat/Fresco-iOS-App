@@ -94,6 +94,8 @@
     } else {
         self.shouldUpdateOnReturn = NO;
     }
+    [self configureNearbyUsers];
+    [self.tableView reloadData];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
