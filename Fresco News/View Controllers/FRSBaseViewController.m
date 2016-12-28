@@ -14,7 +14,6 @@
 #import "FRSAssignmentsViewController.h"
 #import "FRSCameraViewController.h"
 #import "FRSDebitCardViewController.h"
-#import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
 #import "FRSTabBarController.h"
 #import "FRSAppDelegate.h"
@@ -281,11 +280,6 @@
 //        //Else, needs to input SSN
 //        [self segueToIDInfo];
 //    }
-}
-
--(void)segueToTaxInfo {
-    FRSTaxInformationViewController *taxVC = [[FRSIdentityViewController alloc] init];
-    [self.navigationController pushViewController:taxVC animated:YES];
 }
 
 -(void)segueToIDInfo {

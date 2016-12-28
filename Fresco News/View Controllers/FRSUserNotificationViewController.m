@@ -19,7 +19,6 @@
 #import "FRSProfileViewController.h"
 #import "FRSDebitCardViewController.h"
 #import "FRSAssignmentsViewController.h"
-#import "FRSTaxInformationViewController.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 
@@ -610,19 +609,6 @@ NSString * const ASSIGNMENT_ID = @"assignmentNotificationCell";
         
     } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
         [self segueToDebitCard];
-
-    } else if ([currentKey isEqualToString:taxInfoRequiredNotification]) {
-        [self segueToTaxInfo];
-        
-    } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
-        // do nothing
-        [self segueToTaxInfo];
-        
-    } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
-        [self segueToTaxInfo];
-    } else {
-
-    
     }
 }
 -(void)error:(NSError *)error {

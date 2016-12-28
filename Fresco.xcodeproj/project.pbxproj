@@ -41,7 +41,6 @@
 		07A30C031C50488800C536EB /* FRSRadiusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF41C50488800C536EB /* FRSRadiusViewController.m */; };
 		07A30C041C50488800C536EB /* FRSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF61C50488800C536EB /* FRSSettingsViewController.m */; };
 		07A30C051C50488800C536EB /* FRSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF81C50488800C536EB /* FRSTableViewCell.m */; };
-		07A30C061C50488800C536EB /* FRSTaxInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BFA1C50488800C536EB /* FRSTaxInformationViewController.m */; };
 		07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */; };
 		07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C091C50494700C536EB /* FRSStoryView.m */; };
 		07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C0C1C50495C00C536EB /* FRSStoriesViewController.m */; };
@@ -354,8 +353,6 @@
 		07A30BF61C50488800C536EB /* FRSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSSettingsViewController.m; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.m"; sourceTree = "<group>"; };
 		07A30BF71C50488800C536EB /* FRSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSTableViewCell.h; path = "Fresco News/View Controllers/Settings/FRSTableViewCell.h"; sourceTree = "<group>"; };
 		07A30BF81C50488800C536EB /* FRSTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSTableViewCell.m; path = "Fresco News/View Controllers/Settings/FRSTableViewCell.m"; sourceTree = "<group>"; };
-		07A30BF91C50488800C536EB /* FRSTaxInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSTaxInformationViewController.h; path = "Fresco News/View Controllers/Settings/FRSTaxInformationViewController.h"; sourceTree = "<group>"; };
-		07A30BFA1C50488800C536EB /* FRSTaxInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSTaxInformationViewController.m; path = "Fresco News/View Controllers/Settings/FRSTaxInformationViewController.m"; sourceTree = "<group>"; };
 		07A30BFB1C50488800C536EB /* FRSUsernameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSUsernameViewController.h; path = "Fresco News/View Controllers/Settings/FRSUsernameViewController.h"; sourceTree = "<group>"; };
 		07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSUsernameViewController.m; path = "Fresco News/View Controllers/Settings/FRSUsernameViewController.m"; sourceTree = "<group>"; };
 		07A30C081C50494700C536EB /* FRSStoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryView.h; sourceTree = "<group>"; };
@@ -808,6 +805,7 @@
 		073F624C1C3D71D300E07977 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				D4C217C71D63ADCC0076172D /* Identity */,
 				D43C7FE41C8F354500A7A7A7 /* Business Type */,
 				D4C217CB1D63B7230076172D /* Manage Payment */,
 				D43C7FE51C8F354F00A7A7A7 /* Add Payment */,
@@ -818,7 +816,6 @@
 				D43C7FEA1C8F358A00A7A7A7 /* Radius */,
 				D43C7FEB1C8F359000A7A7A7 /* Settings VC */,
 				D43C7FEC1C8F359700A7A7A7 /* Table View */,
-				D43C7FED1C8F359D00A7A7A7 /* Tax Info */,
 				07FD8BAD1CE66EAA00F93705 /* About */,
 				D43C7FEE1C8F35A300A7A7A7 /* Username */,
 			);
@@ -1075,7 +1072,6 @@
 		1EDA44DE1AA4CCFB0082E08D /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				D4C217C71D63ADCC0076172D /* Identity */,
 				D48C722C1D11D2C6000677BF /* Notification */,
 				D487F1B21CBD6550005742F3 /* Submission */,
 				4AB98C921C8A7EC6005E7AB2 /* Camera */,
@@ -1674,15 +1670,6 @@
 			name = "Table View";
 			sourceTree = "<group>";
 		};
-		D43C7FED1C8F359D00A7A7A7 /* Tax Info */ = {
-			isa = PBXGroup;
-			children = (
-				07A30BF91C50488800C536EB /* FRSTaxInformationViewController.h */,
-				07A30BFA1C50488800C536EB /* FRSTaxInformationViewController.m */,
-			);
-			name = "Tax Info";
-			sourceTree = "<group>";
-		};
 		D43C7FEE1C8F35A300A7A7A7 /* Username */ = {
 			isa = PBXGroup;
 			children = (
@@ -2150,6 +2137,7 @@
 				D4C217C91D63AE230076172D /* FRSIdentityViewController.m */,
 			);
 			name = Identity;
+			path = "Fresco News/View Controllers";
 			sourceTree = "<group>";
 		};
 		D4C217CB1D63B7230076172D /* Manage Payment */ = {
@@ -2737,7 +2725,6 @@
 				42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */,
 				D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
-				07A30C061C50488800C536EB /* FRSTaxInformationViewController.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,
 				D421FC551D5B7AE3004C76B7 /* FRSSearchUserCell.m in Sources */,
 				D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */,

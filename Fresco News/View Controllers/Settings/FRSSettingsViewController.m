@@ -22,7 +22,6 @@
 #import "FRSPromoCodeViewController.h"
 #import "FRSEmailViewController.h"
 #import "FRSPasswordChangeViewController.h"
-#import "FRSTaxInformationViewController.h"
 #import "FRSDisableAccountViewController.h"
 #import "FRSRadiusViewController.h"
 #import "FRSDebitCardViewController.h"

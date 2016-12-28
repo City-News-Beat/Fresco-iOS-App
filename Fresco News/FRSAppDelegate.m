@@ -31,7 +31,6 @@
 #import "FRSNavigationController.h"
 #import "FRSAssignmentsViewController.h"
 #import "FRSDebitCardViewController.h"
-#import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
 #import "FRSStoriesViewController.h"
 #import "FRSUploadManager.h"

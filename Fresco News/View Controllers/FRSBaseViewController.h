@@ -40,7 +40,6 @@
 /* DEEP LINKS */
 -(void)segueToPhotosOfTheDay:(NSArray *)postIDs;
 -(void)segueToTodayInNews:(NSArray *)galleryIDs;
--(void)segueToTaxInfo;
 -(void)segueToIDInfo;
 -(void)segueToGallery:(NSString *)galleryID;
 -(void)segueToStory:(NSString *)storyID;
