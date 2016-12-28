@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11535.1" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11523"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,14 +15,13 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Mastercard (0819)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TjK-FW-XAK">
-                        <rect key="frame" x="25" y="11" width="152" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mastercard (0819)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TjK-FW-XAK">
+                        <rect key="frame" x="22" y="11" width="205" height="21"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="21" id="cuI-T9-9nU"/>
-                            <constraint firstAttribute="width" constant="152" id="g3R-yZ-KNv"/>
+                            <constraint firstAttribute="height" constant="21" id="x8A-69-Ok2"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                         <color key="textColor" red="0.22745098039215686" green="0.22745098039215686" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -31,15 +30,15 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check-box-circle-outline" translatesAutoresizingMaskIntoConstraints="NO" id="84h-BS-rxV">
                         <rect key="frame" x="287" y="11" width="20" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="20" id="8fK-GU-5xB"/>
-                            <constraint firstAttribute="width" constant="20" id="9cl-TQ-bjt"/>
+                            <constraint firstAttribute="height" constant="20" id="KLH-YD-3qJ"/>
+                            <constraint firstAttribute="width" constant="20" id="Zii-CG-p4t"/>
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bOs-aE-3QB">
                         <rect key="frame" x="247" y="8" width="28" height="28"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="28" id="cPD-1z-aDs"/>
-                            <constraint firstAttribute="width" constant="28" id="r0f-1L-JYt"/>
+                            <constraint firstAttribute="height" constant="28" id="y3s-J0-4Gx"/>
+                            <constraint firstAttribute="width" constant="28" id="zQx-Dx-4Rb"/>
                         </constraints>
                         <inset key="contentEdgeInsets" minX="2" minY="2" maxX="2" maxY="2"/>
                         <state key="normal" image="trash24K2.png">
@@ -51,15 +50,13 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottomMargin" secondItem="84h-BS-rxV" secondAttribute="bottom" constant="4.5" id="9oP-Kb-SaN"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="TjK-FW-XAK" secondAttribute="bottom" constant="3.5" id="AEc-hD-nNG"/>
-                    <constraint firstItem="84h-BS-rxV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="BAM-Zv-yEh"/>
-                    <constraint firstItem="TjK-FW-XAK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="3" id="S8C-4b-UxV"/>
-                    <constraint firstItem="TjK-FW-XAK" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Uit-pL-znE"/>
-                    <constraint firstItem="84h-BS-rxV" firstAttribute="leading" secondItem="bOs-aE-3QB" secondAttribute="trailing" constant="12" id="cTv-xD-i2W"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="84h-BS-rxV" secondAttribute="trailing" constant="5" id="fud-Za-FPO"/>
-                    <constraint firstItem="TjK-FW-XAK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="14" id="lqR-QB-DVC"/>
-                    <constraint firstItem="bOs-aE-3QB" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="yNh-ce-IhZ"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="84h-BS-rxV" secondAttribute="trailing" constant="5" id="7l5-yx-Dc1"/>
+                    <constraint firstItem="TjK-FW-XAK" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="HcU-uT-GQL"/>
+                    <constraint firstItem="84h-BS-rxV" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Pj6-b6-ePc"/>
+                    <constraint firstItem="84h-BS-rxV" firstAttribute="leading" secondItem="bOs-aE-3QB" secondAttribute="trailing" constant="12" id="Thm-Na-abn"/>
+                    <constraint firstItem="bOs-aE-3QB" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="grb-BW-zvG"/>
+                    <constraint firstItem="bOs-aE-3QB" firstAttribute="leading" secondItem="TjK-FW-XAK" secondAttribute="trailing" constant="20" id="i40-rY-W4s"/>
+                    <constraint firstItem="TjK-FW-XAK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="14" id="lXE-cz-G5L"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
