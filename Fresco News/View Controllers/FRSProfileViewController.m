@@ -259,7 +259,7 @@
     if (isLoadingUser) {
         return;
     }
-    
+
     [self showTabBarAnimated:YES];
     //    self.tableView.bounces = false;
     self.didFollow = NO;
@@ -290,6 +290,8 @@
     
     dateOpened = [NSDate date];
     [FRSTracker screen:@"Profile"];
+    
+    [self setupUI];
     
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
     [self.navigationController.tabBarController.tabBar setHidden:FALSE];
