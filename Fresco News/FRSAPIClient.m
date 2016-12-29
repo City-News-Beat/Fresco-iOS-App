@@ -195,7 +195,7 @@
     [self post:signUpEndpoint withParameters:digestion completion:^(id responseObject, NSError *error) {
         
         if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
-           // [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
+            [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
             [self handleUserLogin:responseObject];            
         }
         
@@ -837,6 +837,7 @@
 }
 
 -(void)saveToken:(NSString *)token forUser:(NSString *)userName {
+    NSLog(@"SAVING TOKEN WITH SERVICE NAME:\n%@", serviceName);
     [SAMKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:userName];
 }
 
@@ -845,8 +846,8 @@
 }
 
 -(BOOL)isAuthenticated {
-    
-    if ([[SAMKeychain accountsForService:serviceName] count] > 0) {
+    NSLog(@"SAM KEYCHAIN BS: \n%lu",[SAMKeychain accountsForService:serviceName].count);
+    if (([SAMKeychain accountsForService:serviceName].count == [NSNull null]) || ([[SAMKeychain accountsForService:serviceName] count] > 0)) {
         return TRUE;
     }
     

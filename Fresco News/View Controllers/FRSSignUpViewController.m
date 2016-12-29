@@ -1188,6 +1188,7 @@
 
     
     [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest completion:^(id responseObject, NSError *error) {
+        
         BOOL facebookSignup = FALSE;
         BOOL twitterSignup = FALSE;
         
@@ -1259,6 +1260,10 @@
             [self segueToSetup];
 
         }
+        NSLog(@"Response Object: \n%@",responseObject);
+        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [delegate saveUserFields:responseObject[@"user"]];
+
         _pastRegistration = registrationDigest;
         
         [self stopSpinner:self.loadingView onButton:self.createAccountButton];
