@@ -1742,12 +1742,12 @@
         self.errorContainer.alpha = 1;
         
         if (self.notificationsEnabled) {
-            _scrollView.contentSize = CGSizeMake(_scrollView.contentSize.width, self.TOSContainerView.frame.origin.y+44);
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 44);
             self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height +self.sliderContainer.frame.size.height);
             self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height +self.sliderContainer.frame.size.height +44); //+promoContainer.frame.size.height, when we add promo
+            _scrollView.contentSize = CGSizeMake(_scrollView.contentSize.width, self.TOSContainerView.frame.origin.y+44);
         } else {
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
