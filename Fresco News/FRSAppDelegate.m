@@ -1,5 +1,5 @@
- 
-    
+
+
 //
 //  FRSAppDelegate.m
 //  Fresco
@@ -818,7 +818,6 @@
 #pragma mark - App Path
 
 - (void)determineAppPath {
-
     NSString *versionString = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
     NSArray *versionComps = [versionString componentsSeparatedByString:@"."];
     NSInteger firstVersionNum = [[versionComps firstObject] integerValue];
@@ -938,4 +937,3 @@
 }
 
 @end
-d
