@@ -7,12 +7,14 @@
 //
 
 #import "FRSStripe.h"
+#import "EndpointManager.h"
 
 @implementation FRSStripe
 
 +(STPCardParams *)creditCardWithNumber:(NSString *)number expiration:(NSArray *)expiration cvc:(NSString *)cvc {
-    [FRSStripe startTest];
-    
+    EndpointManager *manager = [EndpointManager sharedInstance];
+    [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];
+
     STPCardParams *cardParams = [[STPCardParams alloc] init];
     cardParams.number = number;
     cardParams.expMonth = [expiration[0] intValue];
@@ -51,11 +53,4 @@
     }];
 }
 
-+(void)startLive {
-    [Stripe setDefaultPublishableKey:stripeLive];
-}
-
-+(void)startTest {
-    [Stripe setDefaultPublishableKey:stripeTest];
-}
 @end

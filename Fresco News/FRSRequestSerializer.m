@@ -8,11 +8,12 @@
 
 #import "FRSRequestSerializer.h"
 #import "Fresco.h"
+#import "EndpointManager.h"
 
 @implementation FRSRequestSerializer
 
 - (NSMutableURLRequest *)requestWithMethod:(NSString *)method URLString:(NSString *)URLString parameters:(id)parameters error:(NSError *__autoreleasing *)error {
-    NSString *endpoint = [URLString stringByReplacingOccurrencesOfString:baseURL withString:@""];
+    NSString *endpoint = [URLString stringByReplacingOccurrencesOfString:[EndpointManager sharedInstance].currentEndpoint.baseUrl withString:@""];
     
     NSMutableURLRequest *request = [super requestWithMethod:method URLString:URLString parameters:parameters error:Nil];
     NSLog(@"%@", [request valueForHTTPHeaderField:@"Authorization"]);

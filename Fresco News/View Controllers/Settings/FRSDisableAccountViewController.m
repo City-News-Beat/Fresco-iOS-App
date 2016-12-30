@@ -11,6 +11,7 @@
 #import "UIColor+Fresco.h"
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
+#import "EndpointManager.h"
 
 @interface FRSDisableAccountViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -245,8 +246,7 @@
     
     [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
-    
-    [SAMKeychain deletePasswordForService:serviceName account:clientAuthorization];
+    [SAMKeychain deletePasswordForService:serviceName account:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
     
     [NSUserDefaults resetStandardUserDefaults];
     

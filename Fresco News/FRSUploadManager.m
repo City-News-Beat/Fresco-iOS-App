@@ -14,6 +14,7 @@
 #import "FRSAppDelegate.h"
 #import "FRSTracker.h"
 #import "SDAVAssetExportSession.h"
+#import "EndpointManager.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -351,7 +352,7 @@ static NSDate *lastDate;
 }
 
 -(void)startAWS {
-    AWSStaticCredentialsProvider *credentialsProvider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:awsAccessKey secretKey:awsSecretKey];
+    AWSStaticCredentialsProvider *credentialsProvider = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:[EndpointManager sharedInstance].currentEndpoint.amazonS3AccessKey secretKey:[EndpointManager sharedInstance].currentEndpoint.amazonS3SecretKey];
     
     AWSServiceConfiguration *configuration = [[AWSServiceConfiguration alloc] initWithRegion:AWS_REGION credentialsProvider:credentialsProvider];
     
@@ -377,7 +378,7 @@ static NSDate *lastDate;
     upload.body = [NSURL fileURLWithPath:body];
     upload.key = postID;
     upload.metadata = @{@"post_id":post};
-    upload.bucket = awsBucket;
+    upload.bucket = [EndpointManager sharedInstance].currentEndpoint.amazonS3Bucket;
     
     /*
      MixPanel speed tracking

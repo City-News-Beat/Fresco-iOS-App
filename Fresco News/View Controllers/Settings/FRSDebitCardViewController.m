@@ -16,6 +16,7 @@
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
+#import "EndpointManager.h"
 
 @interface FRSDebitCardViewController()
 
@@ -273,7 +274,7 @@
 }
 
 -(void)saveBankInfo {
-    [Stripe setDefaultPublishableKey:stripeLive];
+    [Stripe setDefaultPublishableKey:[EndpointManager sharedInstance].currentEndpoint.stripeKey];
 
     if (!self.loadingView){
         [self configureSpinner];
@@ -497,7 +498,7 @@
     
     [self startSpinner:self.loadingView onButton:self.rightAlignedButton];
     
-    [Stripe setDefaultPublishableKey:stripeTest];
+    [Stripe setDefaultPublishableKey:[EndpointManager sharedInstance].currentEndpoint.stripeKey];
 
     NSArray *components = [expirationDateTextField.text componentsSeparatedByString:@"/"];
     NSArray *expiration;

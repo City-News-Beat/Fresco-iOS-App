@@ -8,42 +8,12 @@
 
 #import "FRSAPIClient.h" // Network
 #import "FRSGallery+CoreDataProperties.h"
-//#import "markdown_lib.h"
-//#import "markdown_peg.h"
 #import "FRSAPIClient.h" // imports all extension classes needed (location, persistence, social, upload)
 #import "FRSStripe.h"
-#import <Mixpanel/Mixpanel.h>
-//libraries
 #import "AFNetworking.h"
 #import "FRSTracker.h"
-// #define distribution TRUE // disable logging
-#ifdef distribution 
-#define NSLog //
-#endif
-
-/*
-    AWS
- */
-
-/* dev */
-static NSString * const awsBucket = @"com.fresconews.dev";
-static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
-static NSString * const awsSecretKey = @"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";
-
-/* prod */
-// segment
-static NSString * const segmentWriteKey = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
-//static NSString * const segmentWriteKey = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug
-/* dev */
-//static NSString * const awsBucket = @"com.fresconews.v2.prod";
-//static NSString * const awsAccessKey = @"AKIAJRQQA26XTXPGVAKA";
-//static NSString * const awsSecretKey = @"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";
 
 #define AWS_REGION AWSRegionUSEast1
-
-// mixpanel
-//static NSString * const mixPanelToken = @"4a01dc9d6ffde669d683102db23c8bcd";
-static NSString * const mixPanelToken = @"0e6b9d8ade7a9f56bf6ddae4b0374148";
 
 // image CDN sizing
 static NSString * const thumbImageSize = @"150x";
@@ -58,21 +28,8 @@ static int const megabyteDefinition = 1048576;
 // notifications
 static NSString * const kStatusBarTappedNotification = @"statusBarTappedNotification";
 
-// api - constants
-static BOOL const developmentEnvironment = FALSE; // both of these effect the base url (dev takes priority)
-static BOOL const stagingEnvironment = FALSE;
-
-// authorization constants
-//static NSString * const clientAuthorization = @"aW9zOmFzZHBvaXF3ZWxramRmaGtpOWVvcmhneQ";
-static NSString * const clientAuthorization = @"MTMzNzp0aGlzaXNhc2VjcmV0";
-static NSString * const testBearerToken = @"goog";
 static NSString * const serviceName = @"frescoNewsService3";
 static NSString * const FRSUploadNotification = @"FRSUploadUpdateNotification";
-
-// base URLS
-static NSString * const baseURL = @"https://api.dev.fresconews.com/v2/";
-static NSString * const stagingURL = @"https://staging.api.fresconews.com/v1/";
-static NSString * const developmentURL = @"https://dev.api.fresconews.com/v1/";
 
 // user settings (notifications)
 static NSString * const settingsEndpoint = @"user/settings";
@@ -182,9 +139,6 @@ static NSString * const acceptedAssignmentEndpoint = @"assignment/accepted";
 // nsnotification
 static NSString * const enableAssignmentAccept = @"enableAssignmentAccept";
 static NSString * const disableAssignmentAccept = @"disableAssignmentAccept";
-
-
-#define FRBASEURL (developmentEnvironment) ? developmentURL : (stagingEnvironment) ? stagingURL : baseURL
 
 
 // mixpanel

@@ -130,10 +130,11 @@
 		65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C11C24C28D002182DE /* FRSOnboardOneView.m */; };
 		65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C61C24D263002182DE /* FRSContentActionsBar.m */; };
 		65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C91C24D464002182DE /* UIFont+Fresco.m */; };
-		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
 		CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */; };
+		CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0CAE611E1579CA00CDE511 /* Endpoint.m */; };
+		CE12A5F91E14747A0032E72F /* EndpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12A5F81E14747A0032E72F /* EndpointManager.m */; };
 		D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA511D6DE6B3008842E1 /* FRSComment.m */; };
 		D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA561D6DF57E008842E1 /* FRSCommentCell.m */; };
 		D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */; };
@@ -532,6 +533,10 @@
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
 		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
 		CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
+		CE0CAE601E1579CA00CDE511 /* Endpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Endpoint.h; sourceTree = "<group>"; };
+		CE0CAE611E1579CA00CDE511 /* Endpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Endpoint.m; sourceTree = "<group>"; };
+		CE12A5F71E14747A0032E72F /* EndpointManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndpointManager.h; sourceTree = "<group>"; };
+		CE12A5F81E14747A0032E72F /* EndpointManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EndpointManager.m; sourceTree = "<group>"; };
 		D400FA501D6DE6B3008842E1 /* FRSComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSComment.h; sourceTree = "<group>"; };
 		D400FA511D6DE6B3008842E1 /* FRSComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSComment.m; sourceTree = "<group>"; };
 		D400FA551D6DF57E008842E1 /* FRSCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCommentCell.h; sourceTree = "<group>"; };
@@ -2284,6 +2289,10 @@
 				D46D35661D9036C400E38FAA /* Tracking */,
 				D48C72251D0B3D5C000677BF /* FRSDevice.h */,
 				D48C72261D0B3D5C000677BF /* FRSDevice.m */,
+				CE12A5F71E14747A0032E72F /* EndpointManager.h */,
+				CE12A5F81E14747A0032E72F /* EndpointManager.m */,
+				CE0CAE601E1579CA00CDE511 /* Endpoint.h */,
+				CE0CAE611E1579CA00CDE511 /* Endpoint.m */,
 			);
 			name = "Fresco API";
 			sourceTree = "<group>";
@@ -2534,7 +2543,6 @@
 				D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */,
 				CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */,
 				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
-				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */,
 				D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */,
@@ -2769,6 +2777,7 @@
 				D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */,
 				D453CC831CCA80850091A004 /* NSManagedObject+MagicalRecord.m in Sources */,
 				07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */,
+				CE12A5F91E14747A0032E72F /* EndpointManager.m in Sources */,
 				65EBEDB91C44197100BE671F /* FRSLocationManager.m in Sources */,
 				D4BE3E311D17D6760039394C /* FRSCarouselCell.m in Sources */,
 				07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */,
@@ -2823,6 +2832,7 @@
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
 				D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */,
 				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,
+				CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */,
 				D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */,
 				D4BE3E2D1D17D6530039394C /* FRSCarousel.m in Sources */,
 			);
