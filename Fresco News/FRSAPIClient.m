@@ -19,9 +19,6 @@
 
 @implementation FRSAPIClient
 @synthesize socialUsed = _socialUsed, passwordUsed = _passwordUsed, emailUsed = _emailUsed, authenticatedUser = _authenticatedUser;
-/*
- Singleton
- */
 
 + (instancetype)sharedClient {
     static FRSAPIClient *client = nil;
@@ -163,7 +160,6 @@
               if (!error) {
                   [self handleUserLogin:responseObject];
               }
-
             }];
 }
 
@@ -295,7 +291,6 @@
 }
 
 - (void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-
     [self post:updateUserEndpoint
         withParameters:digestion
             completion:^(id responseObject, NSError *error) {
@@ -378,7 +373,7 @@
     NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
     NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
 
-    if (deviceToken != Nil || [deviceToken isEqual:[NSNull null]]) {
+    if (deviceToken != nil || [deviceToken isEqual:[NSNull null]]) {
         currentInstallation[@"device_token"] = deviceToken;
     } else {
         NSLog(@"NO DEVICE TOKEN -- INSTALLATION WILL FAIL");
@@ -416,7 +411,7 @@
     if (localeString) {
         currentInstallation[@"locale_identifier"] = localeString;
     }
-
+    
     return currentInstallation;
 }
 
@@ -547,9 +542,7 @@
 }
 
 /*
- 
  Fetch assignments w/in radius of user location, calls generic method w/ parameters & endpoint
- 
  */
 
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
@@ -603,9 +596,7 @@
 #pragma mark - Gallery Fetch
 
 /*
- 
  Fetch galleries w/ limit, calls generic method w/ parameters & endpoint
- 
  */
 
 - (void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void (^)(NSArray *galleries, NSError *error))completion {

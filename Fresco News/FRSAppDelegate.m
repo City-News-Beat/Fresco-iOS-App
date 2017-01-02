@@ -331,10 +331,6 @@
 
     if (responseObject[@"identity"] && ![responseObject[@"identity"] isKindOfClass:[[NSNull null] class]]) {
 
-        //        if (responseObject[@"identity"][@"due_by"] != Nil && ![responseObject[@"identity"][@"due_by"] isEqual:[NSNull null]]) {
-        //            [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
-        //        }
-
         if (responseObject[@"identity"][@"first_name"] != Nil && ![responseObject[@"identity"][@"first_name"] isEqual:[NSNull null]]) {
             [authenticatedUser setValue:responseObject[@"identity"][@"first_name"] forKey:@"stripeFirst"];
         }
@@ -616,9 +612,6 @@
 }
 
 - (void)registerForPushNotifications {
-
-    return;
-
     //    UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge |
     //                                                             UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
     //
@@ -729,29 +722,7 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    //    UNMutableNotificationContent *objNotificationContent = [[UNMutableNotificationContent alloc] init];
-    //    objNotificationContent.title = [NSString localizedUserNotificationStringForKey:@"Title" arguments:nil];
-    //    objNotificationContent.body = [NSString localizedUserNotificationStringForKey:@"Body"
-    //                                                                        arguments:nil];
-    //    objNotificationContent.sound = [UNNotificationSound defaultSound];
-    //    objNotificationContent.userInfo = @{@"type":followedNotification, @"meta": @{@"user_ids": @[@"neN16OqW3D47"]}};
-    //
-    //    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[NSDate date]];
-    //    components.second += 3;
-    //    UNCalendarNotificationTrigger *trigger = [UNCalendarNotificationTrigger
-    //                                              triggerWithDateMatchingComponents:components repeats:FALSE];
-    //
-    //    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"com.fresconews.Fresco"
-    //                                                                          content:objNotificationContent trigger:trigger];
-    //    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-    //    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-    //        if (!error) {
-    //            NSLog(@"Local Notification succeeded");
-    //        }
-    //        else {
-    //            NSLog(@"Local Notification failed");
-    //        }
-    //    }];
+
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
