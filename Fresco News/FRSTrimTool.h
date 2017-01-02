@@ -1,3 +1,4 @@
+ 
 //
 //  FRSTrimTool.h
 //  Fresco
@@ -11,18 +12,15 @@
 #import <AVFoundation/AVFoundation.h>
 @protocol FRSTrimToolDelegate
 @optional
--(void)trimmingWillBegin;
--(void)trimmersDidAdjust;
--(void)trimmingDidEnd;
+- (void)trimmingWillBegin;
+- (void)trimmersDidAdjust;
+- (void)trimmingDidEnd;
 @end
-@interface FRSTrimTool : UIView
-{
-    
+@interface FRSTrimTool : UIView {
 }
 
 @property CMTime leftTime;
 @property CMTime rightTime;
-
 
 @property (nonatomic, assign) float right;
 @property (nonatomic, assign) float left;
@@ -44,5 +42,5 @@
 
 @property (nonatomic, retain) NSArray *leftSquares;
 @property (nonatomic, retain) NSArray *rightSquares;
--(void)setBackground:(UIView *)background;
+- (void)setBackground:(UIView *)background;
 @end

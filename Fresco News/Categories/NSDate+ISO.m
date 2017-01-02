@@ -13,16 +13,14 @@ NSString *const ISOTimeFormat = @"HH:mm:ss";
 
 @implementation NSDate (ISO)
 
-- (NSString *)ISODate
-{
+- (NSString *)ISODate {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
     formatter.dateFormat = ISODateFormat;
     return [formatter stringFromDate:self];
 }
 
-- (NSString *)ISOTime
-{
+- (NSString *)ISOTime {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
     formatter.dateFormat = ISOTimeFormat;

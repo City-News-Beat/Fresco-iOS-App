@@ -8,10 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "Fresco.h"
+#import "SDAVAssetExportSession.h"
 
-
-@interface FRSUploadManager : NSObject
-{
+@interface FRSUploadManager : NSObject {
     int currentIndex;
     unsigned long long totalFileSize;
     unsigned long long uploadedFileSize;
@@ -20,11 +19,12 @@
     int completed;
     BOOL isFromFresh;
     float uploadSpeed;
+    SDAVAssetExportSession *exporter;
 }
 
-+(id)sharedUploader;
--(void)checkCachedUploads;
--(void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
++ (id)sharedUploader;
+- (void)checkCachedUploads;
+- (void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
 @property (nonatomic, retain) NSMutableArray *currentUploads;
 @property (nonatomic, assign) int completedUploads;
 @property (nonatomic, assign) int uploadsToComplete;

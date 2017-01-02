@@ -71,51 +71,52 @@
 
 @implementation FRSUploadViewController
 
-static NSString * const cellIdentifier = @"assignment-cell";
+static NSString *const cellIdentifier = @"assignment-cell";
 
--(void)viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [self configureUI];
     [self checkButtonStates];
-    
-    self.postToTwitter  = NO;
+
+    self.postToTwitter = NO;
     self.postToFacebook = NO;
     self.postAnon = NO;
     self.showingOutlets = NO;
     self.showingGlobalOutlets = NO;
     self.showingAssignmentOutlets = NO;
     [self checkBottomBar];
-    
+
     self.assignmentIDs = [[NSMutableArray alloc] init];
 }
 
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     [self configureAssignments]; //Tableview configures are called here
 
+    [FRSTracker screen:@"Submission"];
+
     [self.galleryCollectionView reloadData];
     [self configurePageController];
-    
+
     [self.galleryCollectionView setContentOffset:CGPointMake(0, 0)];
-    
+
     self.carouselCell.assets = self.content;
 
     self.players = [[NSMutableArray alloc] init];
-    
+
     self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count + numberOfOutlets;
     //self.numberOfRowsInGlobalAssignmentTableView = self.globalAssignments.count + numberOfOutlets;
-    
+
     [self resetFrames:false];
 
-    
     if (!self.spinner) {
         self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     }
-    
+
     if (!self.assignmentsTableView) {
-        self.spinner.frame = CGRectMake(self.view.frame.size.width/2 -20/2, (self.view.frame.size.height + self.galleryCollectionViewHeight)/2 -64 +20/2, 20, 20);
+        self.spinner.frame = CGRectMake(self.view.frame.size.width / 2 - 20 / 2, (self.view.frame.size.height + self.galleryCollectionViewHeight) / 2 - 64 + 20 / 2, 20, 20);
         self.spinner.tintColor = [UIColor frescoOrangeColor];
         [self.spinner setPullProgress:90];
         [self.spinner startAnimating];
@@ -123,24 +124,23 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
 }
 
--(void)viewWillDisappear:(BOOL)animated {
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self dismissKeyboard];
     [self resetOtherCells];
     [self resetOtherOutlets];
 }
 
--(void)viewDidDisappear:(BOOL)animated {
+- (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
 }
 
+- (void)configureUI {
 
--(void)configureUI {
-    
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
-    
+
     [self addObservers];
-    
+
     [self configureScrollView];
     [self configureGalleryCollectionView];
     [self configurePageController];
@@ -148,69 +148,65 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self configureBottomBar];
 }
 
--(void)configureSpinner {
-    
+- (void)configureSpinner {
+
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
 }
 
--(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+- (void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
     [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
-    spinner.frame = CGRectMake(button.frame.size.width - 20 -16, button.frame.size.height/2 -10, 20, 20);
+    spinner.frame = CGRectMake(button.frame.size.width - 20 - 16, button.frame.size.height / 2 - 10, 20, 20);
     [spinner startAnimating];
     [button addSubview:spinner];
-    
+
     button.enabled = FALSE;
 }
 
--(void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+- (void)stopSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
     [button setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
     [spinner removeFromSuperview];
     [spinner startAnimating];
-    
+
     button.enabled = TRUE;
 }
 
--(void)resetFrames: (BOOL)animate {
-    
-    NSLog(@"RESET FRAMES: %ld", self.numberOfRowsInAssignmentTableView);
-    NSLog(@"Count: %lu", (unsigned long)self.assignmentsArray.count);
+- (void)resetFrames:(BOOL)animate {
 
-    if(animate){
+    if (animate) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [UIView beginAnimations:nil context:nil];
-            [UIView setAnimationDuration:0.3];
-            //[UIView setAnimationCurve:UIViewAnimationTransitionCurlUp];
-            self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.numberOfRowsInAssignmentTableView+1) *44);
-            self.globalAssignmentsDrawer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44);
-            if (self.globalAssignmentsTableView) {
-                self.globalAssignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.numberOfRowsInGlobalAssignmentTableView) *44);
-            }
-            self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height +14, self.view.frame.size.width, 200 + 16);
-            
-            [self adjustScrollViewContentSize];
-            [UIView commitAnimations];
+          [UIView beginAnimations:nil context:nil];
+          [UIView setAnimationDuration:0.3];
+          //[UIView setAnimationCurve:UIViewAnimationTransitionCurlUp];
+          self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.numberOfRowsInAssignmentTableView + 1) * 44);
+          self.globalAssignmentsDrawer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44);
+          if (self.globalAssignmentsTableView) {
+              self.globalAssignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.numberOfRowsInGlobalAssignmentTableView) * 44);
+          }
+          self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + 14, self.view.frame.size.width, 200 + 16);
+
+          [self adjustScrollViewContentSize];
+          [UIView commitAnimations];
         });
-    }else{
-        self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.numberOfRowsInAssignmentTableView+1) *44);
+    } else {
+        self.assignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.numberOfRowsInAssignmentTableView + 1) * 44);
         self.globalAssignmentsDrawer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44);
         if (self.globalAssignmentsTableView) {
-            self.globalAssignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.globalAssignments.count) *44);
+            self.globalAssignmentsTableView.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.globalAssignments.count) * 44);
         }
-        self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height +14, self.view.frame.size.width, 200 + 16);
-        
+        self.captionContainer.frame = CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + 14, self.view.frame.size.width, 200 + 16);
+
         [self adjustScrollViewContentSize];
     }
 }
 
--(void)checkButtonStates {
-
+- (void)checkButtonStates {
 }
 
 #pragma mark - UICollectionView
 
--(void)configureGalleryCollectionView {
+- (void)configureGalleryCollectionView {
 
     if (IS_IPHONE_5) {
         self.galleryCollectionViewHeight = 240;
@@ -219,13 +215,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
     } else if (IS_IPHONE_6_PLUS) {
         self.galleryCollectionViewHeight = 310;
     }
-    
+
     self.galleryCollectionViewFlowLayout = [[UICollectionViewFlowLayout alloc] init];
     self.galleryCollectionViewFlowLayout.itemSize = CGSizeMake(50, 50);
     [self.galleryCollectionViewFlowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
     self.galleryCollectionViewFlowLayout.minimumInteritemSpacing = 0;
     self.galleryCollectionViewFlowLayout.minimumLineSpacing = 0;
-    
+
     self.galleryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.galleryCollectionViewHeight) collectionViewLayout:self.galleryCollectionViewFlowLayout];
     self.galleryCollectionView.showsHorizontalScrollIndicator = NO;
     self.galleryCollectionView.collectionViewLayout = self.galleryCollectionViewFlowLayout;
@@ -241,82 +237,82 @@ static NSString * const cellIdentifier = @"assignment-cell";
     //self.galleryCollectionView.backgroundColor = [UIColor redColor];
 }
 
--(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
 
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.content.count;
 }
 
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     self.carouselCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FRSCarouselCell" forIndexPath:indexPath];
-    
+
     PHAsset *asset = [self.content objectAtIndex:indexPath.row];
-    
+
     if (asset.mediaType == PHAssetMediaTypeImage) {
         self.carouselCell.muteImageView.alpha = 0;
         [self.carouselCell removePlayers];
         [self.carouselCell loadImage:asset];
-        
+
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
         [self.carouselCell removePlayers];
         [self.carouselCell loadVideo:asset];
         CGRect newFrame = self.carouselCell.frame;
         newFrame.size.width = self.view.frame.size.width;
         [self.carouselCell setFrame:newFrame];
-        
+
         if (![self.players containsObject:asset]) {
             [self.players addObject:asset];
         }
     } else if (asset.mediaType == PHAssetMediaTypeAudio) {
         // 3.x feature
     }
-    
+
     [self.carouselCell pausePlayer];
-    
+
     return self.carouselCell;
 }
 
--(BOOL)currentPageIsVideo {
+- (BOOL)currentPageIsVideo {
     CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
     NSInteger page = self.galleryCollectionView.contentOffset.x / pageWidth;
-    
+
     //does not work, self.players is nil
     return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
 }
 
--(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     return CGSizeMake(self.view.frame.size.width, collectionView.frame.size.height);
 }
 
--(void)configurePageController {
+- (void)configurePageController {
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = self.content.count;
     self.pageControl.currentPage = 0;
     self.pageControl.userInteractionEnabled = NO;
-    
+
     self.pageControl.currentPageIndicatorTintColor = [UIColor frescoBackgroundColorDark];
     self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:1 alpha:0.7];
-    
+
     [self.pageControl sizeToFit];
     [self.pageControl setFrame:CGRectMake(self.galleryCollectionView.frame.size.width - 16 - self.pageControl.frame.size.width, self.galleryCollectionView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8)];
-    
+
     self.pageControl.hidesForSinglePage = YES;
-    
+
     [self.scrollView addSubview:self.pageControl];
 }
 
 #pragma mark - Navigation Bar
 
--(void)configureNavigationBar {
+- (void)configureNavigationBar {
 
     /* Configure sudo navigationBar */
-        // Used UIView instead of UINavigationBar for increased flexibility when animating
+    // Used UIView instead of UINavigationBar for increased flexibility when animating
     self.navigationBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
     self.navigationBarView.backgroundColor = [UIColor frescoOrangeColor];
     [self.view addSubview:self.navigationBarView];
-    
+
     /* Configure backButton */
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     backButton.frame = CGRectMake(12, 30, 24, 24);
@@ -324,7 +320,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [backButton setTintColor:[UIColor whiteColor]];
     [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
-    
+
     /* Configure squareButton */
     /*UIButton *squareButton = [UIButton buttonWithType:UIButtonTypeSystem];
     squareButton.frame = CGRectMake(self.navigationBarView.frame.size.width-12-24, 30, 24, 24);
@@ -332,30 +328,29 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [squareButton setTintColor:[UIColor whiteColor]];
     [squareButton addTarget:self action:@selector(square) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:squareButton];*/
-    
+
     /* Configure titleLabel */
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 -66/2, 35, 66, 19)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width / 2 - 66 / 2, 35, 66, 19)];
     [titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [titleLabel setText:@"GALLERY"];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [self.navigationBarView addSubview:titleLabel];
-    
-    
+
     self.navigationBarView.alpha = 0;
     titleLabel.alpha = 0;
 }
 
--(void)configureBottomBar {
-    
+- (void)configureBottomBar {
+
     /* Configure bottom container */
-    self.bottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -44, self.view.frame.size.width, 44)];
+    self.bottomContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44)];
     self.bottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.bottomContainer];
-    
+
     UIView *bottomContainerLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0.5)];
     bottomContainerLine.backgroundColor = [UIColor frescoShadowColor];
     [self.bottomContainer addSubview:bottomContainerLine];
-    
+
     /* Configure bottom bar */
     //Configure Twitter post button
     self.twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -364,7 +359,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.twitterButton setImage:[UIImage imageNamed:@"social-twitter"] forState:UIControlStateSelected];
     self.twitterButton.frame = CGRectMake(16, 10, 24, 24);
     [self.bottomContainer addSubview:self.twitterButton];
-    
+
     //Configure Facebook post button
     self.facebookButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.facebookButton addTarget:self action:@selector(postToFacebook:) forControlEvents:UIControlEventTouchDown];
@@ -372,28 +367,28 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.facebookButton setImage:[UIImage imageNamed:@"social-facebook"] forState:UIControlStateSelected];
     self.facebookButton.frame = CGRectMake(56, 10, 24, 24);
     [self.bottomContainer addSubview:self.facebookButton];
-    
+
     //Configure anonymous posting button
-//    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [self.anonButton addTarget:self action:@selector(postAnonymously:) forControlEvents:UIControlEventTouchDown];
-//    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
-//    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
-//    self.anonButton.frame = CGRectMake(96, 10, 24, 24);
-//    [self.bottomContainer addSubview:self.anonButton];
-    
-//    //Configure anonymous label (default alpha = 0)
-//    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, 15, 83, 17)];
-//    self.anonLabel.text = @"ANONYMOUS";
-//    self.anonLabel.font = [UIFont notaBoldWithSize:15];
-//    self.anonLabel.textColor = [UIColor frescoOrangeColor];
-//    self.anonLabel.alpha = 0;
-//    [self.bottomContainer addSubview:self.anonLabel];
-    
+    //    self.anonButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    //    [self.anonButton addTarget:self action:@selector(postAnonymously:) forControlEvents:UIControlEventTouchDown];
+    //    [self.anonButton setImage:[UIImage imageNamed:@"eye-26"] forState:UIControlStateNormal];
+    //    [self.anonButton setImage:[UIImage imageNamed:@"eye-filled"] forState:UIControlStateSelected];
+    //    self.anonButton.frame = CGRectMake(96, 10, 24, 24);
+    //    [self.bottomContainer addSubview:self.anonButton];
+
+    //    //Configure anonymous label (default alpha = 0)
+    //    self.anonLabel = [[UILabel alloc] initWithFrame:CGRectMake(126, 15, 83, 17)];
+    //    self.anonLabel.text = @"ANONYMOUS";
+    //    self.anonLabel.font = [UIFont notaBoldWithSize:15];
+    //    self.anonLabel.textColor = [UIColor frescoOrangeColor];
+    //    self.anonLabel.alpha = 0;
+    //    [self.bottomContainer addSubview:self.anonLabel];
+
     //Configure next button
     self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem]; //Should be green when valid
     [_sendButton.titleLabel setFont:[UIFont notaBoldWithSize:17]];
     [_sendButton setTintColor:[UIColor frescoLightTextColor]];
-    _sendButton.frame = CGRectMake(self.view.frame.size.width-64, 0, 64, 44);
+    _sendButton.frame = CGRectMake(self.view.frame.size.width - 64, 0, 64, 44);
     [_sendButton setTitle:@"SEND" forState:UIControlStateNormal];
     _sendButton.userInteractionEnabled = NO;
     [_sendButton addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
@@ -401,50 +396,46 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.bottomContainer addSubview:_sendButton];
 }
 
-
 #pragma mark - UIScrollView
 
--(void)configureScrollView {
+- (void)configureScrollView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, -20, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.delegate = self;
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorLight];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:self.scrollView];
-
 }
 
--(void)adjustScrollViewContentSize {
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height +38);
-    
+- (void)adjustScrollViewContentSize {
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + self.captionContainer.frame.size.height + 38);
+
     if (self.scrollView.contentSize.height <= self.view.frame.size.height) {
-        self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.view.frame.size.height +1);
+        self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.view.frame.size.height + 1);
     }
 }
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+
     //check mute toggle
     [self.carouselCell pausePlayer];
-    
+
     CGFloat offset = scrollView.contentOffset.y + 20;
-    
-    
-    
+
     //If user is scrolling down, return and act like a normal scroll view
     if (offset > self.scrollView.contentSize.height - self.scrollView.frame.size.height) {
         return;
     }
-    
+
     //If user is scrolling up, scale with content offset.
     if (offset <= 0) {
         self.galleryCollectionView.clipsToBounds = NO;
-        
+
         //self.galleryCollectionView.layer.masksToBounds = NO;
         //NSLog(@"COLLECTIONVIEW HEIGHT: %f", self.galleryCollectionView.frame.size.height);
         [self.galleryCollectionView setFrame:CGRectMake(0, offset, self.galleryCollectionView.frame.size.width, self.galleryCollectionViewHeight + (-offset))];
-        
-        for(FRSCarouselCell *cell in self.galleryCollectionView.visibleCells){
-            for(CALayer *layer in cell.layer.sublayers){
+
+        for (FRSCarouselCell *cell in self.galleryCollectionView.visibleCells) {
+            for (CALayer *layer in cell.layer.sublayers) {
                 CGRect newFrame = layer.frame;
                 newFrame.size.height = self.galleryCollectionView.frame.size.height;
 
@@ -455,35 +446,32 @@ static NSString * const cellIdentifier = @"assignment-cell";
             }
             [cell.layer setFrame:self.galleryCollectionView.frame];
         }
-        
+
         [self.galleryCollectionView.collectionViewLayout invalidateLayout];
         //NSLog(@"COLLECTIONVIEW HEIGHT: %f", self.galleryCollectionView.frame.size.height);
-
     }
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    
     //Update pageControl in galleryCollectionView
     CGFloat pageWidth = self.galleryCollectionView.frame.size.width;
     if (scrollView == self.galleryCollectionView) {
         self.pageControl.currentPage = self.galleryCollectionView.contentOffset.x / pageWidth;
     }
     [self.carouselCell playPlayer];
-    
-//    for (UICollectionViewCell *cell in [self.galleryCollectionView visibleCells]) {
-//        NSIndexPath *indexPath = [self.galleryCollectionView indexPathForCell:cell];
-//        NSLog(@"%@", indexPath);
-//    }
-}
 
+    //    for (UICollectionViewCell *cell in [self.galleryCollectionView visibleCells]) {
+    //        NSIndexPath *indexPath = [self.galleryCollectionView indexPathForCell:cell];
+    //        NSLog(@"%@", indexPath);
+    //    }
+}
 
 #pragma mark - UITableView
 
--(void)configureAssignmentsTableView {
-    
-    self.assignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.assignmentsArray.count+1) *44)];
+- (void)configureAssignmentsTableView {
+
+    self.assignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height, self.view.frame.size.width, (self.assignmentsArray.count + 1) * 44)];
     self.assignmentsTableView.scrollEnabled = NO;
     self.assignmentsTableView.delegate = self;
     self.assignmentsTableView.dataSource = self;
@@ -491,71 +479,69 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.assignmentsTableView.showsVerticalScrollIndicator = NO;
     self.assignmentsTableView.delaysContentTouches = NO;
     self.assignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
+
     self.dismissKeyboardGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     self.dismissKeyboardGestureRecognizer.enabled = NO;
     [self.view addGestureRecognizer:self.dismissKeyboardGestureRecognizer];
-    
+
     [self.scrollView addSubview:self.assignmentsTableView];
 }
 
--(void)configureGlobalAssignmentsDrawer {
-    
+- (void)configureGlobalAssignmentsDrawer {
+
     if (!_globalAssignments || _globalAssignments.count == 0) {
         return;
     }
-    
+
     [CATransaction begin];
     [CATransaction setAnimationDuration:0.2];
     self.globalAssignmentsDrawer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height, self.view.frame.size.width, 44)];
     self.globalAssignmentsDrawer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.globalAssignmentsDrawer];
-    
-    UILabel *label  = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
     label.font = [UIFont systemFontOfSize:12 weight:UIFontWeightLight];
     label.text = [NSString stringWithFormat:@"%lu global assignments", self.globalAssignments.count];
     if (self.globalAssignments.count == 1) {
         label.text = [NSString stringWithFormat:@"%lu global assignment", self.globalAssignments.count];
     }
     [label sizeToFit];
-    label.frame = CGRectMake(self.globalAssignmentsDrawer.frame.size.width/2 - label.frame.size.width/2, 6, label.frame.size.width, 14);
+    label.frame = CGRectMake(self.globalAssignmentsDrawer.frame.size.width / 2 - label.frame.size.width / 2, 6, label.frame.size.width, 14);
     [self.globalAssignmentsDrawer addSubview:label];
-    
+
     UIImageView *globe = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"earth-16"]]; //swap with 16x16 earth
-    globe.frame = CGRectMake(label.frame.origin.x -16 -6, 8, 16, 16);
+    globe.frame = CGRectMake(label.frame.origin.x - 16 - 6, 8, 16, 16);
     [self.globalAssignmentsDrawer addSubview:globe];
-    
+
     self.globalAssignmentsCaret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"down-caret"]];
     self.globalAssignmentsCaret.transform = CGAffineTransformMakeRotation(M_PI);
-    self.globalAssignmentsCaret.frame = CGRectMake(self.view.frame.size.width/2 - 8/2, 28, 8, 8);
+    self.globalAssignmentsCaret.frame = CGRectMake(self.view.frame.size.width / 2 - 8 / 2, 28, 8, 8);
     [self.globalAssignmentsDrawer addSubview:self.globalAssignmentsCaret];
-    
+
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleGlobalAssignmentsDrawer)];
     [self.globalAssignmentsDrawer addGestureRecognizer:tap];
-    
+
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 43.5, self.globalAssignmentsDrawer.frame.size.width, .5)];
     line.backgroundColor = [UIColor frescoShadowColor];
     [self.globalAssignmentsDrawer addSubview:line];
     [CATransaction commit];
 }
 
--(void)toggleGlobalAssignmentsDrawer {
+- (void)toggleGlobalAssignmentsDrawer {
 
     if (self.globalAssignmentsEnabled) {
         self.globalAssignmentsEnabled = NO;
         [self hideAndRemoveGlobalAssignments];
         self.globalAssignmentsCaret.transform = CGAffineTransformMakeRotation(M_PI);
-        NSLog(@"disabled");
     } else {
         self.globalAssignmentsEnabled = YES;
         [self configureAndShowGlobalAssignments];
         self.globalAssignmentsCaret.transform = CGAffineTransformMakeRotation(0);
-        NSLog(@"enabled");
     }
 }
 
--(void)toggleGestureRecognizer {
-    
+- (void)toggleGestureRecognizer {
+
     if (self.dismissKeyboardGestureRecognizer.enabled) {
         self.dismissKeyboardGestureRecognizer.enabled = NO;
     } else {
@@ -563,10 +549,9 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
 }
 
+- (void)configureAndShowGlobalAssignments {
 
--(void)configureAndShowGlobalAssignments {
-    
-    self.globalAssignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.globalAssignments.count) *44)];
+    self.globalAssignmentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height, self.view.frame.size.width, (self.globalAssignments.count) * 44)];
     self.globalAssignmentsTableView.scrollEnabled = NO;
     self.globalAssignmentsTableView.delegate = self;
     self.globalAssignmentsTableView.dataSource = self;
@@ -575,21 +560,20 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.globalAssignmentsTableView.delaysContentTouches = NO;
     self.globalAssignmentsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.scrollView addSubview:self.globalAssignmentsTableView];
-    
+
     [self resetFrames:false];
 }
 
--(void)hideAndRemoveGlobalAssignments {
-    
+- (void)hideAndRemoveGlobalAssignments {
+
     self.globalAssignmentsTableView.frame = CGRectMake(0, 0, self.view.frame.size.width, 0);
-    
+
     [self.globalAssignmentsTableView removeFromSuperview];
     self.globalAssignmentsTableView = nil;
     [self resetFrames:false];
-    
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.assignmentsTableView) {
         return self.numberOfRowsInAssignmentTableView + 1;
     } else if (tableView == self.globalAssignmentsTableView) {
@@ -599,43 +583,40 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     [cell configureAssignmentCellForIndexPath:indexPath];
-    NSLog(@"Displaying Row #%li",(long)indexPath.row);
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 44;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
     if (tableView == self.assignmentsTableView) {
-        NSLog(@"Setup cells");
         if (indexPath.row < _assignmentsArray.count + numberOfOutlets) {
             if (_showingOutlets) {
                 if (indexPath.row > selectedRow && indexPath.row <= selectedRow + numberOfOutlets) {
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
-                    
+
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
                     //NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
                     //cell.representedOutletID = [outlet objectForKey:@"id"];
-                    
+
                     //[self resetFrames:true];
                     return cell;
                 }
             }
-            
+
             NSInteger row = 0;
-            
+
             if (_showingOutlets && indexPath.row > selectedRow) {
                 row = indexPath.row - numberOfOutlets;
-            }
-            else {
+            } else {
                 row = indexPath.row;
             }
             FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.assignmentsArray objectAtIndex:row]];
@@ -647,36 +628,34 @@ static NSString * const cellIdentifier = @"assignment-cell";
             return cell;
         }
     } else if (tableView == self.globalAssignmentsTableView) {
-        
+
         if (indexPath.row < _globalAssignments.count + numberOfOutlets) {
             if (_showingOutlets) {
                 if (indexPath.row > selectedRow && indexPath.row <= selectedRow + numberOfOutlets) {
                     FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:nil];
-                    
+
                     [cell configureOutletCellWithOutlet:[cell.outlets objectAtIndex:indexPath.row]];
                     //NSDictionary *outlet = [cell.outlets objectAtIndex:indexPath.row];
                     //cell.representedOutletID = [outlet objectForKey:@"id"];
-                    
+
                     //[self resetFrames:true];
                     return cell;
                 }
             }
-            
+
             NSInteger row = 0;
-            
+
             if (_showingOutlets && indexPath.row > selectedRow) {
                 row = indexPath.row - numberOfOutlets;
-            }
-            else {
+            } else {
                 row = indexPath.row;
             }
             FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.globalAssignments objectAtIndex:row]];
             [cell configureAssignmentCellForIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
-            
+
             return cell;
         }
-        
-        
+
         //FRSAssignmentPickerTableViewCell *cell = [[FRSAssignmentPickerTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier assignment:[self.globalAssignments objectAtIndex:indexPath.row]];
         //[cell configureAssignmentCellForIndexPath:indexPath];
         //return cell;
@@ -687,146 +666,140 @@ static NSString * const cellIdentifier = @"assignment-cell";
     return nil;
 }
 
--(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    NSLog(@"Selected an assignment");
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
     return indexPath;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = 0;
-    
+
     if (_showingOutlets && indexPath.row > selectedRow) {
         row = indexPath.row - numberOfOutlets;
-    }
-    else {
+    } else {
         row = indexPath.row;
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     FRSAssignmentPickerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
+
     BOOL cellIsOutlet = cell.isAnOutlet;
     BOOL prevCellIsOutlet = self.prevCell.isAnOutlet;
-    
-    if(cellIsOutlet && !cell.isSelectedOutlet){
+
+    if (cellIsOutlet && !cell.isSelectedOutlet) {
         [self resetOtherOutlets];
         cell.isSelectedOutlet = YES;
         selectedOutlet = cell.representedOutletID;
-        
-        NSLog(@"SELECTED OUTLET: %@", selectedOutlet);
-    }else if (!cell.isSelectedAssignment && !cellIsOutlet){
+
+    } else if (!cell.isSelectedAssignment && !cellIsOutlet) {
         [self resetOtherCells];
         [self resetOtherOutlets];
         cell.isSelectedAssignment = YES;
-        
+
         if (tableView == self.assignmentsTableView) {
             if (indexPath.row < self.assignmentsArray.count) {
                 self.selectedAssignment = [self.assignmentsArray objectAtIndex:indexPath.row];
-            }
-            else {
+            } else {
                 self.selectedAssignment = Nil;
             }
-        }else if(tableView == self.globalAssignmentsTableView){
+        } else if (tableView == self.globalAssignmentsTableView) {
             self.selectedAssignment = [self.globalAssignments objectAtIndex:indexPath.row];
         }
-        
+
         selectedRow = indexPath.row;
-        
+
         //Checks if the current cell has more than one outlet
         if (cell.outlets.count > 1 && tableView != self.globalAssignmentsTableView && !_showingAssignmentOutlets) {
-            
+
             if ((self.numberOfRowsInGlobalAssignmentTableView > self.globalAssignments.count && self.prevCell != nil && !cellIsOutlet && !prevCellIsOutlet) && self.prevCell != cell) {
                 self.numberOfRowsInGlobalAssignmentTableView = self.globalAssignments.count;
                 [self collapseTableView:self.globalAssignmentsTableView assignments:self.globalAssignments currentCell:cell];
             }
-            
+
             self.numberOfRowsInAssignmentTableView += cell.outlets.count;
-            
+
             numberOfOutlets = cell.outlets.count;
             self.showingOutlets = YES;
             self.showingAssignmentOutlets = YES;
 
             //set prevcell so the outlets will be removed if user selects a different assignment
             self.prevCell = cell;
-            
-            
+
             NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-            
-            for(int i = 1; i <= cell.outlets.count; i++){
-                [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+i inSection:0]];
+
+            for (int i = 1; i <= cell.outlets.count; i++) {
+                [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row + i inSection:0]];
             }
-            
+
             [CATransaction begin];
             [self resetFrames:true];
-            
+
             [CATransaction setCompletionBlock:^{
-                [tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-                for(int i = 0; i < indexPaths.count; i++){
-                    FRSAssignmentPickerTableViewCell *outletCell = [tableView cellForRowAtIndexPath:[indexPaths objectAtIndex:i]];
-                    outletCell.isAnOutlet = true;
-                    NSDictionary *outletDic = [cell.outlets objectAtIndex:i];
-                    [outletCell.titleLabel setText:outletDic[@"title"]];
-                    outletCell.representedOutletID = outletDic[@"id"];
-                }
-                [self tableView:tableView willSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
-                [self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
-                // animation has finished
+              [tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+              for (int i = 0; i < indexPaths.count; i++) {
+                  FRSAssignmentPickerTableViewCell *outletCell = [tableView cellForRowAtIndexPath:[indexPaths objectAtIndex:i]];
+                  outletCell.isAnOutlet = true;
+                  NSDictionary *outletDic = [cell.outlets objectAtIndex:i];
+                  [outletCell.titleLabel setText:outletDic[@"title"]];
+                  outletCell.representedOutletID = outletDic[@"id"];
+              }
+              [self tableView:tableView willSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
+              [self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
+              // animation has finished
             }];
             [CATransaction commit];
-            
+
             return; //Return to avoid removing cells twice
         }
 
         //Checks if the current cell has more than one outlet
         if (cell.outlets.count > 1 && tableView != self.assignmentsTableView && !_showingGlobalOutlets) {
             self.numberOfRowsInGlobalAssignmentTableView += cell.outlets.count;
-            
-            if ((self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1 && self.prevCell != nil && !cellIsOutlet && !prevCellIsOutlet) && self.prevCell != cell) {
+
+            if ((self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count + 1 && self.prevCell != nil && !cellIsOutlet && !prevCellIsOutlet) && self.prevCell != cell) {
                 self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count;
                 [self collapseTableView:self.assignmentsTableView assignments:self.assignmentsArray currentCell:cell];
             }
-            
+
             numberOfOutlets = cell.outlets.count;
             self.showingOutlets = YES;
             self.showingGlobalOutlets = YES;
-            
+
             //set prevcell so the outlets will be removed if user selects a different assignment
             self.prevCell = cell;
-            
-            
+
             NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-            
-            for(int i = 1; i <= cell.outlets.count; i++){
-                [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+i inSection:0]];
+
+            for (int i = 1; i <= cell.outlets.count; i++) {
+                [indexPaths addObject:[NSIndexPath indexPathForRow:indexPath.row + i inSection:0]];
             }
-            
+
             [CATransaction begin];
             [self resetFrames:true];
-            
+
             [CATransaction setCompletionBlock:^{
-                [tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-                for(int i = 0; i < indexPaths.count; i++){
-                    FRSAssignmentPickerTableViewCell *outletCell = [tableView cellForRowAtIndexPath:[indexPaths objectAtIndex:i]];
-                    outletCell.isAnOutlet = true;
-                    NSDictionary *outletDic = [cell.outlets objectAtIndex:i];
-                    [outletCell.titleLabel setText:outletDic[@"title"]];
-                    outletCell.representedOutletID = outletDic[@"id"];
-                }
-                [self tableView:tableView willSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
-                [self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
-                // animation has finished
+              [tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+              for (int i = 0; i < indexPaths.count; i++) {
+                  FRSAssignmentPickerTableViewCell *outletCell = [tableView cellForRowAtIndexPath:[indexPaths objectAtIndex:i]];
+                  outletCell.isAnOutlet = true;
+                  NSDictionary *outletDic = [cell.outlets objectAtIndex:i];
+                  [outletCell.titleLabel setText:outletDic[@"title"]];
+                  outletCell.representedOutletID = outletDic[@"id"];
+              }
+              [self tableView:tableView willSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
+              [self tableView:tableView didSelectRowAtIndexPath:[indexPaths objectAtIndex:0]];
+              // animation has finished
             }];
             [CATransaction commit];
-            
+
             return; //Return to avoid removing cells twice
         }
     }
-    
+
     //Removes previously added outlet cells when the user selects a cell that does not contain outlets
     //Ex: User selects cell with outlets, user selects "No assignment"
     if (tableView == self.assignmentsTableView) {
-        if ((self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count +1 && self.prevCell != nil && !cellIsOutlet && !prevCellIsOutlet) && self.prevCell != cell) {
+        if ((self.numberOfRowsInAssignmentTableView > self.assignmentsArray.count + 1 && self.prevCell != nil && !cellIsOutlet && !prevCellIsOutlet) && self.prevCell != cell) {
             self.numberOfRowsInAssignmentTableView = self.assignmentsArray.count;
             [self collapseTableView:self.assignmentsTableView assignments:self.assignmentsArray currentCell:cell];
         }
@@ -836,7 +809,7 @@ static NSString * const cellIdentifier = @"assignment-cell";
             [self collapseTableView:self.globalAssignmentsTableView assignments:self.globalAssignments currentCell:cell];
         }
     }
-    
+
     //Call at the end
     if (tableView == self.assignmentsTableView) {
         self.previouslySelectedAssignmentIndexPath = indexPath;
@@ -845,10 +818,10 @@ static NSString * const cellIdentifier = @"assignment-cell";
     }
 }
 
--(void)collapseTableView:(UITableView *)tableView assignments:(NSArray *)assignments currentCell:(FRSAssignmentPickerTableViewCell *)cell{
+- (void)collapseTableView:(UITableView *)tableView assignments:(NSArray *)assignments currentCell:(FRSAssignmentPickerTableViewCell *)cell {
     NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-    for(int i = 1; i <= self.prevCell.outlets.count; i++){
-        [indexPaths addObject:[NSIndexPath indexPathForRow:[tableView indexPathForCell:self.prevCell].row+i inSection:0]];
+    for (int i = 1; i <= self.prevCell.outlets.count; i++) {
+        [indexPaths addObject:[NSIndexPath indexPathForRow:[tableView indexPathForCell:self.prevCell].row + i inSection:0]];
     }
     self.showingOutlets = false;
     if (tableView == self.globalAssignmentsTableView) {
@@ -857,34 +830,34 @@ static NSString * const cellIdentifier = @"assignment-cell";
         self.showingAssignmentOutlets = NO;
     }
     [self resetOtherOutlets];
-    
+
     _prevCell.isSelectedAssignment = false;
     [CATransaction begin];
     [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
     [CATransaction setCompletionBlock:^{
-        [self resetFrames:true];
+      [self resetFrames:true];
     }];
     [CATransaction commit];
 }
 
--(void)resetOtherCells {
+- (void)resetOtherCells {
     numberOfOutlets = 0;
-    for (NSInteger i = 0; i < [self.assignmentsTableView indexPathsForVisibleRows].count; i++){
+    for (NSInteger i = 0; i < [self.assignmentsTableView indexPathsForVisibleRows].count; i++) {
         FRSAssignmentPickerTableViewCell *cell = [self.assignmentsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.isSelectedAssignment = NO;
     }
-    for (NSInteger i = 0; i < [self.globalAssignmentsTableView indexPathsForVisibleRows].count; i++){
+    for (NSInteger i = 0; i < [self.globalAssignmentsTableView indexPathsForVisibleRows].count; i++) {
         FRSAssignmentPickerTableViewCell *cell = [self.globalAssignmentsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.isSelectedAssignment = NO;
     }
 }
 
--(void)resetOtherOutlets {
-    for (NSInteger i = 0; i < [self.assignmentsTableView indexPathsForVisibleRows].count; i++){
+- (void)resetOtherOutlets {
+    for (NSInteger i = 0; i < [self.assignmentsTableView indexPathsForVisibleRows].count; i++) {
         FRSAssignmentPickerTableViewCell *cell = [self.assignmentsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.isSelectedOutlet = NO;
     }
-    for (NSInteger i = 0; i < [self.globalAssignmentsTableView indexPathsForVisibleRows].count; i++){
+    for (NSInteger i = 0; i < [self.globalAssignmentsTableView indexPathsForVisibleRows].count; i++) {
         FRSAssignmentPickerTableViewCell *cell = [self.globalAssignmentsTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.isSelectedOutlet = NO;
     }
@@ -892,13 +865,13 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 #pragma mark - Text View
 
--(void)configureTextView {
-    
+- (void)configureTextView {
+
     NSInteger textViewHeight = 200;
-    
-    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height +self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height +14, self.view.frame.size.width, 200 + 16)];
+
+    self.captionContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.galleryCollectionView.frame.size.height + self.assignmentsTableView.frame.size.height + self.globalAssignmentsDrawer.frame.size.height + self.globalAssignmentsTableView.frame.size.height + 14, self.view.frame.size.width, 200 + 16)];
     [self.scrollView addSubview:self.captionContainer];
-    
+
     self.captionTextView = [[UITextView alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 32, textViewHeight)];
     self.captionTextView.delegate = self;
     self.scrollView.showsVerticalScrollIndicator = NO;
@@ -908,11 +881,11 @@ static NSString * const cellIdentifier = @"assignment-cell";
     self.captionTextView.tintColor = [UIColor frescoOrangeColor];
     self.captionTextView.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.captionContainer addSubview:self.captionTextView];
-    
-//    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(-16, 0, self.view.frame.size.width, 0.5)];
-//    line.backgroundColor = [UIColor frescoShadowColor];
-//    [self.captionContainer addSubview:line];
-    
+
+    //    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(-16, 0, self.view.frame.size.width, 0.5)];
+    //    line.backgroundColor = [UIColor frescoShadowColor];
+    //    [self.captionContainer addSubview:line];
+
     self.placeholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, self.view.frame.size.width - 32, 17)];
     self.placeholderLabel.text = @"What's happening?";
     self.placeholderLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -920,236 +893,234 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.captionContainer addSubview:self.placeholderLabel];
 }
 
--(void)textViewDidEndEditing:(UITextView *)textView {
+- (void)textViewDidEndEditing:(UITextView *)textView {
     if ([textView.text isEqualToString:@""]) { //Check for spaces
         self.placeholderLabel.alpha = 1;
     }
 }
 
--(void)textViewDidChange:(UITextView *)textView{
+- (void)textViewDidChange:(UITextView *)textView {
     //Check the send button state
     self.sendButton.userInteractionEnabled = (_captionTextView.text.length > 0);
-    if(self.sendButton.userInteractionEnabled){
+    if (self.sendButton.userInteractionEnabled) {
         [self.sendButton setTintColor:[UIColor frescoBlueColor]];
-    }else{
+    } else {
         [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
         self.sendButton.userInteractionEnabled = NO;
     }
     [textView setText:[textView.text stringByReplacingOccurrencesOfString:@"arthurdearaujo" withString:@"💩🎉"]];
 }
 
--(BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
     self.placeholderLabel.alpha = 0;
-    
+
     return YES;
 }
 
--(void)dismissKeyboard {
+- (void)dismissKeyboard {
     [self.view resignFirstResponder];
     [self.view endEditing:YES];
 }
 
 #pragma mark - Keyboard
 
--(void)handleKeyboardWillShow:(NSNotification *)sender {
+- (void)handleKeyboardWillShow:(NSNotification *)sender {
     [self toggleGestureRecognizer];
-    
+
     CGSize keyboardSize = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     self.view.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
 }
 
--(void)handleKeyboardWillHide:(NSNotification *)sender{
+- (void)handleKeyboardWillHide:(NSNotification *)sender {
     [self toggleGestureRecognizer];
-    
-    self.view.transform  = CGAffineTransformMakeTranslation(0, 0);
+
+    self.view.transform = CGAffineTransformMakeTranslation(0, 0);
 }
 
 #pragma mark - Assignments
 
--(void)configureAssignments {
+- (void)configureAssignments {
     [self fetchAssignmentsNearLocation:[FRSLocator sharedLocator].currentLocation radius:50];
 }
 
--(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
-    
-    if (self.isFetching) return;
-    
+- (void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
+
+    if (self.isFetching)
+        return;
+
     self.isFetching = YES;
-    
-    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
-        
-        NSArray *assignments = (NSArray *)responseObject[@"nearby"];
-        NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
-        
-        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-       // self.assignmentsArray = [[NSMutableArray alloc] init];
-      //  self.assignmentsArray  = [assignments mutableCopy];
-        self.globalAssignments = [globalAssignments copy];
-        self.assignments = [assignments copy];
 
-        self.isFetching = NO;
-        
-        if (!notFirstFetch) {
-            notFirstFetch = TRUE;
-            [self cacheAssignments];
-        }
-        
-        [delegate.managedObjectContext save:Nil];
-        [delegate saveContext];
-        NSMutableArray *nearBy = responseObject[@"nearby"];
-        NSArray *global = responseObject[@"global"];
-        self.assignmentsArray = [[NSMutableArray alloc] init];
-        for (NSDictionary *assignment in nearBy) {
-            NSLog(@"NEAR BY: %@", assignment);
-            NSArray *coords = assignment[@"location"][@"coordinates"];
-            CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
-            float radius = [assignment[@"radius"] floatValue];
-            
-            BOOL shouldAdd = FALSE;
-            
-            for (PHAsset *asset in self.content) {
-                CLLocation *location = asset.location;
-                CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
-                float miles = distanceFromAssignment / 1609.34;
-                if (miles < radius) {
-                    shouldAdd = TRUE;
-                }
-                //1609.34
-            }
-            
-            if (shouldAdd) {
-                [self.assignmentsArray addObject:assignment];
-            }
-            
-           // CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii
+                                                 ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ]
+                                             withCompletion:^(id responseObject, NSError *error) {
 
-        }
-        
-      //  self.assignmentsArray = nearBy;
-        self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
-        NSLog(@"ASSIGNMENT ARRAY COUNT: %lu", (unsigned long)self.assignmentsArray.count);
-        
-        self.globalAssignments = global;
-        self.numberOfRowsInGlobalAssignmentTableView = _globalAssignments.count;
+                                               NSArray *assignments = (NSArray *)responseObject[@"nearby"];
+                                               NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
 
+                                               FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                                               // self.assignmentsArray = [[NSMutableArray alloc] init];
+                                               //  self.assignmentsArray  = [assignments mutableCopy];
+                                               self.globalAssignments = [globalAssignments copy];
+                                               self.assignments = [assignments copy];
 
-        [self.spinner stopLoading];
-        [self.spinner removeFromSuperview];
-        
-        /*
+                                               self.isFetching = NO;
+
+                                               if (!notFirstFetch) {
+                                                   notFirstFetch = TRUE;
+                                                   [self cacheAssignments];
+                                               }
+
+                                               [delegate.managedObjectContext save:Nil];
+                                               [delegate saveContext];
+                                               NSMutableArray *nearBy = responseObject[@"nearby"];
+                                               NSArray *global = responseObject[@"global"];
+                                               self.assignmentsArray = [[NSMutableArray alloc] init];
+                                               for (NSDictionary *assignment in nearBy) {
+                                                   NSArray *coords = assignment[@"location"][@"coordinates"];
+                                                   CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
+                                                   float radius = [assignment[@"radius"] floatValue];
+
+                                                   BOOL shouldAdd = FALSE;
+
+                                                   for (PHAsset *asset in self.content) {
+                                                       CLLocation *location = asset.location;
+                                                       CLLocationDistance distanceFromAssignment = [location distanceFromLocation:assigmentLoc];
+                                                       float miles = distanceFromAssignment / 1609.34;
+                                                       if (miles < radius) {
+                                                           shouldAdd = TRUE;
+                                                       }
+                                                       //1609.34
+                                                   }
+
+                                                   if (shouldAdd) {
+                                                       [self.assignmentsArray addObject:assignment];
+                                                   }
+
+                                                   // CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
+                                               }
+
+                                               //  self.assignmentsArray = nearBy;
+                                               self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
+
+                                               self.globalAssignments = global;
+                                               self.numberOfRowsInGlobalAssignmentTableView = _globalAssignments.count;
+
+                                               [self.spinner stopLoading];
+                                               [self.spinner removeFromSuperview];
+
+                                               /*
         NSLog(@"Response Object: %@", responseObject);
         NSLog(@"Assignments: %@", nearBy);
         NSLog(@"Global Assignments: %@", global);
         NSLog(@"Error: %@", error);
         */
-        //Get the closest assignment to the user
-        CLLocationDistance closestDistance = 9999999999999999999.0;
-        int closestIndex = 0;
-        for(int i = 0; i < self.assignmentsArray.count; i++){
-            NSDictionary *assignmentDic = [self.assignmentsArray objectAtIndex:i];
-            NSArray *coords = assignmentDic[@"location"][@"coordinates"];
-            //NSLog(@"Lat: %@ Long: %@",[coords objectAtIndex:0], [coords objectAtIndex:1]);
-            CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:0] floatValue] longitude:[[coords objectAtIndex:1] floatValue]];
-            CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
-            //NSLog(@"Distance: %f",distanceFromAssignment);
-            if(closestDistance > distanceFromAssignment){
-                closestDistance = distanceFromAssignment;
-                //NSLog(@"Closest Distance: %f",closestDistance);
-                closestIndex = i;
-            }
-        }
-        
-        
-        [self configureAssignmentsTableView];
+                                               //Get the closest assignment to the user
+                                               CLLocationDistance closestDistance = 9999999999999999999.0;
+                                               int closestIndex = 0;
+                                               for (int i = 0; i < self.assignmentsArray.count; i++) {
+                                                   NSDictionary *assignmentDic = [self.assignmentsArray objectAtIndex:i];
+                                                   NSArray *coords = assignmentDic[@"location"][@"coordinates"];
+                                                   //NSLog(@"Lat: %@ Long: %@",[coords objectAtIndex:0], [coords objectAtIndex:1]);
+                                                   CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:0] floatValue] longitude:[[coords objectAtIndex:1] floatValue]];
+                                                   CLLocationDistance distanceFromAssignment = [[FRSLocator sharedLocator].currentLocation distanceFromLocation:assigmentLoc];
+                                                   //NSLog(@"Distance: %f",distanceFromAssignment);
+                                                   if (closestDistance > distanceFromAssignment) {
+                                                       closestDistance = distanceFromAssignment;
+                                                       //NSLog(@"Closest Distance: %f",closestDistance);
+                                                       closestIndex = i;
+                                                   }
+                                               }
 
-        self.closestAssignmentIndex = closestIndex;
-        
-        //If there is a preselectedGlobalAssignment then change the index
-        if(self.preselectedGlobalAssignment){
-            
-            for(int i = 0; i < self.globalAssignments.count; i++){
-                if([[self.globalAssignments objectAtIndex:i] isEqual:self.preselectedGlobalAssignment]){
-                    self.closestAssignmentIndex = i;
-                }
-            }
-        }
-        
-        if (self.preselectedAssignment) {
+                                               [self configureAssignmentsTableView];
 
-            for(int i = 0; i < self.assignments.count; i++){
-                if([[self.assignments objectAtIndex:i] isEqual:self.preselectedAssignment]){
-                    self.closestAssignmentIndex = i;
-                    NSString *assignmentTitle = [[self.assignments objectAtIndex:i] objectForKey:@"title"];
-                    [self selectAssignmentWithTitle:assignmentTitle];
-                }
-            }
-        }
-        
-        [self configureGlobalAssignmentsDrawer];
-        if(self.preselectedGlobalAssignment){
-            [self toggleGlobalAssignmentsDrawer];
-        }
-        [self configureTextView];
-        [self adjustScrollViewContentSize];
-        
-        [self.assignmentsTableView reloadData];
-        [self.globalAssignmentsTableView reloadData];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
-            if(self.preselectedGlobalAssignment){
-                [self tableView:self.globalAssignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
-            }
-            if(self.preselectedAssignment){
-                [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
-            }
-        });
-    }];
+                                               self.closestAssignmentIndex = closestIndex;
+
+                                               //If there is a preselectedGlobalAssignment then change the index
+                                               if (self.preselectedGlobalAssignment) {
+
+                                                   for (int i = 0; i < self.globalAssignments.count; i++) {
+                                                       if ([[self.globalAssignments objectAtIndex:i] isEqual:self.preselectedGlobalAssignment]) {
+                                                           self.closestAssignmentIndex = i;
+                                                       }
+                                                   }
+                                               }
+
+                                               if (self.preselectedAssignment) {
+
+                                                   for (int i = 0; i < self.assignments.count; i++) {
+                                                       if ([[self.assignments objectAtIndex:i] isEqual:self.preselectedAssignment]) {
+                                                           self.closestAssignmentIndex = i;
+                                                           NSString *assignmentTitle = [[self.assignments objectAtIndex:i] objectForKey:@"title"];
+                                                           [self selectAssignmentWithTitle:assignmentTitle];
+                                                       }
+                                                   }
+                                               }
+
+                                               [self configureGlobalAssignmentsDrawer];
+                                               if (self.preselectedGlobalAssignment) {
+                                                   [self toggleGlobalAssignmentsDrawer];
+                                               }
+                                               [self configureTextView];
+                                               [self adjustScrollViewContentSize];
+
+                                               [self.assignmentsTableView reloadData];
+                                               [self.globalAssignmentsTableView reloadData];
+                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                                 [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+                                                 if (self.preselectedGlobalAssignment) {
+                                                     [self tableView:self.globalAssignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+                                                 }
+                                                 if (self.preselectedAssignment) {
+                                                     [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:self.closestAssignmentIndex inSection:0]];
+                                                 }
+                                               });
+                                             }];
 }
 
--(void)selectAssignmentWithTitle:(NSString *)title {
- 
+- (void)selectAssignmentWithTitle:(NSString *)title {
+
     for (FRSAssignmentPickerTableViewCell *cell in [self.assignmentsTableView visibleCells]) {
-        
+
         if ([cell.titleLabel.text isEqualToString:title]) {
             NSIndexPath *indexPath = [self.assignmentsTableView indexPathForCell:cell];
             // need to delay and dispatch to the main thread here to override any other didSelects
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:indexPath];
+              [self tableView:self.assignmentsTableView didSelectRowAtIndexPath:indexPath];
             });
         }
     }
 }
 
--(BOOL)assignmentExists:(NSString *)assignment {
-    
+- (BOOL)assignmentExists:(NSString *)assignment {
+
     __block BOOL returnValue = FALSE;
-    
-    [self.assignmentIDs enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *currentID = (NSString *)obj;
-        
-        if ([currentID isEqualToString:assignment]) {
-            returnValue = TRUE;
-        }
+
+    [self.assignmentIDs enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
+      NSString *currentID = (NSString *)obj;
+
+      if ([currentID isEqualToString:assignment]) {
+          returnValue = TRUE;
+      }
     }];
-    
+
     return returnValue;
 }
 
--(void)cacheAssignments {
+- (void)cacheAssignments {
 }
 
 #pragma mark - Actions
 
 /* Navigation bar*/
-    //Back button action
--(void)back {
+//Back button action
+- (void)back {
     [self.navigationController popViewControllerAnimated:YES];
-    
+
     //Delay to avoid white flash
     [self performSelector:@selector(resetView) withObject:self afterDelay:0.35];
 }
 
--(void)resetView {
+- (void)resetView {
     [self.pageControl removeFromSuperview];
     self.content = nil;
     self.players = nil;
@@ -1157,126 +1128,131 @@ static NSString * const cellIdentifier = @"assignment-cell";
     [self.carouselCell removeFromSuperview];
     [self.galleryCollectionView reloadData];
 }
-    //Next button action
--(void)send {
-    
+//Next button action
+- (void)send {
+
     /* if authenticated */
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
         [self.navigationController pushViewController:onboardVC animated:NO];
         return;
     }
-    
+
     if (!self.loadingView) {
         [self configureSpinner];
     }
-    
+
     [self startSpinner:self.loadingView onButton:self.sendButton];
     self.sendButton.userInteractionEnabled = NO;
     [self.sendButton setTintColor:[UIColor frescoLightTextColor]];
-    
+
     [self dismissKeyboard];
-    
-    [FRSTracker track:@"Submissions"];
-    [FRSTracker track:@"Submission items in gallery" parameters:@{@"count":@(self.content.count)}];
-        
+
+    NSInteger videosCounted = 0;
+    NSInteger photosCounted = 0;
+
+    for (PHAsset *asset in self.content) {
+        if (asset.mediaType == PHAssetMediaTypeVideo) {
+            videosCounted++;
+        } else {
+            photosCounted++;
+        }
+    }
+
+    [FRSTracker track:submissionsEvent
+           parameters:@{ @"videos_submitted" : @(videosCounted),
+                         @"photos_submitted" : @(photosCounted) }];
+
     [self getPostData:[NSMutableArray arrayWithArray:self.content] current:[[NSMutableArray alloc] init]];
 }
 
--(void)getPostData:(NSMutableArray *)posts current:(NSMutableArray *)current {
+- (void)getPostData:(NSMutableArray *)posts current:(NSMutableArray *)current {
     if (posts.count > 0) {
         PHAsset *firstAsset = posts[0];
-        [[FRSAPIClient sharedClient] digestForAsset:firstAsset callback:^(id responseObject, NSError *error) {
-            NSNumber *fileSize = responseObject[@"fileSize"];
-            contentSize += [fileSize longLongValue];
-            
-            [posts removeObject:firstAsset];
-            [current addObject:responseObject];
-            
-            if (error) {
-                [self creationError:error];
-                [self stopSpinner:self.loadingView onButton:self.sendButton];
-                self.sendButton.userInteractionEnabled = YES;
-                return;
-            }
-            
-            [self getPostData:posts current:current];
-        }];
-    }
-    else {
+        [[FRSAPIClient sharedClient] digestForAsset:firstAsset
+                                           callback:^(id responseObject, NSError *error) {
+                                             NSNumber *fileSize = responseObject[@"fileSize"];
+                                             contentSize += [fileSize longLongValue];
+
+                                             [posts removeObject:firstAsset];
+                                             [current addObject:responseObject];
+
+                                             if (error) {
+                                                 [self creationError:error];
+                                                 [self stopSpinner:self.loadingView onButton:self.sendButton];
+                                                 self.sendButton.userInteractionEnabled = YES;
+                                                 return;
+                                             }
+
+                                             [self getPostData:posts current:current];
+                                           }];
+    } else {
         // upload
         NSMutableDictionary *gallery = [[NSMutableDictionary alloc] init];
-        
+
         if (self.selectedAssignment) {
             gallery[@"assignment_id"] = [(NSDictionary *)self.selectedAssignment objectForKey:@"id"];
-            NSLog(@"attaching assignment: %@", gallery[@"assignment_id"]);
-        }
-        else if (selectedRow < self.assignmentsArray.count) {
+        } else if (selectedRow < self.assignmentsArray.count) {
             gallery[@"assignment_id"] = self.assignmentsArray[selectedRow][@"id"];
-            NSLog(@"attaching assignment: %@", gallery[@"assignment_id"]);
         }
-        
+
         gallery[@"posts_new"] = current;
         gallery[@"caption"] = self.captionTextView.text;
-        
+
         if (_showingOutlets && selectedOutlet) {
             gallery[@"outlet_id"] = selectedOutlet;
         }
-        
-        NSLog(@"CREATING: %@", gallery);
-        
-        [[FRSAPIClient sharedClient] post:createGalleryEndpoint withParameters:gallery completion:^(id responseObject, NSError *error) {
-            if (!error) {
-                NSLog(@"Gallery creation success... (1/2)");
-                [self moveToUpload:responseObject];
-            }
-            else {
-                NSLog(@"Gallery creation error... (%@)", error);
-                [self creationError:error];
-                [self stopSpinner:self.loadingView onButton:self.sendButton];
-                self.sendButton.userInteractionEnabled = YES;
-                return;
-            }
-        }];
+
+        [[FRSAPIClient sharedClient] post:createGalleryEndpoint
+                           withParameters:gallery
+                               completion:^(id responseObject, NSError *error) {
+                                 if (!error) {
+                                     [self moveToUpload:responseObject];
+                                 } else {
+                                     [self creationError:error];
+                                     [self stopSpinner:self.loadingView onButton:self.sendButton];
+                                     self.sendButton.userInteractionEnabled = YES;
+                                     return;
+                                 }
+                               }];
     }
 }
 
--(void)creationError:(NSError *)error {
+- (void)creationError:(NSError *)error {
     if (error.code == -1009) {
         [self connectionError:error];
         return;
     }
-    
+
     FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"GALLERY ERROR" message:@"We encountered an issue creating your gallery. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
     [alert show];
 }
 
--(void)connectionError:(NSError *)error {
+- (void)connectionError:(NSError *)error {
     FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
     [alert show];
 }
 
--(void)moveToUpload:(NSDictionary *)postData {
+- (void)moveToUpload:(NSDictionary *)postData {
     /* upload started */
     NSString *galleryID = postData[@"id"];
-    
+
     if (galleryID && ![galleryID isEqual:[NSNull null]]) {
-        
+
         NSString *shareString = [[[self.captionTextView.text stringByAppendingString:@" "] stringByAppendingString:@"https://fresconews.com/gallery/"] stringByAppendingString:galleryID];
-        
+
         if (self.twitterButton.selected) {
             [self tweet:shareString];
         }
-        
+
         if (self.facebookButton.selected) {
             [self facebook:shareString];
         }
-        
     }
     // instantiate upload process
     // start upload process
     NSArray *posts = postData[@"posts_new"];
-    
+
     int i = 0;
     for (PHAsset *asset in self.content) {
         NSDictionary *post = posts[i];
@@ -1284,128 +1260,120 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [[FRSUploadManager sharedUploader] addAsset:asset withToken:key withPostID:post[@"post_id"]];
         i++;
     }
-    
+
     [self.carouselCell pausePlayer];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)tweet:(NSString *)string {
+- (void)tweet:(NSString *)string {
     //DOES NOT TWEET
     NSString *userID = [Twitter sharedInstance].sessionStore.session.userID;
     TWTRAPIClient *client = [[TWTRAPIClient alloc] initWithUserID:userID];
 
     NSString *tweetEndpoint = @"https://api.twitter.com/1.1/statuses/update.json";
-    NSDictionary *params = @{@"status" : string};
+    NSDictionary *params = @{ @"status" : string };
     NSError *clientError;
-    
+
     NSURLRequest *request = [client URLRequestWithMethod:@"POST" URL:tweetEndpoint parameters:params error:&clientError];
     if (request) {
-        [client sendTwitterRequest:request completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-            
-            NSLog(@"Twitter Response: %@", response);
-            
-            if (data) {
-                NSError *jsonError;
-                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-                NSLog(@"Twitter Response: %@", json);
-            }
-            else {
-                NSLog(@"Error: %@", connectionError);
-            }
-        }];
-    }
-    else {
-        NSLog(@"Error: %@", clientError);
+        [client sendTwitterRequest:request
+                        completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+
+                          if (data) {
+                              NSError *jsonError;
+                              NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+                          } else {
+                          }
+                        }];
+    } else {
     }
 }
 
--(void)facebook:(NSString *)text {
+- (void)facebook:(NSString *)text {
     if ([[FBSDKAccessToken currentAccessToken] hasGranted:@"publish_actions"]) {
-        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters: @{ @"message" : text} HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters:@{ @"message" : text } HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error){
         }];
-        
+
     } else {
         FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
-        [loginManager logInWithPublishPermissions:@[@"publish_actions"] fromViewController:self handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters: @{ @"message" : text} HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-            }];
-        }];
+        [loginManager logInWithPublishPermissions:@[ @"publish_actions" ]
+                               fromViewController:self
+                                          handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+                                            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/feed" parameters:@{ @"message" : text } HTTPMethod:@"POST"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error){
+                                            }];
+                                          }];
     }
 }
 
--(void)square {
-    
+- (void)square {
 }
 
 /* Bottom Bar */
-    //Post to Facebook
--(void)postToFacebook:(UIButton *)sender {
-    
+//Post to Facebook
+- (void)postToFacebook:(UIButton *)sender {
+
     [[NSNotificationCenter defaultCenter] postNotificationName:@"facebook-tapped-uploadvc" object:self];
 
     [self updateStateForButton:sender];
 }
 
-    //Post to Twitter
--(void)postToTwitter:(UIButton *)sender {
-    
+//Post to Twitter
+- (void)postToTwitter:(UIButton *)sender {
+
     [[NSNotificationCenter defaultCenter] postNotificationName:@"twitter-tapped-uploadvc" object:self];
 
     [self updateStateForButton:sender];
 }
 
-    //Post Anonymously
--(void)postAnonymously:(UIButton *)sender {
-    
+//Post Anonymously
+- (void)postAnonymously:(UIButton *)sender {
+
     [[NSNotificationCenter defaultCenter] postNotificationName:@"anon-tapped-uploadvc" object:self];
-    
+
     [self updateStateForButton:sender];
 }
 
--(void)updateStateForButton:(UIButton *)button {
-    
+- (void)updateStateForButton:(UIButton *)button {
+
     if (button.selected) {
         button.selected = NO;
     } else {
         button.selected = YES;
     }
-    
+
     /* Check for self.anonButton to change associated label */
     if (button == self.anonButton && self.anonButton.selected) {
         self.anonLabel.alpha = 1;
-    } else if (button == self.anonButton){
+    } else if (button == self.anonButton) {
         self.anonLabel.alpha = 0;
     }
-    
+
     //Sets BOOL toggles for bottom bar
     [self checkBottomBar];
-    
+
     if (self.postToFacebook) {
-        NSLog(@"Post to Facebook");
     }
-    
+
     if (self.postToTwitter) {
-        NSLog(@"Post to Twitter");
     }
-    
+
     if (self.postAnon) {
-        NSLog(@"Post Anonymously");
     }
 }
 
--(void)checkBottomBar {
+- (void)checkBottomBar {
     if (self.facebookButton.selected) {
         self.postToFacebook = YES;
     } else {
         self.postToFacebook = NO;
     }
-    
+
     if (self.twitterButton.selected) {
         self.postToTwitter = YES;
     } else {
         self.postToTwitter = NO;
     }
-    
+
     if (self.anonButton.selected) {
         self.postAnon = YES;
     } else {
@@ -1415,27 +1383,25 @@ static NSString * const cellIdentifier = @"assignment-cell";
 
 #pragma mark - NSNotification Center
 
--(void)dealloc {
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)addObservers {
 
--(void)addObservers {
-    
     /* Bottom bar notifications */
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"anon-tapped-filevc"     object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"twitter-tapped-filevc"  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"anon-tapped-filevc" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"twitter-tapped-filevc" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifications:) name:@"facebook-tapped-filevc" object:nil];
-    
+
     /* Keyboard notifications */
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
-
--(void)receiveNotifications:(NSNotification *)notification {
+- (void)receiveNotifications:(NSNotification *)notification {
     NSString *notif = [notification name];
-    
+
     if ([notif isEqualToString:@"twitter-tapped-filevc"]) {
         [self updateStateForButton:self.twitterButton];
     } else if ([notif isEqualToString:@"facebook-tapped-filevc"]) {
@@ -1444,6 +1410,5 @@ static NSString * const cellIdentifier = @"assignment-cell";
         [self updateStateForButton:self.anonButton];
     }
 }
-
 
 @end

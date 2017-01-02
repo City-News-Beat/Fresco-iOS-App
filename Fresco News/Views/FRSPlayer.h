@@ -16,3 +16,4 @@
 @property BOOL hasNotifs;
 @property BOOL hasEstablished;
 @end
+

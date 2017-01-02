@@ -37,7 +37,6 @@
             [self populateGalleries];
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"%@", error);
         }];
     
     }
@@ -64,7 +63,6 @@
             [self populateGalleries];
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"%@", error);
         }];
     }
 }

@@ -9,7 +9,7 @@
 #import <CoreData/CoreData.h>
 #import "MagicalRecordXcode7CompatibilityMacros.h"
 
-OBJC_EXPORT NSString * __MR_nonnull const kMagicalRecordDidMergeChangesFromiCloudNotification;
+OBJC_EXPORT NSString *__MR_nonnull const kMagicalRecordDidMergeChangesFromiCloudNotification;
 
 /**
  Category methods to aid in observing changes in other contexts.
@@ -25,7 +25,7 @@ OBJC_EXPORT NSString * __MR_nonnull const kMagicalRecordDidMergeChangesFromiClou
 
  @since Available in v2.0 and later.
  */
-- (void) MR_observeContext:(MR_nonnull NSManagedObjectContext *)otherContext;
+- (void)MR_observeContext:(MR_nonnull NSManagedObjectContext *)otherContext;
 
 /**
  Stops merging changes from the supplied context into self.
@@ -34,7 +34,7 @@ OBJC_EXPORT NSString * __MR_nonnull const kMagicalRecordDidMergeChangesFromiClou
 
  @since Available in v2.0 and later.
  */
-- (void) MR_stopObservingContext:(MR_nonnull NSManagedObjectContext *)otherContext;
+- (void)MR_stopObservingContext:(MR_nonnull NSManagedObjectContext *)otherContext;
 
 /**
  Merges changes from another context into self on the main thread.
@@ -43,7 +43,7 @@ OBJC_EXPORT NSString * __MR_nonnull const kMagicalRecordDidMergeChangesFromiClou
 
  @since Available in v2.0 and later.
  */
-- (void) MR_observeContextOnMainThread:(MR_nonnull NSManagedObjectContext *)otherContext;
+- (void)MR_observeContextOnMainThread:(MR_nonnull NSManagedObjectContext *)otherContext;
 
 /**
  Merges changes from the supplied persistent store coordinator into self in response to changes from iCloud.
@@ -54,7 +54,7 @@ OBJC_EXPORT NSString * __MR_nonnull const kMagicalRecordDidMergeChangesFromiClou
 
  @since Available in v2.0 and later.
  */
-- (void) MR_observeiCloudChangesInCoordinator:(MR_nonnull NSPersistentStoreCoordinator *)coordinator;
+- (void)MR_observeiCloudChangesInCoordinator:(MR_nonnull NSPersistentStoreCoordinator *)coordinator;
 
 /**
  Stops observation and merging of changes from the supplied persistent store coordinator in response to changes from iCloud.
@@ -65,6 +65,6 @@ OBJC_EXPORT NSString * __MR_nonnull const kMagicalRecordDidMergeChangesFromiClou
 
  @since Available in v2.0 and later.
  */
-- (void) MR_stopObservingiCloudChangesInCoordinator:(MR_nonnull NSPersistentStoreCoordinator *)coordinator;
+- (void)MR_stopObservingiCloudChangesInCoordinator:(MR_nonnull NSPersistentStoreCoordinator *)coordinator;
 
 @end

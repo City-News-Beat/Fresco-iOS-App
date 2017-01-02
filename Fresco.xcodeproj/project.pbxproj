@@ -131,10 +131,11 @@
 		65F237C21C24C28D002182DE /* FRSOnboardOneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C11C24C28D002182DE /* FRSOnboardOneView.m */; };
 		65F237C71C24D263002182DE /* FRSContentActionsBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C61C24D263002182DE /* FRSContentActionsBar.m */; };
 		65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C91C24D464002182DE /* UIFont+Fresco.m */; };
-		BC419B6E1B70052500122B87 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC419B6D1B70052500122B87 /* Keys.plist */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
 		CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */; };
+		CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0CAE611E1579CA00CDE511 /* Endpoint.m */; };
+		CE12A5F91E14747A0032E72F /* EndpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12A5F81E14747A0032E72F /* EndpointManager.m */; };
 		D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA511D6DE6B3008842E1 /* FRSComment.m */; };
 		D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA561D6DF57E008842E1 /* FRSCommentCell.m */; };
 		D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */; };
@@ -145,6 +146,8 @@
 		D40BD3CE1CDE076000E39701 /* FRSGalleryTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3CD1CDE076000E39701 /* FRSGalleryTable.m */; };
 		D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D40BD3D01CDE1EAE00E39701 /* Reachability.m */; };
 		D40FA31B1CAAFB2100A4FE47 /* FRSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */; };
+		D41186751E01C80100C0F60A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41186731E01C80000C0F60A /* AdSupport.framework */; };
+		D41186761E01C80100C0F60A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41186741E01C80100C0F60A /* iAd.framework */; };
 		D41365B21CA32DC0004FE848 /* FRSStoryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */; };
 		D41365B31CA32DC0004FE848 /* FRSStoryDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D41365B11CA32DC0004FE848 /* FRSStoryDetailViewController.xib */; };
 		D418E2F71CCA97510003B080 /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = D418E2F61CCA97510003B080 /* MagicalImportFunctions.m */; };
@@ -164,7 +167,6 @@
 		D42C90811CC6191400B25C99 /* UIImage+Pixels.m in Sources */ = {isa = PBXBuildFile; fileRef = D42C90801CC6191400B25C99 /* UIImage+Pixels.m */; };
 		D433E5621DF1D574007440EC /* FRSNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D433E5601DF1D574007440EC /* FRSNotificationHandler.m */; };
 		D433E5671DF1D6A5007440EC /* Model2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D433E5641DF1D6A5007440EC /* Model2.xcdatamodeld */; };
-		D433E5701DF1E2A6007440EC /* (null) in Sources */ = {isa = PBXBuildFile; };
 		D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D43AA8BB1DCA29DA0002DF00 /* FRSWobbleView.m */; };
 		D43C7FCF1C8E469000A7A7A7 /* FRSFileLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FCE1C8E469000A7A7A7 /* FRSFileLoader.m */; };
 		D43C7FD21C8E469800A7A7A7 /* FRSFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D43C7FD11C8E469800A7A7A7 /* FRSFileViewController.m */; };
@@ -192,6 +194,8 @@
 		D453CC891CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC721CCA80850091A004 /* NSManagedObjectContext+MagicalThreading.m */; };
 		D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC761CCA80850091A004 /* NSPersistentStore+MagicalRecord.m */; };
 		D453CC8C1CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = D453CC781CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m */; };
+		D4638F0A1DF4FA1E001F2E05 /* FRSVideoCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = D4638F091DF4FA1E001F2E05 /* FRSVideoCompressor.m */; };
+		D4638F211DF74FA2001F2E05 /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = D4638F201DF74FA2001F2E05 /* SDAVAssetExportSession.m */; };
 		D46D35691D9036E700E38FAA /* FRSTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D46D35681D9036E700E38FAA /* FRSTracker.m */; };
 		D46E9C3D1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = D46E9C3C1D41BDD500A39398 /* FRSUpload+CoreDataProperties.m */; };
 		D475C08F1DC2677000AFC839 /* FRSUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D475C08E1DC2677000AFC839 /* FRSUploadManager.m */; };
@@ -291,6 +295,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02C62B9EAF84913D79E7BEC7 /* Pods-Fresco.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.beta.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.beta.xcconfig"; sourceTree = "<group>"; };
 		05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fresco.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		062D4653F3BC0751E4BC6E6A /* Pods.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.beta.xcconfig; path = "Pods/Target Support Files/Pods/Pods.beta.xcconfig"; sourceTree = "<group>"; };
 		070D66CA1C2AEFD200AB3D9D /* FRSOnboardTwoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSOnboardTwoView.h; sourceTree = "<group>"; };
@@ -392,7 +397,6 @@
 		07ED92DE1C752037000DBEA8 /* DGElasticPullToRefreshLoadingViewCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGElasticPullToRefreshLoadingViewCircle.m; sourceTree = "<group>"; };
 		07ED92DF1C752037000DBEA8 /* DGElasticPullToRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGElasticPullToRefreshView.h; sourceTree = "<group>"; };
 		07ED92E01C752037000DBEA8 /* DGElasticPullToRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGElasticPullToRefreshView.m; sourceTree = "<group>"; };
-		0EF68A1162525EE2C41C79CE /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 		1E408B761AA79A370057AC16 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		1E4983B41AFBCD9900924F59 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		1E4983B51AFBCD9900924F59 /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
@@ -418,7 +422,6 @@
 		1EDA44D11AA4CCC70082E08D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EDA44D21AA4CCC70082E08D /* FrescoNewsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FrescoNewsTests.m; sourceTree = "<group>"; };
 		24BD02930A66131EB6AED7E3 /* Pods_Fresco_WatchKit_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fresco_WatchKit_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		29F0D2E42008DF25D7353EF4 /* Pods-Fresco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.release.xcconfig"; sourceTree = "<group>"; };
 		39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		42B4D4E51ABF7F83006AD3AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		42D997FC1AEAF5B300636F33 /* UIImage+PHAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+PHAsset.h"; path = "Categories/UIImage+PHAsset.h"; sourceTree = "<group>"; };
@@ -525,7 +528,6 @@
 		65F237C81C24D464002182DE /* UIFont+Fresco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIFont+Fresco.h"; path = "Categories/UIFont+Fresco.h"; sourceTree = "<group>"; };
 		65F237C91C24D464002182DE /* UIFont+Fresco.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIFont+Fresco.m"; path = "Categories/UIFont+Fresco.m"; sourceTree = "<group>"; };
 		65FB75A71BFA4ABA00A5A646 /* Pods_Fresco_WatchKit_Extension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_Fresco_WatchKit_Extension.framework; path = "Pods/../build/Debug-iphoneos/Pods_Fresco_WatchKit_Extension.framework"; sourceTree = "<group>"; };
-		7C3D3E2111D42B3157BFB768 /* Pods-Fresco.beta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.beta.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.beta.xcconfig"; sourceTree = "<group>"; };
 		96C32138EB19F136689A3D6B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		9B264C482E5F5EEE8FB92D96 /* Pods-Fresco WatchKit Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -533,6 +535,10 @@
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
 		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
 		CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
+		CE0CAE601E1579CA00CDE511 /* Endpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Endpoint.h; sourceTree = "<group>"; };
+		CE0CAE611E1579CA00CDE511 /* Endpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Endpoint.m; sourceTree = "<group>"; };
+		CE12A5F71E14747A0032E72F /* EndpointManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndpointManager.h; sourceTree = "<group>"; };
+		CE12A5F81E14747A0032E72F /* EndpointManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EndpointManager.m; sourceTree = "<group>"; };
 		D400FA501D6DE6B3008842E1 /* FRSComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSComment.h; sourceTree = "<group>"; };
 		D400FA511D6DE6B3008842E1 /* FRSComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSComment.m; sourceTree = "<group>"; };
 		D400FA551D6DF57E008842E1 /* FRSCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCommentCell.h; sourceTree = "<group>"; };
@@ -552,6 +558,8 @@
 		D40BD3D01CDE1EAE00E39701 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		D40FA3191CAAFB2100A4FE47 /* FRSUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSUserDefaults.h; sourceTree = "<group>"; };
 		D40FA31A1CAAFB2100A4FE47 /* FRSUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSUserDefaults.m; sourceTree = "<group>"; };
+		D41186731E01C80000C0F60A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		D41186741E01C80100C0F60A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		D41365AF1CA32DC0004FE848 /* FRSStoryDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryDetailViewController.h; sourceTree = "<group>"; };
 		D41365B01CA32DC0004FE848 /* FRSStoryDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSStoryDetailViewController.m; sourceTree = "<group>"; };
 		D41365B11CA32DC0004FE848 /* FRSStoryDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSStoryDetailViewController.xib; sourceTree = "<group>"; };
@@ -642,6 +650,10 @@
 		D453CC761CCA80850091A004 /* NSPersistentStore+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStore+MagicalRecord.m"; sourceTree = "<group>"; };
 		D453CC771CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSPersistentStoreCoordinator+MagicalRecord.h"; sourceTree = "<group>"; };
 		D453CC781CCA80850091A004 /* NSPersistentStoreCoordinator+MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSPersistentStoreCoordinator+MagicalRecord.m"; sourceTree = "<group>"; };
+		D4638F081DF4FA1E001F2E05 /* FRSVideoCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSVideoCompressor.h; sourceTree = "<group>"; };
+		D4638F091DF4FA1E001F2E05 /* FRSVideoCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSVideoCompressor.m; sourceTree = "<group>"; };
+		D4638F1F1DF74FA2001F2E05 /* SDAVAssetExportSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDAVAssetExportSession.h; sourceTree = "<group>"; };
+		D4638F201DF74FA2001F2E05 /* SDAVAssetExportSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDAVAssetExportSession.m; sourceTree = "<group>"; };
 		D46D35671D9036E700E38FAA /* FRSTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSTracker.h; sourceTree = "<group>"; };
 		D46D35681D9036E700E38FAA /* FRSTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSTracker.m; sourceTree = "<group>"; };
 		D46E9C3B1D41BDD500A39398 /* FRSUpload+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FRSUpload+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -749,7 +761,9 @@
 		E796FA141B0E2A8E002B30C4 /* NotificationPayloadTests.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationPayloadTests.apns; sourceTree = "<group>"; };
 		E7AAC0A01B4DEBBB003EC8E3 /* WKRelativeDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WKRelativeDate.h; path = Categories/WKRelativeDate.h; sourceTree = "<group>"; };
 		E7AAC0A11B4DEBBB003EC8E3 /* WKRelativeDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WKRelativeDate.m; path = Categories/WKRelativeDate.m; sourceTree = "<group>"; };
+		E9F516F9B9F89BA241B36CA1 /* Pods-Fresco.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.release.xcconfig"; sourceTree = "<group>"; };
 		EE251A1A7F1010A0E6CA6B7F /* Pods-Fresco WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco WatchKit Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco WatchKit Extension/Pods-Fresco WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
+		F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fresco.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fresco/Pods-Fresco.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -757,6 +771,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D41186751E01C80100C0F60A /* AdSupport.framework in Frameworks */,
+				D41186761E01C80100C0F60A /* iAd.framework in Frameworks */,
 				D4F23AC91DC64BF000B0B6DF /* CoreTelephony.framework in Frameworks */,
 				D42A138F1D89A451008909E6 /* Mixpanel.framework in Frameworks */,
 				D4DBF1951CB468C90098BDC0 /* CoreMedia.framework in Frameworks */,
@@ -943,6 +959,8 @@
 		1B35C7E2C0D16DEBE7A411F8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D41186731E01C80000C0F60A /* AdSupport.framework */,
+				D41186741E01C80100C0F60A /* iAd.framework */,
 				D4F23AC81DC64BF000B0B6DF /* CoreTelephony.framework */,
 				D42A138E1D89A451008909E6 /* Mixpanel.framework */,
 				D418E3571CCC1DE50003B080 /* AFNetworking.framework */,
@@ -1418,12 +1436,12 @@
 				39F7235CF7EC3BCFC47F1053 /* Pods.debug.xcconfig */,
 				9B00AAFE2B00421BABBC07D6 /* Pods.release.xcconfig */,
 				062D4653F3BC0751E4BC6E6A /* Pods.beta.xcconfig */,
-				0EF68A1162525EE2C41C79CE /* Pods-Fresco.debug.xcconfig */,
-				29F0D2E42008DF25D7353EF4 /* Pods-Fresco.release.xcconfig */,
-				7C3D3E2111D42B3157BFB768 /* Pods-Fresco.beta.xcconfig */,
 				9B264C482E5F5EEE8FB92D96 /* Pods-Fresco WatchKit Extension.debug.xcconfig */,
 				EE251A1A7F1010A0E6CA6B7F /* Pods-Fresco WatchKit Extension.release.xcconfig */,
 				52CC8732D9311BE822B8EC9B /* Pods-Fresco WatchKit Extension.beta.xcconfig */,
+				F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */,
+				E9F516F9B9F89BA241B36CA1 /* Pods-Fresco.release.xcconfig */,
+				02C62B9EAF84913D79E7BEC7 /* Pods-Fresco.beta.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1954,6 +1972,17 @@
 			name = MagicalRecord;
 			sourceTree = "<group>";
 		};
+		D4638F071DF4F9D9001F2E05 /* Compression */ = {
+			isa = PBXGroup;
+			children = (
+				D4638F1F1DF74FA2001F2E05 /* SDAVAssetExportSession.h */,
+				D4638F201DF74FA2001F2E05 /* SDAVAssetExportSession.m */,
+				D4638F081DF4FA1E001F2E05 /* FRSVideoCompressor.h */,
+				D4638F091DF4FA1E001F2E05 /* FRSVideoCompressor.m */,
+			);
+			name = Compression;
+			sourceTree = "<group>";
+		};
 		D46D35661D9036C400E38FAA /* Tracking */ = {
 			isa = PBXGroup;
 			children = (
@@ -2130,6 +2159,7 @@
 		D4B35F4F1CCEB4AB00F5C8A8 /* File Upload */ = {
 			isa = PBXGroup;
 			children = (
+				D4638F071DF4F9D9001F2E05 /* Compression */,
 				D475C08D1DC2677000AFC839 /* FRSUploadManager.h */,
 				D475C08E1DC2677000AFC839 /* FRSUploadManager.m */,
 			);
@@ -2271,6 +2301,10 @@
 				D46D35661D9036C400E38FAA /* Tracking */,
 				D48C72251D0B3D5C000677BF /* FRSDevice.h */,
 				D48C72261D0B3D5C000677BF /* FRSDevice.m */,
+				CE12A5F71E14747A0032E72F /* EndpointManager.h */,
+				CE12A5F81E14747A0032E72F /* EndpointManager.m */,
+				CE0CAE601E1579CA00CDE511 /* Endpoint.h */,
+				CE0CAE611E1579CA00CDE511 /* Endpoint.m */,
 			);
 			name = "Fresco API";
 			sourceTree = "<group>";
@@ -2521,7 +2555,6 @@
 				D487F1B71CBD6565005742F3 /* FRSSubmissionViewController.xib in Resources */,
 				CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */,
 				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
-				BC419B6E1B70052500122B87 /* Keys.plist in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */,
 				D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */,
@@ -2599,7 +2632,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		BCA811ECB60B44FE48F07483 /* [CP] Copy Pods Resources */ = {
@@ -2740,7 +2773,6 @@
 				D453CC791CCA80850091A004 /* MagicalRecord+Actions.m in Sources */,
 				D4B35F5C1CD1B51400F5C8A8 /* FRSUpload.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
-				D433E5701DF1E2A6007440EC /* (null) in Sources */,
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
 				075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */,
 				65201A3D1C3D7EEA00B31089 /* FRSBaseViewController.m in Sources */,
@@ -2757,9 +2789,11 @@
 				D40BD3D11CDE1EAE00E39701 /* Reachability.m in Sources */,
 				D453CC831CCA80850091A004 /* NSManagedObject+MagicalRecord.m in Sources */,
 				07ED92E21C752037000DBEA8 /* DGElasticPullToRefreshExtension.m in Sources */,
+				CE12A5F91E14747A0032E72F /* EndpointManager.m in Sources */,
 				65EBEDB91C44197100BE671F /* FRSLocationManager.m in Sources */,
 				D4BE3E311D17D6760039394C /* FRSCarouselCell.m in Sources */,
 				07A30C101C50497E00C536EB /* FRSSearchViewController.m in Sources */,
+				D4638F0A1DF4FA1E001F2E05 /* FRSVideoCompressor.m in Sources */,
 				D453CC801CCA80850091A004 /* NSManagedObject+MagicalAggregation.m in Sources */,
 				D421FC501D5B7ACF004C76B7 /* FRSSearchStoryCell.m in Sources */,
 				65135FD11C286DCF00839149 /* FRSUser+CoreDataProperties.m in Sources */,
@@ -2776,6 +2810,7 @@
 				D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */,
 				07A30C011C50488800C536EB /* FRSPasswordChangeViewController.m in Sources */,
 				D43C7FD61C8E46A500A7A7A7 /* FRSImageViewCell.m in Sources */,
+				D4638F211DF74FA2001F2E05 /* SDAVAssetExportSession.m in Sources */,
 				07ED92E31C752037000DBEA8 /* DGElasticPullToRefreshLoadingView.m in Sources */,
 				D433E5671DF1D6A5007440EC /* Model2.xcdatamodeld in Sources */,
 				65C8078D1BFA6BDA00490E73 /* UIView+Helpers.m in Sources */,
@@ -2809,6 +2844,7 @@
 				65201A2B1C3D7D3C00B31089 /* FRSSetupProfileViewController.m in Sources */,
 				D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */,
 				655768941C496B3A0031107A /* FRSArticlesTableViewCell.m in Sources */,
+				CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */,
 				D43C7FDA1C8E472B00A7A7A7 /* FRSVideoTrimmer.m in Sources */,
 				D4BE3E2D1D17D6530039394C /* FRSCarousel.m in Sources */,
 			);
@@ -2876,6 +2912,16 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Appsee\"",
+					"\"${PODS_ROOT}/Headers/Public/CardIO\"",
+					"\"${PODS_ROOT}/Headers/Public/Fabric\"",
+					"\"${PODS_ROOT}/Headers/Public/Smooch\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterCore\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterKit\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -2921,6 +2967,18 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Appsee\"",
+					"\"${PODS_ROOT}/Headers/Public/CardIO\"",
+					"\"${PODS_ROOT}/Headers/Public/Fabric\"",
+					"\"${PODS_ROOT}/Headers/Public/Smooch\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterCore\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterKit\"",
+					"\"${PODS_ROOT}\"/**",
+					"\"$(BUILT_PRODUCTS_DIR)\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -2933,7 +2991,7 @@
 		};
 		1EDA44D71AA4CCC70082E08D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0EF68A1162525EE2C41C79CE /* Pods-Fresco.debug.xcconfig */;
+			baseConfigurationReference = F45D2463F6D72508F1D48892 /* Pods-Fresco.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -2976,7 +3034,7 @@
 		};
 		1EDA44D81AA4CCC70082E08D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 29F0D2E42008DF25D7353EF4 /* Pods-Fresco.release.xcconfig */;
+			baseConfigurationReference = E9F516F9B9F89BA241B36CA1 /* Pods-Fresco.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -3091,6 +3149,18 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Appsee\"",
+					"\"${PODS_ROOT}/Headers/Public/CardIO\"",
+					"\"${PODS_ROOT}/Headers/Public/Fabric\"",
+					"\"${PODS_ROOT}/Headers/Public/Smooch\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterCore\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterKit\"",
+					"\"${PODS_ROOT}\"/**",
+					"\"$(BUILT_PRODUCTS_DIR)\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -3104,7 +3174,7 @@
 		};
 		E78493001BA882D2004491DA /* Beta */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C3D3E2111D42B3157BFB768 /* Pods-Fresco.beta.xcconfig */;
+			baseConfigurationReference = 02C62B9EAF84913D79E7BEC7 /* Pods-Fresco.beta.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

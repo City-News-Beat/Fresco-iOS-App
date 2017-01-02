@@ -21,7 +21,6 @@
 
 @interface FRSAlertView () <UITextViewDelegate>
 
-
 /* Reusable Alert Properties */
 @property (strong, nonatomic) UIView *overlayView;
 @property (strong, nonatomic) UIView *buttonShadow;
@@ -35,7 +34,6 @@
 @property (strong, nonatomic) UIView *actionLine;
 
 @property CGFloat height;
-
 
 /* Permissions Alert Properties */
 @property (nonatomic) BOOL notificationsEnabled;
@@ -78,22 +76,21 @@
 
 @end
 
+@implementation FRSAlertView
 
-@implementation FRSAlertView 
-
--(instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate {
+- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle cancelTitle:(NSString *)cancelTitle cancelTitleColor:(UIColor *)cancelTitleColor delegate:(id)delegate {
     self = [super init];
-    if (self){
-        
+    if (self) {
+
         self.delegate = delegate;
-        
+
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
-        
+
         [self configureDarkOverlay];
-        
+
         /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
@@ -101,31 +98,31 @@
         self.titleLabel.text = title;
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
-        
+
         /* Body Label */
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 0)];
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
         self.messageLabel.alpha = .54;
         self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.messageLabel.numberOfLines = 0;
-        
+
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:message];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:2];
         [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [message length])];
-        
-        self.messageLabel.attributedText = attributedString ;
+
+        self.messageLabel.attributedText = attributedString;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
         [self.messageLabel sizeToFit];
         self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
         [self addSubview:self.messageLabel];
-        
+
         /* Action Shadow */
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
         line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:line];
-        
-        if ([cancelTitle  isEqual: @""]){
+
+        if ([cancelTitle isEqual:@""]) {
             /* Single Action Button */
             self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
             [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
@@ -144,7 +141,7 @@
             [self.actionButton setTitle:actionTitle forState:UIControlStateNormal];
             [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
             [self addSubview:self.actionButton];
-            
+
             /* Right Action */
             self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
             self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
@@ -155,38 +152,35 @@
             [self.cancelButton sizeToFit];
             [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
             [self addSubview:self.cancelButton];
-            
         }
         [self adjustFrame];
         [self addShadowAndClip];
-        
+
         [self animateIn];
-        
     }
     self.delegate = delegate;
     return self;
 }
 
--(void)show {
+- (void)show {
     /* keyWindow places the view above all. Add overlay view first, and then alertView*/
     [[UIApplication sharedApplication].keyWindow addSubview:self.overlayView];
     [[UIApplication sharedApplication].keyWindow addSubview:self];
     [self.inputViewController.view endEditing:YES];
-    
 }
 
--(void)adjustFrame {
+- (void)adjustFrame {
     self.height = self.actionButton.frame.size.height + self.messageLabel.frame.size.height + self.titleLabel.frame.size.height + 15;
-    
+
     //UIViewController* vc = (UIViewController *)self.delegate;
-    
-    NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width  - ALERT_WIDTH)/2;
-    NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height)/2;
-    
+
+    NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
+    NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height) / 2;
+
     self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
 }
 
--(void)addShadowAndClip {
+- (void)addShadowAndClip {
     self.layer.shadowColor = [UIColor blackColor].CGColor;
     self.layer.shadowOffset = CGSizeMake(0, 4);
     self.layer.shadowRadius = 2;
@@ -194,77 +188,77 @@
     self.layer.cornerRadius = 2;
 }
 
-
--(void)cancelTapped {
+- (void)cancelTapped {
     [self animateOut];
-    
+
     if (self.delegate) {
         [self.delegate didPressButtonAtIndex:1];
     }
-    
+
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     delegate.didPresentPermissionsRequest = NO;
 }
 
--(void)actionTapped {
+- (void)actionTapped {
     [self animateOut];
-    
+
     if (self.delegate) {
         [self.delegate didPressButtonAtIndex:0];
     }
-    
+
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     delegate.didPresentPermissionsRequest = NO;
 }
 
--(void)settingsTapped {
+- (void)settingsTapped {
     [self animateOut];
 
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }
 
+- (void)animateIn {
 
--(void)animateIn {
-    
     /* Set default state before animating in */
     self.transform = CGAffineTransformMakeScale(1.175, 1.175);
     self.alpha = 0;
-    
+
     [UIView animateWithDuration:0.25
                           delay:0.0
-                        options: UIViewAnimationOptionCurveEaseInOut
+                        options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         
-                         self.alpha = 1;
-                         self.titleLabel.alpha = 1;
-                         self.cancelButton.alpha = 1;
-                         self.actionButton.alpha = 1;
-                         self.overlayView.alpha = 0.26;
-                         self.transform = CGAffineTransformMakeScale(1, 1);
-                         
-                     } completion:nil];
+
+                       self.alpha = 1;
+                       self.titleLabel.alpha = 1;
+                       self.cancelButton.alpha = 1;
+                       self.actionButton.alpha = 1;
+                       self.overlayView.alpha = 0.26;
+                       self.transform = CGAffineTransformMakeScale(1, 1);
+
+                     }
+                     completion:nil];
 }
 
--(void)animateOut {
-    
+- (void)animateOut {
+
     [UIView animateWithDuration:0.25
-                          delay:0.0
-                        options: UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         
-                         self.alpha = 0;
-                         self.titleLabel.alpha = 0;
-                         self.cancelButton.alpha = 0;
-                         self.actionButton.alpha = 0;
-                         self.overlayView.alpha = 0;
-                         self.transform = CGAffineTransformMakeScale(0.9, 0.9);
-                         
-                     } completion:^(BOOL finished) {
-                         [self removeFromSuperview];
-                     }];
+        delay:0.0
+        options:UIViewAnimationOptionCurveEaseInOut
+        animations:^{
+
+          self.alpha = 0;
+          self.titleLabel.alpha = 0;
+          self.cancelButton.alpha = 0;
+          self.actionButton.alpha = 0;
+          self.overlayView.alpha = 0;
+          self.transform = CGAffineTransformMakeScale(0.9, 0.9);
+
+        }
+        completion:^(BOOL finished) {
+          [self removeFromSuperview];
+        }];
 }
 
--(void)configureDarkOverlay {
+- (void)configureDarkOverlay {
     /* Dark Overlay */
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
@@ -276,35 +270,34 @@
 
 #pragma mark - Custom Alerts
 
--(instancetype)initPermissionsAlert:(id)delegate {
+- (instancetype)initPermissionsAlert:(id)delegate {
     self = [super init];
-    
+
     if (self) {
-        
+
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationDidBecomeActiveNotification object:nil];
 
-        
-        NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH)/2;
-        NSInteger yOrigin = (([UIScreen mainScreen].bounds.size.height - 334)/2);
+        NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
+        NSInteger yOrigin = (([UIScreen mainScreen].bounds.size.height - 334) / 2);
         self.frame = CGRectMake(xOrigin, yOrigin - 20, ALERT_WIDTH, 334);
-        
+
         [self configureDarkOverlay];
 
         [self checkNotificationStatus];
         [self checkLocationStatus];
-        
+
         [self configureRequestButtonsForPermissions];
-        
+
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 44)];
         title.font = [UIFont notaBoldWithSize:17];
         title.text = @"HOLD UP";
         title.textAlignment = NSTextAlignmentCenter;
         title.textColor = [UIColor frescoDarkTextColor];
         [self addSubview:title];
-        
+
         UILabel *subTitle = [[UILabel alloc] initWithFrame:CGRectMake(16, 44, 238, 80)];
         subTitle.text = @"We need your permission for a few things, so we can verify your submissions and notify you about nearby assignments and news.";
         subTitle.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
@@ -312,57 +305,57 @@
         subTitle.textAlignment = NSTextAlignmentCenter;
         subTitle.textColor = [UIColor frescoMediumTextColor];
         [self addSubview:subTitle];
-        
-        UITextView *locationTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, 192+44-10, ALERT_WIDTH, 42)];
-        locationTextView.userInteractionEnabled  = NO;
+
+        UITextView *locationTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, 192 + 44 - 10, ALERT_WIDTH, 42)];
+        locationTextView.userInteractionEnabled = NO;
         locationTextView.clipsToBounds = NO;
-        
+
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
         paragraphStyle.lineSpacing = -2;
         paragraphStyle.minimumLineHeight = -100;
-        
+
         locationTextView.attributedText = [[NSAttributedString alloc] initWithString:@"Your location is only shared when you \n post a gallery to Fresco. In all other cases \n your location is fully anonymous."
-                                                                          attributes: @{NSParagraphStyleAttributeName : paragraphStyle,
-                                                                                        NSFontAttributeName: [UIFont systemFontOfSize:12 weight:UIFontWeightLight]}];
-        
+                                                                          attributes:@{ NSParagraphStyleAttributeName : paragraphStyle,
+                                                                                        NSFontAttributeName : [UIFont systemFontOfSize:12 weight:UIFontWeightLight] }];
+
         locationTextView.textAlignment = NSTextAlignmentCenter;
         locationTextView.textColor = [UIColor frescoMediumTextColor];
         locationTextView.backgroundColor = [UIColor clearColor];
         [self addSubview:locationTextView];
-        
+
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 290, self.frame.size.width, 0.5)];
         line.backgroundColor = [UIColor frescoShadowColor];
         [self addSubview:line];
-        
+
         [self configureActionButtonsForPermissions];
-        
+
         [self addShadowAndClip];
         [self animateIn];
-        
+
         self.locationManager.delegate = delegate;
     }
     return self;
 }
 
--(void)configureRequestButtonsForPermissions {
-    
+- (void)configureRequestButtonsForPermissions {
+
     if (self.locationEnabled) {
         [self configureLocationButtonEnabled:YES];
-        
+
     } else {
         [self configureLocationButtonEnabled:NO];
     }
-    
+
     if (self.notificationsEnabled) {
         [self configureNotificationButtonEnabled:YES];
-    
+
     } else {
         [self configureNotificationButtonEnabled:NO];
     }
 }
 
--(void)configureActionButtonsForPermissions {
-    
+- (void)configureActionButtonsForPermissions {
+
     self.permissionsLaterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.permissionsLaterButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
     self.permissionsLaterButton.frame = CGRectMake(0, 290, 104, 44);
@@ -370,7 +363,7 @@
     [self.permissionsLaterButton setTitle:@"ASK LATER" forState:UIControlStateNormal];
     [self.permissionsLaterButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     [self addSubview:self.permissionsLaterButton];
-    
+
     self.permissionsDoneButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.permissionsDoneButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
     self.permissionsDoneButton.frame = CGRectMake(185, 290, 104, 44);
@@ -378,41 +371,41 @@
     [self.permissionsDoneButton setTitle:@"DONE" forState:UIControlStateNormal];
     [self.permissionsDoneButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     self.permissionsDoneButton.enabled = NO;
-    
+
     if (self.notificationsEnabled && self.locationEnabled) {
         [self.permissionsLaterButton removeFromSuperview];
         self.permissionsDoneButton.enabled = YES;
         [self.permissionsDoneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.permissionsDoneButton.frame = CGRectMake(0, 290, self.frame.size.width, 44);
     }
-    
+
     [self addSubview:self.permissionsDoneButton];
 }
 
--(void)configureNotificationButtonEnabled:(BOOL)enabled {
-    
+- (void)configureNotificationButtonEnabled:(BOOL)enabled {
+
     if (enabled) {
         self.notificationButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        self.notificationButton.frame = CGRectMake(0, 136+44, self.frame.size.width, 44);
+        self.notificationButton.frame = CGRectMake(0, 136 + 44, self.frame.size.width, 44);
         [self.notificationButton setTitle:@"NOTIFICATIONS ENABLED" forState:UIControlStateNormal];
         [self.notificationButton setTintColor:[UIColor frescoOrangeColor]];
         [self.notificationButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         self.notificationButton.userInteractionEnabled = NO;
-        
+
         UIImageView *notificationImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bell-selected"]];
         [self.notificationButton setImage:notificationImageView.image forState:UIControlStateNormal];
         self.notificationButton.imageEdgeInsets = UIEdgeInsetsMake(0, -23.5, 0, 23.5);
         self.notificationButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, -10);
         [self addSubview:self.notificationButton];
-        
+
     } else {
         self.notificationButtonDisabled = [UIButton buttonWithType:UIButtonTypeSystem];
-        self.notificationButtonDisabled.frame = CGRectMake(0, 136+44, self.frame.size.width, 44);
+        self.notificationButtonDisabled.frame = CGRectMake(0, 136 + 44, self.frame.size.width, 44);
         [self.notificationButtonDisabled setTitle:@"ENABLE NOTIFICATIONS" forState:UIControlStateNormal];
         [self.notificationButtonDisabled setTintColor:[UIColor frescoDarkTextColor]];
         [self.notificationButtonDisabled.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self.notificationButtonDisabled addTarget:self action:@selector(requestNotifications) forControlEvents:UIControlEventTouchDown];
-        
+
         UIImageView *notificationImageViewDisabled = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bell"]];
         [self.notificationButtonDisabled setImage:notificationImageViewDisabled.image forState:UIControlStateNormal];
         self.notificationButtonDisabled.imageEdgeInsets = UIEdgeInsetsMake(0, -28, 0, 28);
@@ -421,8 +414,8 @@
     }
 }
 
--(void)configureLocationButtonEnabled:(BOOL)enabled {
-    
+- (void)configureLocationButtonEnabled:(BOOL)enabled {
+
     if (enabled) {
         self.locationButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.locationButton.frame = CGRectMake(0, 136, self.frame.size.width, 44);
@@ -430,13 +423,13 @@
         [self.locationButton setTintColor:[UIColor frescoOrangeColor]];
         [self.locationButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         self.locationButton.userInteractionEnabled = NO;
-        
+
         UIImageView *locationImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map-marker-selected"]];
         [self.locationButton setImage:locationImageView.image forState:UIControlStateNormal];
         self.locationButton.imageEdgeInsets = UIEdgeInsetsMake(0, -40, 0, 40);
         self.locationButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, -10);
         [self addSubview:self.locationButton];
-        
+
     } else {
         self.locationButtonDisabled = [UIButton buttonWithType:UIButtonTypeSystem];
         self.locationButtonDisabled.frame = CGRectMake(0, 136, self.frame.size.width, 44);
@@ -444,7 +437,7 @@
         [self.locationButtonDisabled setTintColor:[UIColor frescoDarkTextColor]];
         [self.locationButtonDisabled.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self.locationButtonDisabled addTarget:self action:@selector(requestLocation) forControlEvents:UIControlEventTouchDown];
-        
+
         UIImageView *locationImageViewDisabled = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"map-marker"]];
         [self.locationButtonDisabled setImage:locationImageViewDisabled.image forState:UIControlStateNormal];
         self.locationButtonDisabled.imageEdgeInsets = UIEdgeInsetsMake(0, -45, 0, 45);
@@ -453,7 +446,7 @@
     }
 }
 
--(void)checkLocationStatus {
+- (void)checkLocationStatus {
     self.locationEnabled = NO;
     if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) || ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse)) {
         self.locationEnabled = YES;
@@ -461,14 +454,13 @@
     } else {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"location-enabled"];
     }
-
 }
 
--(void)checkNotificationStatus {
+- (void)checkNotificationStatus {
     self.notificationsEnabled = NO;
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]){
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
         UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
-        
+
         if (!notificationSettings || (notificationSettings.types == UIUserNotificationTypeNone)) {
             self.notificationsEnabled = NO;
             [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
@@ -479,85 +471,80 @@
     }
 }
 
--(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude {
-    
-    UIAlertController * view=   [UIAlertController
-                                 alertControllerWithTitle:nil
-                                 message:nil
-                                 preferredStyle:UIAlertControllerStyleActionSheet];
-    
+- (void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude {
+
+    UIAlertController *view = [UIAlertController
+        alertControllerWithTitle:nil
+                         message:nil
+                  preferredStyle:UIAlertControllerStyleActionSheet];
+
     UIAlertAction *googleMaps = [UIAlertAction
-                                 actionWithTitle:@"Open with Google Maps"
-                                 style:UIAlertActionStyleDefault
-                                 handler:^(UIAlertAction * action)
-                                 {
-                                     [view dismissViewControllerAnimated:YES completion:nil];
-                                     
-                                     //https://www.google.com/maps/dir/40.7155488,+-74.0207971/Flatiron+School,+11+Broadway+%23260,+New+York,+NY+10004/
-                                     
-                                     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?q=%f,%f",latitude,longitude]];
-                                     if (![[UIApplication sharedApplication] canOpenURL:url]) {
-                                         
-                                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/?q=%f,%f", latitude, longitude]]];
-                                         
-                                     } else {
-                                         [[UIApplication sharedApplication] openURL:url];
-                                     }
-                                     
-                                     
-                                 }];
-    
+        actionWithTitle:@"Open with Google Maps"
+                  style:UIAlertActionStyleDefault
+                handler:^(UIAlertAction *action) {
+                  [view dismissViewControllerAnimated:YES completion:nil];
+
+                  //https://www.google.com/maps/dir/40.7155488,+-74.0207971/Flatiron+School,+11+Broadway+%23260,+New+York,+NY+10004/
+
+                  NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"comgooglemaps://?q=%f,%f", latitude, longitude]];
+                  if (![[UIApplication sharedApplication] canOpenURL:url]) {
+
+                      [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/?q=%f,%f", latitude, longitude]]];
+
+                  } else {
+                      [[UIApplication sharedApplication] openURL:url];
+                  }
+
+                }];
+
     UIAlertAction *appleMaps = [UIAlertAction
-                                actionWithTitle:@"Open with Apple Maps"
-                                style:UIAlertActionStyleDefault
-                                handler:^(UIAlertAction * action)
-                                {
-                                    [view dismissViewControllerAnimated:YES completion:nil];
-                                    
-                                    CLLocationCoordinate2D endingCoord = CLLocationCoordinate2DMake(latitude, longitude);
-                                    MKPlacemark *endLocation = [[MKPlacemark alloc] initWithCoordinate:endingCoord addressDictionary:nil];
-                                    MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:endLocation];
-                                    
-                                    NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
-                                    [launchOptions setObject:MKLaunchOptionsDirectionsModeDriving forKey:MKLaunchOptionsDirectionsModeKey];
-                                    
-                                    [endingItem openInMapsWithLaunchOptions:launchOptions];
-                                    
-                                }];
-    
+        actionWithTitle:@"Open with Apple Maps"
+                  style:UIAlertActionStyleDefault
+                handler:^(UIAlertAction *action) {
+                  [view dismissViewControllerAnimated:YES completion:nil];
+
+                  CLLocationCoordinate2D endingCoord = CLLocationCoordinate2DMake(latitude, longitude);
+                  MKPlacemark *endLocation = [[MKPlacemark alloc] initWithCoordinate:endingCoord addressDictionary:nil];
+                  MKMapItem *endingItem = [[MKMapItem alloc] initWithPlacemark:endLocation];
+
+                  NSMutableDictionary *launchOptions = [[NSMutableDictionary alloc] init];
+                  [launchOptions setObject:MKLaunchOptionsDirectionsModeDriving forKey:MKLaunchOptionsDirectionsModeKey];
+
+                  [endingItem openInMapsWithLaunchOptions:launchOptions];
+
+                }];
+
     UIAlertAction *cancel = [UIAlertAction
-                             actionWithTitle:@"Cancel"
-                             style:UIAlertActionStyleCancel
-                             handler:^(UIAlertAction * action)
-                             {
-                                 [view dismissViewControllerAnimated:YES completion:nil];
-                                 
-                             }];
-    
-    
+        actionWithTitle:@"Cancel"
+                  style:UIAlertActionStyleCancel
+                handler:^(UIAlertAction *action) {
+                  [view dismissViewControllerAnimated:YES completion:nil];
+
+                }];
+
     [view addAction:googleMaps];
     [view addAction:appleMaps];
     [view addAction:cancel];
-    
+
     [(id)self.delegate presentViewController:view animated:YES completion:nil];
 }
 
--(void)requestLocation {
-    
-    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"LocationRequested"]) {
+- (void)requestLocation {
+
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"LocationRequested"]) {
         self.locationManager = [[CLLocationManager alloc] init];
         [self.locationManager requestWhenInUseAuthorization];
     } else {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
-    
+
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"LocationRequested"];
 }
 
--(void)requestNotifications {
-    
+- (void)requestNotifications {
+
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"NotificationsRequested"]) {
-        UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
+        UIUserNotificationType types = (UIUserNotificationType)(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
         UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
         [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
     } else {
@@ -566,68 +553,68 @@
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NotificationsRequested"];
 }
 
--(void)appWillBecomeActive:(NSNotification *)notification {
+- (void)appWillBecomeActive:(NSNotification *)notification {
 
     [self checkLocationStatus];
     [self checkNotificationStatus];
-    
+
     if ((self.locationEnabled) && (self.locationButton == nil)) {
         [self.locationButton removeFromSuperview]; //Remove from superview to avoid duplicates
         [self.locationButtonDisabled removeFromSuperview];
         [self configureLocationButtonEnabled:YES];
     }
-    
-    if  ((self.notificationsEnabled) && (self.notificationButton == nil)){
+
+    if ((self.notificationsEnabled) && (self.notificationButton == nil)) {
         [self.notificationButton removeFromSuperview];
         [self.notificationButtonDisabled removeFromSuperview];
         [self configureNotificationButtonEnabled:YES];
     }
-    
+
     if (self.notificationsEnabled && self.locationEnabled) {
         [self.permissionsDoneButton removeFromSuperview];
         [self.permissionsLaterButton removeFromSuperview];
-        
+
         [self configureActionButtonsForPermissions];
     }
 }
 
--(void)applicationWillEnterForeground:(NSNotification *)notification {
-        
+- (void)applicationWillEnterForeground:(NSNotification *)notification {
+
     [self checkLocationStatus];
     [self checkNotificationStatus];
-    
+
     if ((self.locationEnabled) && (self.locationButton == nil)) {
         [self.locationButton removeFromSuperview]; //Remove from superview to avoid duplicates
         [self.locationButtonDisabled removeFromSuperview];
         [self configureLocationButtonEnabled:YES];
     }
-    
-    if  ((self.notificationsEnabled) && (self.notificationButton == nil)){
+
+    if ((self.notificationsEnabled) && (self.notificationButton == nil)) {
         [self.notificationButton removeFromSuperview];
         [self.notificationButtonDisabled removeFromSuperview];
         [self configureNotificationButtonEnabled:YES];
     }
-    
+
     if (self.notificationsEnabled && self.locationEnabled) {
         [self.permissionsDoneButton removeFromSuperview];
         [self.permissionsLaterButton removeFromSuperview];
-        
+
         [self configureActionButtonsForPermissions];
     }
 }
 
--(instancetype)initFindFriendsAlert {
+- (instancetype)initFindFriendsAlert {
     self = [super init];
-    
+
     if (self) {
-        
+
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
-        
+
         [self configureDarkOverlay];
-        
+
         /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
@@ -635,30 +622,30 @@
         self.titleLabel.text = @"NOT SURE WHO TO FOLLOW?";
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
-        
+
         /* Body Label */
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 0)];
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
         self.messageLabel.alpha = .54;
         self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.messageLabel.numberOfLines = 0;
-        
+
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"Connect your address book to find your friends on Fresco."];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:2];
         [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [@"Connect your address book to find your friends on Fresco." length])];
-        
-        self.messageLabel.attributedText = attributedString ;
+
+        self.messageLabel.attributedText = attributedString;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
         [self.messageLabel sizeToFit];
         self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
         [self addSubview:self.messageLabel];
-        
+
         /* Action Shadow */
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
         line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:line];
-        
+
         /* Left Action */
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
@@ -667,7 +654,7 @@
         [self.actionButton setTitle:@"NO THANKS" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
-        
+
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 0, 44);
@@ -678,41 +665,40 @@
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
         [self addSubview:self.cancelButton];
-        
-        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 70, ALERT_WIDTH, 140);
-        
+
+        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 70, ALERT_WIDTH, 140);
+
         [self addShadowAndClip];
         [self animateIn];
     }
     return self;
 }
 
--(void)requestContacts {
-    
-//    CNAuthorizationStatus status = [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts];
-//    if (status == CNAuthorizationStatusDenied || status == CNAuthorizationStatusRestricted || status == CNAuthorizationStatusNotDetermined) {
-    
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+- (void)requestContacts {
 
-//        return;
-//    }
+    //    CNAuthorizationStatus status = [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts];
+    //    if (status == CNAuthorizationStatusDenied || status == CNAuthorizationStatusRestricted || status == CNAuthorizationStatusNotDetermined) {
+
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+
+    //        return;
+    //    }
 }
 
-
--(instancetype)initNoConnectionAlert {
+- (instancetype)initNoConnectionAlert {
     self = [super init];
-    
+
     if (self) {
-        
+
         NSString *message = @"Please check your internet connection.";
-        
+
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
-        
+
         [self configureDarkOverlay];
-        
+
         /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
@@ -720,30 +706,30 @@
         self.titleLabel.text = @"NO CONNECTION";
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
-        
+
         /* Body Label */
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 0)];
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
         self.messageLabel.alpha = .54;
         self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.messageLabel.numberOfLines = 0;
-        
+
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:message];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:2];
         [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [message length])];
-        
-        self.messageLabel.attributedText = attributedString ;
+
+        self.messageLabel.attributedText = attributedString;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
         [self.messageLabel sizeToFit];
         self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
         [self addSubview:self.messageLabel];
-        
+
         /* Action Shadow */
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
         line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:line];
-        
+
         /* Left Action */
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(settingsTapped) forControlEvents:UIControlEventTouchUpInside];
@@ -752,7 +738,7 @@
         [self.actionButton setTitle:@"SETTINGS" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
-        
+
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
@@ -763,31 +749,28 @@
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
         [self addSubview:self.cancelButton];
-        
+
         [self adjustFrame];
         [self addShadowAndClip];
-        
+
         [self animateIn];
-        
-    
     }
-    
+
     return self;
 }
 
-
--(instancetype)initSignUpAlert {
+- (instancetype)initSignUpAlert {
     self = [super init];
 
     if (self) {
-        
+
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
-        
+
         [self configureDarkOverlay];
-        
+
         /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
@@ -795,30 +778,30 @@
         self.titleLabel.text = @"WAIT, DON'T GO";
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
-        
+
         /* Body Label */
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 0)];
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
         self.messageLabel.alpha = .54;
         self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.messageLabel.numberOfLines = 0;
-        
+
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"Are you sure you don’t want to sign up for Fresco?"];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:2];
         [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [@"Are you sure you don’t want to sign up for Fresco?" length])];
-        
-        self.messageLabel.attributedText = attributedString ;
+
+        self.messageLabel.attributedText = attributedString;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
         [self.messageLabel sizeToFit];
         self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
         [self addSubview:self.messageLabel];
-        
+
         /* Action Shadow */
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
         line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:line];
-        
+
         /* Left Action */
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(cancelTapped) forControlEvents:UIControlEventTouchUpInside];
@@ -827,7 +810,7 @@
         [self.actionButton setTitle:@"CANCEL" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
-        
+
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 0, 44);
@@ -838,49 +821,46 @@
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
         [self addSubview:self.cancelButton];
-        
-        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 70, ALERT_WIDTH, 140);
-        
+
+        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 70, ALERT_WIDTH, 140);
+
         [self addShadowAndClip];
         [self animateIn];
     }
     return self;
 }
 
--(void)returnToPreviousViewController {
+- (void)returnToPreviousViewController {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"returnToPreviousViewController" object:self];
-    
+
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
-    
+
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
 }
 
--(void)dismiss {
+- (void)dismiss {
     [self animateOut];
-    
-    
+
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     [self removeFromSuperview];
 
-    
-//    if (self.delegate) {
-//        [self.delegate didPressButtonAtIndex:1];
-//    }
+    //    if (self.delegate) {
+    //        [self.delegate didPressButtonAtIndex:1];
+    //    }
 }
 
--(instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton {
-    
+- (instancetype)initNoConnectionBannerWithBackButton:(BOOL)backButton {
+
     self = [super init];
-    
+
     if (self) {
         self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 64);
         self.backgroundColor = [UIColor frescoRedHeartColor];
-        
-        
+
         NSString *title = @"";
-        
+
         if (IS_IPHONE_5) {
             title = @"UNABLE TO CONNECT";
         } else if (IS_IPHONE_6) {
@@ -888,16 +868,14 @@
         } else if (IS_IPHONE_6_PLUS) {
             title = @"UNABLE TO CONNECT. CHECK YOUR SIGNAL";
         }
-        
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 33, [UIScreen mainScreen].bounds.size.width -80, 19)];
+
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, 33, [UIScreen mainScreen].bounds.size.width - 80, 19)];
         label.font = [UIFont notaBoldWithSize:17];
         label.textColor = [UIColor whiteColor];
         label.text = title;
         label.textAlignment = NSTextAlignmentCenter;
         [self addSubview:label];
-        
-        
+
         if (backButton) {
             UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
             [backButton setImage:[UIImage imageNamed:@"back-arrow-light"] forState:UIControlStateNormal];
@@ -906,31 +884,34 @@
             [self addSubview:backButton];
         }
 
-        [UIView animateWithDuration:0.3 delay:2.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.alpha = 0;
-        } completion:nil];
+        [UIView animateWithDuration:0.3
+                              delay:2.0
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+                           self.alpha = 0;
+                         }
+                         completion:nil];
     }
     return self;
 }
 
-
--(instancetype)initTOS {
+- (instancetype)initTOS {
     self = [super init];
-    
+
     if (self) {
-        
+
         if (![FRSAPIClient sharedClient].authenticatedUser) {
             return nil;
         }
-        
+
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
         self.alpha = 0;
-        
+
         [self configureDarkOverlay];
-        
+
         /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
@@ -938,54 +919,54 @@
         self.titleLabel.text = @"UPDATED TERMS";
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
-        
+
         [[FRSAPIClient sharedClient] getTermsWithCompletion:^(id responseObject, NSError *error) {
-            
-            if (error || !responseObject) {
-                return;
-            }
-            
-            NSString *TOS = responseObject[@"terms"];
-            TOS = [TOS stringByReplacingOccurrencesOfString:@"�" withString:@"\""];
-            
-            self.TOSTextView.text = TOS;
-            
-            [self addShadowAndClip];
-            [self animateIn];
+
+          if (error || !responseObject) {
+              return;
+          }
+
+          NSString *TOS = responseObject[@"terms"];
+          TOS = [TOS stringByReplacingOccurrencesOfString:@"�" withString:@"\""];
+
+          self.TOSTextView.text = TOS;
+
+          [self addShadowAndClip];
+          [self animateIn];
         }];
-        
-//        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:TOS];
-//        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-//        [paragraphStyle setLineSpacing:2];
-//        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [TOS length])];
-        
-        self.TOSTextView = [[UITextView alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 320)];
+
+        //        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:TOS];
+        //        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        //        [paragraphStyle setLineSpacing:2];
+        //        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [TOS length])];
+
+        self.TOSTextView = [[UITextView alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 320)];
         self.TOSTextView.textColor = [UIColor frescoMediumTextColor];
         self.TOSTextView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
-//        self.TOSTextView.attributedText = attributedString;
+        //        self.TOSTextView.attributedText = attributedString;
         self.TOSTextView.textAlignment = NSTextAlignmentLeft;
         self.TOSTextView.backgroundColor = [UIColor clearColor];
         self.TOSTextView.editable = NO;
         self.TOSTextView.delegate = self;
         [self addSubview:self.TOSTextView];
-        
+
         self.expandTOSButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.expandTOSButton.tintColor = [UIColor blackColor];
-        self.expandTOSButton.frame = CGRectMake(self.frame.size.width -24 -12, 10, 24, 24);
+        self.expandTOSButton.frame = CGRectMake(self.frame.size.width - 24 - 12, 10, 24, 24);
         [self.expandTOSButton setImage:[UIImage imageNamed:@"arrow-expand"] forState:UIControlStateNormal];
         [self.expandTOSButton addTarget:self action:@selector(expandTOS) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.expandTOSButton];
-        
+
         /* Action Shadow */
-        self.actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height -43.5, ALERT_WIDTH, 0.5)];
+        self.actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 43.5, ALERT_WIDTH, 0.5)];
         self.actionLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:self.actionLine];
-        
+
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 44, self.frame.size.width, 0.5)];
         self.topLine.alpha = 0;
         self.topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:self.topLine];
-        
+
         /* Left Action */
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(logoutTapped) forControlEvents:UIControlEventTouchUpInside];
@@ -994,7 +975,7 @@
         [self.actionButton setTitle:@"LOG OUT" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
-        
+
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 0, 44);
@@ -1005,63 +986,62 @@
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 16, self.cancelButton.frame.origin.y, 49, 44)];
         [self addSubview:self.cancelButton];
-        
-        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 408/2, ALERT_WIDTH, 408);
-        self.actionLine.frame = CGRectMake(0, self.frame.size.height -43.5, ALERT_WIDTH, 0.5);
-        
-//        [self addShadowAndClip];
+
+        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 408 / 2, ALERT_WIDTH, 408);
+        self.actionLine.frame = CGRectMake(0, self.frame.size.height - 43.5, ALERT_WIDTH, 0.5);
+
+        //        [self addShadowAndClip];
         //[self animateIn];
     }
     return self;
 }
 
--(void)expandTOS {
-    
-//    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
+- (void)expandTOS {
+
+    //    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
     if ((IS_STANDARD_IPHONE_6_PLUS) || (IS_STANDARD_IPHONE_6)) {
         self.titleLabel.text = @"UPDATED TERMS OF SERVICE";
     }
-    
+
     if (self.frame.size.width == ALERT_WIDTH) {
-        self.frame = CGRectMake(16, 20, [UIScreen mainScreen].bounds.size.width -32, [UIScreen mainScreen].bounds.size.height -40);
+        self.frame = CGRectMake(16, 20, [UIScreen mainScreen].bounds.size.width - 32, [UIScreen mainScreen].bounds.size.height - 40);
         [self.expandTOSButton setImage:[UIImage imageNamed:@"arrow-compress"] forState:UIControlStateNormal];
     } else {
-        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 - ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 408/2, ALERT_WIDTH, 408);
+        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 408 / 2, ALERT_WIDTH, 408);
         [self.expandTOSButton setImage:[UIImage imageNamed:@"arrow-expand"] forState:UIControlStateNormal];
         self.titleLabel.text = @"UPDATED TERMS";
     }
-    
-    self.expandTOSButton.frame = CGRectMake(self.frame.size.width -24 -12, 10, 24, 24);
+
+    self.expandTOSButton.frame = CGRectMake(self.frame.size.width - 24 - 12, 10, 24, 24);
     self.titleLabel.frame = CGRectMake(0, 0, self.frame.size.width, 44);
-    self.TOSTextView.frame = CGRectMake((self.frame.size.width - (self.frame.size.width - 32))/2, 44, (self.frame.size.width - 32), self.frame.size.height -88);
-    self.actionButton.frame = CGRectMake(14, self.frame.size.height -44, 54, 44);
-    self.cancelButton.frame = CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width-16, self.actionButton.frame.origin.y, self.cancelButton.frame.size.width, 44);
-    self.actionLine.frame = CGRectMake(0, self.frame.size.height -43.5, self.frame.size.width, 0.5);
+    self.TOSTextView.frame = CGRectMake((self.frame.size.width - (self.frame.size.width - 32)) / 2, 44, (self.frame.size.width - 32), self.frame.size.height - 88);
+    self.actionButton.frame = CGRectMake(14, self.frame.size.height - 44, 54, 44);
+    self.cancelButton.frame = CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 16, self.actionButton.frame.origin.y, self.cancelButton.frame.size.width, 44);
+    self.actionLine.frame = CGRectMake(0, self.frame.size.height - 43.5, self.frame.size.width, 0.5);
     self.topLine.frame = CGRectMake(0, 44, self.frame.size.width, 0.5);
-//    } completion:nil];
+    //    } completion:nil];
 }
 
--(void)acceptTapped {
+- (void)acceptTapped {
     [[FRSAPIClient sharedClient] acceptTermsWithCompletion:^(id responseObject, NSError *error) {
-        
-        if (!error) {
-            [self dismiss];
-        }
-        else {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
-        }
+
+      if (!error) {
+          [self dismiss];
+      } else {
+          FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+          [alert show];
+      }
     }];
 }
 
--(void)logoutTapped {
+- (void)logoutTapped {
     [self.delegate logoutAlertAction];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"logout_notification" object:nil];
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
     [self dismiss];
 }
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.TOSTextView) {
         if (scrollView.contentOffset.y >= 5) {
             self.topLine.alpha = 1;
@@ -1071,21 +1051,21 @@
     }
 }
 
--(instancetype)initNewStuffWithPasswordField:(BOOL)password {
+- (instancetype)initNewStuffWithPasswordField:(BOOL)password {
 
     self = [super init];
-    if (self){
-        
+    if (self) {
+
         BOOL userHasEmail;
         BOOL userHasUsername;
         BOOL userHasPassword = !password;
-        
+
         if ([[[[FRSAPIClient sharedClient] authenticatedUser] username] isEqual:[NSNull null]] || [[[[FRSAPIClient sharedClient] authenticatedUser] username] isEqualToString:@""] || ![[[FRSAPIClient sharedClient] authenticatedUser] username]) {
             userHasUsername = NO;
         } else {
             userHasUsername = YES;
         }
-        
+
         if ([[[[FRSAPIClient sharedClient] authenticatedUser] email] isEqual:[NSNull null]] || [[[[FRSAPIClient sharedClient] authenticatedUser] email] isEqualToString:@""] || ![[[FRSAPIClient sharedClient] authenticatedUser] email]) {
             userHasEmail = NO;
         } else {
@@ -1095,17 +1075,17 @@
         self.height = 0;
         self.frame = CGRectMake(0, 0, ALERT_WIDTH, 0);
         [self configureDarkOverlay];
-        
+
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.titleLabel.text = @"NEW STUFF!";
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
-        
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 0)];
+
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
         self.messageLabel.alpha = .54;
         self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
@@ -1116,25 +1096,25 @@
         NSRange range3 = [self.messageLabel.text rangeOfString:@"comment"];
         NSRange range4 = [self.messageLabel.text rangeOfString:@"follow"];
         NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:self.messageLabel.text];
-        [attributedText setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]} range:range1];
-        [attributedText setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]} range:range2];
-        [attributedText setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]} range:range3];
-        [attributedText setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightMedium]} range:range4];
+        [attributedText setAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightMedium] } range:range1];
+        [attributedText setAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightMedium] } range:range2];
+        [attributedText setAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightMedium] } range:range3];
+        [attributedText setAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightMedium] } range:range4];
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:attributedText.string];
-        NSMutableParagraphStyle   *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:2];
         [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [attributedText.string length])];
-        
+
         self.messageLabel.attributedText = attributedText;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
         [self.messageLabel sizeToFit];
         self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
         [self addSubview:self.messageLabel];
-        
+
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 336, ALERT_WIDTH, 0.5)];
         line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:line];
-        
+
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(logoutTapped) forControlEvents:UIControlEventTouchUpInside];
         self.actionButton.frame = CGRectMake(16, 337, 54, 44);
@@ -1142,7 +1122,7 @@
         [self.actionButton setTitle:@"LOG OUT" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
-        
+
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 37, 44);
         [self.cancelButton addTarget:self action:@selector(updateUserInfo) forControlEvents:UIControlEventTouchUpInside];
@@ -1153,19 +1133,19 @@
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
         [self addSubview:self.cancelButton];
-        
+
         UIView *usernameContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 248, self.frame.size.width, 44)];
         [self addSubview:usernameContainer];
         UIView *usernameTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
         usernameTopLine.backgroundColor = [UIColor frescoShadowColor];
         [usernameContainer addSubview:usernameTopLine];
-        UIView *emailContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44)];
+        UIView *emailContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 44 * 3, self.frame.size.width, 44)];
         [self addSubview:emailContainer];
         UIView *emailTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
         emailTopLine.backgroundColor = [UIColor frescoShadowColor];
         [emailContainer addSubview:emailTopLine];
-        
-        self.usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+
+        self.usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16 + 16), 20)];
         [self.usernameTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         self.usernameTextField.tag = 1;
         self.usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -1176,20 +1156,20 @@
         self.usernameTextField.textColor = [UIColor frescoDarkTextColor];
         self.usernameTextField.autocorrectionType = UITextAutocorrectionTypeNo;
         [usernameContainer addSubview:self.usernameTextField];
-        
+
         self.usernameCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
-        self.usernameCheckIV.frame = CGRectMake(usernameContainer.frame.size.width -24 -6, 10, 24, 24);
+        self.usernameCheckIV.frame = CGRectMake(usernameContainer.frame.size.width - 24 - 6, 10, 24, 24);
         self.usernameCheckIV.alpha = 0;
         [usernameContainer addSubview:self.usernameCheckIV];
-        
-        self.usernameTakenLabel = [[UILabel alloc] initWithFrame:CGRectMake(-44 -6, 5, 44, 17)];
+
+        self.usernameTakenLabel = [[UILabel alloc] initWithFrame:CGRectMake(-44 - 6, 5, 44, 17)];
         self.usernameTakenLabel.text = @"TAKEN";
         self.usernameTakenLabel.alpha = 0;
         self.usernameTakenLabel.textColor = [UIColor frescoRedHeartColor];
         self.usernameTakenLabel.font = [UIFont notaBoldWithSize:15];
         [self.usernameCheckIV addSubview:self.usernameTakenLabel];
-        
-        self.emailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+
+        self.emailTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16 + 16), 20)];
         [self.emailTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
         self.emailTextField.tag = 2;
         self.emailTextField.placeholder = @"Email address";
@@ -1200,19 +1180,19 @@
         self.emailTextField.autocorrectionType = UITextAutocorrectionTypeNo;
         self.emailTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         [emailContainer addSubview:self.emailTextField];
-        
+
         self.emailCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-red"]];
-        self.emailCheckIV.frame = CGRectMake(emailContainer.frame.size.width -24 -6, 10, 24, 24);
+        self.emailCheckIV.frame = CGRectMake(emailContainer.frame.size.width - 24 - 6, 10, 24, 24);
         self.emailCheckIV.alpha = 0;
         [emailContainer addSubview:self.emailCheckIV];
-        
+
         if (userHasEmail) {
             emailContainer.alpha = 0;
             self.height -= 44;
             self.emailTextField = nil;
             [self.emailTextField removeFromSuperview];
         }
-        
+
         if (userHasUsername) {
             usernameContainer.alpha = 0;
             self.height -= 44;
@@ -1220,7 +1200,7 @@
             [self.usernameTextField removeFromSuperview];
         }
 
-        UIView *passwordContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-44, self.frame.size.width, 44)];
+        UIView *passwordContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 44, self.frame.size.width, 44)];
         if (!userHasPassword) {
             self.migrationAlertShouldShowPassword = YES;
             self.height += 44;
@@ -1229,8 +1209,8 @@
             UIView *passwordTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
             passwordTopLine.backgroundColor = [UIColor frescoShadowColor];
             [passwordContainer addSubview:passwordTopLine];
-            
-            self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16+16), 20)];
+
+            self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16 + 16), 20)];
             [self.passwordTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             self.passwordTextField.tag = 3;
             if ([[FRSAPIClient sharedClient] socialUsed]) {
@@ -1245,7 +1225,7 @@
             self.passwordTextField.textColor = [UIColor frescoDarkTextColor];
             self.passwordTextField.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
             [passwordContainer addSubview:self.passwordTextField];
-            
+
             if (emailContainer.alpha == 0) {
                 passwordContainer.transform = CGAffineTransformMakeTranslation(0, -44);
             }
@@ -1253,123 +1233,129 @@
 
         self.dismissKeyboardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
         [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.dismissKeyboardTap];
-        
-        
+
         self.height += 380;
-        
-        NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width  - ALERT_WIDTH)/2;
-        NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height)/2;
-        
+
+        NSInteger xOrigin = ([UIScreen mainScreen].bounds.size.width - ALERT_WIDTH) / 2;
+        NSInteger yOrigin = ([UIScreen mainScreen].bounds.size.height - self.height) / 2;
+
         self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, self.height - 44, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
         self.actionButton.frame = CGRectMake(self.actionButton.frame.origin.x, self.height - 44, self.actionButton.frame.size.width, self.actionButton.frame.size.height);
         line.frame = CGRectMake(line.frame.origin.x, self.height - 44, line.frame.size.width, line.frame.size.height);
         self.frame = CGRectMake(xOrigin, yOrigin, ALERT_WIDTH, self.height);
-        
+
         [self addShadowAndClip];
-        
+
         [self animateIn];
 
         //Only updating username
         if (userHasPassword && userHasEmail && !userHasUsername) {
-            usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
-            
+            usernameContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 2, self.frame.size.width, 44);
+
             return self;
         }
-        
+
         //Only updaing email
         if (userHasPassword && !userHasEmail && userHasUsername) {
-            emailContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            emailContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 2, self.frame.size.width, 44);
             return self;
         }
-        
+
         //Only updating password
         if (!userHasPassword && userHasEmail && userHasUsername) {
-            passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            passwordContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 2, self.frame.size.width, 44);
             return self;
         }
-        
+
         //Updating password and username
         if (!userHasPassword && userHasEmail && !userHasUsername) {
-            usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
-            passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            usernameContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 3, self.frame.size.width, 44);
+            passwordContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 2, self.frame.size.width, 44);
             return self;
         }
-        
+
         //Updating password and email
         if (!userHasPassword && !userHasEmail && userHasUsername) {
-            emailContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
-            passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            emailContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 3, self.frame.size.width, 44);
+            passwordContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 2, self.frame.size.width, 44);
             return self;
         }
 
         //Updating username and email
         if (userHasPassword && !userHasEmail && !userHasUsername) {
-            usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
-            emailContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            usernameContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 3, self.frame.size.width, 44);
+            emailContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 2, self.frame.size.width, 44);
             return self;
         }
-        
+
         //Updaing username, email, and password
         if (!userHasPassword && !userHasEmail && !userHasUsername) {
-            usernameContainer.frame = CGRectMake(0, self.frame.size.height -44*4, self.frame.size.width, 44);
-            emailContainer.frame = CGRectMake(0, self.frame.size.height -44*3, self.frame.size.width, 44);
-            passwordContainer.frame = CGRectMake(0, self.frame.size.height -44*2, self.frame.size.width, 44);
+            usernameContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 4, self.frame.size.width, 44);
+            emailContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 3, self.frame.size.width, 44);
+            passwordContainer.frame = CGRectMake(0, self.frame.size.height - 44 * 2, self.frame.size.width, 44);
             return self;
         }
     }
     return self;
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
 
--(void)textFieldDidBeginEditing:(UITextField *)textField {
-    
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        if (self.migrationAlertShouldShowPassword) {
-            self.transform = CGAffineTransformMakeTranslation(0, -100);
-        } else {
-            self.transform = CGAffineTransformMakeTranslation(0, -80);
-        }
-        
-    } completion:nil];
-    
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+
+                       if (self.migrationAlertShouldShowPassword) {
+                           self.transform = CGAffineTransformMakeTranslation(0, -100);
+                       } else {
+                           self.transform = CGAffineTransformMakeTranslation(0, -80);
+                       }
+
+                     }
+                     completion:nil];
+
     if (self.emailTextField.isEditing) {
         self.emailCheckIV.alpha = 0;
     }
-    
+
     if (textField.tag == 1) {
         [self startUsernameTimer];
-        if ([textField.text isEqualToString:@""]){
+        if ([textField.text isEqualToString:@""]) {
             textField.text = @"@";
         }
     }
 }
 
--(void)textFieldDidEndEditing:(UITextField *)textField   {
-    
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+
     if (textField == self.usernameTextField) {
-        
+
         if ([textField.text isEqualToString:@"@"]) {
             textField.text = @"";
         }
     }
-    
+
     if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
         [self checkEmail];
     }
-    
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        
-        self.transform = CGAffineTransformMakeTranslation(0, 0);
-        
-    } completion:nil];
+
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+
+                       self.transform = CGAffineTransformMakeTranslation(0, 0);
+
+                     }
+                     completion:nil];
 }
 
--(void)textFieldDidChange:(UITextField *)textField {
+- (void)textFieldDidChange:(UITextField *)textField {
     if ((textField == self.emailTextField) && ([self isValidEmail:self.emailTextField.text])) {
         [self checkEmail];
     }
-    
+
     if (textField == self.usernameTextField) {
         if ([textField.text isEqualToString:@"@"]) {
             [self checkCreateAccountButtonState];
@@ -1377,154 +1363,150 @@
     }
 }
 
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+
     if (self.usernameTextField.isEditing) {
         [self startUsernameTimer];
-        
-        if ([[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""]){
+
+        if ([[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""]) {
             [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:NO success:NO];
         }
     }
-    
+
     [self checkCreateAccountButtonState];
-    
-    
+
     if (textField.tag == 1) {
-        
+
         if ([string containsString:@" "]) {
             return NO;
         }
-        
+
         if (textField.text.length == 1 && [string isEqualToString:@""]) {
             return NO;
         }
-        
+
         NSUInteger newLength = [textField.text length] + [string length] - range.length;
         return newLength <= 20;
     }
-    
+
     return YES;
 }
 
--(void)tap {
+- (void)tap {
     [self resignFirstResponder];
     [self endEditing:YES];
 }
 
-
--(void)updateUserInfo {
+- (void)updateUserInfo {
 
     [self checkEmail];
-    
+
     [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.dismissKeyboardTap];
-    
+
     NSMutableDictionary *digestion = [[NSMutableDictionary alloc] init];
-    
+
     NSString *username = [self.usernameTextField.text stringByReplacingOccurrencesOfString:@"@" withString:@""];
     NSString *email = self.emailTextField.text;
     NSString *password = self.passwordTextField.text;
-    
-    
+
     if (email != nil) {
         [digestion setObject:email forKey:@"email"];
     }
-    
+
     if (username != nil) {
         [digestion setObject:username forKey:@"username"];
     }
-    
-   // if ([[FRSAPIClient sharedClient] passwordUsed]) {
-   //     [digestion setObject:[[FRSAPIClient sharedClient] passwordUsed] forKey:@"verify_password"];
-   // } else if (password){
-      //  [digestion setObject:password forKey:@"verify_password"];
+
+    // if ([[FRSAPIClient sharedClient] passwordUsed]) {
+    //     [digestion setObject:[[FRSAPIClient sharedClient] passwordUsed] forKey:@"verify_password"];
+    // } else if (password){
+    //  [digestion setObject:password forKey:@"verify_password"];
     //}
-    
+
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-    
+
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]) {
         [digestion setObject:password forKey:@"password"];
     }
-    
+
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    
+
     self.cancelButton.alpha = 0;
-    spinner.frame = CGRectMake(self.frame.size.width -20-10, self.frame.size.height -20-10, 20, 20);
+    spinner.frame = CGRectMake(self.frame.size.width - 20 - 10, self.frame.size.height - 20 - 10, 20, 20);
     spinner.tintColor = [UIColor frescoOrangeColor];
     [spinner setPullProgress:90];
     [spinner startAnimating];
     [self addSubview:spinner];
-    
-    [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion completion:^(id responseObject, NSError *error) {
-        FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate saveUserFields:responseObject];
-        
-        if (responseObject && !error) {
-            [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
-            [[NSUserDefaults standardUserDefaults] setBool:true forKey:userHasFinishedMigrating];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
 
-        spinner.alpha = 0;
-        [spinner stopLoading];
-        [spinner removeFromSuperview];
-        self.cancelButton.alpha = 1;
-        
-        
-        if (error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [spinner stopLoading];
-            [spinner removeFromSuperview];
-            [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        });
+    [[FRSAPIClient sharedClient] updateLegacyUserWithDigestion:digestion
+                                                    completion:^(id responseObject, NSError *error) {
+                                                      FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                                                      [appDelegate saveUserFields:responseObject];
 
-        if (error) {
-            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
-            [alert show];
-            
-            return;
-        }
-        
-        if (responseObject) {
+                                                      if (responseObject && !error) {
+                                                          [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
+                                                          [[NSUserDefaults standardUserDefaults] setBool:true forKey:userHasFinishedMigrating];
+                                                          [[NSUserDefaults standardUserDefaults] synchronize];
+                                                      }
 
-            if ([self.usernameTextField isEqual:[NSNull null]] || ![self.usernameTextField.text isEqualToString:@""]) {
-                [[FRSAPIClient sharedClient] authenticatedUser].username = [self.usernameTextField.text substringFromIndex:1];
-            }
-            
-            if ([self.emailTextField isEqual:[NSNull null]] || ![self.emailTextField.text isEqualToString:@""]) {
-                [[FRSAPIClient sharedClient] authenticatedUser].email = self.emailTextField.text;
-            }
-        }
-        }
-        
-        [self dismiss];
-    }];
+                                                      spinner.alpha = 0;
+                                                      [spinner stopLoading];
+                                                      [spinner removeFromSuperview];
+                                                      self.cancelButton.alpha = 1;
+
+                                                      if (error) {
+                                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                                            [spinner stopLoading];
+                                                            [spinner removeFromSuperview];
+                                                            [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+                                                          });
+
+                                                          if (error) {
+                                                              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"Something’s wrong on our end. Sorry about that!" actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                                                              [alert show];
+
+                                                              return;
+                                                          }
+
+                                                          if (responseObject) {
+
+                                                              if ([self.usernameTextField isEqual:[NSNull null]] || ![self.usernameTextField.text isEqualToString:@""]) {
+                                                                  [[FRSAPIClient sharedClient] authenticatedUser].username = [self.usernameTextField.text substringFromIndex:1];
+                                                              }
+
+                                                              if ([self.emailTextField isEqual:[NSNull null]] || ![self.emailTextField.text isEqualToString:@""]) {
+                                                                  [[FRSAPIClient sharedClient] authenticatedUser].email = self.emailTextField.text;
+                                                              }
+                                                          }
+                                                      }
+
+                                                      [self dismiss];
+                                                    }];
 }
 
+- (void)checkEmail {
 
--(void)checkEmail {
-    
-    
     //Prepopulated from login
     if (!self.emailTextField.userInteractionEnabled) {
         return;
     }
-    
-    [[FRSAPIClient sharedClient] checkEmail:self.emailTextField.text completion:^(id responseObject, NSError *error) {
-        
-        if (!error) {
-            self.emailTaken = YES;
-            [self shouldShowEmailError:YES];
-        } else {
-            self.emailTaken = NO;
-            [self shouldShowEmailError:NO];
-        }
-        
-        [self checkCreateAccountButtonState];
-    }];
+
+    [[FRSAPIClient sharedClient] checkEmail:self.emailTextField.text
+                                 completion:^(id responseObject, NSError *error) {
+
+                                   if (!error) {
+                                       self.emailTaken = YES;
+                                       [self shouldShowEmailError:YES];
+                                   } else {
+                                       self.emailTaken = NO;
+                                       [self shouldShowEmailError:NO];
+                                   }
+
+                                   [self checkCreateAccountButtonState];
+                                 }];
 }
 
--(void)shouldShowEmailError:(BOOL)error {
+- (void)shouldShowEmailError:(BOOL)error {
     if (error) {
         self.emailCheckIV.alpha = 1;
     } else {
@@ -1532,82 +1514,80 @@
     }
 }
 
--(void)startUsernameTimer {
+- (void)startUsernameTimer {
     if (!self.usernameTimer) {
         self.usernameTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(usernameTimerFired) userInfo:nil repeats:YES];
     }
 }
 
-
--(void)stopUsernameTimer {
+- (void)stopUsernameTimer {
     if ([self.usernameTimer isValid]) {
         [self.usernameTimer invalidate];
     }
     self.usernameTimer = nil;
 }
 
+- (void)usernameTimerFired {
 
--(void)usernameTimerFired {
-    
     if ([self.usernameTextField.text isEqualToString:@""]) {
         self.usernameCheckIV.alpha = 0;
         self.usernameTakenLabel.alpha = 0;
         [self stopUsernameTimer];
         return;
     }
-    
+
     // Check for emoji and error
-    if ([self stringContainsEmoji:[self.usernameTextField.text substringFromIndex:1]]){
+    if ([self stringContainsEmoji:[self.usernameTextField.text substringFromIndex:1]]) {
         [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
         return;
     }
-    
+
     if (self.usernameTextField.isEditing && (![self stringContainsEmoji:[self.usernameTextField.text substringFromIndex:1]])) {
-        
+
         if ((![[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""])) {
-            
-            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTextField.text substringFromIndex:1] completion:^(id responseObject, NSError *error) {
-                
-                //Return if no internet
-                if (error.code == -1009) {
-                    
-                    return;
-                }
-                
-                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                NSInteger responseCode = response.statusCode;
-                
-                if (responseCode == 404) { //
-                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
-                    self.usernameTaken = NO;
-                    [self stopUsernameTimer];
-                    [self checkCreateAccountButtonState];
-                    return;
-                } else {
-                    [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
-                    self.usernameTaken = YES;
-                    [self stopUsernameTimer];
-                    [self checkCreateAccountButtonState];
-                }
-            }];
+
+            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTextField.text substringFromIndex:1]
+                                            completion:^(id responseObject, NSError *error) {
+
+                                              //Return if no internet
+                                              if (error.code == -1009) {
+
+                                                  return;
+                                              }
+
+                                              NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                              NSInteger responseCode = response.statusCode;
+
+                                              if (responseCode == 404) { //
+                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
+                                                  self.usernameTaken = NO;
+                                                  [self stopUsernameTimer];
+                                                  [self checkCreateAccountButtonState];
+                                                  return;
+                                              } else {
+                                                  [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:NO];
+                                                  self.usernameTaken = YES;
+                                                  [self stopUsernameTimer];
+                                                  [self checkCreateAccountButtonState];
+                                              }
+                                            }];
         }
     }
 }
 
+- (void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
 
--(void)animateUsernameCheckImageView:(UIImageView *)imageView animateIn:(BOOL)animateIn success:(BOOL)success {
-    
-    if(success) {
+    if (success) {
         self.usernameCheckIV.image = [UIImage imageNamed:@""];
         self.usernameTakenLabel.alpha = 0;
     } else {
         self.usernameCheckIV.image = [UIImage imageNamed:@"check-red"];
         self.usernameTakenLabel.alpha = 1;
     }
-    
+
     if (animateIn) {
         if (self.usernameCheckIV.alpha == 0) {
-            
+
             self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
             self.usernameCheckIV.alpha = 0;
             self.usernameCheckIV.alpha = 1;
@@ -1615,62 +1595,63 @@
             self.usernameCheckIV.transform = CGAffineTransformMakeScale(1, 1);
         }
     } else {
-        
+
         self.usernameCheckIV.transform = CGAffineTransformMakeScale(1.1, 1.1);
         self.usernameCheckIV.transform = CGAffineTransformMakeScale(0.001, 0.001);
         self.usernameCheckIV.alpha = 0;
     }
 }
 
+- (BOOL)stringContainsEmoji:(NSString *)string {
 
--(BOOL)stringContainsEmoji:(NSString *)string {
-    
     if ([string isEqualToString:@""]) {
         return NO;
     }
-    
+
     __block BOOL returnValue = NO;
-    [string enumerateSubstringsInRange:NSMakeRange(0, [string length]) options:NSStringEnumerationByComposedCharacterSequences usingBlock:
-     ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-         
-         const unichar hs = [substring characterAtIndex:0];
-         // surrogate pair
-         if (0xd800 <= hs && hs <= 0xdbff) {
-             if (substring.length > 1) {
-                 const unichar ls = [substring characterAtIndex:1];
-                 const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
-                 if (0x1d000 <= uc && uc <= 0x1f77f) {
-                     returnValue = YES;
-                 }
-             }
-         } else if (substring.length > 1) {
-             const unichar ls = [substring characterAtIndex:1];
-             if (ls == 0x20e3) {
-                 returnValue = YES;
-             }
-             
-         } else {
-             // non surrogate
-             if (0x2100 <= hs && hs <= 0x27ff) {
-                 returnValue = YES;
-             } else if (0x2B05 <= hs && hs <= 0x2b07) {
-                 returnValue = YES;
-             } else if (0x2934 <= hs && hs <= 0x2935) {
-                 returnValue = YES;
-             } else if (0x3297 <= hs && hs <= 0x3299) {
-                 returnValue = YES;
-             } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
-                 returnValue = YES;
-             }
-         }
-     }];
-    
+    [string enumerateSubstringsInRange:NSMakeRange(0, [string length])
+                               options:NSStringEnumerationByComposedCharacterSequences
+                            usingBlock:
+                                ^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+
+                                  const unichar hs = [substring characterAtIndex:0];
+                                  // surrogate pair
+                                  if (0xd800 <= hs && hs <= 0xdbff) {
+                                      if (substring.length > 1) {
+                                          const unichar ls = [substring characterAtIndex:1];
+                                          const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+                                          if (0x1d000 <= uc && uc <= 0x1f77f) {
+                                              returnValue = YES;
+                                          }
+                                      }
+                                  } else if (substring.length > 1) {
+                                      const unichar ls = [substring characterAtIndex:1];
+                                      if (ls == 0x20e3) {
+                                          returnValue = YES;
+                                      }
+
+                                  } else {
+                                      // non surrogate
+                                      if (0x2100 <= hs && hs <= 0x27ff) {
+                                          returnValue = YES;
+                                      } else if (0x2B05 <= hs && hs <= 0x2b07) {
+                                          returnValue = YES;
+                                      } else if (0x2934 <= hs && hs <= 0x2935) {
+                                          returnValue = YES;
+                                      } else if (0x3297 <= hs && hs <= 0x3299) {
+                                          returnValue = YES;
+                                      } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
+                                          returnValue = YES;
+                                      }
+                                  }
+                                }];
+
     return returnValue;
 }
 
--(void)checkCreateAccountButtonState {
+- (void)checkCreateAccountButtonState {
     UIControlState controlState;
-    
+
     //Only updating username
     if (!self.passwordTextField && !self.emailTextField && self.usernameTextField) {
         if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken)) {
@@ -1680,7 +1661,7 @@
         }
         [self toggleCreateAccountButtonTitleColorToState:controlState];
     }
-    
+
     //Only updaing email
     if (!self.passwordTextField && self.emailTextField && !self.usernameTextField) {
         if ([self isValidEmail:self.emailTextField.text] && (!self.emailTaken)) {
@@ -1690,7 +1671,7 @@
         }
         [self toggleCreateAccountButtonTitleColorToState:controlState];
     }
-    
+
     //Only updating password
     if (self.passwordTextField && !self.emailTextField && !self.usernameTextField) {
         if ([self.passwordTextField.text length] >= 6) {
@@ -1700,7 +1681,7 @@
         }
         [self toggleCreateAccountButtonTitleColorToState:controlState];
     }
-    
+
     //Updating password and username
     if (self.passwordTextField && !self.emailTextField && self.usernameTextField) {
         if ([self.passwordTextField.text length] >= 6 && [self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken)) {
@@ -1710,7 +1691,7 @@
         }
         [self toggleCreateAccountButtonTitleColorToState:controlState];
     }
-    
+
     //Updating password and email
     if (self.passwordTextField && self.emailTextField && !self.usernameTextField) {
         if ([self.passwordTextField.text length] >= 6 && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken)) {
@@ -1720,7 +1701,7 @@
         }
         [self toggleCreateAccountButtonTitleColorToState:controlState];
     }
-    
+
     //Updating username and email
     if (!self.passwordTextField && self.emailTextField && self.usernameTextField) {
         if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken) && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken)) {
@@ -1730,7 +1711,7 @@
         }
         [self toggleCreateAccountButtonTitleColorToState:controlState];
     }
-    
+
     //Updaing username, email, and password
     if (self.passwordTextField && self.emailTextField && self.usernameTextField) {
         if ([self isValidUsername:[self.usernameTextField.text substringFromIndex:1]] && (!self.usernameTaken) && [self isValidEmail:self.emailTextField.text] && (!self.emailTaken) && [self.passwordTextField.text length] >= 6) {
@@ -1742,22 +1723,22 @@
     }
 }
 
--(BOOL)isValidUsername:(NSString *)username {
+- (BOOL)isValidUsername:(NSString *)username {
     NSCharacterSet *allowedSet = [NSCharacterSet characterSetWithCharactersInString:validUsernameChars];
     NSCharacterSet *disallowedSet = [allowedSet invertedSet];
     return ([username rangeOfCharacterFromSet:disallowedSet].location == NSNotFound);
 }
 
--(BOOL)isValidEmail:(NSString *)emailString {
-    
-    if([emailString length] == 0) {
+- (BOOL)isValidEmail:(NSString *)emailString {
+
+    if ([emailString length] == 0) {
         return NO;
     }
-    
+
     NSString *regExPattern = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     NSRegularExpression *regEx = [[NSRegularExpression alloc] initWithPattern:regExPattern options:NSRegularExpressionCaseInsensitive error:nil];
     NSUInteger regExMatches = [regEx numberOfMatchesInString:emailString options:0 range:NSMakeRange(0, [emailString length])];
-    
+
     if (regExMatches == 0) {
         return NO;
     } else {
@@ -1765,8 +1746,8 @@
     }
 }
 
--(void)toggleCreateAccountButtonTitleColorToState:(UIControlState )controlState {
-    if (controlState == UIControlStateNormal){
+- (void)toggleCreateAccountButtonTitleColorToState:(UIControlState)controlState {
+    if (controlState == UIControlStateNormal) {
         [self.cancelButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
         self.cancelButton.enabled = NO;
     } else {
@@ -1774,26 +1755,23 @@
         [self.cancelButton setTitleColor:[[UIColor frescoBlueColor] colorWithAlphaComponent:0.7] forState:UIControlStateHighlighted];
         self.cancelButton.enabled = YES;
     }
-    
 }
-
-
 
 #pragma mark - Moderation
 
--(instancetype)initUserReportWithUsername:(NSString *)username delegate:(id)delegate {
+- (instancetype)initUserReportWithUsername:(NSString *)username delegate:(id)delegate {
     self = [super init];
     delegate = self.delegate;
 
     if (self) {
-        
-        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 -ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 356/2, ALERT_WIDTH, 356);
-        
+
+        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 356 / 2, ALERT_WIDTH, 356);
+
         [self configureDarkOverlay];
-        
+
         /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
@@ -1801,45 +1779,44 @@
         self.titleLabel.text = [NSString stringWithFormat:@"REPORT %@", [username uppercaseString]];
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
-        
+
         /* Body Label */
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 0)];
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
         self.messageLabel.alpha = .54;
         self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.messageLabel.numberOfLines = 0;
-        
+
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"What is this user doing?"];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:2];
         [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [@"What is this user doing?" length])];
-        
-        self.messageLabel.attributedText = attributedString ;
+
+        self.messageLabel.attributedText = attributedString;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
         [self.messageLabel sizeToFit];
         self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
         [self addSubview:self.messageLabel];
-        
+
         /* Shadows */
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
         line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:line];
-        
-        UIView *actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height -44, ALERT_WIDTH, 0.5)];
+
+        UIView *actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 44, ALERT_WIDTH, 0.5)];
         actionLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:actionLine];
-        
-        
+
         /* Left Action */
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
-        self.actionButton.frame = CGRectMake(16, self.frame.size.height -44, 121, 44);
+        self.actionButton.frame = CGRectMake(16, self.frame.size.height - 44, 121, 44);
         self.actionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
         [self.actionButton setTitle:@"CANCEL" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
-        
+
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
@@ -1851,9 +1828,9 @@
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
         [self addSubview:self.cancelButton];
-        
-        self.moderationIVOne   = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
-        self.moderationIVTwo   = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+
+        self.moderationIVOne = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+        self.moderationIVTwo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
         self.moderationIVThree = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
 
         [self createSelectableButtonWithTitle:@"Being abusive" imageView:self.moderationIVOne yPos:76 action:@selector(didTapOptionOne)];
@@ -1861,25 +1838,25 @@
         [self createSelectableButtonWithTitle:@"Posting stolen content" imageView:self.moderationIVThree yPos:164 action:@selector(didTapOptionThree)];
 
         [self addTextView];
-        
+
         [self addShadowAndClip];
         [self animateIn];
     }
     return self;
 }
 
--(instancetype)initGalleryReportDelegate:(id)delegate {
+- (instancetype)initGalleryReportDelegate:(id)delegate {
     self = [super init];
-    
+
     if (self) {
-        
-        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2 -ALERT_WIDTH/2, [UIScreen mainScreen].bounds.size.height/2 - 356/2, ALERT_WIDTH, 400);
-        
+
+        self.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - ALERT_WIDTH / 2, [UIScreen mainScreen].bounds.size.height / 2 - 356 / 2, ALERT_WIDTH, 400);
+
         [self configureDarkOverlay];
-        
+
         /* Alert Box */
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
-        
+
         /* Title Label */
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_WIDTH, 44)];
         [self.titleLabel setFont:[UIFont notaBoldWithSize:17]];
@@ -1887,45 +1864,44 @@
         self.titleLabel.text = @"REPORT GALLERY";
         self.titleLabel.alpha = .87;
         [self addSubview:self.titleLabel];
-        
+
         /* Body Label */
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH)/2, 44, MESSAGE_WIDTH, 0)];
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - MESSAGE_WIDTH) / 2, 44, MESSAGE_WIDTH, 0)];
         self.messageLabel.alpha = .54;
         self.messageLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
         self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.messageLabel.numberOfLines = 0;
-        
+
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"What’s wrong with this gallery?"];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineSpacing:2];
         [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [@"What’s wrong with this gallery?" length])];
-        
-        self.messageLabel.attributedText = attributedString ;
+
+        self.messageLabel.attributedText = attributedString;
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
         [self.messageLabel sizeToFit];
         self.messageLabel.frame = CGRectMake(self.messageLabel.frame.origin.x, self.messageLabel.frame.origin.y, MESSAGE_WIDTH, self.messageLabel.frame.size.height);
         [self addSubview:self.messageLabel];
-        
+
         /* Shadows */
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, self.messageLabel.frame.origin.y + self.messageLabel.frame.size.height + 14.5, ALERT_WIDTH, 0.5)];
         line.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:line];
-        
-        UIView *actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height -44, ALERT_WIDTH, 0.5)];
+
+        UIView *actionLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - 44, ALERT_WIDTH, 0.5)];
         actionLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:actionLine];
-        
-        
+
         /* Left Action */
         self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
-        self.actionButton.frame = CGRectMake(16, self.frame.size.height -44, 121, 44);
+        self.actionButton.frame = CGRectMake(16, self.frame.size.height - 44, 121, 44);
         self.actionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [self.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
         [self.actionButton setTitle:@"CANCEL" forState:UIControlStateNormal];
         [self.actionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
         [self addSubview:self.actionButton];
-        
+
         /* Right Action */
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.cancelButton.frame = CGRectMake(169, self.actionButton.frame.origin.y, 101, 44);
@@ -1937,9 +1913,9 @@
         [self.cancelButton sizeToFit];
         [self.cancelButton setFrame:CGRectMake(self.frame.size.width - self.cancelButton.frame.size.width - 32, self.cancelButton.frame.origin.y, self.cancelButton.frame.size.width + 32, 44)];
         [self addSubview:self.cancelButton];
-        
-        self.moderationIVOne   = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
-        self.moderationIVTwo   = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+
+        self.moderationIVOne = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
+        self.moderationIVTwo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
         self.moderationIVThree = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
         self.moderationIVFour = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-box-circle-outline"]];
 
@@ -1947,112 +1923,117 @@
         [self createSelectableButtonWithTitle:@"It’s spam" imageView:self.moderationIVTwo yPos:120 action:@selector(didTapOptionTwo)];
         [self createSelectableButtonWithTitle:@"It includes stolen content" imageView:self.moderationIVThree yPos:164 action:@selector(didTapOptionThree)];
         [self createSelectableButtonWithTitle:@"It includes graphic content" imageView:self.moderationIVFour yPos:208 action:@selector(didTapOptionFour)];
-        
+
         [self addTextView];
-        
+
         [self addShadowAndClip];
         [self animateIn];
     }
     return self;
 }
 
+- (void)addTextView {
 
--(void)addTextView {
-    
     int textViewHeight = 93;
     int padding = 44;
-    
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(16, self.frame.size.height -textViewHeight -padding, self.frame.size.width -32, textViewHeight)];
+
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(16, self.frame.size.height - textViewHeight - padding, self.frame.size.width - 32, textViewHeight)];
     self.textView.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.textView.backgroundColor = [UIColor clearColor];
     self.textView.delegate = self;
     self.textView.tintColor = [UIColor frescoBlueColor];
     [self addSubview:self.textView];
-    
+
     self.textViewPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(2, 6, self.frame.size.width - 32, 17)];
     self.textViewPlaceholderLabel.text = @"Please share more details";
     self.textViewPlaceholderLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.textViewPlaceholderLabel.textColor = [UIColor frescoLightTextColor];
     [self.textView addSubview:self.textViewPlaceholderLabel];
-    
+
     self.dismissKeyboardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
     [[UIApplication sharedApplication].keyWindow addGestureRecognizer:self.dismissKeyboardTap];
 }
 
+- (void)createSelectableButtonWithTitle:(NSString *)title imageView:(UIImageView *)imageView yPos:(CGFloat)yPos action:(SEL)action {
 
--(void)createSelectableButtonWithTitle:(NSString *)title imageView:(UIImageView *)imageView yPos:(CGFloat)yPos action:(SEL)action {
-    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.frame = CGRectMake(0, yPos, self.frame.size.width, 44);
     [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:button];
-    
+
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 12, 200, 20)];
     titleLabel.text = title;
     titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     titleLabel.textColor = [UIColor frescoDarkTextColor];
     [button addSubview:titleLabel];
-    
-    imageView.frame = CGRectMake(self.frame.size.width -26-16, 10, 24, 24);
+
+    imageView.frame = CGRectMake(self.frame.size.width - 26 - 16, 10, 24, 24);
     [button addSubview:imageView];
-    
+
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 44, ALERT_WIDTH, 0.5)];
     line.backgroundColor = [UIColor frescoShadowColor];
     [button addSubview:line];
 }
 
--(void)textViewDidBeginEditing:(UITextView *)textView {
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.textViewPlaceholderLabel.alpha = 0;
-        if (IS_IPHONE_6) {
-            self.transform = CGAffineTransformMakeTranslation(0, -150);
-        } else if (IS_IPHONE_5) {
-            self.transform = CGAffineTransformMakeTranslation(0, -200);
-        } else if (IS_IPHONE_6_PLUS) {
-            self.transform = CGAffineTransformMakeTranslation(0, -100);
-        }
-    } completion:nil];
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                       self.textViewPlaceholderLabel.alpha = 0;
+                       if (IS_IPHONE_6) {
+                           self.transform = CGAffineTransformMakeTranslation(0, -150);
+                       } else if (IS_IPHONE_5) {
+                           self.transform = CGAffineTransformMakeTranslation(0, -200);
+                       } else if (IS_IPHONE_6_PLUS) {
+                           self.transform = CGAffineTransformMakeTranslation(0, -100);
+                       }
+                     }
+                     completion:nil];
 }
 
--(void)textViewDidEndEditing:(UITextView *)textView {
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        if ([textView.text isEqualToString:@""]) {
-            self.textViewPlaceholderLabel.alpha = 1;
-        }
-        self.transform = CGAffineTransformMakeTranslation(0, 0);
-    } completion:nil];
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                       if ([textView.text isEqualToString:@""]) {
+                           self.textViewPlaceholderLabel.alpha = 1;
+                       }
+                       self.transform = CGAffineTransformMakeTranslation(0, 0);
+                     }
+                     completion:nil];
 }
 
--(void)didTapOptionOne {
+- (void)didTapOptionOne {
     [self toggleImageView:self.moderationIVOne];
     [self.delegate didPressRadioButtonAtIndex:0];
 }
 
--(void)didTapOptionTwo {
+- (void)didTapOptionTwo {
     [self toggleImageView:self.moderationIVTwo];
     [self.delegate didPressRadioButtonAtIndex:1];
 }
 
--(void)didTapOptionThree {
+- (void)didTapOptionThree {
     [self toggleImageView:self.moderationIVThree];
     [self.delegate didPressRadioButtonAtIndex:2];
 }
 
--(void)didTapOptionFour {
+- (void)didTapOptionFour {
     [self toggleImageView:self.moderationIVFour];
     [self.delegate didPressRadioButtonAtIndex:3];
 }
 
-
--(void)toggleImageView:(UIImageView *)imageView {
+- (void)toggleImageView:(UIImageView *)imageView {
     [self untoggleRadioButtons];
-    
+
     if ([imageView.image isEqual:[UIImage imageNamed:@"check-box-circle-outline"]]) {
         imageView.image = [UIImage imageNamed:@"check-box-circle-filled"];
     } else {
         imageView.image = [UIImage imageNamed:@"check-box-circle-outline"];
     }
-    
+
     if ([self.moderationIVOne.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]] || [self.moderationIVTwo.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]] || [self.moderationIVThree.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]] || [self.moderationIVFour.image isEqual:[UIImage imageNamed:@"check-box-circle-filled"]]) {
         [self.cancelButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
         self.cancelButton.userInteractionEnabled = YES;
@@ -2062,19 +2043,19 @@
     }
 }
 
--(void)untoggleRadioButtons {
+- (void)untoggleRadioButtons {
     self.moderationIVOne.image = [UIImage imageNamed:@"check-box-circle-outline"];
     self.moderationIVTwo.image = [UIImage imageNamed:@"check-box-circle-outline"];
     self.moderationIVThree.image = [UIImage imageNamed:@"check-box-circle-outline"];
     self.moderationIVFour.image = [UIImage imageNamed:@"check-box-circle-outline"];
 }
 
--(void)reportGallery {
+- (void)reportGallery {
     [self dismiss];
     [self.delegate reportGalleryAlertAction];
 }
 
--(void)reportUser {
+- (void)reportUser {
     [self dismiss];
     [self.delegate reportUserAlertAction];
 }

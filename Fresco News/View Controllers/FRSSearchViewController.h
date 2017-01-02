@@ -11,10 +11,9 @@
 #import "FRSScrollingViewController.h"
 #import "FRSNavigationController.h"
 
-@interface FRSSearchViewController : FRSBaseViewController <UITextFieldDelegate>
-{
+@interface FRSSearchViewController : FRSBaseViewController <UITextFieldDelegate> {
     BOOL isInDefault;
-    
+
     NSInteger userIndex;
     NSInteger storyIndex;
     NSInteger galleryIndex;
@@ -26,5 +25,5 @@
 @property (nonatomic, retain) NSArray *galleries;
 @property (nonatomic, retain) NSArray *defaultData;
 @property BOOL shouldUpdateOnReturn;
--(void)search:(NSString *)string;
+- (void)search:(NSString *)string;
 @end

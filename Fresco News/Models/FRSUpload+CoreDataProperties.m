@@ -24,5 +24,4 @@
 @dynamic uploadID;
 @dynamic key;
 
-
 @end

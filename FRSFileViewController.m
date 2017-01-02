@@ -233,14 +233,13 @@ static NSString *imageTile = @"ImageTile";
         
     }
     
-    [FRSTracker track:@"Submission videos in gallery" parameters:@{@"count":@(numberOfVideos)}];
-    [FRSTracker track:@"Submission photos in gallery" parameters:@{@"count":@(numberOfPhotos)}];
+    [FRSTracker track:videosInGallery parameters:@{@"count":@(numberOfVideos)}];
+    [FRSTracker track:photosInGallery parameters:@{@"count":@(numberOfPhotos)}];
     
     self.uploadViewController.content = nil;
     self.uploadViewController.players = nil;
     self.uploadViewController.content = selectedAssets;
     [self.navigationController pushViewController:self.uploadViewController animated:YES];
-    NSLog(@"(FileVC) ASSETS: %@", self.uploadViewController.content);
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
@@ -410,9 +409,7 @@ static NSString *imageTile = @"ImageTile";
 //    [self shouldShowStatusBar:NO animated:YES];
 }
 
--(void)filesLoaded {
-    NSLog(@"permission granted");
-    
+-(void)filesLoaded {    
     if ([fileLoader numberOfAssets] == 0) {
         return;
     }

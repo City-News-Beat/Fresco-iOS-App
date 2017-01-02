@@ -14,16 +14,15 @@
 #import "FRSAlertView.h"
 #import "FRSStoryView.h"
 
-@interface FRSHomeViewController : FRSScrollingViewController <FRSGalleryViewDelegate, FRSStoryViewDelegate, FRSAlertViewDelegate>
-{
+@interface FRSHomeViewController : FRSScrollingViewController <FRSGalleryViewDelegate, FRSStoryViewDelegate, FRSAlertViewDelegate> {
     BOOL delayClear;
     BOOL needsUpdate;
     BOOL hasLoadedOnce;
     BOOL wasAuthenticated;
-    DGElasticPullToRefreshLoadingViewCircle* loadingView;
+    DGElasticPullToRefreshLoadingViewCircle *loadingView;
     NSArray *pulledFromCache;
     NSMutableArray *reloadedFrom;
-    
+
     FRSSplitTableView *tableScroller;
     FRSFollowingController *followingController;
     UITableView *followTable;
@@ -31,8 +30,12 @@
     NSDate *exit;
     NSInteger numberRead;
     NSIndexPath *lastIndexPath;
+
+    CGPoint lastScrollOffset;
+    NSTimeInterval lastOffsetCapture;
+    BOOL isScrollingFast;
 }
 @property BOOL loadNoMore;
--(void)loadData;
--(void)presentTOS;
+- (void)loadData;
+- (void)presentTOS;
 @end

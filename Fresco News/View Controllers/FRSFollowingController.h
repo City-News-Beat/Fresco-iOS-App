@@ -9,11 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 @protocol FRSFollowingControllerDelegate
--(void)storyClicked:(FRSStory *)story;
--(void)galleryClicked:(FRSGallery *)gallery;
+- (void)storyClicked:(FRSStory *)story;
+- (void)galleryClicked:(FRSGallery *)gallery;
 @end
-@interface FRSFollowingController : NSObject <UITableViewDelegate, UITableViewDataSource>
-{
+@interface FRSFollowingController : NSObject <UITableViewDelegate, UITableViewDataSource> {
     DGElasticPullToRefreshLoadingViewCircle *loadingView;
 }
 
@@ -22,5 +21,5 @@
 @property (nonatomic, weak) id<FRSFollowingControllerDelegate> delegate;
 @property (weak, nonatomic) id<UIScrollViewDelegate> scrollDelegate;
 
--(void)reloadData;
+- (void)reloadData;
 @end

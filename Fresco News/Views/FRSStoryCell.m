@@ -15,63 +15,57 @@
 
 @implementation FRSStoryCell
 
-
--(void)clickedImageAtIndex:(NSInteger)imageIndex {
-    
+- (void)clickedImageAtIndex:(NSInteger)imageIndex {
 }
 
--(void)awakeFromNib {
+- (void)awakeFromNib {
     [super awakeFromNib]; // lord have mercy
 }
 
--(void)setSelected:(BOOL)selected animated:(BOOL)animated{
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 }
 
 - (void)configureCell {
     self.backgroundColor = [UIColor frescoBackgroundColorDark];
-//    self.backgroundColor = [UIColor redColor];
+    //    self.backgroundColor = [UIColor redColor];
 
     self.storyView = [[FRSStoryView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 13) story:self.story delegate:self];
-    
+
     if (self.story.caption.length == 0) {
         self.storyView.backgroundColor = [UIColor greenColor];
-//        self.storyView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        //        self.storyView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     }
-    
+
     self.storyView.actionBlock = self.actionBlock;
     [self addSubview:self.storyView];
-    
-    
-    __weak typeof (self) weakSelf = self;
-    
+
+    __weak typeof(self) weakSelf = self;
+
     self.storyView.shareBlock = ^void(NSArray *sharedContent) {
-        weakSelf.shareBlock(sharedContent);
+      weakSelf.shareBlock(sharedContent);
     };
-    
+
     self.storyView.readMoreBlock = ^void(NSArray *sharedContent) {
-        if (weakSelf.readMoreBlock) {
-            weakSelf.readMoreBlock(Nil);
-        }
+      if (weakSelf.readMoreBlock) {
+          weakSelf.readMoreBlock(Nil);
+      }
     };
 }
--(void)play {
-    
+- (void)play {
 }
--(void)pause {
-    
+- (void)pause {
 }
--(void)clearCell{
+- (void)clearCell {
     [self.storyView removeFromSuperview];
 }
 
-
 #pragma mark - DataSource For Action Bar
--(BOOL)shouldHaveActionBar{
+- (BOOL)shouldHaveActionBar {
     return YES;
 }
 
--(BOOL)shouldHaveTextLimit{
+- (BOOL)shouldHaveTextLimit {
     return YES;
 }
 

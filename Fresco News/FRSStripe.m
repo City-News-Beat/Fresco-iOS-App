@@ -7,12 +7,14 @@
 //
 
 #import "FRSStripe.h"
+#import "EndpointManager.h"
 
 @implementation FRSStripe
 
-+(STPCardParams *)creditCardWithNumber:(NSString *)number expiration:(NSArray *)expiration cvc:(NSString *)cvc {
-    [FRSStripe startTest];
-    
++ (STPCardParams *)creditCardWithNumber:(NSString *)number expiration:(NSArray *)expiration cvc:(NSString *)cvc {
+    EndpointManager *manager = [EndpointManager sharedInstance];
+    [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];
+
     STPCardParams *cardParams = [[STPCardParams alloc] init];
     cardParams.number = number;
     cardParams.expMonth = [expiration[0] intValue];
@@ -21,40 +23,35 @@
     return cardParams;
 }
 
++ (STPCardParams *)creditCardWithNumber:(NSString *)number expiration:(NSArray *)expiration cvc:(NSString *)cvc firstName:(NSString *)firstName lastName:(NSString *)lastName {
 
-+(STPCardParams *)creditCardWithNumber:(NSString *)number expiration:(NSArray *)expiration cvc:(NSString *)cvc firstName:(NSString *)firstName lastName:(NSString *)lastName {
-    
     STPCardParams *cardParams = [FRSStripe creditCardWithNumber:number expiration:expiration cvc:cvc];
-    
+
     cardParams.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
     return cardParams;
 }
 
-+(void)createTokenWithCard:(STPCardParams *)params completion:(FRSStripeBlock)completion {
-    [[STPAPIClient sharedClient] createTokenWithCard:params completion:^(STPToken *token, NSError *error) {
-         completion(token, error);
-    }];
++ (void)createTokenWithCard:(STPCardParams *)params completion:(FRSStripeBlock)completion {
+    [[STPAPIClient sharedClient] createTokenWithCard:params
+                                          completion:^(STPToken *token, NSError *error) {
+                                            completion(token, error);
+                                          }];
 }
 
-+(STPBankAccountParams *)bankAccountWithNumber:(NSString *)number routing:(NSString *)routing name:(NSString *)name ssn:(NSString *)last4 type:(FRSBankAccountType)holderType {
++ (STPBankAccountParams *)bankAccountWithNumber:(NSString *)number routing:(NSString *)routing name:(NSString *)name ssn:(NSString *)last4 type:(FRSBankAccountType)holderType {
     STPBankAccountParams *bankParams = [[STPBankAccountParams alloc] init];
     bankParams.accountNumber = number;
     bankParams.routingNumber = routing;
-    
+
     return bankParams;
 }
 
-+(void)createTokenWithBank:(STPBankAccountParams *)params completion:(FRSStripeBlock)completion {
-    
-    [[STPAPIClient sharedClient] createTokenWithBankAccount:params completion:^(STPToken * _Nullable token, NSError * _Nullable error) {
-        completion(token, error);
-    }];
++ (void)createTokenWithBank:(STPBankAccountParams *)params completion:(FRSStripeBlock)completion {
+
+    [[STPAPIClient sharedClient] createTokenWithBankAccount:params
+                                                 completion:^(STPToken *_Nullable token, NSError *_Nullable error) {
+                                                   completion(token, error);
+                                                 }];
 }
 
-+(void)startLive {
-    [Stripe setDefaultPublishableKey:stripeLive];
-}
-+(void)startTest {
-    [Stripe setDefaultPublishableKey:stripeLive];
-}
 @end

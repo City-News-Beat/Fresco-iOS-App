@@ -20,13 +20,13 @@
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:self];
 
     [localContext performBlock:^{
-        [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
+      [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
 
-        if (block) {
-            block(localContext);
-        }
-        
-        [localContext MR_saveWithOptions:MRSaveParentContexts completion:completion];
+      if (block) {
+          block(localContext);
+      }
+
+      [localContext MR_saveWithOptions:MRSaveParentContexts completion:completion];
     }];
 }
 
@@ -37,13 +37,13 @@
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:self];
 
     [localContext performBlockAndWait:^{
-        [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
+      [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
 
-        if (block) {
-            block(localContext);
-        }
-        
-        [localContext MR_saveWithOptions:MRSaveParentContexts|MRSaveSynchronously completion:nil];
+      if (block) {
+          block(localContext);
+      }
+
+      [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:nil];
     }];
 }
 

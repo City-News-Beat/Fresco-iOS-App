@@ -10,19 +10,18 @@
 #import <Photos/Photos.h>
 #import "FRSPlayer.h"
 
-@interface FRSCarouselCell : UICollectionViewCell
-{
+@interface FRSCarouselCell : UICollectionViewCell {
     UIImageView *imageView;
     FRSPlayer *videoView;
     AVPlayerLayer *playerLayer;
 }
 
--(void)loadImage:(PHAsset *)asset;
--(void)loadVideo:(PHAsset *)asset;
+- (void)loadImage:(PHAsset *)asset;
+- (void)loadVideo:(PHAsset *)asset;
 
--(void)pausePlayer;
--(void)playPlayer;
--(void)removePlayers;
+- (void)pausePlayer;
+- (void)playPlayer;
+- (void)removePlayers;
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (strong, nonatomic) NSArray *assets;
@@ -30,6 +29,5 @@
 
 @property BOOL didUnmute;
 @property (strong, nonatomic) PHAsset *asset;
-
 
 @end

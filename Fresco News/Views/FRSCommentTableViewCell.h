@@ -10,10 +10,10 @@
 
 @interface FRSCommentTableViewCell : UITableViewCell
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier comment:(id)comment;
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier comment:(id)comment;
 
--(void)configureCell;
+- (void)configureCell;
 
--(void)clearCell;
+- (void)clearCell;
 
 @end

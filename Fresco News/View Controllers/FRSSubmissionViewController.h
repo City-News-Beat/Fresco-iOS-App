@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FRSSubmissionViewController : UIViewController
-{
-
+@interface FRSSubmissionViewController : UIViewController {
 }
 @end

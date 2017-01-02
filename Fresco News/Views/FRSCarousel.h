@@ -10,9 +10,7 @@
 #import "FRSCarouselCell.h"
 #import <Photos/Photos.h>
 
-@interface FRSCarousel : UICollectionView <UICollectionViewDelegate, UICollectionViewDataSource>
-{
-    
+@interface FRSCarousel : UICollectionView <UICollectionViewDelegate, UICollectionViewDataSource> {
 }
 
 @property (nonatomic, weak) NSArray *media;

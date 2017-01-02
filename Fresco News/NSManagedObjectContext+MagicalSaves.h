@@ -24,7 +24,7 @@ typedef NS_OPTIONS(NSUInteger, MRSaveOptions) {
     MRSaveSynchronouslyExceptRootContext = 1 << 3
 };
 
-typedef void (^MRSaveCompletionHandler)(BOOL contextDidSave, NSError * __MR_nullable error);
+typedef void (^MRSaveCompletionHandler)(BOOL contextDidSave, NSError *__MR_nullable error);
 
 @interface NSManagedObjectContext (MagicalSaves)
 
@@ -36,7 +36,7 @@ typedef void (^MRSaveCompletionHandler)(BOOL contextDidSave, NSError * __MR_null
 
  @since Available in v2.1.0 and later.
 */
-- (void) MR_saveOnlySelfWithCompletion:(MR_nullable MRSaveCompletionHandler)completion;
+- (void)MR_saveOnlySelfWithCompletion:(MR_nullable MRSaveCompletionHandler)completion;
 
 /**
  Asynchronously save changes in the current context all the way back to the persistent store.
@@ -46,7 +46,7 @@ typedef void (^MRSaveCompletionHandler)(BOOL contextDidSave, NSError * __MR_null
 
  @since Available in v2.1.0 and later.
  */
-- (void) MR_saveToPersistentStoreWithCompletion:(MR_nullable MRSaveCompletionHandler)completion;
+- (void)MR_saveToPersistentStoreWithCompletion:(MR_nullable MRSaveCompletionHandler)completion;
 
 /**
  Synchronously save changes in the current context and it's parent.
@@ -54,7 +54,7 @@ typedef void (^MRSaveCompletionHandler)(BOOL contextDidSave, NSError * __MR_null
 
  @since Available in v2.1.0 and later.
  */
-- (void) MR_saveOnlySelfAndWait;
+- (void)MR_saveOnlySelfAndWait;
 
 /**
  Synchronously save changes in the current context all the way back to the persistent store.
@@ -62,7 +62,7 @@ typedef void (^MRSaveCompletionHandler)(BOOL contextDidSave, NSError * __MR_null
 
  @since Available in v2.1.0 and later.
  */
-- (void) MR_saveToPersistentStoreAndWait;
+- (void)MR_saveToPersistentStoreAndWait;
 
 /**
  Save the current context with options.
@@ -73,20 +73,20 @@ typedef void (^MRSaveCompletionHandler)(BOOL contextDidSave, NSError * __MR_null
 
  @since Available in v2.1.0 and later.
  */
-- (void) MR_saveWithOptions:(MRSaveOptions)saveOptions completion:(MR_nullable MRSaveCompletionHandler)completion;
+- (void)MR_saveWithOptions:(MRSaveOptions)saveOptions completion:(MR_nullable MRSaveCompletionHandler)completion;
 
 @end
 
 #pragma mark - Deprecated Methods — DO NOT USE
 @interface NSManagedObjectContext (MagicalSavesDeprecated)
 
-- (void) MR_save MR_DEPRECATED_WILL_BE_REMOVED_IN_PLEASE_USE("3.0", "MR_saveToPersistentStoreAndWait");
-- (void) MR_saveWithErrorCallback:(void (^ __MR_nullable)(NSError * __MR_nullable error))errorCallback MR_DEPRECATED_WILL_BE_REMOVED_IN("3.0");
-- (void) MR_saveInBackgroundCompletion:(void (^ __MR_nullable)(void))completion MR_DEPRECATED_WILL_BE_REMOVED_IN("3.0");
-- (void) MR_saveInBackgroundErrorHandler:(void (^ __MR_nullable)(NSError * __MR_nullable error))errorCallback MR_DEPRECATED_WILL_BE_REMOVED_IN("3.0");
-- (void) MR_saveInBackgroundErrorHandler:(void (^ __MR_nullable)(NSError * __MR_nullable error))errorCallback completion:(void (^ __MR_nullable)(void))completion MR_DEPRECATED_WILL_BE_REMOVED_IN("3.0");
-- (void) MR_saveNestedContexts MR_DEPRECATED_WILL_BE_REMOVED_IN_PLEASE_USE("3.0", "MR_saveToPersistentStoreWithCompletion:");
-- (void) MR_saveNestedContextsErrorHandler:(void (^ __MR_nullable)(NSError * __MR_nullable error))errorCallback MR_DEPRECATED_WILL_BE_REMOVED_IN_PLEASE_USE("3.0", "MR_saveToPersistentStoreWithCompletion:");
-- (void) MR_saveNestedContextsErrorHandler:(void (^ __MR_nullable)(NSError * __MR_nullable error))errorCallback completion:(void (^ __MR_nullable)(void))completion MR_DEPRECATED_WILL_BE_REMOVED_IN_PLEASE_USE("3.0", "MR_saveToPersistentStoreWithCompletion:");
+- (void)MR_save MR_DEPRECATED_WILL_BE_REMOVED_IN_PLEASE_USE("3.0", "MR_saveToPersistentStoreAndWait");
+- (void)MR_saveWithErrorCallback:(void (^__MR_nullable)(NSError *__MR_nullable error))errorCallback MR_DEPRECATED_WILL_BE_REMOVED_IN("3.0");
+- (void)MR_saveInBackgroundCompletion:(void (^__MR_nullable)(void))completion MR_DEPRECATED_WILL_BE_REMOVED_IN("3.0");
+- (void)MR_saveInBackgroundErrorHandler:(void (^__MR_nullable)(NSError *__MR_nullable error))errorCallback MR_DEPRECATED_WILL_BE_REMOVED_IN("3.0");
+- (void)MR_saveInBackgroundErrorHandler:(void (^__MR_nullable)(NSError *__MR_nullable error))errorCallback completion:(void (^__MR_nullable)(void))completion MR_DEPRECATED_WILL_BE_REMOVED_IN("3.0");
+- (void)MR_saveNestedContexts MR_DEPRECATED_WILL_BE_REMOVED_IN_PLEASE_USE("3.0", "MR_saveToPersistentStoreWithCompletion:");
+- (void)MR_saveNestedContextsErrorHandler:(void (^__MR_nullable)(NSError *__MR_nullable error))errorCallback MR_DEPRECATED_WILL_BE_REMOVED_IN_PLEASE_USE("3.0", "MR_saveToPersistentStoreWithCompletion:");
+- (void)MR_saveNestedContextsErrorHandler:(void (^__MR_nullable)(NSError *__MR_nullable error))errorCallback completion:(void (^__MR_nullable)(void))completion MR_DEPRECATED_WILL_BE_REMOVED_IN_PLEASE_USE("3.0", "MR_saveToPersistentStoreWithCompletion:");
 
 @end

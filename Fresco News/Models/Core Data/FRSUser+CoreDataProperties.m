@@ -37,5 +37,4 @@
 @dynamic disabled;
 @dynamic suspended;
 
-
 @end

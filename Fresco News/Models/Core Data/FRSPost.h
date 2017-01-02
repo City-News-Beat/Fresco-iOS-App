@@ -10,7 +10,6 @@
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
 
-
 @class FRSGallery, FRSUser;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -19,14 +18,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Insert code here to declare functionality of your managed object subclass
 
-+(instancetype)postWithDictionary:(NSDictionary *)dict;
--(void)configureWithDictionary:(NSDictionary *)dict;
--(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context;
--(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context save:(BOOL)save;
++ (instancetype)postWithDictionary:(NSDictionary *)dict;
+- (void)configureWithDictionary:(NSDictionary *)dict;
+- (void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context;
+- (void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context save:(BOOL)save;
 @property (nonatomic, weak) NSManagedObjectContext *currentContext;
 @property (nonatomic, retain) CLLocation *location;
 @property (nonatomic, retain) NSString *contentType;
--(NSDictionary *)jsonObject;
+- (NSDictionary *)jsonObject;
 @end
 
 NS_ASSUME_NONNULL_END

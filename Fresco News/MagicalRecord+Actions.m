@@ -13,42 +13,42 @@
 
 #pragma mark - Asynchronous saving
 
-+ (void) saveWithBlock:(void(^)(NSManagedObjectContext *localContext))block;
++ (void)saveWithBlock:(void (^)(NSManagedObjectContext *localContext))block;
 {
     [self saveWithBlock:block completion:nil];
 }
 
-+ (void) saveWithBlock:(void(^)(NSManagedObjectContext *localContext))block completion:(MRSaveCompletionHandler)completion;
++ (void)saveWithBlock:(void (^)(NSManagedObjectContext *localContext))block completion:(MRSaveCompletionHandler)completion;
 {
-    NSManagedObjectContext *savingContext  = [NSManagedObjectContext MR_rootSavingContext];
+    NSManagedObjectContext *savingContext = [NSManagedObjectContext MR_rootSavingContext];
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:savingContext];
 
     [localContext performBlock:^{
-        [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
+      [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
 
-        if (block) {
-            block(localContext);
-        }
+      if (block) {
+          block(localContext);
+      }
 
-        [localContext MR_saveWithOptions:MRSaveParentContexts completion:completion];
+      [localContext MR_saveWithOptions:MRSaveParentContexts completion:completion];
     }];
 }
 
 #pragma mark - Synchronous saving
 
-+ (void) saveWithBlockAndWait:(void(^)(NSManagedObjectContext *localContext))block;
++ (void)saveWithBlockAndWait:(void (^)(NSManagedObjectContext *localContext))block;
 {
-    NSManagedObjectContext *savingContext  = [NSManagedObjectContext MR_rootSavingContext];
+    NSManagedObjectContext *savingContext = [NSManagedObjectContext MR_rootSavingContext];
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:savingContext];
 
     [localContext performBlockAndWait:^{
-        [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
+      [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
 
-        if (block) {
-            block(localContext);
-        }
+      if (block) {
+          block(localContext);
+      }
 
-        [localContext MR_saveWithOptions:MRSaveParentContexts|MRSaveSynchronously completion:nil];
+      [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:nil];
     }];
 }
 
@@ -57,86 +57,81 @@
 #pragma mark - Deprecated Methods — DO NOT USE
 @implementation MagicalRecord (ActionsDeprecated)
 
-+ (void) saveUsingCurrentThreadContextWithBlock:(void (^)(NSManagedObjectContext *localContext))block completion:(MRSaveCompletionHandler)completion;
++ (void)saveUsingCurrentThreadContextWithBlock:(void (^)(NSManagedObjectContext *localContext))block completion:(MRSaveCompletionHandler)completion;
 {
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
 
     [localContext performBlock:^{
-        [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
+      [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
 
-        if (block) {
-            block(localContext);
-        }
+      if (block) {
+          block(localContext);
+      }
 
-        [localContext MR_saveWithOptions:MRSaveParentContexts completion:completion];
+      [localContext MR_saveWithOptions:MRSaveParentContexts completion:completion];
     }];
 }
 
-+ (void) saveUsingCurrentThreadContextWithBlockAndWait:(void (^)(NSManagedObjectContext *localContext))block;
++ (void)saveUsingCurrentThreadContextWithBlockAndWait:(void (^)(NSManagedObjectContext *localContext))block;
 {
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
 
     [localContext performBlockAndWait:^{
-        [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
+      [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
 
-        if (block) {
-            block(localContext);
-        }
+      if (block) {
+          block(localContext);
+      }
 
-        [localContext MR_saveWithOptions:MRSaveParentContexts|MRSaveSynchronously completion:nil];
+      [localContext MR_saveWithOptions:MRSaveParentContexts | MRSaveSynchronously completion:nil];
     }];
 }
 
-+ (void) saveInBackgroundWithBlock:(void(^)(NSManagedObjectContext *localContext))block
-{
++ (void)saveInBackgroundWithBlock:(void (^)(NSManagedObjectContext *localContext))block {
     [[self class] saveWithBlock:block completion:nil];
 }
 
-+ (void) saveInBackgroundWithBlock:(void(^)(NSManagedObjectContext *localContext))block completion:(void(^)(void))completion
-{
-    NSManagedObjectContext *savingContext  = [NSManagedObjectContext MR_rootSavingContext];
++ (void)saveInBackgroundWithBlock:(void (^)(NSManagedObjectContext *localContext))block completion:(void (^)(void))completion {
+    NSManagedObjectContext *savingContext = [NSManagedObjectContext MR_rootSavingContext];
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextWithParent:savingContext];
 
     [localContext performBlock:^{
-        [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
+      [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
 
-        if (block)
-        {
-            block(localContext);
-        }
+      if (block) {
+          block(localContext);
+      }
 
-        [localContext MR_saveToPersistentStoreAndWait];
+      [localContext MR_saveToPersistentStoreAndWait];
 
-        if (completion)
-        {
-            completion();
-        }
+      if (completion) {
+          completion();
+      }
     }];
 }
 
-+ (void) saveInBackgroundUsingCurrentContextWithBlock:(void (^)(NSManagedObjectContext *localContext))block completion:(void (^)(void))completion errorHandler:(void (^)(NSError *error))errorHandler;
++ (void)saveInBackgroundUsingCurrentContextWithBlock:(void (^)(NSManagedObjectContext *localContext))block completion:(void (^)(void))completion errorHandler:(void (^)(NSError *error))errorHandler;
 {
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
 
     [localContext performBlock:^{
-        [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
+      [localContext MR_setWorkingName:NSStringFromSelector(_cmd)];
 
-        if (block) {
-            block(localContext);
+      if (block) {
+          block(localContext);
+      }
+
+      [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError *error) {
+        if (contextDidSave) {
+            if (completion) {
+                completion();
+            }
+        } else {
+            if (errorHandler) {
+                errorHandler(error);
+            }
         }
-
-        [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError *error) {
-            if (contextDidSave) {
-                if (completion) {
-                    completion();
-                }
-            }
-            else {
-                if (errorHandler) {
-                    errorHandler(error);
-                }
-            }
-        }];
+      }];
     }];
 }
 

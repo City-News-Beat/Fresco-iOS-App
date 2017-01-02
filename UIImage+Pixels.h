@@ -21,7 +21,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UIImage (Pixels)
--(unsigned char*) grayscalePixels;
--(unsigned char*) rgbaPixels;
--(double) luminosity;
+- (unsigned char *)grayscalePixels;
+- (unsigned char *)rgbaPixels;
+- (double)luminosity;
 @end
