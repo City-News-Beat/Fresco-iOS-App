@@ -680,6 +680,9 @@
             if (self.galleries.count <= 0) {
                 [self configureFrogForFeed:self.tableView];
                 self.feedAwkwardView.alpha = 1;
+                
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:NO];
+                [alert show];
             } else {
                 self.feedAwkwardView.alpha = 0;
             }
@@ -707,6 +710,8 @@
             if (self.likes.count <= 0) {
                 [self configureFrogForFeed:self.tableView];
                 self.feedAwkwardView.alpha = 1;
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:NO];
+                [alert show];
             } else {
                 self.feedAwkwardView.alpha = 0;
             }
@@ -726,11 +731,14 @@
 
 -(void)configureFrogForFeed:(UITableView *)feed {
     
+    NSInteger profileContainerTabBarHeight = 44;
+    
     if (self.feedAwkwardView) {
+        if (self.feedAwkwardView.superview != feed){
+            [feed addSubview:self.feedAwkwardView];
+        }
         return;
     }
-    
-    NSInteger profileContainerTabBarHeight = 44;
     
     self.feedAwkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, ((self.profileContainer.frame.size.height + profileContainerTabBarHeight) + (self.view.frame.size.height))/2, self.view.frame.size.width, self.view.frame.size.height)];
     [feed addSubview:self.feedAwkwardView];
