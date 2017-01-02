@@ -22,7 +22,6 @@ static BOOL isDeeplinking;
 
 + (void)handleNotification:(NSDictionary *)push {
     NSString *instruction = push[@"type"];
-    NSLog(@"INSTRUCTION: %@", push);
 
     // payment
     if ([instruction isEqualToString:newAssignmentNotification]) {
@@ -89,7 +88,6 @@ static BOOL isDeeplinking;
     }
 
     if ([instruction isEqualToString:@"user-news-gallery"]) {
-        NSLog(@"TODAY IN NEWS");
         NSString *galleryID = [[push objectForKey:@"meta"] objectForKey:@"gallery_id"];
 
         if (galleryID && [[galleryID class] isSubclassOfClass:[NSString class]]) {
@@ -245,7 +243,6 @@ static BOOL isDeeplinking;
     [[FRSAPIClient sharedClient] getGalleryWithUID:gallery
                                         completion:^(id responseObject, NSError *error) {
 
-                                          NSLog(@"TODAY: %@", responseObject);
                                           if (error) {
                                               [self error:error];
                                           }

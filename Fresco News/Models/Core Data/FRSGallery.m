@@ -90,7 +90,6 @@
             self.creator = newUser;
             self.creator.uid = dict[@"owner"][@"id"];
         } @catch (NSException *exception) {
-            NSLog(@"EXCEPTION: %@", exception.description);
         } @finally {
         }
     }

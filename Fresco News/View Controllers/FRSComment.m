@@ -25,7 +25,6 @@
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     _comment = dictionary[@"comment"];
     _user = [FRSUser nonSavedUserWithProperties:dictionary[@"user"] context:[delegate managedObjectContext]];
-    NSLog(@"%@", dictionary);
 
     self.userDictionary = dictionary[@"user"];
 

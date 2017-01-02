@@ -82,7 +82,6 @@
     //
     //        }];
     //    }
-    NSLog(@"CURATOR: %@", dict[@"curator"]);
 
     if (![dict[@"curator"] isEqual:[NSNull null]]) {
         self.curatorDict = dict[@"curator"];
@@ -134,7 +133,6 @@
     NSMutableArray *mArr = [NSMutableArray new];
 
     for (NSDictionary *thumb in thumbnails) {
-        NSLog(@"%@", thumb);
         NSString *stringURL = thumb[@"image"];
         if (!stringURL)
             continue;
@@ -144,8 +142,6 @@
             [mArr addObject:url];
         }
     }
-
-    NSLog(@"COMPLETE");
 
     return [mArr copy];
 }

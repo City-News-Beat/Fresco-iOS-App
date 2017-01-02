@@ -309,14 +309,12 @@
 
                                      if (!stories.count) {
                                          if (error) {
-                                             NSLog(@"Error fetching stories %@", error.localizedDescription);
+                                             NSLog(@"Fetch Stories Error: %@", error.localizedDescription);
                                          } else {
                                              _loadNoMore = TRUE;
                                              NSLog(@"No error fetching stories but the request returned zero results");
                                          }
                                      }
-
-                                     NSLog(@"%@", stories);
 
                                      if (stories.count < numToFetch || stories.count == 0) {
                                          _loadNoMore = TRUE;

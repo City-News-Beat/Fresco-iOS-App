@@ -69,7 +69,6 @@
 - (void)configureGlobalAssignmentCellWithAssignment:(NSDictionary *)assignment {
     self.assignment = assignment;
     NSString *dateInString = (NSString *)[self.assignment objectForKey:@"ends_at"];
-    NSLog(@"Date %@", dateInString);
 
     //TODO
     //[photoPriceLabel setText:(NSString *)[self.assignment objectForKey:@"photo price key?"]];

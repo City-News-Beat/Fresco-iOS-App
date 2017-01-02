@@ -226,11 +226,9 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
     }
 
     NSString *currentKey = [[self.feed objectAtIndex:indexPath.row] objectForKey:@"type"];
-    NSLog(@"KEY: %@", currentKey);
 
     /* NEWS */
     if ([currentKey isEqualToString:photoOfDayNotification]) {
-        NSLog(@"PHOTOS OF THE DAY");
 
     } else if ([currentKey isEqualToString:todayInNewsNotification]) {
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
@@ -314,7 +312,6 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
     } else if ([currentKey isEqualToString:commentedNotification] || [currentKey isEqualToString:mentionCommentNotification] || [currentKey isEqualToString:mentionGalleryNotification]) {
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
-        NSLog(@"COMMENTED");
         [self configureCommentCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
             defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -339,13 +336,11 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
     /* PAYMENT */
     else if ([currentKey isEqualToString:purchasedContentNotification]) {
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
-        NSLog(@"PURCHASED CONTENT");
         [self configureGalleryCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         return defaultCell;
 
     } else if ([currentKey isEqualToString:paymentExpiringNotification]) {
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
-        NSLog(@"PAYMENT EXPIRING");
         [self configurePaymentExpiringCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
             defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -354,7 +349,6 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
     } else if ([currentKey isEqualToString:paymentSentNotification]) {
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
-        NSLog(@"PAYMENT SENT");
         [self configurePaymentSentCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
             defaultCell.backgroundColor = [UIColor frescoBackgroundColorDark];
@@ -362,7 +356,6 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return defaultCell;
 
     } else if ([currentKey isEqualToString:paymentDeclinedNotification]) {
-        NSLog(@"PAYMENT DECLINED");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         [self configurePaymentDeclinedCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
@@ -371,7 +364,6 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return defaultCell;
 
     } else if ([currentKey isEqualToString:taxInfoRequiredNotification]) {
-        NSLog(@"TAX INFO REQUIRED");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         [self configureTaxInfoRequiredCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
@@ -380,7 +372,6 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return defaultCell;
 
     } else if ([currentKey isEqualToString:taxInfoProcessedNotification]) {
-        NSLog(@"TAX INFO PROCESSING");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         [self configureTaxInfoProcessedCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
@@ -389,7 +380,6 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
         return defaultCell;
 
     } else if ([currentKey isEqualToString:taxInfoDeclinedNotification]) {
-        NSLog(@"TAX INFO DECLINED");
         FRSDefaultNotificationTableViewCell *defaultCell = [tableView dequeueReusableCellWithIdentifier:currentKey];
         [self configureTaxInfoDeclinedCell:defaultCell dictionary:[self.feed objectAtIndex:indexPath.row]];
         if ([self seen:indexPath]) {
@@ -580,7 +570,6 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
                                  success = TRUE;
                              }
 
-                             NSLog(@"MARK AS READ SUCCESS: %d", success);
                            }];
 }
 
@@ -595,7 +584,6 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
                                  success = TRUE;
                              }
 
-                             NSLog(@"MARK AS READ SUCCESS: %d", success);
                            }];
 }
 

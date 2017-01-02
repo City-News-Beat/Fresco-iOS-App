@@ -142,11 +142,9 @@
     if (self.didToggleTwitter) {
         self.didToggleTwitter = NO;
         if (index == 0) {
-            NSLog(@"twitter index = 0");
             [self.twitterSwitch setOn:YES animated:YES];
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
         } else {
-            NSLog(@"twitter index = 1");
             [self.twitterSwitch setOn:NO animated:YES];
             self.twitterHandle = nil;
             [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
@@ -156,12 +154,10 @@
     } else if (self.didToggleFacebook) {
         self.didToggleFacebook = NO;
         if (index == 0) {
-            NSLog(@"facebook index = 0");
             [self.facebookSwitch setOn:YES animated:YES];
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
 
         } else if (index == 1) {
-            NSLog(@"facebook index = 1");
             [self.facebookSwitch setOn:NO animated:YES];
             self.facebookName = nil;
             [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
@@ -183,13 +179,12 @@
 
     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
 
-        NSLog(@"DISABLED TWITTER");
         self.alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
         self.alert.delegate = self;
         [self.alert show];
 
         [[FRSAPIClient sharedClient] unlinkTwitter:^(id responseObject, NSError *error) {
-          NSLog(@"Disconnect TW: %@", error);
+          NSLog(@"Disconnect Twitter Error: %@", error);
         }];
 
     } else {
@@ -255,14 +250,13 @@
 
     self.didToggleFacebook = YES;
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
-        NSLog(@"DISABLE FACEBOOK");
 
         self.alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT FACEBOOK?" message:@"You’ll be unable to use your Facebook account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
         self.alert.delegate = self;
         [self.alert show];
 
         [[FRSAPIClient sharedClient] unlinkFacebook:^(id responseObject, NSError *error) {
-          NSLog(@"Disconnect FB: %@", error);
+          NSLog(@"Disconnect Facebook Error: %@", error);
         }];
 
     } else {
@@ -670,7 +664,6 @@
     [profileIV hnk_setImageFromURL:(NSURL *)profile];
 
     profileIV.backgroundColor = [UIColor frescoLightTextColor];
-    NSLog(@"profile image URL: %@", profile);
     if (!profile) {
         UIImageView *profileIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user-24"]];
         profileIcon.frame = CGRectMake(4, 4, 24, 24);
@@ -804,7 +797,6 @@
     [profileIV hnk_setImageFromURL:(NSURL *)profile];
 
     profileIV.backgroundColor = [UIColor frescoLightTextColor];
-    NSLog(@"profile image URL: %@", profile);
     if (!profile) {
         UIImageView *profileIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"user-24"]];
         profileIcon.frame = CGRectMake(4, 4, 24, 24);
@@ -885,10 +877,8 @@
     }
 
     if (following) {
-        NSLog(@"USER IS FOLLOWING, UNFOLLOW AND CHANGE ICON");
         [self unfollow:currentUser];
     } else {
-        NSLog(@"USER IS NOT FOLLOWING, FOLLOW AND CHANGE ICON");
         [self follow:currentUser];
     }
 }

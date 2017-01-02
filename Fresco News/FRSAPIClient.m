@@ -381,7 +381,6 @@
     if (deviceToken != Nil || [deviceToken isEqual:[NSNull null]]) {
         currentInstallation[@"device_token"] = deviceToken;
     } else {
-        NSLog(@"NO DEVICE TOKEN -- INSTALLATION WILL FAIL");
     }
 
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
@@ -462,7 +461,6 @@
         NSDictionary *update = @{ @"installation" : currentInstallation };
         [self updateUserWithDigestion:update
                            completion:^(id responseObject, NSError *error) {
-                             NSLog(@"USER UPDATED: %@ %@", responseObject, error);
                            }];
     }
 }
@@ -511,7 +509,6 @@
 
 - (void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
-    NSLog(@"%@", endpoint);
 
     [self get:endpoint
         withParameters:Nil
@@ -538,7 +535,6 @@
       [self updateUserLocation:userInfo.userInfo
                     completion:^(NSDictionary *response, NSError *error) {
                       if (!error) {
-                          // NSLog(@"Sent Location");
                       } else {
                           NSLog(@"Location Error: %@ %@", response, error);
                       }
@@ -897,13 +893,8 @@
 - (BOOL)isAuthenticated {
 
     if ([[SAMKeychain accountsForService:serviceName] count] > 0) {
-        NSLog(@"--- isAuthenticated: TRUE");
-        NSLog(@"--- FRSUser = %@", [[FRSAPIClient sharedClient] authenticatedUser]);
         return TRUE;
     }
-
-    NSLog(@"--- isAuthenticated: FALSE");
-    NSLog(@"--- FRSUser = %@", [[FRSAPIClient sharedClient] authenticatedUser]);
     return FALSE;
 }
 

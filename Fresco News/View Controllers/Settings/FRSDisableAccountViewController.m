@@ -206,11 +206,10 @@
 
           NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
           NSInteger responseCode = response.statusCode;
-          NSLog(@"ERROR: %ld", (long)responseCode);
+          NSLog(@"Disable Account Error: %ld", (long)responseCode);
 
           if (error.code == -1009) {
 
-              NSLog(@"Unable to connect.");
               FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
               [alert show];
 
@@ -343,8 +342,6 @@
             self.passwordIsValid = NO;
         }
     }
-
-    NSLog(@"user: (%d), email: (%d), pass: (%d)", self.usernameIsValid, self.emailIsValid, self.passwordIsValid);
 
     if (self.usernameIsValid && self.emailIsValid && self.passwordIsValid) {
         [self.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];

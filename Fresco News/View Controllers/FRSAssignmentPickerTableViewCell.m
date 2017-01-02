@@ -157,7 +157,6 @@
 
     //    if (self.outlets.count > 1) {
     self.titleLabel.text = [outlet objectForKey:@"title"];
-    NSLog(@"OUTLET: %@", outlet);
     //self.representedOutletID = [outlet objectForKey:@"id"];
     //    }
 }

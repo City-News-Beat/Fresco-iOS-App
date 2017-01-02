@@ -1517,10 +1517,8 @@
         CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
         if (scrollSpeed > maxScrollVelocity) {
             isScrollingFast = YES;
-            NSLog(@"Fast");
         } else {
             isScrollingFast = NO;
-            NSLog(@"Slow");
         }
 
         lastScrollOffset = currentOffset;
@@ -1583,7 +1581,6 @@
 
                                    if ([[_representedUser valueForKey:@"following"] boolValue] == TRUE) {
                                        [self.followBarButtonItem setImage:[UIImage imageNamed:@"followed-white"]];
-                                       NSLog(@"FOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
 
                                    } else {
                                        [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
@@ -1604,8 +1601,6 @@
                                      } else {
                                          [self.followBarButtonItem setImage:[UIImage imageNamed:@"follow-white"]];
                                      }
-
-                                     NSLog(@"UNFOLLOWED USER: %d %@", (error == Nil), self.representedUser.uid);
 
                                    }];
 }
@@ -1654,11 +1649,8 @@
 }
 
 - (void)showFollowers {
-    NSLog(@"Pushing1");
     FRSFollowersViewController *vc = [[FRSFollowersViewController alloc] init];
-    NSLog(@"Pushing2");
     vc.representedUser = _representedUser;
-    NSLog(@"Pushing3");
     [self.navigationController pushViewController:vc animated:YES];
 }
 

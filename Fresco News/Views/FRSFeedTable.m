@@ -235,7 +235,7 @@
 }
 
 - (void)followStory {
-    NSLog(@"Follow Story");
+
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

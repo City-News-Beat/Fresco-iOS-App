@@ -299,7 +299,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                              withCompletion:^(id responseObject, NSError *error) {
                                                NSArray *assignments = (NSArray *)responseObject[@"nearby"];
                                                NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
-                                               NSLog(@"ASS: %@ %@", assignments, error);
 
                                                FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                                                NSMutableArray *mSerializedAssignments = [NSMutableArray new];
@@ -1359,8 +1358,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (self.locationManager.monitoringState == FRSLocationMonitoringStateForeground) {
         [self.locationManager stopUpdatingLocation];
     }
-
-    NSLog(@"Location update notification observed by assignmentsVC");
 
     //CLLocation *currentLocation = [locations lastObject];
 

@@ -159,7 +159,6 @@
 - (void)animate {
 
     //    if (!self.animating) {
-    NSLog(@"Poof");
     self.cloudIV.alpha = 1;
     self.televisionIV.alpha = 1;
     self.newspaperIV.alpha = 1;

@@ -159,7 +159,6 @@
 - (void)captureOutput:(AVCaptureOutput *)captureOutput
     didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
            fromConnection:(AVCaptureConnection *)connection {
-    NSLog(@"TEST");
 }
 
 - (void)viewDidLoad {
@@ -2002,7 +2001,7 @@
                                                    [self outputAccelertionData:accelerometerData.acceleration];
 
                                                } else {
-                                                   NSLog(@"%@", error);
+                                                   NSLog(@"Motion Manager Error: %@", error);
                                                }
                                              }];
 
@@ -2058,7 +2057,6 @@
 
         } else if (acceleration.y >= 0.75) {
             orientationNew = self.lastOrientation;
-            NSLog(@"acel x = %f, acel z = %f", acceleration.x, acceleration.z);
         } else {
             // Consider same as last time
             return;

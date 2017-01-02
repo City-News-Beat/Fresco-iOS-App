@@ -152,7 +152,6 @@
 
     if (textField.isSecureTextEntry) {
         self.password = textField.text;
-        NSLog(@"PASSWORD: %@", textField.text);
         return YES;
     }
 
@@ -234,7 +233,6 @@
 
     [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion
                                               completion:^(id responseObject, NSError *error) {
-                                                NSLog(@"RESPONSE: %@ \n ERROR: %@", responseObject, error);
                                                 FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                                                 [delegate reloadUser];
 
@@ -244,7 +242,6 @@
                                                 }
 
                                                 if (error.code == -1009) {
-                                                    NSLog(@"Unable to connect.");
                                                     if (!self.alert) {
                                                         self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                                                         [self.alert show];
@@ -254,7 +251,6 @@
 
                                                 NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
                                                 NSInteger responseCode = response.statusCode;
-                                                NSLog(@"ERROR: %ld", (long)responseCode);
 
                                                 if (responseCode == 403 || responseCode == 401) { //incorrect
                                                     if (!self.errorImageView) {

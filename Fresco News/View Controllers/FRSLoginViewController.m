@@ -250,7 +250,6 @@
                                }
 
                                if (error.code == -1009) {
-                                   NSLog(@"Unable to connect.");
                                    self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
                                    [self.alert show];
                                    return;
@@ -258,7 +257,7 @@
 
                                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
                                NSInteger responseCode = response.statusCode;
-                               NSLog(@"ERROR: %ld", (long)responseCode);
+                               NSLog(@"Login Error: %ld", (long)responseCode);
 
                                if (responseCode == 401) {
                                    [self presentInvalidInfo];
@@ -402,7 +401,7 @@
               return;
           }
 
-          NSLog(@"TWITTER SIGN IN: %@", error);
+          NSLog(@"Twitter Login Error: %@", error);
 
           FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
           [alert show];
@@ -519,7 +518,6 @@
       if (error) {
 
           if (error.code == -1009) {
-              NSLog(@"Unable to connect.");
               self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
               [self.alert show];
               [spinner stopLoading];

@@ -145,7 +145,6 @@
           }
 
           if (error.code == -1009) {
-              NSLog(@"Unable to connect.");
               if (!self.alert) {
                   if (!self.alert) {
                       self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
@@ -157,7 +156,7 @@
 
           NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
           NSInteger responseCode = response.statusCode;
-          NSLog(@"ERROR: %ld", (long)responseCode);
+          NSLog(@"Update User Error: %ld", (long)responseCode);
 
           if (responseCode == 403 || responseCode == 401) {
               if (!self.errorImageView) {
@@ -207,10 +206,8 @@
         //User is editing password textField
         self.password = textField.text;
         if ([self isValidPassword:self.password]) {
-            NSLog(@"PASSWORD IS VALID");
             self.passwordIsValid = YES;
         } else {
-            NSLog(@"PASSWORD IS INVALID");
             self.passwordIsValid = NO;
         }
 
@@ -218,10 +215,8 @@
         //User is editing email textField
         self.email = textField.text;
         if ([self isValidEmail:self.email]) {
-            NSLog(@"EMAIL IS VALID");
             self.emailIsValid = YES;
         } else {
-            NSLog(@"EMAIL IS INVALID");
             self.emailIsValid = NO;
         }
     }

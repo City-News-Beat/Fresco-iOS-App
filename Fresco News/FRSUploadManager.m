@@ -121,9 +121,9 @@ static NSDate *lastDate;
     [center addNotificationRequest:request
              withCompletionHandler:^(NSError *_Nullable error) {
                if (!error) {
-                   NSLog(@"Local Notification succeeded");
+                   NSLog(@"Local Notification succeeded!");
                } else {
-                   NSLog(@"Local Notification failed");
+                   NSLog(@"Local Notification failed.");
                }
              }];
 }
@@ -339,7 +339,6 @@ static NSDate *lastDate;
 
     if (completed == toComplete) {
         // complete
-        NSLog(@"UPLOAD PROCESS COMPLETE");
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{ @"type" : @"completion" }];
         currentIndex = 0;
         totalFileSize = 0;
@@ -351,13 +350,11 @@ static NSDate *lastDate;
         return;
     }
 
-    NSLog(@"STARTING NEW UPLOAD");
     NSArray *request = [self.uploadMeta objectAtIndex:currentIndex];
     [self addUploadForPost:request[1]
                        url:request[0]
                     postID:request[2]
                 completion:^(id responseObject, NSError *error) {
-                  NSLog(@"COMPLETED: %@ %@", responseObject, error);
                 }];
 }
 
@@ -413,8 +410,6 @@ static NSDate *lastDate;
 
       uploadSpeed = averageMegabitsPerSecond;
 
-      NSLog(@"UPLOAD SPEED: %fmbps", megabitsPerSecond);
-
       lastDate = [NSDate date];
       uploadUpdates++;
     };
@@ -423,7 +418,7 @@ static NSDate *lastDate;
     [[transferManager upload:upload] continueWithBlock:^id(AWSTask *task) {
 
       if (task.error) {
-          NSLog(@"ERR: %@", task.error);
+          NSLog(@"Upload Error: %@", task.error);
           [weakSelf uploadDidErrorWithError:task.error];
       }
 
@@ -439,7 +434,6 @@ static NSDate *lastDate;
           }
 
           completed++;
-          NSLog(@"UPLOAD COMPLETE");
           currentIndex++;
           [self taskDidComplete:task];
           [self restart];
@@ -452,7 +446,6 @@ static NSDate *lastDate;
 - (void)updateProgress:(int64_t)bytes {
     uploadedFileSize += bytes;
     float progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
-    NSLog(@"PROG: %f", progress);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{ @"type" : @"progress",
                                                                                                          @"percentage" : @(progress) }];
 }

@@ -287,19 +287,15 @@
     if ([[self.story valueForKey:@"liked"] boolValue]) {
         [[FRSAPIClient sharedClient] unlikeStory:self.story
                                       completion:^(id responseObject, NSError *error) {
-                                        NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
                                         if (error) {
                                             [actionBar handleHeartState:TRUE];
                                             [actionBar handleHeartAmount:likes];
-                                            NSLog(@"ERR: %@", error);
                                         }
                                       }];
     } else {
         [[FRSAPIClient sharedClient] likeStory:self.story
                                     completion:^(id responseObject, NSError *error) {
-                                      NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
                                       if (error) {
-                                          NSLog(@"ERR: %@", error);
                                           [actionBar handleHeartState:FALSE];
                                           [actionBar handleHeartAmount:likes];
                                       }
@@ -310,7 +306,6 @@
 - (void)handleRepost:(FRSContentActionsBar *)actionBar {
     [[FRSAPIClient sharedClient] repostStory:self.story
                                   completion:^(id responseObject, NSError *error) {
-                                    NSLog(@"REPOSTED %@", (!error) ? @"TRUE" : @"FALSE");
                                   }];
 }
 
@@ -375,7 +370,6 @@
 }
 
 - (void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar {
-    NSLog(@"READ MORE");
 
     if (self.readMoreBlock) {
         self.readMoreBlock(Nil);

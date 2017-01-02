@@ -84,8 +84,7 @@
 
                                                         _lastAnimated = [NSDate date];
                                                     } else if ([update[@"type"] isEqualToString:@"completion"]) {
-                                                        NSLog(@"COMPLETION");
-
+                                                        
                                                         CGRect navFrame = self.frame;
                                                         navFrame.origin.y = -20;
                                                         navFrame.size.height += 20;
@@ -103,7 +102,6 @@
                                                               }];
                                                         });
                                                     } else if ([update[@"type"] isEqualToString:@"failure"]) {
-                                                        NSLog(@"FAILURE");
 
                                                         dispatch_async(dispatch_get_main_queue(), ^{
                                                           CGRect navFrame = self.frame;
@@ -214,7 +212,6 @@
 
 - (void)dismissFailureView {
     [FRSTracker track:uploadCancel];
-    NSLog(@"dismiss");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSDismissUpload" object:nil userInfo:@{ @"type" : @"dismiss" }];
 
     [UIView animateWithDuration:.2

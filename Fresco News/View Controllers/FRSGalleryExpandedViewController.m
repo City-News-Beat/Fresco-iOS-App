@@ -234,7 +234,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     for (int i = 0; i < posts.count; i++) {
         if ([[(FRSPost *)posts[i] uid] isEqualToString:self.defaultPostID]) {
             indexOfPost = i;
-            NSLog(@"POST FOUND: %@ %d", [(FRSPost *)posts[i] uid], indexOfPost);
             break;
         }
     }
@@ -393,8 +392,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     self.currentCommentUserDictionary = comment.userDictionary;
 
-    NSLog(@"userDictionary: %@", comment.userDictionary);
-
     NSString *username;
 
     if (comment.userDictionary[@"username"] != [NSNull null] && (![comment.userDictionary[@"username"] isEqualToString:@"<null>"])) {
@@ -509,8 +506,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, TOP_NAV_BAR_HEIGHT, self.view.frame.size.width, 500) gallery:self.gallery delegate:self];
     [self.scrollView addSubview:self.galleryView];
 
-    NSLog(@"%f", self.galleryView.frame.size.height);
-
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
         initWithTarget:self
                 action:@selector(dismissKeyboard:)];
@@ -583,7 +578,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[FRSAPIClient sharedClient] deleteComment:comment.uid
                                    fromGallery:self.gallery
                                     completion:^(id responseObject, NSError *error) {
-                                      NSLog(@"%@", error);
+                                      NSLog(@"Delete Comment Error: %@", error);
                                       if (!error) {
                                           self.totalCommentCount--;
                                           [self reload];
@@ -614,10 +609,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         } else {
             height += commentSize += 20;
         }
-
-        NSLog(@"STRING SIZE  : %f", labelRect.size.height);
-        NSLog(@"COMMENT SIZE : %f", commentSize);
-        NSLog(@"HEIGHT       : %f", height);
 
         index++;
     }
@@ -753,7 +744,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
         [[FRSAPIClient sharedClient] unlikeGallery:self.gallery
                                         completion:^(id responseObject, NSError *error) {
-                                          NSLog(@"UNLIKED %@", (!error) ? @"TRUE" : @"FALSE");
                                           if (error) {
                                               [actionBar handleHeartState:TRUE];
                                               [actionBar handleHeartAmount:likes];
@@ -763,7 +753,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     } else {
         [[FRSAPIClient sharedClient] likeGallery:self.gallery
                                       completion:^(id responseObject, NSError *error) {
-                                        NSLog(@"LIKED %@", (!error) ? @"TRUE" : @"FALSE");
                                         if (error) {
                                             [actionBar handleHeartState:FALSE];
                                             [actionBar handleHeartAmount:likes];
@@ -778,7 +767,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     [[FRSAPIClient sharedClient] repostGallery:self.gallery
                                     completion:^(id responseObject, NSError *error) {
-                                      NSLog(@"REPOSTED %@", error);
+                                      NSLog(@"Reposted Error: %@", error);
 
                                       if (error) {
                                           [actionBar handleRepostState:!state];
@@ -868,10 +857,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             } else {
                 height = commentSize + 20;
             }
-
-            NSLog(@"STRING SIZE  : %f", labelRect.size.height);
-            NSLog(@"COMMENT SIZE : %f", commentSize);
-            NSLog(@"HEIGHT       : %f", height);
 
             return height;
         }
@@ -1054,8 +1039,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             FRSArticle *article = self.orderedArticles[indexPath.row];
             if (article.articleStringURL) {
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:article.articleStringURL]];
-                [FRSTracker track:articleOpens parameters:@{ @"article_url" : article.articleStringURL,
-                                                             @"article_id" : article.uid }];
+                [FRSTracker track:articleOpens
+                       parameters:@{ @"article_url" : article.articleStringURL,
+                                     @"article_id" : article.uid }];
             }
         }
     }
@@ -1140,7 +1126,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[FRSAPIClient sharedClient] addComment:commentField.text
                                   toGallery:self.galleryID
                                  completion:^(id responseObject, NSError *error) {
-                                   NSLog(@"%@ %@", responseObject, error);
                                    if (error) {
                                        NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
                                        self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed.\nPlease try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];

@@ -86,7 +86,6 @@ static NSString *addPaymentCell = @"addPaymentCell";
 
 - (void)deletePayment:(NSIndexPath *)path {
     NSDictionary *pay = self.payments[path.row];
-    NSLog(@"%@", pay);
 
     [[FRSAPIClient sharedClient] deletePayment:pay[@"id"]
                                     completion:^(id responseObject, NSError *error) {
@@ -150,7 +149,6 @@ static NSString *addPaymentCell = @"addPaymentCell";
           return;
       }
 
-      NSLog(@"PAYMENTS %@", responseObject);
       self.payments = responseObject;
 
       if (self.payments.count > 1) {
@@ -165,7 +163,6 @@ static NSString *addPaymentCell = @"addPaymentCell";
 }
 
 - (void)fetchError:(NSError *)error {
-    NSLog(@"PAYMENT ERROR: %@", error);
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -180,7 +177,6 @@ static NSString *addPaymentCell = @"addPaymentCell";
 
     [[FRSAPIClient sharedClient] deletePayment:payment[@"id"]
                                     completion:^(id responseObject, NSError *error) {
-                                      NSLog(@"%@", responseObject);
                                       if (!error) {
                                           [self reloadPayments];
                                       }

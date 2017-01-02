@@ -16,7 +16,6 @@
     NSString *endpoint = [URLString stringByReplacingOccurrencesOfString:[EndpointManager sharedInstance].currentEndpoint.baseUrl withString:@""];
 
     NSMutableURLRequest *request = [super requestWithMethod:method URLString:URLString parameters:parameters error:Nil];
-    NSLog(@"%@", [request valueForHTTPHeaderField:@"Authorization"]);
     if (![endpoint containsString:@"auth"] && ![endpoint containsString:@"user"]) {
         NSString *authorization = [request valueForHTTPHeaderField:@"Authorization"];
         if ([authorization containsString:@"Basic"]) {

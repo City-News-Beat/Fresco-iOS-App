@@ -136,10 +136,6 @@
 }
 #pragma mark - Constraints
 - (void)constrainSubview:(UIView *)subView ToBottomOfParentView:(UIView *)parentView {
-
-    NSLog(@"SUBVIEW: %@", subView);
-    NSLog(@"PARENTVIEW: %@", parentView);
-
     subView.translatesAutoresizingMaskIntoConstraints = NO;
 
     //Trailing
@@ -188,9 +184,6 @@
     [parentView addConstraint:top];
 }
 - (void)constrainLayer:(AVPlayerLayer *)subView ToBottomOfParentView:(UIView *)parentView {
-
-    NSLog(@"SUBVIEW: %@", subView);
-    NSLog(@"PARENTVIEW: %@", parentView);
 
     //    subView.translatesAutoresizingMaskIntoConstraints = NO;
 

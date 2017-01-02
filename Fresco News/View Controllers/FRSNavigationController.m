@@ -77,7 +77,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    NSLog(@"Showed Nav");
 }
 
 - (void)scrollToTop {

@@ -174,9 +174,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
 - (void)resetFrames:(BOOL)animate {
 
-    NSLog(@"RESET FRAMES: %ld", self.numberOfRowsInAssignmentTableView);
-    NSLog(@"Count: %lu", (unsigned long)self.assignmentsArray.count);
-
     if (animate) {
         dispatch_async(dispatch_get_main_queue(), ^{
           [UIView beginAnimations:nil context:nil];
@@ -536,12 +533,10 @@ static NSString *const cellIdentifier = @"assignment-cell";
         self.globalAssignmentsEnabled = NO;
         [self hideAndRemoveGlobalAssignments];
         self.globalAssignmentsCaret.transform = CGAffineTransformMakeRotation(M_PI);
-        NSLog(@"disabled");
     } else {
         self.globalAssignmentsEnabled = YES;
         [self configureAndShowGlobalAssignments];
         self.globalAssignmentsCaret.transform = CGAffineTransformMakeRotation(0);
-        NSLog(@"enabled");
     }
 }
 
@@ -590,7 +585,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(FRSAssignmentPickerTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     [cell configureAssignmentCellForIndexPath:indexPath];
-    NSLog(@"Displaying Row #%li", (long)indexPath.row);
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -604,7 +598,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     if (tableView == self.assignmentsTableView) {
-        NSLog(@"Setup cells");
         if (indexPath.row < _assignmentsArray.count + numberOfOutlets) {
             if (_showingOutlets) {
                 if (indexPath.row > selectedRow && indexPath.row <= selectedRow + numberOfOutlets) {
@@ -675,7 +668,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    NSLog(@"Selected an assignment");
     return indexPath;
 }
 
@@ -699,7 +691,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
         cell.isSelectedOutlet = YES;
         selectedOutlet = cell.representedOutletID;
 
-        NSLog(@"SELECTED OUTLET: %@", selectedOutlet);
     } else if (!cell.isSelectedAssignment && !cellIsOutlet) {
         [self resetOtherCells];
         [self resetOtherOutlets];
@@ -985,7 +976,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
                                                NSArray *global = responseObject[@"global"];
                                                self.assignmentsArray = [[NSMutableArray alloc] init];
                                                for (NSDictionary *assignment in nearBy) {
-                                                   NSLog(@"NEAR BY: %@", assignment);
                                                    NSArray *coords = assignment[@"location"][@"coordinates"];
                                                    CLLocation *assigmentLoc = [[CLLocation alloc] initWithLatitude:[[coords objectAtIndex:1] floatValue] longitude:[[coords objectAtIndex:0] floatValue]];
                                                    float radius = [assignment[@"radius"] floatValue];
@@ -1011,7 +1001,6 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
                                                //  self.assignmentsArray = nearBy;
                                                self.numberOfRowsInAssignmentTableView = _assignmentsArray.count;
-                                               NSLog(@"ASSIGNMENT ARRAY COUNT: %lu", (unsigned long)self.assignmentsArray.count);
 
                                                self.globalAssignments = global;
                                                self.numberOfRowsInGlobalAssignmentTableView = _globalAssignments.count;
@@ -1203,10 +1192,8 @@ static NSString *const cellIdentifier = @"assignment-cell";
 
         if (self.selectedAssignment) {
             gallery[@"assignment_id"] = [(NSDictionary *)self.selectedAssignment objectForKey:@"id"];
-            NSLog(@"attaching assignment: %@", gallery[@"assignment_id"]);
         } else if (selectedRow < self.assignmentsArray.count) {
             gallery[@"assignment_id"] = self.assignmentsArray[selectedRow][@"id"];
-            NSLog(@"attaching assignment: %@", gallery[@"assignment_id"]);
         }
 
         gallery[@"posts_new"] = current;
@@ -1216,16 +1203,12 @@ static NSString *const cellIdentifier = @"assignment-cell";
             gallery[@"outlet_id"] = selectedOutlet;
         }
 
-        NSLog(@"CREATING: %@", gallery);
-
         [[FRSAPIClient sharedClient] post:createGalleryEndpoint
                            withParameters:gallery
                                completion:^(id responseObject, NSError *error) {
                                  if (!error) {
-                                     NSLog(@"Gallery creation success... (1/2)");
                                      [self moveToUpload:responseObject];
                                  } else {
-                                     NSLog(@"Gallery creation error... (%@)", error);
                                      [self creationError:error];
                                      [self stopSpinner:self.loadingView onButton:self.sendButton];
                                      self.sendButton.userInteractionEnabled = YES;
@@ -1296,18 +1279,13 @@ static NSString *const cellIdentifier = @"assignment-cell";
         [client sendTwitterRequest:request
                         completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
 
-                          NSLog(@"Twitter Response: %@", response);
-
                           if (data) {
                               NSError *jsonError;
                               NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-                              NSLog(@"Twitter Response: %@", json);
                           } else {
-                              NSLog(@"Error: %@", connectionError);
                           }
                         }];
     } else {
-        NSLog(@"Error: %@", clientError);
     }
 }
 
@@ -1374,15 +1352,12 @@ static NSString *const cellIdentifier = @"assignment-cell";
     [self checkBottomBar];
 
     if (self.postToFacebook) {
-        NSLog(@"Post to Facebook");
     }
 
     if (self.postToTwitter) {
-        NSLog(@"Post to Twitter");
     }
 
     if (self.postAnon) {
-        NSLog(@"Post Anonymously");
     }
 }
 

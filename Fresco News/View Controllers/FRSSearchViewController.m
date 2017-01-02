@@ -431,7 +431,6 @@
 - (void)searchError:(NSError *)error {
 
     if (error.code == -1009) {
-        NSLog(@"Unable to connect.");
         self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
         [self.alert show];
         return;
@@ -723,8 +722,6 @@
 
         if (self.configuredNearby) {
 
-            NSLog(@"FOLLOWING: %@", user[@"following"]);
-
             [cell configureSearchNearbyUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
         } else {
             [cell configureSearchUserCellWithProfilePhoto:avatarURLObject fullName:firstname userName:username isFollowing:[user[@"following"] boolValue] userDict:self.users[indexPath.row] user:nil];
@@ -760,7 +757,6 @@
         NSString *title = @" ";
         if (story[@"title"] && ![story[@"title"] isEqual:[NSNull null]]) {
             title = story[@"title"];
-            NSLog(@"title = %@", title);
         }
 
         [cell configureSearchStoryCellWithStoryPhoto:photo storyName:title];
@@ -861,7 +857,6 @@
         NSDictionary *story = self.stories[indexPath.row];
 
         [self pushStoryView:story[@"id"] inRow:indexPath.row];
-        NSLog(@"id: %@", story[@"id"]);
     }
 }
 

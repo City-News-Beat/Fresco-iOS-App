@@ -43,7 +43,6 @@
 
     if (properties[@"location"] != Nil && ![properties[@"location"] isEqual:[NSNull null]]) {
         [user setValue:properties[@"location"] forKey:@"location"];
-        NSLog(@"USER LOC: %@", properties[@"location"]);
     }
 
     if (properties[@"followed_count"] != Nil && ![properties[@"followed_count"] isEqual:[NSNull null]]) {
@@ -122,7 +121,6 @@
 
     if (properties[@"location"] != Nil && ![properties[@"location"] isEqual:[NSNull null]]) {
         [user setValue:properties[@"location"] forKey:@"location"];
-        NSLog(@"USER LOC: %@", properties[@"location"]);
     }
 
     if (properties[@"followed_count"] != Nil && ![properties[@"followed_count"] isEqual:[NSNull null]]) {
@@ -186,7 +184,6 @@
 
     if (properties[@"location"] != Nil && ![properties[@"location"] isEqual:[NSNull null]]) {
         [self setValue:properties[@"location"] forKey:@"location"];
-        NSLog(@"USER LOC: %@", properties[@"location"]);
     }
 
     if (properties[@"followed_count"] != Nil && ![properties[@"followed_count"] isEqual:[NSNull null]]) {

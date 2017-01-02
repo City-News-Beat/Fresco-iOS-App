@@ -30,8 +30,6 @@
 
 - (void)setFeed:(NSArray *)feed {
     _feed = feed;
-
-    NSLog(@"SET FEED: %@", feed);
 }
 
 - (NSArray *)feed {
@@ -57,11 +55,10 @@
 }
 
 - (void)commonInit {
-    NSLog(@"COMMON INIT");
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 
     [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
-      NSLog(@"LOADED: %@ %@", galleries, error);
 
       if (galleries.count == 0) {
           FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width / 2 - 175 / 2, self.tableView.frame.size.height / 2 - 125 / 2 + 64, 175, 125)];
@@ -78,7 +75,6 @@
 
 - (void)reloadData {
     [[FRSAPIClient sharedClient] fetchFollowing:^(NSArray *galleries, NSError *error) {
-      NSLog(@"LOADED: %@ %@", galleries, error);
 
       if (galleries.count == 0) {
           FRSAwkwardView *awkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width / 2 - 175 / 2, self.tableView.frame.size.height / 2 - 125 / 2 + 64, 175, 125)];
@@ -187,8 +183,6 @@
     if (height <= 0) {
         height = 100;
     }
-
-    NSLog(@"HEIGHT: %f", height);
 
     return height;
 }

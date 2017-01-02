@@ -227,7 +227,6 @@
 
     [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion
                                               completion:^(id responseObject, NSError *error) {
-                                                NSLog(@"RESPONSE: %@ \n ERROR: %@", responseObject, error);
                                                 FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                                                 [delegate reloadUser];
 
@@ -238,7 +237,6 @@
 
                                                 if (error) {
                                                     if (error.code == -1009) {
-                                                        NSLog(@"Unable to connect.");
                                                         self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
                                                         [self.alert show];
                                                         return;
@@ -246,7 +244,6 @@
 
                                                     NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
                                                     NSInteger responseCode = response.statusCode;
-                                                    NSLog(@"ERROR: %ld", (long)responseCode);
 
                                                     if (responseCode == 403 || responseCode == 401) {
                                                         if (!self.errorImageView) {

@@ -586,7 +586,6 @@
     self.savingInfo = true;
     [[FRSAPIClient sharedClient] updateIdentityWithDigestion:addressInfo
                                                   completion:^(id responseObject, NSError *error) {
-                                                    NSLog(@"IDENTITY: %@ %@", error, responseObject);
                                                     self.savingInfo = false;
 
                                                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -627,7 +626,6 @@
         if (self.saveIDInfoButton.enabled && !self.savingInfo) {
             [self saveIDInfo];
         }
-        NSLog(@"SAVING INFO: %@ %@ %@ %@ %@ %@ %@", _firstNameField.text, _lastNameField.text, _addressField.text, _unitField.text, _stateField.text, _zipField.text, _dateField.text);
     }
 }
 

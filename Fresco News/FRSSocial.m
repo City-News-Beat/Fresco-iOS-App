@@ -14,15 +14,12 @@
 // TODO: for login w/ twitter & login w/ facebook, use register, and add extra api layer
 + (void)loginWithTwitter:(LoginCompletionBlock)completion {
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
-      NSLog(@"SECRET: %@ \nTOKEN: %@", session.authTokenSecret, session.authToken);
 
       if (session) {
           [[FRSAPIClient sharedClient] signInWithTwitter:session
                                               completion:^(id responseObject, NSError *error) {
 
                                                 if (responseObject) {
-
-                                                    NSLog(@"RESPONSE: %d", [[responseObject objectForKey:@"valid_password"] boolValue]);
 
                                                     /*if ([[responseObject objectForKey:@"valid_password"] boolValue]) {
                         completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], session, Nil, responseObject);
@@ -59,8 +56,6 @@
 
                                                                            } else {
                                                                                [[FRSAPIClient sharedClient] handleUserLogin:responseObject];
-
-                                                                               NSLog(@"RESPONSE: %d", [[responseObject objectForKey:@"valid_password"] boolValue]);
 
                                                                                /*if ( [[responseObject objectForKey:@"valid_password"] boolValue]) {
                             completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], Nil, [FBSDKAccessToken currentAccessToken], responseObject);

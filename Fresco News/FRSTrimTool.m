@@ -235,8 +235,6 @@
     float w = self.frame.size.width - 60 - 30;
     self.left = x / w;
 
-    NSLog(@"LEFT: %f", self.left);
-
     return left;
 }
 
@@ -260,7 +258,6 @@
     float w = self.frame.size.width - 60 + 15;
     self.right = x / w;
 
-    NSLog(@"RIGHT: %f", self.right);
     return right;
 }
 

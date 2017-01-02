@@ -64,7 +64,6 @@
     [self hideTabBarAnimated:true];
 
     [self.navigationController setNavigationBarHidden:false];
-    NSLog(@"%f", self.navigationController.navigationBar.bounds.origin.y);
 
     [self.navigationController.navigationBar setTitleTextAttributes:@{
         NSForegroundColorAttributeName : [UIColor whiteColor],
@@ -120,8 +119,7 @@
         [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint
             withParameters:@{ @"avatar" : imageData }
             completion:^(id responseObject, NSError *error) {
-              NSLog(@"Response Object: %@", responseObject);
-              NSLog(@"Error: %@", error);
+              NSLog(@"Digestion Update Error: %@", error);
 
               if (!error) {
                   dispatch_async(dispatch_get_main_queue(), ^{
@@ -147,7 +145,6 @@
                                               completion:^(id responseObject, NSError *error) {
 
                                                 if (error.code == -1009) {
-                                                    NSLog(@"Unable to connect.");
                                                     FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                                                     [alert show];
                                                     return;

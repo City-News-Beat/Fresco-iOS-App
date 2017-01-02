@@ -102,7 +102,6 @@
     // RIGHT HUR
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
     [self.profileIV setContentMode:UIViewContentModeScaleAspectFill];
-    NSLog(@"AVATAR: %@", self.profileIV.image);
 
     self.captionLabel.text = self.gallery.caption;
 
@@ -160,10 +159,6 @@
     else {
         [self.actionBar setCurrentUser:FALSE];
     }*/
-
-    NSLog(@"self.gallery.creator = %@", self.gallery.creator);
-    NSLog(@"self.gallery.creator.uid = %@", self.gallery.creator.uid);
-    NSLog(@"authenticatedUser.uid = %@", [[[FRSAPIClient sharedClient] authenticatedUser] uid]);
 
     dispatch_async(dispatch_get_main_queue(), ^{
 
@@ -312,10 +307,6 @@
                                               [actionBar handleRepostAmount:reposts];
                                               if (error.code != 101) {
 
-                                                  NSLog(@"GALLERY: %@", self.gallery);
-                                                  NSLog(@"CREATOR: %@", self.gallery.creator);
-                                                  NSLog(@"UID: %@", self.gallery.creator.uid);
-
                                                   self.gallery.numberOfReposts++;
                                               }
                                           }
@@ -347,7 +338,6 @@
 }
 
 - (void)contentTap:(UITapGestureRecognizer *)sender {
-    NSLog(@"TAP");
 }
 
 - (void)configureUI {
@@ -414,7 +404,6 @@
                 // videof
                 // set up FRSPlayer
                 // add AVPlayerLayer
-                NSLog(@"TOP LEVEL PLAYER");
                 dispatch_async(dispatch_get_main_queue(), ^{
                   [self.players addObject:[self setupPlayerForPost:post play:FALSE]];
 
@@ -970,7 +959,6 @@
 }
 
 - (void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar {
-    NSLog(@"READ MORE");
 
     if (self.readMoreBlock) {
         self.readMoreBlock(Nil);

@@ -398,7 +398,6 @@
 }
 
 - (void)hereTapped {
-    NSLog(@"here");
 }
 
 - (void)configureSpinner {
@@ -458,8 +457,6 @@
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
 
-    NSLog(@"View Width/2: %f", self.view.frame.size.width / 2);
-    NSLog(@"Origin: %f", (self.tableView.frame.size.width / 4));
     self.highlightTabButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width / 2 - 60 - 10 - titleView.frame.size.width / 6, 6, 120, 30)];
     [self.highlightTabButton setTitle:@"HIGHLIGHTS" forState:UIControlStateNormal];
     [self.highlightTabButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
@@ -721,7 +718,6 @@
     [reloadedFrom addObject:offsetID];
 
     if (lastOffset == self.dataSource.count) {
-        NSLog(@"NOT RELOADING");
         return;
     }
 
@@ -1002,10 +998,8 @@
             CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
             if (scrollSpeed > maxScrollVelocity) {
                 isScrollingFast = YES;
-                NSLog(@"Fast");
             } else {
                 isScrollingFast = NO;
-                NSLog(@"Slow");
             }
 
             lastScrollOffset = currentOffset;

@@ -147,7 +147,6 @@
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     self.navigationItem.titleView = titleView;
     //(self.navigationController.navigationBar.frame.size.width/24)
-    NSLog(@"awddwadwadw %f", self.navigationItem.accessibilityFrame.size.width);
     self.followersTabButton = [[UIButton alloc] initWithFrame:CGRectMake(titleView.frame.size.width / 2 - 60 - 45 - titleView.frame.size.width / 6, 6, 120, 30)];
     [self.followersTabButton setTitle:@"FOLLOWERS" forState:UIControlStateNormal];
     [self.followersTabButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:1] forState:UIControlStateNormal];
@@ -208,7 +207,7 @@
                                           completion:^(id responseObject, NSError *error) {
 
                                             if (error || !responseObject) {
-                                                NSLog(@"LOAD MORE FOLLOWING ERROR: %@", error);
+                                                NSLog(@"Load More Following Error: %@", error);
                                                 return;
                                             }
 
@@ -241,7 +240,7 @@
                                                 last:user
                                           completion:^(id responseObject, NSError *error) {
                                             if (error || !responseObject) {
-                                                NSLog(@"LOAD MORE FOLLOWERS ERROR: %@", error);
+                                                NSLog(@"Load More Followers Error: %@", error);
                                                 return;
                                             }
 
@@ -269,7 +268,6 @@
 
     [[FRSAPIClient sharedClient] getFollowingForUser:_representedUser
                                           completion:^(id responseObject, NSError *error) {
-                                            NSLog(@"%@ %@", responseObject, error);
 
                                             self.didLoadOnce = YES;
                                             [self.followingSpinner removeFromSuperview];
@@ -469,15 +467,15 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (self.tableView == tableView) {
-        NSLog(@"Followers Table View");
+
     } else {
-        NSLog(@"Following Table View");
+
     }
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"%lu", (unsigned long)self.followerArray.count);
+
     if (self.tableView == tableView) {
         return self.followerArray.count;
     }
@@ -522,8 +520,6 @@
         if (avatarURL && ![avatarURL isEqual:[NSNull null]]) {
             avatarURLObject = [NSURL URLWithString:avatarURL];
         }
-
-        NSLog(@"USERN: %@", user.username);
 
         [cell configureSearchUserCellWithProfilePhoto:avatarURLObject
                                              fullName:user.firstName
@@ -577,7 +573,6 @@
     } else {
         FRSProfileViewController *controller = [[FRSProfileViewController alloc] initWithUser:((FRSUser *)self.followingArray[indexPath.row])];
         //should be followersArray
-        NSLog(@"FOLLOWING: %@", ((FRSUser *)self.followingArray[indexPath.row]).following);
 
         [self.navigationController pushViewController:controller animated:TRUE];
     }

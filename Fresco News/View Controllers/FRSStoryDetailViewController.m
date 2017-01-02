@@ -313,7 +313,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
     [[FRSAPIClient sharedClient] fetchGalleriesInStory:self.story.uid
                                             completion:^(NSArray *galleries, NSError *error) {
-                                              NSLog(@"%@", galleries);
 
                                               FRSAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
                                               NSArray *galleriesArray = galleries;
@@ -354,7 +353,6 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)followStory {
-    NSLog(@"Follow Story");
 }
 
 - (void)scrollToGalleryIndex:(NSInteger)index {

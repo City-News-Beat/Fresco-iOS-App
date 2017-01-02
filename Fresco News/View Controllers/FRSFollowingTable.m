@@ -174,7 +174,6 @@
 }
 
 - (void)followStory {
-    NSLog(@"Follow Story");
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -208,10 +207,8 @@
         CGFloat scrollSpeed = fabs(scrollSpeedNotAbs);
         if (scrollSpeed > maxScrollVelocity) {
             isScrollingFast = YES;
-            NSLog(@"Fast");
         } else {
             isScrollingFast = NO;
-            NSLog(@"Slow");
         }
 
         lastScrollOffset = currentOffset;

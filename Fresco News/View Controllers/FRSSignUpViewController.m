@@ -949,7 +949,7 @@
 
                                               NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
                                               NSInteger responseCode = response.statusCode;
-                                              NSLog(@"ERROR: %ld", (long)responseCode);
+                                              NSLog(@"Check Username Error: %ld", (long)responseCode);
 
                                               if (responseCode == 404) { //
                                                   [self animateUsernameCheckImageView:self.usernameCheckIV animateIn:YES success:YES];
@@ -1255,10 +1255,7 @@
                                                       facebookSignup = true;
                                                   }
 
-                                                  NSLog(@"%@ %@", error, responseObject);
-
                                                   NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
-                                                  NSLog(@"%@", errorMessage);
 
                                                   if (error) {
                                                       [registrationDigest setObject:error.localizedDescription forKey:@"error"];
@@ -1322,7 +1319,6 @@
 }
 
 - (void)checkEmail {
-    NSLog(@"EMAIL: %@", self.emailTF.text);
 
     [[FRSAPIClient sharedClient] checkEmail:self.emailTF.text
                                  completion:^(id responseObject, NSError *error) {

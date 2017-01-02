@@ -21,7 +21,6 @@
     FRSPost *post = [FRSPost MR_createEntity];
 
     if (!dict) {
-        NSLog(@"does not have dict");
     }
 
     if (dict)
@@ -137,7 +136,6 @@
         ;
         self.creator.bio = (dict[@"owner"][@"bio"] != Nil) ? dict[@"owner"][@"bio"] : @"";
         self.creator.following = dict[@"owner"][@"following"];
-        NSLog(@"FOLLOWING: %@", dict[@"owner"][@"following"]);
     }
 
     if ([dict objectForKey:@"stream"] != [NSNull null]) {

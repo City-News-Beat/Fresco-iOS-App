@@ -279,8 +279,6 @@
 
     [self startSpinner:self.loadingView onButton:self.saveBankButton];
 
-    NSLog(@"SAVING BANK INFO");
-
     NSString *bankAccountNumber = _accountNumberField.text;
     NSString *routingNumber = _routingNumberField.text;
 
@@ -291,8 +289,6 @@
     bankParams.accountHolderType = STPBankAccountHolderTypeIndividual;
     bankParams.country = @"US";
 
-    NSLog(@"PARAMS: %@", bankParams);
-
     if (!bankParams) {
         self.alertView = [[FRSAlertView alloc] initWithTitle:@"INCORRECT BANK INFORMATION" message:@"Please make sure your expiration date info is correct and try again." actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         [self.alertView show];
@@ -302,7 +298,6 @@
 
     [[STPAPIClient sharedClient] createTokenWithBankAccount:bankParams
                                                  completion:^(STPToken *_Nullable token, NSError *_Nullable error) {
-                                                   NSLog(@"STP: %@ %@", token, error);
                                                    // created token
                                                    if (error || !token) {
                                                        // failed
@@ -314,7 +309,6 @@
                                                    }
                                                    [[FRSAPIClient sharedClient] createPaymentWithToken:token.tokenId
                                                                                             completion:^(id responseObject, NSError *error) {
-                                                                                              NSLog(@"API: %@ %@", responseObject, error);
 
                                                                                               if (error) {
                                                                                                   // failed
@@ -423,11 +417,8 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
 
     if (cardNumberTextField.isEditing) {
-        NSLog(@"CARD NUMBER: %@", cardNumberTextField);
     } else if (expirationDateTextField.isEditing) {
-        NSLog(@"EXP DATE: %@", expirationDateTextField);
     } else if (securityCodeTextField.isEditing) {
-        NSLog(@"CVV: %@", securityCodeTextField);
     }
 
     if ((cardNumberTextField.text.length == 16) && (securityCodeTextField.text.length >= 3)) {
@@ -479,8 +470,6 @@
         }
     }
 
-    NSLog(@"INTERACTION ENABLED: %d", self.saveBankButton.userInteractionEnabled);
-
     return YES;
 }
 
@@ -515,8 +504,6 @@
         return;
     }
 
-    NSLog(@"CARD PARAMS: %@", params);
-
     [FRSStripe createTokenWithCard:params
                         completion:^(STPToken *stripeToken, NSError *error) {
 
@@ -527,11 +514,9 @@
                               return;
                           }
 
-                          NSLog(@"TOKEN: %@ \n TOKEN_ERROR:%@", stripeToken, error);
                           [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId
                                                                    completion:^(id responseObject, NSError *error) {
-                                                                     //
-                                                                     NSLog(@"RESP: %@ \n ERR:%@", responseObject, error);
+
                                                                      if (error) {
                                                                          self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                                                                          [self.alertView show];
