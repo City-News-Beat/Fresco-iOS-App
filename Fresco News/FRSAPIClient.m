@@ -897,9 +897,13 @@
 - (BOOL)isAuthenticated {
 
     if ([[SAMKeychain accountsForService:serviceName] count] > 0) {
+        NSLog(@"--- isAuthenticated: TRUE");
+        NSLog(@"--- FRSUser = %@", [[FRSAPIClient sharedClient] authenticatedUser]);
         return TRUE;
     }
 
+    NSLog(@"--- isAuthenticated: FALSE");
+    NSLog(@"--- FRSUser = %@", [[FRSAPIClient sharedClient] authenticatedUser]);
     return FALSE;
 }
 

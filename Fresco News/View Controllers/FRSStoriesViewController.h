@@ -11,13 +11,12 @@
 #import "Fresco.h"
 #import "FRSStoryDetailViewController.h"
 
-@interface FRSStoriesViewController : FRSScrollingViewController
-{
+@interface FRSStoriesViewController : FRSScrollingViewController {
     BOOL firstOpen;
     NSDate *entry;
     NSDate *exit;
     NSInteger numberRead;
 }
 @property BOOL loadNoMore;
--(void)reloadData;
+- (void)reloadData;
 @end

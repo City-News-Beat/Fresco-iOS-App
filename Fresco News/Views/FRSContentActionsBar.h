@@ -12,29 +12,29 @@
 
 @interface FRSContentActionsBar : UIView
 
-@property (weak, nonatomic) NSObject <FRSContentActionBarDelegate> *delegate;
+@property (weak, nonatomic) NSObject<FRSContentActionBarDelegate> *delegate;
 
--(instancetype)initWithOrigin:(CGPoint)origin delegate:(id <FRSContentActionBarDelegate>)delegate;
+- (instancetype)initWithOrigin:(CGPoint)origin delegate:(id<FRSContentActionBarDelegate>)delegate;
 
--(void)actionButtonTitleNeedsUpdate;
--(void)handleHeartState:(BOOL)state;
--(void)handleRepostState:(BOOL)state;
--(void)handleHeartAmount:(NSInteger)amount;
--(void)handleRepostAmount:(NSInteger)amount;
--(void)setCurrentUser:(BOOL)isAuth;
+- (void)actionButtonTitleNeedsUpdate;
+- (void)handleHeartState:(BOOL)state;
+- (void)handleRepostState:(BOOL)state;
+- (void)handleHeartAmount:(NSInteger)amount;
+- (void)handleRepostAmount:(NSInteger)amount;
+- (void)setCurrentUser:(BOOL)isAuth;
 @property (strong, nonatomic) UIButton *actionButton;
 
 @end
 
 @protocol FRSContentActionBarDelegate <NSObject>
 
--(NSString *)titleForActionButton;
+- (NSString *)titleForActionButton;
 
--(UIColor *)colorForActionButton;
+- (UIColor *)colorForActionButton;
 
--(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar;
--(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar;
--(void)handleActionButtonTapped;
--(void)handleRepost:(FRSContentActionsBar *)actionBar;
--(void)handleLike:(FRSContentActionsBar *)actionBar;
+- (void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar;
+- (void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar;
+- (void)handleActionButtonTapped;
+- (void)handleRepost:(FRSContentActionsBar *)actionBar;
+- (void)handleLike:(FRSContentActionsBar *)actionBar;
 @end

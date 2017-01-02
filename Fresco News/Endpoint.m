@@ -8,8 +8,6 @@
 
 #import "Endpoint.h"
 
-
-
 @implementation Endpoint
 
 - (void)setEndpoint:(int)endpointIndex {

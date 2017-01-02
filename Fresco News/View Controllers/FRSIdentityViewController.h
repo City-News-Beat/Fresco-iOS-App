@@ -10,12 +10,11 @@
 #import "FRSBaseViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 
-@interface FRSIdentityViewController : FRSBaseViewController <UITextFieldDelegate>
-{
+@interface FRSIdentityViewController : FRSBaseViewController <UITextFieldDelegate> {
     BOOL showsNameArea;
     BOOL showsAddressArea;
     BOOL showsSocialSecurityArea;
-    
+
     int sectionWithSendButton;
 }
 @property (nonatomic, strong) DGElasticPullToRefreshLoadingViewCircle *loadingView;

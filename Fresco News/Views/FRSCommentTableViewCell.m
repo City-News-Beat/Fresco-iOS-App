@@ -12,7 +12,7 @@
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
 
-@interface FRSCommentTableViewCell()
+@interface FRSCommentTableViewCell ()
 
 @property (strong, nonatomic) UIImageView *profileIV;
 @property (strong, nonatomic) UILabel *commentLabel;
@@ -31,10 +31,10 @@
     // Configure the view for the selected state
 }
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier comment:(id)comment{
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier comment:(id)comment {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self){
-        
+    if (self) {
+
         self.backgroundColor = [UIColor frescoBackgroundColorLight];
         [self configureImageView];
         [self configureLabel];
@@ -42,14 +42,14 @@
     return self;
 }
 
--(void)configureImageView{
+- (void)configureImageView {
     self.profileIV = [[UIImageView alloc] init];
-    self.profileIV.clipsToBounds  = YES;
+    self.profileIV.clipsToBounds = YES;
     self.profileIV.contentMode = UIViewContentModeScaleAspectFill;
     [self addSubview:self.profileIV];
 }
 
--(void)configureLabel{
+- (void)configureLabel {
     self.commentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width - 80, 0)];
     self.commentLabel.text = @"salvia kitsech before they sold out high life. unami tattoed sriracha mesggings picked marfa blue bottle high lfie next level four loko pbr.";
     self.commentLabel.textColor = [UIColor frescoDarkTextColor];
@@ -59,17 +59,17 @@
     [self addSubview:self.commentLabel];
 }
 
--(void)configureCell{
-    
+- (void)configureCell {
+
     self.profileIV.frame = CGRectMake(16, 12, 32, 32);
     self.profileIV.image = [UIImage imageNamed:@"kobe"];
     self.profileIV.layer.cornerRadius = 16;
-    
+
     [self.commentLabel centerVerticallyInView:self];
     [self.commentLabel setOriginWithPoint:CGPointMake(64, self.commentLabel.frame.origin.y)];
 }
 
--(void)clearCell{
+- (void)clearCell {
     self.profileIV.image = nil;
     self.commentLabel.text = nil;
 }

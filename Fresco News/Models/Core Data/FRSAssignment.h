@@ -12,14 +12,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FRSAssignment : NSManagedObject<FRSManagedObject>
+@interface FRSAssignment : NSManagedObject <FRSManagedObject>
 
 // Insert code here to declare functionality of your managed object subclass
 
-+(instancetype)assignmentWithDictionary:(NSDictionary *)dictionary;
++ (instancetype)assignmentWithDictionary:(NSDictionary *)dictionary;
 
--(void)configureWithDictionary:(NSDictionary *)dictionary;
-
+- (void)configureWithDictionary:(NSDictionary *)dictionary;
 
 @end
 

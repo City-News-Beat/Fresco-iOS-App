@@ -13,8 +13,7 @@
 
  @since Available in v2.3 and later.
  */
-typedef NS_ENUM(NSUInteger, MagicalRecordVersionTag)
-{
+typedef NS_ENUM(NSUInteger, MagicalRecordVersionTag) {
     /** Version 2.2.0 */
     MagicalRecordVersionTag2_2 = 220,
 
@@ -30,10 +29,10 @@ typedef NS_ENUM(NSUInteger, MagicalRecordVersionTag)
 
 #ifdef NS_BLOCKS_AVAILABLE
 
-OBJC_EXPORT NSString * __MR_nonnull const kMagicalRecordCleanedUpNotification;
+OBJC_EXPORT NSString *__MR_nonnull const kMagicalRecordCleanedUpNotification;
 
 @class NSManagedObjectContext;
-typedef void (^CoreDataBlock)(NSManagedObjectContext * __MR_nonnull context);
+typedef void (^CoreDataBlock)(NSManagedObjectContext *__MR_nonnull context);
 
 #endif
 
@@ -51,7 +50,7 @@ typedef void (^CoreDataBlock)(NSManagedObjectContext * __MR_nonnull context);
 
  @since Available in v2.3 and later.
  */
-+ (MagicalRecordVersionTag) version;
++ (MagicalRecordVersionTag)version;
 
 /**
  Provides information about the current stack, including the model, coordinator, persistent store, the default context and any parent contexts of the default context.
@@ -60,14 +59,14 @@ typedef void (^CoreDataBlock)(NSManagedObjectContext * __MR_nonnull context);
 
  @since Available in v2.3 and later.
  */
-+ (MR_nonnull NSString *) currentStack;
++ (MR_nonnull NSString *)currentStack;
 
 /**
  Cleans up the entire MagicalRecord stack. Sets the default model, store and context to nil before posting a kMagicalRecordCleanedUpNotification notification.
 
  @since Available in v1.0 and later.
  */
-+ (void) cleanUp;
++ (void)cleanUp;
 
 /**
  Calls NSBundle's -bundleForClass: to determine the bundle to search for the default model within.
@@ -76,7 +75,7 @@ typedef void (^CoreDataBlock)(NSManagedObjectContext * __MR_nonnull context);
 
  @since Available in v2.0 and later.
  */
-+ (void) setDefaultModelFromClass:(MR_nonnull Class)modelClass;
++ (void)setDefaultModelFromClass:(MR_nonnull Class)modelClass;
 
 /**
  Looks for a momd file with the specified name, and if found sets it as the default model.
@@ -85,7 +84,7 @@ typedef void (^CoreDataBlock)(NSManagedObjectContext * __MR_nonnull context);
 
  @since Available in v1.0 and later.
  */
-+ (void) setDefaultModelNamed:(MR_nonnull NSString *)modelName;
++ (void)setDefaultModelNamed:(MR_nonnull NSString *)modelName;
 
 /**
  Determines the store file name your app should use. This method is used by the MagicalRecord SQLite stacks when a store file is not specified. The file name returned is in the form "<ApplicationName>.sqlite". `<ApplicationName>` is taken from the application's info dictionary, which is retrieved from the method [[NSBundle mainBundle] infoDictionary]. If no bundle name is available, "CoreDataStore.sqlite" will be used.
@@ -94,6 +93,6 @@ typedef void (^CoreDataBlock)(NSManagedObjectContext * __MR_nonnull context);
 
  @since Available in v2.0 and later.
  */
-+ (MR_nonnull NSString *) defaultStoreName;
++ (MR_nonnull NSString *)defaultStoreName;
 
 @end

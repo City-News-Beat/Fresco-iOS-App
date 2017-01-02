@@ -9,7 +9,7 @@
 #import "FRSAssignmentAnnotation.h"
 #import "FRSAssignment.h"
 
-@interface FRSAssignmentAnnotation()
+@interface FRSAssignmentAnnotation ()
 
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *address;
@@ -22,20 +22,18 @@
 @implementation FRSAssignmentAnnotation
 @synthesize subtitle = _subtitle;
 
--(instancetype)initWithAssignment:(FRSAssignment *)assignment atIndex:(NSInteger)index{
+- (instancetype)initWithAssignment:(FRSAssignment *)assignment atIndex:(NSInteger)index {
     self = [super init];
-    if (self){
+    if (self) {
         if ([assignment.title isKindOfClass:[NSString class]]) {
             self.name = assignment.title;
-        }
-        else {
+        } else {
             self.name = @"Unknown Assignment";
         }
-        
+
         if ([assignment.caption isKindOfClass:[NSString class]]) {
             _subtitle = assignment.caption;
-        }
-        else {
+        } else {
             _subtitle = @"";
         }
         self.assignmentExpirationDate = assignment.expirationDate;
@@ -44,17 +42,18 @@
         self.assignmentId = assignment.uid;
         self.address = assignment.address;
         self.coordinate = CLLocationCoordinate2DMake([assignment.latitude floatValue], [assignment.longitude floatValue]);
-        
+
         self.isAcceptable = [assignment.acceptable boolValue];
     }
     return self;
 }
 
--(NSString *)subtitle {
+- (NSString *)subtitle {
     return _subtitle;
 }
 
--(NSString *)title {
+- (NSString *)title {
     return self.name;
 }
 @end
+

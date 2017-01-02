@@ -15,10 +15,10 @@
 @property (nonatomic) NSInteger assignmentIndex;
 @property (nonatomic) NSString *assignmentId;
 @property (nonatomic) NSArray *outlets;
--(instancetype)initWithAssignment:(FRSAssignment *)assignment atIndex:(NSInteger)index;
--(NSString *)title;
--(NSString *)subtitle;
--(NSDate *)assignmentExpirationDate;
--(NSDate *)assignmentPostedDate;
+- (instancetype)initWithAssignment:(FRSAssignment *)assignment atIndex:(NSInteger)index;
+- (NSString *)title;
+- (NSString *)subtitle;
+- (NSDate *)assignmentExpirationDate;
+- (NSDate *)assignmentPostedDate;
 @property (nonatomic) BOOL isAcceptable; // add isAcceptable to model
 @end

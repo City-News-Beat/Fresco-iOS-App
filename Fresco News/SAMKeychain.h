@@ -7,9 +7,9 @@
 //
 
 #if __has_feature(modules)
-	@import Foundation;
+@import Foundation;
 #else
-	#import <Foundation/Foundation.h>
+#import <Foundation/Foundation.h>
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
@@ -20,8 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
  platform.
  */
 typedef NS_ENUM(OSStatus, SAMKeychainErrorCode) {
-	/** Some of the arguments were invalid. */
-	SAMKeychainErrorBadArguments = -1001,
+    /** Some of the arguments were invalid. */
+    SAMKeychainErrorBadArguments = -1001,
 };
 
 /** SAMKeychain error domain */
@@ -94,7 +94,6 @@ extern NSString *const kSAMKeychainWhereKey;
 + (nullable NSData *)passwordDataForService:(NSString *)serviceName account:(NSString *)account;
 + (nullable NSData *)passwordDataForService:(NSString *)serviceName account:(NSString *)account error:(NSError **)error __attribute__((swift_error(none)));
 
-
 /**
  Deletes a password from the Keychain.
 
@@ -106,7 +105,6 @@ extern NSString *const kSAMKeychainWhereKey;
  */
 + (BOOL)deletePasswordForService:(NSString *)serviceName account:(NSString *)account;
 + (BOOL)deletePasswordForService:(NSString *)serviceName account:(NSString *)account error:(NSError **)error __attribute__((swift_error(none)));
-
 
 /**
  Sets a password in the Keychain.
@@ -148,7 +146,6 @@ extern NSString *const kSAMKeychainWhereKey;
 + (nullable NSArray<NSDictionary<NSString *, id> *> *)allAccounts;
 + (nullable NSArray<NSDictionary<NSString *, id> *> *)allAccounts:(NSError *__autoreleasing *)error __attribute__((swift_error(none)));
 
-
 /**
  Returns an array containing the Keychain's accounts for a given service, or `nil` if the Keychain doesn't have any
  accounts for the given service.
@@ -163,7 +160,6 @@ extern NSString *const kSAMKeychainWhereKey;
  */
 + (nullable NSArray<NSDictionary<NSString *, id> *> *)accountsForService:(nullable NSString *)serviceName;
 + (nullable NSArray<NSDictionary<NSString *, id> *> *)accountsForService:(nullable NSString *)serviceName error:(NSError *__autoreleasing *)error __attribute__((swift_error(none)));
-
 
 #pragma mark - Configuration
 
