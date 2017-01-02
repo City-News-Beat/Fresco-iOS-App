@@ -97,6 +97,9 @@ static NSString *const commentEndpoint = @"gallery/%@/comment/";
 static NSString *const galleryUnlikeEndpoint = @"gallery/%@/unlike";
 static NSString *const storyUnlikeEndpoint = @"story/%@/unlike";
 static NSString *const deleteCommentEndpoint = @"gallery/%@/comment/delete"; // comment_id -> comment
+static NSString *const likedGalleryEndpoint = @"gallery/%@/likes";
+static NSString *const repostedGalleryEndpoint = @"gallery/%@/reposts";
+
 
 // feeds
 static NSString *const likeFeed = @"feeds/%@/likes";
