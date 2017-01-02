@@ -255,6 +255,9 @@
     self.configuredNearby = NO;
 
     [self configureSpinner];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      self.nearbyHeaderContainer.alpha = 0;
+    });
     self.users = @[];
     self.galleries = @[];
     self.stories = @[];

@@ -367,9 +367,10 @@
 
     NSInteger secondsInProfile = -1 * [dateOpened timeIntervalSinceNow];
 
-    [FRSTracker track:profileSession parameters:@{ @"activity_duration" : @(secondsInProfile),
-                                                   @"user_id" : userID,
-                                                   @"galleries_scrolled_past" : @(galleriesScrolledPast) }];
+    [FRSTracker track:profileSession
+           parameters:@{ @"activity_duration" : @(secondsInProfile),
+                         @"user_id" : userID,
+                         @"galleries_scrolled_past" : @(galleriesScrolledPast) }];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -722,12 +723,16 @@
 - (void)configureFrogForFeed:(UITableView *)feed {
 
     if (self.feedAwkwardView) {
+        if (self.feedAwkwardView.superview != feed) {
+            [feed addSubview:self.feedAwkwardView];
+        }
         return;
     }
 
     NSInteger profileContainerTabBarHeight = 44;
 
     self.feedAwkwardView = [[FRSAwkwardView alloc] initWithFrame:CGRectMake(0, ((self.profileContainer.frame.size.height + profileContainerTabBarHeight) + (self.view.frame.size.height)) / 2, self.view.frame.size.width, self.view.frame.size.height)];
+
     [feed addSubview:self.feedAwkwardView];
 }
 
@@ -1160,8 +1165,9 @@
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
     NSString *url = content[0];
     url = [[url componentsSeparatedByString:@"/"] lastObject];
-    [FRSTracker track:galleryShared parameters:@{ @"gallery_id" : url,
-                                                  @"shared_from" : @"profile" }];
+    [FRSTracker track:galleryShared
+           parameters:@{ @"gallery_id" : url,
+                         @"shared_from" : @"profile" }];
 }
 
 - (void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
@@ -1187,8 +1193,9 @@
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
     [self hideTabBarAnimated:YES];
 
-    [FRSTracker track:galleryOpenedFromProfile parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"",
-                                                             @"opened_from" : @"profile" }];
+    [FRSTracker track:galleryOpenedFromProfile
+           parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"",
+                         @"opened_from" : @"profile" }];
 }
 
 - (void)readMoreStory:(NSIndexPath *)indexPath {
