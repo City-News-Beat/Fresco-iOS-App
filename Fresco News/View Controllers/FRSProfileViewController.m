@@ -681,7 +681,6 @@
                 [self configureFrogForFeed:self.tableView];
                 self.feedAwkwardView.alpha = 1;
                 
-                NSLog(@"Unable to connect.");
                 FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:NO];
                 [alert show];
             } else {
@@ -711,7 +710,6 @@
             if (self.likes.count <= 0) {
                 [self configureFrogForFeed:self.tableView];
                 self.feedAwkwardView.alpha = 1;
-                NSLog(@"Unable to connect.");
                 FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:NO];
                 [alert show];
             } else {
@@ -1138,11 +1136,9 @@
     self.likesButton.alpha = 0.7;
     
     if (self.galleries.count == 0 || (!self.galleries)) {
-        NSLog(@"SHOWING FROMDADMWDOAMDMOWADMWODOWADMOWAD");
         [self configureFrogForFeed:self.tableView];
         self.feedAwkwardView.alpha = 1;
     } else {
-        NSLog(@"hiding FROMDADMWDOAMDMOWADMWODOWADMOWAD");
         self.feedAwkwardView.alpha = 0;
     }
     
