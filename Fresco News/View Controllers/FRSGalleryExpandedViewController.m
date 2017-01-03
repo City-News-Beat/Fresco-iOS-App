@@ -503,7 +503,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (void)configureGalleryView {
-    self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, TOP_NAV_BAR_HEIGHT, self.view.frame.size.width, 500) gallery:self.gallery delegate:self];
+    self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, TOP_NAV_BAR_HEIGHT, self.view.frame.size.width, 0) gallery:self.gallery delegate:self];
     [self.scrollView addSubview:self.galleryView];
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
@@ -709,6 +709,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)adjustScrollViewContentSize {
 
     CGFloat height = self.galleryView.layer.frame.size.height + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING + 50;
+    
+    // this checks if the height of the gallery has not been set yet
+    // and sets a default value of 280 (pulled from spec) to avoid any
+    // formatting issues on newly uploaded galleries.
+    if (self.galleryView.frame.size.height <= 0 || self.galleryView == nil) {
+        height = 280 + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING + 50;
+    }
+    
     if (self.comments.count > 0) {
         height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height + 20;
     }
