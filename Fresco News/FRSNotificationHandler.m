@@ -256,6 +256,49 @@ static BOOL isDeeplinking;
                                             isDeeplinking = FALSE;
                                           });
                                         }];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
+//    
+//    for (NSString *gallery in galleryIDs) {
+//        
+//        [[FRSAPIClient sharedClient] getGalleryWithUID:gallery
+//                                            completion:^(id responseObject, NSError *error) {
+//                                                
+//                                                if (![galleryArray containsObject:responseObject]) {
+//                                                    [galleryArray addObject:(FRSGallery *)responseObject];
+//                                                }
+//                                                
+//                                                if (galleryArray.count == galleryIDs.count) {
+//                                                    if (!isDeeplinking) {
+//                                                        isDeeplinking = YES;
+//                                                        FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
+//                                                        [detailVC configureWithGalleries:galleryArray];
+//                                                        detailVC.navigationController = (UINavigationController *)[[[UIApplication sharedApplication] keyWindow] rootViewController];
+//                                                        detailVC.title = @"TODAY IN NEWS";
+//                                                        [(UINavigationController *)[[[UIApplication sharedApplication] keyWindow] rootViewController] pushViewController:detailVC animated:YES];
+//                                                    }
+//                                                }
+//                                            }];
+//    }
+    
+    
+    
+    
+    
+    
+    
+    
+//    FRSBaseViewController *baseVC = [[FRSBaseViewController alloc] init];
+//    [baseVC segueToTodayInNews:galleryIDs];
 }
 
 + (void)segueToGallery:(NSString *)galleryID {
