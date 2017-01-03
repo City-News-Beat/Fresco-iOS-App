@@ -350,6 +350,28 @@
     return self;
 }
 
+-(void)configureWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate{
+    [self setFrame:frame];
+    
+    self.delegate = delegate;
+    self.gallery = gallery;
+    NSMutableArray *posts = [[NSMutableArray alloc] init];
+    
+    for (FRSPost *post in self.gallery.posts) {
+        [posts addObject:post];
+    }
+    
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES];
+    [posts sortUsingDescriptors:[NSArray arrayWithObject:sort]];
+    
+    self.orderedPosts = posts;
+    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
+    
+    [self configureUI];
+    [self updateSocial];
+}
+
+
 -(void)contentTap:(UITapGestureRecognizer *)sender {
     NSLog(@"TAP");
 }

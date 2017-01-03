@@ -28,6 +28,7 @@
 
 #import "MGSwipeTableCell.h"
 #import "FRSCommentCell.h"
+#import "FRSGalleryDetailView.h"
 
 #define TOP_NAV_BAR_HEIGHT 64
 #define GALLERY_BOTTOM_PADDING 16
@@ -80,7 +81,9 @@
 
 @end
 
-@implementation FRSGalleryExpandedViewController
+@implementation FRSGalleryExpandedViewController{
+    FRSGalleryDetailView *galleryDetailView;
+}
 
 static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
@@ -91,7 +94,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(instancetype)initWithGallery:(FRSGallery *)gallery {
     self = [super init];
     if (self){
-        self.gallery = gallery;
+        self.gallery = gallery;//Remove after tested
+        galleryDetailView.gallery = gallery;
         
         if (gallery.uid) {
             self.galleryID = gallery.uid;
@@ -111,6 +115,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self = [super init];
     if (self){
         self.gallery = gallery;
+        galleryDetailView.gallery = gallery;
         //        self.orderedArticles = [self.gallery.articles allObjects];
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
@@ -131,6 +136,16 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         [self configureCommentLabel];
         [self configureSpinner];
     }
+    
+    galleryDetailView = [[[NSBundle mainBundle] loadNibNamed:@"FRSGalleryDetailView" owner:self options:nil] objectAtIndex:0];
+    [self.view addSubview:galleryDetailView];
+    galleryDetailView.gallery = self.gallery; //TODO: To be removed from class
+    galleryDetailView.defaultPostID = self.defaultPostID; //TODO: To be removed from class
+    [galleryDetailView configureGalleryView];
+    NSLog(@"Width 1: %f", self.view.frame.size.width);
+    NSLog(@"Width 2: %f", galleryDetailView.frame.size.width);
+    [self.view updateConstraints];
+    [self.view layoutSubviews];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -463,17 +478,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)configureUI{
     
-    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];//Added
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    [self configureScrollView];
-    [self configureGalleryView];
+    [self configureScrollView];//Added
+    [self configureGalleryView];//Added
     [self configureArticles];
     [self configureActionBar];
     [self configureNavigationBar];
     [self adjustScrollViewContentSize];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]//Chose not to add
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard:)];
     tap.cancelsTouchesInView = NO;
@@ -492,7 +507,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)playerWillPlay:(FRSPlayer *)player {
 }
 
--(void)configureGalleryView{
+-(void)configureGalleryView{//Added
     self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, TOP_NAV_BAR_HEIGHT, self.view.frame.size.width, 500) gallery:self.gallery delegate:self];
     [self.scrollView addSubview:self.galleryView];
     
@@ -1109,6 +1124,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             line.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.12];
             [commentField addSubview:line];
             
+            //Added until here
+            
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeUp:) name:UIKeyboardWillShowNotification object:Nil];
             
             [self.view addSubview:commentField];
@@ -1152,7 +1169,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
--(void)changeUp:(NSNotification *)change {
+-(void)changeUp:(NSNotification *)change {//Added
     
     if (self.didChangeUp) {
         return;
@@ -1444,7 +1461,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)loadGallery:(FRSGallery *)gallery {
-    self.gallery = gallery;
+    self.gallery = gallery;//Remove when tested
+    galleryDetailView.gallery = gallery;
     
     if (gallery.uid) {
         self.galleryID = gallery.uid;
@@ -1454,7 +1472,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.hiddenTabBar = YES;
     self.actionBarVisible = YES;
     self.touchEnabled = NO;
-    [self.galleryView loadGallery:gallery];
+    [self.galleryView loadGallery:gallery];//Remove when tested
+    [galleryDetailView.galleryView loadGallery:gallery];
     [self fetchCommentsWithID:gallery.uid];
     
 }

@@ -132,6 +132,8 @@
 		65F237CA1C24D464002182DE /* UIFont+Fresco.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F237C91C24D464002182DE /* UIFont+Fresco.m */; };
 		BCCFBCD81B726B5100A7CDE1 /* NSString+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */; };
 		C84BCB8E2886F985DF8773A5 /* Pods_Fresco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05903B223ECAE1D23A81E413 /* Pods_Fresco.framework */; };
+		CA2D87341E1C1033009BBB5A /* FRSGalleryDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA2D87331E1C1033009BBB5A /* FRSGalleryDetailView.xib */; };
+		CA2D87371E1C1246009BBB5A /* FRSGalleryDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = CA2D87361E1C1246009BBB5A /* FRSGalleryDetailView.m */; };
 		CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */; };
 		CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0CAE611E1579CA00CDE511 /* Endpoint.m */; };
 		CE12A5F91E14747A0032E72F /* EndpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12A5F81E14747A0032E72F /* EndpointManager.m */; };
@@ -532,6 +534,9 @@
 		BC419B6D1B70052500122B87 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		BCCFBCD61B726B5100A7CDE1 /* NSString+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Validation.h"; path = "Categories/NSString+Validation.h"; sourceTree = "<group>"; };
 		BCCFBCD71B726B5100A7CDE1 /* NSString+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Validation.m"; path = "Categories/NSString+Validation.m"; sourceTree = "<group>"; };
+		CA2D87331E1C1033009BBB5A /* FRSGalleryDetailView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryDetailView.xib; sourceTree = "<group>"; };
+		CA2D87351E1C1246009BBB5A /* FRSGalleryDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryDetailView.h; sourceTree = "<group>"; };
+		CA2D87361E1C1246009BBB5A /* FRSGalleryDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryDetailView.m; sourceTree = "<group>"; };
 		CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
 		CE0CAE601E1579CA00CDE511 /* Endpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Endpoint.h; sourceTree = "<group>"; };
 		CE0CAE611E1579CA00CDE511 /* Endpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Endpoint.m; sourceTree = "<group>"; };
@@ -1189,6 +1194,9 @@
 				D400FA531D6DE6C1008842E1 /* Comment */,
 				659B3E7F1C45B10E002E9B79 /* FRSGalleryExpandedViewController.h */,
 				659B3E801C45B10E002E9B79 /* FRSGalleryExpandedViewController.m */,
+				CA2D87351E1C1246009BBB5A /* FRSGalleryDetailView.h */,
+				CA2D87361E1C1246009BBB5A /* FRSGalleryDetailView.m */,
+				CA2D87331E1C1033009BBB5A /* FRSGalleryDetailView.xib */,
 				07B61ECB1CAF1C4900D3454F /* PeekPopArticleViewController.h */,
 				07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */,
 			);
@@ -2552,6 +2560,7 @@
 				D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */,
 				D48C72441D11D39F000677BF /* FRSBreakingCell.xib in Resources */,
 				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
+				CA2D87341E1C1033009BBB5A /* FRSGalleryDetailView.xib in Resources */,
 				D48C72311D11D2EB000677BF /* FRSActivityViewController.xib in Resources */,
 				D48C72381D11D312000677BF /* FRSGenericActivityCell.xib in Resources */,
 				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
@@ -2760,6 +2769,7 @@
 				D453CC791CCA80850091A004 /* MagicalRecord+Actions.m in Sources */,
 				D4B35F5C1CD1B51400F5C8A8 /* FRSUpload.m in Sources */,
 				657F3EA81C0CC9D7009AE08F /* UIImage+Helpers.m in Sources */,
+				CA2D87371E1C1246009BBB5A /* FRSGalleryDetailView.m in Sources */,
 				D433E5701DF1E2A6007440EC /* (null) in Sources */,
 				65135FD81C286DCF00839149 /* FRSNotification.m in Sources */,
 				075998331C6BCF5300A0FE73 /* FRSAVSessionManager.m in Sources */,
