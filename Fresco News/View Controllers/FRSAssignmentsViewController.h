@@ -2,7 +2,7 @@
 //  FRSAssignmentsViewController.h
 //  Fresco
 //
-//  Created by Daniel Sun on 1/11/16.
+//  Created by Fresco News on 1/11/16.
 //  Copyright © 2016 Fresco. All rights reserved.
 //
 
@@ -14,25 +14,26 @@
 
 @import MapKit;
 
-@interface FRSAssignmentsViewController : FRSBaseViewController <UIScrollViewDelegate>
-{
+@interface FRSAssignmentsViewController : FRSBaseViewController <UIScrollViewDelegate> {
     __weak UIScrollView *currentScroller; // weak b/c we only want to hold reference when in view
     BOOL isScrolling;
-    
+
     NSTimer *scrollTimer;
     BOOL notFirstFetch;
 }
 
--(void)setInitialMapRegion;
--(instancetype)initWithActiveAssignment:(NSString *)assignmentID;
--(void)focusOnAssignment:(FRSAssignment *)assignment;
--(void)configureMap;
--(void)fetchLocalAssignments;
+- (void)setInitialMapRegion;
+- (instancetype)initWithActiveAssignment:(NSString *)assignmentID;
+- (void)focusOnAssignment:(FRSAssignment *)assignment;
+- (void)configureMap;
 @property CGFloat assignmentLat;
 @property CGFloat assignmentLong;
+
+- (void)globalAssignmentsSegue;
 
 @property (nonatomic) BOOL hasDefault;
 @property (nonatomic, retain) NSString *defaultID;
 @property (strong, nonatomic) MKMapView *mapView;
+@property BOOL mapShouldFollowUser;
 
 @end

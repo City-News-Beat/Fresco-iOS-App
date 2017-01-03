@@ -38,9 +38,9 @@ typedef NS_ENUM(NSInteger, DGElasticPullToRefreshState) {
 @interface DGElasticPullToRefreshView : UIView
 
 @property (nonatomic, copy) void (^actionHandler)();
-@property (nonatomic, strong) DGElasticPullToRefreshLoadingView* loadingView;
+@property (nonatomic, strong) DGElasticPullToRefreshLoadingView *loadingView;
 @property (nonatomic, assign) BOOL observing;
-@property (nonatomic, strong) UIColor* fillColor;
+@property (nonatomic, strong) UIColor *fillColor;
 
 #pragma mark - config
 @property (nonatomic, assign) CGFloat waveMaxHeight;
@@ -50,7 +50,7 @@ typedef NS_ENUM(NSInteger, DGElasticPullToRefreshState) {
 @property (nonatomic, assign) CGFloat animationVelocity;
 @property (nonatomic, assign) CGFloat yPos;
 
-- (UIScrollView*)scrollView;
+- (UIScrollView *)scrollView;
 - (void)disassociateDisplayLink;
 - (void)stopLoading;
 @end

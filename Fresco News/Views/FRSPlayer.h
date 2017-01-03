@@ -14,4 +14,6 @@
 @property (nonatomic, copy) void (^playBlock)(BOOL willPlay, FRSPlayer *player);
 @property BOOL wasMuted;
 @property BOOL hasNotifs;
+@property BOOL hasEstablished;
 @end
+

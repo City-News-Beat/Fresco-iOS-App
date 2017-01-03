@@ -27,7 +27,7 @@
 #import <UIKit/UIKit.h>
 
 @interface DGElasticPullToRefreshLoadingView : UIView
-@property (nonatomic, strong) CAShapeLayer* maskLayer;
+@property (nonatomic, strong) CAShapeLayer *maskLayer;
 - (void)setPullProgress:(CGFloat)progress;
 - (void)startAnimating;
 - (void)stopLoading;

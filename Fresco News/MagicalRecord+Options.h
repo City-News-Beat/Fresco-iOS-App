@@ -13,8 +13,7 @@
 
  @since Available in v2.3 and later.
  */
-typedef NS_ENUM (NSUInteger, MagicalRecordLoggingMask)
-{
+typedef NS_ENUM(NSUInteger, MagicalRecordLoggingMask) {
     /** Log all errors */
     MagicalRecordLoggingMaskError = 1 << 0,
 
@@ -36,8 +35,7 @@ typedef NS_ENUM (NSUInteger, MagicalRecordLoggingMask)
 
  @since Available in v2.3 and later.
  */
-typedef NS_ENUM (NSUInteger, MagicalRecordLoggingLevel)
-{
+typedef NS_ENUM(NSUInteger, MagicalRecordLoggingLevel) {
     /** Don't log anything */
     MagicalRecordLoggingLevelOff = 0,
 
@@ -60,7 +58,6 @@ typedef NS_ENUM (NSUInteger, MagicalRecordLoggingLevel)
     MagicalRecordLoggingLevelAll = NSUIntegerMax
 };
 
-
 @interface MagicalRecord (Options)
 
 /**
@@ -74,7 +71,7 @@ typedef NS_ENUM (NSUInteger, MagicalRecordLoggingLevel)
 
  @since Available in v2.0.4 and later.
  */
-+ (BOOL) shouldAutoCreateManagedObjectModel;
++ (BOOL)shouldAutoCreateManagedObjectModel;
 
 /**
  Setting this to true will make MagicalRecord create the default managed object model automatically if it doesn't exist when calling `[NSManagedObjectModel MR_defaultManagedObjectModel]`.
@@ -83,7 +80,7 @@ typedef NS_ENUM (NSUInteger, MagicalRecordLoggingLevel)
 
  @since Available in v2.0.4 and later.
  */
-+ (void) setShouldAutoCreateManagedObjectModel:(BOOL)autoCreate;
++ (void)setShouldAutoCreateManagedObjectModel:(BOOL)autoCreate;
 
 /**
  If this is true, the default persistent store will be automatically created if it doesn't exist when calling `[NSPersistentStoreCoordinator MR_defaultStoreCoordinator]`.
@@ -92,7 +89,7 @@ typedef NS_ENUM (NSUInteger, MagicalRecordLoggingLevel)
 
  @since Available in v2.0.4 and later.
  */
-+ (BOOL) shouldAutoCreateDefaultPersistentStoreCoordinator;
++ (BOOL)shouldAutoCreateDefaultPersistentStoreCoordinator;
 
 /**
  Setting this to true will make MagicalRecord create the default persistent store automatically if it doesn't exist when calling `[NSPersistentStoreCoordinator MR_defaultStoreCoordinator]`.
@@ -101,7 +98,7 @@ typedef NS_ENUM (NSUInteger, MagicalRecordLoggingLevel)
 
  @since Available in v2.0.4 and later.
  */
-+ (void) setShouldAutoCreateDefaultPersistentStoreCoordinator:(BOOL)autoCreate;
++ (void)setShouldAutoCreateDefaultPersistentStoreCoordinator:(BOOL)autoCreate;
 
 /**
  If this is true and MagicalRecord encounters a store with a version that does not match that of the model, the store will be removed from the disk.
@@ -111,7 +108,7 @@ typedef NS_ENUM (NSUInteger, MagicalRecordLoggingLevel)
  
  @since Available in v2.0.4 and later.
  */
-+ (BOOL) shouldDeleteStoreOnModelMismatch;
++ (BOOL)shouldDeleteStoreOnModelMismatch;
 
 /**
  Setting this to true will make MagicalRecord delete any stores that it encounters which do not match the version of their model.
@@ -121,7 +118,7 @@ typedef NS_ENUM (NSUInteger, MagicalRecordLoggingLevel)
  
  @since Available in v2.0.4 and later.
  */
-+ (void) setShouldDeleteStoreOnModelMismatch:(BOOL)shouldDelete;
++ (void)setShouldDeleteStoreOnModelMismatch:(BOOL)shouldDelete;
 
 /**
  @name Logging Levels
@@ -134,7 +131,7 @@ typedef NS_ENUM (NSUInteger, MagicalRecordLoggingLevel)
  
  @since Available in v2.3 and later.
  */
-+ (MagicalRecordLoggingLevel) loggingLevel;
++ (MagicalRecordLoggingLevel)loggingLevel;
 
 /**
  Sets the logging mask set for MagicalRecord in the current application.
@@ -143,6 +140,6 @@ typedef NS_ENUM (NSUInteger, MagicalRecordLoggingLevel)
 
  @since Available in v2.3 and later.
  */
-+ (void) setLoggingLevel:(MagicalRecordLoggingLevel)level;
++ (void)setLoggingLevel:(MagicalRecordLoggingLevel)level;
 
 @end

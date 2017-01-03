@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FRSTabBarController : UITabBarController
-
+@interface FRSTabBarController : UITabBarController <FRSAlertViewDelegate>
 
 @property (nonatomic) NSInteger lastActiveIndex;
 
@@ -18,18 +17,18 @@
 //- (void)presentCameraForCaptureMode:(FRSCaptureMode)captureMode;
 
 - (void)presentAssignments;
--(void)setIrisItemColor:(UIColor *)color;
--(void)handleNotification:(NSDictionary *)notification;
--(void)respondToQuickAction:(NSString *)quickAction;
--(void)openGalleryID:(NSString *)galleryID;
--(void)openStoryID:(NSString *)storyID;
--(void)openUserID:(NSString *)userID;
--(void)openGalleryIDS:(NSArray *)galleryIDS;
--(void)openAssignmentID:(NSString *)assignmentID;
--(void)updateBellIcon:(BOOL)unread;
--(void)updateUserIcon;
+- (void)setIrisItemColor:(UIColor *)color;
+- (void)handleNotification:(NSDictionary *)notification;
+- (void)respondToQuickAction:(NSString *)quickAction;
+- (void)openGalleryID:(NSString *)galleryID;
+- (void)openStoryID:(NSString *)storyID;
+- (void)openUserID:(NSString *)userID;
+- (void)openGalleryIDS:(NSArray *)galleryIDS;
+- (void)openAssignmentID:(NSString *)assignmentID;
+- (void)updateBellIcon:(BOOL)unread;
+- (void)updateUserIcon;
 @property (strong, nonatomic) UIView *dot;
 
--(void)configureViewControllersWithNotif:(BOOL)notif;
+- (void)configureViewControllersWithNotif:(BOOL)notif;
 
 @end

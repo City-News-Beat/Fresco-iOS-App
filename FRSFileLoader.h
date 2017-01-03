@@ -16,29 +16,27 @@
  
  */
 @protocol FRSFileLoaderDelegate
--(void)applicationNotAuthorized;
--(void)filesLoaded;
+- (void)applicationNotAuthorized;
+- (void)filesLoaded;
 @end
 
 typedef void (^AuthCallback)(BOOL authorized);
 typedef void (^MediaCallback)(NSArray *media, NSError *error);
 typedef void (^DataCallback)(UIImage *image, AVAsset *video, PHAssetMediaType mediaType, NSError *error);
 
-@interface FRSFileLoader : NSObject
-{
+@interface FRSFileLoader : NSObject {
     PHFetchResult *currentCollection;
     MediaCallback returnCallback;
     NSRange currentRange;
     NSMutableArray *allAssets;
     PHCachingImageManager *assetLoader;
-    
-    BOOL wasPreviouslyAuthorized;
 
+    BOOL wasPreviouslyAuthorized;
 }
--(id)initWithDelegate:(id<FRSFileLoaderDelegate>)del;
+- (id)initWithDelegate:(id<FRSFileLoaderDelegate>)del;
 @property (nonatomic, weak) id<FRSFileLoaderDelegate> delegate;
--(NSInteger)numberOfAssets;
--(void)fetchAssetsWithinIndexRange:(NSRange)range callback:(MediaCallback)callback;
--(void)getDataFromAsset:(PHAsset *)asset callback:(DataCallback)callback;
--(PHAsset *)assetAtIndex:(NSInteger)index;
+- (NSInteger)numberOfAssets;
+- (void)fetchAssetsWithinIndexRange:(NSRange)range callback:(MediaCallback)callback;
+- (void)getDataFromAsset:(PHAsset *)asset callback:(DataCallback)callback;
+- (PHAsset *)assetAtIndex:(NSInteger)index;
 @end

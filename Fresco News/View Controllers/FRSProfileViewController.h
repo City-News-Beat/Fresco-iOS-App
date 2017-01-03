@@ -11,15 +11,27 @@
 #import "FRSFeedTable.h"
 #import "FRSBorderedImageView.h"
 
-@interface FRSProfileViewController : FRSScrollingViewController <UITextViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource>
-{
+@interface FRSProfileViewController : FRSScrollingViewController <UITextViewDelegate, FRSGalleryViewDelegate, FRSStoryViewDelegate, UITableViewDataSource> {
     UILabel *titleLabel;
     UIView *topView;
     BOOL isLoadingUser;
     NSString *userId;
+    BOOL isReloading;
+    BOOL isFinishedLikes;
+    BOOL isFinishedUser;
+
+    CGPoint lastScrollOffset;
+    NSTimeInterval lastOffsetCapture;
+    BOOL isScrollingFast;
+    NSInteger galleriesScrolledPast;
+
+    NSInteger currentProfileCount;
+    NSInteger currentLikesCount;
+
+    NSDate *dateOpened;
 }
 
--(void)resizeProfileContainer;
+- (void)resizeProfileContainer;
 
 @property BOOL userIsBlocking;
 @property BOOL userIsBlocked;
@@ -29,11 +41,11 @@
 @property (nonatomic, weak) NSArray *currentFeed;
 @property (nonatomic, retain) UIScrollView *tablePageScroller;
 @property (nonatomic, retain) UITableView *contentTable;
--(instancetype)initWithUser:(FRSUser *)user;
--(instancetype)initWithUserID:(NSString *)userName;
+- (instancetype)initWithUser:(FRSUser *)user;
+- (instancetype)initWithUserID:(NSString *)userName;
 
--(void)loadAuthenticatedUser;
--(FRSUser *)authenticatedUser;
+- (void)loadAuthenticatedUser;
+- (FRSUser *)authenticatedUser;
 @property (nonatomic, retain) FRSUser *representedUser;
 @property BOOL authenticatedProfile;
 //@property (strong, nonatomic) UILabel *bioLabel;
@@ -43,6 +55,6 @@
 @property (strong, nonatomic) FRSBorderedImageView *profileIV;
 @property BOOL editedProfile;
 @property BOOL shouldShowNotificationsOnLoad;
--(void)showNotificationsNotAnimated;
+- (void)showNotificationsNotAnimated;
 
 @end

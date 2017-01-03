@@ -36,6 +36,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
     [super viewWillAppear:animated];
 
     [self reloadPayments];
+    [FRSTracker screen:@"Payment Method"];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -62,9 +63,11 @@ static NSString *addPaymentCell = @"addPaymentCell";
             [cell setActive:NO];
         }
         cell.delegate = self;
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
     } else if (indexPath.section == 1) {
         FRSAddPaymentCell *cell = [self.tableView dequeueReusableCellWithIdentifier:addPaymentCell];
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
     }
 
@@ -116,7 +119,6 @@ static NSString *addPaymentCell = @"addPaymentCell";
         }
 
         NSDictionary *payment = self.payments[i];
-
         if ([payment[@"id"] isEqualToString:activePayment]) {
             [cell setActive:YES];
         } else {

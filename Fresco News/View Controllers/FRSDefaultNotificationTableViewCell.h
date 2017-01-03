@@ -10,7 +10,7 @@
 
 @protocol FRSDefaultNotificationCellDelegate <NSObject>
 
--(void)customButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath;
+- (void)customButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -20,22 +20,21 @@
 @property (nonatomic, strong) NSIndexPath *indexPath;
 
 /* SOCIAL */
--(void)configureUserFollowNotificationWithID:(NSString *)userID;
--(void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
--(void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID;
--(void)configureAssignmentCellWithID:(NSString *)assignmentID;
--(void)configureUserRepostNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
--(void)configureUserCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID;
--(void)configureUserMentionCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID;
--(void)configureUserMentionGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
+- (void)configureUserFollowNotificationWithID:(NSString *)userID;
+- (void)configureUserLikeNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
+- (void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID;
+- (void)configureAssignmentCellWithID:(NSString *)assignmentID;
+- (void)configureUserRepostNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
+- (void)configureUserCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID;
+- (void)configureUserMentionCommentNotificationWithUserID:(NSString *)userID commentID:(NSString *)commentID;
+- (void)configureUserMentionGalleryNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID;
 
 /* PAYMENT */
--(void)configurePhotoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod;
--(void)configureVideoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod;
+- (void)configurePhotoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod;
+- (void)configureVideoPurchasedWithPostID:(NSString *)postID outletID:(NSString *)outletID price:(NSString *)price paymentMethod:(NSString *)paymentMethod;
 
-
--(void)configureCellForType:(NSString *)cellType userID:(NSString *)userID;
--(NSInteger)heightForCell;
+- (void)configureCellForType:(NSString *)cellType userID:(NSString *)userID;
+- (NSInteger)heightForCell;
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;
@@ -51,10 +50,9 @@
 
 @property (nonatomic) NSInteger count;
 
-
 /* HELPERS */
--(void)configureDefaultCell;
--(void)configureDefaultCellWithAttributesForNotification:(FRSNotificationType)notificationType;
--(void)updateLabelsForCount;
--(void)configureImageCell;
+- (void)configureDefaultCell;
+- (void)configureDefaultCellWithAttributesForNotification:(FRSNotificationType)notificationType;
+- (void)updateLabelsForCount;
+- (void)configureImageCell;
 @end

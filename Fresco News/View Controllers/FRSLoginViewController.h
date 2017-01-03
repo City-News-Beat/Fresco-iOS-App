@@ -27,9 +27,9 @@
 @property (nonatomic, retain) IBOutlet UILabel *socialLabel;
 @property (weak, nonatomic) IBOutlet UIButton *passwordHelpButton;
 
--(IBAction)login:(id)sender;
--(IBAction)twitter:(id)sender;
--(IBAction)facebook:(id)sender;
--(IBAction)next:(id)sender;
+- (IBAction)login:(id)sender;
+- (IBAction)twitter:(id)sender;
+- (IBAction)facebook:(id)sender;
+- (IBAction)next:(id)sender;
 
 @end

@@ -101,7 +101,9 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
+    
+    [FRSTracker screen:@"Settings"];
+    
     [self checkNotificationStatus];
 
     [self.navigationController.navigationBar setTitleTextAttributes:
@@ -550,7 +552,6 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 - (void)didPressButtonAtIndex:(NSInteger)index {
     //for logout alert
     if (index == 0) {
-        NSLog(@"index 0");
     } else if (index == 1) {
         [self logoutWithPop:YES];
     }

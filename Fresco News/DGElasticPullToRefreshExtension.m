@@ -27,38 +27,33 @@
 #import "DGElasticPullToRefreshExtension.h"
 #import <objc/runtime.h>
 
-static NSString* observersArray = @"observers";
+static NSString *observersArray = @"observers";
 
 @implementation NSObject (DGElasticExtension)
-- (NSMutableArray*)dg_observers
-{
+- (NSMutableArray *)dg_observers {
     id observers = objc_getAssociatedObject(self, &observersArray);
     if (observers) {
         return observers;
-    }
-    else {
-        NSMutableArray* observers = [NSMutableArray array];
+    } else {
+        NSMutableArray *observers = [NSMutableArray array];
         [self setDg_observers:observers];
         return observers;
     }
 }
 
-- (void)setDg_observers:(NSMutableArray*)dg_observers
-{
+- (void)setDg_observers:(NSMutableArray *)dg_observers {
     objc_setAssociatedObject(self, &observersArray, dg_observers, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)dg_addObserver:(NSObject*)observer forKeyPath:(NSString*)keyPath
-{
-    NSDictionary* observerInfo = @{ keyPath : observer };
+- (void)dg_addObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath {
+    NSDictionary *observerInfo = @{ keyPath : observer };
     if ([self.dg_observers indexOfObject:observerInfo] == NSNotFound) {
         [self.dg_observers addObject:observerInfo];
         [self addObserver:observer forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:nil];
     }
 }
-- (void)dg_removeObserver:(NSObject*)observer forKeyPath:(NSString*)keyPath
-{
-    NSDictionary* observerInfo = @{ keyPath : observer };
+- (void)dg_removeObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath {
+    NSDictionary *observerInfo = @{ keyPath : observer };
     if ([self.dg_observers containsObject:observerInfo]) {
         [self.dg_observers removeObject:observerInfo];
         [self removeObserver:observer forKeyPath:keyPath];
@@ -68,26 +63,21 @@ static NSString* observersArray = @"observers";
 
 @implementation UIView (DGElasticExtension)
 
-- (void)setCenterX:(CGFloat)centerX
-{
+- (void)setCenterX:(CGFloat)centerX {
     self.center = CGPointMake(centerX, self.center.y);
 }
-- (CGFloat)centerX
-{
+- (CGFloat)centerX {
     return self.center.x;
 }
 
-- (void)setCenterY:(CGFloat)centerY
-{
+- (void)setCenterY:(CGFloat)centerY {
     self.center = CGPointMake(self.center.x, centerY);
 }
-- (CGFloat)centerY
-{
+- (CGFloat)centerY {
     return self.center.y;
 }
-- (CGPoint)dg_center:(BOOL)usePresentationLayerIfPossible
-{
-    CALayer* persentationLayer = self.layer.presentationLayer;
+- (CGPoint)dg_center:(BOOL)usePresentationLayerIfPossible {
+    CALayer *persentationLayer = self.layer.presentationLayer;
     if (usePresentationLayerIfPossible && persentationLayer) {
         return persentationLayer.position;
     }
@@ -97,57 +87,45 @@ static NSString* observersArray = @"observers";
 
 @implementation UIScrollView (DGElasticExtension)
 
-- (void)setContentInsetTop:(CGFloat)contentInsetTop
-{
+- (void)setContentInsetTop:(CGFloat)contentInsetTop {
     self.contentInset = UIEdgeInsetsMake(contentInsetTop, self.contentInset.left, self.contentInset.bottom, self.contentInset.right);
 }
-- (CGFloat)contentInsetTop
-{
+- (CGFloat)contentInsetTop {
     return self.contentInset.top;
 }
 
-- (void)setContentInsetLeft:(CGFloat)contentInsetLeft
-{
+- (void)setContentInsetLeft:(CGFloat)contentInsetLeft {
     self.contentInset = UIEdgeInsetsMake(self.contentInset.top, contentInsetLeft, self.contentInset.bottom, self.contentInset.right);
 }
-- (CGFloat)contentInsetLeft
-{
+- (CGFloat)contentInsetLeft {
     return self.contentInset.left;
 }
 
-- (void)setContentInsetBottom:(CGFloat)contentInsetBottom
-{
+- (void)setContentInsetBottom:(CGFloat)contentInsetBottom {
     self.contentInset = UIEdgeInsetsMake(self.contentInset.top, self.contentInset.left, contentInsetBottom, self.contentInset.right);
 }
-- (CGFloat)contentInsetBottom
-{
+- (CGFloat)contentInsetBottom {
     return self.contentInset.bottom;
 }
 
-- (void)setContentInsetRight:(CGFloat)contentInsetRight
-{
+- (void)setContentInsetRight:(CGFloat)contentInsetRight {
     self.contentInset = UIEdgeInsetsMake(self.contentInset.top, self.contentInset.left, self.contentInset.bottom, contentInsetRight);
 }
-- (CGFloat)contentInsetRight
-{
+- (CGFloat)contentInsetRight {
     return self.contentInset.right;
 }
 
-- (void)setContentOffsetX:(CGFloat)contentOffsetX
-{
+- (void)setContentOffsetX:(CGFloat)contentOffsetX {
     self.contentOffset = CGPointMake(contentOffsetX, self.contentOffset.y);
 }
-- (CGFloat)contentOffsetX
-{
+- (CGFloat)contentOffsetX {
     return self.contentOffset.x;
 }
 
-- (void)setContentOffsetY:(CGFloat)contentOffsetY
-{
+- (void)setContentOffsetY:(CGFloat)contentOffsetY {
     self.contentOffset = CGPointMake(self.contentOffset.x, contentOffsetY);
 }
-- (CGFloat)contentOffsetY
-{
+- (CGFloat)contentOffsetY {
     return self.contentOffset.y;
 }
 

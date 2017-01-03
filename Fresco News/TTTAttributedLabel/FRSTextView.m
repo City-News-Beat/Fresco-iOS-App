@@ -15,17 +15,16 @@
 }
 
 - (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
-    
+
     // discard all recognizers but the one that activates links, by just not calling super
     // (in iOS 9.2.3 a short press for links is 0.12s, long press for selection is 0.75s)
-    
-    if ([gestureRecognizer isMemberOfClass:UILongPressGestureRecognizer.class] &&
-        ((UILongPressGestureRecognizer*)gestureRecognizer).minimumPressDuration < 0.25) {
-        
-        ((UILongPressGestureRecognizer*)gestureRecognizer).minimumPressDuration = 0.0;
+
+    if ([gestureRecognizer isMemberOfClass:UILongPressGestureRecognizer.class] && ((UILongPressGestureRecognizer *)gestureRecognizer).minimumPressDuration < 0.25) {
+
+        ((UILongPressGestureRecognizer *)gestureRecognizer).minimumPressDuration = 0.0;
         [super addGestureRecognizer:gestureRecognizer];
     }
 }
 
-
 @end
+ 

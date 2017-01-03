@@ -8,9 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface FRSUserDefaults : NSObject
-{
-    
+@interface FRSUserDefaults : NSObject {
 }
-+(instancetype)standardUserDefaults;
++ (instancetype)standardUserDefaults;
 @end

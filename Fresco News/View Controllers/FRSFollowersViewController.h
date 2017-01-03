@@ -1,3 +1,4 @@
+
 //
 //  FRSFollowersViewController.h
 //  Fresco
@@ -9,7 +10,13 @@
 #import "FRSScrollingViewController.h"
 #import "FRSUser.h"
 
-@interface FRSFollowersViewController : FRSScrollingViewController <UITableViewDelegate, UITableViewDataSource>
+@interface FRSFollowersViewController : FRSScrollingViewController <UITableViewDelegate, UITableViewDataSource> {
+    BOOL isAtBottomFollowers;
+    BOOL isAtBottomFollowing;
+    BOOL isReloadingFollowing;
+    BOOL isReloadingFollowers;
+}
+
 @property (nonatomic, weak) FRSUser *representedUser;
 @property BOOL shouldUpdateOnReturn;
 @end

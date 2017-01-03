@@ -21,20 +21,19 @@
     // Configure the view for the selected state
 }
 
--(IBAction)deletePayment:(id)sender {
+- (IBAction)deletePayment:(id)sender {
     if (_delegate) {
         [_delegate deleteButtonClicked:self.payment];
     }
 }
 
--(void)setActive:(BOOL)active {
+- (void)setActive:(BOOL)active {
     self.isActive = active;
-    
+
     if (active) {
         self.selectionCircle.image = [UIImage imageNamed:@"check-box-circle-filled"];
         self.deletionButton.hidden = TRUE;
-    }
-    else {
+    } else {
         self.selectionCircle.image = [UIImage imageNamed:@"check-box-circle-outline"];
         self.deletionButton.hidden = FALSE;
     }

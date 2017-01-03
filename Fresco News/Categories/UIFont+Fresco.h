@@ -10,12 +10,12 @@
 
 @interface UIFont (Fresco)
 
-+(UIFont *)notaBoldWithSize:(NSInteger)size;
++ (UIFont *)notaBoldWithSize:(NSInteger)size;
 
-+(UIFont *)notaRegularWithSize:(NSInteger)size;
++ (UIFont *)notaRegularWithSize:(NSInteger)size;
 
-+(UIFont *)notaMediumWithSize:(NSInteger)size;
++ (UIFont *)notaMediumWithSize:(NSInteger)size;
 
-+(UIFont *)karminaBoldWithSize:(NSInteger)size;
++ (UIFont *)karminaBoldWithSize:(NSInteger)size;
 
 @end

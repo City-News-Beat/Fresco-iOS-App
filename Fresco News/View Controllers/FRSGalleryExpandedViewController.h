@@ -9,18 +9,20 @@
 #import "FRSScrollingViewController.h"
 @class FRSGallery;
 
-@interface FRSGalleryExpandedViewController : FRSScrollingViewController <UITextViewDelegate>
-{
+@interface FRSGalleryExpandedViewController : FRSScrollingViewController <UITextViewDelegate> {
     UITextField *commentField;
     NSString *last;
     UIButton *topButton;
     BOOL showsMoreButton;
+    NSDate *dateEntered;
+    float percentageScrolled;
 }
+
 @property BOOL isLoadingUser;
 @property (strong, nonatomic) FRSGallery *gallery;
-
--(void)focusOnPost:(NSString *)postID;
--(instancetype)initWithGallery:(FRSGallery *)gallery;
--(instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID;
-
+@property (strong, nonatomic) NSString *openedFrom;
+- (void)focusOnPost:(NSString *)postID;
+- (instancetype)initWithGallery:(FRSGallery *)gallery;
+- (instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID;
+- (void)loadGallery:(FRSGallery *)gallery;
 @end

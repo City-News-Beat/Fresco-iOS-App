@@ -13,22 +13,23 @@
 
 @protocol FRSStoryViewDelegate <NSObject>
 
--(BOOL)shouldHaveActionBar;
--(BOOL)shouldHaveTextLimit;
+- (BOOL)shouldHaveActionBar;
+- (BOOL)shouldHaveTextLimit;
 
--(void)clickedImageAtIndex:(NSInteger)imageIndex;
+- (void)clickedImageAtIndex:(NSInteger)imageIndex;
+@property (weak, nonatomic) UINavigationController *navigationController;
+
 @end
 
 @interface FRSStoryView : UIView
 
-@property (weak, nonatomic) NSObject <FRSStoryViewDelegate> *delegate;
+@property (weak, nonatomic) NSObject<FRSStoryViewDelegate> *delegate;
 @property (strong, nonatomic) ActionButtonBlock actionBlock;
 @property (strong, nonatomic) ShareSheetBlock shareBlock;
 @property (strong, nonatomic) ShareSheetBlock readMoreBlock;
 @property (strong, nonatomic) FRSStory *story;
 @property (weak, nonatomic) UINavigationController *navigationController;
 
-
--(instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id <FRSStoryViewDelegate>)delegate;
+- (instancetype)initWithFrame:(CGRect)frame story:(FRSStory *)story delegate:(id<FRSStoryViewDelegate>)delegate;
 
 @end

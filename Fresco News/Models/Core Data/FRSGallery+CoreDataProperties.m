@@ -13,4 +13,6 @@
 
 @implementation FRSGallery (CoreDataProperties)
 @dynamic creator;
+@dynamic liked;
+@dynamic likes;
 @end
