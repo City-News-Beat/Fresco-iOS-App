@@ -1008,9 +1008,6 @@
 #pragma mark Action Logic
 
 -(void)handleToggleSwitched:(UISwitch *)toggle {
-//    id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
-//    [delegate registerForPushNotifications];
-    
     [self checkLocationStatus];
     [self checkNotificationStatus];
     
