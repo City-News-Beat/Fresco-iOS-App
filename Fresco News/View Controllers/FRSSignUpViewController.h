@@ -9,10 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
 #import "FRSAPIClient.h"
+
 @protocol FRSAppDelegate <NSObject>
--(void)registerForPushNotifications;
+- (void)registerForPushNotifications;
 @end
+
 @interface FRSSignUpViewController : FRSBaseViewController
+
 @property TWTRSession *twitterSession;
 @property FBSDKAccessToken *facebookToken;
 @property (nonatomic, retain) UIButton *facebookButton;
@@ -23,4 +26,5 @@
 @property (nonatomic, retain) NSDictionary *pastRegistration;
 @property (nonatomic) BOOL isPresented;
 @property (nonatomic) BOOL firstSlide;
+
 @end

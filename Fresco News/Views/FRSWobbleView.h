@@ -15,5 +15,5 @@
 @property (nonatomic, retain) UILabel *warningLabel;
 @property (nonatomic, retain) UIView *backingView;
 
--(void)configureForWobble;
+- (void)configureForWobble;
 @end

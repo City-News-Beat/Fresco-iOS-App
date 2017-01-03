@@ -12,7 +12,7 @@
 
 @protocol FRSCommentCellDelegate <NSObject>
 
--(void)didPressProfilePictureWithUserId:(NSString *)uid;
+- (void)didPressProfilePictureWithUserId:(NSString *)uid;
 
 @end
 

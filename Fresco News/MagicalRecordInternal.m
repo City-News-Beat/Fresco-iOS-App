@@ -7,31 +7,28 @@
 
 #import "MagicalRecord.h"
 
-NSString * const kMagicalRecordCleanedUpNotification = @"kMagicalRecordCleanedUpNotification";
+NSString *const kMagicalRecordCleanedUpNotification = @"kMagicalRecordCleanedUpNotification";
 
 @interface MagicalRecord (Internal)
 
-+ (void) cleanUpStack;
-+ (void) cleanUpErrorHanding;
++ (void)cleanUpStack;
++ (void)cleanUpErrorHanding;
 
 @end
 
 @interface NSManagedObjectContext (MagicalRecordInternal)
 
-+ (void) MR_cleanUp;
++ (void)MR_cleanUp;
 
 @end
 
-
 @implementation MagicalRecord
 
-+ (MagicalRecordVersionTag) version
-{
++ (MagicalRecordVersionTag)version {
     return MagicalRecordVersionTag2_3;
 }
 
-+ (void) cleanUp
-{
++ (void)cleanUp {
     [self cleanUpErrorHanding];
     [self cleanUpStack];
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -40,16 +37,15 @@ NSString * const kMagicalRecordCleanedUpNotification = @"kMagicalRecordCleanedUp
                                     userInfo:nil];
 }
 
-+ (void) cleanUpStack;
++ (void)cleanUpStack;
 {
-	[NSManagedObjectContext MR_cleanUp];
-	[NSManagedObjectModel MR_setDefaultManagedObjectModel:nil];
-	[NSPersistentStoreCoordinator MR_setDefaultStoreCoordinator:nil];
-	[NSPersistentStore MR_setDefaultPersistentStore:nil];
+    [NSManagedObjectContext MR_cleanUp];
+    [NSManagedObjectModel MR_setDefaultManagedObjectModel:nil];
+    [NSPersistentStoreCoordinator MR_setDefaultStoreCoordinator:nil];
+    [NSPersistentStore MR_setDefaultPersistentStore:nil];
 }
 
-+ (NSString *) currentStack
-{
++ (NSString *)currentStack {
     NSMutableString *status = [NSMutableString stringWithString:@"Current Default Core Data Stack: ---- \n"];
 
     [status appendFormat:@"Model:           %@\n", [[NSManagedObjectModel MR_defaultManagedObjectModel] entityVersionHashesByName]];
@@ -61,41 +57,37 @@ NSString * const kMagicalRecordCleanedUpNotification = @"kMagicalRecordCleanedUp
     return status;
 }
 
-+ (void) setDefaultModelNamed:(NSString *)modelName;
++ (void)setDefaultModelNamed:(NSString *)modelName;
 {
     NSManagedObjectModel *model = [NSManagedObjectModel MR_managedObjectModelNamed:modelName];
     [NSManagedObjectModel MR_setDefaultManagedObjectModel:model];
 }
 
-+ (void) setDefaultModelFromClass:(Class)modelClass;
++ (void)setDefaultModelFromClass:(Class)modelClass;
 {
     NSBundle *bundle = [NSBundle bundleForClass:modelClass];
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:[NSArray arrayWithObject:bundle]];
     [NSManagedObjectModel MR_setDefaultManagedObjectModel:model];
 }
 
-+ (NSString *) defaultStoreName;
++ (NSString *)defaultStoreName;
 {
     NSString *defaultName = [[[NSBundle mainBundle] infoDictionary] valueForKey:(id)kCFBundleNameKey];
-    if (defaultName == nil)
-    {
+    if (defaultName == nil) {
         defaultName = kMagicalRecordDefaultStoreFileName;
     }
-    if (![defaultName hasSuffix:@"sqlite"]) 
-    {
+    if (![defaultName hasSuffix:@"sqlite"]) {
         defaultName = [defaultName stringByAppendingPathExtension:@"sqlite"];
     }
 
     return defaultName;
 }
 
-
 #pragma mark - initialize
 
-+ (void) initialize;
++ (void)initialize;
 {
-    if (self == [MagicalRecord class]) 
-    {
+    if (self == [MagicalRecord class]) {
         [self setShouldAutoCreateManagedObjectModel:YES];
         [self setShouldAutoCreateDefaultPersistentStoreCoordinator:NO];
 #ifdef DEBUG
@@ -107,5 +99,4 @@ NSString * const kMagicalRecordCleanedUpNotification = @"kMagicalRecordCleanedUp
 }
 
 @end
-
 

@@ -12,7 +12,6 @@
 
 @import AVFoundation;
 
-
 typedef NS_ENUM(NSUInteger, FRSAVAuthStatus) {
     FRSAVStatusAuthorized,
     FRSAVStatusDenied,
@@ -33,15 +32,14 @@ typedef NS_ENUM(NSUInteger, FRSAVAuthStatus) {
 @property (strong, nonatomic) AVCaptureMovieFileOutput *movieFileOutput;
 @property (strong, nonatomic) AVCaptureStillImageOutput *stillImageOutput;
 
-+(instancetype)defaultManager;
++ (instancetype)defaultManager;
 
--(void)startCaptureSessionForCaptureMode:(FRSCaptureMode)captureMode withCompletion:(void(^)())completion;
+- (void)startCaptureSessionForCaptureMode:(FRSCaptureMode)captureMode withCompletion:(void (^)())completion;
 
--(void)clearCaptureSession;
+- (void)clearCaptureSession;
 
--(void)configureOrientationForPreview:(UIView *)preview;
+- (void)configureOrientationForPreview:(UIView *)preview;
 
 - (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange;
-
 
 @end

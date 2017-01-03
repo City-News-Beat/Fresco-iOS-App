@@ -19,10 +19,10 @@
 typedef void (^LoginCompletionBlock)(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user);
 
 // login methods communicate with both the social outlet, and the API
-+(void)loginWithTwitter:(LoginCompletionBlock)completion;
-+(void)loginWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent manager:(FBSDKLoginManager *)manager;
++ (void)loginWithTwitter:(LoginCompletionBlock)completion;
++ (void)loginWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent manager:(FBSDKLoginManager *)manager;
 
 // register methods simply communicate with social outlet, for eventual communication to the API
-+(void)registerWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent;
-+(void)registerWithTwitter:(LoginCompletionBlock)completion;
++ (void)registerWithFacebook:(LoginCompletionBlock)completion parent:(UIViewController *)parent;
++ (void)registerWithTwitter:(LoginCompletionBlock)completion;
 @end

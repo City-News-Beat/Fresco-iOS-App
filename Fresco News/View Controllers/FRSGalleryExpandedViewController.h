@@ -9,8 +9,7 @@
 #import "FRSScrollingViewController.h"
 @class FRSGallery;
 
-@interface FRSGalleryExpandedViewController : FRSScrollingViewController <UITextViewDelegate>
-{
+@interface FRSGalleryExpandedViewController : FRSScrollingViewController <UITextViewDelegate> {
     UITextField *commentField;
     NSString *last;
     UIButton *topButton;
@@ -22,8 +21,8 @@
 @property BOOL isLoadingUser;
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) NSString *openedFrom;
--(void)focusOnPost:(NSString *)postID;
--(instancetype)initWithGallery:(FRSGallery *)gallery;
--(instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID;
--(void)loadGallery:(FRSGallery *)gallery;
+- (void)focusOnPost:(NSString *)postID;
+- (instancetype)initWithGallery:(FRSGallery *)gallery;
+- (instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID;
+- (void)loadGallery:(FRSGallery *)gallery;
 @end

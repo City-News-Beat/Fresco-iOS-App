@@ -98,6 +98,7 @@
         case 404:
 
             break;
+
         case 405:
 
             break;
@@ -142,7 +143,7 @@
 }
 
 /*
-    Sign in: all expect user to have an account, either returns a token, a challenge (i.e. 'create an account') or incorrect details
+ Sign in: all expect user to have an account, either returns a token, a challenge (i.e. 'create an account') or incorrect details
  */
 - (void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *twitterAccessToken = session.authToken;
@@ -335,6 +336,7 @@
 
     // if we have multiple "authenticated" users in data store, we probs messed up big time
     if ([authenticatedUsers count] > 1) {
+
     }
 
     _authenticatedUser = [authenticatedUsers firstObject];
@@ -376,7 +378,6 @@
     if (deviceToken != nil || [deviceToken isEqual:[NSNull null]]) {
         currentInstallation[@"device_token"] = deviceToken;
     } else {
-        NSLog(@"NO DEVICE TOKEN -- INSTALLATION WILL FAIL");
     }
 
     NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
@@ -457,7 +458,6 @@
         NSDictionary *update = @{ @"installation" : currentInstallation };
         [self updateUserWithDigestion:update
                            completion:^(id responseObject, NSError *error) {
-                             NSLog(@"USER UPDATED: %@ %@", responseObject, error);
                            }];
     }
 }
@@ -506,7 +506,6 @@
 
 - (void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
-    NSLog(@"%@", endpoint);
 
     [self get:endpoint
         withParameters:Nil
@@ -530,10 +529,10 @@
 - (void)handleLocationUpdate:(NSNotification *)userInfo {
 
     dispatch_async(dispatch_get_main_queue(), ^{
+
       [self updateUserLocation:userInfo.userInfo
                     completion:^(NSDictionary *response, NSError *error) {
                       if (!error) {
-                          // NSLog(@"Sent Location");
                       } else {
                           NSLog(@"Location Error: %@ %@", response, error);
                       }
@@ -552,6 +551,7 @@
     [geoData setObject:location forKey:@"coordinates"];
 
     NSDictionary *params = @{
+
         @"geo" : geoData,
         @"radius" : @(radius),
     };
@@ -602,6 +602,7 @@
 - (void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void (^)(NSArray *galleries, NSError *error))completion {
 
     NSDictionary *params = @{
+
         @"limit" : [NSNumber numberWithInteger:limit],
         @"last" : (offset != Nil) ? offset : @"",
     };
@@ -619,8 +620,26 @@
             }];
 }
 
-- (void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+-(void)fetchLikesForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:likedGalleryEndpoint, galleryID];
+    
+    [self get:endpoint withParameters:@{@"limit" : limit, @"last" : lastID} completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
 
+
+-(void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:repostedGalleryEndpoint, galleryID];
+    
+    [self get:endpoint withParameters:@{@"limit" : limit, @"last" : lastID} completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
+}
+
+
+-(void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
+    
     NSString *endpoint = [NSString stringWithFormat:deleteCommentEndpoint, gallery.uid];
     NSDictionary *params = @{ @"comment_id" : commentID };
 
@@ -664,6 +683,7 @@
               completion(responseObject, error);
             }];
 }
+
 
 - (void)createPaymentWithToken:(nonnull NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
 
@@ -814,7 +834,7 @@
 }
 
 /*
-    Keychain-Based interaction & authentication
+ Keychain-Based interaction & authentication
  */
 
 // user/me
@@ -890,7 +910,6 @@
     if ([[SAMKeychain accountsForService:serviceName] count] > 0) {
         return TRUE;
     }
-
     return FALSE;
 }
 
@@ -899,7 +918,7 @@
 }
 
 /*
-    Generic HTTP methods for use within class
+ Generic HTTP methods for use within class
  */
 - (void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
 
@@ -954,7 +973,7 @@
 }
 
 /*
-    One-off tools for use within class
+ One-off tools for use within class
  */
 
 - (NSNumber *)fileSizeForURL:(NSURL *)url {
@@ -1240,7 +1259,7 @@
         [self unrepostGallery:gallery completion:completion];
         return;
     }
-
+  
     [FRSTracker track:galleryReposted parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
@@ -1278,6 +1297,7 @@
 
 - (void)unrepostGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostGalleryEndpoint, gallery.uid];
+
     [FRSTracker track:galleryUnreposted parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
 
     [self post:endpoint
@@ -1293,6 +1313,7 @@
 
 - (void)unrepostStory:(FRSStory *)story completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:unrepostStoryEndpoint, story.uid];
+
     [self post:endpoint
         withParameters:Nil
             completion:^(id responseObject, NSError *error) {
@@ -1470,7 +1491,7 @@
 
             [responseObjects addObject:[self objectFromDictionary:responseObject context:managedObjectContext]];
         }
-
+        
         return responseObjects;
     } else {
     }
@@ -1522,7 +1543,7 @@
             [onboardNav pushViewController:onboardVC animated:NO];
             [tab presentViewController:onboardNav animated:YES completion:Nil];
         }
-
+        
         return TRUE;
     }
 

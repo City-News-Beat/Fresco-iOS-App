@@ -196,6 +196,7 @@
 
     //Animate transition
     NSString *username = _userField.text;
+
     if ([[username substringToIndex:1] isEqualToString:@"@"]) {
         username = [username substringFromIndex:1];
     }
@@ -216,7 +217,7 @@
     }
 
     NSMutableDictionary *installationDigest = (NSMutableDictionary *)[[FRSAPIClient sharedClient] currentInstallation];
-    
+
     [[FRSAPIClient sharedClient] signIn:username
                                password:password
                              completion:^(id responseObject, NSError *error) {
@@ -250,14 +251,12 @@
                                    }
 
                                    [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
-                    
+
                                    [delegate registerForPushNotifications];
-                                   
                                    return;
                                }
 
                                if (error.code == -1009) {
-                                   NSLog(@"Unable to connect.");
                                    self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
                                    [self.alert show];
                                    return;
@@ -446,7 +445,6 @@
 }
 
 - (IBAction)facebook:(id)sender {
-
     self.facebookButton.hidden = true;
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     spinner.tintColor = [UIColor frescoOrangeColor];
@@ -504,7 +502,6 @@
       if (error) {
 
           if (error.code == -1009) {
-              NSLog(@"Unable to connect.");
               self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
               [self.alert show];
               [spinner stopLoading];
@@ -537,6 +534,7 @@
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 / 2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
       [self.navigationController popViewControllerAnimated:NO];
+
       [[NSNotificationCenter defaultCenter]
           postNotificationName:@"returnToOnboard"
                         object:self];
@@ -623,8 +621,8 @@
 
 - (void)textFieldDidChange:(UITextField *)textField {
     if ((self.userField.text && self.userField.text.length > 0) && (self.passwordField.text && self.passwordField.text.length >= 1)) {
-
         if ([self validEmail:self.userField.text] || [self isValidUsername:self.userField.text]) {
+
             self.loginButton.enabled = YES;
 
             [UIView transitionWithView:self.loginButton

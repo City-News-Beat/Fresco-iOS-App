@@ -654,14 +654,11 @@
     }
 
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
-        NSLog(@"INACTIVE");
         completionHandler(UIBackgroundFetchResultNewData);
     } else if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         [self handleRemotePush:userInfo];
-        NSLog(@"BACKGROUND");
         completionHandler(UIBackgroundFetchResultNewData);
     } else {
-        NSLog(@"FOREGROUND");
         completionHandler(UIBackgroundFetchResultNewData);
     }
 }

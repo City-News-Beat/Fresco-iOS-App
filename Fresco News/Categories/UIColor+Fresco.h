@@ -10,34 +10,34 @@
 
 @interface UIColor (Fresco)
 
-+(UIColor *)frescoTabBarColor;
++ (UIColor *)frescoTabBarColor;
 
-+(UIColor *)frescoOrangeColor;
++ (UIColor *)frescoOrangeColor;
 
-+(UIColor *)frescoBackgroundColorLight;
++ (UIColor *)frescoBackgroundColorLight;
 
-+(UIColor *)frescoBackgroundColorDark;
++ (UIColor *)frescoBackgroundColorDark;
 
-+(UIColor *)frescoDarkTextColor;
++ (UIColor *)frescoDarkTextColor;
 
-+(UIColor *)frescoMediumTextColor;
++ (UIColor *)frescoMediumTextColor;
 
-+(UIColor *)frescoLightTextColor;
++ (UIColor *)frescoLightTextColor;
 
-+(UIColor *)frescoGreenColor;
++ (UIColor *)frescoGreenColor;
 
-+(UIColor *)frescoRedHeartColor;
++ (UIColor *)frescoRedHeartColor;
 
-+(UIColor *)frescoBlueColor;
++ (UIColor *)frescoBlueColor;
 
-+(UIColor *)frescoShadowColor;
++ (UIColor *)frescoShadowColor;
 
-+(UIColor *)frescoSliderGray;
++ (UIColor *)frescoSliderGray;
 
-+(UIColor *)twitterBlueColor;
++ (UIColor *)twitterBlueColor;
 
-+(UIColor *)facebookBlueColor;
++ (UIColor *)facebookBlueColor;
 
-+(UIColor *)frescoLightBlueColor;
++ (UIColor *)frescoLightBlueColor;
 
 @end

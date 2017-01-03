@@ -8,11 +8,9 @@
 
 #import <UIKit/UIKit.h>
 @protocol FRSPaymentCellDelegate
--(void)deleteButtonClicked:(NSDictionary *)payment;
+- (void)deleteButtonClicked:(NSDictionary *)payment;
 @end
-@interface FRSPaymentCell : UITableViewCell
-{
-
+@interface FRSPaymentCell : UITableViewCell {
 }
 @property (nonatomic, retain) IBOutlet UILabel *paymentTitleLabel;
 @property (nonatomic, retain) IBOutlet UIImageView *selectionCircle;
@@ -22,6 +20,6 @@
 @property (nonatomic, weak) id<FRSPaymentCellDelegate> delegate;
 @property BOOL isActive;
 
--(IBAction)deletePayment:(id)sender;
--(void)setActive:(BOOL)active;
+- (IBAction)deletePayment:(id)sender;
+- (void)setActive:(BOOL)active;
 @end

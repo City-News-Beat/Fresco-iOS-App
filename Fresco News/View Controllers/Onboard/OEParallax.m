@@ -10,40 +10,38 @@
 
 @implementation OEParallax
 
-+ (UIView *)createParallaxFromView:(UIView *)view withMaxX:(NSUInteger)xMax withMinX:(NSInteger)xMin withMaxY:(NSUInteger)yMax withMinY:(NSInteger)yMin{
++ (UIView *)createParallaxFromView:(UIView *)view withMaxX:(NSUInteger)xMax withMinX:(NSInteger)xMin withMaxY:(NSUInteger)yMax withMinY:(NSInteger)yMin {
 
     NSInteger negativeX = xMin;
     NSUInteger positiveX = xMax;
-    
+
     NSInteger negativeY = yMin;
     NSUInteger positiveY = yMax;
-    
-    
-    UIInterpolatingMotionEffect *xValue = [[UIInterpolatingMotionEffect alloc]initWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
-    
+
+    UIInterpolatingMotionEffect *xValue = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+
     xValue.minimumRelativeValue = @(negativeX);
     xValue.maximumRelativeValue = @(positiveX);
-    
-    UIInterpolatingMotionEffect *yValue = [[UIInterpolatingMotionEffect alloc]initWithKeyPath:@"center.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-    
+
+    UIInterpolatingMotionEffect *yValue = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+
     yValue.minimumRelativeValue = @(negativeY);
     yValue.maximumRelativeValue = @(positiveY);
-    
+
     //Create a motion effect group
-    
+
     UIMotionEffectGroup *xGroup = [[UIMotionEffectGroup alloc] init];
-    xGroup.motionEffects = @[xValue];
-    
+    xGroup.motionEffects = @[ xValue ];
+
     UIMotionEffectGroup *yGroup = [[UIMotionEffectGroup alloc] init];
-    yGroup.motionEffects = @[yValue];
-    
+    yGroup.motionEffects = @[ yValue ];
+
     //Add motion effect group to image view
-    
+
     [view addMotionEffect:xGroup];
     [view addMotionEffect:yGroup];
-    
+
     return view;
 }
-
 
 @end

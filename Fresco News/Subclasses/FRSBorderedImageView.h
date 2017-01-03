@@ -13,6 +13,6 @@
 @property (strong, nonatomic) UIColor *borderColor;
 @property (nonatomic) CGFloat borderWidth;
 
--(instancetype)initWithFrame:(CGRect)frame borderColor:(UIColor *)borderColor borderWidth:(CGFloat)borderWidth;
+- (instancetype)initWithFrame:(CGRect)frame borderColor:(UIColor *)borderColor borderWidth:(CGFloat)borderWidth;
 
 @end

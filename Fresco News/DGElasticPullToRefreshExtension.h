@@ -28,10 +28,10 @@
 
 @interface NSObject (DGElasticExtension)
 
-@property (nonatomic, strong) NSMutableArray* dg_observers;
+@property (nonatomic, strong) NSMutableArray *dg_observers;
 
-- (void)dg_addObserver:(NSObject*)observer forKeyPath:(NSString*)keyPath;
-- (void)dg_removeObserver:(NSObject*)observer forKeyPath:(NSString*)keyPath;
+- (void)dg_addObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath;
+- (void)dg_removeObserver:(NSObject *)observer forKeyPath:(NSString *)keyPath;
 
 @end
 
