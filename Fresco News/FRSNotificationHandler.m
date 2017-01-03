@@ -14,6 +14,8 @@
 #import "FRSAssignmentsViewController.h"
 #import "FRSDebitCardViewController.h"
 #import "FRSIdentityViewController.h"
+#import "FRSTabBarController.h"
+#import "FRSHomeViewController.h"
 #import "Fresco.h"
 
 static BOOL isDeeplinking;
@@ -201,71 +203,71 @@ static BOOL isDeeplinking;
 }
 
 + (void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
-
-    if (isDeeplinking) {
-        return;
-    }
-
-    isDeeplinking = TRUE;
-
-    NSString *gallery = @"";
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-
-    for (int i = 0; i < galleryIDs.count - 1; i++) {
-        gallery = [gallery stringByAppendingString:galleryIDs[i]];
-        gallery = [gallery stringByAppendingString:@","];
-    }
-
-    gallery = [gallery stringByAppendingString:[galleryIDs lastObject]];
-
-    UITabBarController *tab = (UITabBarController *)appDelegate.tabBarController;
-    FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
-    [detailVC showTabBarAnimated:YES];
-    detailVC.navigationController = tab.navigationController;
-    detailVC.title = (title) ? [title uppercaseString] : @"TODAY IN NEWS";
-
-    UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
-
-    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-        [navController pushViewController:detailVC animated:TRUE];
-
-    } else {
-
-        UITabBarController *tab = (UITabBarController *)navController;
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
-
-        [navController pushViewController:detailVC animated:TRUE];
-    }
-
-    [[FRSAPIClient sharedClient] getGalleryWithUID:gallery
-                                        completion:^(id responseObject, NSError *error) {
-
-                                          if (error) {
-                                              [self error:error];
-                                          }
-
-                                          if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
-                                              responseObject = @[ responseObject ];
-                                          }
-
-                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                            [detailVC configureWithGalleries:responseObject];
-                                            isDeeplinking = FALSE;
-                                          });
-                                        }];
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"notif-for-todayinnews" object:galleryIDs];
     
+//    FRSNavigationController *navController = (FRSNavigationController *)[[UIApplication sharedApplication].keyWindow rootViewController];
+//    FRSTabBarController *tabBarController = [navController.viewControllers objectAtIndex:0];
+//    FRSNavigationController *homeNavController = [[tabBarController viewControllers] objectAtIndex:0];
+//    FRSBaseViewController *baseVC = (FRSBaseViewController *)[[[[homeNavController viewControllers] objectAtIndex:0] superclass] superclass];
+//    [baseVC segueToTodayInNews:galleryIDs];
     
-    
-    
-    
-    
-    
-    
-    
+//    
+//    if (isDeeplinking) {
+//        return;
+//    }
+//
+//    isDeeplinking = TRUE;
+//
+//    NSString *gallery = @"";
+//    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+//
+//    for (int i = 0; i < galleryIDs.count - 1; i++) {
+//        gallery = [gallery stringByAppendingString:galleryIDs[i]];
+//        gallery = [gallery stringByAppendingString:@","];
+//    }
+//
+//    gallery = [gallery stringByAppendingString:[galleryIDs lastObject]];
+//
+//    UITabBarController *tab = (UITabBarController *)appDelegate.tabBarController;
+//    FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
+//    [detailVC showTabBarAnimated:YES];
+//    detailVC.navigationController = tab.navigationController;
+//    detailVC.title = (title) ? [title uppercaseString] : @"TODAY IN NEWS";
+//
+//    UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+//
+//    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+//        [navController pushViewController:detailVC animated:TRUE];
+//
+//    } else {
+//
+//        UITabBarController *tab = (UITabBarController *)navController;
+//        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+//        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+//
+//        navController = (UINavigationController *)[[tab viewControllers] firstObject];
+//
+//        [navController pushViewController:detailVC animated:TRUE];
+//    }
+//
+//    [[FRSAPIClient sharedClient] getGalleryWithUID:gallery
+//                                        completion:^(id responseObject, NSError *error) {
+//
+//                                          if (error) {
+//                                              [self error:error];
+//                                          }
+//
+//                                          if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
+//                                              responseObject = @[ responseObject ];
+//                                          }
+//
+//                                          dispatch_async(dispatch_get_main_queue(), ^{
+//                                            [detailVC configureWithGalleries:responseObject];
+//                                            isDeeplinking = FALSE;
+//                                          });
+//                                        }];
+ 
 //    NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
 //    
 //    for (NSString *gallery in galleryIDs) {
@@ -290,13 +292,7 @@ static BOOL isDeeplinking;
 //                                            }];
 //    }
     
-    
-    
-    
-    
-    
-    
-    
+
 //    FRSBaseViewController *baseVC = [[FRSBaseViewController alloc] init];
 //    [baseVC segueToTodayInNews:galleryIDs];
 }
