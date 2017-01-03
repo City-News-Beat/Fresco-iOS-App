@@ -243,6 +243,7 @@
 
     [self removeStatusBarNotification];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSPlayerPlay" object:self];
+    [self expandNavBar:nil animated:NO];
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -380,7 +381,7 @@
     //    UILabel *subText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.followingTable.frame.size.width, 40)];
     //    [subText setTextAlignment:NSTextAlignmentCenter];
     //    subText.backgroundColor = [UIColor clearColor];
-    //    [subText setText:@"It looks like you aren't following anyone yet. \nSee which of your friends are using Fresco         ."];
+    //    [subText setText:@"It looks like you aren't following anyone yet. fnSee which of your friends are using Fresco         ."];
     //    subText.numberOfLines = 2;
     //    subText.textColor = [UIColor frescoMediumTextColor];
     //    [subText setFont:[UIFont systemFontOfSize:15 weight:UIFontWeightRegular]];

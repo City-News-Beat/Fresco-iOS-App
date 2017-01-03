@@ -22,6 +22,7 @@
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
+#import "FRSDualUserListViewController.h"
 
 #define TEXTVIEW_TOP_PAD 12
 
@@ -191,13 +192,13 @@
 
     NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
     BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
-
-    // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
-
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
+    
+   // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
+    
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
+    [self.actionBar handleHeartState:isLiked];
+    [self.actionBar handleHeartAmount:[numLikes intValue]];
 
     [self.repostLabel removeFromSuperview];
     self.repostLabel = Nil;
@@ -225,7 +226,19 @@
     });
 }
 
-- (void)handleActionButtonTapped {
+-(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    [self.delegate.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    vc.didTapRepostLabel = YES;
+    [self.delegate.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)handleActionButtonTapped {
+
     // idk why dan made this method life is a mystery
 
     if (self.readMoreBlock) {
@@ -264,25 +277,25 @@
                                         }];
 
     } else {
-        [[FRSAPIClient sharedClient] likeGallery:self.gallery
-                                      completion:^(id responseObject, NSError *error) {
-                                        if (error) {
-                                            [actionBar handleHeartState:FALSE];
-                                            [actionBar handleHeartAmount:likes];
-                                            if (error.code != 101) {
-                                                self.gallery.likes = @([self.gallery.likes intValue] + 1);
-                                                @try {
-                                                    self.gallery.numberOfLikes++;
-                                                }
-                                                @catch (NSException *e) {
-                                                }
-                                            }
-                                        }
-                                      }];
+        [[FRSAPIClient sharedClient] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            if (error) {
+                [actionBar handleHeartState:FALSE];
+                [actionBar handleHeartAmount:likes];
+                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                NSInteger responseCode = response.statusCode;
+                
+                // 400 status code means the user has already liked the gallery, should soft fail.
+                if (error.code != 101 && responseCode != 400) {
+                    self.gallery.numberOfLikes ++;
+                }
+            }
+        }];
     }
 }
 
-- (void)handleRepost:(FRSContentActionsBar *)actionBar {
+
+-(void)handleRepost:(FRSContentActionsBar *)actionBar {
+
     /*if (![[FRSAPIClient sharedClient] authenticatedUser]) {
         return;
     }*/
@@ -300,17 +313,19 @@
                                             }
                                           }];
     } else {
-        [[FRSAPIClient sharedClient] repostGallery:self.gallery
-                                        completion:^(id responseObject, NSError *error) {
-                                          if (error) {
-                                              [actionBar handleRepostState:FALSE];
-                                              [actionBar handleRepostAmount:reposts];
-                                              if (error.code != 101) {
-
-                                                  self.gallery.numberOfReposts++;
-                                              }
-                                          }
-                                        }];
+        [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
+            if (error) {
+                [actionBar handleRepostState:FALSE];
+                [actionBar handleRepostAmount:reposts];
+                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                NSInteger responseCode = response.statusCode;
+                
+                // 400 status code means the user has already reposted the gallery, should soft fail.
+                if (error.code != 101 && responseCode != 400) {
+                    self.gallery.numberOfReposts++;
+                }
+            }
+        }];
     }
 }
 

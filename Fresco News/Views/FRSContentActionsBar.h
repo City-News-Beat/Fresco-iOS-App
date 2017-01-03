@@ -24,6 +24,7 @@
 - (void)setCurrentUser:(BOOL)isAuth;
 @property (strong, nonatomic) UIButton *actionButton;
 
+
 @end
 
 @protocol FRSContentActionBarDelegate <NSObject>
@@ -32,9 +33,12 @@
 
 - (UIColor *)colorForActionButton;
 
-- (void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar;
-- (void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar;
-- (void)handleActionButtonTapped;
-- (void)handleRepost:(FRSContentActionsBar *)actionBar;
-- (void)handleLike:(FRSContentActionsBar *)actionBar;
+-(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar;
+-(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar;
+-(void)handleActionButtonTapped;
+-(void)handleRepost:(FRSContentActionsBar *)actionBar;
+-(void)handleLike:(FRSContentActionsBar *)actionBar;
+-(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar;
+-(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar;
+
 @end

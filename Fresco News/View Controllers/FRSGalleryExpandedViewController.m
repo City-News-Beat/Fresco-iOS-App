@@ -29,11 +29,13 @@
 #import "MGSwipeTableCell.h"
 #import "FRSCommentCell.h"
 
+#import "FRSDualUserListViewController.h"
+
 #define TOP_NAV_BAR_HEIGHT 64
 #define GALLERY_BOTTOM_PADDING 16
 #define CELL_HEIGHT 62
 
-@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, MGSwipeTableCellDelegate, FRSCommentCellDelegate, UITextFieldDelegate>
+@interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, MGSwipeTableCellDelegate, FRSCommentCellDelegate, UITextFieldDelegate, FRSGalleryViewDelegate>
 
 @property (strong, nonatomic) FRSGalleryView *galleryView;
 @property (strong, nonatomic) FRSCommentsView *commentsView;
@@ -154,6 +156,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self showTabBarAnimated:NO];
 
     [self trackSession];
+
+    [self expandNavBar:nil animated:NO];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -578,7 +582,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[FRSAPIClient sharedClient] deleteComment:comment.uid
                                    fromGallery:self.gallery
                                     completion:^(id responseObject, NSError *error) {
-                                      NSLog(@"Delete Comment Error: %@", error);
+                                      
                                       if (!error) {
                                           self.totalCommentCount--;
                                           [self reload];
@@ -609,7 +613,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         } else {
             height += commentSize += 20;
         }
-
+      
         index++;
     }
 
@@ -680,10 +684,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
 
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
+    [self.actionBar handleHeartState:isLiked];
+    [self.actionBar handleHeartAmount:[numLikes intValue]];
 
     [self.view addSubview:self.actionBar];
 
@@ -767,7 +771,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     [[FRSAPIClient sharedClient] repostGallery:self.gallery
                                     completion:^(id responseObject, NSError *error) {
-                                      NSLog(@"Reposted Error: %@", error);
 
                                       if (error) {
                                           [actionBar handleRepostState:!state];
@@ -1126,6 +1129,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[FRSAPIClient sharedClient] addComment:commentField.text
                                   toGallery:self.galleryID
                                  completion:^(id responseObject, NSError *error) {
+
                                    if (error) {
                                        NSString *message = [NSString stringWithFormat:@"\"%@\"", commentField.text];
                                        self.errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed.\nPlease try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
@@ -1475,7 +1479,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     NSDictionary *session = @{
         @"activity_duration" : @(timeInSession),
         @"gallery_id" : galleryID,
-        @"scrolled_percent" : @(percentageScrolled * 100),
         @"author" : authorID,
         @"opened_from" : _openedFrom
     };
@@ -1483,5 +1486,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [FRSTracker track:gallerySession parameters:session];
 }
 
+#pragma mark - FRSGalleryViewDelegate
+
+- (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    vc.didTapRepostLabel = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 @end
