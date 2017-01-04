@@ -435,7 +435,7 @@ static BOOL isDeeplinking;
                                                  [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
 
                                                  [assignment configureWithDictionary:responseObject];
-                                                 [assignmentsVC focusOnAssignment:assignment];
+                                                 [assignmentsVC setDefaultAssignment:assignment];
 
                                                  navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
                                                  [tab setSelectedIndex:3];
@@ -452,7 +452,7 @@ static BOOL isDeeplinking;
                                                  [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
 
                                                  [assignment configureWithDictionary:responseObject];
-                                                 [assignmentsVC focusOnAssignment:assignment];
+                                                 [assignmentsVC setDefaultAssignment:assignment];
 
                                                  navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
                                                  [tab setSelectedIndex:3];
