@@ -694,10 +694,12 @@
         [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
     }
 
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{ @"installation" : installationDigest }
-        completion:^(id responseObject, NSError *error) {
-          NSLog(@"Updated user installation");
-        }];
+    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        [[FRSAPIClient sharedClient] updateUserWithDigestion:@{ @"installation" : installationDigest }
+            completion:^(id responseObject, NSError *error) {
+              NSLog(@"Updated user installation");
+            }];
+    }
 }
 
 - (void)handleLocationUpdate {
@@ -719,7 +721,6 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -760,7 +761,6 @@
 }
 
 - (void)checkNotifications {
-
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
         return;
     }

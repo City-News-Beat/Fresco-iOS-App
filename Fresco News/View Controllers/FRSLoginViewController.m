@@ -216,8 +216,6 @@
         username = _userField.text;
     }
 
-    NSMutableDictionary *installationDigest = (NSMutableDictionary *)[[FRSAPIClient sharedClient] currentInstallation];
-
     [[FRSAPIClient sharedClient] signIn:username
                                password:password
                              completion:^(id responseObject, NSError *error) {
@@ -252,7 +250,7 @@
 
                                    [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
 
-                                   [delegate registerForPushNotifications];
+        
                                    return;
                                }
 
