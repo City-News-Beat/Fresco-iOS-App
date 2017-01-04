@@ -32,6 +32,7 @@
 #define TOP_NAV_BAR_HEIGHT 64
 #define GALLERY_BOTTOM_PADDING 16
 #define CELL_HEIGHT 62
+#define STATIC_GALLERY_HEIGHT 280
 
 @interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, MGSwipeTableCellDelegate, FRSCommentCellDelegate, UITextFieldDelegate>
 
@@ -713,10 +714,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     // this checks if the height of the gallery has not been set yet
     // and sets a default value of 280 (pulled from spec) to avoid any
     // formatting issues on newly uploaded galleries.
-    
-    CGFloat staticGalleryViewHeight = 280;
     if (self.galleryView.frame.size.height <= 0 || self.galleryView == nil) {
-        height = staticGalleryViewHeight + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING + 50;
+        height = STATIC_GALLERY_HEIGHT + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING + 50;
     }
     
     if (self.comments.count > 0) {
