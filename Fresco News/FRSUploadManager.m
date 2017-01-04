@@ -34,6 +34,17 @@ static NSDate *lastDate;
     return sharedUploader;
 }
 
+- (instancetype)init {
+    self = [super init];
+
+    if (self) {
+        self.currentGalleryID = @"";
+        [self commonInit];
+    }
+
+    return self;
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -44,8 +55,9 @@ static NSDate *lastDate;
         return;
     }
 
-    [FRSTracker track:uploadClose parameters:@{ @"percent_complete" : @(lastProgress),
-                                                @"gallery_id" : _currentGalleryID }];
+    [FRSTracker track:uploadClose
+           parameters:@{ @"percent_complete" : @(lastProgress),
+                         @"gallery_id" : _currentGalleryID }];
 }
 
 - (void)checkCachedUploads {
@@ -139,8 +151,7 @@ static NSDate *lastDate;
 
     for (NSString *uploadPost in [self.managedObjects allKeys]) {
         FRSUpload *upload = [self.managedObjects objectForKey:uploadPost];
-        if ([upload.completed boolValue] != TRUE) {
-            // key = TOKEN uploadID = POST resourceURL = ASSEt
+        if ([upload.completed boolValue] == NO) {
             if (upload.key && upload.uploadID && upload.resourceURL) {
                 PHFetchResult *assetArray = [PHAsset fetchAssetsWithLocalIdentifiers:@[ upload.resourceURL ] options:nil];
                 PHAsset *asset = [assetArray firstObject];
@@ -153,17 +164,6 @@ static NSDate *lastDate;
             }];
         }
     }
-}
-
-- (instancetype)init {
-    self = [super init];
-
-    if (self) {
-        _currentGalleryID = @"";
-        [self commonInit];
-    }
-
-    return self;
 }
 
 - (void)commonInit {
@@ -207,7 +207,6 @@ static NSDate *lastDate;
 }
 
 - (void)createUploadWithAsset:(PHAsset *)asset token:(NSString *)token post:(NSString *)post {
-
     FRSUpload *upload = [FRSUpload MR_createEntityInContext:self.context];
 
     [self.context performBlock:^{
@@ -248,7 +247,6 @@ static NSDate *lastDate;
                                                           options:options
                                                     resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
                                                       NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[[NSProcessInfo processInfo] globallyUniqueString] stringByAppendingString:@".jpeg"]];
-                                                      [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
 
                                                       // write data to temp path (background thread, async)
                                                       [imageData writeToFile:tempPath atomically:NO];
@@ -263,11 +261,10 @@ static NSDate *lastDate;
                                                     }];
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset
-                                                        options:Nil
+                                                        options:nil
                                                   resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
                                                     // create temp location to move data (PHAsset can not be weakly linked to)
                                                     NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-                                                    [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
 
                                                     //            SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:avasset];
                                                     //            encoder.outputFileType = AVFileTypeMPEG4;
@@ -317,7 +314,6 @@ static NSDate *lastDate;
                                                                                                                 toFile:[NSURL fileURLWithPath:tempPath]
                                                                                                                options:options
                                                                                                      completionHandler:^(NSError *_Nullable error) {
-
                                                                                                        unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
                                                                                                        totalFileSize += fileSize;
 
@@ -336,7 +332,6 @@ static NSDate *lastDate;
 }
 
 - (void)restart {
-
     if (completed == toComplete) {
         // complete
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{ @"type" : @"completion" }];
@@ -355,10 +350,9 @@ static NSDate *lastDate;
                        url:request[0]
                     postID:request[2]
                 completion:^(id responseObject, NSError *error) {
-                }];
-}
+                  [[NSFileManager defaultManager] removeItemAtPath:request[0] error:Nil];
 
-- (void)next {
+                }];
 }
 
 - (void)startAWS {
@@ -370,11 +364,9 @@ static NSDate *lastDate;
 }
 
 - (void)addUploadForPost:(NSString *)postID url:(NSString *)body postID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
-
     __block int uploadUpdates;
 
     AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
-
     AWSS3TransferManagerUploadRequest *upload = [AWSS3TransferManagerUploadRequest new];
 
     if ([body containsString:@".jpeg"]) {
@@ -428,8 +420,9 @@ static NSDate *lastDate;
 
           if (upload) {
               [self.context performBlock:^{
-                upload.completed = @(TRUE);
-                [self.context save:Nil];
+                upload.completed = @(YES);
+                [self.context save:nil];
+                completion(nil, nil);
               }];
           }
 
@@ -446,8 +439,10 @@ static NSDate *lastDate;
 - (void)updateProgress:(int64_t)bytes {
     uploadedFileSize += bytes;
     float progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{ @"type" : @"progress",
-                                                                                                         @"percentage" : @(progress) }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate"
+                                                        object:nil
+                                                      userInfo:@{ @"type" : @"progress",
+                                                                  @"percentage" : @(progress) }];
 }
 
 - (void)uploadDidErrorWithError:(NSError *)error {
