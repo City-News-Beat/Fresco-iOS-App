@@ -141,7 +141,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.view addSubview:galleryDetailView];
     galleryDetailView.gallery = self.gallery; //TODO: To be removed from class
     galleryDetailView.defaultPostID = self.defaultPostID; //TODO: To be removed from class
-    [galleryDetailView configureGalleryView];
+    galleryDetailView.parentVC = self;
+    [galleryDetailView configureUI];
     NSLog(@"Width 1: %f", self.view.frame.size.width);
     NSLog(@"Width 2: %f", galleryDetailView.frame.size.width);
     [self.view updateConstraints];

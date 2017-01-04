@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FRSGalleryView.h"
+#import "FRSGalleryExpandedViewController.h"
 
 @interface FRSGalleryDetailView : UIView <FRSGalleryViewDelegate>
 
@@ -17,7 +18,8 @@
 
 @property (strong, nonatomic) IBOutlet FRSGalleryView *galleryView;
 @property (nonatomic, retain) NSMutableArray *comments;
+@property (strong, nonatomic) IBOutlet FRSGalleryExpandedViewController *parentVC;
 
--(void)configureGalleryView;
+-(void)configureUI;
 
 @end
