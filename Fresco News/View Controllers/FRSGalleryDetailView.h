@@ -16,6 +16,7 @@
 @property BOOL didChangeUp;
 
 @property (strong, nonatomic) IBOutlet FRSGalleryView *galleryView;
+@property (nonatomic, retain) NSMutableArray *comments;
 
 -(void)configureGalleryView;
 

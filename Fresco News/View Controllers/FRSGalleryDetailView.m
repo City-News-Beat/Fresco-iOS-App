@@ -130,8 +130,8 @@
     
     CGFloat labelOriginY = self.galleryView.frame.origin.y + self.galleryView.frame.size.height;
     
-    if (self.orderedArticles.count > 0) {
-        labelOriginY += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height;
+    if ([self.gallery.articles allObjects].count > 0) {
+        labelOriginY += articlesTableView.frame.size.height + articlesLabel.frame.size.height;
     }
     
     [self configureCommentLabel];
