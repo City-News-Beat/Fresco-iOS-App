@@ -201,61 +201,7 @@ static BOOL isDeeplinking;
 }
 
 + (void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
-
-    if (isDeeplinking) {
-        return;
-    }
-
-    isDeeplinking = TRUE;
-
-    NSString *gallery = @"";
-    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-
-    for (int i = 0; i < galleryIDs.count - 1; i++) {
-        gallery = [gallery stringByAppendingString:galleryIDs[i]];
-        gallery = [gallery stringByAppendingString:@","];
-    }
-
-    gallery = [gallery stringByAppendingString:[galleryIDs lastObject]];
-
-    UITabBarController *tab = (UITabBarController *)appDelegate.tabBarController;
-    FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
-    [detailVC showTabBarAnimated:YES];
-    detailVC.navigationController = tab.navigationController;
-    detailVC.title = (title) ? [title uppercaseString] : @"TODAY IN NEWS";
-
-    UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
-
-    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-        [navController pushViewController:detailVC animated:TRUE];
-
-    } else {
-
-        UITabBarController *tab = (UITabBarController *)navController;
-        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-
-        navController = (UINavigationController *)[[tab viewControllers] firstObject];
-
-        [navController pushViewController:detailVC animated:TRUE];
-    }
-
-    [[FRSAPIClient sharedClient] getGalleryWithUID:gallery
-                                        completion:^(id responseObject, NSError *error) {
-
-                                          if (error) {
-                                              [self error:error];
-                                          }
-
-                                          if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
-                                              responseObject = @[ responseObject ];
-                                          }
-
-                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                            [detailVC configureWithGalleries:responseObject];
-                                            isDeeplinking = FALSE;
-                                          });
-                                        }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"notif-for-todayinnews" object:galleryIDs];
 }
 
 + (void)segueToGallery:(NSString *)galleryID {

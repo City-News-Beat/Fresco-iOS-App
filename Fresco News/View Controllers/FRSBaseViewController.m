@@ -35,6 +35,12 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTodayInNewsNotification:) name:@"notif-for-todayinnews" object:nil];
+}
+
+-(void)receiveTodayInNewsNotification:(NSNotification *)notif {
+    [self segueToTodayInNews:[notif object]];
 }
 
 - (void)removeNavigationBarLine {

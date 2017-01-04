@@ -237,8 +237,9 @@
     if (entry) {
         exit = [NSDate date];
         NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
-        [FRSTracker track:highlightsSession parameters:@{ activityDuration : @(sessionLength),
-                                                          @"galleries_scrolled_past" : @(numberRead) }];
+        [FRSTracker track:highlightsSession
+               parameters:@{ activityDuration : @(sessionLength),
+                             @"galleries_scrolled_past" : @(numberRead) }];
     }
 
     [self removeStatusBarNotification];
@@ -819,8 +820,9 @@
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
     NSString *url = content[0];
     url = [[url componentsSeparatedByString:@"/"] lastObject];
-    [FRSTracker track:galleryShared parameters:@{ @"gallery_id" : url,
-                                                  @"shared_from" : @"highlights" }];
+    [FRSTracker track:galleryShared
+           parameters:@{ @"gallery_id" : url,
+                         @"shared_from" : @"highlights" }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -850,8 +852,9 @@
 - (void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
 
     FRSGallery *gallery = self.dataSource[notification.row];
-    [FRSTracker track:galleryOpenedFromHighlights parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"",
-                                                                @"opened_from" : @"highlights" }];
+    [FRSTracker track:galleryOpenedFromHighlights
+           parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"",
+                         @"opened_from" : @"highlights" }];
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
