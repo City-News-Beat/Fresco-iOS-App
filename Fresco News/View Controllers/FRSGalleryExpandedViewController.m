@@ -77,8 +77,6 @@
 @property (strong, nonatomic) NSDictionary *currentCommentUserDictionary;
 @property BOOL didChangeUp;
 
-@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
-
 @end
 
 @implementation FRSGalleryExpandedViewController{
@@ -105,23 +103,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         self.hiddenTabBar = YES;
         self.actionBarVisible = YES;
         self.touchEnabled = NO;
-        [self fetchCommentsWithID:gallery.uid];
+        [galleryDetailView fetchCommentsWithID:gallery.uid];
         
-    }
-    return self;
-}
-
--(instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID {
-    self = [super init];
-    if (self){
-        self.gallery = gallery;
-        galleryDetailView.gallery = gallery;
-        //        self.orderedArticles = [self.gallery.articles allObjects];
-        self.hiddenTabBar = YES;
-        self.actionBarVisible = YES;
-        self.touchEnabled = NO;
-        //[self fetchCommentsWithID:gallery.uid];
-        [self setupDeepLinkedComment:commentID];
     }
     return self;
 }
@@ -143,6 +126,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     galleryDetailView.defaultPostID = self.defaultPostID; //TODO: To be removed from class
     galleryDetailView.parentVC = self;
     [galleryDetailView configureUI];
+    [galleryDetailView fetchCommentsWithID:self.gallery.uid];
     NSLog(@"Width 1: %f", self.view.frame.size.width);
     NSLog(@"Width 2: %f", galleryDetailView.frame.size.width);
     [self.view updateConstraints];
@@ -178,71 +162,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [super viewDidDisappear:animated];
 }
 
--(void)setupDeepLinkedComment:(NSString *)commentID {
-    NSString *format = @"gallery/%@/comments?last=%@&dir=disc";
-    NSString *endpoint = [NSString stringWithFormat:format, self.gallery.uid, commentID];
-    
-    [[FRSAPIClient sharedClient] get:endpoint withParameters:Nil completion:^(id responseObject, NSError *error) {
-        if (error || !responseObject) {
-            [self commentError:error];
-            return;
-        }
-        
-        _comments = [[NSMutableArray alloc] init];
-        NSArray *response = (NSArray *)responseObject;
-        for (NSInteger i = response.count-1; i >= 0; i--) {
-            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:response[i]];
-            [_comments addObject:commentObject];
-        }
-        
-        if ([_comments count] <= 10) {
-            showsMoreButton = FALSE;
-        }
-        else {
-            showsMoreButton = TRUE;
-        }
-        
-        [self configureComments];
-    }];
-}
-
 -(void)configureSpinner {
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] initWithFrame:CGRectMake(82, 13, 20, 20)];
     self.loadingView.tintColor = [UIColor frescoOrangeColor];
     [self.loadingView setPullProgress:90];
     [self.loadingView startAnimating];
     [self.commentLabel addSubview:self.loadingView];
-}
-
--(void)fetchCommentsWithID:(NSString  *)galleryID {
-    
-    [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID completion:^(id responseObject, NSError *error) {
-        
-        [self.loadingView removeFromSuperview];
-        self.loadingView.alpha = 0;
-        
-        if (error || !responseObject) {
-            [self commentError:error];
-            return;
-        }
-        
-        _comments = [[NSMutableArray alloc] init];
-        NSArray *response = (NSArray *)responseObject;
-        for (NSInteger i = response.count-1; i >= 0; i--) {
-            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:response[i]];
-            [_comments addObject:commentObject];
-        }
-        
-        if ([self.gallery.comments integerValue] <= 10) {
-            showsMoreButton = FALSE;
-        }
-        else {
-            showsMoreButton = TRUE;
-        }
-        
-        [self configureComments];
-        
-    }];
 }
 
 -(void)focus {
@@ -479,7 +404,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 -(void)configureUI{
     
-    self.view.backgroundColor = [UIColor frescoBackgroundColorDark];//Added
+    //self.view.backgroundColor = [UIColor frescoBackgroundColorDark];//Added
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self configureScrollView];//Added
@@ -1461,7 +1386,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
--(void)loadGallery:(FRSGallery *)gallery {
+-(void)loadGallery:(FRSGallery *)gallery {//Might be useless
     self.gallery = gallery;//Remove when tested
     galleryDetailView.gallery = gallery;
     
@@ -1475,8 +1400,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     self.touchEnabled = NO;
     [self.galleryView loadGallery:gallery];//Remove when tested
     [galleryDetailView.galleryView loadGallery:gallery];
-    [self fetchCommentsWithID:gallery.uid];
-    
+    [galleryDetailView fetchCommentsWithID:gallery.uid];
 }
 
 -(void)trackSession {

@@ -27,6 +27,8 @@
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Sv-gY-L1p" customClass="FRSGalleryView">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="300" id="yka-Fq-ZAn"/>
                                     </constraints>
@@ -59,21 +61,24 @@
                                 </view>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="rLO-dS-YLU">
                                     <rect key="frame" x="0.0" y="492" width="375" height="100"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="100" id="QYQ-i6-rwz"/>
                                     </constraints>
+                                    <color key="separatorColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </tableView>
                                 <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="w5E-hK-yjE">
                                     <rect key="frame" x="0.0" y="347" width="375" height="100"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="100" id="m5y-4x-Ckc"/>
                                     </constraints>
+                                    <color key="separatorColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="sectionIndexBackgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </tableView>
                             </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="MEo-kD-hxy" secondAttribute="trailing" id="4Em-hV-l9W"/>
                                 <constraint firstItem="Ehb-El-AVW" firstAttribute="leading" secondItem="NbN-nY-a20" secondAttribute="leading" id="68Z-uh-x6G"/>
@@ -101,6 +106,7 @@
                             </constraints>
                         </view>
                     </subviews>
+                    <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="NbN-nY-a20" secondAttribute="bottom" id="ESj-5c-gkY"/>
                         <constraint firstAttribute="trailing" secondItem="NbN-nY-a20" secondAttribute="trailing" id="JX9-1P-Qdh"/>
@@ -157,13 +163,13 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="articlesHeightConstraint" destination="QYQ-i6-rwz" id="bIv-Fu-6hP"/>
+                <outlet property="articlesHeightConstraint" destination="m5y-4x-Ckc" id="zeb-Nc-6ax"/>
                 <outlet property="articlesLabel" destination="gkQ-Kx-cFr" id="XNj-q4-U4h"/>
                 <outlet property="articlesTableView" destination="w5E-hK-yjE" id="bUe-69-Hmu"/>
                 <outlet property="commentTextField" destination="btY-pg-mdR" id="sX0-GQ-xF0"/>
-                <outlet property="commentsHeightConstraint" destination="m5y-4x-Ckc" id="qeq-BC-qPt"/>
-                <outlet property="commentsLabel" destination="rLO-dS-YLU" id="yHr-gB-mHB"/>
-                <outlet property="commentsTableView" destination="rLO-dS-YLU" id="9Sa-Qe-EI0"/>
+                <outlet property="commentsHeightConstraint" destination="QYQ-i6-rwz" id="s7r-Sc-62K"/>
+                <outlet property="commentsLabel" destination="0yb-JT-eRR" id="rRx-93-3t1"/>
+                <outlet property="commentsTableView" destination="rLO-dS-YLU" id="kbK-DF-hSu"/>
                 <outlet property="galleryHeightConstraint" destination="yka-Fq-ZAn" id="VJm-FE-408"/>
                 <outlet property="galleryView" destination="1Sv-gY-L1p" id="Acu-tZ-130"/>
                 <outlet property="scrollView" destination="zpr-wT-uyb" id="MfS-aO-aMk"/>

@@ -7,6 +7,7 @@
 //
 
 #import "FRSScrollingViewController.h"
+#import "DGElasticPullToRefreshLoadingViewCircle.h"
 @class FRSGallery;
 
 @interface FRSGalleryExpandedViewController : FRSScrollingViewController <UITextViewDelegate>
@@ -22,8 +23,9 @@
 @property BOOL isLoadingUser;
 @property (strong, nonatomic) FRSGallery *gallery;
 @property (strong, nonatomic) NSString *openedFrom;
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
+
 -(void)focusOnPost:(NSString *)postID;
 -(instancetype)initWithGallery:(FRSGallery *)gallery;
--(instancetype)initWithGallery:(FRSGallery *)gallery comment:(NSString *)commentID;
 -(void)loadGallery:(FRSGallery *)gallery;
 @end

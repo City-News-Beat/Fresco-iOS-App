@@ -21,5 +21,6 @@
 @property (strong, nonatomic) IBOutlet FRSGalleryExpandedViewController *parentVC;
 
 -(void)configureUI;
+-(void)fetchCommentsWithID:(NSString*)galleryID;
 
 @end

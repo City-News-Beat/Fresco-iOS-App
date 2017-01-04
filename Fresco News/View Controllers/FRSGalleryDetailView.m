@@ -35,7 +35,7 @@
     UIButton *topButton;
     
     IBOutlet UITableView *commentsTableView;
-    IBOutlet UITableView *commentsLabel;
+    IBOutlet UILabel *commentsLabel;
     IBOutlet UITableView *articlesTableView;
     IBOutlet UILabel *articlesLabel;
     IBOutlet NSLayoutConstraint *articlesHeightConstraint;
@@ -154,22 +154,19 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if ([self.gallery.articles allObjects].count > 0) {
         labelOriginY += articlesTableView.frame.size.height + articlesLabel.frame.size.height;
     }
-    
-    commentsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, labelOriginY + commentsLabel.frame.size.height, self.frame.size.width, height)];
     commentsTableView.delegate = self;
     commentsTableView.dataSource = self;
     [commentsTableView registerNib:[UINib nibWithNibName:@"FRSCommentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:reusableCommentIdentifier];
     commentsTableView.hidden = self.comments.count == 0;
-    commentsTableView.hidden = self.comments.count == 0;
-    
-    [commentsTableView setSeparatorColor:[UIColor clearColor]];
     
     if (self.comments.count > 0) {
         [commentsTableView addSubview:[UIView lineAtPoint:CGPointMake(0, 0)]];
     }
     
+    [self adjustHeight];
     [self adjustScrollViewContentSize];
     [self.actionBar actionButtonTitleNeedsUpdate];
+    [commentsTableView reloadData];
 }
 
 -(void)configureActionBar{
@@ -220,10 +217,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         height += commentsHeightConstraint.constant + commentsLabel.frame.size.height + 20;
     }
     if ([self.gallery.articles allObjects].count > 0) {
+        articlesHeightConstraint.constant = CELL_HEIGHT * [self.gallery.articles allObjects].count;
         height += articlesHeightConstraint.constant + articlesLabel.frame.size.height + 20;
     }
     
     scrollViewHeightConstraint.constant = height;
+    [self setNeedsUpdateConstraints];
+    [self layoutIfNeeded];
 }
 
 -(void)loadMoreComments {
@@ -285,6 +285,37 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [self dismissKeyboard:Nil];
             
         }
+    }];
+}
+
+-(void)fetchCommentsWithID:(NSString  *)galleryID {
+    
+    [[FRSAPIClient sharedClient] fetchCommentsForGalleryID:galleryID completion:^(id responseObject, NSError *error) {
+        
+        [_parentVC.loadingView removeFromSuperview];
+        _parentVC.loadingView.alpha = 0;
+        
+        if (error || !responseObject) {
+            //[self commentError:error];
+            return;
+        }
+        
+        _comments = [[NSMutableArray alloc] init];
+        NSArray *response = (NSArray *)responseObject;
+        for (NSInteger i = response.count-1; i >= 0; i--) {
+            FRSComment *commentObject = [[FRSComment alloc] initWithDictionary:response[i]];
+            [_comments addObject:commentObject];
+        }
+        
+        if ([self.gallery.comments integerValue] <= 10) {
+            showsMoreButton = FALSE;
+        }
+        else {
+            showsMoreButton = TRUE;
+        }
+        
+        [self configureComments];
+        
     }];
 }
 
@@ -467,6 +498,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (tableView == articlesTableView) {
         FRSArticlesTableViewCell *cell = [[FRSArticlesTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"article-cell" article:[self.gallery.articles allObjects] [indexPath.row]];
+        cell.backgroundColor = [UIColor clearColor];
         return cell;
     }
     else if (tableView == commentsTableView) {
@@ -493,8 +525,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:topButton];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.backgroundColor = [UIColor frescoBackgroundColorLight];
-            
+            cell.backgroundColor = [UIColor whiteColor];
             
             if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
                 [cell setSeparatorInset:UIEdgeInsetsZero];
@@ -505,6 +536,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
                 [cell setLayoutMargins:UIEdgeInsetsZero];
             }
+            cell.backgroundColor = [UIColor clearColor];
             
             return cell;
         }
@@ -518,6 +550,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 //                [cell.commentTextView sizeToFit];
                 return cell;
             }
+            cell.backgroundColor = [UIColor clearColor];
         }
     }
     
@@ -561,10 +594,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     height += 56;
     
     commentsTableView.frame = CGRectMake(0, commentsTableView.frame.origin.y, self.frame.size.width, height);
+    commentsHeightConstraint.constant = height;
+
     [self adjustScrollViewContentSize];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self adjustScrollViewContentSize];
-    });
     [commentsTableView reloadData];
     commentsTableView.hidden = self.comments.count == 0;
     commentsLabel.hidden = self.comments.count == 0;
