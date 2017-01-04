@@ -20,6 +20,7 @@
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "Haneke.h"
+#import "FRSUserManager.h"
 
 @import MapKit;
 
@@ -131,7 +132,7 @@
 
     NSString *radius = [NSString stringWithFormat:@"%.0f", self.miles];
 
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{ @"radius" : radius }
+    [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"radius" : radius }
         completion:^(id responseObject, NSError *error) {
 
           if (error.code == -1009) {
@@ -160,7 +161,7 @@
           if (responseObject) {
               [self popViewController];
               [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
-              FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+              FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
               userToUpdate.notificationRadius = @(self.miles);
               [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
           }
@@ -234,9 +235,9 @@
         imageView.clipsToBounds = YES;
         [mapCircleView addSubview:imageView];
 
-        if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
+        if ([FRSUserManager sharedInstance].authenticatedUser.profileImage) {
 
-            NSString *link = [[FRSAPIClient sharedClient].authenticatedUser valueForKey:@"profileImage"];
+            NSString *link = [[FRSUserManager sharedInstance].authenticatedUser valueForKey:@"profileImage"];
             NSURL *url = [NSURL URLWithString:link];
             [imageView hnk_setImageFromURL:url];
 

@@ -10,10 +10,8 @@
 #import "UITextView+Resize.h"
 #import "FRSArticlesTableViewCell.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
-
 #import "FRSGallery.h"
 #import "FRSArticle.h"
-
 #import "FRSGalleryView.h"
 #import "FRSCommentsView.h"
 #import "FRSContentActionsBar.h"
@@ -25,11 +23,11 @@
 #import "FRSSearchViewController.h"
 #import "FRSOnboardingViewController.h"
 #import "FRSAlertView.h"
-
 #import "MGSwipeTableCell.h"
 #import "FRSCommentCell.h"
-
 #import "FRSDualUserListViewController.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 #define TOP_NAV_BAR_HEIGHT 64
 #define GALLERY_BOTTOM_PADDING 16
@@ -303,7 +301,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     self.navigationItem.rightBarButtonItems = @[ dots ];
 
-    if ([[[self.gallery creator] uid] isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+    if ([[[self.gallery creator] uid] isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
         self.navigationItem.rightBarButtonItems = nil;
     }
 }
@@ -373,15 +371,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [view addAction:reportGallery];
 
     if (![[[self.gallery creator] uid] isEqualToString:@""] && [self.gallery creator] != nil) {
-        if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
             [view addAction:report];
         }
-        if ([[[FRSAPIClient sharedClient] authenticatedUser] blocking] || self.didBlockUser) {
-            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        if ([[[FRSUserManager sharedInstance] authenticatedUser] blocking] || self.didBlockUser) {
+            if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
                 [view addAction:unblock];
             }
         } else {
-            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+            if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
                 [view addAction:block];
             }
         }
@@ -691,7 +689,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     [self.view addSubview:self.actionBar];
 
-    if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+    if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
         [self.actionBar setCurrentUser:YES];
     } else {
         [self.actionBar setCurrentUser:NO];

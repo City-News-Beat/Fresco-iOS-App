@@ -7,22 +7,18 @@
 //
 
 #import "FRSSignUpViewController.h"
-
-//View Controllers
 #import "FRSSetupProfileViewController.h" // !HELPFUL, LOOP BACK
 #import "FRSLoginViewController.h"
-
-//Helpers
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
-
-//UI
 #import "FRSAlertView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FRSAppDelegate.h"
 #import "FRSNavigationController.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 @import MapKit;
 
@@ -80,7 +76,7 @@
 
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 
-    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
     }
@@ -185,7 +181,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
 
-    FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
     userToUpdate.notificationRadius = @(self.miles);
     [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
 }
@@ -503,7 +499,7 @@
     imageView.layer.cornerRadius = 9;
     [mapCircleView addSubview:imageView];
 
-    if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
+    if ([FRSUserManager sharedInstance].authenticatedUser.profileImage) {
 
     } else {
         imageView.backgroundColor = [UIColor frescoBlueColor];
@@ -1243,79 +1239,79 @@
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
     [registrationDigest setObject:@(self.miles) forKey:@"radius"];
 
-    [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest
-                                                completion:^(id responseObject, NSError *error) {
-                                                  BOOL facebookSignup = FALSE;
-                                                  BOOL twitterSignup = FALSE;
+    [[FRSAuthManager sharedInstance] registerWithUserDigestion:registrationDigest
+                                                    completion:^(id responseObject, NSError *error) {
+                                                      BOOL facebookSignup = FALSE;
+                                                      BOOL twitterSignup = FALSE;
 
-                                                  if ([self.currentSocialDigest objectForKey:@"twitter"]) {
-                                                      twitterSignup = true;
-                                                  }
-                                                  if ([self.currentSocialDigest objectForKey:@"facebook"]) {
-                                                      facebookSignup = true;
-                                                  }
+                                                      if ([self.currentSocialDigest objectForKey:@"twitter"]) {
+                                                          twitterSignup = true;
+                                                      }
+                                                      if ([self.currentSocialDigest objectForKey:@"facebook"]) {
+                                                          facebookSignup = true;
+                                                      }
 
-                                                  NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
+                                                      NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
 
-                                                  if (error) {
-                                                      [registrationDigest setObject:error.localizedDescription forKey:@"error"];
-                                                      [FRSTracker track:registrationError parameters:@{ @"error" : registrationDigest }];
-                                                  }
+                                                      if (error) {
+                                                          [registrationDigest setObject:error.localizedDescription forKey:@"error"];
+                                                          [FRSTracker track:registrationError parameters:@{ @"error" : registrationDigest }];
+                                                      }
 
-                                                  if (error.code == -1009) {
+                                                      if (error.code == -1009) {
 
-                                                      FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                                      [alert show];
-                                                      [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-
-                                                      return;
-                                                  }
-
-                                                  if (error) {
-                                                      [Answers logSignUpWithMethod:@"Email"
-                                                                           success:@NO
-                                                                  customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
-                                                                                      @"facebook" : @((self.facebookToken != Nil)) }];
-
-                                                      NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                                      NSInteger responseCode = response.statusCode;
-
-                                                      if (responseCode == 412) {
-                                                          [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-                                                          [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-
-                                                          NSString *ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
-                                                          NSError *jsonError;
-
-                                                          NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
-                                                          NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
-
-                                                          FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                          FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                                                           [alert show];
                                                           [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
                                                           return;
                                                       }
 
-                                                      [self presentGenericError];
+                                                      if (error) {
+                                                          [Answers logSignUpWithMethod:@"Email"
+                                                                               success:@NO
+                                                                      customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
+                                                                                          @"facebook" : @((self.facebookToken != Nil)) }];
+
+                                                          NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                          NSInteger responseCode = response.statusCode;
+
+                                                          if (responseCode == 412) {
+                                                              [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+                                                              [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+
+                                                              NSString *ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                                                              NSError *jsonError;
+
+                                                              NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
+                                                              NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
+
+                                                              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                              [alert show];
+                                                              [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+                                                              return;
+                                                          }
+
+                                                          [self presentGenericError];
+                                                          [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+                                                      }
+
+                                                      if (error.code == 0) {
+                                                          [Answers logSignUpWithMethod:@"Email"
+                                                                               success:@YES
+                                                                      customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
+                                                                                          @"facebook" : @((self.facebookToken != Nil)) }];
+
+                                                          _isAlreadyRegistered = TRUE;
+                                                          [self segueToSetup];
+                                                      }
+                                                      _pastRegistration = registrationDigest;
+
                                                       [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-                                                  }
-
-                                                  if (error.code == 0) {
-                                                      [Answers logSignUpWithMethod:@"Email"
-                                                                           success:@YES
-                                                                  customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
-                                                                                      @"facebook" : @((self.facebookToken != Nil)) }];
-
-                                                      _isAlreadyRegistered = TRUE;
-                                                      [self segueToSetup];
-                                                  }
-                                                  _pastRegistration = registrationDigest;
-
-                                                  [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-                                                  //        Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                                                  //        [mixpanel createAlias:frescoID
-                                                  //                forDistinctID:mixpanel.distinctId];
-                                                }];
+                                                      //        Mixpanel *mixpanel = [Mixpanel sharedInstance];
+                                                      //        [mixpanel createAlias:frescoID
+                                                      //                forDistinctID:mixpanel.distinctId];
+                                                    }];
 }
 
 - (void)checkEmail {

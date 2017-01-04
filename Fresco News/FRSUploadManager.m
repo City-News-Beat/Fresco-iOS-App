@@ -44,8 +44,9 @@ static NSDate *lastDate;
         return;
     }
 
-    [FRSTracker track:uploadClose parameters:@{ @"percent_complete" : @(lastProgress),
-                                                @"gallery_id" : _currentGalleryID }];
+    [FRSTracker track:uploadClose
+           parameters:@{ @"percent_complete" : @(lastProgress),
+                         @"gallery_id" : _currentGalleryID }];
 }
 
 - (void)checkCachedUploads {
@@ -354,7 +355,7 @@ static NSDate *lastDate;
     [self addUploadForPost:request[1]
                        url:request[0]
                     postID:request[2]
-                completion:^(id responseObject, NSError *error) {
+                completion:^(id responseObject, NSError *error){
                 }];
 }
 
@@ -423,7 +424,6 @@ static NSDate *lastDate;
       }
 
       if (task.result) {
-
           FRSUpload *upload = [self.managedObjects objectForKey:post];
 
           if (upload) {
@@ -446,8 +446,10 @@ static NSDate *lastDate;
 - (void)updateProgress:(int64_t)bytes {
     uploadedFileSize += bytes;
     float progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{ @"type" : @"progress",
-                                                                                                         @"percentage" : @(progress) }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate"
+                                                        object:nil
+                                                      userInfo:@{ @"type" : @"progress",
+                                                                  @"percentage" : @(progress) }];
 }
 
 - (void)uploadDidErrorWithError:(NSError *)error {

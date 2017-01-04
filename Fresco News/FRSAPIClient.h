@@ -37,10 +37,7 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 @property (nonatomic, retain) AFHTTPRequestOperationManager *requestManager;
 @property BOOL managerAuthenticated;
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
-@property (nonatomic, retain) NSString *passwordUsed;
-@property (nonatomic, retain) NSDictionary *socialUsed;
-@property (nonatomic, retain) NSString *emailUsed;
-@property (nonatomic, retain) FRSUser *authenticatedUser;
+
 @property (strong, nonatomic) FRSAlertView *suspendedAlert;
 
 +(instancetype)sharedClient;
@@ -56,19 +53,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 -(void)getAcceptedAssignmentWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 -(void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
 
-
-+ (instancetype)sharedClient;
-- (NSManagedObjectContext *)managedObjectContext;
-- (void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchStoriesWithLimit:(NSInteger)limit lastStoryID:(NSString *)offsetID completion:(void (^)(NSArray *stories, NSError *error))completion;
-- (void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void (^)(NSArray *galleries, NSError *error))completion;
-- (void)fetchFollowing:(void (^)(NSArray *galleries, NSError *error))completion;
-- (void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchGalleriesInStory:(NSString *)storyID completion:(void (^)(NSArray *galleries, NSError *error))completion;
-- (void)acceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unacceptAssignment:(NSString *)assignmentID completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)getAcceptedAssignmentWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)fetchLikesForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion;
 
@@ -87,22 +71,12 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 - (void)disconnectPlatform:(NSString *)platform completion:(FRSAPIDefaultCompletionBlock)completion;
 
-// authentication
-- (void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)updateIdentityWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
-
 //registration
-- (void)registerWithUserDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion; // leaves burdon of constructing dict obj to sender (will have method for that)
+
 - (void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)updateLocalUser;
-- (BOOL)isAuthenticated;
+
 - (void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-- (NSString *)authenticationToken; // current token, assuming 1 user support
 - (NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken; // current social links, formatted for transmission to server
-- (FRSUser *)authenticatedUser;
 - (NSDictionary *)currentInstallation;
 - (NSNumber *)fileSizeForURL:(NSURL *)url;
 // social
@@ -111,7 +85,7 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 - (void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion;
+
 
 - (void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getStoryWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -120,8 +94,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 - (void)getPostWithID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion;
 
 // check user
-- (void)getUserWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion;
 - (NSDate *)dateFromString:(NSString *)string;
 
 - (void)likeGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -178,7 +150,7 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 // terms
 - (void)getTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)acceptTermsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)logout;
+
 // moderation
 - (void)blockUser:(NSString *)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)unblockUser:(NSString *)userID withCompletion:(FRSAPIDefaultCompletionBlock)completion;
@@ -193,4 +165,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 - (void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion;
 - (void)updateSettings:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
+
+- (void)reevaluateAuthorization;
 @end

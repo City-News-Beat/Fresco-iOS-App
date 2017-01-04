@@ -9,25 +9,22 @@
 #import "FRSHomeViewController.h"
 #import "Fresco.h"
 
-/* View Controllers */
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSSearchViewController.h"
 #import "FRSLoginViewController.h"
-
-/* UI */
 #import "DGElasticPullToRefresh.h"
 #import "FRSGalleryCell.h"
 #import "FRSTrimTool.h"
 #import "FRSAwkwardView.h"
 #import "FRSAlertView.h"
-
-/* Core Data */
 #import "MagicalRecord.h"
 #import "FRSCoreData.h"
 #import "FRSAppDelegate.h"
 #import "FRSGallery+CoreDataProperties.h"
 #import "FRSFollowingTable.h"
 #import "FRSLocationManager.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
     BOOL isLoading;
@@ -93,7 +90,7 @@
     //Unable to logout using delegate method because that gets called in LoginVC
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:@"logout_notification" object:nil];
 
-    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         //Present permissions alert on launch after two days from downloading the app only if the they have not seen the alert yet.
         if (![[NSUserDefaults standardUserDefaults] boolForKey:userHasSeenPermissionsAlert]) {
             if ([[NSUserDefaults standardUserDefaults] valueForKey:startDate]) {
@@ -223,7 +220,7 @@
 }
 
 - (void)logoutAlertAction {
-    if ([[FRSAPIClient sharedClient] authenticatedUser].username) {
+    if ([[FRSUserManager sharedInstance] authenticatedUser].username) {
         return;
     }
     [self logoutWithPop:YES];
@@ -265,8 +262,8 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentMigrationAlert) name:@"user-did-login" object:nil];
 
-    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-        if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
+    if ([[FRSUserManager sharedInstance] authenticatedUser]) {
+        if (![[FRSUserManager sharedInstance] authenticatedUser].username) {
 
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutAlertAction) name:UIApplicationWillTerminateNotification object:nil];
         }
@@ -285,7 +282,7 @@
         return;
     }
 
-    if ([[FRSAPIClient sharedClient] isAuthenticated] && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
+    if ([[FRSAuthManager sharedInstance] isAuthenticated] && [[[NSUserDefaults standardUserDefaults] valueForKey:userNeedsToMigrate] boolValue]) {
         FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[[NSUserDefaults standardUserDefaults] valueForKey:@"needs-password"] boolValue]];
         alert.delegate = self;
         [alert show];

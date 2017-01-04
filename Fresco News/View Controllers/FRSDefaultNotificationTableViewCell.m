@@ -11,6 +11,7 @@
 #import "FRSProfileViewController.h"
 #import "FRSAPIClient.h"
 #import <Haneke/Haneke.h>
+#import "FRSUserManager.h"
 
 @interface FRSDefaultNotificationTableViewCell ()
 
@@ -31,17 +32,17 @@
 }
 
 - (void)setUserImage:(NSString *)userID {
-    [[FRSAPIClient sharedClient] getUserWithUID:userID
-                                     completion:^(id responseObject, NSError *error) {
-                                       self.titleLabel.text = [responseObject objectForKey:@"full_name"];
+    [[FRSUserManager sharedInstance] getUserWithUID:userID
+                                         completion:^(id responseObject, NSError *error) {
+                                           self.titleLabel.text = [responseObject objectForKey:@"full_name"];
 
-                                       if ([responseObject objectForKey:@"avatar"] != [NSNull null]) {
-                                           NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
-                                           [self.image hnk_setImageFromURL:avatarURL];
-                                       }
+                                           if ([responseObject objectForKey:@"avatar"] != [NSNull null]) {
+                                               NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
+                                               [self.image hnk_setImageFromURL:avatarURL];
+                                           }
 
-                                       [self updateLabelsForCount];
-                                     }];
+                                           [self updateLabelsForCount];
+                                         }];
 }
 
 - (void)configureUserRepostNotificationWithUserID:(NSString *)userID galleryID:(NSString *)galleryID {
@@ -167,27 +168,27 @@
     self.followButton.alpha = 0;
     self.followButton.tintColor = [UIColor blackColor];
 
-    [[FRSAPIClient sharedClient] getUserWithUID:userID
-                                     completion:^(id responseObject, NSError *error) {
+    [[FRSUserManager sharedInstance] getUserWithUID:userID
+                                         completion:^(id responseObject, NSError *error) {
 
-                                       self.titleLabel.text = [responseObject objectForKey:@"full_name"];
+                                           self.titleLabel.text = [responseObject objectForKey:@"full_name"];
 
-                                       if ([responseObject objectForKey:@"avatar"] != [NSNull null]) {
-                                           NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
-                                           [self.image hnk_setImageFromURL:avatarURL];
-                                       }
+                                           if ([responseObject objectForKey:@"avatar"] != [NSNull null]) {
+                                               NSURL *avatarURL = [NSURL URLWithString:[responseObject objectForKey:@"avatar"]];
+                                               [self.image hnk_setImageFromURL:avatarURL];
+                                           }
 
-                                       if ([[responseObject objectForKey:@"following"] boolValue]) {
-                                           [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
-                                           self.followButton.tintColor = [UIColor frescoOrangeColor];
-                                       } else {
-                                           [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
-                                           self.followButton.tintColor = [UIColor blackColor];
-                                       }
+                                           if ([[responseObject objectForKey:@"following"] boolValue]) {
+                                               [self.followButton setImage:[UIImage imageNamed:@"account-check"] forState:UIControlStateNormal];
+                                               self.followButton.tintColor = [UIColor frescoOrangeColor];
+                                           } else {
+                                               [self.followButton setImage:[UIImage imageNamed:@"account-add"] forState:UIControlStateNormal];
+                                               self.followButton.tintColor = [UIColor blackColor];
+                                           }
 
-                                       [self updateLabelsForCount];
+                                           [self updateLabelsForCount];
 
-                                     }];
+                                         }];
 }
 
 - (void)configureFeaturedStoryCellWithStoryID:(NSString *)storyID {

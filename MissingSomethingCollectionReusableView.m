@@ -9,6 +9,7 @@
 #import "MissingSomethingCollectionReusableView.h"
 #import "UIColor+Fresco.h"
 #import <Smooch/Smooch.h>
+#import "FRSUserManager.h"
 
 @interface MissingSomethingCollectionReusableView ()
 @property (weak, nonatomic) IBOutlet UITextView *textView;
@@ -36,7 +37,7 @@
 }
 
 -(void)presentSmooch {
-    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *currentUser = [[FRSUserManager sharedInstance] authenticatedUser];
     if (currentUser.firstName) {
         [SKTUser currentUser].firstName = currentUser.firstName;
     }

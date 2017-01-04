@@ -10,6 +10,7 @@
 #import "FRSDebitCardViewController.h"
 #import "FRSPaymentCell.h"
 #import "FRSAppDelegate.h"
+#import "FRSUserManager.h"
 
 @interface FRSPaymentViewController ()
 @end
@@ -107,7 +108,7 @@ static NSString *addPaymentCell = @"addPaymentCell";
         NSDictionary *payment = [self.payments objectAtIndex:indexPath.row];
         NSString *paymentID = payment[@"id"];
         NSString *digits = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
-        [[[FRSAPIClient sharedClient] authenticatedUser] setValue:digits forKey:@"creditCardDigits"];
+        [[[FRSUserManager sharedInstance] authenticatedUser] setValue:digits forKey:@"creditCardDigits"];
         [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
 
         [[NSUserDefaults standardUserDefaults] setObject:digits forKey:settingsPaymentLastFour];

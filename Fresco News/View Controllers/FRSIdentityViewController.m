@@ -12,6 +12,7 @@
 #import "FRSTableViewCell.h"
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
+#import "FRSUserManager.h"
 
 @interface FRSIdentityViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -51,7 +52,7 @@
     [self.navigationItem setTitle:@"IDENTIFICATION"];
     [self.tableView reloadData];
 
-    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *currentUser = [[FRSUserManager sharedInstance] authenticatedUser];
     NSArray *fieldsNeeded = currentUser.fieldsNeeded;
 
     for (NSString *neededField in fieldsNeeded) {
@@ -246,7 +247,7 @@
 }
 
 - (void)configureAddressCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
 
     switch (indexPath.row) {
     case 0:
@@ -341,7 +342,7 @@
 }
 
 - (void)configureNameCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
 
     switch (indexPath.row) {
 
@@ -420,7 +421,7 @@
 }
 
 - (void)configureSSNCell:(FRSTableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
 
     switch (indexPath.row) {
     case 0:
@@ -584,7 +585,7 @@
     }
 
     self.savingInfo = true;
-    [[FRSAPIClient sharedClient] updateIdentityWithDigestion:addressInfo
+    [[FRSUserManager sharedInstance] updateIdentityWithDigestion:addressInfo
                                                   completion:^(id responseObject, NSError *error) {
                                                     self.savingInfo = false;
 

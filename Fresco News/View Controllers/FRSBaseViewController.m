@@ -18,6 +18,8 @@
 #import "FRSIdentityViewController.h"
 #import "FRSTabBarController.h"
 #import "FRSAppDelegate.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 @interface FRSBaseViewController ()
 
@@ -363,17 +365,17 @@
 
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
 
-    if ([[FRSAPIClient sharedClient] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
-        [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSAPIClient sharedClient] authenticatedUser]];
+    if ([[FRSUserManager sharedInstance] authenticatedUser]) { //fixes a crash when logging out from migration alert and signed in with email and password
+        [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[[FRSUserManager sharedInstance] authenticatedUser]];
     }
 
-    [[FRSAPIClient sharedClient] logout];
+    [[FRSAuthManager sharedInstance] logout];
     [FRSTracker reset];
 
     dispatch_async(dispatch_get_main_queue(), ^{
       [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
     });
-    [[FRSAPIClient sharedClient] logout];
+    [[FRSAuthManager sharedInstance] logout];
 
     [(FRSTabBarController *)self.tabBarController setIrisItemColor:[UIColor frescoOrangeColor]];
 
@@ -402,8 +404,8 @@
     }
     [[NSUserDefaults standardUserDefaults] synchronize];
 
-    [[FRSAPIClient sharedClient] setPasswordUsed:nil];
-    [[FRSAPIClient sharedClient] setEmailUsed:nil];
+    [[FRSAuthManager sharedInstance] setPasswordUsed:nil];
+    [[FRSAuthManager sharedInstance] setEmailUsed:nil];
 
     FRSTabBarController *tabBarController = (FRSTabBarController *)self.tabBarController;
     [tabBarController updateUserIcon];
@@ -417,7 +419,7 @@
 
 #pragma mark - Smooch
 - (void)presentSmooch {
-    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *currentUser = [[FRSUserManager sharedInstance] authenticatedUser];
 
     if (currentUser.firstName) {
         [SKTUser currentUser].firstName = currentUser.firstName;
@@ -440,7 +442,7 @@
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
 
-    if ([[FRSAPIClient sharedClient] authenticatedUser].suspended) {
+    if ([[FRSUserManager sharedInstance] authenticatedUser].suspended) {
         self.suspendedAlert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message:[NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         [self.suspendedAlert show];
     }

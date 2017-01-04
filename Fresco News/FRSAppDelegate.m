@@ -1,5 +1,3 @@
-
-
 //
 //  FRSAppDelegate.m
 //  Fresco
@@ -40,6 +38,8 @@
 #import "FRSNotificationHandler.h"
 #import <UserNotifications/UserNotifications.h>
 #import "EndpointManager.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
@@ -68,7 +68,7 @@
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
     if ([self isFirstRun] && !launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [[FRSAPIClient sharedClient] logout];
+        [[FRSAuthManager sharedInstance] logout];
     }
 
     [self configureWindow];
@@ -83,7 +83,7 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 
-    if ([[FRSAPIClient sharedClient] isAuthenticated] || launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+    if ([[FRSAuthManager sharedInstance] isAuthenticated] || launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
         self.tabBarController = [[FRSTabBarController alloc] init];
         FRSNavigationController *mainNav = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
 
@@ -175,9 +175,8 @@
 }
 
 - (void)startTracking {
-
-    if ([[FRSAPIClient sharedClient] authenticatedUser]) {
-        FRSUser *user = [[FRSAPIClient sharedClient] authenticatedUser];
+    if ([[FRSUserManager sharedInstance] authenticatedUser]) {
+        FRSUser *user = [[FRSUserManager sharedInstance] authenticatedUser];
         NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
         NSString *userID = Nil;
 
@@ -232,7 +231,7 @@
 
 - (void)reloadUser:(FRSAPIDefaultCompletionBlock)completion {
 
-    [[FRSAPIClient sharedClient] refreshCurrentUser:^(id responseObject, NSError *error) {
+    [[FRSUserManager sharedInstance] refreshCurrentUser:^(id responseObject, NSError *error) {
       // check against existing user
       if (error || responseObject[@"error"]) {
           // throw up sign in
@@ -244,7 +243,7 @@
         [self saveUserFields:responseObject];
       }];
 
-      if ([[FRSAPIClient sharedClient] isAuthenticated] && !self.didPresentPermissionsRequest) {
+      if ([[FRSAuthManager sharedInstance] isAuthenticated] && !self.didPresentPermissionsRequest) {
           if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
               [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
           }
@@ -262,7 +261,7 @@
 }
 
 - (void)saveUserFields:(NSDictionary *)responseObject {
-    FRSUser *authenticatedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
 
     if (!authenticatedUser) {
         authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
@@ -701,7 +700,7 @@
         [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
     }
 
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{ @"installation" : installationDigest }
+    [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"installation" : installationDigest }
         completion:^(id responseObject, NSError *error) {
           NSLog(@"Updated user installation");
         }];
@@ -757,7 +756,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 
-    if ([[FRSAPIClient sharedClient] isAuthenticated] && !self.didPresentPermissionsRequest) {
+    if ([[FRSAuthManager sharedInstance] isAuthenticated] && !self.didPresentPermissionsRequest) {
         if (([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)) {
             [[FRSLocationManager sharedManager] startLocationMonitoringForeground];
         }
@@ -790,7 +789,7 @@
 
 - (void)checkNotifications {
 
-    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         return;
     }
 

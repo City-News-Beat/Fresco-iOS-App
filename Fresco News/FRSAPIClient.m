@@ -16,12 +16,10 @@
 #import "FRSTabBarController.h"
 #import "FRSAppDelegate.h"
 #import "EndpointManager.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 @implementation FRSAPIClient
-@synthesize socialUsed = _socialUsed, passwordUsed = _passwordUsed, emailUsed = _emailUsed, authenticatedUser = _authenticatedUser;
-/*
- Singleton
- */
 
 + (instancetype)sharedClient {
     static FRSAPIClient *client = nil;
@@ -34,55 +32,6 @@
     return client;
 }
 
-- (id)init {
-    self = [super init];
-
-    if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleLocationUpdate:)
-                                                     name:FRSLocationUpdateNotification
-                                                   object:nil];
-    }
-
-    return self;
-}
-
-- (void)setPasswordUsed:(NSString *)passwordUsed {
-    _passwordUsed = passwordUsed;
-}
-
-- (void)setEmailUsed:(NSString *)emailUsed {
-    _emailUsed = emailUsed;
-}
-
-- (void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSMutableDictionary *mutableDigestion = [digestion mutableCopy];
-
-    if (self.passwordUsed) {
-        [mutableDigestion setObject:self.passwordUsed forKey:@"verify_password"];
-    } else if (self.socialUsed && !self.passwordUsed) {
-        [mutableDigestion addEntriesFromDictionary:self.socialUsed];
-    }
-
-    [self updateUserWithDigestion:mutableDigestion completion:completion];
-}
-
-- (NSString *)passwordUsed {
-    return _passwordUsed;
-}
-
-- (NSString *)emailUsed {
-    return _emailUsed;
-}
-
-- (NSDictionary *)socialUsed {
-    return _socialUsed;
-}
-
-- (void)setSocialUsed:(NSDictionary *)socialUsed {
-
-    _socialUsed = socialUsed;
-}
 
 - (void)handleError:(NSError *)error {
     switch (error.code / 100) {
@@ -126,91 +75,6 @@
     default:
         break;
     }
-}
-
-- (void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion {
-    self.passwordUsed = password;
-
-    NSDictionary *params = @{ @"username" : user,
-                              @"password" : password };
-
-    [self post:loginEndpoint
-        withParameters:params
-            completion:^(id responseObject, NSError *error) {
-
-              completion(responseObject, error);
-              if (!error) {
-                  [self handleUserLogin:responseObject];
-              }
-            }];
-}
-
-/*
- Sign in: all expect user to have an account, either returns a token, a challenge (i.e. 'create an account') or incorrect details
- */
-- (void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *twitterAccessToken = session.authToken;
-    NSString *twitterAccessTokenSecret = session.authTokenSecret;
-    NSDictionary *authDictionary = @{ @"platform" : @"twitter",
-                                      @"token" : twitterAccessToken,
-                                      @"secret" : twitterAccessTokenSecret };
-    self.socialUsed = authDictionary;
-
-    [self post:socialLoginEndpoint
-        withParameters:authDictionary
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-              // handle cacheing of authentication
-              if (!error) {
-                  [self handleUserLogin:responseObject];
-              }
-
-            }];
-}
-
-- (void)signInWithFacebook:(FBSDKAccessToken *)token completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *facebookAccessToken = token.tokenString;
-    NSDictionary *authDictionary = @{ @"platform" : @"facebook",
-                                      @"token" : facebookAccessToken };
-    self.socialUsed = authDictionary;
-
-    [self post:socialLoginEndpoint
-        withParameters:authDictionary
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error); // burden of error handling falls on sender
-
-              // handle internal cacheing of authentication
-              if (!error) {
-                  [self handleUserLogin:responseObject];
-              }
-            }];
-}
-
-- (void)registerWithUserDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    // email
-    // username
-    // password
-    // twitter_handle
-    // social_links
-    // installation
-
-    if (digestion[@"password"]) {
-        self.passwordUsed = digestion[@"password"];
-    } else {
-        self.socialUsed = digestion[@"social_links"];
-    }
-
-    [self post:signUpEndpoint
-        withParameters:digestion
-            completion:^(id responseObject, NSError *error) {
-
-              if ([responseObject objectForKey:@"token"] && ![responseObject objectForKey:@"err"]) {
-                  // [self saveToken:[responseObject objectForKey:@"token"] forUser:clientAuthorization];
-                  [self handleUserLogin:responseObject];
-              }
-
-              completion(responseObject, error);
-            }];
 }
 
 - (void)linkTwitter:(NSString *)token secret:(NSString *)secret completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -295,58 +159,12 @@
         }];
 }
 
-- (void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    [self post:updateUserEndpoint
-        withParameters:digestion
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
-- (void)updateIdentityWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self post:@"user/identity/update"
-        withParameters:digestion
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
 - (void)updateSettingsWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:settingsUpdateEndpoint withParameters:digestion completion:completion];
 }
 
 - (void)disableAccountWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:disableAccountEndpoint withParameters:digestion completion:completion];
-}
-
-- (FRSUser *)authenticatedUser {
-
-    // predicate searching for users in store w/ loggedIn as TRUE/1
-    NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"isLoggedIn", @(TRUE)];
-    NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUser"];
-    signedInRequest.predicate = signedInPredicate;
-
-    // get context from app deleegate (hate this dependency but no need to re-write rn to move up)
-    NSManagedObjectContext *context = [self managedObjectContext]; // temp (replace with internal or above method
-
-    // no need to sort response, because theoretically there is 1
-    NSError *userFetchError;
-    NSArray *authenticatedUsers = [context executeFetchRequest:signedInRequest error:&userFetchError];
-
-    // no authenticated user, or we had trouble accessing data store
-    if (userFetchError || [authenticatedUsers count] < 1) {
-        return Nil;
-    }
-
-    // if we have multiple "authenticated" users in data store, we probs messed up big time
-    if ([authenticatedUsers count] > 1) {
-
-    }
-
-    _authenticatedUser = [authenticatedUsers firstObject];
-
-    return _authenticatedUser;
 }
 
 // all the info needed for "social_links" field of registration/signin
@@ -374,140 +192,9 @@
     return socialDigestion;
 }
 
-// all info needed for "installation" field of registration/signin
-- (NSDictionary *)currentInstallation {
 
-    NSMutableDictionary *currentInstallation = [[NSMutableDictionary alloc] init];
-    NSString *deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"deviceToken"];
 
-    if (deviceToken != Nil || [deviceToken isEqual:[NSNull null]]) {
-        currentInstallation[@"device_token"] = deviceToken;
-    } else {
-    }
 
-    NSString *sessionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"SESSION_ID"];
-
-    if (sessionID) {
-        currentInstallation[@"device_id"] = sessionID;
-    } else {
-        sessionID = [self randomString];
-        currentInstallation[@"device_id"] = sessionID;
-        [[NSUserDefaults standardUserDefaults] setObject:sessionID forKey:@"SESSION_ID"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-
-    currentInstallation[@"platform"] = @"ios";
-
-    NSString *appVersion = [NSString stringWithFormat:@"%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
-
-    if (appVersion) {
-        currentInstallation[@"app_version"] = appVersion;
-    }
-
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    NSString *timeZone = [dateFormat stringFromDate:[NSDate date]];
-
-    if (timeZone) {
-        currentInstallation[@"timezone"] = timeZone;
-    }
-
-    NSString *localeString = [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode];
-
-    if (localeString) {
-        currentInstallation[@"locale_identifier"] = localeString;
-    }
-
-    return currentInstallation;
-}
-
-- (NSString *)randomString {
-    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    NSMutableString *randomString = [NSMutableString stringWithCapacity:15];
-
-    for (int i = 0; i < 15; i++) {
-        [randomString appendFormat:@"%C", [letters characterAtIndex:arc4random_uniform([letters length])]];
-    }
-
-    return randomString;
-}
-
-- (NSString *)random64CharacterString {
-    NSString *letters = @"abcdefABCDEF0123456789";
-    NSMutableString *randomString = [NSMutableString stringWithCapacity:64];
-
-    for (int i = 0; i < 64; i++) {
-        [randomString appendFormat:@"%C", [letters characterAtIndex:arc4random_uniform([letters length])]];
-    }
-
-    return randomString;
-}
-
-- (void)handleUserLogin:(id)responseObject {
-    if ([responseObject objectForKey:@"token"]) {
-        [self saveToken:[responseObject objectForKey:@"token"] forUser:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
-    }
-
-    FRSUser *authenticatedUser = [self authenticatedUser];
-
-    if (!authenticatedUser) {
-        authenticatedUser = [NSEntityDescription insertNewObjectForEntityForName:@"FRSUser" inManagedObjectContext:[self managedObjectContext]];
-    }
-
-    [self reevaluateAuthorization];
-    [self updateLocalUser];
-
-    NSDictionary *currentInstallation = [self currentInstallation];
-
-    if ([currentInstallation objectForKey:@"device_token"]) {
-        NSDictionary *update = @{ @"installation" : currentInstallation };
-        [self updateUserWithDigestion:update
-                           completion:^(id responseObject, NSError *error) {
-                           }];
-    }
-}
-
-- (void)updateLocalUser {
-    if (![self isAuthenticated]) {
-        return;
-    }
-
-    [self get:authenticatedUserEndpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              if (error) {
-                  return;
-              }
-
-              // set up FRSUser object with this info, set authenticated to true
-              NSString *userID = Nil;
-
-              userID = responseObject[@"id"];
-              NSString *email = responseObject[@"email"];
-              NSString *name = responseObject[@"full_name"];
-              NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
-
-              if (userID && ![userID isEqual:[NSNull null]]) {
-                  userID = userID;
-              }
-
-              if (name && ![name isEqual:[NSNull null]]) {
-                  identityDictionary[@"name"] = name;
-              }
-
-              if (email && ![email isEqual:[NSNull null]]) {
-                  identityDictionary[@"email"] = email;
-              }
-
-              [[SEGAnalytics sharedAnalytics] identify:userID
-                                                traits:identityDictionary];
-              [FRSTracker track:loginEvent];
-            }];
-}
-
-- (void)disconnectPlatform:(NSString *)platform completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self post:deleteSocialEndpoint withParameters:@{ @"platform" : platform } completion:completion];
-}
 
 - (void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
@@ -519,31 +206,7 @@
             }];
 }
 
-- (void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion {
-    if (![self isAuthenticated]) {
-        return;
-    }
 
-    [self post:locationEndpoint
-        withParameters:location
-            completion:^(id responseObject, NSError *error){
-
-            }];
-}
-
-- (void)handleLocationUpdate:(NSNotification *)userInfo {
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-
-      [self updateUserLocation:userInfo.userInfo
-                    completion:^(NSDictionary *response, NSError *error) {
-                      if (!error) {
-                      } else {
-                          NSLog(@"Location Error: %@ %@", response, error);
-                      }
-                    }];
-    });
-}
 
 /*
  
@@ -712,20 +375,9 @@
     [FRSLocator sharedLocator];
 }
 
-- (void)updateUserLocation:(NSDictionary *)inputParams completion:(void (^)(NSDictionary *response, NSError *error))completion {
-    if (![self isAuthenticated]) {
-        return;
-    }
-
-    [self post:locationEndpoint
-        withParameters:inputParams
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
 
 - (void)fetchFollowing:(void (^)(NSArray *galleries, NSError *error))completion {
-    FRSUser *authenticatedUser = [self authenticatedUser];
+    FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
 
     if (!authenticatedUser) {
         completion(Nil, [[NSError alloc] initWithDomain:@"com.fresconews.fresco" code:404 userInfo:@{ @"error" : @"no user u dingus" }]);
@@ -846,31 +498,14 @@
  Keychain-Based interaction & authentication
  */
 
-// user/me
-- (void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion {
-
-    if (![self isAuthenticated]) {
-        completion(Nil, [NSError errorWithDomain:@"com.fresconews.fresco" code:404 userInfo:Nil]); // no authenticated user, 404
-        return;
-    }
-
-    [self reevaluateAuthorization]; // specific check on bearer
-
-    // authenticated request to user/me (essentially user/ozetadev w/ more fields)
-    [self get:authenticatedUserEndpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
 
 - (void)reevaluateAuthorization {
-    if (![self isAuthenticated]) {
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         // set client token
         [self.requestManager.requestSerializer setValue:[self clientAuthorization] forHTTPHeaderField:@"Authorization"];
     } else { // set bearer token if we haven't already
         // set bearer client token
-        NSString *currentBearerToken = [self authenticationToken];
+        NSString *currentBearerToken = [[FRSAuthManager sharedInstance] authenticationToken];
         if (currentBearerToken) {
             currentBearerToken = [NSString stringWithFormat:@"Bearer %@", currentBearerToken];
 
@@ -881,45 +516,6 @@
         }
     }
     _managerAuthenticated = TRUE;
-}
-
-- (NSString *)authenticationToken {
-
-    NSArray *allAccounts = [SAMKeychain accountsForService:serviceName];
-
-    if ([allAccounts count] == 0) {
-        return Nil;
-    }
-
-    NSDictionary *credentialsDictionary = [allAccounts firstObject];
-    NSString *accountName = credentialsDictionary[kSAMKeychainAccountKey];
-
-    return [SAMKeychain passwordForService:serviceName account:accountName];
-}
-
-- (void)logout {
-    NSArray *allAccounts = [SAMKeychain allAccounts];
-
-    for (NSDictionary *account in allAccounts) {
-        NSString *accountName = account[kSAMKeychainAccountKey];
-        [SAMKeychain deletePasswordForService:serviceName account:accountName];
-    }
-}
-
-- (void)saveToken:(NSString *)token forUser:(NSString *)userName {
-    [SAMKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:userName];
-}
-
-- (NSString *)tokenForUser:(NSString *)userName {
-    return [SAMKeychain passwordForService:serviceName account:userName];
-}
-
-- (BOOL)isAuthenticated {
-
-    if ([[SAMKeychain accountsForService:serviceName] count] > 0) {
-        return TRUE;
-    }
-    return FALSE;
 }
 
 - (NSString *)clientAuthorization {
@@ -993,48 +589,6 @@
                     error:&fileSizeError];
 
     return fileSizeValue;
-}
-
-- (void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion {
-
-    NSString *endpoint = [NSString stringWithFormat:@"user/%@", user];
-
-    [self get:endpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-              if (error) {
-                  completion(TRUE, error);
-                  return;
-              }
-
-              if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-                  completion(FALSE, error);
-              }
-
-              // shouldn't happen
-              completion(TRUE, error);
-            }];
-}
-
-- (void)getUserWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    NSString *endpoint = [NSString stringWithFormat:@"user/%@", user];
-
-    [self get:endpoint
-        withParameters:nil
-            completion:^(id responseObject, NSError *error) {
-              if (error) {
-                  completion(responseObject, error);
-                  return;
-              }
-
-              if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-                  completion(responseObject, error);
-              }
-
-              // shouldn't happen
-              completion(responseObject, error);
-            }];
 }
 
 - (void)getPostWithID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -1536,7 +1090,7 @@
 
 - (BOOL)checkAuthAndPresentOnboard {
 
-    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
 
         id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
         FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
@@ -1556,7 +1110,7 @@
         return TRUE;
     }
 
-    if ([[FRSAPIClient sharedClient] authenticatedUser].suspended) {
+    if ([[FRSUserManager sharedInstance] authenticatedUser].suspended) {
         [self checkSuspended];
         return TRUE;
     }
@@ -1567,7 +1121,7 @@
 /// not ideal
 #pragma mark - Smooch
 - (void)presentSmooch {
-    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *currentUser = [[FRSUserManager sharedInstance] authenticatedUser];
     if (currentUser.firstName) {
         [SKTUser currentUser].firstName = currentUser.firstName;
     }
@@ -1585,7 +1139,7 @@
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
 
-    if ([[FRSAPIClient sharedClient] authenticatedUser].suspended) {
+    if ([[FRSUserManager sharedInstance] authenticatedUser].suspended) {
         self.suspendedAlert = [[FRSAlertView alloc] initWithTitle:@"SUSPENDED" message:[NSString stringWithFormat:@"You’ve been suspended for inappropriate behavior. You will be unable to submit, repost, or comment on galleries for 14 days."] actionTitle:@"CONTACT SUPPORT" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
         [self.suspendedAlert show];
     }

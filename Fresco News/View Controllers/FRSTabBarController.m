@@ -20,6 +20,8 @@
 #import "FRSUserNotificationViewController.h"
 #import "FRSLocationManager.h"
 #import "FRSBaseViewController.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 @interface FRSTabBarController () <UITabBarControllerDelegate>
 
@@ -197,7 +199,7 @@
         self.viewControllers = @[ vc, vc1, vc2, vc3, vc4 ];
     } else {
         UINavigationController *vc4 = [[FRSNavigationController alloc] initWithNavigationBarClass:[FRSNavigationBar class] toolbarClass:Nil];
-        [vc4 pushViewController:[[FRSProfileViewController alloc] initWithUser:[[FRSAPIClient sharedClient] authenticatedUser]] animated:NO];
+        [vc4 pushViewController:[[FRSProfileViewController alloc] initWithUser:[[FRSUserManager sharedInstance] authenticatedUser]] animated:NO];
         self.viewControllers = @[ vc, vc1, vc2, vc3, vc4 ];
     }
 }
@@ -360,7 +362,7 @@
 
             [self updateUserIcon];
         } else {
-            if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+            if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
                 id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
                 FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
                 UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
@@ -476,7 +478,7 @@
             [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
             return NO;
         }
-        if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
             FRSProfileViewController *profileVC = (FRSProfileViewController *)selectedVC;
             [profileVC.tableView setContentOffset:CGPointMake(0, 0) animated:NO];
         } else {

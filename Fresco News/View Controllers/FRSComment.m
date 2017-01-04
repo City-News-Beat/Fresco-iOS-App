@@ -8,6 +8,7 @@
 
 #import "FRSComment.h"
 #import "FRSAppDelegate.h"
+#import "FRSUserManager.h"
 
 @implementation FRSComment
 
@@ -28,7 +29,7 @@
 
     self.userDictionary = dictionary[@"user"];
 
-    if ([dictionary[@"user"][@"id"] isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+    if ([dictionary[@"user"][@"id"] isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
         _isDeletable = TRUE;
     } else {
         _isDeletable = FALSE;

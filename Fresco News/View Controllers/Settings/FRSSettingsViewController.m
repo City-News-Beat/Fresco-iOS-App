@@ -8,17 +8,11 @@
 
 
 #import "FRSSettingsViewController.h"
-
-/* Categories */
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
-
-/* UI Subclasses */
 #import "FRSTableViewCell.h"
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
-
-/* View Controllers */
 #import "FRSUsernameViewController.h"
 #import "FRSPromoCodeViewController.h"
 #import "FRSEmailViewController.h"
@@ -30,18 +24,13 @@
 #import "FRSPaymentViewController.h"
 #import "FRSAboutFrescoViewController.h"
 #import "FRSIdentityViewController.h"
-
 #import <MessageUI/MessageUI.h>
 #import <Smooch/Smooch.h>
-
-/* API */
 #import "FRSAPIClient.h"
 #import "FRSSocial.h"
-
 #import "SAMKeychain.h"
-
 #import "NSDate+ISO.h"
-
+#import "FRSUserManager.h"
 
 @interface FRSSettingsViewController () <UITableViewDelegate, UITableViewDataSource, FRSAlertViewDelegate>
 
@@ -61,7 +50,7 @@
     
     [self configureTableView];
     
-    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *currentUser = [[FRSUserManager sharedInstance] authenticatedUser];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -130,7 +119,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *currentUser = [[FRSUserManager sharedInstance] authenticatedUser];
     int sectionTwo = 4;
     
     if (currentUser.fieldsNeeded.count == 0) {
@@ -255,16 +244,16 @@
             switch (indexPath.row) {
                 case 0:
                     
-                    if ([[FRSAPIClient sharedClient] authenticatedUser].username && ![[[FRSAPIClient sharedClient] authenticatedUser].username isEqual:[NSNull null]]) {
-                        [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSAPIClient sharedClient] authenticatedUser].username]];
+                    if ([[FRSUserManager sharedInstance] authenticatedUser].username && ![[[FRSUserManager sharedInstance] authenticatedUser].username isEqual:[NSNull null]]) {
+                        [cell configureCellWithUsername:[NSString stringWithFormat:@"@%@", [[FRSUserManager sharedInstance] authenticatedUser].username]];
                     }
                     else {
                         [cell configureCellWithUsername:@"@username"];
                     }
                     break;
                 case 1:
-                    if ([[FRSAPIClient sharedClient] authenticatedUser].email && ![[[FRSAPIClient sharedClient] authenticatedUser].email isEqual:[NSNull null]]) {
-                        [cell configureDefaultCellWithTitle:[[FRSAPIClient sharedClient] authenticatedUser].email andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                    if ([[FRSUserManager sharedInstance] authenticatedUser].email && ![[[FRSUserManager sharedInstance] authenticatedUser].email isEqual:[NSNull null]]) {
+                        [cell configureDefaultCellWithTitle:[[FRSUserManager sharedInstance] authenticatedUser].email andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
                     else {
                         [cell configureDefaultCellWithTitle:@"Email" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
@@ -295,7 +284,7 @@
 //                        NSString *miles = [[NSUserDefaults standardUserDefaults] objectForKey:@"notification-radius"];
 //                        CGFloat milesFloat = [miles floatValue];
                         
-                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%@ mi", [[[FRSAPIClient sharedClient] authenticatedUser] notificationRadius]] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
+                        [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:[NSString stringWithFormat:@"%@ mi", [[[FRSUserManager sharedInstance] authenticatedUser] notificationRadius]] rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     } else {
                         [cell configureDefaultCellWithTitle:@"Notification radius" andCarret:YES andRightAlignedTitle:@"" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                     }
@@ -322,7 +311,7 @@
                     break;
                 case 3: {
                     
-                    NSString *dueBy = [[FRSAPIClient sharedClient] authenticatedUser].dueBy;
+                    NSString *dueBy = [[FRSUserManager sharedInstance] authenticatedUser].dueBy;
                     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
                     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
                     dateFormat.dateStyle = NSDateFormatterMediumStyle;
@@ -334,7 +323,7 @@
                         [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:dateString rightAlignedTitleColor:[UIColor frescoBlueColor]];
                         
                     } else {
-                        if ([[FRSAPIClient sharedClient] authenticatedUser].fieldsNeeded.count == 0) {
+                        if ([[FRSUserManager sharedInstance] authenticatedUser].fieldsNeeded.count == 0) {
                             [cell configureDefaultCellWithTitle:@"ID Info" andCarret:YES andRightAlignedTitle:@"Verified" rightAlignedTitleColor:[UIColor frescoMediumTextColor]];
                         }
                         else {
