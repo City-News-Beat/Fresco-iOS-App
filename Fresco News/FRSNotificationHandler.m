@@ -352,8 +352,6 @@ static BOOL isDeeplinking;
 + (void)segueToAssignment:(NSString *)assignmentID {
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
 
-    [appDelegate.tabBarController setSelectedIndex:3];
-
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
     __block BOOL ranOnce = FALSE;
 
@@ -368,42 +366,56 @@ static BOOL isDeeplinking;
 
                                              UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
 
-                                             if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
-                                                 UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
-                                                 tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-                                                 tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                                             [assignment configureWithDictionary:responseObject];
 
-                                                 FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
-
-                                                 assignmentsVC.hasDefault = YES;
-                                                 assignmentsVC.defaultID = assignmentID;
-
-                                                 [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
-
-                                                 [assignment configureWithDictionary:responseObject];
-                                                 [assignmentsVC focusOnAssignment:assignment];
-
-                                                 navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
-                                                 [tab setSelectedIndex:3];
+                                             NSTimeInterval dateDiff = [assignment.expirationDate timeIntervalSinceDate:[NSDate date]];
+                                             if (dateDiff < 0.0) { // if expired
+                                                 FRSAlertView *alertView = [[FRSAlertView alloc]
+                                                        initWithTitle:@"Assignment Expired"
+                                                              message:@"This assignment has already expired"
+                                                          actionTitle:@"OK"
+                                                          cancelTitle:@""
+                                                     cancelTitleColor:[UIColor frescoBackgroundColorDark]
+                                                             delegate:nil];
+                                                 [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+                                                 [alertView show];
                                              } else {
-                                                 UITabBarController *tab = (UITabBarController *)navController;
-                                                 tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-                                                 tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+                                                 [appDelegate.tabBarController setSelectedIndex:3];
 
-                                                 FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
+                                                 if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                                                     UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
+                                                     tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                                                     tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
 
-                                                 assignmentsVC.hasDefault = YES;
-                                                 assignmentsVC.defaultID = assignmentID;
+                                                     FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
 
-                                                 [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
+                                                     assignmentsVC.hasDefault = YES;
+                                                     assignmentsVC.defaultID = assignmentID;
 
-                                                 [assignment configureWithDictionary:responseObject];
-                                                 [assignmentsVC focusOnAssignment:assignment];
+                                                     [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
 
-                                                 navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
-                                                 [tab setSelectedIndex:3];
+                                                     [assignmentsVC setDefaultAssignment:assignment];
+
+                                                     navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
+                                                     [tab setSelectedIndex:3];
+                                                 } else {
+                                                     UITabBarController *tab = (UITabBarController *)navController;
+                                                     tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+                                                     tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+
+                                                     FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
+
+                                                     assignmentsVC.hasDefault = YES;
+                                                     assignmentsVC.defaultID = assignmentID;
+
+                                                     [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
+
+                                                     [assignmentsVC setDefaultAssignment:assignment];
+
+                                                     navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
+                                                     [tab setSelectedIndex:3];
+                                                 }
                                              }
-
                                            }];
 }
 

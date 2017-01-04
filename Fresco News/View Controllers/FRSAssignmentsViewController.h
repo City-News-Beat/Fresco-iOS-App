@@ -24,7 +24,7 @@
 
 - (void)setInitialMapRegion;
 - (instancetype)initWithActiveAssignment:(NSString *)assignmentID;
-- (void)focusOnAssignment:(FRSAssignment *)assignment;
+- (void)setDefaultAssignment:(FRSAssignment *)assignment;
 - (void)configureMap;
 @property CGFloat assignmentLat;
 @property CGFloat assignmentLong;
