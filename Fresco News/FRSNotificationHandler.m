@@ -14,8 +14,6 @@
 #import "FRSAssignmentsViewController.h"
 #import "FRSDebitCardViewController.h"
 #import "FRSIdentityViewController.h"
-#import "FRSTabBarController.h"
-#import "FRSHomeViewController.h"
 #import "Fresco.h"
 
 static BOOL isDeeplinking;
@@ -203,7 +201,6 @@ static BOOL isDeeplinking;
 }
 
 + (void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
-
     [[NSNotificationCenter defaultCenter] postNotificationName:@"notif-for-todayinnews" object:galleryIDs];
 }
 
