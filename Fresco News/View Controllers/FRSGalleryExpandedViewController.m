@@ -713,8 +713,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     // this checks if the height of the gallery has not been set yet
     // and sets a default value of 280 (pulled from spec) to avoid any
     // formatting issues on newly uploaded galleries.
+    
+    CGFloat staticGalleryViewHeight = 280;
     if (self.galleryView.frame.size.height <= 0 || self.galleryView == nil) {
-        height = 280 + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING + 50;
+        height = staticGalleryViewHeight + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING + 50;
     }
     
     if (self.comments.count > 0) {
