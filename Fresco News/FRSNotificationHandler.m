@@ -424,7 +424,14 @@ static BOOL isDeeplinking;
 
                                              NSTimeInterval doubleDiff = [assignment.expirationDate timeIntervalSinceDate:[NSDate date]];
                                              if (doubleDiff < 0.0) { // if expired
-                                                 FRSAlertView *alertView = [[FRSAlertView alloc] initWithTitle:@"Assignment Expired" message:@"This assignment has already expired" actionTitle:@"Ok" cancelTitle:@"Cancel" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
+                                                 FRSAlertView *alertView = [[FRSAlertView alloc]
+                                                        initWithTitle:@"Assignment Expired"
+                                                              message:@"This assignment has already expired"
+                                                          actionTitle:@"OK"
+                                                          cancelTitle:@""
+                                                     cancelTitleColor:[UIColor frescoBackgroundColorDark]
+                                                             delegate:nil];
+                                                 [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
                                                  [alertView show];
                                              } else {
                                                  [appDelegate.tabBarController setSelectedIndex:3];

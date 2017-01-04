@@ -42,5 +42,6 @@
 
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) UIButton *actionButton;
 
 @end
