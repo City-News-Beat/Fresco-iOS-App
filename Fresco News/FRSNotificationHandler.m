@@ -422,8 +422,8 @@ static BOOL isDeeplinking;
 
                                              [assignment configureWithDictionary:responseObject];
 
-                                             NSTimeInterval doubleDiff = [assignment.expirationDate timeIntervalSinceDate:[NSDate date]];
-                                             if (doubleDiff < 0.0) { // if expired
+                                             NSTimeInterval dateDiff = [assignment.expirationDate timeIntervalSinceDate:[NSDate date]];
+                                             if (dateDiff < 0.0) { // if expired
                                                  FRSAlertView *alertView = [[FRSAlertView alloc]
                                                         initWithTitle:@"Assignment Expired"
                                                               message:@"This assignment has already expired"
