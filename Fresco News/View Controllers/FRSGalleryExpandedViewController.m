@@ -124,6 +124,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     galleryDetailView.gallery = self.gallery; //TODO: To be removed from class
     galleryDetailView.defaultPostID = self.defaultPostID; //TODO: To be removed from class
     galleryDetailView.parentVC = self;
+    galleryDetailView.scrollView.delegate = self;
     [galleryDetailView configureUI];
     [galleryDetailView fetchCommentsWithID:self.gallery.uid];
     galleryDetailView.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
@@ -718,14 +719,14 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - UIScrollView Delegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if (scrollView == self.scrollView) {
+    if (scrollView == galleryDetailView.scrollView) {
         [super scrollViewDidScroll:scrollView];
-        [self.actionBar actionButtonTitleNeedsUpdate];
+        [galleryDetailView.actionBar actionButtonTitleNeedsUpdate];
     }
     
-    if (scrollView == self.scrollView) {
-        float size = self.scrollView.contentSize.height;
-        float offset = self.scrollView.contentOffset.y;
+    if (scrollView == galleryDetailView.scrollView) {
+        float size = galleryDetailView.scrollView.contentSize.height;
+        float offset = galleryDetailView.scrollView.contentOffset.y;
         
         float percentage = offset / size;
         

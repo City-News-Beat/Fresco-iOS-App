@@ -19,7 +19,9 @@
 
 @property (strong, nonatomic) IBOutlet FRSGalleryView *galleryView;
 @property (nonatomic, retain) NSMutableArray *comments;
-@property (strong, nonatomic) IBOutlet FRSGalleryExpandedViewController *parentVC;
+@property (strong, nonatomic) FRSGalleryExpandedViewController *parentVC;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) FRSContentActionsBar *actionBar;
 
 -(void)configureUI;
 -(void)fetchCommentsWithID:(NSString*)galleryID;

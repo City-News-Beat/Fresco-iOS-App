@@ -22,7 +22,6 @@
 
 @interface FRSGalleryDetailView () <FRSGalleryViewDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, FRSContentActionBarDelegate, FRSCommentCellDelegate, MGSwipeTableCellDelegate, UITextViewDelegate>
 
-@property (strong, nonatomic) FRSContentActionsBar *actionBar;
 @property BOOL didPrepareForReply;
 
 @end
@@ -33,6 +32,8 @@
     BOOL showsMoreButton;
     UIButton *topButton;
     
+    IBOutlet UIView *addCommentView;
+    IBOutlet NSLayoutConstraint *addCommentBotConstraint;
     IBOutlet UITableView *commentsTableView;
     IBOutlet UILabel *commentsLabel;
     IBOutlet UITableView *articlesTableView;
@@ -41,7 +42,6 @@
     IBOutlet NSLayoutConstraint *commentsHeightConstraint;
     IBOutlet NSLayoutConstraint *galleryHeightConstraint;
     IBOutlet UITextField *commentTextField;
-    IBOutlet UIScrollView *scrollView;
     IBOutlet NSLayoutConstraint *scrollViewHeightConstraint;
 }
 
@@ -65,6 +65,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self configureGalleryView];
     [self configureArticles];
     [self configureComments];
+    [self configureActionBar];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeUp:) name:UIKeyboardWillShowNotification object:Nil];
 }
 
 -(void)configureGalleryView{
@@ -198,6 +200,58 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
+#pragma mark - Action Bar Delegate and Methods
+
+-(NSString *)titleForActionButton {
+    CGRect visibleRect;
+    visibleRect.origin = self.scrollView.contentOffset;
+    visibleRect.size = self.scrollView.bounds.size;
+    
+    NSInteger offset = visibleRect.origin.y + visibleRect.size.height + TOP_NAV_BAR_HEIGHT - GALLERY_BOTTOM_PADDING - self.actionBar.frame.size.height;
+    
+    if (commentsLabel.frame.origin.y > offset) {
+        if (self.gallery && self.totalCommentCount > 0) {
+            return [NSString stringWithFormat:@"%lu COMMENTS", (unsigned long) self.totalCommentCount];
+        }
+    }
+    return @"ADD A COMMENT";
+}
+
+-(UIColor *)colorForActionButton {
+    return [UIColor frescoBlueColor];
+}
+
+-(void)sendComment {
+    if (!commentTextField.text || commentTextField.text.length == 0) {
+        return;
+    }
+    
+    [[FRSAPIClient sharedClient] addComment:commentTextField.text toGallery:self.gallery.uid completion:^(id responseObject, NSError *error) {
+        NSLog(@"%@ %@", responseObject, error);
+        if (error) {
+            NSString *message = [NSString stringWithFormat:@"\"%@\"", commentTextField.text];
+            errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed.\nPlease try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+            [errorAlertView show];
+        }
+        else {
+            
+            self.totalCommentCount++;
+            //[commentTextField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentTextField.frame.size.width, commentTextField.frame.size.height)];
+            //                [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
+            
+            self.totalCommentCount++;
+            commentsTableView.hidden = NO;
+            [self reload];
+            //                CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+            //                [self.scrollView setContentOffset:bottomOffset animated:YES];
+            
+            commentTextField.text = @"";
+            [self dismissKeyboard:Nil];
+            
+        }
+    }];
+}
+
 -(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
     NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
@@ -211,7 +265,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)adjustScrollViewContentSize{
-    CGFloat bottomPadding = 30;
+    CGFloat bottomPadding = 20;
     
     CGFloat height = galleryHeightConstraint.constant + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING + 50;
     
@@ -261,35 +315,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }];
 }
 
--(void)sendComment {
-    if (!commentTextField.text || commentTextField.text.length == 0) {
-        return;
-    }
-    
-    [[FRSAPIClient sharedClient] addComment:commentTextField.text toGallery:self.gallery.uid completion:^(id responseObject, NSError *error) {
-        NSLog(@"%@ %@", responseObject, error);
-        if (error) {
-            NSString *message = [NSString stringWithFormat:@"\"%@\"", commentTextField.text];
-            errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed.\nPlease try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
-            [errorAlertView show];
-        }
-        else {
-            totalCommentCount++;
-            [commentTextField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentTextField.frame.size.width, commentTextField.frame.size.height)];
-            //                [self.view setFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height)];
-            
-            totalCommentCount++;
-            commentsTableView.hidden = NO;
-            [self reload];
-            //                CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
-            //                [self.scrollView setContentOffset:bottomOffset animated:YES];
-            
-            commentTextField.text = @"";
-            [self dismissKeyboard:Nil];
-            
-        }
-    }];
-}
 
 -(void)fetchCommentsWithID:(NSString  *)galleryID {
     
@@ -370,13 +395,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)dismissKeyboard:(UITapGestureRecognizer *)tap {
     self.didChangeUp = NO;
     
+    self.actionBar.hidden = false;
+    
     [self.galleryView playerTap:tap];
     if (commentTextField.isEditing) {
         [commentTextField resignFirstResponder];
         
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            [commentTextField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentTextField.frame.size.width, commentTextField.frame.size.height)];
-            [self setFrame:CGRectMake(0, 64, self.frame.size.width, self.frame.size.height)];
+            //[commentTextField setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 44, commentTextField.frame.size.width, commentTextField.frame.size.height)];
+            [self setFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         } completion:nil];
     }
     else {
@@ -390,12 +417,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         return;
     }
     
+    self.actionBar.hidden = true;
+    
     [UIView animateWithDuration:.2 animations:^{
         NSDictionary *info = [change userInfo];
         
         CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-        CGFloat originY = self.frame.size.height - commentTextField.frame.size.height;
-        [commentTextField setFrame:CGRectMake(0, originY , commentTextField.frame.size.width, commentTextField.frame.size.height)];
+        //addCommentBotConstraint.constant = self.frame.size.height - addCommentView.frame.size.height;
         [self setFrame:CGRectMake(0, self.frame.origin.y - keyboardSize.height, self.frame.size.width, self.frame.size.height)];
     }];
     
@@ -704,13 +732,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 -(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
     // comment text field comes up
     if (![[FRSAPIClient sharedClient] checkAuthAndPresentOnboard]) {
-        if (!commentTextField) {
-            
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeUp:) name:UIKeyboardWillShowNotification object:Nil];
-            
-            [commentTextField addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventEditingDidEndOnExit];
-            commentTextField.delegate = self;
-        }
+        [commentTextField addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventEditingDidEndOnExit];
+        commentTextField.delegate = self;
         commentTextField.text = @"";
         [commentTextField becomeFirstResponder];
     }

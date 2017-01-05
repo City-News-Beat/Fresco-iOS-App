@@ -115,54 +115,65 @@
                         <constraint firstItem="NbN-nY-a20" firstAttribute="centerX" secondItem="zpr-wT-uyb" secondAttribute="centerX" id="hRN-qR-RKD"/>
                     </constraints>
                 </scrollView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="22I-bo-Ha5" userLabel="CommentLeftPaddingView">
-                    <rect key="frame" x="0.0" y="623" width="16" height="44"/>
-                    <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kR5-eC-RzP" userLabel="CommentView">
+                    <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                    <subviews>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Say something nice" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="btY-pg-mdR">
+                            <rect key="frame" x="16" y="0.0" width="359" height="44"/>
+                            <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="ODx-f0-87m"/>
+                            </constraints>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" returnKeyType="send"/>
+                        </textField>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="22I-bo-Ha5" userLabel="CommentLeftPaddingView">
+                            <rect key="frame" x="0.0" y="0.0" width="16" height="44"/>
+                            <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="3lf-Mf-Ky6"/>
+                                <constraint firstAttribute="width" constant="16" id="bmj-pC-Rlw"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YaN-9X-Pbd" userLabel="CommentLineView">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="0.0"/>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="0.5" id="hsJ-W7-by4"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="44" id="3lf-Mf-Ky6"/>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="XRp-Xz-mVA"/>
-                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="44" id="Zf9-Hp-x2j"/>
-                        <constraint firstAttribute="width" constant="16" id="bmj-pC-Rlw"/>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="16" id="mcx-N6-YPR"/>
+                        <constraint firstAttribute="height" constant="44" id="1ra-fQ-3HE"/>
+                        <constraint firstItem="YaN-9X-Pbd" firstAttribute="leading" secondItem="kR5-eC-RzP" secondAttribute="leading" id="D1N-ng-ItG"/>
+                        <constraint firstAttribute="bottom" secondItem="22I-bo-Ha5" secondAttribute="bottom" id="Jxn-vZ-7Hx"/>
+                        <constraint firstAttribute="bottom" secondItem="btY-pg-mdR" secondAttribute="bottom" id="NFV-qo-Xi0"/>
+                        <constraint firstAttribute="trailing" secondItem="btY-pg-mdR" secondAttribute="trailing" id="PbD-gT-Jyh"/>
+                        <constraint firstAttribute="trailing" secondItem="YaN-9X-Pbd" secondAttribute="trailing" id="PpG-Fc-d7B"/>
+                        <constraint firstItem="22I-bo-Ha5" firstAttribute="leading" secondItem="kR5-eC-RzP" secondAttribute="leading" id="QzF-t4-cPS"/>
+                        <constraint firstItem="YaN-9X-Pbd" firstAttribute="top" secondItem="kR5-eC-RzP" secondAttribute="top" id="djV-Rf-lid"/>
+                        <constraint firstItem="btY-pg-mdR" firstAttribute="top" secondItem="kR5-eC-RzP" secondAttribute="top" id="eAr-eS-Z26"/>
+                        <constraint firstItem="btY-pg-mdR" firstAttribute="leading" secondItem="22I-bo-Ha5" secondAttribute="trailing" id="hhc-fn-pfV"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YaN-9X-Pbd" userLabel="CommentLineView">
-                    <rect key="frame" x="0.0" y="623" width="375" height="0.0"/>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="0.5" id="hsJ-W7-by4"/>
-                    </constraints>
-                </view>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Say something nice" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="btY-pg-mdR">
-                    <rect key="frame" x="16" y="623" width="359" height="44"/>
-                    <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="44" id="ODx-f0-87m"/>
-                    </constraints>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
-                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                    <textInputTraits key="textInputTraits" returnKeyType="send"/>
-                </textField>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstItem="btY-pg-mdR" firstAttribute="leading" secondItem="22I-bo-Ha5" secondAttribute="trailing" id="6N5-4v-PcS"/>
                 <constraint firstAttribute="trailing" secondItem="zpr-wT-uyb" secondAttribute="trailing" id="Anc-zV-xhk"/>
-                <constraint firstAttribute="bottom" secondItem="22I-bo-Ha5" secondAttribute="bottom" id="AzM-Uw-Q2c"/>
-                <constraint firstItem="btY-pg-mdR" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="D2d-sF-cpy"/>
-                <constraint firstItem="YaN-9X-Pbd" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="QXZ-nP-bEy"/>
-                <constraint firstItem="22I-bo-Ha5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="SFP-7g-Vg5"/>
                 <constraint firstAttribute="bottom" secondItem="zpr-wT-uyb" secondAttribute="bottom" id="Uqe-Pj-9ID"/>
-                <constraint firstAttribute="trailing" secondItem="YaN-9X-Pbd" secondAttribute="trailing" id="evn-qT-VOS"/>
-                <constraint firstAttribute="bottom" secondItem="btY-pg-mdR" secondAttribute="bottom" id="g0H-Hk-4Fg"/>
-                <constraint firstAttribute="trailing" secondItem="btY-pg-mdR" secondAttribute="trailing" id="hxT-mS-VEc"/>
+                <constraint firstItem="kR5-eC-RzP" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="grg-0v-Tdx"/>
+                <constraint firstAttribute="trailing" secondItem="kR5-eC-RzP" secondAttribute="trailing" id="iys-QB-Yve"/>
                 <constraint firstItem="zpr-wT-uyb" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jJW-Qb-rgK"/>
-                <constraint firstItem="btY-pg-mdR" firstAttribute="top" secondItem="YaN-9X-Pbd" secondAttribute="bottom" id="n3p-8t-SVh"/>
+                <constraint firstAttribute="bottom" secondItem="kR5-eC-RzP" secondAttribute="bottom" id="pMx-pf-YIf"/>
                 <constraint firstItem="zpr-wT-uyb" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="zIx-Jf-w2v"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="addCommentBotConstraint" destination="pMx-pf-YIf" id="DaN-eq-Jgc"/>
+                <outlet property="addCommentView" destination="kR5-eC-RzP" id="boT-ef-ine"/>
                 <outlet property="articlesHeightConstraint" destination="m5y-4x-Ckc" id="zeb-Nc-6ax"/>
                 <outlet property="articlesLabel" destination="gkQ-Kx-cFr" id="XNj-q4-U4h"/>
                 <outlet property="articlesTableView" destination="w5E-hK-yjE" id="bUe-69-Hmu"/>
@@ -172,7 +183,7 @@
                 <outlet property="commentsTableView" destination="rLO-dS-YLU" id="kbK-DF-hSu"/>
                 <outlet property="galleryHeightConstraint" destination="yka-Fq-ZAn" id="VJm-FE-408"/>
                 <outlet property="galleryView" destination="1Sv-gY-L1p" id="Acu-tZ-130"/>
-                <outlet property="scrollView" destination="zpr-wT-uyb" id="MfS-aO-aMk"/>
+                <outlet property="scrollView" destination="zpr-wT-uyb" id="ADi-Ho-RKk"/>
                 <outlet property="scrollViewHeightConstraint" destination="lc5-Xi-xmr" id="ouf-JE-WRW"/>
             </connections>
             <point key="canvasLocation" x="33.5" y="96.5"/>
