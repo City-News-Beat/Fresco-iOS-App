@@ -176,10 +176,13 @@
                 <outlet property="addCommentView" destination="kR5-eC-RzP" id="boT-ef-ine"/>
                 <outlet property="articlesHeightConstraint" destination="m5y-4x-Ckc" id="zeb-Nc-6ax"/>
                 <outlet property="articlesLabel" destination="gkQ-Kx-cFr" id="XNj-q4-U4h"/>
+                <outlet property="articlesTVTopLine" destination="Ehb-El-AVW" id="O5j-1Y-nGb"/>
                 <outlet property="articlesTableView" destination="w5E-hK-yjE" id="bUe-69-Hmu"/>
                 <outlet property="commentTextField" destination="btY-pg-mdR" id="sX0-GQ-xF0"/>
                 <outlet property="commentsHeightConstraint" destination="QYQ-i6-rwz" id="s7r-Sc-62K"/>
                 <outlet property="commentsLabel" destination="0yb-JT-eRR" id="rRx-93-3t1"/>
+                <outlet property="commentsLabelTopConstraint" destination="Q97-PT-NWc" id="kWW-8R-KRF"/>
+                <outlet property="commentsTVTopLine" destination="MEo-kD-hxy" id="sWm-4A-SHA"/>
                 <outlet property="commentsTableView" destination="rLO-dS-YLU" id="kbK-DF-hSu"/>
                 <outlet property="galleryHeightConstraint" destination="yka-Fq-ZAn" id="VJm-FE-408"/>
                 <outlet property="galleryView" destination="1Sv-gY-L1p" id="Acu-tZ-130"/>

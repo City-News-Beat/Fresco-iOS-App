@@ -34,9 +34,12 @@
     
     IBOutlet UIView *addCommentView;
     IBOutlet NSLayoutConstraint *addCommentBotConstraint;
+    IBOutlet UIView *commentsTVTopLine;
     IBOutlet UITableView *commentsTableView;
     IBOutlet UILabel *commentsLabel;
+    IBOutlet NSLayoutConstraint *commentsLabelTopConstraint;
     IBOutlet UITableView *articlesTableView;
+    IBOutlet UIView *articlesTVTopLine;
     IBOutlet UILabel *articlesLabel;
     IBOutlet NSLayoutConstraint *articlesHeightConstraint;
     IBOutlet NSLayoutConstraint *commentsHeightConstraint;
@@ -58,7 +61,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)awakeFromNib{
     [super awakeFromNib];
     NSLog(@"Test: Loaded View");
-    articlesLabel.hidden = true;
 }
 
 -(void)configureUI{
@@ -86,11 +88,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     galleryHeightConstraint.constant = self.galleryView.frame.size.height;
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]//Chose not to add
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard:)];
-    
-    [self.galleryView addGestureRecognizer:tap];
+    tap.cancelsTouchesInView = NO;
+    [self addGestureRecognizer:tap];
+
     [self.galleryView play];
     [self focus];
     [self layoutSubviews];
@@ -98,24 +101,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)configureArticles{
-    
-    if ([self.gallery.articles allObjects].count == 0) {
-        return;
-    }
-    
-    if ([self.gallery.articles allObjects].count > 0) {
-        articlesLabel.hidden = false;
-    }
-    
     articlesHeightConstraint.constant = CELL_HEIGHT * [self.gallery.articles allObjects].count;
     
     articlesTableView.delegate = self;
     articlesTableView.dataSource = self;
     articlesTableView.hidden = [self.gallery.articles allObjects].count == 0;
-    
-    if ([self.gallery.articles allObjects].count > 0) {
-//        [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.articlesTV.frame.origin.y - 0.5)]];
-    }
+    articlesTVTopLine.hidden = [self.gallery.articles allObjects].count == 0;
+    articlesLabel.hidden = [self.gallery.articles allObjects].count == 0;
 }
 
 -(void)configureComments {
@@ -143,22 +135,25 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             height += commentSize += 20;
         }
         
-        //NSLog(@"STRING SIZE  : %f", labelRect.size.height);
-        //NSLog(@"COMMENT SIZE : %f", commentSize);
-        //NSLog(@"HEIGHT       : %f", height);
-        
         index++;
     }
     
     CGFloat labelOriginY = self.galleryView.frame.origin.y + self.galleryView.frame.size.height;
     
+    CGFloat zeplinTVLabelTopPadding = 24;
     if ([self.gallery.articles allObjects].count > 0) {
         labelOriginY += articlesTableView.frame.size.height + articlesLabel.frame.size.height;
+        commentsLabelTopConstraint.constant = zeplinTVLabelTopPadding;
+    }else{
+        commentsLabelTopConstraint.constant = -zeplinTVLabelTopPadding;
     }
+    
     commentsTableView.delegate = self;
     commentsTableView.dataSource = self;
     [commentsTableView registerNib:[UINib nibWithNibName:@"FRSCommentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:reusableCommentIdentifier];
     commentsTableView.hidden = self.comments.count == 0;
+    commentsTVTopLine.hidden = self.comments.count == 0;
+    commentsLabel.hidden = self.comments.count == 0;
     
     if (self.comments.count > 0) {
         [commentsTableView addSubview:[UIView lineAtPoint:CGPointMake(0, 0)]];

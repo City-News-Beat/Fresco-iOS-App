@@ -112,7 +112,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self configureUI];
+    [self configureNavigationBar];
     
     if ([self.gallery.comments integerValue] >= 1) {
         [self configureCommentLabel];
@@ -403,27 +403,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     
     [self presentViewController:view animated:YES completion:nil];
 }
-
--(void)configureUI{
-    
-    //self.view.backgroundColor = [UIColor frescoBackgroundColorDark];//Added
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    
-    [self configureScrollView];//Added
-    [self configureGalleryView];//Added
-    [self configureArticles];
-    [self configureActionBar];
-    [self configureNavigationBar];
-    [self adjustScrollViewContentSize];
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]//Chose not to add
-                                   initWithTarget:self
-                                   action:@selector(dismissKeyboard:)];
-    tap.cancelsTouchesInView = NO;
-    [self.view addGestureRecognizer:tap];
-    
-}
-
 
 -(void)configureScrollView{
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, -TOP_NAV_BAR_HEIGHT, self.view.frame.size.width, self.view.frame.size.height - 44)];
