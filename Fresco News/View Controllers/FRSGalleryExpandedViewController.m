@@ -113,7 +113,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [super viewDidLoad];
     
     [self configureUI];
-    self.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
     
     if ([self.gallery.comments integerValue] >= 1) {
         [self configureCommentLabel];
@@ -127,6 +126,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     galleryDetailView.parentVC = self;
     [galleryDetailView configureUI];
     [galleryDetailView fetchCommentsWithID:self.gallery.uid];
+    galleryDetailView.totalCommentCount = [[self.gallery valueForKey:@"comments"] intValue];
+    
     NSLog(@"Width 1: %f", self.view.frame.size.width);
     NSLog(@"Width 2: %f", galleryDetailView.frame.size.width);
     [self.view updateConstraints];

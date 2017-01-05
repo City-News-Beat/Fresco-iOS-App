@@ -27,7 +27,7 @@
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Sv-gY-L1p" customClass="FRSGalleryView">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
-                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="300" id="yka-Fq-ZAn"/>
@@ -47,35 +47,35 @@
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ehb-El-AVW">
                                     <rect key="frame" x="0.0" y="346" width="375" height="1"/>
-                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.56000000000000005" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="0.5" id="9xl-PJ-QYm"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MEo-kD-hxy">
-                                    <rect key="frame" x="0.0" y="491" width="375" height="1"/>
-                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.56000000000000005" colorSpace="calibratedRGB"/>
+                                    <rect key="frame" x="0.0" y="493" width="375" height="1"/>
+                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="0.5" id="SNq-7o-BDY"/>
                                     </constraints>
                                 </view>
-                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="rLO-dS-YLU">
-                                    <rect key="frame" x="0.0" y="492" width="375" height="100"/>
-                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="100" id="QYQ-i6-rwz"/>
-                                    </constraints>
-                                    <color key="separatorColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </tableView>
                                 <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="w5E-hK-yjE">
                                     <rect key="frame" x="0.0" y="347" width="375" height="100"/>
-                                    <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="100" id="m5y-4x-Ckc"/>
                                     </constraints>
-                                    <color key="separatorColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="sectionIndexBackgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </tableView>
+                                <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="rLO-dS-YLU">
+                                    <rect key="frame" x="0.0" y="494" width="375" height="100"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="100" id="QYQ-i6-rwz"/>
+                                    </constraints>
+                                    <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </tableView>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -94,7 +94,7 @@
                                 <constraint firstItem="w5E-hK-yjE" firstAttribute="leading" secondItem="NbN-nY-a20" secondAttribute="leading" id="abv-fW-AJo"/>
                                 <constraint firstAttribute="trailing" secondItem="rLO-dS-YLU" secondAttribute="trailing" id="b8x-qz-otk"/>
                                 <constraint firstItem="gkQ-Kx-cFr" firstAttribute="leading" secondItem="NbN-nY-a20" secondAttribute="leading" constant="16" id="c8r-nW-kaR"/>
-                                <constraint firstItem="rLO-dS-YLU" firstAttribute="top" secondItem="0yb-JT-eRR" secondAttribute="bottom" constant="6" id="j2b-un-Mfk"/>
+                                <constraint firstItem="rLO-dS-YLU" firstAttribute="top" secondItem="0yb-JT-eRR" secondAttribute="bottom" constant="8" id="j2b-un-Mfk"/>
                                 <constraint firstItem="w5E-hK-yjE" firstAttribute="top" secondItem="Ehb-El-AVW" secondAttribute="bottom" id="jtj-qc-jWH"/>
                                 <constraint firstAttribute="height" constant="667" id="lc5-Xi-xmr"/>
                                 <constraint firstAttribute="trailing" secondItem="0yb-JT-eRR" secondAttribute="trailing" id="oVo-KA-FAb"/>
@@ -106,7 +106,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.92941176470588238" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="NbN-nY-a20" secondAttribute="bottom" id="ESj-5c-gkY"/>
                         <constraint firstAttribute="trailing" secondItem="NbN-nY-a20" secondAttribute="trailing" id="JX9-1P-Qdh"/>

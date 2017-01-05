@@ -15,6 +15,7 @@
 @property (strong, nonatomic) FRSGallery *gallery;
 @property NSString *defaultPostID;
 @property BOOL didChangeUp;
+@property int totalCommentCount;
 
 @property (strong, nonatomic) IBOutlet FRSGalleryView *galleryView;
 @property (nonatomic, retain) NSMutableArray *comments;

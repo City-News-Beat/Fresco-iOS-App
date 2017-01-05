@@ -20,10 +20,9 @@
 #define TOP_NAV_BAR_HEIGHT 64
 #define GALLERY_BOTTOM_PADDING 16
 
-@interface FRSGalleryDetailView () <FRSGalleryViewDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, FRSContentActionBarDelegate>
+@interface FRSGalleryDetailView () <FRSGalleryViewDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, FRSContentActionBarDelegate, FRSCommentCellDelegate, MGSwipeTableCellDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) FRSContentActionsBar *actionBar;
-@property int totalCommentCount;
 @property BOOL didPrepareForReply;
 
 @end
@@ -212,13 +211,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 -(void)adjustScrollViewContentSize{
-    CGFloat height = galleryHeightConstraint.constant + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING +50;
+    CGFloat bottomPadding = 30;
+    
+    CGFloat height = galleryHeightConstraint.constant + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING + 50;
+    
+    
     if (self.comments.count > 0) {
-        height += commentsHeightConstraint.constant + commentsLabel.frame.size.height + 20;
+        height += commentsHeightConstraint.constant + commentsLabel.frame.size.height + bottomPadding;
     }
     if ([self.gallery.articles allObjects].count > 0) {
         articlesHeightConstraint.constant = CELL_HEIGHT * [self.gallery.articles allObjects].count;
-        height += articlesHeightConstraint.constant + articlesLabel.frame.size.height + 20;
+        height += articlesHeightConstraint.constant + articlesLabel.frame.size.height + bottomPadding;
     }
     
     scrollViewHeightConstraint.constant = height;
@@ -525,7 +528,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             [topButton addTarget:self action:@selector(showAllComments) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:topButton];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.backgroundColor = [UIColor whiteColor];
+            cell.backgroundColor = [UIColor clearColor];
+            cell.backgroundView.backgroundColor = [UIColor clearColor];
             
             if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
                 [cell setSeparatorInset:UIEdgeInsetsZero];
@@ -536,7 +540,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
                 [cell setLayoutMargins:UIEdgeInsetsZero];
             }
-            cell.backgroundColor = [UIColor clearColor];
             
             return cell;
         }
@@ -548,9 +551,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 cell.cellDelegate = self;
                 [cell configureCell:comment delegate:self];
                 //                [cell.commentTextView sizeToFit];
+                cell.backgroundColor = [UIColor clearColor];
+                cell.contentView.backgroundColor = [UIColor clearColor];
                 return cell;
             }
-            cell.backgroundColor = [UIColor clearColor];
         }
     }
     
@@ -591,9 +595,13 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         index++;
     }
     
-    height += 56;
+    height += 45;
     
     commentsTableView.frame = CGRectMake(0, commentsTableView.frame.origin.y, self.frame.size.width, height);
+    if (!showsMoreButton) {
+        CGFloat showMoreHeight = 45;
+        height-=showMoreHeight;
+    }
     commentsHeightConstraint.constant = height;
 
     [self adjustScrollViewContentSize];
