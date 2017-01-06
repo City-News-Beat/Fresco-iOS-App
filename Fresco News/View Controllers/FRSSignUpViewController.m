@@ -1004,9 +1004,6 @@
 #pragma mark Action Logic
 
 - (void)handleToggleSwitched:(UISwitch *)toggle {
-    //    id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
-    //    [delegate registerForPushNotifications];
-
     [self checkLocationStatus];
     [self checkNotificationStatus];
 
@@ -1217,11 +1214,6 @@
 
     [self dismissKeyboard];
 
-    //    if (_isAlreadyRegistered) {
-    //        [self segueToSetup];
-    //        return;
-    //    }
-
     if (![self checkFields]) {
         return;
     }
@@ -1312,9 +1304,6 @@
                                                   _pastRegistration = registrationDigest;
 
                                                   [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-                                                  //        Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                                                  //        [mixpanel createAlias:frescoID
-                                                  //                forDistinctID:mixpanel.distinctId];
                                                 }];
 }
 
