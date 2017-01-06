@@ -897,7 +897,6 @@
     }
 }
 
-
 - (void)saveToken:(NSString *)token forUser:(NSString *)userName {
     [SAMKeychain setPasswordData:[token dataUsingEncoding:NSUTF8StringEncoding] forService:serviceName account:userName];
 }
@@ -906,8 +905,9 @@
     return [SAMKeychain passwordForService:serviceName account:userName];
 }
 
--(BOOL)isAuthenticated {
-    if (([SAMKeychain accountsForService:serviceName].count == [NSNull null]) || ([[SAMKeychain accountsForService:serviceName] count] > 0)) {
+- (BOOL)isAuthenticated {
+
+    if ([[SAMKeychain accountsForService:serviceName] count] > 0) {
         return TRUE;
     }
     return FALSE;
