@@ -116,6 +116,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.view addSubview:galleryDetailView];
     
     [galleryDetailView loadGalleryDetailViewWithGallery:self.gallery parentVC:self];
+    
+    NSLog(@"Gallery Object: \n%@", self.gallery.jsonObject);
 }
 
 - (void)configureNavigationBar {
