@@ -793,7 +793,6 @@
 }
 
 #pragma mark - TextField Delegate
-
 - (void)textFieldDidChange {
 
     if ((self.emailTF.isEditing) && ([self isValidEmail:self.emailTF.text])) {
@@ -1308,14 +1307,12 @@
 }
 
 - (void)checkEmail {
-
     [[FRSAPIClient sharedClient] checkEmail:self.emailTF.text
                                  completion:^(id responseObject, NSError *error) {
                                    if (!error) {
                                        self.emailTaken = YES;
                                        [self shouldShowEmailDialogue:YES];
                                        [self presentInvalidEmail];
-
                                    } else {
                                        self.emailTaken = NO;
                                        [self shouldShowEmailDialogue:NO];
