@@ -325,7 +325,9 @@
 
       self.configuredNearby = YES;
 
-      self.nearbyHeaderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -70, self.view.frame.size.width, 100)];
+      if (!self.nearbyHeaderContainer) {
+            self.nearbyHeaderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -70, self.view.frame.size.width, 100)];
+      }
       [self.tableView addSubview:self.nearbyHeaderContainer];
 
       UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24, self.nearbyHeaderContainer.frame.size.width, 31)];
