@@ -10,10 +10,10 @@
 
 @interface FRSOnboardThreeView : UIView
 
--(instancetype)initWithOrigin:(CGPoint)origin;
+- (instancetype)initWithOrigin:(CGPoint)origin;
 
--(void)animate;
--(UIImageView*)getCloud;
--(UIView*)getCloudContainer;
+- (void)animate;
+- (UIImageView *)getCloud;
+- (UIView *)getCloudContainer;
 
 @end

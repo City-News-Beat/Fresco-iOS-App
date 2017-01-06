@@ -10,67 +10,64 @@
 
 @implementation UIColor (Fresco)
 
-+(UIColor *)frescoTabBarColor{
++ (UIColor *)frescoTabBarColor {
     return [UIColor colorWithWhite:0.13 alpha:1.0]; // opaque
 }
 
-+(UIColor *)frescoOrangeColor{
-    return [UIColor colorWithRed:1 green:198/255.0 blue:0 alpha:1.0];
++ (UIColor *)frescoOrangeColor {
+    return [UIColor colorWithRed:1 green:198 / 255.0 blue:0 alpha:1.0];
 }
 
-+(UIColor *)frescoBackgroundColorDark{
-    return [UIColor colorWithRed:242/255. green:242/255. blue:237/255. alpha:1];
++ (UIColor *)frescoBackgroundColorDark {
+    return [UIColor colorWithRed:242 / 255. green:242 / 255. blue:237 / 255. alpha:1];
 }
 
-+(UIColor *)frescoBackgroundColorLight{
-    return [UIColor colorWithRed:250/255.0 green:250/255.0 blue:250/255.0 alpha:1.0];
++ (UIColor *)frescoBackgroundColorLight {
+    return [UIColor colorWithRed:250 / 255.0 green:250 / 255.0 blue:250 / 255.0 alpha:1.0];
 }
 
-+(UIColor *)frescoGreenColor{
-    return [UIColor colorWithRed:76/255.0 green:216/255.0 blue:100/255.0 alpha:1.0];
++ (UIColor *)frescoGreenColor {
+    return [UIColor colorWithRed:76 / 255.0 green:216 / 255.0 blue:100 / 255.0 alpha:1.0];
 }
 
-+(UIColor *)frescoDarkTextColor{
++ (UIColor *)frescoDarkTextColor {
     return [UIColor colorWithWhite:0.0 alpha:0.87];
 }
 
-+(UIColor *)frescoRedHeartColor{
-    return [UIColor colorWithRed:208/255.0 green:2/255.0 blue:27/255.0 alpha:1.0];
++ (UIColor *)frescoRedHeartColor {
+    return [UIColor colorWithRed:208 / 255.0 green:2 / 255.0 blue:27 / 255.0 alpha:1.0];
 }
 
-+(UIColor *)frescoBlueColor{
-    return [UIColor colorWithRed:0 green:71/255.0 blue:187/255.0 alpha:1.0];
++ (UIColor *)frescoBlueColor {
+    return [UIColor colorWithRed:0 green:71 / 255.0 blue:187 / 255.0 alpha:1.0];
 }
 
-+(UIColor *)frescoLightBlueColor{
-    return [UIColor colorWithRed:0 green:71/255.0 blue:187/255.0 alpha:0.3];
++ (UIColor *)frescoLightBlueColor {
+    return [UIColor colorWithRed:0 green:71 / 255.0 blue:187 / 255.0 alpha:0.3];
 }
 
-+(UIColor *)frescoMediumTextColor{
++ (UIColor *)frescoMediumTextColor {
     return [UIColor colorWithWhite:0.0 alpha:0.54];
 }
 
-+(UIColor *)frescoLightTextColor{
++ (UIColor *)frescoLightTextColor {
     return [UIColor colorWithWhite:0.0 alpha:0.26];
 }
 
-+(UIColor *)frescoShadowColor {
++ (UIColor *)frescoShadowColor {
     return [UIColor colorWithWhite:0 alpha:0.12];
 }
 
-+(UIColor *)frescoSliderGray {
-    return [UIColor colorWithWhite:182.0/255.0 alpha:1.0];
++ (UIColor *)frescoSliderGray {
+    return [UIColor colorWithWhite:182.0 / 255.0 alpha:1.0];
 }
 
-+(UIColor *)twitterBlueColor {
-    return [UIColor colorWithRed:85.0/255.0 green:172.0/255.0 blue:238.0/255.0 alpha:1.0];
++ (UIColor *)twitterBlueColor {
+    return [UIColor colorWithRed:85.0 / 255.0 green:172.0 / 255.0 blue:238.0 / 255.0 alpha:1.0];
 }
 
-+(UIColor *)facebookBlueColor {
-    return [UIColor colorWithRed:59.0/255.0 green:89.0/255.0 blue:152.0/255.0 alpha:1.0];
++ (UIColor *)facebookBlueColor {
+    return [UIColor colorWithRed:59.0 / 255.0 green:89.0 / 255.0 blue:152.0 / 255.0 alpha:1.0];
 }
-
-
-
 
 @end

@@ -8,7 +8,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-typedef NS_ENUM(NSInteger, FRSLocationMonitoringState){
+typedef NS_ENUM(NSInteger, FRSLocationMonitoringState) {
     FRSLocationMonitoringStateOff,
     FRSLocationMonitoringStateForeground,
     FRSLocationMonitoringStateBackground
@@ -20,15 +20,14 @@ typedef NS_ENUM(NSInteger, FRSLocationMonitoringState){
 
 @property (strong, nonatomic) CLLocation *lastAcquiredLocation;
 
++ (instancetype)sharedManager;
 
-+(instancetype)sharedManager;
+- (void)startLocationMonitoringForeground;
 
--(void)startLocationMonitoringForeground;
+- (void)startLocationMonitoringBackground;
 
--(void)startLocationMonitoringBackground;
+- (void)pauseLocationMonitoring;
 
--(void)pauseLocationMonitoring;
-
--(BOOL)significantLocationChangeForLocation:(CLLocation *)location;
+- (BOOL)significantLocationChangeForLocation:(CLLocation *)location;
 
 @end

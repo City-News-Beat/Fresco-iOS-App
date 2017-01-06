@@ -15,7 +15,6 @@
 
 @protocol SDAVAssetExportSessionDelegate;
 
-
 /**
  * An `SDAVAssetExportSession` object transcodes the contents of an AVAsset source object to create an output
  * of the form described by specified video and audio settings. It implements most of the API of Apple provided
@@ -185,7 +184,6 @@
 - (void)cancelExport;
 
 @end
-
 
 @protocol SDAVAssetExportSessionDelegate <NSObject>
 

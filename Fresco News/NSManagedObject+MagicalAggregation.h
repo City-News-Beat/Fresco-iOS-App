@@ -11,24 +11,24 @@
 
 @interface NSManagedObject (MagicalAggregation)
 
-+ (MR_nonnull NSNumber *) MR_numberOfEntities;
-+ (MR_nonnull NSNumber *) MR_numberOfEntitiesWithContext:(MR_nonnull NSManagedObjectContext *)context;
-+ (MR_nonnull NSNumber *) MR_numberOfEntitiesWithPredicate:(MR_nullable NSPredicate *)searchTerm;
-+ (MR_nonnull NSNumber *) MR_numberOfEntitiesWithPredicate:(MR_nullable NSPredicate *)searchTerm inContext:(MR_nonnull NSManagedObjectContext *)context;
++ (MR_nonnull NSNumber *)MR_numberOfEntities;
++ (MR_nonnull NSNumber *)MR_numberOfEntitiesWithContext:(MR_nonnull NSManagedObjectContext *)context;
++ (MR_nonnull NSNumber *)MR_numberOfEntitiesWithPredicate:(MR_nullable NSPredicate *)searchTerm;
++ (MR_nonnull NSNumber *)MR_numberOfEntitiesWithPredicate:(MR_nullable NSPredicate *)searchTerm inContext:(MR_nonnull NSManagedObjectContext *)context;
 
-+ (NSUInteger) MR_countOfEntities;
-+ (NSUInteger) MR_countOfEntitiesWithContext:(MR_nonnull NSManagedObjectContext *)context;
-+ (NSUInteger) MR_countOfEntitiesWithPredicate:(MR_nullable NSPredicate *)searchFilter;
-+ (NSUInteger) MR_countOfEntitiesWithPredicate:(MR_nullable NSPredicate *)searchFilter inContext:(MR_nonnull NSManagedObjectContext *)context;
++ (NSUInteger)MR_countOfEntities;
++ (NSUInteger)MR_countOfEntitiesWithContext:(MR_nonnull NSManagedObjectContext *)context;
++ (NSUInteger)MR_countOfEntitiesWithPredicate:(MR_nullable NSPredicate *)searchFilter;
++ (NSUInteger)MR_countOfEntitiesWithPredicate:(MR_nullable NSPredicate *)searchFilter inContext:(MR_nonnull NSManagedObjectContext *)context;
 
-+ (BOOL) MR_hasAtLeastOneEntity;
-+ (BOOL) MR_hasAtLeastOneEntityInContext:(MR_nonnull NSManagedObjectContext *)context;
++ (BOOL)MR_hasAtLeastOneEntity;
++ (BOOL)MR_hasAtLeastOneEntityInContext:(MR_nonnull NSManagedObjectContext *)context;
 
-- (MR_nullable id) MR_minValueFor:(MR_nonnull NSString *)property;
-- (MR_nullable id) MR_maxValueFor:(MR_nonnull NSString *)property;
+- (MR_nullable id)MR_minValueFor:(MR_nonnull NSString *)property;
+- (MR_nullable id)MR_maxValueFor:(MR_nonnull NSString *)property;
 
-+ (MR_nullable id) MR_aggregateOperation:(MR_nonnull NSString *)function onAttribute:(MR_nonnull NSString *)attributeName withPredicate:(MR_nullable NSPredicate *)predicate inContext:(MR_nonnull NSManagedObjectContext *)context;
-+ (MR_nullable id) MR_aggregateOperation:(MR_nonnull NSString *)function onAttribute:(MR_nonnull NSString *)attributeName withPredicate:(MR_nullable NSPredicate *)predicate;
++ (MR_nullable id)MR_aggregateOperation:(MR_nonnull NSString *)function onAttribute:(MR_nonnull NSString *)attributeName withPredicate:(MR_nullable NSPredicate *)predicate inContext:(MR_nonnull NSManagedObjectContext *)context;
++ (MR_nullable id)MR_aggregateOperation:(MR_nonnull NSString *)function onAttribute:(MR_nonnull NSString *)attributeName withPredicate:(MR_nullable NSPredicate *)predicate;
 
 /**
  *  Supports aggregating values using a key-value collection operator that can be grouped by an attribute.
@@ -44,7 +44,7 @@
  *
  *  @return Results of the collection operator, filtered by the provided predicate and grouped by the provided key path
  */
-+ (MR_nullable NSArray *) MR_aggregateOperation:(MR_nonnull NSString *)collectionOperator onAttribute:(MR_nonnull NSString *)attributeName withPredicate:(MR_nullable NSPredicate *)predicate groupBy:(MR_nullable NSString*)groupingKeyPath inContext:(MR_nonnull NSManagedObjectContext *)context;
++ (MR_nullable NSArray *)MR_aggregateOperation:(MR_nonnull NSString *)collectionOperator onAttribute:(MR_nonnull NSString *)attributeName withPredicate:(MR_nullable NSPredicate *)predicate groupBy:(MR_nullable NSString *)groupingKeyPath inContext:(MR_nonnull NSManagedObjectContext *)context;
 
 /**
  *  Supports aggregating values using a key-value collection operator that can be grouped by an attribute.
@@ -61,9 +61,9 @@
  *
  *  @return Results of the collection operator, filtered by the provided predicate and grouped by the provided key path
  */
-+ (MR_nullable NSArray *) MR_aggregateOperation:(MR_nonnull NSString *)collectionOperator onAttribute:(MR_nonnull NSString *)attributeName withPredicate:(MR_nullable NSPredicate *)predicate groupBy:(MR_nullable NSString*)groupingKeyPath;
++ (MR_nullable NSArray *)MR_aggregateOperation:(MR_nonnull NSString *)collectionOperator onAttribute:(MR_nonnull NSString *)attributeName withPredicate:(MR_nullable NSPredicate *)predicate groupBy:(MR_nullable NSString *)groupingKeyPath;
 
-- (MR_nullable instancetype) MR_objectWithMinValueFor:(MR_nonnull NSString *)property;
-- (MR_nullable instancetype) MR_objectWithMinValueFor:(MR_nonnull NSString *)property inContext:(MR_nonnull NSManagedObjectContext *)context;
+- (MR_nullable instancetype)MR_objectWithMinValueFor:(MR_nonnull NSString *)property;
+- (MR_nullable instancetype)MR_objectWithMinValueFor:(MR_nonnull NSString *)property inContext:(MR_nonnull NSManagedObjectContext *)context;
 
 @end

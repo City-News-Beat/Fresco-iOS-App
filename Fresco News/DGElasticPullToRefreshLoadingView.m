@@ -27,8 +27,7 @@
 #import "DGElasticPullToRefreshLoadingView.h"
 
 @implementation DGElasticPullToRefreshLoadingView
-- (CAShapeLayer*)maskLayer
-{
+- (CAShapeLayer *)maskLayer {
     if (_maskLayer == nil) {
         _maskLayer = [[CAShapeLayer alloc] init];
         _maskLayer.backgroundColor = [UIColor clearColor].CGColor;
@@ -42,13 +41,10 @@
     }
     return _maskLayer;
 }
-- (void)setPullProgress:(CGFloat)progress
-{
+- (void)setPullProgress:(CGFloat)progress {
 }
-- (void)startAnimating
-{
+- (void)startAnimating {
 }
-- (void)stopLoading
-{
+- (void)stopLoading {
 }
 @end

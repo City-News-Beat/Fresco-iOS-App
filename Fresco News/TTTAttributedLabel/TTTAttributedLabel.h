@@ -1,17 +1,17 @@
 // TTTAttributedLabel.h
 //
 // Copyright (c) 2011 Mattt Thompson (http://mattt.me)
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,40 +35,40 @@ FOUNDATION_EXPORT const unsigned char TTTAttributedLabelVersionString[];
  Vertical alignment for text in a label whose bounds are larger than its text bounds
  */
 typedef NS_ENUM(NSInteger, TTTAttributedLabelVerticalAlignment) {
-    TTTAttributedLabelVerticalAlignmentCenter   = 0,
-    TTTAttributedLabelVerticalAlignmentTop      = 1,
-    TTTAttributedLabelVerticalAlignmentBottom   = 2,
+    TTTAttributedLabelVerticalAlignmentCenter = 0,
+    TTTAttributedLabelVerticalAlignmentTop = 1,
+    TTTAttributedLabelVerticalAlignmentBottom = 2,
 };
 
 /**
  Determines whether the text to which this attribute applies has a strikeout drawn through itself.
  */
-extern NSString * const kTTTStrikeOutAttributeName;
+extern NSString *const kTTTStrikeOutAttributeName;
 
 /**
  The background fill color. Value must be a `CGColorRef`. Default value is `nil` (no fill).
  */
-extern NSString * const kTTTBackgroundFillColorAttributeName;
+extern NSString *const kTTTBackgroundFillColorAttributeName;
 
 /**
  The padding for the background fill. Value must be a `UIEdgeInsets`. Default value is `UIEdgeInsetsZero` (no padding).
  */
-extern NSString * const kTTTBackgroundFillPaddingAttributeName;
+extern NSString *const kTTTBackgroundFillPaddingAttributeName;
 
 /**
  The background stroke color. Value must be a `CGColorRef`. Default value is `nil` (no stroke).
  */
-extern NSString * const kTTTBackgroundStrokeColorAttributeName;
+extern NSString *const kTTTBackgroundStrokeColorAttributeName;
 
 /**
  The background stroke line width. Value must be an `NSNumber`. Default value is `1.0f`.
  */
-extern NSString * const kTTTBackgroundLineWidthAttributeName;
+extern NSString *const kTTTBackgroundLineWidthAttributeName;
 
 /**
  The background corner radius. Value must be an `NSNumber`. Default value is `5.0f`.
  */
-extern NSString * const kTTTBackgroundCornerRadiusAttributeName;
+extern NSString *const kTTTBackgroundCornerRadiusAttributeName;
 
 @protocol TTTAttributedLabelDelegate;
 
@@ -110,7 +110,7 @@ IB_DESIGNABLE
  * The designated initializers are @c initWithFrame: and @c initWithCoder:.
  * init will not properly initialize many required properties and other configuration.
  */
-- (instancetype) init NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
 
 ///-----------------------------
 /// @name Accessing the Delegate
@@ -121,7 +121,7 @@ IB_DESIGNABLE
  
  @discussion A `TTTAttributedLabel` delegate responds to messages sent by tapping on links in the label. You can use the delegate to respond to links referencing a URL, address, phone number, date, or date with a specified time zone and duration.
  */
-@property (nonatomic, unsafe_unretained) IBOutlet id <TTTAttributedLabelDelegate> delegate;
+@property (nonatomic, unsafe_unretained) IBOutlet id<TTTAttributedLabelDelegate> delegate;
 
 ///--------------------------------------------
 /// @name Detecting, Accessing, & Styling Links
@@ -295,7 +295,7 @@ IB_DESIGNABLE
  @discussion This string is `nil` by default.
  */
 - (void)setText:(id)text
-afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString *(^)(NSMutableAttributedString *mutableAttributedString))block;
+    afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString * (^)(NSMutableAttributedString *mutableAttributedString))block;
 
 ///------------------------------------
 /// @name Accessing the Text Attributes
@@ -450,7 +450,7 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
  @param url The URL for the selected link.
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-   didSelectLinkWithURL:(NSURL *)url;
+    didSelectLinkWithURL:(NSURL *)url;
 
 /**
  Tells the delegate that the user did select a link to an address.
@@ -459,7 +459,7 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
  @param addressComponents The components of the address for the selected link.
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-didSelectLinkWithAddress:(NSDictionary *)addressComponents;
+    didSelectLinkWithAddress:(NSDictionary *)addressComponents;
 
 /**
  Tells the delegate that the user did select a link to a phone number.
@@ -468,7 +468,7 @@ didSelectLinkWithAddress:(NSDictionary *)addressComponents;
  @param phoneNumber The phone number for the selected link.
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-didSelectLinkWithPhoneNumber:(NSString *)phoneNumber;
+    didSelectLinkWithPhoneNumber:(NSString *)phoneNumber;
 
 /**
  Tells the delegate that the user did select a link to a date.
@@ -477,7 +477,7 @@ didSelectLinkWithPhoneNumber:(NSString *)phoneNumber;
  @param date The datefor the selected link.
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-  didSelectLinkWithDate:(NSDate *)date;
+    didSelectLinkWithDate:(NSDate *)date;
 
 /**
  Tells the delegate that the user did select a link to a date with a time zone and duration.
@@ -488,9 +488,9 @@ didSelectLinkWithPhoneNumber:(NSString *)phoneNumber;
  @param duration The duration, in seconds from the date for the selected link.
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-  didSelectLinkWithDate:(NSDate *)date
-               timeZone:(NSTimeZone *)timeZone
-               duration:(NSTimeInterval)duration;
+    didSelectLinkWithDate:(NSDate *)date
+                 timeZone:(NSTimeZone *)timeZone
+                 duration:(NSTimeInterval)duration;
 
 /**
  Tells the delegate that the user did select a link to transit information
@@ -499,7 +499,7 @@ didSelectLinkWithPhoneNumber:(NSString *)phoneNumber;
  @param components A dictionary containing the transit components. The currently supported keys are `NSTextCheckingAirlineKey` and `NSTextCheckingFlightKey`.
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-didSelectLinkWithTransitInformation:(NSDictionary *)components;
+    didSelectLinkWithTransitInformation:(NSDictionary *)components;
 
 /**
  Tells the delegate that the user did select a link to a text checking result.
@@ -510,7 +510,7 @@ didSelectLinkWithTransitInformation:(NSDictionary *)components;
  @param result The custom text checking result.
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-didSelectLinkWithTextCheckingResult:(NSTextCheckingResult *)result;
+    didSelectLinkWithTextCheckingResult:(NSTextCheckingResult *)result;
 
 ///---------------------------------
 /// @name Responding to Long Presses
@@ -529,8 +529,8 @@ didSelectLinkWithTextCheckingResult:(NSTextCheckingResult *)result;
  @param point the point pressed, in the label's coordinate space
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-didLongPressLinkWithURL:(NSURL *)url
-                atPoint:(CGPoint)point;
+    didLongPressLinkWithURL:(NSURL *)url
+                    atPoint:(CGPoint)point;
 
 /**
  Tells the delegate that the user long-pressed a link to an address.
@@ -540,8 +540,8 @@ didLongPressLinkWithURL:(NSURL *)url
  @param point the point pressed, in the label's coordinate space
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-didLongPressLinkWithAddress:(NSDictionary *)addressComponents
-                atPoint:(CGPoint)point;
+    didLongPressLinkWithAddress:(NSDictionary *)addressComponents
+                        atPoint:(CGPoint)point;
 
 /**
  Tells the delegate that the user long-pressed a link to a phone number.
@@ -551,9 +551,8 @@ didLongPressLinkWithAddress:(NSDictionary *)addressComponents
  @param point the point pressed, in the label's coordinate space
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-didLongPressLinkWithPhoneNumber:(NSString *)phoneNumber
-                atPoint:(CGPoint)point;
-
+    didLongPressLinkWithPhoneNumber:(NSString *)phoneNumber
+                            atPoint:(CGPoint)point;
 
 /**
  Tells the delegate that the user long-pressed a link to a date.
@@ -563,9 +562,8 @@ didLongPressLinkWithPhoneNumber:(NSString *)phoneNumber
  @param point the point pressed, in the label's coordinate space
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-didLongPressLinkWithDate:(NSDate *)date
-                atPoint:(CGPoint)point;
-
+    didLongPressLinkWithDate:(NSDate *)date
+                     atPoint:(CGPoint)point;
 
 /**
  Tells the delegate that the user long-pressed a link to a date with a time zone and duration.
@@ -577,11 +575,10 @@ didLongPressLinkWithDate:(NSDate *)date
  @param point the point pressed, in the label's coordinate space
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-didLongPressLinkWithDate:(NSDate *)date
-               timeZone:(NSTimeZone *)timeZone
-               duration:(NSTimeInterval)duration
-                atPoint:(CGPoint)point;
-
+    didLongPressLinkWithDate:(NSDate *)date
+                    timeZone:(NSTimeZone *)timeZone
+                    duration:(NSTimeInterval)duration
+                     atPoint:(CGPoint)point;
 
 /**
  Tells the delegate that the user long-pressed a link to transit information.
@@ -591,8 +588,8 @@ didLongPressLinkWithDate:(NSDate *)date
  @param point the point pressed, in the label's coordinate space
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-didLongPressLinkWithTransitInformation:(NSDictionary *)components
-                atPoint:(CGPoint)point;
+    didLongPressLinkWithTransitInformation:(NSDictionary *)components
+                                   atPoint:(CGPoint)point;
 
 /**
  Tells the delegate that the user long-pressed a link to a text checking result.
@@ -604,14 +601,14 @@ didLongPressLinkWithTransitInformation:(NSDictionary *)components
  @param point the point pressed, in the label's coordinate space
  */
 - (void)attributedLabel:(TTTAttributedLabel *)label
-didLongPressLinkWithTextCheckingResult:(NSTextCheckingResult *)result
-                atPoint:(CGPoint)point;
+    didLongPressLinkWithTextCheckingResult:(NSTextCheckingResult *)result
+                                   atPoint:(CGPoint)point;
 
 @end
 
 @interface TTTAttributedLabelLink : NSObject <NSCoding>
 
-typedef void (^TTTAttributedLabelLinkBlock) (TTTAttributedLabel *, TTTAttributedLabelLink *);
+typedef void (^TTTAttributedLabelLinkBlock)(TTTAttributedLabel *, TTTAttributedLabelLink *);
 
 /**
  An `NSTextCheckingResult` representing the link's location and type.
@@ -675,7 +672,7 @@ typedef void (^TTTAttributedLabelLinkBlock) (TTTAttributedLabel *, TTTAttributed
  
  @return The initialized link object.
  */
-- (instancetype)initWithAttributesFromLabel:(TTTAttributedLabel*)label
+- (instancetype)initWithAttributesFromLabel:(TTTAttributedLabel *)label
                          textCheckingResult:(NSTextCheckingResult *)result;
 
 @end

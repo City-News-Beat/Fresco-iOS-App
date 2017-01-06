@@ -28,17 +28,17 @@ static NSString *addPaymentCell = @"addPaymentCell";
     [self setupTableView];
 
     [self configureBackButtonAnimated:NO];
-   // [self configureDismissKeyboardGestureRecognizer];
+    // [self configureDismissKeyboardGestureRecognizer];
 }
 
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [FRSTracker screen:@"Payment Method"];
-    
+
     [self reloadPayments];
 }
 
--(void)setupTableView {
+- (void)setupTableView {
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -35, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -47,22 +47,21 @@ static NSString *addPaymentCell = @"addPaymentCell";
     [self.view addSubview:self.tableView];
     self.tableView.showsVerticalScrollIndicator = FALSE;
     self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
-    
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return self.payments.count;
     }
-    
+
     return 1;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         FRSPaymentCell *cell = [self.tableView dequeueReusableCellWithIdentifier:paymentCell];
         __block NSDictionary *payment = self.payments[indexPath.row];
@@ -70,125 +69,118 @@ static NSString *addPaymentCell = @"addPaymentCell";
         cell.payment = self.payments[indexPath.row];
         if ([payment[@"active"] boolValue]) {
             [cell setActive:TRUE];
-        }
-        else {
+        } else {
             [cell setActive:FALSE];
         }
         cell.delegate = self;
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
-    }
-    else if (indexPath.section == 1) {
+    } else if (indexPath.section == 1) {
         UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:addPaymentCell];
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         return cell;
     }
-    
+
     return Nil;
 }
 
--(void)deletePayment:(NSIndexPath *)path {
+- (void)deletePayment:(NSIndexPath *)path {
     NSDictionary *pay = self.payments[path.row];
-    NSLog(@"%@", pay);
-    
-    [[FRSAPIClient sharedClient] deletePayment:pay[@"id"] completion:^(id responseObject, NSError *error) {
-        [self reloadPayments];
-    }];
+
+    [[FRSAPIClient sharedClient] deletePayment:pay[@"id"]
+                                    completion:^(id responseObject, NSError *error) {
+                                      [self reloadPayments];
+                                    }];
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+
     if (indexPath.section == 1) {
         FRSDebitCardViewController *debit = [[FRSDebitCardViewController alloc] init];
         [self.navigationController pushViewController:debit animated:YES];
-    }
-    else {
+    } else {
         if (indexPath.row == selectedIndex) {
             return;
         }
-        
+
         NSDictionary *payment = [self.payments objectAtIndex:indexPath.row];
         NSString *paymentID = payment[@"id"];
         NSString *digits = [NSString stringWithFormat:@"%@ (%@)", payment[@"brand"], payment[@"last4"]];
         [[[FRSAPIClient sharedClient] authenticatedUser] setValue:digits forKey:@"creditCardDigits"];
         [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
-        
+
         [[NSUserDefaults standardUserDefaults] setObject:digits forKey:settingsPaymentLastFour];
-        
-        [[FRSAPIClient sharedClient] makePaymentActive:paymentID completion:^(id responseObject, NSError *error) {
-            if (!error) {
-                [self resetOtherPayments:paymentID];
-            }
-        }];
+
+        [[FRSAPIClient sharedClient] makePaymentActive:paymentID
+                                            completion:^(id responseObject, NSError *error) {
+                                              if (!error) {
+                                                  [self resetOtherPayments:paymentID];
+                                              }
+                                            }];
     }
 }
 
--(void)resetOtherPayments:(NSString *)activePayment {
-    
+- (void)resetOtherPayments:(NSString *)activePayment {
+
     NSInteger i = 0;
     for (FRSPaymentCell *cell in self.tableView.visibleCells) {
-        
+
         if (i >= self.payments.count) {
             return;
         }
-        
+
         NSDictionary *payment = self.payments[i];
-        
+
         if ([payment[@"id"] isEqualToString:activePayment]) {
             [cell setActive:TRUE];
-        }
-        else {
+        } else {
             [cell setActive:FALSE];
         }
-        
+
         i++;
     }
 }
 
--(void)reloadPayments {
+- (void)reloadPayments {
     [[FRSAPIClient sharedClient] fetchPayments:^(id responseObject, NSError *error) {
-        if (error || !responseObject) {
-            [self fetchError:error];
-            return;
-        }
-        
-        NSLog(@"PAYMENTS %@", responseObject);
-        self.payments = responseObject;
+      if (error || !responseObject) {
+          [self fetchError:error];
+          return;
+      }
 
-        
-        if (self.payments.count > 1) {
-            [self.navigationItem setTitle:@"PAYMENT METHODS"];
-        } else {
-            [self.navigationItem setTitle:@"PAYMENT METHOD"];
+      self.payments = responseObject;
 
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
+      if (self.payments.count > 1) {
+          [self.navigationItem setTitle:@"PAYMENT METHODS"];
+      } else {
+          [self.navigationItem setTitle:@"PAYMENT METHOD"];
+      }
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+      });
     }];
 }
 
--(void)fetchError:(NSError *)error {
-    NSLog(@"PAYMENT ERROR: %@", error);
+- (void)fetchError:(NSError *)error {
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
--(void)deleteButtonClicked:(NSDictionary *)payment {
-    
+- (void)deleteButtonClicked:(NSDictionary *)payment {
+
     if (!payment) {
         return;
     }
-    
-    [[FRSAPIClient sharedClient] deletePayment:payment[@"id"] completion:^(id responseObject, NSError *error) {
-        NSLog(@"%@", responseObject);
-        if (!error) {
-            [self reloadPayments];
-        }
-    }];
+
+    [[FRSAPIClient sharedClient] deletePayment:payment[@"id"]
+                                    completion:^(id responseObject, NSError *error) {
+                                      if (!error) {
+                                          [self reloadPayments];
+                                      }
+                                    }];
 }
 
 /*

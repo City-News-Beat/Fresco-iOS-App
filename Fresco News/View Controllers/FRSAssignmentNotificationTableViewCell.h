@@ -10,7 +10,7 @@
 
 @protocol FRSExternalNavigationDelegate <NSObject>
 
--(void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude;
+- (void)navigateToAssignmentWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude;
 
 @end
 
@@ -18,12 +18,12 @@
 
 @property (nonatomic, retain) id<FRSExternalNavigationDelegate> delegate;
 
--(void)configureAssignmentCellWithID:(NSString *)assignmentID;
--(void)configureCameraCellWithAssignmentID:(NSString *)assignmentID;
--(NSInteger)heightForCell;
+- (void)configureAssignmentCellWithID:(NSString *)assignmentID;
+- (void)configureCameraCellWithAssignmentID:(NSString *)assignmentID;
+- (NSInteger)heightForCell;
 
-@property (weak, nonatomic) IBOutlet UILabel  *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel  *bodyLabel;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *bodyLabel;
 @property (weak, nonatomic) IBOutlet UIButton *actionButton;
 @property (nonatomic, retain) NSString *assignmentID;
 

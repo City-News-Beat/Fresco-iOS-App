@@ -14,15 +14,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FRSUser : NSManagedObject<FRSManagedObject>
+@interface FRSUser : NSManagedObject <FRSManagedObject>
 
 // Insert code here to declare functionality of your managed object subclass
 @property (nullable, nonatomic, retain) NSString *dueBy;
 @property (nonatomic, retain) NSArray *requiredFields;
-+(FRSUser *)loggedInUser;
-+(instancetype)nonSavedUserWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context;
--(NSDictionary *)jsonObject;
--(void)configureWithDictionary:(NSDictionary *)properties;
++ (FRSUser *)loggedInUser;
++ (instancetype)nonSavedUserWithProperties:(NSDictionary *)properties context:(NSManagedObjectContext *)context;
+- (NSDictionary *)jsonObject;
+- (void)configureWithDictionary:(NSDictionary *)properties;
 @end
 
 NS_ASSUME_NONNULL_END

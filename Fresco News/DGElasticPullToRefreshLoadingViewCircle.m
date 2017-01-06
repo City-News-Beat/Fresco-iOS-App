@@ -26,17 +26,16 @@
 
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 
-static NSString* kRotationAnimation = @"kRotationAnimation";
+static NSString *kRotationAnimation = @"kRotationAnimation";
 
 @interface DGElasticPullToRefreshLoadingViewCircle ()
-@property (nonatomic, strong) CAShapeLayer* shapeLayer;
+@property (nonatomic, strong) CAShapeLayer *shapeLayer;
 @property (nonatomic, assign) CATransform3D identityTransform;
 @end
 
 @implementation DGElasticPullToRefreshLoadingViewCircle
 
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init];
     if (self) {
         _shapeLayer = [CAShapeLayer layer];
@@ -44,7 +43,7 @@ static NSString* kRotationAnimation = @"kRotationAnimation";
         _shapeLayer.fillColor = [UIColor clearColor].CGColor;
         _shapeLayer.strokeColor = self.tintColor.CGColor;
         _shapeLayer.actions = @{ @"strokeEnd" : [NSNull null],
-            @"transform" : [NSNull null] };
+                                 @"transform" : [NSNull null] };
         _shapeLayer.anchorPoint = CGPointMake(0.5, 0.5);
         [self.layer addSublayer:_shapeLayer];
 
@@ -55,15 +54,14 @@ static NSString* kRotationAnimation = @"kRotationAnimation";
     return self;
 }
 
--(instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         _shapeLayer = [CAShapeLayer layer];
         [_shapeLayer setFrame:frame];
         [self.layer setFrame:frame];
         [self setFrame:frame];
-        
-        
+
         _shapeLayer.lineWidth = 2.0;
         _shapeLayer.fillColor = [UIColor clearColor].CGColor;
         _shapeLayer.strokeColor = self.tintColor.CGColor;
@@ -71,7 +69,7 @@ static NSString* kRotationAnimation = @"kRotationAnimation";
                                  @"transform" : [NSNull null] };
         _shapeLayer.anchorPoint = CGPointMake(0.5, 0.5);
         [self.layer addSublayer:_shapeLayer];
-        
+
         _identityTransform = CATransform3DIdentity;
         _identityTransform.m34 = (1 / -500.0);
         _identityTransform = CATransform3DRotate(_identityTransform, toRadians(-90.0), 0.0, 0.0, 1.0);
@@ -79,28 +77,25 @@ static NSString* kRotationAnimation = @"kRotationAnimation";
     return self;
 }
 
-- (void)setPullProgress:(CGFloat)progress
-{
+- (void)setPullProgress:(CGFloat)progress {
     [super setPullProgress:progress];
     self.shapeLayer.strokeEnd = MIN(0.9 * progress, 0.9);
 
     if (progress > 1.0) {
         CGFloat degrees = ((progress - 1) * 200);
         self.shapeLayer.transform = CATransform3DRotate(self.identityTransform, toRadians(degrees), 0, 0, 1);
-    }
-    else {
+    } else {
         self.shapeLayer.transform = self.identityTransform;
     }
 }
 
-- (void)startAnimating
-{
+- (void)startAnimating {
     [super startAnimating];
     if ([self.shapeLayer animationForKey:kRotationAnimation] != nil) {
         return;
     }
 
-    CABasicAnimation* rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     rotationAnimation.toValue = @(2 * M_PI + [self currentDegree]);
     rotationAnimation.duration = 1.0;
     rotationAnimation.repeatCount = MAXFLOAT;
@@ -110,39 +105,34 @@ static NSString* kRotationAnimation = @"kRotationAnimation";
     [self.shapeLayer addAnimation:rotationAnimation forKey:kRotationAnimation];
 }
 
-- (void)stopLoading
-{
+- (void)stopLoading {
     [super stopLoading];
     [self.shapeLayer removeAnimationForKey:kRotationAnimation];
 }
 
-- (CGFloat)currentDegree
-{
+- (CGFloat)currentDegree {
     return [[self.shapeLayer valueForKeyPath:@"transform.rotation.z"] floatValue];
 }
 
-- (void)tintColorDidChange
-{
+- (void)tintColorDidChange {
     [super tintColorDidChange];
 
     self.shapeLayer.strokeColor = self.tintColor.CGColor;
 }
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [super layoutSubviews];
     self.shapeLayer.frame = self.bounds;
     CGFloat inset = self.shapeLayer.lineWidth / 2.0;
     self.shapeLayer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(self.shapeLayer.bounds, inset, inset)].CGPath;
 }
 
-- (void)setOriginY: (int)y{
+- (void)setOriginY:(int)y {
     CGRect newFrame = self.shapeLayer.frame;
     newFrame.origin.y = y;
     [self.shapeLayer setFrame:newFrame];
 }
 
-static float toRadians(float value)
-{
+static float toRadians(float value) {
 
     return (value * (float)M_PI) / 180.0;
 }

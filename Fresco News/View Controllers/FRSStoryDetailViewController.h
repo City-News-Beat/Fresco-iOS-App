@@ -14,10 +14,9 @@
 #import "FRSBaseViewController.h"
 #import "FRSStoryDetailViewController.h"
 
-@interface FRSStoryDetailViewController : FRSBaseViewController<UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
+@interface FRSStoryDetailViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource, FRSGalleryViewDelegate>
 
 {
-    
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *galleriesTable;
@@ -26,8 +25,8 @@
 @property (nonatomic, retain) NSString *storyID;
 @property (strong, nonatomic) NSString *timestamp;
 
--(void)reloadData;
--(void)scrollToGalleryIndex:(NSInteger)index;
--(void)configureWithGalleries:(NSArray *)galleries;
+- (void)reloadData;
+- (void)scrollToGalleryIndex:(NSInteger)index;
+- (void)configureWithGalleries:(NSArray *)galleries;
 
 @end

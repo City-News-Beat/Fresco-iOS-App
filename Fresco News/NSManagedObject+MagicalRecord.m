@@ -13,17 +13,15 @@ static NSUInteger kMagicalRecordDefaultBatchSize = 20;
 
 @implementation NSManagedObject (MagicalRecord)
 
-+ (NSString *) MR_entityName;
++ (NSString *)MR_entityName;
 {
     NSString *entityName;
 
-    if ([self respondsToSelector:@selector(entityName)])
-    {
+    if ([self respondsToSelector:@selector(entityName)]) {
         entityName = [self performSelector:@selector(entityName)];
     }
 
-    if ([entityName length] == 0)
-    {
+    if ([entityName length] == 0) {
         // Remove module prefix from Swift subclasses
         entityName = [NSStringFromClass(self) componentsSeparatedByString:@"."].lastObject;
     }
@@ -31,192 +29,158 @@ static NSUInteger kMagicalRecordDefaultBatchSize = 20;
     return entityName;
 }
 
-+ (void) MR_setDefaultBatchSize:(NSUInteger)newBatchSize
-{
-	@synchronized(self)
-	{
-		kMagicalRecordDefaultBatchSize = newBatchSize;
-	}
++ (void)MR_setDefaultBatchSize:(NSUInteger)newBatchSize {
+    @synchronized(self) {
+        kMagicalRecordDefaultBatchSize = newBatchSize;
+    }
 }
 
-+ (NSUInteger) MR_defaultBatchSize
-{
-	return kMagicalRecordDefaultBatchSize;
++ (NSUInteger)MR_defaultBatchSize {
+    return kMagicalRecordDefaultBatchSize;
 }
 
-+ (NSArray *) MR_executeFetchRequest:(NSFetchRequest *)request inContext:(NSManagedObjectContext *)context
-{
++ (NSArray *)MR_executeFetchRequest:(NSFetchRequest *)request inContext:(NSManagedObjectContext *)context {
     __block NSArray *results = nil;
     [context performBlockAndWait:^{
 
-        NSError *error = nil;
-        
-        results = [context executeFetchRequest:request error:&error];
-        
-        if (results == nil) 
-        {
-            [MagicalRecord handleErrors:error];
-        }
+      NSError *error = nil;
+
+      results = [context executeFetchRequest:request error:&error];
+
+      if (results == nil) {
+          [MagicalRecord handleErrors:error];
+      }
 
     }];
-	return results;	
+    return results;
 }
 
-+ (NSArray *) MR_executeFetchRequest:(NSFetchRequest *)request
-{
++ (NSArray *)MR_executeFetchRequest:(NSFetchRequest *)request {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-	return [self MR_executeFetchRequest:request inContext:[NSManagedObjectContext MR_contextForCurrentThread]];
+    return [self MR_executeFetchRequest:request inContext:[NSManagedObjectContext MR_contextForCurrentThread]];
 #pragma clang diagnostic pop
 }
 
-+ (id) MR_executeFetchRequestAndReturnFirstObject:(NSFetchRequest *)request inContext:(NSManagedObjectContext *)context
-{
-	[request setFetchLimit:1];
-	
-	NSArray *results = [self MR_executeFetchRequest:request inContext:context];
-	if ([results count] == 0)
-	{
-		return nil;
-	}
-	return [results firstObject];
++ (id)MR_executeFetchRequestAndReturnFirstObject:(NSFetchRequest *)request inContext:(NSManagedObjectContext *)context {
+    [request setFetchLimit:1];
+
+    NSArray *results = [self MR_executeFetchRequest:request inContext:context];
+    if ([results count] == 0) {
+        return nil;
+    }
+    return [results firstObject];
 }
 
-+ (id) MR_executeFetchRequestAndReturnFirstObject:(NSFetchRequest *)request
-{
++ (id)MR_executeFetchRequestAndReturnFirstObject:(NSFetchRequest *)request {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-	return [self MR_executeFetchRequestAndReturnFirstObject:request inContext:[NSManagedObjectContext MR_contextForCurrentThread]];
+    return [self MR_executeFetchRequestAndReturnFirstObject:request inContext:[NSManagedObjectContext MR_contextForCurrentThread]];
 #pragma clang diagnostic pop
 }
 
 #if TARGET_OS_IPHONE
 
-+ (BOOL) MR_performFetch:(NSFetchedResultsController *)controller
-{
-	NSError *error = nil;
-	BOOL success = [controller performFetch:&error];
-	if (!success)
-	{
-		[MagicalRecord handleErrors:error];
-	}
-	return success;
++ (BOOL)MR_performFetch:(NSFetchedResultsController *)controller {
+    NSError *error = nil;
+    BOOL success = [controller performFetch:&error];
+    if (!success) {
+        [MagicalRecord handleErrors:error];
+    }
+    return success;
 }
 
 #endif
 
-+ (NSEntityDescription *) MR_entityDescription
-{
++ (NSEntityDescription *)MR_entityDescription {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-	return [self MR_entityDescriptionInContext:[NSManagedObjectContext MR_contextForCurrentThread]];
+    return [self MR_entityDescriptionInContext:[NSManagedObjectContext MR_contextForCurrentThread]];
 #pragma clang diagnostic pop
 }
 
-+ (NSEntityDescription *) MR_entityDescriptionInContext:(NSManagedObjectContext *)context
-{
++ (NSEntityDescription *)MR_entityDescriptionInContext:(NSManagedObjectContext *)context {
     NSString *entityName = [self MR_entityName];
     return [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
 }
 
-+ (NSArray *) MR_propertiesNamed:(NSArray *)properties
-{
++ (NSArray *)MR_propertiesNamed:(NSArray *)properties {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     return [self MR_propertiesNamed:properties inContext:[NSManagedObjectContext MR_contextForCurrentThread]];
 #pragma clang diagnostic pop
 }
 
-+ (NSArray *) MR_propertiesNamed:(NSArray *)properties inContext:(NSManagedObjectContext *)context
-{
-	NSEntityDescription *description = [self MR_entityDescriptionInContext:context];
-	NSMutableArray *propertiesWanted = [NSMutableArray array];
++ (NSArray *)MR_propertiesNamed:(NSArray *)properties inContext:(NSManagedObjectContext *)context {
+    NSEntityDescription *description = [self MR_entityDescriptionInContext:context];
+    NSMutableArray *propertiesWanted = [NSMutableArray array];
 
-	if (properties)
-	{
-		NSDictionary *propDict = [description propertiesByName];
+    if (properties) {
+        NSDictionary *propDict = [description propertiesByName];
 
-		for (NSString *propertyName in properties)
-		{
-			NSPropertyDescription *property = [propDict objectForKey:propertyName];
-			if (property)
-			{
-				[propertiesWanted addObject:property];
-			}
-			else
-			{
-				MRLogWarn(@"Property '%@' not found in %lx properties for %@", propertyName, (unsigned long)[propDict count], NSStringFromClass(self));
-			}
-		}
-	}
-	return propertiesWanted;
+        for (NSString *propertyName in properties) {
+            NSPropertyDescription *property = [propDict objectForKey:propertyName];
+            if (property) {
+                [propertiesWanted addObject:property];
+            } else {
+                MRLogWarn(@"Property '%@' not found in %lx properties for %@", propertyName, (unsigned long)[propDict count], NSStringFromClass(self));
+            }
+        }
+    }
+    return propertiesWanted;
 }
 
-+ (NSArray *) MR_sortAscending:(BOOL)ascending attributes:(NSArray *)attributesToSortBy
-{
-	NSMutableArray *attributes = [NSMutableArray array];
-    
-    for (NSString *attributeName in attributesToSortBy) 
-    {
++ (NSArray *)MR_sortAscending:(BOOL)ascending attributes:(NSArray *)attributesToSortBy {
+    NSMutableArray *attributes = [NSMutableArray array];
+
+    for (NSString *attributeName in attributesToSortBy) {
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:attributeName ascending:ascending];
         [attributes addObject:sortDescriptor];
     }
-    
-	return attributes;
+
+    return attributes;
 }
 
-+ (NSArray *) MR_ascendingSortDescriptors:(NSArray *)attributesToSortBy
-{
-	return [self MR_sortAscending:YES attributes:attributesToSortBy];
++ (NSArray *)MR_ascendingSortDescriptors:(NSArray *)attributesToSortBy {
+    return [self MR_sortAscending:YES attributes:attributesToSortBy];
 }
 
-+ (NSArray *) MR_descendingSortDescriptors:(NSArray *)attributesToSortBy
-{
-	return [self MR_sortAscending:NO attributes:attributesToSortBy];
++ (NSArray *)MR_descendingSortDescriptors:(NSArray *)attributesToSortBy {
+    return [self MR_sortAscending:NO attributes:attributesToSortBy];
 }
 
 #pragma mark -
 
-+ (id) MR_createEntityInContext:(NSManagedObjectContext *)context
-{
-    if ([self respondsToSelector:@selector(insertInManagedObjectContext:)] && context != nil)
-    {
++ (id)MR_createEntityInContext:(NSManagedObjectContext *)context {
+    if ([self respondsToSelector:@selector(insertInManagedObjectContext:)] && context != nil) {
         id entity = [self performSelector:@selector(insertInManagedObjectContext:) withObject:context];
         return entity;
-    }
-    else
-    {
+    } else {
         NSEntityDescription *entity = nil;
-        if (context == nil)
-        {
+        if (context == nil) {
             entity = [self MR_entityDescription];
+        } else {
+            entity = [self MR_entityDescriptionInContext:context];
         }
-        else
-        {
-            entity  = [self MR_entityDescriptionInContext:context];
-        }
-        
-        if (entity == nil)
-        {
+
+        if (entity == nil) {
             return nil;
         }
-        
+
         return [[self alloc] initWithEntity:entity insertIntoManagedObjectContext:context];
     }
 }
 
-+ (id) MR_createEntity
-{
++ (id)MR_createEntity {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-	NSManagedObject *newEntity = [self MR_createEntityInContext:[NSManagedObjectContext MR_contextForCurrentThread]];
+    NSManagedObject *newEntity = [self MR_createEntityInContext:[NSManagedObjectContext MR_contextForCurrentThread]];
 #pragma clang diagnostic pop
 
-	return newEntity;
+    return newEntity;
 }
 
-- (BOOL) MR_deleteEntityInContext:(NSManagedObjectContext *)context
-{
+- (BOOL)MR_deleteEntityInContext:(NSManagedObjectContext *)context {
     NSError *error = nil;
     NSManagedObject *entityInContext = [context existingObjectWithID:[self objectID] error:&error];
     [MagicalRecord handleErrors:error];
@@ -227,52 +191,45 @@ static NSUInteger kMagicalRecordDefaultBatchSize = 20;
     return YES;
 }
 
-- (BOOL) MR_deleteEntity
-{
-	[self MR_deleteEntityInContext:[self managedObjectContext]];
-	return YES;
+- (BOOL)MR_deleteEntity {
+    [self MR_deleteEntityInContext:[self managedObjectContext]];
+    return YES;
 }
 
-+ (BOOL) MR_deleteAllMatchingPredicate:(NSPredicate *)predicate inContext:(NSManagedObjectContext *)context
-{
++ (BOOL)MR_deleteAllMatchingPredicate:(NSPredicate *)predicate inContext:(NSManagedObjectContext *)context {
     NSFetchRequest *request = [self MR_requestAllWithPredicate:predicate inContext:context];
     [request setReturnsObjectsAsFaults:YES];
-	[request setIncludesPropertyValues:NO];
-    
-	NSArray *objectsToTruncate = [self MR_executeFetchRequest:request inContext:context];
-    
-	for (id objectToTruncate in objectsToTruncate) 
-    {
-		[objectToTruncate MR_deleteEntityInContext:context];
-	}
-    
-	return YES;
+    [request setIncludesPropertyValues:NO];
+
+    NSArray *objectsToTruncate = [self MR_executeFetchRequest:request inContext:context];
+
+    for (id objectToTruncate in objectsToTruncate) {
+        [objectToTruncate MR_deleteEntityInContext:context];
+    }
+
+    return YES;
 }
 
-+ (BOOL) MR_deleteAllMatchingPredicate:(NSPredicate *)predicate
-{
++ (BOOL)MR_deleteAllMatchingPredicate:(NSPredicate *)predicate {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     return [self MR_deleteAllMatchingPredicate:predicate inContext:[NSManagedObjectContext MR_contextForCurrentThread]];
 #pragma clang diagnostic pop
 }
 
-+ (BOOL) MR_truncateAllInContext:(NSManagedObjectContext *)context
-{
++ (BOOL)MR_truncateAllInContext:(NSManagedObjectContext *)context {
     NSFetchRequest *request = [self MR_requestAllInContext:context];
     [request setReturnsObjectsAsFaults:YES];
     [request setIncludesPropertyValues:NO];
 
     NSArray *objectsToDelete = [self MR_executeFetchRequest:request inContext:context];
-    for (NSManagedObject *objectToDelete in objectsToDelete)
-    {
+    for (NSManagedObject *objectToDelete in objectsToDelete) {
         [objectToDelete MR_deleteEntityInContext:context];
     }
     return YES;
 }
 
-+ (BOOL) MR_truncateAll
-{
++ (BOOL)MR_truncateAll {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [self MR_truncateAllInContext:[NSManagedObjectContext MR_contextForCurrentThread]];
@@ -281,30 +238,26 @@ static NSUInteger kMagicalRecordDefaultBatchSize = 20;
     return YES;
 }
 
-- (id) MR_inContext:(NSManagedObjectContext *)otherContext
-{
+- (id)MR_inContext:(NSManagedObjectContext *)otherContext {
     NSError *error = nil;
-    
-    if ([[self objectID] isTemporaryID])
-    {
-        BOOL success = [[self managedObjectContext] obtainPermanentIDsForObjects:@[self] error:&error];
-        if (!success)
-        {
+
+    if ([[self objectID] isTemporaryID]) {
+        BOOL success = [[self managedObjectContext] obtainPermanentIDsForObjects:@[ self ] error:&error];
+        if (!success) {
             [MagicalRecord handleErrors:error];
             return nil;
         }
     }
-    
+
     error = nil;
-    
+
     NSManagedObject *inContext = [otherContext existingObjectWithID:[self objectID] error:&error];
     [MagicalRecord handleErrors:error];
-    
+
     return inContext;
 }
 
-- (id) MR_inThreadContext
-{
+- (id)MR_inThreadContext {
     NSManagedObject *weakSelf = self;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -317,13 +270,11 @@ static NSUInteger kMagicalRecordDefaultBatchSize = 20;
 #pragma mark - Deprecated Methods — DO NOT USE
 @implementation NSManagedObject (MagicalRecordDeprecated)
 
-+ (instancetype) MR_createInContext:(NSManagedObjectContext *)context
-{
++ (instancetype)MR_createInContext:(NSManagedObjectContext *)context {
     return [self MR_createEntityInContext:context];
 }
 
-- (BOOL) MR_deleteInContext:(NSManagedObjectContext *)context
-{
+- (BOOL)MR_deleteInContext:(NSManagedObjectContext *)context {
     return [self MR_deleteEntityInContext:context];
 }
 

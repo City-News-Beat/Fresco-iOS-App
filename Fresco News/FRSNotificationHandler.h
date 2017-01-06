@@ -13,17 +13,17 @@
 
 @interface FRSNotificationHandler : NSObject
 
-+(void)handleNotification:(NSDictionary *)notification;
-+(void)segueToUser:(NSString *)user;
-+(void)segueToAssignment:(NSString *)assignment;
-+(void)segueToGallery:(NSString *)gallery;
-+(void)segueToGallery:(NSString *)gallery post:(NSString *)post;
-+(void)segueToStory:(NSString *)story;
-+(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title;
-+(void)segueToPayment;
-+(void)segueToIdentification;
++ (void)handleNotification:(NSDictionary *)notification;
++ (void)segueToUser:(NSString *)user;
++ (void)segueToAssignment:(NSString *)assignment;
++ (void)segueToGallery:(NSString *)gallery;
++ (void)segueToGallery:(NSString *)gallery post:(NSString *)post;
++ (void)segueToStory:(NSString *)story;
++ (void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title;
++ (void)segueToPayment;
++ (void)segueToIdentification;
 
-+(BOOL)isDeeplinking;
-+(void)setIsDeeplinking:(BOOL)value;
++ (BOOL)isDeeplinking;
++ (void)setIsDeeplinking:(BOOL)value;
 
 @end

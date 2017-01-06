@@ -15,126 +15,125 @@
 
 @implementation FRSTrimTool
 
--(instancetype)init {
+- (instancetype)init {
     self = [super init];
-    
+
     if (self) {
         [self commonInit];
     }
-    
+
     return self;
 }
 
--(instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
-    
+
     if (self) {
         [self commonInit];
     }
-    
+
     return self;
 }
 
--(instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
-    
+
     if (self) {
         [self commonInit];
     }
-    
+
     return self;
 }
 
--(void)commonInit {
+- (void)commonInit {
     [self setupUI];
 }
 
--(void)setupGestureRecognizers {
-    
+- (void)setupGestureRecognizers {
+
     if (self.leftView.gestureRecognizers.count > 0) {
         return;
     }
-    
+
     UIPanGestureRecognizer *leftRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panLeft:)];
     UIPanGestureRecognizer *rightRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panRight:)];
-    
+
     [self.leftView addGestureRecognizer:leftRecognizer];
     [self.rightView addGestureRecognizer:rightRecognizer];
 }
 
--(void)setFrame:(CGRect)frame {
+- (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
     [self reconfigureUI];
 }
 
--(void)reconfigureUI {
-    float effectiveWidth = self.frame.size.width-30;
-    
+- (void)reconfigureUI {
+    float effectiveWidth = self.frame.size.width - 30;
+
     self.leftView.frame = CGRectMake(0, 0, 30 + (effectiveWidth * self.left) + 15, self.frame.size.height);
-    self.rightView.frame = CGRectMake(self.frame.size.width-15 - 30 - (effectiveWidth * self.right), 0, self.leftView.frame.size.width, self.frame.size.height);
-    
-    self.leftOutline.frame = CGRectMake(30 + (effectiveWidth * self.left), 10, 15, self.frame.size.height-20);
-    self.rightOutline.frame = CGRectMake(0, 10, 15, self.frame.size.height-20);
-    
-    self.topView.frame = CGRectMake(35, 10, self.frame.size.width-70, 4);
-    self.bottomView.frame = CGRectMake(35, self.frame.size.height-14, self.frame.size.width-70, 4);
+    self.rightView.frame = CGRectMake(self.frame.size.width - 15 - 30 - (effectiveWidth * self.right), 0, self.leftView.frame.size.width, self.frame.size.height);
+
+    self.leftOutline.frame = CGRectMake(30 + (effectiveWidth * self.left), 10, 15, self.frame.size.height - 20);
+    self.rightOutline.frame = CGRectMake(0, 10, 15, self.frame.size.height - 20);
+
+    self.topView.frame = CGRectMake(35, 10, self.frame.size.width - 70, 4);
+    self.bottomView.frame = CGRectMake(35, self.frame.size.height - 14, self.frame.size.width - 70, 4);
 }
 
--(void)setupUI {
+- (void)setupUI {
     self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     [self addSubview:self.backgroundView];
-    
+
     self.leftView = [[UIView alloc] init];
     self.rightView = [[UIView alloc] init];
-    
+
     self.leftOutline = [[UIView alloc] init];
     self.rightOutline = [[UIView alloc] init];
     //
     self.rightOutline.backgroundColor = [UIColor frescoGreenColor];
     self.leftOutline.backgroundColor = [UIColor frescoGreenColor];
-    
-    [self.leftView addSubview:self.leftOutline];  // green thumb
+
+    [self.leftView addSubview:self.leftOutline]; // green thumb
     [self.rightView addSubview:self.rightOutline]; // green thumb
     [self drawSquares];
-    
+
     self.topView = [[UIView alloc] init];
     self.topView.backgroundColor = [UIColor frescoGreenColor];
-    
+
     self.bottomView = [[UIView alloc] init];
     self.bottomView.backgroundColor = [UIColor frescoGreenColor];
-    
+
     [self addSubview:self.topView];
     [self addSubview:self.bottomView];
     [self addSubview:self.rightView];
     [self addSubview:self.leftView];
-    
+
     self.leftOutline.layer.masksToBounds = YES;
     self.rightOutline.layer.masksToBounds = YES;
-    
+
     self.leftOutline.layer.cornerRadius = 2.0;
     self.rightOutline.layer.cornerRadius = 2.0;
-    
+
     [self reconfigureUI]; // set frames correctly
     [self setupGestureRecognizers];
 }
 
--(void)drawSquares {
+- (void)drawSquares {
     NSMutableArray *la = [[NSMutableArray alloc] init]; // left array
     NSMutableArray *ra = [[NSMutableArray alloc] init]; // right array
     NSMutableArray *ca; // currently represented array
     UIView *cv; // current represented view (leftOutline v rightOutline)
-    
+
     for (int r = 0; r < 2; r++) {
-        
+
         if (r == 0) {
             ca = la;
             cv = self.leftOutline;
-        }
-        else {
+        } else {
             ca = ra;
             cv = self.rightOutline;
         }
-        
+
         for (int i = 0; i < 4; i++) {
             for (int c = 0; c < 2; c++) {
                 float x = 4 * c + 5; // 0 | 4
@@ -145,86 +144,78 @@
                 [ca addObject:currentSquare];
             }
         }
-        
+
         if (r == 0) {
             self.leftSquares = ca;
-        }
-        else {
+        } else {
             self.rightSquares = ca;
         }
     }
 }
 
--(void)setBackground:(UIView *)background {
-    
+- (void)setBackground:(UIView *)background {
+
     [self.backgroundView removeFromSuperview];
     self.backgroundView = background;
     self.backgroundView.frame = CGRectMake(10, 8, self.backgroundView.frame.size.width, self.backgroundView.frame.size.height);
     [self addSubview:self.backgroundView];
-    
-    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.x, self.backgroundView.frame.size.width+60, self.backgroundView.frame.size.height+16); // resize to background
+
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.x, self.backgroundView.frame.size.width + 60, self.backgroundView.frame.size.height + 16); // resize to background
 }
 
--(void)panRight:(UIPanGestureRecognizer *)sender {
-    
+- (void)panRight:(UIPanGestureRecognizer *)sender {
+
     if (sender.state == UIGestureRecognizerStateBegan) {
         self.rightRect = self.rightView.frame;
-        
+
         if (self.delegate) {
             [self.delegate trimmingWillBegin];
         }
-    }
-    else if (sender.state == UIGestureRecognizerStateChanged) {
+    } else if (sender.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [sender translationInView:self];
-        
+
         float xOffset = translation.x;
         float newX = self.rightRect.origin.x + xOffset;
-        
+
         CGRect newFrame = CGRectMake(newX, self.rightRect.origin.y, self.rightRect.size.width, self.rightRect.size.height);
-        
-        
+
         self.rightView.frame = [self checkRight:newFrame];
-    }
-    else if (sender.state == UIGestureRecognizerStateEnded) {
+    } else if (sender.state == UIGestureRecognizerStateEnded) {
         if (self.delegate) {
             [self.delegate trimmingDidEnd];
         }
     }
-    
+
     [self handleRightChange]; // adjust cmtime
-    
 }
 
--(void)panLeft:(UIPanGestureRecognizer *)sender {
+- (void)panLeft:(UIPanGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateBegan) {
         self.leftRect = self.leftView.frame;
-        
+
         if (self.delegate) {
             [self.delegate trimmingWillBegin];
         }
-    }
-    else if (sender.state == UIGestureRecognizerStateChanged) {
+    } else if (sender.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [sender translationInView:self];
-        
+
         float xOffset = translation.x;
         float newX = self.leftRect.origin.x + xOffset;
-        
+
         CGRect newFrame = CGRectMake(newX, self.leftRect.origin.y, self.leftRect.size.width, self.leftRect.size.height);
-    
-        
+
         self.leftView.frame = [self checkLeft:newFrame];
-        
-    }
-    else if (sender.state == UIGestureRecognizerStateEnded) {
+
+    } else if (sender.state == UIGestureRecognizerStateEnded) {
         if (self.delegate) {
             [self.delegate trimmingDidEnd];
         }
     }
-    
+
     [self handleLeftChange]; // adjust cmtime
 }
 
--(CGRect)checkLeft:(CGRect)left {
+- (CGRect)checkLeft:(CGRect)left {
     float x = left.origin.x;
     if (x > self.rightView.frame.origin.x - 45) {
         left.origin.x = self.rightView.frame.origin.x - 45;
@@ -232,54 +223,51 @@
     if (x < 0) {
         left.origin.x = 0;
     }
-    
-    float yDiff = self.frame.size.width -self.rightView.frame.origin.x;
+
+    float yDiff = self.frame.size.width - self.rightView.frame.origin.x;
     float xBorder = 30 + left.origin.x;
     float width = self.frame.size.width - xBorder - yDiff;
-    
-    self.topView.frame = CGRectMake(xBorder+5, self.topView.frame.origin.y, width, self.topView.frame.size.height);
-     self.bottomView.frame = CGRectMake(xBorder+5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
-    
+
+    self.topView.frame = CGRectMake(xBorder + 5, self.topView.frame.origin.y, width, self.topView.frame.size.height);
+    self.bottomView.frame = CGRectMake(xBorder + 5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
+
     x = left.origin.x;
-    float w = self.frame.size.width-60-30;
+    float w = self.frame.size.width - 60 - 30;
     self.left = x / w;
-    
-    NSLog(@"LEFT: %f", self.left);
 
     return left;
 }
 
--(CGRect)checkRight:(CGRect)right {
+- (CGRect)checkRight:(CGRect)right {
     float x = right.origin.x;
     if (x < self.leftView.frame.origin.x + 45) {
         right.origin.x = self.leftView.frame.origin.x + 45;
     }
-    if (x > self.frame.size.width-45) {
-        right.origin.x = self.frame.size.width-45;
+    if (x > self.frame.size.width - 45) {
+        right.origin.x = self.frame.size.width - 45;
     }
-    
+
     float yDiff = self.frame.size.width - right.origin.x;
     float xBorder = 30 + self.leftView.frame.origin.x;
     float width = self.frame.size.width - xBorder - yDiff;
-    
-    self.topView.frame = CGRectMake(xBorder+5, self.topView.frame.origin.y, width, self.topView.frame.size.height);
-    self.bottomView.frame = CGRectMake(xBorder+5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
-    
+
+    self.topView.frame = CGRectMake(xBorder + 5, self.topView.frame.origin.y, width, self.topView.frame.size.height);
+    self.bottomView.frame = CGRectMake(xBorder + 5, self.bottomView.frame.origin.y, width, self.bottomView.frame.size.height);
+
     x = right.origin.x;
-    float w = self.frame.size.width-60+15;
+    float w = self.frame.size.width - 60 + 15;
     self.right = x / w;
-    
-    NSLog(@"RIGHT: %f", self.right);
+
     return right;
 }
 
--(void)handleLeftChange {
+- (void)handleLeftChange {
     if (self.delegate) {
         [self.delegate trimmersDidAdjust];
     }
 }
 
--(void)handleRightChange {
+- (void)handleRightChange {
     [self handleLeftChange];
 }
 

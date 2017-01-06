@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-typedef void(^FRSCompressionCompletionBlock)(NSURL *filePath, NSError *error);
+typedef void (^FRSCompressionCompletionBlock)(NSURL *filePath, NSError *error);
 
 @interface FRSVideoCompressor : NSObject
--(instancetype)initWithAsset:(AVAsset *)asset completion:(FRSCompressionCompletionBlock)completion;
--(instancetype)initWithAsset:(AVAsset *)asset preferences:(NSDictionary *)preferences completion:(FRSCompressionCompletionBlock)completion;
+- (instancetype)initWithAsset:(AVAsset *)asset completion:(FRSCompressionCompletionBlock)completion;
+- (instancetype)initWithAsset:(AVAsset *)asset preferences:(NSDictionary *)preferences completion:(FRSCompressionCompletionBlock)completion;
 
 @end

@@ -14,7 +14,7 @@
 @property (strong, nonatomic) NSArray *outlets;
 @property (nonatomic, copy) void (^openCameraBlock)();
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment;
--(void)configureGlobalAssignmentCellWithAssignment:(NSDictionary *)assignment;
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier assignment:(NSArray *)assignment;
+- (void)configureGlobalAssignmentCellWithAssignment:(NSDictionary *)assignment;
 
 @end

@@ -8,7 +8,7 @@
 
 #import "FRSBorderedImageView.h"
 
-@interface FRSBorderedImageView()
+@interface FRSBorderedImageView ()
 
 @property (strong, nonatomic) UIView *borderView;
 
@@ -16,11 +16,11 @@
 
 @implementation FRSBorderedImageView
 
--(instancetype)initWithFrame:(CGRect)frame borderColor:(UIColor *)borderColor borderWidth:(CGFloat)borderWidth{
+- (instancetype)initWithFrame:(CGRect)frame borderColor:(UIColor *)borderColor borderWidth:(CGFloat)borderWidth {
     self = [super initWithFrame:frame];
-    if (self){
+    if (self) {
         self.borderView = [[UIView alloc] initWithFrame:CGRectMake(-0.5, -0.5, self.frame.size.width + 1, self.frame.size.height + 1)];
-        self.borderView.layer.cornerRadius = (self.frame.size.width + 1)/2;
+        self.borderView.layer.cornerRadius = (self.frame.size.width + 1) / 2;
         self.borderColor = borderColor;
         self.borderWidth = borderWidth;
         self.borderView.backgroundColor = [UIColor clearColor];
@@ -29,13 +29,11 @@
     return self;
 }
 
-
-
--(void)setBorderColor:(UIColor *)borderColor{
+- (void)setBorderColor:(UIColor *)borderColor {
     self.borderView.layer.borderColor = borderColor.CGColor;
 }
 
--(void)setBorderWidth:(CGFloat)borderWidth{
+- (void)setBorderWidth:(CGFloat)borderWidth {
     self.borderView.layer.borderWidth = borderWidth;
 }
 

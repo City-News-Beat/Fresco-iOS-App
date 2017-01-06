@@ -131,7 +131,6 @@
     float startTime = trimmer.left * videoDuration;
     float endTime = trimmer.right * videoDuration;
     
-    NSLog(@"%f", startTime);
     [self.player pause];
     
     int32_t timeScale = self.player.currentItem.asset.duration.timescale;

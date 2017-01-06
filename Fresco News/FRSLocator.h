@@ -19,11 +19,10 @@
  To watch for location changes, simply register for the notification constant defined below. This decouples location tracking from any other class, something I think will drastically help in 3.0.
  */
 
-static NSString * const FRSLocationUpdateNotification = @"FRSLocationUpdateNotification";
+static NSString *const FRSLocationUpdateNotification = @"FRSLocationUpdateNotification";
 typedef void (^BackgroundBlock)(NSArray *locations); // allows us to add ability for background task (in case app is killed in background)
 
-@interface FRSLocator : NSObject <CLLocationManagerDelegate>
-{
+@interface FRSLocator : NSObject <CLLocationManagerDelegate> {
     NSTimer *stopTimer;
 }
 
@@ -33,11 +32,11 @@ typedef void (^BackgroundBlock)(NSArray *locations); // allows us to add ability
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, assign) BackgroundBlock backgroundBlock; // block to execute if app is in background state
 
--(void)manualUpdate;
+- (void)manualUpdate;
 
-+(instancetype)sharedLocator;
-+(NSArray *)localAssignments;
-+(NSArray *)globalAssignments;
-+(NSArray *)allAssignments;
++ (instancetype)sharedLocator;
++ (NSArray *)localAssignments;
++ (NSArray *)globalAssignments;
++ (NSArray *)allAssignments;
 
 @end

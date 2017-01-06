@@ -10,7 +10,7 @@
 #import "FRSBaseViewController.h"
 #import "FRSAPIClient.h"
 @protocol FRSAppDelegate <NSObject>
--(void)registerForPushNotifications;
+- (void)registerForPushNotifications;
 @end
 @interface FRSSignUpViewController : FRSBaseViewController
 @property TWTRSession *twitterSession;
