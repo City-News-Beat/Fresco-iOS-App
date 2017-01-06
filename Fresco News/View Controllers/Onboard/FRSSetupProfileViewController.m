@@ -634,8 +634,6 @@
     return textView.text.length + (text.length - range.length) <= 160;
 }
 
-
-
 #pragma mark - Keyboard
 
 - (void)handleKeyboardWillShow:(NSNotification *)sender {
