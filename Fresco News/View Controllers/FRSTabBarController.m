@@ -363,7 +363,6 @@
             if (![[FRSAPIClient sharedClient] isAuthenticated]) {
                 id<FRSApp> appDelegate = (id<FRSApp>)[[UIApplication sharedApplication] delegate];
                 FRSOnboardingViewController *onboardVC = [[FRSOnboardingViewController alloc] init];
-                NSLog(@"Authenticated User: \n%@", [[FRSAPIClient sharedClient] authenticatedUser]);
                 UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
 
                 if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
