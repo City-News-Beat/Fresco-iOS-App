@@ -460,6 +460,7 @@
 
     self.bioTV = [[UITextView alloc] initWithFrame:CGRectMake(16, 11, backgroundView.frame.size.width - 32, backgroundView.frame.size.height - 22)];
     self.bioTV.tag = 3;
+    self.bioTV.textContainer.maximumNumberOfLines = 7;
     self.bioTV.tintColor = [UIColor frescoOrangeColor];
     self.bioTV.delegate = self;
     self.bioTV.textContainer.lineFragmentPadding = 0;
@@ -626,6 +627,11 @@
     if ([[textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
         textView.attributedText = [[NSAttributedString alloc] initWithString:@"Bio" attributes:@{ NSForegroundColorAttributeName : [UIColor frescoLightTextColor], NSFontAttributeName : [UIFont systemFontOfSize:15 weight:-1] }];
     }
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    return textView.text.length + (text.length - range.length) <= 160;
 }
 
 #pragma mark - Keyboard
