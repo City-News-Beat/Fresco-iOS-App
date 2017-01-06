@@ -14,16 +14,20 @@
 
 @property (strong, nonatomic) FRSGallery *gallery;
 @property NSString *defaultPostID;
-@property BOOL didChangeUp;
 @property int totalCommentCount;
+@property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 
 @property (strong, nonatomic) IBOutlet FRSGalleryView *galleryView;
 @property (nonatomic, retain) NSMutableArray *comments;
 @property (strong, nonatomic) FRSGalleryExpandedViewController *parentVC;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) FRSContentActionsBar *actionBar;
+@property (strong, nonatomic) IBOutlet UITextField *commentTextField;
+@property (strong, nonatomic) IBOutlet UITableView *articlesTableView;
 
 -(void)configureUI;
 -(void)fetchCommentsWithID:(NSString*)galleryID;
+-(void)sendComment;
+-(void)loadGalleryDetailViewWithGallery:(FRSGallery *)gallery parentVC:(FRSGalleryExpandedViewController *)parentVC;
 
 @end
