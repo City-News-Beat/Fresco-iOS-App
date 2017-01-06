@@ -16,20 +16,19 @@ static BOOL _iCloudEnabled = NO;
 
 #pragma mark - iCloud Methods
 
-+ (BOOL) isICloudEnabled;
++ (BOOL)isICloudEnabled;
 {
     return _iCloudEnabled;
 }
 
-+ (void) setICloudEnabled:(BOOL)enabled;
++ (void)setICloudEnabled:(BOOL)enabled;
 {
-    @synchronized(self)
-    {
+    @synchronized(self) {
         _iCloudEnabled = enabled;
     }
 }
 
-+ (void) setupCoreDataStackWithiCloudContainer:(NSString *)containerID localStoreNamed:(NSString *)localStore;
++ (void)setupCoreDataStackWithiCloudContainer:(NSString *)containerID localStoreNamed:(NSString *)localStore;
 {
     [self setupCoreDataStackWithiCloudContainer:containerID
                                  contentNameKey:nil
@@ -37,28 +36,27 @@ static BOOL _iCloudEnabled = NO;
                         cloudStorePathComponent:nil];
 }
 
-+ (void) setupCoreDataStackWithiCloudContainer:(NSString *)containerID contentNameKey:(NSString *)contentNameKey localStoreNamed:(NSString *)localStoreName cloudStorePathComponent:(NSString *)pathSubcomponent;
++ (void)setupCoreDataStackWithiCloudContainer:(NSString *)containerID contentNameKey:(NSString *)contentNameKey localStoreNamed:(NSString *)localStoreName cloudStorePathComponent:(NSString *)pathSubcomponent;
 {
-    [self setupCoreDataStackWithiCloudContainer:containerID 
+    [self setupCoreDataStackWithiCloudContainer:containerID
                                  contentNameKey:contentNameKey
                                 localStoreNamed:localStoreName
                         cloudStorePathComponent:pathSubcomponent
                                      completion:nil];
 }
 
-+ (void) setupCoreDataStackWithiCloudContainer:(NSString *)containerID contentNameKey:(NSString *)contentNameKey localStoreNamed:(NSString *)localStoreName cloudStorePathComponent:(NSString *)pathSubcomponent completion:(void(^)(void))completion;
++ (void)setupCoreDataStackWithiCloudContainer:(NSString *)containerID contentNameKey:(NSString *)contentNameKey localStoreNamed:(NSString *)localStoreName cloudStorePathComponent:(NSString *)pathSubcomponent completion:(void (^)(void))completion;
 {
     NSPersistentStoreCoordinator *coordinator = [NSPersistentStoreCoordinator MR_coordinatorWithiCloudContainerID:containerID
-                                                                                                   contentNameKey:contentNameKey 
-                                                                                                  localStoreNamed:localStoreName 
+                                                                                                   contentNameKey:contentNameKey
+                                                                                                  localStoreNamed:localStoreName
                                                                                           cloudStorePathComponent:pathSubcomponent
                                                                                                        completion:completion];
     [NSPersistentStoreCoordinator MR_setDefaultStoreCoordinator:coordinator];
     [NSManagedObjectContext MR_initializeDefaultContextWithCoordinator:coordinator];
 }
 
-+ (void) setupCoreDataStackWithiCloudContainer:(NSString *)containerID localStoreAtURL:(NSURL *)storeURL
-{
++ (void)setupCoreDataStackWithiCloudContainer:(NSString *)containerID localStoreAtURL:(NSURL *)storeURL {
     NSString *contentNameKey = [[[NSBundle mainBundle] infoDictionary] objectForKey:(id)kCFBundleIdentifierKey];
     [self setupCoreDataStackWithiCloudContainer:containerID
                                  contentNameKey:contentNameKey
@@ -66,8 +64,7 @@ static BOOL _iCloudEnabled = NO;
                         cloudStorePathComponent:nil];
 }
 
-+ (void) setupCoreDataStackWithiCloudContainer:(NSString *)containerID contentNameKey:(NSString *)contentNameKey localStoreAtURL:(NSURL *)storeURL cloudStorePathComponent:(NSString *)pathSubcomponent
-{
++ (void)setupCoreDataStackWithiCloudContainer:(NSString *)containerID contentNameKey:(NSString *)contentNameKey localStoreAtURL:(NSURL *)storeURL cloudStorePathComponent:(NSString *)pathSubcomponent {
     [self setupCoreDataStackWithiCloudContainer:containerID
                                  contentNameKey:contentNameKey
                                 localStoreAtURL:storeURL
@@ -75,10 +72,9 @@ static BOOL _iCloudEnabled = NO;
                                      completion:nil];
 }
 
-+ (void) setupCoreDataStackWithiCloudContainer:(NSString *)containerID contentNameKey:(NSString *)contentNameKey localStoreAtURL:(NSURL *)storeURL cloudStorePathComponent:(NSString *)pathSubcomponent completion:(void (^)(void))completion
-{
++ (void)setupCoreDataStackWithiCloudContainer:(NSString *)containerID contentNameKey:(NSString *)contentNameKey localStoreAtURL:(NSURL *)storeURL cloudStorePathComponent:(NSString *)pathSubcomponent completion:(void (^)(void))completion {
     NSPersistentStoreCoordinator *coordinator = [NSPersistentStoreCoordinator MR_coordinatorWithiCloudContainerID:containerID contentNameKey:contentNameKey localStoreAtURL:storeURL cloudStorePathComponent:pathSubcomponent completion:completion];
-    
+
     [NSPersistentStoreCoordinator MR_setDefaultStoreCoordinator:coordinator];
     [NSManagedObjectContext MR_initializeDefaultContextWithCoordinator:coordinator];
 }

@@ -14,12 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
-
-
-
-
-@interface FRSStory : NSManagedObject<FRSManagedObject>
+@interface FRSStory : NSManagedObject <FRSManagedObject>
 
 @property (nonatomic, retain) NSNumber *galleryCount;
 @property (strong, nonatomic, retain) NSDictionary *curatorDict;
@@ -27,9 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) FRSUser *creator;
 // Insert code here to declare functionality of your managed object subclass
 
--(void)configureWithDictionary:(NSDictionary *)dict;
--(NSDictionary *)jsonObject;
--(NSInteger)heightForStory;
+- (void)configureWithDictionary:(NSDictionary *)dict;
+- (NSDictionary *)jsonObject;
+- (NSInteger)heightForStory;
 @end
 
 NS_ASSUME_NONNULL_END

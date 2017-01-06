@@ -12,9 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FRSNotification : NSManagedObject<FRSManagedObject>
-
-
+@interface FRSNotification : NSManagedObject <FRSManagedObject>
 
 // Insert code here to declare functionality of your managed object subclass
 

@@ -10,23 +10,20 @@
 
 @implementation UIImage (PHAsset)
 
-+ (UIImage *)imageFromAsset:(PHAsset *)asset
-{
++ (UIImage *)imageFromAsset:(PHAsset *)asset {
 
-//    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(300, 300) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * result, NSDictionary * info) {
-//    
-//        return result;
-//    
-//    }];
-    
-    return  nil;
-
-}
-
-+ (UIImage *)fullResImageFromAsset:(PHAsset *)asset{
+    //    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(300, 300) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * result, NSDictionary * info) {
+    //
+    //        return result;
+    //
+    //    }];
 
     return nil;
+}
 
++ (UIImage *)fullResImageFromAsset:(PHAsset *)asset {
+
+    return nil;
 }
 
 @end

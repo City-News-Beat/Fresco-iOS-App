@@ -7,30 +7,30 @@
 //
 
 #if __has_feature(modules)
-	@import Foundation;
-	@import Security;
+@import Foundation;
+@import Security;
 #else
-	#import <Foundation/Foundation.h>
-	#import <Security/Security.h>
+#import <Foundation/Foundation.h>
+#import <Security/Security.h>
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
 
 #if __IPHONE_7_0 || __MAC_10_9
-	// Keychain synchronization available at compile time
-	#define SAMKEYCHAIN_SYNCHRONIZATION_AVAILABLE 1
+// Keychain synchronization available at compile time
+#define SAMKEYCHAIN_SYNCHRONIZATION_AVAILABLE 1
 #endif
 
 #if __IPHONE_3_0 || __MAC_10_9
-	// Keychain access group available at compile time
-	#define SAMKEYCHAIN_ACCESS_GROUP_AVAILABLE 1
+// Keychain access group available at compile time
+#define SAMKEYCHAIN_ACCESS_GROUP_AVAILABLE 1
 #endif
 
 #ifdef SAMKEYCHAIN_SYNCHRONIZATION_AVAILABLE
 typedef NS_ENUM(NSUInteger, SAMKeychainQuerySynchronizationMode) {
-	SAMKeychainQuerySynchronizationModeAny,
-	SAMKeychainQuerySynchronizationModeNo,
-	SAMKeychainQuerySynchronizationModeYes
+    SAMKeychainQuerySynchronizationModeAny,
+    SAMKeychainQuerySynchronizationModeNo,
+    SAMKeychainQuerySynchronizationModeYes
 };
 #endif
 
@@ -73,7 +73,6 @@ typedef NS_ENUM(NSUInteger, SAMKeychainQuerySynchronizationMode) {
  */
 @property (nonatomic, copy, nullable) NSString *password;
 
-
 ///------------------------
 /// @name Saving & Deleting
 ///------------------------
@@ -96,7 +95,6 @@ typedef NS_ENUM(NSUInteger, SAMKeychainQuerySynchronizationMode) {
  @return `YES` if saving was successful, `NO` otherwise.
  */
 - (BOOL)deleteItem:(NSError **)error;
-
 
 ///---------------
 /// @name Fetching
@@ -125,7 +123,6 @@ typedef NS_ENUM(NSUInteger, SAMKeychainQuerySynchronizationMode) {
  @return `YES` if fetching was successful, `NO` otherwise.
  */
 - (BOOL)fetch:(NSError **)error;
-
 
 ///-----------------------------
 /// @name Synchronization Status

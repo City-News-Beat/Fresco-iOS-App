@@ -10,16 +10,15 @@
 
 @implementation FRSUserDefaults
 
-+(instancetype)standardUserDefaults {
++ (instancetype)standardUserDefaults {
     static FRSUserDefaults *defaults = nil;
     static dispatch_once_t onceToken;
-    
+
     dispatch_once(&onceToken, ^{
-        defaults = [[FRSUserDefaults alloc] init];
+      defaults = [[FRSUserDefaults alloc] init];
     });
-    
+
     return defaults;
 }
-
 
 @end

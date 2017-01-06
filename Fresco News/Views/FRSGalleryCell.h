@@ -11,8 +11,7 @@
 
 @class FRSGallery;
 
-@interface FRSGalleryCell : UITableViewCell <FRSGalleryViewDelegate>
-{
+@interface FRSGalleryCell : UITableViewCell <FRSGalleryViewDelegate> {
     BOOL hasPlayed;
 }
 @property (strong, nonatomic) FRSGalleryView *galleryView;
@@ -24,9 +23,9 @@
 @property (weak, nonatomic) UINavigationController *navigationController;
 @property (weak, nonatomic) id<FRSGalleryViewDelegate> delegate;
 @property BOOL hasVideoAsFirstPost;
--(void)clearCell;
--(void)configureCell;
--(void)offScreen;
--(void)play;
--(void)pause;
+- (void)clearCell;
+- (void)configureCell;
+- (void)offScreen;
+- (void)play;
+- (void)pause;
 @end

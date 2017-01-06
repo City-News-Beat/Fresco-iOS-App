@@ -240,7 +240,6 @@ static NSString *imageTile = @"ImageTile";
     self.uploadViewController.players = nil;
     self.uploadViewController.content = selectedAssets;
     [self.navigationController pushViewController:self.uploadViewController animated:YES];
-    NSLog(@"(FileVC) ASSETS: %@", self.uploadViewController.content);
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
@@ -410,9 +409,7 @@ static NSString *imageTile = @"ImageTile";
 //    [self shouldShowStatusBar:NO animated:YES];
 }
 
--(void)filesLoaded {
-    NSLog(@"permission granted");
-    
+-(void)filesLoaded {    
     if ([fileLoader numberOfAssets] == 0) {
         return;
     }

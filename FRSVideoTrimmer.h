@@ -19,25 +19,23 @@
 
 typedef void (^TrimCompletion)(NSURL *originalURL, NSURL *destinationURL, NSError *error);
 
-@interface FRSVideoTrimmer : NSObject
-{
-    
+@interface FRSVideoTrimmer : NSObject {
 }
 
 // base method
--(void)trimAsset:(AVAsset *)asset startTime:(CMTime)startTime endTime:(CMTime)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion;
+- (void)trimAsset:(AVAsset *)asset startTime:(CMTime)startTime endTime:(CMTime)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion;
 
 // convenience methods
--(void)trimAsset:(AVAsset *)asset startSeconds:(float)startTime endSeconds:(float)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion; // for use with float time values
+- (void)trimAsset:(AVAsset *)asset startSeconds:(float)startTime endSeconds:(float)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion; // for use with float time values
 
--(void)trimPHAsset:(PHAsset *)asset startTime:(CMTime)startTime endTime:(CMTime)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion; // for use with PHAsset
+- (void)trimPHAsset:(PHAsset *)asset startTime:(CMTime)startTime endTime:(CMTime)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion; // for use with PHAsset
 
--(void)trimPHAsset:(PHAsset *)asset startSeconds:(float)startTime endSeconds:(float)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion; // for use with PHAsset AND float time values
+- (void)trimPHAsset:(PHAsset *)asset startSeconds:(float)startTime endSeconds:(float)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion; // for use with PHAsset AND float time values
 
--(void)trimAssetAtURL:(NSURL *)startURL startTime:(CMTime)startTime endTime:(CMTime)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion; // for use with a URL
+- (void)trimAssetAtURL:(NSURL *)startURL startTime:(CMTime)startTime endTime:(CMTime)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion; // for use with a URL
 
--(void)trimAssetAtURL:(NSURL *)startURL startSeconds:(float)startTime endSeconds:(float)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion; // for use with a URL AND float time values
+- (void)trimAssetAtURL:(NSURL *)startURL startSeconds:(float)startTime endSeconds:(float)endTime toURL:(NSURL *)url withCallback:(TrimCompletion)completion; // for use with a URL AND float time values
 
--(UIView *)previewImagesForAsset:(AVAsset *)asset;
+- (UIView *)previewImagesForAsset:(AVAsset *)asset;
 
 @end

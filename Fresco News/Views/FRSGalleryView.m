@@ -22,10 +22,11 @@
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
+#import "FRSDualUserListViewController.h"
 
 #define TEXTVIEW_TOP_PAD 12
 
-@interface FRSGalleryView() <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
+@interface FRSGalleryView () <UIScrollViewDelegate, FRSContentActionBarDelegate, UITextViewDelegate>
 @property (nonatomic, retain) UIView *topLine;
 @property (nonatomic, retain) UIView *bottomLine;
 @property (nonatomic, retain) UIView *borderLine;
@@ -39,85 +40,82 @@
 
 @implementation FRSGalleryView
 
+- (void)loadGallery:(FRSGallery *)gallery {
 
--(void)loadGallery:(FRSGallery *)gallery {
-    
     if ([self.gallery.uid isEqualToString:gallery.uid]) {
         self.gallery = gallery;
         [self updateSocial];
         [self checkOwner];
         return;
     }
-    
+
     _hasTapped = FALSE;
-    
+
     for (FRSPlayer *player in self.players) {
         if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
             [player.currentItem cancelPendingSeeks];
             [player.currentItem.asset cancelLoading];
         }
     }
-    
+
     for (AVPlayerLayer *layer in self.playerLayers) {
         [layer removeFromSuperlayer];
     }
-    
+
     for (UIImageView *imageView in self.imageViews) {
         imageView.image = Nil;
     }
-    
-    
+
     self.players = Nil;
     self.videoPlayer = Nil;
     self.playerLayers = Nil;
-    
+
     self.gallery = gallery;
-    
+
     self.players = [[NSMutableArray alloc] init];
     self.playerLayers = [[NSMutableArray alloc] init];
-    
+
     self.clipsToBounds = NO;
     self.gallery = gallery;
     self.orderedPosts = [gallery.posts allObjects];
-    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE]]];
-    
+    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:TRUE] ]];
+
     self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight]);
     self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
     self.scrollView.clipsToBounds = YES;
     [self updateLabels];
-    
+
     self.pageControl.numberOfPages = self.gallery.posts.count;
     [self.pageControl setCurrentPage:0];
     [self.pageControl sizeToFit];
-    
-    self.pageControl.frame = CGRectMake(self.frame.size.width - ((self.gallery.posts.count) *16) - 16, self.scrollView.frame.size.height - 15 - 8, (self.gallery.posts.count) *16, 8);
-    
+
+    self.pageControl.frame = CGRectMake(self.frame.size.width - ((self.gallery.posts.count) * 16) - 16, self.scrollView.frame.size.height - 15 - 8, (self.gallery.posts.count) * 16, 8);
+
     [self updateUser];
-    
+
     self.topLine.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5);
     self.bottomLine.frame = CGRectMake(0, self.scrollView.frame.size.height - 0.5, self.scrollView.frame.size.width, 0.5);
     self.clockIV.center = self.pageControl.center;
-    
+
     self.clockIV.frame = CGRectMake(21, self.clockIV.frame.origin.y, 16, 16);
     [self.locationIV setOriginWithPoint:CGPointMake(self.locationIV.frame.origin.x, self.clockIV.frame.origin.y - self.locationIV.frame.size.height - 6)];
-    
+
     // RIGHT HUR
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
     [self.profileIV setContentMode:UIViewContentModeScaleAspectFill];
-    NSLog(@"AVATAR: %@", self.profileIV.image);
-    
+
     self.captionLabel.text = self.gallery.caption;
-    
-    if ([self.delegate shouldHaveTextLimit]){
+
+    if ([self.delegate shouldHaveTextLimit]) {
         self.captionLabel.numberOfLines = 6;
     } else {
         self.captionLabel.numberOfLines = 0;
     }
-    
+
     [self.captionLabel sizeToFit];
-    
+
     [self.captionLabel setFrame:CGRectMake(16, [self imageViewHeight] + TEXTVIEW_TOP_PAD, self.scrollView.frame.size.width - 32, self.captionLabel.frame.size.height)];
-    
+
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
     CGRect timeFrame = self.timeLabel.frame;
@@ -125,7 +123,7 @@
     self.timeLabel.frame = timeFrame;
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
-    
+
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
@@ -138,20 +136,20 @@
     [self updateScrollView];
     [self updateSocial];
     [self adjustHeight];
-    
+
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
-    
+
     [self checkOwner];
-    
+
     [self.actionBar.actionButton setTitle:[self titleForActionButton] forState:UIControlStateNormal];
     [self.actionBar.actionButton.titleLabel sizeToFit];
-    
+
     [self.actionBar actionButtonTitleNeedsUpdate];
 }
 
--(void)checkOwner {
+- (void)checkOwner {
     /*NSString *ownerID = self.gallery.creator.uid;
     NSString *userID = [[FRSAPIClient sharedClient] authenticatedUser].uid;
     
@@ -162,164 +160,168 @@
     else {
         [self.actionBar setCurrentUser:FALSE];
     }*/
-    
-    NSLog(@"self.gallery.creator = %@", self.gallery.creator);
-    NSLog(@"self.gallery.creator.uid = %@", self.gallery.creator.uid);
-    NSLog(@"authenticatedUser.uid = %@", [[[FRSAPIClient sharedClient] authenticatedUser] uid]);
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
-                
-        if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
-            [self.actionBar setCurrentUser:YES];
-        } else {
-            [self.actionBar setCurrentUser:NO];
-        }
+
+      if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+          [self.actionBar setCurrentUser:YES];
+      } else {
+          [self.actionBar setCurrentUser:NO];
+      }
     });
 }
 
--(void)updateUser {
+- (void)updateUser {
     FRSPost *firstPost = (FRSPost *)[self.orderedPosts firstObject];
-    
+
     if (firstPost.creator.profileImage != Nil && ![firstPost.creator.profileImage isEqual:[NSNull null]] && [[firstPost.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![firstPost.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:firstPost.creator.profileImage].absoluteString.length > 1) {
         //NSLog(@"aaAvatar: %@",firstPost.creator.profileImage);
-        NSString *smallAvatar = [firstPost.creator.profileImage stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
+        NSString *smallAvatar = [firstPost.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
 
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
-    }
-    else {
+    } else {
         [self.profileIV setImage:Nil];
         [self.nameLabel setOriginWithPoint:CGPointMake(0, self.nameLabel.frame.origin.y)];
     }
-    
 }
 
--(void)updateSocial {
+- (void)updateSocial {
     NSNumber *numLikes = [self.gallery valueForKey:@"likes"];
     BOOL isLiked = [[self.gallery valueForKey:@"liked"] boolValue];
-    
+
     NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
     BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
     
    // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
     
-    [self.actionBar handleHeartState:isLiked];
-    [self.actionBar handleHeartAmount:[numLikes intValue]];
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
-    
+    [self.actionBar handleHeartState:isLiked];
+    [self.actionBar handleHeartAmount:[numLikes intValue]];
+
     [self.repostLabel removeFromSuperview];
     self.repostLabel = Nil;
     [self.repostImageView removeFromSuperview];
     self.repostImageView = Nil;
-    
+
     if ([self.gallery valueForKey:@"reposted_by"] != nil && ![[self.gallery valueForKey:@"reposted_by"] isEqualToString:@""]) {
-        
+
         [self configureRepostWithName:[self.gallery valueForKey:@"reposted_by"]];
     }
 }
 
--(void)updateScrollView {
+- (void)updateScrollView {
     if (self.scrollView.contentOffset.x >= 0) {
         [self.scrollView scrollRectToVisible:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height) animated:NO];
         [self scrollViewDidScroll:self.scrollView];
     }
-    
+
     for (UIImageView *imageView in self.imageViews) {
         [imageView setImage:Nil];
     }
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self configureImageViews];
+      [self configureImageViews];
     });
 }
 
+-(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    [self.delegate.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+    FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
+    vc.didTapRepostLabel = YES;
+    [self.delegate.navigationController pushViewController:vc animated:YES];
+}
+
 -(void)handleActionButtonTapped {
+
     // idk why dan made this method life is a mystery
-    
+
     if (self.readMoreBlock) {
         self.readMoreBlock(Nil);
     }
 }
 
--(void)contentActionbarDidSelectShareButton:(id)sender {
+- (void)contentActionbarDidSelectShareButton:(id)sender {
     // show actions sheet
-    self.shareBlock(@[[@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid]]);
+    self.shareBlock(@[ [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid] ]);
 }
 
--(void)handleLike:(FRSContentActionsBar *)actionBar {
+- (void)handleLike:(FRSContentActionsBar *)actionBar {
     /*if (![[FRSAPIClient sharedClient] authenticatedUser]) {
         return;
     }*/
-    
+
     NSInteger likes = [[self.gallery valueForKey:@"likes"] integerValue];
 
     if ([[self.gallery valueForKey:@"liked"] boolValue]) {
-        [[FRSAPIClient sharedClient] unlikeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            if (error) {
-                [actionBar handleHeartState:TRUE];
-                [actionBar handleHeartAmount:likes];
-                if (error.code != 101) {
-                    self.gallery.likes = @([self.gallery.likes intValue] - 1);
-                    
-                    @try {
-                        self.gallery.numberOfLikes--;
-                    }
-                    @catch(NSException *e) {
-                        
-                    }
+        [[FRSAPIClient sharedClient] unlikeGallery:self.gallery
+                                        completion:^(id responseObject, NSError *error) {
+                                          if (error) {
+                                              [actionBar handleHeartState:TRUE];
+                                              [actionBar handleHeartAmount:likes];
+                                              if (error.code != 101) {
+                                                  self.gallery.likes = @([self.gallery.likes intValue] - 1);
 
-                }
-            }
-        }];
+                                                  @try {
+                                                      self.gallery.numberOfLikes--;
+                                                  }
+                                                  @catch (NSException *e) {
+                                                  }
+                                              }
+                                          }
+                                        }];
 
     } else {
         [[FRSAPIClient sharedClient] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
             if (error) {
                 [actionBar handleHeartState:FALSE];
                 [actionBar handleHeartAmount:likes];
-                if (error.code != 101) {
-                    self.gallery.likes = @([self.gallery.likes intValue] + 1);
-                    @try {
-                        self.gallery.numberOfLikes++;
-                    }
-                    @catch(NSException *e) {
-                        
-                    }
-                    
+                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                NSInteger responseCode = response.statusCode;
+                
+                // 400 status code means the user has already liked the gallery, should soft fail.
+                if (error.code != 101 && responseCode != 400) {
+                    self.gallery.numberOfLikes ++;
                 }
             }
         }];
     }
 }
 
+
 -(void)handleRepost:(FRSContentActionsBar *)actionBar {
+
     /*if (![[FRSAPIClient sharedClient] authenticatedUser]) {
         return;
     }*/
-    
+
     NSInteger reposts = [[self.gallery valueForKey:@"reposts"] integerValue];
     if ([[self.gallery valueForKey:@"reposted"] boolValue]) {
-        [[FRSAPIClient sharedClient] unrepostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            if (error) {
-                [actionBar handleRepostState:TRUE];
-                [actionBar handleRepostAmount:reposts];
-                if (error.code != 101) {
-                    self.gallery.numberOfReposts--;
-                }
-            }
-        }];
+        [[FRSAPIClient sharedClient] unrepostGallery:self.gallery
+                                          completion:^(id responseObject, NSError *error) {
+                                            if (error) {
+                                                [actionBar handleRepostState:TRUE];
+                                                [actionBar handleRepostAmount:reposts];
+                                                if (error.code != 101) {
+                                                    self.gallery.numberOfReposts--;
+                                                }
+                                            }
+                                          }];
     } else {
         [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
             if (error) {
                 [actionBar handleRepostState:FALSE];
                 [actionBar handleRepostAmount:reposts];
-                if (error.code != 101) {
-                    
-                    NSLog(@"GALLERY: %@", self.gallery);
-                    NSLog(@"CREATOR: %@", self.gallery.creator);
-                    NSLog(@"UID: %@", self.gallery.creator.uid);
-
+                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                NSInteger responseCode = response.statusCode;
+                
+                // 400 status code means the user has already reposted the gallery, should soft fail.
+                if (error.code != 101 && responseCode != 400) {
                     self.gallery.numberOfReposts++;
                 }
             }
@@ -327,22 +329,22 @@
     }
 }
 
--(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate{
+- (instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryViewDelegate>)delegate {
     self = [super initWithFrame:frame];
-    if (self){
+    if (self) {
         self.delegate = delegate;
         self.gallery = gallery;
         NSMutableArray *posts = [[NSMutableArray alloc] init];
-        
+
         for (FRSPost *post in self.gallery.posts) {
             [posts addObject:post];
         }
-        
+
         NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES];
         [posts sortUsingDescriptors:[NSArray arrayWithObject:sort]];
-        
+
         self.orderedPosts = posts;
-        self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
+        self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
 
         [self configureUI];
         [self updateSocial];
@@ -350,30 +352,29 @@
     return self;
 }
 
--(void)contentTap:(UITapGestureRecognizer *)sender {
-    NSLog(@"TAP");
+- (void)contentTap:(UITapGestureRecognizer *)sender {
 }
 
--(void)configureUI{
+- (void)configureUI {
     self.backgroundColor = [UIColor frescoBackgroundColorLight];
-    
+
     [self configureScrollView]; //
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self configureImageViews]; 
+      [self configureImageViews];
     });
     // these three will be wrapped in carousel
-    [self configurePageControl];//
-    
+    [self configurePageControl]; //
+
     [self configureGalleryInfo]; // this will stay similar
-    
+
     [self configureCaptionLabel]; // this will stay similar
 
     [self configureActionsBar]; // this will stay similar
-    
+
     [self adjustHeight]; // this will stay similar, but called every time we change our represented gallery
 }
 
--(void)configureScrollView{
+- (void)configureScrollView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, [self imageViewHeight])];
     self.scrollView.showsVerticalScrollIndicator = NO;
     self.scrollView.backgroundColor = [UIColor frescoBackgroundColorLight];
@@ -383,8 +384,7 @@
     self.scrollView.contentSize = CGSizeMake(self.gallery.posts.count * self.frame.size.width, self.scrollView.frame.size.height);
     self.scrollView.delaysContentTouches = FALSE;
     [self addSubview:self.scrollView];
-    
-    
+
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playerTap:)];
     tapGesture.numberOfTapsRequired = 1;
     tapGesture.numberOfTouchesRequired = 1;
@@ -392,245 +392,238 @@
     [self addGestureRecognizer:tapGesture];
 }
 
--(void)configureImageViews{
+- (void)configureImageViews {
     self.players = [[NSMutableArray alloc] init];
     self.imageViews = [NSMutableArray new];
-    
+
     [self.nameLabel sizeToFit];
-    
-    for (NSInteger i = 0; i < self.gallery.posts.count; i++){
-            
+
+    for (NSInteger i = 0; i < self.gallery.posts.count; i++) {
+
         FRSPost *post = self.orderedPosts[i];
-            
+
         NSInteger xOrigin = i * self.frame.size.width;
         FRSScrollViewImageView *imageView = [[FRSScrollViewImageView alloc] initWithFrame:CGRectMake(xOrigin, 0, self.frame.size.width, [self imageViewHeight])];
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.backgroundColor = [UIColor whiteColor];
         imageView.clipsToBounds = YES;
         imageView.indexInScrollView = i;
-            
+
         [self.imageViews addObject:imageView];
         [self.scrollView addSubview:imageView];
 
-            if (i==0) {
-                [self loadImage:post.imageUrl forImageView:imageView];
+        if (i == 0) {
+            [self loadImage:post.imageUrl forImageView:imageView];
 
-                if (post.videoUrl != Nil) {
-                    // videof
-                    // set up FRSPlayer
-                    // add AVPlayerLayer
-                    NSLog(@"TOP LEVEL PLAYER");
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.players addObject:[self setupPlayerForPost:post play:FALSE]];
-                        
-                        if ([self.players[0] respondsToSelector:@selector(container)]) {
-                            [self.scrollView bringSubviewToFront:[self.players[0] container]];
-                        }
-                    });
-                    [self configureMuteIcon];
-                }
-                else {
-                    [self.players addObject:imageView];
-                }
+            if (post.videoUrl != Nil) {
+                // videof
+                // set up FRSPlayer
+                // add AVPlayerLayer
+                dispatch_async(dispatch_get_main_queue(), ^{
+                  [self.players addObject:[self setupPlayerForPost:post play:FALSE]];
+
+                  if ([self.players[0] respondsToSelector:@selector(container)]) {
+                      [self.scrollView bringSubviewToFront:[self.players[0] container]];
+                  }
+                });
+                [self configureMuteIcon];
+            } else {
+                [self.players addObject:imageView];
             }
-           
-            imageView.userInteractionEnabled = YES;
+        }
+
+        imageView.userInteractionEnabled = YES;
     }
-    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        if (self.imageViews.count > 1) {
-//            UIImageView *nextImage = self.imageViews[1];
-//            FRSPost *nextPost = self.orderedPosts[1];
-//            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
-//        }
-//    });
+
+    //    dispatch_async(dispatch_get_main_queue(), ^{
+    //        if (self.imageViews.count > 1) {
+    //            UIImageView *nextImage = self.imageViews[1];
+    //            FRSPost *nextPost = self.orderedPosts[1];
+    //            [nextImage hnk_setImageFromURL:[NSURL URLWithString:nextPost.imageUrl] placeholder:nil];
+    //        }
+    //    });
 
     if (!self.topLine) {
         self.topLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, 0.5)];
         self.topLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:self.topLine];
-        
+
         self.bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.scrollView.frame.size.height - 0.5, self.scrollView.frame.size.width, 0.5)];
         self.bottomLine.backgroundColor = [UIColor colorWithWhite:0 alpha:0.12];
         [self addSubview:self.bottomLine];
     }
 }
 
--(void)removeFromSuperview {
-    
+- (void)removeFromSuperview {
+
     for (FRSPlayer *player in self.players) {
         if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
             [player.currentItem cancelPendingSeeks];
             [player.currentItem.asset cancelLoading];
         }
     }
-    
+
     for (AVPlayerLayer *layer in self.playerLayers) {
         [layer removeFromSuperlayer];
     }
-    
+
     for (UIImageView *imageView in self.imageViews) {
         imageView.image = Nil;
     }
-    
-    
+
     self.players = Nil;
     self.videoPlayer = Nil;
     self.playerLayers = Nil;
-    
+
     [super removeFromSuperview];
 }
 
--(void)dealloc {
+- (void)dealloc {
     for (FRSPlayer *player in self.players) {
         if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
             [player.currentItem cancelPendingSeeks];
             [player.currentItem.asset cancelLoading];
         }
     }
-    
+
     self.players = Nil;
     self.videoPlayer = Nil;
 }
 
--(FRSPlayer *)setupPlayerForPost:(FRSPost *)post play:(BOOL)play {
+- (FRSPlayer *)setupPlayerForPost:(FRSPost *)post play:(BOOL)play {
     if (!_playerLayers) {
         _playerLayers = [[NSMutableArray alloc] init];
     }
-    
-    [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryAmbient error:nil];
 
-    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
+
     FRSPlayer *videoPlayer;
-    
+
     if (!play) {
         videoPlayer = [[FRSPlayer alloc] init];
-    }
-    else {
+    } else {
         videoPlayer = [FRSPlayer playerWithURL:[NSURL URLWithString:post.videoUrl]];
     }
-    
+
     videoPlayer.hasEstablished = play;
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
-        AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-        videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(playerItemDidReachEnd:)
-                                                     name:AVPlayerItemDidPlayToEndTimeNotification
-                                                   object:[videoPlayer currentItem]];
-        
-        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
-        
-        playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
-        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
-        playerLayer.opaque = FALSE;
-        
-        UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
-        container.backgroundColor = [UIColor clearColor];
-        
-        videoPlayer.container = container;
-        playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
-        [_playerLayers addObject:playerLayer];
-        
-        if (play) {
-            [container.layer insertSublayer:playerLayer atIndex:1000];
-        }
-        
-        [self.scrollView addSubview:container];
-        [self.scrollView bringSubviewToFront:container];
-        
-        [self configureMuteIcon];
+      AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+      videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+      [[NSNotificationCenter defaultCenter] addObserver:self
+                                               selector:@selector(playerItemDidReachEnd:)
+                                                   name:AVPlayerItemDidPlayToEndTimeNotification
+                                                 object:[videoPlayer currentItem]];
+
+      NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+
+      playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
+      playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+      playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+      playerLayer.opaque = FALSE;
+
+      UIView *container = [[UIView alloc] initWithFrame:playerLayer.frame];
+      container.backgroundColor = [UIColor clearColor];
+
+      videoPlayer.container = container;
+      playerLayer.frame = CGRectMake(0, 0, playerLayer.frame.size.width, playerLayer.frame.size.height);
+      [_playerLayers addObject:playerLayer];
+
+      if (play) {
+          [container.layer insertSublayer:playerLayer atIndex:1000];
+      }
+
+      [self.scrollView addSubview:container];
+      [self.scrollView bringSubviewToFront:container];
+
+      [self configureMuteIcon];
     });
-    
+
     videoPlayer.muted = TRUE;
     videoPlayer.wasMuted = FALSE;
-    
+
     __weak typeof(self) weakSelf = self;
-    
+
     videoPlayer.playBlock = ^(BOOL playing, FRSPlayer *player) {
-        [weakSelf handlePlay:playing player:player];
+      [weakSelf handlePlay:playing player:player];
     };
-    
+
     return videoPlayer;
 }
 
--(void)handlePlay:(BOOL)play player:(FRSPlayer *)player {
-//    if (play) {
-//        for (FRSPlayer *potential in self.players) {
-//            if (potential != player && [[potential class] isSubclassOfClass:[FRSPlayer class]]) {
-//                [potential pause];
-//            }
-//        }
-//        
-//        if (self.delegate) {
-//            [self.delegate playerWillPlay:player];
-//        }
-//    }
+- (void)handlePlay:(BOOL)play player:(FRSPlayer *)player {
+    //    if (play) {
+    //        for (FRSPlayer *potential in self.players) {
+    //            if (potential != player && [[potential class] isSubclassOfClass:[FRSPlayer class]]) {
+    //                [potential pause];
+    //            }
+    //        }
+    //
+    //        if (self.delegate) {
+    //            [self.delegate playerWillPlay:player];
+    //        }
+    //    }
 }
 
--(void)playerTap:(UITapGestureRecognizer *)tap {
-        CGPoint location = [tap locationInView:self];
-        
-        if (location.y > _scrollView.frame.size.height) {
-            return;
-        }
-        
-        NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
-        FRSPlayer *player = self.players[page];
-        
-        if (![[player class] isSubclassOfClass:[FRSPlayer class]]) {
-            return;
-        }
-        
+- (void)playerTap:(UITapGestureRecognizer *)tap {
+    CGPoint location = [tap locationInView:self];
+
+    if (location.y > _scrollView.frame.size.height) {
+        return;
+    }
+
+    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width / 2) / self.scrollView.frame.size.width;
+    FRSPlayer *player = self.players[page];
+
+    if (![[player class] isSubclassOfClass:[FRSPlayer class]]) {
+        return;
+    }
+
+    player.muted = FALSE;
+
+    if (self.muteImageView.alpha == 1 && player.rate == 0.0) {
+        self.muteImageView.alpha = 0;
+        [player play];
+        return;
+    }
+
+    if (player.muted) {
         player.muted = FALSE;
-        
-        if (self.muteImageView.alpha == 1 && player.rate == 0.0) {
-            self.muteImageView.alpha = 0;
-            [player play];
-            return;
-        }
-        
-        if (player.muted) {
-            player.muted = FALSE;
-            [player play];
-            return;
-        }
-        else if (self.muteImageView.alpha == 1) {
-            self.muteImageView.alpha = 0;
-            return;
-        }
-        
-        if (player.rate == 0.0) {
-            [player play];
-        } else {
-            [player pause];
-            _hasTapped = TRUE;
-        }
+        [player play];
+        return;
+    } else if (self.muteImageView.alpha == 1) {
+        self.muteImageView.alpha = 0;
+        return;
+    }
+
+    if (player.rate == 0.0) {
+        [player play];
+    } else {
+        [player pause];
+        _hasTapped = TRUE;
+    }
 }
 
--(void)handlePhotoTap:(NSInteger)index {
-    
+- (void)handlePhotoTap:(NSInteger)index {
 }
 
--(void)playerItemDidReachEnd:(NSNotification *)notification {
+- (void)playerItemDidReachEnd:(NSNotification *)notification {
     [self.videoPlayer seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
     [self.videoPlayer play];
 }
 
--(void)configureMuteIcon {
-    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+- (void)configureMuteIcon {
+    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width / 2) / self.scrollView.frame.size.width;
     if (!self.muteImageView) {
         self.muteImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mute"]];
         self.muteImageView.alpha = 0;
         [self.scrollView addSubview:self.muteImageView];
     }
-    
+
     if ([self currentPageIsVideo]) {
 
         FRSPlayer *player = self.players[page];
-        
+
         if (player.muted == FALSE) {
             return;
         }
@@ -641,60 +634,60 @@
     }
 }
 
--(BOOL)currentPageIsVideo {
-    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
+- (BOOL)currentPageIsVideo {
+    NSInteger page = (self.scrollView.contentOffset.x + self.frame.size.width / 2) / self.scrollView.frame.size.width;
     return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
 }
 
--(BOOL)pageIsVideo:(NSInteger)page {
+- (BOOL)pageIsVideo:(NSInteger)page {
     return (self.players.count > page && [self.players[page] respondsToSelector:@selector(pause)]);
 }
--(void)configurePageControl{
+- (void)configurePageControl {
     self.pageControl = [[UIPageControl alloc] init];
     self.pageControl.numberOfPages = self.gallery.posts.count;
     self.pageControl.currentPage = 0;
     self.pageControl.userInteractionEnabled = NO;
-    
+
     self.pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
     self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:1 alpha:0.7];
-    
+
     [self.pageControl sizeToFit];
     [self.pageControl setFrame:CGRectMake(self.scrollView.frame.size.width - 16 - self.pageControl.frame.size.width, self.scrollView.frame.size.height - 15 - 8, self.pageControl.frame.size.width, 8)];
-    
+
     self.pageControl.hidesForSinglePage = YES;
-    
+
     [self addSubview:self.pageControl];
 }
 
--(void)configureGalleryInfo{
-//    [self updateLabels];
+- (void)configureGalleryInfo {
+    //    [self updateLabels];
     [self configureTimeLine];
     [self configureLocationLine];
     [self configureUserLine];
     [self updateLabels];
 }
 
--(void)configureRepostWithName:(NSString *)name {
-    
+- (void)configureRepostWithName:(NSString *)name {
+
     if (self.repostLabel == nil) {
         self.repostImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"repost-icon-white"]];
         self.repostImageView.frame = CGRectMake(16, 12, 24, 24);
         [self addSubview:self.repostImageView];
-        
+
         self.repostLabel = [[UILabel alloc] initWithFrame:CGRectMake(48, 17, self.frame.size.width - 48 - 16, 17)];
         self.repostLabel.text = [name uppercaseString];
         self.repostLabel.font = [UIFont notaBoldWithSize:15];
         self.repostLabel.textColor = [UIColor whiteColor];
         [self addShadowToLabel:self.repostLabel];
         [self addSubview:self.repostLabel];
-        
-        UIButton *repostSegueButton = [[UIButton alloc] initWithFrame:CGRectMake(self.repostLabel.frame.origin.x -60, self.repostLabel.frame.origin.y-15, self.repostLabel.frame.size.width, self.repostLabel.frame.size.height +30)];
+
+        UIButton *repostSegueButton = [[UIButton alloc] initWithFrame:CGRectMake(self.repostLabel.frame.origin.x - 60, self.repostLabel.frame.origin.y - 15, self.repostLabel.frame.size.width, self.repostLabel.frame.size.height + 30)];
         [repostSegueButton addTarget:self action:@selector(segueToSourceUser) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:repostSegueButton];
     }
 }
 
--(void)configureTimeLine{
+- (void)configureTimeLine {
     self.clockIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 16, 16)];
     self.clockIV.image = [UIImage imageNamed:@"gallery-clock"];
     self.clockIV.contentMode = UIViewContentModeCenter;
@@ -702,31 +695,31 @@
     [self.clockIV setFrame:CGRectMake(21, self.clockIV.frame.origin.y, 16, 16)];
 
     [self addSubview:self.clockIV];
-    
+
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
-    
+
     self.timeLabel = [self galleryInfoLabelWithText:[FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate] fontSize:13];
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
-    
+
     self.timeLabel.clipsToBounds = NO;
     self.timeLabel.layer.masksToBounds = NO;
-    
+
     [self addShadowToLabel:self.timeLabel];
 
     [self addSubview:self.timeLabel];
 }
 
--(void)configureLocationLine{
+- (void)configureLocationLine {
     self.locationIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 16, 16)];
     self.locationIV.image = [UIImage imageNamed:@"gallery-pin"];
     self.locationIV.contentMode = UIViewContentModeCenter;
     self.locationIV.center = self.clockIV.center;
     [self.locationIV setOriginWithPoint:CGPointMake(self.locationIV.frame.origin.x, self.clockIV.frame.origin.y - self.locationIV.frame.size.height - 6)];
     [self addSubview:self.locationIV];
-    
+
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
-    
+
     self.locationLabel = [self galleryInfoLabelWithText:post.address fontSize:13];
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
@@ -737,21 +730,23 @@
     [self addSubview:self.locationLabel];
 }
 
--(void)configureUserLine {
+- (void)configureUserLine {
     self.profileIV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
     self.profileIV.center = self.locationIV.center;
     [self.profileIV setOriginWithPoint:CGPointMake(self.profileIV.frame.origin.x, self.locationIV.frame.origin.y - self.profileIV.frame.size.height - 6)];
-    
+
     self.profileIV.layer.cornerRadius = 12;
     self.profileIV.clipsToBounds = YES;
     [self addSubview:self.profileIV];
-    
+
     FRSPost *post = [[self.gallery.posts allObjects] firstObject];
-    
-    if(post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0){
-        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@",post.creator.username] fontSize:17];;
-    }else{
-        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@",post.creator.firstName] fontSize:17];;
+
+    if (post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) {
+        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@", post.creator.username] fontSize:17];
+        ;
+    } else {
+        self.nameLabel = [self galleryInfoLabelWithText:[NSString stringWithFormat:@"%@", post.creator.firstName] fontSize:17];
+        ;
     }
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
@@ -760,24 +755,24 @@
 
     //Set frame again to avoid clipping shadow
     self.nameLabel.frame = CGRectMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y, self.frame.size.width, 30);
-    
+
     [self addShadowToLabel:self.nameLabel];
-    
+
     self.nameLabel.layer.masksToBounds = NO;
     [self addSubview:self.nameLabel];
-    
+
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            //Set user image
-            NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
-            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
+          //Set user image
+          NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
+          [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
 
-            //NSLog(@"wwAvatar: %@",post.creator.profileImage);
+          //NSLog(@"wwAvatar: %@",post.creator.profileImage);
 
-            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
-            [photoTap setNumberOfTapsRequired:1];
-            [self.profileIV setUserInteractionEnabled:YES];
-            [self.profileIV addGestureRecognizer:photoTap];
+          UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+          [photoTap setNumberOfTapsRequired:1];
+          [self.profileIV setUserInteractionEnabled:YES];
+          [self.profileIV addGestureRecognizer:photoTap];
         });
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
@@ -786,71 +781,67 @@
     [bylineTap setNumberOfTapsRequired:1];
     [self.nameLabel setUserInteractionEnabled:YES];
     [self.nameLabel addGestureRecognizer:bylineTap];
-
 }
 
--(void)updateLabels{
+- (void)updateLabels {
     if (self.orderedPosts.count == 0)
         return;
-    
+
     FRSPost *post = self.orderedPosts[self.adjustedPage];
-    
+
     FRSGallery *parent = post.gallery;
-    
-    if((post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) && ![post.creator.username isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.username class] isSubclassOfClass:[NSString class]] && post.creator.username != nil && ![post.creator.username isEqualToString:@""]){
-        self.nameLabel.text = [NSString stringWithFormat:@"@%@",post.creator.username];
-    }else if (![post.creator.firstName isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.firstName class] isSubclassOfClass:[NSString class]]){
-        self.nameLabel.text = [NSString stringWithFormat:@"%@",post.creator.firstName];
-    }
-    else {
+
+    if ((post.creator.firstName == (id)[NSNull null] || post.creator.firstName.length == 0) && ![post.creator.username isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.username class] isSubclassOfClass:[NSString class]] && post.creator.username != nil && ![post.creator.username isEqualToString:@""]) {
+        self.nameLabel.text = [NSString stringWithFormat:@"@%@", post.creator.username];
+    } else if (![post.creator.firstName isEqual:[NSNull null]] && post.creator != Nil && [[post.creator.firstName class] isSubclassOfClass:[NSString class]]) {
+        self.nameLabel.text = [NSString stringWithFormat:@"%@", post.creator.firstName];
+    } else {
         self.nameLabel.text = @"";
     }
-    
+
     if (parent.externalAccountName != nil && ![parent.externalAccountName isEqual:[NSNull null]]) {
-        
-        if ([parent.externalSource isEqualToString:@"twitter"] ) {
-            NSString *toSet = [NSString stringWithFormat:@"@%@",parent.externalAccountName];
-            
+
+        if ([parent.externalSource isEqualToString:@"twitter"]) {
+            NSString *toSet = [NSString stringWithFormat:@"@%@", parent.externalAccountName];
+
             if ([toSet length] != 1) {
                 self.nameLabel.text = toSet;
             }
-            
+
         } else {
             self.nameLabel.text = parent.externalAccountName;
-            
         }
-        
     }
-    
+
     self.locationLabel.text = post.address;
     self.timeLabel.text = [FRSDateFormatter dateStringGalleryFormatFromDate:post.createdDate];
-    
+
     self.nameLabel.numberOfLines = 1;
     [self.nameLabel sizeToFit];
     self.nameLabel.center = self.profileIV.center;
     [self.nameLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.nameLabel.frame.origin.y)];
-    
+
     //[self.locationLabel sizeToFit];
     self.locationLabel.center = self.locationIV.center;
     [self.locationLabel setOriginWithPoint:CGPointMake(self.timeLabel.frame.origin.x, self.locationLabel.frame.origin.y)];
     [self.timeLabel sizeToFit];
-    
+
     self.timeLabel.center = self.clockIV.center;
     [self.timeLabel setOriginWithPoint:CGPointMake(self.clockIV.frame.origin.x + self.clockIV.frame.size.width + 13, self.timeLabel.frame.origin.y)];
     CGRect timeFrame = self.timeLabel.frame;
     timeFrame.size.width = 100;
     self.timeLabel.frame = timeFrame;
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString: @"/images" withString:@"/images/200"];
-            [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
-            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
-            [photoTap setNumberOfTapsRequired:1];
-            [self.profileIV setUserInteractionEnabled:YES];
-            [self.profileIV addGestureRecognizer:photoTap];
+          NSString *smallAvatar = [post.creator.profileImage stringByReplacingOccurrencesOfString:@"/images" withString:@"/images/200"];
+          [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:smallAvatar]];
+          UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(segueToUserProfile:)];
+          [photoTap setNumberOfTapsRequired:1];
+          [self.profileIV setUserInteractionEnabled:YES];
+          [self.profileIV addGestureRecognizer:photoTap];
         });
-        
+
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
         //[self.nameLabel setUserInteractionEnabled:NO];
@@ -866,31 +857,31 @@
     [self addShadowToLabel:self.timeLabel];
 }
 
--(void)addShadowToLabel:(UILabel*)label {
+- (void)addShadowToLabel:(UILabel *)label {
     if (!label.text) {
         return;
     }
-    
-    NSMutableAttributedString* attString = [[NSMutableAttributedString alloc] initWithString:label.text];
+
+    NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:label.text];
     NSRange range = NSMakeRange(0, [attString length]);
-    
+
     [attString addAttribute:NSFontAttributeName value:label.font range:range];
     [attString addAttribute:NSForegroundColorAttributeName value:label.textColor range:range];
-    
+
     NSShadow *shadow = [[NSShadow alloc] init];
     shadow.shadowColor = [UIColor colorWithWhite:0 alpha:0.2];
     shadow.shadowOffset = CGSizeMake(0, 1.5);
     shadow.shadowBlurRadius = 2;
     [attString addAttribute:NSShadowAttributeName value:shadow range:range];
-    
+
     label.attributedText = attString;
-    
+
     label.clipsToBounds = NO;
     label.layer.masksToBounds = NO;
 }
 
--(UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize {
-    
+- (UILabel *)galleryInfoLabelWithText:(NSString *)text fontSize:(NSInteger)fontSize {
+
     UILabel *label = [UILabel new];
     label.clipsToBounds = NO;
     label.layer.masksToBounds = NO;
@@ -904,7 +895,7 @@
     label.adjustsFontSizeToFitWidth = YES;
     label.numberOfLines = 1;
 
-   // [label sizeToFit];
+    // [label sizeToFit];
     CGRect labelFrame = label.frame;
     labelFrame.size.height = 20;
     labelFrame.size.width = [UIScreen mainScreen].bounds.size.width;
@@ -912,186 +903,174 @@
     return label;
 }
 
--(void)configureCaptionLabel{
+- (void)configureCaptionLabel {
     self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, self.scrollView.frame.size.height, self.scrollView.frame.size.width - 32, 0)];
     self.captionLabel.textColor = [UIColor frescoDarkTextColor];
     self.captionLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.captionLabel.text = self.gallery.caption;
-    
-    if ([self.delegate shouldHaveTextLimit]){
+
+    if ([self.delegate shouldHaveTextLimit]) {
         self.captionLabel.numberOfLines = 6;
     } else {
         self.captionLabel.numberOfLines = 0;
     }
-    
+
     [self.captionLabel sizeToFit];
-    
+
     [self.captionLabel setFrame:CGRectMake(16, self.scrollView.frame.size.height + TEXTVIEW_TOP_PAD, self.scrollView.frame.size.width - 32, self.captionLabel.frame.size.height)];
-    
+
     [self addSubview:self.captionLabel];
 }
 
--(void)configureActionsBar{
-    
+- (void)configureActionsBar {
+
     if (![self.delegate shouldHaveActionBar]) {
         self.actionBar = [[FRSContentActionsBar alloc] initWithFrame:CGRectZero];
-    }
-    else{
+    } else {
         self.actionBar = [[FRSContentActionsBar alloc] initWithOrigin:CGPointMake(0, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height) delegate:self];
     }
-    
+
     self.actionBar.delegate = self;
-    
+
     [self addSubview:self.actionBar];
-    
 }
 
--(void)adjustHeight{
+- (void)adjustHeight {
     NSInteger height = [self imageViewHeight] + self.captionLabel.frame.size.height + TEXTVIEW_TOP_PAD * 2 + self.actionBar.frame.size.height;
-    
+
     if ([self.delegate shouldHaveActionBar]) {
         height -= TEXTVIEW_TOP_PAD;
     }
-    
+
     [self setSizeWithSize:CGSizeMake(self.frame.size.width, height)];
-    
+
     if (!self.borderLine) {
         self.borderLine = [UIView lineAtPoint:CGPointMake(0, self.frame.size.height)];
         [self addSubview:self.borderLine];
-    }
-    else {
+    } else {
         self.borderLine.frame = CGRectMake(0, self.frame.size.height, self.borderLine.frame.size.width, self.borderLine.frame.size.height);
     }
-    
+
     [self bringSubviewToFront:self.borderLine];
 }
 
-
-
-
 #pragma mark - Action Bar Delegate
--(NSString *)titleForActionButton{
+- (NSString *)titleForActionButton {
     int comments = [[self.gallery valueForKey:@"comments"] intValue];
-    
+
     if (comments == 1) {
         return [NSString stringWithFormat:@"%d COMMENT", comments];
     } else if (comments == 0) {
         return @"READ MORE";
-   } //else if (comments >= 600) {
-//        return [NSString stringWithFormat:@"HELLA COMMENTS"];
-//    }
-    
+    } //else if (comments >= 600) {
+    //        return [NSString stringWithFormat:@"HELLA COMMENTS"];
+    //    }
+
     return [NSString stringWithFormat:@"%d COMMENTS", comments];
 }
 
-
--(UIColor *)colorForActionButton{
+- (UIColor *)colorForActionButton {
     return [UIColor frescoBlueColor];
 }
 
--(void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar{
-    NSLog(@"READ MORE");
-    
+- (void)contentActionBarDidSelectActionButton:(FRSContentActionsBar *)actionBar {
+
     if (self.readMoreBlock) {
         self.readMoreBlock(Nil);
     }
 }
 
--(void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
+- (void)contentActionBarDidShare:(FRSContentActionsBar *)actionbar {
     FRSPost *post = self.orderedPosts[0];
     NSString *sharedContent = [@"https://fresconews.com/gallery/" stringByAppendingString:self.gallery.uid];
-    
+
     sharedContent = [NSString stringWithFormat:@"Check out this gallery from %@: %@", [[post.address componentsSeparatedByString:@","] firstObject], sharedContent];
-    self.shareBlock(@[sharedContent]);
+    self.shareBlock(@[ sharedContent ]);
 }
 
 #pragma mark ScrollView Delegate
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     //We add half a screen's width so that the image loading occurs half way through the scroll.
     [self pause];
-    
+
     if (!self.players) {
         self.players = [[NSMutableArray alloc] init];
     }
-    
-    NSInteger page = (scrollView.contentOffset.x + self.frame.size.width/2)/self.scrollView.frame.size.width;
-    
+
+    NSInteger page = (scrollView.contentOffset.x + self.frame.size.width / 2) / self.scrollView.frame.size.width;
+
     if (page < 0) {
         return;
     }
-    
+
     UIImageView *imageView;
     FRSPost *post;
     imageView = (self.imageViews.count > page) ? self.imageViews[page] : Nil;
     post = (self.orderedPosts.count > page) ? self.orderedPosts[page] : Nil;
-    
+
     [self loadImage:post.imageUrl forImageView:imageView];
     [self handlePlay:TRUE player:Nil];
-    
+
     if (self.players.count <= page) {
         if (post.videoUrl != Nil && page >= self.players.count) {
             FRSPlayer *player = [self setupPlayerForPost:post play:TRUE];
             [self.players addObject:player];
             [self.videoPlayer play];
-        }
-        else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
+        } else if (post.videoUrl == Nil || [post.videoUrl isEqual:[NSNull null]] || !post.videoUrl) {
             if (self.players && imageView) {
                 [self.players addObject:imageView];
             }
-        }
-        else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
+        } else if (self.players.count > page && [self.players[page] respondsToSelector:@selector(play)]) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                FRSPlayer *player = (FRSPlayer *)self.players[page];
-                if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
-                    self.videoPlayer = player;
-                    [player play];
-                }
-                else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
-                    [player pause];
-                }
+              FRSPlayer *player = (FRSPlayer *)self.players[page];
+              if ([player respondsToSelector:@selector(play)] && player.rate == 0.0 && player != self.videoPlayer) {
+                  self.videoPlayer = player;
+                  [player play];
+              } else if ([player respondsToSelector:@selector(play)] && player.rate != 0.0) {
+                  [player pause];
+              }
             });
         }
     }
-    
-    if (self.imageViews.count > page+1 && self.orderedPosts.count > page+1) {
-        
-        UIImageView *nextImage = self.imageViews[page+1];
-        FRSPost *nextPost = self.orderedPosts[page+1];
-        
+
+    if (self.imageViews.count > page + 1 && self.orderedPosts.count > page + 1) {
+
+        UIImageView *nextImage = self.imageViews[page + 1];
+        FRSPost *nextPost = self.orderedPosts[page + 1];
+
         if (nextPost.videoUrl == Nil) {
             [self loadImage:nextPost.imageUrl forImageView:nextImage];
         }
     }
-    
+
     self.adjustedPage = page;
-    
+
     if (page >= self.gallery.posts.count) {
         return;
     }
-    
+
     if (page >= self.players.count) {
         return;
     }
-    
-    if (page != self.pageControl.currentPage){
+
+    if (page != self.pageControl.currentPage) {
         [self.videoPlayer pause];
     }
     [self updateLabels];
 
-    
-    if (scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > ((self.gallery.posts.count -1) * self.scrollView.frame.size.width)) return;
-    
+    if (scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > ((self.gallery.posts.count - 1) * self.scrollView.frame.size.width))
+        return;
+
     if (self.imageViews.count == 0 || self.imageViews.count < page || self.orderedPosts.count < page) {
         return;
     }
-    
-    
-    NSInteger halfScroll = scrollView.frame.size.width/4;
+
+    NSInteger halfScroll = scrollView.frame.size.width / 4;
     CGFloat amtScrolled = scrollView.contentOffset.x - (scrollView.frame.size.width * self.pageControl.currentPage);
-    
+
     CGFloat percentCompleted = ABS(amtScrolled) / halfScroll;
-    
+
     if (percentCompleted > 1.0 && percentCompleted < 3.0) {
         self.nameLabel.alpha = 0;
         self.locationLabel.alpha = 0;
@@ -1102,143 +1081,138 @@
         self.muteImageView.alpha = 0;
         return;
     }
-        
-    if (percentCompleted > 3) percentCompleted -= 2;
+
+    if (percentCompleted > 3)
+        percentCompleted -= 2;
     CGFloat absAlpha = ABS(1 - percentCompleted);
-    
+
     self.nameLabel.alpha = absAlpha;
     self.locationLabel.alpha = absAlpha;
     self.timeLabel.alpha = absAlpha;
     self.profileIV.alpha = absAlpha;
     self.locationIV.alpha = absAlpha;
     self.clockIV.alpha = absAlpha;
-    
+
     FRSPlayer *player = self.players[page];
     if ([[player class] isSubclassOfClass:[FRSPlayer class]] && player.muted) {
         self.muteImageView.alpha = absAlpha;
     }
-    
+
     self.profileIV.image = Nil;
-    
+
     FRSPost *adjustedPost = self.orderedPosts[self.adjustedPage];
     if (post.creator.profileImage != Nil && ![post.creator.profileImage isEqual:[NSNull null]] && [[post.creator.profileImage class] isSubclassOfClass:[NSString class]] && ![post.creator.profileImage containsString:@".avatar"] && [NSURL URLWithString:post.creator.profileImage].absoluteString.length > 1) {
         [self.profileIV hnk_setImageFromURL:[NSURL URLWithString:adjustedPost.creator.profileImage]];
         //self.profileIV.alpha = 1;
         //NSLog(@"mmAvatar: %@",post.creator.profileImage);
-        
+
     } else {
         [self.nameLabel setOriginWithPoint:CGPointMake(20, self.nameLabel.frame.origin.y)];
-       // self.profileIV.alpha = 0;
+        // self.profileIV.alpha = 0;
     }
-    
-    
-    
+
     if (adjustedPost.videoUrl == nil) {
         self.muteImageView.alpha = 0;
     }
 }
 
--(void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
+- (void)loadImage:(NSString *)url forImageView:(UIImageView *)imageView {
     NSString *adjustedURL = url;
-    
-    
+
     /*
      Adjust sizing from URL string
      */
-    
+
     if ([adjustedURL containsString:@"cdn.fresconews"]) {
         NSString *adjustedSize = [NSString stringWithFormat:@"%d", (int)([UIScreen mainScreen].bounds.size.width * [[UIScreen mainScreen] scale])];
         adjustedSize = [@"/images/" stringByAppendingString:adjustedSize];
         adjustedURL = [adjustedURL stringByReplacingOccurrencesOfString:@"/images" withString:adjustedSize];
     }
-    
+
     [imageView hnk_setImageFromURL:[NSURL URLWithString:adjustedURL]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
-                        change:(NSDictionary *)change context:(void *)context {
+                        change:(NSDictionary *)change
+                       context:(void *)context {
     if (object == self.videoPlayer && [keyPath isEqualToString:@"status"]) {
-        
+
         if (self.videoPlayer.status == AVPlayerStatusReadyToPlay) {
-            
-        }
-        else if (self.videoPlayer.status == AVPlayerStatusFailed) {
-            
+
+        } else if (self.videoPlayer.status == AVPlayerStatusFailed) {
         }
     }
 }
 
--(void)setupPlayer {
+- (void)setupPlayer {
     [self.videoPlayer addObserver:self forKeyPath:@"status" options:0 context:nil];
 }
 
--(void)breakDownPlayer:(AVPlayerLayer *)layer {
+- (void)breakDownPlayer:(AVPlayerLayer *)layer {
     if (![[layer class] isSubclassOfClass:[AVPlayerLayer class]]) {
         return;
     }
-    
+
     [layer.player pause];
     [layer.player replaceCurrentItemWithPlayerItem:Nil];
     [layer removeFromSuperlayer];
 }
 
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSInteger page = scrollView.contentOffset.x / self.scrollView.frame.size.width;
     self.pageControl.currentPage = page;
-    
+
     self.currentPage = page;
     if (self.players.count > page) {
         self.videoPlayer = ([self.players[page] respondsToSelector:@selector(play)]) ? self.players[page] : Nil;
         [self.videoPlayer play];
     }
-    
+
     [self configureMuteIcon];
 }
 
--(NSInteger)imageViewHeight{
+- (NSInteger)imageViewHeight {
     NSInteger totalHeight = 0;
-    
-    for (FRSPost *post in self.gallery.posts){
+
+    for (FRSPost *post in self.gallery.posts) {
         NSInteger rawHeight = [post.meta[@"image_height"] integerValue];
         NSInteger rawWidth = [post.meta[@"image_width"] integerValue];
-        
-        if (rawHeight == 0 || rawWidth == 0){
+
+        if (rawHeight == 0 || rawWidth == 0) {
             totalHeight += [UIScreen mainScreen].bounds.size.width;
-        }
-        else {
-            NSInteger scaledHeight = rawHeight * ([UIScreen mainScreen].bounds.size.width/rawWidth);
+        } else {
+            NSInteger scaledHeight = rawHeight * ([UIScreen mainScreen].bounds.size.width / rawWidth);
             totalHeight += scaledHeight;
         }
     }
-    
+
     float divider = self.gallery.posts.count;
     if (divider == 0) {
         divider = 1;
     }
-    
-    NSInteger averageHeight = totalHeight/divider;
-    
-    averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4/3);
-    
+
+    NSInteger averageHeight = totalHeight / divider;
+
+    averageHeight = MIN(averageHeight, [UIScreen mainScreen].bounds.size.width * 4 / 3);
+
     return averageHeight;
 }
 
--(void)segueToSourceUser {
+- (void)segueToSourceUser {
     FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:self.gallery.sourceUser];
-    
+
     if ([self.gallery.sourceUser uid] != nil) {
         [self.delegate.navigationController pushViewController:userViewController animated:YES];
-
     }
 }
 
--(void)segueToUserProfile:(FRSUser *)user {
-    
+- (void)segueToUserProfile:(FRSUser *)user {
+
     NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
-    
+
     if (page >= 0 && page < self.orderedPosts.count) {
         FRSPost *currentPost = self.orderedPosts[page];
-        
+
         if ([self.gallery.externalSource isEqualToString:@"twitter"]) {
             NSString *twitterString = [NSString stringWithFormat:@"twitter://user?screen_name=%@", self.gallery.externalAccountName];
             NSString *twitterLink = [NSString stringWithFormat:@"https://twitter.com/%@", self.gallery.externalAccountName];
@@ -1247,139 +1221,145 @@
             } else {
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:twitterLink]];
             }
-            
+
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                
-                FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
 
-                if ([currentPost.creator uid] != nil) {
-                    [self.delegate.navigationController pushViewController:userViewController animated:YES];
-                    
-//                    userViewController.hidesBottomBarWhenPushed = NO;
+              FRSProfileViewController *userViewController = [[FRSProfileViewController alloc] initWithUser:(FRSUser *)currentPost.creator];
 
-//                    [userViewController setHiddenTabBar:NO];
-                    
-//                    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-//                    [[appDelegate.tabBarController tabBar] setHidden:NO];
-                    
-//                    [self.delegate.navigationController.tabBarController.tabBar setHidden:NO];
-                }
+              if ([currentPost.creator uid] != nil) {
+                  [self.delegate.navigationController pushViewController:userViewController animated:YES];
+
+                  //                    userViewController.hidesBottomBarWhenPushed = NO;
+
+                  //                    [userViewController setHiddenTabBar:NO];
+
+                  //                    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                  //                    [[appDelegate.tabBarController tabBar] setHidden:NO];
+
+                  //                    [self.delegate.navigationController.tabBarController.tabBar setHidden:NO];
+              }
             });
         }
     }
 }
 
--(void)presentParallax{
-    
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.container.alpha = 1;
-        self.parallaxImage.alpha = 1;
-    } completion:nil];
-    
+- (void)presentParallax {
+
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                       self.container.alpha = 1;
+                       self.parallaxImage.alpha = 1;
+                     }
+                     completion:nil];
+
     [UIView beginAnimations:@"statusBar" context:nil];
     [UIView setAnimationDuration:0.3];
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     [UIView commitAnimations];
 }
 
--(void)dismissParallax{
+- (void)dismissParallax {
     self.parallaxImage.alpha = 0;
 
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.container.alpha = 0;
-    } completion:^(BOOL finished) {
-        [self.parallaxImage removeFromSuperview];
-        self.userInteractionEnabled = YES;
-    }];
-    
+    [UIView animateWithDuration:0.3
+        delay:0.0
+        options:UIViewAnimationOptionCurveEaseInOut
+        animations:^{
+          self.container.alpha = 0;
+        }
+        completion:^(BOOL finished) {
+          [self.parallaxImage removeFromSuperview];
+          self.userInteractionEnabled = YES;
+        }];
+
     [UIView beginAnimations:@"statusBar" context:nil];
     [UIView setAnimationDuration:0];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [UIView commitAnimations];
 }
 
--(void)play {
-    
+- (void)play {
+
     NSInteger page = self.scrollView.contentOffset.x / self.scrollView.frame.size.width;
-    
+
     if (self.players.count > page) {
         if ([[self.players[page] class] isSubclassOfClass:[FRSPlayer class]]) {
-            
+
             FRSPlayer *player = (FRSPlayer *)self.players[page];
-            
+
             if ([[player class] isSubclassOfClass:[FRSPlayer class]] && !player.currentItem && _currentPage < self.orderedPosts.count) {
-                
+
                 if (page >= self.orderedPosts.count) {
                     return;
                 }
-                
+
                 FRSPost *post = (FRSPost *)self.orderedPosts[page];
-                
+
                 [player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:[NSURL URLWithString:post.videoUrl]]];
-                
+
                 if (!player.hasEstablished) {
-                    
+
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-                        player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
-                        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                                 selector:@selector(playerItemDidReachEnd:)
-                                                                     name:AVPlayerItemDidPlayToEndTimeNotification
-                                                                   object:[player currentItem]];
-                        
-                        NSInteger postIndex = [self.orderedPosts indexOfObject:post];
-                        
-                        playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
-                        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-                        playerLayer.backgroundColor = [UIColor clearColor].CGColor;
-                        playerLayer.opaque = FALSE;
-                        [player.container.layer insertSublayer:playerLayer atIndex:10000];
-                        
-                        if (self.playerLayers.count > page) {
-                            [(AVPlayerLayer *)self.playerLayers[page] removeFromSuperlayer];
-                        }
-                        
-                        self.playerLayers[page] = playerLayer;
+                      AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+                      player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
+                      [[NSNotificationCenter defaultCenter] addObserver:self
+                                                               selector:@selector(playerItemDidReachEnd:)
+                                                                   name:AVPlayerItemDidPlayToEndTimeNotification
+                                                                 object:[player currentItem]];
+
+                      NSInteger postIndex = [self.orderedPosts indexOfObject:post];
+
+                      playerLayer.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * postIndex, 0, [UIScreen mainScreen].bounds.size.width, self.scrollView.frame.size.height);
+                      playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                      playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+                      playerLayer.opaque = FALSE;
+                      [player.container.layer insertSublayer:playerLayer atIndex:10000];
+
+                      if (self.playerLayers.count > page) {
+                          [(AVPlayerLayer *)self.playerLayers[page] removeFromSuperlayer];
+                      }
+
+                      self.playerLayers[page] = playerLayer;
                     });
-                    
+
                     player.hasEstablished = TRUE;
                 }
-                
+
                 if (self.players.count > page) {
                     [(AVPlayer *)self.players[page] play];
                     [(AVPlayer *)self.players[page] performSelector:@selector(play) withObject:Nil afterDelay:.15];
                 }
-
             }
-            
         }
     }
 }
 
--(void)offScreen {
+- (void)offScreen {
     for (FRSPlayer *player in self.players) {
         if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
             [player.currentItem cancelPendingSeeks];
             [player.currentItem.asset cancelLoading];
-            
+
             for (CALayer *layer in player.container.layer.sublayers) {
                 [layer removeFromSuperlayer];
             }
-            
+
             player.hasEstablished = FALSE;
         }
     }
 }
 
--(void)pause {
+- (void)pause {
     for (AVPlayer *player in self.players) {
         if ([[player class] isSubclassOfClass:[FRSPlayer class]]) {
             [player pause];
         }
     }
-    
-//    self.muteImageView.alpha = 1;
+
+    //    self.muteImageView.alpha = 1;
 }
 
 @end

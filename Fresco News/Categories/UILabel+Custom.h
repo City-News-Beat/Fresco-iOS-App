@@ -10,5 +10,5 @@
 
 @interface UILabel (Custom)
 
-+(UILabel *)labelWithText:(NSString *)text textColor:(UIColor *)textColor font:(UIFont *)font;
++ (UILabel *)labelWithText:(NSString *)text textColor:(UIColor *)textColor font:(UIFont *)font;
 @end

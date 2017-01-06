@@ -17,24 +17,23 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
     FRSCaptureModeVideo
 };
 
-@interface FRSCameraViewController : FRSBaseViewController <AVCaptureVideoDataOutputSampleBufferDelegate>
-{
+@interface FRSCameraViewController : FRSBaseViewController <AVCaptureVideoDataOutputSampleBufferDelegate> {
     float beginGestureScale;
     float effectiveScale;
     NSTimer *thumb;
     NSTimer *wobble;
     NSTimer *pan;
     UILabel *title;
-    
+
     NSDate *entry;
     NSDate *exit;
-    
+
     FRSWobbleView *panAlert;
     FRSWobbleView *shakeAlert;
-    
+
     BOOL isShowingWobble;
     BOOL isShowingPan;
-    
+
     BOOL hasShaken;
     BOOL hasPanned;
 }
@@ -48,14 +47,12 @@ typedef NS_ENUM(NSUInteger, FRSCaptureMode) {
 @property (nonatomic, retain) NSDictionary *preselectedGlobalAssignment;
 @property (nonatomic, retain) NSDictionary *preselectedAssignment;
 
--(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode;
--(instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode selectedAssignment:(NSDictionary *)assignment selectedGlobalAssignment:(NSDictionary *)globalAssignment;
+- (instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode;
+- (instancetype)initWithCaptureMode:(FRSCaptureMode)captureMode selectedAssignment:(NSDictionary *)assignment selectedGlobalAssignment:(NSDictionary *)globalAssignment;
 
--(void)handlePreviewButtonTapped;
--(void)toggleCaptureMode;
-
+- (void)handlePreviewButtonTapped;
+- (void)toggleCaptureMode;
 
 - (void)dismissAndReturnToPreviousTab;
-
 
 @end

@@ -15,17 +15,16 @@
 #import "FRSPlayer.h"
 @class FRSGallery;
 
-
 @protocol FRSGalleryViewDelegate <NSObject>
--(BOOL)shouldHaveActionBar;
--(BOOL)shouldHaveTextLimit;
--(void)playerWillPlay:(FRSPlayer *)player;
+- (BOOL)shouldHaveActionBar;
+- (BOOL)shouldHaveTextLimit;
+- (void)playerWillPlay:(FRSPlayer *)player;
 @property (weak, nonatomic) UINavigationController *navigationController;
 @end
 
 @interface FRSGalleryView : UIView
 
-@property (weak, nonatomic) NSObject <FRSGalleryViewDelegate> *delegate;
+@property (weak, nonatomic) NSObject<FRSGalleryViewDelegate> *delegate;
 @property (nonatomic) BOOL hasTapped;
 
 @property (strong, nonatomic) FRSGallery *gallery;
@@ -70,12 +69,12 @@
 
 @property (nonatomic, retain) NSMutableArray *players;
 
--(void)playerTap:(UITapGestureRecognizer *)tap;
--(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate;
--(void)loadGallery:(FRSGallery *)gallery;
--(void)play;
--(void)pause;
--(void)offScreen;
+- (void)playerTap:(UITapGestureRecognizer *)tap;
+- (instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryViewDelegate>)delegate;
+- (void)loadGallery:(FRSGallery *)gallery;
+- (void)play;
+- (void)pause;
+- (void)offScreen;
 
 //Should probably have a resize method that adjusts the size of the entire view. Still haven't out the best way to do this.
 
