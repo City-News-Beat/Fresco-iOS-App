@@ -794,10 +794,9 @@
 
 #pragma mark - TextField Delegate
 
--(void)textFieldDidChange {
-    
-    if ((self.emailTF.isEditing)) {
+- (void)textFieldDidChange {
 
+    if ((self.emailTF.isEditing) && ([self isValidEmail:self.emailTF.text])) {
         [self checkEmail];
     }
 
@@ -984,7 +983,7 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
 
     if (textField == self.emailTF) {
-        if (!self.emailError) {
+        if (self.emailError) {
             [self shouldShowEmailDialogue:NO];
         }
     }
@@ -1130,7 +1129,7 @@
                              }
                              completion:nil];
         }
-        
+
     } else {
 
         [self.scrollView setContentOffset:CGPointMake(0, -self.scrollView.contentInset.top) animated:YES];
@@ -1786,12 +1785,11 @@
         self.errorContainer.alpha = 1;
 
         if (self.notificationsEnabled) {
+
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 44);
-            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height +self.sliderContainer.frame.size.height);
-            self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height +self.sliderContainer.frame.size.height +44); //+promoContainer.frame.size.height, when we add promo
-            _scrollView.contentSize = CGSizeMake(_scrollView.contentSize.width, self.TOSContainerView.frame.origin.y+44);
+            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
 
         } else {
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
@@ -1802,20 +1800,16 @@
 
     } else {
         self.emailError = NO;
-      
-        self.errorContainer.alpha = 0;
-        self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
-        self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
-        self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
-        self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, 0);
-        
+
         if (self.notificationsEnabled) {
-            self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height +self.sliderContainer.frame.size.height); //+promoContainer.frame.size.height, when we add promo
 
         } else {
+            self.errorContainer.alpha = 0;
+            self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
+            self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
+            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
             self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, 0);
         }
-
     }
 }
 
