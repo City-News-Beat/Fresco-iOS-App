@@ -776,7 +776,7 @@
     titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.text = [NSString stringWithFormat:@"@%@", [[FRSAPIClient sharedClient] authenticatedUser].username];
+    titleLabel.text = [NSString stringWithFormat:@"@%@", self.representedUser.username];
     [titleLabel sizeToFit];
     self.navigationItem.titleView = titleLabel;
 
