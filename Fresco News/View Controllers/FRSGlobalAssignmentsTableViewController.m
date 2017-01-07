@@ -43,7 +43,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-
+    
     [self expandNavBar:nil];
 }
 
@@ -55,7 +55,6 @@
 #pragma mark - UI Configuration
 
 - (void)configureNavigationBar {
-
     [self configureBackButtonAnimated:YES];
     self.title = @"GLOBAL ASSIGNMENTS";
 

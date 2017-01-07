@@ -581,7 +581,11 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
 #pragma mark - Assignments
 - (void)configureAssignmentCell:(FRSAssignmentNotificationTableViewCell *)assignmentCell dictionary:(NSDictionary *)dictionary {
     assignmentCell.assignmentID = [[dictionary objectForKey:@"meta"] objectForKey:@"assignment_id"];
-    assignmentCell.actionButton.tintColor = [UIColor blackColor];
+    if ([[[dictionary objectForKey:@"meta"] objectForKey:@"is_global"] integerValue] == 1) {
+        assignmentCell.actionButton.hidden = true;
+    }else{
+        assignmentCell.actionButton.tintColor = [UIColor blackColor];
+    }
     assignmentCell.titleLabel.text = [dictionary objectForKey:@"title"];
     assignmentCell.bodyLabel.text = [dictionary objectForKey:@"body"];
     assignmentCell.bodyLabel.numberOfLines = 0;

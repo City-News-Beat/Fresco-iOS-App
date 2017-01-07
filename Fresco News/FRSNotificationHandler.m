@@ -382,7 +382,7 @@ static BOOL isDeeplinking;
                                              } else {
                                                  [appDelegate.tabBarController setSelectedIndex:3];
 
-                                                 if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+                                                 if ([[navController class] isSubclassOfClass:[UINavigationController class]] && ![responseObject[@"location"] isEqual: [NSNull null]] && responseObject[@"location"] != nil) {
                                                      UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
                                                      tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
                                                      tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
@@ -399,7 +399,7 @@ static BOOL isDeeplinking;
                                                      navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
                                                      [tab setSelectedIndex:3];
                                                  } else {
-                                                     UITabBarController *tab = (UITabBarController *)navController;
+                                                     UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
                                                      tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
                                                      tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
 
@@ -410,10 +410,12 @@ static BOOL isDeeplinking;
 
                                                      [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
 
-                                                     [assignmentsVC setDefaultAssignment:assignment];
+                                                     [assignmentsVC globalAssignmentsSegue];
 
                                                      navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
                                                      [tab setSelectedIndex:3];
+                                                     
+                                                     assignmentsVC.closeButton.alpha = 0;
                                                  }
                                              }
                                            }];

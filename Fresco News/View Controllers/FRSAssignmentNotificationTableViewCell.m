@@ -10,6 +10,7 @@
 #import "FRSCameraViewController.h"
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
+#import "FRSGlobalAssignmentsTableViewController.h"
 
 @interface FRSAssignmentNotificationTableViewCell ()
 
@@ -29,8 +30,6 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
-    //UITableViewCell subviews' background colors turn to clearColor when selecting/highlighting.
-    //Setting the background color overrides this
     self.line.backgroundColor = [UIColor frescoLightTextColor];
 }
 

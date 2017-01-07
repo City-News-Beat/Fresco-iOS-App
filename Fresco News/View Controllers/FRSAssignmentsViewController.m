@@ -55,7 +55,6 @@
 @property (strong, nonatomic) UILabel *videoCashLabel;
 @property (strong, nonatomic) UILabel *globalAssignmentsLabel;
 @property (strong, nonatomic) NSArray *globalAssignmentsArray;
-@property (strong, nonatomic) UIButton *closeButton;
 @property (strong, nonatomic) UIView *assignmentStatsContainer;
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
@@ -531,12 +530,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
         self.assignmentPostedDate = assignment.createdDate;
-
+        
         self.outlets = assignment.outlets;
-
+        
         [self configureOutlets];
         [self configureAssignmentCard];
         [self animateAssignmentCard];
+        
         [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
         [self setPostedDate];
         [self setDistance];
@@ -1456,6 +1456,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 - (void)globalAssignmentsSegue {
     FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
     tableViewController.assignments = self.globalAssignmentsArray;
+    [self dismissAssignmentCard];
     [self.navigationController pushViewController:tableViewController animated:NO];
 }
 
