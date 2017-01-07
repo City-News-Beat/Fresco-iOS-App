@@ -1454,10 +1454,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 - (void)globalAssignmentsSegue {
-    FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
-    tableViewController.assignments = self.globalAssignmentsArray;
-    [self dismissAssignmentCard];
-    [self.navigationController pushViewController:tableViewController animated:NO];
+    if (![[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass: [FRSGlobalAssignmentsTableViewController class]]){
+        FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
+        tableViewController.assignments = self.globalAssignmentsArray;
+        [self dismissAssignmentCard];
+        [self.navigationController pushViewController:tableViewController animated:NO];
+    }
 }
 
 //Redundant, but we need two because the deep link is not an animated transition
