@@ -80,6 +80,7 @@
 @property BOOL userIsInRange;
 @property BOOL shouldRefreshMap;
 @property BOOL isCheckingForAcceptedAssignment;
+@property BOOL seguedToGlobalAssignment;
 
 @end
 
@@ -156,6 +157,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                                   }];
 
     self.assignmentCardIsOpen = NO;
+    self.seguedToGlobalAssignment = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -176,6 +178,21 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.navigationController.navigationBar setTitleTextAttributes:
                                                  @{ NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17] }];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    if (!self.navigationItem.leftBarButtonItem && !self.seguedToGlobalAssignment){
+        UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
+        self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.closeButton.tintColor = [UIColor whiteColor];
+        [self.closeButton setImage:closeButtonImage forState:UIControlStateNormal];
+        self.closeButton.frame = CGRectMake(0, 0, 24, 24);
+        self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0);
+        [self.closeButton addTarget:self action:@selector(dismissAssignmentCard) forControlEvents:UIControlEventTouchUpInside];
+        self.closeButton.alpha = 0;
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
+        self.navigationItem.leftBarButtonItem = backButton;
+    }else{
+        self.seguedToGlobalAssignment = false;
+    }
 
     [self removeNavigationBarLine];
 
@@ -1125,16 +1142,6 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     label.textColor = [UIColor frescoLightTextColor];
     [self.scrollView addSubview:label];
 
-    UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
-    self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.closeButton.tintColor = [UIColor whiteColor];
-    [self.closeButton setImage:closeButtonImage forState:UIControlStateNormal];
-    self.closeButton.frame = CGRectMake(0, 0, 24, 24);
-    self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0);
-    [self.closeButton addTarget:self action:@selector(dismissAssignmentCard) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
-    self.navigationItem.leftBarButtonItem = backButton;
-    self.closeButton.alpha = 0;
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding + 25), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
 
@@ -1177,6 +1184,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 14 + 50, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
 
     [self drawImages];
+    self.navigationItem.hidesBackButton = false;
 }
 
 - (void)dismissTap:(UITapGestureRecognizer *)sender {
@@ -1457,7 +1465,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (![[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass: [FRSGlobalAssignmentsTableViewController class]]){
         FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
         tableViewController.assignments = self.globalAssignmentsArray;
-        [self dismissAssignmentCard];
+        self.seguedToGlobalAssignment = true;
         [self.navigationController pushViewController:tableViewController animated:NO];
     }
 }

@@ -415,7 +415,8 @@ static BOOL isDeeplinking;
                                                      navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
                                                      [tab setSelectedIndex:3];
                                                      
-                                                     assignmentsVC.closeButton.alpha = 0;
+                                                     assignmentsVC.navigationItem.leftBarButtonItem = nil;
+                                                     assignmentsVC.navigationItem.hidesBackButton = true;
                                                  }
                                              }
                                            }];
