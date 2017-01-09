@@ -389,6 +389,7 @@ static BOOL isDeeplinking;
 
                                                      FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
 
+                                                     assignmentsVC.assignmentCardIsOpen = YES;
                                                      assignmentsVC.hasDefault = YES;
                                                      assignmentsVC.defaultID = assignmentID;
 

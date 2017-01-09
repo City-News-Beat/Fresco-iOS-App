@@ -36,5 +36,6 @@
 @property (nonatomic, retain) NSString *defaultID;
 @property (strong, nonatomic) MKMapView *mapView;
 @property BOOL mapShouldFollowUser;
+@property BOOL assignmentCardIsOpen;
 
 @end
