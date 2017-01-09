@@ -399,7 +399,11 @@
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{
-          [self saveContext];
+            @try {
+                [self saveContext];
+            } @catch (NSException *exception) {
+                NSLog(@"Error saving context.");
+            }
         });
     }
 }
@@ -517,8 +521,10 @@
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
-
-    return _persistentStoreCoordinator;
+    
+    @synchronized (self) {
+        return _persistentStoreCoordinator;
+    }
 }
 
 - (NSURL *)applicationDocumentsDirectory {
@@ -529,16 +535,22 @@
 - (NSManagedObjectContext *)managedObjectContext {
     // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.)
     if (_managedObjectContext != nil) {
+        NSLog(@"NSManagedObjectContext exists, returning");
         return _managedObjectContext;
     }
 
+    NSLog(@"Creating a new NSManagedObjectContext");
+    
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (!coordinator) {
         return nil;
     }
     _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [_managedObjectContext setPersistentStoreCoordinator:coordinator];
-    return _managedObjectContext;
+    
+    @synchronized (self) {
+        return _managedObjectContext;
+    }
 }
 
 #pragma mark - Core Data Saving support
@@ -551,7 +563,6 @@
             // Replace this implementation with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
         }
     }
 }

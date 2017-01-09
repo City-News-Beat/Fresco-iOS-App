@@ -562,32 +562,38 @@
 }
 
 - (void)cacheLocalData:(NSArray *)localData {
-    [self.appDelegate.managedObjectContext performBlock:^{
-      self.dataSource = [[NSMutableArray alloc] init];
-      self.highlights = [[NSMutableArray alloc] init];
-
-      NSInteger localIndex = 0;
-      for (NSDictionary *gallery in localData) {
-          FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-
-          [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-          [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
-          [self.dataSource addObject:galleryToSave];
-          [self.highlights addObject:galleryToSave];
-          localIndex++;
-      }
-
-      [self.appDelegate.managedObjectContext save:Nil];
-      [self.appDelegate saveContext];
-
-      [self.tableView reloadData];
-
-      for (FRSGallery *gallery in self.cachedData) {
-          [self.appDelegate.managedObjectContext deleteObject:gallery];
-      }
-
-      [self.appDelegate saveContext];
-    }];
+    
+    if (self.appDelegate.managedObjectContext) {
+        [self.appDelegate.managedObjectContext performBlock:^{
+            self.dataSource = [[NSMutableArray alloc] init];
+            self.highlights = [[NSMutableArray alloc] init];
+            
+            NSInteger localIndex = 0;
+            for (NSDictionary *gallery in localData) {
+                FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                
+                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
+                [self.dataSource addObject:galleryToSave];
+                [self.highlights addObject:galleryToSave];
+                localIndex++;
+            }
+            
+            if ([self.appDelegate.managedObjectContext hasChanges]) {
+                [self.appDelegate.managedObjectContext save:Nil];
+            }
+            
+            [self.appDelegate saveContext];
+            
+            [self.tableView reloadData];
+            
+            for (FRSGallery *gallery in self.cachedData) {
+                [self.appDelegate.managedObjectContext deleteObject:gallery];
+            }
+            
+            [self.appDelegate saveContext];
+        }];
+    }
 }
 
 - (void)reloadFromLocal {
