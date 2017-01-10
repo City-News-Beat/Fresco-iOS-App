@@ -30,19 +30,32 @@
     int totalCommentCount;
     BOOL showsMoreButton;
     UIButton *showCommentsButton;
-
+    
+    // Verification Tab
+    IBOutlet UIImageView *verificationEyeImageView;
+    IBOutlet UIView *verificationContainerView;
+    IBOutlet UILabel *verificationLabel;
+    IBOutlet NSLayoutConstraint *verificationViewHeightConstraint;
+    IBOutlet NSLayoutConstraint *verificationViewLeftContraint;
+    
+    // Comments
     IBOutlet UIView *addCommentView;
     IBOutlet NSLayoutConstraint *addCommentBotConstraint;
     IBOutlet UIView *commentsTVTopLine;
     IBOutlet UITableView *commentsTableView;
     IBOutlet UILabel *commentsLabel;
     IBOutlet NSLayoutConstraint *commentsLabelTopConstraint;
+    IBOutlet NSLayoutConstraint *commentsHeightConstraint;
+    
+    // Articles
     IBOutlet UIView *articlesTVTopLine;
     IBOutlet UILabel *articlesLabel;
     IBOutlet NSLayoutConstraint *articlesHeightConstraint;
-    IBOutlet NSLayoutConstraint *commentsHeightConstraint;
+    
     IBOutlet NSLayoutConstraint *galleryHeightConstraint;
     IBOutlet NSLayoutConstraint *scrollViewHeightConstraint;
+    
+    NSMutableArray *galleryPurchases;
 }
 
 static NSString *reusableCommentIdentifier = @"commentIdentifier";
@@ -62,6 +75,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self configureArticles];
     [self configureComments];
     [self configureActionBar];
+    [self configureVerificationView];
     if ([self.gallery.comments integerValue] >= 1) {
         [self configureCommentsSpinner];
     }
@@ -153,6 +167,57 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     } else {
         [self.actionBar setCurrentUser:NO];
     }
+}
+
+- (void)configureVerificationView {
+    // If the user created the gallery
+    if ([self.gallery.creator.uid isEqualToString: [[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        verificationViewLeftContraint.constant = 16;// Zeplin reg distance
+        verificationEyeImageView.hidden = true;
+        
+        [self getGalleryPurchases];
+        
+        if (self.gallery.verificationRating == 0){// Not Rated
+            verificationLabel.text = @"PENDING VERIFICATION";
+            verificationContainerView.backgroundColor = [UIColor frescoOrangeColor];
+        }else if(self.gallery.verificationRating == 1){// Skipped
+            verificationLabel.text = @"NOT VERIFIED";
+            verificationContainerView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.26];
+        }else if(self.gallery.verificationRating == 2 || self.gallery.verificationRating == 3){// Verified or Highlighted
+            verificationLabel.text = @"VERIFIED";
+            verificationContainerView.backgroundColor = [UIColor colorWithRed:(76/255.0) green:(215/255.0) blue:(100/255.0) alpha:1.0];
+        }else if(self.gallery.verificationRating == 4){// DELETED
+            verificationLabel.text = @"DELETED";
+            verificationContainerView.backgroundColor = [UIColor colorWithRed:(208/255.0) green:(2/255.0) blue:(27/255.0) alpha:1.0];
+        }
+    }else{
+        verificationViewHeightConstraint.constant = 0;
+        verificationContainerView.hidden = true;
+    }
+}
+
+-(void)getGalleryPurchases{
+    [[FRSAPIClient sharedClient] fetchPurchasesForGalleryID:self.gallery.uid completion:^(id responseObject, NSError *error) {
+        galleryPurchases = [[NSMutableArray alloc] initWithArray:responseObject];
+        if (galleryPurchases.count > 0){
+            verificationContainerView.backgroundColor = [UIColor colorWithRed:(76/255.0) green:(215/255.0) blue:(100/255.0) alpha:1.0];
+            if (galleryPurchases.count == 1) {
+                NSDictionary *purchase = [[galleryPurchases objectAtIndex:0][@"purchases"] objectAtIndex:0];
+                
+                NSLog(@"%@", purchase[@"outlet"]);
+                
+                NSString *title = [purchase valueForKeyPath:@"outlet.title"];
+                
+                verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %@", [title uppercaseString]];
+                if ([title isEqualToString:@"Fresco News"]){
+                    verificationViewLeftContraint.constant = 56;// Zeplin distance from left
+                    verificationEyeImageView.hidden = false;
+                }
+            }else{
+                verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %lu OUTLETS", (unsigned long)galleryPurchases.count];
+            }
+        }
+    }];
 }
 
 - (void)dealloc {
@@ -366,6 +431,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)showAllComments {
     [self loadMoreComments];
+}
+
+#pragma mark - IBActions
+
+- (IBAction)showGalleryStatus:(id)sender {
+    
 }
 
 #pragma mark - FRSContentActionBarDelegate and Action Bar Methods

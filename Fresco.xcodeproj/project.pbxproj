@@ -135,6 +135,8 @@
 		CA2D87341E1C1033009BBB5A /* FRSGalleryDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA2D87331E1C1033009BBB5A /* FRSGalleryDetailView.xib */; };
 		CA2D87371E1C1246009BBB5A /* FRSGalleryDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = CA2D87361E1C1246009BBB5A /* FRSGalleryDetailView.m */; };
 		CABAC8511D46608B00E0EB01 /* FRSFileFooterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */; };
+		CAF0928A1E25921500F7F711 /* FRSGalleryStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = CAF092891E25921500F7F711 /* FRSGalleryStatusView.m */; };
+		CAF0928C1E25923100F7F711 /* FRSGalleryStatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CAF0928B1E25923100F7F711 /* FRSGalleryStatusView.xib */; };
 		CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0CAE611E1579CA00CDE511 /* Endpoint.m */; };
 		CE12A5F91E14747A0032E72F /* EndpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12A5F81E14747A0032E72F /* EndpointManager.m */; };
 		D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA511D6DE6B3008842E1 /* FRSComment.m */; };
@@ -538,6 +540,9 @@
 		CA2D87351E1C1246009BBB5A /* FRSGalleryDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryDetailView.h; sourceTree = "<group>"; };
 		CA2D87361E1C1246009BBB5A /* FRSGalleryDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryDetailView.m; sourceTree = "<group>"; };
 		CABAC8501D46608B00E0EB01 /* FRSFileFooterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSFileFooterCell.xib; sourceTree = "<group>"; };
+		CAF092881E25921500F7F711 /* FRSGalleryStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryStatusView.h; sourceTree = "<group>"; };
+		CAF092891E25921500F7F711 /* FRSGalleryStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSGalleryStatusView.m; sourceTree = "<group>"; };
+		CAF0928B1E25923100F7F711 /* FRSGalleryStatusView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSGalleryStatusView.xib; sourceTree = "<group>"; };
 		CE0CAE601E1579CA00CDE511 /* Endpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Endpoint.h; sourceTree = "<group>"; };
 		CE0CAE611E1579CA00CDE511 /* Endpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Endpoint.m; sourceTree = "<group>"; };
 		CE12A5F71E14747A0032E72F /* EndpointManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndpointManager.h; sourceTree = "<group>"; };
@@ -1197,6 +1202,9 @@
 				CA2D87351E1C1246009BBB5A /* FRSGalleryDetailView.h */,
 				CA2D87361E1C1246009BBB5A /* FRSGalleryDetailView.m */,
 				CA2D87331E1C1033009BBB5A /* FRSGalleryDetailView.xib */,
+				CAF092881E25921500F7F711 /* FRSGalleryStatusView.h */,
+				CAF092891E25921500F7F711 /* FRSGalleryStatusView.m */,
+				CAF0928B1E25923100F7F711 /* FRSGalleryStatusView.xib */,
 				07B61ECB1CAF1C4900D3454F /* PeekPopArticleViewController.h */,
 				07B61ECC1CAF1C4900D3454F /* PeekPopArticleViewController.m */,
 			);
@@ -2553,6 +2561,7 @@
 				078737FA1D5D05E100F7C27B /* FRSTextNotificationTableViewCell.xib in Resources */,
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */,
+				CAF0928C1E25923100F7F711 /* FRSGalleryStatusView.xib in Resources */,
 				D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */,
 				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
@@ -2746,6 +2755,7 @@
 				65135FD51C286DCF00839149 /* FRSStory+CoreDataProperties.m in Sources */,
 				6547C90A1C6A9CA600DAD98C /* FRSTabbedNavigationTitleView.m in Sources */,
 				65F237B01C249DC3002182DE /* FRSAppDelegate.m in Sources */,
+				CAF0928A1E25921500F7F711 /* FRSGalleryStatusView.m in Sources */,
 				E70F4BE01B9F920D00A765E0 /* WKImagePath.m in Sources */,
 				077CF9D91CE62793006FE908 /* FRSAboutFrescoViewController.m in Sources */,
 				65E860AC1C4FEE9E00CB28D0 /* FRSAssignment+CoreDataProperties.m in Sources */,

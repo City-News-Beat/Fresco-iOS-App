@@ -32,6 +32,7 @@
 @dynamic stories;
 @dynamic articles;
 @dynamic isLiked;
+@dynamic verificationRating;
 @dynamic numberOfLikes;
 @dynamic numberOfReposts;
 @dynamic externalAccountID;
@@ -125,6 +126,10 @@
         self.externalURL = [dict objectForKey:@"external_url"];
     }
     
+    if ([dict valueForKey:@"rating"] != [NSNull null]) {
+        self.verificationRating = [[dict objectForKey:@"rating"] integerValue];
+    }
+    
     if (!self.posts || self.posts.count == 0) {
         [self addPostsWithArray:dict[@"posts"]];
     }
@@ -135,7 +140,7 @@
     
     [self setValue:@([dict[@"liked"] boolValue]) forKey:@"liked"];
     [self setValue:@([dict[@"likes"] integerValue]) forKey:@"likes"];
-
+    
     [self setValue:@([dict[@"reposted"] boolValue]) forKey:@"reposted"];
     [self setValue:@([dict[@"reposts"] integerValue]) forKey:@"reposts"];
     
