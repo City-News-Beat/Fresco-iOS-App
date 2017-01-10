@@ -115,6 +115,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     galleryDetailView = [[[NSBundle mainBundle] loadNibNamed:@"FRSGalleryDetailView" owner:self options:nil] objectAtIndex:0];
     [self.view addSubview:galleryDetailView];
     
+    galleryDetailView.frame = self.view.frame;
+    
     [galleryDetailView loadGalleryDetailViewWithGallery:self.gallery parentVC:self];
     
     NSLog(@"Gallery Object: \n%@", self.gallery.jsonObject);

@@ -23,7 +23,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
                         <view multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="245" verticalHuggingPriority="245" translatesAutoresizingMaskIntoConstraints="NO" id="NbN-nY-a20" userLabel="ContentView">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="682"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Sv-gY-L1p" customClass="FRSGalleryView">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
@@ -126,10 +126,10 @@
                                 <constraint firstItem="w5E-hK-yjE" firstAttribute="leading" secondItem="NbN-nY-a20" secondAttribute="leading" id="abv-fW-AJo"/>
                                 <constraint firstAttribute="trailing" secondItem="rLO-dS-YLU" secondAttribute="trailing" id="b8x-qz-otk"/>
                                 <constraint firstItem="gkQ-Kx-cFr" firstAttribute="leading" secondItem="NbN-nY-a20" secondAttribute="leading" constant="16" id="c8r-nW-kaR"/>
+                                <constraint firstAttribute="bottom" secondItem="rLO-dS-YLU" secondAttribute="bottom" constant="44" id="g8d-Hn-cDn"/>
                                 <constraint firstItem="Zrb-4n-89F" firstAttribute="top" secondItem="1Sv-gY-L1p" secondAttribute="bottom" id="guB-vx-av9"/>
                                 <constraint firstItem="rLO-dS-YLU" firstAttribute="top" secondItem="0yb-JT-eRR" secondAttribute="bottom" constant="8" id="j2b-un-Mfk"/>
                                 <constraint firstItem="w5E-hK-yjE" firstAttribute="top" secondItem="Ehb-El-AVW" secondAttribute="bottom" id="jtj-qc-jWH"/>
-                                <constraint firstAttribute="height" constant="667" id="lc5-Xi-xmr"/>
                                 <constraint firstAttribute="trailing" secondItem="0yb-JT-eRR" secondAttribute="trailing" id="oVo-KA-FAb"/>
                                 <constraint firstAttribute="trailing" secondItem="1Sv-gY-L1p" secondAttribute="trailing" id="qUE-R0-2ch"/>
                                 <constraint firstItem="MEo-kD-hxy" firstAttribute="leading" secondItem="NbN-nY-a20" secondAttribute="leading" id="t8K-XJ-4Ev"/>
@@ -142,11 +142,10 @@
                     </subviews>
                     <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.92941176470588238" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="NbN-nY-a20" secondAttribute="bottom" id="ESj-5c-gkY"/>
                         <constraint firstAttribute="trailing" secondItem="NbN-nY-a20" secondAttribute="trailing" id="JX9-1P-Qdh"/>
                         <constraint firstItem="NbN-nY-a20" firstAttribute="leading" secondItem="zpr-wT-uyb" secondAttribute="leading" id="KfF-90-xNB"/>
                         <constraint firstItem="NbN-nY-a20" firstAttribute="top" secondItem="zpr-wT-uyb" secondAttribute="top" id="RGJ-cX-f40"/>
-                        <constraint firstItem="NbN-nY-a20" firstAttribute="centerX" secondItem="zpr-wT-uyb" secondAttribute="centerX" id="hRN-qR-RKD"/>
+                        <constraint firstAttribute="bottom" secondItem="NbN-nY-a20" secondAttribute="bottom" id="pa8-pw-Rpb"/>
                     </constraints>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kR5-eC-RzP" userLabel="CommentView">
@@ -196,15 +195,16 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <gestureRecognizers/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="zpr-wT-uyb" secondAttribute="bottom" id="2fe-u8-qaV"/>
                 <constraint firstAttribute="trailing" secondItem="zpr-wT-uyb" secondAttribute="trailing" id="Anc-zV-xhk"/>
-                <constraint firstAttribute="bottom" secondItem="zpr-wT-uyb" secondAttribute="bottom" id="Uqe-Pj-9ID"/>
+                <constraint firstItem="NbN-nY-a20" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" priority="250" id="ebm-Vm-K9D"/>
                 <constraint firstItem="kR5-eC-RzP" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="grg-0v-Tdx"/>
                 <constraint firstAttribute="trailing" secondItem="kR5-eC-RzP" secondAttribute="trailing" id="iys-QB-Yve"/>
+                <constraint firstItem="NbN-nY-a20" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="jEF-2O-mum"/>
                 <constraint firstItem="zpr-wT-uyb" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jJW-Qb-rgK"/>
                 <constraint firstAttribute="bottom" secondItem="kR5-eC-RzP" secondAttribute="bottom" id="pMx-pf-YIf"/>
                 <constraint firstItem="zpr-wT-uyb" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="zIx-Jf-w2v"/>
             </constraints>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="addCommentBotConstraint" destination="pMx-pf-YIf" id="DaN-eq-Jgc"/>
                 <outlet property="addCommentView" destination="kR5-eC-RzP" id="boT-ef-ine"/>
@@ -221,24 +221,13 @@
                 <outlet property="galleryHeightConstraint" destination="yka-Fq-ZAn" id="VJm-FE-408"/>
                 <outlet property="galleryView" destination="1Sv-gY-L1p" id="Acu-tZ-130"/>
                 <outlet property="scrollView" destination="zpr-wT-uyb" id="ADi-Ho-RKk"/>
-                <outlet property="scrollViewHeightConstraint" destination="lc5-Xi-xmr" id="ouf-JE-WRW"/>
                 <outlet property="verificationContainerView" destination="Zrb-4n-89F" id="Iad-Kl-D45"/>
                 <outlet property="verificationEyeImageView" destination="9bG-jd-VFq" id="x9J-mV-0nm"/>
                 <outlet property="verificationLabel" destination="e4O-Wh-Aj3" id="IrE-NQ-oMt"/>
                 <outlet property="verificationViewHeightConstraint" destination="neg-yf-feg" id="KaA-QW-Z7z"/>
                 <outlet property="verificationViewLeftContraint" destination="KCC-gy-C4K" id="FzX-jg-VzE"/>
             </connections>
-            <point key="canvasLocation" x="33.5" y="96.5"/>
-        </view>
-        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="3aY-Uy-6qL">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-        </tableView>
-        <view contentMode="scaleToFill" id="4d2-Ke-6J8">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <point key="canvasLocation" x="1" y="189"/>
         </view>
     </objects>
     <resources>

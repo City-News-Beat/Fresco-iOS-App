@@ -53,7 +53,6 @@
     IBOutlet NSLayoutConstraint *articlesHeightConstraint;
     
     IBOutlet NSLayoutConstraint *galleryHeightConstraint;
-    IBOutlet NSLayoutConstraint *scrollViewHeightConstraint;
     
     NSMutableArray *galleryPurchases;
 }
@@ -134,7 +133,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     commentsLabel.hidden = self.comments.count == 0;
 
     [self adjustCommentsTableHeight];
-    [self adjustScrollViewContentSize];
     [self.actionBar actionButtonTitleNeedsUpdate];
     [commentsTableView reloadData];
 }
@@ -224,26 +222,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)adjustScrollViewContentSize {
-    CGFloat bottomPadding = 20;
-
-    CGFloat height = galleryHeightConstraint.constant + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING + 50;
-
-    if (self.comments.count > 0) {
-        height += commentsHeightConstraint.constant + commentsLabel.frame.size.height + bottomPadding;
-    }
-
-    if ([self.gallery.articles allObjects].count > 0) {
-        articlesHeightConstraint.constant = CELL_HEIGHT * [self.gallery.articles allObjects].count;
-        height += articlesHeightConstraint.constant + articlesLabel.frame.size.height + bottomPadding;
-    }
-
-    scrollViewHeightConstraint.constant = height;
-
-    [self setNeedsUpdateConstraints];
-    [self layoutIfNeeded];
-}
-
 - (void)focusOnPost {
     NSArray *posts = self.galleryView.orderedPosts;
     //[[self.gallery.posts allObjects] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE]]];
@@ -311,7 +289,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     commentsHeightConstraint.constant = height;
 
-    [self adjustScrollViewContentSize];
     [commentsTableView reloadData];
 }
 
