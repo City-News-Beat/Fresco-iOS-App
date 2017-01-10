@@ -34,9 +34,18 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 
+    
+    NSString *openedFrom = @"";
+    
+    if (self.isComingFromNotification) {
+        openedFrom = @"push";
+    } else {
+        openedFrom = @"stories";
+    }
+    
     [FRSTracker track:galleryOpenedFromStories
-           parameters:@{ @"story_id" : (self.story.uid != Nil) ? self.story.uid : @"",
-                         @"opened_from" : @"stories" }];
+           parameters:@{ @"story_id" : (self.story.uid != nil) ? self.story.uid : @"",
+                         @"opened_from" : openedFrom }];
 }
 
 - (void)configureWithGalleries:(NSArray *)galleries {

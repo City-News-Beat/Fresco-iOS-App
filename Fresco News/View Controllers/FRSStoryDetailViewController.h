@@ -24,6 +24,7 @@
 @property (nonatomic, weak) FRSStory *story;
 @property (nonatomic, retain) NSString *storyID;
 @property (strong, nonatomic) NSString *timestamp;
+@property BOOL isComingFromNotification;
 
 - (void)reloadData;
 - (void)scrollToGalleryIndex:(NSInteger)index;
