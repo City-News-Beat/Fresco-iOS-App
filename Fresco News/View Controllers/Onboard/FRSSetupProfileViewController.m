@@ -461,6 +461,7 @@
     self.bioTV = [[UITextView alloc] initWithFrame:CGRectMake(16, 11, backgroundView.frame.size.width - 32, backgroundView.frame.size.height - 22)];
     self.bioTV.tag = 3;
     self.bioTV.textContainer.maximumNumberOfLines = 7;
+    self.bioTV.textContainer.lineBreakMode = NSLineBreakByTruncatingTail;
     self.bioTV.tintColor = [UIColor frescoOrangeColor];
     self.bioTV.delegate = self;
     self.bioTV.textContainer.lineFragmentPadding = 0;
@@ -618,6 +619,7 @@
         self.doneButton.userInteractionEnabled = YES;
         [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     }
+    
     [textView setText:[textView.text stringByReplacingOccurrencesOfString:@"arthurdearaujo" withString:@"💩🎉"]];
 }
 
@@ -631,6 +633,14 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    // Prevent user from going past the max line limit
+    float numberOfLines = textView.contentSize.height / textView.font.lineHeight;
+    if([text isEqualToString:@"\n"] && textView.textContainer.maximumNumberOfLines <= numberOfLines)
+    {
+        [textView resignFirstResponder];
+        return NO;
+    }
+
     return textView.text.length + (text.length - range.length) <= 160;
 }
 
