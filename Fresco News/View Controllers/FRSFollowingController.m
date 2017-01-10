@@ -39,6 +39,10 @@
 - (void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
 
     FRSGallery *gallery = self.feed[notification.row];
+    
+    [FRSTracker track:galleryOpenedFromHighlights
+           parameters:@{ @"gallery_id" : (gallery.uid != nil) ? gallery.uid : @"",
+                         @"opened_from" : @"following" }];
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
