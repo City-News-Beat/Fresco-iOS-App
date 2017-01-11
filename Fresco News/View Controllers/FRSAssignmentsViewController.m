@@ -1218,7 +1218,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
     self.assignmentCardIsOpen = YES;
     self.mapShouldFollowUser = NO;
-
+    
     UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
     self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.closeButton.tintColor = [UIColor whiteColor];
@@ -1504,6 +1504,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 - (void)globalAssignmentsAnimatedSegue {
     FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
     tableViewController.assignments = self.globalAssignmentsArray;
+    self.seguedToGlobalAssignment = true;
     [self.navigationController pushViewController:tableViewController animated:YES];
 }
 
