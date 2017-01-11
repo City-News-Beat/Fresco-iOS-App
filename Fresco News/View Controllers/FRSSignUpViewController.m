@@ -1797,14 +1797,15 @@
 
     } else {
         self.emailError = NO;
+        
+        self.errorContainer.alpha = 0;
+        self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
+        self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
+        self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
 
         if (self.notificationsEnabled) {
-
+            self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
         } else {
-            self.errorContainer.alpha = 0;
-            self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
-            self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
-            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
             self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, 0);
         }
     }
