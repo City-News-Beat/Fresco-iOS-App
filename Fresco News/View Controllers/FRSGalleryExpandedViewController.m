@@ -522,6 +522,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
 }
 
+
+
+
+/**
+ Sets up the comment table
+ */
+- (void) configureCommentsTableView {
+    self.commentTableView.rowHeight = UITableViewAutomaticDimension;
+    self.commentTableView.estimatedRowHeight = 56;
+}
+
 - (void)configureArticles {
 
     if (self.orderedArticles.count == 0) {
@@ -725,6 +736,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (self.comments.count > 0) {
         height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height + 20;
     }
+    
     if (self.orderedArticles.count > 0) {
         height += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height + 20;
     }
@@ -799,11 +811,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (scrollView == self.scrollView) {
         float size = self.scrollView.contentSize.height;
         float offset = self.scrollView.contentOffset.y;
-
-        float percentage = offset / size;
-
+        float percentage = ((offset + self.scrollView.frame.size.height) / size) * 100; //multiply * 100 because we want the whole percentage not the decimal
+        
         if (percentageScrolled < percentage) {
-            percentageScrolled = percentage;
+            percentageScrolled = percentage > 100 ? 100 : percentage;
         }
     }
 }
@@ -1003,6 +1014,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             height += commentSize;
         }
         index++;
+        
+        height = commentSize;
     }
 
     height += 56;
@@ -1489,9 +1502,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         @"activity_duration" : @(timeInSession),
         @"gallery_id" : galleryID,
         @"author" : authorID,
-        @"opened_from" : _openedFrom
+        @"opened_from" : _openedFrom,
+        @"scrolled_percent" : @(percentageScrolled)
     };
 
+    NSLog(@"percent scrolled = %f", percentageScrolled);
+    
     [FRSTracker track:gallerySession parameters:session];
 }
 

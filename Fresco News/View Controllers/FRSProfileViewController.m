@@ -1183,7 +1183,7 @@
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
-    vc.openedFrom = @"Profile";
+    vc.openedFrom = @"profile";
 
     [super showNavBarForScrollView:self.tableView animated:NO];
 
