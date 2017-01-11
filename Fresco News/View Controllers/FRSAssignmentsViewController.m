@@ -1296,7 +1296,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
     self.closeButton.alpha = 0;
 
-    [self showGlobalAssignmentsBar];
+    if (self.globalAssignmentsArray.count >= 1) {
+        [self showGlobalAssignmentsBar];
+    }
     self.hasDefault = NO;
 }
 
@@ -1689,7 +1691,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
     }
 
-    if (self.globalAssignmentsArray.count <= 1) {
+    if (self.globalAssignmentsArray.count >= 1) {
         [self showGlobalAssignmentsBar];
     }
 
