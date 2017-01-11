@@ -15,22 +15,70 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="FRSGalleryStatusView">
             <rect key="frame" x="0.0" y="0.0" width="270" height="450"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GALLERY STATUS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oOZ-DY-h4v">
-                    <rect key="frame" x="64" y="15" width="142" height="20"/>
+                    <rect key="frame" x="73" y="15" width="125" height="17"/>
                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qiU-5v-YDl">
-                    <rect key="frame" x="0.0" y="45" width="270" height="361"/>
+                    <rect key="frame" x="0.0" y="42" width="270" height="364"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="win-4y-deO" userLabel="ContentView">
                             <rect key="frame" x="0.0" y="0.0" width="270" height="450"/>
+                            <subviews>
+                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="checkboxMarkedCircleOutline24G" translatesAutoresizingMaskIntoConstraints="NO" id="T9R-sq-DvS">
+                                    <rect key="frame" x="18" y="12" width="24" height="24"/>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Submitted" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lrv-WE-yCU">
+                                    <rect key="frame" x="58" y="15" width="70" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YUo-lS-IBm">
+                                    <rect key="frame" x="29" y="33" width="2" height="36"/>
+                                    <color key="backgroundColor" red="0.29803921568627451" green="0.84313725490196079" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="36" id="82s-Mf-4it"/>
+                                        <constraint firstAttribute="width" constant="2" id="CzS-GH-WTT"/>
+                                    </constraints>
+                                </view>
+                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="checkboxMarkedCircleOutline24G" translatesAutoresizingMaskIntoConstraints="NO" id="8Uh-ie-t7F">
+                                    <rect key="frame" x="18" y="66" width="24" height="24"/>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Verified" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mdp-Zf-CIF">
+                                    <rect key="frame" x="58" y="58" width="55" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="News outlets can purchase content from this gallery" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7rG-sk-Zgd">
+                                    <rect key="frame" x="58" y="77" width="398" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="7rG-sk-Zgd" firstAttribute="top" secondItem="mdp-Zf-CIF" secondAttribute="bottom" constant="1" id="0Rq-Jf-fja"/>
+                                <constraint firstItem="YUo-lS-IBm" firstAttribute="leading" secondItem="win-4y-deO" secondAttribute="leading" constant="29" id="6Ot-tx-fH2"/>
+                                <constraint firstItem="Lrv-WE-yCU" firstAttribute="leading" secondItem="T9R-sq-DvS" secondAttribute="trailing" constant="16" id="JrP-Ky-nHk"/>
+                                <constraint firstItem="T9R-sq-DvS" firstAttribute="top" secondItem="win-4y-deO" secondAttribute="top" constant="12" id="RA2-6t-gpN"/>
+                                <constraint firstItem="YUo-lS-IBm" firstAttribute="top" secondItem="T9R-sq-DvS" secondAttribute="bottom" constant="-3" id="YyV-AJ-F4b"/>
+                                <constraint firstItem="8Uh-ie-t7F" firstAttribute="top" secondItem="T9R-sq-DvS" secondAttribute="bottom" constant="30" id="bBi-wb-kZd"/>
+                                <constraint firstItem="8Uh-ie-t7F" firstAttribute="leading" secondItem="win-4y-deO" secondAttribute="leading" constant="18" id="bag-Oh-cSY"/>
+                                <constraint firstItem="7rG-sk-Zgd" firstAttribute="leading" secondItem="8Uh-ie-t7F" secondAttribute="trailing" constant="16" id="rdr-xo-Z0b"/>
+                                <constraint firstItem="mdp-Zf-CIF" firstAttribute="top" secondItem="Lrv-WE-yCU" secondAttribute="bottom" constant="25" id="rof-ZO-Mm3"/>
+                                <constraint firstItem="mdp-Zf-CIF" firstAttribute="leading" secondItem="8Uh-ie-t7F" secondAttribute="trailing" constant="16" id="v6V-3L-Wat"/>
+                                <constraint firstItem="T9R-sq-DvS" firstAttribute="leading" secondItem="win-4y-deO" secondAttribute="leading" constant="18" id="w35-bB-Crb"/>
+                                <constraint firstItem="Lrv-WE-yCU" firstAttribute="top" secondItem="win-4y-deO" secondAttribute="top" constant="15" id="zbe-Mx-JhK"/>
+                            </constraints>
                         </view>
                     </subviews>
                     <constraints>
@@ -44,13 +92,13 @@
                     <rect key="frame" x="0.0" y="406" width="270" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GET HELP" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ObO-99-arc">
-                            <rect key="frame" x="16" y="13" width="72" height="18"/>
+                            <rect key="frame" x="16" y="15" width="62" height="15"/>
                             <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GtD-WC-otU">
-                            <rect key="frame" x="232" y="13" width="22" height="18"/>
+                            <rect key="frame" x="235" y="15" width="19" height="15"/>
                             <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                             <color key="textColor" red="0.0" green="0.27843137254901962" blue="0.73333333333333328" alpha="0.87" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -81,6 +129,15 @@
                 <constraint firstItem="oOZ-DY-h4v" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="15" id="uvY-7Q-LHk"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="submittedCheckImageView" destination="T9R-sq-DvS" id="hP1-VZ-ht3"/>
+                <outlet property="submittedLabel" destination="Lrv-WE-yCU" id="Hza-2c-CXH"/>
+                <outlet property="verifiedCheckImageView" destination="8Uh-ie-t7F" id="WcR-23-b09"/>
+                <outlet property="verifiedLineView" destination="YUo-lS-IBm" id="2rc-WZ-sG7"/>
+            </connections>
         </view>
     </objects>
+    <resources>
+        <image name="checkboxMarkedCircleOutline24G" width="24" height="24"/>
+    </resources>
 </document>

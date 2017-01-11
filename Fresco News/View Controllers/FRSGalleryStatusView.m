@@ -8,7 +8,17 @@
 
 #import "FRSGalleryStatusView.h"
 
-@implementation FRSGalleryStatusView
+@implementation FRSGalleryStatusView{
+    
+    IBOutlet UIImageView *submittedCheckImageView;
+    IBOutlet UILabel *submittedLabel;
+    
+    IBOutlet UIView *verifiedLineView;
+    
+    IBOutlet UIImageView *verifiedCheckImageView;
+    
+    
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.
