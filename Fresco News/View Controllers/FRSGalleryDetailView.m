@@ -38,9 +38,11 @@
     IBOutlet NSLayoutConstraint *verificationViewHeightConstraint;
     IBOutlet NSLayoutConstraint *verificationViewLeftContraint;
     
-    // Comments
+    // Comment Bottom Bar
     IBOutlet UIView *addCommentView;
     IBOutlet NSLayoutConstraint *addCommentBotConstraint;
+    
+    // Comments TableVeiw
     IBOutlet UIView *commentsTVTopLine;
     IBOutlet UITableView *commentsTableView;
     IBOutlet UILabel *commentsLabel;
@@ -83,6 +85,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 action:@selector(dismissKeyboard:)];
     tap.cancelsTouchesInView = NO;
     [self addGestureRecognizer:tap];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
 }
 
 - (void)configureCommentsSpinner { //Not sure if this does anything
@@ -242,7 +246,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
     self.actionBar.hidden = false;
-
+    addCommentBotConstraint.constant = 0;
+    
     [self.galleryView playerTap:tap];
     if (self.commentTextField.isEditing) {
         [self.commentTextField resignFirstResponder];
@@ -254,6 +259,20 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                          }
                          completion:nil];
     }
+    
+    [self updateConstraintsIfNeeded];
+    [self layoutIfNeeded];
+}
+
+-(void)keyboardWillShow:(NSNotification *)notification{
+    NSDictionary *info = [notification userInfo];
+
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    
+    addCommentBotConstraint.constant = keyboardSize.height;
+    
+    [self updateConstraintsIfNeeded];
+    [self layoutIfNeeded];
 }
 
 
