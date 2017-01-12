@@ -313,6 +313,7 @@ static NSString *const migrationShown = @"Migration Shown";
 static NSString *const galleryOpenedFromHighlights = @"Gallery opened";
 static NSString *const galleryOpenedFromProfile = @"Gallery opened";
 static NSString *const galleryOpenedFromStories = @"Gallery opened";
+static NSString *const galleryOpenedFromSearch = @"Gallery opened";
 static NSString *const galleryOpenedFromFollowing = @"Gallery opened";
 static NSString *const galleryOpenedFromPush = @"Gallery opened";
 static NSString *const locationEnabled = @"Permissions location enables";

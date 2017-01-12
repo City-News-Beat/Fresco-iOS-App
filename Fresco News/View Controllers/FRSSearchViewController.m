@@ -816,7 +816,9 @@
 - (void)readMore:(NSIndexPath *)indexPath {
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.galleries objectAtIndex:indexPath.row]];
     vc.shouldHaveBackButton = YES;
-
+    
+    [FRSTracker track:galleryOpenedFromSearch parameters:@{ @"opened_from" : @"search" }]; 
+    
     self.navigationItem.title = @"";
 
     [self.navigationController pushViewController:vc animated:YES];
