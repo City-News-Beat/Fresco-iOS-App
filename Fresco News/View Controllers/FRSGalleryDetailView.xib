@@ -37,7 +37,7 @@
                                     <rect key="frame" x="0.0" y="300" width="375" height="44"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PENDING VERIFICATION" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e4O-Wh-Aj3">
-                                            <rect key="frame" x="56" y="15" width="150" height="15"/>
+                                            <rect key="frame" x="56" y="14.5" width="150" height="15"/>
                                             <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>

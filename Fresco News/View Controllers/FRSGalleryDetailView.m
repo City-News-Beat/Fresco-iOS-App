@@ -14,6 +14,8 @@
 #import "FRSArticlesTableViewCell.h"
 #import "FRSSearchViewController.h"
 #import "FRSGalleryExpandedViewController.h"
+#import "FRSGalleryStatusView.h"
+#import "FRSGalleryStatusTableViewCell.h"
 
 #define CELL_HEIGHT 62
 #define TOP_NAV_BAR_HEIGHT 64
@@ -56,6 +58,8 @@
     
     IBOutlet NSLayoutConstraint *galleryHeightConstraint;
     
+    // Gallery Status
+    FRSGalleryStatusView *galleryStatusPopup;
     NSMutableArray *galleryPurchases;
 }
 
@@ -76,7 +80,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self configureArticles];
     [self configureComments];
     [self configureActionBar];
-    [self configureVerificationView];
+    [self configureVerificationTabView];
     if ([self.gallery.comments integerValue] >= 1) {
         [self configureCommentsSpinner];
     }
@@ -171,7 +175,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
-- (void)configureVerificationView {
+- (void)configureVerificationTabView {
     // If the user created the gallery
     if ([self.gallery.creator.uid isEqualToString: [[FRSAPIClient sharedClient] authenticatedUser].uid]) {
         verificationViewLeftContraint.constant = 16;// Zeplin reg distance
@@ -432,7 +436,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 #pragma mark - IBActions
 
 - (IBAction)showGalleryStatus:(id)sender {
-    
+    galleryStatusPopup = (FRSGalleryStatusView *)[[[NSBundle mainBundle] loadNibNamed:@"FRSGalleryStatusView" owner:self options:nil] objectAtIndex:0];
+    [galleryStatusPopup configureWithArray:galleryPurchases rating:(int)self.gallery.verificationRating];
+    [[UIApplication sharedApplication].keyWindow addSubview:galleryStatusPopup];
+    galleryStatusPopup.frame = [UIApplication sharedApplication].keyWindow.rootViewController.view.frame;
 }
 
 #pragma mark - FRSContentActionBarDelegate and Action Bar Methods
