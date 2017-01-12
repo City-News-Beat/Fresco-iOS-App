@@ -63,6 +63,8 @@
 @property (strong, nonatomic) FRSSetupProfileViewController *setupProfileVC;
 @property CGFloat latitude;
 @property CGFloat longitude;
+@property (strong, nonatomic) NSMutableArray *formViews;
+
 
 @end
 
@@ -231,6 +233,8 @@
 
 - (void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
+    
+    self.formViews = [[NSMutableArray alloc] init];
 
     [self configureScrollView];
     [self configureTextFields];
@@ -297,6 +301,7 @@
     self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
     [self.scrollView addSubview:self.usernameHighlightLine];
 
+
     self.usernameCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-green"]];
     self.usernameCheckIV.frame = CGRectMake(self.usernameTF.frame.size.width - 24, 10, 24, 24);
     self.usernameCheckIV.alpha = 0;
@@ -353,6 +358,7 @@
     self.assignmentsCard = [[UIView alloc] initWithFrame:CGRectMake(0, 192, self.scrollView.frame.size.width, 62)];
     self.assignmentsCard.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.assignmentsCard];
+    [self.formViews addObject:self.assignmentsCard];
 
     UILabel *topLabel = [[UILabel alloc] init];
     topLabel.text = @"ASSIGNMENT NOTIFICATIONS";
@@ -386,6 +392,7 @@
     self.y += 44 + 12; // cc: dan
     self.TOSContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentsCard.frame.origin.y + self.assignmentsCard.frame.size.height + 12, self.view.frame.size.width, 44)];
     [self.scrollView addSubview:self.TOSContainerView];
+    [self.formViews addObject:self.TOSContainerView];
 
     self.TOSCheckBoxButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@"check-disabled"] forState:UIControlStateNormal];
@@ -1780,18 +1787,28 @@
         self.emailError = YES;
 
         self.errorContainer.alpha = 1;
+        
+        NSArray *views = [self.scrollView subviews];
+        
+        NSLog(@"%lu", (unsigned long)[views count]);
 
         if (self.notificationsEnabled) {
-
+            
+//            for(UIView *subview in vi)
+            
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 44);
-            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
-
+            //self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
+            //self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
+            NSLog(@"TOSContainer View Y %f", self.TOSContainerView.frame.origin.y);
+            self.TOSContainerView.frame = CGRectMake(self.TOSContainerView.frame.origin.x, 658, self.TOSContainerView.frame.size.width, self.TOSContainerView.frame.size.height);
+            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height+44);
+            
         } else {
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
-            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 44);
+            //self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 44);
             self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, 44);
         }
 
@@ -1799,6 +1816,7 @@
         self.emailError = NO;
         
         self.errorContainer.alpha = 0;
+        
         self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
         self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
         self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
