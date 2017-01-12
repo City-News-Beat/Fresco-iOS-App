@@ -11,6 +11,7 @@
 @implementation FRSGalleryStatusView{
     
     IBOutlet UIView *popupView;
+    IBOutlet NSLayoutConstraint *popupViewHeightConstraint;
     
     // Submitted
     IBOutlet UIImageView *submittedCheckImageView;
@@ -28,7 +29,7 @@
     IBOutlet UIView *soldLineView;
     IBOutlet UILabel *soldLabel;
     IBOutlet UITableView *soldContentTableView;
-    
+    IBOutlet UIImageView *soldCashIconImageView;
 }
 
 -(void)configureWithArray:(NSArray *)purchases rating:(int)rating{
@@ -39,7 +40,7 @@
     if (rating == 0){// Not Rated | PENDING VERIFICATION
         [self setToPendingVerification];
     }else if(rating == 1){// Skipped | NOT VERIFIED
-
+        
     }else if(rating == 2 || rating == 3){// Verified or Highlighted | VERIFIED
 
     }else if(rating == 4){// DELETED
@@ -48,6 +49,13 @@
 }
 
 -(void)setToPendingVerification{
+    popupViewHeightConstraint.constant = 230;
+    
+    soldLabel.hidden = true;
+    soldLineView.hidden = true;
+    soldContentTableView.hidden = true;
+    soldCashIconImageView.hidden = true;
+
     verifiedTitleLabel.text = @"Pending Verification";
     verifiedTitleLabel.font = [UIFont systemFontOfSize:verifiedTitleLabel.font.pointSize weight:UIFontWeightMedium];
     
@@ -55,7 +63,8 @@
     
     verifiedLineView.backgroundColor = [UIColor frescoOrangeColor];
     verifiedLineHeightConstraint.constant = 36;
-    // Set circle to empty orange image
+    
+    [verifiedCheckImageView setImage:[UIImage imageNamed:@"checkboxBlankCircleOutline24Y"]];
 }
 
 -(void)animateIn {

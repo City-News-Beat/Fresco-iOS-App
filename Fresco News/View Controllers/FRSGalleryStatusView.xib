@@ -20,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xEa-Qj-pWB" userLabel="PopupView">
-                    <rect key="frame" x="53" y="184" width="270" height="300"/>
+                    <rect key="frame" x="53" y="219" width="270" height="230"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GALLERY STATUS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oOZ-DY-h4v">
                             <rect key="frame" x="73" y="15" width="125" height="17"/>
@@ -29,10 +29,10 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qiU-5v-YDl">
-                            <rect key="frame" x="0.0" y="43" width="270" height="213"/>
+                            <rect key="frame" x="0.0" y="43" width="270" height="143"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="win-4y-deO" userLabel="ContentView">
-                                    <rect key="frame" x="0.0" y="0.0" width="270" height="300"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="270" height="230"/>
                                     <subviews>
                                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="checkboxMarkedCircleOutline24G" translatesAutoresizingMaskIntoConstraints="NO" id="T9R-sq-DvS">
                                             <rect key="frame" x="18" y="12" width="24" height="24"/>
@@ -60,8 +60,8 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="News outlets can purchase content from this gallery" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7rG-sk-Zgd">
-                                            <rect key="frame" x="58" y="79" width="200" height="36"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Once we’ve verified your gallery, news outlets will be able to purchase content." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7rG-sk-Zgd">
+                                            <rect key="frame" x="58" y="79" width="200" height="54"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="200" id="ICN-EL-J7S"/>
                                             </constraints>
@@ -84,7 +84,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="u3H-JQ-EVk">
-                                            <rect key="frame" x="60" y="137" width="210" height="163"/>
+                                            <rect key="frame" x="60" y="137" width="210" height="93"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </tableView>
                                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="cashUsd24G" translatesAutoresizingMaskIntoConstraints="NO" id="wrw-vf-4P4">
@@ -126,7 +126,7 @@
                             </constraints>
                         </scrollView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vGl-9k-fb1" userLabel="BottomBarView">
-                            <rect key="frame" x="5" y="256" width="260" height="39"/>
+                            <rect key="frame" x="5" y="186" width="260" height="39"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GET HELP" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ObO-99-arc">
                                     <rect key="frame" x="11" y="12.5" width="62" height="15"/>
@@ -160,7 +160,7 @@
                         <constraint firstAttribute="trailing" secondItem="qiU-5v-YDl" secondAttribute="trailing" id="Mgb-oe-9zE"/>
                         <constraint firstItem="oOZ-DY-h4v" firstAttribute="centerX" secondItem="xEa-Qj-pWB" secondAttribute="centerX" id="UTb-m1-ou0"/>
                         <constraint firstAttribute="bottom" secondItem="vGl-9k-fb1" secondAttribute="bottom" constant="5" id="WDj-qz-H90"/>
-                        <constraint firstAttribute="height" priority="250" constant="300" id="hXq-9B-cfv"/>
+                        <constraint firstAttribute="height" constant="230" id="hXq-9B-cfv"/>
                         <constraint firstItem="win-4y-deO" firstAttribute="width" secondItem="xEa-Qj-pWB" secondAttribute="width" id="jjf-hq-4JX"/>
                         <constraint firstItem="vGl-9k-fb1" firstAttribute="leading" secondItem="xEa-Qj-pWB" secondAttribute="leading" constant="5" id="nH7-iM-bRL"/>
                         <constraint firstItem="oOZ-DY-h4v" firstAttribute="top" secondItem="xEa-Qj-pWB" secondAttribute="top" constant="15" id="oz0-Rj-L2S"/>
@@ -176,6 +176,8 @@
             </constraints>
             <connections>
                 <outlet property="popupView" destination="xEa-Qj-pWB" id="ekm-dz-ZAK"/>
+                <outlet property="popupViewHeightConstraint" destination="hXq-9B-cfv" id="l7f-n9-hWi"/>
+                <outlet property="soldCashIconImageView" destination="wrw-vf-4P4" id="wg2-TK-YdS"/>
                 <outlet property="soldContentTableView" destination="u3H-JQ-EVk" id="6ic-vU-FR8"/>
                 <outlet property="soldLabel" destination="HPO-rt-b5k" id="QeN-Cr-x1T"/>
                 <outlet property="soldLineView" destination="02D-1T-Mu2" id="laj-ej-Yx4"/>
