@@ -1290,11 +1290,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         if (self.userIsInRange && !self.didAcceptAssignment) {
-                             self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
-                         } else {
-                             
-                         }
+                         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
                      }
                      completion:^(BOOL finished) {
                          
