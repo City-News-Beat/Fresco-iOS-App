@@ -245,6 +245,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.hasDefault = NO;
     self.defaultID = nil;
     
+    if(self.closeButton){
+        self.closeButton.alpha = 0;
+    }
+
     if(self.seguedToGlobalAssignment){
         self.seguedToGlobalAssignment = false;
     }
@@ -1500,6 +1504,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
         tableViewController.assignments = self.globalAssignmentsArray;
         self.seguedToGlobalAssignment = YES;
+        self.closeButton.alpha = 0;
         [self.navigationController pushViewController:tableViewController animated:NO];
     }
 }
@@ -1510,6 +1515,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
     tableViewController.assignments = self.globalAssignmentsArray;
     self.seguedToGlobalAssignment = YES;
+    self.closeButton.alpha = 0;
     [self.navigationController pushViewController:tableViewController animated:YES];
 }
 
