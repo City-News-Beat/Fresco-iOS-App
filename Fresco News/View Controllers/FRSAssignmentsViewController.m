@@ -251,6 +251,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     self.hasDefault = NO;
     self.defaultID = nil;
+    
+    if(self.seguedToGlobalAssignment){
+        self.seguedToGlobalAssignment = false;
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

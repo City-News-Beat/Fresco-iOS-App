@@ -38,4 +38,5 @@
 @property BOOL assignmentCardIsOpen;
 @property (strong, nonatomic) FRSAssignment *selectedAssignment;
 
+
 @end

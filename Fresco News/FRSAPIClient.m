@@ -262,6 +262,7 @@
 - (void)check:(NSString *)check completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *checkEndpoint = [userEndpoint stringByAppendingString:[check stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
 
+    
     [self get:checkEndpoint
         withParameters:Nil
             completion:^(id responseObject, NSError *error) {
