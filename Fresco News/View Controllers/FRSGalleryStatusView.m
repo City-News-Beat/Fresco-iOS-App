@@ -44,6 +44,7 @@
     [self addLayerShadowAndRadius];
     self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
     [self animateIn];
+    [self configureSoldTableView];
     
     purchases = [[NSArray alloc] initWithArray:postPurchases];
     
@@ -60,6 +61,15 @@
             // Todo
         }
     }
+}
+
+-(void)configureSoldTableView{
+    soldContentTableView.delegate = self;
+    soldContentTableView.dataSource = self;
+    soldContentTableView.clipsToBounds = true;
+    soldContentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    soldContentTableView.estimatedRowHeight = 40;
+    soldContentTableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 -(void)setToPendingVerification{
@@ -114,6 +124,7 @@
     }else{
         popupViewHeightConstraint.constant = 528; // Zeplin Height
     }
+    verifiedDescriptionLabel.hidden = true;
 }
 
 - (void)hideSoldViews{
@@ -165,7 +176,7 @@
     popupView.layer.shadowOffset = CGSizeMake(0, 4);
     popupView.layer.shadowRadius = 2;
     popupView.layer.shadowOpacity = 0.1;
-    popupView.layer.cornerRadius = 2;
+    popupView.layer.cornerRadius = 4;
 }
 
 #pragma mark - IBActions
@@ -188,18 +199,17 @@
     return purchases.count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    FRSGalleryStatusTableViewCell *cell = (FRSGalleryStatusTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView registerNib:[UINib nibWithNibName:@"FRSGalleryStatusTableViewCell" bundle:nil] forCellReuseIdentifier:@"purchase-cell"];
+    FRSGalleryStatusTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"purchase-cell"];
+    cell.tableView = tableView;
+    [(FRSGalleryStatusTableViewCell *)cell configureCellWithPurchaseDict:[purchases objectAtIndex:indexPath.row]];
 
-    return cell.frame.size.height;
+    return cell;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    FRSGalleryStatusTableViewCell *cell = [[FRSGalleryStatusTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"purchase-cell"];
-    [cell configureCellWithPurchaseDict:[purchases objectAtIndex:indexPath.row]];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return cell;
 }
 
 @end

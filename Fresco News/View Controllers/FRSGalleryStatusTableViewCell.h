@@ -12,4 +12,6 @@
 
 -(void)configureCellWithPurchaseDict:(NSDictionary *)purchaseDict;
 
+@property (nonatomic) UITableView *tableView;
+
 @end
