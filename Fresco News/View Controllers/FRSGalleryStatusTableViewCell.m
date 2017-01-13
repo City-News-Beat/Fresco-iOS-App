@@ -7,6 +7,7 @@
 //
 
 #import "FRSGalleryStatusTableViewCell.h"
+#import "Heneke.h"
 
 @implementation FRSGalleryStatusTableViewCell{
     
@@ -16,8 +17,12 @@
     
 }
 
--(void)configureCellWithImage:(UIImage *)postImage purchasesDict:(NSDictionary *)purchasesDict{
-    [postImageView setImage:postImage];
+-(void)configureCellWithPurchaseDict:(NSDictionary *)purchaseDict{
+    /*[postImageView hnk_setImageFromURL:[NSURL URLWithString:postImageURL] placeholder:nil success:^(UIImage *image) {
+
+    } failure:^(NSError *error) {
+
+    }];*/
     
 }
 

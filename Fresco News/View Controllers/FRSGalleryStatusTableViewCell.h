@@ -10,4 +10,6 @@
 
 @interface FRSGalleryStatusTableViewCell : UITableViewCell
 
+-(void)configureCellWithPurchaseDict:(NSDictionary *)purchaseDict;
+
 @end
