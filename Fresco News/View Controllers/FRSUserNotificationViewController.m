@@ -79,6 +79,7 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
     [[FRSAPIClient sharedClient] getNotificationsWithCompletion:^(id responseObject, NSError *error) {
         self.feed = [responseObject objectForKey:@"feed"];
         
+        NSLog(@"GET NOTIFICATIONS: %@", responseObject);
         [self configureTableView];
         [self registerNibs];
         [self.spinner stopLoading];
@@ -580,10 +581,12 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
 
 #pragma mark - Assignments
 - (void)configureAssignmentCell:(FRSAssignmentNotificationTableViewCell *)assignmentCell dictionary:(NSDictionary *)dictionary {
+    NSLog(@"DICTIONARY: %@", dictionary);
     assignmentCell.assignmentID = [[dictionary objectForKey:@"meta"] objectForKey:@"assignment_id"];
-    if ([[[dictionary objectForKey:@"meta"] objectForKey:@"is_global"] integerValue] == 1) {
+    if ([[[dictionary objectForKey:@"meta"] objectForKey:@"is_global"] boolValue]) {
         assignmentCell.actionButton.hidden = true;
     }else{
+        assignmentCell.actionButton.hidden = false;
         assignmentCell.actionButton.tintColor = [UIColor blackColor];
     }
     assignmentCell.titleLabel.text = [dictionary objectForKey:@"title"];
