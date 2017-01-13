@@ -410,12 +410,12 @@ static BOOL isDeeplinking;
                                                      assignmentsVC.defaultID = assignmentID;
 
                                                      [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
+                                                     
+                                                     //navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
+                                                     //[tab setSelectedIndex:3];
 
                                                      [assignmentsVC globalAssignmentsSegue];
-
-                                                     navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
-                                                     [tab setSelectedIndex:3];
-                                                     
+                                                                                                          
                                                      assignmentsVC.navigationItem.leftBarButtonItem = nil;
                                                      assignmentsVC.navigationItem.hidesBackButton = true;
                                                  }

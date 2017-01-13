@@ -38,4 +38,5 @@
 @property BOOL mapShouldFollowUser;
 @property BOOL assignmentCardIsOpen;
 
+
 @end
