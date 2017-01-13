@@ -394,8 +394,7 @@ static BOOL isDeeplinking;
                                                      assignmentsVC.defaultID = assignmentID;
 
                                                      [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
-
-                                                     [assignmentsVC setDefaultAssignment:assignment];
+                                                     assignmentsVC.selectedAssignment = assignment;
 
                                                      navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
                                                      [tab setSelectedIndex:3];

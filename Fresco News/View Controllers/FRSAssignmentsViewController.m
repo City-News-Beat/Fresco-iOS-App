@@ -156,6 +156,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                                   }];
     
     self.assignmentCardIsOpen = NO;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -191,6 +192,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
     
     [self checkForAcceptedAssignment];
+    
+    
+    if (self.selectedAssignment) {
+        [self setDefaultAssignment:self.selectedAssignment];
+        self.selectedAssignment = nil;
+    }
 }
 
 - (void)dealloc {

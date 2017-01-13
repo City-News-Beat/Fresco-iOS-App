@@ -264,7 +264,7 @@
                                              FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
                                              FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
                                              [assignment configureWithDictionary:responseObject];
-                                             [assignmentsVC setDefaultAssignment:assignment];
+                                             assignmentsVC.selectedAssignment = assignment;
 
                                            }];
 }
