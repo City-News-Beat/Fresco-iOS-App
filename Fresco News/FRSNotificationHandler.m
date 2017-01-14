@@ -18,6 +18,9 @@
 
 static BOOL isDeeplinking;
 
+/* BOOL used to determine if the push handler is navigating to an assignment */
+static BOOL isSegueingToAssignment;
+
 @implementation FRSNotificationHandler
 
 + (void)handleNotification:(NSDictionary *)push {
@@ -350,18 +353,37 @@ static BOOL isDeeplinking;
 }
 
 + (void)segueToAssignment:(NSString *)assignmentID {
+
+    if (isSegueingToAssignment) {
+        return;
+    }
+    
+    isSegueingToAssignment = YES;
+    
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
 
     [self performSelector:@selector(popViewController) withObject:nil afterDelay:0.3];
-    __block BOOL ranOnce = FALSE;
 
     [[FRSAPIClient sharedClient] getAssignmentWithUID:assignmentID
                                            completion:^(id responseObject, NSError *error) {
-                                             if (ranOnce) {
-                                                 return;
-                                             }
-
-                                             ranOnce = TRUE;
+                                               
+                                               //Tell the view controller we're done with this segue
+                                               isSegueingToAssignment = NO;
+                                               
+                                               if(error) {
+                                                   FRSAlertView *alertView = [[FRSAlertView alloc]
+                                                                              initWithTitle:@"Unable to Load Assignment!"
+                                                                              message:@"We're unable to load this assignment right now!"
+                                                                              actionTitle:@"OK"
+                                                                              cancelTitle:@""
+                                                                              cancelTitleColor:[UIColor frescoBackgroundColorDark]
+                                                                              delegate:nil];
+                                                   [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
+                                                   [alertView show];
+                                                   
+                                                   return;
+                                               }
+                                               
                                              FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
 
                                              UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
@@ -380,9 +402,7 @@ static BOOL isDeeplinking;
                                                  [alertView.actionButton setTitleColor:[UIColor frescoDarkTextColor] forState:UIControlStateNormal];
                                                  [alertView show];
                                              } else {
-                                                 [appDelegate.tabBarController setSelectedIndex:3];
-
-                                                 if ([[navController class] isSubclassOfClass:[UINavigationController class]] && ![responseObject[@"location"] isEqual: [NSNull null]] && responseObject[@"location"] != nil) {
+                                                 if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
                                                      UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
                                                      tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
                                                      tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
@@ -398,25 +418,6 @@ static BOOL isDeeplinking;
 
                                                      navController = (UINavigationController *)[[tab viewControllers] objectAtIndex:2];
                                                      [tab setSelectedIndex:3];
-                                                 } else {
-                                                     UITabBarController *tab = (UITabBarController *)[[navController viewControllers] firstObject];
-                                                     tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
-                                                     tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
-
-                                                     FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[[(FRSNavigationController *)[tab.viewControllers objectAtIndex:3] viewControllers] firstObject];
-
-                                                     assignmentsVC.hasDefault = YES;
-                                                     assignmentsVC.defaultID = assignmentID;
-
-                                                     [assignmentsVC.navigationController setNavigationBarHidden:FALSE];
-                                                     
-                                                     //navController = (UINavigationController *)[[tab.tabBarController viewControllers] objectAtIndex:2];
-                                                     //[tab setSelectedIndex:3];
-
-                                                     [assignmentsVC globalAssignmentsSegue];
-                                                                                                          
-                                                     assignmentsVC.navigationItem.leftBarButtonItem = nil;
-                                                     assignmentsVC.navigationItem.hidesBackButton = true;
                                                  }
                                              }
                                            }];

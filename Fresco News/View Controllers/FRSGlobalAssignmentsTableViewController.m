@@ -9,6 +9,7 @@
 #import "FRSGlobalAssignmentsTableViewController.h"
 #import "GlobalAssignmentsTableViewCell.h"
 #import "FRSCameraViewController.h"
+#import "FRSAssignmentsViewController.h"
 
 @interface FRSGlobalAssignmentsTableViewController () <UITableViewDelegate, UITableViewDataSource>
 

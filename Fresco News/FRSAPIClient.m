@@ -1129,10 +1129,9 @@
 
               if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
                   completion(responseObject, error);
+              } else {
+                  completion(nil, error);
               }
-
-              // shouldn't happen
-              completion(responseObject, error);
             }];
 }
 
