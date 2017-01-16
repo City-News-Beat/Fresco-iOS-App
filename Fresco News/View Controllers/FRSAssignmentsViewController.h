@@ -24,7 +24,6 @@
 
 - (void)setInitialMapRegion;
 - (instancetype)initWithActiveAssignment:(NSString *)assignmentID;
-- (void)setDefaultAssignment:(FRSAssignment *)assignment;
 - (void)configureMap;
 @property CGFloat assignmentLat;
 @property CGFloat assignmentLong;
@@ -37,5 +36,7 @@
 @property (strong, nonatomic) MKMapView *mapView;
 @property BOOL mapShouldFollowUser;
 @property BOOL assignmentCardIsOpen;
+@property (strong, nonatomic) FRSAssignment *selectedAssignment;
+
 
 @end

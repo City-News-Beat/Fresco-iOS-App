@@ -156,6 +156,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                                                   }];
     
     self.assignmentCardIsOpen = NO;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -191,6 +192,23 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
     
     [self checkForAcceptedAssignment];
+}
+
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    //If the VC is presented and a selected assignment is set, present that assignment to the user
+    //by either pushing the global assignment controller or presenting it on the map
+    if (self.selectedAssignment) {
+        if ([self.selectedAssignment.latitude isEqual:@0] && [self.selectedAssignment.longitude isEqual:@0]) {
+            [self globalAssignmentsSegue];
+        } else {
+            [self setDefaultAssignment:self.selectedAssignment];
+        }
+        
+        self.selectedAssignment = nil;
+    }
 }
 
 - (void)dealloc {
@@ -244,6 +262,14 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     self.hasDefault = NO;
     self.defaultID = nil;
+    
+    if(self.closeButton){
+        self.closeButton.alpha = 0;
+    }
+
+    if(self.seguedToGlobalAssignment){
+        self.seguedToGlobalAssignment = false;
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -1491,12 +1517,18 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.scrollView.frame = CGRectMake(0, 36, self.view.frame.size.width, self.view.frame.size.height);
 }
 
+
+/**
+ * Segways to the global assignment screen from the root assignment VC
+ */
 - (void)globalAssignmentsSegue {
     if (![[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass: [FRSGlobalAssignmentsTableViewController class]] && self.seguedToGlobalAssignment == false){
         FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
         tableViewController.assignments = self.globalAssignmentsArray;
         self.seguedToGlobalAssignment = YES;
-        [self.navigationController pushViewController:tableViewController animated:NO];
+        self.closeButton.alpha = 0;
+        [self.navigationController pushViewController:tableViewController animated:YES];
+        self.selectedAssignment = nil;
     }
 }
 
@@ -1506,6 +1538,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
     tableViewController.assignments = self.globalAssignmentsArray;
     self.seguedToGlobalAssignment = YES;
+    self.closeButton.alpha = 0;
     [self.navigationController pushViewController:tableViewController animated:YES];
 }
 

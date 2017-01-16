@@ -264,20 +264,9 @@
                                              FRSAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
                                              FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:[appDelegate managedObjectContext]];
                                              [assignment configureWithDictionary:responseObject];
-                                             [assignmentsVC setDefaultAssignment:assignment];
+                                             assignmentsVC.selectedAssignment = assignment;
 
                                            }];
-}
-
-- (void)segueToGlobalAssignmentWithID:(NSString *)assignmentID {
-
-    FRSNavigationController *navCont = (FRSNavigationController *)[self.tabBarController.viewControllers objectAtIndex:3];
-    FRSAssignmentsViewController *assignmentsVC = (FRSAssignmentsViewController *)[navCont.viewControllers objectAtIndex:0];
-
-    [self.tabBarController setSelectedIndex:3];
-    [assignmentsVC globalAssignmentsSegue];
-
-    [self performSelector:@selector(popViewController) withObject:nil afterDelay:0];
 }
 
 - (void)segueToCameraWithAssignmentID:(NSString *)assignmentID {
