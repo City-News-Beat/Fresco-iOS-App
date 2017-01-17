@@ -8,6 +8,7 @@
 
 #import "FRSGalleryStatusView.h"
 #import "FRSGalleryStatusTableViewCell.h"
+#import "Haneke.h"
 
 @interface FRSGalleryStatusView () <UITableViewDelegate, UITableViewDataSource>
 @end
@@ -68,7 +69,7 @@
     soldContentTableView.dataSource = self;
     soldContentTableView.clipsToBounds = true;
     soldContentTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    soldContentTableView.estimatedRowHeight = 40;
+    soldContentTableView.estimatedRowHeight = 20;
     soldContentTableView.rowHeight = UITableViewAutomaticDimension;
 }
 
@@ -179,6 +180,18 @@
     popupView.layer.cornerRadius = 4;
 }
 
+
+/**
+ Changes the scroll view content size to make it able to scroll down to the size of the tableview (if this wasn't here, there would be 2 scroll views needed. 1 for the tableview scrollview, 1 for the scrollview)
+ */
+-(void)adjustScrollViewContentSize{
+    float botBarHeight = 44;
+    scrollView.contentSize = CGSizeMake(scrollView.contentSize.width, self.frame.size.height - (botBarHeight * 2));
+    CGRect newFrame = soldContentTableView.frame;
+    newFrame.size.height = soldContentTableView.contentSize.height;
+    soldContentTableView.frame = newFrame;
+}
+
 #pragma mark - IBActions
 
 - (IBAction)pressedOk:(id)sender {
@@ -203,13 +216,14 @@
     [tableView registerNib:[UINib nibWithNibName:@"FRSGalleryStatusTableViewCell" bundle:nil] forCellReuseIdentifier:@"purchase-cell"];
     FRSGalleryStatusTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"purchase-cell"];
     cell.tableView = tableView;
+    
     [(FRSGalleryStatusTableViewCell *)cell configureCellWithPurchaseDict:[purchases objectAtIndex:indexPath.row]];
 
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    [(FRSGalleryStatusTableViewCell *)cell configureCellWithPurchaseDict:[purchases objectAtIndex:indexPath.row]];
+    [self adjustScrollViewContentSize];
 }
-
 @end

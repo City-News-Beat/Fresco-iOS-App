@@ -23,13 +23,13 @@
                     <rect key="frame" x="53" y="219" width="270" height="230"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GALLERY STATUS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oOZ-DY-h4v">
-                            <rect key="frame" x="72.5" y="15" width="125" height="17"/>
+                            <rect key="frame" x="64" y="15" width="142" height="20"/>
                             <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qiU-5v-YDl">
-                            <rect key="frame" x="0.0" y="43" width="270" height="143"/>
+                            <rect key="frame" x="0.0" y="46" width="270" height="145"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="win-4y-deO" userLabel="ContentView">
                                     <rect key="frame" x="0.0" y="0.0" width="270" height="230"/>
@@ -83,7 +83,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="u3H-JQ-EVk">
+                                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="u3H-JQ-EVk">
                                             <rect key="frame" x="60" y="137" width="210" height="93"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </tableView>
@@ -126,10 +126,10 @@
                             </constraints>
                         </scrollView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vGl-9k-fb1" userLabel="BottomBarView">
-                            <rect key="frame" x="5" y="186" width="260" height="39"/>
+                            <rect key="frame" x="0.0" y="191" width="270" height="39"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YfB-7A-1dB">
-                                    <rect key="frame" x="11" y="6.5" width="62" height="27"/>
+                                    <rect key="frame" x="11" y="5" width="72" height="30"/>
                                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                                     <state key="normal" title="GET HELP">
                                         <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
@@ -139,7 +139,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LaO-gg-GSg">
-                                    <rect key="frame" x="219" y="6.5" width="30" height="27"/>
+                                    <rect key="frame" x="229" y="5" width="30" height="30"/>
                                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                                     <state key="normal" title="OK">
                                         <color key="titleColor" red="0.0" green="0.27843137254901962" blue="0.73333333333333328" alpha="1" colorSpace="calibratedRGB"/>
@@ -149,14 +149,14 @@
                                     </connections>
                                 </button>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Swo-6v-Bsa">
-                                    <rect key="frame" x="0.0" y="-1" width="260" height="0.0"/>
+                                    <rect key="frame" x="0.0" y="-1" width="270" height="0.0"/>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="0.5" id="fz0-Ua-cYd"/>
                                     </constraints>
                                 </view>
                             </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="LaO-gg-GSg" firstAttribute="centerY" secondItem="vGl-9k-fb1" secondAttribute="centerY" id="32Y-hP-aP7"/>
                                 <constraint firstAttribute="height" constant="39" id="3Fl-AE-Awj"/>
@@ -177,13 +177,13 @@
                         <constraint firstItem="vGl-9k-fb1" firstAttribute="top" secondItem="qiU-5v-YDl" secondAttribute="bottom" id="HA9-9n-qri"/>
                         <constraint firstAttribute="trailing" secondItem="qiU-5v-YDl" secondAttribute="trailing" id="Mgb-oe-9zE"/>
                         <constraint firstItem="oOZ-DY-h4v" firstAttribute="centerX" secondItem="xEa-Qj-pWB" secondAttribute="centerX" id="UTb-m1-ou0"/>
-                        <constraint firstAttribute="bottom" secondItem="vGl-9k-fb1" secondAttribute="bottom" constant="5" id="WDj-qz-H90"/>
+                        <constraint firstAttribute="bottom" secondItem="vGl-9k-fb1" secondAttribute="bottom" id="WDj-qz-H90"/>
                         <constraint firstAttribute="height" constant="230" id="hXq-9B-cfv"/>
                         <constraint firstItem="win-4y-deO" firstAttribute="width" secondItem="xEa-Qj-pWB" secondAttribute="width" id="jjf-hq-4JX"/>
-                        <constraint firstItem="vGl-9k-fb1" firstAttribute="leading" secondItem="xEa-Qj-pWB" secondAttribute="leading" constant="5" id="nH7-iM-bRL"/>
+                        <constraint firstItem="vGl-9k-fb1" firstAttribute="leading" secondItem="xEa-Qj-pWB" secondAttribute="leading" id="nH7-iM-bRL"/>
                         <constraint firstItem="oOZ-DY-h4v" firstAttribute="top" secondItem="xEa-Qj-pWB" secondAttribute="top" constant="15" id="oz0-Rj-L2S"/>
                         <constraint firstItem="qiU-5v-YDl" firstAttribute="top" secondItem="oOZ-DY-h4v" secondAttribute="bottom" constant="11" id="q2z-q8-S7C"/>
-                        <constraint firstAttribute="trailing" secondItem="vGl-9k-fb1" secondAttribute="trailing" constant="5" id="x9v-K3-aob"/>
+                        <constraint firstAttribute="trailing" secondItem="vGl-9k-fb1" secondAttribute="trailing" id="x9v-K3-aob"/>
                     </constraints>
                 </view>
             </subviews>

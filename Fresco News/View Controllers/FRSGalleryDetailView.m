@@ -16,6 +16,7 @@
 #import "FRSGalleryExpandedViewController.h"
 #import "FRSGalleryStatusView.h"
 #import "FRSGalleryStatusTableViewCell.h"
+#import "Haneke.h"
 
 #define CELL_HEIGHT 62
 #define TOP_NAV_BAR_HEIGHT 64

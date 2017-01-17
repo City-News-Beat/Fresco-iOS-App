@@ -10,6 +10,6 @@
 
 @interface FRSGalleryStatusView : UIView
 
--(void)configureWithArray:(NSArray *)purchases rating:(int)rating;
+-(void)configureWithArray:(NSArray *)postPurchases rating:(int)rating;
 
 @end

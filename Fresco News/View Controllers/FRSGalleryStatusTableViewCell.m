@@ -8,6 +8,7 @@
 
 #import "FRSGalleryStatusTableViewCell.h"
 #import "Haneke.h"
+#import "NSURL+Fresco.h"
 
 @implementation FRSGalleryStatusTableViewCell{
     
@@ -15,8 +16,12 @@
     IBOutlet UILabel *outletsLabel;
     IBOutlet UILabel *outletsPriceLabel;
     
+    IBOutlet NSLayoutConstraint *postImageViewHeightConstraint;
+    
     NSDictionary *purchaseDict;
 }
+
+static BOOL reloadedTableView = false;
 
 -(void)configureCellWithPurchaseDict:(NSDictionary *)purchasePostDict{
     purchaseDict = [[NSDictionary alloc] initWithDictionary:purchasePostDict];
@@ -24,19 +29,27 @@
     
     NSLog(@"URL %@", [NSURL URLWithString:purchaseDict[@"image"]]);
     
-    [postImageView hnk_setImageFromURL:[NSURL URLWithString:purchaseDict[@"image"]] placeholder:nil success:^(UIImage *image) {
-            [self configurePostImageViewWithImage:image];
+    NSURL *resizedURL = [[NSURL alloc] initWithString:purchaseDict[@"image"] width:postImageView.frame.size.width];
+    [postImageView hnk_setImageFromURL:resizedURL placeholder:nil success:^(UIImage *image) {
+        [self configurePostImageViewWithImage:image];
+        [self configureOutletsLabels];
+        if(reloadedTableView == false && [self.tableView indexPathForCell:self].row+1 == [self.tableView numberOfRowsInSection:0]){
+            [self.tableView reloadData];
+            reloadedTableView = true;
+        }
     } failure:^(NSError *error) {
         NSLog(@"ERROR %@", error);
     }];
-    [self configureOutletsLabels];
 }
 
 -(void)configurePostImageViewWithImage:(UIImage *)image{
+    float aspectRatio = postImageView.frame.size.width / image.size.width;
+    postImageViewHeightConstraint.constant = aspectRatio * image.size.height;
+
     [postImageView setImage:image];
     
     //postImageViewHeightConstraint.constant = image.size.height;
-    
+    /*
     CGRect newFrame = postImageView.frame;
     newFrame.size.height = image.size.height;
     postImageView.frame = newFrame;
@@ -45,8 +58,9 @@
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height + image.size.height);
         
         [self.tableView layoutIfNeeded];
-    });
+    });*/
 }
+
 
 -(void)configureOutletsLabels{
     outletsLabel.text = @"";

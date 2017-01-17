@@ -10,8 +10,7 @@
 
 @interface FRSGalleryStatusTableViewCell : UITableViewCell
 
--(void)configureCellWithPurchaseDict:(NSDictionary *)purchaseDict;
-
+-(void)configureCellWithPurchaseDict:(NSDictionary *)purchasePostDict;
 @property (nonatomic) UITableView *tableView;
 
 @end
