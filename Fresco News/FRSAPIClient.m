@@ -769,8 +769,6 @@
         self.requestManager = manager;
         self.requestManager.requestSerializer = [[FRSRequestSerializer alloc] init];
         [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        [self.requestManager.requestSerializer setValue:@"Authorization" forHTTPHeaderField:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
-        self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
     }
 
     [self reevaluateAuthorization];
