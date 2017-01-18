@@ -23,13 +23,13 @@
                     <rect key="frame" x="53" y="219" width="270" height="230"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GALLERY STATUS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oOZ-DY-h4v">
-                            <rect key="frame" x="64" y="15" width="142" height="20"/>
+                            <rect key="frame" x="72.5" y="15" width="125" height="17"/>
                             <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="17"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qiU-5v-YDl">
-                            <rect key="frame" x="0.0" y="46" width="270" height="145"/>
+                            <rect key="frame" x="0.0" y="43" width="270" height="148"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="win-4y-deO" userLabel="ContentView">
                                     <rect key="frame" x="0.0" y="0.0" width="270" height="230"/>
@@ -129,7 +129,7 @@
                             <rect key="frame" x="0.0" y="191" width="270" height="39"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YfB-7A-1dB">
-                                    <rect key="frame" x="11" y="5" width="72" height="30"/>
+                                    <rect key="frame" x="11" y="6.5" width="62" height="27"/>
                                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                                     <state key="normal" title="GET HELP">
                                         <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
@@ -139,7 +139,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LaO-gg-GSg">
-                                    <rect key="frame" x="229" y="5" width="30" height="30"/>
+                                    <rect key="frame" x="229" y="6.5" width="30" height="27"/>
                                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                                     <state key="normal" title="OK">
                                         <color key="titleColor" red="0.0" green="0.27843137254901962" blue="0.73333333333333328" alpha="1" colorSpace="calibratedRGB"/>

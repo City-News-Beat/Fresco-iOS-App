@@ -178,6 +178,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
 - (void)configureVerificationTabView {
     // If the user created the gallery
+    verificationViewHeightConstraint.constant = 0;
+    verificationContainerView.hidden = true;
+    [self updateConstraints];
     if ([self.gallery.creator.uid isEqualToString: [[FRSAPIClient sharedClient] authenticatedUser].uid]) {
         verificationViewLeftContraint.constant = 16;// Zeplin reg distance
         verificationEyeImageView.hidden = true;
@@ -203,9 +206,20 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     }
 }
 
+-(void)animateVerificationTabIn{
+    verificationContainerView.hidden = false;
+    [UIView animateWithDuration:0.1
+                     animations:^{
+                         verificationViewHeightConstraint.constant = 44;
+                         [self layoutIfNeeded];
+                     }];
+}
+
 -(void)getGalleryPurchases{
     [[FRSAPIClient sharedClient] fetchPurchasesForGalleryID:self.gallery.uid completion:^(id responseObject, NSError *error) {
         galleryPurchases = [[NSMutableArray alloc] initWithArray:responseObject];
+        [self animateVerificationTabIn];
+        
         if (galleryPurchases.count > 0){
             verificationContainerView.backgroundColor = [UIColor colorWithRed:(76/255.0) green:(215/255.0) blue:(100/255.0) alpha:1.0];
             if (galleryPurchases.count == 1) {
