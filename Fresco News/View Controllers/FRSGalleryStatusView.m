@@ -8,6 +8,7 @@
 
 #import "FRSGalleryStatusView.h"
 #import "FRSGalleryStatusTableViewCell.h"
+#import "FRSGalleryDetailView.h"
 #import "Haneke.h"
 
 @interface FRSGalleryStatusView () <UITableViewDelegate, UITableViewDataSource>
@@ -205,6 +206,7 @@
 - (IBAction)pressedGetHelp:(id)sender {
     [self animateOut];
     [self.parentVC presentSmooch];
+    [self.parentView dismissKeyboard:nil];
 }
 
 #pragma mark - UITableViewDataSource

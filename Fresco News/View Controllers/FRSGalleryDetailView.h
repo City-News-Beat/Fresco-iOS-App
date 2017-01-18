@@ -29,5 +29,6 @@
 -(void)fetchCommentsWithID:(NSString*)galleryID;
 -(void)sendComment;
 -(void)loadGalleryDetailViewWithGallery:(FRSGallery *)gallery parentVC:(FRSGalleryExpandedViewController *)parentVC;
+- (void)dismissKeyboard:(UITapGestureRecognizer *)tap;
 
 @end

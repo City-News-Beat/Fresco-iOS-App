@@ -265,6 +265,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             }
 
             if (boughtByOneOutlet) {
+                if ([outletNames[0] isEqualToString:@"Fresco News"]){
+                    verificationViewLeftContraint.constant = 56; // Zeplin distance from left
+                    verificationEyeImageView.hidden = false;
+                }
                 verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %@", [outletNames[0] uppercaseString]];
             } else {
                 verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %lu OUTLETS", (unsigned long)galleryPurchases.count];
@@ -486,6 +490,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [galleryStatusPopup configureWithArray:galleryPurchases rating:(int)self.gallery.verificationRating];
     [[UIApplication sharedApplication].keyWindow addSubview:galleryStatusPopup];
     galleryStatusPopup.parentVC = self.parentVC;
+    galleryStatusPopup.parentView = self;
     galleryStatusPopup.frame = [UIApplication sharedApplication].keyWindow.rootViewController.view.frame;
 }
 

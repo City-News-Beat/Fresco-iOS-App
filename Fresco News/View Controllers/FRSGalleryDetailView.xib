@@ -23,7 +23,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
                         <view multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="245" verticalHuggingPriority="245" translatesAutoresizingMaskIntoConstraints="NO" id="NbN-nY-a20" userLabel="ContentView">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="682"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="688"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Sv-gY-L1p" customClass="FRSGalleryView">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
@@ -43,7 +43,7 @@
                                             </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PENDING VERIFICATION" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e4O-Wh-Aj3">
-                                            <rect key="frame" x="56" y="14" width="150" height="15"/>
+                                            <rect key="frame" x="56" y="13" width="170" height="18"/>
                                             <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -72,26 +72,26 @@
                                     </constraints>
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ARTICLES" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gkQ-Kx-cFr">
-                                    <rect key="frame" x="16" y="368" width="359" height="15"/>
+                                    <rect key="frame" x="16" y="368" width="359" height="18"/>
                                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="COMMENTS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0yb-JT-eRR">
-                                    <rect key="frame" x="16" y="515" width="359" height="15"/>
+                                    <rect key="frame" x="16" y="518" width="359" height="18"/>
                                     <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.54000000000000004" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MEo-kD-hxy">
-                                    <rect key="frame" x="0.0" y="537" width="375" height="1"/>
+                                    <rect key="frame" x="0.0" y="543" width="375" height="1"/>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="0.5" id="SNq-7o-BDY"/>
                                     </constraints>
                                 </view>
                                 <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="w5E-hK-yjE">
-                                    <rect key="frame" x="0.0" y="391" width="375" height="100"/>
+                                    <rect key="frame" x="0.0" y="394" width="375" height="100"/>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="100" id="m5y-4x-Ckc"/>
@@ -100,7 +100,7 @@
                                     <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </tableView>
                                 <tableView contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="rLO-dS-YLU">
-                                    <rect key="frame" x="0.0" y="538" width="375" height="100"/>
+                                    <rect key="frame" x="0.0" y="544" width="375" height="100"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="100" id="QYQ-i6-rwz"/>
@@ -109,7 +109,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </tableView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ehb-El-AVW">
-                                    <rect key="frame" x="0.0" y="390" width="375" height="1"/>
+                                    <rect key="frame" x="0.0" y="393" width="375" height="1"/>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.12" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="0.5" id="9xl-PJ-QYm"/>

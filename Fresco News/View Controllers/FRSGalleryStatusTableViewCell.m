@@ -49,18 +49,6 @@
     postImageViewHeightConstraint.constant = aspectRatio * image.size.height;
 
     [postImageView setImage:image];
-
-    //postImageViewHeightConstraint.constant = image.size.height;
-    /*
-    CGRect newFrame = postImageView.frame;
-    newFrame.size.height = image.size.height;
-    postImageView.frame = newFrame;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height + image.size.height);
-        
-        [self.tableView layoutIfNeeded];
-    });*/
 }
 
 - (void)configureOutletsLabels {
