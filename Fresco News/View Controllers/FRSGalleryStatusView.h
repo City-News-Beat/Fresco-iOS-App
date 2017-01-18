@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FRSGalleryExpandedViewController.h"
 
 @interface FRSGalleryStatusView : UIView
+
+@property (strong, nonatomic) FRSGalleryExpandedViewController *parentVC;
 
 -(void)configureWithArray:(NSArray *)postPurchases rating:(int)rating;
 

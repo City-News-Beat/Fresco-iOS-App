@@ -116,6 +116,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self.view addSubview:galleryDetailView];
     
     galleryDetailView.frame = self.view.frame;
+    galleryDetailView.parentVC = self;
     
     [galleryDetailView loadGalleryDetailViewWithGallery:self.gallery parentVC:self];
     

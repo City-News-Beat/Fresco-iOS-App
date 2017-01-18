@@ -199,7 +199,8 @@
 }
 
 - (IBAction)pressedGetHelp:(id)sender {
-    
+    [self animateOut];
+    [self.parentVC presentSmooch];
 }
 
 #pragma mark - UITableViewDataSource

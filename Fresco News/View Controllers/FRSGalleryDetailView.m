@@ -440,6 +440,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     galleryStatusPopup = (FRSGalleryStatusView *)[[[NSBundle mainBundle] loadNibNamed:@"FRSGalleryStatusView" owner:self options:nil] objectAtIndex:0];
     [galleryStatusPopup configureWithArray:galleryPurchases rating:(int)self.gallery.verificationRating];
     [[UIApplication sharedApplication].keyWindow addSubview:galleryStatusPopup];
+    galleryStatusPopup.parentVC = self.parentVC;
     galleryStatusPopup.frame = [UIApplication sharedApplication].keyWindow.rootViewController.view.frame;
 }
 
