@@ -33,32 +33,32 @@
     int totalCommentCount;
     BOOL showsMoreButton;
     UIButton *showCommentsButton;
-    
+
     // Verification Tab
     IBOutlet UIImageView *verificationEyeImageView;
     IBOutlet UIView *verificationContainerView;
     IBOutlet UILabel *verificationLabel;
     IBOutlet NSLayoutConstraint *verificationViewHeightConstraint;
     IBOutlet NSLayoutConstraint *verificationViewLeftContraint;
-    
+
     // Comment Bottom Bar
     IBOutlet UIView *addCommentView;
     IBOutlet NSLayoutConstraint *addCommentBotConstraint;
-    
+
     // Comments TableVeiw
     IBOutlet UIView *commentsTVTopLine;
     IBOutlet UITableView *commentsTableView;
     IBOutlet UILabel *commentsLabel;
     IBOutlet NSLayoutConstraint *commentsLabelTopConstraint;
     IBOutlet NSLayoutConstraint *commentsHeightConstraint;
-    
+
     // Articles
     IBOutlet UIView *articlesTVTopLine;
     IBOutlet UILabel *articlesLabel;
     IBOutlet NSLayoutConstraint *articlesHeightConstraint;
-    
+
     IBOutlet NSLayoutConstraint *galleryHeightConstraint;
-    
+
     // Gallery Status
     FRSGalleryStatusView *galleryStatusPopup;
     NSMutableArray *galleryPurchases;
@@ -90,7 +90,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                 action:@selector(dismissKeyboard:)];
     tap.cancelsTouchesInView = NO;
     [self addGestureRecognizer:tap];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
 }
 
@@ -181,90 +181,92 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     verificationViewHeightConstraint.constant = 0;
     verificationContainerView.hidden = true;
     [self updateConstraints];
-    if ([self.gallery.creator.uid isEqualToString: [[FRSAPIClient sharedClient] authenticatedUser].uid]) {
-        verificationViewLeftContraint.constant = 16;// Zeplin reg distance
+
+    if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        verificationViewLeftContraint.constant = 16; // Zeplin reg distance
         verificationEyeImageView.hidden = true;
-        
+
         [self getGalleryPurchases];
-        
-        if (self.gallery.verificationRating == 0){// Not Rated
+
+        if (self.gallery.verificationRating == 0) { // Not Rated
             verificationLabel.text = @"PENDING VERIFICATION";
             verificationContainerView.backgroundColor = [UIColor frescoOrangeColor];
-        }else if(self.gallery.verificationRating == 1){// Skipped
+        } else if (self.gallery.verificationRating == 1) { // Skipped
             verificationLabel.text = @"NOT VERIFIED";
             verificationContainerView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.26];
-        }else if(self.gallery.verificationRating == 2 || self.gallery.verificationRating == 3){// Verified or Highlighted
+        } else if (self.gallery.verificationRating == 2 || self.gallery.verificationRating == 3) { // Verified or Highlighted
             verificationLabel.text = @"VERIFIED";
-            verificationContainerView.backgroundColor = [UIColor colorWithRed:(76/255.0) green:(215/255.0) blue:(100/255.0) alpha:1.0];
-        }else if(self.gallery.verificationRating == 4){// DELETED
+            verificationContainerView.backgroundColor = [UIColor colorWithRed:(76 / 255.0) green:(215 / 255.0) blue:(100 / 255.0) alpha:1.0];
+        } else if (self.gallery.verificationRating == 4) { // DELETED
             verificationLabel.text = @"DELETED";
-            verificationContainerView.backgroundColor = [UIColor colorWithRed:(208/255.0) green:(2/255.0) blue:(27/255.0) alpha:1.0];
+            verificationContainerView.backgroundColor = [UIColor colorWithRed:(208 / 255.0) green:(2 / 255.0) blue:(27 / 255.0) alpha:1.0];
         }
-    }else{
+    } else {
         verificationViewHeightConstraint.constant = 0;
         verificationContainerView.hidden = true;
     }
 }
 
--(void)animateVerificationTabIn{
+- (void)animateVerificationTabIn {
     verificationContainerView.hidden = false;
     [UIView animateWithDuration:0.1
                      animations:^{
-                         verificationViewHeightConstraint.constant = 44;
-                         [self layoutIfNeeded];
+                       verificationViewHeightConstraint.constant = 44;
+                       [self layoutIfNeeded];
                      }];
 }
 
--(void)getGalleryPurchases{
-    [[FRSAPIClient sharedClient] fetchPurchasesForGalleryID:self.gallery.uid completion:^(id responseObject, NSError *error) {
-        galleryPurchases = [[NSMutableArray alloc] initWithArray:responseObject];
-        [self animateVerificationTabIn];
-        [self configureVerificationTabBarTitle];
-    }];
+- (void)getGalleryPurchases {
+    [[FRSAPIClient sharedClient] fetchPurchasesForGalleryID:self.gallery.uid
+                                                 completion:^(id responseObject, NSError *error) {
+                                                   galleryPurchases = [[NSMutableArray alloc] initWithArray:responseObject];
+                                                   [self animateVerificationTabIn];
+                                                   [self configureVerificationTabBarTitle];
+                                                 }];
 }
 
--(void)configureVerificationTabBarTitle{
-    if (galleryPurchases.count > 0){
-        verificationContainerView.backgroundColor = [UIColor colorWithRed:(76/255.0) green:(215/255.0) blue:(100/255.0) alpha:1.0];
+- (void)configureVerificationTabBarTitle {
+    if (galleryPurchases.count > 0) {
+        verificationContainerView.backgroundColor = [UIColor colorWithRed:(76 / 255.0) green:(215 / 255.0) blue:(100 / 255.0) alpha:1.0];
         if (galleryPurchases.count == 1) {
             NSDictionary *purchase = [[galleryPurchases objectAtIndex:0][@"purchases"] objectAtIndex:0];
-            
+
             NSLog(@"%@", purchase[@"outlet"]);
-            
+
             NSString *title = [purchase valueForKeyPath:@"outlet.title"];
-            
+
             verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %@", [title uppercaseString]];
-            if ([title isEqualToString:@"Fresco News"]){
-                verificationViewLeftContraint.constant = 56;// Zeplin distance from left
+            if ([title isEqualToString:@"Fresco News"]) {
+                verificationViewLeftContraint.constant = 56; // Zeplin distance from left
                 verificationEyeImageView.hidden = false;
             }
-        }else{
+        } else {
             //Check all of the outlet names to see if they are different, if all the purchases are made by 1 outlet, show that it was bought by the 1 outlet
             BOOL boughtByOneOutlet = true;
-            
+
             NSMutableArray *outletNames = [[NSMutableArray alloc] init];
-            
+
             //Loop through the purchases dict
-            for (int i = 0; i < galleryPurchases.count; i++){
+            for (int i = 0; i < galleryPurchases.count; i++) {
                 NSDictionary *galleryDict = [galleryPurchases objectAtIndex:i];
                 NSArray *galleryPurchasesArray = (NSArray *)(galleryDict[@"purchases"]);
                 // Loop through the purchases dict inside the purchases
-                for(int n = 0; n < galleryPurchasesArray.count; n++){
+                for (int n = 0; n < galleryPurchasesArray.count; n++) {
                     NSString *outletName = (NSString *)[[galleryPurchasesArray objectAtIndex:n] valueForKeyPath:@"outlet.title"];
                     // Loop through the existing outlet names to compare
                     for (int x = 0; x < outletNames.count; x++) {
                         // Check if the outlet name is different from the rest
-                        if (![outletName isEqualToString: outletNames[x]]) {
+                        if (![outletName isEqualToString:outletNames[x]]) {
                             boughtByOneOutlet = false;
                         }
                     }
                     [outletNames addObject:outletName];
                 }
             }
-            
+
             if (boughtByOneOutlet) {
                 verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %@", [outletNames[0] uppercaseString]];
-            }else{
+            } else {
                 verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %lu OUTLETS", (unsigned long)galleryPurchases.count];
             }
         }
@@ -296,7 +298,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)dismissKeyboard:(UITapGestureRecognizer *)tap {
     self.actionBar.hidden = false;
     addCommentBotConstraint.constant = 0;
-    
+
     [self.galleryView playerTap:tap];
     if (self.commentTextField.isEditing) {
         [self.commentTextField resignFirstResponder];
@@ -308,22 +310,21 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                          }
                          completion:nil];
     }
-    
+
     [self updateConstraintsIfNeeded];
     [self layoutIfNeeded];
 }
 
--(void)keyboardWillShow:(NSNotification *)notification{
+- (void)keyboardWillShow:(NSNotification *)notification {
     NSDictionary *info = [notification userInfo];
 
     CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    
+
     addCommentBotConstraint.constant = keyboardSize.height;
-    
+
     [self updateConstraintsIfNeeded];
     [self layoutIfNeeded];
 }
-
 
 - (void)adjustCommentsTableHeight {
     float height = 0;
@@ -726,8 +727,9 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             FRSArticle *article = [self.gallery.articles allObjects][indexPath.row];
             if (article.articleStringURL) {
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:article.articleStringURL]];
-                [FRSTracker track:articleOpens parameters:@{ @"article_url" : article.articleStringURL,
-                                                             @"article_id" : article.uid }];
+                [FRSTracker track:articleOpens
+                       parameters:@{ @"article_url" : article.articleStringURL,
+                                     @"article_id" : article.uid }];
             }
         }
     }
