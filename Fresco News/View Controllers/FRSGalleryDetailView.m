@@ -219,26 +219,56 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [[FRSAPIClient sharedClient] fetchPurchasesForGalleryID:self.gallery.uid completion:^(id responseObject, NSError *error) {
         galleryPurchases = [[NSMutableArray alloc] initWithArray:responseObject];
         [self animateVerificationTabIn];
-        
-        if (galleryPurchases.count > 0){
-            verificationContainerView.backgroundColor = [UIColor colorWithRed:(76/255.0) green:(215/255.0) blue:(100/255.0) alpha:1.0];
-            if (galleryPurchases.count == 1) {
-                NSDictionary *purchase = [[galleryPurchases objectAtIndex:0][@"purchases"] objectAtIndex:0];
-                
-                NSLog(@"%@", purchase[@"outlet"]);
-                
-                NSString *title = [purchase valueForKeyPath:@"outlet.title"];
-                
-                verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %@", [title uppercaseString]];
-                if ([title isEqualToString:@"Fresco News"]){
-                    verificationViewLeftContraint.constant = 56;// Zeplin distance from left
-                    verificationEyeImageView.hidden = false;
+        [self configureVerificationTabBarTitle];
+    }];
+}
+
+-(void)configureVerificationTabBarTitle{
+    if (galleryPurchases.count > 0){
+        verificationContainerView.backgroundColor = [UIColor colorWithRed:(76/255.0) green:(215/255.0) blue:(100/255.0) alpha:1.0];
+        if (galleryPurchases.count == 1) {
+            NSDictionary *purchase = [[galleryPurchases objectAtIndex:0][@"purchases"] objectAtIndex:0];
+            
+            NSLog(@"%@", purchase[@"outlet"]);
+            
+            NSString *title = [purchase valueForKeyPath:@"outlet.title"];
+            
+            verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %@", [title uppercaseString]];
+            if ([title isEqualToString:@"Fresco News"]){
+                verificationViewLeftContraint.constant = 56;// Zeplin distance from left
+                verificationEyeImageView.hidden = false;
+            }
+        }else{
+            //Check all of the outlet names to see if they are different, if all the purchases are made by 1 outlet, show that it was bought by the 1 outlet
+            BOOL boughtByOneOutlet = true;
+            
+            NSMutableArray *outletNames = [[NSMutableArray alloc] init];
+            
+            //Loop through the purchases dict
+            for (int i = 0; i < galleryPurchases.count; i++){
+                NSDictionary *galleryDict = [galleryPurchases objectAtIndex:i];
+                NSArray *galleryPurchasesArray = (NSArray *)(galleryDict[@"purchases"]);
+                // Loop through the purchases dict inside the purchases
+                for(int n = 0; n < galleryPurchasesArray.count; n++){
+                    NSString *outletName = (NSString *)[[galleryPurchasesArray objectAtIndex:n] valueForKeyPath:@"outlet.title"];
+                    // Loop through the existing outlet names to compare
+                    for (int x = 0; x < outletNames.count; x++) {
+                        // Check if the outlet name is different from the rest
+                        if (![outletName isEqualToString: outletNames[x]]) {
+                            boughtByOneOutlet = false;
+                        }
+                    }
+                    [outletNames addObject:outletName];
                 }
+            }
+            
+            if (boughtByOneOutlet) {
+                verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %@", [outletNames[0] uppercaseString]];
             }else{
                 verificationLabel.text = [NSString stringWithFormat:@"SOLD TO %lu OUTLETS", (unsigned long)galleryPurchases.count];
             }
         }
-    }];
+    }
 }
 
 - (void)dealloc {

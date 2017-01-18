@@ -121,7 +121,6 @@
 -(void)setToSold{
     if (purchases.count == 1) {
         popupViewHeightConstraint.constant = 410; // Zeplin Height
-        scrollView.scrollEnabled = false;
     }else{
         popupViewHeightConstraint.constant = 528; // Zeplin Height
     }
@@ -185,11 +184,15 @@
  Changes the scroll view content size to make it able to scroll down to the size of the tableview (if this wasn't here, there would be 2 scroll views needed. 1 for the tableview scrollview, 1 for the scrollview)
  */
 -(void)adjustScrollViewContentSize{
-    float botBarHeight = 44;
-    scrollView.contentSize = CGSizeMake(scrollView.contentSize.width, self.frame.size.height - (botBarHeight * 2));
+    // Bar height for bot bar, top bar and the rest
+    float barHeight = 27;
+    
+    // Disables the need to scroll
     CGRect newFrame = soldContentTableView.frame;
     newFrame.size.height = soldContentTableView.contentSize.height;
     soldContentTableView.frame = newFrame;
+    
+    scrollView.contentSize = CGSizeMake(scrollView.contentSize.width, (barHeight * 5) + soldContentTableView.frame.size.height);
 }
 
 #pragma mark - IBActions
@@ -217,6 +220,9 @@
     [tableView registerNib:[UINib nibWithNibName:@"FRSGalleryStatusTableViewCell" bundle:nil] forCellReuseIdentifier:@"purchase-cell"];
     FRSGalleryStatusTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"purchase-cell"];
     cell.tableView = tableView;
+    if(!cell.reloadedTableViewCounter){
+        cell.reloadedTableViewCounter = 0;
+    }
     
     [(FRSGalleryStatusTableViewCell *)cell configureCellWithPurchaseDict:[purchases objectAtIndex:indexPath.row]];
 

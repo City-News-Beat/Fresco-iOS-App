@@ -21,8 +21,6 @@
     NSDictionary *purchaseDict;
 }
 
-static BOOL reloadedTableView = false;
-
 -(void)configureCellWithPurchaseDict:(NSDictionary *)purchasePostDict{
     purchaseDict = [[NSDictionary alloc] initWithDictionary:purchasePostDict];
     postImageView.layer.cornerRadius = 3;
@@ -33,9 +31,10 @@ static BOOL reloadedTableView = false;
     [postImageView hnk_setImageFromURL:resizedURL placeholder:nil success:^(UIImage *image) {
         [self configurePostImageViewWithImage:image];
         [self configureOutletsLabels];
-        if(reloadedTableView == false && [self.tableView indexPathForCell:self].row+1 == [self.tableView numberOfRowsInSection:0]){
+        // Reload the table once for every cell
+        if(self.reloadedTableViewCounter == 0){
             [self.tableView reloadData];
-            reloadedTableView = true;
+            self.reloadedTableViewCounter = 1;
         }
     } failure:^(NSError *error) {
         NSLog(@"ERROR %@", error);

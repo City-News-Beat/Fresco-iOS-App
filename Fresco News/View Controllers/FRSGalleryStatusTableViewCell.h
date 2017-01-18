@@ -13,4 +13,6 @@
 -(void)configureCellWithPurchaseDict:(NSDictionary *)purchasePostDict;
 @property (nonatomic) UITableView *tableView;
 
+@property (nonatomic) int reloadedTableViewCounter;
+
 @end
