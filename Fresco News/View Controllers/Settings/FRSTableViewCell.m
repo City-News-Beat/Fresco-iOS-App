@@ -183,8 +183,22 @@
         self.alert.delegate = self;
         [self.alert show];
 
+        self.twitterSwitch.on = NO;
+        self.twitterSwitch.enabled = NO;
+
         [[FRSAPIClient sharedClient] unlinkTwitter:^(id responseObject, NSError *error) {
           NSLog(@"Disconnect Twitter Error: %@", error);
+            self.twitterSwitch.enabled = YES;
+            if (error) {
+                self.twitterSwitch.on = YES;
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
+                [alert show];
+            }else{
+                self.twitterSwitch.on = NO;
+            }
+            if(self.parentTableView){
+                [self.parentTableView reloadData];
+            }
         }];
 
     } else {
@@ -192,11 +206,19 @@
         //        self.userInteractionEnabled = NO;
         //        self.twitterIV.alpha = 0;
         //        [self configureSpinner];
+        self.twitterSwitch.enabled = NO;
+        self.twitterSwitch.on = YES;
         [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user) {
           //            [self.loadingView stopLoading];
           //            [self.loadingView removeFromSuperview];
-          self.twitterSwitch.userInteractionEnabled = YES;
+          self.twitterSwitch.enabled = YES;
           self.userInteractionEnabled = YES;
+            
+            if(error){
+                self.twitterSwitch.on = NO;
+            }else{
+                self.twitterSwitch.on = YES;
+            }
 
           if (session) {
 
@@ -232,6 +254,9 @@
                                                       return;
                                                   }
                                               }
+                                                if(self.parentTableView){
+                                                    [self.parentTableView reloadData];
+                                                }
                                             }];
 
           } else if (error) {
@@ -255,21 +280,39 @@
         self.alert.delegate = self;
         [self.alert show];
 
+        self.facebookSwitch.on = NO;
+        self.facebookSwitch.enabled = NO;
         [[FRSAPIClient sharedClient] unlinkFacebook:^(id responseObject, NSError *error) {
           NSLog(@"Disconnect Facebook Error: %@", error);
+            self.facebookSwitch.enabled = YES;
+            if(error){
+                self.facebookSwitch.on = YES;
+                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
+                [alert show];
+            }else{
+                self.facebookSwitch.on = NO;
+            }
+            if(self.parentTableView){
+                [self.parentTableView reloadData];
+            }
         }];
 
     } else {
 
         FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
 
+        self.facebookSwitch.enabled = NO;
+        self.facebookSwitch.on = YES;
         [login logInWithReadPermissions:@[ @"public_profile", @"email", @"user_friends" ]
                      fromViewController:self.inputViewController
                                 handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
 
-                                  if (error) {
-                                      //handle errors
-                                  }
+                                    if(error){
+                                        self.facebookSwitch.on = NO;
+                                        self.facebookSwitch.enabled = YES;
+                                        FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
+                                        [alert show];
+                                    }
 
                                   if (result && !error) {
 
@@ -278,16 +321,35 @@
                                                                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
                                                                        [self.facebookSwitch setOn:YES animated:YES];
                                                                        self.facebookSwitch.alpha = 0;
+                                                                         
+                                                                         self.facebookSwitch.enabled = YES;
+                                                                         
+                                                                         if(error){
+                                                                             self.facebookSwitch.on = NO;
+                                                                             self.facebookSwitch.enabled = YES;
+                                                                             FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
+                                                                             [alert show];
+                                                                         }else{
+                                                                             self.facebookSwitch.on = YES;
+                                                                         }
 
+                                                                         
                                                                        if (responseObject && !error) {
                                                                            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                                                                              if (!error) {
                                                                                  self.facebookName = [result valueForKey:@"name"];
                                                                                  self.socialTitleLabel.text = self.facebookName;
                                                                                  [[NSUserDefaults standardUserDefaults] setObject:self.facebookName forKey:@"facebook-name"];
+                                                                                 self.facebookSwitch.on = YES;
+                                                                                 if(self.parentTableView){
+                                                                                     [self.parentTableView reloadData];
+                                                                                 }
                                                                              }
+                                                                               
                                                                            }];
                                                                        } else if (error) {
+                                                                           self.facebookSwitch.on = NO;
+                                                                           self.facebookSwitch.enabled = YES;
                                                                            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
                                                                            NSInteger responseCode = response.statusCode;
 
@@ -310,8 +372,14 @@
                                                                                return;
                                                                            }
                                                                        }
+                                                                         if(self.parentTableView){
+                                                                             [self.parentTableView reloadData];
+                                                                         }
                                                                      }];
                                   }
+                                    if(self.parentTableView){
+                                        [self.parentTableView reloadData];
+                                    }
                                 }];
     }
 }

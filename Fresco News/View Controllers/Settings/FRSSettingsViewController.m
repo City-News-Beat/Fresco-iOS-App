@@ -357,6 +357,7 @@
                     //                    [cell configureFindFriendsCell];
                     
                     self.twitterCell = cell;
+                    self.twitterCell.parentTableView = tableView;
                     if (self.twitterCell.twitterHandle) {
                         [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
                         self.twitterCell.twitterSwitch.on = YES;
@@ -368,6 +369,7 @@
                     break;
                 case 1:
                     self.facebookCell = cell;
+                    self.facebookCell.parentTableView = tableView;
                     
                     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
                         [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
