@@ -170,6 +170,8 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 // file
 - (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)uploadStateID:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)updateTaxInfoWithFileID:(NSString *) fileID completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)fetchFileSizeForVideo:(PHAsset *)video callback:(FRSAPISizeCompletionBlock)callback;
 - (NSString *)md5:(PHAsset *)asset;
 - (NSMutableDictionary *)digestForAsset:(PHAsset *)asset callback:(FRSAPIDefaultCompletionBlock)callback;

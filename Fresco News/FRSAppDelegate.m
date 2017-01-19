@@ -61,6 +61,9 @@
     [self startFabric]; // crashlytics first yall
     [self configureStartDate];
     [self clearUploadCache];
+    
+    EndpointManager *manager = [EndpointManager sharedInstance];
+    [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];
 
     [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
 

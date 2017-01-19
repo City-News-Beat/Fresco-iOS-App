@@ -18,15 +18,19 @@
                 <outlet property="addressField" destination="FsK-cK-oPX" id="gRo-hT-qmD"/>
                 <outlet property="addressView" destination="LlY-Zw-4F5" id="4XV-aT-2YQ"/>
                 <outlet property="addressViewHeightConstraint" destination="nzR-0N-C9B" id="KdI-Tb-S6B"/>
+                <outlet property="addressViewTopSpaceConstraint" destination="9AJ-7H-YUZ" id="XaU-rq-3Mz"/>
                 <outlet property="cityField" destination="fnn-hZ-LFx" id="o3t-Pm-ocY"/>
                 <outlet property="dateField" destination="Ze0-Pf-Nhz" id="4vL-oz-EOm"/>
+                <outlet property="documentIDButton" destination="kby-Sf-LLe" id="2kR-k8-7YO"/>
                 <outlet property="firstNameField" destination="Vj3-ei-fR0" id="f6X-hB-0l4"/>
                 <outlet property="lastNameField" destination="0ag-L0-kkY" id="6mJ-kQ-b8u"/>
                 <outlet property="mainInfoView" destination="ATk-zk-Qbu" id="MQP-HG-fD3"/>
                 <outlet property="saveIDInfoButton" destination="n1b-63-Pvo" id="BHg-9l-ZmY"/>
+                <outlet property="saveIdTopSpaceConstraint" destination="GUn-OH-y0u" id="UFy-k8-EOf"/>
                 <outlet property="socialField" destination="KRN-A7-UHz" id="iD4-N5-pwn"/>
                 <outlet property="ssnView" destination="C5T-is-bfA" id="ZV7-5q-6Ay"/>
                 <outlet property="ssnViewHeightConstraint" destination="aga-zx-6ZE" id="TrB-Ed-zFQ"/>
+                <outlet property="ssnViewTopSpaceConstraint" destination="FbO-Hf-F9Z" id="0i2-oA-tHS"/>
                 <outlet property="stateField" destination="kzj-zi-0Sq" id="2dh-1d-1Kb"/>
                 <outlet property="unitField" destination="cg0-V5-Seb" id="m58-8m-RZZ"/>
                 <outlet property="view" destination="iN0-l3-epB" id="LRy-dq-cZC"/>
@@ -49,7 +53,7 @@
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WiH-3d-M3R">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="FIJ-7V-PxE"/>
                                                 <constraint firstAttribute="height" constant="1" id="fg4-SX-v8o"/>
@@ -73,7 +77,7 @@
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5yA-TZ-5ax">
                                             <rect key="frame" x="0.0" y="45" width="375" height="1"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="O1v-1m-KIG"/>
                                             </constraints>
@@ -96,7 +100,7 @@
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wcc-Dy-w5j">
                                             <rect key="frame" x="0.0" y="90" width="375" height="1"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="d0Q-o7-whn"/>
                                             </constraints>
@@ -119,7 +123,7 @@
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CBS-Gp-Qzq">
                                             <rect key="frame" x="0.0" y="135" width="375" height="1"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="gF0-57-mS5"/>
                                             </constraints>
@@ -156,7 +160,7 @@
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7ne-ip-44N">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="HLe-ul-d0X"/>
                                             </constraints>
@@ -179,7 +183,7 @@
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FFr-rE-uOf">
                                             <rect key="frame" x="0.0" y="45" width="375" height="1"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="lsH-6z-A6Q"/>
                                             </constraints>
@@ -202,7 +206,7 @@
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fPE-R9-DvE">
                                             <rect key="frame" x="0.0" y="90" width="375" height="1"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="rxW-Ef-OwA"/>
                                             </constraints>
@@ -257,7 +261,7 @@
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MQx-5p-cpl">
                                             <rect key="frame" x="0.0" y="135" width="375" height="1"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="3UD-vv-HVj"/>
                                             </constraints>
@@ -298,7 +302,7 @@
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oZV-8q-Du6">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="lessThanOrEqual" constant="1" id="9Bm-R9-ObR"/>
                                                 <constraint firstAttribute="height" constant="1" id="hXk-SQ-pzB"/>
@@ -322,7 +326,7 @@
                                         </textField>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="paS-Jx-Wm1">
                                             <rect key="frame" x="0.0" y="45" width="375" height="1"/>
-                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="1n6-dn-ceg"/>
                                             </constraints>
@@ -356,6 +360,24 @@
                                         <action selector="saveIDInfo:" destination="-1" eventType="touchUpInside" id="DR7-h2-huv"/>
                                     </connections>
                                 </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kby-Sf-LLe">
+                                    <rect key="frame" x="12" y="354" width="113" height="36"/>
+                                    <color key="backgroundColor" red="0.0" green="0.2784313725" blue="0.73333333329999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="36" id="otV-jx-loO"/>
+                                        <constraint firstAttribute="width" constant="113" id="zXP-aO-Rcg"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
+                                    <inset key="contentEdgeInsets" minX="-4" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="imageEdgeInsets" minX="-8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <state key="normal" title="STATE ID" image="upload">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="savedocumentIDInfo:" destination="-1" eventType="touchUpInside" id="yR4-hs-kMm"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
@@ -364,7 +386,9 @@
                                 <constraint firstAttribute="trailing" secondItem="n1b-63-Pvo" secondAttribute="trailing" id="Ddt-N4-CC6"/>
                                 <constraint firstItem="C5T-is-bfA" firstAttribute="top" secondItem="LlY-Zw-4F5" secondAttribute="bottom" constant="12" id="FbO-Hf-F9Z"/>
                                 <constraint firstItem="n1b-63-Pvo" firstAttribute="top" secondItem="C5T-is-bfA" secondAttribute="bottom" constant="12" id="GUn-OH-y0u"/>
+                                <constraint firstItem="kby-Sf-LLe" firstAttribute="top" secondItem="C5T-is-bfA" secondAttribute="bottom" constant="12" id="Pp5-Mc-x7T"/>
                                 <constraint firstItem="ATk-zk-Qbu" firstAttribute="top" secondItem="qwf-Vw-avB" secondAttribute="top" id="R8Y-K5-dZn"/>
+                                <constraint firstItem="kby-Sf-LLe" firstAttribute="leading" secondItem="qwf-Vw-avB" secondAttribute="leading" constant="12" id="Sx4-RH-pUn"/>
                                 <constraint firstItem="ATk-zk-Qbu" firstAttribute="leading" secondItem="qwf-Vw-avB" secondAttribute="leading" id="UKp-Yw-Q4m"/>
                                 <constraint firstAttribute="trailing" secondItem="C5T-is-bfA" secondAttribute="trailing" id="fRx-2M-9PD"/>
                                 <constraint firstAttribute="trailing" secondItem="ATk-zk-Qbu" secondAttribute="trailing" id="gId-vE-4Ao"/>
@@ -395,4 +419,7 @@
             <point key="canvasLocation" x="8.5" y="46.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="upload" width="18" height="18"/>
+    </resources>
 </document>

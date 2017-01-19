@@ -28,12 +28,14 @@
 @property (weak, nonatomic) IBOutlet UITextField *socialField;
 @property (weak, nonatomic) IBOutlet UITextField *dateField;
 @property (strong, nonatomic) UIDatePicker *datePicker;
+@property (weak, nonatomic) IBOutlet UIButton *documentIDButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveIDInfoButton;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addressViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addressViewTopSpaceConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *ssnViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *ssnViewTopSpaceConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *saveIdTopSpaceConstraint;
 
 @property (strong, nonatomic) FRSAlertView *alert;
 @property BOOL savingInfo;
@@ -64,21 +66,24 @@
 
     for (NSString *neededField in fieldsNeeded) {
         if ([self isNameArea:neededField]) {
-            showsNameArea = TRUE;
+            showsNameArea = YES;
         }
         if ([self isAddressArea:neededField]) {
-            showsAddressArea = TRUE;
+            showsAddressArea = YES;
         }
         if ([self isSSNArea:neededField]) {
-            showsSocialSecurityArea = TRUE;
+            showsSocialSecurityArea = YES;
+        }
+        if ([self isDocumentIDArea:neededField]) {
+            showDocumentButton = YES;
         }
     }
 
     if (([authenticatedUser valueForKey:@"stripeFirst"] && ![[authenticatedUser valueForKey:@"stripeFirst"] isEqual:[NSNull null]]) || ([authenticatedUser valueForKey:@"dob_month"] && ![[authenticatedUser valueForKey:@"dob_month"] isEqual:[NSNull null]])) {
-        showsNameArea = TRUE;
+        showsNameArea = YES;
     }
     if (([authenticatedUser valueForKey:@"address_line1"] && ![[authenticatedUser valueForKey:@"address_line1"] isEqual:[NSNull null]])) {
-        showsAddressArea = TRUE;
+        showsAddressArea = YES;
     }
 
     if (!showsAddressArea) {
@@ -94,6 +99,13 @@
         self.ssnView.hidden = YES;
     } else {
         self.ssnView.hidden = NO;
+    }
+    if (!showDocumentButton) {
+        self.documentIDButton.hidden = YES;
+        self.saveIdTopSpaceConstraint.constant = 12;
+    } else {
+        self.documentIDButton.hidden = NO;
+        self.saveIdTopSpaceConstraint.constant = 12 + self.saveIDInfoButton.frame.size.height;
     }
 
     self.mainInfoView.hidden = !showsNameArea;
@@ -131,18 +143,21 @@
         _addressField.enabled = FALSE;
         _addressField.textColor = [UIColor frescoLightTextColor];
     }
+    if ([authenticatedUser valueForKey:@"address_line2"]) {
+        _addressField.text = [authenticatedUser valueForKey:@"address_line2"];
+        _addressField.enabled = FALSE;
+        _addressField.textColor = [UIColor frescoLightTextColor];
+    }
     if ([authenticatedUser valueForKey:@"address_city"]) {
         _cityField.text = [authenticatedUser valueForKey:@"address_city"];
         _cityField.enabled = FALSE;
         _cityField.textColor = [UIColor frescoLightTextColor];
     }
-
     if ([authenticatedUser valueForKey:@"address_state"]) {
         _stateField.text = [authenticatedUser valueForKey:@"address_state"];
         _stateField.enabled = FALSE;
         _stateField.textColor = [UIColor frescoLightTextColor];
     }
-
     if ([authenticatedUser valueForKey:@"address_zip"]) {
         _zipField.text = [authenticatedUser valueForKey:@"address_zip"];
         _zipField.enabled = FALSE;
@@ -173,7 +188,15 @@
 }
 
 - (BOOL)isSSNArea:(NSString *)field {
-    if ([field isEqualToString:@"pid_last4"]) {
+    if ([field isEqualToString:@"pid_last4"] || [field isEqualToString:@"personal_id_number"]) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+- (BOOL)isDocumentIDArea:(NSString *)field {
+    if ([field isEqualToString:@"id_document"]) {
         return TRUE;
     }
 
@@ -569,31 +592,31 @@
 //}
 
 - (IBAction)textFieldDidBeginEditing:(UITextField *)textField {
-//    if (IS_IPHONE_5) {
-//        if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField) {
-//            [UIView animateWithDuration:0.3
-//                                  delay:0
-//                                options:UIViewAnimationOptionCurveEaseInOut
-//                             animations:^{
-//                               self.tableView.transform = CGAffineTransformMakeTranslation(0, -70);
-//                             }
-//                             completion:nil];
-//        }
-//    }
+    //    if (IS_IPHONE_5) {
+    //        if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField) {
+    //            [UIView animateWithDuration:0.3
+    //                                  delay:0
+    //                                options:UIViewAnimationOptionCurveEaseInOut
+    //                             animations:^{
+    //                               self.tableView.transform = CGAffineTransformMakeTranslation(0, -70);
+    //                             }
+    //                             completion:nil];
+    //        }
+    //    }
 }
 
 - (IBAction)textFieldDidEndEditing:(UITextField *)textField {
-//    if (IS_IPHONE_5) {
-//        if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField) {
-//            [UIView animateWithDuration:0.3
-//                                  delay:0
-//                                options:UIViewAnimationOptionCurveEaseInOut
-//                             animations:^{
-//                               self.tableView.transform = CGAffineTransformMakeTranslation(0, 0);
-//                             }
-//                             completion:nil];
-//        }
-//    }
+    //    if (IS_IPHONE_5) {
+    //        if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField) {
+    //            [UIView animateWithDuration:0.3
+    //                                  delay:0
+    //                                options:UIViewAnimationOptionCurveEaseInOut
+    //                             animations:^{
+    //                               self.tableView.transform = CGAffineTransformMakeTranslation(0, 0);
+    //                             }
+    //                             completion:nil];
+    //        }
+    //    }
 }
 
 - (IBAction)textFieldDidChange:(UITextField *)textField {
@@ -614,9 +637,34 @@
     }
 }
 
-- (IBAction)saveIDInfo:(id)sender {
-    // NSString *country = @"US";//TODO BEWARE THIS IS HARDCODED!!!
+- (IBAction)savedocumentIDInfo:(id)sender {
+    UIAlertController *photoSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
+    FRSIdentityViewController *__weak weakSelf = self;
+    UIAlertAction *cameraAction = [UIAlertAction actionWithTitle:@"Take a New Photo"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction *_Nonnull action) {
+                                                           [weakSelf showImagePickerControllerWithCamera:YES];
+                                                         }];
+    [photoSheet addAction:cameraAction];
+
+    UIAlertAction *libraryAction = [UIAlertAction actionWithTitle:@"Upload Photo"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction *_Nonnull action) {
+                                                            [weakSelf showImagePickerControllerWithCamera:NO];
+                                                          }];
+    [photoSheet addAction:libraryAction];
+
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction *_Nonnull action){
+                                                         }];
+    [photoSheet addAction:cancelAction];
+
+    [self presentViewController:photoSheet animated:YES completion:nil];
+}
+
+- (IBAction)saveIDInfo:(id)sender {
     [self startSpinner:self.loadingView onButton:self.saveIDInfoButton];
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -652,7 +700,6 @@
     if (_lastNameField.enabled && ![_lastNameField.text isEqualToString:@""]) {
         [addressInfo setObject:_lastNameField.text forKey:@"last_name"];
     }
-
     if (_socialField.enabled && ![_socialField.text isEqualToString:@""]) {
         [addressInfo setObject:_socialField.text forKey:@"pid_last4"];
     }
@@ -735,4 +782,66 @@
 
     return NO;
 }
+
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    [picker dismissViewControllerAnimated:YES
+                               completion:^{
+                                 NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+                                 UIImage *editedImage;
+
+                                 // Handle a still image capture
+                                 if (CFStringCompare((CFStringRef)mediaType, kUTTypeImage, 0) == kCFCompareEqualTo) {
+                                     editedImage = (UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
+
+                                     if (!editedImage)
+                                         return;
+
+                                     NSData *imageData = UIImageJPEGRepresentation(editedImage, 1.0);
+                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                       [[FRSAPIClient sharedClient] uploadStateID:setStateIDEndpoint
+                                           withParameters:@{ @"file" : imageData }
+                                           completion:^(id responseObject, NSError *error) {
+                                             if (error) {
+
+                                             } else {
+                                                 if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
+                                                     NSMutableDictionary *responseObjects = [[NSMutableDictionary alloc] init];
+                                                     NSArray *keys = [responseObject allKeys];
+                                                     NSString *fileID = [responseObjects valueForKey:@"id"];
+                                                     [[FRSAPIClient sharedClient] updateTaxInfoWithFileID:fileID
+                                                                                               completion:^(id responseObject, NSError *error){
+                                                                                                   NSLog(@"%@", responseObject);
+                                                                                               }];
+                                                 }
+                                             }
+                                           }];
+                                     });
+                                 }
+                               }];
+}
+
+- (void)showImagePickerControllerWithCamera:(BOOL)withCamera {
+
+    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
+    cameraUI.delegate = self;
+    cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *)kUTTypeImage];
+    cameraUI.allowsEditing = true;
+    if (withCamera) {
+        cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
+        cameraUI.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    } else {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+        cameraUI.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+
+    [self presentViewController:cameraUI animated:YES completion:nil];
+}
+
 @end

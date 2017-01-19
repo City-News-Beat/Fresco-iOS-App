@@ -272,8 +272,6 @@
 
 
 - (void)saveBankInfo {
-    [Stripe setDefaultPublishableKey:[EndpointManager sharedInstance].currentEndpoint.stripeKey];
-
     if (!self.loadingView) {
         [self configureSpinner];
     }
@@ -481,8 +479,6 @@
     }
 
     [self startSpinner:self.loadingView onButton:self.rightAlignedButton];
-
-    [Stripe setDefaultPublishableKey:[EndpointManager sharedInstance].currentEndpoint.stripeKey];
 
     NSArray *components = [expirationDateTextField.text componentsSeparatedByString:@"/"];
     NSArray *expiration;

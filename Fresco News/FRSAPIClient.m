@@ -1,3 +1,4 @@
+
 //
 //  FRSAPIClient.m
 //  Fresco
@@ -341,7 +342,6 @@
 
     // if we have multiple "authenticated" users in data store, we probs messed up big time
     if ([authenticatedUsers count] > 1) {
-
     }
 
     _authenticatedUser = [authenticatedUsers firstObject];
@@ -462,7 +462,7 @@
     if ([currentInstallation objectForKey:@"device_token"]) {
         NSDictionary *update = @{ @"installation" : currentInstallation };
         [self updateUserWithDigestion:update
-                           completion:^(id responseObject, NSError *error) {
+                           completion:^(id responseObject, NSError *error){
                            }];
     }
 }
@@ -629,26 +629,30 @@
             }];
 }
 
--(void)fetchLikesForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
+- (void)fetchLikesForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:likedGalleryEndpoint, galleryID];
-    
-    [self get:endpoint withParameters:@{@"limit" : limit, @"last" : lastID} completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
-    }];
+
+    [self get:endpoint
+        withParameters:@{ @"limit" : limit,
+                          @"last" : lastID }
+        completion:^(id responseObject, NSError *error) {
+          completion(responseObject, error);
+        }];
 }
 
-
--(void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
+- (void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:repostedGalleryEndpoint, galleryID];
-    
-    [self get:endpoint withParameters:@{@"limit" : limit, @"last" : lastID} completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
-    }];
+
+    [self get:endpoint
+        withParameters:@{ @"limit" : limit,
+                          @"last" : lastID }
+        completion:^(id responseObject, NSError *error) {
+          completion(responseObject, error);
+        }];
 }
 
+- (void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
 
--(void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    
     NSString *endpoint = [NSString stringWithFormat:deleteCommentEndpoint, gallery.uid];
     NSDictionary *params = @{ @"comment_id" : commentID };
 
@@ -692,7 +696,6 @@
               completion(responseObject, error);
             }];
 }
-
 
 - (void)createPaymentWithToken:(nonnull NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
 
@@ -978,6 +981,53 @@
         failure:^(AFHTTPRequestOperation *_Nullable operation, NSError *_Nonnull error) {
           completion(Nil, error);
           [self handleError:error];
+        }];
+}
+
+- (NSString *)encodeStringTo64:(NSString *)fromString {
+    NSData *plainData = [fromString dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *base64String;
+    if ([plainData respondsToSelector:@selector(base64EncodedStringWithOptions:)]) {
+        base64String = [plainData base64EncodedStringWithOptions:kNilOptions]; // iOS 7+
+    } else {
+        base64String = [plainData base64Encoding]; // pre iOS7
+    }
+
+    return base64String;
+}
+
+- (void)uploadStateID:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:[EndpointManager sharedInstance].currentEndpoint.baseUrl]];
+    self.requestManager = manager;
+    self.requestManager.requestSerializer = [[FRSRequestSerializer alloc] init];
+    [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
+    NSString *formattedStripeKey = [NSString stringWithFormat:@"%@:", [EndpointManager sharedInstance].currentEndpoint.stripeKey];
+    NSString *auth = [NSString stringWithFormat:@"Basic %@", [self encodeStringTo64:formattedStripeKey]];
+
+    [self.requestManager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
+
+    [manager POST:endPoint
+        parameters:parameters
+        constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+          NSString *paramNameForImage = @"file";
+          [formData appendPartWithFileData:parameters[@"file"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+          [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
+        }
+        success:^(AFHTTPRequestOperation *operation, id responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(AFHTTPRequestOperation *_Nullable operation, NSError *_Nonnull error) {
+          completion(Nil, error);
+          [self handleError:error];
+        }];
+}
+
+- (void)updateTaxInfoWithFileID:(NSString *)fileID completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:updateTaxInfoEndpoint
+        withParameters:@{ @"stripe_document_token" : fileID }
+        completion:^(id responseObject, NSError *error) {
+          completion(responseObject, error);
         }];
 }
 
@@ -1268,7 +1318,7 @@
         [self unrepostGallery:gallery completion:completion];
         return;
     }
-  
+
     [FRSTracker track:galleryReposted parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
@@ -1465,7 +1515,6 @@
 /* serialization */
 
 - (id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
-
     if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
         NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
         NSMutableDictionary *responseObjects = [[NSMutableDictionary alloc] init];
@@ -1500,7 +1549,7 @@
 
             [responseObjects addObject:[self objectFromDictionary:responseObject context:managedObjectContext]];
         }
-        
+
         return responseObjects;
     } else {
     }
@@ -1552,7 +1601,7 @@
             [onboardNav pushViewController:onboardVC animated:NO];
             [tab presentViewController:onboardNav animated:YES completion:Nil];
         }
-        
+
         return TRUE;
     }
 
