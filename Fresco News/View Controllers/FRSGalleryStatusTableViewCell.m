@@ -31,8 +31,6 @@
     [postImageView hnk_setImageFromURL:resizedURL
                            placeholder:nil
                                success:^(UIImage *image) {
-                                   NSLog(@"ROWS %ld", [self.tableView numberOfRowsInSection:0]);
-                                   NSLog(@"INDEXPATH ROW %i", [self row]);
                                    if ((int)[self.tableView numberOfRowsInSection:0]-1 == self.row) {
                                        [self.parentView removeLoadingSpinner];
                                    }

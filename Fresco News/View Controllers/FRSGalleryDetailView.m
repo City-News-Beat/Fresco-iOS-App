@@ -231,7 +231,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         if (galleryPurchases.count == 1) {
             NSDictionary *purchase = [[galleryPurchases objectAtIndex:0][@"purchases"] objectAtIndex:0];
 
-            NSLog(@"%@", purchase[@"outlet"]);
+//            NSLog(@"%@", purchase[@"outlet"]);
 
             NSString *title = [purchase valueForKeyPath:@"outlet.title"];
 
@@ -288,7 +288,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     for (int i = 0; i < posts.count; i++) {
         if ([[(FRSPost *)posts[i] uid] isEqualToString:self.defaultPostID]) {
             indexOfPost = i;
-            NSLog(@"POST FOUND: %@ %d", [(FRSPost *)posts[i] uid], indexOfPost);
+            //NSLog(@"POST FOUND: %@ %d", [(FRSPost *)posts[i] uid], indexOfPost);
             break;
         }
     }
