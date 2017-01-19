@@ -111,14 +111,14 @@
     self.mainInfoView.hidden = !showsNameArea;
 
     if ([authenticatedUser valueForKey:@"stripeFirst"]) {
-        _firstNameField.text = [authenticatedUser valueForKey:@"stripeFirst"];
-        _firstNameField.enabled = FALSE;
-        _firstNameField.textColor = [UIColor frescoLightTextColor];
+        self.firstNameField.text = [authenticatedUser valueForKey:@"stripeFirst"];
+        self.firstNameField.enabled = FALSE;
+        self.firstNameField.textColor = [UIColor frescoLightTextColor];
     }
     if ([authenticatedUser valueForKey:@"stripeLast"]) {
-        _lastNameField.text = [authenticatedUser valueForKey:@"stripeLast"];
-        _lastNameField.enabled = FALSE;
-        _lastNameField.textColor = [UIColor frescoLightTextColor];
+        self.lastNameField.text = [authenticatedUser valueForKey:@"stripeLast"];
+        self.lastNameField.enabled = FALSE;
+        self.lastNameField.textColor = [UIColor frescoLightTextColor];
     }
     if ([[authenticatedUser valueForKey:@"dob_day"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_month"] intValue] != 0 && [[authenticatedUser valueForKey:@"dob_year"] intValue] != 0) {
         int day = [[authenticatedUser valueForKey:@"dob_day"] intValue];
@@ -126,9 +126,9 @@
         int year = [[authenticatedUser valueForKey:@"dob_year"] intValue];
 
         NSString *birthday = [NSString stringWithFormat:@"%d/%d/%d", month, day, year];
-        _dateField.enabled = FALSE;
-        _dateField.text = birthday;
-        _dateField.textColor = [UIColor frescoLightTextColor];
+        self.dateField.enabled = FALSE;
+        self.dateField.text = birthday;
+        self.dateField.textColor = [UIColor frescoLightTextColor];
     }
 
     self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 210, 320, 216)];
@@ -136,37 +136,37 @@
     self.datePicker.backgroundColor = [UIColor whiteColor];
     [self.datePicker addTarget:self action:@selector(startDateSelected:) forControlEvents:UIControlEventValueChanged];
 
-    _dateField.inputView = self.datePicker;
+    self.dateField.inputView = self.datePicker;
 
     if ([authenticatedUser valueForKey:@"address_line1"]) {
-        _addressField.text = [authenticatedUser valueForKey:@"address_line1"];
-        _addressField.enabled = FALSE;
-        _addressField.textColor = [UIColor frescoLightTextColor];
+        self.addressField.text = [authenticatedUser valueForKey:@"address_line1"];
+        self.addressField.enabled = FALSE;
+        self.addressField.textColor = [UIColor frescoLightTextColor];
     }
     if ([authenticatedUser valueForKey:@"address_line2"]) {
-        _addressField.text = [authenticatedUser valueForKey:@"address_line2"];
-        _addressField.enabled = FALSE;
-        _addressField.textColor = [UIColor frescoLightTextColor];
+        self.unitField.text = [authenticatedUser valueForKey:@"address_line2"];
+        self.unitField.enabled = FALSE;
+        self.unitField.textColor = [UIColor frescoLightTextColor];
     }
     if ([authenticatedUser valueForKey:@"address_city"]) {
-        _cityField.text = [authenticatedUser valueForKey:@"address_city"];
-        _cityField.enabled = FALSE;
-        _cityField.textColor = [UIColor frescoLightTextColor];
+        self.cityField.text = [authenticatedUser valueForKey:@"address_city"];
+        self.cityField.enabled = FALSE;
+        self.cityField.textColor = [UIColor frescoLightTextColor];
     }
     if ([authenticatedUser valueForKey:@"address_state"]) {
-        _stateField.text = [authenticatedUser valueForKey:@"address_state"];
-        _stateField.enabled = FALSE;
-        _stateField.textColor = [UIColor frescoLightTextColor];
+        self.stateField.text = [authenticatedUser valueForKey:@"address_state"];
+        self.stateField.enabled = FALSE;
+        self.stateField.textColor = [UIColor frescoLightTextColor];
     }
     if ([authenticatedUser valueForKey:@"address_zip"]) {
-        _zipField.text = [authenticatedUser valueForKey:@"address_zip"];
-        _zipField.enabled = FALSE;
-        _zipField.textColor = [UIColor frescoLightTextColor];
+        self.zipField.text = [authenticatedUser valueForKey:@"address_zip"];
+        self.zipField.enabled = FALSE;
+        self.zipField.textColor = [UIColor frescoLightTextColor];
     }
     if ([authenticatedUser valueForKey:@"ssn"]) {
-        _socialField.text = [authenticatedUser valueForKey:@"ssn"];
-        _socialField.enabled = FALSE;
-        _socialField.textColor = [UIColor frescoLightTextColor];
+        self.socialField.text = [authenticatedUser valueForKey:@"ssn"];
+        self.socialField.enabled = FALSE;
+        self.socialField.textColor = [UIColor frescoLightTextColor];
     }
 }
 
@@ -181,26 +181,30 @@
 
 - (BOOL)isAddressArea:(NSString *)field {
     if ([field isEqualToString:@"address_line1"] || [field isEqualToString:@"address_line2"] || [field isEqualToString:@"address_city"] || [field isEqualToString:@"address_state"] || [field isEqualToString:@"address_zip"]) {
-        return TRUE;
+        return YES;
     }
 
-    return FALSE;
+    return NO;
 }
 
 - (BOOL)isSSNArea:(NSString *)field {
-    if ([field isEqualToString:@"pid_last4"] || [field isEqualToString:@"personal_id_number"]) {
-        return TRUE;
+    if ([field isEqualToString:@"pid_last4"]) {
+        self.socialField.placeholder = @"Last 4 Digits of Social Security Number";
+        return YES;
     }
-
-    return FALSE;
+    if ([field isEqualToString:@"personal_id_number"]) {
+        self.socialField.placeholder = @"Social Security Number";
+        return YES;
+    }
+    return NO;
 }
 
 - (BOOL)isDocumentIDArea:(NSString *)field {
     if ([field isEqualToString:@"id_document"]) {
-        return TRUE;
+        return YES;
     }
 
-    return FALSE;
+    return NO;
 }
 
 - (void)configureSpinner {
