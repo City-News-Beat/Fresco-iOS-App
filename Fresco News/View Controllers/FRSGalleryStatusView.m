@@ -40,6 +40,7 @@
     IBOutlet UIImageView *soldCashIconImageView;
 
     NSArray *purchases;
+    DGElasticPullToRefreshLoadingViewCircle *spinner;
 }
 
 - (void)configureWithArray:(NSArray *)postPurchases rating:(int)rating {
@@ -126,6 +127,14 @@
         popupViewHeightConstraint.constant = 528; // Zeplin Height
     }
     verifiedDescriptionLabel.hidden = true;
+    
+    scrollView.hidden = true;
+    spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
+    spinner.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.height/2, 20, 20);
+    spinner.tintColor = [UIColor frescoOrangeColor];
+    [self addSubview:spinner];
+    [spinner setPullProgress:90];
+    [spinner startAnimating];
 }
 
 - (void)hideSoldViews {
@@ -197,6 +206,12 @@
     scrollView.contentSize = CGSizeMake(scrollView.contentSize.width, (barHeight * 5) + soldContentTableView.frame.size.height);
 }
 
+- (void)removeLoadingSpinner {
+    scrollView.hidden = false;
+    [spinner stopLoading];
+    [spinner removeFromSuperview];
+}
+
 #pragma mark - IBActions
 
 - (IBAction)pressedOk:(id)sender {
@@ -223,6 +238,8 @@
     [tableView registerNib:[UINib nibWithNibName:@"FRSGalleryStatusTableViewCell" bundle:nil] forCellReuseIdentifier:@"purchase-cell"];
     FRSGalleryStatusTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"purchase-cell"];
     cell.tableView = tableView;
+    cell.parentView = self;
+    cell.row = (int)indexPath.row;
     if (!cell.reloadedTableViewCounter) {
         cell.reloadedTableViewCounter = 0;
     }

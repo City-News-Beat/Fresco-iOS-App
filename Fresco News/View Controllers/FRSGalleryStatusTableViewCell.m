@@ -15,33 +15,38 @@
     IBOutlet UIImageView *postImageView;
     IBOutlet UILabel *outletsLabel;
     IBOutlet UILabel *outletsPriceLabel;
-
+    
     IBOutlet NSLayoutConstraint *postImageViewHeightConstraint;
-
+    
     NSDictionary *purchaseDict;
 }
 
 - (void)configureCellWithPurchaseDict:(NSDictionary *)purchasePostDict {
     purchaseDict = [[NSDictionary alloc] initWithDictionary:purchasePostDict];
     postImageView.layer.cornerRadius = 3;
-
+    
     NSLog(@"URL %@", [NSURL URLWithString:purchaseDict[@"image"]]);
-
+    
     NSURL *resizedURL = [[NSURL alloc] initWithString:purchaseDict[@"image"] width:postImageView.frame.size.width];
     [postImageView hnk_setImageFromURL:resizedURL
-        placeholder:nil
-        success:^(UIImage *image) {
-          [self configurePostImageViewWithImage:image];
-          [self configureOutletsLabels];
-          // Reload the table once for every cell
-          if (self.reloadedTableViewCounter == 0) {
-              [self.tableView reloadData];
-              self.reloadedTableViewCounter = 1;
-          }
-        }
-        failure:^(NSError *error) {
-          NSLog(@"ERROR %@", error);
-        }];
+                           placeholder:nil
+                               success:^(UIImage *image) {
+                                   NSLog(@"ROWS %ld", [self.tableView numberOfRowsInSection:0]);
+                                   NSLog(@"INDEXPATH ROW %i", [self row]);
+                                   if ((int)[self.tableView numberOfRowsInSection:0]-1 == self.row) {
+                                       [self.parentView removeLoadingSpinner];
+                                   }
+                                   [self configurePostImageViewWithImage:image];
+                                   [self configureOutletsLabels];
+                                   // Reload the table once for every cell
+                                   if (self.reloadedTableViewCounter == 0) {
+                                       [self.tableView reloadData];
+                                       self.reloadedTableViewCounter = 1;
+                                   }
+                               }
+                               failure:^(NSError *error) {
+                                   NSLog(@"ERROR %@", error);
+                               }];
 }
 
 - (void)configurePostImageViewWithImage:(UIImage *)image {
