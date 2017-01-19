@@ -168,12 +168,19 @@ static BOOL isSegueingToAssignment;
     }
 
     if ([instruction isEqualToString:todayInNewsNotification]) {
-        NSArray *galleryIDs = [[push objectForKey:@"meta"] objectForKey:@"gallery_ids"];
+        NSArray *galleryIDs;
+        
+        if ([[push objectForKey:@"meta"] objectForKey:@"gallery_ids"]) {
+            galleryIDs = [[push objectForKey:@"meta"] objectForKey:@"gallery_ids"];
+        } else {
+           galleryIDs = [push objectForKey:@"gallery_ids"];
+        }
+        
 
-        if (galleryIDs && [[galleryIDs class] isSubclassOfClass:[galleryIDs class]]) {
+        if (galleryIDs) {
             [FRSNotificationHandler segueToTodayInNews:galleryIDs title:push[@"aps"][@"alert"][@"title"]];
         } else {
-            NSArray *galleryIDs = [push objectForKey:@"gallery_ids"];
+            galleryIDs = [push objectForKey:@"gallery_ids"];
             [FRSNotificationHandler segueToTodayInNews:galleryIDs title:@"Today In News"];
         }
     }
@@ -204,7 +211,49 @@ static BOOL isSegueingToAssignment;
 }
 
 + (void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"notif-for-todayinnews" object:galleryIDs];
+    
+    FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    UITabBarController *tab = (UITabBarController *)appDelegate.tabBarController;
+    FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
+    
+    detailVC.navigationController = tab.navigationController;
+    UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
+    [navController setNavigationBarHidden:FALSE];
+    
+    
+    if ([[navController class] isSubclassOfClass:[UINavigationController class]]) {
+
+    } else {
+        UITabBarController *tab = (UITabBarController *)navController;
+        tab.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        tab.navigationController.interactivePopGestureRecognizer.delegate = nil;
+        
+        navController = (UINavigationController *)[[tab viewControllers] firstObject];
+        [navController setNavigationBarHidden:FALSE];
+    }
+
+    NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [galleryIDs count]; i++) {
+
+        [[FRSAPIClient sharedClient] getGalleryWithUID:[galleryIDs objectAtIndex:i] completion:^(id responseObject, NSError *error) {
+            if (!error && responseObject) {
+                [galleryArray addObject:responseObject];
+
+                // Checks if loop is complete by comparing added galleries with gallery IDs
+                if ([galleryArray count] == [galleryIDs count]) {
+
+                    // If all galleries from the galleryIDs array have been adedd, push and configure
+                    [detailVC configureWithGalleries:galleryArray];
+                    [navController pushViewController:detailVC animated:TRUE];
+                    
+                }
+            } else {
+                NSLog(@"Unable to create gallery from id: %@", [galleryIDs objectAtIndex:i]);
+            }
+        }];
+    }
 }
 
 + (void)segueToGallery:(NSString *)galleryID {
