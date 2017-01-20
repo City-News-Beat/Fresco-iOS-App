@@ -336,7 +336,6 @@ static NSDate *lastDate;
 }
 
 - (void)restart {
-
     if (completed == toComplete) {
         // complete
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{ @"type" : @"completion" }];

@@ -597,31 +597,31 @@
 //}
 
 - (IBAction)textFieldDidBeginEditing:(UITextField *)textField {
-        if (IS_IPHONE_5) {
-            if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField || textField == self.socialField) {
-                [UIView animateWithDuration:0.3
-                                      delay:0
-                                    options:UIViewAnimationOptionCurveEaseInOut
-                                 animations:^{
-                                   self.scrollView.transform = CGAffineTransformMakeTranslation(0, -70);
-                                 }
-                                 completion:nil];
-            }
+    if (IS_IPHONE_5) {
+        if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField || textField == self.socialField) {
+            [UIView animateWithDuration:0.3
+                                  delay:0
+                                options:UIViewAnimationOptionCurveEaseInOut
+                             animations:^{
+                               self.scrollView.transform = CGAffineTransformMakeTranslation(0, -70);
+                             }
+                             completion:nil];
         }
+    }
 }
 
 - (IBAction)textFieldDidEndEditing:(UITextField *)textField {
-        if (IS_IPHONE_5) {
-            if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField || textField == self.socialField) {
-                [UIView animateWithDuration:0.3
-                                      delay:0
-                                    options:UIViewAnimationOptionCurveEaseInOut
-                                 animations:^{
-                                   self.scrollView.transform = CGAffineTransformMakeTranslation(0, 0);
-                                 }
-                                 completion:nil];
-            }
+    if (IS_IPHONE_5) {
+        if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField || textField == self.socialField) {
+            [UIView animateWithDuration:0.3
+                                  delay:0
+                                options:UIViewAnimationOptionCurveEaseInOut
+                             animations:^{
+                               self.scrollView.transform = CGAffineTransformMakeTranslation(0, 0);
+                             }
+                             completion:nil];
         }
+    }
 }
 
 - (IBAction)textFieldDidChange:(UITextField *)textField {
@@ -708,8 +708,7 @@
     if (_socialField.enabled && ![_socialField.text isEqualToString:@""]) {
         if ([self.socialField.placeholder isEqualToString:@"Last 4 Digits of Social Security Number"]) {
             [addressInfo setObject:_socialField.text forKey:@"pid_last4"];
-        }
-        else if ([self.socialField.placeholder isEqualToString:@"Social Security Number"]) {
+        } else if ([self.socialField.placeholder isEqualToString:@"Social Security Number"]) {
             [addressInfo setObject:_socialField.text forKey:@"personal_id_number"];
         }
     }
@@ -816,7 +815,7 @@
                                      NSData *imageData = UIImageJPEGRepresentation(editedImage, 1.0);
                                      dispatch_async(dispatch_get_main_queue(), ^{
                                        [[FRSAPIClient sharedClient] uploadStateID:setStateIDEndpoint
-                                           withParameters:@{ @"file" : imageData }
+                                                                   withParameters:imageData
                                            completion:^(id responseObject, NSError *error) {
                                              if (error) {
 
@@ -826,8 +825,8 @@
                                                      NSArray *keys = [responseObject allKeys];
                                                      NSString *fileID = [responseObjects valueForKey:@"id"];
                                                      [[FRSAPIClient sharedClient] updateTaxInfoWithFileID:fileID
-                                                                                               completion:^(id responseObject, NSError *error){
-                                                                                                   NSLog(@"%@", responseObject);
+                                                                                               completion:^(id responseObject, NSError *error) {
+                                                                                                 NSLog(@"%@", responseObject);
                                                                                                }];
                                                  }
                                              }

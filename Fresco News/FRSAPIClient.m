@@ -773,10 +773,10 @@
             }];
 }
 
-- (AFHTTPRequestOperationManager *)managerWithFrescoConfigurations {
+- (AFHTTPSessionManager *)managerWithFrescoConfigurations {
 
     if (!self.requestManager) {
-        AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:[EndpointManager sharedInstance].currentEndpoint.baseUrl]];
+        AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:[EndpointManager sharedInstance].currentEndpoint.baseUrl]];
         self.requestManager = manager;
         self.requestManager.requestSerializer = [[FRSRequestSerializer alloc] init];
         [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -933,55 +933,43 @@
  Generic HTTP methods for use within class
  */
 - (void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
 
-    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
-
-    [manager GET:endPoint
-        parameters:parameters
-        success:^(AFHTTPRequestOperation *_Nonnull operation, id _Nonnull responseObject) {
-          completion(responseObject, Nil);
-
-        }
-        failure:^(AFHTTPRequestOperation *_Nullable operation, NSError *_Nonnull error) {
-          completion(Nil, error);
-          [self handleError:error];
-        }];
+    [manager GET:endPoint parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress) {
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        completion(responseObject, Nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        completion(Nil, error);
+        [self handleError:error];
+    }];
 }
 
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
 
-    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
-
-    [manager POST:endPoint
-        parameters:parameters
-        success:^(AFHTTPRequestOperation *_Nonnull operation, id _Nonnull responseObject) {
-
-          completion(responseObject, Nil);
-
-        }
-        failure:^(AFHTTPRequestOperation *_Nullable operation, NSError *_Nonnull error) {
-          completion(Nil, error);
-          [self handleError:error];
-        }];
+    [manager POST:endPoint parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress) {
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        completion(responseObject, Nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        completion(Nil, error);
+        [self handleError:error];
+    }];
 }
 
 - (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
 
-    [manager POST:endPoint
-        parameters:parameters
-        constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-          NSString *paramNameForImage = @"avatar";
-          [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
-        }
-        success:^(AFHTTPRequestOperation *operation, id responseObject) {
-          completion(responseObject, Nil);
-
-        }
-        failure:^(AFHTTPRequestOperation *_Nullable operation, NSError *_Nonnull error) {
-          completion(Nil, error);
-          [self handleError:error];
-        }];
+ [manager POST:endPoint parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+     NSString *paramNameForImage = @"avatar";
+     [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+ } progress:^(NSProgress * _Nonnull uploadProgress) {
+    
+ } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+     completion(responseObject, Nil);
+ } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+     completion(Nil, error);
+     [self handleError:error];
+ }];
 }
 
 - (NSString *)encodeStringTo64:(NSString *)fromString {
@@ -996,31 +984,27 @@
     return base64String;
 }
 
-- (void)uploadStateID:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:setStateIDEndpoint]];
-    self.requestManager = manager;
+- (void)uploadStateID:(NSString *)endPoint withParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:setStateIDEndpoint]];
     self.requestManager.requestSerializer = [[FRSRequestSerializer alloc] init];
-    [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+//    [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
     NSString *formattedStripeKey = [NSString stringWithFormat:@"%@:", [EndpointManager sharedInstance].currentEndpoint.stripeKey];
     NSString *auth = [NSString stringWithFormat:@"Basic %@", [self encodeStringTo64:formattedStripeKey]];
 
     [self.requestManager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
-
-    [manager POST:endPoint
-        parameters:parameters
-        constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-          NSString *paramNameForImage = @"file";
-          [formData appendPartWithFileData:parameters[@"file"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
-          [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
-        }
-        success:^(AFHTTPRequestOperation *operation, id responseObject) {
-          completion(responseObject, Nil);
-        }
-        failure:^(AFHTTPRequestOperation *_Nullable operation, NSError *_Nonnull error) {
-          completion(Nil, error);
-          [self handleError:error];
-        }];
+    
+    [manager POST:endPoint parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        NSString *paramNameForImage = @"file";
+        [formData appendPartWithFileData:parameters name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+        [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        completion(responseObject, Nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        completion(Nil, error);
+        [self handleError:error];
+    }];
 }
 
 - (void)updateTaxInfoWithFileID:(NSString *)fileID completion:(FRSAPIDefaultCompletionBlock)completion {
