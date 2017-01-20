@@ -35,12 +35,6 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTodayInNewsNotification:) name:@"notif-for-todayinnews" object:nil];
-}
-
--(void)receiveTodayInNewsNotification:(NSNotification *)notif {
-    [self segueToTodayInNews:[notif object]];
 }
 
 - (void)removeNavigationBarLine {
@@ -120,37 +114,6 @@
         statusBarApplicationWindow.alpha = alpha;
     }
 }
-
-#pragma mark - Deep Links
-
-- (void)segueToTodayInNews:(NSArray *)galleryIDs {
-
-    NSMutableArray *galleryArray = [[NSMutableArray alloc] init];
-
-    for (NSString *gallery in galleryIDs) {
-
-        [[FRSAPIClient sharedClient] getGalleryWithUID:gallery
-                                            completion:^(id responseObject, NSError *error) {
-
-                                              if (![galleryArray containsObject:responseObject]) {
-                                                  [galleryArray addObject:(FRSGallery *)responseObject];
-                                              }
-
-                                              if (galleryArray.count == galleryIDs.count) {
-                                                  if (!self.isSegueingToStory) {
-                                                      self.isSegueingToStory = YES;
-                                                      FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] init];
-                                                      [detailVC configureWithGalleries:galleryArray];
-                                                      detailVC.navigationController = self.navigationController;
-                                                      detailVC.title = @"TODAY IN NEWS";
-                                                      detailVC.isComingFromNotification = YES;
-                                                      [self.navigationController pushViewController:detailVC animated:YES];
-                                                  }
-                                              }
-                                            }];
-    }
-}
-
 
 #pragma mark - FRSAlertView
 
