@@ -10,7 +10,7 @@
 #import "Fresco.h"
 #import "SDAVAssetExportSession.h"
 
-@interface FRSUploadManager : NSObject {
+@interface FRSUploadManager : NSObject <SDAVAssetExportSessionDelegate> {
     int currentIndex;
     unsigned long long totalFileSize;
     unsigned long long uploadedFileSize;
@@ -19,12 +19,14 @@
     int completed;
     BOOL isFromFresh;
     float uploadSpeed;
+    int numberOfVideos;
     SDAVAssetExportSession *exporter;
 }
 
 + (id)sharedUploader;
 - (void)checkCachedUploads;
 - (void)addAsset:(PHAsset *)asset withToken:(NSString *)token withPostID:(NSString *)postID;
+
 @property (nonatomic, retain) NSMutableArray *currentUploads;
 @property (nonatomic, assign) int completedUploads;
 @property (nonatomic, assign) int uploadsToComplete;
@@ -32,5 +34,6 @@
 @property (nonatomic, weak) NSManagedObjectContext *context;
 @property (nonatomic, retain) NSMutableDictionary *managedObjects;
 @property (nonatomic, retain) NSString *currentGalleryID;
+@property (nonatomic, retain) NSMutableDictionary *transcodingProgressDictionary;
 
 @end

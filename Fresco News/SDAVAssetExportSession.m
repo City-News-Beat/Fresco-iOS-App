@@ -215,7 +215,9 @@
                 // update the video progress
                 lastSamplePresentationTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
                 self.progress = duration == 0 ? 1 : CMTimeGetSeconds(lastSamplePresentationTime) / duration;
-
+                if ([self.delegate respondsToSelector:@selector(updateTranscodingProgress:withPostID:)]) {
+                    [self.delegate updateTranscodingProgress:self.progress withPostID:self.postID];
+                }
                 if ([self.delegate respondsToSelector:@selector(exportSession:renderFrame:withPresentationTime:toBuffer:)]) {
                     CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)CMSampleBufferGetImageBuffer(sampleBuffer);
                     CVPixelBufferRef renderBuffer = NULL;
