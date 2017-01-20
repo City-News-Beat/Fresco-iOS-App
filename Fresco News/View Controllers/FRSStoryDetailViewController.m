@@ -34,15 +34,14 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 
-    
     NSString *openedFrom = @"";
-    
+
     if (self.isComingFromNotification) {
         openedFrom = @"push";
     } else {
         openedFrom = @"stories";
     }
-    
+
     [FRSTracker track:galleryOpenedFromStories
            parameters:@{ @"story_id" : (self.story.uid != nil) ? self.story.uid : @"",
                          @"opened_from" : openedFrom }];
@@ -67,6 +66,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
               [self.galleriesTable reloadData];
               [self.loadingView stopLoading];
               [self.loadingView removeFromSuperview];
+              self.loadingView.alpha = 0;
             });
         };
     }
@@ -338,6 +338,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
                                                 [self.galleriesTable reloadData];
                                                 [self.loadingView stopLoading];
                                                 [self.loadingView removeFromSuperview];
+                                                self.loadingView.alpha = 0;
                                               });
                                             }];
 }
@@ -368,7 +369,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)configureSpinner {
-    
+
     if (self.loadingView) {
         return;
     }
