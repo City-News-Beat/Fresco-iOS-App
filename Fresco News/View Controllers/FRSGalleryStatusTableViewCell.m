@@ -54,6 +54,10 @@
     [postImageView setImage:image];
 }
 
+
+/**
+ Goes through the outlets that have purchased the gallery and sets the price and title of the outlet. Purchases = Outlets Purchase Dictionary
+ */
 - (void)configureOutletsLabels {
     outletsLabel.text = @"";
     for (int i = 0; i < ((NSArray *)purchaseDict[@"purchases"]).count; i++) {
@@ -62,6 +66,7 @@
         int postPrice = (int)[((NSString *)[purchaseDict[@"purchases"] objectAtIndex:i][@"amount"])integerValue];
         outletsPriceLabel.text = [NSString stringWithFormat:@"$%d", (int)(((float)postPrice) * (float)(0.01))];
 
+        // If it is not the last outlet, skip a line in the text
         if (i != ((NSArray *)purchaseDict[@"purchases"]).count - 1) {
             outletsLabel.text = [NSString stringWithFormat:@"%@\n", outletsLabel.text];
             outletsPriceLabel.text = [NSString stringWithFormat:@"%@\n", outletsPriceLabel.text];
