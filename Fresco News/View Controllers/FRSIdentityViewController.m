@@ -15,6 +15,7 @@
 
 @interface FRSIdentityViewController ()
 
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIView *mainInfoView;
 @property (weak, nonatomic) IBOutlet UIView *addressView;
 @property (weak, nonatomic) IBOutlet UIView *ssnView;
@@ -596,31 +597,31 @@
 //}
 
 - (IBAction)textFieldDidBeginEditing:(UITextField *)textField {
-    //    if (IS_IPHONE_5) {
-    //        if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField) {
-    //            [UIView animateWithDuration:0.3
-    //                                  delay:0
-    //                                options:UIViewAnimationOptionCurveEaseInOut
-    //                             animations:^{
-    //                               self.tableView.transform = CGAffineTransformMakeTranslation(0, -70);
-    //                             }
-    //                             completion:nil];
-    //        }
-    //    }
+        if (IS_IPHONE_5) {
+            if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField || textField == self.socialField) {
+                [UIView animateWithDuration:0.3
+                                      delay:0
+                                    options:UIViewAnimationOptionCurveEaseInOut
+                                 animations:^{
+                                   self.scrollView.transform = CGAffineTransformMakeTranslation(0, -70);
+                                 }
+                                 completion:nil];
+            }
+        }
 }
 
 - (IBAction)textFieldDidEndEditing:(UITextField *)textField {
-    //    if (IS_IPHONE_5) {
-    //        if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField) {
-    //            [UIView animateWithDuration:0.3
-    //                                  delay:0
-    //                                options:UIViewAnimationOptionCurveEaseInOut
-    //                             animations:^{
-    //                               self.tableView.transform = CGAffineTransformMakeTranslation(0, 0);
-    //                             }
-    //                             completion:nil];
-    //        }
-    //    }
+        if (IS_IPHONE_5) {
+            if (textField == self.addressField || textField == self.unitField || textField == self.cityField || textField == self.stateField || textField == self.zipField || textField == self.socialField) {
+                [UIView animateWithDuration:0.3
+                                      delay:0
+                                    options:UIViewAnimationOptionCurveEaseInOut
+                                 animations:^{
+                                   self.scrollView.transform = CGAffineTransformMakeTranslation(0, 0);
+                                 }
+                                 completion:nil];
+            }
+        }
 }
 
 - (IBAction)textFieldDidChange:(UITextField *)textField {
@@ -705,7 +706,12 @@
         [addressInfo setObject:_lastNameField.text forKey:@"last_name"];
     }
     if (_socialField.enabled && ![_socialField.text isEqualToString:@""]) {
-        [addressInfo setObject:_socialField.text forKey:@"pid_last4"];
+        if ([self.socialField.placeholder isEqualToString:@"Last 4 Digits of Social Security Number"]) {
+            [addressInfo setObject:_socialField.text forKey:@"pid_last4"];
+        }
+        else if ([self.socialField.placeholder isEqualToString:@"Social Security Number"]) {
+            [addressInfo setObject:_socialField.text forKey:@"personal_id_number"];
+        }
     }
 
     self.savingInfo = true;

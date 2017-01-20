@@ -27,6 +27,7 @@
                 <outlet property="mainInfoView" destination="ATk-zk-Qbu" id="MQP-HG-fD3"/>
                 <outlet property="saveIDInfoButton" destination="n1b-63-Pvo" id="BHg-9l-ZmY"/>
                 <outlet property="saveIdTopSpaceConstraint" destination="GUn-OH-y0u" id="UFy-k8-EOf"/>
+                <outlet property="scrollView" destination="QyJ-MS-viv" id="ccU-re-fqI"/>
                 <outlet property="socialField" destination="KRN-A7-UHz" id="iD4-N5-pwn"/>
                 <outlet property="ssnView" destination="C5T-is-bfA" id="ZV7-5q-6Ay"/>
                 <outlet property="ssnViewHeightConstraint" destination="aga-zx-6ZE" id="TrB-Ed-zFQ"/>
