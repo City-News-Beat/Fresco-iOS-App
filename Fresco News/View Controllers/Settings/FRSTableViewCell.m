@@ -310,8 +310,6 @@
                                     if(error){
                                         self.facebookSwitch.on = NO;
                                         self.facebookSwitch.enabled = YES;
-                                        FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
-                                        [alert show];
                                     }
 
                                   if (result && !error) {
@@ -327,8 +325,6 @@
                                                                          if(error){
                                                                              self.facebookSwitch.on = NO;
                                                                              self.facebookSwitch.enabled = YES;
-                                                                             FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
-                                                                             [alert show];
                                                                          }else{
                                                                              self.facebookSwitch.on = YES;
                                                                          }
