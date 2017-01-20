@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 static NSString *const awsBucketDev = @"com.fresconews.dev";
-static NSString *const awsAccessKeyDev = @"AKIAJRQQA26XTXPGVAKA";
-static NSString *const awsSecretKeyDev = @"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";
+static NSString * const awsAccessKeyDev = @"AKIAJRQQA26XTXPGVAKA";
+static NSString * const awsSecretKeyDev = @"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";
 
 static NSString *const segmentWriteKeyProd = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
 static NSString *const segmentWriteKeyDev = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug
@@ -19,7 +19,7 @@ static NSString *const awsBucketProd = @"com.fresconews.v2.prod";
 static NSString *const awsAccessKeyProd = @"AKIAJRQQA26XTXPGVAKA";
 static NSString *const awsSecretKeyProd = @"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";
 
-static NSString *const clientAuthorizationProd = @"aW9zOmFzZHBvaXF3ZWxramRmaGtpOWVvcmhneQ";
+static NSString *const clientAuthorizationProd = @"TkJzcGtLWjcyZk1WQnhtV01LcHR6cm5kVm10TkxLWFk1WFY2ZjVDQjJUdEE4dk1OcnRwMlRtZFpQUVZNOnFoYTlrRVZnM3k5ZXZnSmM4TVdoZ3JFakg0dmh0TDZYdUU4c1BROHlKYXZyY3J1ZmdGalhiQVRDS3RmOGZ3U0ZDNUZDZlhWOXpLSHlZVTdEM0hhcEJDUUJKcXRrOHF3OXBHdmVlRzNCRmIzQ3lRZ05GOHVibWZwZDZQMndLYkY3YUttYnN5ajdKa1ZqWGRkZmo4U25NcHFDYXR6ZUVtSzRScllnd2hyZVZkcFl2SlN1cTZFbXJ2N1dYdGpYVUo=";
 static NSString *const clientAuthorizationDev = @"MTMzNzp0aGlzaXNhc2VjcmV0";
 
 static NSString *const twitterConsumeyKey = @"kT772ISFiuWQdVQblU4AmBWw3";

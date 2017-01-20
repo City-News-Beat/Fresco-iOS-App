@@ -113,7 +113,11 @@
         [self handleLocalPush:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo]];
     }
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [self handleRemotePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+        // If we don't check for <iOS 10, multiple calls to handleRemotePush will be made.
+        // Once here, and once in userNotificationCenter:didReceiveNotificationResponse.
+        if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
+            [self handleRemotePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+        }
     }
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
         [self handleColdQuickAction:launchOptions[UIApplicationLaunchOptionsShortcutItemKey]];
@@ -331,10 +335,6 @@
 
     if (responseObject[@"identity"] && ![responseObject[@"identity"] isKindOfClass:[[NSNull null] class]]) {
 
-        //        if (responseObject[@"identity"][@"due_by"] != Nil && ![responseObject[@"identity"][@"due_by"] isEqual:[NSNull null]]) {
-        //            [authenticatedUser setValue:responseObject[@"due_by"] forKey:@"due_by"];
-        //        }
-
         if (responseObject[@"identity"][@"first_name"] != Nil && ![responseObject[@"identity"][@"first_name"] isEqual:[NSNull null]]) {
             [authenticatedUser setValue:responseObject[@"identity"][@"first_name"] forKey:@"stripeFirst"];
         }
@@ -403,7 +403,11 @@
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{
-          [self saveContext];
+            @try {
+                [self saveContext];
+            } @catch (NSException *exception) {
+                NSLog(@"Error saving context.");
+            }
         });
     }
 }
@@ -482,12 +486,15 @@
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+    // Gets called in the foreground
+    
     // [self handleRemotePush:notification.request.content.userInfo];
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
     didReceiveNotificationResponse:(UNNotificationResponse *)response
              withCompletionHandler:(void (^)())completionHandler {
+    
     NSLog(@"Handle push from background or closed");
     // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
     NSLog(@"%@", response.notification.request.content.userInfo);
@@ -521,8 +528,10 @@
         // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
-
-    return _persistentStoreCoordinator;
+    
+    @synchronized (self) {
+        return _persistentStoreCoordinator;
+    }
 }
 
 - (NSURL *)applicationDocumentsDirectory {
@@ -535,14 +544,17 @@
     if (_managedObjectContext != nil) {
         return _managedObjectContext;
     }
-
+    
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (!coordinator) {
         return nil;
     }
     _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [_managedObjectContext setPersistentStoreCoordinator:coordinator];
-    return _managedObjectContext;
+    
+    @synchronized (self) {
+        return _managedObjectContext;
+    }
 }
 
 #pragma mark - Core Data Saving support
@@ -555,7 +567,6 @@
             // Replace this implementation with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
         }
     }
 }
@@ -616,9 +627,6 @@
 }
 
 - (void)registerForPushNotifications {
-
-    return;
-
     //    UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeBadge |
     //                                                             UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
     //
@@ -656,19 +664,17 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // iOS 10 will handle notifications through other methods
     // custom code to handle notification content
+
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
         [self handleRemotePush:userInfo];
     }
 
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
-        NSLog(@"INACTIVE");
         completionHandler(UIBackgroundFetchResultNewData);
     } else if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         [self handleRemotePush:userInfo];
-        NSLog(@"BACKGROUND");
         completionHandler(UIBackgroundFetchResultNewData);
     } else {
-        NSLog(@"FOREGROUND");
         completionHandler(UIBackgroundFetchResultNewData);
     }
 }
@@ -704,10 +710,12 @@
         [installationDigest setObject:oldDeviceToken forKey:@"old_device_token"];
     }
 
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{ @"installation" : installationDigest }
-        completion:^(id responseObject, NSError *error) {
-          NSLog(@"Updated user installation");
-        }];
+    if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        [[FRSAPIClient sharedClient] updateUserWithDigestion:@{ @"installation" : installationDigest }
+            completion:^(id responseObject, NSError *error) {
+              NSLog(@"Updated user installation");
+            }];
+    }
 }
 
 - (void)handleLocationUpdate {
@@ -729,29 +737,6 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    //    UNMutableNotificationContent *objNotificationContent = [[UNMutableNotificationContent alloc] init];
-    //    objNotificationContent.title = [NSString localizedUserNotificationStringForKey:@"Title" arguments:nil];
-    //    objNotificationContent.body = [NSString localizedUserNotificationStringForKey:@"Body"
-    //                                                                        arguments:nil];
-    //    objNotificationContent.sound = [UNNotificationSound defaultSound];
-    //    objNotificationContent.userInfo = @{@"type":followedNotification, @"meta": @{@"user_ids": @[@"neN16OqW3D47"]}};
-    //
-    //    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[NSDate date]];
-    //    components.second += 3;
-    //    UNCalendarNotificationTrigger *trigger = [UNCalendarNotificationTrigger
-    //                                              triggerWithDateMatchingComponents:components repeats:FALSE];
-    //
-    //    UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:@"com.fresconews.Fresco"
-    //                                                                          content:objNotificationContent trigger:trigger];
-    //    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-    //    [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-    //        if (!error) {
-    //            NSLog(@"Local Notification succeeded");
-    //        }
-    //        else {
-    //            NSLog(@"Local Notification failed");
-    //        }
-    //    }];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -792,7 +777,6 @@
 }
 
 - (void)checkNotifications {
-
     if (![[FRSAPIClient sharedClient] isAuthenticated]) {
         return;
     }

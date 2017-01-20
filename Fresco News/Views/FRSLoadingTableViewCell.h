@@ -1,6 +1,6 @@
 //
 //  FRSLoadingTableViewCell.h
-//  
+//
 //
 //  Created by Omar Elfanek on 4/11/16.
 //

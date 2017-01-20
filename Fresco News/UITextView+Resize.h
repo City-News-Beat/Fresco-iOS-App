@@ -10,6 +10,6 @@
 #import <Foundation/Foundation.h>
 
 @interface UITextView (Resize)
--(void)frs_setTextWithResize:(NSString *)text;
--(void)frs_resize;
+- (void)frs_setTextWithResize:(NSString *)text;
+- (void)frs_resize;
 @end

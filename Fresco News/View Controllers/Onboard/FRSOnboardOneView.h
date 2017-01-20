@@ -10,9 +10,9 @@
 
 @interface FRSOnboardOneView : UIView
 
--(instancetype)initWithOrigin:(CGPoint)origin;
+- (instancetype)initWithOrigin:(CGPoint)origin;
 
--(void)animate;
--(void)reset;
+- (void)animate;
+- (void)reset;
 
 @end

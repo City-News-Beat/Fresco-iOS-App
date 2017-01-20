@@ -15,17 +15,16 @@
 #import "FRSPlayer.h"
 @class FRSGallery;
 
-
 @protocol FRSGalleryViewDelegate <NSObject>
--(BOOL)shouldHaveActionBar;
--(BOOL)shouldHaveTextLimit;
--(void)playerWillPlay:(FRSPlayer *)player;
+- (BOOL)shouldHaveActionBar;
+- (BOOL)shouldHaveTextLimit;
+- (void)playerWillPlay:(FRSPlayer *)player;
 @property (weak, nonatomic) UINavigationController *navigationController;
 @end
 
 @interface FRSGalleryView : UIView
 
-@property (weak, nonatomic) NSObject <FRSGalleryViewDelegate> *delegate;
+@property (weak, nonatomic) NSObject<FRSGalleryViewDelegate> *delegate;
 @property (nonatomic) BOOL hasTapped;
 
 @property (strong, nonatomic) FRSGallery *gallery;

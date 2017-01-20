@@ -24,5 +24,5 @@ typedef enum {
     FRSDeviceTypeUnknown
 } FRSDeviceType;
 @interface FRSDevice : NSObject
-+(FRSDeviceType)currentDevice;
++ (FRSDeviceType)currentDevice;
 @end

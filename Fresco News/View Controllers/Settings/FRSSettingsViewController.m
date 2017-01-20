@@ -62,7 +62,6 @@
     [self configureTableView];
     
     FRSUser *currentUser = [[FRSAPIClient sharedClient] authenticatedUser];
-    NSLog(@"FIELDS NEEDED: %@", currentUser.fieldsNeeded);
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -657,7 +656,6 @@
 -(void)didPressButtonAtIndex:(NSInteger)index {
     //for logout alert
     if (index == 0) {
-        NSLog(@"index 0");
     } else if (index == 1) {
         [self logoutWithPop:YES];
     }

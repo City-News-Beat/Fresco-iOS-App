@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
 
-@interface FRSUserNotificationViewController : FRSBaseViewController
-{
+@interface FRSUserNotificationViewController : FRSBaseViewController {
     BOOL loadingMoreNotifications;
     BOOL reachedBottom;
 }

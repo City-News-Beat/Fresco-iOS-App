@@ -27,18 +27,16 @@
 #import "DGElasticPullToRefresh.h"
 #import <objc/runtime.h>
 
-static NSString* pullToRefreshViewKey = @"pullToRefreshView";
+static NSString *pullToRefreshViewKey = @"pullToRefreshView";
 
 @implementation UIScrollView (DGElasticPullToRefresh)
 
-- (DGElasticPullToRefreshView*)pullToRefreshView
-{
+- (DGElasticPullToRefreshView *)pullToRefreshView {
     return objc_getAssociatedObject(self, &pullToRefreshViewKey);
 }
-- (void)setPullToRefreshView:(DGElasticPullToRefreshView*)pullToRefreshView
-{
+- (void)setPullToRefreshView:(DGElasticPullToRefreshView *)pullToRefreshView {
     objc_setAssociatedObject(self, &pullToRefreshViewKey, pullToRefreshView,
-        OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 - (void)dg_addPullToRefreshWithWaveMaxHeight:(CGFloat)waveMaxHeight
                              minOffsetToPull:(CGFloat)minOffsetToPull
@@ -48,11 +46,11 @@ static NSString* pullToRefreshViewKey = @"pullToRefreshView";
                                actionHandler:(void (^)())actionHandler
                                  loadingView:(DGElasticPullToRefreshLoadingView *)loadingView
                                         yPos:(CGFloat)yPos {
-    
+
     self.multipleTouchEnabled = NO;
     self.panGestureRecognizer.maximumNumberOfTouches = 1;
-    DGElasticPullToRefreshView* pullToRefreshView =[[DGElasticPullToRefreshView alloc] init];
-    
+    DGElasticPullToRefreshView *pullToRefreshView = [[DGElasticPullToRefreshView alloc] init];
+
     pullToRefreshView.waveMaxHeight = waveMaxHeight;
     pullToRefreshView.minOffsetToPull = minOffsetToPull;
     pullToRefreshView.loadingContentInset = loadingContentInset;
@@ -63,32 +61,26 @@ static NSString* pullToRefreshViewKey = @"pullToRefreshView";
     pullToRefreshView.animationVelocity = velocity;
     pullToRefreshView.yPos = yPos;
     [self addSubview:pullToRefreshView];
-    
+
     pullToRefreshView.observing = YES;
-    
 }
 
 - (void)dg_addPullToRefreshWithActionHandler:(void (^)())actionHandler
-                                 loadingView:(DGElasticPullToRefreshLoadingView*)loadingView
-{
+                                 loadingView:(DGElasticPullToRefreshLoadingView *)loadingView {
     [self dg_addPullToRefreshWithWaveMaxHeight:70.0 minOffsetToPull:95.0 loadingContentInset:50.0 loadingViewSize:20.0 velocity:3.4 actionHandler:actionHandler loadingView:loadingView yPos:0];
 }
-- (void)dg_removePullToRefresh
-{
+- (void)dg_removePullToRefresh {
     [self.pullToRefreshView disassociateDisplayLink];
     self.pullToRefreshView.observing = NO;
     [self.pullToRefreshView removeFromSuperview];
 }
-- (void)dg_setPullToRefreshBackgroundColor:(UIColor*)color
-{
+- (void)dg_setPullToRefreshBackgroundColor:(UIColor *)color {
     self.pullToRefreshView.backgroundColor = color;
 }
-- (void)dg_setPullToRefreshFillColor:(UIColor*)color
-{
+- (void)dg_setPullToRefreshFillColor:(UIColor *)color {
     self.pullToRefreshView.fillColor = color;
 }
-- (void)dg_stopLoading
-{
+- (void)dg_stopLoading {
     [self.pullToRefreshView stopLoading];
 }
 @end

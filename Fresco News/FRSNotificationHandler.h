@@ -13,17 +13,24 @@
 
 @interface FRSNotificationHandler : NSObject
 
-+(void)handleNotification:(NSDictionary *)notification;
-+(void)segueToUser:(NSString *)user;
-+(void)segueToAssignment:(NSString *)assignment;
-+(void)segueToGallery:(NSString *)gallery;
-+(void)segueToGallery:(NSString *)gallery post:(NSString *)post;
-+(void)segueToStory:(NSString *)story;
-+(void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title;
-+(void)segueToPayment;
-+(void)segueToIdentification;
++ (void)handleNotification:(NSDictionary *)notification;
++ (void)segueToUser:(NSString *)user;
 
-+(BOOL)isDeeplinking;
-+(void)setIsDeeplinking:(BOOL)value;
+/*
+ * @discussion This method is used to retrieve the assignment from the passed IDs and subsequnetly navigate to the assignment view controller
+ where the presentation of the assignment is handled
+ * @param assignmentID The ID of the assignment we want to segue to
+ */
++ (void)segueToAssignment:(NSString *)assignment;
+
++ (void)segueToGallery:(NSString *)gallery;
++ (void)segueToGallery:(NSString *)gallery post:(NSString *)post;
++ (void)segueToStory:(NSString *)story;
++ (void)segueToTodayInNews:(NSArray *)galleryIDs title:(NSString *)title;
++ (void)segueToPayment;
++ (void)segueToIdentification;
+
++ (BOOL)isDeeplinking;
++ (void)setIsDeeplinking:(BOOL)value;
 
 @end

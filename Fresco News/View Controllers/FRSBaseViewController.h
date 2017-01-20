@@ -23,48 +23,33 @@
 @property (nonatomic) BOOL actionBarVisible;
 @property (nonatomic) BOOL isPresented;
 
--(void)configureBackButtonAnimated:(BOOL)animated;
+- (void)configureBackButtonAnimated:(BOOL)animated;
 
--(void)removeNavigationBarLine;
+- (void)removeNavigationBarLine;
 
--(void)hideTabBarAnimated:(BOOL)animated;
+- (void)hideTabBarAnimated:(BOOL)animated;
 
--(void)showTabBarAnimated:(BOOL)animated;
+- (void)showTabBarAnimated:(BOOL)animated;
 
--(void)popViewController;
+- (void)popViewController;
 
--(void)shouldShowStatusBar:(BOOL)statusBar animated:(BOOL)animated;
+- (void)shouldShowStatusBar:(BOOL)statusBar animated:(BOOL)animated;
 
--(void)logoutWithPop:(BOOL)pop;
-
-/* DEEP LINKS */
--(void)segueToPhotosOfTheDay:(NSArray *)postIDs;
--(void)segueToTodayInNews:(NSArray *)galleryIDs;
--(void)segueToTaxInfo;
--(void)segueToIDInfo;
--(void)segueToGallery:(NSString *)galleryID;
--(void)segueToStory:(NSString *)storyID;
--(void)segueHome;
--(void)segueToUser:(NSString *)userID;
--(void)segueToPost:(NSString *)postID;
--(void)segueToAssignmentWithID:(NSString *)assignmentID;
--(void)segueToGlobalAssignmentWithID:(NSString *)assignmentID;
--(void)segueToCameraWithAssignmentID:(NSString *)assignmentID;
--(void)segueToDebitCard;
+- (void)logoutWithPop:(BOOL)pop;
 
 /* KEYBOARD */
--(void)configureDismissKeyboardGestureRecognizer;
--(void)dismissKeyboardFromView;
+- (void)configureDismissKeyboardGestureRecognizer;
+- (void)dismissKeyboardFromView;
 
 /* FRSAlertView */
--(void)presentGenericError;
--(void)presentNoConnectionError;
--(void)checkStatusAndPresentPermissionsAlert:(id)delegate;
+- (void)presentGenericError;
+- (void)presentNoConnectionError;
+- (void)checkStatusAndPresentPermissionsAlert:(id)delegate;
 
 /* MODERATION */
--(void)checkSuspended;
+- (void)checkSuspended;
 
 /* SMOOCH */
--(void)presentSmooch;
+- (void)presentSmooch;
 
 @end

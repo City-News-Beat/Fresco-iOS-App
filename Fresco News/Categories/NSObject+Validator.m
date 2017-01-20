@@ -10,22 +10,22 @@
 
 @implementation NSObject (Validator)
 
--(BOOL)isNull{
+- (BOOL)isNull {
     return [self isEqual:[NSNull null]];
 }
 
--(BOOL)isValidDictionaryForKeys:(NSArray *)keys{
-    
-    if (![self isKindOfClass:[NSDictionary class]]) return NO;
-    
+- (BOOL)isValidDictionaryForKeys:(NSArray *)keys {
+
+    if (![self isKindOfClass:[NSDictionary class]])
+        return NO;
+
     NSDictionary *dict = (NSDictionary *)self;
-    for (NSString *key in keys){
-        if ([dict[key] isNull]){
+    for (NSString *key in keys) {
+        if ([dict[key] isNull]) {
             return NO;
         }
     }
     return YES;
-    
 }
 
 @end

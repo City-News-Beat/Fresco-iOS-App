@@ -9,9 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FRSBaseViewController.h"
 
-
-@interface FRSUploadViewController : FRSBaseViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
-{
+@interface FRSUploadViewController : FRSBaseViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource> {
     NSInteger selectedRow;
     NSInteger numberOfOutlets;
     unsigned long long contentSize;
@@ -28,6 +26,6 @@
 @property (strong, nonatomic) NSDictionary *preselectedAssignment;
 @property (nonatomic, weak) NSArray *content;
 
--(void)configureAssignmentsTableView;
+- (void)configureAssignmentsTableView;
 
 @end

@@ -11,15 +11,15 @@
 
 @implementation FRSUserAnnotation
 
--(instancetype)init {
-   self = [super init];
-    
+- (instancetype)init {
+    self = [super init];
+
     if (self) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
         view.backgroundColor = [UIColor redColor];
-        
     }
     return self;
 }
 
 @end
+

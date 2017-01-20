@@ -10,7 +10,7 @@
 
 @implementation UILabel (Custom)
 
-+(UILabel *)labelWithText:(NSString *)text textColor:(UIColor *)textColor font:(UIFont *)font{
++ (UILabel *)labelWithText:(NSString *)text textColor:(UIColor *)textColor font:(UIFont *)font {
     UILabel *label = [UILabel new];
     label.text = text;
     label.textColor = textColor;

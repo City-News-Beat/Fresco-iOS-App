@@ -10,15 +10,13 @@
 
 @implementation UIImageView (Helpers)
 
-+ (UIImageView *)UIImageViewWithName:(NSString *)imageName andFrame:(CGRect)frame andContentMode:(UIViewContentMode)contentMode{
-    
++ (UIImageView *)UIImageViewWithName:(NSString *)imageName andFrame:(CGRect)frame andContentMode:(UIViewContentMode)contentMode {
+
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
     imageView.image = [UIImage imageNamed:imageName];
     imageView.contentMode = contentMode;
-    
-    
+
     return imageView;
-    
 }
 
 @end

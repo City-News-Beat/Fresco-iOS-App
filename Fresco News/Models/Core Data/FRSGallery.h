@@ -23,13 +23,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FRSGallery : NSManagedObject<FRSManagedObject>
-{
+@interface FRSGallery : NSManagedObject <FRSManagedObject> {
     BOOL save;
 }
 // Insert code here to declare functionality of your managed object subclass
--(void)configureWithDictionary:(NSDictionary *)dict;
--(void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context;
+- (void)configureWithDictionary:(NSDictionary *)dict;
+- (void)configureWithDictionary:(NSDictionary *)dict context:(NSManagedObjectContext *)context;
 @property (nullable, nonatomic, retain) NSString *byline;
 @property (nullable, nonatomic, retain) NSString *caption;
 @property (nullable, nonatomic, retain) NSString *comments;
@@ -54,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger numberOfReposts;
 @property (nonatomic, assign) NSInteger verificationRating;
 @property (nonatomic) NSInteger generatedHeight;
--(NSInteger)heightForGallery;
+- (NSInteger)heightForGallery;
 @property (nonatomic, weak) NSManagedObjectContext *currentContext;
 
 @end
@@ -75,8 +74,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeArticlesObject:(FRSArticle *)value;
 - (void)addArticles:(NSSet<FRSArticle *> *)values;
 - (void)removeArticles:(NSSet<FRSArticle *> *)values;
--(NSArray *)sorted;
--(NSDictionary *)jsonObject;
+- (NSArray *)sorted;
+- (NSDictionary *)jsonObject;
 @end
 
 NS_ASSUME_NONNULL_END

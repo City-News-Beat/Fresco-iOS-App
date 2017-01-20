@@ -24,8 +24,7 @@
 
 @import MapKit;
 
-@interface FRSAssignmentsViewController () <MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate>
-{
+@interface FRSAssignmentsViewController () <MKMapViewDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate> {
     NSMutableArray *dictionaryRepresentations;
     BOOL hasSnapped;
 }
@@ -56,7 +55,6 @@
 @property (strong, nonatomic) UILabel *videoCashLabel;
 @property (strong, nonatomic) UILabel *globalAssignmentsLabel;
 @property (strong, nonatomic) NSArray *globalAssignmentsArray;
-@property (strong, nonatomic) UIButton *closeButton;
 @property (strong, nonatomic) UIView *assignmentStatsContainer;
 @property (strong, nonatomic) UIView *globalAssignmentsBottomContainer;
 @property (strong, nonatomic) FRSAssignment *currentAssignment;
@@ -77,11 +75,11 @@
 @property (strong, nonatomic) NSDictionary *acceptedAssignmentDictionary;
 
 @property BOOL didAcceptAssignment;
-@property BOOL assignmentCardIsOpen;
 @property BOOL assignmentDidExpire;
 @property BOOL userIsInRange;
 @property BOOL shouldRefreshMap;
 @property BOOL isCheckingForAcceptedAssignment;
+@property BOOL seguedToGlobalAssignment;
 
 @end
 
@@ -90,8 +88,7 @@
 static NSString *const ACTION_TITLE_ONE = @"ACCEPT";
 static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
-
--(instancetype)init {
+- (instancetype)init {
     self = [super init];
     
     if (self) {
@@ -101,7 +98,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     return self;
 }
 
--(instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     
     if (self) {
@@ -111,7 +108,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     return self;
 }
 
--(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     
     if (self) {
@@ -120,7 +117,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     return self;
 }
--(void)commonInit {
+- (void)commonInit {
     //    CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
     //
     //
@@ -129,13 +126,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     //    }
 }
 
--(instancetype)initWithActiveAssignment:(NSString *)assignmentID {
+- (instancetype)initWithActiveAssignment:(NSString *)assignmentID {
     self = [super init];
     
     return self;
 }
 
--(void)viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
     [self configureMap];
     [self configurePanGestureRec];
@@ -148,18 +145,21 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     self.assignmentIDs = [[NSMutableArray alloc] init];
     
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification object:nil queue:nil usingBlock:^(NSNotification *notification) {
-        CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
-        if (lastLocation) {
-            [self locationUpdate:lastLocation];
-        }
-    }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *notification) {
+                                                      CLLocation *lastLocation = [FRSLocator sharedLocator].currentLocation;
+                                                      if (lastLocation) {
+                                                          [self locationUpdate:lastLocation];
+                                                      }
+                                                  }];
     
     self.assignmentCardIsOpen = NO;
-    
+
 }
 
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tabBarController.navigationController setNavigationBarHidden:YES];
     
@@ -175,7 +175,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     self.navigationItem.title = @"ASSIGNMENTS";
     [self.navigationController.navigationBar setTitleTextAttributes:
-     @{NSForegroundColorAttributeName:[UIColor whiteColor], NSFontAttributeName:[UIFont notaBoldWithSize:17]}];
+     @{ NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont notaBoldWithSize:17] }];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     [self removeNavigationBarLine];
@@ -194,11 +194,28 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self checkForAcceptedAssignment];
 }
 
--(void)dealloc {
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    //If the VC is presented and a selected assignment is set, present that assignment to the user
+    //by either pushing the global assignment controller or presenting it on the map
+    if (self.selectedAssignment) {
+        if ([self.selectedAssignment.latitude isEqual:@0] && [self.selectedAssignment.longitude isEqual:@0]) {
+            [self globalAssignmentsSegue];
+        } else {
+            [self setDefaultAssignment:self.selectedAssignment];
+        }
+        
+        self.selectedAssignment = nil;
+    }
+}
+
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
--(void)didReceiveLocationUpdate:(NSNotification *)notification {
+- (void)didReceiveLocationUpdate:(NSNotification *)notification {
     NSDictionary *latLong = notification.userInfo;
     
     NSNumber *lat = latLong[@"lat"];
@@ -208,7 +225,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self locationUpdate:location];
 }
 
--(void)locationUpdate:(CLLocation *)location {
+- (void)locationUpdate:(CLLocation *)location {
     
     if (!hasSnapped) {
         hasSnapped = TRUE;
@@ -218,7 +235,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
--(void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
     
     if (self.assignmentCardIsOpen) {
         return;
@@ -238,22 +255,29 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
--(void)viewWillDisappear:(BOOL)animated {
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     self.hasDefault = NO;
-    self.defaultID  = nil;
+    self.defaultID = nil;
+    
+    if(self.closeButton){
+        self.closeButton.alpha = 0;
+    }
+
+    if(self.seguedToGlobalAssignment){
+        self.seguedToGlobalAssignment = false;
+    }
 }
 
--(void)viewDidDisappear:(BOOL)animated {
+- (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     self.isPresented = NO;
 }
 
-
--(void)configureMap {
+- (void)configureMap {
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     self.mapView.delegate = self;
     self.mapView.showsCompass = NO;
@@ -263,7 +287,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.view addSubview:self.mapView];
 }
 
--(void)checkForAcceptedAssignment {
+- (void)checkForAcceptedAssignment {
     if (self.isCheckingForAcceptedAssignment) {
         return;
     }
@@ -283,98 +307,99 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }];
 }
 
--(void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
+- (void)fetchAssignmentsNearLocation:(CLLocation *)location radius:(NSInteger)radii {
     if (self.didAcceptAssignment) {
         return;
     }
     
-    if (self.isFetching) return;
+    if (self.isFetching)
+        return;
     
     self.isFetching = YES;
     
     [self checkForAcceptedAssignment];
     
-    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii ofLocation:@[@(location.coordinate.longitude), @(location.coordinate.latitude)] withCompletion:^(id responseObject, NSError *error) {
-        NSArray *assignments = (NSArray *)responseObject[@"nearby"];
-        NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
-        NSLog(@"ASS: %@ %@", assignments, error);
-        
-        
-        FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-        NSMutableArray *mSerializedAssignments = [NSMutableArray new];
-        
-        if (globalAssignments.count > 0) {
-            [self configureGlobalAssignmentsBar];
-            if (self.defaultID) {
-                [self showGlobalAssignmentsBar];
-            }
-            if (globalAssignments.count > 1) {
-                self.globalAssignmentsLabel.text = [NSString stringWithFormat:@"%lu global assignments", (unsigned long)globalAssignments.count];
-            }else{
-                self.globalAssignmentsLabel.text = [NSString stringWithFormat:@"%lu global assignment", (unsigned long)globalAssignments.count];
-            }
-        }
-        
-        self.globalAssignmentsArray = [globalAssignments copy];
-        
-        if (self.globalAssignmentsArray.count >= 1) {
-            [self showGlobalAssignmentsBar];
-        }
-        
-        FRSAssignment *defaultAssignment;
-        
-        if (assignments.count > 0) {
-            for (NSDictionary *dict in assignments){
-                FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
-                [assignmentToAdd configureWithDictionary:dict];
-                NSString *uid = assignmentToAdd.uid;
-                
-                if ([uid isEqualToString:self.defaultID]) {
-                    defaultAssignment = assignmentToAdd;
-                }
-                
-                if ([self assignmentExists:uid]) {
-                    continue;
-                }
-                
-                [mSerializedAssignments addObject:assignmentToAdd];
-                
-                if (!dictionaryRepresentations) {
-                    dictionaryRepresentations = [[NSMutableArray alloc] init];
-                }
-                
-                [dictionaryRepresentations addObject:dict];
-            }
-            
-            self.assignments = [mSerializedAssignments copy];
-        }
-       
-        [self addAnnotationsForAssignments];
-        
-        self.isFetching = NO;
-        
-        if (!notFirstFetch) {
-            notFirstFetch = TRUE;
-            [self cacheAssignments];
-        }
-        
-        [self addAnnotationsForAssignments];
-        [delegate.managedObjectContext save:Nil];
-        [delegate saveContext];
-        
-        if (self.defaultID && defaultAssignment) {
-            [self setDefaultAssignment:defaultAssignment];
-        }
-        
-        if (self.acceptedAssignment) {
-            self.assignmentID = self.acceptedAssignment.uid;
-            [self configureAcceptedAssignment:self.acceptedAssignment];
-            [self setDefaultAssignment:self.acceptedAssignment];
-        }
-    }];
+    [[FRSAPIClient sharedClient] getAssignmentsWithinRadius:radii
+                                                 ofLocation:@[ @(location.coordinate.longitude), @(location.coordinate.latitude) ]
+                                             withCompletion:^(id responseObject, NSError *error) {
+                                                 NSArray *assignments = (NSArray *)responseObject[@"nearby"];
+                                                 NSArray *globalAssignments = (NSArray *)responseObject[@"global"];
+                                                 
+                                                 FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                                                 NSMutableArray *mSerializedAssignments = [NSMutableArray new];
+                                                 
+                                                 if (globalAssignments.count > 0) {
+                                                     [self configureGlobalAssignmentsBar];
+                                                     if (self.defaultID) {
+                                                         [self showGlobalAssignmentsBar];
+                                                     }
+                                                     if (globalAssignments.count > 1) {
+                                                         self.globalAssignmentsLabel.text = [NSString stringWithFormat:@"%lu global assignments", (unsigned long)globalAssignments.count];
+                                                     } else {
+                                                         self.globalAssignmentsLabel.text = [NSString stringWithFormat:@"%lu global assignment", (unsigned long)globalAssignments.count];
+                                                     }
+                                                 }
+                                                 
+                                                 self.globalAssignmentsArray = [globalAssignments copy];
+                                                 
+                                                 if (self.globalAssignmentsArray.count >= 1) {
+                                                     [self showGlobalAssignmentsBar];
+                                                 }
+                                                 
+                                                 FRSAssignment *defaultAssignment;
+                                                 
+                                                 if (assignments.count > 0) {
+                                                     for (NSDictionary *dict in assignments) {
+                                                         FRSAssignment *assignmentToAdd = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+                                                         [assignmentToAdd configureWithDictionary:dict];
+                                                         NSString *uid = assignmentToAdd.uid;
+                                                         
+                                                         if ([uid isEqualToString:self.defaultID]) {
+                                                             defaultAssignment = assignmentToAdd;
+                                                         }
+                                                         
+                                                         if ([self assignmentExists:uid]) {
+                                                             continue;
+                                                         }
+                                                         
+                                                         [mSerializedAssignments addObject:assignmentToAdd];
+                                                         
+                                                         if (!dictionaryRepresentations) {
+                                                             dictionaryRepresentations = [[NSMutableArray alloc] init];
+                                                         }
+                                                         
+                                                         [dictionaryRepresentations addObject:dict];
+                                                     }
+                                                     
+                                                     self.assignments = [mSerializedAssignments copy];
+                                                 }
+                                                 
+                                                 [self addAnnotationsForAssignments];
+                                                 
+                                                 self.isFetching = NO;
+                                                 
+                                                 if (!notFirstFetch) {
+                                                     notFirstFetch = TRUE;
+                                                     [self cacheAssignments];
+                                                 }
+                                                 
+                                                 [self addAnnotationsForAssignments];
+                                                 [delegate.managedObjectContext save:Nil];
+                                                 [delegate saveContext];
+                                                 
+                                                 if (self.defaultID && defaultAssignment) {
+                                                     [self setDefaultAssignment:defaultAssignment];
+                                                 }
+                                                 
+                                                 if (self.acceptedAssignment) {
+                                                     self.assignmentID = self.acceptedAssignment.uid;
+                                                     [self configureAcceptedAssignment:self.acceptedAssignment];
+                                                     [self setDefaultAssignment:self.acceptedAssignment];
+                                                 }
+                                             }];
 }
 
--(BOOL)location:(CLLocation *)location isWithinAssignmentRadius:(FRSAssignment *)assignment {
+- (BOOL)location:(CLLocation *)location isWithinAssignmentRadius:(FRSAssignment *)assignment {
     NSNumber *assignmentRadius = assignment.radius;
     float milesRadius = [assignmentRadius floatValue];
     
@@ -389,11 +414,11 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     return FALSE;
 }
 
--(BOOL)assignmentExists:(NSString *)assignment {
+- (BOOL)assignmentExists:(NSString *)assignment {
     
     __block BOOL returnValue = FALSE;
     
-    [self.assignmentIDs enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.assignmentIDs enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
         NSString *currentID = (NSString *)obj;
         
         if ([currentID isEqualToString:assignment]) {
@@ -404,15 +429,13 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     return returnValue;
 }
 
-
--(void)cacheAssignments {
-    
+- (void)cacheAssignments {
 }
 
 #pragma mark - Region
 
 // gets called when user taps on map icon in tab bar
--(void)setInitialMapRegion {
+- (void)setInitialMapRegion {
     
     // disable snap if already tracking
     if (self.mapShouldFollowUser) {
@@ -422,7 +445,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             mapRegion.center = self.mapView.userLocation.coordinate;
             mapRegion.span.latitudeDelta = 0.002;
             mapRegion.span.longitudeDelta = 0.002;
-            [self.mapView setRegion:mapRegion animated: YES];
+            [self.mapView setRegion:mapRegion animated:YES];
         }
         return;
     }
@@ -444,8 +467,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
-
--(void)adjustMapRegionWithLocation:(CLLocation *)location {
+- (void)adjustMapRegionWithLocation:(CLLocation *)location {
     
     // if user accepted assignment, keep assignment and user annotations on map
     if (self.didAcceptAssignment) {
@@ -465,7 +487,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 #pragma mark - Annotations
 
--(void)addAnnotationsForAssignments {
+- (void)addAnnotationsForAssignments {
     
     if (self.didAcceptAssignment) {
         // avoid drawing mutliple
@@ -478,7 +500,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     NSInteger count = 0;
     
-    for(FRSAssignment *assignment in self.assignments) {
+    for (FRSAssignment *assignment in self.assignments) {
         
         if ([self assignmentExists:assignment.uid]) {
             continue;
@@ -491,14 +513,14 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
--(void)removeAssignmentsFromMap {
+- (void)removeAssignmentsFromMap {
     id userLocation = [self.mapView userLocation];
     NSMutableArray *assignments = [[NSMutableArray alloc] initWithArray:[self.mapView annotations]];
-    if (userLocation != nil ) {
+    if (userLocation != nil) {
         [assignments removeObject:userLocation]; // avoid removing user location off the map
     }
     
-    for (id <MKAnnotation> annotation in self.mapView.annotations) {
+    for (id<MKAnnotation> annotation in self.mapView.annotations) {
         if ([annotation isKindOfClass:[FRSMapCircle class]]) {
             [assignments removeObject:annotation];
         }
@@ -508,7 +530,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     assignments = nil;
 }
 
--(void)addAssignmentAnnotation:(FRSAssignment*)assignment index:(NSInteger)index {
+- (void)addAssignmentAnnotation:(FRSAssignment *)assignment index:(NSInteger)index {
     FRSAssignmentAnnotation *ann = [[FRSAssignmentAnnotation alloc] initWithAssignment:assignment atIndex:index];
     // create center coordinate for the assignment
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([assignment.latitude floatValue], [assignment.longitude floatValue]);
@@ -525,18 +547,37 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self setDefaultAssignment:assignment];
 }
 
-
 // used when coming in from another view controller
--(void)setDefaultAssignment:(FRSAssignment *)assignment {
+- (void)setDefaultAssignment:(FRSAssignment *)assignment {
     
     if (self.hasDefault && [assignment.uid isEqualToString:self.defaultID]) {
+        
+        self.assignmentLat = [assignment.latitude floatValue];
+        self.assignmentLong = [assignment.longitude floatValue];
+        
+        self.assignmentCardIsOpen = YES;
         
         self.assignmentTitle = assignment.title;
         self.assignmentCaption = assignment.caption;
         self.assignmentExpirationDate = assignment.expirationDate;
         self.assignmentPostedDate = assignment.createdDate;
         
+        self.assignmentID = assignment.uid;
+        
         self.outlets = assignment.outlets;
+        
+        if (![assignment.acceptable boolValue]) {
+            self.assignemntAcceptButtonTitle = ACTION_TITLE_TWO;
+        } else {
+            self.assignemntAcceptButtonTitle = ACTION_TITLE_ONE;
+        }
+        
+        if (self.didAcceptAssignment) {
+            self.assignemntAcceptButtonTitle = ACTION_TITLE_TWO;
+        }
+        
+        [self setExpiration:self.assignmentExpirationDate days:0 hours:0 minutes:0 seconds:0];
+        [self setPostedDate];
         
         [self configureOutlets];
         [self configureAssignmentCard];
@@ -549,7 +590,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self drawImages];
         
         if (!self.didAcceptAssignment) {
-            MKCoordinateRegion region = { {0.0, 0.0 }, { 0.0, 0.0 } };
+            MKCoordinateRegion region = { { 0.0, 0.0 }, { 0.0, 0.0 } };
             region.center.latitude = [assignment.latitude doubleValue];
             region.center.longitude = [assignment.longitude doubleValue];
             region.span.longitudeDelta = 0.05f;
@@ -562,19 +603,21 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self.mapView setCenterCoordinate:newCenter animated:NO];
         
         self.hasDefault = NO;
-        self.defaultID  = nil;
-        self.assignmentCardIsOpen  = NO;
+        self.defaultID = nil;
+        // self.assignmentCardIsOpen = NO;
+        
+        [self configureAssignmentCard];
+        [self hideGlobalAssignmentsBar];
     }
 }
 
-
 #pragma mark - MapView
 
--(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
     [self updateAssignments];
 }
 
--(void)updateAssignments {
+- (void)updateAssignments {
     
     if (self.didAcceptAssignment) {
         return;
@@ -593,10 +636,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self fetchAssignmentsNearLocation:location radius:milesLatitude];
 }
 
-
--(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     
-    if (/*([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) ||*/[annotation isKindOfClass:[MKUserLocation class]]) {
+    if (/*([annotation isKindOfClass:[FRSMapCircle class]] && [(FRSMapCircle *)annotation circleType] == FRSMapCircleTypeUser) ||*/ [annotation isKindOfClass:[MKUserLocation class]]) {
         static NSString *annotationIdentifer = @"user-annotation";
         MKAnnotationView *annotationView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifer];
         if (annotationView == nil) {
@@ -604,7 +646,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             annotationView.userInteractionEnabled = NO;
             
             UIView *view = [[UIView alloc] initWithFrame:CGRectMake(-12, -12, 24, 24)];
-            view.layer.cornerRadius = view.frame.size.width/2;
+            view.layer.cornerRadius = view.frame.size.width / 2;
             view.backgroundColor = [UIColor whiteColor];
             
             view.layer.shadowColor = [UIColor blackColor].CGColor;
@@ -628,12 +670,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
                 NSURL *url = [NSURL URLWithString:link];
                 [imageView hnk_setImageFromURL:url];
                 imageView.backgroundColor = [UIColor frescoBlueColor];
-            }
-            else {
+            } else {
                 imageView.backgroundColor = [UIColor frescoBlueColor];
             }
-        }
-        else {
+        } else {
             annotationView.annotation = annotation;
         }
         return annotationView;
@@ -674,21 +714,18 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             
             annotationView.enabled = YES;
             annotationView.frame = CGRectMake(0, 0, 75, 75);
-        }
-        else {
+        } else {
             annotationView.annotation = annotation;
         }
         return annotationView;
-        
     }
     
     return nil;
 }
 
-
 #pragma mark - Annotations and Overlays
 
--(void)addUserLocationCircleOverlay {
+- (void)addUserLocationCircleOverlay {
     
     //    CGFloat radius = self.mapView.usergLocation.location.horizontalAccuracy > 100 ? 100 : self.mapView.userLocation.location.horizontalAccuracy;
     
@@ -706,8 +743,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.mapView addAnnotation:self.userCircle];
 }
 
-
-- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id < MKOverlay >)overlay {
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
     
     MKCircleRenderer *circleR = [[MKCircleRenderer alloc] initWithCircle:(MKCircle *)overlay];
     if ([overlay isKindOfClass:[FRSMapCircle class]]) {
@@ -716,8 +752,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         if (circle.circleType == FRSMapCircleTypeUser) {
             circleR.fillColor = [UIColor frescoLightBlueColor];
             
-        }
-        else if (circle.circleType == FRSMapCircleTypeAssignment) {
+        } else if (circle.circleType == FRSMapCircleTypeAssignment) {
             circleR.fillColor = [UIColor frescoOrangeColor];
             if (self.didAcceptAssignment && [self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
                 circleR.fillColor = [UIColor frescoGreenColor];
@@ -729,13 +764,14 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     return circleR;
 }
 
--(void)removeAllOverlaysIncludingUser:(BOOL)removeUser {
-    for (id<MKOverlay>overlay in self.mapView.overlays) {
+- (void)removeAllOverlaysIncludingUser:(BOOL)removeUser {
+    for (id<MKOverlay> overlay in self.mapView.overlays) {
         if ([overlay isKindOfClass:[FRSMapCircle class]]) {
             FRSMapCircle *circle = (FRSMapCircle *)overlay;
             
             if (circle.circleType == FRSMapCircleTypeUser) {
-                if (!removeUser) continue;
+                if (!removeUser)
+                    continue;
             };
             
             [self.mapView removeOverlay:circle];
@@ -743,9 +779,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
-
-
--(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     
     if ([[view.annotation class] isSubclassOfClass:[MKUserLocation class]]) {
         return;
@@ -799,14 +833,14 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
--(void)setDistance {
+- (void)setDistance {
     
     CLLocation *locA = [[CLLocation alloc] initWithLatitude:self.assignmentLat longitude:self.assignmentLong];
     CLLocation *locB = [[CLLocation alloc] initWithLatitude:[FRSLocator sharedLocator].currentLocation.coordinate.latitude longitude:[FRSLocator sharedLocator].currentLocation.coordinate.longitude];
     CLLocationDistance distance = [locA distanceFromLocation:locB];
     
     CGFloat miles = distance / 1609.34;
-    CGFloat feet  = miles * 5280;
+    CGFloat feet = miles * 5280;
     
     NSString *distanceString;
     
@@ -825,16 +859,15 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
     self.distanceLabel.text = distanceString;
     [self.distanceLabel sizeToFit];
-    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
+    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width + 60, 66, 24, 24);
     
     if (!self.userIsInRange) {
         self.acceptAssignmentDistanceAwayLabel.text = [distanceString uppercaseString];
     }
 }
 
--(void)setPostedDate {
+- (void)setPostedDate {
     NSString *postedString;
-    
     
     NSTimeInterval secondsFromGMT = [[NSTimeZone localTimeZone] secondsFromGMT];
     NSDate *correctDate = [self.assignmentPostedDate dateByAddingTimeInterval:secondsFromGMT];
@@ -842,13 +875,12 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     [formatter setDateFormat:@"h:mm a"];
     
-    
     postedString = [NSString stringWithFormat:@"Posted %@ at %@", [FRSDateFormatter dateDifference:self.assignmentPostedDate], [formatter stringFromDate:correctDate]];
     
     self.postedLabel.text = postedString;
 }
 
--(void)setExpiration:(NSDate *)date days:(int)expDays hours:(int)expHours minutes:(int)expMinutes seconds:(int)expSeconds {
+- (void)setExpiration:(NSDate *)date days:(int)expDays hours:(int)expHours minutes:(int)expMinutes seconds:(int)expSeconds {
     
     if (self.assignmentDidExpire) {
         return;
@@ -857,7 +889,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentDidExpire = NO;
     
     NSTimeInterval doubleDiff = [date timeIntervalSinceDate:[NSDate date]];
-    long diff = (long) doubleDiff;
+    long diff = (long)doubleDiff;
     int seconds = diff % 60;
     diff = diff / 60;
     int minutes = diff % 60;
@@ -923,7 +955,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.acceptAssignmentTimeRemainingLabel.text = expirationString;
 }
 
--(void)assignmentExpired {
+- (void)assignmentExpired {
     self.assignmentDidExpire = YES;
     if (!self.expiredAssignmentAlert) {
         self.expiredAssignmentAlert = [[FRSAlertView alloc] initWithTitle:@"OOPS" message:@"This assignment has expired!" actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:[UIColor frescoBlueColor] delegate:nil];
@@ -936,9 +968,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     });
 }
 
-
 // removes and readds all assignment annotations
--(void)reloadAssignmentAnnotations {
+- (void)reloadAssignmentAnnotations {
     [self removeAssignmentsFromMap];
     [self removeAllOverlaysIncludingUser:NO];
     [self addAnnotationsForAssignments];
@@ -946,9 +977,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self addAnnotationsForAssignments];
 }
 
-
 // snaps camera to fit assignment annotation between top of assignment card and top of map
--(void)snapToAnnotationView:(MKAnnotationView *)view {
+- (void)snapToAnnotationView:(MKAnnotationView *)view {
     CLLocationCoordinate2D newCenter = CLLocationCoordinate2DMake(view.annotation.coordinate.latitude, view.annotation.coordinate.longitude);
     newCenter.latitude -= self.mapView.region.span.latitudeDelta * 0.25;
     [self.mapView setCenterCoordinate:newCenter animated:YES];
@@ -962,8 +992,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 }
 
 // configures assignment card
--(void)createAssignmentView {
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height -49, self.view.frame.size.width, self.view.frame.size.height)];
+- (void)createAssignmentView {
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 49, self.view.frame.size.width, self.view.frame.size.height)];
     self.scrollView.multipleTouchEnabled = NO;
     [self.view addSubview:self.scrollView];
     self.scrollView.showsVerticalScrollIndicator = NO;
@@ -971,7 +1001,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.scrollView addSubview:self.dismissView];
     
     // needs to be global variable & removed on dismiss
-    self.assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height/3.5, self.view.frame.size.width, 1000)]; //Height is 1000 to avoid user overscrolling in y
+    self.assignmentCard = [[UIView alloc] initWithFrame:CGRectMake(0, 76 + [UIScreen mainScreen].bounds.size.height / 3.5, self.view.frame.size.width, 1000)]; //Height is 1000 to avoid user overscrolling in y
     self.assignmentCard.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.assignmentCard];
     
@@ -1007,6 +1037,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [topContainer addSubview:self.assignmentTitleLabel];
     
     self.assignmentBottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 44)];
+//    float barHeight = 44;
+//    self.assignmentBottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - (barHeight*2) - 5, self.view.frame.size.width, barHeight)];
     self.assignmentBottomBar.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.assignmentBottomBar];
     
@@ -1015,7 +1047,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.assignmentBottomBar addSubview:bottomContainerLine];
     
     self.assignmentActionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.assignmentActionButton.frame = CGRectMake(self.view.frame.size.width -100 -16, 15, 100, 17);
+    self.assignmentActionButton.frame = CGRectMake(self.view.frame.size.width - 100 - 16, 15, 100, 17);
     [self.assignmentActionButton setTitle:self.assignemntAcceptButtonTitle forState:UIControlStateNormal];
     [self.assignmentActionButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
     self.assignmentActionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
@@ -1025,7 +1057,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.assignmentBottomBar addSubview:self.assignmentActionButton];
     
     self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
-    self.spinner.frame = CGRectMake(self.assignmentActionButton.frame.size.width - 20, self.assignmentActionButton.frame.size.height/2 - 10, 20, 20);
+    self.spinner.frame = CGRectMake(self.assignmentActionButton.frame.size.width - 20, self.assignmentActionButton.frame.size.height / 2 - 10, 20, 20);
     self.spinner.tintColor = [UIColor frescoOrangeColor];
     [self.spinner setPullProgress:90];
     self.spinner.alpha = 0;
@@ -1070,7 +1102,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     
     NSInteger bottomPadding = 15; // whatever padding we need at the bottom
     
-    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height +1);
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height + 1);
     
     UIImageView *videoImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"video-icon"]];
     videoImageView.frame = CGRectMake(85, 10, 24, 24);
@@ -1121,7 +1153,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self setDistance];
     
     self.navigateButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width +60, 66, 24, 24);
+    self.navigateButton.frame = CGRectMake(self.distanceLabel.frame.size.width + 60, 66, 24, 24);
     self.navigateButton.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
     self.navigateButton.alpha = 0.5;
     [self.navigateButton setImage:[UIImage imageNamed:@"directions-24"] forState:UIControlStateNormal];
@@ -1135,7 +1167,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     warningLabel.text = @"Not all events are safe. Be careful!";
     [self.assignmentStatsContainer addSubview:warningLabel];
     
-    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*1.6, self.view.frame.size.width, 150)];
+    UITextView *label = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height * 1.6, self.view.frame.size.width, 150)];
     label.text = @"If you keep scrolling you will find a pigeon.\n\n\n\n\nAlmost there...\n\n\n🐦";
     label.font = [UIFont systemFontOfSize:10 weight:UIFontWeightLight];
     label.textAlignment = NSTextAlignmentCenter;
@@ -1143,16 +1175,16 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     label.textColor = [UIColor frescoLightTextColor];
     [self.scrollView addSubview:label];
     
-    UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
-    self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.closeButton.tintColor = [UIColor whiteColor];
-    [self.closeButton setImage:closeButtonImage forState:UIControlStateNormal];
-    self.closeButton.frame = CGRectMake(0, 0, 24, 24);
-    self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0);
-    [self.closeButton addTarget:self action:@selector(dismissAssignmentCard) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
-    self.navigationItem.leftBarButtonItem = backButton;
-    self.closeButton.alpha = 0;
+//    UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
+//    self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    self.closeButton.tintColor = [UIColor whiteColor];
+//    [self.closeButton setImage:closeButtonImage forState:UIControlStateNormal];
+//    self.closeButton.frame = CGRectMake(0, 0, 24, 24);
+//    self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0);
+//    [self.closeButton addTarget:self action:@selector(dismissAssignmentCard) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
+//    self.navigationItem.leftBarButtonItem = backButton;
+//    self.closeButton.alpha = 0;
     [self.assignmentTextView frs_setTextWithResize:self.assignmentCaption];
     self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.view.frame.size.height - (24 + self.assignmentTextView.frame.size.height + 24 + 40 + 24 + 44 + 49 + 24 + bottomPadding + 25), self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
     
@@ -1161,16 +1193,15 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentBottomBar.layer.zPosition = 2;
 }
 
--(void)navigateToAssignment {
+- (void)navigateToAssignment {
     FRSAlertView *alert = [[FRSAlertView alloc] init];
     alert.delegate = self;
     [alert navigateToAssignmentWithLatitude:self.assignmentLat longitude:self.assignmentLong];
 }
 
-
 #pragma mark - Assignment Card
 
--(void)configureAssignmentCard {
+- (void)configureAssignmentCard {
     
     if (_scrollView) {
         self.assignmentTitleLabel.text = self.assignmentTitle;
@@ -1196,41 +1227,68 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.assignmentStatsContainer.frame = CGRectMake(self.assignmentStatsContainer.frame.origin.x, self.assignmentTextView.frame.size.height + 14 + 50, self.assignmentStatsContainer.frame.size.width, self.assignmentStatsContainer.frame.size.height);
     
     [self drawImages];
+    
+    self.navigationItem.hidesBackButton = false;
 }
 
-
--(void)dismissTap:(UITapGestureRecognizer *)sender {
+- (void)dismissTap:(UITapGestureRecognizer *)sender {
     
     [self dismissAssignmentCard];
     
     //Waits for animation to complete before removing from superview
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.scrollView removeFromSuperview];
-        [self.assignmentBottomBar removeFromSuperview];
     });
 }
 
--(void)animateAssignmentCard{
+- (void)animateAssignmentCard {
     
     self.assignmentCardIsOpen = YES;
     self.mapShouldFollowUser = NO;
     
+    UIImage *closeButtonImage = [UIImage imageNamed:@"close"];
+    self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.closeButton.tintColor = [UIColor whiteColor];
+    [self.closeButton setImage:closeButtonImage forState:UIControlStateNormal];
+    self.closeButton.frame = CGRectMake(0, 0, 24, 24);
+    self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(0, -16, 0, 0);
+    [self.closeButton addTarget:self action:@selector(dismissAssignmentCard) forControlEvents:UIControlEventTouchUpInside];
+    self.closeButton.alpha = 0;
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
+    self.navigationItem.leftBarButtonItem = backButton;
+    
     // animate scrollView in y
-    [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        CGRect scrollFrame = self.scrollView.frame;
-        scrollFrame.origin.y = -12;
-        self.scrollView.frame = scrollFrame;
-    } completion:nil];
+    [UIView animateWithDuration:0.5
+                          delay:0
+         usingSpringWithDamping:0.8
+          initialSpringVelocity:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         CGRect scrollFrame = self.scrollView.frame;
+                         scrollFrame.origin.y = -12;
+                         self.scrollView.frame = scrollFrame;
+                     }
+                     completion:nil];
     
-    [UIView animateWithDuration:0.3 delay:0 options: UIViewAnimationOptionCurveEaseOut animations:^{
-        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -93);
-    } completion:nil];
+    [UIView animateWithDuration:0.3
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -93);
+                     }
+                     completion:nil];
     
-    [UIView animateWithDuration:0.2 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.closeButton.alpha = 1;
-    } completion:nil];
+    [UIView animateWithDuration:0.2
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.closeButton.alpha = 1;
+                     }
+                     completion:nil];
     
-    [self hideGlobalAssignmentsBar];
+    if (self.globalAssignmentsArray.count >= 1) {
+        [self hideGlobalAssignmentsBar];
+    }
     
     // configure accepted assignment state
     if (self.acceptedAssignment) {
@@ -1242,20 +1300,28 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
--(void)dismissAssignmentCard {
+- (void)dismissAssignmentCard {
     
     self.assignmentCardIsOpen = NO;
     
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.assignmentCard.frame.origin.y + (self.view.frame.size.height - self.assignmentCard.frame.origin.y) +100, self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
-    } completion:nil];
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.assignmentCard.frame = CGRectMake(self.assignmentCard.frame.origin.x, self.assignmentCard.frame.origin.y + (self.view.frame.size.height - self.assignmentCard.frame.origin.y) + 100, self.assignmentCard.frame.size.width, self.assignmentCard.frame.size.height);
+                     }
+                     completion:nil];
     
-    [UIView animateWithDuration:0.5 delay:0.0 options: UIViewAnimationOptionCurveEaseOut animations:^{
-        self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
-    } completion:^(BOOL finished) {
-        
-        [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
-    }];
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, 44);
+                     }
+                     completion:^(BOOL finished) {
+                         
+                         [self.scrollView setOriginWithPoint:CGPointMake(0, self.view.frame.size.height)];
+                     }];
     
     self.closeButton.alpha = 0;
     
@@ -1263,8 +1329,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.hasDefault = NO;
 }
 
-
--(void)configureOutlets {
+- (void)configureOutlets {
     NSArray *outlets = self.outlets;
     
     if (outlets.count == 1) {
@@ -1272,20 +1337,17 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         
         if (outlet[@"title"] && ![outlet[@"title"] isEqual:[NSNull null]]) {
             self.assignmentOutlet = outlet[@"title"];
-        }
-        else {
+        } else {
             self.assignmentOutlet = @"1 active news outlet";
         }
-    }
-    else if (outlets.count > 1) {
+    } else if (outlets.count > 1) {
         self.assignmentOutlet = [NSString stringWithFormat:@"%d active news outlets", (int)self.outlets.count];
-    }
-    else if (outlets.count == 0) {
+    } else if (outlets.count == 0) {
         self.assignmentOutlet = @"No active news outlets";
     }
 }
 
--(void)drawImages {
+- (void)drawImages {
     if (self.outletImagesViews) {
         for (UIImageView *imageView in self.outletImagesViews) {
             [imageView removeFromSuperview];
@@ -1306,10 +1368,10 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             int height = 24;
             int y = 16;
             
-            CGRect imageFrame = CGRectMake(xOffset +4, y, width, height);
+            CGRect imageFrame = CGRectMake(xOffset + 4, y, width, height);
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
             imageView.layer.masksToBounds = YES;
-            imageView.layer.cornerRadius = width/2;
+            imageView.layer.cornerRadius = width / 2;
             
             [self.outletImagesViews addObject:imageView];
             
@@ -1317,54 +1379,49 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             [imageView hnk_setImageFromURL:[NSURL URLWithString:outlet[@"avatar"]]];
         }
         
-        int xOffset = (int)self.outletImagesViews.count * (int)34 + 17 + (3 * (self.outletImagesViews.count >0));
+        int xOffset = (int)self.outletImagesViews.count * (int)34 + 17 + (3 * (self.outletImagesViews.count > 0));
         CGRect frame = self.assignmentOutletLabel.frame;
         frame.origin.x = xOffset;
         self.assignmentOutletLabel.frame = frame;
     }
 }
 
-
-
 #pragma mark - UIScrollView
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == currentScroller) {
         [self handleAssignmentScroll];
     }
 }
 
-
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (scrollView.contentOffset.y <= -75) {
         [self dismissAssignmentCard];
     }
 }
 
--(void)handleAssignmentScroll {
-    
+- (void)handleAssignmentScroll {
 }
 
 #pragma mark - Location Manager
 
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     
     if (!locations.count) {
         NSLog(@"FRSLocationManager did not return any locations");
         return;
     }
     
-    if (![self.locationManager significantLocationChangeForLocation:[locations lastObject]]) return;
+    if (![self.locationManager significantLocationChangeForLocation:[locations lastObject]])
+        return;
     
     self.locationManager.lastAcquiredLocation = [locations lastObject];
     
     //[[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_LOCATIONS_UPDATE object:nil userInfo:@{@"locations" : locations}];
     
-    if (self.locationManager.monitoringState == FRSLocationMonitoringStateForeground){
+    if (self.locationManager.monitoringState == FRSLocationMonitoringStateForeground) {
         [self.locationManager stopUpdatingLocation];
     }
-    
-    NSLog(@"Location update notification observed by assignmentsVC");
     
     //CLLocation *currentLocation = [locations lastObject];
     
@@ -1380,24 +1437,24 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
 
 #pragma mark - UIPanGestureRec
 
--(void)configurePanGestureRec {
+- (void)configurePanGestureRec {
     self.mapShouldFollowUser = YES;
-    UIPanGestureRecognizer* panRec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
+    UIPanGestureRecognizer *panRec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
     [panRec setDelegate:self];
     [self.mapView addGestureRecognizer:panRec];
 }
 
--(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return YES;
 }
 
--(void)didDragMap:(UIGestureRecognizer*)gestureRecognizer {
+- (void)didDragMap:(UIGestureRecognizer *)gestureRecognizer {
     self.mapShouldFollowUser = NO;
 }
 
 #pragma mark - Assignment Bars
 
--(void)configureGlobalAssignmentsBar {
+- (void)configureGlobalAssignmentsBar {
     
     if (self.globalAssignmentsBottomContainer) {
         return;
@@ -1407,7 +1464,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.globalAssignmentsBottomContainer.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.view addSubview:self.globalAssignmentsBottomContainer];
     
-    self.globalAssignmentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 12, self.view.frame.size.width -56 -24 -18 -6, 20)];
+    self.globalAssignmentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(56, 12, self.view.frame.size.width - 56 - 24 - 18 - 6, 20)];
     self.globalAssignmentsLabel.text = @"  global assignments";
     self.globalAssignmentsLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightLight];
     self.globalAssignmentsLabel.textColor = [UIColor frescoDarkTextColor];
@@ -1418,60 +1475,76 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self.globalAssignmentsBottomContainer addSubview:globeImageView];
     
     UIImageView *caret = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"right-caret"]];
-    caret.frame = CGRectMake(self.view.frame.size.width -24 -6, 10, 24, 24);
+    caret.frame = CGRectMake(self.view.frame.size.width - 24 - 6, 10, 24, 24);
     [self.globalAssignmentsBottomContainer addSubview:caret];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(globalAssignmentsAnimatedSegue)];
     [self.globalAssignmentsBottomContainer addGestureRecognizer:tap];
-    
 }
 
--(void)showGlobalAssignmentsBar {
+- (void)showGlobalAssignmentsBar {
     if (self.didAcceptAssignment) {
         return;
     }
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, -44-49);
-    } completion:nil];
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, -44 - 49);
+                     }
+                     completion:nil];
 }
 
--(void)hideGlobalAssignmentsBar {
-    [UIView animateWithDuration:0.3 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, self.globalAssignmentsBottomContainer.frame.size.height);
-    } completion:nil];
+- (void)hideGlobalAssignmentsBar {
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.globalAssignmentsBottomContainer.transform = CGAffineTransformMakeTranslation(0, self.globalAssignmentsBottomContainer.frame.size.height);
+                     }
+                     completion:nil];
 }
 
--(void)showAssignmentsMetaBar {
-    self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -44-49);
+- (void)showAssignmentsMetaBar {
+    self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, -44 - 49);
     //    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     self.scrollView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
 }
 
--(void)hideAssignmentsMetaBar {
+- (void)hideAssignmentsMetaBar {
     self.assignmentBottomBar.transform = CGAffineTransformMakeTranslation(0, self.assignmentBottomBar.frame.size.height);
     //    [self.scrollView setContentOffset:CGPointMake(0, -44) animated:YES];
     self.scrollView.frame = CGRectMake(0, 36, self.view.frame.size.width, self.view.frame.size.height);
-    
 }
 
--(void)globalAssignmentsSegue {
-    FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
-    tableViewController.assignments = self.globalAssignmentsArray;
-    [self.navigationController pushViewController:tableViewController animated:NO];
+
+/**
+ * Segways to the global assignment screen from the root assignment VC
+ */
+- (void)globalAssignmentsSegue {
+    if (![[UIApplication sharedApplication].keyWindow.rootViewController isKindOfClass: [FRSGlobalAssignmentsTableViewController class]] && self.seguedToGlobalAssignment == false){
+        FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
+        tableViewController.assignments = self.globalAssignmentsArray;
+        self.seguedToGlobalAssignment = YES;
+        self.closeButton.alpha = 0;
+        [self.navigationController pushViewController:tableViewController animated:YES];
+        self.selectedAssignment = nil;
+    }
 }
 
 //Redundant, but we need two because the deep link is not an animated transition
 //and we can't pass in a BOOL value to a selector
--(void)globalAssignmentsAnimatedSegue {
+- (void)globalAssignmentsAnimatedSegue {
     FRSGlobalAssignmentsTableViewController *tableViewController = [[FRSGlobalAssignmentsTableViewController alloc] init];
     tableViewController.assignments = self.globalAssignmentsArray;
+    self.seguedToGlobalAssignment = YES;
+    self.closeButton.alpha = 0;
     [self.navigationController pushViewController:tableViewController animated:YES];
 }
 
-
 #pragma mark - Assignment Accepting
 
--(void)assignmentAction {
+- (void)assignmentAction {
     if ([self.assignmentActionButton.titleLabel.text isEqualToString:ACTION_TITLE_TWO]) {
         [self openCamera];
     } else {
@@ -1479,68 +1552,71 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
--(void)acceptAssignment {
+- (void)acceptAssignment {
     self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.spinner.tintColor = [UIColor frescoOrangeColor];
     [self.spinner setPullProgress:90];
     [self startSpinner:self.spinner onButton:self.assignmentActionButton];
     
-    [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
-        
-        [self stopSpinner:self.spinner onButton:self.assignmentActionButton color:[UIColor frescoGreenColor]];
-        
-        NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-        NSInteger responseCode = response.statusCode;
-        
-        if (responseObject || responseCode == 403) {
-            FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-            FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
-            NSDictionary *dict = responseObject;
-            [assignment configureWithDictionary:dict];
-            [self configureAcceptedAssignment:assignment];
-            
-            self.acceptedAssignmentDictionary = dict;
-            
-            return;
-        }
-        
-        // user has already accepted the assignment
-        if (responseCode == 412) {
-            // should never happen
-            // bottom tab bar is not visible when in an accepted state
-            return;
-        }
-        
-        // user is not authenticated (allow assignment accept)
-        if (responseCode == 403) {
-            return;
-        }
-        
-        if (error.code == -1009) {
-            [self presentNoConnectionError];
-            return;
-        }
-        
-        // 101 is unauthenticated (FRSAPIClient)
-        if (error.code != 101) {
-            [self presentGenericError];
-        }
-    }];
+    [[FRSAPIClient sharedClient] acceptAssignment:self.assignmentID
+                                       completion:^(id responseObject, NSError *error) {
+                                           
+                                           [self stopSpinner:self.spinner onButton:self.assignmentActionButton color:[UIColor frescoGreenColor]];
+                                           
+                                           NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                           NSInteger responseCode = response.statusCode;
+                                           
+                                           if (responseObject || responseCode == 403) {
+                                               FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                                               FRSAssignment *assignment = [NSEntityDescription insertNewObjectForEntityForName:@"FRSAssignment" inManagedObjectContext:delegate.managedObjectContext];
+                                               NSDictionary *dict = responseObject;
+                                               [assignment configureWithDictionary:dict];
+                                               [self configureAcceptedAssignment:assignment];
+                                               
+                                               self.acceptedAssignmentDictionary = dict;
+                                               
+                                               return;
+                                           }
+                                           
+                                           // user has already accepted the assignment
+                                           if (responseCode == 412) {
+                                               // should never happen
+                                               // bottom tab bar is not visible when in an accepted state
+                                               return;
+                                           }
+                                           
+                                           // user is not authenticated (allow assignment accept)
+                                           if (responseCode == 403) {
+                                               return;
+                                           }
+                                           
+                                           if (error.code == -1009) {
+                                               [self presentNoConnectionError];
+                                               return;
+                                           }
+                                           
+                                           // 101 is unauthenticated (FRSAPIClient)
+                                           if (error.code != 101) {
+                                               [self presentGenericError];
+                                           }
+                                       }];
 }
 
--(void)openCamera {
+- (void)openCamera {
     FRSCameraViewController *cam = [[FRSCameraViewController alloc] initWithCaptureMode:FRSCaptureModeVideo selectedAssignment:self.acceptedAssignmentDictionary selectedGlobalAssignment:nil];
     UINavigationController *navControl = [[UINavigationController alloc] init];
     navControl.navigationBar.barTintColor = [UIColor frescoOrangeColor];
     [navControl pushViewController:cam animated:NO];
     [navControl setNavigationBarHidden:YES];
     
-    [self presentViewController:navControl animated:YES completion:^{
-        [self.tabBarController setSelectedIndex:3]; // should return to assignments
-    }];
+    [self presentViewController:navControl
+                       animated:YES
+                     completion:^{
+                         [self.tabBarController setSelectedIndex:3]; // should return to assignments
+                     }];
 }
 
--(void)configureAcceptedAssignment:(FRSAssignment *)assignment {
+- (void)configureAcceptedAssignment:(FRSAssignment *)assignment {
     
     if (self.didAcceptAssignment) {
         return;
@@ -1550,7 +1626,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.hasDefault = YES;
     self.defaultID = assignment.uid;
     
-    self.assignmentLat  = [assignment.latitude floatValue];
+    self.assignmentLat = [assignment.latitude floatValue];
     self.assignmentLong = [assignment.longitude floatValue];
     
     [self didAcceptAssignment:assignment];
@@ -1599,7 +1675,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.mapShouldFollowUser = YES;
 }
 
--(void)didAcceptAssignment:(FRSAssignment *)assignment {
+- (void)didAcceptAssignment:(FRSAssignment *)assignment {
     self.didAcceptAssignment = YES;
     [self removeAssignmentsFromMap];
     [self removeAllOverlaysIncludingUser:NO];
@@ -1611,23 +1687,23 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
 }
 
-
 #pragma mark - Assignment Unaccepting
 
--(void)unacceptAssignment {
+- (void)unacceptAssignment {
     self.spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.spinner.tintColor = [UIColor whiteColor];
     [self.spinner setPullProgress:90];
     
     [self startSpinner:self.spinner onButton:self.unacceptAssignmentButton];
     
-    [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID completion:^(id responseObject, NSError *error) {
-        // error or response, user should be able to unaccept. at least visually
-        [self configureUnacceptedAssignment];
-    }];
+    [[FRSAPIClient sharedClient] unacceptAssignment:self.assignmentID
+                                         completion:^(id responseObject, NSError *error) {
+                                             // error or response, user should be able to unaccept. at least visually
+                                             [self configureUnacceptedAssignment];
+                                         }];
 }
 
--(void)configureUnacceptedAssignment {
+- (void)configureUnacceptedAssignment {
     [self stopSpinner:self.spinner onButton:self.unacceptAssignmentButton color:[UIColor whiteColor]];
     self.didAcceptAssignment = NO;
     self.acceptedAssignment = nil;
@@ -1650,7 +1726,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
         [self.assignmentActionButton setTitle:ACTION_TITLE_ONE forState:UIControlStateNormal];
     }
     
-    if (self.globalAssignmentsArray.count <= 1) {
+    if (self.globalAssignmentsArray.count >= 1) {
         [self showGlobalAssignmentsBar];
     }
     
@@ -1662,10 +1738,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
-
 #pragma mark - Location Based UI Updates
 
--(void)updateUIForLocation {
+- (void)updateUIForLocation {
     if ([self location:[[FRSLocator sharedLocator] currentLocation] isWithinAssignmentRadius:self.currentAssignment]) {
         if (!self.userIsInRange) {
             self.shouldRefreshMap = YES;
@@ -1691,7 +1766,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
--(void)updateExpirationAndDistanceLabels {
+- (void)updateExpirationAndDistanceLabels {
     
     [self updateUIForLocation];
     
@@ -1699,8 +1774,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     [self setDistance];
 }
 
-
--(void)updateCounter:(NSTimer *)timer {
+- (void)updateCounter:(NSTimer *)timer {
     
     if (!self.didAcceptAssignment) {
         return;
@@ -1719,7 +1793,7 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
--(void)updateNavBarToOpenCamera {
+- (void)updateNavBarToOpenCamera {
     self.acceptAssignmentDistanceAwayLabel.frame = CGRectMake(0, 35, self.greenView.frame.size.width, 17);
     self.acceptAssignmentDistanceAwayLabel.text = @"OPEN YOUR CAMERA";
     if (IS_IPHONE_5) {
@@ -1739,25 +1813,21 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     }
 }
 
-
 #pragma mark - Spinner
 
--(void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
+- (void)startSpinner:(DGElasticPullToRefreshLoadingViewCircle *)spinner onButton:(UIButton *)button {
     [button setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
     button.tintColor = [UIColor clearColor];
-    spinner.frame = CGRectMake(button.frame.size.width - 20, button.frame.size.height/2 -10, 20, 20);
+    spinner.frame = CGRectMake(button.frame.size.width - 20, button.frame.size.height / 2 - 10, 20, 20);
     [spinner startAnimating];
     [button addSubview:spinner];
 }
 
--(void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button color:(UIColor *)color {
+- (void)stopSpinner:(DGElasticPullToRefreshLoadingView *)spinner onButton:(UIButton *)button color:(UIColor *)color {
     
     [button setTitleColor:color forState:UIControlStateNormal];
     [spinner stopLoading];
     [spinner removeFromSuperview];
 }
-
-
-
 
 @end

@@ -13,8 +13,8 @@
 
 @property BOOL selectable;
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier article:(FRSArticle *)article;
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier article:(FRSArticle *)article;
 
--(void)configureCell;
+- (void)configureCell;
 
 @end

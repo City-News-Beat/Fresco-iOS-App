@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 @class FRSGallery;
 
-
 @protocol FRSCommentsViewDelegate;
 
 @interface FRSCommentsView : UIView
@@ -18,20 +17,16 @@
 
 @property (nonatomic) BOOL shouldShowAllComments;
 
-@property (weak, nonatomic) NSObject <FRSCommentsViewDelegate> *delegate;
+@property (weak, nonatomic) NSObject<FRSCommentsViewDelegate> *delegate;
 
+- (instancetype)initWithComments:(NSArray *)comments;
 
-
-
--(instancetype)initWithComments:(NSArray *)comments;
-
--(NSInteger)height;
+- (NSInteger)height;
 
 @end
 
-
 @protocol FRSCommentsViewDelegate <NSObject>
 
--(void)commentsView:(FRSCommentsView *)commentsView didToggleViewMode:(BOOL)showAllComments;
+- (void)commentsView:(FRSCommentsView *)commentsView didToggleViewMode:(BOOL)showAllComments;
 
 @end

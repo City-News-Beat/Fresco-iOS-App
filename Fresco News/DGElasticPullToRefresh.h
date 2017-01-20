@@ -31,8 +31,7 @@ SOFTWARE.
 
 @interface UIScrollView (DGElasticPullToRefresh)
 
-@property (nonatomic, strong) DGElasticPullToRefreshView* pullToRefreshView;
-
+@property (nonatomic, strong) DGElasticPullToRefreshView *pullToRefreshView;
 
 /**
     CGFloat WaveMaxHeight = 70.0;
@@ -41,7 +40,7 @@ SOFTWARE.
     CGFloat LoadingViewSize = 30.0;
  */
 - (void)dg_addPullToRefreshWithActionHandler:(void (^)())actionHandler
-                                 loadingView:(DGElasticPullToRefreshLoadingView*)loadingView;
+                                 loadingView:(DGElasticPullToRefreshLoadingView *)loadingView;
 
 - (void)dg_addPullToRefreshWithWaveMaxHeight:(CGFloat)waveMaxHeight
                              minOffsetToPull:(CGFloat)minOffsetToPull
@@ -53,9 +52,9 @@ SOFTWARE.
                                         yPos:(CGFloat)yPos;
 
 - (void)dg_removePullToRefresh;
-- (void)dg_setPullToRefreshBackgroundColor:(UIColor*)color;
-- (void)dg_setPullToRefreshFillColor:(UIColor*)color;
+- (void)dg_setPullToRefreshBackgroundColor:(UIColor *)color;
+- (void)dg_setPullToRefreshFillColor:(UIColor *)color;
 - (void)dg_stopLoading;
--(void)dg_setFrame:(CGRect)frame;
+- (void)dg_setFrame:(CGRect)frame;
 
 @end

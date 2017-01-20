@@ -162,3 +162,4 @@
 //+(FRSMapCircle *)circleInMapView:(MKMapView *)mapView forUserWithRadius:(NSNumber *)radius location:(CLLocationCoordinate2D)location;
 //
 //@end
+d
