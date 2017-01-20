@@ -178,10 +178,10 @@ static BOOL isSegueingToAssignment;
         
 
         if (galleryIDs) {
-            [FRSNotificationHandler segueToTodayInNews:galleryIDs title:push[@"aps"][@"alert"][@"title"]];
+            [FRSNotificationHandler segueToTodayInNews:galleryIDs title:@"TODAY IN NEWS"];
         } else {
             galleryIDs = [push objectForKey:@"gallery_ids"];
-            [FRSNotificationHandler segueToTodayInNews:galleryIDs title:@"Today In News"];
+            [FRSNotificationHandler segueToTodayInNews:galleryIDs title:@"TODAY IN NEWS"];
         }
     }
 
@@ -218,6 +218,7 @@ static BOOL isSegueingToAssignment;
     FRSStoryDetailViewController *detailVC = [[FRSStoryDetailViewController alloc] initWithNibName:@"FRSStoryDetailViewController" bundle:[NSBundle mainBundle]];
     
     detailVC.navigationController = tab.navigationController;
+    detailVC.title = title;
     UINavigationController *navController = (UINavigationController *)appDelegate.window.rootViewController;
     [navController setNavigationBarHidden:FALSE];
     

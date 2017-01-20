@@ -368,6 +368,10 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)configureSpinner {
+    
+    if (self.loadingView) {
+        return;
+    }
 
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.loadingView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - 10, [UIScreen mainScreen].bounds.size.height / 2 - 44 - 10, 20, 20);
