@@ -175,14 +175,7 @@ static BOOL isSegueingToAssignment;
         } else {
            galleryIDs = [push objectForKey:@"gallery_ids"];
         }
-        
-
-        if (galleryIDs) {
-            [FRSNotificationHandler segueToTodayInNews:galleryIDs title:@"TODAY IN NEWS"];
-        } else {
-            galleryIDs = [push objectForKey:@"gallery_ids"];
-            [FRSNotificationHandler segueToTodayInNews:galleryIDs title:@"TODAY IN NEWS"];
-        }
+        [FRSNotificationHandler segueToTodayInNews:galleryIDs title:@"TODAY IN NEWS"];
     }
 
     if ([instruction isEqualToString:restartUploadNotification]) {
