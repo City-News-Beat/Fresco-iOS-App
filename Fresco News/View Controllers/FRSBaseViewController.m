@@ -121,7 +121,7 @@
     }
 }
 
-//#pragma mark - Deep Links
+#pragma mark - Deep Links
 
 - (void)segueToTodayInNews:(NSArray *)galleryIDs {
 
