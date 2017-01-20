@@ -162,6 +162,8 @@ static NSDate *lastDate;
     uploadedFileSize = 0;
     lastProgress = 0;
     toComplete = 0;
+    totalImageFilesSize = 0;
+    totalVideoFilesSize = 0;
     completed = 0;
     numberOfVideos = 0;
     self.uploadMeta = [[NSMutableArray alloc] init];
@@ -273,7 +275,7 @@ static NSDate *lastDate;
 
                                                       unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
                                                       totalFileSize += fileSize;
-
+                                                      totalImageFilesSize += fileSize;
                                                       NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
 
                                                       [self.uploadMeta addObject:uploadMeta];
@@ -316,7 +318,7 @@ static NSDate *lastDate;
                                                       NSLog(@"ENDING EXPORT %@", encoder.error);
                                                       unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
                                                       totalFileSize += fileSize;
-
+                                                      totalVideoFilesSize += fileSize;
                                                       NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
                                                       [self.uploadMeta addObject:uploadMeta];
                                                       if (self.uploadMeta.count == self.uploadsToComplete) {
@@ -333,6 +335,8 @@ static NSDate *lastDate;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{ @"type" : @"completion" }];
         currentIndex = 0;
         totalFileSize = 0;
+        totalImageFilesSize = 0;
+        totalVideoFilesSize = 0;
         uploadedFileSize = 0;
         lastProgress = 0;
         toComplete = 0;
@@ -340,6 +344,14 @@ static NSDate *lastDate;
         numberOfVideos = 0;
         self.uploadMeta = [[NSMutableArray alloc] init];
         self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
+        
+        NSMutableDictionary *uploadErrorSummary = [@{ @"debug_message" : @"Upload completed" } mutableCopy];
+        if (uploadSpeed > 0) {
+            [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
+        }
+        
+        [FRSTracker track:uploadDebug parameters:uploadErrorSummary];
+
         return;
     }
 
@@ -442,7 +454,6 @@ static NSDate *lastDate;
     } else {
         progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
     }
-    NSLog(@"progress %f", progress);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate"
                                                         object:nil
                                                       userInfo:@{ @"type" : @"progress",
@@ -455,7 +466,12 @@ static NSDate *lastDate;
     if (uploadSpeed > 0) {
         [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
     }
-
+    NSString *videoFilesSize = [NSString stringWithFormat:@"%lluMB", totalVideoFilesSize];
+    NSString *imageFilesSize = [NSString stringWithFormat:@"%lluMB", totalImageFilesSize];
+    
+    NSDictionary *filesDictionary = @{ @"video" : videoFilesSize, @"photo" : imageFilesSize };
+    [uploadErrorSummary setObject:filesDictionary forKey:@"files"];
+    
     [FRSTracker track:uploadError parameters:uploadErrorSummary];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{ @"type" : @"failure" }];
 }

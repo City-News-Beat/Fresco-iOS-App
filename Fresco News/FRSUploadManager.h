@@ -13,6 +13,8 @@
 @interface FRSUploadManager : NSObject <SDAVAssetExportSessionDelegate> {
     int currentIndex;
     unsigned long long totalFileSize;
+    unsigned long long totalVideoFilesSize;
+    unsigned long long totalImageFilesSize;
     unsigned long long uploadedFileSize;
     float lastProgress;
     int toComplete;
