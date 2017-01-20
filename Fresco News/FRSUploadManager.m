@@ -41,11 +41,10 @@ static NSDate *lastDate;
     [self.transcodingProgressDictionary setValue:[NSNumber numberWithFloat:progress] forKey:postID];
     __block float transcodingProgress = 0;
     [self.transcodingProgressDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSNumber *value, BOOL *stop) {
-        transcodingProgress += value.floatValue;
+      transcodingProgress += value.floatValue;
     }];
-    
+
     float totalTranscodingProgress = 0.5f * transcodingProgress / numberOfVideos;
-    NSLog(@"progress %f", transcodingProgress);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate"
                                                         object:nil
                                                       userInfo:@{ @"type" : @"progress",
@@ -278,7 +277,10 @@ static NSDate *lastDate;
                                                       NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
 
                                                       [self.uploadMeta addObject:uploadMeta];
-                                                      [self checkRestart];
+                                                      if (self.uploadMeta.count == self.uploadsToComplete) {
+                                                          [self restart];
+                                                      }
+
                                                     }];
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
         numberOfVideos++;
@@ -317,15 +319,11 @@ static NSDate *lastDate;
 
                                                       NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
                                                       [self.uploadMeta addObject:uploadMeta];
-                                                      [self checkRestart];
+                                                      if (self.uploadMeta.count == self.uploadsToComplete) {
+                                                          [self restart];
+                                                      }
                                                     }];
                                                   }];
-    }
-}
-
-- (void)checkRestart {
-    if (self.uploadMeta.count == 1) {
-        [self restart];
     }
 }
 
