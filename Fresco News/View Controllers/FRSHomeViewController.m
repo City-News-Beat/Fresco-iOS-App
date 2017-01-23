@@ -23,12 +23,9 @@
 #import "FRSGallery+CoreDataProperties.h"
 #import "FRSFollowingTable.h"
 #import "FRSLocationManager.h"
-<<<<<<< HEAD
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
-=======
 #import "FRSNotificationHandler.h"
->>>>>>> dev
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
     BOOL isLoading;
@@ -109,11 +106,6 @@
             }
         }
     }
-    
-//    [FRSNotificationHandler segueToTodayInNews:@[@"LJE0QZvXo1G5"] title:@"hello"];
-    
-//    [FRSNotificationHandler handleNotification:@{@"type" : @"user-news-today-in-news"}];
-    
 }
 
 + (NSInteger)daysBetweenDate:(NSDate *)fromDateTime andDate:(NSDate *)toDateTime {
