@@ -1430,6 +1430,16 @@
             }];
 }
 
+- (void)fetchPurchasesForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:purchasesEndpoint, galleryID];
+    [self get:endpoint
+withParameters:Nil
+   completion:^(id responseObject, NSError *error) {
+       completion(responseObject, error);
+   }];
+}
+
+
 - (void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:paginateComments, gallery.uid, last];
 

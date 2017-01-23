@@ -93,6 +93,7 @@ static NSString *const unfollowUserEndpoint = @"user/%@/unfollow";
 static NSString *const followersEndpoint = @"user/%@/followers";
 static NSString *const followingEndpoint = @"user/%@/following";
 static NSString *const commentsEndpoint = @"gallery/%@/comments?limit=10";
+static NSString * const purchasesEndpoint = @"gallery/%@/purchases";
 static NSString *const commentEndpoint = @"gallery/%@/comment/";
 static NSString *const galleryUnlikeEndpoint = @"gallery/%@/unlike";
 static NSString *const storyUnlikeEndpoint = @"story/%@/unlike";

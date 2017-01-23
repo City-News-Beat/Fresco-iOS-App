@@ -250,7 +250,6 @@
 
                                    [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
 
-        
                                    return;
                                }
 
