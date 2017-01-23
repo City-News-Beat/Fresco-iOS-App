@@ -252,14 +252,8 @@
                                    
                                    NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
 
-                                   if ([FBSDKAccessToken setCurrentAccessToken:[FBSDKAccessToken toke]]) {
-                                       [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields": @"email,name,first_name"}]
-                                        startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                                            if (!error) {
-                                                NSLog(@"fetched user:%@", result);
-                                                NSLog(@"%@",result[@"email"]);
-                                            }
-                                        }];
+                                   if (socialLinksDict[@"facebook"] != nil && [socialLinksDict[@"facebook"] count] > 0) {
+                                       [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
                                    }
         
                                    return;
