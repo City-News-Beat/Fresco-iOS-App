@@ -19,10 +19,10 @@
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:(v) options:NSNumericSearch] != NSOrderedAscending)
 
 @implementation FRSUploadManager
+
 static NSDate *lastDate;
 
 + (id)sharedUploader {
-
     static FRSUploadManager *sharedUploader = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -32,6 +32,34 @@ static NSDate *lastDate;
     });
 
     return sharedUploader;
+}
+
+- (void)exportSession:(SDAVAssetExportSession *)exportSession renderFrame:(CVPixelBufferRef)pixelBuffer withPresentationTime:(CMTime)presentationTime toBuffer:(CVPixelBufferRef)renderBuffer {
+}
+
+- (void)updateTranscodingProgress:(float)progress withPostID:(NSString *)postID {
+    [self.transcodingProgressDictionary setValue:[NSNumber numberWithFloat:progress] forKey:postID];
+    __block float transcodingProgress = 0;
+    [self.transcodingProgressDictionary enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSNumber *value, BOOL *stop) {
+      transcodingProgress += value.floatValue;
+    }];
+
+    float totalTranscodingProgress = 0.5f * transcodingProgress / numberOfVideos;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate"
+                                                        object:nil
+                                                      userInfo:@{ @"type" : @"progress",
+                                                                  @"percentage" : @(totalTranscodingProgress) }];
+}
+
+- (instancetype)init {
+    self = [super init];
+
+    if (self) {
+        self.currentGalleryID = @"";
+        [self commonInit];
+    }
+
+    return self;
 }
 
 - (void)dealloc {
@@ -44,8 +72,9 @@ static NSDate *lastDate;
         return;
     }
 
-    [FRSTracker track:uploadClose parameters:@{ @"percent_complete" : @(lastProgress),
-                                                @"gallery_id" : _currentGalleryID }];
+    [FRSTracker track:uploadClose
+           parameters:@{ @"percent_complete" : @(lastProgress),
+                         @"gallery_id" : _currentGalleryID }];
 }
 
 - (void)checkCachedUploads {
@@ -86,7 +115,6 @@ static NSDate *lastDate;
 }
 
 - (void)appWillResignActive {
-
     if (completed == toComplete) {
         return;
     }
@@ -134,13 +162,16 @@ static NSDate *lastDate;
     uploadedFileSize = 0;
     lastProgress = 0;
     toComplete = 0;
+    totalImageFilesSize = 0;
+    totalVideoFilesSize = 0;
     completed = 0;
+    numberOfVideos = 0;
     self.uploadMeta = [[NSMutableArray alloc] init];
+    self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
 
     for (NSString *uploadPost in [self.managedObjects allKeys]) {
         FRSUpload *upload = [self.managedObjects objectForKey:uploadPost];
-        if ([upload.completed boolValue] != TRUE) {
-            // key = TOKEN uploadID = POST resourceURL = ASSEt
+        if ([upload.completed boolValue] == NO) {
             if (upload.key && upload.uploadID && upload.resourceURL) {
                 PHFetchResult *assetArray = [PHAsset fetchAssetsWithLocalIdentifiers:@[ upload.resourceURL ] options:nil];
                 PHAsset *asset = [assetArray firstObject];
@@ -155,24 +186,15 @@ static NSDate *lastDate;
     }
 }
 
-- (instancetype)init {
-    self = [super init];
-
-    if (self) {
-        _currentGalleryID = @"";
-        [self commonInit];
-    }
-
-    return self;
-}
-
 - (void)commonInit {
     self.currentUploads = [[NSMutableArray alloc] init];
     self.uploadsToComplete = 0;
     self.completedUploads = 0;
     self.uploadMeta = [[NSMutableArray alloc] init];
+    self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
     [self startAWS];
     currentIndex = 0;
+    numberOfVideos = 0;
 
     FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     self.context = delegate.managedObjectContext;
@@ -207,7 +229,6 @@ static NSDate *lastDate;
 }
 
 - (void)createUploadWithAsset:(PHAsset *)asset token:(NSString *)token post:(NSString *)post {
-
     FRSUpload *upload = [FRSUpload MR_createEntityInContext:self.context];
 
     [self.context performBlock:^{
@@ -248,90 +269,63 @@ static NSDate *lastDate;
                                                           options:options
                                                     resultHandler:^(NSData *_Nullable imageData, NSString *_Nullable dataUTI, UIImageOrientation orientation, NSDictionary *_Nullable info) {
                                                       NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[[NSProcessInfo processInfo] globallyUniqueString] stringByAppendingString:@".jpeg"]];
-                                                      [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
 
                                                       // write data to temp path (background thread, async)
                                                       [imageData writeToFile:tempPath atomically:NO];
 
                                                       unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
                                                       totalFileSize += fileSize;
-
+                                                      totalImageFilesSize += fileSize;
                                                       NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
 
                                                       [self.uploadMeta addObject:uploadMeta];
-                                                      [self checkRestart];
+                                                      if (self.uploadMeta.count == self.uploadsToComplete) {
+                                                          [self restart];
+                                                      }
+
                                                     }];
     } else if (asset.mediaType == PHAssetMediaTypeVideo) {
+        numberOfVideos++;
         [[PHImageManager defaultManager] requestAVAssetForVideo:asset
-                                                        options:Nil
+                                                        options:nil
                                                   resultHandler:^(AVAsset *avasset, AVAudioMix *audioMix, NSDictionary *info) {
                                                     // create temp location to move data (PHAsset can not be weakly linked to)
                                                     NSString *tempPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"frs"] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-                                                    [[NSFileManager defaultManager] removeItemAtPath:tempPath error:Nil];
+                                                    SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:avasset];
+                                                    encoder.delegate = self;
+                                                    encoder.outputFileType = AVFileTypeMPEG4;
+                                                    encoder.outputURL = [NSURL fileURLWithPath:tempPath];
+                                                    encoder.videoSettings = @{
+                                                        AVVideoCodecKey : AVVideoCodecH264,
+                                                        AVVideoWidthKey : @1920,
+                                                        AVVideoHeightKey : @1080,
+                                                        AVVideoCompressionPropertiesKey : @{
+                                                            AVVideoProfileLevelKey : AVVideoProfileLevelH264High41,
+                                                            AVVideoMaxKeyFrameIntervalDurationKey : @16
+                                                        },
+                                                    };
+                                                    encoder.audioSettings = @{
+                                                        AVFormatIDKey : @(kAudioFormatMPEG4AAC),
+                                                        AVNumberOfChannelsKey : @2,
+                                                        AVSampleRateKey : @44100,
+                                                        AVEncoderBitRateKey : @64000,
+                                                    };
+                                                    encoder.postID = postID;
 
-                                                    //            SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:avasset];
-                                                    //            encoder.outputFileType = AVFileTypeMPEG4;
-                                                    //            encoder.outputURL = [NSURL fileURLWithPath:tempPath];
-                                                    //            encoder.videoSettings = @
-                                                    //            {
-                                                    //                AVVideoCodecKey: AVVideoCodecH264,
-                                                    //                AVVideoWidthKey: @1920,
-                                                    //                AVVideoHeightKey: @1080,
-                                                    //                AVVideoCompressionPropertiesKey: @
-                                                    //                {
-                                                    //                    AVVideoProfileLevelKey: AVVideoProfileLevelH264High41,
-                                                    //                    AVVideoMaxKeyFrameIntervalDurationKey: @16
-                                                    //                },
-                                                    //            };
-                                                    //            encoder.audioSettings = @
-                                                    //            {
-                                                    //                AVFormatIDKey: @(kAudioFormatMPEG4AAC),
-                                                    //                AVNumberOfChannelsKey: @2,
-                                                    //                AVSampleRateKey: @44100,
-                                                    //                AVEncoderBitRateKey: @64000,
-                                                    //            };
-                                                    //
-                                                    //            NSLog(@"STARTING EXPORT");
-                                                    //
-                                                    //            [encoder exportAsynchronouslyWithCompletionHandler:^
-                                                    //             {
-                                                    //                 NSLog(@"ENDING EXPORT %@", encoder.error);
-                                                    //                 unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
-                                                    //                 totalFileSize += fileSize;
-                                                    //
-                                                    //                 NSArray *uploadMeta = @[tempPath, revisedToken, postID];
-                                                    //                 [self.uploadMeta addObject:uploadMeta];
-                                                    //                 [self checkRestart];
-                                                    //
-                                                    //            }];
-                                                    //
-                                                    //            return;
-                                                    // set up resource from PHAsset
+                                                    NSLog(@"STARTING EXPORT");
 
-                                                    PHAssetResource *resource = [[PHAssetResource assetResourcesForAsset:asset] firstObject];
-                                                    PHAssetResourceRequestOptions *options = [PHAssetResourceRequestOptions new];
-                                                    options.networkAccessAllowed = YES;
-
-                                                    // write data from PHAsset resource to temp location, send for upload
-                                                    [[PHAssetResourceManager defaultManager] writeDataForAssetResource:resource
-                                                                                                                toFile:[NSURL fileURLWithPath:tempPath]
-                                                                                                               options:options
-                                                                                                     completionHandler:^(NSError *_Nullable error) {
-
-                                                                                                       unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
-                                                                                                       totalFileSize += fileSize;
-
-                                                                                                       NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
-                                                                                                       [self.uploadMeta addObject:uploadMeta];
-                                                                                                       [self checkRestart];
-                                                                                                     }];
+                                                    [encoder exportAsynchronouslyWithCompletionHandler:^{
+                                                      NSLog(@"ENDING EXPORT %@", encoder.error);
+                                                      unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:tempPath error:nil] fileSize];
+                                                      totalFileSize += fileSize;
+                                                      totalVideoFilesSize += fileSize;
+                                                      NSArray *uploadMeta = @[ tempPath, revisedToken, postID ];
+                                                      [self.uploadMeta addObject:uploadMeta];
+                                                      if (self.uploadMeta.count == self.uploadsToComplete) {
+                                                          [self restart];
+                                                      }
+                                                    }];
                                                   }];
-    }
-}
-
-- (void)checkRestart {
-    if (self.uploadMeta.count == 1) {
-        [self restart];
     }
 }
 
@@ -341,11 +335,23 @@ static NSDate *lastDate;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{ @"type" : @"completion" }];
         currentIndex = 0;
         totalFileSize = 0;
+        totalImageFilesSize = 0;
+        totalVideoFilesSize = 0;
         uploadedFileSize = 0;
         lastProgress = 0;
         toComplete = 0;
         completed = 0;
+        numberOfVideos = 0;
         self.uploadMeta = [[NSMutableArray alloc] init];
+        self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
+        
+        NSMutableDictionary *uploadErrorSummary = [@{ @"debug_message" : @"Upload completed" } mutableCopy];
+        if (uploadSpeed > 0) {
+            [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
+        }
+        
+        [FRSTracker track:uploadDebug parameters:uploadErrorSummary];
+
         return;
     }
 
@@ -354,10 +360,9 @@ static NSDate *lastDate;
                        url:request[0]
                     postID:request[2]
                 completion:^(id responseObject, NSError *error) {
-                }];
-}
+                  [[NSFileManager defaultManager] removeItemAtPath:request[0] error:Nil];
 
-- (void)next {
+                }];
 }
 
 - (void)startAWS {
@@ -369,11 +374,9 @@ static NSDate *lastDate;
 }
 
 - (void)addUploadForPost:(NSString *)postID url:(NSString *)body postID:(NSString *)post completion:(FRSAPIDefaultCompletionBlock)completion {
-
     __block int uploadUpdates;
 
     AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
-
     AWSS3TransferManagerUploadRequest *upload = [AWSS3TransferManagerUploadRequest new];
 
     if ([body containsString:@".jpeg"]) {
@@ -427,8 +430,9 @@ static NSDate *lastDate;
 
           if (upload) {
               [self.context performBlock:^{
-                upload.completed = @(TRUE);
-                [self.context save:Nil];
+                upload.completed = @(YES);
+                [self.context save:nil];
+                completion(nil, nil);
               }];
           }
 
@@ -444,21 +448,31 @@ static NSDate *lastDate;
 
 - (void)updateProgress:(int64_t)bytes {
     uploadedFileSize += bytes;
-    float progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:nil userInfo:@{ @"type" : @"progress",
-                                                                                                         @"percentage" : @(progress) }];
+    float progress;
+    if (numberOfVideos > 0) {
+        progress = 0.5f + (0.5f * (uploadedFileSize * 1.0) / (totalFileSize * 1.0));
+    } else {
+        progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate"
+                                                        object:nil
+                                                      userInfo:@{ @"type" : @"progress",
+                                                                  @"percentage" : @(progress) }];
 }
 
 - (void)uploadDidErrorWithError:(NSError *)error {
 
     NSMutableDictionary *uploadErrorSummary = [@{ @"error_message" : error.localizedDescription } mutableCopy];
     if (uploadSpeed > 0) {
-        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed"];
+        [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
     }
-
-    if (error.localizedDescription) {
-        [FRSTracker track:uploadError parameters:uploadErrorSummary];
-    }
+    NSString *videoFilesSize = [NSString stringWithFormat:@"%lluMB", totalVideoFilesSize];
+    NSString *imageFilesSize = [NSString stringWithFormat:@"%lluMB", totalImageFilesSize];
+    
+    NSDictionary *filesDictionary = @{ @"video" : videoFilesSize, @"photo" : imageFilesSize };
+    [uploadErrorSummary setObject:filesDictionary forKey:@"files"];
+    
+    [FRSTracker track:uploadError parameters:uploadErrorSummary];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{ @"type" : @"failure" }];
 }
 

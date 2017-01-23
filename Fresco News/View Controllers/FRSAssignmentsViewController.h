@@ -24,7 +24,6 @@
 
 - (void)setInitialMapRegion;
 - (instancetype)initWithActiveAssignment:(NSString *)assignmentID;
-- (void)focusOnAssignment:(FRSAssignment *)assignment;
 - (void)configureMap;
 @property CGFloat assignmentLat;
 @property CGFloat assignmentLong;
@@ -32,8 +31,12 @@
 - (void)globalAssignmentsSegue;
 
 @property (nonatomic) BOOL hasDefault;
+@property (strong, nonatomic) UIButton *closeButton;
 @property (nonatomic, retain) NSString *defaultID;
 @property (strong, nonatomic) MKMapView *mapView;
 @property BOOL mapShouldFollowUser;
+@property BOOL assignmentCardIsOpen;
+@property (strong, nonatomic) FRSAssignment *selectedAssignment;
+
 
 @end

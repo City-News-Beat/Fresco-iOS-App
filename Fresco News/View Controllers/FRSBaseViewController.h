@@ -37,24 +37,6 @@
 
 - (void)logoutWithPop:(BOOL)pop;
 
-/* DEEP LINKS */
-- (void)segueToPhotosOfTheDay:(NSArray *)postIDs;
-- (void)segueToTodayInNews:(NSArray *)galleryIDs;
-- (void)segueToTaxInfo;
-- (void)segueToIDInfo;
-- (void)segueToGallery:(NSString *)galleryID;
-- (void)segueToStory:(NSString *)storyID;
-- (void)segueHome;
-- (void)segueToUser:(NSString *)userID;
-- (void)segueToPost:(NSString *)postID;
-- (void)segueToAssignmentWithID:(NSString *)assignmentID;
-- (void)segueToGlobalAssignmentWithID:(NSString *)assignmentID;
-- (void)segueToCameraWithAssignmentID:(NSString *)assignmentID;
-- (void)segueToDebitCard;
-
-/* ERRORS */
-- (void)presentGenericError;
-
 /* KEYBOARD */
 - (void)configureDismissKeyboardGestureRecognizer;
 - (void)dismissKeyboardFromView;

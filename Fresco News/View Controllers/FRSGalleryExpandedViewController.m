@@ -34,6 +34,7 @@
 #define TOP_NAV_BAR_HEIGHT 64
 #define GALLERY_BOTTOM_PADDING 16
 #define CELL_HEIGHT 62
+#define STATIC_GALLERY_HEIGHT 280
 
 @interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, FRSGalleryViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSCommentsViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, MGSwipeTableCellDelegate, FRSCommentCellDelegate, UITextFieldDelegate, FRSGalleryViewDelegate>
 
@@ -507,7 +508,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 }
 
 - (void)configureGalleryView {
-    self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, TOP_NAV_BAR_HEIGHT, self.view.frame.size.width, 500) gallery:self.gallery delegate:self];
+    self.galleryView = [[FRSGalleryView alloc] initWithFrame:CGRectMake(0, TOP_NAV_BAR_HEIGHT, self.view.frame.size.width, 0) gallery:self.gallery delegate:self];
     [self.scrollView addSubview:self.galleryView];
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
@@ -519,6 +520,17 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [self focus];
 
     //    [self.scrollView addSubview:[UIView lineAtPoint:CGPointMake(0, self.galleryView.frame.origin.y + self.galleryView.frame.size.height)]];
+}
+
+
+
+
+/**
+ Sets up the comment table
+ */
+- (void) configureCommentsTableView {
+    self.commentTableView.rowHeight = UITableViewAutomaticDimension;
+    self.commentTableView.estimatedRowHeight = 56;
 }
 
 - (void)configureArticles {
@@ -713,9 +725,18 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 - (void)adjustScrollViewContentSize {
 
     CGFloat height = self.galleryView.layer.frame.size.height + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING + 50;
+    
+    // this checks if the height of the gallery has not been set yet
+    // and sets a default value of 280 (pulled from spec) to avoid any
+    // formatting issues on newly uploaded galleries.
+    if (self.galleryView.frame.size.height <= 0 || self.galleryView == nil) {
+        height = STATIC_GALLERY_HEIGHT + self.actionBar.layer.frame.size.height + GALLERY_BOTTOM_PADDING + 50;
+    }
+    
     if (self.comments.count > 0) {
         height += self.commentTableView.frame.size.height + self.commentLabel.frame.size.height + 20;
     }
+    
     if (self.orderedArticles.count > 0) {
         height += self.articlesTV.frame.size.height + self.articlesLabel.frame.size.height + 20;
     }
@@ -790,11 +811,10 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (scrollView == self.scrollView) {
         float size = self.scrollView.contentSize.height;
         float offset = self.scrollView.contentOffset.y;
-
-        float percentage = offset / size;
-
+        float percentage = ((offset + self.scrollView.frame.size.height) / size) * 100; //multiply * 100 because we want the whole percentage not the decimal
+        
         if (percentageScrolled < percentage) {
-            percentageScrolled = percentage;
+            percentageScrolled = percentage > 100 ? 100 : percentage;
         }
     }
 }
@@ -994,6 +1014,8 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
             height += commentSize;
         }
         index++;
+        
+        height = commentSize;
     }
 
     height += 56;
@@ -1480,9 +1502,12 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
         @"activity_duration" : @(timeInSession),
         @"gallery_id" : galleryID,
         @"author" : authorID,
-        @"opened_from" : _openedFrom
+        @"opened_from" : _openedFrom,
+        @"scrolled_percent" : @(percentageScrolled)
     };
 
+    NSLog(@"percent scrolled = %f", percentageScrolled);
+    
     [FRSTracker track:gallerySession parameters:session];
 }
 
