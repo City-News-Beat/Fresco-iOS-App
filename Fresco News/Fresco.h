@@ -93,13 +93,13 @@ static NSString *const unfollowUserEndpoint = @"user/%@/unfollow";
 static NSString *const followersEndpoint = @"user/%@/followers";
 static NSString *const followingEndpoint = @"user/%@/following";
 static NSString *const commentsEndpoint = @"gallery/%@/comments?limit=10";
+static NSString * const purchasesEndpoint = @"gallery/%@/purchases";
 static NSString *const commentEndpoint = @"gallery/%@/comment/";
 static NSString *const galleryUnlikeEndpoint = @"gallery/%@/unlike";
 static NSString *const storyUnlikeEndpoint = @"story/%@/unlike";
 static NSString *const deleteCommentEndpoint = @"gallery/%@/comment/delete"; // comment_id -> comment
 static NSString *const likedGalleryEndpoint = @"gallery/%@/likes";
 static NSString *const repostedGalleryEndpoint = @"gallery/%@/reposts";
-
 
 // feeds
 static NSString *const likeFeed = @"feeds/%@/likes";
@@ -117,11 +117,12 @@ static NSString *const galleryObjectType = @"gallery";
 static NSString *const storyObjectType = @"story";
 
 // payments
-
 static NSString *const createPayment = @"user/payment/create";
 static NSString *const getPaymentsEndpoint = @"user/payment";
 static NSString *const deletePaymentEndpoint = @"user/payment/%@/delete";
 static NSString *const makePaymentActiveEndpoint = @"user/payment/%@/update/";
+static NSString *const setStateIDEndpoint = @"https://uploads.stripe.com/v1/files";
+static NSString *const updateTaxInfoEndpoint = @"user/identity/update";
 
 // moderation
 static NSString *const blockUserEndpoint = @"user/%@/block";
@@ -313,6 +314,9 @@ static NSString *const migrationShown = @"Migration Shown";
 static NSString *const galleryOpenedFromHighlights = @"Gallery opened";
 static NSString *const galleryOpenedFromProfile = @"Gallery opened";
 static NSString *const galleryOpenedFromStories = @"Gallery opened";
+static NSString *const galleryOpenedFromSearch = @"Gallery opened";
+static NSString *const galleryOpenedFromFollowing = @"Gallery opened";
+static NSString *const galleryOpenedFromPush = @"Gallery opened";
 static NSString *const locationEnabled = @"Permissions location enables";
 static NSString *const locationDisabled = @"Permissions location disables";
 static NSString *const loginError = @"Login Error";

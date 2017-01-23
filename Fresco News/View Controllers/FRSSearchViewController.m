@@ -92,6 +92,8 @@
     } else {
         self.shouldUpdateOnReturn = NO;
     }
+    [self configureNearbyUsers];
+    [self.tableView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -323,7 +325,9 @@
 
       self.configuredNearby = YES;
 
-      self.nearbyHeaderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -70, self.view.frame.size.width, 100)];
+      if (!self.nearbyHeaderContainer) {
+            self.nearbyHeaderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, -70, self.view.frame.size.width, 100)];
+      }
       [self.tableView addSubview:self.nearbyHeaderContainer];
 
       UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 24, self.nearbyHeaderContainer.frame.size.width, 31)];
@@ -812,7 +816,9 @@
 - (void)readMore:(NSIndexPath *)indexPath {
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.galleries objectAtIndex:indexPath.row]];
     vc.shouldHaveBackButton = YES;
-
+    
+    [FRSTracker track:galleryOpenedFromSearch parameters:@{ @"opened_from" : @"search" }];
+    
     self.navigationItem.title = @"";
 
     [self.navigationController pushViewController:vc animated:YES];

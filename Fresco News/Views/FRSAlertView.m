@@ -31,7 +31,6 @@
 @property (strong, nonatomic) UILabel *messageLabel;
 
 @property (strong, nonatomic) UIButton *cancelButton;
-@property (strong, nonatomic) UIButton *actionButton;
 
 @property (strong, nonatomic) UIView *actionLine;
 

@@ -34,9 +34,17 @@ static NSString *galleryCell = @"GalleryCellReuse";
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToExpandedGalleryForContentBarTap:) name:@"GalleryContentBarActionTapped" object:nil];
 
+    NSString *openedFrom = @"";
+
+    if (self.isComingFromNotification) {
+        openedFrom = @"push";
+    } else {
+        openedFrom = @"stories";
+    }
+
     [FRSTracker track:galleryOpenedFromStories
-           parameters:@{ @"story_id" : (self.story.uid != Nil) ? self.story.uid : @"",
-                         @"opened_from" : @"stories" }];
+           parameters:@{ @"story_id" : (self.story.uid != nil) ? self.story.uid : @"",
+                         @"opened_from" : openedFrom }];
 }
 
 - (void)configureWithGalleries:(NSArray *)galleries {
@@ -58,6 +66,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
               [self.galleriesTable reloadData];
               [self.loadingView stopLoading];
               [self.loadingView removeFromSuperview];
+              self.loadingView.alpha = 0;
             });
         };
     }
@@ -213,7 +222,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:[self.stories objectAtIndex:indexPath.row]];
 
     vc.shouldHaveBackButton = YES;
-    vc.openedFrom = @"Stories";
+    vc.openedFrom = @"stories";
 
     self.navigationItem.title = @"";
     [self.navigationController pushViewController:vc animated:YES];
@@ -329,6 +338,7 @@ static NSString *galleryCell = @"GalleryCellReuse";
                                                 [self.galleriesTable reloadData];
                                                 [self.loadingView stopLoading];
                                                 [self.loadingView removeFromSuperview];
+                                                self.loadingView.alpha = 0;
                                               });
                                             }];
 }
@@ -359,6 +369,10 @@ static NSString *galleryCell = @"GalleryCellReuse";
 }
 
 - (void)configureSpinner {
+
+    if (self.loadingView) {
+        return;
+    }
 
     self.loadingView = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     self.loadingView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - 10, [UIScreen mainScreen].bounds.size.height / 2 - 44 - 10, 20, 20);

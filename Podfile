@@ -3,16 +3,10 @@ use_frameworks!
 
 source 'https://github.com/CocoaPods/Specs.git'
 
-def shared_pods
-    pod 'AFNetworking'
-end
-
 target 'Fresco' do
-    shared_pods
-    pod 'AFNetworking'
+    pod 'AFNetworking', '~> 3.0’
     pod 'Analytics'
     pod 'STKWebKitViewController'
-    pod 'AFNetworkActivityLogger'
     pod 'BTBadgeView'
     pod 'Mantle', '~>1.5.1'
     pod 'Functional.m'

@@ -1,3 +1,4 @@
+
 //
 //  FRSAPIClient.m
 //  Fresco
@@ -31,7 +32,6 @@
 
     return client;
 }
-
 
 - (void)handleError:(NSError *)error {
     switch (error.code / 100) {
@@ -192,10 +192,6 @@
     return socialDigestion;
 }
 
-
-
-
-
 - (void)fetchGalleriesForUser:(FRSUser *)user completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:userFeed, user.uid];
 
@@ -206,12 +202,8 @@
             }];
 }
 
-
-
 /*
- 
  Fetch assignments w/in radius of user location, calls generic method w/ parameters & endpoint
- 
  */
 
 - (void)getAssignmentsWithinRadius:(float)radius ofLocation:(NSArray *)location withCompletion:(FRSAPIDefaultCompletionBlock)completion {
@@ -266,9 +258,7 @@
 #pragma mark - Gallery Fetch
 
 /*
- 
  Fetch galleries w/ limit, calls generic method w/ parameters & endpoint
- 
  */
 
 - (void)fetchGalleriesWithLimit:(NSInteger)limit offsetGalleryID:(NSString *)offset completion:(void (^)(NSArray *galleries, NSError *error))completion {
@@ -292,26 +282,30 @@
             }];
 }
 
--(void)fetchLikesForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
+- (void)fetchLikesForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:likedGalleryEndpoint, galleryID];
-    
-    [self get:endpoint withParameters:@{@"limit" : limit, @"last" : lastID} completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
-    }];
+
+    [self get:endpoint
+        withParameters:@{ @"limit" : limit,
+                          @"last" : lastID }
+        completion:^(id responseObject, NSError *error) {
+          completion(responseObject, error);
+        }];
 }
 
-
--(void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
+- (void)fetchRepostsForGallery:(NSString *)galleryID limit:(NSNumber *)limit lastID:(NSString *)lastID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:repostedGalleryEndpoint, galleryID];
-    
-    [self get:endpoint withParameters:@{@"limit" : limit, @"last" : lastID} completion:^(id responseObject, NSError *error) {
-        completion(responseObject, error);
-    }];
+
+    [self get:endpoint
+        withParameters:@{ @"limit" : limit,
+                          @"last" : lastID }
+        completion:^(id responseObject, NSError *error) {
+          completion(responseObject, error);
+        }];
 }
 
+- (void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
 
--(void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion {
-    
     NSString *endpoint = [NSString stringWithFormat:deleteCommentEndpoint, gallery.uid];
     NSDictionary *params = @{ @"comment_id" : commentID };
 
@@ -356,7 +350,6 @@
             }];
 }
 
-
 - (void)createPaymentWithToken:(nonnull NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion {
 
     if (!token) {
@@ -374,7 +367,6 @@
 - (void)startLocator {
     [FRSLocator sharedLocator];
 }
-
 
 - (void)fetchFollowing:(void (^)(NSArray *galleries, NSError *error))completion {
     FRSUser *authenticatedUser = [[FRSUserManager sharedInstance] authenticatedUser];
@@ -422,14 +414,13 @@
             }];
 }
 
-- (AFHTTPRequestOperationManager *)managerWithFrescoConfigurations {
+- (AFHTTPSessionManager *)managerWithFrescoConfigurations {
 
     if (!self.requestManager) {
-        AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:[EndpointManager sharedInstance].currentEndpoint.baseUrl]];
+        AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:[EndpointManager sharedInstance].currentEndpoint.baseUrl]];
         self.requestManager = manager;
         self.requestManager.requestSerializer = [[FRSRequestSerializer alloc] init];
         [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
     }
 
     [self reevaluateAuthorization];
@@ -498,7 +489,6 @@
  Keychain-Based interaction & authentication
  */
 
-
 - (void)reevaluateAuthorization {
     if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         // set client token
@@ -526,54 +516,89 @@
  Generic HTTP methods for use within class
  */
 - (void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
 
     [manager GET:endPoint
         parameters:parameters
-        success:^(AFHTTPRequestOperation *_Nonnull operation, id _Nonnull responseObject) {
-          completion(responseObject, Nil);
-
+        progress:^(NSProgress *_Nonnull downloadProgress) {
         }
-        failure:^(AFHTTPRequestOperation *_Nullable operation, NSError *_Nonnull error) {
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
           completion(Nil, error);
           [self handleError:error];
         }];
 }
 
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-
-    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
 
     [manager POST:endPoint
         parameters:parameters
-        success:^(AFHTTPRequestOperation *_Nonnull operation, id _Nonnull responseObject) {
-
-          completion(responseObject, Nil);
-
+        progress:^(NSProgress *_Nonnull downloadProgress) {
         }
-        failure:^(AFHTTPRequestOperation *_Nullable operation, NSError *_Nonnull error) {
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
           completion(Nil, error);
           [self handleError:error];
         }];
 }
 
 - (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
-    AFHTTPRequestOperationManager *manager = [self managerWithFrescoConfigurations];
+    AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
 
     [manager POST:endPoint
         parameters:parameters
-        constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
           NSString *paramNameForImage = @"avatar";
           [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
         }
-        success:^(AFHTTPRequestOperation *operation, id responseObject) {
-          completion(responseObject, Nil);
+        progress:^(NSProgress *_Nonnull uploadProgress) {
 
         }
-        failure:^(AFHTTPRequestOperation *_Nullable operation, NSError *_Nonnull error) {
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
           completion(Nil, error);
           [self handleError:error];
+        }];
+}
+
+- (void)uploadStateID:(NSString *)endPoint withParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:setStateIDEndpoint]];
+    manager.requestSerializer = [[FRSRequestSerializer alloc] init];
+    [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
+    manager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
+    NSString *auth = [NSString stringWithFormat:@"Bearer %@", [EndpointManager sharedInstance].currentEndpoint.stripeKey];
+
+    [manager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
+
+    [manager POST:endPoint
+        parameters:nil
+        constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+          [formData appendPartWithFileData:parameters name:@"file" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+          [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
+        }
+        progress:^(NSProgress *_Nonnull uploadProgress) {
+        }
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          completion(Nil, error);
+          [self handleError:error];
+        }];
+}
+
+- (void)updateTaxInfoWithFileID:(NSString *)fileID completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self post:updateTaxInfoEndpoint
+        withParameters:@{ @"stripe_document_token" : fileID }
+        completion:^(id responseObject, NSError *error) {
+          completion(responseObject, error);
         }];
 }
 
@@ -663,16 +688,6 @@
     [self get:endpoint
         withParameters:nil
             completion:^(id responseObject, NSError *error) {
-              if (error) {
-                  completion(responseObject, error);
-                  return;
-              }
-
-              //        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-              //            completion(responseObject, error);
-              //        }
-
-              // shouldn't happen
               completion(responseObject, error);
             }];
 }
@@ -691,10 +706,9 @@
 
               if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
                   completion(responseObject, error);
+              } else {
+                  completion(nil, error);
               }
-
-              // shouldn't happen
-              completion(responseObject, error);
             }];
 }
 
@@ -822,7 +836,7 @@
         [self unrepostGallery:gallery completion:completion];
         return;
     }
-  
+
     [FRSTracker track:galleryReposted parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"" }];
 
     NSString *endpoint = [NSString stringWithFormat:repostGalleryEndpoint, gallery.uid];
@@ -984,6 +998,15 @@
             }];
 }
 
+- (void)fetchPurchasesForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:purchasesEndpoint, galleryID];
+    [self get:endpoint
+        withParameters:Nil
+            completion:^(id responseObject, NSError *error) {
+              completion(responseObject, error);
+            }];
+}
+
 - (void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:paginateComments, gallery.uid, last];
 
@@ -1019,7 +1042,6 @@
 /* serialization */
 
 - (id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
-
     if ([[response class] isSubclassOfClass:[NSDictionary class]]) {
         NSManagedObjectContext *managedObjectContext = (cache) ? [self managedObjectContext] : Nil;
         NSMutableDictionary *responseObjects = [[NSMutableDictionary alloc] init];
@@ -1054,7 +1076,7 @@
 
             [responseObjects addObject:[self objectFromDictionary:responseObject context:managedObjectContext]];
         }
-        
+
         return responseObjects;
     } else {
     }
@@ -1106,7 +1128,7 @@
             [onboardNav pushViewController:onboardVC animated:NO];
             [tab presentViewController:onboardNav animated:YES completion:Nil];
         }
-        
+
         return TRUE;
     }
 

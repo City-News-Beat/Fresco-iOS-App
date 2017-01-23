@@ -59,6 +59,7 @@
 @property (strong, nonatomic) FRSSetupProfileViewController *setupProfileVC;
 @property CGFloat latitude;
 @property CGFloat longitude;
+@property (strong, nonatomic) NSMutableArray *formViews;
 
 @end
 
@@ -228,6 +229,8 @@
 - (void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
 
+    self.formViews = [[NSMutableArray alloc] init];
+
     [self configureScrollView];
     [self configureTextFields];
     [self configureNotificationSection];
@@ -349,6 +352,7 @@
     self.assignmentsCard = [[UIView alloc] initWithFrame:CGRectMake(0, 192, self.scrollView.frame.size.width, 62)];
     self.assignmentsCard.backgroundColor = [UIColor frescoBackgroundColorLight];
     [self.scrollView addSubview:self.assignmentsCard];
+    [self.formViews addObject:self.assignmentsCard];
 
     UILabel *topLabel = [[UILabel alloc] init];
     topLabel.text = @"ASSIGNMENT NOTIFICATIONS";
@@ -382,6 +386,7 @@
     self.y += 44 + 12; // cc: dan
     self.TOSContainerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.assignmentsCard.frame.origin.y + self.assignmentsCard.frame.size.height + 12, self.view.frame.size.width, 44)];
     [self.scrollView addSubview:self.TOSContainerView];
+    [self.formViews addObject:self.TOSContainerView];
 
     self.TOSCheckBoxButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.TOSCheckBoxButton setImage:[UIImage imageNamed:@"check-disabled"] forState:UIControlStateNormal];
@@ -789,7 +794,6 @@
 }
 
 #pragma mark - TextField Delegate
-
 - (void)textFieldDidChange {
 
     if ((self.emailTF.isEditing) && ([self isValidEmail:self.emailTF.text])) {
@@ -1000,9 +1004,6 @@
 #pragma mark Action Logic
 
 - (void)handleToggleSwitched:(UISwitch *)toggle {
-    //    id<FRSAppDelegate> delegate = (id<FRSAppDelegate>)[[UIApplication sharedApplication] delegate];
-    //    [delegate registerForPushNotifications];
-
     [self checkLocationStatus];
     [self checkNotificationStatus];
 
@@ -1213,11 +1214,6 @@
 
     [self dismissKeyboard];
 
-    //    if (_isAlreadyRegistered) {
-    //        [self segueToSetup];
-    //        return;
-    //    }
-
     if (![self checkFields]) {
         return;
     }
@@ -1308,21 +1304,16 @@
                                                       _pastRegistration = registrationDigest;
 
                                                       [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-                                                      //        Mixpanel *mixpanel = [Mixpanel sharedInstance];
-                                                      //        [mixpanel createAlias:frescoID
-                                                      //                forDistinctID:mixpanel.distinctId];
                                                     }];
 }
 
 - (void)checkEmail {
-
     [[FRSAPIClient sharedClient] checkEmail:self.emailTF.text
                                  completion:^(id responseObject, NSError *error) {
                                    if (!error) {
                                        self.emailTaken = YES;
                                        [self shouldShowEmailDialogue:YES];
                                        [self presentInvalidEmail];
-
                                    } else {
                                        self.emailTaken = NO;
                                        [self shouldShowEmailDialogue:NO];
@@ -1785,36 +1776,47 @@
 }
 
 - (void)shouldShowEmailDialogue:(BOOL)yes {
-
     if (yes) {
         self.emailError = YES;
 
         self.errorContainer.alpha = 1;
 
+        NSArray *views = [self.scrollView subviews];
+
+        NSLog(@"%lu", (unsigned long)[views count]);
+
         if (self.notificationsEnabled) {
+
+            //            for(UIView *subview in vi)
 
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 44);
-            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
+            //self.promoContainer.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
+            //self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
+            NSLog(@"TOSContainer View Y %f", self.TOSContainerView.frame.origin.y);
+            self.TOSContainerView.frame = CGRectMake(self.TOSContainerView.frame.origin.x, 658, self.TOSContainerView.frame.size.width, self.TOSContainerView.frame.size.height);
+            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + 44);
 
         } else {
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
-            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 44);
+            //self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 44);
             self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, 44);
         }
 
     } else {
         self.emailError = NO;
 
-        if (self.notificationsEnabled) {
+        self.errorContainer.alpha = 0;
 
+        self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
+        self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
+        self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
+
+        if (self.notificationsEnabled) {
+            self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
         } else {
-            self.errorContainer.alpha = 0;
-            self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
-            self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
-            self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);
             self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, 0);
         }
     }

@@ -761,16 +761,16 @@
     //  [super configureNavigationBar];
     [super removeNavigationBarLine];
 
-    //self.navigationItem.title = @"@aesthetique";
     titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.frame.size.height)];
     titleLabel.text = @"";
     titleLabel.font = [UIFont fontWithName:@"Nota-Bold" size:17];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
+    // titleLabel.text = [NSString stringWithFormat:@"@%@", self.representedUser.username];
+    [titleLabel sizeToFit];
     self.navigationItem.titleView = titleLabel;
 
-    //NSLog(@"CHILDREN: %lu", self.navigationController.childViewControllers.count);
-
+    
     if (self.representedUser.isLoggedIn && [self.navigationController.childViewControllers objectAtIndex:0] == self) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"bell-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showNotificationsAnimated)];
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pen-icon"] style:UIBarButtonItemStylePlain target:self action:@selector(showEditProfile)];
@@ -1173,7 +1173,7 @@
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
-    vc.openedFrom = @"Profile";
+    vc.openedFrom = @"profile";
 
     [super showNavBarForScrollView:self.tableView animated:NO];
 

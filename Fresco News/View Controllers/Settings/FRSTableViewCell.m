@@ -704,6 +704,7 @@
     [bioLabel sizeToFit];
     bioLabel.frame = CGRectMake(72, 34, [UIScreen mainScreen].bounds.size.width - 72 - 56, bioLabel.frame.size.height);
     [self addSubview:bioLabel];
+    [bioLabel sizeToFit];
 
     self.followingButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.followingButton addTarget:self action:@selector(follow) forControlEvents:UIControlEventTouchUpInside];

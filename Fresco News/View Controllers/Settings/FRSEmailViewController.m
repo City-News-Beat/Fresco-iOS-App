@@ -15,14 +15,13 @@
 
 @interface FRSEmailViewController ()
 
-@property (strong, nonatomic) FRSTableViewCell *cell;
 @property (strong, nonatomic) FRSAlertView *alert;
 @property (strong, nonatomic) UIImageView *errorImageView;
-@property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *password;
-@property (strong, nonatomic) UITextField *passwordTextField;
-
+@property (strong, nonatomic) IBOutlet UITextField *emailTextField;
+@property (strong, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (strong, nonatomic) IBOutlet UIButton *saveButton;
 @property BOOL emailIsValid;
 @property BOOL passwordIsValid;
 
@@ -33,95 +32,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self configureTableView];
-    [self configureBackButtonAnimated:NO];
-}
-
-- (void)configureTableView {
-
     self.title = @"EMAIL ADDRESS";
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height - 64;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
-    self.tableView.showsVerticalScrollIndicator = NO;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.bounces = NO;
-    self.tableView.backgroundColor = [UIColor frescoBackgroundColorDark];
-    [self.tableView setSeparatorColor:[UIColor clearColor]];
-    [self.view addSubview:self.tableView];
-}
 
-#pragma mark - UITableView
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 44;
-}
-
-- (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *cellIdentifier;
-    self.cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (self.cell == nil) {
-        self.cell = [[FRSTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-    }
-    if ([self.cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [self.cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-    if ([self.cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
-        [self.cell setPreservesSuperviewLayoutMargins:NO];
-    }
-    if ([self.cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [self.cell setLayoutMargins:UIEdgeInsetsZero];
-    }
-    return self.cell;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    cell = self.cell;
-
-    switch (indexPath.row) {
-    case 0:
-        [cell configureEditableCellWithDefaultText:@"New email" withTopSeperator:YES withBottomSeperator:YES isSecure:NO withKeyboardType:UIKeyboardTypeEmailAddress];
-        cell.textField.delegate = self;
-        cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
-        [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
-        cell.textField.returnKeyType = UIReturnKeyNext;
-        break;
-
-    case 1:
-        [cell configureEditableCellWithDefaultText:@"Password" withTopSeperator:NO withBottomSeperator:YES isSecure:YES withKeyboardType:UIKeyboardTypeDefault];
-        cell.textField.delegate = self;
-        [cell.textField addTarget:self action:@selector(textField:shouldChangeCharactersInRange:replacementString:) forControlEvents:UIControlEventEditingChanged];
-        cell.textField.returnKeyType = UIReturnKeyDone;
-        self.passwordTextField = cell.textField;
-        break;
-
-    case 2:
-        [cell configureCellWithRightAlignedButtonTitle:@"SAVE EMAIL" withWidth:109 withColor:[UIColor frescoLightTextColor]];
-        [cell.rightAlignedButton addTarget:self action:@selector(saveEmail) forControlEvents:UIControlEventTouchUpInside];
-        break;
-
-    default:
-        break;
-    }
-
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [self configureBackButtonAnimated:NO];
 }
 
 #pragma mark - Actions
 
-- (void)saveEmail {
+- (IBAction)saveEmail:(id)sender {
 
     if (!self.emailIsValid || !self.passwordIsValid) {
         return;
@@ -196,13 +114,12 @@
         self.errorImageView.alpha = 1; // 0 when animating
         [self.view addSubview:self.errorImageView];
 
-        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        self.cell.rightAlignedButton.userInteractionEnabled = NO;
+        [self.saveButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.saveButton.userInteractionEnabled = NO;
     }
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
-
     if (textField.isSecureTextEntry) {
         //User is editing password textField
         self.password = textField.text;
@@ -223,37 +140,23 @@
     }
 
     if (self.emailIsValid && self.passwordIsValid) {
-        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
-        self.cell.rightAlignedButton.userInteractionEnabled = YES;
+
+        [self.saveButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
+        self.saveButton.userInteractionEnabled = YES;
     } else {
-        [self.cell.rightAlignedButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
-        self.cell.rightAlignedButton.userInteractionEnabled = NO;
+        [self.saveButton setTitleColor:[UIColor frescoLightTextColor] forState:UIControlStateNormal];
+        self.saveButton.userInteractionEnabled = NO;
     }
 
     return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-
-    /*if (textField.isSecureTextEntry) {
-        
-        if (!self.passwordIsValid || !self.emailIsValid) {
-            return NO;
-        }
-        
-        [textField resignFirstResponder];
-        [self saveEmail];
-    }*/
-
-    FRSTableViewCell *currentCell = (FRSTableViewCell *)textField.superview.superview;
-    NSIndexPath *currentIndexPath = [self.tableView indexPathForCell:currentCell];
-    NSIndexPath *nextIndexPath = [NSIndexPath indexPathForRow:currentIndexPath.row + 1 inSection:0];
-    FRSTableViewCell *nextCell = (FRSTableViewCell *)[self.tableView cellForRowAtIndexPath:nextIndexPath];
-    [nextCell.textField becomeFirstResponder];
-
-    if (textField == self.passwordTextField) {
+    if (textField == self.emailTextField) {
+        [self.passwordTextField becomeFirstResponder];
+    } else if (textField == self.passwordTextField) {
         [self.view resignFirstResponder];
-        [self saveEmail];
+        [self saveEmail:nil];
     }
 
     return YES;

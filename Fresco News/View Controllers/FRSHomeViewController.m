@@ -23,8 +23,12 @@
 #import "FRSGallery+CoreDataProperties.h"
 #import "FRSFollowingTable.h"
 #import "FRSLocationManager.h"
+<<<<<<< HEAD
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+=======
+#import "FRSNotificationHandler.h"
+>>>>>>> dev
 
 @interface FRSHomeViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
     BOOL isLoading;
@@ -105,6 +109,11 @@
             }
         }
     }
+    
+//    [FRSNotificationHandler segueToTodayInNews:@[@"LJE0QZvXo1G5"] title:@"hello"];
+    
+//    [FRSNotificationHandler handleNotification:@{@"type" : @"user-news-today-in-news"}];
+    
 }
 
 + (NSInteger)daysBetweenDate:(NSDate *)fromDateTime andDate:(NSDate *)toDateTime {
@@ -234,8 +243,9 @@
     if (entry) {
         exit = [NSDate date];
         NSInteger sessionLength = [exit timeIntervalSinceDate:entry];
-        [FRSTracker track:highlightsSession parameters:@{ activityDuration : @(sessionLength),
-                                                          @"galleries_scrolled_past" : @(numberRead) }];
+        [FRSTracker track:highlightsSession
+               parameters:@{ activityDuration : @(sessionLength),
+                             @"galleries_scrolled_past" : @(numberRead) }];
     }
 
     [self removeStatusBarNotification];
@@ -558,32 +568,38 @@
 }
 
 - (void)cacheLocalData:(NSArray *)localData {
-    [self.appDelegate.managedObjectContext performBlock:^{
-      self.dataSource = [[NSMutableArray alloc] init];
-      self.highlights = [[NSMutableArray alloc] init];
-
-      NSInteger localIndex = 0;
-      for (NSDictionary *gallery in localData) {
-          FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
-
-          [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
-          [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
-          [self.dataSource addObject:galleryToSave];
-          [self.highlights addObject:galleryToSave];
-          localIndex++;
-      }
-
-      [self.appDelegate.managedObjectContext save:Nil];
-      [self.appDelegate saveContext];
-
-      [self.tableView reloadData];
-
-      for (FRSGallery *gallery in self.cachedData) {
-          [self.appDelegate.managedObjectContext deleteObject:gallery];
-      }
-
-      [self.appDelegate saveContext];
-    }];
+    
+    if (self.appDelegate.managedObjectContext) {
+        [self.appDelegate.managedObjectContext performBlock:^{
+            self.dataSource = [[NSMutableArray alloc] init];
+            self.highlights = [[NSMutableArray alloc] init];
+            
+            NSInteger localIndex = 0;
+            for (NSDictionary *gallery in localData) {
+                FRSGallery *galleryToSave = [NSEntityDescription insertNewObjectForEntityForName:@"FRSGallery" inManagedObjectContext:[self.appDelegate managedObjectContext]];
+                
+                [galleryToSave configureWithDictionary:gallery context:[self.appDelegate managedObjectContext]];
+                [galleryToSave setValue:[NSNumber numberWithInteger:localIndex] forKey:@"index"];
+                [self.dataSource addObject:galleryToSave];
+                [self.highlights addObject:galleryToSave];
+                localIndex++;
+            }
+            
+            if ([self.appDelegate.managedObjectContext hasChanges]) {
+                [self.appDelegate.managedObjectContext save:Nil];
+            }
+            
+            [self.appDelegate saveContext];
+            
+            [self.tableView reloadData];
+            
+            for (FRSGallery *gallery in self.cachedData) {
+                [self.appDelegate.managedObjectContext deleteObject:gallery];
+            }
+            
+            [self.appDelegate saveContext];
+        }];
+    }
 }
 
 - (void)reloadFromLocal {
@@ -816,8 +832,9 @@
     [self.navigationController presentViewController:activityController animated:YES completion:nil];
     NSString *url = content[0];
     url = [[url componentsSeparatedByString:@"/"] lastObject];
-    [FRSTracker track:galleryShared parameters:@{ @"gallery_id" : url,
-                                                  @"shared_from" : @"highlights" }];
+    [FRSTracker track:galleryShared
+           parameters:@{ @"gallery_id" : url,
+                         @"shared_from" : @"highlights" }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -832,7 +849,7 @@
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.gallery = gallery;
     vc.shouldHaveBackButton = YES;
-    vc.openedFrom = @"Following";
+    vc.openedFrom = @"following";
 
     [super showNavBarForScrollView:self.tableView animated:NO];
 
@@ -847,13 +864,14 @@
 - (void)goToExpandedGalleryForContentBarTap:(NSIndexPath *)notification {
 
     FRSGallery *gallery = self.dataSource[notification.row];
-    [FRSTracker track:galleryOpenedFromHighlights parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"",
-                                                                @"opened_from" : @"highlights" }];
+    [FRSTracker track:galleryOpenedFromHighlights
+           parameters:@{ @"gallery_id" : (gallery.uid != Nil) ? gallery.uid : @"",
+                         @"opened_from" : @"highlights" }];
 
     FRSGalleryExpandedViewController *vc = [[FRSGalleryExpandedViewController alloc] initWithGallery:gallery];
     vc.shouldHaveBackButton = YES;
     vc.gallery = gallery;
-    vc.openedFrom = @"Highlights";
+    vc.openedFrom = @"highlights";
 
     [super showNavBarForScrollView:self.tableView animated:NO];
 

@@ -271,9 +271,8 @@
     self.bankButton.alpha = 0.7;
 }
 
-- (void)saveBankInfo {
-    [Stripe setDefaultPublishableKey:[EndpointManager sharedInstance].currentEndpoint.stripeKey];
 
+- (void)saveBankInfo {
     if (!self.loadingView) {
         [self configureSpinner];
     }
@@ -482,8 +481,6 @@
 
     [self startSpinner:self.loadingView onButton:self.rightAlignedButton];
 
-    [Stripe setDefaultPublishableKey:[EndpointManager sharedInstance].currentEndpoint.stripeKey];
-
     NSArray *components = [expirationDateTextField.text componentsSeparatedByString:@"/"];
     NSArray *expiration;
 
@@ -517,11 +514,9 @@
 
                           [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId
                                                                    completion:^(id responseObject, NSError *error) {
-
                                                                      if (error) {
-                                                                         self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                                         self.alertView = [[FRSAlertView alloc] initWithTitle:@"SAVE ID ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                                                                          [self.alertView show];
-                                                                         [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
                                                                      } else if (responseObject) {
                                                                          NSString *brand = [responseObject objectForKey:@"brand"];
                                                                          NSString *last4 = [responseObject objectForKey:@"last4"];

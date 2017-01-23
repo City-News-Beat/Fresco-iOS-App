@@ -192,9 +192,9 @@
 
     NSNumber *numReposts = [self.gallery valueForKey:@"reposts"];
     BOOL isReposted = ![[self.gallery valueForKey:@"reposted"] boolValue];
-    
-   // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
-    
+
+    // NSString *repostedBy = [self.gallery valueForKey:@"repostedBy"];
+
     [self.actionBar handleRepostState:isReposted];
     [self.actionBar handleRepostAmount:[numReposts intValue]];
     [self.actionBar handleHeartState:isLiked];
@@ -226,18 +226,18 @@
     });
 }
 
--(void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
+- (void)handleLikeLabelTapped:(FRSContentActionsBar *)actionBar {
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
--(void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
+- (void)handleRepostLabelTapped:(FRSContentActionsBar *)actionBar {
     FRSDualUserListViewController *vc = [[FRSDualUserListViewController alloc] initWithGallery:self.gallery.uid];
     vc.didTapRepostLabel = YES;
     [self.delegate.navigationController pushViewController:vc animated:YES];
 }
 
--(void)handleActionButtonTapped {
+- (void)handleActionButtonTapped {
 
     // idk why dan made this method life is a mystery
 
@@ -277,24 +277,24 @@
                                         }];
 
     } else {
-        [[FRSAPIClient sharedClient] likeGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            if (error) {
-                [actionBar handleHeartState:FALSE];
-                [actionBar handleHeartAmount:likes];
-                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                NSInteger responseCode = response.statusCode;
-                
-                // 400 status code means the user has already liked the gallery, should soft fail.
-                if (error.code != 101 && responseCode != 400) {
-                    self.gallery.numberOfLikes ++;
-                }
-            }
-        }];
+        [[FRSAPIClient sharedClient] likeGallery:self.gallery
+                                      completion:^(id responseObject, NSError *error) {
+                                        if (error) {
+                                            [actionBar handleHeartState:FALSE];
+                                            [actionBar handleHeartAmount:likes];
+                                            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                            NSInteger responseCode = response.statusCode;
+
+                                            // 400 status code means the user has already liked the gallery, should soft fail.
+                                            if (error.code != 101 && responseCode != 400) {
+                                                self.gallery.numberOfLikes++;
+                                            }
+                                        }
+                                      }];
     }
 }
 
-
--(void)handleRepost:(FRSContentActionsBar *)actionBar {
+- (void)handleRepost:(FRSContentActionsBar *)actionBar {
 
     /*if (![[FRSAPIClient sharedClient] authenticatedUser]) {
         return;
@@ -313,19 +313,20 @@
                                             }
                                           }];
     } else {
-        [[FRSAPIClient sharedClient] repostGallery:self.gallery completion:^(id responseObject, NSError *error) {
-            if (error) {
-                [actionBar handleRepostState:FALSE];
-                [actionBar handleRepostAmount:reposts];
-                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                NSInteger responseCode = response.statusCode;
-                
-                // 400 status code means the user has already reposted the gallery, should soft fail.
-                if (error.code != 101 && responseCode != 400) {
-                    self.gallery.numberOfReposts++;
-                }
-            }
-        }];
+        [[FRSAPIClient sharedClient] repostGallery:self.gallery
+                                        completion:^(id responseObject, NSError *error) {
+                                          if (error) {
+                                              [actionBar handleRepostState:FALSE];
+                                              [actionBar handleRepostAmount:reposts];
+                                              NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                              NSInteger responseCode = response.statusCode;
+
+                                              // 400 status code means the user has already reposted the gallery, should soft fail.
+                                              if (error.code != 101 && responseCode != 400) {
+                                                  self.gallery.numberOfReposts++;
+                                              }
+                                          }
+                                        }];
     }
 }
 
@@ -352,7 +353,29 @@
     return self;
 }
 
+- (void)configureWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryViewDelegate>)delegate {
+    [self setFrame:frame];
+
+    self.delegate = delegate;
+    self.gallery = gallery;
+    NSMutableArray *posts = [[NSMutableArray alloc] init];
+
+    for (FRSPost *post in self.gallery.posts) {
+        [posts addObject:post];
+    }
+
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES];
+    [posts sortUsingDescriptors:[NSArray arrayWithObject:sort]];
+
+    self.orderedPosts = posts;
+    self.orderedPosts = [self.orderedPosts sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"createdDate" ascending:FALSE] ]];
+
+    [self configureUI];
+    [self updateSocial];
+}
+
 - (void)contentTap:(UITapGestureRecognizer *)sender {
+    //NSLog(@"TAP");
 }
 
 - (void)configureUI {

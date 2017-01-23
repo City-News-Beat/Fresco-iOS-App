@@ -18,11 +18,24 @@
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
 
-@interface FRSLoginViewController () <UITextFieldDelegate, FRSAlertViewDelegate>
+@interface FRSLoginViewController () <UITextFieldDelegate>
+
+@property (weak, nonatomic) IBOutlet UIImageView *logoView;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UITextField *userField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordField;
+@property (weak, nonatomic) IBOutlet UIView *usernameHighlightLine;
+@property (weak, nonatomic) IBOutlet UIView *passwordHighlightLine;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet UIButton *twitterButton;
+@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
+@property (weak, nonatomic) IBOutlet UILabel *socialLabel;
+@property (weak, nonatomic) IBOutlet UIButton *passwordHelpButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *socialTopConstraint;
 
 @property (nonatomic) BOOL didAnimate;
 @property (nonatomic) BOOL didTransform;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *socialTopConstraint;
+
 @property (strong, nonatomic) DGElasticPullToRefreshLoadingViewCircle *loadingView;
 @property (strong, nonatomic) UILabel *invalidUserLabel;
 @property (nonatomic) BOOL didAuthenticateSocial;
@@ -75,13 +88,6 @@
     [self.passwordField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 
     self.loginButton.enabled = NO;
-
-    self.backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.backButton.frame = CGRectMake(12, 30, 24, 24);
-    [self.backButton setImage:[UIImage imageNamed:@"back-arrow-dark"] forState:UIControlStateNormal];
-    [self.backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    //    self.backButton.tintColor = [UIColor frescoMediumTextColor];
-    [self.view addSubview:self.backButton];
 
     self.view.backgroundColor = [UIColor frescoBackgroundColorLight];
 
@@ -180,14 +186,11 @@
 }
 
 - (IBAction)login:(id)sender {
-
     [self dismissKeyboard];
 
     //Animate transition
     NSString *username = _userField.text;
-    //    username = [username stringByReplacingOccurrencesOfString:@"@" withString:@""];
 
-    //username = [username stringByReplacingOccurrencesOfString:@"@" withString:@""];
     if ([[username substringToIndex:1] isEqualToString:@"@"]) {
         username = [username substringFromIndex:1];
     }
@@ -210,13 +213,11 @@
     [[FRSAuthManager sharedInstance] signIn:username
                                    password:password
                                  completion:^(id responseObject, NSError *error) {
-
                                    if (error) {
                                        [FRSTracker track:loginError
                                               parameters:@{ @"method" : @"email",
                                                             @"error" : error.localizedDescription }];
                                    }
-
                                    [self stopSpinner:self.loadingView onButton:self.loginButton];
 
                                    if (error.code == 0) {
@@ -252,7 +253,6 @@
 
                                    NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
                                    NSInteger responseCode = response.statusCode;
-                                   NSLog(@"Login Error: %ld", (long)responseCode);
 
                                    if (responseCode == 401) {
                                        [self presentInvalidInfo];
@@ -356,7 +356,6 @@
     [spinner startAnimating];
     [self.twitterButton.superview addSubview:spinner];
     [spinner setFrame:CGRectMake(self.twitterButton.frame.origin.x, self.twitterButton.frame.origin.y, self.twitterButton.frame.size.width, self.twitterButton.frame.size.width)];
-    //NSLog(@"%f x %f", self.twitterButton.frame.size.width,self.twitterButton.frame.size.width-2);
 
     [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *responseObject) {
 
@@ -386,9 +385,7 @@
       }
 
       if (error) {
-
           if (error.code == -1009) {
-
               self.alert = [[FRSAlertView alloc] initNoConnectionAlert];
               [self.alert show];
               [spinner stopLoading];
@@ -397,7 +394,7 @@
               return;
           }
 
-          NSLog(@"Twitter Login Error: %@", error);
+          NSLog(@"TWITTER SIGN IN: %@", error);
 
           FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"COULDN’T LOG IN" message:@"We couldn’t verify your Twitter account. Please try logging in with your email and password." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
           [alert show];
@@ -410,12 +407,8 @@
 }
 
 - (void)popToOrigin {
-
-    //FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-    //[appDelegate reloadUser];
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     [appDelegate reloadUser];
-    //[appDelegate registerForPushNotifications];
 
     NSArray *viewControllers = [self.navigationController viewControllers];
 
@@ -439,25 +432,8 @@
       [[NSNotificationCenter defaultCenter] postNotificationName:@"user-did-login" object:nil];
     });
 }
-/*-(void)displayMigrationAlert {
-    
-    if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
-        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
-        alert.delegate = self;
-        [alert show];
-    }
-}*/
-
-//-(void)displayMigrationAlert {
-//    if (![[FRSAPIClient sharedClient] authenticatedUser].username) {
-//        FRSAlertView *alert = [[FRSAlertView alloc] initNewStuffWithPasswordField:[[NSUserDefaults standardUserDefaults] boolForKey:@"needs-password"]];
-//        alert.delegate = self;
-//        [alert show];
-//    }
-//}
 
 - (IBAction)facebook:(id)sender {
-
     self.facebookButton.hidden = true;
     DGElasticPullToRefreshLoadingViewCircle *spinner = [[DGElasticPullToRefreshLoadingViewCircle alloc] init];
     spinner.tintColor = [UIColor frescoOrangeColor];
@@ -541,13 +517,13 @@
     [self.passwordField becomeFirstResponder];
 }
 
-- (void)back {
+- (IBAction)back:(id)sender {
     [self dismissKeyboard];
     [self animateOut];
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 / 2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
       [self.navigationController popViewControllerAnimated:NO];
-      //        [self.navigationController popToRootViewControllerAnimated:NO];
+
       [[NSNotificationCenter defaultCenter]
           postNotificationName:@"returnToOnboard"
                         object:self];
@@ -575,11 +551,11 @@
     if (textField == self.userField) {
         if ((![self isValidUsername:self.userField.text] && ![self validEmail:self.userField.text]) || [self.userField.text isEqualToString:@""]) {
             [self animateTextFieldError:textField];
-            return FALSE;
+            return NO;
         }
     }
 
-    return TRUE;
+    return YES;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -633,11 +609,7 @@
 }
 
 - (void)textFieldDidChange:(UITextField *)textField {
-
-    //    self.loginButton.enabled = YES; //FOR TESTING
-
     if ((self.userField.text && self.userField.text.length > 0) && (self.passwordField.text && self.passwordField.text.length >= 1)) {
-
         if ([self validEmail:self.userField.text] || [self isValidUsername:self.userField.text]) {
 
             self.loginButton.enabled = YES;
@@ -651,7 +623,6 @@
                             completion:nil];
 
         } else {
-
             [UIView transitionWithView:self.loginButton
                               duration:0.2
                                options:UIViewAnimationOptionTransitionCrossDissolve
@@ -1293,14 +1264,6 @@
                      }
                      completion:nil];
 }
-
-#pragma mark - FRSAlertView Delegate
-
-//-(void)didPressButtonAtIndex:(NSInteger)index {
-//    if (index == 0) {
-//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-//    }
-//}
 
 @end
 

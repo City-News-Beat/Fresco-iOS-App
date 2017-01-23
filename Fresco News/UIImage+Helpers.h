@@ -13,4 +13,3 @@
 - (UIImage *)tintedImageWithColor:(UIColor *)tintColor blendingMode:(CGBlendMode)blendMode;
 
 @end
-

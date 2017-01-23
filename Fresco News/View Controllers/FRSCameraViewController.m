@@ -97,28 +97,22 @@
 @property (nonatomic, strong) FRSTabBarController *tabBarController;
 
 @property (strong, nonatomic) CAShapeLayer *circleLayer;
-
 @property (nonatomic) BOOL isRecording;
-
 @property (strong, nonatomic) NSTimer *videoTimer;
 
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 
 @property (nonatomic) BOOL firstTime;
-
 @property (nonatomic) BOOL firstTimeAni;
 
 @property (nonatomic) CGRect originalApertureFrame;
-
 @property (nonatomic) UIDeviceOrientation lastOrientation;
-
 @property (nonatomic) CGFloat rotationIVOriginalY;
 
 @property (nonatomic, retain) NSMutableArray *positions;
-
 @property (strong, nonatomic) UIView *alertContainer;
-
 @property (nonatomic) BOOL didPush;
+
 @end
 
 @implementation FRSCameraViewController
@@ -257,15 +251,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-
-    //    @try {
-    //        [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
-    //        [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
-    //        [[NSNotificationCenter defaultCenter] removeObserver:self];
-    //    }
-    //    @catch (NSException *e) {
-
-    //    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -297,7 +282,7 @@
     [super viewDidAppear:animated];
 
     entry = [NSDate date];
-    [self fadeInPreview];
+    self.preview.alpha = 1.0;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -320,16 +305,6 @@
     [self.motionManager stopAccelerometerUpdates];
     [self.motionManager stopGyroUpdates];
     [self shouldShowStatusBar:YES animated:YES];
-}
-
-- (void)fadeInPreview {
-    dispatch_async(dispatch_get_main_queue(), ^{
-
-      //        [UIView animateWithDuration:0.2 animations:^{
-      self.preview.alpha = 1.0;
-      //        }];
-
-    });
 }
 
 #pragma mark - UI configuration methods
@@ -416,11 +391,6 @@
 }
 
 - (void)dismissAndReturnToPreviousTab {
-
-    //    FRSTabBarController *tabBarController = ((FRSTabBarController *)self.presentingViewController);
-    //
-    ////    tabBarController.selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:previouslySelectedTabKey];
-
     [self dismissViewControllerAnimated:YES completion:nil];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self shouldShowStatusBar:YES animated:YES];
@@ -514,7 +484,6 @@
 }
 
 - (void)configureNextSection {
-
     self.previewBackgroundIV = [[UIImageView alloc] initWithFrame:CGRectMake(SIDE_PAD, 0, PREVIEW_WIDTH, PREVIEW_WIDTH)];
     self.previewBackgroundIV.image = [UIImage imageNamed:@"white-background-circle"];
     [self.previewBackgroundIV centerVerticallyInView:self.bottomClearContainer];
@@ -539,44 +508,9 @@
     [self.nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.nextButton setBackgroundColor:[UIColor whiteColor]];
     [self.nextButton clipAsCircle];
-    //    [self.nextButton.titleLabel setFont:[UIFont systemFontOfSize:15 weight:700]];
     [self.nextButton.titleLabel setFont:[UIFont notaBoldWithSize:15]];
-    //    [self.nextButton addObserver:self forKeyPath:@"highlighted" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self.nextButton addTarget:self action:@selector(handlePreviewButtonTapped) forControlEvents:UIControlEventTouchUpInside];
 }
-
-//-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
-//    if ([keyPath isEqualToString:@"highlighted"]){
-//
-//        NSNumber *new = [change objectForKey:@"new"];
-//        NSNumber *old = [change objectForKey:@"old"];
-//
-//        if ([new isEqualToNumber:@1] && [old isEqualToNumber:@0]){ //Was unhighlighted and then became highlighted
-//            if (object == self.nextButton)
-//                self.previewBackgroundIV.alpha = 0.7;
-//            else if (object == self.flashButton)
-//                self.flashButton.alpha = 0.7;
-//        }
-//        else if ([new isEqualToNumber:@0] && [old isEqualToNumber:@1]){ //Was highlighted and now unhighlighted
-//            if (object == self.nextButton)
-//                self.previewBackgroundIV.alpha = 1.0;
-//            else if (object == self.flashButton)
-//                self.flashButton.alpha = 1.0;
-//        }
-//        else if ([new isEqualToNumber:@1] && [old isEqualToNumber:@1]){ //Was highlighted and is staying highlighted
-//            if (object == self.nextButton)
-//                self.previewBackgroundIV.alpha = 0.7;
-//            else if (object == self.flashButton)
-//                self.flashButton.alpha = 0.7;
-//        }
-//        else {
-//            if (object == self.nextButton)
-//                self.previewBackgroundIV.alpha = 1.0;
-//            else if (object == self.flashButton)
-//                self.flashButton.alpha = 1.0;
-//        }
-//    }
-//}
 
 - (void)configureApertureButton {
 
@@ -1793,23 +1727,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-//-(void)dealloc{
-//
-//    @try {
-////        [self.nextButton removeObserver:self forKeyPath:@"highlighted"];
-////        [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
-////        [[NSNotificationCenter defaultCenter] removeObserver:self];
-//    }
-//    @catch(NSException *e) {
-//        @try {
-//            [self.flashButton removeObserver:self forKeyPath:@"highlighted"];
-//        }
-//        @catch (NSException *e) {
-//
-//        }
-//    }
-//}
-
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
 
     //    if (self.locationManager.managerState == LocationManagerStateForeground)
@@ -1841,7 +1758,6 @@
 }
 
 - (void)updateLocationLabelWithAssignment:(FRSAssignment *)assignment {
-
     dispatch_async(dispatch_get_main_queue(), ^{
       if (!assignment.title)
           return;
@@ -1857,7 +1773,6 @@
 }
 
 - (void)runVideoRecordAnimation {
-
     self.captureModeToggleView.alpha = 0.0;
 
     [UIView animateWithDuration:0.4
@@ -1911,8 +1826,6 @@
 
     // Add the animation to the circle
     [self.circleLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-
-    //    }
 }
 
 - (void)stopRecordingAnimation {

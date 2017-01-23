@@ -1255,6 +1255,7 @@ static NSString *const cellIdentifier = @"assignment-cell";
     NSArray *posts = postData[@"posts_new"];
 
     int i = 0;
+    [[FRSUploadManager sharedUploader] setUploadsToComplete:(int)self.content.count];
     for (PHAsset *asset in self.content) {
         NSDictionary *post = posts[i];
         NSString *key = post[@"key"];
