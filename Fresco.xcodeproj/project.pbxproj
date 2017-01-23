@@ -34,7 +34,6 @@
 		07A138BF1CBC053C00163BA0 /* FRSLoadingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A138BE1CBC053C00163BA0 /* FRSLoadingTableViewCell.m */; };
 		07A2C1481DEE2ED900B8445F /* FRSGalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A2C1461DEE2ED900B8445F /* FRSGalleryView.m */; };
 		07A2C14B1DEE2EE000B8445F /* FRSPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A2C14A1DEE2EE000B8445F /* FRSPlayer.m */; };
-		07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */; };
 		07A30BFE1C50488800C536EB /* FRSDebitCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */; };
 		07A30BFF1C50488800C536EB /* FRSDisableAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BEC1C50488800C536EB /* FRSDisableAccountViewController.m */; };
 		07A30C001C50488800C536EB /* FRSEmailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BEE1C50488800C536EB /* FRSEmailViewController.m */; };
@@ -43,7 +42,6 @@
 		07A30C031C50488800C536EB /* FRSRadiusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF41C50488800C536EB /* FRSRadiusViewController.m */; };
 		07A30C041C50488800C536EB /* FRSSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF61C50488800C536EB /* FRSSettingsViewController.m */; };
 		07A30C051C50488800C536EB /* FRSTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BF81C50488800C536EB /* FRSTableViewCell.m */; };
-		07A30C061C50488800C536EB /* FRSTaxInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BFA1C50488800C536EB /* FRSTaxInformationViewController.m */; };
 		07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */; };
 		07A30C0A1C50494700C536EB /* FRSStoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C091C50494700C536EB /* FRSStoryView.m */; };
 		07A30C0D1C50495C00C536EB /* FRSStoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A30C0C1C50495C00C536EB /* FRSStoriesViewController.m */; };
@@ -143,6 +141,11 @@
 		CAF0928C1E25923100F7F711 /* FRSGalleryStatusView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CAF0928B1E25923100F7F711 /* FRSGalleryStatusView.xib */; };
 		CE0CAE621E1579CA00CDE511 /* Endpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0CAE611E1579CA00CDE511 /* Endpoint.m */; };
 		CE12A5F91E14747A0032E72F /* EndpointManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12A5F81E14747A0032E72F /* EndpointManager.m */; };
+		CE2A704E1E1D8F5600D5D13B /* FRSEmailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2A704D1E1D8F5600D5D13B /* FRSEmailViewController.xib */; };
+		CEB3E8961E14180F000E2B78 /* FRSSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */; };
+		CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */; };
+		CEC20DE91E1C6BC000532D75 /* FRSIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC20DE81E1C6BC000532D75 /* FRSIdentityViewController.m */; };
+		CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEDE171B1E2EB90C00818B7B /* FRSIdentityViewController.xib */; };
 		D400FA521D6DE6B3008842E1 /* FRSComment.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA511D6DE6B3008842E1 /* FRSComment.m */; };
 		D400FA581D6DF57E008842E1 /* FRSCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D400FA561D6DF57E008842E1 /* FRSCommentCell.m */; };
 		D400FA591D6DF57E008842E1 /* FRSCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D400FA571D6DF57E008842E1 /* FRSCommentCell.xib */; };
@@ -229,7 +232,6 @@
 		D4BE3E2D1D17D6530039394C /* FRSCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BE3E2C1D17D6530039394C /* FRSCarousel.m */; };
 		D4BE3E311D17D6760039394C /* FRSCarouselCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4BE3E2F1D17D6760039394C /* FRSCarouselCell.m */; };
 		D4BE3E321D17D6760039394C /* FRSCarouselCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4BE3E301D17D6760039394C /* FRSCarouselCell.xib */; };
-		D4C217CA1D63AE230076172D /* FRSIdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C217C91D63AE230076172D /* FRSIdentityViewController.m */; };
 		D4C217CE1D63B7B40076172D /* FRSPaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C217CD1D63B7B40076172D /* FRSPaymentViewController.m */; };
 		D4C217D31D64DC010076172D /* FRSPaymentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4C217D11D64DC010076172D /* FRSPaymentCell.m */; };
 		D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4C217D21D64DC010076172D /* FRSPaymentCell.xib */; };
@@ -354,8 +356,6 @@
 		07A2C1471DEE2ED900B8445F /* FRSGalleryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSGalleryView.h; sourceTree = "<group>"; };
 		07A2C1491DEE2EE000B8445F /* FRSPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPlayer.h; sourceTree = "<group>"; };
 		07A2C14A1DEE2EE000B8445F /* FRSPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPlayer.m; sourceTree = "<group>"; };
-		07A30BE71C50488800C536EB /* FRSBusinessTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSBusinessTypeViewController.h; path = "Fresco News/View Controllers/Settings/FRSBusinessTypeViewController.h"; sourceTree = "<group>"; };
-		07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSBusinessTypeViewController.m; path = "Fresco News/View Controllers/Settings/FRSBusinessTypeViewController.m"; sourceTree = "<group>"; };
 		07A30BE91C50488800C536EB /* FRSDebitCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSDebitCardViewController.h; path = "Fresco News/View Controllers/Settings/FRSDebitCardViewController.h"; sourceTree = "<group>"; };
 		07A30BEA1C50488800C536EB /* FRSDebitCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSDebitCardViewController.m; path = "Fresco News/View Controllers/Settings/FRSDebitCardViewController.m"; sourceTree = "<group>"; };
 		07A30BEB1C50488800C536EB /* FRSDisableAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSDisableAccountViewController.h; path = "Fresco News/View Controllers/Settings/FRSDisableAccountViewController.h"; sourceTree = "<group>"; };
@@ -372,8 +372,6 @@
 		07A30BF61C50488800C536EB /* FRSSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSSettingsViewController.m; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.m"; sourceTree = "<group>"; };
 		07A30BF71C50488800C536EB /* FRSTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSTableViewCell.h; path = "Fresco News/View Controllers/Settings/FRSTableViewCell.h"; sourceTree = "<group>"; };
 		07A30BF81C50488800C536EB /* FRSTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSTableViewCell.m; path = "Fresco News/View Controllers/Settings/FRSTableViewCell.m"; sourceTree = "<group>"; };
-		07A30BF91C50488800C536EB /* FRSTaxInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSTaxInformationViewController.h; path = "Fresco News/View Controllers/Settings/FRSTaxInformationViewController.h"; sourceTree = "<group>"; };
-		07A30BFA1C50488800C536EB /* FRSTaxInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSTaxInformationViewController.m; path = "Fresco News/View Controllers/Settings/FRSTaxInformationViewController.m"; sourceTree = "<group>"; };
 		07A30BFB1C50488800C536EB /* FRSUsernameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSUsernameViewController.h; path = "Fresco News/View Controllers/Settings/FRSUsernameViewController.h"; sourceTree = "<group>"; };
 		07A30BFC1C50488800C536EB /* FRSUsernameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSUsernameViewController.m; path = "Fresco News/View Controllers/Settings/FRSUsernameViewController.m"; sourceTree = "<group>"; };
 		07A30C081C50494700C536EB /* FRSStoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSStoryView.h; sourceTree = "<group>"; };
@@ -557,6 +555,12 @@
 		CE0CAE611E1579CA00CDE511 /* Endpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Endpoint.m; sourceTree = "<group>"; };
 		CE12A5F71E14747A0032E72F /* EndpointManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndpointManager.h; sourceTree = "<group>"; };
 		CE12A5F81E14747A0032E72F /* EndpointManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EndpointManager.m; sourceTree = "<group>"; };
+		CE2A704D1E1D8F5600D5D13B /* FRSEmailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSEmailViewController.xib; path = "Fresco News/View Controllers/Settings/FRSEmailViewController.xib"; sourceTree = "<group>"; };
+		CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSSettingsViewController.xib; path = "Fresco News/View Controllers/Settings/FRSSettingsViewController.xib"; sourceTree = "<group>"; };
+		CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSPaymentViewController.xib; path = "Fresco News/View Controllers/Settings/FRSPaymentViewController.xib"; sourceTree = "<group>"; };
+		CEC20DE71E1C6BC000532D75 /* FRSIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRSIdentityViewController.h; path = "Fresco News/View Controllers/FRSIdentityViewController.h"; sourceTree = SOURCE_ROOT; };
+		CEC20DE81E1C6BC000532D75 /* FRSIdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRSIdentityViewController.m; path = "Fresco News/View Controllers/FRSIdentityViewController.m"; sourceTree = SOURCE_ROOT; };
+		CEDE171B1E2EB90C00818B7B /* FRSIdentityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FRSIdentityViewController.xib; path = "Fresco News/View Controllers/Onboard/FRSIdentityViewController.xib"; sourceTree = SOURCE_ROOT; };
 		D400FA501D6DE6B3008842E1 /* FRSComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSComment.h; sourceTree = "<group>"; };
 		D400FA511D6DE6B3008842E1 /* FRSComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSComment.m; sourceTree = "<group>"; };
 		D400FA551D6DF57E008842E1 /* FRSCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSCommentCell.h; sourceTree = "<group>"; };
@@ -719,8 +723,6 @@
 		D4BE3E2F1D17D6760039394C /* FRSCarouselCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSCarouselCell.m; sourceTree = "<group>"; };
 		D4BE3E301D17D6760039394C /* FRSCarouselCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FRSCarouselCell.xib; sourceTree = "<group>"; };
 		D4BEEB891D1DCD720019D2AB /* Fresco.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Fresco.entitlements; sourceTree = "<group>"; };
-		D4C217C81D63AE230076172D /* FRSIdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSIdentityViewController.h; sourceTree = "<group>"; };
-		D4C217C91D63AE230076172D /* FRSIdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSIdentityViewController.m; sourceTree = "<group>"; };
 		D4C217CC1D63B7B40076172D /* FRSPaymentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPaymentViewController.h; sourceTree = "<group>"; };
 		D4C217CD1D63B7B40076172D /* FRSPaymentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRSPaymentViewController.m; sourceTree = "<group>"; };
 		D4C217D01D64DC010076172D /* FRSPaymentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRSPaymentCell.h; sourceTree = "<group>"; };
@@ -848,7 +850,7 @@
 		073F624C1C3D71D300E07977 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				D43C7FE41C8F354500A7A7A7 /* Business Type */,
+				D4C217C71D63ADCC0076172D /* Identity */,
 				D4C217CB1D63B7230076172D /* Manage Payment */,
 				D43C7FE51C8F354F00A7A7A7 /* Add Payment */,
 				D43C7FE61C8F355500A7A7A7 /* Disable Account */,
@@ -858,7 +860,6 @@
 				D43C7FEA1C8F358A00A7A7A7 /* Radius */,
 				D43C7FEB1C8F359000A7A7A7 /* Settings VC */,
 				D43C7FEC1C8F359700A7A7A7 /* Table View */,
-				D43C7FED1C8F359D00A7A7A7 /* Tax Info */,
 				07FD8BAD1CE66EAA00F93705 /* About */,
 				D43C7FEE1C8F35A300A7A7A7 /* Username */,
 			);
@@ -1127,7 +1128,6 @@
 			isa = PBXGroup;
 			children = (
 				078A53671E084AA90018F112 /* Social Feeds */,
-				D4C217C71D63ADCC0076172D /* Identity */,
 				D48C722C1D11D2C6000677BF /* Notification */,
 				D487F1B21CBD6550005742F3 /* Submission */,
 				4AB98C921C8A7EC6005E7AB2 /* Camera */,
@@ -1663,15 +1663,6 @@
 			name = Three;
 			sourceTree = "<group>";
 		};
-		D43C7FE41C8F354500A7A7A7 /* Business Type */ = {
-			isa = PBXGroup;
-			children = (
-				07A30BE71C50488800C536EB /* FRSBusinessTypeViewController.h */,
-				07A30BE81C50488800C536EB /* FRSBusinessTypeViewController.m */,
-			);
-			name = "Business Type";
-			sourceTree = "<group>";
-		};
 		D43C7FE51C8F354F00A7A7A7 /* Add Payment */ = {
 			isa = PBXGroup;
 			children = (
@@ -1695,6 +1686,7 @@
 			children = (
 				07A30BED1C50488800C536EB /* FRSEmailViewController.h */,
 				07A30BEE1C50488800C536EB /* FRSEmailViewController.m */,
+				CE2A704D1E1D8F5600D5D13B /* FRSEmailViewController.xib */,
 			);
 			name = Email;
 			sourceTree = "<group>";
@@ -1731,6 +1723,7 @@
 			children = (
 				07A30BF51C50488800C536EB /* FRSSettingsViewController.h */,
 				07A30BF61C50488800C536EB /* FRSSettingsViewController.m */,
+				CEB3E8951E14180F000E2B78 /* FRSSettingsViewController.xib */,
 			);
 			name = "Settings VC";
 			sourceTree = "<group>";
@@ -1742,15 +1735,6 @@
 				07A30BF81C50488800C536EB /* FRSTableViewCell.m */,
 			);
 			name = "Table View";
-			sourceTree = "<group>";
-		};
-		D43C7FED1C8F359D00A7A7A7 /* Tax Info */ = {
-			isa = PBXGroup;
-			children = (
-				07A30BF91C50488800C536EB /* FRSTaxInformationViewController.h */,
-				07A30BFA1C50488800C536EB /* FRSTaxInformationViewController.m */,
-			);
-			name = "Tax Info";
 			sourceTree = "<group>";
 		};
 		D43C7FEE1C8F35A300A7A7A7 /* Username */ = {
@@ -2228,20 +2212,22 @@
 		D4C217C71D63ADCC0076172D /* Identity */ = {
 			isa = PBXGroup;
 			children = (
-				D4C217C81D63AE230076172D /* FRSIdentityViewController.h */,
-				D4C217C91D63AE230076172D /* FRSIdentityViewController.m */,
+				CEC20DE71E1C6BC000532D75 /* FRSIdentityViewController.h */,
+				CEC20DE81E1C6BC000532D75 /* FRSIdentityViewController.m */,
+				CEDE171B1E2EB90C00818B7B /* FRSIdentityViewController.xib */,
 			);
 			name = Identity;
+			path = "Fresco News/View Controllers/Fresco News/View Controllers";
 			sourceTree = "<group>";
 		};
 		D4C217CB1D63B7230076172D /* Manage Payment */ = {
 			isa = PBXGroup;
 			children = (
-				D4C217E11D6715370076172D /* Title Cell */,
 				D4C217D51D64E1510076172D /* Add Cell */,
 				D4C217CF1D64DBEC0076172D /* Payment Cell */,
 				D4C217CC1D63B7B40076172D /* FRSPaymentViewController.h */,
 				D4C217CD1D63B7B40076172D /* FRSPaymentViewController.m */,
+				CEB3E8971E142D69000E2B78 /* FRSPaymentViewController.xib */,
 			);
 			name = "Manage Payment";
 			sourceTree = "<group>";
@@ -2264,13 +2250,6 @@
 				D4C217D81D64E1700076172D /* FRSAddPaymentCell.xib */,
 			);
 			name = "Add Cell";
-			sourceTree = "<group>";
-		};
-		D4C217E11D6715370076172D /* Title Cell */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Title Cell";
 			sourceTree = "<group>";
 		};
 		D4D60D0D1CC8365B00059EBA /* Highlights */ = {
@@ -2588,11 +2567,13 @@
 				072A9F411C2491A900F8CCE0 /* Nota-Bold.otf in Resources */,
 				D421FC511D5B7ACF004C76B7 /* FRSSearchStoryCell.xib in Resources */,
 				CAF0928C1E25923100F7F711 /* FRSGalleryStatusView.xib in Resources */,
+				CEB3E8961E14180F000E2B78 /* FRSSettingsViewController.xib in Resources */,
 				D4C217D41D64DC010076172D /* FRSPaymentCell.xib in Resources */,
 				D418E3451CCC1A9B0003B080 /* AccountKitStrings.bundle in Resources */,
 				1EDA44C41AA4CCC70082E08D /* Images.xcassets in Resources */,
 				D4E76A2C1CB2B15D00AC7A45 /* FRSLoginViewController.xib in Resources */,
 				D4EE64261D830DD60034B5EA /* FRSReadMoreCell.xib in Resources */,
+				CE2A704E1E1D8F5600D5D13B /* FRSEmailViewController.xib in Resources */,
 				D48C72441D11D39F000677BF /* FRSBreakingCell.xib in Resources */,
 				D43C7FD71C8E46A500A7A7A7 /* FRSImageViewCell.xib in Resources */,
 				CA2D87341E1C1033009BBB5A /* FRSGalleryDetailView.xib in Resources */,
@@ -2601,7 +2582,9 @@
 				D4D60D0C1CC829C000059EBA /* following.json in Resources */,
 				D421FC561D5B7AE3004C76B7 /* FRSSearchUserCell.xib in Resources */,
 				D4C217DA1D64E1700076172D /* FRSAddPaymentCell.xib in Resources */,
+				CEB3E8981E142D69000E2B78 /* FRSPaymentViewController.xib in Resources */,
 				07EAFF2D1CEA237300E224E2 /* FRSLaunchScreen.xib in Resources */,
+				CEDE171C1E2EB90C00818B7B /* FRSIdentityViewController.xib in Resources */,
 				D48C723E1D11D352000677BF /* FRSUserCell.xib in Resources */,
 				D4DBF1911CB43AA40098BDC0 /* checkboxBlankCircleOutline24W2@3x.png in Resources */,
 				07B6FB4F1D0A0E89001C3120 /* FRSGlobalAssignmentTableViewCell.xib in Resources */,
@@ -2775,6 +2758,7 @@
 				659B3E811C45B10E002E9B79 /* FRSGalleryExpandedViewController.m in Sources */,
 				D4AF8EEB1CF8B50400A33FAB /* FRSRequestSerializer.m in Sources */,
 				65201A341C3D7D7900B31089 /* FRSGalleryCell.m in Sources */,
+				CEC20DE91E1C6BC000532D75 /* FRSIdentityViewController.m in Sources */,
 				D48C72431D11D39F000677BF /* FRSBreakingCell.m in Sources */,
 				078737FD1D5D077F00F7C27B /* FRSTextNotificationTableViewCell.m in Sources */,
 				07B6FB481D09E3D7001C3120 /* FRSGlobalAssignmentsTableViewController.m in Sources */,
@@ -2793,7 +2777,6 @@
 				65DC9BF41C485B7F001F450A /* FRSGallery+CoreDataProperties.m in Sources */,
 				0780914B1CD93A0D00D7FA40 /* FRSUploadViewController.m in Sources */,
 				D453CC871CCA80850091A004 /* NSManagedObjectContext+MagicalRecord.m in Sources */,
-				07A30BFD1C50488800C536EB /* FRSBusinessTypeViewController.m in Sources */,
 				65135FD21C286DCF00839149 /* FRSUser.m in Sources */,
 				65135FD61C286DCF00839149 /* FRSStory.m in Sources */,
 				D43C7FDD1C8E474C00A7A7A7 /* FRSCheckBox.m in Sources */,
@@ -2840,7 +2823,6 @@
 				42D997FE1AEAF5B300636F33 /* UIImage+PHAsset.m in Sources */,
 				D43AA8BC1DCA29DA0002DF00 /* FRSWobbleView.m in Sources */,
 				42D998071AEC46D900636F33 /* NSDate+ISO.m in Sources */,
-				07A30C061C50488800C536EB /* FRSTaxInformationViewController.m in Sources */,
 				07A30C071C50488800C536EB /* FRSUsernameViewController.m in Sources */,
 				D421FC551D5B7AE3004C76B7 /* FRSSearchUserCell.m in Sources */,
 				D453CC8B1CCA80850091A004 /* NSPersistentStore+MagicalRecord.m in Sources */,
@@ -2862,7 +2844,6 @@
 				65135FDA1C286DCF00839149 /* FRSGallery.m in Sources */,
 				D41B2EFA1D53E5960007C61F /* FRSSearchResultsTable.m in Sources */,
 				6547C9041C6A68A700DAD98C /* FRSUserTableViewCell.m in Sources */,
-				D4C217CA1D63AE230076172D /* FRSIdentityViewController.m in Sources */,
 				D453CC7B1CCA80850091A004 /* MagicalRecord+iCloud.m in Sources */,
 				65201A281C3D7D2B00B31089 /* FRSScrollingViewController.m in Sources */,
 				D4B35F581CD1758400F5C8A8 /* FRSJSONResponseSerializer.m in Sources */,
