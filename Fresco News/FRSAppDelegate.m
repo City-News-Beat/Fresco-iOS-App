@@ -485,12 +485,6 @@
     return _managedObjectModel;
 }
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
-    // Gets called in the foreground
-    
-    // [self handleRemotePush:notification.request.content.userInfo];
-}
-
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
     didReceiveNotificationResponse:(UNNotificationResponse *)response
              withCompletionHandler:(void (^)())completionHandler {
