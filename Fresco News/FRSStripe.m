@@ -12,9 +12,6 @@
 @implementation FRSStripe
 
 + (STPCardParams *)creditCardWithNumber:(NSString *)number expiration:(NSArray *)expiration cvc:(NSString *)cvc {
-    EndpointManager *manager = [EndpointManager sharedInstance];
-    [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];
-
     STPCardParams *cardParams = [[STPCardParams alloc] init];
     cardParams.number = number;
     cardParams.expMonth = [expiration[0] intValue];
@@ -24,7 +21,6 @@
 }
 
 + (STPCardParams *)creditCardWithNumber:(NSString *)number expiration:(NSArray *)expiration cvc:(NSString *)cvc firstName:(NSString *)firstName lastName:(NSString *)lastName {
-
     STPCardParams *cardParams = [FRSStripe creditCardWithNumber:number expiration:expiration cvc:cvc];
 
     cardParams.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
@@ -47,7 +43,6 @@
 }
 
 + (void)createTokenWithBank:(STPBankAccountParams *)params completion:(FRSStripeBlock)completion {
-
     [[STPAPIClient sharedClient] createTokenWithBankAccount:params
                                                  completion:^(STPToken *_Nullable token, NSError *_Nullable error) {
                                                    completion(token, error);

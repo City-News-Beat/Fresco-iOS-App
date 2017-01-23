@@ -33,7 +33,6 @@
 #import "FRSNavigationController.h"
 #import "FRSAssignmentsViewController.h"
 #import "FRSDebitCardViewController.h"
-#import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
 #import "FRSStoriesViewController.h"
 #import "FRSUploadManager.h"
@@ -62,6 +61,9 @@
     [self startFabric]; // crashlytics first yall
     [self configureStartDate];
     [self clearUploadCache];
+    
+    EndpointManager *manager = [EndpointManager sharedInstance];
+    [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];
 
     [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
 
@@ -483,12 +485,6 @@
     }
     _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
     return _managedObjectModel;
-}
-
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
-    // Gets called in the foreground
-    
-    // [self handleRemotePush:notification.request.content.userInfo];
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center

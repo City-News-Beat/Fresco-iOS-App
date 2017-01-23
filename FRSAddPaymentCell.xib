@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11535.1" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11523"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,25 +18,18 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="C1M-Y1-8qn">
-                        <rect key="frame" x="14" y="15" width="14" height="14"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="14" id="IBR-Yd-QF1"/>
-                            <constraint firstAttribute="width" constant="14" id="mvw-Ue-Dml"/>
-                        </constraints>
-                    </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="disclosure" translatesAutoresizingMaskIntoConstraints="NO" id="VDh-pp-1Ey">
                         <rect key="frame" x="298" y="15" width="8" height="15"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="15" id="2GW-XJ-OhS"/>
-                            <constraint firstAttribute="width" constant="8" id="rLE-NC-RCK"/>
+                            <constraint firstAttribute="width" constant="8" id="RHC-bL-1Py"/>
+                            <constraint firstAttribute="height" constant="15" id="agC-r2-vIi"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add a payment method" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YbR-SS-ZUh">
                         <rect key="frame" x="47" y="11" width="159" height="21"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="21" id="T7h-qn-EvI"/>
-                            <constraint firstAttribute="width" constant="159" id="k0t-cj-anV"/>
+                            <constraint firstAttribute="height" constant="21" id="EVN-yb-oU0"/>
+                            <constraint firstAttribute="width" constant="159" id="MzB-3r-C73"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                         <color key="textColor" red="0.2274509804" green="0.2274509804" blue="0.2274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -44,13 +37,10 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailingMargin" secondItem="VDh-pp-1Ey" secondAttribute="trailing" constant="6" id="8nN-m2-fTc"/>
-                    <constraint firstItem="C1M-Y1-8qn" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="AH3-sK-MBH"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="VDh-pp-1Ey" secondAttribute="bottom" constant="5.5" id="J6G-wq-Qo2"/>
-                    <constraint firstItem="YbR-SS-ZUh" firstAttribute="leading" secondItem="C1M-Y1-8qn" secondAttribute="trailing" constant="19" id="MeE-0Q-DXx"/>
-                    <constraint firstItem="YbR-SS-ZUh" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="PuM-OM-bDy"/>
-                    <constraint firstItem="C1M-Y1-8qn" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="6" id="oVO-JC-ydm"/>
-                    <constraint firstItem="VDh-pp-1Ey" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="7" id="vD4-R0-uTA"/>
+                    <constraint firstItem="YbR-SS-ZUh" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="39" id="5Uk-dP-8w5"/>
+                    <constraint firstItem="VDh-pp-1Ey" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="8I3-e7-r9N"/>
+                    <constraint firstItem="YbR-SS-ZUh" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="AF0-c3-dZ2"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="VDh-pp-1Ey" secondAttribute="trailing" constant="6" id="eer-bb-8ZZ"/>
                 </constraints>
             </tableViewCellContentView>
         </tableViewCell>

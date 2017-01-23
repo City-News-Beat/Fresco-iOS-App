@@ -117,11 +117,12 @@ static NSString *const galleryObjectType = @"gallery";
 static NSString *const storyObjectType = @"story";
 
 // payments
-
 static NSString *const createPayment = @"user/payment/create";
 static NSString *const getPaymentsEndpoint = @"user/payment";
 static NSString *const deletePaymentEndpoint = @"user/payment/%@/delete";
 static NSString *const makePaymentActiveEndpoint = @"user/payment/%@/update/";
+static NSString *const setStateIDEndpoint = @"https://uploads.stripe.com/v1/files";
+static NSString *const updateTaxInfoEndpoint = @"user/identity/update";
 
 // moderation
 static NSString *const blockUserEndpoint = @"user/%@/block";
