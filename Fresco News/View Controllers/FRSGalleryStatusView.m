@@ -44,10 +44,12 @@
 }
 
 // Zeplin Heights
-const double popupViewHeightPendingVerified = 230;
-const double popupViewHeightVerified = 216;
-const double popupViewHeightOneSold = 410;
-const double popupViewHeightMultiSold = 528;
+static CGFloat const popupViewHeightPendingVerified = 230;
+static CGFloat const popupViewHeightVerified = 216;
+static CGFloat const popupViewHeightOneSold = 410;
+static CGFloat const popupViewHeightMultiSold = 528;
+
+static CGFloat const barHeight = 27; // Bar height for bot bar, top bar and the rest
 
 const double verifiedLineHeightNotSold = 36;
 
@@ -206,9 +208,6 @@ typedef int GalleryStatusRating;
  Changes the scroll view content size to make it able to scroll down to the size of the tableview (if this wasn't here, there would be 2 scroll views needed. 1 for the tableview scrollview, 1 for the scrollview)
  */
 - (void)adjustScrollViewContentSize {
-    // Bar height for bot bar, top bar and the rest
-    float barHeight = 27;
-
     // Disables the need to scroll
     CGRect newFrame = soldContentTableView.frame;
     newFrame.size.height = soldContentTableView.contentSize.height;
