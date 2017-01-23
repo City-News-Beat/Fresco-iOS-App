@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Nota-Bold.otf">
+            <string>Nota-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FRSEmailViewController">
+            <connections>
+                <outlet property="emailTextField" destination="1EE-Oq-SjY" id="lxA-eS-sbE"/>
+                <outlet property="passwordTextField" destination="tza-pk-Nn1" id="zA1-iD-zJb"/>
+                <outlet property="saveButton" destination="pkY-bA-GCb" id="S1c-wj-1nz"/>
+                <outlet property="view" destination="iN0-l3-epB" id="b5h-UJ-8ag"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MCC-ew-T4L">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                    <subviews>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="New Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1EE-Oq-SjY">
+                            <rect key="frame" x="16" y="0.0" width="343" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="teu-IA-vxF"/>
+                            </constraints>
+                            <color key="textColor" white="0.0" alpha="0.85999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
+                            <connections>
+                                <outlet property="delegate" destination="-1" id="ySq-10-6af"/>
+                            </connections>
+                        </textField>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="1EE-Oq-SjY" firstAttribute="top" secondItem="MCC-ew-T4L" secondAttribute="top" id="1L3-1b-Ja0"/>
+                        <constraint firstItem="1EE-Oq-SjY" firstAttribute="leading" secondItem="MCC-ew-T4L" secondAttribute="leading" constant="16" id="UJe-bi-Ksd"/>
+                        <constraint firstAttribute="height" constant="44" id="YDH-gj-UqY"/>
+                        <constraint firstAttribute="trailing" secondItem="1EE-Oq-SjY" secondAttribute="trailing" constant="16" id="YYa-LB-bf1"/>
+                        <constraint firstAttribute="bottom" secondItem="1EE-Oq-SjY" secondAttribute="bottom" id="qbu-nd-g4A"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yzd-t5-Fdw">
+                    <rect key="frame" x="0.0" y="45" width="375" height="44"/>
+                    <subviews>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tza-pk-Nn1">
+                            <rect key="frame" x="16" y="0.0" width="343" height="44"/>
+                            <color key="textColor" white="0.0" alpha="0.85999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                            <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
+                            <connections>
+                                <outlet property="delegate" destination="-1" id="tOF-e9-ccu"/>
+                            </connections>
+                        </textField>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="tza-pk-Nn1" firstAttribute="leading" secondItem="yzd-t5-Fdw" secondAttribute="leading" constant="16" id="Km2-39-n74"/>
+                        <constraint firstItem="tza-pk-Nn1" firstAttribute="top" secondItem="yzd-t5-Fdw" secondAttribute="top" id="O1S-Ii-Ywt"/>
+                        <constraint firstAttribute="bottom" secondItem="tza-pk-Nn1" secondAttribute="bottom" id="V4m-m7-a7G"/>
+                        <constraint firstAttribute="trailing" secondItem="tza-pk-Nn1" secondAttribute="trailing" constant="16" id="VCs-ZB-R4m"/>
+                        <constraint firstAttribute="height" constant="44" id="hx8-qI-DjI"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pkY-bA-GCb">
+                    <rect key="frame" x="266" y="90" width="109" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="2Ii-Jn-r4j"/>
+                        <constraint firstAttribute="height" constant="44" id="Sif-Bt-esw"/>
+                        <constraint firstAttribute="width" constant="109" id="dGX-1n-3Wr"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Nota-Bold" family="Nota" pointSize="15"/>
+                    <state key="normal" title="SAVE EMAIL">
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.26000000000000001" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="saveEmail:" destination="-1" eventType="touchUpInside" id="ZUQ-ja-Uyo"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="yzd-t5-Fdw" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8Of-dT-Mqh"/>
+                <constraint firstAttribute="trailing" secondItem="MCC-ew-T4L" secondAttribute="trailing" id="8Pv-Fr-dDE"/>
+                <constraint firstItem="MCC-ew-T4L" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8ey-WK-3ID"/>
+                <constraint firstItem="pkY-bA-GCb" firstAttribute="top" secondItem="yzd-t5-Fdw" secondAttribute="bottom" constant="1" id="B3E-Kp-dOa"/>
+                <constraint firstAttribute="trailing" secondItem="yzd-t5-Fdw" secondAttribute="trailing" id="JRJ-qA-x3J"/>
+                <constraint firstAttribute="trailing" secondItem="pkY-bA-GCb" secondAttribute="trailing" id="KGs-8O-tSF"/>
+                <constraint firstAttribute="trailing" secondItem="pkY-bA-GCb" secondAttribute="trailing" id="b32-XF-Gvj"/>
+                <constraint firstItem="yzd-t5-Fdw" firstAttribute="top" secondItem="MCC-ew-T4L" secondAttribute="bottom" constant="1" id="dZ9-uF-GqR"/>
+                <constraint firstItem="MCC-ew-T4L" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="v7P-pM-UMI"/>
+            </constraints>
+            <point key="canvasLocation" x="25.5" y="51.5"/>
+        </view>
+    </objects>
+</document>

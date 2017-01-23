@@ -19,7 +19,6 @@
 #import "FRSProfileViewController.h"
 #import "FRSDebitCardViewController.h"
 #import "FRSAssignmentsViewController.h"
-#import "FRSTaxInformationViewController.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 

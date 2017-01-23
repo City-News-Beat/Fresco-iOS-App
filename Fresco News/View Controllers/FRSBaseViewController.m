@@ -14,7 +14,6 @@
 #import "FRSAssignmentsViewController.h"
 #import "FRSCameraViewController.h"
 #import "FRSDebitCardViewController.h"
-#import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
 #import "FRSTabBarController.h"
 #import "FRSAppDelegate.h"

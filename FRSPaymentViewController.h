@@ -15,6 +15,8 @@
 @interface FRSPaymentViewController : FRSBaseViewController <UITableViewDelegate, UITableViewDataSource, FRSPaymentCellDelegate> {
     NSInteger selectedIndex;
 }
+
 @property (nonatomic, retain) NSArray *payments;
-@property (nonatomic, retain) UITableView *tableView;
+@property (nonatomic, retain) IBOutlet UITableView *tableView;
+
 @end
