@@ -1100,16 +1100,6 @@
     [self get:endpoint
         withParameters:nil
             completion:^(id responseObject, NSError *error) {
-              if (error) {
-                  completion(responseObject, error);
-                  return;
-              }
-
-              //        if ([responseObject objectForKey:@"id"] != Nil && ![[responseObject objectForKey:@"id"] isEqual:[NSNull null]]) {
-              //            completion(responseObject, error);
-              //        }
-
-              // shouldn't happen
               completion(responseObject, error);
             }];
 }
