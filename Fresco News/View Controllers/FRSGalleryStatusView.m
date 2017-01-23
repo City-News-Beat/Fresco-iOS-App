@@ -43,6 +43,14 @@
     DGElasticPullToRefreshLoadingViewCircle *spinner;
 }
 
+// Zeplin Heights
+const double popupViewHeightPendingVerified = 230;
+const double popupViewHeightVerified = 216;
+const double popupViewHeightOneSold = 410;
+const double popupViewHeightMultiSold = 528;
+
+const double verifiedLineHeightNotSold = 36;
+
 enum {
     PendingVerfication = 0,
     NotVerified = 1,
@@ -85,8 +93,7 @@ typedef int GalleryStatusRating;
 }
 
 - (void)setToPendingVerification {
-    int popupViewHeight = 230; // Zeplin Height
-    popupViewHeightConstraint.constant = popupViewHeight;
+    popupViewHeightConstraint.constant = popupViewHeightPendingVerified;
     scrollView.scrollEnabled = false;
 
     [self hideSoldViews];
@@ -96,15 +103,13 @@ typedef int GalleryStatusRating;
     verifiedDescriptionLabel.text = @"Once we’ve verified your gallery, news outlets will be able to purchase content.";
 
     verifiedLineView.backgroundColor = [UIColor frescoOrangeColor];
-    int verifiedLineHeight = 36; // Zeplin Line Height
-    verifiedLineHeightConstraint.constant = verifiedLineHeight;
+    verifiedLineHeightConstraint.constant = verifiedLineHeightNotSold;
 
     [verifiedCheckImageView setImage:[UIImage imageNamed:@"checkboxBlankCircleOutline24Y"]];
 }
 
 - (void)setToNotVerified {
-    int popupViewHeight = 230; // Zeplin Height
-    popupViewHeightConstraint.constant = popupViewHeight;
+    popupViewHeightConstraint.constant = popupViewHeightPendingVerified;
     scrollView.scrollEnabled = false;
 
     [self hideSoldViews];
@@ -114,15 +119,13 @@ typedef int GalleryStatusRating;
     verifiedDescriptionLabel.text = @"This gallery is visible to Fresco users but hidden to news outlets.";
 
     verifiedLineView.backgroundColor = [UIColor frescoLightTextColor];
-    int verifiedLineHeight = 36; // Zeplin Line Height
-    verifiedLineHeightConstraint.constant = verifiedLineHeight;
+    verifiedLineHeightConstraint.constant = verifiedLineHeightNotSold;
 
     [verifiedCheckImageView setImage:[UIImage imageNamed:@"checkboxBlankCircleOutline24K3"]];
 }
 
 - (void)setToVerified {
-    int popupViewHeight = 216; // Zeplin Height
-    popupViewHeightConstraint.constant = popupViewHeight;
+    popupViewHeightConstraint.constant = popupViewHeightVerified;
     scrollView.scrollEnabled = false;
 
     [self hideSoldViews];
@@ -131,18 +134,15 @@ typedef int GalleryStatusRating;
     verifiedTitleLabel.text = @"Verified";
     verifiedDescriptionLabel.text = @"News outlets can purchase content from this gallery.";
 
-    int verifiedLineHeight = 36; // Zeplin Line Height
-    verifiedLineHeightConstraint.constant = verifiedLineHeight;
+    verifiedLineHeightConstraint.constant = verifiedLineHeightNotSold;
 }
 
 - (void)setToSold {
-    int popupViewHeight;
     if (purchases.count == 1) {
-        popupViewHeight = 410; // Zeplin Height
+        popupViewHeightConstraint.constant = popupViewHeightOneSold;
     } else {
-        popupViewHeight = 528; // Zeplin Height
+        popupViewHeightConstraint.constant = popupViewHeightMultiSold;
     }
-    popupViewHeightConstraint.constant = popupViewHeight;
     verifiedDescriptionLabel.hidden = true;
     
     scrollView.hidden = true;
