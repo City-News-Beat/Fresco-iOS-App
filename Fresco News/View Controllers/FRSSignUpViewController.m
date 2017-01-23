@@ -1221,13 +1221,13 @@
     [self configureSpinner];
     [self startSpinner:self.loadingView onButton:self.createAccountButton];
 
-    NSDictionary *currentInstallation = [[FRSAPIClient sharedClient] currentInstallation];
+    NSDictionary *currentInstallation = [[FRSAuthManager sharedInstance] currentInstallation];
 
     NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
     [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
 
     if (currentInstallation && [currentInstallation objectForKey:@"device_token"]) {
-        [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
+        [registrationDigest setObject:[[FRSAuthManager sharedInstance] currentInstallation] forKey:@"installation"];
     }
 
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];

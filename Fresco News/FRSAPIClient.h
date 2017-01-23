@@ -77,7 +77,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 - (void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 - (NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken; // current social links, formatted for transmission to server
-- (NSDictionary *)currentInstallation;
 - (NSNumber *)fileSizeForURL:(NSURL *)url;
 // social
 - (void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion;

@@ -560,7 +560,6 @@
 }
 
 - (void)cacheLocalData:(NSArray *)localData {
-    
     if (self.appDelegate.managedObjectContext) {
         [self.appDelegate.managedObjectContext performBlock:^{
             self.dataSource = [[NSMutableArray alloc] init];

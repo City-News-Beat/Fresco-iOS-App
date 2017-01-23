@@ -24,5 +24,6 @@
 - (void)registerWithUserDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion; // leaves burdon of constructing dict obj to sender (will have method for that)
 - (NSString *)authenticationToken;
 - (void)logout;
+- (NSDictionary *)currentInstallation;
 
 @end
