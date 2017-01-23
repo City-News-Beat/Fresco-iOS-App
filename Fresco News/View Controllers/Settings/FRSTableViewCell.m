@@ -1028,30 +1028,20 @@
             radius = [user.notificationRadius floatValue];
         }
 
-        NSDictionary *dict = @{ @"send_push" : @YES };
-
-        [[FRSAPIClient sharedClient] post:settingsUpdateEndpoint
-            withParameters:@{ @"notify-user-dispatch-new-assignment" : dict }
-            completion:^(id responseObject, NSError *error) {
-              if (responseObject && !error) {
-                  state = YES;
-                  [[NSUserDefaults standardUserDefaults] setBool:state forKey:settingsUserNotificationToggle];
-                  [[NSUserDefaults standardUserDefaults] synchronize];
-
-              } else {
-                  [sender setOn:FALSE];
-                  FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                  [alert show];
-              }
-            }];
-
+        [[FRSAPIClient sharedClient] setPushNotificationWithBool:YES completion:^(id responseObject, NSError *error) {
+            if (responseObject && !error) {
+                state = YES;
+                [[NSUserDefaults standardUserDefaults] setBool:state forKey:settingsUserNotificationToggle];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+            } else {
+                [sender setOn:FALSE];
+                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                [alert show];
+            }
+        }];
     } else {
-
-        NSDictionary *dict = @{ @"send_push" : @NO };
-
-        [[FRSAPIClient sharedClient] post:settingsUpdateEndpoint
-            withParameters:@{ @"notify-user-dispatch-new-assignment" : dict }
-            completion:^(id responseObject, NSError *error) {
+        [[FRSAPIClient sharedClient] setPushNotificationWithBool:YES completion:^(id responseObject, NSError *error) {
               if (responseObject && !error) {
                   state = NO;
                   [[NSUserDefaults standardUserDefaults] setBool:state forKey:settingsUserNotificationToggle];
