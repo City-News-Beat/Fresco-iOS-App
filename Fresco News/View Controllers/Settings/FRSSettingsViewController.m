@@ -373,12 +373,12 @@
                     
                     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
                         NSLog(@"FACEBOOK NAME: %@", [[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]);
-                        NSLog(@"FACEBOOK ENABLED: %@", [[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-enabled"]);
+                        NSLog(@"FACEBOOK connected: %@", [[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-connected"]);
                         
                         [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
                     } else {
-                        NSLog(@"FACEBOOK ENABLED: %@", [[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-enabled"]);
-                        [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+                        NSLog(@"FACEBOOK connected: %@", [[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-connected"]);
+                        [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]];
                     }
                     break;
                     

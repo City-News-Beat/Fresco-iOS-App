@@ -252,7 +252,7 @@
                                    
                                    NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
 
-                                   if (socialLinksDict[@"facebook"] != nil && [socialLinksDict[@"facebook"] count] > 0) {
+                                   if (socialLinksDict[@"facebook"] != nil) {
                                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
                                    }
         

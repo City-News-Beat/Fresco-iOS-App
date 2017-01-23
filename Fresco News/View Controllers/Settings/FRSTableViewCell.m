@@ -155,14 +155,10 @@
         self.didToggleFacebook = NO;
         if (index == 0) {
             [self.facebookSwitch setOn:YES animated:YES];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
-
         } else if (index == 1) {
             [self.facebookSwitch setOn:NO animated:YES];
             self.facebookName = nil;
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
             self.socialTitleLabel.text = @"Connect Facebook";
-            [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
         }
     }
 
@@ -287,9 +283,8 @@
             self.facebookSwitch.enabled = YES;
             if(error){
                 self.facebookSwitch.on = YES;
-                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
-                [alert show];
             }else{
+                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
                 self.facebookSwitch.on = NO;
             }
             if(self.parentTableView){
@@ -1034,11 +1029,9 @@
         }
 
         NSDictionary *dict = @{ @"send_push" : @YES };
-        NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:NULL];
-        NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 
         [[FRSAPIClient sharedClient] post:settingsUpdateEndpoint
-            withParameters:@{ @"notify-user-dispatch-new-assignment" : str }
+            withParameters:@{ @"notify-user-dispatch-new-assignment" : dict }
             completion:^(id responseObject, NSError *error) {
               if (responseObject && !error) {
                   state = YES;
@@ -1047,25 +1040,26 @@
 
               } else {
                   [sender setOn:FALSE];
+                  FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                  [alert show];
               }
             }];
 
     } else {
 
         NSDictionary *dict = @{ @"send_push" : @NO };
-        NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:NULL];
-        NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 
         [[FRSAPIClient sharedClient] post:settingsUpdateEndpoint
-            withParameters:@{ @"notify-user-dispatch-new-assignment" : str }
+            withParameters:@{ @"notify-user-dispatch-new-assignment" : dict }
             completion:^(id responseObject, NSError *error) {
               if (responseObject && !error) {
                   state = NO;
                   [[NSUserDefaults standardUserDefaults] setBool:state forKey:settingsUserNotificationToggle];
                   [[NSUserDefaults standardUserDefaults] synchronize];
-
               } else {
                   [sender setOn:TRUE];
+                  FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                  [alert show];
               }
             }];
     }
