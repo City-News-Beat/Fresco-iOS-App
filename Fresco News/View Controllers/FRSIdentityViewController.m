@@ -817,16 +817,11 @@
                                        [[FRSAPIClient sharedClient] uploadStateID:setStateIDEndpoint
                                                                    withParameters:imageData
                                            completion:^(id responseObject, NSError *error) {
-                                             if (error) {
-
-                                             } else {
+                                             if (!error) {
                                                  if ([[responseObject class] isSubclassOfClass:[NSDictionary class]]) {
-                                                     NSMutableDictionary *responseObjects = [[NSMutableDictionary alloc] init];
-                                                     NSArray *keys = [responseObject allKeys];
-                                                     NSString *fileID = [responseObjects valueForKey:@"id"];
+                                                     NSString *fileID = [responseObject valueForKey:@"id"];
                                                      [[FRSAPIClient sharedClient] updateTaxInfoWithFileID:fileID
                                                                                                completion:^(id responseObject, NSError *error) {
-                                                                                                 NSLog(@"%@", responseObject);
                                                                                                }];
                                                  }
                                              }

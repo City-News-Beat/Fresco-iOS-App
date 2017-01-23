@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 static NSString *const awsBucketDev = @"com.fresconews.dev";
-static NSString * const awsAccessKeyDev = @"AKIAJRQQA26XTXPGVAKA";
-static NSString * const awsSecretKeyDev = @"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";
+static NSString *const awsAccessKeyDev = @"AKIAJRQQA26XTXPGVAKA";
+static NSString *const awsSecretKeyDev = @"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";
 
 static NSString *const segmentWriteKeyProd = @"WGfcEDU5pn9SMdGf5zjL0cgO3MAPLqHI"; // prod
 static NSString *const segmentWriteKeyDev = @"SseDGQBsKVym6w3gv5Kxrg3wRoDMw29h"; // debug

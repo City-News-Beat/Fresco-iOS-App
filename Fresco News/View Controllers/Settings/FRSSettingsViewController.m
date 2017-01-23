@@ -220,7 +220,6 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 #pragma mark - UITableViewDataSource
 
 - (FRSTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     NSString *cellIdentifier;
     FRSTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 
@@ -240,7 +239,6 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(FRSTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-
     switch (indexPath.section) {
     case Me:
         switch (indexPath.row) {
@@ -373,9 +371,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     }
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {    
     switch (indexPath.section) {
     case Me:
         switch (indexPath.row) {

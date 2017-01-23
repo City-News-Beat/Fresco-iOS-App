@@ -972,31 +972,17 @@
  }];
 }
 
-- (NSString *)encodeStringTo64:(NSString *)fromString {
-    NSData *plainData = [fromString dataUsingEncoding:NSUTF8StringEncoding];
-    NSString *base64String;
-    if ([plainData respondsToSelector:@selector(base64EncodedStringWithOptions:)]) {
-        base64String = [plainData base64EncodedStringWithOptions:kNilOptions]; // iOS 7+
-    } else {
-        base64String = [plainData base64Encoding]; // pre iOS7
-    }
-
-    return base64String;
-}
-
 - (void)uploadStateID:(NSString *)endPoint withParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:setStateIDEndpoint]];
-    self.requestManager.requestSerializer = [[FRSRequestSerializer alloc] init];
-//    [self.requestManager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    self.requestManager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
-    NSString *formattedStripeKey = [NSString stringWithFormat:@"%@:", [EndpointManager sharedInstance].currentEndpoint.stripeKey];
-    NSString *auth = [NSString stringWithFormat:@"Basic %@", [self encodeStringTo64:formattedStripeKey]];
+    manager.requestSerializer = [[FRSRequestSerializer alloc] init];
+    [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
+    manager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
+    NSString *auth = [NSString stringWithFormat:@"Bearer %@", [EndpointManager sharedInstance].currentEndpoint.stripeKey];
 
-    [self.requestManager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
+    [manager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
     
     [manager POST:endPoint parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-        NSString *paramNameForImage = @"file";
-        [formData appendPartWithFileData:parameters name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+        [formData appendPartWithFileData:parameters name:@"file" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
         [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
     } progress:^(NSProgress * _Nonnull uploadProgress) {
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

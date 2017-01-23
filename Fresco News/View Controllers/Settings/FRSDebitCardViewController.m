@@ -513,11 +513,9 @@
 
                           [[FRSAPIClient sharedClient] createPaymentWithToken:stripeToken.tokenId
                                                                    completion:^(id responseObject, NSError *error) {
-
                                                                      if (error) {
-                                                                         self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
+                                                                         self.alertView = [[FRSAlertView alloc] initWithTitle:@"SAVE ID ERROR" message:error.localizedDescription actionTitle:@"TRY AGAIN" cancelTitle:@"CANCEL" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                                                                          [self.alertView show];
-                                                                         [self stopSpinner:self.loadingView onButton:self.rightAlignedButton];
                                                                      } else if (responseObject) {
                                                                          NSString *brand = [responseObject objectForKey:@"brand"];
                                                                          NSString *last4 = [responseObject objectForKey:@"last4"];
