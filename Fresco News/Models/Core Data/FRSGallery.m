@@ -122,7 +122,7 @@
     if ([dict valueForKey:@"external_url"] != [NSNull null]) {
         self.externalURL = [dict objectForKey:@"external_url"];
     }
-    
+
     if ([dict valueForKey:@"rating"] != [NSNull null]) {
         self.verificationRating = [[dict objectForKey:@"rating"] integerValue];
     }
@@ -137,7 +137,7 @@
 
     [self setValue:@([dict[@"liked"] boolValue]) forKey:@"liked"];
     [self setValue:@([dict[@"likes"] integerValue]) forKey:@"likes"];
-    
+
     [self setValue:@([dict[@"reposted"] boolValue]) forKey:@"reposted"];
     [self setValue:@([dict[@"reposts"] integerValue]) forKey:@"reposts"];
 

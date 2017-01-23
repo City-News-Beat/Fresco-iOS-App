@@ -69,13 +69,13 @@
 
 @property (nonatomic, retain) NSMutableArray *players;
 
--(void)playerTap:(UITapGestureRecognizer *)tap;
--(instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate;
--(void)configureWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id <FRSGalleryViewDelegate>)delegate;
--(void)loadGallery:(FRSGallery *)gallery;
--(void)play;
--(void)pause;
--(void)offScreen;
+- (void)playerTap:(UITapGestureRecognizer *)tap;
+- (instancetype)initWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryViewDelegate>)delegate;
+- (void)configureWithFrame:(CGRect)frame gallery:(FRSGallery *)gallery delegate:(id<FRSGalleryViewDelegate>)delegate;
+- (void)loadGallery:(FRSGallery *)gallery;
+- (void)play;
+- (void)pause;
+- (void)offScreen;
 
 //Should probably have a resize method that adjusts the size of the entire view. Still haven't out the best way to do this.
 

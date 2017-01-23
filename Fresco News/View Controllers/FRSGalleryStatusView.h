@@ -16,6 +16,6 @@
 @property (strong, nonatomic) FRSGalleryDetailView *parentView;
 
 -(void)configureWithArray:(NSArray *)postPurchases rating:(int)rating;
-- (void)removeLoadingSpinner;
+-(void)removeLoadingSpinner;
 
 @end

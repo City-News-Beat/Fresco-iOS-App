@@ -43,6 +43,15 @@
     DGElasticPullToRefreshLoadingViewCircle *spinner;
 }
 
+enum {
+    PendingVerfication = 0,
+    NotVerified = 1,
+    Verified = 2,
+    Highlighted = 3,
+    Deleted = 4
+};
+typedef int GalleryStatusRating;
+
 - (void)configureWithArray:(NSArray *)postPurchases rating:(int)rating {
     [self addLayerShadowAndRadius];
     self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
@@ -54,13 +63,13 @@
     if (purchases.count > 0) {
         [self setToSold];
     } else {
-        if (rating == 0) { // Not Rated | PENDING VERIFICATION
+        if (rating == PendingVerfication) { // Not Rated | PENDING VERIFICATION
             [self setToPendingVerification];
-        } else if (rating == 1) { // Skipped | NOT VERIFIED
+        } else if (rating == NotVerified) { // Skipped | NOT VERIFIED
             [self setToNotVerified];
-        } else if (rating == 2 || rating == 3) { // Verified or Highlighted | VERIFIED
+        } else if (rating == Verified || rating == Highlighted) { // Verified or Highlighted | VERIFIED
             [self setToVerified];
-        } else if (rating == 4) { // DELETED
+        } else if (rating == Deleted) { // DELETED
             // Todo
         }
     }
@@ -76,7 +85,8 @@
 }
 
 - (void)setToPendingVerification {
-    popupViewHeightConstraint.constant = 230; // Zeplin Height
+    int popupViewHeight = 230; // Zeplin Height
+    popupViewHeightConstraint.constant = popupViewHeight;
     scrollView.scrollEnabled = false;
 
     [self hideSoldViews];
@@ -86,13 +96,15 @@
     verifiedDescriptionLabel.text = @"Once we’ve verified your gallery, news outlets will be able to purchase content.";
 
     verifiedLineView.backgroundColor = [UIColor frescoOrangeColor];
-    verifiedLineHeightConstraint.constant = 36;
+    int verifiedLineHeight = 36; // Zeplin Line Height
+    verifiedLineHeightConstraint.constant = verifiedLineHeight;
 
     [verifiedCheckImageView setImage:[UIImage imageNamed:@"checkboxBlankCircleOutline24Y"]];
 }
 
 - (void)setToNotVerified {
-    popupViewHeightConstraint.constant = 230; // Zeplin Height
+    int popupViewHeight = 230; // Zeplin Height
+    popupViewHeightConstraint.constant = popupViewHeight;
     scrollView.scrollEnabled = false;
 
     [self hideSoldViews];
@@ -101,14 +113,16 @@
     verifiedTitleLabel.text = @"Couldn't verify";
     verifiedDescriptionLabel.text = @"This gallery is visible to Fresco users but hidden to news outlets.";
 
-    verifiedLineView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.26];
-    verifiedLineHeightConstraint.constant = 36;
+    verifiedLineView.backgroundColor = [UIColor frescoLightTextColor];
+    int verifiedLineHeight = 36; // Zeplin Line Height
+    verifiedLineHeightConstraint.constant = verifiedLineHeight;
 
     [verifiedCheckImageView setImage:[UIImage imageNamed:@"checkboxBlankCircleOutline24K3"]];
 }
 
 - (void)setToVerified {
-    popupViewHeightConstraint.constant = 216; // Zeplin Height
+    int popupViewHeight = 216; // Zeplin Height
+    popupViewHeightConstraint.constant = popupViewHeight;
     scrollView.scrollEnabled = false;
 
     [self hideSoldViews];
@@ -117,15 +131,18 @@
     verifiedTitleLabel.text = @"Verified";
     verifiedDescriptionLabel.text = @"News outlets can purchase content from this gallery.";
 
-    verifiedLineHeightConstraint.constant = 36;
+    int verifiedLineHeight = 36; // Zeplin Line Height
+    verifiedLineHeightConstraint.constant = verifiedLineHeight;
 }
 
 - (void)setToSold {
+    int popupViewHeight;
     if (purchases.count == 1) {
-        popupViewHeightConstraint.constant = 410; // Zeplin Height
+        popupViewHeight = 410; // Zeplin Height
     } else {
-        popupViewHeightConstraint.constant = 528; // Zeplin Height
+        popupViewHeight = 528; // Zeplin Height
     }
+    popupViewHeightConstraint.constant = popupViewHeight;
     verifiedDescriptionLabel.hidden = true;
     
     scrollView.hidden = true;
@@ -155,10 +172,7 @@
                      animations:^{
 
                        self.alpha = 1;
-                       //                         self.titleLabel.alpha = 1;
-                       //                         self.cancelButton.alpha = 1;
-                       //                         self.actionButton.alpha = 1;
-                       self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.26];
+                       self.backgroundColor = [UIColor frescoLightTextColor];
                        popupView.transform = CGAffineTransformMakeScale(1, 1);
 
                      }
@@ -172,9 +186,6 @@
         animations:^{
 
           self.alpha = 0;
-          //                         self.titleLabel.alpha = 0;
-          //                         self.cancelButton.alpha = 0;
-          //                         self.actionButton.alpha = 0;
           self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
           popupView.transform = CGAffineTransformMakeScale(0.9, 0.9);
         }
