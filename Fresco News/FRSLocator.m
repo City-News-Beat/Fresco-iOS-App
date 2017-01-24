@@ -7,12 +7,7 @@
 //
 
 #import "FRSLocator.h"
-#import "FRSAPIClient.h"
 #import "FRSUserManager.h"
-#import <CoreTelephony/CTCallCenter.h>
-#import <CoreTelephony/CTCall.h>
-#import <CoreTelephony/CTCarrier.h>
-#import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
 @implementation FRSLocator
 
