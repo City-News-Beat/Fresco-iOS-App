@@ -250,20 +250,6 @@
 
                                    [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
 
-                                   NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
-
-                                   if (socialLinksDict[@"facebook"] != nil) {
-                                       [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
-                                   }
-                                   
-                                   if (socialLinksDict[@"twitter"] != nil) {
-                                       [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-                                   }
-
-                                   if (responseObject[@"twitter_handle"] != nil) {
-                                       [[NSUserDefaults standardUserDefaults] setValue:responseObject[@"twitter_handle"] forKey:@"twitter-handle"];
-                                   }
-
                                    return;
                                }
 
@@ -388,11 +374,6 @@
       }
 
       if (authenticated) {
-          NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
-
-          if (socialLinksDict[@"facebook"] != nil) {
-              [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
-          }
 
           [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
           [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
@@ -478,17 +459,6 @@
       }
 
       if (authenticated) {
-          
-          if (responseObject[@"twitter_handle"] != nil) {
-              [[NSUserDefaults standardUserDefaults] setValue:responseObject[@"twitter_handle"] forKey:@"twitter-handle"];
-          }
-          NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
-          if (socialLinksDict[@"twitter"] != nil) {
-              [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-          }
-          
-          [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
-
 
           NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
 
@@ -500,8 +470,6 @@
           [delegate saveUserFields:responseObject[@"user"]];
           [self setMigrateState:responseObject];
 
-          NSLog(@"Social Digest: %@",socialDigest);
-          
           [[FRSAPIClient sharedClient] updateUserWithDigestion:socialDigest
                                                     completion:^(id responseObject, NSError *error) {
                                                       [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
@@ -512,6 +480,11 @@
                                                         }
                                                       }];
                                                     }];
+
+          //            if (<#condition#>) {
+          //                [self displayMigrationAlert];
+          //            }
+
           self.didAuthenticateSocial = YES;
           [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
           [self popToOrigin];
