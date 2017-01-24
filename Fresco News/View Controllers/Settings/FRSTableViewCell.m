@@ -173,7 +173,7 @@
 
     self.didToggleTwitter = YES;
 
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"]) {
         self.alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
         self.alert.delegate = self;
         [self.alert show];
@@ -191,6 +191,7 @@
             }else{
                 self.twitterSwitch.on = NO;
                 [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"twitter-handle"];
+                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
             }
             if(self.parentTableView){
                 [self.parentTableView reloadData];
@@ -1025,8 +1026,7 @@
 
         [[FRSAPIClient sharedClient] setPushNotificationWithBool:YES completion:^(id responseObject, NSError *error) {
             if (responseObject && !error) {
-                state = YES;
-                [[NSUserDefaults standardUserDefaults] setBool:state forKey:settingsUserNotificationToggle];
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
             } else {
@@ -1036,10 +1036,9 @@
             }
         }];
     } else {
-        [[FRSAPIClient sharedClient] setPushNotificationWithBool:YES completion:^(id responseObject, NSError *error) {
+        [[FRSAPIClient sharedClient] setPushNotificationWithBool:NO completion:^(id responseObject, NSError *error) {
               if (responseObject && !error) {
-                  state = NO;
-                  [[NSUserDefaults standardUserDefaults] setBool:state forKey:settingsUserNotificationToggle];
+                  [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
                   [[NSUserDefaults standardUserDefaults] synchronize];
               } else {
                   [sender setOn:TRUE];

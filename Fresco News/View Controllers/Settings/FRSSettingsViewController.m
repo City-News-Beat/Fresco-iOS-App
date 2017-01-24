@@ -286,7 +286,7 @@
                 case 0:
                     [self checkNotificationStatus];
                     
-                    [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:settingsUserNotificationToggle]];
+                    [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
    
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     break;
@@ -364,7 +364,11 @@
                     } else {
                         self.twitterCell.twitterSwitch.on = NO;
                         self.twitterHandle = nil;
-                        [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
+                        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"]){
+                            [self.twitterCell configureSocialCellWithTitle:@"Twitter Connected" andTag:1 enabled:YES];
+                        }else{
+                            [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
+                        }
                     }
                     break;
                 case 1:
@@ -378,7 +382,11 @@
                         [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
                     } else {
                         NSLog(@"FACEBOOK connected: %@", [[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-connected"]);
-                        [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]];
+                        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]){
+                            [cell configureSocialCellWithTitle:@"Facebook Connected" andTag:2 enabled:YES];
+                        }else{
+                            [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:NO];
+                        }
                     }
                     break;
                     
