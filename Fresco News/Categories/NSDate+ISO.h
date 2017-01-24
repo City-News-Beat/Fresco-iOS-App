@@ -12,5 +12,6 @@
 
 - (NSString *)ISODate;
 - (NSString *)ISOTime;
+- (NSString *)ISODateWithTimeZone;
 
 @end
