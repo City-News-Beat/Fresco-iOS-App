@@ -33,7 +33,6 @@
 #import "FRSNavigationController.h"
 #import "FRSAssignmentsViewController.h"
 #import "FRSDebitCardViewController.h"
-#import "FRSTaxInformationViewController.h"
 #import "FRSIdentityViewController.h"
 #import "FRSStoriesViewController.h"
 #import "FRSUploadManager.h"
@@ -62,6 +61,9 @@
     [self startFabric]; // crashlytics first yall
     [self configureStartDate];
     [self clearUploadCache];
+    
+    EndpointManager *manager = [EndpointManager sharedInstance];
+    [Stripe setDefaultPublishableKey:manager.currentEndpoint.stripeKey];
 
     [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
 
@@ -113,7 +115,11 @@
         [self handleLocalPush:[launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] userInfo]];
     }
     if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-        [self handleRemotePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+        // If we don't check for <iOS 10, multiple calls to handleRemotePush will be made.
+        // Once here, and once in userNotificationCenter:didReceiveNotificationResponse.
+        if (!SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"10.0")) {
+            [self handleRemotePush:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+        }
     }
     if (launchOptions[UIApplicationLaunchOptionsShortcutItemKey]) {
         [self handleColdQuickAction:launchOptions[UIApplicationLaunchOptionsShortcutItemKey]];
@@ -481,13 +487,10 @@
     return _managedObjectModel;
 }
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
-    // [self handleRemotePush:notification.request.content.userInfo];
-}
-
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
     didReceiveNotificationResponse:(UNNotificationResponse *)response
              withCompletionHandler:(void (^)())completionHandler {
+    
     NSLog(@"Handle push from background or closed");
     // if you set a member variable in didReceiveRemoteNotification, you  will know if this is from closed or background
     NSLog(@"%@", response.notification.request.content.userInfo);
@@ -657,6 +660,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // iOS 10 will handle notifications through other methods
     // custom code to handle notification content
+
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
         [self handleRemotePush:userInfo];
     }

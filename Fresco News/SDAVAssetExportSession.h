@@ -143,6 +143,8 @@
  */
 @property (nonatomic, assign, readonly) AVAssetExportSessionStatus status;
 
+@property (nonatomic, strong) NSString *postID;
+
 /**
  * Returns an asset export session configured with a specified asset.
  *
@@ -188,5 +190,7 @@
 @protocol SDAVAssetExportSessionDelegate <NSObject>
 
 - (void)exportSession:(SDAVAssetExportSession *)exportSession renderFrame:(CVPixelBufferRef)pixelBuffer withPresentationTime:(CMTime)presentationTime toBuffer:(CVPixelBufferRef)renderBuffer;
+
+- (void)updateTranscodingProgress:(float)progress withPostID:(NSString *)postID;
 
 @end

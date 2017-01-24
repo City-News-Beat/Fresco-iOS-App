@@ -263,7 +263,7 @@
                                    if (responseObject[@"twitter_handle"] != nil) {
                                        [[NSUserDefaults standardUserDefaults] setValue:responseObject[@"twitter_handle"] forKey:@"twitter-handle"];
                                    }
-                                   
+
                                    return;
                                }
 
