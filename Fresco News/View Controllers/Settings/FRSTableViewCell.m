@@ -183,19 +183,19 @@
 
         [[FRSAPIClient sharedClient] unlinkTwitter:^(id responseObject, NSError *error) {
           NSLog(@"Disconnect Twitter Error: %@", error);
-            self.twitterSwitch.enabled = YES;
-            if (error) {
-                self.twitterSwitch.on = YES;
-                FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
-                [alert show];
-            }else{
-                self.twitterSwitch.on = NO;
-                [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"twitter-handle"];
-                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
-            }
-            if(self.parentTableView){
-                [self.parentTableView reloadData];
-            }
+          self.twitterSwitch.enabled = YES;
+          if (error) {
+              self.twitterSwitch.on = YES;
+              FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionAlert];
+              [alert show];
+          } else {
+              self.twitterSwitch.on = NO;
+              [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"twitter-handle"];
+              [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+          }
+          if (self.parentTableView) {
+              [self.parentTableView reloadData];
+          }
         }];
 
     } else {
@@ -204,12 +204,12 @@
         [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user) {
           self.twitterSwitch.enabled = YES;
           self.userInteractionEnabled = YES;
-            
-            if(error){
-                self.twitterSwitch.on = NO;
-            }else{
-                self.twitterSwitch.on = YES;
-            }
+
+          if (error) {
+              self.twitterSwitch.on = NO;
+          } else {
+              self.twitterSwitch.on = YES;
+          }
 
           if (session) {
 
@@ -245,9 +245,9 @@
                                                       return;
                                                   }
                                               }
-                                                if(self.parentTableView){
-                                                    [self.parentTableView reloadData];
-                                                }
+                                              if (self.parentTableView) {
+                                                  [self.parentTableView reloadData];
+                                              }
                                             }];
 
           } else if (error) {
@@ -275,17 +275,17 @@
         self.facebookSwitch.enabled = NO;
         [[FRSAPIClient sharedClient] unlinkFacebook:^(id responseObject, NSError *error) {
           NSLog(@"Disconnect Facebook Error: %@", error);
-            self.facebookSwitch.enabled = YES;
-            if(error){
-                self.facebookSwitch.on = YES;
-            }else{
-                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
-                [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"facebook-name"];
-                self.facebookSwitch.on = NO;
-            }
-            if(self.parentTableView){
-                [self.parentTableView reloadData];
-            }
+          self.facebookSwitch.enabled = YES;
+          if (error) {
+              self.facebookSwitch.on = YES;
+          } else {
+              [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+              [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"facebook-name"];
+              self.facebookSwitch.on = NO;
+          }
+          if (self.parentTableView) {
+              [self.parentTableView reloadData];
+          }
         }];
 
     } else {
@@ -298,10 +298,10 @@
                      fromViewController:self.inputViewController
                                 handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
 
-                                    if(error){
-                                        self.facebookSwitch.on = NO;
-                                        self.facebookSwitch.enabled = YES;
-                                    }
+                                  if (error) {
+                                      self.facebookSwitch.on = NO;
+                                      self.facebookSwitch.enabled = YES;
+                                  }
 
                                   if (result && !error) {
 
@@ -310,17 +310,16 @@
                                                                        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
                                                                        [self.facebookSwitch setOn:YES animated:YES];
                                                                        self.facebookSwitch.alpha = 0;
-                                                                         
-                                                                         self.facebookSwitch.enabled = YES;
-                                                                         
-                                                                         if(error){
-                                                                             self.facebookSwitch.on = NO;
-                                                                             self.facebookSwitch.enabled = YES;
-                                                                         }else{
-                                                                             self.facebookSwitch.on = YES;
-                                                                         }
 
-                                                                         
+                                                                       self.facebookSwitch.enabled = YES;
+
+                                                                       if (error) {
+                                                                           self.facebookSwitch.on = NO;
+                                                                           self.facebookSwitch.enabled = YES;
+                                                                       } else {
+                                                                           self.facebookSwitch.on = YES;
+                                                                       }
+
                                                                        if (responseObject && !error) {
                                                                            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                                                                              if (!error) {
@@ -328,11 +327,11 @@
                                                                                  self.socialTitleLabel.text = self.facebookName;
                                                                                  [[NSUserDefaults standardUserDefaults] setObject:self.facebookName forKey:@"facebook-name"];
                                                                                  self.facebookSwitch.on = YES;
-                                                                                 if(self.parentTableView){
+                                                                                 if (self.parentTableView) {
                                                                                      [self.parentTableView reloadData];
                                                                                  }
                                                                              }
-                                                                               
+
                                                                            }];
                                                                        } else if (error) {
                                                                            self.facebookSwitch.on = NO;
@@ -359,14 +358,14 @@
                                                                                return;
                                                                            }
                                                                        }
-                                                                         if(self.parentTableView){
-                                                                             [self.parentTableView reloadData];
-                                                                         }
+                                                                       if (self.parentTableView) {
+                                                                           [self.parentTableView reloadData];
+                                                                       }
                                                                      }];
                                   }
-                                    if(self.parentTableView){
-                                        [self.parentTableView reloadData];
-                                    }
+                                  if (self.parentTableView) {
+                                      [self.parentTableView reloadData];
+                                  }
                                 }];
     }
 }
@@ -1024,28 +1023,30 @@
             radius = [user.notificationRadius floatValue];
         }
 
-        [[FRSAPIClient sharedClient] setPushNotificationWithBool:YES completion:^(id responseObject, NSError *error) {
-            if (responseObject && !error) {
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                
-            } else {
-                [sender setOn:FALSE];
-                FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                [alert show];
-            }
-        }];
+        [[FRSAPIClient sharedClient] setPushNotificationWithBool:YES
+                                                      completion:^(id responseObject, NSError *error) {
+                                                        if (responseObject && !error) {
+                                                            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+                                                            [[NSUserDefaults standardUserDefaults] synchronize];
+
+                                                        } else {
+                                                            [sender setOn:FALSE];
+                                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                            [alert show];
+                                                        }
+                                                      }];
     } else {
-        [[FRSAPIClient sharedClient] setPushNotificationWithBool:NO completion:^(id responseObject, NSError *error) {
-              if (responseObject && !error) {
-                  [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
-                  [[NSUserDefaults standardUserDefaults] synchronize];
-              } else {
-                  [sender setOn:TRUE];
-                  FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
-                  [alert show];
-              }
-            }];
+        [[FRSAPIClient sharedClient] setPushNotificationWithBool:NO
+                                                      completion:^(id responseObject, NSError *error) {
+                                                        if (responseObject && !error) {
+                                                            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+                                                            [[NSUserDefaults standardUserDefaults] synchronize];
+                                                        } else {
+                                                            [sender setOn:TRUE];
+                                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                            [alert show];
+                                                        }
+                                                      }];
     }
 }
 
