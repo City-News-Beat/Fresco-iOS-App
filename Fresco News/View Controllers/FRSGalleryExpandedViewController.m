@@ -7,15 +7,15 @@
 //
 
 #import "FRSGalleryExpandedViewController.h"
-
 #import "FRSGallery.h"
 #import "FRSArticle.h"
-
 #import "PeekPopArticleViewController.h"
 #import "Haneke.h"
 #import "Fresco.h"
 #import "FRSAlertView.h"
 #import "FRSGalleryDetailView.h"
+#import "FRSUserManager.h"
+#import "FRSAuthManager.h"
 
 @interface FRSGalleryExpandedViewController () <UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, FRSContentActionBarDelegate, UIViewControllerPreviewingDelegate, FRSAlertViewDelegate, UITextFieldDelegate>
 
@@ -142,7 +142,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     self.navigationItem.rightBarButtonItems = @[ dots ];
 
-    if ([[[self.gallery creator] uid] isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+    if ([[[self.gallery creator] uid] isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
         self.navigationItem.rightBarButtonItems = nil;
     }
 }
@@ -217,15 +217,15 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     [view addAction:reportGallery];
 
     if (![[[self.gallery creator] uid] isEqualToString:@""] && [self.gallery creator] != nil) {
-        if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
             [view addAction:report];
         }
-        if ([[[FRSAPIClient sharedClient] authenticatedUser] blocking] || self.didBlockUser) {
-            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+        if ([[[FRSUserManager sharedInstance] authenticatedUser] blocking] || self.didBlockUser) {
+            if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
                 [view addAction:unblock];
             }
         } else {
-            if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+            if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
                 [view addAction:block];
             }
         }

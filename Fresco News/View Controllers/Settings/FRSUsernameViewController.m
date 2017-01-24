@@ -12,6 +12,7 @@
 #import "UIColor+Fresco.h"
 #import "FRSAppDelegate.h"
 #import "FRSAlertView.h"
+#import "FRSUserManager.h"
 
 @interface FRSUsernameViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, FRSAlertViewDelegate>
 
@@ -231,38 +232,38 @@
     NSDictionary *digestion = @{ @"username" : self.username,
                                  @"verify_password" : self.password };
 
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:digestion
-                                              completion:^(id responseObject, NSError *error) {
-                                                FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
-                                                [delegate reloadUser];
+    [[FRSUserManager sharedInstance] updateUserWithDigestion:digestion
+                                                  completion:^(id responseObject, NSError *error) {
+                                                    FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+                                                    [delegate reloadUser];
 
-                                                if (!error) {
-                                                    [self popViewController];
-                                                    return;
-                                                }
-
-                                                if (error.code == -1009) {
-                                                    if (!self.alert) {
-                                                        self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                                        [self.alert show];
-                                                    }
-                                                    return;
-                                                }
-
-                                                NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                                NSInteger responseCode = response.statusCode;
-
-                                                if (responseCode == 403 || responseCode == 401) { //incorrect
-                                                    if (!self.errorImageView) {
-                                                        [self addErrorToView];
+                                                    if (!error) {
+                                                        [self popViewController];
                                                         return;
                                                     }
-                                                } else {
-                                                    [self presentGenericError];
-                                                }
-                                              }];
 
-    FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+                                                    if (error.code == -1009) {
+                                                        if (!self.alert) {
+                                                            self.alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
+                                                            [self.alert show];
+                                                        }
+                                                        return;
+                                                    }
+
+                                                    NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                    NSInteger responseCode = response.statusCode;
+
+                                                    if (responseCode == 403 || responseCode == 401) { //incorrect
+                                                        if (!self.errorImageView) {
+                                                            [self addErrorToView];
+                                                            return;
+                                                        }
+                                                    } else {
+                                                        [self presentGenericError];
+                                                    }
+                                                  }];
+
+    FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
     userToUpdate.username = self.username;
     [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
 }
@@ -352,7 +353,7 @@
 
         if ((![self.cell.textField.text isEqualToString:@""])) {
 
-            [[FRSAPIClient sharedClient] checkUsername:self.username
+            [[FRSUserManager sharedInstance] checkUsername:self.username
                                             completion:^(id responseObject, NSError *error) {
 
                                               if (!error && responseObject) {

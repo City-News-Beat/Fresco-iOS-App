@@ -10,19 +10,11 @@
 #import "FRSGallery.h"
 #import "FRSUser.h"
 #import "FRSCoreData.h"
-
 #import "FRSDateFormatter.h"
 #import "MagicalRecord.h"
+#import "FRSUserManager.h"
 
 @import UIKit;
-
-//@property (nullable, nonatomic, retain) NSString *caption;
-//@property (nullable, nonatomic, retain) NSDate *createdDate;
-//@property (nullable, nonatomic, retain) NSDate *editedDate;
-//@property (nullable, nonatomic, retain) NSString *title;
-//@property (nullable, nonatomic, retain) NSString *uid;
-//@property (nullable, nonatomic, retain) FRSUser *creator;
-//@property (nullable, nonatomic, retain) NSSet<FRSGallery *> *galleries;
 
 @implementation FRSStory
 @synthesize galleryCount = _galleryCount, sourceUser = _sourceUser, creator = _creator, curatorDict = _curatorDict;
@@ -101,11 +93,11 @@
             NSDictionary *source = (NSDictionary *)[results firstObject];
             NSString *userID = source[@"user_id"];
 
-            [[FRSAPIClient sharedClient] getUserWithUID:userID
-                                             completion:^(id responseObject, NSError *error) {
-                                               FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                               self.sourceUser = user;
-                                             }];
+            [[FRSUserManager sharedInstance] getUserWithUID:userID
+                                                 completion:^(id responseObject, NSError *error) {
+                                                   FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                                   self.sourceUser = user;
+                                                 }];
         }
     }
 }

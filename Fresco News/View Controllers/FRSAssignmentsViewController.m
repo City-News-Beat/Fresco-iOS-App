@@ -21,6 +21,8 @@
 #import "Haneke.h"
 #import "FRSAlertView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 @import MapKit;
 
@@ -184,8 +186,8 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
     if (!delegate.didPresentPermissionsRequest) { //Avoid double alerts
         [self checkStatusAndPresentPermissionsAlert:_locationManager.delegate];
     }
-    
-    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         if (self.didAcceptAssignment) {
             [self configureUnacceptedAssignment];
         }
@@ -664,9 +666,9 @@ static NSString *const ACTION_TITLE_TWO = @"OPEN CAMERA";
             imageView.clipsToBounds = YES;
             imageView.contentMode = UIViewContentModeScaleAspectFill;
             [annotationView addSubview:imageView];
-            
-            if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
-                NSString *link = [[FRSAPIClient sharedClient].authenticatedUser valueForKey:@"profileImage"];
+
+            if ([FRSUserManager sharedInstance].authenticatedUser.profileImage) {
+                NSString *link = [[FRSUserManager sharedInstance].authenticatedUser valueForKey:@"profileImage"];
                 NSURL *url = [NSURL URLWithString:link];
                 [imageView hnk_setImageFromURL:url];
                 imageView.backgroundColor = [UIColor frescoBlueColor];

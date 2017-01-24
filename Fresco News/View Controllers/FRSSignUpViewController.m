@@ -7,22 +7,18 @@
 //
 
 #import "FRSSignUpViewController.h"
-
-//View Controllers
 #import "FRSSetupProfileViewController.h" // !HELPFUL, LOOP BACK
 #import "FRSLoginViewController.h"
-
-//Helpers
 #import "UIColor+Fresco.h"
 #import "UIFont+Fresco.h"
 #import "UIView+Helpers.h"
-
-//UI
 #import "FRSAlertView.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FRSAppDelegate.h"
 #import "FRSNavigationController.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 @import MapKit;
 
@@ -65,7 +61,6 @@
 @property CGFloat longitude;
 @property (strong, nonatomic) NSMutableArray *formViews;
 
-
 @end
 
 @implementation FRSSignUpViewController
@@ -82,7 +77,7 @@
 
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 
-    if (![[FRSAPIClient sharedClient] isAuthenticated]) {
+    if (![[FRSAuthManager sharedInstance] isAuthenticated]) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
     }
@@ -187,7 +182,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.miles] forKey:settingsUserNotificationRadius];
 
-    FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
     userToUpdate.notificationRadius = @(self.miles);
     [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
 }
@@ -233,7 +228,7 @@
 
 - (void)configureUI {
     self.view.backgroundColor = [UIColor frescoBackgroundColorDark];
-    
+
     self.formViews = [[NSMutableArray alloc] init];
 
     [self configureScrollView];
@@ -300,7 +295,6 @@
     self.usernameHighlightLine = [[UIView alloc] initWithFrame:CGRectMake(48, 92 - 64 + 44, self.usernameTF.frame.size.width, 0.5)];
     self.usernameHighlightLine.backgroundColor = [UIColor frescoShadowColor];
     [self.scrollView addSubview:self.usernameHighlightLine];
-
 
     self.usernameCheckIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"check-green"]];
     self.usernameCheckIV.frame = CGRectMake(self.usernameTF.frame.size.width - 24, 10, 24, 24);
@@ -510,7 +504,7 @@
     imageView.layer.cornerRadius = 9;
     [mapCircleView addSubview:imageView];
 
-    if ([FRSAPIClient sharedClient].authenticatedUser.profileImage) {
+    if ([FRSUserManager sharedInstance].authenticatedUser.profileImage) {
 
     } else {
         imageView.backgroundColor = [UIColor frescoBlueColor];
@@ -944,7 +938,7 @@
 
         if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
 
-            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTF.text substringFromIndex:1]
+            [[FRSUserManager sharedInstance] checkUsername:[self.usernameTF.text substringFromIndex:1]
                                             completion:^(id responseObject, NSError *error) {
 
                                               //Return if no internet
@@ -1227,13 +1221,13 @@
     [self configureSpinner];
     [self startSpinner:self.loadingView onButton:self.createAccountButton];
 
-    NSDictionary *currentInstallation = [[FRSAPIClient sharedClient] currentInstallation];
+    NSDictionary *currentInstallation = [[FRSAuthManager sharedInstance] currentInstallation];
 
     NSMutableDictionary *registrationDigest = [[NSMutableDictionary alloc] init];
     [registrationDigest setObject:self.currentSocialDigest forKey:@"social_links"];
 
     if (currentInstallation && [currentInstallation objectForKey:@"device_token"]) {
-        [registrationDigest setObject:[[FRSAPIClient sharedClient] currentInstallation] forKey:@"installation"];
+        [registrationDigest setObject:[[FRSAuthManager sharedInstance] currentInstallation] forKey:@"installation"];
     }
 
     [registrationDigest setObject:[self.usernameTF.text substringFromIndex:1] forKey:@"username"];
@@ -1241,80 +1235,80 @@
     [registrationDigest setObject:self.emailTF.text forKey:@"email"];
     [registrationDigest setObject:@(self.miles) forKey:@"radius"];
 
-    [[FRSAPIClient sharedClient] registerWithUserDigestion:registrationDigest
-                                                completion:^(id responseObject, NSError *error) {
-                                                  BOOL facebookSignup = FALSE;
-                                                  BOOL twitterSignup = FALSE;
+    [[FRSAuthManager sharedInstance] registerWithUserDigestion:registrationDigest
+                                                    completion:^(id responseObject, NSError *error) {
+                                                      BOOL facebookSignup = FALSE;
+                                                      BOOL twitterSignup = FALSE;
 
-                                                  if ([self.currentSocialDigest objectForKey:@"twitter"]) {
-                                                      twitterSignup = true;
-                                                  }
-                                                  if ([self.currentSocialDigest objectForKey:@"facebook"]) {
-                                                      facebookSignup = true;
-                                                  }
+                                                      if ([self.currentSocialDigest objectForKey:@"twitter"]) {
+                                                          twitterSignup = true;
+                                                      }
+                                                      if ([self.currentSocialDigest objectForKey:@"facebook"]) {
+                                                          facebookSignup = true;
+                                                      }
 
-                                                  NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
+                                                      NSString *errorMessage = [[error userInfo] objectForKey:@"Content-Length"];
 
-                                                  if (error) {
-                                                      [registrationDigest setObject:error.localizedDescription forKey:@"error"];
-                                                      [FRSTracker track:registrationError parameters:@{ @"error" : registrationDigest }];
-                                                  }
+                                                      if (error) {
+                                                          [registrationDigest setObject:error.localizedDescription forKey:@"error"];
+                                                          [FRSTracker track:registrationError parameters:@{ @"error" : registrationDigest }];
+                                                      }
 
-                                                  if (error.code == -1009) {
+                                                      if (error.code == -1009) {
 
-                                                      FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
-                                                      [alert show];
-                                                      [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-
-                                                      return;
-                                                  }
-
-                                                  if (error) {
-                                                      [Answers logSignUpWithMethod:@"Email"
-                                                                           success:@NO
-                                                                  customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
-                                                                                      @"facebook" : @((self.facebookToken != Nil)) }];
-
-                                                      NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
-                                                      NSInteger responseCode = response.statusCode;
-
-                                                      if (responseCode == 412) {
-                                                          [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
-                                                          [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
-
-                                                          NSString *ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
-                                                          NSError *jsonError;
-
-                                                          NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
-                                                          NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
-
-                                                          FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                          FRSAlertView *alert = [[FRSAlertView alloc] initNoConnectionBannerWithBackButton:YES];
                                                           [alert show];
                                                           [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+
                                                           return;
                                                       }
 
-                                                      [self presentGenericError];
+                                                      if (error) {
+                                                          [Answers logSignUpWithMethod:@"Email"
+                                                                               success:@NO
+                                                                      customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
+                                                                                          @"facebook" : @((self.facebookToken != Nil)) }];
+
+                                                          NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
+                                                          NSInteger responseCode = response.statusCode;
+
+                                                          if (responseCode == 412) {
+                                                              [_twitterButton setImage:[UIImage imageNamed:@"twitter-icon"] forState:UIControlStateNormal];
+                                                              [_facebookButton setImage:[UIImage imageNamed:@"facebook-icon"] forState:UIControlStateNormal];
+
+                                                              NSString *ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+                                                              NSError *jsonError;
+
+                                                              NSDictionary *jsonErrorResponse = [NSJSONSerialization JSONObjectWithData:[ErrorResponse dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&jsonError];
+                                                              NSString *errorMessage = jsonErrorResponse[@"error"][@"msg"];
+
+                                                              FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:errorMessage actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                              [alert show];
+                                                              [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+                                                              return;
+                                                          }
+
+                                                          [self presentGenericError];
+                                                          [self stopSpinner:self.loadingView onButton:self.createAccountButton];
+                                                      }
+
+                                                      if (error.code == 0) {
+                                                          [Answers logSignUpWithMethod:@"Email"
+                                                                               success:@YES
+                                                                      customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
+                                                                                          @"facebook" : @((self.facebookToken != Nil)) }];
+
+                                                          _isAlreadyRegistered = TRUE;
+                                                          [self segueToSetup];
+                                                      }
+                                                      _pastRegistration = registrationDigest;
+
                                                       [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-                                                  }
-
-                                                  if (error.code == 0) {
-                                                      [Answers logSignUpWithMethod:@"Email"
-                                                                           success:@YES
-                                                                  customAttributes:@{ @"twitter" : @((self.twitterSession != Nil)),
-                                                                                      @"facebook" : @((self.facebookToken != Nil)) }];
-
-                                                      _isAlreadyRegistered = TRUE;
-                                                      [self segueToSetup];
-                                                  }
-                                                  _pastRegistration = registrationDigest;
-
-                                                  [self stopSpinner:self.loadingView onButton:self.createAccountButton];
-                                                }];
+                                                    }];
 }
 
 - (void)checkEmail {
-    [[FRSAPIClient sharedClient] checkEmail:self.emailTF.text
+    [[FRSUserManager sharedInstance] checkEmail:self.emailTF.text
                                  completion:^(id responseObject, NSError *error) {
                                    if (!error) {
                                        self.emailTaken = YES;
@@ -1782,20 +1776,19 @@
 }
 
 - (void)shouldShowEmailDialogue:(BOOL)yes {
-
     if (yes) {
         self.emailError = YES;
 
         self.errorContainer.alpha = 1;
-        
+
         NSArray *views = [self.scrollView subviews];
-        
+
         NSLog(@"%lu", (unsigned long)[views count]);
 
         if (self.notificationsEnabled) {
-            
-//            for(UIView *subview in vi)
-            
+
+            //            for(UIView *subview in vi)
+
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
             self.sliderContainer.transform = CGAffineTransformMakeTranslation(0, 44);
@@ -1803,8 +1796,8 @@
             //self.TOSContainerView.transform = CGAffineTransformMakeTranslation(0, self.mapView.frame.size.height + self.sliderContainer.frame.size.height + self.sliderContainer.frame.size.height);
             NSLog(@"TOSContainer View Y %f", self.TOSContainerView.frame.origin.y);
             self.TOSContainerView.frame = CGRectMake(self.TOSContainerView.frame.origin.x, 658, self.TOSContainerView.frame.size.width, self.TOSContainerView.frame.size.height);
-            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height+44);
-            
+            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width, self.scrollView.contentSize.height + 44);
+
         } else {
             self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 44);
             self.mapView.transform = CGAffineTransformMakeTranslation(0, 44);
@@ -1814,9 +1807,9 @@
 
     } else {
         self.emailError = NO;
-        
+
         self.errorContainer.alpha = 0;
-        
+
         self.assignmentsCard.transform = CGAffineTransformMakeTranslation(0, 0);
         self.mapView.transform = CGAffineTransformMakeTranslation(0, 0);
         self.promoContainer.transform = CGAffineTransformMakeTranslation(0, 0);

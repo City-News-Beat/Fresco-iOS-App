@@ -12,8 +12,9 @@
 #import "FRSStory.h"
 #import "FRSUser.h"
 #import "FRSCoreData.h"
-
 #import "FRSDateFormatter.h"
+#import "FRSUserManager.h"
+
 @import UIKit;
 
 @implementation FRSGallery
@@ -77,11 +78,11 @@
         NSDictionary *source = (NSDictionary *)[results firstObject];
         NSString *userID = source[@"user_id"];
 
-        [[FRSAPIClient sharedClient] getUserWithUID:userID
-                                         completion:^(id responseObject, NSError *error) {
-                                           FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                           self.sourceUser = user;
-                                         }];
+        [[FRSUserManager sharedInstance] getUserWithUID:userID
+                                             completion:^(id responseObject, NSError *error) {
+                                               FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                               self.sourceUser = user;
+                                             }];
     }
 
     if ((dict[@"owner"] != [NSNull null]) && (dict[@"owner"] != nil)) {

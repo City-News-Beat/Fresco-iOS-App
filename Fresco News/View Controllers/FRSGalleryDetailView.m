@@ -17,6 +17,7 @@
 #import "FRSGalleryStatusView.h"
 #import "FRSGalleryStatusTableViewCell.h"
 #import "Haneke.h"
+#import "FRSUserManager.h"
 
 #define CELL_HEIGHT 62
 #define TOP_NAV_BAR_HEIGHT 64
@@ -169,7 +170,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
 
     [self addSubview:self.actionBar];
 
-    if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+    if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
         [self.actionBar setCurrentUser:YES];
     } else {
         [self.actionBar setCurrentUser:NO];
@@ -182,7 +183,7 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     verificationContainerView.hidden = true;
     [self updateConstraints];
 
-    if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+    if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
         verificationViewLeftContraint.constant = 16; // Zeplin reg distance
         verificationEyeImageView.hidden = true;
 

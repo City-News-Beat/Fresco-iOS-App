@@ -18,11 +18,11 @@
 #import "OEParallax.h"
 #import "FRSUser+CoreDataProperties.h"
 #import "FRSProfileViewController.h"
-//#import "FRSUserProfileViewController.h"
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "FRSAppDelegate.h"
 #import "FRSDualUserListViewController.h"
+#import "FRSUserManager.h"
 
 #define TEXTVIEW_TOP_PAD 12
 
@@ -163,7 +163,7 @@
 
     dispatch_async(dispatch_get_main_queue(), ^{
 
-      if ([self.gallery.creator.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+      if ([self.gallery.creator.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
           [self.actionBar setCurrentUser:YES];
       } else {
           [self.actionBar setCurrentUser:NO];

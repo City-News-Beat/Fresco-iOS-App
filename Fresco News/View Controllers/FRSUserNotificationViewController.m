@@ -7,28 +7,23 @@
 //
 
 #import "FRSUserNotificationViewController.h"
-
 #import "FRSAppDelegate.h"
 #import "FRSTabBarController.h"
-
 #import "FRSAssignmentNotificationTableViewCell.h"
 #import "FRSDefaultNotificationTableViewCell.h"
 #import "FRSTextNotificationTableViewCell.h"
-
 #import "FRSCameraViewController.h"
 #import "FRSProfileViewController.h"
 #import "FRSDebitCardViewController.h"
 #import "FRSAssignmentsViewController.h"
 #import "FRSGalleryExpandedViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
-
 #import "FRSAwkwardView.h"
 #import "FRSAssignment.h"
 #import "FRSAlertView.h"
-
 #import <Haneke/Haneke.h>
-
 #import "FRSNotificationHandler.h"
+#import "FRSUserManager.h"
 
 @interface FRSUserNotificationViewController () <UITableViewDelegate, UITableViewDataSource, FRSExternalNavigationDelegate, FRSAlertViewDelegate, FRSDefaultNotificationCellDelegate>
 
@@ -780,7 +775,7 @@ NSString *const ASSIGNMENT_ID = @"assignmentNotificationCell";
     
     if ([[notification objectForKey:@"type"] isEqualToString:followedNotification]) {
         if ([notification objectForKey:@"user_id"]) {
-            [[FRSAPIClient sharedClient] getUserWithUID:[notification objectForKey:@"user_id"]
+            [[FRSUserManager sharedInstance] getUserWithUID:[notification objectForKey:@"user_id"]
                                              completion:^(id responseObject, NSError *error) {
                                                  FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
                                                  FRSUser *currentUser = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];

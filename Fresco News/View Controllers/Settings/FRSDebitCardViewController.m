@@ -17,6 +17,7 @@
 #import "FRSAppDelegate.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
 #import "EndpointManager.h"
+#import "FRSUserManager.h"
 
 @interface FRSDebitCardViewController ()
 
@@ -319,7 +320,7 @@
                                                                                                   NSString *last4 = [responseObject objectForKey:@"last4"];
                                                                                                   NSString *creditCard = [NSString stringWithFormat:@"%@ %@", brand, last4];
 
-                                                                                                  [[[FRSAPIClient sharedClient] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
+                                                                                                  [[[FRSUserManager sharedInstance] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
                                                                                                   [(FRSAppDelegate *)[[UIApplication sharedApplication] delegate] saveContext];
                                                                                                   [self.navigationController popViewControllerAnimated:YES];
                                                                                               }
@@ -522,7 +523,7 @@
 
                                                                          if ([[responseObject valueForKey:@"valid"] boolValue]) {
                                                                              NSString *creditCard = [NSString stringWithFormat:@"%@ %@", brand, last4];
-                                                                             [[[FRSAPIClient sharedClient] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
+                                                                             [[[FRSUserManager sharedInstance] authenticatedUser] setValue:creditCard forKey:@"creditCardDigits"];
                                                                              [self.navigationController popViewControllerAnimated:YES];
                                                                          } else {
                                                                              self.alertView = [[FRSAlertView alloc] initWithTitle:@"CARD ERROR" message:@"The card you entered was invalid. Please try again." actionTitle:@"TRY AGAIN" cancelTitle:@"OK" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];

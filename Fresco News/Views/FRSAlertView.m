@@ -15,6 +15,8 @@
 #import <MapKit/MapKit.h>
 #import "FRSAppDelegate.h"
 #import <Contacts/Contacts.h>
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 #define ALERT_WIDTH 270
 #define MESSAGE_WIDTH 238
@@ -899,7 +901,7 @@
 
     if (self) {
 
-        if (![FRSAPIClient sharedClient].authenticatedUser) {
+        if (![FRSUserManager sharedInstance].authenticatedUser) {
             return nil;
         }
 
@@ -1059,13 +1061,13 @@
         BOOL userHasUsername;
         BOOL userHasPassword = !password;
 
-        if ([[[[FRSAPIClient sharedClient] authenticatedUser] username] isEqual:[NSNull null]] || [[[[FRSAPIClient sharedClient] authenticatedUser] username] isEqualToString:@""] || ![[[FRSAPIClient sharedClient] authenticatedUser] username]) {
+        if ([[[[FRSUserManager sharedInstance] authenticatedUser] username] isEqual:[NSNull null]] || [[[[FRSUserManager sharedInstance] authenticatedUser] username] isEqualToString:@""] || ![[[FRSUserManager sharedInstance] authenticatedUser] username]) {
             userHasUsername = NO;
         } else {
             userHasUsername = YES;
         }
 
-        if ([[[[FRSAPIClient sharedClient] authenticatedUser] email] isEqual:[NSNull null]] || [[[[FRSAPIClient sharedClient] authenticatedUser] email] isEqualToString:@""] || ![[[FRSAPIClient sharedClient] authenticatedUser] email]) {
+        if ([[[[FRSUserManager sharedInstance] authenticatedUser] email] isEqual:[NSNull null]] || [[[[FRSUserManager sharedInstance] authenticatedUser] email] isEqualToString:@""] || ![[[FRSUserManager sharedInstance] authenticatedUser] email]) {
             userHasEmail = NO;
         } else {
             userHasEmail = YES;
@@ -1212,7 +1214,7 @@
             self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(16, 11, self.frame.size.width - (16 + 16), 20)];
             [self.passwordTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
             self.passwordTextField.tag = 3;
-            if ([[FRSAPIClient sharedClient] socialUsed]) {
+            if ([[FRSAuthManager sharedInstance] socialUsed]) {
                 self.passwordTextField.placeholder = @"Set a New Password";
             } else {
                 self.passwordTextField.placeholder = @"Confirm Password";
@@ -1470,11 +1472,11 @@
                                                           if (responseObject) {
 
                                                               if ([self.usernameTextField isEqual:[NSNull null]] || ![self.usernameTextField.text isEqualToString:@""]) {
-                                                                  [[FRSAPIClient sharedClient] authenticatedUser].username = [self.usernameTextField.text substringFromIndex:1];
+                                                                  [[FRSUserManager sharedInstance] authenticatedUser].username = [self.usernameTextField.text substringFromIndex:1];
                                                               }
 
                                                               if ([self.emailTextField isEqual:[NSNull null]] || ![self.emailTextField.text isEqualToString:@""]) {
-                                                                  [[FRSAPIClient sharedClient] authenticatedUser].email = self.emailTextField.text;
+                                                                  [[FRSUserManager sharedInstance] authenticatedUser].email = self.emailTextField.text;
                                                               }
                                                           }
                                                       }
@@ -1490,7 +1492,7 @@
         return;
     }
 
-    [[FRSAPIClient sharedClient] checkEmail:self.emailTextField.text
+    [[FRSUserManager sharedInstance] checkEmail:self.emailTextField.text
                                  completion:^(id responseObject, NSError *error) {
 
                                    if (!error) {
@@ -1545,7 +1547,7 @@
 
         if ((![[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""])) {
 
-            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTextField.text substringFromIndex:1]
+            [[FRSUserManager sharedInstance] checkUsername:[self.usernameTextField.text substringFromIndex:1]
                                             completion:^(id responseObject, NSError *error) {
 
                                               //Return if no internet

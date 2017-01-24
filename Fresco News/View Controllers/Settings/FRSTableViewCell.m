@@ -7,12 +7,9 @@
 //
 
 #import "FRSTableViewCell.h"
-
-/* Categories */
 #import "UIFont+Fresco.h"
 #import "UIColor+Fresco.h"
 #import "UIView+Helpers.h"
-
 #import "FRSAlertView.h"
 #import "FRSSettingsViewController.h"
 #import "DGElasticPullToRefreshLoadingViewCircle.h"
@@ -20,6 +17,7 @@
 #import <Haneke/Haneke.h>
 #import "FRSAppDelegate.h"
 #import "FRSLocationManager.h"
+#import "FRSUserManager.h"
 
 @interface FRSTableViewCell () <FRSAlertViewDelegate>
 
@@ -856,7 +854,7 @@
     self.following = isFollowing;
     self.currentUser = user;
 
-    if (self.currentUser.uid && [[FRSAPIClient sharedClient] authenticatedUser].uid && [self.currentUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+    if (self.currentUser.uid && [[FRSUserManager sharedInstance] authenticatedUser].uid && [self.currentUser.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
         self.followingButton.alpha = 0;
     } else {
         self.followingButton.alpha = 1;
@@ -962,7 +960,7 @@
     __block BOOL state;
 
     if ([sender isOn]) {
-        FRSUser *user = [[FRSAPIClient sharedClient] authenticatedUser];
+        FRSUser *user = [[FRSUserManager sharedInstance] authenticatedUser];
         float radius = 10;
 
         if ([user.notificationRadius floatValue] > 0) {

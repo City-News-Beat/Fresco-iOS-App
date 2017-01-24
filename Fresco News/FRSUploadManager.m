@@ -344,12 +344,12 @@ static NSDate *lastDate;
         numberOfVideos = 0;
         self.uploadMeta = [[NSMutableArray alloc] init];
         self.transcodingProgressDictionary = [[NSMutableDictionary alloc] init];
-        
+
         NSMutableDictionary *uploadErrorSummary = [@{ @"debug_message" : @"Upload completed" } mutableCopy];
         if (uploadSpeed > 0) {
             [uploadErrorSummary setObject:@(uploadSpeed) forKey:@"upload_speed_kBps"];
         }
-        
+
         [FRSTracker track:uploadDebug parameters:uploadErrorSummary];
 
         return;
@@ -359,9 +359,7 @@ static NSDate *lastDate;
     [self addUploadForPost:request[1]
                        url:request[0]
                     postID:request[2]
-                completion:^(id responseObject, NSError *error) {
-                  [[NSFileManager defaultManager] removeItemAtPath:request[0] error:Nil];
-
+                completion:^(id responseObject, NSError *error){
                 }];
 }
 
@@ -425,7 +423,6 @@ static NSDate *lastDate;
       }
 
       if (task.result) {
-
           FRSUpload *upload = [self.managedObjects objectForKey:post];
 
           if (upload) {
@@ -448,12 +445,14 @@ static NSDate *lastDate;
 
 - (void)updateProgress:(int64_t)bytes {
     uploadedFileSize += bytes;
+
     float progress;
     if (numberOfVideos > 0) {
         progress = 0.5f + (0.5f * (uploadedFileSize * 1.0) / (totalFileSize * 1.0));
     } else {
         progress = (uploadedFileSize * 1.0) / (totalFileSize * 1.0);
     }
+
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate"
                                                         object:nil
                                                       userInfo:@{ @"type" : @"progress",
@@ -468,10 +467,11 @@ static NSDate *lastDate;
     }
     NSString *videoFilesSize = [NSString stringWithFormat:@"%lluMB", totalVideoFilesSize];
     NSString *imageFilesSize = [NSString stringWithFormat:@"%lluMB", totalImageFilesSize];
-    
-    NSDictionary *filesDictionary = @{ @"video" : videoFilesSize, @"photo" : imageFilesSize };
+
+    NSDictionary *filesDictionary = @{ @"video" : videoFilesSize,
+                                       @"photo" : imageFilesSize };
     [uploadErrorSummary setObject:filesDictionary forKey:@"files"];
-    
+
     [FRSTracker track:uploadError parameters:uploadErrorSummary];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"FRSUploadUpdate" object:Nil userInfo:@{ @"type" : @"failure" }];
 }

@@ -12,6 +12,7 @@
 #import "FRSAPIClient.h"
 #import "FRSAlertView.h"
 #import "EndpointManager.h"
+#import "FRSUserManager.h"
 
 @interface FRSDisableAccountViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -177,7 +178,7 @@
     self.passwordIsConfirmed = NO;
 
     //These checks should return when the API responds in the block below
-    if (![[[FRSAPIClient sharedClient].authenticatedUser.username lowercaseString] isEqualToString:[self.username lowercaseString]]) {
+    if (![[[FRSUserManager sharedInstance].authenticatedUser.username lowercaseString] isEqualToString:[self.username lowercaseString]]) {
 
         self.usernameErrorImageView.alpha = 1;
         self.usernameIsConfirmed = NO;
@@ -188,7 +189,7 @@
         self.usernameIsConfirmed = YES;
     }
 
-    if (![[[FRSAPIClient sharedClient].authenticatedUser.email lowercaseString] isEqualToString:[self.email lowercaseString]]) {
+    if (![[[FRSUserManager sharedInstance].authenticatedUser.email lowercaseString] isEqualToString:[self.email lowercaseString]]) {
         self.emailIsConfirmed = NO;
 
         self.emailErrorImageView.alpha = 1;
@@ -232,7 +233,7 @@
 
 - (void)logout {
 
-    [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSAPIClient sharedClient].authenticatedUser];
+    [[[FRSAPIClient sharedClient] managedObjectContext] deleteObject:[FRSUserManager sharedInstance].authenticatedUser];
     [[[FRSAPIClient sharedClient] managedObjectContext] save:nil];
     [SAMKeychain deletePasswordForService:serviceName account:[EndpointManager sharedInstance].currentEndpoint.frescoClientId];
 

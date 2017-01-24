@@ -11,6 +11,7 @@
 #import "UIColor+Fresco.h"
 #import "FRSAPIClient.h"
 #import "FRSAppDelegate.h"
+#import "FRSUserManager.h"
 
 @interface FRSEmailViewController ()
 
@@ -46,15 +47,15 @@
 
     [self.view endEditing:YES];
 
-    [[FRSAPIClient sharedClient] updateUserWithDigestion:@{ @"email" : self.email,
-                                                            @"verify_password" : self.password }
+    [[FRSUserManager sharedInstance] updateUserWithDigestion:@{ @"email" : self.email,
+                                                                @"verify_password" : self.password }
         completion:^(id responseObject, NSError *error) {
 
           FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
           [delegate reloadUser];
 
           if (!error && responseObject) {
-              FRSUser *userToUpdate = [[FRSAPIClient sharedClient] authenticatedUser];
+              FRSUser *userToUpdate = [[FRSUserManager sharedInstance] authenticatedUser];
               userToUpdate.email = self.email;
               [[[FRSAPIClient sharedClient] managedObjectContext] save:Nil];
 

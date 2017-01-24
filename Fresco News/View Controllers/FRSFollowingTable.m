@@ -15,6 +15,7 @@
 #import "FRSAwkwardView.h"
 #import "FRSStoryCell.h"
 #import "FRSStoryDetailViewController.h"
+#import "FRSUserManager.h"
 
 @implementation FRSFollowingTable
 @synthesize navigationController = _navigationController, galleries = _galleries;
@@ -372,7 +373,7 @@
     dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     NSString *timeStamp = [dateFormat stringFromDate:gallery.editedDate];
 
-    FRSUser *authUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    FRSUser *authUser = [[FRSUserManager sharedInstance] authenticatedUser];
     NSString *userID = authUser.uid;
 
     NSString *endpoint = [NSString stringWithFormat:followingFeed, userID];

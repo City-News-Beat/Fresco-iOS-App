@@ -1,40 +1,30 @@
 #import "FRSProfileViewController.h"
-
-//View Controllers
 #import "FRSSettingsViewController.h"
 #import "FRSFollowersViewController.h"
 #import "FRSNavigationController.h"
-
 #import "FRSGalleryCell.h"
-
 #import "FRSBorderedImageView.h"
 #import "DGElasticPullToRefresh.h"
-
 #import "Fresco.h"
-
 #import "FRSTrimTool.h"
 #import "FRSAppDelegate.h"
-
 #import "FRSUser.h"
-
 #import "FRSAlertView.h"
-
 #import "FRSAppDelegate.h"
 #import "FRSAPIClient.h"
 #import "FRSStoryCell.h"
 #import "FRSSetupProfileViewController.h"
-
 #import "FRSAPIClient.h"
 #import "FRSAwkwardView.h"
 #import "FRSGalleryExpandedViewController.h"
 #import <Haneke/Haneke.h>
 #import "FRSStoryDetailViewController.h"
 #import "FRSUserNotificationViewController.h"
-
 #import "FRSTabBarController.h"
-
 #import "FRSSearchViewController.h"
 #import "UITextView+Resize.h"
+#import "FRSAuthManager.h"
+#import "FRSUserManager.h"
 
 @interface FRSProfileViewController () <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITabBarDelegate, FRSAlertViewDelegate>
 
@@ -96,7 +86,7 @@
 @synthesize representedUser = _representedUser, authenticatedProfile = _authenticatedProfile;
 
 - (void)loadAuthenticatedUser {
-    _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+    _representedUser = [[FRSUserManager sharedInstance] authenticatedUser];
     self.authenticatedProfile = TRUE;
     [self configureWithUser:_representedUser];
     [self fetchGalleries];
@@ -132,20 +122,20 @@
     }
 
     if (FALSE) {
-        _representedUser = [[FRSAPIClient sharedClient] authenticatedUser];
+        _representedUser = [[FRSUserManager sharedInstance] authenticatedUser];
         self.authenticatedProfile = TRUE;
         [self configureWithUser:_representedUser];
     } else {
-        [[FRSAPIClient sharedClient] getUserWithUID:_representedUser.uid
-                                         completion:^(id responseObject, NSError *error) {
-                                           if (error || !responseObject) {
-                                               return;
-                                           }
+        [[FRSUserManager sharedInstance] getUserWithUID:_representedUser.uid
+                                             completion:^(id responseObject, NSError *error) {
+                                               if (error || !responseObject) {
+                                                   return;
+                                               }
 
-                                           _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
-                                           [self configureWithUser:_representedUser];
+                                               _representedUser = [FRSUser nonSavedUserWithProperties:responseObject context:[[FRSAPIClient sharedClient] managedObjectContext]];
+                                               [self configureWithUser:_representedUser];
 
-                                         }];
+                                             }];
     }
 
     [self setupUI];
@@ -408,26 +398,26 @@
         [self setupUI];
         [self configureUI];
 
-        [[FRSAPIClient sharedClient] getUserWithUID:userName
-                                         completion:^(id responseObject, NSError *error) {
-                                           [self addStatusBarNotification];
-                                           [self showNavBarForScrollView:self.tableView animated:NO];
-                                           FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [[FRSUserManager sharedInstance] getUserWithUID:userName
+                                             completion:^(id responseObject, NSError *error) {
+                                               [self addStatusBarNotification];
+                                               [self showNavBarForScrollView:self.tableView animated:NO];
+                                               FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
 
-                                           FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
-                                           _representedUser = user;
+                                               FRSUser *user = [FRSUser nonSavedUserWithProperties:responseObject context:[delegate managedObjectContext]];
+                                               _representedUser = user;
 
-                                           [self configureWithUser:user];
-                                           [self fetchGalleries];
-                                           [super removeNavigationBarLine];
+                                               [self configureWithUser:user];
+                                               [self fetchGalleries];
+                                               [super removeNavigationBarLine];
 
-                                           if (self.shouldShowNotificationsOnLoad) {
-                                               [self showNotificationsNotAnimated];
-                                           }
+                                               if (self.shouldShowNotificationsOnLoad) {
+                                                   [self showNotificationsNotAnimated];
+                                               }
 
-                                           [self showTabBarAnimated:YES];
-                                           self.tableView.bounces = false;
-                                         }];
+                                               [self showTabBarAnimated:YES];
+                                               self.tableView.bounces = false;
+                                             }];
     }
 
     return self;
@@ -657,7 +647,7 @@
                                               if (self.userIsBlocking || _representedUser.blocking) {
                                                   [self configureBlockedUserWithButton:YES];
                                                   return;
-                                              } else if ((self.userIsSuspended || _representedUser.suspended) && ![_representedUser.uid isEqual:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+                                              } else if ((self.userIsSuspended || _representedUser.suspended) && ![_representedUser.uid isEqual:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
                                                   [self configureSuspendedUser];
                                                   return;
                                               } else if (self.userIsDisabled || _representedUser.disabled) {
@@ -796,7 +786,7 @@
 
     } else {
 
-        if (![self.representedUser.uid isEqualToString:[[FRSAPIClient sharedClient] authenticatedUser].uid]) {
+        if (![self.representedUser.uid isEqualToString:[[FRSUserManager sharedInstance] authenticatedUser].uid]) {
 
             self.followBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""] style:UIBarButtonItemStylePlain target:self action:@selector(followUser)];
             self.followBarButtonItem.tintColor = [UIColor whiteColor];
@@ -811,7 +801,7 @@
 
               if (!self.userIsDisabled || !self.userIsSuspended) {
 
-                  if ([[FRSAPIClient sharedClient] isAuthenticated]) {
+                  if ([[FRSAuthManager sharedInstance] isAuthenticated]) {
                       UIBarButtonItem *dotIcon = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"dots"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSheet)];
                       dotIcon.imageInsets = UIEdgeInsetsMake(0, 0, 0, -30);
 
