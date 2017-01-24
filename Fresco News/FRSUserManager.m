@@ -90,9 +90,7 @@
                             }
 
                             // set up FRSUser object with this info, set authenticated to true
-                            NSString *userID = Nil;
-
-                            userID = responseObject[@"id"];
+                            NSString *userID = responseObject[@"id"];
                             NSString *email = responseObject[@"email"];
                             NSString *name = responseObject[@"full_name"];
                             NSMutableDictionary *identityDictionary = [[NSMutableDictionary alloc] init];
@@ -116,7 +114,6 @@
 }
 
 - (void)updateUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion {
-
     [[FRSAPIClient sharedClient] post:updateUserEndpoint
                        withParameters:digestion
                            completion:^(id responseObject, NSError *error) {
@@ -125,7 +122,6 @@
 }
 
 - (FRSUser *)authenticatedUser {
-
     // predicate searching for users in store w/ loggedIn as TRUE/1
     NSPredicate *signedInPredicate = [NSPredicate predicateWithFormat:@"%K == %@", @"isLoggedIn", @(TRUE)];
     NSFetchRequest *signedInRequest = [NSFetchRequest fetchRequestWithEntityName:@"FRSUser"];
@@ -211,6 +207,23 @@
                        withParameters:location
                            completion:^(id responseObject, NSError *error){
                            }];
+}
+
+- (void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self check:email completion:completion];
+}
+
+- (void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion {
+    [self check:username completion:completion];
+}
+
+- (void)check:(NSString *)check completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSString *checkEndpoint = [userEndpoint stringByAppendingString:[check stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+    
+    [[FRSAPIClient sharedClient] get:checkEndpoint withParameters:Nil
+   completion:^(id responseObject, NSError *error) {
+       completion(responseObject, error);
+   }];
 }
 
 @end

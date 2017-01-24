@@ -353,7 +353,7 @@
 
         if ((![self.cell.textField.text isEqualToString:@""])) {
 
-            [[FRSAPIClient sharedClient] checkUsername:self.username
+            [[FRSUserManager sharedInstance] checkUsername:self.username
                                             completion:^(id responseObject, NSError *error) {
 
                                               if (!error && responseObject) {

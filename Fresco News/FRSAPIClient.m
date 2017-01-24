@@ -120,23 +120,6 @@
         }];
 }
 
-- (void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self check:email completion:completion];
-}
-- (void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion {
-    [self check:username completion:completion];
-}
-
-- (void)check:(NSString *)check completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSString *checkEndpoint = [userEndpoint stringByAppendingString:[check stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
-
-    [self get:checkEndpoint
-        withParameters:Nil
-            completion:^(id responseObject, NSError *error) {
-              completion(responseObject, error);
-            }];
-}
-
 - (void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion {
 
     [self get:notificationEndpoint

@@ -8,6 +8,7 @@
 
 #import "FRSLocator.h"
 #import "FRSAPIClient.h"
+#import "FRSUserManager.h"
 #import <CoreTelephony/CTCallCenter.h>
 #import <CoreTelephony/CTCall.h>
 #import <CoreTelephony/CTCarrier.h>
@@ -83,7 +84,7 @@
         NSDictionary *userLocation = @{ @"lat" : @(currentLocation.coordinate.latitude),
                                         @"lng" : @(currentLocation.coordinate.longitude) };
 
-        [[FRSAPIClient sharedClient] pingLocation:userLocation
+        [[FRSUserManager sharedInstance] pingLocation:userLocation
                                        completion:^(id responseObject, NSError *error) {
                                          if (error) {
                                              NSLog(@"Location Error");

@@ -1492,7 +1492,7 @@
         return;
     }
 
-    [[FRSAPIClient sharedClient] checkEmail:self.emailTextField.text
+    [[FRSUserManager sharedInstance] checkEmail:self.emailTextField.text
                                  completion:^(id responseObject, NSError *error) {
 
                                    if (!error) {
@@ -1547,7 +1547,7 @@
 
         if ((![[self.usernameTextField.text substringFromIndex:1] isEqualToString:@""])) {
 
-            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTextField.text substringFromIndex:1]
+            [[FRSUserManager sharedInstance] checkUsername:[self.usernameTextField.text substringFromIndex:1]
                                             completion:^(id responseObject, NSError *error) {
 
                                               //Return if no internet

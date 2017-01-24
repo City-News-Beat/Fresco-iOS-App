@@ -938,7 +938,7 @@
 
         if ((![[self.usernameTF.text substringFromIndex:1] isEqualToString:@""])) {
 
-            [[FRSAPIClient sharedClient] checkUsername:[self.usernameTF.text substringFromIndex:1]
+            [[FRSUserManager sharedInstance] checkUsername:[self.usernameTF.text substringFromIndex:1]
                                             completion:^(id responseObject, NSError *error) {
 
                                               //Return if no internet
@@ -1308,7 +1308,7 @@
 }
 
 - (void)checkEmail {
-    [[FRSAPIClient sharedClient] checkEmail:self.emailTF.text
+    [[FRSUserManager sharedInstance] checkEmail:self.emailTF.text
                                  completion:^(id responseObject, NSError *error) {
                                    if (!error) {
                                        self.emailTaken = YES;

@@ -192,7 +192,7 @@
 }
 
 - (void)reloadData {
-    [[FRSAPIClient new] fetchStoriesWithLimit:self.stories.count
+    [[FRSAPIClient new] fetchStoriesWithLimit:12
                                   lastStoryID:Nil
                                    completion:^(NSArray *stories, NSError *error) {
 

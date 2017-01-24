@@ -21,5 +21,8 @@
 - (void)refreshCurrentUser:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getUserWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)checkUser:(NSString *)user completion:(FRSAPIBooleanCompletionBlock)completion;
+- (void)pingLocation:(NSDictionary *)location completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)checkEmail:(NSString *)email completion:(FRSAPIDefaultCompletionBlock)completion;
+- (void)checkUsername:(NSString *)username completion:(FRSAPIDefaultCompletionBlock)completion;
 
 @end
