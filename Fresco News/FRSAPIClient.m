@@ -1,5 +1,4 @@
- 
-    
+
 //
 //  FRSAPIClient.m
 //  Fresco
@@ -1490,16 +1489,6 @@
     [self post:endpoint withParameters:parameters completion:completion];
 }
 
-- (void)setPushNotificationWithBool:(BOOL)sendPush completion:(FRSAPIDefaultCompletionBlock)completion {
-    NSDictionary *dict = @{ @"send_push" : [NSNumber numberWithBool:sendPush] };
-
-    [self post:settingsUpdateEndpoint
-        withParameters:@{ @"notify-user-dispatch-new-assignment" : dict }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
-}
-
 /* serialization */
 
 - (id)parsedObjectsFromAPIResponse:(id)response cache:(BOOL)cache {
@@ -1830,4 +1819,3 @@
 }
 
 @end
-d
