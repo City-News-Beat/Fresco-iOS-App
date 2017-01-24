@@ -227,8 +227,4 @@
                            }];
 }
 
-- (void)disconnectPlatform:(NSString *)platform completion:(FRSAPIDefaultCompletionBlock)completion {
-    [[FRSAPIClient sharedClient] post:deleteSocialEndpoint withParameters:@{ @"platform" : platform } completion:completion];
-}
-
 @end

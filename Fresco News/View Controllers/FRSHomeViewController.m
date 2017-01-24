@@ -294,8 +294,8 @@
 
 - (void)reloadData {
     [self.followingTable reloadFollowing];
-
-    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:self.dataSource.count
+   
+    [[FRSAPIClient sharedClient] fetchGalleriesWithLimit:12
                                          offsetGalleryID:Nil
                                               completion:^(NSArray *galleries, NSError *error) {
                                                 [self.appDelegate.managedObjectContext performBlock:^{

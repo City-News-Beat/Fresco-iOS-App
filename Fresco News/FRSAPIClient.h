@@ -69,8 +69,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 
 - (void)deleteComment:(NSString *)commentID fromGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 
-- (void)disconnectPlatform:(NSString *)platform completion:(FRSAPIDefaultCompletionBlock)completion;
-
 //registration
 
 - (void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;

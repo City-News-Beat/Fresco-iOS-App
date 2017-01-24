@@ -19,6 +19,7 @@
 #import "EndpointManager.h"
 #import "FRSAuthManager.h"
 #import "FRSUserManager.h"
+#import "NSDate+ISO.h"
 
 @implementation FRSAPIClient
 
@@ -1238,10 +1239,7 @@
                           digest[@"lat"] = @(asset.location.coordinate.latitude);
                           digest[@"lng"] = @(asset.location.coordinate.longitude);
 
-                          NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-                          dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-
-                          digest[@"captured_at"] = [dateFormat stringFromDate:asset.creationDate];
+                          digest[@"captured_at"] = [(NSDate *)asset.creationDate ISODateWithTimeZone];
 
                           if (asset.mediaType == PHAssetMediaTypeImage) {
                               digest[@"contentType"] = @"image/jpeg";
