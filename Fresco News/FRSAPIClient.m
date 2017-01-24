@@ -17,6 +17,7 @@
 #import "FRSTabBarController.h"
 #import "FRSAppDelegate.h"
 #import "EndpointManager.h"
+#import "NSDate+ISO.h"
 
 @implementation FRSAPIClient
 @synthesize socialUsed = _socialUsed, passwordUsed = _passwordUsed, emailUsed = _emailUsed, authenticatedUser = _authenticatedUser;
@@ -263,7 +264,6 @@
 - (void)check:(NSString *)check completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *checkEndpoint = [userEndpoint stringByAppendingString:[check stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
 
-    
     [self get:checkEndpoint
         withParameters:Nil
             completion:^(id responseObject, NSError *error) {
@@ -413,7 +413,7 @@
     if (localeString) {
         currentInstallation[@"locale_identifier"] = localeString;
     }
-    
+
     return currentInstallation;
 }
 
@@ -926,41 +926,54 @@
 - (void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
 
-    [manager GET:endPoint parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress) {
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        completion(responseObject, Nil);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        completion(Nil, error);
-        [self handleError:error];
-    }];
+    [manager GET:endPoint
+        parameters:parameters
+        progress:^(NSProgress *_Nonnull downloadProgress) {
+        }
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          completion(Nil, error);
+          [self handleError:error];
+        }];
 }
 
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
 
-    [manager POST:endPoint parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress) {
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        completion(responseObject, Nil);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        completion(Nil, error);
-        [self handleError:error];
-    }];
+    [manager POST:endPoint
+        parameters:parameters
+        progress:^(NSProgress *_Nonnull downloadProgress) {
+        }
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          completion(Nil, error);
+          [self handleError:error];
+        }];
 }
 
 - (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
 
- [manager POST:endPoint parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-     NSString *paramNameForImage = @"avatar";
-     [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
- } progress:^(NSProgress * _Nonnull uploadProgress) {
-    
- } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-     completion(responseObject, Nil);
- } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-     completion(Nil, error);
-     [self handleError:error];
- }];
+    [manager POST:endPoint
+        parameters:parameters
+        constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+          NSString *paramNameForImage = @"avatar";
+          [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+        }
+        progress:^(NSProgress *_Nonnull uploadProgress) {
+
+        }
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          completion(Nil, error);
+          [self handleError:error];
+        }];
 }
 
 - (void)uploadStateID:(NSString *)endPoint withParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -971,17 +984,22 @@
     NSString *auth = [NSString stringWithFormat:@"Bearer %@", [EndpointManager sharedInstance].currentEndpoint.stripeKey];
 
     [manager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
-    
-    [manager POST:endPoint parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-        [formData appendPartWithFileData:parameters name:@"file" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
-        [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
-    } progress:^(NSProgress * _Nonnull uploadProgress) {
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        completion(responseObject, Nil);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        completion(Nil, error);
-        [self handleError:error];
-    }];
+
+    [manager POST:endPoint
+        parameters:nil
+        constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+          [formData appendPartWithFileData:parameters name:@"file" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+          [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
+        }
+        progress:^(NSProgress *_Nonnull uploadProgress) {
+        }
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          completion(Nil, error);
+          [self handleError:error];
+        }];
 }
 
 - (void)updateTaxInfoWithFileID:(NSString *)fileID completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -1433,12 +1451,11 @@
 - (void)fetchPurchasesForGalleryID:(NSString *)galleryID completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:purchasesEndpoint, galleryID];
     [self get:endpoint
-withParameters:Nil
-   completion:^(id responseObject, NSError *error) {
-       completion(responseObject, error);
-   }];
+        withParameters:Nil
+            completion:^(id responseObject, NSError *error) {
+              completion(responseObject, error);
+            }];
 }
-
 
 - (void)fetchMoreComments:(FRSGallery *)gallery last:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:paginateComments, gallery.uid, last];
@@ -1688,10 +1705,7 @@ withParameters:Nil
                           digest[@"lat"] = @(asset.location.coordinate.latitude);
                           digest[@"lng"] = @(asset.location.coordinate.longitude);
 
-                          NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-                          dateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-
-                          digest[@"captured_at"] = [dateFormat stringFromDate:asset.creationDate];
+                          digest[@"captured_at"] = [(NSDate *)asset.creationDate ISODateWithTimeZone];
 
                           if (asset.mediaType == PHAssetMediaTypeImage) {
                               digest[@"contentType"] = @"image/jpeg";
