@@ -75,6 +75,7 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 // notifications
 - (void)getNotificationsWithCompletion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getNotificationsWithLast:(NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion;
+-(void)setPushNotificationWithBool: (BOOL) sendPush completion:(FRSAPIDefaultCompletionBlock)completion;
 
 - (void)updateLegacyUserWithDigestion:(NSDictionary *)digestion completion:(FRSAPIDefaultCompletionBlock)completion;
 

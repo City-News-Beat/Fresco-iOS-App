@@ -184,6 +184,7 @@
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"twitter-handle"];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"twitter-connected"];
+    
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:settingsUserNotificationRadius];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:settingsUserNotificationToggle];
     [[NSUserDefaults standardUserDefaults] setValue:nil forKey:userNeedsToMigrate];
