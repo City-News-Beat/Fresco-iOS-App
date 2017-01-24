@@ -106,7 +106,7 @@
         self.twitterSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
         [self.twitterSwitch addTarget:self action:@selector(twitterToggle) forControlEvents:UIControlEventValueChanged];
         self.twitterSwitch.onTintColor = [UIColor twitterBlueColor];
-        [self.twitterSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"] animated:NO];
+        [self.twitterSwitch setOn:enabled];
 
         [self addSubview:self.twitterSwitch];
 
@@ -174,7 +174,6 @@
     self.didToggleTwitter = YES;
 
     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
-
         self.alert = [[FRSAlertView alloc] initWithTitle:@"DISCONNECT TWITTER?" message:@"You’ll be unable to use your Twitter account for logging in and sharing galleries." actionTitle:@"CANCEL" cancelTitle:@"DISCONNECT" cancelTitleColor:[UIColor frescoRedHeartColor] delegate:self];
         self.alert.delegate = self;
         [self.alert show];
@@ -191,6 +190,7 @@
                 [alert show];
             }else{
                 self.twitterSwitch.on = NO;
+                [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"twitter-handle"];
             }
             if(self.parentTableView){
                 [self.parentTableView reloadData];
@@ -198,15 +198,9 @@
         }];
 
     } else {
-        //        self.twitterSwitch.userInteractionEnabled = NO;
-        //        self.userInteractionEnabled = NO;
-        //        self.twitterIV.alpha = 0;
-        //        [self configureSpinner];
         self.twitterSwitch.enabled = NO;
         self.twitterSwitch.on = YES;
         [FRSSocial loginWithTwitter:^(BOOL authenticated, NSError *error, TWTRSession *session, FBSDKAccessToken *token, NSDictionary *user) {
-          //            [self.loadingView stopLoading];
-          //            [self.loadingView removeFromSuperview];
           self.twitterSwitch.enabled = YES;
           self.userInteractionEnabled = YES;
             
@@ -285,6 +279,7 @@
                 self.facebookSwitch.on = YES;
             }else{
                 [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+                [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"facebook-name"];
                 self.facebookSwitch.on = NO;
             }
             if(self.parentTableView){

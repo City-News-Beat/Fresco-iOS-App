@@ -358,7 +358,7 @@
                     
                     self.twitterCell = cell;
                     self.twitterCell.parentTableView = tableView;
-                    if (self.twitterCell.twitterHandle) {
+                    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
                         [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
                         self.twitterCell.twitterSwitch.on = YES;
                     } else {
