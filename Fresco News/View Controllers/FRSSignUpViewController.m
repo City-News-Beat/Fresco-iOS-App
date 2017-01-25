@@ -97,7 +97,7 @@
 }
 
 - (NSDictionary *)currentSocialDigest {
-    return [[FRSAPIClient sharedClient] socialDigestionWithTwitter:_twitterSession facebook:_facebookToken];
+    return [[FRSAuthManager sharedInstance] socialDigestionWithTwitter:_twitterSession facebook:_facebookToken];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -73,11 +73,8 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 //registration
 
 - (void)createGallery:(FRSGallery *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
-- (NSDictionary *)socialDigestionWithTwitter:(TWTRSession *)twitterSession facebook:(FBSDKAccessToken *)facebookToken; // current social links, formatted for transmission to server
+
 - (NSNumber *)fileSizeForURL:(NSURL *)url;
-// social
-- (void)addTwitter:(TWTRSession *)twitterSession completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)addFacebook:(FBSDKAccessToken *)facebookToken completion:(FRSAPIDefaultCompletionBlock)completion;
 
 - (void)getGalleryWithUID:(NSString *)gallery completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)getStoryWithUID:(NSString *)user completion:(FRSAPIDefaultCompletionBlock)completion;
@@ -150,11 +147,6 @@ typedef void (^FRSAPISizeCompletionBlock)(NSInteger size, NSError *error);
 - (void)reportUser:(NSString *)userID params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)reportGallery:(FRSGallery *)gallery params:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)fetchBlockedUsers:(FRSAPIDefaultCompletionBlock)completion;
-
-- (void)linkTwitter:(NSString *)token secret:(NSString *)secret completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)linkFacebook:(NSString *)token completion:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unlinkFacebook:(FRSAPIDefaultCompletionBlock)completion;
-- (void)unlinkTwitter:(FRSAPIDefaultCompletionBlock)completion;
 
 - (void)fetchSettings:(FRSAPIDefaultCompletionBlock)completion;
 - (void)updateSettings:(NSDictionary *)params completion:(FRSAPIDefaultCompletionBlock)completion;
