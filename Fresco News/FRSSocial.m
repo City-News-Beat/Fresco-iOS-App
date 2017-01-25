@@ -56,7 +56,7 @@
                                                                                    completion(FALSE, error, Nil, Nil, nil);
 
                                                                                } else {
-                                                                                   [[FRSAPIClient sharedClient] handleUserLogin:responseObject];
+                                                                                   [[FRSAuthManager sharedInstance] handleUserLogin:responseObject];
 
                                                                                    /*if ( [[responseObject objectForKey:@"valid_password"] boolValue]) {
                             completion(TRUE, [NSError errorWithDomain:@"com.fresconews.Fresco" code:1125 userInfo:Nil], Nil, [FBSDKAccessToken currentAccessToken], responseObject);
