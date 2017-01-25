@@ -91,9 +91,9 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     [FRSTracker screen:@"Settings"];
-    
+
     [self checkNotificationStatus];
 
     [self.navigationController.navigationBar setTitleTextAttributes:
@@ -131,7 +131,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
+
     FRSUser *currentUser = [[FRSUserManager sharedInstance] authenticatedUser];
 
     int sectionTwo = 4;
@@ -259,7 +259,8 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
         switch (indexPath.row) {
         case AssignmentNotifications:
             [self checkNotificationStatus];
-            [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:settingsUserNotificationToggle]];
+
+            [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
 
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             break;
@@ -308,22 +309,32 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
         switch (indexPath.row) {
         case ConnectTwitter:
             self.twitterCell = cell;
-            if (self.twitterCell.twitterHandle) {
+            self.twitterCell.parentTableView = tableView;
+            if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
                 [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
                 self.twitterCell.twitterSwitch.on = YES;
             } else {
                 self.twitterCell.twitterSwitch.on = NO;
                 self.twitterHandle = nil;
-                [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"]) {
+                    [self.twitterCell configureSocialCellWithTitle:@"Twitter Connected" andTag:1 enabled:YES];
+                } else {
+                    [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
+                }
             }
             break;
         case ConnectFacebook:
             self.facebookCell = cell;
+            self.facebookCell.parentTableView = tableView;
+
             if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
                 [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
-
             } else {
-                [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]) {
+                    [cell configureSocialCellWithTitle:@"Facebook Connected" andTag:2 enabled:YES];
+                } else {
+                    [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:NO];
+                }
             }
             break;
 
@@ -362,7 +373,7 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     }
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {    
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
     case Me:
         switch (indexPath.row) {

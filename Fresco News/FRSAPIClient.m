@@ -130,6 +130,16 @@
         }];
 }
 
+- (void)setPushNotificationWithBool:(BOOL)sendPush completion:(FRSAPIDefaultCompletionBlock)completion {
+    NSDictionary *dict = @{ @"send_push" : [NSNumber numberWithBool:sendPush] };
+
+    [self post:settingsUpdateEndpoint
+        withParameters:@{ @"notify-user-dispatch-new-assignment" : dict }
+        completion:^(id responseObject, NSError *error) {
+          completion(responseObject, error);
+        }];
+}
+
 - (void)getNotificationsWithLast:(nonnull NSString *)last completion:(FRSAPIDefaultCompletionBlock)completion {
 
     if (!last) {
@@ -501,55 +511,55 @@
  */
 - (void)get:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
-
+    
     [manager GET:endPoint
-        parameters:parameters
+      parameters:parameters
         progress:^(NSProgress *_Nonnull downloadProgress) {
         }
-        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-          completion(responseObject, Nil);
-        }
-        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-          completion(Nil, error);
-          [self handleError:error];
-        }];
+         success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+             completion(responseObject, Nil);
+         }
+         failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+             completion(Nil, error);
+             [self handleError:error];
+         }];
 }
 
 - (void)post:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
-
+    
     [manager POST:endPoint
-        parameters:parameters
-        progress:^(NSProgress *_Nonnull downloadProgress) {
-        }
-        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-          completion(responseObject, Nil);
-        }
-        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-          completion(Nil, error);
-          [self handleError:error];
-        }];
+       parameters:parameters
+         progress:^(NSProgress *_Nonnull downloadProgress) {
+         }
+          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+              completion(responseObject, Nil);
+          }
+          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+              completion(Nil, error);
+              [self handleError:error];
+          }];
 }
 
 - (void)postAvatar:(NSString *)endPoint withParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
     AFHTTPSessionManager *manager = [self managerWithFrescoConfigurations];
-
+    
     [manager POST:endPoint
-        parameters:parameters
-        constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
-          NSString *paramNameForImage = @"avatar";
-          [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
-        }
-        progress:^(NSProgress *_Nonnull uploadProgress) {
-
-        }
-        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-          completion(responseObject, Nil);
-        }
-        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-          completion(Nil, error);
-          [self handleError:error];
-        }];
+       parameters:parameters
+constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+    NSString *paramNameForImage = @"avatar";
+    [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+}
+         progress:^(NSProgress *_Nonnull uploadProgress) {
+             
+         }
+          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+              completion(responseObject, Nil);
+          }
+          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+              completion(Nil, error);
+              [self handleError:error];
+          }];
 }
 
 - (void)uploadStateID:(NSString *)endPoint withParameters:(NSData *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
@@ -558,32 +568,32 @@
     [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
     manager.responseSerializer = [[FRSJSONResponseSerializer alloc] init];
     NSString *auth = [NSString stringWithFormat:@"Bearer %@", [EndpointManager sharedInstance].currentEndpoint.stripeKey];
-
+    
     [manager.requestSerializer setValue:auth forHTTPHeaderField:@"Authorization"];
-
+    
     [manager POST:endPoint
-        parameters:nil
-        constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
-          [formData appendPartWithFileData:parameters name:@"file" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
-          [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
-        }
-        progress:^(NSProgress *_Nonnull uploadProgress) {
-        }
-        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-          completion(responseObject, Nil);
-        }
-        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
-          completion(Nil, error);
-          [self handleError:error];
-        }];
+       parameters:nil
+constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+    [formData appendPartWithFileData:parameters name:@"file" fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+    [formData appendPartWithFormData:[@"identity_document" dataUsingEncoding:NSUTF8StringEncoding] name:@"purpose"];
+}
+         progress:^(NSProgress *_Nonnull uploadProgress) {
+         }
+          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+              completion(responseObject, Nil);
+          }
+          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+              completion(Nil, error);
+              [self handleError:error];
+          }];
 }
 
 - (void)updateTaxInfoWithFileID:(NSString *)fileID completion:(FRSAPIDefaultCompletionBlock)completion {
     [self post:updateTaxInfoEndpoint
-        withParameters:@{ @"stripe_document_token" : fileID }
-        completion:^(id responseObject, NSError *error) {
-          completion(responseObject, error);
-        }];
+withParameters:@{ @"stripe_document_token" : fileID }
+    completion:^(id responseObject, NSError *error) {
+        completion(responseObject, error);
+    }];
 }
 
 /*

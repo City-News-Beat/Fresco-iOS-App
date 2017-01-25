@@ -104,7 +104,7 @@
         self.twitterSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 12 - 51, 6, 51, 31)];
         [self.twitterSwitch addTarget:self action:@selector(twitterToggle) forControlEvents:UIControlEventValueChanged];
         self.twitterSwitch.onTintColor = [UIColor twitterBlueColor];
-        [self.twitterSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"] animated:NO];
+        [self.twitterSwitch setOn:enabled];
 
         [self addSubview:self.twitterSwitch];
 
@@ -153,14 +153,10 @@
         self.didToggleFacebook = NO;
         if (index == 0) {
             [self.facebookSwitch setOn:YES animated:YES];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
-
         } else if (index == 1) {
             [self.facebookSwitch setOn:NO animated:YES];
             self.facebookName = nil;
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
             self.socialTitleLabel.text = @"Connect Facebook";
-            [[NSUserDefaults standardUserDefaults] setValue:nil forKey:@"facebook-name"];
         }
     }
 
@@ -253,20 +249,36 @@
         self.alert.delegate = self;
         [self.alert show];
 
+        self.facebookSwitch.on = NO;
+        self.facebookSwitch.enabled = NO;
         [[FRSAPIClient sharedClient] unlinkFacebook:^(id responseObject, NSError *error) {
           NSLog(@"Disconnect Facebook Error: %@", error);
+          self.facebookSwitch.enabled = YES;
+          if (error) {
+              self.facebookSwitch.on = YES;
+          } else {
+              [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"facebook-connected"];
+              [[NSUserDefaults standardUserDefaults] setValue:Nil forKey:@"facebook-name"];
+              self.facebookSwitch.on = NO;
+          }
+          if (self.parentTableView) {
+              [self.parentTableView reloadData];
+          }
         }];
 
     } else {
 
         FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
 
+        self.facebookSwitch.enabled = NO;
+        self.facebookSwitch.on = YES;
         [login logInWithReadPermissions:@[ @"public_profile", @"email", @"user_friends" ]
                      fromViewController:self.inputViewController
                                 handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
 
                                   if (error) {
-                                      //handle errors
+                                      self.facebookSwitch.on = NO;
+                                      self.facebookSwitch.enabled = YES;
                                   }
 
                                   if (result && !error) {
@@ -277,15 +289,31 @@
                                                                        [self.facebookSwitch setOn:YES animated:YES];
                                                                        self.facebookSwitch.alpha = 0;
 
+                                                                       self.facebookSwitch.enabled = YES;
+
+                                                                       if (error) {
+                                                                           self.facebookSwitch.on = NO;
+                                                                           self.facebookSwitch.enabled = YES;
+                                                                       } else {
+                                                                           self.facebookSwitch.on = YES;
+                                                                       }
+
                                                                        if (responseObject && !error) {
                                                                            [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : @"name" }] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                                                                              if (!error) {
                                                                                  self.facebookName = [result valueForKey:@"name"];
                                                                                  self.socialTitleLabel.text = self.facebookName;
                                                                                  [[NSUserDefaults standardUserDefaults] setObject:self.facebookName forKey:@"facebook-name"];
+                                                                                 self.facebookSwitch.on = YES;
+                                                                                 if (self.parentTableView) {
+                                                                                     [self.parentTableView reloadData];
+                                                                                 }
                                                                              }
+
                                                                            }];
                                                                        } else if (error) {
+                                                                           self.facebookSwitch.on = NO;
+                                                                           self.facebookSwitch.enabled = YES;
                                                                            NSHTTPURLResponse *response = error.userInfo[@"com.alamofire.serialization.response.error.response"];
                                                                            NSInteger responseCode = response.statusCode;
 
@@ -308,7 +336,13 @@
                                                                                return;
                                                                            }
                                                                        }
+                                                                       if (self.parentTableView) {
+                                                                           [self.parentTableView reloadData];
+                                                                       }
                                                                      }];
+                                  }
+                                  if (self.parentTableView) {
+                                      [self.parentTableView reloadData];
                                   }
                                 }];
     }
@@ -967,41 +1001,30 @@
             radius = [user.notificationRadius floatValue];
         }
 
-        NSDictionary *dict = @{ @"send_push" : @YES };
-        NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:NULL];
-        NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        [[FRSAPIClient sharedClient] setPushNotificationWithBool:YES
+                                                      completion:^(id responseObject, NSError *error) {
+                                                        if (responseObject && !error) {
+                                                            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notifications-enabled"];
+                                                            [[NSUserDefaults standardUserDefaults] synchronize];
 
-        [[FRSAPIClient sharedClient] post:settingsUpdateEndpoint
-            withParameters:@{ @"notify-user-dispatch-new-assignment" : str }
-            completion:^(id responseObject, NSError *error) {
-              if (responseObject && !error) {
-                  state = YES;
-                  [[NSUserDefaults standardUserDefaults] setBool:state forKey:settingsUserNotificationToggle];
-                  [[NSUserDefaults standardUserDefaults] synchronize];
-
-              } else {
-                  [sender setOn:FALSE];
-              }
-            }];
-
+                                                        } else {
+                                                            [sender setOn:FALSE];
+                                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                            [alert show];
+                                                        }
+                                                      }];
     } else {
-
-        NSDictionary *dict = @{ @"send_push" : @NO };
-        NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:NULL];
-        NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-
-        [[FRSAPIClient sharedClient] post:settingsUpdateEndpoint
-            withParameters:@{ @"notify-user-dispatch-new-assignment" : str }
-            completion:^(id responseObject, NSError *error) {
-              if (responseObject && !error) {
-                  state = NO;
-                  [[NSUserDefaults standardUserDefaults] setBool:state forKey:settingsUserNotificationToggle];
-                  [[NSUserDefaults standardUserDefaults] synchronize];
-
-              } else {
-                  [sender setOn:TRUE];
-              }
-            }];
+        [[FRSAPIClient sharedClient] setPushNotificationWithBool:NO
+                                                      completion:^(id responseObject, NSError *error) {
+                                                        if (responseObject && !error) {
+                                                            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"notifications-enabled"];
+                                                            [[NSUserDefaults standardUserDefaults] synchronize];
+                                                        } else {
+                                                            [sender setOn:TRUE];
+                                                            FRSAlertView *alert = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"We could not connect to Fresco News. Please try again later." actionTitle:@"OK" cancelTitle:@"" cancelTitleColor:nil delegate:nil];
+                                                            [alert show];
+                                                        }
+                                                      }];
     }
 }
 

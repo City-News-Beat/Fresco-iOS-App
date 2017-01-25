@@ -213,11 +213,13 @@
     [[FRSAuthManager sharedInstance] signIn:username
                                    password:password
                                  completion:^(id responseObject, NSError *error) {
+
                                    if (error) {
                                        [FRSTracker track:loginError
                                               parameters:@{ @"method" : @"email",
                                                             @"error" : error.localizedDescription }];
                                    }
+
                                    [self stopSpinner:self.loadingView onButton:self.loginButton];
 
                                    if (error.code == 0) {
@@ -242,6 +244,20 @@
 
                                        [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
 
+                                       NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
+
+                                       if (socialLinksDict[@"facebook"] != nil) {
+                                           [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+                                       }
+
+                                       if (socialLinksDict[@"twitter"] != nil) {
+                                           [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+                                       }
+
+                                       if (responseObject[@"twitter_handle"] != nil) {
+                                           [[NSUserDefaults standardUserDefaults] setValue:responseObject[@"twitter_handle"] forKey:@"twitter-handle"];
+                                       }
+
                                        return;
                                    }
 
@@ -264,7 +280,6 @@
                                    }
                                  }];
 }
-
 - (void)presentInvalidInfo {
 
     [UIView animateWithDuration:0.15
@@ -346,7 +361,6 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
-
 - (IBAction)twitter:(id)sender {
 
     self.twitterButton.hidden = true;
@@ -366,6 +380,11 @@
       }
 
       if (authenticated) {
+          NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
+
+          if (socialLinksDict[@"facebook"] != nil) {
+              [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"facebook-connected"];
+          }
 
           [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
           [[NSUserDefaults standardUserDefaults] setValue:session.userName forKey:@"twitter-handle"];
@@ -452,6 +471,16 @@
 
       if (authenticated) {
 
+          if (responseObject[@"twitter_handle"] != nil) {
+              [[NSUserDefaults standardUserDefaults] setValue:responseObject[@"twitter_handle"] forKey:@"twitter-handle"];
+          }
+          NSDictionary *socialLinksDict = responseObject[@"user"][@"social_links"];
+          if (socialLinksDict[@"twitter"] != nil) {
+              [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+          }
+
+          [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
+
           NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
 
           /*  */
@@ -461,6 +490,8 @@
           FRSAppDelegate *delegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
           [delegate saveUserFields:responseObject[@"user"]];
           [self setMigrateState:responseObject];
+
+          NSLog(@"Social Digest: %@", socialDigest);
 
           [[FRSUserManager sharedInstance] updateUserWithDigestion:socialDigest
                                                         completion:^(id responseObject, NSError *error) {
@@ -472,11 +503,6 @@
                                                             }
                                                           }];
                                                         }];
-
-          //            if (<#condition#>) {
-          //                [self displayMigrationAlert];
-          //            }
-
           self.didAuthenticateSocial = YES;
           [self checkStatusAndPresentPermissionsAlert:self.locationManager.delegate];
           [self popToOrigin];
