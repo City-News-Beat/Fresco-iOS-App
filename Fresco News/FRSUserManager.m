@@ -12,6 +12,13 @@
 #import "FRSAPIClient.h"
 #import "FRSAuthManager.h"
 
+static NSString *const userEndpoint = @"user/";
+static NSString *const setAvatarEndpoint = @"user/avatar";
+static NSString *const updateUserEndpoint = @"user/update";
+static NSString *const authenticatedUserEndpoint = @"user/me";
+static NSString *const addSocialEndpoint = @"user/social/connect/";
+static NSString *const deleteSocialEndpoint = @"user/social/disconnect/";
+
 @implementation FRSUserManager
 
 + (instancetype)sharedInstance {
@@ -219,11 +226,33 @@
 
 - (void)check:(NSString *)check completion:(FRSAPIDefaultCompletionBlock)completion {
     NSString *checkEndpoint = [userEndpoint stringByAppendingString:[check stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
-    
-    [[FRSAPIClient sharedClient] get:checkEndpoint withParameters:Nil
-   completion:^(id responseObject, NSError *error) {
-       completion(responseObject, error);
-   }];
+
+    [[FRSAPIClient sharedClient] get:checkEndpoint
+                      withParameters:Nil
+                          completion:^(id responseObject, NSError *error) {
+                            completion(responseObject, error);
+                          }];
+}
+
+- (void)postAvatarWithParameters:(NSDictionary *)parameters completion:(FRSAPIDefaultCompletionBlock)completion {
+    AFHTTPSessionManager *manager = [[FRSAPIClient sharedClient] managerWithFrescoConfigurations];
+
+    [manager POST:setAvatarEndpoint
+        parameters:parameters
+        constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+          NSString *paramNameForImage = @"avatar";
+          [formData appendPartWithFileData:parameters[@"avatar"] name:paramNameForImage fileName:@"photo.jpg" mimeType:@"image/jpeg"];
+        }
+        progress:^(NSProgress *_Nonnull uploadProgress) {
+
+        }
+        success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+          completion(responseObject, Nil);
+        }
+        failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+          completion(Nil, error);
+          [[FRSAPIClient sharedClient] handleError:error];
+        }];
 }
 
 @end

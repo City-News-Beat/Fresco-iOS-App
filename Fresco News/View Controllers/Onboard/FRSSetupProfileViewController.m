@@ -116,8 +116,7 @@
         //Send image to backend and set the url to the avatar :)
         NSData *imageData = UIImageJPEGRepresentation(self.profileIV.image, 1.0);
 
-        [[FRSAPIClient sharedClient] postAvatar:setAvatarEndpoint
-            withParameters:@{ @"avatar" : imageData }
+        [[FRSUserManager sharedInstance] postAvatarWithParameters:@{ @"avatar" : imageData }
             completion:^(id responseObject, NSError *error) {
               NSLog(@"Digestion Update Error: %@", error);
 
@@ -619,7 +618,7 @@
         self.doneButton.userInteractionEnabled = YES;
         [self.doneButton setTitleColor:[UIColor frescoBlueColor] forState:UIControlStateNormal];
     }
-    
+
     [textView setText:[textView.text stringByReplacingOccurrencesOfString:@"arthurdearaujo" withString:@"💩🎉"]];
 }
 
@@ -631,12 +630,10 @@
     }
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     // Prevent user from going past the max line limit
     float numberOfLines = textView.contentSize.height / textView.font.lineHeight;
-    if([text isEqualToString:@"\n"] && textView.textContainer.maximumNumberOfLines <= numberOfLines)
-    {
+    if ([text isEqualToString:@"\n"] && textView.textContainer.maximumNumberOfLines <= numberOfLines) {
         [textView resignFirstResponder];
         return NO;
     }

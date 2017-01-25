@@ -11,6 +11,11 @@
 #import "EndpointManager.h"
 #import "NSString+Fresco.h"
 
+// sign in / sign up (authorization) methods
+static NSString *const loginEndpoint = @"auth/signin";
+static NSString *const signUpEndpoint = @"auth/register";
+static NSString *const socialLoginEndpoint = @"auth/signin/social";
+
 @implementation FRSAuthManager
 
 + (instancetype)sharedInstance {
