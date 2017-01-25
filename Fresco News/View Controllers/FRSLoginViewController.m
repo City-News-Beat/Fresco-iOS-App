@@ -481,7 +481,7 @@
 
           [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"twitter-connected"];
 
-          NSDictionary *socialDigest = [[FRSAPIClient sharedClient] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
+          NSDictionary *socialDigest = [[FRSAuthManager sharedInstance] socialDigestionWithTwitter:nil facebook:[FBSDKAccessToken currentAccessToken]];
 
           /*  */
           // [[FRSAPIClient sharedClient] setSocialUsed:socialDigest];
