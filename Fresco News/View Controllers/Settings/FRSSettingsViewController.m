@@ -258,10 +258,11 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     case AssignmentsPayments:
         switch (indexPath.row) {
         case AssignmentNotifications:
-            [self checkNotificationStatus];
-            [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:settingsUserNotificationToggle]];
-
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [self checkNotificationStatus];
+                
+                [cell configureAssignmentCellEnabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"notifications-enabled"]];
+                
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
             break;
         case NotificationRadius:
             if ([[NSUserDefaults standardUserDefaults] objectForKey:settingsUserNotificationRadius] != nil) {
@@ -307,24 +308,34 @@ typedef NS_ENUM(NSInteger, SectionMiscRowIndex) {
     case Social:
         switch (indexPath.row) {
         case ConnectTwitter:
-            self.twitterCell = cell;
-            if (self.twitterCell.twitterHandle) {
-                [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
-                self.twitterCell.twitterSwitch.on = YES;
-            } else {
-                self.twitterCell.twitterSwitch.on = NO;
-                self.twitterHandle = nil;
-                [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
-            }
+                self.twitterCell = cell;
+                self.twitterCell.parentTableView = tableView;
+                if ([[NSUserDefaults standardUserDefaults] valueForKey:@"twitter-handle"]) {
+                    [self.twitterCell configureSocialCellWithTitle:self.twitterHandle andTag:1 enabled:YES];
+                    self.twitterCell.twitterSwitch.on = YES;
+                } else {
+                    self.twitterCell.twitterSwitch.on = NO;
+                    self.twitterHandle = nil;
+                    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"twitter-connected"]){
+                        [self.twitterCell configureSocialCellWithTitle:@"Twitter Connected" andTag:1 enabled:YES];
+                    }else{
+                        [self.twitterCell configureSocialCellWithTitle:@"Connect Twitter" andTag:1 enabled:NO];
+                    }
+                }
             break;
         case ConnectFacebook:
-            self.facebookCell = cell;
-            if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
-                [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
-
-            } else {
-                [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
-            }
+                self.facebookCell = cell;
+                self.facebookCell.parentTableView = tableView;
+                
+                if ([[NSUserDefaults standardUserDefaults] valueForKey:@"facebook-name"]) {
+                    [cell configureSocialCellWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"facebook-name"] andTag:2 enabled:[[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-enabled"]];
+                } else {
+                    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"facebook-connected"]){
+                        [cell configureSocialCellWithTitle:@"Facebook Connected" andTag:2 enabled:YES];
+                    }else{
+                        [cell configureSocialCellWithTitle:@"Connect Facebook" andTag:2 enabled:NO];
+                    }
+                }
             break;
 
         default:

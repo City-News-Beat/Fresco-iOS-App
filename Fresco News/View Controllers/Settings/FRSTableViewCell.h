@@ -60,6 +60,8 @@
 @property (nonatomic) NSInteger cellType;
 @property (strong, nonatomic) NSString *representedID;
 @property (weak, nonatomic) NSManagedObject *representedObject;
+
+@property (strong, nonatomic) UITableView *parentTableView;
 - (void)twitterToggle;
 - (void)facebookToggle;
 
