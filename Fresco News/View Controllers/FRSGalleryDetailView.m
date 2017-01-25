@@ -382,6 +382,11 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
                                        errorAlertView = [[FRSAlertView alloc] initWithTitle:@"ERROR" message:@"Comment failed.\nPlease try again later." actionTitle:@"CANCEL" cancelTitle:@"TRY AGAIN" cancelTitleColor:[UIColor frescoBlueColor] delegate:self];
                                        [errorAlertView show];
                                    } else {
+                                       int comments = [[self.gallery valueForKey:@"comments"] intValue];
+                                       comments++;
+                                       [self.gallery setValue:[NSNumber numberWithInt:comments] forKey:@"comments"];
+                                       [self.actionBar actionButtonTitleNeedsUpdate];
+                                       
                                        self.totalCommentCount++;
                                        commentsTableView.hidden = NO;
 
