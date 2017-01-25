@@ -10,6 +10,6 @@
 
 @interface FRSBaseManager : NSObject
 
-+ (NSManagedObjectContext *)managedObjectContext;
+- (NSManagedObjectContext *)managedObjectContext;
 
 @end

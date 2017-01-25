@@ -11,7 +11,7 @@
 
 @implementation FRSBaseManager
 
-+ (NSManagedObjectContext *)managedObjectContext {
+- (NSManagedObjectContext *)managedObjectContext {
     FRSAppDelegate *appDelegate = (FRSAppDelegate *)[[UIApplication sharedApplication] delegate];
     return [appDelegate managedObjectContext];
 }
