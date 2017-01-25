@@ -533,7 +533,6 @@ static NSString *reusableCommentIdentifier = @"commentIdentifier";
     if (![[FRSAPIClient sharedClient] checkAuthAndPresentOnboard]) {
         [self.commentTextField addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventEditingDidEndOnExit];
         self.commentTextField.delegate = self;
-        self.commentTextField.text = @"";
         [self.commentTextField becomeFirstResponder];
     }
 }
