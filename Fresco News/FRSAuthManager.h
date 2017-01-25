@@ -17,6 +17,7 @@
 
 + (instancetype)sharedInstance;
 
+- (void)handleUserLogin:(id)responseObject;
 - (BOOL)isAuthenticated;
 - (void)signIn:(NSString *)user password:(NSString *)password completion:(FRSAPIDefaultCompletionBlock)completion;
 - (void)signInWithTwitter:(TWTRSession *)session completion:(FRSAPIDefaultCompletionBlock)completion;
