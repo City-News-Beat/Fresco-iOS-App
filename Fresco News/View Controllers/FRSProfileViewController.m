@@ -1418,6 +1418,8 @@
 
             galCell.gallery = self.currentFeed[indexPath.row];
             [galCell configureCell];
+            [[galCell galleryView] adjustHeight];
+            
         } else if (self.currentFeed.count == 0) {
 
         } else {

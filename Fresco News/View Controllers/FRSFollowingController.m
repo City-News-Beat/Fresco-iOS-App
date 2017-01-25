@@ -159,6 +159,7 @@
         };
 
         [galCell configureCell];
+        [[galCell galleryView] adjustHeight];
     } else {
         FRSStoryCell *storyCell = (FRSStoryCell *)cell;
         [storyCell clearCell];
